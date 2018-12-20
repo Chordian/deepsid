@@ -218,7 +218,9 @@
 				<a href="https://twitter.com/jchuus">Twitter</a>
 					<span>&#9642</span>
 				<a href="https://www.facebook.com/chordian.net/">Facebook</a>
-			</div>
+					<span>&#9642</span>
+				<a href="https://github.com/Chordian/deepsid">GitHub</a>
+				</div>
 			<div id="tabs">
 				<div class="tab unselectable" data-topic="profile" id="tab-profile">Profile</div>
 				<div class="tab unselectable" data-topic="csdb" id="tab-csdb">CSDb<div id="note-csdb" class="notification csdbcolor"></div></div>
