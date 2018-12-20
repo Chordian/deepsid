@@ -1,0 +1,1311 @@
+
+/**
+ * DeepSID / Browser
+ */
+
+ function Browser() {
+
+	this.ROOT_HVSC = 'hvsc';
+	this.path = "";
+	this.search = "";
+
+	this.symlistFolders = [];
+
+	this.currentScrollPos = 0;
+	this.scrollPositions = [];
+
+	this.secondsLength = 0;
+
+	this.init();
+}
+
+Browser.prototype = {
+
+	/**
+	 * Initialize.
+	 */
+	init: function() {
+		this.setupSortBox();
+		this.getSymlists();
+
+		if (GetParam("file") === "" && GetParam("search") === "") this.getFolder();
+		this.addEvents();
+	},
+
+	/**
+	 * Add the events pertinent to this class.
+	 */
+	addEvents: function() {
+		$("#songs").on("click", "#sym-rename", function() {
+			return false; // Prevent SID row from playing if the rename edit box is clicked
+		});
+
+		$("#songs").on("click", "button,tr", this.onClick.bind(this));
+		$("#dropdown-sort").change(this.onChange.bind(this));
+
+		if ($("#logout").length) {
+			$("#folders table").on("contextmenu", "tr", this.contextMenu.bind(this));
+			$("#panel")
+				.on("click", ".context", this.onContextClick.bind(this))
+				.on("mouseenter", "#contextmenu .submenu", this.contextSubMenu.bind(this))
+				.on("mouseleave", "#contextmenu .submenu,#contextsubmenu", function() {
+					if (!$("#contextsubmenu").is(":hover"))
+						$("#contextsubmenu").remove();
+				})
+		}
+
+		setInterval(function() {
+			// Update clock
+			var secondsCurrent = SID.getCurrentPlaytime();
+			$("#time-current").empty().append(Math.floor(secondsCurrent / 60)+":"+(secondsCurrent % 60 < 10 ? "0" : "")+(secondsCurrent % 60));
+			// Update time bar
+			$("#time-bar div").css("width", ((secondsCurrent / this.secondsLength) * 346)+"px");
+		}.bind(this), 200);
+
+		$("#search-box").keydown(function(event) {
+			if (event.keyCode == 13 && $("#search-box").val() !== "")
+				$("#search-button").trigger("click");
+		}).keyup(function() {
+			$("#search-button").removeClass("disabled");
+			if ($("#search-box").val() !== "")
+				$("#search-button").prop("disabled", false);
+			else
+				$("#search-button").prop("enabled", false).addClass("disabled");
+		});
+
+		$(document).on("click", function(event) {
+			$target = $(event.target);
+			if (!$target.hasClass("line") || ($target.hasClass("line") && !$target.hasClass("disabled"))) {
+				$("#contextmenu,#contextsubmenu").remove();
+				if (typeof this.contextTR !== "undefined")
+					this.contextTR.css("background", "");
+			}
+			if (!$target.hasClass("line"))
+				this.restoreDisplayName();
+		}.bind(this));
+
+		$(document).keyup(function(event) {
+			switch (event.keyCode) {
+				case 27: // ESC
+					$("#contextmenu,#contextsubmenu").remove();
+					this.contextTR.css("background", "");
+					this.restoreDisplayName();
+					break;
+				case 13: // Enter
+					$rename = $("#sym-rename");
+					if ($rename.length) {
+						var newName = $rename.val();
+						$.post("php/symlist_rename.php", {
+							symlist:	(this.isFileRenamed ? this.path.substr(1) : this.contextSID),
+							fullname:	(this.isFileRenamed ? this.contextSID : ''),
+							new:		newName,
+						}, function(data) {
+							this.validateData(data, function() {
+								/*this.contextEntry.empty().append(newName+(this.isFileRenamed ? this.prevSymName.substr(-4) : ''));
+								$("#sym-rename").remove();*/
+								this.getFolder();
+							});
+						}.bind(this));
+					}
+					break;
+			}
+		}.bind(this));
+	},
+
+	/**
+	 * Click the left mouse button somewhere below the control buttons.
+	 * 
+	 * @param {*} event 
+	 * @param {number} paramSubtune		If specified, override subtune number with a URL parameter.
+	 * @param {boolean} paramSkipCSDb	If specified and TRUE, skip generating the 'CSDb' tab contents.
+	 */
+	onClick: function(event, paramSubtune, paramSkipCSDb) {
+		this.clearSpinner();
+
+		switch (event.target.id) {
+			case "folder-root":
+				if (!$("#folder-root").hasClass("disabled")) {
+					// Go to HVSC root folder
+					this.path = "";
+					ctrls.state("prev/next", "disabled");
+					ctrls.state("subtunes", "disabled");
+					this.getFolder(this.scrollPositions[0]);
+					this.scrollPositions = [this.scrollPositions[0]];
+					this.getComposer();
+					UpdateURL();
+				}
+				break;
+			case "folder-back":
+				if (!$("#folder-back").hasClass("disabled")) {
+					// Go back one folder in the HVSC tree
+					this.path = this.path.substr(0, this.path.lastIndexOf("/"));
+					ctrls.state("prev/next", "disabled");
+					ctrls.state("subtunes", "disabled");
+					this.getFolder(this.scrollPositions.pop());
+					this.getComposer();
+					UpdateURL();
+				}
+				break;
+			case "search-button":
+				// Perform a search query
+				this.setupSortBox();
+				ctrls.state("prev/next", "disabled");
+				ctrls.state("subtunes", "disabled");
+				ctrls.state("loop", "disabled");
+
+				this.scrollPositions.push(this.currentScrollPos); // Remember where we parked
+				this.getFolder(0, $("#search-box").val().replace(/\s/g, '_'));
+				break;
+			case "search-cancel":
+				// Cancel the search results and return to the previous normal folder view
+				ctrls.state("prev/next", "disabled");
+				ctrls.state("subtunes", "disabled");
+
+				this.getFolder(this.scrollPositions.pop());
+				break;
+			default:
+				// A TD element was clicked (folder, SID file, star rating)
+				var $tr = $(event.target).parents("tr");
+				if ($($tr).hasClass("disabled")) return false;
+
+				// Get the unmodified name of this entry
+				// NOTE: Elsewhere, "extra" folders have their prefixed "_" removed for displaying.
+				var name = $tr.find(".name").attr("data-name");
+
+				if (event.target.tagName === "B") {
+					// Clicked a star to set a rating for a folder or SID file
+					if (!$("#logout").length) {
+						// But must be logged in to do that
+						alert("Login or register and you can click these stars to vote for a file or folder.");
+						return false;
+					}
+					var rating = event.shiftKey ? 0 : 5 - $(event.target).index(); // Remember stars are backwards (RTL; see CSS)
+					var ratedName = ((this.isSearching || this.isSymlist ? "/" : this.path+"/")+name).substr(1);
+
+					// Star rating for a folder or a SID file (PHP script figures this out by itself)
+					$.post("php/rating_write.php", {fullname: ratedName, rating: rating}, function(data) {
+						this.validateData(data, function(data) {
+
+							var stars = this.buildStars(data.rating);
+
+							// Make the rating sticky without refreshing the page
+							var $td = $(event.target).parents("td");
+							$td.find(".rating").empty().append(stars);
+
+							// But also update the relevant array for later filtering/sorting
+							var isFile = $td.parent("tr").find(".name").hasClass("file"),
+								endName = ratedName.split("/").slice(-1)[0];
+							if (isFile) {
+								$.each(this.playlist, function(i, file) {
+									if (file.filename == endName) {
+										file.rating = data.rating;
+										return false;
+									}
+								});
+							} else {
+								// Temporarily make the HTML string of folders into a jQuery object
+								var $folders = $(this.folders);
+								$($folders).find(".name[data-name='"+endName+"']")
+									.parents("td").next().find(".rating")
+									.empty().append(stars);
+								// Has to be wrapped to get everything back
+								this.folders = $("<div>").append($folders.clone()).html();
+							}
+						});
+					}.bind(this));
+					return false;
+				}
+
+				// A row was clicked, but was it a folder or a SID file?
+				if (name.indexOf(".sid") === -1 && name.indexOf(".mus") === -1) {
+
+					// ENTER FOLDER
+
+					if ($(event.target).find(".entry").hasClass("search"))
+						this.path = "/"+name; // Search folders already have the full path
+					else
+						this.path += "/"+name;
+					ctrls.state("prev/next", "disabled");
+					ctrls.state("subtunes", "disabled");
+					ctrls.state("loop", "disabled");
+
+					this.scrollPositions.push(this.currentScrollPos); // Remember where we parked
+					this.currentScrollPos = 0;
+					this.getFolder();
+					this.getComposer();
+
+					UpdateURL();
+
+				} else {
+
+					// LOAD AND PLAY FILE
+
+					// NOTE: Don't add a SID.pause() here, it creates an error for jsSID on stop then re-click.
+					SID.setVolume(0);
+					ctrls.setButtonPause();
+
+					this.songPos = $tr.index() - this.subFolders;
+
+					if (!SID.emulatorFlags.offline) {
+						$("#play-pause,#stop,#subtune-plus,#subtune-minus,#subtune-value").removeClass("disabled");
+						$("#volume").prop("disabled", false);
+					}
+					if (SID.emulatorFlags.supportFaster) $("#faster").removeClass("disabled");
+					ctrls.state("subtunes", "disabled");
+
+					$("#time-bar").empty().append('<div></div>');
+
+					this.showSpinner($(event.target).parents("tr").children("td.sid"));
+
+					// Either default start subtune, or an override from a "?subtune=" URL parameter
+					var subtune = typeof paramSubtune !== "undefined" ? paramSubtune : this.playlist[this.songPos].startsubtune,
+						subtuneMax = this.playlist[this.songPos].subtunes - 1;
+					// Make sure the overridden value is within what is available for that SID tune
+					subtune = subtune < 0 ? 0 : subtune;
+					subtune = subtune > subtuneMax ? subtuneMax : subtune;
+
+					SID.load(subtune, this.getLength(subtune), this.playlist[this.songPos].fullname, function(error) {
+
+						this.clearSpinner();
+
+						if (error) {
+
+							this.errorRow();
+
+						} else {
+
+							ctrls.subtuneMax = SID.getSongInfo().maxSubsong;
+							ctrls.subtuneCurrent = subtune;
+							ctrls.updateSubtuneText();
+							if (ctrls.subtuneMax > 0 && !SID.emulatorFlags.offline) $("#subtune-value").removeClass("disabled");
+							if (subtune < ctrls.subtuneMax && !SID.emulatorFlags.offline) $("#subtune-plus").removeClass("disabled");
+							if (subtune > 0 && !SID.emulatorFlags.offline) $("#subtune-minus").removeClass("disabled");
+							ctrls.state("prev/next", "enabled");
+							if (!SID.emulatorFlags.offline) ctrls.state("loop", "enabled");
+
+							ctrls.updateInfo();
+							ctrls.updateStil();
+
+							//setTimeout(SID.play(true), 1); // Why did I do this in the first place? Uhh...
+							SID.play(true);
+							setTimeout(ctrls.setButtonPlay, 75); // For nice pause-to-play delay animation
+						}
+
+						// Disable PREV or NEXT if at list boundaries
+						if (this.songPos == this.playlist.length - 1)
+							$("#skip-next").addClass("disabled");
+						if (this.songPos == 0)
+							$("#skip-prev").addClass("disabled");
+
+						ctrls.emulatorChanged = false;
+
+						if (typeof paramSkipCSDb === "undefined" || !paramSkipCSDb)
+							this.getCSDb();
+						else
+							this.getComposer();
+						this.getGB64();
+						this.reloadDisqus(this.playlist[this.songPos].fullname);
+
+						ctrls.pace(); // CIA/VBI/4x etc.
+
+						UpdateURL();
+						viz.enableAllPianoVoices();
+
+						// Tab 'STIL' is called 'Lyrics' in CGSC
+						$("#tab-stil").empty().append(this.isCGSC() ? "Lyrics" : "STIL");
+
+					}.bind(this));
+
+					SID.setCallbackTrackEnd(function() {
+						if ($("#loop").hasClass("button-off")) {
+							// Play the next subtune, or if no more subtunes, the next tune in the list
+							$("#faster").trigger("mouseup"); // Easy there cowboy
+							if (ctrls.subtuneCurrent < ctrls.subtuneMax && !$("#subtune-plus").hasClass("disabled")) {
+								// Next subtune
+								$("#subtune-plus").trigger("mouseup");
+							} else if (this.songPos < (this.playlist.length - 1) && !$("#skip-next").hasClass("disabled")) {
+								// Next song
+								$("#skip-next").trigger("mouseup", false);
+							} else {
+								// At the end of everything
+								$("#stop").trigger("mouseup");
+								$("#songs tr").removeClass("selected");
+							}
+						}
+					}.bind(this));
+				}
+
+				$("#songs tr").removeClass("selected");
+				$tr.addClass("selected");
+		}
+	},
+
+	/**
+	 * When selecting an option in the SORT/FILTER drop-down box.
+	 * 
+	 * See 'setupSortBox' regarding setting up its contents.
+	 * 
+	 * @param {*} event 
+	 */
+	onChange: function(event) {
+		// Another sorting method chosen in the top right drop-down box
+		$("#songs table").empty();
+		ctrls.state("prev/next", "disabled");
+		ctrls.state("subtunes", "disabled");
+		var filterFolders = false;
+		switch (event.target.value) {
+			case "all":
+				// MUSICIANS and ROOT: Show all folders in the letter folder
+				filterFolders = true;
+				if (this.path === "") {
+					this.getFolder();
+					localStorage.setItem("personal", "all");
+				} else {
+					$("#songs table").append(this.folders);
+					localStorage.setItem("letter", "all");
+				}
+				break;
+			case "personal":
+				// ROOT: Show only collections and own public/private playlists
+				filterFolders = true;
+				this.getFolder();
+				localStorage.setItem("personal", "personal");
+				break;
+			case "quality":
+				// MUSICIANS: Show only decent folders (assessed by JCH) in the letter folder
+				filterFolders = true;
+				$.get("php/rating_quality.php", { folder: this.path }, function(data) {
+					this.validateData(data, function(data) {
+						// Is the folder ready (i.e. all folders have ratings)?
+						if (data.ready) {
+							$(this.folders+" tr").each(function(i, element) {
+								$this = $(element);
+								// Rating must be more than one star
+								if (data.results[$this.find(".name").text()] > 1)
+									filterFolders += '<tr>'+$this.html()+'</tr>';
+							}.bind(this));
+							filterFolders = '<tr class="disabled"><td class="spacer" colspan="2"></tr>'+
+								filterFolders+'<tr class="disabled"><td class="divider" colspan="2"></tr>';
+							$("#songs table").append(filterFolders);
+							localStorage.setItem("letter", "quality");
+						} else {
+							alert("The filter option for this folder is not ready yet.");
+							$("#dropdown-sort").val("all").trigger("change");
+						}
+					});
+				}.bind(this));
+				break;
+			case "name":
+				// Sort playlist according to the SID filename
+				this.playlist.sort(function(obj1, obj2) {
+					var o1 = obj1.substname != "" ? obj1.substname : obj1.filename;
+					var o2 = obj2.substname != "" ? obj2.substname : obj2.filename;
+					return o1.toLowerCase() > o2.toLowerCase() ? 1 : -1;
+				});
+				break;
+			case "player":
+				// Sort playlist according to music player
+				this.playlist.sort(function(obj1, obj2) {
+					return obj1.player.toLowerCase() > obj2.player.toLowerCase() ? 1 : -1;
+				});
+				break;
+			case "rating":
+				// Sort playlist according to rating
+				this.playlist.sort(function(obj1, obj2) {
+					return obj2.rating - obj1.rating;
+				});
+				break;
+			case "oldest":
+				// Sort playlist according to the 'copyright' string (the year in start is used)
+				this.playlist.sort(function(obj1, obj2) {
+					return obj1.copyright > obj2.copyright ? 1 : -1; // Oldest year in top
+				});
+				break;
+			case "newest":
+				// Sort playlist according to the 'copyright' string (the year in start is used)
+				this.playlist.sort(function(obj1, obj2) {
+					return obj1.copyright < obj2.copyright ? 1 : -1; // Newest year in top
+				});
+				break;
+			case "shuffle":
+				// Sort playlist in a random manner (randomize)
+				for (var i = 0; i < 25; i++) {
+					this.playlist.sort(function() {
+						return Math.random() >= 0.5;
+					});
+				}
+		}
+
+		if (!filterFolders) {
+			// Now rebuild the reordered table list (files only; the folders in top are just preserved)
+			var files = adaptedName = "";
+			$.each(this.playlist, function(i, file) {
+				adaptedName = file.substname == "" ? file.filename.replace(/^\_/, '') : file.substname;
+				adaptedName = this.adaptBrowserName(adaptedName);
+				files += '<tr>'+
+						'<td class="sid unselectable"><div class="block-wrap"><div class="block">'+(file.subtunes > 1 ? '<div class="subtunes">'+file.subtunes+'</div>' : '')+
+						'<div class="entry name file'+(this.isSearching || this.path.substr(0, 2) === "/$" ? ' search' : '')+'" data-name="'+file.filename+'">'+adaptedName+'</div></div></div><br />'+
+						'<span class="info">'+file.copyright.substr(0, 4)+' in '+file.player+'</span></td>'+
+						'<td class="stars filestars"><span class="rating">'+this.buildStars(file.rating)+'</span>'+
+						'<span class="disqus-comment-count" data-disqus-url="http://deepsid.chordian.net/#!'+this.path+"/"+file.filename.replace("/_High Voltage SID Collection", "")+'"></span>'+
+						'</td>'+
+					'</tr>';
+			}.bind(this));
+			$("#songs table").append(this.folders+files);
+			this.updateDisqusCounts();
+		}
+
+		$("#folders").mCustomScrollbar("scrollTo", "top");
+	},
+
+	/**
+	 * Get the folders and files in 'this.path' and show them in the browser panel.
+	 * 
+	 * @param {number} scrollPos	If specified, jump to position in list (otherwise just stay in top).
+	 * @param {string} searchQuery	If specified, search results will be shown instead.
+	 * @param {function} callback 	If specified, the function to call after showing the contents.
+	 */
+	getFolder: function(scrollPos, searchQuery, callback) {
+		ctrls.state("root/back", "disabled");
+		$("#dropdown-sort").prop("disabled", true);
+		$("#songs table").empty();
+		this.isSearching = typeof searchQuery !== "undefined";
+		this.isSymlist = this.path.substr(0, 2) === "/!" || this.path.substr(0, 2) === "/$";
+
+		var loading = setTimeout(function() {
+			// Fade in a GIF loading spinner if the AJAX call takes longer than usual
+			$("#loading").css("top", $("#songs").height() / 2 - 50 /* Half size of SVG */).fadeIn(350);
+		}, 150);
+
+		this.playlist = []; // Every folder we enter will become its own local playlist
+		this.subFolders = 0;
+		// Call the AJAX PHP script that delivers the list of files and folders
+		$.get("php/hvsc.php", {
+				folder:			this.path,
+				searchType:		$("#dropdown-search").val(),
+				searchQuery:	this.isSearching ? searchQuery : "",
+		}, function(data) {
+			this.validateData(data, function(data) {
+				clearTimeout(loading);
+				$("#loading").hide();
+				ctrls.state("root/back", "enabled");
+				$("#folders").mCustomScrollbar("destroy");
+				this.folders = this.extra = this.symlists = "";
+				var files = "";
+
+				// Disable emulators/handlers in the drop-down according to parent folder attributes
+				$("#dropdown-emulator").styledOptionState("websid jssid soasc_auto soasc_r2 soasc_r4 soasc_r5", "enabled");
+				$("#page .viz-emu").removeClass("disabled");
+				$("#dropdown-emulator").styledOptionState(data.incompatible, "disabled");
+				if (data.incompatible.indexOf("websid") !== -1) $("#page .viz-websid").addClass("disabled");
+				if (data.incompatible.indexOf("jssid") !== -1) $("#page .viz-jssid").addClass("disabled");
+
+				$("#path").css("top", "5px");
+				var pathText = this.path == "" ? "/" : this.path
+					.replace(/^\/_/, '/')
+					.replace("/Compute's Gazette SID Collection", '<span class="dim">CGSC</span>')
+					.replace("/High Voltage SID Collection", '<span class="dim">HVSC</span>');
+				if (this.isSearching)
+					pathText = data.results+' results found&nbsp;&nbsp;<button id="search-cancel" class="medium">Cancel</button>';
+				else if (this.isSymlist) {
+					$("#path").css("top", "0.5px");
+					pathText = '<span class="playlist">'+this.path.substr(2)+'</span><br />'+
+						(this.path.substr(0, 2) === "/!"
+							? '<span class="maintainer">Personal playlist</span>'
+							: '<span class="maintainer">Playlist by '+data.owner+'</span>');
+				}
+				$("#path").empty().append(pathText);
+
+				// Tab 'STIL' is called 'Lyrics' in CGSC
+				$("#tab-stil").empty().append(this.isCGSC() ? "Lyrics" : "STIL");
+
+				// The 'CSDb' and 'GB64' tabs are useless to CGSC
+				var $twoTabs = $("#tab-csdb,#tab-gb64");
+				$twoTabs.removeClass("disabled");
+				if (this.isCGSC()) {
+					$twoTabs.addClass("disabled");
+					$("#note-csdb,#note-gb64").hide();
+					var $selected = $("#tabs .selected");
+					if ($selected.attr("data-topic") === "csdb" || $selected.attr("data-topic") === "gb64")
+						$("#tab-profile").trigger("click");
+				}
+
+				// FOLDERS
+
+				// Sort the list of folders first
+				data.folders.sort(function(obj1, obj2) {
+					return obj1.foldername.replace(/^(\_|\!|\$)/, '').toLowerCase() > obj2.foldername.replace(/^(\_|\!|\$)/, '').toLowerCase() ? 1 : -1;
+				});
+
+				var filter = this.setupSortBox();
+				var collections = [],
+					onlyShowPersonal = this.path === "" && filter === "personal";
+				$.each(data.folders, function(i, folder) {
+					var isPersonalSymlist = folder.foldername.substr(0, 1) == "!",
+						isPublicSymlist = folder.foldername.substr(0, 1) == "$",
+						myPublic = false;
+
+					if (isPublicSymlist) {
+						var result = $.grep(this.symlistFolders, function(entry) {
+							return entry.fullname == folder.foldername;
+						}.bind(this));
+						if (result.length) myPublic = true;
+					}
+					var adaptedName = folder.foldername.replace(/^(\_|\!|\$)/, '');
+					adaptedName = this.adaptBrowserName(adaptedName);
+					var folderEntry = '<tr'+(folder.incompatible.indexOf(SID.emulator) !== -1 ? ' class="disabled"' : '')+'>'+
+							'<td class="folder '+
+								(isPersonalSymlist || (isPublicSymlist && myPublic)
+									? 'playlist'
+									: folder.foldertype.toLowerCase()+(folder.hasphoto ? '-photo' : ''))+
+								'"><div class="block-wrap"><div class="block">'+
+							(folder.filescount > 0 ? '<div class="filescount">'+folder.filescount+'</div>' : '')+
+							'<span class="name entry'+(this.isSearching ? ' search' : '')+'" data-name="'+folder.foldername+'" data-incompat="'+folder.incompatible+'">'+
+							adaptedName+'</span></div></div></td>'+
+							'<td class="stars"><span class="rating">'+this.buildStars(folder.rating)+'</span></td>'+
+						'</tr>';
+					if (folder.foldername == "_High Voltage SID Collection" || 			// HVSC or CGSC
+							folder.foldername == "_Compute's Gazette SID Collection")
+						collections.push(folderEntry); // Need to swap the below
+					else if ((folder.foldername.substr(0, 1) == "_" || isPublicSymlist) &&
+						(!onlyShowPersonal || (onlyShowPersonal && myPublic)))			// Public symlist or custom?
+						this.extra += folderEntry;
+					else if (isPersonalSymlist)											// Personal symlist folder?
+						this.symlists += folderEntry;
+					else
+						this.folders += folderEntry;									// Normal folder
+					this.subFolders++;
+				}.bind(this));
+
+				if (this.subFolders) {
+					if (this.extra !== "") {
+						this.extra = '<tr class="disabled"><td class="spacer" colspan="2"></td></tr>'+this.extra+
+							'<tr class="disabled"><td class="divider" colspan="2"></td></tr>';
+						this.subFolders += 2;
+					}
+					if (this.symlists !== "") {
+						this.symlists = '<tr class="disabled"><td class="spacer" colspan="2"></td></tr>'+this.symlists+
+							'<tr class="disabled"><td class="divider" colspan="2"></td></tr>';
+						this.subFolders += 2;
+					}
+					if (collections.length)
+						this.folders = collections[1]+collections[0]; // HVSC should always be first
+					this.folders = '<tr class="disabled"><td class="spacer" colspan="2"></td></tr>'+this.folders;
+					this.folders += '<tr class="disabled"><td class="divider" colspan="2"></td></tr>'+this.extra;
+					this.folders += this.symlists;
+					this.subFolders += 2;
+				}
+
+				// FILES
+
+				// Sort the list of files first
+				data.files.sort(function(obj1, obj2) {
+					var o1 = obj1.substname != "" ? obj1.substname : obj1.filename;
+					var o2 = obj2.substname != "" ? obj2.substname : obj2.filename;
+					return o1.toLowerCase() > o2.toLowerCase() ? 1 : -1;
+				});
+				$.each(data.files, function(i, file) {
+					// Player: Replace "_" with space + "V" with "v" for versions
+					var player = file.player.replace(/_/g, " ").replace(/(V)(\d)/g, "v$2"),
+						rootFile = (this.isSearching || this.isSymlist ? "" : this.path) + "/" + file.filename;
+					var adaptedName = file.substname == "" ? file.filename.replace(/^\_/, '') : file.substname;
+					adaptedName = this.adaptBrowserName(adaptedName);
+					files += '<tr>'+
+							'<td class="sid unselectable"><div class="block-wrap"><div class="block">'+(file.subtunes > 1 ? '<div class="subtunes">'+file.subtunes+'</div>' : '')+
+							'<div class="entry name file'+(this.isSearching || this.path.substr(0, 2) === "/$" ? ' search' : '')+'" data-name="'+file.filename+'">'+adaptedName+'</div></div></div><br />'+
+							'<span class="info">'+file.copyright.substr(0, 4)+' in '+player+'</span></td>'+
+							'<td class="stars filestars"><span class="rating">'+this.buildStars(file.rating)+'</span>'+
+							'<span class="disqus-comment-count" data-disqus-url="http://deepsid.chordian.net/#!'+rootFile.replace("/_High Voltage SID Collection", "")+'"></span>'+
+							'</td>'+
+						'</tr>'; // &#9642; is the dot character if needed
+
+					// If the STIL text starts with a <BR> newline or a <HR> line, get rid of it
+					var stil = file.stil;
+					if (stil.substr(2, 4) == "r />") stil = stil.substr(6);
+
+					this.playlist.push({
+						filename:		file.filename,
+						substname:		file.substname, // Symlists can have renamed SID files
+						fullname:		this.ROOT_HVSC + rootFile,
+						player: 		player,
+						length: 		file.lengths,
+						clockspeed:		file.clockspeed,
+						sidmodel:		file.sidmodel,
+						subtunes:		file.subtunes,
+						startsubtune:	file.startsubtune == 0 ? 0 : file.startsubtune - 1, // If 0 then SIDId skipped it
+						size:			file.datasize,
+						address:		file.loadaddr,
+						copyright:		file.copyright,
+						stil:			stil,
+						rating:			file.rating,
+						hvsc:			file.hvsc,
+					});
+				}.bind(this));
+
+				if (files !== "" || this.path === "" || this.isMusiciansLetterFolder()) $("#dropdown-sort").prop("disabled", false);
+				/*var pos = this.folders.lastIndexOf('<tr>');
+				this.folders = this.folders.slice(0, pos) + this.folders.slice(pos).replace('<tr>', '<tr class="last">');*/
+				$("#songs table").append(this.folders+files);
+				this.updateDisqusCounts();
+
+				var $browser = this;
+				$("#folders").height($("#folders").height()) // Ugly hack to make custom scroll bar respect flexbox height
+					.mCustomScrollbar({
+						axis: "y",
+						theme: "dark-3",
+						setTop: (typeof scrollPos !== "undefined" ? scrollPos+"px" : "0"),
+						scrollButtons:{
+							enable: true,
+						},
+						mouseWheel:{
+							scrollAmount: 150,
+						},
+						callbacks: {
+							whileScrolling: function() {
+								$browser.currentScrollPos = this.mcs.top;
+							}
+						}
+					});
+				if (typeof callback === "function") callback.call(this);
+			});
+			if (this.path == "")
+				ctrls.state("root/back", "disabled");
+		}.bind(this));
+	},
+
+	/**
+	 * Get the length of the SID (sub) tune and convert it to just seconds.
+	 * 
+	 * @param {number} subtune		Subtune number.
+	 * @param {boolean} noReset		If specified and TRUE, skip resetting the bar fields.
+	 * 
+	 * @return {number}				The total number of seconds.
+	 */
+	getLength: function(subtune, noReset) {
+		// Example of a DB length string for four subtunes: "4:03 0:07 0:03 1:41"
+		var length = this.playlist[this.songPos].length.split(" ")[subtune];
+		if (typeof length === "undefined") length = "0:00";
+
+		this.secondsLength = length.split(":");
+		this.secondsLength = parseInt(this.secondsLength[0]) * 60 + parseInt(this.secondsLength[1]);
+
+		if (typeof noReset === "undefined") {
+			$("#time-current").empty().append("0:00");
+			$("#time-length").empty().append(length);
+			return $("#loop").hasClass("button-on") ? 0 : this.secondsLength;
+		}
+		return this.secondsLength;
+	},
+
+	/**
+	 * Turn the SID file row red to indicate that the handler can't play this.
+	 */
+	errorRow: function() {
+		// Can't rely on .selected as it might not be updated yet 
+		var $tr = $("#folders tr").eq(this.subFolders + this.songPos);
+
+		// Turn the row all red
+		$tr.find(".entry").css("color", "#a33");
+		$tr.find("span.info").css("color", "#cc8282");
+		$tr.css("background", "#f5eaea");
+
+		// Remove stuff, clear boxes, disable buttons
+		$("#sid-model,#clockspeed,#hvsc-version").remove();
+		$("#memory-chunk").css({left: "0", width: "0"});
+		$("#info-text").empty();
+		$("#stil").mCustomScrollbar("destroy").empty();
+
+		ctrls.state("play/stop", "disabled");
+		ctrls.state("prev/next", "enabled"); // Still need to skip it
+		ctrls.state("subtunes", "disabled");
+		ctrls.state("faster", "disabled");
+		ctrls.state("loop", "disabled");
+		$("#volume").prop("disabled", true);
+	},
+
+	/**
+	 * Build the HTML elements needed to show the marked stars in the SID file row.
+	 * 
+	 * @param {number} rating	The rating; 0 to 5.
+	 * 
+	 * @return {string}			The HTML string to put into the SID row.
+	 */
+	buildStars: function(rating) {
+		var s = $("#logout").length ? "sh " : "s "; // Only allow stars lighting up on hover if logged in
+
+		if (!rating || rating === "0")
+			return '<b class="'+s+'eu"></b><b class="'+s+'eu"></b><b class="'+s+'eu"></b><b class="'+s+'eu"></b><b class="'+s+'eu"></b>';
+
+		var stars = "";
+		for (var i = rating; i < 5; i++)
+			stars += '<b class="'+s+'ev"></b>';
+		for (var i = 0; i < rating; i++)
+			stars += '<b class="'+s+'xv"></b>';
+
+		return stars;
+	},
+
+	/**
+	 * Hide the rating stars and show a spinner to show that the SID tune is loading.
+	 * 
+	 * @param {object} $td	The jQuery element with the SID filename.
+	 */
+	showSpinner: function($td) {
+		if (SID.emulatorFlags.slowLoading) {
+			// Temporarily hide the rating stars and show a loading spinner instead
+			$stars = $($td).next("td.stars");
+			$stars.children("span").hide();
+			$stars.append('<span id="spinner"></span>');
+		}
+	},
+
+	/**
+	 * Clear the SID tune loading spinner and show the ratings stars again.
+	 */
+	clearSpinner: function() {
+		$("#songs td.stars span").show();
+		$("#spinner").remove();
+	},
+
+	/**
+	 * Let Disqus know that it's time to load comments for a different SID file.
+	 * 
+	 * @param {string} file		SID fullname string.
+	 */
+	reloadDisqus: function(file) {
+		if ($("#topic-disqus").length && $("#disqus-toggle").is(":checked") && typeof DISQUS !== "undefined") {
+			// Disqus was implemented before the main folder for HVSC was so it doesn't know it exists
+			var rootFile = file.replace("hvsc", "").replace("/_High Voltage SID Collection", "");
+			DISQUS.reset({
+				reload: true,
+				config: function() {  
+					this.page.url = "http://deepsid.chordian.net/#!"+rootFile;
+					this.page.identifier = "http://deepsid.chordian.net/#!"+rootFile;
+					this.page.title = rootFile;
+					$("#disqus-title").empty().append("File: "+rootFile);
+				}
+			});
+		}
+		this.rowDisqusCount();
+	},
+
+	/**
+	 * If there are any Disqus comments then show a notification number on the 'Disqus' tab (if not in focus).
+	 */
+	rowDisqusCount: function() {
+		var count = $("#folders tr").eq(this.subFolders + this.songPos).find(".disqus-comment-count")
+			.text().trim().split(" ")[0];
+		if (count !== "" && $("#tabs .selected").attr("data-topic") !== "disqus")
+			$("#note-disqus").empty().append(count).show();
+		else
+			$("#note-disqus").hide();
+	},
+
+	/**
+	 * Show number of Disqus comments for each SID file (if any).
+	 */
+	updateDisqusCounts: function() {
+		if ($("#topic-disqus").length && $("#disqus-toggle").is(":checked") && typeof DISQUSWIDGETS !== "undefined")
+			DISQUSWIDGETS.getCount({reset: true});
+	},
+
+	/**
+	 * Show the composer page in the 'Profile' tab.
+	 */
+	getComposer: function() {
+		if (this.composer) this.composer.abort();
+		if (this.groups) this.groups.abort();
+
+		if (this.path.substr(0, 2) == "/!" || this.path.substr(0, 2) == "/$") {
+			// Symlists won't get a composer page (for now at least)
+			$("#topic-profile").empty();
+			return;
+		}
+
+		$("#topic-profile").empty().append('<div style="height:400px;"><img id="loading-profile" src="images/loading.svg" style="display:none;" alt="" /></div>');
+
+		this.composerCache = "";
+
+		var loadingComposer = setTimeout(function() {
+			// Fade in a GIF loading spinner if the AJAX call takes a while
+			$("#loading-profile").fadeIn(500);
+		}, 250);
+
+		this.composer = $.get("php/composer.php", {
+			fullname: this.path.substr(1)
+		}, function(data) {
+			this.validateData(data, function(data) {
+
+				clearTimeout(loadingComposer);
+				$("#topic-profile").empty().append(data.html);
+	
+				this.groups = $.get("php/groups.php", {
+					fullname: this.path.substr(1)
+				}, function(data) {
+					this.validateData(data, function(data) {
+
+						if (data.html !== "") {
+							$("#table-groups").empty().append(data.html);
+							var html = $("#topic-profile").html();
+							// Don't include the script or the chart stuff will be shown twice
+							this.composerCache = html.substr(0, html.indexOf("<script"));
+						}
+	
+					});
+				}.bind(this));
+
+			});
+		}.bind(this));
+	},
+
+	/**
+	 * Show contents in the 'CSDb' tab pertinent to the selected SID tune. A spinner is
+	 * shown while getting contents through the CSDb web service.
+	 * 
+	 * Also handles the tab notification counter. 
+	 * 
+	 * @param {string} type		E.g. "release" (only used for permalinks).
+	 * @param {number} id		ID number used by CSDb (only used for permalinks).
+	 * @param {boolean} back	If specified and TRUE, show a 'BACK' button.
+	 */
+	getCSDb: function(type, id, back) {
+		if (this.csdb) this.csdb.abort();
+		$("#topic-csdb").empty().append('<div style="height:400px;"><img id="loading-csdb" src="images/loading.svg" style="display:none;" alt="" /></div>');
+
+		tabScrollPos = 0;
+
+		var loadingCSDb = setTimeout(function() {
+			// Fade in a GIF loading spinner if the AJAX call takes a while
+			$("#loading-csdb").fadeIn(500);
+		}, 250);
+
+		var args = typeof type !== "undefined" && typeof id !== "undefined"
+			? { type: type, id: id, back: (typeof back === "undefined" ? 1 : 0) }
+			: { fullname: browser.playlist[browser.songPos].fullname.substr(5) };
+
+		this.csdb = $.get("php/csdb.php", args, function(data) {
+			this.validateData(data, function(data) {
+
+				clearTimeout(loadingCSDb);
+				$("#topic-csdb").empty().append(data.html)
+					.css("visibility", "visible");
+
+				// If there are any entries then show a notification number on the 'CSDb' tab (if not in focus)
+				if (data.count != 0 && $("#tabs .selected").attr("data-topic") !== "csdb" && !this.isCGSC())
+					// If it's a release page then show a special character instead of a count
+					$("#note-csdb").empty().append(data.count > 0 ? data.count : "&#9679;").show(); // 8901, 9679
+				else
+					$("#note-csdb").hide();
+
+			});
+		}.bind(this));
+	},
+
+	/**
+	 * Show a competition results list in the 'CSDb' tab.
+	 * 
+	 * @param {string} compo	Type, e.g. "C64 Music" (obtained from a CSDb page).
+	 * @param {number} id 		The CSDB event ID.
+	 * @param {number} mark		ID of the release page to mark on the competition results list.
+	 */
+	getCompoResults: function(compo, id, mark) {
+		if (this.compo) this.compo.abort();
+		$("#topic-csdb").empty().append('<div style="height:400px;"><img id="loading-csdb" src="images/loading.svg" style="display:none;" alt="" /></div>');
+
+		var loadingCSDb = setTimeout(function() {
+			// Fade in a GIF loading spinner if the AJAX call takes a while
+			$("#loading-csdb").fadeIn(500);
+		}, 250);
+
+		this.compo = $.get("php/csdb_compo_table.php", { compo: compo, id: id, mark: mark }, function(data) {
+			this.validateData(data, function(data) {
+
+				clearTimeout(loadingCSDb);
+				$("#topic-csdb").empty().append(data.html)
+					.css("visibility", "visible");
+
+				// Populate all path table cells with the HVSC paths (when available in the CSDb release pages)
+				$("#topic-csdb .compo-path").each(function() {
+					var $this = $(this);
+					$.get("php/csdb_compo_path.php", { id: $this.attr("data-id") }, function(data) {
+						browser.validateData(data, function(data) {
+							$this.append(data.path);
+						});
+					});
+				});
+			});
+		}.bind(this));
+	},
+
+	/**
+	 * Show contents in the 'GB64' tab pertinent to the selected SID tune. A spinner is
+	 * shown while calling the PHP script.
+	 * 
+	 * Also handles the tab notification counter. 
+	 */
+	getGB64: function() {
+		if (this.gb64) this.gb64.abort();
+		$("#topic-gb64").empty().append('<div style="height:400px;"><img id="loading-gb64" src="images/loading.svg" style="display:none;" alt="" /></div>');
+
+		var loadingGB64 = setTimeout(function() {
+			// Fade in a GIF loading spinner if the AJAX call takes a while
+			$("#loading-gb64").fadeIn(500);
+		}, 250);
+
+		this.gb64 = $.get("php/gb64.php", { fullname: browser.playlist[browser.songPos].fullname.substr(5) }, function(data) {
+			this.validateData(data, function(data) {
+
+				clearTimeout(loadingGB64);
+				$("#topic-gb64").empty().append(data.html)
+					.css("visibility", "visible");
+	
+				// If there are any entries then show a notification number on the 'GB64' tab (if not in focus)
+				if (data.count > 0 && $("#tabs .selected").attr("data-topic") !== "gb64" && !this.isCGSC())
+					$("#note-gb64").empty().append(data.count).show();
+				else
+					$("#note-gb64").hide();
+	
+			});
+		}.bind(this));
+	},
+
+	/**
+ 	 * Get an array with the symlist folders the user currently have. These include
+ 	 * public symlists by other users.
+	 * 
+	 * @return {array}	An array with a list of symlists available to the user.
+	 */
+	getSymlists: function() {
+		$.get("php/symlist_folders.php", function(data) {
+			this.validateData(data, function(data) {
+				data.symlists.sort(function(obj1, obj2) {
+					return obj1.fullname.substr(1).toLowerCase() > obj2.fullname.substr(1).toLowerCase() ? 1 : -1;
+				});
+				this.symlistFolders = data.symlists;
+			});
+		}.bind(this));
+	},
+
+	/**
+	 * Show the main context menu. This is shown when right-clicking a SID file row.
+	 * 
+	 * NOTE: The context menu only appears when an valid action can be done to the SID
+	 * file, otherwise it passes control over to the standard web browser context menu.
+	 * 
+	 * @param {*} event 
+	 */
+	contextMenu: function(event) {
+		this.getSymlists();
+
+		var $panel = $("#panel"),
+			$target = $(event.target);
+
+		$("#contextmenu").remove();
+		if (typeof this.contextTR !== "undefined")
+			this.contextTR.css("background", "");
+
+		var contents = "";
+		this.contextEntry = $target.find(".entry");
+		this.contextSID = this.contextEntry.attr("data-name");
+
+		// Maintain hover background color while showing the context menu
+		this.contextTR = $target.parent("tr");
+		this.contextTR.css("background", "#f1f1ed");
+
+		if ($target.hasClass("sid")) {
+			var isPersonalSymlist = this.path.substr(0, 2) == "/!",
+				isPublicSymlist = this.path.substr(0, 2) == "/$";
+
+			if (isPublicSymlist && !this.isSearching) {
+				var result = $.grep(this.symlistFolders, function(entry) {
+					return entry.fullname == this.path.substr(1);
+				}.bind(this));
+				if (result.length === 0) return; // Not your public symlist
+			}
+
+			contents = (isPersonalSymlist || isPublicSymlist) && !this.isSearching
+
+				? '<div class="line" data-action="symentry-rename">Rename</div>'+			// SID in symlist folder
+				  '<div class="line" data-action="symentry-remove">Remove</div>'
+					
+				: '<div class="line" data-action="symlist-new">Add to New Playlist</div>'+	// SID in normal folder
+				  '<div class="line submenu'+(this.symlistFolders.length === 0 ? ' disabled' : '')+'">Add to Playlist</div>';
+
+		} else if ($target.hasClass("folder") && (this.contextSID.substr(0, 1) == "!" || this.contextSID.substr(0, 1) == "$")) {
+			var ifAlreadyPublic = "";
+
+			if (this.contextSID.substr(0, 1) == "$") {
+				var result = $.grep(this.symlistFolders, function(entry) {
+					return entry.fullname == this.contextSID;
+				}.bind(this));
+				if (result.length === 0) return; // Not your public symlist
+				ifAlreadyPublic = " disabled";
+			}
+
+			contents = 																		// Symlist folder in root
+				'<div class="line" data-action="symentry-rename">Rename Playlist</div>'+
+				'<div class="line" data-action="symlist-delete">Delete Playlist</div>'+
+				'<div class="line'+ifAlreadyPublic+'" data-action="symlist-publish">Publish Playlist</div>';
+		} else
+			return;
+
+		// Create the hidden menu and assume coordinates for going downwards
+		$panel.prepend('<div id="contextmenu" class="context">'+contents+'</div>');
+		var $contextMenu = $("#contextmenu");
+		$contextMenu
+			.css("top", event.pageY - 2)
+			.css("left", event.pageX - ($panel.offset().left - 8));
+
+		// Flip the menu upwards if the bottom of it goes off screen
+		// NOTE: Need "visibility:hidden" and not "display:none" for this to work.
+		var win = $(window);
+		var viewportBottom = win.scrollTop() + win.height();
+		var boundsBottom = $contextMenu.offset().top + $contextMenu.outerHeight();
+		if (boundsBottom > viewportBottom)
+			$contextMenu.css("top", event.pageY - $contextMenu.outerHeight());
+
+		// Show the menu
+		$contextMenu.css("visibility","visible");
+
+		return false;
+	},
+
+	/**
+	 * Show a sub context menu attached to a main context menu. Typically used to show
+	 * playlist folders available that the user can add a SID file to.
+	 * 
+	 * @param {*} event 
+	 */
+	contextSubMenu: function(event) {
+		var $panel = $("#panel");
+		$("#contextsubmenu").remove();
+
+		if ($(event.target).hasClass("disabled")) return;
+
+		// NOTE: For now, this is HARDWIRED to just show a list of playlist entries.
+		var contents = "";
+		$.each(this.symlistFolders, function(i, symlist) {
+			contents += '<div class="line" data-action="symlist-add">'+symlist['fullname'].substr(1)+
+				(symlist['public'] ? ' [PUBLIC]' : '')+'</div>';
+		});
+
+		// Create the hidden menu and assume coordinates for going downwards
+		$panel.prepend('<div id="contextsubmenu" class="context">'+contents+'</div>');
+		var $contextMenu = $("#contextmenu"),
+			$contextSubMenu = $("#contextsubmenu");
+		$contextSubMenu
+			.css("top", $contextMenu.children(".submenu").offset().top)
+			.css("left", $contextMenu.offset().left + $contextMenu.outerWidth() - 7);
+
+		// Flip the menu upwards if the bottom of it goes off screen
+		// NOTE: Need "visibility:hidden" and not "display:none" for this to work.
+		var win = $(window);
+		var viewportBottom = win.scrollTop() + win.height();
+		var boundsBottom = $contextSubMenu.offset().top + $contextSubMenu.outerHeight();
+		if (boundsBottom > viewportBottom)
+			$contextSubMenu.css("top", event.pageY - ($contextSubMenu.outerHeight() - $(".context .line").height() + 1));
+
+		// Show the menu
+		$contextSubMenu.css("visibility","visible");
+	},
+
+	/**
+	 * When clicking an item on a (sub) context menu.
+	 * 
+	 * @param {*} event 
+	 */
+	onContextClick: function(event) {
+		var $target = $(event.target);
+		if ($target.hasClass("disabled")) return;
+		var action = $target.attr("data-action");
+		switch (action) {
+			case "symlist-add":
+			case "symlist-new":
+				// Add the SID file to a symlist (exiting or creating with unique version of SID file name)
+				$.post("php/symlist_write.php", {
+					fullname:	(this.isSearching ? this.contextSID : this.path.substr(1)+"/"+this.contextSID),
+					symlist:	(action === "symlist-add" ? (event.target.textContent.indexOf(" [PUBLIC]") !== -1 ? "$" : "!")+event.target.textContent : '')
+				}, function(data) {
+					this.validateData(data);
+				}.bind(this));
+				if (action === "symlist-new")
+					this.getSymlists();
+				break;
+			case "symlist-delete":
+				// Delete the symlist and all of its entries
+				$.post("php/symlist_delete.php", {
+					symlist:	this.contextSID
+				}, function(data) {
+					this.validateData(data, function() {
+						this.getFolder();
+					});
+				}.bind(this));
+				break;
+			case "symlist-publish":
+				if (this.contextSID.substr(0, 1) === "$") return;
+				// Publish the playlist so that everyone can see it (and edit it if logged in)
+				$.post("php/symlist_publish.php", {
+					symlist:	this.contextSID
+				}, function(data) {
+					this.validateData(data, function() {
+						this.getFolder();
+					});
+				}.bind(this));
+				break;
+			case "symentry-remove":
+				// Remove the SID file from the symlist
+				$.post("php/symlist_remove.php", {
+					fullname:	this.contextSID,		// Fullname of physical SID file
+					symlist:	this.path.substr(1)
+				}, function(data) {
+					this.validateData(data, function() {
+						this.getFolder();
+					});
+				}.bind(this));
+				break;
+			case "symentry-rename":
+				this.prevSymName = this.contextEntry.text();
+				this.isFileRenamed = this.prevSymName.substr(-4) == ".sid" || this.prevSymName.substr(-4) == ".mus";
+				// Create the edit box
+				this.contextEntry.empty().append('<input type="text" id="sym-rename"'+
+					(this.isFileRenamed ? '' : ' style="position:absolute;top:6px;width:268px;"')+' maxlength="128" value="" />');
+				var nameBeingEdited = this.isFileRenamed
+					? this.prevSymName.substr(0, this.prevSymName.length - 4)
+					: this.prevSymName;
+				// Value must be set here for the cursor to be placed in the end
+				$renameBox = $("#sym-rename");
+				$renameBox.focus().val(nameBeingEdited);
+				// @link https://css-tricks.com/snippets/jquery/move-cursor-to-end-of-textarea-or-input/
+				if ($renameBox[0].setSelectionRange) {
+					var len = $renameBox.val().length * 2; // Opera issue
+					setTimeout(function() {
+						$renameBox[0].setSelectionRange(len, len);
+					}, 1); // Blink wants a timeout
+				}
+			default:
+				break;
+		}
+	},
+
+	/**
+	 * Restore the original display name of the file or folder. Used when no longer
+	 * renaming a playlist folder or file.
+	 */
+	restoreDisplayName: function() {
+		if ($("#sym-rename").length) {
+			this.contextEntry.empty().append(this.prevSymName);
+			$("#sym-rename").remove();
+		}
+	},
+
+	/**
+	 * Shorten a SID filename by abbreviating long HVSC and CGSC collection names.
+	 * 
+	 * @param {string} name		The original SID filename.
+	 * 
+	 * @return {string}			The shortened SID filename.
+	 */
+	adaptBrowserName: function(name) {
+		// Shorten collection names in browser list
+		return this.path === "" && !this.isSearching ? name : name
+			.replace("High Voltage SID Collection", '<font class="dim">HVSC</font>')
+			.replace("HVSC</font>/DEMOS", "HVSC/D</font>")
+			.replace("HVSC</font>/GAMES", "HVSC/G</font>")
+			.replace("HVSC</font>/MUSICIANS", "HVSC/M</font>")
+			.replace("Compute's Gazette SID Collection", '<font class="dim">CGSC</font>');
+	},
+
+	/**
+	 * Handle any errors after returning from an AJAX call.
+	 * 
+	 * @param {object} data			The data returned from the PHP script.
+	 * @param {function} callback	Function to call if no errors.
+	 * 
+	 * @return {boolean}			TRUE if no errors.
+	 */
+	validateData: function(data, callback) {
+		try {
+			data = $.parseJSON(data);
+		} catch(e) {
+			if (document.location.hostname == "chordian")
+				$("body").empty().append(data);
+			else
+				alert("An error occurred. If it keeps popping up please tell me about it: chordian@gmail.com");
+			return false;
+		}
+		if (data.status == "error") {
+			alert(data.message);
+			return false;
+		} else {
+			if (typeof callback === "function")
+				callback.call(this, data);
+			return true;
+		}
+	},
+
+	/**
+	 * Are we located in a CGSC folder, or at least playing a MUS file?
+	 * 
+	 * @return {boolean}
+	 */
+	isCGSC: function() {
+		return this.path.indexOf("_Compute's Gazette SID Collection") !== -1 ||
+			(typeof this.playlist[this.songPos] !== "undefined" &&
+				this.playlist[this.songPos].fullname.indexOf("_Compute's Gazette SID Collection") !== -1);
+	},
+
+	/**
+	 * Are we inside a letter folder in the 'MUSICIANS' folder in HVSC?
+	 * 
+	 * @return {boolean}
+	 */
+	isMusiciansLetterFolder: function() {
+		return this.path.indexOf("_High Voltage SID Collection/MUSICIANS") !== -1 &&
+			this.path.split("/").length === 4;
+	},
+
+	/**
+	 * Empty and then refill the contextual SORT/FILTER drop-down box.
+	 * 
+	 * @return {string}		Currently selected item (FILTER only).
+	 */
+	setupSortBox: function() {
+		var stickyMode = null;
+		if (!this.isSearching && this.path === "") {
+			// Sort box becomes a filter box in the root
+			stickyMode = localStorage.getItem("personal");
+			if (stickyMode == null)
+				stickyMode = "all";
+			else if (stickyMode == "personal")
+				stickyMode = "personal";
+			$("#dropdown-sort").empty().append(
+				'<option value="all">All</option>'+
+				'<option value="personal">Personal</option>'
+			).val(stickyMode);
+		} else if (!this.isSearching && this.isMusiciansLetterFolder()) {
+			// Sort box becomes a filter box when inside letter folders in MUSICIANS
+			$("#dropdown-sort").empty().append(
+				'<option value="all">All</option>'+
+				'<option value="quality">Decent</option>'
+			).val("all");
+			stickyMode = localStorage.getItem("letter");
+			if (stickyMode == null)
+				stickyMode = "all";
+			else if (stickyMode == "quality")
+				setTimeout(function() {
+					$("#dropdown-sort").val("quality").trigger("change");
+				}, 1);
+		} else {
+			// Sort box for everything else
+			$("#dropdown-sort").empty().append(
+				'<option value="name">Name</option>'+
+				'<option value="player">Player</option>'+
+				'<option value="rating">Rating</option>'+
+				'<option value="oldest">Oldest</option>'+
+				'<option value="newest">Newest</option>'+
+				'<option value="shuffle">Shuffle</option>'
+			).val("name");
+		}
+		return stickyMode;
+	},
+}

@@ -1,0 +1,2365 @@
+
+/**
+ * DeepSID / CSS
+ */
+
+@-ms-viewport{
+	width: 450;
+}
+
+body, html {
+	height: 100%;
+	margin: 0;
+}
+
+ /* Remove pointer events to simplify event handling in jQuery */
+button svg,
+button b,
+td span.info,
+td div,
+.no-hover {
+	pointer-events: none;
+}
+
+/* Add to elements you don't want to get marked when clicking fast */
+.unselectable {
+	-moz-user-select: -moz-none;
+	-khtml-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+/* For the "? ? ?" unknown fields */
+small.u1 { margin-right: 2px; }
+small.u2 { margin-left: 2px; }
+
+/* This should be a container ONLY around the text (not any images or other extra stuff) or some browsers might get confused */
+.ellipsis {
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+/* @link http://style64.org/c64-truetype */
+@font-face {
+	font-family: 'Commodore 64';
+	src: url('../fonts/C64_Pro_Mono-STYLE.woff2') format('woff2'),
+		 url('../fonts/C64_Pro_Mono-STYLE.woff') format('woff'),
+		 url('../fonts/C64_Pro_Mono-STYLE.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+}
+
+/* Container for entire left side (top, info/memory/stil, controls, browser, search) */
+#panel {
+	display: flex;
+	flex-flow: column;
+	height: 100%;
+	width: 430px;
+	margin: 0 10px;
+}
+
+#credits {
+	position: relative;
+}
+
+	#credits .c-left {
+		display: inline-block;
+		width: 170px;
+		font-weight: bold;
+		color: #62644c;
+	}
+
+	#credits span {
+		position: absolute;
+		right: 0;
+		font-size: 12px;
+		line-height: 19px;
+	}
+
+#sites {
+	position: absolute;
+	top: 12px;
+	right: 0;
+	font: normal 10px/0 "Montserrat", sans-serif;
+	text-transform: uppercase;
+	color: #c8c9b9;
+	z-index: 100;
+}
+
+	#sites span {
+		margin: 0 4px;
+	}
+
+	#sites a {
+		text-decoration: none;
+		color: #a1a294;
+	}
+
+	#sites a:hover {
+		color: #e95927;
+	}
+
+/* ---- Top (Login / Register) ----------------------------------------------- */
+
+#top, #tabs {
+	flex: 0 0 45px;
+	/*overflow: hidden;*/
+	position: relative;
+	margin: 6px 0;
+	/*background: #ffd;*/
+}
+
+#logo {
+	position: absolute;
+	top: -25px;
+	left: -7px;
+	color:  #d3d4c6; /* #c8c8b9 */
+	font: bold 43px "Kanit", sans-serif;
+}
+
+#logged-in {
+	position: absolute;
+	bottom: 3px;
+	right: 0;
+}
+
+	#logged-username {
+		font: normal 15px "Montserrat", sans-serif;
+		color: #68695a;
+	}
+
+	/* Additional styling for the emulator drop-down box in top */
+	#top .emulator {
+		position: absolute;
+		left: 0;
+		bottom: 3px;
+		width: 116px;
+		z-index: 3;
+		font-family: "Asap Condensed", sans-serif;
+	}
+
+#userform {
+	display: inline-block;
+}
+
+#userform fieldset {
+	position: absolute;
+	bottom: 3px;
+	right: 0;
+	width: 310px;
+	padding: 0;
+	margin: 0;
+	text-align: right;
+	border: none;
+}
+
+#userform label,
+#top label {
+	font: normal 13px/0 "Montserrat", sans-serif;
+}
+
+#userform input[type="text"],
+#userform input[type="password"] {
+	font-size: 14px;
+	padding: 4px;
+	height: 20px;
+	width: 82px;
+	border: 1px solid #c8c8b9;
+	border-radius: 1px;
+}
+
+/*#userform input[type="password"] {
+	width: 80px;
+}*/
+
+#userform button,
+#logout {
+	position: relative;
+	top: 2.5px;
+	height: 20px;
+	line-height: 0;
+	padding: 0 4px;
+}
+
+#response {
+	font-size: 12px;
+	color: #7c7e60;
+}
+
+	#userform .good	{ color: #494; }
+	#userform .bad	{ color: #a44; }
+
+/* ---- Controls Panel (Buttons) -------------------------------------------- */
+
+#interactive {
+	flex: 0 0 50px;
+	margin-top: 9px;
+}
+
+#controls {
+	height: 44px;
+	margin-left: 10px; /* To line up with the folder controls further down */
+}
+
+	#controls button,
+	#songs button,
+	.edit button {
+		transition: all .05s linear;
+		box-shadow: 2px 2px 4px #808270; /* #7c7e60 */
+	}
+
+	#controls button:active,
+	#songs button:active,
+	.edit button:active {
+		box-shadow: 0 0 0 transparent;
+	}
+
+	#controls button.disabled,
+	#songs button.disabled,
+	#userform button.disabled,
+	.edit button.disabled {
+		cursor: default;
+		background: #c8c9b9; /* #c4c5b3 */
+		border-color: #c8c9b9;
+		box-shadow: 0 0 0 transparent;
+		color: #f5f5f1;
+		fill: #f5f5f1;
+	}
+
+	#controls .divider,
+	.edit .divider {
+		display: inline-block;
+		width: 7px;			/* 10px */
+		height: 100%;
+		margin-left: 4px;	/* 7px */
+		border-left: 3px solid #c8c9b9; /* #b0b29a */
+	}
+
+.button-big, .button-lady, .button-tiny {
+	width: 50px;
+	height: 44px;
+	padding: 0;
+	border-radius: 10px;
+	fill: currentColor;
+	vertical-align: top;
+}
+
+.button-lady {
+	width: 100%;
+	height: 30px;
+}
+
+.button-tiny {
+	width: 100%;
+	height: 13px;
+}
+
+	.button-tiny svg {
+		position: relative;
+		top: -5px;
+	}
+
+.button-idle,
+.button-off {
+	color: #f5f5f1;
+	border: 2px solid transparent;
+}
+
+	.button-idle:hover,
+	.button-off:hover {
+		color: #fff;
+	}
+
+.button-selected,
+.button-on {
+	border: 2px solid #474937;
+	color: #474937;
+	background: #f5f5f1;
+}
+
+.button-on {
+	box-shadow: none !important;
+}
+
+	.button-selected:hover,
+	.button-on:hover {
+		border-color: #62644c;
+		color: #62644c;
+		background: #fff;
+	}
+
+.button-area {
+	display: inline-block;
+	position: relative;
+	height: 100%;
+	width: 42px;
+	vertical-align: top;
+}
+
+	.button-area div.disabled {
+		color: #c8c9b9;
+	}
+
+/* Used in piano tab */
+.edit {
+	border: 1px solid #ced0c0;
+	width: calc(100% - 5px); /* To match the width of the keyboards */
+	padding: 8px;
+	margin: 0 0 10px 2px;
+	background: rgb(71, 73, 55, 0.08);
+	border-radius: 3px;
+}
+
+	#waveform-colors {
+		position: absolute;
+		top: 1px;
+		left: 694px; /* Don't use 'right' here or it will be pushed by the custom scrollbar */
+	}
+
+	.viz-buffer {
+		float: right;
+	}
+
+		.viz-buffer label {
+			margin-right: 4px;
+		}
+
+		.dropdown-buffer {
+			position: relative;
+			top: 1px;
+			font-size: 13px;
+		}
+
+	.piano-top-panel {
+		position: relative;
+		top: 2px;
+		left: 2px;
+		height: 50px;
+		width: 834px;
+		/*font: normal 13px/0 "Montserrat", sans-serif;*/
+		color: #ddd;
+		background: #444;
+		background: linear-gradient(to bottom, #555 0%,#080808 100%);
+		border-top-left-radius: 3px;
+		border-top-right-radius: 3px;
+		/* border-bottom is set in main.js */
+	}
+
+		.pv-wrap {
+			position: absolute;
+			top: 11px;
+			left: 12px;
+			padding: 1px;
+			background: linear-gradient(to bottom, #111 0%,#3c3c3c 100%);
+			border-radius: 4px;
+		}
+
+		/* Button 1, 2 or 3 on keyboard that toggles ON or OFF */
+		.piano-voice {
+			padding: 0;
+			height: 25px !important;
+			width: 30px;
+			border-radius: 4px;
+			vertical-align: top;
+			font-size: 15px !important;
+			font-weight: bold;
+		}
+
+			.voice-on {
+				color: #222;
+				/*background: linear-gradient(to bottom, #f1f8f1 0%,#7e7 100%);*/
+				background: radial-gradient(circle 27px, #f6fcf6, #2c2);
+				background-repeat: no-repeat;				
+				border: 2px solid #3c3c3c;
+				box-shadow: 0 0 2px #afa;
+			}
+
+				.voice-on:hover {
+					/*background: linear-gradient(to bottom, #fff 0%,#bfb 100%);*/
+					background: radial-gradient(circle 30px, #fff, #4e4);
+				}
+
+			.voice-off {
+				color: #ddd;
+				background: linear-gradient(to bottom, #555 0%,#080808 100%);
+			}
+
+				.voice-off:hover {
+					background: linear-gradient(to bottom, #636363 0%,#171717 100%);
+				}
+
+		/* The flat triangle above the pulse width bars */
+		.flat-triangle {
+			position: absolute;
+			top: 20px;
+			left: 81px;
+			width: 0; 
+			height: 0; 
+			border-left: 100px solid transparent;	/* Each must be half width of pulse width bar  + 2px */
+			border-right: 100px solid transparent;
+			border-bottom: 7px solid #888;
+		}
+
+		.edges {
+			position: absolute;
+			top: 20px;
+			width: 200px;							/* Width of pulse width bar */
+			height: 7px;
+			border-left: 1px solid #ddd;
+			border-right: 1px solid #ddd;
+		}
+
+			.edges-pulse	{ left: 82px; }
+			.edges-fc		{ right: 115px; }
+
+		.edges-res {
+			position: absolute;
+			top: 10px;
+			right: 78px;
+			width: 3px;
+			height: 30px;							/* Height of vertical resonance bar */
+			border-top: 1px solid #ddd;
+			border-bottom: 1px solid #ddd;
+		}
+		
+		.bar-num {
+			position: absolute;
+			top: 12px;								/* Left is set in 'piano.php' */
+			font: normal 10px/0 "Montserrat", sans-serif;
+			line-height: 0;
+		}
+
+			.num-res {
+				right: 83px;
+				font-size: 9px;
+			}
+
+		/* RM / HS triangle arrows */
+		.pm-carpet-left {
+			position: absolute;
+			top: 7px;
+			height: 17px;
+			width: 6px;
+			transform: rotate(45deg);
+			border-radius: 3px;
+			background: linear-gradient(to bottom, #303030 0%,#434343 50%);
+		}
+
+			.pcl-ringmod	{ left: 376px; }
+			.pcl-hardsync	{ left: 412px; }
+
+		.pm-carpet-right {
+			position: absolute;
+			top: 7px;
+			left: 338px;
+			height: 17px;
+			width: 6px;
+			transform: rotate(-45deg);
+			border-radius: 3px;
+			background: linear-gradient(to bottom, #303030 0%,#434343 50%);
+		}
+
+			.pcr-ringmod  { left: 384px; }
+			.pcr-hardsync { left: 420px; }
+
+			.piano-ringmod-left,
+			.piano-hardsync-left {
+				position: absolute;
+				top: 8.5px;
+				height: 14px;
+				width: 3px;
+				transform: rotate(45deg);
+			}
+
+				.piano-ringmod-left   { left: 377.5px; }
+				.piano-hardsync-left  { left: 413.5px; }
+
+			.piano-ringmod-right,
+			.piano-hardsync-right {
+				position: absolute;
+				top: 8.5px;
+				height: 14px;
+				width: 3px;
+				transform: rotate(-45deg);
+			}
+
+				.piano-ringmod-right  { left: 385.5px; }
+				.piano-hardsync-right { left: 421.5px; }
+
+				.pr-on {
+					background: linear-gradient(to bottom, #faa 0%,#f44 100%);
+					box-shadow: 0 2px 11px #f66;
+				}
+
+				.ph-on {
+					background: linear-gradient(to bottom, #bbf 0%,#66f 100%);
+					box-shadow: 0 2px 11px #7272ff;
+				}
+
+				.pr-off, .ph-off {
+					background: #232323;
+				}
+
+			.label-mod {
+				top: 29px;
+				font-size: 9px;
+			}
+
+		.piano-top-panel .bar {
+			/*border: 1px solid #7a7a7a;*/
+			margin-top: 30px;
+			margin-left: 80px;
+			padding: 2px;
+			border-radius: 4px;
+			background: #333;
+			background: linear-gradient(to bottom, #0c0c0c 0%,#3c3c3c 100%);
+		}
+
+		/* The brown filter cutoff bar */
+		#piano-fc {
+			float: right;
+			margin-right: 112px;
+		}
+
+		/* The vertical resonance bar */
+		#piano-res {
+			position: absolute;
+			top: 8px;
+			right: 69px;
+			margin: 0;
+			border-radius: 1px;
+		}
+
+		.pb-wrap {
+			position: absolute;
+			right: 10px;
+			padding: 2px;
+		}
+
+			.pb-lp {
+				top: 8px;
+				background: linear-gradient(to bottom, #1e1e1e 0%,#464646 100%);
+			}
+			.pb-bp {
+				top: 20px;
+				background: linear-gradient(to bottom, #111 0%,#3c3c3c 100%);
+			}
+			.pb-hp {
+				top: 32px;
+				background: linear-gradient(to bottom, #0e0e0e 0%,#333 100%);
+			}
+
+			.pb-wrap span {
+				position: absolute;
+				top: 5px;
+				left: -29px;
+				font: normal 9px/0 "Montserrat", sans-serif;
+			}
+
+			/* The small filter passband LED indicators */
+			.piano-pb-led {
+				width: 17px;
+				height: 6px;
+			}
+
+				.pb-on {
+					background: #f55;
+					background: linear-gradient(to bottom, #fdd 0%,#f66 100%);
+					border: 0.3px solid #e44;
+					box-shadow: 0 0 11px #f88;
+				}
+
+				.pb-off {
+					background: #1e1e1e;
+					background: linear-gradient(to bottom, #333 0%,#1e1e1e 100%);
+					border: 0.3px solid #111;
+				}
+
+	.button-edit {
+		height: 25px !important;
+		padding: 0;
+		border-radius: 10px;
+		vertical-align: top;
+	}
+
+	/* Radio-button style buttons where the text needs to stay the same and only one button may be active */
+	.button-radio {
+		width: 70px;
+		margin-right: 2px;
+	}
+
+	/* Checkbox style toggle buttons that also toggles the text between ON and OFF */
+	.button-toggle {
+		width: 42px;
+	}
+
+	.edit label {
+		font: normal 13px/0 "Montserrat", sans-serif;
+		color: #68695a;
+		margin: 0 16px 0 1px;
+	}
+
+.button-tag {
+	position: relative;
+	top: 4px;
+	width: 100%;
+	text-align: center;
+}
+
+.button-tag, .tag {
+	font: normal 13px/0 "Montserrat", sans-serif;
+	color: #68695a;
+}
+
+.tag {
+	position: relative;
+	top: -2px;
+}
+
+.button-counter {
+	width: 100%;
+	text-align: center;
+	font-size: 11px;
+	font-weight: bold;
+}
+
+#flood {
+	overflow: hidden;
+	position: relative;
+	margin: 0 2px;
+}
+
+	/* A down-scrolling canvas area in the 'Flood' tab */
+	.flood-river {
+		position: absolute;
+		top: 0;
+		border: 0.5px solid #ced0c0; /* Color also set in 'viz.jz' script */
+		height: 100%;
+		width: 270px;
+		/*background: #fff;*/
+	}
+
+		#flood0 { left: 0; }
+		#flood1 { left: 282px; }
+		#flood2 { right: 0; }
+
+.thinner {
+	width: 32px;
+}
+
+	#faster, #skip-prev, #skip-next, #loop {
+		position: absolute;
+		bottom: 0;
+	}
+
+	#subtune-value {
+		position: absolute;
+		top: 13px;
+	}
+
+	#subtune-minus {
+		position: absolute;
+		left: 0;
+		bottom: 0;
+	}
+
+/* Volume slider - @link https://css-tricks.com/styling-cross-browser-compatible-range-inputs-css/
+   NOTE: These can't be comma-huddled! */
+
+input[type=range] {
+	-webkit-appearance: none;
+	height: 100%;
+	background: transparent;
+}
+
+input[type=range]:focus {
+	outline: none;
+}
+
+input[type=range]::-webkit-slider-thumb {	/* WebKit / Blink */
+	-webkit-appearance: none;
+	border: 2px solid #474937;
+	height: 16px;
+	width: 6px;
+	background: #474937;
+	cursor: pointer;
+	box-shadow: -1.5px 1.5px 4px #808270;
+	border-radius: 12px;
+	box-sizing: content-box;
+	margin-top: -9px;
+	transition: all .05s linear;
+}
+
+	input[type=range]::-webkit-slider-thumb:active {
+		background: #fff;
+		box-shadow: none;
+	}
+
+	input[type=range]:disabled::-webkit-slider-thumb {
+		background: #c8c9b9;
+		border-color: #c8c9b9;
+		box-shadow: 0 0 0 transparent;
+		cursor: default;
+	}
+
+input[type=range]::-moz-range-thumb {		/* Firefox*/
+	border: 2px solid #474937;
+	height: 16px;
+	width: 6px;
+	background: #474937;
+	cursor: pointer;
+	box-shadow: -1.5px 1.5px 4px #808270;
+	border-radius: 12px;
+	box-sizing: content-box;
+	transition: all .05s linear;
+}
+
+	input[type=range]::-moz-range-thumb:active {
+		background: #fff;
+		box-shadow: none;
+	}
+
+	input[type=range]:disabled::-moz-range-thumb {
+		background: #c8c9b9;
+		border-color: #c8c9b9;
+		box-shadow: 0 0 0 transparent;
+		cursor: default;
+	}
+
+input[type=range]::-ms-thumb {				/* IE / Edge */
+	border: 2px solid #474937;
+	height: 16px;
+	width: 6px;
+	background: #474937;
+	cursor: pointer;
+	box-shadow: -1.5px 1.5px 4px #808270;
+	border-radius: 12px;
+	box-sizing: content-box;
+	margin-top: 0;
+	transition: all .05s linear;
+}
+
+	input[type=range]::-ms-thumb:active {
+		background: #fff;
+		box-shadow: none;
+	}
+
+	input[type=range]:disabled::-ms-thumb {
+		background: #c8c9b9;
+		border-color: #c8c9b9;
+		box-shadow: 0 0 0 transparent;
+		cursor: default;
+	}
+	
+input[type=range]::-webkit-slider-runnable-track {
+	width: 100%;
+	height: 3px;
+	background: #7e8260;
+	border-radius: 1.3px;
+	cursor: pointer;
+}
+
+	input[type=range]:disabled::-webkit-slider-runnable-track {
+		background: #c8c9b9;
+		cursor: default;
+	}
+
+input[type=range]::-moz-range-track {
+	width: 100%;
+	height: 3px;
+	background: #7e8260;
+	border-radius: 1.3px;
+	cursor: pointer;
+}
+
+	input[type=range]:disabled::-moz-range-track {
+		background: #c8c9b9;
+		cursor: default;
+	}
+
+input[type=range]::-ms-track {
+	width: 100%;
+	height: 3px;
+	border-color: transparent;
+	color: transparent;
+	background: #7e8260;
+	border-radius: 1.3px;
+	cursor: pointer;
+}
+
+	input[type=range]:disabled::-ms-track {
+		background: #c8c9b9;
+		cursor: default;
+	}
+
+#volume {
+	position: absolute;
+	right: -40px;
+	top: -106px;
+	width: 45px;
+	transform-origin: 75px 75px;
+	transform: rotate(-90deg);
+}
+
+/* ---- The Time/Length Bar ------------------------------------------------- */
+
+#time {
+	margin-top: 2px;
+	text-align: center;
+	font-size: 14px;
+	color: #474937;
+}
+
+	#time-bar {
+		overflow: hidden;
+		display: inline-block;
+		width: 346px; /* Width also used in browser.js */
+		height: 9px;
+		border: 0.5px solid #c4c5b3; /* #a8ad95 #c8c9b9 */
+		border-radius: 3px;
+		background: #fcfcfc;
+	}
+
+		#time-bar div {
+			float: left;
+			height: 100%;
+			width: 0; /* Changed in jQuery */
+			background: #000;
+			transition: all 1s linear;
+			pointer-events: none;
+		}
+
+		#time .websid div	{ background: #44529d; }
+		#time .jssid div	{ background: rgb(38, 99, 41); }
+		#time .soasc_r2 div	{ background: #a44; }
+		#time .soasc_r4 div	{ background: rgb(116, 87, 47); }
+		#time .soasc_r5 div	{ background: #444; }
+		#time .jhohertz div	{ background: rgb(104, 44, 116); } /* Not implemented yet */
+
+/* ---- Info Box (Name, Author, Copyright) ---------------------------------- */
+
+#info {
+	position: relative;
+	flex: 0 0 84px;
+	border: 1px solid #c8c8b9;
+	border-top-left-radius: 1px;
+	border-top-right-radius: 1px;
+	border-bottom-color: #969787; /* #7a88c8 #8a8c7a #969787 #7f8dcb */
+	background: #f7f8f5;
+	font-size: 14px;
+}
+
+	#info-text {
+		overflow:hidden;
+		padding: 6px 10px;
+		height: 70px;
+		hyphens: auto;
+	}
+
+	/* Black box for the MUS info text */
+	#info-mus {
+		position: relative;
+		top: 3px;
+		left: -2px;
+		background: #000;
+		color: #000;
+		width: 330px; /* 320 + (BORDER * 2) */
+		border: 5px solid #000;
+		border-radius: 4px;
+	}
+
+	/* C64 colors for MUS info text (supplied by Peter Weighill) */
+	.c0 { color:#000000; }
+	.c1 { color:#ffffff; }
+	.c2 { color:#880000; }
+	.c3 { color:#aaffee; }
+	.c4 { color:#cc44cc; }
+	.c5 { color:#00cc55; }
+	.c6 { color:#0000aa; }
+	.c7 { color:#eeee77; }
+	.c8 { color:#dd8855; }
+	.c9 { color:#664400; }
+	.c10 { color:#ff7777; }
+	.c11 { color:#333333; }
+	.c12 { color:#777777; }
+	.c13 { color:#aaff66; }
+	.c14 { color:#0088ff; }
+	.c15 { color:#bbbbbb; }
+	
+	.b0 { background-color:#000000; }
+	.b1 { background-color:#ffffff; }
+	.b2 { background-color:#880000; }
+	.b3 { background-color:#aaffee; }
+	.b4 { background-color:#cc44cc; }
+	.b5 { background-color:#00cc55; }
+	.b6 { background-color:#0000aa; }
+	.b7 { background-color:#eeee77; }
+	.b8 { background-color:#dd8855; }
+	.b9 { background-color:#664400; }
+	.b10 { background-color:#ff7777; }
+	.b11 { background-color:#333333; }
+	.b12 { background-color:#777777; }
+	.b13 { background-color:#aaff66; }
+	.b14 { background-color:#0088ff; }
+	.b15 { background-color:#bbbbbb; }	
+
+	/* A corner box to make sure text never appear below the small flag boxes */
+	#corner {
+		float: right;
+		width: 80px;
+		height: 22px;
+	}
+
+	#sid-model,
+	#clockspeed {
+		position: absolute;
+		height: 16px;
+		padding: 7px 4px 0;
+		font-family: "Open Sans", helvetica, sans-serif;
+		font-size: 11px;
+		line-height: 0;
+		border: 1px solid #8a8c7a; /* #c4c5b3  */
+		border-radius: 3px;
+		text-align: center;
+		vertical-align: top;
+		cursor: pointer;
+	}
+
+		#sid-model {
+			top: 9px;
+			right: 9px;
+		}
+
+		#clockspeed {
+			top: 9px;
+			right: 47px;
+		}
+
+		#info .MOS6581 {
+			background: #474937;
+			color: #f5f5f1;
+			border-color: #474937;
+		}
+
+			#info .MOS6581:hover {
+				background: #62644c;
+				color: #fff;
+				border-color: #62644c;
+			}
+
+		#info .MOS8580 {
+			background: #fafafa;
+		}
+
+			#info .MOS8580:hover {
+				color: #62644c;
+				background: #fff;
+			}
+
+		#info .PAL {
+			background: #669;
+			color: #f5f5f1;
+			border-color: #669;
+		}
+
+			#info .PAL:hover {
+				background: #77a;
+				color: #fff;
+				border-color: #77a;
+			}
+
+		#info .NTSC {
+			background: #955;
+			color: #f5f5f1;
+			border-color: #955;
+		}
+
+			#info .NTSC:hover {
+				background: #b06c6c;
+				color: #fff;
+				border-color: #b06c6c;
+			}
+
+	#hvsc-version,
+	#pace {
+		position: absolute;
+		right: 9px;
+		bottom: 15px;
+		font-family: "Open Sans", helvetica, sans-serif;
+		font-size: 11px;
+	}
+
+	#hvsc-version	{ color: #a8ad95; }
+	#pace			{ bottom: 35px; }
+
+	/* Light blue bar indicating all of 64 KB RAM */
+	#memory-bar {
+		overflow: hidden;
+		display: inline-block;
+		position: absolute;
+		bottom: 0;
+		width: 100%; /* Width also used in main.js */
+		height: 8px;
+		border-top: 1px solid #44529d; /* #8a8c7a #969787 #7f8dcb */
+		border-left: 1px solid rgba(68,82,157,0.3);
+		border-right: 1px solid rgba(68,82,157,0.3);
+		background: #a4aeda; /*#7d8bca;*/
+	}
+
+		#memory-lid {
+			position: relative;
+			top: 0;
+			left: 0;
+			height: 2px;
+			width: 100%;
+			/*border-top: 2px solid transparent;
+			border-image: linear-gradient(90deg, rgba(68,82,157,0), rgba(68,82,157,1), rgba(68,82,157,0)) 2 stretch;*/
+			background-image: linear-gradient(90deg, rgba(68,82,157,0), rgba(68,82,157,1), rgba(68,82,157,0));
+		}
+
+		/* Dark blue indicating the tune in memory */
+		#memory-chunk {
+			position: relative;
+			top: -2px;
+			left: 0; /* Changed in jQuery */
+			height: 100%;
+			width: 0; /* Changed in jQuery */
+			background: #44529d;
+			z-index: 2;
+			cursor: help;
+		}
+
+/* ---- STIL Box ------------------------------------------------------------ */
+
+#stil {
+	overflow: none; /* Only for tips; changed to "auto" for actual STIL text (hack needed for MS Edge) */
+	flex: 0 0 118px;
+	padding: 6px 10px;
+	border-left: 1px solid #c8c8b9;
+	border-right: 1px solid #c8c8b9;
+	border-bottom: 0.5px solid #c8c8b9;
+	border-bottom-left-radius: 1px;
+	border-bottom-right-radius: 1px;
+	font-size: 14px;
+	background: #f7f8f5;
+}
+
+	/* The STIL box is used for random tips upon page load */
+	#tips {
+		position: relative;
+		top: 50%;
+		transform: translateY(-50%);
+		font-size: 12px;
+		text-align: center;
+	}
+
+		#tips p {
+			margin: 0 0 6px 0;
+		}
+
+		#tips code {
+			font-size: 12px;
+		}
+
+	/* C64 font for INFO and STIL boxes when browsing CGSC */
+	.c64font {
+		font-family: "Commodore 64", sans-serif;
+		font-size: 10px !important;
+		line-height: 10px;
+		color: #555743;
+	}
+
+	#stil .subtune,
+	#topic-stil .subtune {
+		display: inline-block;
+		height: 16px;
+		padding: 0 4px;
+		font-size: 12px;
+		line-height: 15px;
+		font-weight: bold;
+		color: #f5f5f1;
+		background: #474937;
+		border-radius: 3px;
+		text-align: center;
+		cursor: pointer;
+	}
+
+		#stil .subtune:hover,
+		#topic-stil .subtune:hover {
+			background: #62644c;
+		}
+
+	#stil hr,
+	#topic-stil hr {
+		background: transparent;
+		border-bottom: 1px dashed #a8ad95;
+		height: 1px;
+		margin: 8px 0 9px;
+	}
+
+/* Line below STIL box for dragging it smaller or larger */
+#slider {
+	position: relative;
+	flex: 0 0 3px;
+	border-left: 1px solid #c8c8b9;
+	border-right: 1px solid #c8c8b9;
+	border-bottom: 0.5px solid #c8c8b9;
+	background: #fff;
+	text-align: center;
+	cursor: n-resize;
+}
+
+/* ---- Browser List -------------------------------------------------------- */
+
+#songs {
+	flex: 1 1 auto;
+	flex: 1; /* Chrome hack */
+	position: relative;
+	padding: 0;
+	margin: 3.5px 0 10px;
+	border: 1px solid #c8c8b9; /* #a8ad95 #c8c8b9 #ced0c0 #d3d4c6 #d7d7cb */
+	border-radius: 1px;
+	color: #555;
+	background: #f7f8f5; /* #f0f0ea #f2f2ee #f7f8f5 */
+}
+
+	/* Container for GIF loading spinner IMG */
+	#loading {
+		position: absolute;
+		top: 0; /* Changed in jQuery */
+		left: 165px; /* (430 / 2) - 50 */
+	}
+
+	/* The top container with root/back buttons, path and sort drop-down box */
+	#songs-buttons {
+		height: 50px;
+		padding: 10px;
+		background: #fff;
+	}
+
+	/* The root/back buttons */
+	.browser-ctrls {
+		width: 34px;
+	}
+
+		.browser-ctrls svg {
+			position: relative;
+			top: 2px;
+		}
+
+	#path {
+		display: inline-block;
+		position: relative;
+		top: 5px;
+		margin-left: 8px;
+		font-size: 14px;
+		width: 61%; /* If you change the panel box width you may have to finetune this */
+		height: 34px;
+		color: #808270; /* #68695a #969787 #808270 #8a8c7a */
+	}
+	
+		/* For the small HVSC or CGSC in the path line */
+		#path .dim,
+		#folders .dim {
+			position: relative;
+			top: -1px;
+			color: #b0b29a; /* #c4c5b3 #c8c8b9 */
+			font-size: 9px;
+			margin-right: 1px;
+		}
+
+		#folders .dim {
+			font-size: 11px;
+			color: #969787;
+		}
+
+		#path .playlist {
+			position: relative;
+			top: -3px;
+			font-weight: bold;
+		}
+
+		#path .maintainer {
+			position: relative;
+			top: -9px;
+			font-size: 10px;
+			color: #969787; /* #a1a294 */
+			font-style: italic;
+		}
+
+	/* The drop-down box for how the list is sorted */
+	#sort {
+		position: absolute;
+		top: 13px;
+		right: 11px;
+	}
+
+		#sort label {
+			font: normal 13px/0 "Montserrat", sans-serif;
+			color: #68695a;
+		}
+
+		#dropdown-sort {
+			font-size: 13px;
+		}
+
+	#songs table {
+		font-size: 14px;
+		border: 0;
+	}
+
+	/* Scrollable box with folders and SID files */
+	#folders {
+		overflow: auto;
+		height: calc(100% - 100px); /* Minus the height of #songs-buttons and #search */
+		border-top: 1px solid #c8c8b9;
+		border-bottom: 1px solid #c8c8b9;
+	}
+
+	/* A clicked SID file for playing */
+	#songs .selected {
+		color: #474937 !important;
+		background: #ebebe5; /* #d2d5cb #eaeae4 #ebebe5 #edede7*/
+		font-weight: bold;
+	}
+
+	#songs .selected .info,
+	#songs .selected .disqus-comment-count {
+		font-weight: normal;
+		color: #62644c;
+	}
+
+	#songs td {
+		border: 0;
+		padding: 0 0 0 10px;
+		cursor: pointer;
+	}
+
+		/* Loading spinner shown for slow-loading handlers like SOASC */
+		#spinner {
+			float: right;
+			position: relative;
+			top: -1px;
+			right: 20px;
+			width: 42px;
+			height: 42px;
+			background: url(../images/spinner.svg) no-repeat;
+		}
+
+		#songs td.stars {
+			width: 118px;
+			padding: 0;
+		}
+
+		/* Stars for SID files need to be aligned with the first line (the SID filename itself) */
+		#songs td.filestars {
+			vertical-align: top;
+			padding-top: 6px;
+		}
+
+		#songs .rating {
+			display: block;
+			unicode-bidi: bidi-override; /* @link https://css-tricks.com/star-ratings/ */
+			direction: rtl;
+		}
+
+		#songs b.s,
+		#songs b.sh { /* Star */
+			display: inline-block;
+			position: relative;
+			top: 3px;
+			width: 18px;
+			height: 18px;
+		}
+
+		/* Show filled stars when hovering on them (only when logged in) */
+		#songs .rating > b.sh:hover:before,
+		#songs .rating > b.sh:hover ~ b.sh:before {
+			content: "";
+			display: inline-block;
+			position: relative;
+			top: 0;
+			width: 18px;
+			height: 18px;
+			background: url(../images/if_star_orange.svg) 0 0 / 18px 18px no-repeat;
+		}
+
+		#songs b.xv { /* User voted */
+			background: url(../images/if_star_orange.svg) 0 0 / 18px 18px no-repeat;
+		}
+
+		#songs b.ev { /* Empty voted */
+			background: url(../images/if_star_empty_voted.svg) 0 0 / 18px 18px no-repeat;
+		}
+
+		#songs b.eu { /* Empty unvoted */
+			background: url(../images/if_star_empty_unvoted.svg) 0 0 / 18px 18px no-repeat;
+		}
+
+		#songs .disqus-comment-count {
+			float: right;
+			position: relative;
+			top: -1px;
+			right: 30px;
+			font-size: 11px;
+			color: #969787; /* #808270 #8a8c7a */
+		}
+
+		#songs .block-wrap {
+		  display: inline-block;
+		  max-width: 294px; /* Width before right end turns in to "..." ellipsis */
+		}
+
+		#songs .block {
+		  width: 100%;
+		}
+
+		/* Used for both folders and files (wrapper to force a maximum width with "..." in the end) */
+		#songs .entry {
+			display: block;
+			overflow: hidden;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+			/*background: #faa;*/
+		}
+
+		/* Alloyrun.sid (file) */
+		#songs .file {
+			padding-top: 6px;
+		}
+
+		/* A narrower font for search queries in case path + name gets long */
+		#songs .search {
+			/*font-family: "Barlow Condensed", sans-serif;*/
+			font-family: "Asap Condensed", sans-serif;
+		}
+
+		/* Number of subtunes (indicated in the end of the SID filename) */
+		#songs .subtunes {
+			float: right;
+			position: relative;
+			top: 9px;
+			margin-left: 6px;
+			height: 16px;
+			padding: 0 4px;
+			font-size: 12px;
+			line-height: 15px;
+			font-weight: bold;
+			color: #f5f5f1;
+			background: #474937;
+			border-radius: 3px;
+			text-align: center;
+		}
+
+			#songs .disabled .subtunes {
+				background: #d3d4c6; /* #c8c9b9 */
+			}
+
+		/* 1988 in MoN/FutureComposer (second line below SID filename itself) */
+		#songs .info {
+			position: relative;
+			top: -7px;
+			font-size: 11px;
+			color: #969787; /* #808270 #8a8c7a */
+		}
+
+		/* Tel_Jeroen (folder) */
+		#songs .folder {
+			font-size: 16px;
+			line-height: 0;
+			position: relative;
+			top: -2px;
+		}
+
+			#songs .folder span {
+				height: 26px;
+			}
+
+			/* Folder SVG icon */
+			#songs .folder span:before {
+				content: "";
+				display: inline-block;
+				position: relative;
+				top: 2px;
+				margin-right: 2px;
+				background: url(../images/if_folder.svg) 0 0 / 26px 26px no-repeat;
+				width: 26px;
+				height: 21px;
+			}
+
+			#songs .single span:before {
+				background: url(../images/if_folder_single.svg) 0 0 / 26px 26px no-repeat;
+			}
+
+			#songs .single-photo span:before {
+				background: url(../images/if_folder_single_photo.svg) 0 0 / 26px 26px no-repeat;
+			}
+
+			#songs .group span:before {
+				background: url(../images/if_folder_group.svg) 0 0 / 26px 26px no-repeat;
+			}
+
+			#songs .group-photo span:before {
+				background: url(../images/if_folder_group_photo.svg) 0 0 / 26px 26px no-repeat;
+			}
+
+			#songs .playlist span:before {
+				background: url(../images/if_folder_star.svg) 0 0 / 26px 26px no-repeat;
+			}
+
+			/* #songs .playlist span:before {
+				top: 6px;
+				background: url(../images/playlist.svg) 4px 0 / 19px 19px no-repeat;
+			} (Shows a list-with-note icon instead) */
+
+		#songs .filescount {
+			float: right;
+			position: relative;
+			top: 8px;
+			margin-left: 6px;
+			height: 16px;
+			padding: 7px 4px 0;
+			font-size: 11px;
+			line-height: none;
+			background: transparent; /* #8a8c7a */
+			border: 1px solid #c4c5b3;
+			border-radius: 3px;
+			text-align: center;
+		}
+
+		/* Breathing room in top of folders */
+		#songs .spacer {
+			padding-bottom: 5px;
+			cursor: default;
+		}
+
+		/* Divider below folders (end of folder or divider before SID files) */
+		#songs .divider {
+			padding-bottom: 6px;
+			border-bottom: 1px dashed #a8ad95;
+			cursor: default;
+		}
+
+	#songs tr:hover {
+		/*color: #e95927;*/ /* Orange */
+		background: #f1f1ed; /* #d2d5cb #ebebe5 #edede7 #eeeee8 */
+	}
+
+		#songs tr.selected:hover {
+			background: #ebebe5;
+		}
+
+		#songs tr.disabled:hover {
+			background: #f7f8f5; /* Same as box background */
+		}
+
+	/* Used for e.g. BASIC tunes (the two emulators can't play these) */
+	#songs .disabled,
+	#songs .disabled tr:hover,
+	#songs .disabled .info {
+		color: #d3d4c6; /* #c8c8b9 #a8ad95; */
+		cursor: default;
+	}
+
+	/* The bottom container for searching */
+	#search {
+		position: relative;
+		padding: 10px;
+		height: 50px;
+		background: #fff;
+	}
+
+		#dropdown-search {
+			position: absolute;
+			top: 14px;
+			left: 11px;
+			font-size: 13px;
+			width: 88px;
+		}
+
+		#search input[type="text"] {
+			position: absolute;
+			top: 14px;
+			left: 105px;
+			width: 242px;
+			font-size: 14px;
+			padding: 4px;
+			height: 21px;
+			border: 0.5px solid #c8c8b9;
+			border-radius: 1px;
+		}
+
+		#songs .medium {
+			padding: 0 7px;
+			font-size: 11px;
+			box-shadow: none !important;
+		}
+
+			#search-button {
+				position: absolute;
+				top: 14px;
+				right: 11px;
+				height: 21px;
+				line-height: 22px;
+			}
+
+			#search-cancel {
+				position: relative;
+				top: -2.5px;
+				height: 23px;
+				line-height: 26px;
+			}
+
+/* ---- Context menu -------------------------------------------------------- */
+
+.context {
+	visibility: hidden;
+	position: absolute;
+	z-index: 4;
+	background: #fff;
+	border: 1px solid #c8c8b9;
+	padding: 4px 6px;
+	box-shadow: 2px 2px 2px rgba(0,0,0,0.2);
+	/*box-shadow: 2px 2px 4px #808270;*/ /* #7c7e60 */
+}
+
+	#contextsubmenu {
+		z-index: 5;
+	}
+
+	.context .line {
+		position: relative;
+		height: 24px;
+		padding: 0 6px;
+		margin: 2px 0;
+		font-size: 13px;
+		line-height: 25px;
+		cursor: pointer;
+	}
+
+		.context .line:hover {
+			background: #eeeee8; /* #d2d5cb #ebebe5 #edede7 #eeeee8 */
+		}
+
+	.context .submenu {
+		padding-right: 18px;
+	}
+
+	.context .submenu:after {
+		content: "";
+		position: absolute;
+		top: 6px;
+		right: 0;
+		width: 0;
+		height: 0;
+		border: 6px solid transparent;
+		border-color: transparent transparent transparent #474937;
+	}
+
+	.context .disabled {
+		color: #ced0c0; /* #c8c8b9; */
+		cursor: default;
+	}
+
+		.context .disabled:hover {
+			background: transparent;
+		}
+
+		.context .disabled.submenu:after { /* Chained classes */
+			border-color: transparent transparent transparent #ced0c0;
+		}
+
+	/* Edit box for renaming a file or folder (symlists only) */
+	#sym-rename {
+		height: 20px;
+		width: 264px;
+		font-size: 14px;
+		font-weight: normal;
+		pointer-events: auto;
+	}
+
+/* ---- Right side container with tabs -------------------------------------- */
+
+/* Container for entire left side (top, info/memory/stil, controls, browser, search) */
+#dexter {
+	position: absolute;
+	top: 0;
+	left: 450px;
+	display: flex;
+	flex-flow: column;
+	height: calc(100% - 10px);
+	width: 860px;
+}
+
+	#tabs {
+		/* See also #top for additional styling (flex) */
+		width: 860px;
+	}
+
+		#tabs .tab {
+			float: left;
+			position: relative;
+			top: 30.5px;
+			width: 60px;
+			height: 22px;
+			font: normal 13px/0 "Montserrat", sans-serif;
+			padding-top: 10px;
+			color: #808270;
+			margin-right: 3px;
+			border-top: 1px solid #c8c8b9;
+			border-left: 1px solid #c8c8b9;
+			border-right: 1px solid #c8c8b9;
+			border-top-left-radius: 1px;
+			border-top-right-radius: 1px;
+			text-align: center;
+			background: #eff1eb;
+			z-index: 1;
+			cursor: pointer;
+		}
+
+		#tabs .selected {
+			border-top: 1px solid #c8c8b9;
+			border-left: 1px solid #c8c8b9;
+			border-right: 1px solid #c8c8b9;
+			color: #68695a;
+			background: #f7f8f5;
+			z-index: 3;
+			cursor: default;
+		}
+
+		#tabs .disabled {
+			border-top: 1px solid #dadace;
+			border-left: 1px solid #dadace;
+			border-right: 1px solid #dadace;
+			color: #d7d7cb;
+			background: #eeeee8;
+			cursor: default;
+		}
+
+		#tabs .tab:not(.selected):hover.tab:not(.disabled):hover {
+			color: #62644c;
+			background: #fff;
+		}
+
+		#tabs .right {
+			float: right;
+			margin-left: 3px;
+			margin-right: 0;
+		}
+
+		/* Small value bubbles at the tab corners */
+		#tabs .notification {
+			display: none;
+			position: absolute;
+			top: -6px;
+			right: -2px;
+			font-size: 9px;
+			line-height: 0;
+			height: 12.5px;
+			background: #a00; /* #44529d */
+			color: #fff;
+			padding: 6px 3px 0;
+			border-radius: 3px;
+			font-weight: bold;
+		}
+
+		#tabs .csdbcolor {
+			background: #100098; /* Original CSDb color */
+		}
+
+		#tabs .gb64color {
+			background: #070;
+		}
+
+	/* Where the contents of a dexter tab is shown */
+	#page {
+		flex: 1 1 auto;
+		flex: 1; /* Chrome hack */
+		overflow: auto;
+		padding: 10px;
+		border: 1px solid #c8c8b9;
+		border-radius: 1px;
+		background: #f7f8f5 url(../images/biglogo.png) -14px -2px / 890px no-repeat;
+		z-index: 2;
+	}
+
+		#page h2:first-child {
+			margin-top: 140px;
+		}
+
+		#page .h2-note {
+			position: relative;
+			top: -3px;
+			display: inline-block;
+			margin-left: 16px;
+			font: italic 14px "Open Sans", helvetica, sans-serif;
+		}
+
+	#disqus-title {
+		display: block;
+		/*font-size: 19px;*/
+		margin: 140px 0 14px;
+		color: #68695a; /* #474937 */
+	}
+
+	/* Tighter paragraphs for the profile, CSDb and GB64 pages */
+	#page .ext p {
+		margin: 10px 0;
+	}
+
+		#page .ext del {
+			color: #a8ad95; /* #969787 */
+		}
+
+		#page .ext .screenshot {
+			width: 384px;
+			height: 272px;
+			border: 1px solid #ced0c0;
+		}
+
+		#page .ext .composer {
+			width: 184px;
+			height: 184px;
+			border: 1px solid #ced0c0;
+		}
+
+			/* Born - SID - Died */
+			#page .ext .line {
+				position: relative;
+				top: -4px;
+				margin-right: 20px;
+			}
+
+			#page .ext .onsid {
+				padding: 2px 6px 3px;
+				border: 1px solid #b0b29a;
+				border-radius: 4px;
+				background: #fff;
+			}
+
+			/* Flag image added after countries */
+			#page .ext .flag {
+				height: 11px;
+				border: 1px solid #62644c;
+				margin: 0 1px;
+			}
+
+			#page .ext img.icon {
+				position: relative;
+				top: 4px;
+				height: 21px;
+				margin-right: 3px;
+			}
+
+			#page .ext img.arrow {
+				position: relative;
+				top: 4px;
+				height: 18px;
+				margin-right: 2px;
+			}
+
+			#page .ext .up {
+				position: relative;
+				top: -2px;
+			}
+
+			#page .ext .abandoned {
+				color: #caa;
+			}
+
+		#page .ext .icon-before:before,
+		#page .ext .compo-pos:before {
+			content: "";
+			position: relative;
+			display: inline-block;
+		}
+
+			#page .ext .icon-arrowright:before {
+				top: 4px;
+				height: 18px;
+				width: 18px;
+				background: url(../images/composer_arrowright.svg) 0 0 / 18px 18px no-repeat;
+				margin-right: 2px;
+			}
+
+			#page .ext .compo-pos:before {
+				top: 1px;
+				height: 16px;
+				width: 18px;
+				background: url(../images/composer_arrowright.svg) 0 0 / 18px 18px no-repeat;
+			}
+
+			#page .ext .icon-founder:before {
+				top: 4px;
+				height: 18px;
+				width: 18px;
+				background: url(../images/composer_flash.svg) 0 0 / 18px 18px no-repeat;
+				margin-right: 2px;
+			}
+
+			#page .ext .icon-random:before {
+				top: 4px;
+				height: 17px;
+				width: 17px;
+				background: url(../images/composer_random.svg) 0 0 / 17px 17px no-repeat;
+				margin-right: 2px;
+			}
+
+			#page .ext .icon-created:before {
+				top: 2px;
+				left: 1px;
+				height: 16px;
+				width: 16px;
+				background: url(../images/composer_plus.svg) 0 0 / 16px 16px no-repeat;
+				margin-right: 4px;
+			}
+
+			#page .ext .icon-work:before {
+				top: 2px;
+				height: 15px;
+				width: 15px;
+				background: url(../images/composer_office.svg) 0 0 / 15px 15px no-repeat;
+				margin-right: 4px;
+			}
+
+			#page .ext .icon-etc:before {
+				top: 2px;
+				left: -1px;
+				height: 16px;
+				width: 16px;
+				background: url(../images/composer_downwards.svg) 0 0 / 18px 18px no-repeat;
+				margin-right: 3px;
+			}
+
+			#page .ext .icon-swing:before {
+				top: 4px;
+				height: 18px;
+				width: 18px;
+				background: url(../images/composer_arrowswing.svg) 0 0 / 18px 18px no-repeat;
+				margin-right: 2px;
+			}
+
+			#page .ext .icon-note:before {
+				top: 4px;
+				left: 1px;
+				height: 18px;
+				width: 11px;
+				background: url(../images/composer_singlenote.svg) 0 0 / 11px 18px no-repeat;
+				margin-right: 6px;
+			}
+
+		/* Some composer profiles may show a group logo/name image too */
+		#brand {
+			position: absolute;
+			right: 0;
+			bottom: 6px;
+		}
+
+		/* Container for group name in table list to have ellipsis on it */
+		#page .ext .group,
+		#page .ext .participant {
+			display: inline-block;
+			max-width: 195px;
+			vertical-align: bottom;
+		}
+
+		#page .ext .participant {
+			max-width: 250px;
+		}
+
+		#page .ext .permalink {
+			width: 12px;
+			height: 12px;
+			fill: #c4c5b3;
+			margin: 0 0 2px 8px;
+			cursor: pointer;
+			transition: all .07s linear;
+		}
+
+		#corner-icons {
+			position: absolute;
+			top: 2px;
+			right: 4px;
+			height: 24px;
+			text-align: right;
+		}
+
+			#corner-icons svg {
+				width: 24px;
+				height: 24px;
+				cursor: pointer;
+				transition: all .07s linear;
+			}
+
+				#corner-icons .profile,
+				#corner-icons .close {
+					width: 23px;
+					height: 23px;
+					margin-right: 3px;
+					fill: #c4c5b3;
+				}
+
+				#corner-icons .close {
+					position: relative;
+					top: 1px;
+				}
+
+				#corner-icons .close:hover,
+				#corner-icons .profile:hover,
+				#page .ext .permalink:hover {
+					fill: #969787;
+				}
+
+				#corner-icons .outlink {
+					stroke: #c4c5b3; /* #ced0c0 */
+				}
+
+				#corner-icons .outlink:hover {
+					stroke: #969787; /* #a8ad95 #b0b29a */
+				}
+
+		/* Icons inline in text (typically in field with notable achievements) */
+		#page .ext .inline-icon {
+			position: relative;
+			top: 3px;
+			width: 15px;
+			margin-right: 2px;
+		}
+
+		#page .ext .count {
+			position: relative;
+			top: -1px;
+			margin-left: 6px;
+			height: 16px;
+			padding: 0 4px 0;
+			font-size: 11px;
+			line-height: none;
+			background: transparent; /* #8a8c7a */
+			border: 1px solid #c4c5b3;
+			border-radius: 3px;
+			text-align: center;
+		}
+
+			#page .ext table.comments .count {
+				font-size: 9px;
+			}
+
+		#page .ext table.comments,
+		#page .ext table.releases {
+			font-size: 14px;
+			margin: 0;
+			border-width: 1.5px;
+		}
+
+		#page .ext table.comments td {
+			border-top-color: #ced0c0; /* #c8c8b9 */
+		}
+
+		#page .ext .user {
+			position: relative;
+			width: 170px;
+			vertical-align: top;
+			border-right-color: #ced0c0;
+			color: #969787;
+		}
+
+			#page .ext .user a {
+				text-decoration: none;
+			}
+
+			#page .ext .date {
+				position: relative;
+				top: -4px;
+				font-size: 11px;
+				color: #7c7e60; /* #969787 */
+			}
+
+			#page .ext .pm {
+				position: absolute;
+				top: auto;
+				bottom: 6px;
+				right: 6px;
+			}
+
+			/* Folder icon in comments that goes to his/her DeepSID folder */
+			#page .ext .home-folder {
+				position: absolute;
+				top: auto;
+				bottom: 6px;
+				right: 32px;
+				cursor: pointer;
+			}
+
+		/* The table cell with the actual CSDb comment text */
+		#page .ext .comment {
+			vertical-align: top;
+		}
+
+			/* Used to encapsulate extremely long words and force them to wrap around */
+			#page .ext .long {
+				display: inline-block;
+				overflow-wrap: break-word;
+				word-wrap: break-word;
+				word-break: break-all;
+			}
+
+		/* Table showing releases for a SID tune (CSDb type: "SID") */
+		#page .ext table.releases {
+			border-left: none;
+			border-right: none;
+			border-top: none;
+			border-bottom: 1px solid #ced0c0;
+			margin: 0;
+		}
+
+			#page .ext table.releases td {
+				border-right: none;
+				border-top: 1px solid #ced0c0;
+				padding: 7px 0 2px;
+			}
+
+			#topic-piano .piano {
+				position: relative;
+				width: 100%;
+				height: 96px;
+				transition: all .2s linear;
+			}
+
+			#topic-csdb .thumbnail {
+				width: 116px;
+			}
+
+			#topic-gb64 .thumbnail {
+				text-align: right;
+				/*background: #faa;*/
+			}
+
+				#page .ext .thumbnail img {
+					width: 116px;
+					height: 82px;
+					border: 1px solid #ced0c0;
+				}
+
+				#topic-gb64 .thumbnail img {
+					margin-left: 8px;
+				}
+
+			#page .ext .info {
+				position: relative;
+				padding: 7px 0 0 6px !important;
+				vertical-align: top;
+				font-size: 12px;
+			}
+
+				#page .ext .name {
+					font-size: 16px;
+					font-weight: bold;
+					text-decoration: none;
+				}
+
+			#page .ext .rdate,
+			#page .ext .language {
+				display: inline-block;
+				position: relative;
+				top: 19px;
+				font-size: 11px;
+				margin-right: 6px;
+				color: #7c7e60; /* #969787 */
+			}
+
+			#page .ext .language {
+				left: 1px;
+			}
+
+				#page .ext .info .count {
+					top: 18px;
+					margin: 0 3px 0 0;
+				}
+
+					#page .ext .info .count a {
+						text-decoration: none !important;
+					}
+
+			#page .ext .external {
+				position: absolute;
+				right: 20px;
+				top: 31px;
+			}
+
+			#page .ext button {
+				font-size: 11px;
+				height: 21px;
+				line-height: 22px;
+			}
+
+				#go-back,
+				#go-back-init {
+					position: relative;
+					top: -4px;
+					margin-left: 10px;
+				}
+
+				#show-compo {
+					position: relative;
+					top: -1px;
+					margin-left: 8px;
+				}
+
+				#csdb-comment {
+					margin: 6px 6px 0 0;
+				}
+
+	#page .ext table.tight {
+		width: auto !important;
+		border: none;
+		margin-bottom: 0;
+	}
+
+	#page .ext table.tight th,
+	#page .ext table.tight td {
+		border: none;
+		padding: 0;
+	}
+
+		#page .ext .top td {
+			vertical-align: top;
+		}
+
+		#page .ext .topline {
+			padding-top: 6px !important;
+			border-top: 1px solid #b0b29a !important; /* #a8ad95 #c4c5b3 */
+		}
+
+		#page .ext .bottomline {
+			padding-bottom: 8px !important;
+			border-bottom: 1px solid #b0b29a !important;
+		}
+
+		#page .ext .leftline {
+			border-left: 1px solid #b0b29a !important;
+		}
+
+		#page .ext .rightline {
+			border-right: 1px solid #b0b29a !important;
+		}
+
+		/* No CSDb profile | No game statics */
+		#page .ext .nocounts {
+			margin-top: 1px;
+			font-size: 12px;
+			line-height: 22px;
+			color: #a1a294;
+			text-align: center;
+		}
+
+		#page .ext span.quote {
+			display: block;
+			font-weight: bold;
+			font-size: 12px;
+			margin: 6px 0 0 10px;
+		}
+
+		#page .ext div.quote {
+			margin: 0 10px 11px;
+			padding: 4px 8px;
+			font-size: 12px;
+			border: 1px solid #a8ad95;
+			border-radius: 2px;
+			/*background: #fff;*/
+		}
+
+	#page .ext table.compo {
+		width: 100% !important;
+		margin: 0;
+		padding: 6px;
+		font-size: 13px;
+		border: 1px solid #b0b29a;
+	}
+
+	#page .ext table.compo th,
+	#page .ext table.compo td {
+		border: none;
+	}
+
+	#page .ext table.compo th {
+		padding-bottom: 4px;
+		background: transparent;
+	}
+
+		#page .ext tr.compo-bold {
+			font-weight: bold;
+		}
+
+		#page .ext td.compo-arrow {
+			padding: 0 !important;
+			padding-right: 2px !important;
+		}
+
+		#page .ext td.compo-place {
+			text-align: right;
+			padding-right: 12px !important;
+			padding-bottom: 1px !important;
+		}
+
+		#page .ext td.compo-name {
+			padding-right: 18px !important;
+			padding-bottom: 1px !important;
+		}
+
+		#page .ext td.compo-path {
+			padding-right: 10px !important;
+			padding-bottom: 1px !important;
+		}
+
+	#page .legend {
+		position: relative;
+		top: -2px;
+		display: inline-block;
+		font-family: "Open Sans", helvetica, sans-serif;
+		font-size: 12px;
+		margin-left: 32px;
+		color: #969787;
+	}
+
+	/* Container for GIF loading spinner IMG */
+	#loading-profile,
+	#loading-csdb,
+	#loading-gb64 {
+		position: relative;
+		top: 235px;
+		left: 370px;
+	}
+
+	#page .deepsid-iframe {
+		border:1px solid #b0b29a;
+		width:100%;
+		display:none;
+	}
+
+/* ---- Overriding Custom Scrollbar Styling --------------------------------- */
+
+.mCSB_inside > .mCSB_container {
+	margin-right: 17px;	/* Changed from 30px; drags content closer to scrollbar */
+}
+
+.mCSB_scrollTools {
+	height: 103%; 		/* Changed from auto */
+	top: -3px;			/* Changed from 0	 */
+	right: -3px;		/* Changed from 0	 */
+}
+
+#folders .mCSB_inside > .mCSB_container {
+	margin-right: 0;
+}
+
+#folders .mCSB_scrollTools {
+	height: 99%;		/* Changed from auto */
+	top: 2px;
+	right: 7px;
+}
+
+#page .mCSB_scrollTools {
+	top: -7px;
+}
+
+/* ---- Styled Select ------------------------------------------------------- */
+
+/* Used to make the original select hidden but still functional */
+.s-hidden {
+	visibility: hidden;
+	padding-right: 10px;
+}
+
+/* When an <LI> option needs a 16x16 icon */
+.s-icon {
+	position: relative;
+	float: left;
+	width: 16px;
+	height: 16px;
+	margin-top: 3px;
+	margin-right: 4px;
+}
+
+/* Also extended for the original drop-down box */
+.select {
+	position: relative;
+	cursor: pointer;
+	display: inline-block;
+	font: normal 13px/1.44em "Open Sans", helvetica, sans-serif;
+	color: #474937;
+	height: 20px;
+	border: 1px solid #c8c8b9;
+	border-radius: 1px;
+	background: #fff;
+	
+}
+
+/* Inside the new styled select */
+.styledSelect {
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	padding: 0 6px;
+	border-radius: 1px;
+	background: #fff;
+}
+
+/* The small arrow symbol */
+.styledSelect:after {
+	content: "";
+	position: absolute;
+	top: 7px;
+	right: 6px;
+	width: 0;
+	height: 0;
+	border: 5px solid transparent;
+	border-color: #474937 transparent transparent transparent;
+}
+
+/* The small arrow symbol when the drop-down box is disabled */
+.select .disabled:after {
+	border-color: #777 transparent transparent transparent;
+}
+
+/* When the select box is clicked and thus unfolded */
+.styledSelect:active, .styledSelect.active {
+	background: #f5f5f1;
+}
+
+/* The drop-down panel itself */
+.options {
+	display: none;
+	position: absolute;
+	top: 100%;
+	right: 0;
+	left: 0;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	border: 1px solid #c8c8b9;
+	background: #fff;
+	max-height: 221px;
+	overflow-y: none;
+	line-height: 1.75em;
+	box-shadow: 0 1px 2px rgba(0,0,0,0.3);
+}
+
+	.options li {
+		height: 22px;
+		padding: 0 6px;
+		margin: 0;
+	}
+
+	.options li.disabled {
+		color: #c8c8ba !important;	
+	}
+
+	/* Adds a dotted line */
+	.s-line {
+		padding-bottom: 1px;
+		border-bottom: 1px dotted #a4a4a4;
+	}
