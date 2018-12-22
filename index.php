@@ -729,6 +729,24 @@
 				<div id="topic-changes" class="topic" style="display:none;">
 					<h2>Changes</h2>
 
+					<h3>December 22, 2018</h3>
+					<ul>
+						<li>Added a <code>Good</code> filter option to the letter folders in MUSICIANS. The <code>Decent</code>
+						option will show folders that JCH gave two stars or more, and <code>Good</code> will show folders that
+						JCH gave three stars or more.</li>
+					</ul>
+
+					<h3>December 21, 2018</h3>
+					<ul>
+						<li>The <code>Decent</code> mode is now ready for letter folder <code>G</code> in MUSICIANS.</li>
+					</ul>
+
+					<h3>December 20, 2018</h3>
+					<ul>
+						<li>The source codes for DeepSID are now on <a href="https://github.com/Chordian/deepsid">GitHub</a>.
+							Feel free to use the issue tracker there.</li>
+					</ul>
+
 					<h3>December 18, 2018</h3>
 					<ul>
 						<li>The sort drop-down box in the root has been changed into a filter mode. Select <code>Personal</code>

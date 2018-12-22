@@ -371,23 +371,25 @@ Browser.prototype = {
 				this.getFolder();
 				localStorage.setItem("personal", "personal");
 				break;
-			case "quality":
-				// MUSICIANS: Show only decent folders (assessed by JCH) in the letter folder
+			case "decent":
+			case "good":
+				// MUSICIANS: Show only decent or good folders (assessed by JCH) in the letter folder
 				filterFolders = true;
 				$.get("php/rating_quality.php", { folder: this.path }, function(data) {
 					this.validateData(data, function(data) {
 						// Is the folder ready (i.e. all folders have ratings)?
 						if (data.ready) {
+							var stars = event.target.value == "decent" ? 1 : 2;
 							$(this.folders+" tr").each(function(i, element) {
 								$this = $(element);
-								// Rating must be more than one star
-								if (data.results[$this.find(".name").text()] > 1)
+								// Rating must be more than one star for "decent" or two stars for "good"
+								if (data.results[$this.find(".name").text()] > stars)
 									filterFolders += '<tr>'+$this.html()+'</tr>';
 							}.bind(this));
 							filterFolders = '<tr class="disabled"><td class="spacer" colspan="2"></tr>'+
 								filterFolders+'<tr class="disabled"><td class="divider" colspan="2"></tr>';
 							$("#songs table").append(filterFolders);
-							localStorage.setItem("letter", "quality");
+							localStorage.setItem("letter", event.target.value);
 						} else {
 							alert("The filter option for this folder is not ready yet.");
 							$("#dropdown-sort").val("all").trigger("change");
@@ -1286,14 +1288,15 @@ Browser.prototype = {
 			// Sort box becomes a filter box when inside letter folders in MUSICIANS
 			$("#dropdown-sort").empty().append(
 				'<option value="all">All</option>'+
-				'<option value="quality">Decent</option>'
+				'<option value="decent">Decent</option>'+
+				'<option value="good">Good</option>'
 			).val("all");
 			stickyMode = localStorage.getItem("letter");
 			if (stickyMode == null)
 				stickyMode = "all";
-			else if (stickyMode == "quality")
+			else if (stickyMode == "decent" || stickyMode == "good")
 				setTimeout(function() {
-					$("#dropdown-sort").val("quality").trigger("change");
+					$("#dropdown-sort").val(stickyMode).trigger("change");
 				}, 1);
 		} else {
 			// Sort box for everything else
