@@ -217,7 +217,7 @@
 					<span>&#9642</span>-->
 				<a href="https://twitter.com/jchuus">Twitter</a>
 					<span>&#9642</span>
-				<a href="https://www.facebook.com/chordian.net/">Facebook</a>
+				<a href="https://www.facebook.com/groups/deepsid/">Facebook</a>
 					<span>&#9642</span>
 				<a href="https://github.com/Chordian/deepsid">GitHub</a>
 				</div>
@@ -733,8 +733,12 @@
 					<ul>
 						<li>Searching for HVSC/CGSC versions now also return new folders.</li>
 						<li>Fixed a bug that prevented
-						<a href="http://deepsid.chordian.net/?file=/MUSICIANS/S/Syboxez/Back_to_BASICs.sid" class="redirect">Back to BASICs.sid</a>
-						from being played by the emulators.</li>
+							<a href="http://deepsid.chordian.net/?file=/MUSICIANS/S/Syboxez/Back_to_BASICs.sid" class="redirect">Back to BASICs.sid</a>
+							from being played by the emulators.</li>
+						<li>Added a <code>Common</code> filter option in the root. Select this to show the HVSC and CGSC
+							collection folders along with common collection/competition playlists, plus of course your
+							personal playlists. In other words, the new option filters out public playlists that are
+							personal in nature, such as e.g. lists of favorites.</li>
 					</ul>
 
 					<h3>December 24, 2018</h3>

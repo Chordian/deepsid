@@ -365,6 +365,12 @@ Browser.prototype = {
 					localStorage.setItem("letter", "all");
 				}
 				break;
+			case "common":
+				// ROOT: Show collections, varied "official" playlists, and own public/private playlists
+				filterFolders = true;
+				this.getFolder();
+				localStorage.setItem("personal", "common");
+				break;
 			case "personal":
 				// ROOT: Show only collections and own public/private playlists
 				filterFolders = true;
@@ -541,7 +547,8 @@ Browser.prototype = {
 
 				var filter = this.setupSortBox();
 				var collections = [],
-					onlyShowPersonal = this.path === "" && filter === "personal";
+					onlyShowPersonal = this.path === "" && filter === "personal",
+					onlyShowCommon = this.path === "" && filter === "common";
 				$.each(data.folders, function(i, folder) {
 					var isPersonalSymlist = folder.foldername.substr(0, 1) == "!",
 						isPublicSymlist = folder.foldername.substr(0, 1) == "$",
@@ -570,7 +577,8 @@ Browser.prototype = {
 							folder.foldername == "_Compute's Gazette SID Collection")
 						collections.push(folderEntry); // Need to swap the below
 					else if ((folder.foldername.substr(0, 1) == "_" || isPublicSymlist) &&
-						(!onlyShowPersonal || (onlyShowPersonal && myPublic)))			// Public symlist or custom?
+						(!onlyShowPersonal || (onlyShowPersonal && myPublic)) &&
+						(!onlyShowCommon || (onlyShowCommon && folder.flags & 0x1)))	// Public symlist or custom?
 						this.extra += folderEntry;
 					else if (isPersonalSymlist)											// Personal symlist folder?
 						this.symlists += folderEntry;
@@ -972,8 +980,7 @@ Browser.prototype = {
 	},
 
 	/**
- 	 * Get an array with the symlist folders the user currently have. These include
- 	 * public symlists by other users.
+	 * Get an array with the personal and public symlist folders the user currently have.
 	 * 
 	 * @return {array}	An array with a list of symlists available to the user.
 	 */
@@ -1282,6 +1289,7 @@ Browser.prototype = {
 				stickyMode = "personal";
 			$("#dropdown-sort").empty().append(
 				'<option value="all">All</option>'+
+				'<option value="common">Common</option>'+
 				'<option value="personal">Personal</option>'
 			).val(stickyMode);
 		} else if (!this.isSearching && this.isMusiciansLetterFolder()) {

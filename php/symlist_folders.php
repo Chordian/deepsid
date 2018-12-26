@@ -2,8 +2,7 @@
 /**
  * DeepSID
  *
- * Get an array with the symlist folders the user currently have. These include
- * public symlists by other users.
+ * Get an array with the personal and public symlist folders the user currently have.
  */
 
 require_once("class.account.php"); // Includes setup
