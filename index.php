@@ -729,9 +729,21 @@
 				<div id="topic-changes" class="topic" style="display:none;">
 					<h2>Changes</h2>
 
+					<h3>December 26, 2018</h3>
+					<ul>
+						<li>Searching for HVSC/CGSC versions now also return new folders.</li>
+					</ul>
+
+					<h3>December 24, 2018</h3>
+					<ul>
+						<li>Added composer profiles for the new folders in HVSC #70.</li>
+						<li>Deleted the two server folders for "Datastorm 2018" and "From JCH's Special Collection" as their
+							contents can now be found in HVSC #70 instead. Everything below HVSC and CGSC are now only playlists.</li>
+					</ul>
+
 					<h3>December 23, 2018</h3>
 					<ul>
-						<li>The <a href="https://www.hvsc.c64.org/">High Voltage SID Collection</a> has now been upgraded to the latest version #70.</li>
+						<li>The <a href="https://www.hvsc.c64.org/">High Voltage SID Collection</a> has been upgraded to the latest version #70.</li>
 					</ul>
 
 					<h3>December 22, 2018</h3>

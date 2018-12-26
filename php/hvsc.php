@@ -73,7 +73,7 @@ try {
 			$select = $db->prepare('SELECT fullname FROM composers WHERE country LIKE :query LIMIT 1000');
 			$query = strtolower($_GET['searchQuery']) == 'holland' ? 'netherlands' : $_GET['searchQuery'];
 			$select->execute(array(':query'=>'%'.$query.'%'));
-		} else if ($_GET['searchType'] == 'fullname') {
+		} else if ($_GET['searchType'] == 'fullname' || $_GET['searchType'] == 'new') {
 			// Normal type search
 			$select = $db->prepare('SELECT fullname FROM hvsc_folders WHERE '.$_GET['searchType'].' LIKE :query AND (fullname NOT LIKE "!%") LIMIT 1000');
 			$select->execute(array(':query'=>'%'.($_GET['searchType'] == 'new' ? str_replace('.', '', $_GET['searchQuery']) : $_GET['searchQuery']).'%'));
