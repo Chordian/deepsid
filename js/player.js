@@ -189,7 +189,7 @@ SIDPlayer.prototype = {
 
 			case "websid":
 
-				var error = file.indexOf("_BASIC") !== -1;
+				var error = file.indexOf("_BASIC.") !== -1;
 				if (error) this.setVolume(0);
 
 				var options = {};
@@ -227,7 +227,7 @@ SIDPlayer.prototype = {
 			case "jssid":
 
 				// @todo Maybe catch most digi/speech stuff via the 'player' field?
-				var error = file.indexOf("_BASIC") !== -1;
+				var error = file.indexOf("_BASIC.") !== -1;
 				if (error) this.setVolume(0);
 
 				this.jsSID.setloadcallback(function() {

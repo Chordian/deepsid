@@ -732,6 +732,9 @@
 					<h3>December 26, 2018</h3>
 					<ul>
 						<li>Searching for HVSC/CGSC versions now also return new folders.</li>
+						<li>Fixed a bug that prevented
+						<a href="http://deepsid.chordian.net/?file=/MUSICIANS/S/Syboxez/Back_to_BASICs.sid" class="redirect">Back to BASICs.sid</a>
+						from being played by the emulators.</li>
 					</ul>
 
 					<h3>December 24, 2018</h3>
