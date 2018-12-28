@@ -162,13 +162,21 @@ function CommentsTable($title, $comments, &$scener_handle, &$scener_id, $backwar
 			}
 		}
 
+		// Figure out the name of the thumbnail (if it exists)
+		$fn = str_replace('_High Voltage SID Collection/', '', $hvsc_folder);
+		$fn = str_replace("_Compute's Gazette SID Collection/", "cgsc_", $fn);
+		$fn = strtolower(str_replace('/', '_', $fn));
+		$thumbnail = 'images/composers/'.$fn.'.jpg';
+		if (!file_exists('../'.$thumbnail)) $thumbnail = 'images/composer.png';
+
 		array_push($comments_array, '<tr>'.
 			'<td class="user">'.
 				($scid
 					? '<a href="https://csdb.dk/scener/?id='.$scid.'" target="_blank"><b>'.$handle.'</b></a>'
 					: '<b>'.(!empty($handle) ? $handle : '[ID:'.$comment->CSDbUser->ID.']').'</b>'
 				).
-				'<br /><span class="date">'.$fixed_date.'</span>'.
+				'<br /><span class="date">'.$fixed_date.'</span><br />'.
+				(!empty($hvsc_folder) ? '<img class="avatar" src="'.$thumbnail.'" alt="" style="background:#fff;width:52px;height:52px;" />' : '').
 				'<span class="count pm"><a href="https://csdb.dk/privatemessages/sendmessage.php?userid='.$comment->CSDbUser->ID.'&selectdone.x=1" target="_blank">PM</a></span>'.
 				// (!empty($hvsc_folder) ? '<img class="home-folder" src="images/if_folder.svg" alt="" />' : '').
 				(!empty($hvsc_folder) ? '<span class="count home-folder" title="Show DeepSID folder" data-home="'.$hvsc_folder.'"><img style="width:14px;" src="images/if_folder.svg" alt="" /></span>' : '').

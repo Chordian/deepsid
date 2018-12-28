@@ -729,6 +729,11 @@
 				<div id="topic-changes" class="topic" style="display:none;">
 					<h2>Changes</h2>
 
+					<h3>December 28, 2018</h3>
+					<ul>
+						<li>Avatar images can now be seen in CSDb comments for composers with a HVSC folder.</li>
+					</ul>
+
 					<h3>December 27, 2018</h3>
 					<ul>
 						<li>New files and folders in HVSC and CGSC now have a yellow indicator; a <b>*</b> for folders

@@ -2032,6 +2032,17 @@ input[type=range]::-ms-track {
 				cursor: pointer;
 			}
 
+			#page .ext .avatar {
+				/*position: absolute;
+				top: auto;
+				bottom: 6px;
+				left: 6px;*/
+				width: 52px;
+				height: 52px;
+				border: 0.5px solid #ced0c0;
+				margin-bottom: -3px;
+			}
+
 		/* The table cell with the actual CSDb comment text */
 		#page .ext .comment {
 			vertical-align: top;
