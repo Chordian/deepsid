@@ -226,6 +226,7 @@ try {
 				$incompat_row =		$row->incompatible;				// jssid
 				$has_photo =		file_exists('../'.$thumbnail);	// TRUE
 				$flags =			$row->flags;					// 1
+				$hvsc = 			$row->new;						// 70
 
 				if ($user_id) {
 					// Does the user have any rating for this folder?
@@ -252,6 +253,7 @@ try {
 				'hasphoto'		=> $has_photo,
 				'rating'		=> $rating,
 				'flags'			=> $flags,
+				'hvsc'			=> $hvsc,
 			));
 
 		} else {

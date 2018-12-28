@@ -729,6 +729,13 @@
 				<div id="topic-changes" class="topic" style="display:none;">
 					<h2>Changes</h2>
 
+					<h3>December 27, 2018</h3>
+					<ul>
+						<li>New files and folders in HVSC and CGSC now have a yellow indicator; a <b>*</b> for folders
+							and <b>NEW</b> for files.</li>
+						<li>All new files in HVSC #70 are now connected to CSDb entries.</li>
+					</ul>
+
 					<h3>December 26, 2018</h3>
 					<ul>
 						<li>Searching for HVSC/CGSC versions now also return new folders.</li>

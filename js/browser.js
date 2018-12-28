@@ -6,6 +6,9 @@
  function Browser() {
 
 	this.ROOT_HVSC = 'hvsc';
+	this.HVSC_VERSION = 70;
+	this.CGSC_VERSION = 136;
+
 	this.path = "";
 	this.search = "";
 
@@ -448,10 +451,11 @@ Browser.prototype = {
 			// Now rebuild the reordered table list (files only; the folders in top are just preserved)
 			var files = adaptedName = "";
 			$.each(this.playlist, function(i, file) {
+				var isNew = file.hvsc == this.HVSC_VERSION || file.hvsc == this.CGSC_VERSION;
 				adaptedName = file.substname == "" ? file.filename.replace(/^\_/, '') : file.substname;
 				adaptedName = this.adaptBrowserName(adaptedName);
 				files += '<tr>'+
-						'<td class="sid unselectable"><div class="block-wrap"><div class="block">'+(file.subtunes > 1 ? '<div class="subtunes">'+file.subtunes+'</div>' : '')+
+						'<td class="sid unselectable"><div class="block-wrap"><div class="block">'+(file.subtunes > 1 ? '<div class="subtunes'+(isNew ? ' newst' : '')+'">'+file.subtunes+'</div>' : (isNew ? '<div class="newsid"></div>' : ''))+
 						'<div class="entry name file'+(this.isSearching || this.path.substr(0, 2) === "/$" ? ' search' : '')+'" data-name="'+file.filename+'">'+adaptedName+'</div></div></div><br />'+
 						'<span class="info">'+file.copyright.substr(0, 4)+' in '+file.player+'</span></td>'+
 						'<td class="stars filestars"><span class="rating">'+this.buildStars(file.rating)+'</span>'+
@@ -567,6 +571,7 @@ Browser.prototype = {
 								(isPersonalSymlist || (isPublicSymlist && myPublic)
 									? 'playlist'
 									: folder.foldertype.toLowerCase()+(folder.hasphoto ? '-photo' : ''))+
+									(folder.hvsc == this.HVSC_VERSION || folder.hvsc == this.CGSC_VERSION ? ' new' : '')+
 								'"><div class="block-wrap"><div class="block">'+
 							(folder.filescount > 0 ? '<div class="filescount">'+folder.filescount+'</div>' : '')+
 							'<span class="name entry'+(this.isSearching ? ' search' : '')+'" data-name="'+folder.foldername+'" data-incompat="'+folder.incompatible+'">'+
@@ -617,11 +622,12 @@ Browser.prototype = {
 				$.each(data.files, function(i, file) {
 					// Player: Replace "_" with space + "V" with "v" for versions
 					var player = file.player.replace(/_/g, " ").replace(/(V)(\d)/g, "v$2"),
-						rootFile = (this.isSearching || this.isSymlist ? "" : this.path) + "/" + file.filename;
+						rootFile = (this.isSearching || this.isSymlist ? "" : this.path) + "/" + file.filename,
+						isNew = file.hvsc == this.HVSC_VERSION || file.hvsc == this.CGSC_VERSION;
 					var adaptedName = file.substname == "" ? file.filename.replace(/^\_/, '') : file.substname;
 					adaptedName = this.adaptBrowserName(adaptedName);
 					files += '<tr>'+
-							'<td class="sid unselectable"><div class="block-wrap"><div class="block">'+(file.subtunes > 1 ? '<div class="subtunes">'+file.subtunes+'</div>' : '')+
+							'<td class="sid unselectable"><div class="block-wrap"><div class="block">'+(file.subtunes > 1 ? '<div class="subtunes'+(isNew ? ' newst' : '')+'">'+file.subtunes+'</div>' : (isNew ? '<div class="newsid"></div>' : ''))+
 							'<div class="entry name file'+(this.isSearching || this.path.substr(0, 2) === "/$" ? ' search' : '')+'" data-name="'+file.filename+'">'+adaptedName+'</div></div></div><br />'+
 							'<span class="info">'+file.copyright.substr(0, 4)+' in '+player+'</span></td>'+
 							'<td class="stars filestars"><span class="rating">'+this.buildStars(file.rating)+'</span>'+

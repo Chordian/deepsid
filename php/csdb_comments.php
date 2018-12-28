@@ -67,17 +67,19 @@ function CommentsTable($title, $comments, &$scener_handle, &$scener_id, $backwar
 		// http://chordian/deepsid/?file=/MUSICIANS/C/CreaMD/Gonna_Make_You_Sweep.sid (all of them used)
 
 		// Test cases for SID release lists with user comments:
+		// NOTE: Sometimes there is no scener ID and handle and all we get is the user id (hence "unknown") here
+		// below. Unfortunately these user id are intrinsic and can't be used to look up in the web service.
 		// http://chordian/deepsid/?file=/MUSICIANS/S/SounDemoN/Vicious_SID_2-Cybernoid_2.sid
 		// http://chordian/deepsid/?file=/MUSICIANS/H/Hubbard_Rob/Knucklebusters.sid
 		// http://chordian/deepsid/?file=/MUSICIANS/F/Follin_Tim/Bionic_Commando.sid (three user comments)
-		// http://chordian/deepsid/?file=/MUSICIANS/L/Linus/Cruzer_on_Chocolate_Islands.sid (same)
-		// http://chordian/deepsid/?file=/MUSICIANS/L/Linus/Ashes_to_Ashes.sid (eight user comments)
-		// http://chordian/deepsid/?file=/MUSICIANS/L/Linus/Datalife_Verbatim.sid
-		// http://chordian/deepsid/?file=/MUSICIANS/L/Linus/Harden_Your_Horns.sid
-		// http://chordian/deepsid/?file=/MUSICIANS/L/Linus/Jars_Revenge_Soundtrack.sid
+		// http://chordian/deepsid/?file=/MUSICIANS/L/Linus/Cruzer_on_Chocolate_Islands.sid (same + unknown)
+		// http://chordian/deepsid/?file=/MUSICIANS/L/Linus/Ashes_to_Ashes.sid (eight user comments + unknown)
+		// http://chordian/deepsid/?file=/MUSICIANS/L/Linus/Datalife_Verbatim.sid (unknown)
+		// http://chordian/deepsid/?file=/MUSICIANS/L/Linus/Harden_Your_Horns.sid (unknown)
+		// http://chordian/deepsid/?file=/MUSICIANS/L/Linus/Jars_Revenge_Soundtrack.sid (unknown)
 		// http://chordian/deepsid/?file=/MUSICIANS/L/Linus/Special_Agent_Rocco_Montefiori.sid
-		// http://chordian/deepsid/?file=/MUSICIANS/J/JCH/Chimerang.sid
-		// http://chordian/deepsid/?file=/MUSICIANS/D/DRAX/Caught_in_the_Middle.sid
+		// http://chordian/deepsid/?file=/MUSICIANS/J/JCH/Chimerang.sid (unknown)
+		// http://chordian/deepsid/?file=/MUSICIANS/D/DRAX/Caught_in_the_Middle.sid (unknown)
 
 		// Test cases for raw URL links that are long and/or have special characters:
 		// http://chordian/deepsid/?tab=csdb&csdbtype=release&csdbid=61763 (%20)

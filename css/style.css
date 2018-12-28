@@ -1308,12 +1308,13 @@ input[type=range]::-ms-track {
 		}
 
 		#songs .block-wrap {
-		  display: inline-block;
-		  max-width: 294px; /* Width before right end turns in to "..." ellipsis */
+			position: relative;
+			display: inline-block;
+			max-width: 294px; /* Width before right end turns in to "..." ellipsis */
 		}
 
 		#songs .block {
-		  width: 100%;
+			width: 100%;
 		}
 
 		/* Used for both folders and files (wrapper to force a maximum width with "..." in the end) */
@@ -1323,6 +1324,10 @@ input[type=range]::-ms-track {
 			white-space: nowrap;
 			text-overflow: ellipsis;
 			/*background: #faa;*/
+		}
+
+		#songs td.sid {
+			position: relative;
 		}
 
 		/* Alloyrun.sid (file) */
@@ -1413,6 +1418,41 @@ input[type=range]::-ms-track {
 				top: 6px;
 				background: url(../images/playlist.svg) 4px 0 / 19px 19px no-repeat;
 			} (Shows a list-with-note icon instead) */
+
+		#songs td.new:before,
+		#songs td.sid .newsid:before,
+		#songs td.sid .newst:before {
+			content: "*";
+			position: absolute;
+			top: 16px;
+			left: 24px;
+			padding: 6px 2px 3px;
+			background: #ef0;
+			/*border: 1px solid #bb0;*/ /* #c4c5b3 */
+			font: bold 11px/0 "Open Sans", sans-serif;
+			border-radius: 1px;
+			z-index: 2;
+			box-shadow: 0 0 2px #000;
+		}
+
+		#songs td.sid .newsid:before,
+		#songs td.sid .newst:before {
+			content: "NEW";
+			display: inline-block;
+			top: 18px;
+			left: auto;
+			right: -9px;
+			font-size: 8px;
+			border-radius: 2px;
+			padding-bottom: 6px;
+		}
+
+		#songs td.sid .newst:before {
+			color: #555;
+			top: 9px;
+			left: -20px;
+			right: auto;
+		}
 
 		#songs .filescount {
 			float: right;
