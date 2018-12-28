@@ -732,6 +732,8 @@
 					<h3>December 28, 2018</h3>
 					<ul>
 						<li>Avatar images can now be seen in CSDb comments for composers with a HVSC folder.</li>
+						<li>The <code>Decent</code> and <code>Good</code> modes are now ready for letter folder <code>H</code> in MUSICIANS.</li>
+						<li>Fixed a bug where user handles were often unknown in CSDb comments for SID entries.</li>
 					</ul>
 
 					<h3>December 27, 2018</h3>

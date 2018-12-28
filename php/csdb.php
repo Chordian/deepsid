@@ -78,9 +78,13 @@ if ($csdb_type == 'sid') {
 	$sid_handles = array();
 	$sid_groups = array();
 
+	// For user comments in "sid" entries, we need to get them with lower depth to ensure we get all handles
+	$xml = file_get_contents('https://csdb.dk/webservice/?type=sid&id='.$csdb_id);
+	$simple_csdb = !strpos($xml, '<CSDbData>') ? $csdb : simplexml_load_string(utf8_decode($xml));
+
 	// For some reason the XML user comments for "sid" entries are not backwards
-	$user_comments = isset($csdb->SID->UserComment)
-		? CommentsTable('User comments', $csdb->SID->UserComment, $scener_handle, $scener_id)
+	$user_comments = isset($simple_csdb->SID->UserComment)
+		? CommentsTable('User comments', $simple_csdb->SID->UserComment, $scener_handle, $scener_id)
 		: '';
 	
 	$comment_button = '<button id="csdb-comment" data-type="sid" data-id="'.$csdb->SID->ID.'">Comment</button><br />';
