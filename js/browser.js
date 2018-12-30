@@ -30,6 +30,7 @@ Browser.prototype = {
 	init: function() {
 		this.setupSortBox();
 		this.getSymlists();
+		this.getComposer();
 
 		if (GetParam("file") === "" && GetParam("search") === "") this.getFolder();
 		this.addEvents();
@@ -847,31 +848,42 @@ Browser.prototype = {
 			$("#loading-profile").fadeIn(500);
 		}, 250);
 
-		this.composer = $.get("php/composer.php", {
-			fullname: this.path.substr(1)
-		}, function(data) {
-			this.validateData(data, function(data) {
+		if (this.path == "") {
+			// Welcome page for the root
+			this.composer = $.get("php/root.php", function(data) {
+				this.validateData(data, function(data) {
+					clearTimeout(loadingComposer);
+					$("#topic-profile").empty().append(data.html);
+				});
+			}.bind(this));
+		} else {
+			// Composer profile page
+			this.composer = $.get("php/composer.php", {
+				fullname: this.path.substr(1)
+			}, function(data) {
+				this.validateData(data, function(data) {
 
-				clearTimeout(loadingComposer);
-				$("#topic-profile").empty().append(data.html);
-	
-				this.groups = $.get("php/groups.php", {
-					fullname: this.path.substr(1)
-				}, function(data) {
-					this.validateData(data, function(data) {
+					clearTimeout(loadingComposer);
+					$("#topic-profile").empty().append(data.html);
+		
+					this.groups = $.get("php/groups.php", {
+						fullname: this.path.substr(1)
+					}, function(data) {
+						this.validateData(data, function(data) {
 
-						if (data.html !== "") {
-							$("#table-groups").empty().append(data.html);
-							var html = $("#topic-profile").html();
-							// Don't include the script or the chart stuff will be shown twice
-							this.composerCache = html.substr(0, html.indexOf("<script"));
-						}
-	
-					});
-				}.bind(this));
+							if (data.html !== "") {
+								$("#table-groups").empty().append(data.html);
+								var html = $("#topic-profile").html();
+								// Don't include the script or the chart stuff will be shown twice
+								this.composerCache = html.substr(0, html.indexOf("<script"));
+							}
+		
+						});
+					}.bind(this));
 
-			});
-		}.bind(this));
+				});
+			}.bind(this));
+		}
 	},
 
 	/**

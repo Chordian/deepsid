@@ -729,6 +729,13 @@
 				<div id="topic-changes" class="topic" style="display:none;">
 					<h2>Changes</h2>
 
+					<h3>December 29, 2018</h3>
+					<ul>
+						<li>Composer folders in letter folders of MUSICIANS now show the correct total of files that
+							includes sub folders.</li>
+						<li>The <code>Decent</code> and <code>Good</code> modes are now ready for letter folder <code>I</code> in MUSICIANS.</li>
+					</ul>
+
 					<h3>December 28, 2018</h3>
 					<ul>
 						<li>Avatar images can now be seen in CSDb comments for composers with a HVSC folder.</li>

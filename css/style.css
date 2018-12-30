@@ -1162,7 +1162,8 @@ input[type=range]::-ms-track {
 	
 		/* For the small HVSC or CGSC in the path line */
 		#path .dim,
-		#folders .dim {
+		#folders .dim,
+		#page .dim {
 			position: relative;
 			top: -1px;
 			color: #b0b29a; /* #c4c5b3 #c8c8b9 */
@@ -1170,7 +1171,8 @@ input[type=range]::-ms-track {
 			margin-right: 1px;
 		}
 
-		#folders .dim {
+		#folders .dim,
+		#page .dim {
 			font-size: 11px;
 			color: #969787;
 		}
@@ -1307,23 +1309,35 @@ input[type=range]::-ms-track {
 			color: #969787; /* #808270 #8a8c7a */
 		}
 
-		#songs .block-wrap {
+		#songs .block-wrap,
+		#page .block-wrap {
 			position: relative;
 			display: inline-block;
 			max-width: 294px; /* Width before right end turns in to "..." ellipsis */
 		}
 
-		#songs .block {
+		#page .block-wrap {
+			max-width: 320px;
+			padding-left: 14px;
+			vertical-align: bottom;
+		}
+
+		#songs .block,
+		#page .block {
 			width: 100%;
 		}
 
 		/* Used for both folders and files (wrapper to force a maximum width with "..." in the end) */
-		#songs .entry {
+		#songs .entry,
+		#page .top-item {
 			display: block;
 			overflow: hidden;
 			white-space: nowrap;
 			text-overflow: ellipsis;
-			/*background: #faa;*/
+		}
+
+		#page .top-item {
+			pointer-events: auto;
 		}
 
 		#songs td.sid {
@@ -1336,7 +1350,8 @@ input[type=range]::-ms-track {
 		}
 
 		/* A narrower font for search queries in case path + name gets long */
-		#songs .search {
+		#songs .search,
+		#page .slimfont {
 			/*font-family: "Barlow Condensed", sans-serif;*/
 			font-family: "Asap Condensed", sans-serif;
 		}
@@ -1896,6 +1911,22 @@ input[type=range]::-ms-track {
 			right: 0;
 			bottom: 6px;
 		}
+
+		/* Container table in root welcome page for the two side-by-side tables */
+		#page table.root {
+			border: none;
+		}
+
+			#page table.root td {
+				border: none;
+				padding: 0;
+				text-align: right;
+				vertical-align: top;
+			}
+
+			#page table.root td.middle {
+				text-align: left;
+			}
 
 		/* Container for group name in table list to have ellipsis on it */
 		#page .ext .group,
