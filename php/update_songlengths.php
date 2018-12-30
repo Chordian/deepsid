@@ -3,7 +3,7 @@
  * DeepSID
  *
  * Take all time length fields in 'hvsc_files', split them up into subtune
- * parts, then saves them as individual rows in the 'hvsc_lengths' table.
+ * parts, then save them as individual rows in the 'hvsc_lengths' table.
  * 
  * This table is used for displaying a top 20 list of the longest tunes. A
  * table for this is necessary as the SQL required to generate it directly

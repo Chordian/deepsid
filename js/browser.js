@@ -852,8 +852,13 @@ Browser.prototype = {
 			// Welcome page for the root
 			this.composer = $.get("php/root.php", function(data) {
 				this.validateData(data, function(data) {
+
 					clearTimeout(loadingComposer);
 					$("#topic-profile").empty().append(data.html);
+
+					$("#page .dropdown-top-list").styledSelect("toplist");
+					$("#page .dropdown-top-list-left").styledSetValue(data.left);
+					$("#page .dropdown-top-list-right").styledSetValue(data.right);
 				});
 			}.bind(this));
 		} else {

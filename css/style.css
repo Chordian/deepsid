@@ -1780,7 +1780,7 @@ input[type=range]::-ms-track {
 			border: 1px solid #ced0c0;
 		}
 
-			/* Born - SID - Died */
+			/* Born / Died */
 			#page .ext .line {
 				position: relative;
 				top: -4px;
@@ -1917,6 +1917,10 @@ input[type=range]::-ms-track {
 			border: none;
 		}
 
+			#page table.root div {
+				pointer-events: auto;
+			}
+
 			#page table.root td {
 				border: none;
 				padding: 0;
@@ -1926,6 +1930,15 @@ input[type=range]::-ms-track {
 
 			#page table.root td.middle {
 				text-align: left;
+			}
+
+			/* Additional styling for the top list dropdown boxes */
+			.toplist {
+				margin-bottom: 4px;
+				/*width: 200px;*/
+				text-align: left;
+				float: left;
+				z-index: 2;
 			}
 
 		/* Container for group name in table list to have ellipsis on it */
