@@ -6,6 +6,7 @@
  */
 
 require_once("setup.php");
+require_once("countries.php"); // Used by the 'countries' list type
 
 function AdaptBrowserName($fullname, $link = '') {
 	$adapted_fullname = str_replace('_High Voltage SID Collection', '<font class="dim">HVSC</font>', $fullname);
@@ -19,6 +20,9 @@ function AdaptBrowserName($fullname, $link = '') {
 }
 
 function GenerateList($type) {
+
+	global $countryCodes;
+
 	try {
 		if ($_SERVER['HTTP_HOST'] == LOCALHOST)
 			$db = new PDO(PDO_LOCALHOST, USER_LOCALHOST, PWD_LOCALHOST);
@@ -71,7 +75,7 @@ function GenerateList($type) {
 				$entry = "Composer";
 				$value = 'Games';
 
-				$select = $db->query('SELECT fullname, application, count(1) as c FROM hvsc_files WHERE application = "RELEASE" '.
+				$select = $db->query('SELECT fullname, application, count(1) AS c FROM hvsc_files WHERE application = "RELEASE" '.
 					'GROUP BY SUBSTRING_INDEX(fullname, "/", 4) HAVING c > 1 ORDER by c DESC LIMIT 20');
 				$select->setFetchMode(PDO::FETCH_OBJ);
 				if ($select->rowCount()) {
@@ -82,6 +86,35 @@ function GenerateList($type) {
 							'value' =>	$row->c,
 						));
 					}
+				}
+				break;
+
+			case 'countries':
+
+				$entry = "Country";
+				$value = 'Count';
+
+				$countryCounts = [];
+
+				foreach($countryCodes as $country => $code) {
+					$select = $db->query('SELECT count(1) AS c FROM composers WHERE country LIKE "%'.$country.'%"');
+					$select->setFetchMode(PDO::FETCH_OBJ);
+					array_push($countryCounts, array(
+						'country' =>	($country == 'usa' ? 'USA' : ucwords($country)),
+						'count' =>		$select->fetch()->c,
+					));
+				}
+
+				usort($countryCounts, function ($item1, $item2) {
+					if ($item1['count'] == $item2['count']) return 0;
+					return $item1['count'] > $item2['count'] ? -1 : 1;
+				});				
+
+				for ($i = 0; $i < 20; $i++) {
+					array_push($list, array(
+						'entry' =>	$countryCounts[$i]['country'],
+						'value' =>	$countryCounts[$i]['count'],
+					));
 				}
 				break;
 

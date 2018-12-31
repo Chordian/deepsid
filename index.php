@@ -733,6 +733,7 @@
 					<ul>
 						<li>The profile tab in the root now serves as a welcome page with two top 20 lists. The contents
 							for these are chosen randomly, but you can select other lists in the drop-down boxes.</li>
+						<li>Added another top 20 list for number of composers in countries.</li>
 					</ul>
 
 					<h3>December 29, 2018</h3>

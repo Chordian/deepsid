@@ -13,11 +13,12 @@ require_once("root_generate.php");
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest')
 	die("Direct access not permitted.");
 
-$available_lists = ['maxfiles', 'longest', 'mostgames'];
+$available_lists = ['maxfiles', 'longest', 'mostgames', 'countries'];
 $dropdown_options =
 	'<option value="'.$available_lists[0].'">Most SID tunes produced</option>'.
 	'<option value="'.$available_lists[1].'">The longest SID tunes</option>'.
-	'<option value="'.$available_lists[2].'">Most games covered</option>';
+	'<option value="'.$available_lists[2].'">Most games covered</option>'.
+	'<option value="'.$available_lists[3].'">Composers in countries</option>';
 
 // Randomly choose two lists while also making sure they're not the same one
 $choices = array_rand($available_lists, 2);
