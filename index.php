@@ -729,6 +729,12 @@
 				<div id="topic-changes" class="topic" style="display:none;">
 					<h2>Changes</h2>
 
+					<h3>December 31, 2018</h3>
+					<ul>
+						<li>The profile tab in the root now serves as a welcome page with two top 20 lists. The contents
+							for these are chosen randomly, but you can select other lists in the drop-down boxes.</li>
+					</ul>
+
 					<h3>December 29, 2018</h3>
 					<ul>
 						<li>Composer folders in letter folders of MUSICIANS now show the correct total of files that

@@ -179,7 +179,7 @@ $(function() { // DOM ready
 	/**
 	 * When changing one of the *STYLED* drop-down boxes.
 	 * 
-	 * For now, only the SID handler uses a styled drop-down box.
+	 * Used by the SID handler and the top 20 lists.
 	 */
 	$("div.styledSelect").change(function() {
 		switch ($(this).prev("select").attr("name")) {

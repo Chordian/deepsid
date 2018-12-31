@@ -859,6 +859,29 @@ Browser.prototype = {
 					$("#page .dropdown-top-list").styledSelect("toplist");
 					$("#page .dropdown-top-list-left").styledSetValue(data.left);
 					$("#page .dropdown-top-list-right").styledSetValue(data.right);
+
+					// Event handler must be set here
+					$("div.styledSelect").change(function() {
+						switch ($(this).prev("select").attr("name")) {
+							case "select-top-list-left":
+								// Selecting a different type for the left top 20 list box
+								var value = $("#page .dropdown-top-list-left").styledGetValue();
+								$.get("php/root_get.php", { type: value }, function(data) {
+									data = $.parseJSON(data);
+									$("#page .top-list-left").empty().append(data.list);
+								});
+								break;
+							case "select-top-list-right":
+								// Selecting a different type for the right top 20 list box
+								// Selecting a different type for the left top 20 list box
+								var value = $("#page .dropdown-top-list-right").styledGetValue();
+								$.get("php/root_get.php", { type: value }, function(data) {
+									data = $.parseJSON(data);
+									$("#page .top-list-right").empty().append(data.list);
+								});
+								break;
+						}
+					});
 				});
 			}.bind(this));
 		} else {
