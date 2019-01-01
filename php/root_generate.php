@@ -57,7 +57,7 @@ function GenerateList($type) {
 				$entry = 'SID tune';
 				$value = 'Time';
 
-				// This query makes use of the 'hvsc_length' table created especially for this purpose
+				// This query makes use of the 'hvsc_length' table
 				$select = $db->query('SELECT fullname, length, subtune FROM hvsc_lengths ORDER BY TIME_TO_SEC(length) DESC LIMIT 20');
 				$select->setFetchMode(PDO::FETCH_OBJ);
 				if ($select->rowCount()) {
@@ -76,7 +76,7 @@ function GenerateList($type) {
 				$value = 'Games';
 
 				$select = $db->query('SELECT fullname, application, count(1) AS c FROM hvsc_files WHERE application = "RELEASE" '.
-					'GROUP BY SUBSTRING_INDEX(fullname, "/", 4) HAVING c > 1 ORDER by c DESC LIMIT 20');
+					'GROUP BY SUBSTRING_INDEX(fullname, "/", 4) HAVING c > 1 ORDER BY c DESC LIMIT 20');
 				$select->setFetchMode(PDO::FETCH_OBJ);
 				if ($select->rowCount()) {
 					foreach($select as $row) {
@@ -112,9 +112,60 @@ function GenerateList($type) {
 
 				for ($i = 0; $i < 20; $i++) {
 					array_push($list, array(
-						'entry' =>	$countryCounts[$i]['country'],
+						'entry' =>	'<a href="'.HOST.'?type=country&search='.$countryCounts[$i]['country'].'">'.$countryCounts[$i]['country'].'</a>',
 						'value' =>	$countryCounts[$i]['count'],
 					));
+				}
+				break;
+
+			case 'startaddr':
+
+				$entry = "Start address";
+				$value = 'Count';
+
+				$select = $db->query('SELECT loadaddr, count(1) AS c FROM hvsc_files WHERE loadaddr != 0 '.
+					'GROUP BY loadaddr ORDER BY c DESC LIMIT 20');
+				$select->setFetchMode(PDO::FETCH_OBJ);
+				if ($select->rowCount()) {
+					foreach($select as $row) {
+						$loadaddr = $row->loadaddr;
+						switch ($loadaddr) {
+							case 0x0801: $append = '&nbsp;&nbsp;(BASIC program)'; break;
+							case 0x1800: $append = '&nbsp;&nbsp;(Generally Future Composer)'; break;
+							case 0xA000: $append = '&nbsp;&nbsp;(Start of BASIC ROM)'; break;
+							case 0xC000: $append = '&nbsp;&nbsp;(Free space after BASIC ROM)'; break;
+							case 0xE000: $append = '&nbsp;&nbsp;(Start of KERNAL ROM)'; break;
+							default:     $append = '';
+						}
+						array_push($list, array(
+							'entry' =>	'Memory location: <span style="font:normal 14px/0 monospace"><b>$'.str_pad(strtoupper(dechex($loadaddr)), 4, '0', STR_PAD_LEFT).'</b></span>'.$append,
+							'value' =>	$row->c,
+						));
+					}
+				}
+				break;
+
+			case 'maxtime':
+
+				$entry = 'Composer';
+				$value = 'Time';
+
+				// This query makes use of the 'hvsc_length' table
+				$select = $db->query('SELECT SUBSTRING_INDEX(fullname, "/", 4) AS f, SUM(TIME_TO_SEC(length)) AS s FROM hvsc_lengths '.
+					'WHERE fullname LIKE "%/MUSICIANS/%" '.
+					'GROUP BY f '.
+					'ORDER BY s DESC LIMIT 20');
+				$select->setFetchMode(PDO::FETCH_OBJ);
+				if ($select->rowCount()) {
+					foreach($select as $row) {
+						$total_seconds = $row->s / 60;
+						$hours = floor($total_seconds / 3600);
+						$minutes = str_pad(floor(($total_seconds / 60) % 60), 2, '0', STR_PAD_LEFT);
+						array_push($list, array(
+							'entry' =>	AdaptBrowserName($row->f, HOST.'?file=/'.$row->f),
+							'value' =>	'<span class="slimfont">'.$hours.'h '.$minutes.'m</span>',
+						));
+					}
 				}
 				break;
 
@@ -127,7 +178,7 @@ function GenerateList($type) {
 			'<tr>'.
 				'<th style="width:18px;text-align:right;"><u>#</u></th>'.
 				'<th style="padding-left:14px;"><u>'.$entry.'</u></th>'.
-				'<th style="width:40px;text-align:right;"><u>'.$value.'</u></th>'.
+				'<th style="width:50px;text-align:right;"><u>'.$value.'</u></th>'.
 			'</tr>';
 		foreach($list as $key => $item)
 			$contents .=

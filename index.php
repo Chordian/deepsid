@@ -729,6 +729,13 @@
 				<div id="topic-changes" class="topic" style="display:none;">
 					<h2>Changes</h2>
 
+					<h3>January 1, 2019</h3>
+					<ul>
+						<li>The top 20 list for number of composers in countries now have search links.</li>
+						<li>Added another top 20 list for most popular start address in memory.</li>
+						<li>Added another top 20 list for total playing time composed (hours and minutes).</li></li>
+					</ul>
+
 					<h3>December 31, 2018</h3>
 					<ul>
 						<li>The profile tab in the root now serves as a welcome page with two top 20 lists. The contents
