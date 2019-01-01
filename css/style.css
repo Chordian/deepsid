@@ -1932,13 +1932,25 @@ input[type=range]::-ms-track {
 				text-align: left;
 			}
 
+			#page table.root label {
+				position: relative;
+				top: -2px;
+				right: 6px;
+				font: normal 13px/0 "Montserrat", sans-serif;
+				color: #68695a;
+			}
+
 			/* Additional styling for the top list dropdown boxes */
-			.toplist {
+			.toplist,
+			.toprows {
 				margin-bottom: 4px;
-				/*width: 200px;*/
 				text-align: left;
 				float: left;
 				z-index: 2;
+			}
+
+			.toprows {
+				float: right;
 			}
 
 		/* Container for group name in table list to have ellipsis on it */

@@ -731,16 +731,18 @@
 
 					<h3>January 1, 2019</h3>
 					<ul>
-						<li>The top 20 list for number of composers in countries now have search links.</li>
-						<li>Added another top 20 list for most popular start address in memory.</li>
-						<li>Added another top 20 list for total playing time composed (hours and minutes).</li></li>
+						<li>The top list for number of composers in countries now have search links.</li>
+						<li>Added another top list for most popular start address in memory.</li>
+						<li>Added another top list for total playing time composed (hours and minutes).</li></li>
+						<li>Number of rows for the top lists can now be adjusted with drop-down boxes.
+							The default was reduced to 10.</li>
 					</ul>
 
 					<h3>December 31, 2018</h3>
 					<ul>
-						<li>The profile tab in the root now serves as a welcome page with two top 20 lists. The contents
+						<li>The profile tab in the root now serves as a welcome page with two top lists. The contents
 							for these are chosen randomly, but you can select other lists in the drop-down boxes.</li>
-						<li>Added another top 20 list for number of composers in countries.</li>
+						<li>Added another top list for number of composers in countries.</li>
 					</ul>
 
 					<h3>December 29, 2018</h3>

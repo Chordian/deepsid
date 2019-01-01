@@ -2,7 +2,7 @@
 /**
  * DeepSID
  *
- * A procedure for returning the inside contents of a top 20 list.
+ * A procedure for returning the inside contents of a top list.
  */
 
 require_once("setup.php");
@@ -19,7 +19,7 @@ function AdaptBrowserName($fullname, $link = '') {
 	return $adapted_fullname;
 }
 
-function GenerateList($type) {
+function GenerateList($rows, $type) {
 
 	global $countryCodes;
 
@@ -40,7 +40,7 @@ function GenerateList($type) {
 				$entry = "Composer";
 				$value = 'Count';
 
-				$select = $db->query('SELECT fullname, files FROM hvsc_folders WHERE type = "SINGLE" AND fullname NOT LIKE "%Worktunes" ORDER BY files DESC LIMIT 20');
+				$select = $db->query('SELECT fullname, files FROM hvsc_folders WHERE type = "SINGLE" AND fullname NOT LIKE "%Worktunes" ORDER BY files DESC LIMIT '.$rows);
 				$select->setFetchMode(PDO::FETCH_OBJ);
 				if ($select->rowCount()) {
 					foreach($select as $row) {
@@ -58,7 +58,7 @@ function GenerateList($type) {
 				$value = 'Time';
 
 				// This query makes use of the 'hvsc_length' table
-				$select = $db->query('SELECT fullname, length, subtune FROM hvsc_lengths ORDER BY TIME_TO_SEC(length) DESC LIMIT 20');
+				$select = $db->query('SELECT fullname, length, subtune FROM hvsc_lengths ORDER BY TIME_TO_SEC(length) DESC LIMIT '.$rows);
 				$select->setFetchMode(PDO::FETCH_OBJ);
 				if ($select->rowCount()) {
 					foreach($select as $row) {
@@ -76,7 +76,7 @@ function GenerateList($type) {
 				$value = 'Games';
 
 				$select = $db->query('SELECT fullname, application, count(1) AS c FROM hvsc_files WHERE application = "RELEASE" '.
-					'GROUP BY SUBSTRING_INDEX(fullname, "/", 4) HAVING c > 1 ORDER BY c DESC LIMIT 20');
+					'GROUP BY SUBSTRING_INDEX(fullname, "/", 4) HAVING c > 1 ORDER BY c DESC LIMIT '.$rows);
 				$select->setFetchMode(PDO::FETCH_OBJ);
 				if ($select->rowCount()) {
 					foreach($select as $row) {
@@ -110,7 +110,7 @@ function GenerateList($type) {
 					return $item1['count'] > $item2['count'] ? -1 : 1;
 				});				
 
-				for ($i = 0; $i < 20; $i++) {
+				for ($i = 0; $i < $rows; $i++) {
 					array_push($list, array(
 						'entry' =>	'<a href="'.HOST.'?type=country&search='.$countryCounts[$i]['country'].'">'.$countryCounts[$i]['country'].'</a>',
 						'value' =>	$countryCounts[$i]['count'],
@@ -124,7 +124,7 @@ function GenerateList($type) {
 				$value = 'Count';
 
 				$select = $db->query('SELECT loadaddr, count(1) AS c FROM hvsc_files WHERE loadaddr != 0 '.
-					'GROUP BY loadaddr ORDER BY c DESC LIMIT 20');
+					'GROUP BY loadaddr ORDER BY c DESC LIMIT '.$rows);
 				$select->setFetchMode(PDO::FETCH_OBJ);
 				if ($select->rowCount()) {
 					foreach($select as $row) {
@@ -154,7 +154,7 @@ function GenerateList($type) {
 				$select = $db->query('SELECT SUBSTRING_INDEX(fullname, "/", 4) AS f, SUM(TIME_TO_SEC(length)) AS s FROM hvsc_lengths '.
 					'WHERE fullname LIKE "%/MUSICIANS/%" '.
 					'GROUP BY f '.
-					'ORDER BY s DESC LIMIT 20');
+					'ORDER BY s DESC LIMIT '.$rows);
 				$select->setFetchMode(PDO::FETCH_OBJ);
 				if ($select->rowCount()) {
 					foreach($select as $row) {

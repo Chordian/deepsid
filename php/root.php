@@ -4,7 +4,7 @@
  *
  * Build an HTML welcome page for the root.
  * 
- *  - Top 20 lists boxes (left and right)
+ *  - Left and right top lists boxes
  */
 
 // require_once("setup.php");
@@ -20,8 +20,15 @@ $dropdown_options =
 	'<option value="'.$available_lists[2].'">Most games covered</option>'.
 	'<option value="'.$available_lists[3].'">Composers in countries</option>'.
 	'<option value="'.$available_lists[4].'">Most popular start address</option>'.
-	'<option value="'.$available_lists[5].'">Total playing time composed</option>'.
+	'<option value="'.$available_lists[5].'">Total playing time produced</option>'.
 	'';
+
+$row_options =
+	'<option value="10">10</option>'.
+	'<option value="25">25</option>'.
+	'<option value="50">50</option>'.
+	'<option value="100">100</option>'.
+	'<option value="250">250</option>';
 
 // Randomly choose two lists while also making sure they're not the same one
 $choices = array_rand($available_lists, 2);
@@ -35,8 +42,12 @@ $html =
 			'<select class="dropdown-top-list dropdown-top-list-left" name="select-top-list-left">'.
 				$dropdown_options.
 			'</select>'.
+			'<label>Rows</label>'.
+			'<select class="dropdown-top-rows dropdown-top-rows-left" name="select-top-rows-left">'.
+				$row_options.
+			'</select>'.
 			'<table class="top-list-left tight compo" style="max-width:100%;font-size:14px;padding:8px 12px;">'.
-				GenerateList($choice_left).
+				GenerateList(10, $choice_left).
 			'</table>'.
 		'</td>'.
 		'<td style="width:10px;"></td>'.
@@ -44,8 +55,12 @@ $html =
 			'<select class="dropdown-top-list dropdown-top-list-right" name="select-top-list-right">'.
 				$dropdown_options.
 			'</select>'.
+			'<label>Rows</label>'.
+			'<select class="dropdown-top-rows dropdown-top-rows-right" name="select-top-rows-right">'.
+				$row_options.
+			'</select>'.
 			'<table class="top-list-right tight compo" style="max-width:100%;font-size:14px;padding:8px 12px;">'.
-				GenerateList($choice_right).
+				GenerateList(10, $choice_right).
 			'</table>'.
 		'</td>'.
 	'</tr></table>';
