@@ -58,7 +58,9 @@ function GenerateList($rows, $type) {
 				$value = 'Time';
 
 				// This query makes use of the 'hvsc_length' table
-				$select = $db->query('SELECT fullname, length, subtune FROM hvsc_lengths ORDER BY TIME_TO_SEC(length) DESC LIMIT '.$rows);
+				// NOTE: Sebastian Bjørnerud's "Psykolog_end.sid" is exempt because it's just a series of sound effects.
+				// This was actually based on a poll: https://www.facebook.com/groups/deepsid/permalink/207861710163193/
+				$select = $db->query('SELECT fullname, length, subtune FROM hvsc_lengths WHERE fullname NOT LIKE "%psykolog_end.sid" ORDER BY TIME_TO_SEC(length) DESC LIMIT '.$rows);
 				$select->setFetchMode(PDO::FETCH_OBJ);
 				if ($select->rowCount()) {
 					foreach($select as $row) {
