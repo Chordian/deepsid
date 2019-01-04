@@ -50,13 +50,13 @@ $(function() { // DOM ready
 	 * @param {*} event 
 	 */
 	$(window).on("keydown", function(event) {
-		if (!$("#search-box,#username,#password,#sym-rename").is(":focus")) {
+		if (!$("#search-box,#username,#password,#sym-rename,#sym-specify-subtune").is(":focus")) {
 			if (event.keyCode == 220)								// Keydown key below 'Escape'
 				// Fast forward
 				$("#faster").trigger("mousedown");
 		}
 	}).on("keyup", function(event) {
-		if (!$("#search-box,#username,#password,#sym-rename").is(":focus")) {
+		if (!$("#search-box,#username,#password,#sym-rename,#sym-specify-subtune").is(":focus")) {
 			if (event.keyCode == 220)								// Keyup key below 'Escape'
 				// Fast forward
 				$("#faster").trigger("mouseup");

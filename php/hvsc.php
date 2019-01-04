@@ -341,11 +341,14 @@ try {
 			$substname = '';
 			if ($isPublicSymlist || $isPersonalSymlist) {
 				// We're inside a symlist so check now if the file has a different name here
-				$symlist = $db->query('SELECT sidname FROM symlists WHERE folder_id = '.$symlist_folder_id.' AND file_id = '.$row->id);
+				$symlist = $db->query('SELECT sidname, subtune FROM symlists WHERE folder_id = '.$symlist_folder_id.' AND file_id = '.$row->id);
 				$symlist->setFetchMode(PDO::FETCH_OBJ);
 				if ($symlist->rowCount()) {
-					$substname = $symlist->fetch()->sidname;
+					$row_sym = $symlist->fetch();
+					$substname = $row_sym->sidname;
 					if (!empty($substname)) $substname .= substr($file, -4);
+					// Also check if a different sub tune than the default one should play instead
+					if ($row_sym->subtune) $startsubtune = $row_sym->subtune;
 				}
 			}
 

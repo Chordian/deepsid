@@ -40,8 +40,8 @@ Browser.prototype = {
 	 * Add the events pertinent to this class.
 	 */
 	addEvents: function() {
-		$("#songs").on("click", "#sym-rename", function() {
-			return false; // Prevent SID row from playing if the rename edit box is clicked
+		$("#songs").on("click", "#sym-rename,#sym-specify-subtune", function() {
+			return false; // Prevent SID row from playing if an edit box in a SID row is clicked
 		});
 
 		$("#songs").on("click", "button,tr", this.onClick.bind(this));
@@ -85,7 +85,7 @@ Browser.prototype = {
 					this.contextTR.css("background", "");
 			}
 			if (!$target.hasClass("line"))
-				this.restoreDisplayName();
+				this.restoreSIDRow();
 		}.bind(this));
 
 		$(document).keyup(function(event) {
@@ -93,10 +93,11 @@ Browser.prototype = {
 				case 27: // ESC
 					$("#contextmenu,#contextsubmenu").remove();
 					this.contextTR.css("background", "");
-					this.restoreDisplayName();
+					this.restoreSIDRow();
 					break;
 				case 13: // Enter
-					$rename = $("#sym-rename");
+					var $rename = $("#sym-rename"),
+						$specifySubtune = $("#sym-specify-subtune");
 					if ($rename.length) {
 						var newName = $rename.val();
 						$.post("php/symlist_rename.php", {
@@ -107,6 +108,22 @@ Browser.prototype = {
 							this.validateData(data, function() {
 								/*this.contextEntry.empty().append(newName+(this.isFileRenamed ? this.prevSymName.substr(-4) : ''));
 								$("#sym-rename").remove();*/
+								this.getFolder();
+							});
+						}.bind(this));
+					} else if ($specifySubtune.length) {
+						var newSubtune = $specifySubtune.val();
+						if (parseInt(newSubtune) > this.contextMaxSubtunes)
+							// If too big a number was specifed then just set it to the maximum
+							newSubtune = this.contextMaxSubtunes;
+						$.post("php/symlist_subtune.php", {
+							fullname:	this.contextSID,
+							symlist:	this.path.substr(1),
+							subtune:	newSubtune,
+						}, function(data) {
+							this.validateData(data, function() {
+								// Could just store it in the proper place but I think users would like to see
+								// the folder updating as some sort of confirmation
 								this.getFolder();
 							});
 						}.bind(this));
@@ -1074,7 +1091,8 @@ Browser.prototype = {
 			contents = (isPersonalSymlist || isPublicSymlist) && !this.isSearching
 
 				? '<div class="line" data-action="symentry-rename">Rename</div>'+			// SID in symlist folder
-				  '<div class="line" data-action="symentry-remove">Remove</div>'
+				  '<div class="line" data-action="symentry-remove">Remove</div>'+
+				  '<div class="line'+(this.playlist[$target.parent("tr").index()].subtunes > 1 ? '' : ' disabled')+'" data-action="symentry-subtune">Select Subtune</div>'
 					
 				: '<div class="line" data-action="symlist-new">Add to New Playlist</div>'+	// SID in normal folder
 				  '<div class="line submenu'+(this.symlistFolders.length === 0 ? ' disabled' : '')+'">Add to Playlist</div>';
@@ -1230,19 +1248,44 @@ Browser.prototype = {
 						$renameBox[0].setSelectionRange(len, len);
 					}, 1); // Blink wants a timeout
 				}
+				break;
+			case "symentry-subtune":
+				var $starField = this.contextEntry.parents("td").next();
+				this.prevStars = $starField.html();
+				// Create the edit box
+				$starField.empty().append(
+					'<div id="small-edit">'+
+						'<label class="slimfont unselectable" style="margin-right:4px;" for="sym-specify-subtune">Subtune</label>'+
+						'<input type="text" id="sym-specify-subtune" maxlength="3" value="" />'+
+					'</div>');
+				$subtuneBox = $("#sym-specify-subtune");
+				var index = $starField.parent("tr").index();
+				var subtuneBeingEdited = this.playlist[index].startsubtune + 1;
+				this.contextMaxSubtunes = this.playlist[index].subtunes;
+				$subtuneBox.focus().val(subtuneBeingEdited);
+				if ($subtuneBox[0].setSelectionRange) {
+					var len = $subtuneBox.val().length * 2; // Opera issue
+					setTimeout(function() {
+						$subtuneBox[0].setSelectionRange(len, len);
+					}, 1); // Blink wants a timeout
+				}
+				break;
 			default:
 				break;
 		}
 	},
 
 	/**
-	 * Restore the original display name of the file or folder. Used when no longer
-	 * renaming a playlist folder or file.
+	 * Restore the original display name of the file or folder, or the rating stars.
+	 * Used when no longer using an edit box on a SID file or folder row.
 	 */
-	restoreDisplayName: function() {
+	restoreSIDRow: function() {
 		if ($("#sym-rename").length) {
 			this.contextEntry.empty().append(this.prevSymName);
 			$("#sym-rename").remove();
+		} else if ($("#sym-specify-subtune").length) {
+			this.contextEntry.parents("td").next().empty().append(this.prevStars);
+			$("#sym-specify-subtune").remove();
 		}
 	},
 

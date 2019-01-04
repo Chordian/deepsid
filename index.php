@@ -729,6 +729,18 @@
 				<div id="topic-changes" class="topic" style="display:none;">
 					<h2>Changes</h2>
 
+					<h3>January 4, 2019</h3>
+					<ul>
+						<li>You can now specify a default sub tune for a playlist SID entry. Just right-click the SID row in your
+							playlist and choose <code>Select Subtune</code> to edit it.
+						</li>
+					</ul>
+
+					<h3>January 3, 2019</h3>
+					<ul>
+						<li>The <code>Decent</code> and <code>Good</code> modes are now ready for letter folder <code>J</code> in MUSICIANS.</li>
+					</ul>
+
 					<h3>January 1, 2019</h3>
 					<ul>
 						<li>The top list for number of composers in countries now have search links.</li>
