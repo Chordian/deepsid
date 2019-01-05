@@ -400,7 +400,7 @@ $(function() { // DOM ready
 	/**
 	 * When clicking a 'redirect' link to open an arbitrary SID file without reloading DeepSID.
 	 */
-	$("#topic-csdb,#stil,#topic-stil").on("click", "a.redirect", function() {
+	$("#topic-csdb,#stil,#topic-stil,#topic-changes").on("click", "a.redirect", function() {
 		var fullname = $(this).html();
 		var path = "/_High Voltage SID Collection"+fullname.substr(0, fullname.lastIndexOf("/"));
 		// @todo If using redirect for custom folders later then copy the 'browser.path' lines from 'fileParam' below.

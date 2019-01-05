@@ -99,7 +99,8 @@ Browser.prototype = {
 					var $rename = $("#sym-rename"),
 						$specifySubtune = $("#sym-specify-subtune");
 					if ($rename.length) {
-						var newName = $rename.val();
+						// If the user maintained the collection shortcodes, restore their HTML formatting
+						var newName =  $rename.val().replace(/(^HVSC\/(D|G|M)|CGSC)/, '<font class="dim">$1</font>');
 						$.post("php/symlist_rename.php", {
 							symlist:	(this.isFileRenamed ? this.path.substr(1) : this.contextSID),
 							fullname:	(this.isFileRenamed ? this.contextSID : ''),
@@ -122,8 +123,8 @@ Browser.prototype = {
 							subtune:	newSubtune,
 						}, function(data) {
 							this.validateData(data, function() {
-								// Could just store it in the proper place but I think users would like to see
-								// the folder updating as some sort of confirmation
+								// Could just store it in the proper place here, but I think users would
+								// like to see the folder updating as some sort of confirmation.
 								this.getFolder();
 							});
 						}.bind(this));
@@ -427,10 +428,10 @@ Browser.prototype = {
 			case "name":
 				// Sort playlist according to the SID filename
 				this.playlist.sort(function(obj1, obj2) {
-					var o1 = obj1.substname != "" ? obj1.substname : obj1.filename;
-					var o2 = obj2.substname != "" ? obj2.substname : obj2.filename;
+					var o1 = obj1.substname !== "" ? obj1.substname : this.adaptBrowserName(obj1.filename, true);
+					var o2 = obj2.substname !== "" ? obj2.substname : this.adaptBrowserName(obj2.filename, true);
 					return o1.toLowerCase() > o2.toLowerCase() ? 1 : -1;
-				});
+				}.bind(this));
 				break;
 			case "player":
 				// Sort playlist according to music player
@@ -633,10 +634,10 @@ Browser.prototype = {
 
 				// Sort the list of files first
 				data.files.sort(function(obj1, obj2) {
-					var o1 = obj1.substname != "" ? obj1.substname : obj1.filename;
-					var o2 = obj2.substname != "" ? obj2.substname : obj2.filename;
+					var o1 = obj1.substname !== "" ? obj1.substname : this.adaptBrowserName(obj1.filename, true);
+					var o2 = obj2.substname !== "" ? obj2.substname : this.adaptBrowserName(obj2.filename, true);
 					return o1.toLowerCase() > o2.toLowerCase() ? 1 : -1;
-				});
+				}.bind(this));
 				$.each(data.files, function(i, file) {
 					// Player: Replace "_" with space + "V" with "v" for versions
 					var player = file.player.replace(/_/g, " ").replace(/(V)(\d)/g, "v$2"),
@@ -1293,17 +1294,18 @@ Browser.prototype = {
 	 * Shorten a SID filename by abbreviating long HVSC and CGSC collection names.
 	 * 
 	 * @param {string} name		The original SID filename.
+	 * @param {boolean} raw		TRUE to use raw HVSC/CGSC collection names
 	 * 
 	 * @return {string}			The shortened SID filename.
 	 */
-	adaptBrowserName: function(name) {
-		// Shorten collection names in browser list
+	adaptBrowserName: function(name, raw) {
+		underscore = typeof raw !== "undefined" ? "_" : "";
 		return this.path === "" && !this.isSearching ? name : name
-			.replace("High Voltage SID Collection", '<font class="dim">HVSC</font>')
+			.replace(underscore+"High Voltage SID Collection", '<font class="dim">HVSC</font>')
 			.replace("HVSC</font>/DEMOS", "HVSC/D</font>")
 			.replace("HVSC</font>/GAMES", "HVSC/G</font>")
 			.replace("HVSC</font>/MUSICIANS", "HVSC/M</font>")
-			.replace("Compute's Gazette SID Collection", '<font class="dim">CGSC</font>');
+			.replace(underscore+"Compute's Gazette SID Collection", '<font class="dim">CGSC</font>');
 	},
 
 	/**

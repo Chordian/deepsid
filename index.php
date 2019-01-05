@@ -478,7 +478,7 @@
 						<a href="https://www.hvsc.c64.org/">https://www.hvsc.c64.org/</a>
 					</p>
 					<p>
-						Compute's Gazette SID Collection #135<br />
+						Compute's Gazette SID Collection #136<br />
 						<a href="http://www.c64music.co.uk/">http://www.c64music.co.uk/</a>
 					</p>
 					<p>
@@ -729,11 +729,25 @@
 				<div id="topic-changes" class="topic" style="display:none;">
 					<h2>Changes</h2>
 
+					<h3>January 5, 2019</h3>
+					<ul>
+						<li>Fixed a name sorting discrepancy in playlists.</li>
+						<li>The formatting for the HVSC/CGSC shortcodes are now preserved when editing playlist entries.</li>
+					</ul>
+
 					<h3>January 4, 2019</h3>
 					<ul>
 						<li>You can now specify a default sub tune for a playlist SID entry. Just right-click the SID row in your
 							playlist and choose <code>Select Subtune</code> to edit it.
 						</li>
+						<li>Fixed the following tunes that were not updated properly during the HVSC #70 update:</li>
+						<ul>
+							<li><a href="#" class="redirect">/MUSICIANS/S/Scarzix/Real_Wat_d_fuc.sid</a></li>
+							<li><a href="#" class="redirect">/MUSICIANS/S/Steel/Danger_Dawg_Intro.sid</a></li>
+							<li><a href="#" class="redirect">/MUSICIANS/S/Steel/Party_Pirates_Part_One.sid</a></li>
+							<li><a href="#" class="redirect">/MUSICIANS/S/Steel/Party_Pirates_Part_Two.sid</a></li>
+							<li><a href="#" class="redirect">/MUSICIANS/C/Cruz_Debby/Muss_I_Denn.sid</a></li>
+						</ul>
 					</ul>
 
 					<h3>January 3, 2019</h3>
