@@ -117,6 +117,7 @@ $prettyPlayerNames = array(
 	'Oeyvind_Jergan' =>			'Øyvind Jergan\'s player',
 	'Olav_Moerkrid' =>			'Olav Mørkrid\'s player',
 	'Oliver_Buettner' =>		'Oliver Büttner\'s player',
+	'Oliver_Kirwa' =>			'Oliver Kirwa\'s player',
 	'Oliver_Klaewer' =>			'Oliver Kläwer\'s player',
 	'Olivier_Barthelemy' =>		'Olivier Barthelemy\'s player',
 	'Parker_Bros' =>			'Parker Bros\' player',
