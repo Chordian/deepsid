@@ -1378,7 +1378,22 @@ input[type=range]::-ms-track {
 				background: #d3d4c6; /* #c8c9b9 */
 			}
 
-		/* 1988 in MoN/FutureComposer (second line below SID filename itself) */
+			/* In symlists a specific subtune to be played is shown instead */
+			#songs .specific {
+				font-size: 9px;
+				line-height: 1.65em;
+				background: #fff;
+				padding: 0 5px;
+				color: #222;
+				border: 0.8px solid #888; /* #b0b29a #c4c5b3 */
+				border-radius: 10px;
+			}
+
+				/*#songs .specific:before {
+					content: "# ";
+				}*/
+
+			/* 1988 in MoN/FutureComposer (second line below SID filename itself) */
 		#songs .info {
 			position: relative;
 			top: -7px;

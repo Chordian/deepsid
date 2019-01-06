@@ -729,6 +729,12 @@
 				<div id="topic-changes" class="topic" style="display:none;">
 					<h2>Changes</h2>
 
+					<h3>January 6, 2019</h3>
+					<ul>
+						<li>Multiple occurrences of the same SID file are now possible in playlists, to support different sub tunes for each.</li>
+						<li>Playlists now show the sub tune that will be played for a SID tune instead of the maximum amount available.</li>
+					</ul>
+
 					<h3>January 5, 2019</h3>
 					<ul>
 						<li>Fixed a name sorting discrepancy in playlists.</li>

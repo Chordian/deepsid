@@ -104,6 +104,7 @@ Browser.prototype = {
 						$.post("php/symlist_rename.php", {
 							symlist:	(this.isFileRenamed ? this.path.substr(1) : this.contextSID),
 							fullname:	(this.isFileRenamed ? this.contextSID : ''),
+							symid:		this.contextSymID,
 							new:		newName,
 						}, function(data) {
 							this.validateData(data, function() {
@@ -120,6 +121,7 @@ Browser.prototype = {
 						$.post("php/symlist_subtune.php", {
 							fullname:	this.contextSID,
 							symlist:	this.path.substr(1),
+							symid:		this.contextSymID,
 							subtune:	newSubtune,
 						}, function(data) {
 							this.validateData(data, function() {
@@ -474,8 +476,8 @@ Browser.prototype = {
 				adaptedName = file.substname == "" ? file.filename.replace(/^\_/, '') : file.substname;
 				adaptedName = this.adaptBrowserName(adaptedName);
 				files += '<tr>'+
-						'<td class="sid unselectable"><div class="block-wrap"><div class="block">'+(file.subtunes > 1 ? '<div class="subtunes'+(isNew ? ' newst' : '')+'">'+file.subtunes+'</div>' : (isNew ? '<div class="newsid"></div>' : ''))+
-						'<div class="entry name file'+(this.isSearching || this.path.substr(0, 2) === "/$" ? ' search' : '')+'" data-name="'+file.filename+'">'+adaptedName+'</div></div></div><br />'+
+						'<td class="sid unselectable"><div class="block-wrap"><div class="block">'+(file.subtunes > 1 ? '<div class="subtunes'+(this.isSymlist ? ' specific' : '')+(isNew ? ' newst' : '')+'">'+(this.isSymlist ? file.startsubtune + 1 : file.subtunes)+'</div>' : (isNew ? '<div class="newsid"></div>' : ''))+
+						'<div class="entry name file'+(this.isSearching || this.path.substr(0, 2) === "/$" ? ' search' : '')+'" data-name="'+file.filename+'" data-symid="'+file.symid+'">'+adaptedName+'</div></div></div><br />'+
 						'<span class="info">'+file.copyright.substr(0, 4)+' in '+file.player+'</span></td>'+
 						'<td class="stars filestars"><span class="rating">'+this.buildStars(file.rating)+'</span>'+
 						'<span class="disqus-comment-count" data-disqus-url="http://deepsid.chordian.net/#!'+this.path+"/"+file.filename.replace("/_High Voltage SID Collection", "")+'"></span>'+
@@ -646,8 +648,8 @@ Browser.prototype = {
 					var adaptedName = file.substname == "" ? file.filename.replace(/^\_/, '') : file.substname;
 					adaptedName = this.adaptBrowserName(adaptedName);
 					files += '<tr>'+
-							'<td class="sid unselectable"><div class="block-wrap"><div class="block">'+(file.subtunes > 1 ? '<div class="subtunes'+(isNew ? ' newst' : '')+'">'+file.subtunes+'</div>' : (isNew ? '<div class="newsid"></div>' : ''))+
-							'<div class="entry name file'+(this.isSearching || this.path.substr(0, 2) === "/$" ? ' search' : '')+'" data-name="'+file.filename+'">'+adaptedName+'</div></div></div><br />'+
+							'<td class="sid unselectable"><div class="block-wrap"><div class="block">'+(file.subtunes > 1 ? '<div class="subtunes'+(this.isSymlist ? ' specific' : '')+(isNew ? ' newst' : '')+'">'+(this.isSymlist ? file.startsubtune : file.subtunes)+'</div>' : (isNew ? '<div class="newsid"></div>' : ''))+
+							'<div class="entry name file'+(this.isSearching || this.path.substr(0, 2) === "/$" ? ' search' : '')+'" data-name="'+file.filename+'" data-symid="'+file.symid+'">'+adaptedName+'</div></div></div><br />'+
 							'<span class="info">'+file.copyright.substr(0, 4)+' in '+player+'</span></td>'+
 							'<td class="stars filestars"><span class="rating">'+this.buildStars(file.rating)+'</span>'+
 							'<span class="disqus-comment-count" data-disqus-url="http://deepsid.chordian.net/#!'+rootFile.replace("/_High Voltage SID Collection", "")+'"></span>'+
@@ -674,6 +676,7 @@ Browser.prototype = {
 						stil:			stil,
 						rating:			file.rating,
 						hvsc:			file.hvsc,
+						symid:			file.symid,
 					});
 				}.bind(this));
 
@@ -1073,6 +1076,7 @@ Browser.prototype = {
 		var contents = "";
 		this.contextEntry = $target.find(".entry");
 		this.contextSID = this.contextEntry.attr("data-name");
+		this.contextSymID = this.contextEntry.attr("data-symid");
 
 		// Maintain hover background color while showing the context menu
 		this.contextTR = $target.parent("tr");
@@ -1223,7 +1227,8 @@ Browser.prototype = {
 				// Remove the SID file from the symlist
 				$.post("php/symlist_remove.php", {
 					fullname:	this.contextSID,		// Fullname of physical SID file
-					symlist:	this.path.substr(1)
+					symlist:	this.path.substr(1),
+					symid:		this.contextSymID,
 				}, function(data) {
 					this.validateData(data, function() {
 						this.getFolder();

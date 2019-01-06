@@ -6,6 +6,7 @@
  * 
  * @uses		$_POST['fullname']
  * @uses		$_POST['symlist']
+ * @uses		$_POST['symid']			if > 0 then use this as reference instead
  */
 
 require_once("class.account.php"); // Includes setup
@@ -38,19 +39,28 @@ try {
 	$folder_id = $row->id;
 	$file_count = $row->files;
 
-	// Get ID of actual SID file
-	$select = $db->prepare('SELECT id FROM hvsc_files WHERE fullname = :fullname LIMIT 1');
-	$select->execute(array(':fullname'=>$_POST['fullname']));
-	$select->setFetchMode(PDO::FETCH_OBJ);
+	if (isset($_POST['symid']) && $_POST['symid']) {
 
-	if (!$select->rowCount())
-		die(json_encode(array('status' => 'error', 'message' => "Couldn't find ".$_POST['fullname'])));
+		// We must reference the symlist ID directly because of multiple ocurrences of the same SID file
+		$delete = $db->prepare('DELETE FROM symlists WHERE id = :symid LIMIT 1');
+		$delete->execute(array(':symid'=>$_POST['symid']));
 
-	$file_id = $select->fetch()->id;
+	} else {
 
-	// Now delete the symlist entry
-	$delete = $db->query('DELETE FROM symlists WHERE folder_id = '.$folder_id.' AND file_id = '.$file_id.' LIMIT 1');
-	
+		// Get ID of actual SID file
+		$select = $db->prepare('SELECT id FROM hvsc_files WHERE fullname = :fullname LIMIT 1');
+		$select->execute(array(':fullname'=>$_POST['fullname']));
+		$select->setFetchMode(PDO::FETCH_OBJ);
+
+		if (!$select->rowCount())
+			die(json_encode(array('status' => 'error', 'message' => "Couldn't find ".$_POST['fullname'])));
+
+		$file_id = $select->fetch()->id;
+
+		// Now delete the symlist entry
+		$delete = $db->query('DELETE FROM symlists WHERE folder_id = '.$folder_id.' AND file_id = '.$file_id.' LIMIT 1');
+	}
+
 	// Decrease the count of files
 	$update = $db->query('UPDATE hvsc_folders SET files = '.--$file_count.' WHERE id = '.$folder_id);
 	if ($update->rowCount() == 0)

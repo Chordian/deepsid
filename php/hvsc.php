@@ -190,6 +190,7 @@ try {
 
 	$folder = ltrim($_GET['folder'].'/', '/');
 	$files_ext = $folders_ext = array();
+	$multiple = array();
 
 	foreach($files as $file) {
 
@@ -338,17 +339,27 @@ try {
 			// Make references to other HVSC tunes into redirect links (i.e. won't refresh the web page)
 			$stil = preg_replace('/(\/DEMO[^\s].+\.sid|\/GAMES[^\s]+\.sid|\/MUSICIANS[^\s]+\.sid)/', '<a class="redirect" href="#">$1</a>', $stil);
 
+			$symid = $symid_pos = 0;
 			$substname = '';
 			if ($isPublicSymlist || $isPersonalSymlist) {
-				// We're inside a symlist so check now if the file has a different name here
-				$symlist = $db->query('SELECT sidname, subtune FROM symlists WHERE folder_id = '.$symlist_folder_id.' AND file_id = '.$row->id);
+				// We're inside a symlist so check now if the file has a different name and sub tune here
+				$symlist = $db->query('SELECT id, sidname, subtune FROM symlists WHERE folder_id = '.$symlist_folder_id.' AND file_id = '.$row->id.' ORDER BY id');
 				$symlist->setFetchMode(PDO::FETCH_OBJ);
-				if ($symlist->rowCount()) {
-					$row_sym = $symlist->fetch();
-					$substname = $row_sym->sidname;
+				$row_sym = $symlist->fetchAll();
+
+				$row_count = $symlist->rowCount();
+				if ($row_count) {
+					if ($row_count > 1) {
+						// There are multiple entries of the same SID tune
+						$symid_pos = array_key_exists($row->id, $multiple) ? $multiple[$row->id] : 0;
+						$symid = $row_sym[$symid_pos]->id;
+						$multiple[$row->id] = $symid_pos + 1;
+					}
+					// Did the user rename it?
+					$substname = $row_sym[$symid_pos]->sidname;
 					if (!empty($substname)) $substname .= substr($file, -4);
 					// Also check if a different sub tune than the default one should play instead
-					if ($row_sym->subtune) $startsubtune = $row_sym->subtune;
+					if ($row_sym[$symid_pos]->subtune) $startsubtune = $row_sym[$symid_pos]->subtune;
 				}
 			}
 
@@ -377,6 +388,7 @@ try {
 				'stil' => 			$stil,
 				'rating' =>			$rating,
 				'hvsc' =>			$hvsc,
+				'symid' =>			$symid,
 			));
 		}
 	}

@@ -88,11 +88,6 @@ try {
 
 	$file_id = $select->fetch()->id;
 
-	// Check that the symlist folder doesn't already have it (duplicates are not allowed)
-	$select = $db->query('SELECT 1 FROM symlists WHERE folder_id = '.$folder_id.' AND file_id = '.$file_id.' LIMIT 1');
-	if ($select->rowCount())
-		die(json_encode(array('status' => 'error', 'message' => "It's already in the '".substr($symlist_folder, 1)."' playlist.")));
-
 	// Now create the symlist entry (different SID name via renaming is done in a different PHP file)
 	$insert = $db->query('INSERT INTO symlists (folder_id, file_id) VALUES('.$folder_id.', '.$file_id.')');
 	if ($insert->rowCount() == 0)
