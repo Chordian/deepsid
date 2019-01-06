@@ -2127,8 +2127,8 @@ input[type=range]::-ms-track {
 				top: auto;
 				bottom: 6px;
 				left: 6px;*/
-				width: 52px;
-				height: 52px;
+				width: 57px;
+				height: 57px;
 				border: 0.5px solid #ced0c0;
 				margin-bottom: -3px;
 			}
