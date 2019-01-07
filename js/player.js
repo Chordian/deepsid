@@ -516,7 +516,9 @@ SIDPlayer.prototype = {
 		switch (override || this.emulator) {
 			case "websid":
 				SIDBackend.updateSongInfo(this.file, result);
-				result.maxSubsong = isCGSC ? 0 : result.maxSubsong - 1;
+				// iOS uses an older WebSID scriptprocessor script
+				var iOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+				if (!iOS) result.maxSubsong = isCGSC ? 0 : result.maxSubsong - 1;
 				break;
 			case "jssid":
 				result.actualSubsong	= this.subtune;
