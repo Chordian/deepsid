@@ -19,6 +19,8 @@
 
 	this.secondsLength = 0;
 
+	this.isMobile = $("body").attr("data-mobile") !== "0";
+
 	this.init();
 }
 
@@ -687,23 +689,31 @@ Browser.prototype = {
 				this.updateDisqusCounts();
 
 				var $browser = this;
-				$("#folders").height($("#folders").height()) // Ugly hack to make custom scroll bar respect flexbox height
-					.mCustomScrollbar({
-						axis: "y",
-						theme: "dark-3",
-						setTop: (typeof scrollPos !== "undefined" ? scrollPos+"px" : "0"),
-						scrollButtons:{
-							enable: true,
-						},
-						mouseWheel:{
-							scrollAmount: 150,
-						},
-						callbacks: {
-							whileScrolling: function() {
-								$browser.currentScrollPos = this.mcs.top;
+
+				// Let mobile devices use their own touch scrolling stuff
+				if (this.isMobile) {
+					// Hack to make sure the bottom search bar sits in the correct bottom of the viewport
+					$(window).trigger("resize");
+				} else {
+					// Ugly hack to make custom scroll bar respect flexbox height
+					$("#folders").height($("#folders").height())
+						.mCustomScrollbar({
+							axis: "y",
+							theme: "dark-3",
+							setTop: (typeof scrollPos !== "undefined" ? scrollPos+"px" : "0"),
+							scrollButtons:{
+								enable: true,
+							},
+							mouseWheel:{
+								scrollAmount: 150,
+							},
+							callbacks: {
+								whileScrolling: function() {
+									$browser.currentScrollPos = this.mcs.top;
+								}
 							}
-						}
-					});
+						});
+				}
 				if (typeof callback === "function") callback.call(this);
 			});
 			if (this.path == "")
