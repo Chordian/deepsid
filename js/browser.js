@@ -191,7 +191,7 @@ Browser.prototype = {
 				break;
 			default:
 				// A TD element was clicked (folder, SID file, star rating)
-				var $tr = $(event.target).parents("tr");
+				var $tr = $(event.currentTarget);
 				if ($($tr).hasClass("disabled")) return false;
 
 				// Get the unmodified name of this entry
@@ -490,7 +490,7 @@ Browser.prototype = {
 			this.updateDisqusCounts();
 		}
 
-		$("#folders").mCustomScrollbar("scrollTo", "top");
+		if (!this.isMobile) $("#folders").mCustomScrollbar("scrollTo", "top");
 	},
 
 	/**
@@ -524,7 +524,7 @@ Browser.prototype = {
 				clearTimeout(loading);
 				$("#loading").hide();
 				ctrls.state("root/back", "enabled");
-				$("#folders").mCustomScrollbar("destroy");
+				if (!this.isMobile) $("#folders").mCustomScrollbar("destroy");
 				this.folders = this.extra = this.symlists = "";
 				var files = "";
 
@@ -821,6 +821,7 @@ Browser.prototype = {
 	 * @param {string} file		SID fullname string.
 	 */
 	reloadDisqus: function(file) {
+		if (this.isMobile) return;
 		if ($("#topic-disqus").length && $("#disqus-toggle").is(":checked") && typeof DISQUS !== "undefined") {
 			// Disqus was implemented before the main folder for HVSC was so it doesn't know it exists
 			var rootFile = file.replace("hvsc", "").replace("/_High Voltage SID Collection", "");
@@ -841,6 +842,7 @@ Browser.prototype = {
 	 * If there are any Disqus comments then show a notification number on the 'Disqus' tab (if not in focus).
 	 */
 	rowDisqusCount: function() {
+		if (this.isMobile) return;
 		var count = $("#folders tr").eq(this.subFolders + this.songPos).find(".disqus-comment-count")
 			.text().trim().split(" ")[0];
 		if (count !== "" && $("#tabs .selected").attr("data-topic") !== "disqus")
@@ -853,6 +855,7 @@ Browser.prototype = {
 	 * Show number of Disqus comments for each SID file (if any).
 	 */
 	updateDisqusCounts: function() {
+		if (this.isMobile) return;
 		if ($("#topic-disqus").length && $("#disqus-toggle").is(":checked") && typeof DISQUSWIDGETS !== "undefined")
 			DISQUSWIDGETS.getCount({reset: true});
 	},
@@ -861,6 +864,7 @@ Browser.prototype = {
 	 * Show the composer page in the 'Profile' tab.
 	 */
 	getComposer: function() {
+		if (this.isMobile) return;
 		if (this.composer) this.composer.abort();
 		if (this.groups) this.groups.abort();
 
@@ -949,6 +953,7 @@ Browser.prototype = {
 	 * @param {boolean} back	If specified and TRUE, show a 'BACK' button.
 	 */
 	getCSDb: function(type, id, back) {
+		if (this.isMobile) return;
 		if (this.csdb) this.csdb.abort();
 		$("#topic-csdb").empty().append('<div style="height:400px;"><img id="loading-csdb" src="images/loading.svg" style="display:none;" alt="" /></div>');
 
@@ -989,6 +994,7 @@ Browser.prototype = {
 	 * @param {number} mark		ID of the release page to mark on the competition results list.
 	 */
 	getCompoResults: function(compo, id, mark) {
+		if (this.isMobile) return;
 		if (this.compo) this.compo.abort();
 		$("#topic-csdb").empty().append('<div style="height:400px;"><img id="loading-csdb" src="images/loading.svg" style="display:none;" alt="" /></div>');
 
@@ -1024,6 +1030,7 @@ Browser.prototype = {
 	 * Also handles the tab notification counter. 
 	 */
 	getGB64: function() {
+		if (this.isMobile) return;
 		if (this.gb64) this.gb64.abort();
 		$("#topic-gb64").empty().append('<div style="height:400px;"><img id="loading-gb64" src="images/loading.svg" style="display:none;" alt="" /></div>');
 

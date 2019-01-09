@@ -185,6 +185,9 @@ SIDPlayer.prototype = {
 		timeout = this.timeout = typeof timeout === "undefined" ? this.timeout : timeout;
 		file = this.file = typeof file === "undefined" ? this.file : file;
 
+		// Show the raw SID filename in the title
+		$(document).attr("title", "DeepSID | "+file.split("/").slice(-1)[0]);
+
 		switch (this.emulator) {
 
 			case "websid":

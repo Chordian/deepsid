@@ -60,6 +60,8 @@ $(function() { // DOM ready
 			if (event.keyCode == 220)								// Keyup key below 'Escape'
 				// Fast forward
 				$("#faster").trigger("mouseup");
+			else if (event.keyCode == 32)							// Keyup 'Space'
+				$("#play-pause").trigger("mouseup");
 			else if (event.keyCode == 80)							// Keyup 'p'
 				// Open a pop-up window with only the width of the #panel area
 				window.open("//deepsid.chordian.net/", "_blank",
@@ -443,10 +445,12 @@ $(function() { // DOM ready
 		// This is the <TR> row with the SID file we need to play
 		var $trPlay = $("#folders tr").eq($tr.index());
 		$trPlay.children("td.sid").trigger("click", [undefined, true]);
-		// Scroll the row into the middle of the list
-		var rowPos = $trPlay[0].offsetTop;
-		var halfway = $("#folders").height() / 2 - 26; // Last value is half of SID file row height
-		$("#folders").mCustomScrollbar("scrollTo", rowPos > halfway ? rowPos - halfway : "top");
+		if (!browser.isMobile) {
+			// Scroll the row into the middle of the list
+			var rowPos = $trPlay[0].offsetTop,
+				halfway = $("#folders").height() / 2 - 26; // Last value is half of SID file row height
+			$("#folders").mCustomScrollbar("scrollTo", rowPos > halfway ? rowPos - halfway : "top");
+		}
 	}
 
 	/**
@@ -517,10 +521,12 @@ $(function() { // DOM ready
 					$trPlay.children("td.sid").trigger("click");
 				else
 					$trPlay.children("td.sid").trigger("click", paramSubtune == 0 ? 0 : paramSubtune - 1);
-				// Scroll the row into the middle of the list
-				var rowPos = $trPlay[0].offsetTop;
-				var halfway = $("#folders").height() / 2 - 26; // Last value is half of SID file row height
-				$("#folders").mCustomScrollbar("scrollTo", rowPos > halfway ? rowPos - halfway : "top");
+				if (!browser.isMobile) {
+					// Scroll the row into the middle of the list
+					var rowPos = $trPlay[0].offsetTop;
+					var halfway = $("#folders").height() / 2 - 26; // Last value is half of SID file row height
+					$("#folders").mCustomScrollbar("scrollTo", rowPos > halfway ? rowPos - halfway : "top");
+				}
 			}
 			browser.getComposer();
 		});

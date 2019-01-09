@@ -726,6 +726,12 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>January 9, 2019</h3>
+						<ul>
+							<li>The page title is now updated to reflect the song currently being played.</li>
+							<li>You can now use <code>Space</code> to toggle between play and pause.</li>
+						</ul>
+
 						<h3>January 7, 2019</h3>
 						<ul>
 							<li>Fixed a bug where iOS devices didn't show the correct number of maximum sub tunes.</li>

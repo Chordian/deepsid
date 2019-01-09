@@ -189,7 +189,7 @@ Controls.prototype = {
 				if (typeof autoCenter === "undefined") {
 					var rowPos = $("tr").eq($("tr.selected").index())[0].offsetTop;
 					var halfway = $("#folders").height() / 2 - 26; // Last value is half of SID file row height
-					$("#folders").mCustomScrollbar("scrollTo", rowPos > halfway ? rowPos - halfway : "top");
+					if (!browser.isMobile) $("#folders").mCustomScrollbar("scrollTo", rowPos > halfway ? rowPos - halfway : "top");
 				}
 
 				if (error) browser.errorRow();
