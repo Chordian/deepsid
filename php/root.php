@@ -13,6 +13,10 @@ require_once("root_generate.php");
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest')
 	die("Direct access not permitted.");
 
+$important = '<b>NOTE:</b> The <b>SOASC handlers</b> are currently ineffective as Stoneoak Valley have
+	<span class="bad">server problems</span>. They are working on the problem. Please use the emulators
+	for the time being until this is fixed.';
+
 $available_lists = ['maxfiles', 'longest', 'mostgames', 'countries', 'startaddr', 'maxtime'];
 $dropdown_options =
 	'<option value="'.$available_lists[0].'">Most SID tunes produced</option>'.
@@ -37,6 +41,7 @@ $choice_right = $available_lists[$choices[1]];
 
 $html =
 	'<div style="position:relative;top:-2px;left:135px;margin-bottom:150px;font:normal 12px Montserrat,sans-serif;color:#d3d4c6;"><i>Behold!&nbsp;&nbsp;You now find yourself in &ndash;</i></div>'.
+	'<div class="root-wide">'.$important.'</div>'.
 	'<table class="root"><tr>'.
 		'<td style="max-width:300px;">'.
 			'<select class="dropdown-top-list dropdown-top-list-left" name="select-top-list-left">'.

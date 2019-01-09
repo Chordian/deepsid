@@ -3,10 +3,6 @@
  * DeepSID / CSS
  */
 
-/*@-ms-viewport{
-	width: 450;
-}*/
-
 body, html {
 	height: 100%;
 	margin: 0;
@@ -1945,6 +1941,20 @@ input[type=range]::-ms-track {
 			right: 0;
 			bottom: 6px;
 		}
+
+		/* An arbitrary page-wide info box on root welcome page */
+		#page .root-wide {
+			padding: 10px;
+			border: 1px solid #caa; /* #b0b29a */
+			margin-bottom: 10px;
+			background: #fee;
+			border-radius: 3px;
+		}
+
+			#page .root-wide .bad {
+				font-weight: bold;
+				color: #a00;
+			}
 
 		/* Container table in root welcome page for the two side-by-side tables */
 		#page table.root {

@@ -5,7 +5,9 @@
 	$user_id = $account->CheckLogin() ? $account->UserID() : 0;
 
 	function isMobile() {
-		return preg_match("/(android|avantgo|blackberry|bolt|boost|cricket|docomo|fone|hiptop|mini|mobi|palm|phone|pie|tablet|up\.browser|up\.link|webos|wos)/i", $_SERVER["HTTP_USER_AGENT"]);
+		return isset($_GET['mobile'])
+			? $_GET['mobile']
+			: preg_match("/(android|avantgo|blackberry|bolt|boost|cricket|docomo|fone|hiptop|mini|mobi|palm|phone|pie|tablet|up\.browser|up\.link|webos|wos)/i", $_SERVER["HTTP_USER_AGENT"]);
 	}
 ?>
 <!DOCTYPE html>
@@ -707,6 +709,9 @@
 								<td>csdbid</td><td>Set to an ID value to show a CSDb entry;
 									must be used together with <code>csdbtype</code></td>
 							</tr>
+							<tr>
+								<td>mobile</td><td>Set it to <code>0</code> on a mobile device to use desktop view, or <code>1</code> on a desktop computer to use mobile view</td>
+							</tr>
 						</table>
 						<p>
 							An example to show a specific folder:<br />
@@ -730,6 +735,13 @@
 						<ul>
 							<li>The page title is now updated to reflect the song currently being played.</li>
 							<li>You can now use <code>Space</code> to toggle between play and pause.</li>
+							<li>The <code>Decent</code> and <code>Good</code> modes are now ready for letter folder <code>K</code> in MUSICIANS.</li>
+							<li>Added the URL parameter <code>mobile</code>. Set it to <code>0</code> on a mobile device to use
+								the full desktop view, or to <code>1</code> on a desktop computer to force mobile device view there
+								(the latter is use for debugging).</li>
+							<li>Fixed a bug where rows were not always marked in playlists on mobile devices.</li>
+							<li>Fixed a bug where loading with a file URL parameter didn't populate the browser list on mobile devices.</li>
+							<li>Fixed mobile devices not centering the song in the list when this is requested.</li>
 						</ul>
 
 						<h3>January 7, 2019</h3>

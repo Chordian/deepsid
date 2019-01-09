@@ -85,15 +85,17 @@ $(function() { // DOM ready
 			$(window).height() > 840 ? $("#stil").show() : $("#stil").hide();
 		// Make sure the browser box always take up all screen height upon resizing the window
 		$("#folders").height(0).height($("#songs").height() - 100);
-		// Also make sure the scrollbar for dexter has the correct height
-		$("#page .mCSB_scrollTools").css("height", $("#page").height() + 13);
-		// Correct height for flood river too
-		var floodHeight = $("#page").outerHeight() - 173;
-		$("#flood").height(floodHeight);
-		$("#flood .flood-river canvas").attr("height", floodHeight - 1);
-		viz.river_height[0] = viz.river_height[1] = viz.river_height[2] = floodHeight - 1;
-		// And that the web site iframe has the correct height too
-		$("#page .deepsid-iframe").height($("#page").outerHeight() - 61); // 24
+		if (!browser.isMobile) {
+			// Also make sure the scrollbar for dexter has the correct height
+			$("#page .mCSB_scrollTools").css("height", $("#page").height() + 13);
+			// Correct height for flood river too
+			var floodHeight = $("#page").outerHeight() - 173;
+			$("#flood").height(floodHeight);
+			$("#flood .flood-river canvas").attr("height", floodHeight - 1);
+			viz.river_height[0] = viz.river_height[1] = viz.river_height[2] = floodHeight - 1;
+			// And that the web site iframe has the correct height too
+			$("#page .deepsid-iframe").height($("#page").outerHeight() - 61); // 24
+		}
 	});
 
 	/**
@@ -445,12 +447,13 @@ $(function() { // DOM ready
 		// This is the <TR> row with the SID file we need to play
 		var $trPlay = $("#folders tr").eq($tr.index());
 		$trPlay.children("td.sid").trigger("click", [undefined, true]);
-		if (!browser.isMobile) {
-			// Scroll the row into the middle of the list
-			var rowPos = $trPlay[0].offsetTop,
-				halfway = $("#folders").height() / 2 - 26; // Last value is half of SID file row height
+		// Scroll the row into the middle of the list
+		var rowPos = $trPlay[0].offsetTop,
+			halfway = $("#folders").height() / 2 - 26; // Last value is half of SID file row height
+		if (browser.isMobile)
+			$("#folders").scrollTop(rowPos > halfway ? rowPos - halfway : 0);
+		else
 			$("#folders").mCustomScrollbar("scrollTo", rowPos > halfway ? rowPos - halfway : "top");
-		}
 	}
 
 	/**
@@ -521,12 +524,13 @@ $(function() { // DOM ready
 					$trPlay.children("td.sid").trigger("click");
 				else
 					$trPlay.children("td.sid").trigger("click", paramSubtune == 0 ? 0 : paramSubtune - 1);
-				if (!browser.isMobile) {
-					// Scroll the row into the middle of the list
-					var rowPos = $trPlay[0].offsetTop;
-					var halfway = $("#folders").height() / 2 - 26; // Last value is half of SID file row height
+				// Scroll the row into the middle of the list
+				var rowPos = $trPlay[0].offsetTop;
+				var halfway = $("#folders").height() / 2 - 26; // Last value is half of SID file row height
+				if (browser.isMobile)
+					$("#folders").scrollTop(rowPos > halfway ? rowPos - halfway : 0);
+				else
 					$("#folders").mCustomScrollbar("scrollTo", rowPos > halfway ? rowPos - halfway : "top");
-				}
 			}
 			browser.getComposer();
 		});

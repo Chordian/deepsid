@@ -290,6 +290,11 @@ Browser.prototype = {
 					subtune = subtune < 0 ? 0 : subtune;
 					subtune = subtune > subtuneMax ? subtuneMax : subtune;
 
+					// NOTE: These two lines uses to be placed below SID.load(). Placing them up here instead
+					// fixed a row marking bug on iOS in playlists with duplicate use of songs.
+					$("#songs tr").removeClass("selected");
+					$tr.addClass("selected");
+
 					SID.load(subtune, this.getLength(subtune), this.playlist[this.songPos].fullname, function(error) {
 
 						this.clearSpinner();
@@ -360,9 +365,6 @@ Browser.prototype = {
 						}
 					}.bind(this));
 				}
-
-				$("#songs tr").removeClass("selected");
-				$tr.addClass("selected");
 		}
 	},
 
@@ -490,7 +492,10 @@ Browser.prototype = {
 			this.updateDisqusCounts();
 		}
 
-		if (!this.isMobile) $("#folders").mCustomScrollbar("scrollTo", "top");
+		if (this.isMobile)
+			$("#folders").scrollTop(0);
+		else
+			$("#folders").mCustomScrollbar("scrollTo", "top");
 	},
 
 	/**
