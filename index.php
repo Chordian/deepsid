@@ -202,6 +202,7 @@
 						<option value="rating">Rating</option>
 						<option value="country">Country</option>
 						<option value="new">Version</option>
+						<option value="gb64">Game</option>
 					</select>
 					<input type="text" name="search-box" id="search-box" maxlength="32" />
 					<button id="search-button" class="medium disabled" disabled="disabled">Search</button>
@@ -693,9 +694,10 @@
 								<td>search</td><td>A search query (just like when typed in the bottom)</td>
 							</tr>
 							<tr>
-								<td>type</td><td>Search type; <code>fullname</code>, <code>author</code>,
+								<td>type</td><td>Search type; <code>fullname</code> (title), <code>author</code>,
 									<code>copyright</code>, <code>player</code>, <code>stil</code>, <code>rating</code>,
-									<code>country</code> or <code>new</code> (HVSC)</td>
+									<code>country</code>, <code>new</code> (HVSC or CGSC version number) or
+									<code>gb64</code> (game)</td>
 							</tr>
 							<tr>
 								<td>tab</td><td>Set to <code>csdb</code>, <code>gb64</code>, <code>stil</code>, <code>piano</code>, <code>flood</code>,
@@ -731,6 +733,12 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>January 10, 2019</h3>
+						<ul>
+							<li>You can now search for songs made for specific games with the new <code>Game</code> search type.</li>
+							<li>Avatar thumbnails in CSDb comments are now clickable and goes to the composer's profile/folder.</li>
+						</ul>
+
 						<h3>January 9, 2019</h3>
 						<ul>
 							<li>The page title is now updated to reflect the song currently being played.</li>
@@ -738,7 +746,7 @@
 							<li>The <code>Decent</code> and <code>Good</code> modes are now ready for letter folder <code>K</code> in MUSICIANS.</li>
 							<li>Added the URL parameter <code>mobile</code>. Set it to <code>0</code> on a mobile device to use
 								the full desktop view, or to <code>1</code> on a desktop computer to force mobile device view there
-								(the latter is use for debugging).</li>
+								(the latter is used for debugging).</li>
 							<li>Fixed a bug where rows were not always marked in playlists on mobile devices.</li>
 							<li>Fixed a bug where loading with a file URL parameter didn't populate the browser list on mobile devices.</li>
 							<li>Fixed mobile devices not centering the song in the list when this is requested.</li>

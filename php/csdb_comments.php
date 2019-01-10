@@ -176,7 +176,7 @@ function CommentsTable($title, $comments, &$scener_handle, &$scener_id, $backwar
 					: '<b>'.(!empty($handle) ? $handle : '[ID:'.$comment->CSDbUser->ID.']').'</b>'
 				).
 				'<br /><span class="date">'.$fixed_date.'</span><br />'.
-				(!empty($hvsc_folder) ? '<img class="avatar" src="'.$thumbnail.'" alt="" style="background:#fff;width:57px;height:57px;" />' : '').
+				(!empty($hvsc_folder) ? '<a href="'.HOST.'?file=/'.$hvsc_folder.'"><img class="avatar" src="'.$thumbnail.'" alt="" style="background:#fff;width:57px;height:57px;" /></a>' : '').
 				'<span class="count pm"><a href="https://csdb.dk/privatemessages/sendmessage.php?userid='.$comment->CSDbUser->ID.'&selectdone.x=1" target="_blank">PM</a></span>'.
 				// (!empty($hvsc_folder) ? '<img class="home-folder" src="images/if_folder.svg" alt="" />' : '').
 				(!empty($hvsc_folder) ? '<span class="count home-folder" title="Show DeepSID folder" data-home="'.$hvsc_folder.'"><img style="width:14px;" src="images/if_folder.svg" alt="" /></span>' : '').
