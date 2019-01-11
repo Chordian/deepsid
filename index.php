@@ -733,10 +733,17 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>January 11, 2019</h3>
+						<ul>
+							<li>Songs inside other playlists can now be added to your own playlist with the right-click context menu.</li>
+							<li>You can now download any SID or MUS file using the right-click context menu.</li>
+						</ul>
+
 						<h3>January 10, 2019</h3>
 						<ul>
 							<li>You can now search for songs made for specific games with the new <code>Game</code> search type.</li>
 							<li>Avatar thumbnails in CSDb comments are now clickable and goes to the composer's profile/folder.</li>
+							<li>Glenn Rune Gallefoss' <a href="https://sourceforge.net/projects/ultimate-sid-list/">Ultimate SID List</a> (1000+ SID files) has now been added as a <a href="http://deepsid.chordian.net/?file=/$GRG%27s%20Ultimate%20SID%20List%20v6/">playlist</a> for v6.</li>
 						</ul>
 
 						<h3>January 9, 2019</h3>

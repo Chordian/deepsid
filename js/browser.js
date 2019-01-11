@@ -49,16 +49,14 @@ Browser.prototype = {
 		$("#songs").on("click", "button,tr", this.onClick.bind(this));
 		$("#dropdown-sort").change(this.onChange.bind(this));
 
-		if ($("#logout").length) {
-			$("#folders table").on("contextmenu", "tr", this.contextMenu.bind(this));
-			$("#panel")
-				.on("click", ".context", this.onContextClick.bind(this))
-				.on("mouseenter", "#contextmenu .submenu", this.contextSubMenu.bind(this))
-				.on("mouseleave", "#contextmenu .submenu,#contextsubmenu", function() {
-					if (!$("#contextsubmenu").is(":hover"))
-						$("#contextsubmenu").remove();
-				})
-		}
+		$("#folders table").on("contextmenu", "tr", this.contextMenu.bind(this));
+		$("#panel")
+			.on("click", ".context", this.onContextClick.bind(this))
+			.on("mouseenter", "#contextmenu .submenu", this.contextSubMenu.bind(this))
+			.on("mouseleave", "#contextmenu .submenu,#contextsubmenu", function() {
+				if (!$("#contextsubmenu").is(":hover"))
+					$("#contextsubmenu").remove();
+			})
 
 		setInterval(function() {
 			// Update clock
@@ -1078,10 +1076,8 @@ Browser.prototype = {
 	},
 
 	/**
-	 * Show the main context menu. This is shown when right-clicking a SID file row.
-	 * 
-	 * NOTE: The context menu only appears when an valid action can be done to the SID
-	 * file, otherwise it passes control over to the standard web browser context menu.
+	 * Show the main context menu. This is shown when right-clicking a SID file row
+	 * or a symlist folder.
 	 * 
 	 * @param {*} event 
 	 */
@@ -1112,10 +1108,10 @@ Browser.prototype = {
 				var result = $.grep(this.symlistFolders, function(entry) {
 					return entry.fullname == this.path.substr(1);
 				}.bind(this));
-				if (result.length === 0) return; // Not your public symlist
+				var isMyPublicSymlist = result.length !== 0;
 			}
 
-			contents = (isPersonalSymlist || isPublicSymlist) && !this.isSearching
+			contents = (isPersonalSymlist || isMyPublicSymlist) && !this.isSearching
 
 				? '<div class="line" data-action="symentry-rename">Rename</div>'+			// SID in symlist folder
 				  '<div class="line" data-action="symentry-remove">Remove</div>'+
@@ -1123,6 +1119,12 @@ Browser.prototype = {
 					
 				: '<div class="line" data-action="symlist-new">Add to New Playlist</div>'+	// SID in normal folder
 				  '<div class="line submenu'+(this.symlistFolders.length === 0 ? ' disabled' : '')+'">Add to Playlist</div>';
+
+			// Divider to more common SID file actions
+			contents += '<div class="divider"></div>';
+
+			// Download SID file
+			contents += '<div class="line" data-action="download-file">Download File</div>';
 
 		} else if ($target.hasClass("folder") && (this.contextSID.substr(0, 1) == "!" || this.contextSID.substr(0, 1) == "$")) {
 			var ifAlreadyPublic = "";
@@ -1212,11 +1214,16 @@ Browser.prototype = {
 		if ($target.hasClass("disabled")) return;
 		var action = $target.attr("data-action");
 		switch (action) {
+			case "download-file":
+				var symChar = this.path.substr(1, 1);
+				// Force the browser to download it using an invisible <iframe>
+				$("#download").prop("src", this.ROOT_HVSC + '/' + (this.isSearching || symChar == "!" || symChar == "$" ? this.contextSID : this.path.substr(1)+"/"+this.contextSID));
+				break;
 			case "symlist-add":
 			case "symlist-new":
 				// Add the SID file to a symlist (exiting or creating with unique version of SID file name)
 				$.post("php/symlist_write.php", {
-					fullname:	(this.isSearching ? this.contextSID : this.path.substr(1)+"/"+this.contextSID),
+					fullname:	(this.isSearching || this.path.substr(1, 1) == "$" ? this.contextSID : this.path.substr(1)+"/"+this.contextSID),
 					symlist:	(action === "symlist-add" ? (event.target.textContent.indexOf(" [PUBLIC]") !== -1 ? "$" : "!")+event.target.textContent : '')
 				}, function(data) {
 					this.validateData(data);

@@ -319,7 +319,7 @@ small.u2 { margin-left: 2px; }
 	}
 
 		.viz-buffer label {
-			margin-right: 4px;
+			margin-right: 4px !important;
 		}
 
 		.dropdown-buffer {
@@ -2509,8 +2509,8 @@ input[type=range]::-ms-track {
 		color: #c8c8ba !important;	
 	}
 
-	/* Adds a dotted line */
-	.s-line {
-		padding-bottom: 1px;
-		border-bottom: 1px dotted #a4a4a4;
+	.divider {
+		height: 2px;
+		margin-bottom: 1px;
+		border-bottom: 1px solid #c8c8b9;
 	}
