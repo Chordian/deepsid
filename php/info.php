@@ -7,7 +7,7 @@
  * @uses		$_GET['fullname']
  */
 
-require_once("setup.php");
+require_once("class.account.php"); // Includes setup
 
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest')
 	die("Direct access not permitted.");
@@ -86,7 +86,10 @@ if (substr($_GET['fullname'], -4) == '.mus') {
 		if ($info['sidmodel'] != 'MOS8580') $info['sidmodel'] = 'MOS6581';
 
 	} catch(PDOException $e) {
-		echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
+		$error_msg = $e->getMessage();
+		$account->LogActivity('User "'.$_SESSION['user_name'].'" invoked a database error in the "info.php" script:');
+		$account->LogActivity(' '.$error_msg);
+		echo json_encode(array('status' => 'error', 'message' => $error_msg));
 	}
 }
 

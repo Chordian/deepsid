@@ -394,7 +394,12 @@ try {
 	}
 
 } catch(PDOException $e) {
-	die(json_encode(array('status' => 'error', 'message' => $e->getMessage())));
+	$error_msg = $e->getMessage();
+	$account->LogActivity('User "'.$_SESSION['user_name'].'" invoked a database error in the "hvsc.php" script:');
+	$account->LogActivity(' '.$error_msg);
+	$account->LogActivity(' files: '.$file_ext);
+	$account->LogActivity(' folders: '.$folders_ext);
+	die(json_encode(array('status' => 'error', 'message' => $error_msg)));
 }
 
 echo json_encode(array('status' => 'ok', 'files' => $files_ext, 'folders' => $folders_ext, 'results' => $found, 'incompatible' => $incompatible, 'owner' => $owner, 'debug' => $debug));

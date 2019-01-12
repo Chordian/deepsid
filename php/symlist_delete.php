@@ -40,9 +40,13 @@ try {
 
 	// Now delete the folder itself
 	$delete = $db->query('DELETE FROM hvsc_folders WHERE id = '.$folder_id.' LIMIT 1');
+	$account->LogActivity('User "'.$_SESSION['user_name'].'" deleted the "'.$_POST['symlist'].'" playlist');
 
 } catch(PDOException $e) {
-	die(json_encode(array('status' => 'error', 'message' => $e->getMessage())));
+	$error_msg = $e->getMessage();
+	$account->LogActivity('User "'.$_SESSION['user_name'].'" invoked a database error in the "symlist_delete.php" script:');
+	$account->LogActivity(' '.$error_msg);
+	die(json_encode(array('status' => 'error', 'message' => $error_msg)));
 }
 
 echo json_encode(array('status' => 'ok'));

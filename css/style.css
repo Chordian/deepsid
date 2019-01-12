@@ -1610,6 +1610,12 @@ input[type=range]::-ms-track {
 			background: #eeeee8; /* #d2d5cb #ebebe5 #edede7 #eeeee8 */
 		}
 
+	.context .divider {
+		height: 2px;
+		margin-bottom: 1px;
+		border-bottom: 1px solid #c8c8b9;
+	}
+
 	.context .submenu {
 		padding-right: 18px;
 	}
@@ -1945,16 +1951,29 @@ input[type=range]::-ms-track {
 		/* An arbitrary page-wide info box on root welcome page */
 		#page .root-wide {
 			padding: 10px;
-			border: 1px solid #caa; /* #b0b29a */
 			margin-bottom: 10px;
-			background: #fee;
 			border-radius: 3px;
 		}
 
-			#page .root-wide .bad {
-				font-weight: bold;
-				color: #a00;
+			#page .good-news {
+				border: 1px solid #aca;
+				background: #efe;
 			}
+
+			#page .bad-news {
+				border: 1px solid #caa; /* #b0b29a */
+				background: #fee;
+			}
+
+				#page .root-wide .good {
+					font-weight: bold;
+					color: #070;
+				}
+				
+				#page .root-wide .bad {
+					font-weight: bold;
+					color: #a00;
+				}
 
 		/* Container table in root welcome page for the two side-by-side tables */
 		#page table.root {
@@ -2509,8 +2528,8 @@ input[type=range]::-ms-track {
 		color: #c8c8ba !important;	
 	}
 
-	.divider {
-		height: 2px;
-		margin-bottom: 1px;
-		border-bottom: 1px solid #c8c8b9;
+	/* Adds a dotted line */
+	.s-line {
+		padding-bottom:1px;
+		border-bottom:1px dotted #a4a4a4;
 	}

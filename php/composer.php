@@ -10,7 +10,7 @@
  * @uses		$_GET['fullname'] (to folder)
  */
 
-require_once("setup.php");
+require_once("class.account.php"); // Includes setup
 require_once("pretty_player_names.php");
 require_once("countries.php");
 
@@ -110,7 +110,10 @@ if (isset($fullname)) {
 		}
 
 	} catch(PDOException $e) {
-		die(json_encode(array('status' => 'error', 'message' => $e->getMessage())));
+		$error_msg = $e->getMessage();
+		$account->LogActivity('User "'.$_SESSION['user_name'].'" invoked a database error in the "composer.php" script:');
+		$account->LogActivity(' '.$error_msg);
+		die(json_encode(array('status' => 'error', 'message' => $error_msg)));
 	}
 
 } else

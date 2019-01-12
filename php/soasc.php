@@ -24,7 +24,7 @@
  * @uses		$_GET['subtune']		subtune number
  */
 
-require_once("setup.php");
+require_once("class.account.php"); // Includes setup
 
 $soasc_models = array(
 	'r2' 	=> 'MOS6581R2',
@@ -145,6 +145,9 @@ try {
 	}
 
 } catch(PDOException $e) {
-	echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
+	$error_msg = $e->getMessage();
+	$account->LogActivity('User "'.$_SESSION['user_name'].'" invoked a database error in the "soasc.php" script:');
+	$account->LogActivity(' '.$error_msg);
+	echo json_encode(array('status' => 'error', 'message' => $error_msg));
 }
 ?>

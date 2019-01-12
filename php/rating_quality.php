@@ -10,7 +10,7 @@
  * @uses		$_GET['folder']
  */
 
-require_once("setup.php");
+require_once("class.account.php"); // Includes setup
 
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest')
 	die("Direct access not permitted.");
@@ -45,7 +45,10 @@ try {
 	}
 
 } catch(PDOException $e) {
-	die(json_encode(array('status' => 'error', 'message' => $e->getMessage())));
+	$error_msg = $e->getMessage();
+	$account->LogActivity('User "'.$_SESSION['user_name'].'" invoked a database error in the "rating_quality.php" script:');
+	$account->LogActivity(' '.$error_msg);
+	die(json_encode(array('status' => 'error', 'message' => $error_msg)));
 }
 echo json_encode(array('status' => 'ok', 'ready' => $ready, 'results' => $results));
 ?>

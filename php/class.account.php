@@ -68,6 +68,7 @@ class Account {
 			return false;
 		}
 
+		$this->LogActivity('User "'.$_POST['username'].'" has registered for the site');
 		return true;
 	}
 
@@ -84,8 +85,10 @@ class Account {
 		$password = trim($_POST['password']);
 
 		if (!isset($_SESSION)) session_start();
-		if (!$this->ValidateLogin($username, $password))
+		if (!$this->ValidateLogin($username, $password)) {
+			$this->LogActivity('User "'.$username.'" tried to log in but was denied access');
 			return false;
+		}
 
 		$_SESSION[$this->LoginSession()] = $username;
 
@@ -104,6 +107,7 @@ class Account {
 			return false;
 		}
 
+		$this->LogActivity('User "'.$username.'" logged in');
 		return true;
 	}
 
@@ -153,6 +157,7 @@ class Account {
 	 */
 	public function LogOut() {
 		session_start();
+		$this->LogActivity('User "'.$_SESSION['user_name'].'" logged out');
 
 		$session = $this->LoginSession();
 		$_SESSION[$session] = null;
@@ -200,7 +205,23 @@ class Account {
 	}
 
 	/**
-	 * $return		string		name of the current script
+	 * Writes a line to a log file describing an activity.
+	 * 
+	 * NOTE: This is used for debugging purposes. Ratings set by users for specific
+	 * SID files are never logged as this is none of my business. However, the names
+	 * of playlists being created, renamed, deleted or published will be logged.
+	 * 
+	 * @param		string		text to be logged
+	 */
+	public function LogActivity($str) {
+		// if ($_SERVER['HTTP_HOST'] != LOCALHOST) {
+			$time_ip = date('Y-m-d H:i:s', strtotime(TIME_ADJUST)).' - '.$_SERVER['REMOTE_ADDR'].' - ';
+			file_put_contents($_SERVER['DOCUMENT_ROOT'].'/deepsid/logs/activity.txt', $time_ip.$str.PHP_EOL, FILE_APPEND);
+		// }
+	}
+
+	/**
+	 * @return		string		name of the current script
 	 */
 	public function Self() {
 		return htmlentities($_SERVER['PHP_SELF']);
@@ -382,6 +403,8 @@ class Account {
 						$_SESSION['user_name']	= $row->username;
 						$_SESSION['user_id']	= $row->id;
 						$_SESSION[$this->LoginSession()] = $row->username;
+
+						$this->LogActivity('User "'.$row->username.'" has returned via a cookie');
 
 						// Reset the expiry date
 						setcookie('user', $cookiehash, time()+3600*24*365, '/', ($_SERVER['HTTP_HOST'] == LOCALHOST ? 'localhost_deepsid' : 'deepsid.chordian.net'));

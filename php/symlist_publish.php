@@ -38,6 +38,7 @@ try {
 	$update->execute(array(':public'=>'$'.substr($_POST['symlist'], 1), ':fullname'=>$_POST['symlist']));
 	if ($update->rowCount() == 0)
 		die(json_encode(array('status' => 'error', 'message' => 'Could not publish "'.$_POST['symlist'])));
+	$account->LogActivity('User "'.$_SESSION['user_name'].'" published the "'.$_POST['symlist'].'" playlist');
 
 } catch(PDOException $e) {
 	die(json_encode(array('status' => 'error', 'message' => $e->getMessage())));

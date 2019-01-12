@@ -54,6 +54,7 @@ try {
 			' VALUES("'.$suggested_symlist_name.'", '.$user_id.')');
 		if ($insert->rowCount() == 0)
 			die(json_encode(array('status' => 'error', 'message' => "Could not create ".$suggested_symlist_name)));
+		$account->LogActivity('User "'.$_SESSION['user_name'].'" created the "'.$suggested_symlist_name.'" playlist');
 
 		$folder_id = $db->lastInsertId();
 		$file_count = 0;
@@ -99,7 +100,10 @@ try {
 		die(json_encode(array('status' => 'error', 'message' => 'Could not update the count of files in '.$symlist_folder)));
 
 } catch(PDOException $e) {
-	die(json_encode(array('status' => 'error', 'message' => $e->getMessage())));
+	$error_msg = $e->getMessage();
+	$account->LogActivity('User "'.$_SESSION['user_name'].'" invoked a database error in the "symlist_write.php" script:');
+	$account->LogActivity(' '.$error_msg);
+	die(json_encode(array('status' => 'error', 'message' => $error_msg)));
 }
 
 echo json_encode(array('status' => 'ok'));

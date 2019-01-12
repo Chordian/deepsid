@@ -5,7 +5,7 @@
  * A procedure for returning the inside contents of a top list.
  */
 
-require_once("setup.php");
+require_once("class.account.php"); // Includes setup
 require_once("countries.php"); // Used by the 'countries' list type
 
 function AdaptBrowserName($fullname, $link = '') {
@@ -193,7 +193,10 @@ function GenerateList($rows, $type) {
 		return $contents;
 
 	} catch(PDOException $e) {
-		die(json_encode(array('status' => 'error', 'message' => $e->getMessage())));
+		$error_msg = $e->getMessage();
+		$account->LogActivity('User "'.$_SESSION['user_name'].'" invoked a database error in the "root_generate.php" script:');
+		$account->LogActivity(' '.$error_msg);
+		die(json_encode(array('status' => 'error', 'message' => $error_msg)));
 	}
 }
 ?>

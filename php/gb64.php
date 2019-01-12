@@ -8,7 +8,7 @@
  * @uses		$_GET['fullname']
  */
 
-require_once("setup.php");
+require_once("class.account.php"); // Includes setup
 
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest')
 	die("Direct access not permitted.");
@@ -50,15 +50,23 @@ if (isset($_GET['fullname'])) {
 				try {
 					$gb64 = unserialize($array);
 				} catch(Exception $e) {
-					die(json_encode(array('status' => 'fatal', 'html' => '<p>Something bad happened. Chordian might want to see this.</p><p>'.$e.'</p>'.$array)));
+					$account->LogActivity('User "'.$_SESSION['user_name'].'" invoked a fatal error the "gb64.php" script:');
+					$account->LogActivity(' '.$e);
+					$account->LogActivity(' '.$array);
+					die(json_encode(array('status' => 'fatal', 'html' => '<p>Something bad happened. Chordian will be able to see this in a log.</p><p>'.$e.'</p>'.$array)));
 				}
 				//$gb64 = array_reverse($gb64); // To get original game in top (most common order)
 			}
 		} else {
+			$account->LogActivity('User "'.$_SESSION['user_name'].'" received no database info from the "gb64.php" script');
+			$account->LogActivity(' $_GET[\'fullname\']: '.$_GET['fullname']);
 			die(json_encode(array('status' => 'error', 'message' => "Couldn't find the information in the database.")));
 		}
 	} catch(PDOException $e) {
-		die(json_encode(array('status' => 'error', 'message' => $e->getMessage())));
+		$error_msg = $e->getMessage();
+		$account->LogActivity('User "'.$_SESSION['user_name'].'" invoked a database error in the "gb64.php" script:');
+		$account->LogActivity(' '.$error_msg);
+		die(json_encode(array('status' => 'error', 'message' => $error_msg)));
 	}
 
 } else
