@@ -298,7 +298,7 @@ small.u2 { margin-left: 2px; }
 		color: #c8c9b9;
 	}
 
-/* Used in piano tab */
+/* Used in e.g. the piano tab */
 .edit {
 	border: 1px solid #ced0c0;
 	width: calc(100% - 5px); /* To match the width of the keyboards */
@@ -307,6 +307,10 @@ small.u2 { margin-left: 2px; }
 	background: rgb(71, 73, 55, 0.08);
 	border-radius: 3px;
 }
+
+	#topic-settings .edit {
+		padding: 20px 16px;
+	}
 
 	#waveform-colors {
 		position: absolute;
@@ -595,6 +599,15 @@ small.u2 { margin-left: 2px; }
 		font: normal 13px/0 "Montserrat", sans-serif;
 		color: #68695a;
 		margin: 0 16px 0 1px;
+	}
+
+		#topic-settings .edit label {
+			margin-left: 8px;
+		}
+
+	/* Space between settings */
+	#topic-settings .space {
+		height: 16px;
 	}
 
 .button-tag {

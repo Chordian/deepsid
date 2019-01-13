@@ -303,6 +303,16 @@ $(function() { // DOM ready
 			ctYears.update();
 			ctPlayers.update();
 		}
+
+		if (topic === "settings") {
+			// Get the user's settings
+			$.post("php/settings.php", function(data) {
+				browser.validateData(data, function(data) {
+					SettingToggle("skip-tune", data.settings.skiptune);
+					SettingToggle("mark-tune", data.settings.marktune);
+				});
+			}.bind(this));
+		}
 	});
 
 	/**
@@ -598,6 +608,20 @@ function ShowDexterScrollbar(topic) {
 			},
 		});
 	}
+}
+
+/**
+ * Set the state of an ON/OFF toggle button in the settings tab.
+ * 
+ * @param {boolean} id		Part of ID to be appended.
+ * @param {boolean} state	1 or 0.
+ */
+function SettingToggle(id, state) {
+	$("#setting-"+id)
+		.empty()
+		.append(state ? "On" : "Off")
+		.removeClass("button-off button-on")
+		.addClass("button-"+(state ? "on" : "off"));
 }
 
 /**
