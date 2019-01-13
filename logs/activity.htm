@@ -1,0 +1,25 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+	<head>
+		<title>DeepSID Activity Log</title>
+		<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+		<script type="text/javascript">
+			$(function(){ // DOM ready
+				$("#log").load("activity.txt",function(){
+					$(this).html($(this).html().replace(/\n/g,"<br />")).show();
+					$("html,body").scrollTop($(document).height());
+				});
+			});
+		</script>
+	</head>
+
+	<body>
+		<h2 style="margin-top:0;">DeepSID Activity Log</h2>
+		<div id="log" style='display:none;font:normal 12px "courier new",courier,monospace;'></div>
+	</body>
+</html>

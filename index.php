@@ -60,7 +60,18 @@
 		<meta property="og:type" content="website" />
 		<meta property="og:image" content="http://chordian.net/deepsid/images/example.png" />
 		<meta property="og:url" content="http://deepsid.chordian.net" />
-		<meta property="og:description" content="A modern online SID player for the High Voltage and Compute's Gazette SID collections." />
+		<meta property="og:description" content="<?php
+			$hvsc = 'High Voltage SID Collection';
+			$cgsc = "Compute's Gazette SID Collection";
+			if (empty($_GET['file']))
+				echo "A modern online SID player for the High Voltage and Compute's Gazette SID collections.";
+			else if (strpos($_GET['file'], $hvsc))
+				echo substr($_GET['file'], strpos($_GET['file'], $hvsc) + strlen($hvsc));
+			else if (strpos($_GET['file'], $cgsc))
+				echo substr($_GET['file'], strpos($_GET['file'], $cgsc) + strlen($cgsc));
+			else
+				echo $_GET['file'];
+		?>" />
 		<meta name="twitter:card" content="summary" />
 
 	</head>
@@ -732,6 +743,11 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>January 13, 2019</h3>
+						<ul>
+							<li>The <a href="http://ogp.me/">Open Graph</a> description should now show the song or folder being linked to.</li>
+						</ul>
 
 						<h3>January 11, 2019</h3>
 						<ul>
