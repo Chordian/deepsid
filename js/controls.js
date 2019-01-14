@@ -185,8 +185,8 @@ Controls.prototype = {
 				$("#songs tr").removeClass("selected");
 				$("#folders tr").eq(browser.subFolders + browser.songPos).addClass("selected");
 
-				// Only auto-center if using the buttons; a timed out tune should never do this
-				if (typeof autoCenter === "undefined") {
+				// A timed out tune should only auto-center if a setting demands it
+				if (GetSettingValue("mark-tune") || typeof autoCenter === "undefined") {
 					var rowPos = $("tr").eq($("tr.selected").index())[0].offsetTop;
 					var halfway = $("#folders").height() / 2 - 26; // Last value is half of SID file row height
 					if (browser.isMobile)

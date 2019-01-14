@@ -19,9 +19,7 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH
 	die("Direct access not permitted.");
 
 $user_id = $account->CheckLogin() ? $account->UserID() : 0;
-
-if (!$user_id)
-	die(json_encode(array('status' => 'error', 'message' => 'You must be logged in to adjust settings.')));
+if (!$user_id) die(json_encode(array('status' => 'ok')));
 
 try {
 	if ($_SERVER['HTTP_HOST'] == LOCALHOST)
@@ -37,22 +35,24 @@ try {
 	$settings = unserialize($select->fetch()->flags);
 
 	if (!$settings)
-		// First time
+		// "First time?"
 		$settings = array(
 			'skiptune' =>	0,
 			'marktune' =>	0,
 		);
 
 	// Adjust settings
-	if (!empty($_POST['skiptune'])) $settings['skiptune'] = (int)$_POST['skiptune'];
-	if (!empty($_POST['marktune'])) $settings['marktune'] = (int)$_POST['marktune'];
+	if (isset($_POST['skiptune'])) $settings['skiptune'] = (int)$_POST['skiptune'];
+	if (isset($_POST['marktune'])) $settings['marktune'] = (int)$_POST['marktune'];
 
 	if ($_POST) {
 		// Store the settings
+		$serialized = serialize($settings);
 		$update = $db->prepare('UPDATE users SET flags = :flags WHERE id = '.$user_id);
-		$update->execute(array(':flags' => serialize($settings)));
+		$update->execute(array(':flags' => $serialized));
+		$account->LogActivity('User "'.$_SESSION['user_name'].'" updated personal settings: '.$serialized);
 		if ($update->rowCount() == 0)
-			die(json_encode(array('status' => 'error', 'message' => 'Could not update yours settings')));
+			die(json_encode(array('status' => 'error', 'message' => 'Could not update your settings.')));
 	}
 
 } catch(PDOException $e) {

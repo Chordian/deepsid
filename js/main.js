@@ -9,6 +9,14 @@ var cacheTabScrollPos = tabScrollPos = cachePosBeforeCompo = peekCounter = 0;
 
 $(function() { // DOM ready
 
+	// Get the user's settings
+	$.post("php/settings.php", function(data) {
+		browser.validateData(data, function(data) {
+			SettingToggle("skip-tune", data.settings.skiptune);
+			SettingToggle("mark-tune", data.settings.marktune);
+		});
+	}.bind(this));
+
 	var userExists = false;
 	var emulator = GetParam("emulator").toLowerCase();
 	if ($.inArray(emulator, [
@@ -303,15 +311,28 @@ $(function() { // DOM ready
 			ctYears.update();
 			ctPlayers.update();
 		}
+	});
 
-		if (topic === "settings") {
-			// Get the user's settings
-			$.post("php/settings.php", function(data) {
-				browser.validateData(data, function(data) {
-					SettingToggle("skip-tune", data.settings.skiptune);
-					SettingToggle("mark-tune", data.settings.marktune);
-				});
-			}.bind(this));
+	/**
+	 * When one of the ON/OFF toggle buttons are clicked in the settings page.
+	 */
+	$("#topic-settings .button-toggle").click(function(event) {
+		var $this = $(event.target);
+		if ($this.hasClass("button-toggle")) {
+			// Checkbox style toggle button
+			var state = $this.hasClass("button-off");
+			$this.empty().append(state ? "On" : "Off");
+			$this.removeClass("button-off button-on").addClass("button-"+(state ? "on" : "off"))
+
+			var settings = {};
+			if (event.target.id === "setting-skip-tune")
+				settings.skiptune = state ? 1 : 0;
+			else if (event.target.id === "setting-mark-tune")
+				settings.marktune = state ? 1 : 0;
+
+			$.post("php/settings.php", settings, function(data) {
+				browser.validateData(data);
+			});
 		}
 	});
 
@@ -613,7 +634,7 @@ function ShowDexterScrollbar(topic) {
 /**
  * Set the state of an ON/OFF toggle button in the settings tab.
  * 
- * @param {boolean} id		Part of ID to be appended.
+ * @param {string} id		Part of the ID to be appended.
  * @param {boolean} state	1 or 0.
  */
 function SettingToggle(id, state) {
@@ -622,6 +643,20 @@ function SettingToggle(id, state) {
 		.append(state ? "On" : "Off")
 		.removeClass("button-off button-on")
 		.addClass("button-"+(state ? "on" : "off"));
+}
+
+/**
+ * Get a value from the settings tab.
+ * 
+ * @param {string} id		Part of the ID to be appended.
+ * 
+ * @return {*}				The value.
+ */
+function GetSettingValue(id) {
+	$setting = $("#setting-"+id);
+	if ($setting.hasClass("button-toggle"))
+		// Checkbox style toggle button; return boolean
+		return $setting.hasClass("button-on");
 }
 
 /**

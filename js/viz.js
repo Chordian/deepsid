@@ -82,9 +82,9 @@ Viz.prototype = {
 	 */
 	addEvents: function() {
 		$(window).on("keyup", this.onKeyUp.bind(this));
-		$("#page").on("click", ".button-toggle,.button-radio", this.onToggleClick.bind(this));
-		$("#page").on("click", ".piano-voice", this.onVoiceClick.bind(this));
-		$("#page .dropdown-buffer").on("change", this.onChangeBufferSize.bind(this));
+		$("#topic-piano,#topic-flood").on("click", ".button-toggle,.button-radio", this.onToggleClick.bind(this));
+		$("#topic-piano,#topic-flood").on("click", ".piano-voice", this.onVoiceClick.bind(this));
+		$("#topic-piano,#topic-flood .dropdown-buffer").on("change", this.onChangeBufferSize.bind(this));
 	},
 
 	/**

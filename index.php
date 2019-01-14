@@ -445,18 +445,18 @@
 					<div id="topic-stil" class="topic" style="display:none;">
 					</div>
 
-					<div id="topic-settings" class="settings ext" style="display:none;">
+					<div id="topic-settings" class="topic ext" style="display:none;">
 						<h2>Settings</h2>
 						<?php if (!$user_id) : ?>
 							<i>If you register and log in, you can adjust your settings here.</i>
 						<?php else : ?>
-							<p>These settings are tied to your account in the database.</p>
+							<p>Changing a setting here will save it immediately.</p>
 							<div class="edit">
 								<button id="setting-skip-tune" class="button-edit button-toggle button-off">Off</button>
 								<label for="setting-skip-tune" class="unselectable">Auto-progress should proceed to the next song instead of the next sub tune</label>
 								<div class="space"></div>
 								<button id="setting-mark-tune" class="button-edit button-toggle button-off">Off</button>
-								<label for="setting-mark-tune" class="unselectable">Auto-progress should select the next tune as it skips to it</label>
+								<label for="setting-mark-tune" class="unselectable">Auto-progress should select and center the next tune as it proceeds to it</label>
 							</div>
 						<?php endif ?>
 					</div>
@@ -731,7 +731,8 @@
 							</tr>
 							<tr>
 								<td>tab</td><td>Set to <code>csdb</code>, <code>gb64</code>, <code>stil</code>, <code>piano</code>, <code>flood</code>,
-									<code>disqus</code>, <code>about</code>, <code>faq</code> or <code>changes</code> to select that tab</td>
+									<code>disqus</code>, <code>about</code>, <code>faq</code>, <code>changes</code> or <code>settings</code>
+									(the gear icon) to select that tab</td>
 							</tr>
 							<tr>
 								<td>csdbtype</td><td>Set to <code>sid</code> or <code>release</code> to show a CSDb entry;
@@ -762,6 +763,14 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>January 14, 2019</h3>
+						<ul>
+							<li>Created a page with your personal settings. Click the tab with the gear icon to see it.</li>
+							<li>New toggle in settings: Auto-progress should proceed to the next song instead of the next sub tune.</li>
+							<li>New toggle in settings: Auto-progress should select and center then next tune as it proceeds to it.</li>
+							<li>Upgraded the WebSid emulator. It has various PSID fixes and can now play songs made in DefMon.</li>
+						</ul>
 
 						<h3>January 13, 2019</h3>
 						<ul>

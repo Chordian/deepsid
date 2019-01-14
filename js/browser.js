@@ -349,7 +349,7 @@ Browser.prototype = {
 						if ($("#loop").hasClass("button-off")) {
 							// Play the next subtune, or if no more subtunes, the next tune in the list
 							$("#faster").trigger("mouseup"); // Easy there cowboy
-							if (ctrls.subtuneCurrent < ctrls.subtuneMax && !$("#subtune-plus").hasClass("disabled")) {
+							if (!GetSettingValue("skip-tune") && (ctrls.subtuneCurrent < ctrls.subtuneMax && !$("#subtune-plus").hasClass("disabled"))) {
 								// Next subtune
 								$("#subtune-plus").trigger("mouseup");
 							} else if (this.songPos < (this.playlist.length - 1) && !$("#skip-next").hasClass("disabled")) {
