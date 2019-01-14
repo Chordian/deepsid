@@ -770,6 +770,7 @@
 							<li>New toggle in settings: Auto-progress should proceed to the next song instead of the next sub tune.</li>
 							<li>New toggle in settings: Auto-progress should select and center then next tune as it proceeds to it.</li>
 							<li>Upgraded the WebSid emulator. It has various PSID fixes and can now play songs made in DefMon.</li>
+							<li>Search entries now update the profile tab based on the file itself. Cancelling reloads the original profile.</li>
 						</ul>
 
 						<h3>January 13, 2019</h3>

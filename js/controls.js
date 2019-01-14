@@ -174,6 +174,8 @@ Controls.prototype = {
 					this.updateStil();
 
 					browser.getCSDb();
+					if (browser.isSearching)
+						browser.getComposer(browser.playlist[browser.songPos].fullname);
 					browser.getGB64();
 					browser.reloadDisqus(browser.playlist[browser.songPos].fullname);
 					UpdateURL();

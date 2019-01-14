@@ -11,6 +11,7 @@
 
 	this.path = "";
 	this.search = "";
+	this.previousOverridePath = "";
 
 	this.symlistFolders = [];
 
@@ -186,6 +187,7 @@ Browser.prototype = {
 				ctrls.state("subtunes", "disabled");
 
 				this.getFolder(this.scrollPositions.pop());
+				this.getComposer();
 				break;
 			default:
 				// A TD element was clicked (folder, SID file, star rating)
@@ -328,9 +330,11 @@ Browser.prototype = {
 
 						ctrls.emulatorChanged = false;
 
-						if (typeof paramSkipCSDb === "undefined" || !paramSkipCSDb)
+						if (typeof paramSkipCSDb === "undefined" || !paramSkipCSDb) {
 							this.getCSDb();
-						else
+							if (this.isSearching)
+								this.getComposer(this.playlist[this.songPos].fullname);
+						} else
 							this.getComposer();
 						this.getGB64();
 						this.reloadDisqus(this.playlist[this.songPos].fullname);
@@ -865,13 +869,26 @@ Browser.prototype = {
 
 	/**
 	 * Show the composer page in the 'Profile' tab.
+	 * 
+	 * @param {string} overridePath		If specified, fullname for profile (including file).
 	 */
-	getComposer: function() {
+	getComposer: function(overridePath) {
 		if (this.isMobile) return;
 		if (this.composer) this.composer.abort();
 		if (this.groups) this.groups.abort();
 
-		if (this.path.substr(0, 2) == "/!" || this.path.substr(0, 2) == "/$") {
+		if (typeof overridePath == "undefined")
+			overridePath = "";
+		else {
+			// We have an override path for a search entry
+			overridePath = overridePath.substr(overridePath.indexOf("/") + 1);
+			overridePath = overridePath.substr(0, overridePath.lastIndexOf("/"));
+			// Don't reload the same profile again and again
+			if (overridePath == this.previousOverridePath) return;
+			this.previousOverridePath = overridePath;
+		}
+
+		if (overridePath == "" && (this.path.substr(0, 2) == "/!" || this.path.substr(0, 2) == "/$")) {
 			// Symlists won't get a composer page (for now at least)
 			$("#topic-profile").empty();
 			return;
@@ -886,7 +903,7 @@ Browser.prototype = {
 			$("#loading-profile").fadeIn(500);
 		}, 250);
 
-		if (this.path == "") {
+		if (this.path == "" && overridePath == "") {
 			// Welcome page for the root
 			this.composer = $.get("php/root.php", function(data) {
 				this.validateData(data, function(data) {
@@ -918,7 +935,7 @@ Browser.prototype = {
 		} else {
 			// Composer profile page
 			this.composer = $.get("php/composer.php", {
-				fullname: this.path.substr(1)
+				fullname: (overridePath == "" ? this.path.substr(1) : overridePath),
 			}, function(data) {
 				this.validateData(data, function(data) {
 
