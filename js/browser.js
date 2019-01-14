@@ -935,7 +935,7 @@ Browser.prototype = {
 		} else {
 			// Composer profile page
 			this.composer = $.get("php/composer.php", {
-				fullname: (overridePath == "" ? this.path.substr(1) : overridePath),
+				fullname: (overridePath == "" ? this.path.substr(1) : overridePath)
 			}, function(data) {
 				this.validateData(data, function(data) {
 
@@ -943,7 +943,7 @@ Browser.prototype = {
 					$("#topic-profile").empty().append(data.html);
 		
 					this.groups = $.get("php/groups.php", {
-						fullname: this.path.substr(1)
+						fullname: (overridePath == "" ? this.path.substr(1) : overridePath)
 					}, function(data) {
 						this.validateData(data, function(data) {
 

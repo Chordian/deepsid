@@ -46,9 +46,28 @@ try {
 				' WHERE ratings.user_id = '.$user_id.' AND ratings.rating '.$operators.' :rating AND ratings.type = "FILE" LIMIT 1000');
 			$select->execute(array(':rating'=>str_replace('-', '', $_GET['searchQuery'])));
 		} else if ($_GET['searchType'] != 'country') {
-			// Normal type search
-			$select = $db->prepare('SELECT fullname FROM hvsc_files WHERE '.$_GET['searchType'].' LIKE :query LIMIT 1000');
-			$select->execute(array(':query'=>'%'.($_GET['searchType'] == 'new' ? str_replace('.', '', $_GET['searchQuery']) : $_GET['searchQuery']).'%'));
+			// Normal type search (handles any position of words and excluding with "-" prepended)
+			// NOTE: This would have been easier with 'Full-Text' search but I'm not using the MyISAM engine.
+			$exclude = '';
+			if ($_GET['searchType'] == 'new') {
+				$include = $_GET['searchType'].' LIKE "%'.str_replace('.', '', $_GET['searchQuery']).'%"';
+			} else {
+				$words = explode('_', $_GET['searchQuery']);
+				$include = '(';
+				$i_and = $e_and = '';
+				foreach($words as $word) {
+					if (substr($word, 0, 1) == '-') {
+						$exclude .= $e_and.$_GET['searchType'].' NOT LIKE "%'.substr($word, 1).'%"';
+						$e_and = ' AND ';
+					} else {
+						$include .= $i_and.$_GET['searchType'].' LIKE "%'.$word.'%"';
+						$i_and = ' AND ';
+					}
+				}
+				if (!empty($exclude)) $exclude = ' AND ('.$exclude.')';
+				$include .= ')';
+			}
+			$select = $db->query('SELECT fullname FROM hvsc_files WHERE '.$include.$exclude.' LIMIT 1000');
 		}
 		$files = array();
 		if ($select) {
@@ -75,8 +94,7 @@ try {
 			$select->execute(array(':query'=>'%'.$query.'%'));
 		} else if ($_GET['searchType'] == 'fullname' || $_GET['searchType'] == 'new') {
 			// Normal type search
-			$select = $db->prepare('SELECT fullname FROM hvsc_folders WHERE '.$_GET['searchType'].' LIKE :query AND (fullname NOT LIKE "!%") LIMIT 1000');
-			$select->execute(array(':query'=>'%'.($_GET['searchType'] == 'new' ? str_replace('.', '', $_GET['searchQuery']) : $_GET['searchQuery']).'%'));
+			$select = $db->query('SELECT fullname FROM hvsc_folders WHERE '.$include.$exclude.' AND (fullname NOT LIKE "!%") LIMIT 1000');
 		}
 		if ($select) {
 			$select->setFetchMode(PDO::FETCH_OBJ);
@@ -397,8 +415,8 @@ try {
 	$error_msg = $e->getMessage();
 	$account->LogActivity('User "'.$_SESSION['user_name'].'" invoked a database error in the "hvsc.php" script:');
 	$account->LogActivity(' '.$error_msg);
-	$account->LogActivity(' files: '.$file_ext);
-	$account->LogActivity(' folders: '.$folders_ext);
+	if (isset($file_ext)) $account->LogActivity(' files: '.$file_ext);
+	if (isset($folders_ext)) $account->LogActivity(' folders: '.$folders_ext);
 	die(json_encode(array('status' => 'error', 'message' => $error_msg)));
 }
 

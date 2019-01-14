@@ -52,7 +52,7 @@
 		<script type="text/javascript" src="js/browser.js"></script>
 		<script type="text/javascript" src="js/viz.js"></script>
 		<script type="text/javascript" src="js/main.js"></script>
-		<link rel="icon" href="//chordian.net/images/avatar_c_olivi_32x32.png" sizes="32x32" />
+		<link rel="icon" href="images/deepsid_icon_32x32.png" sizes="32x32" />
 		<link rel="apple-touch-icon-precomposed" href="//chordian.net/images/avatar_c_olivi_128x128.png" />
 		<meta name="msapplication-TileImage" content="//chordian.net/images/avatar_c_olivi_128x128.png" />
 		<?php // @link https://developers.facebook.com/tools/debug/sharing/ and https://cards-dev.twitter.com/validator ?>
@@ -771,6 +771,7 @@
 							<li>New toggle in settings: Auto-progress should select and center then next tune as it proceeds to it.</li>
 							<li>Upgraded the WebSid emulator. It has various PSID fixes and can now play songs made in DefMon.</li>
 							<li>Search entries now update the profile tab based on the file itself. Cancelling reloads the original profile.</li>
+							<li>Expanded the search logic to handle any order of words as well as excluding words with <code>-</code> prepended.</li>
 						</ul>
 
 						<h3>January 13, 2019</h3>
