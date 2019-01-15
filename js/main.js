@@ -674,6 +674,9 @@ function ResizeIframe() {
  */
 function UpdateURL() {
 	var urlFile = browser.isSearching || browser.path == "" ? "&file=" : "&file="+browser.path.replace(/^\/_/, '/')+"/";
+	// Special case for HVSC as its collection name is not necessary (except in the HVSC root)
+	if (urlFile.split("/").length - 1 > 2)
+		urlFile = urlFile.replace("/High Voltage SID Collection", "");
 	try {
 		urlFile = browser.playlist[browser.songPos].substname !== ""
 			? urlFile += browser.playlist[browser.songPos].substname

@@ -785,6 +785,7 @@
 						<ul>
 							<li>Added the buffer size drop-down box in the settings page.</li>
 							<li>Search type <code>Author</code> now also return folders in addition to just songs.</li>
+							<li>Simplified the <code>?file=</code> parameter when inside HVSC folders.</li>
 						</ul>
 
 						<h3>January 14, 2019</h3>
