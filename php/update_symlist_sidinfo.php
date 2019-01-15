@@ -4,6 +4,12 @@
  *
  * Parse a CSV file to update the corresponding SID file entries in a symlist.
  * 
+ * This version works on a CSV file generated from a folder with single SID
+ * files that were once in HVSC. Because of this, the script have to make a lot
+ * of assumptions and detective work in order to figure out how the SID files
+ * connect to their HVSC counterparts. For this to work, the CSV file has to be
+ * generated with SIDInfo to grab a few extra fields, to help out with this.
+ * 
  * Preparing the CSV file:
  * 
  *  1. Copy the latest 'SIDInfo.exe' into the folder with SID files.

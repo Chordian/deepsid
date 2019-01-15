@@ -1140,8 +1140,9 @@ Browser.prototype = {
 			// Divider to more common SID file actions
 			contents += '<div class="divider"></div>';
 
-			// Download SID file
-			contents += '<div class="line" data-action="download-file">Download File</div>';
+			contents +=
+				'<div class="line" data-action="download-file">Download File</div>'+
+				'<div class="line'+(this.isSearching || isPersonalSymlist || isPublicSymlist ? " disabled" : "")+'" data-action="copy-link">Copy Link</div>';
 
 		} else if ($target.hasClass("folder") && (this.contextSID.substr(0, 1) == "!" || this.contextSID.substr(0, 1) == "$")) {
 			var ifAlreadyPublic = "";
@@ -1235,6 +1236,21 @@ Browser.prototype = {
 				var symChar = this.path.substr(1, 1);
 				// Force the browser to download it using an invisible <iframe>
 				$("#download").prop("src", this.ROOT_HVSC + '/' + (this.isSearching || symChar == "!" || symChar == "$" ? this.contextSID : this.path.substr(1)+"/"+this.contextSID));
+				break;
+			case 'copy-link':
+				var url = window.location.href,
+					more = url.indexOf("&") != -1;
+				var path = url.indexOf(".sid") != -1 || url.indexOf(".mus") != -1
+					? url.substr(0, url.lastIndexOf("/") + 1)
+					: (more ? url.substr(0, url.indexOf("&")): url);
+				url = path+this.contextSID+(more ? url.substr(url.indexOf("&")) : "");
+				// Copy it to the clipboard
+				// @link https://stackoverflow.com/a/30905277/2242348
+				var $temp = $("<input>");
+				$("body").append($temp);
+				$temp.val(url).select();
+				document.execCommand("copy");
+				$temp.remove();
 				break;
 			case "symlist-add":
 			case "symlist-new":
