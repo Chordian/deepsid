@@ -92,8 +92,13 @@ try {
 			$select = $db->prepare('SELECT fullname FROM composers WHERE country LIKE :query LIMIT 1000');
 			$query = strtolower($_GET['searchQuery']) == 'holland' ? 'netherlands' : $_GET['searchQuery'];
 			$select->execute(array(':query'=>'%'.$query.'%'));
-		} else if ($_GET['searchType'] == 'fullname' || $_GET['searchType'] == 'new') {
+		} else if ($_GET['searchType'] == 'fullname' || $_GET['searchType'] == 'author' || $_GET['searchType'] == 'new') {
 			// Normal type search
+			if ($_GET['searchType'] == 'author') {
+				// Let 'author' also find folders using 'fullname' as replacement type
+				$exclude = str_replace('author NOT LIKE "%', 'fullname NOT LIKE "%', $exclude);
+				$include = str_replace('author LIKE "%', 'fullname LIKE "%', $include);
+			}
 			$select = $db->query('SELECT fullname FROM hvsc_folders WHERE '.$include.$exclude.' AND (fullname NOT LIKE "!%") LIMIT 1000');
 		}
 		if ($select) {

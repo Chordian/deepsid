@@ -610,6 +610,11 @@ small.u2 { margin-left: 2px; }
 		height: 16px;
 	}
 
+		#topic-settings .splitline {
+			border-bottom: 1px solid #c8c9b9; /* #b0b29a */
+			margin-bottom: 16px;
+		}
+
 .button-tag {
 	position: relative;
 	top: 4px;

@@ -452,11 +452,28 @@
 						<?php else : ?>
 							<p>Changing a setting here will save it immediately.</p>
 							<div class="edit">
+
+								<select id="dropdown-settings-buffer" class="dropdown-buffer" name="sort">
+									<!--<option value="256">256</option>
+									<option value="512">512</option>-->
+									<option value="1024" selected="selected">1024</option>
+									<option value="2048">2048</option>
+									<option value="4096">4096</option>
+									<option value="8192">8192</option>
+									<option value="16384">16384</option>
+								</select>
+								<label for="dropdown-settings-buffer" class="unselectable">Buffer size&nbsp;&nbsp;(<i>decrease</i> for smoother updating in <b>Piano</b> and <b>Flood</b> tabs &ndash; <i>increase</i> if playback is stuttering)</label>
+
+								<div class="space splitline"></div>
+
 								<button id="setting-skip-tune" class="button-edit button-toggle button-off">Off</button>
 								<label for="setting-skip-tune" class="unselectable">Auto-progress should proceed to the next song instead of the next sub tune</label>
+
 								<div class="space"></div>
+
 								<button id="setting-mark-tune" class="button-edit button-toggle button-off">Off</button>
 								<label for="setting-mark-tune" class="unselectable">Auto-progress should select and center the next tune as it proceeds to it</label>
+
 							</div>
 						<?php endif ?>
 					</div>
@@ -763,6 +780,12 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>January 15, 2019</h3>
+						<ul>
+							<li>Added the buffer size drop-down box in the settings page.</li>
+							<li>Search type <code>Author</code> now also return folders in addition to just songs.</li>
+						</ul>
 
 						<h3>January 14, 2019</h3>
 						<ul>
