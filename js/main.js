@@ -454,6 +454,21 @@ $(function() { // DOM ready
 	});
 
 	/**
+	 * When clicking recommendation box in the root.
+	 */
+	$("#topic-profile").on("mousedown", "table.recommended", function() { return false; });
+	$("#topic-profile").on("mouseup", "table.recommended", function(event) {
+		var link = "http://deepsid.chordian.net/?file=/"+$(this).attr("data-folder").replace("_High Voltage SID Collection/", "")+"/";
+		if (event.which == 2 && event.button == 1)
+			// Middle mouse button for opening it in a new browser tab
+			window.open(link);
+		else
+			// Open in same browser tab
+			window.location.href = link;
+		return false;
+	});
+
+	/**
 	 * When clicking a home folder icon in a CSDb comment table.
 	 */
 	$("#topic-csdb").on("click", ".home-folder", function() {

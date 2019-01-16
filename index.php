@@ -781,6 +781,11 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>January 16, 2019</h3>
+						<ul>
+							<li>Added composer recommendation boxes in the profile tab in the root.</li>
+						</ul>
+
 						<h3>January 15, 2019</h3>
 						<ul>
 							<li>Added the buffer size drop-down box in the settings page.</li>

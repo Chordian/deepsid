@@ -1969,7 +1969,7 @@ input[type=range]::-ms-track {
 		/* An arbitrary page-wide info box on root welcome page */
 		#page .root-wide {
 			padding: 10px;
-			margin-bottom: 10px;
+			margin-bottom: 24px;
 			border-radius: 3px;
 		}
 
@@ -2008,6 +2008,59 @@ input[type=range]::-ms-track {
 				text-align: right;
 				vertical-align: top;
 			}
+
+			#page table.rec table.tight {
+				max-width: 100%;
+				padding: 8px 0 6px 11px;
+				cursor: pointer;
+				transition: all .07s linear;
+			}
+
+			#page table.rec table.tight:hover {
+				background: #eeefe9;
+			}
+
+				/* Recommendations */
+				#page table.rec td {
+					position: relative;
+					text-align: left;
+					margin-bottom: 10px;
+				}
+
+				/* "Recommended Folder" */
+				#page table.rec h3 {
+					display: inline-block;
+					margin: 0 0 7px 30px;
+					font-size: 22px;
+					line-height: 1.16em;
+				}
+
+				/* "J. Bjerregaard" */
+				#page table.rec h4 {
+					margin: 0;
+					font-size: 19px;
+				}
+
+				/* "Jozz" */
+				#page table.rec h5 {
+					margin: 0;
+					font-size: 16px;
+				}
+				
+				#page table.rec .folder {
+					position: absolute;
+					top: -4px;
+					left: -4px;
+					width: 31px;
+				}
+
+				/* The double-note icon */
+				#page table.rec img.icon {
+					position: relative;
+					top: 3px;
+					height: 15px;
+					margin-right: 5px;
+				}
 
 			#page table.root td.middle {
 				text-align: left;
