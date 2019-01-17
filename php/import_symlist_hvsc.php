@@ -34,8 +34,8 @@ require_once("class.account.php"); // Includes setup
 
 // Folder ID for custom symlist folder
 // -----------------------------------
-// EC64SC: LOCALHOST = 2298, ONLINE = 2308.
-define('SYMFOLDER', $_SERVER['HTTP_HOST'] == LOCALHOST ? 2298 : 2308);
+// EC64SC: LOCALHOST = 2299, ONLINE = 2309.
+define('SYMFOLDER', $_SERVER['HTTP_HOST'] == LOCALHOST ? 2299 : 2309);
 
 try {
 	if ($_SERVER['HTTP_HOST'] == LOCALHOST)

@@ -56,11 +56,61 @@
 		<link rel="apple-touch-icon-precomposed" href="//chordian.net/images/avatar_c_olivi_128x128.png" />
 		<meta name="msapplication-TileImage" content="//chordian.net/images/avatar_c_olivi_128x128.png" />
 		<?php // @link https://developers.facebook.com/tools/debug/sharing/ and https://cards-dev.twitter.com/validator ?>
-		<meta property="og:title" content="DeepSID" />
+		<meta property="fb:app_id" content="285373918828438" />
+		<meta property="og:title" content="<?php
+			// Example: Rob Hubbard - Commando
+			$file = isset($_GET['file']) ? $_GET['file'] : '';
+			if (empty($file) || substr($file, 0, 2) == '/!' || substr($file, 0, 2) == '/$') {
+				echo 'DeepSID';
+			} else {
+				if (substr($file, 0, 6) == '/DEMOS' || substr($file, 0, 6) == '/GAMES' || substr($file, 0, 10) == '/MUSICIANS')
+					$file = '_High Voltage SID Collection'.$file;
+
+				try {
+					if ($_SERVER['HTTP_HOST'] == LOCALHOST)
+						$db = new PDO(PDO_LOCALHOST, USER_LOCALHOST, PWD_LOCALHOST);
+					else
+						$db = new PDO(PDO_ONLINE, USER_ONLINE, PWD_ONLINE);
+					$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+					$db->exec("SET NAMES UTF8");
+
+					if (substr($file, -4) == '.sid' || substr($file, -4) == '.mus') {
+						// It's a specific file
+						$select = $db->query('SELECT name, author FROM hvsc_files WHERE fullname = "'.$file.'" LIMIT 1');
+						$select->setFetchMode(PDO::FETCH_OBJ);
+						if ($select->rowCount()) {
+							// Rob Hubbard - Commando
+							$row = $select->fetch();
+							$title = $row->author.' - '.$row->name;
+						} else {
+							// Fallback: Commando.sid
+							$array = explode('/', $file);
+							$title = substr(end($array), 0);
+						}
+					} else {
+						// It's a composer folder
+						$select = $db->query('SELECT name FROM composers WHERE fullname = "'.substr($file, 0, -1).'" LIMIT 1');
+						$select->setFetchMode(PDO::FETCH_OBJ);
+						if ($select->rowCount()) {
+							// Rob Hubbard
+							$title = $select->fetch()->name;
+						} else {
+							// Fallback: Composer
+							$title = 'Composer';
+						}
+					}
+				} catch(PDOException $e) {
+					// Use default then
+					$title = 'DeepSID';
+				}
+				echo $title;
+			}
+		?>" />
 		<meta property="og:type" content="website" />
 		<meta property="og:image" content="http://chordian.net/deepsid/images/example.png" />
-		<meta property="og:url" content="http://deepsid.chordian.net" />
+		<meta property="og:url" content="<?php echo (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]"; ?>" />
 		<meta property="og:description" content="<?php
+			// Example: /MUSICIANS/H/Hubbard_Rob/Commando.sid
 			$hvsc = 'High Voltage SID Collection';
 			$cgsc = "Compute's Gazette SID Collection";
 			if (empty($_GET['file']))
@@ -591,8 +641,8 @@
 							<li>Right-click your playlist folder and choose to rename it.</li>
 							<li>Continue with other awesome SID tunes, only this time choose to add them to your existing
 								playlist.</li>
-							<li>Inside your playlist folder, you can right-click SID files there and either rename or
-								remove them.</li>
+							<li>Inside your playlist, you can right-click SID files to rename or
+								remove them, or set a different default sub tune.</li>
 							<li>If you later want to share your playlist, you can right-click the playlist folder and choose
 								to publish it.</li>
 							<li>Or, if you later hate your playlist, you can right-click the playlist folder and choose to
@@ -780,6 +830,12 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>January 16, 2019</h3>
+						<ul>
+							<li>The <a href="http://ogp.me/">Open Graph</a> title should now show the composer name and song title (if present).</li>
+							<li>Fixed a bug that prevented the dynamically updated OG tags from appearing in Facebook posts.</li>
+						</ul>
 
 						<h3>January 16, 2019</h3>
 						<ul>
