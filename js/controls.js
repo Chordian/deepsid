@@ -420,7 +420,7 @@ Controls.prototype = {
 			var songName = info.songName.replace("<?>", unknown),
 				songAuthor = info.songAuthor.replace("<?>", unknown);
 			if (fullname.indexOf(browser.path) === -1 || browser.isSearching) {
-				var homePath = $("#songs tr").eq(browser.songPos + browser.subFolders).find(".entry").attr("data-name").replace("_High Voltage SID Collection/", ""),
+				var homePath = decodeURI($("#songs tr").eq(browser.songPos + browser.subFolders).find(".entry").attr("data-name")).replace("_High Voltage SID Collection/", ""),
 					sidFile = fullname.split("/").slice(-1)[0];
 				songName = '<a href="?file=/'+homePath+'" class="redirect">'+songName+'</a>';
 				songAuthor = '<a href="?file=/'+homePath.replace(sidFile, "")+'" class="redirect">'+songAuthor+'</a>';

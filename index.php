@@ -81,7 +81,11 @@
 						if ($select->rowCount()) {
 							// Rob Hubbard - Commando
 							$row = $select->fetch();
-							$title = $row->author.' - '.$row->name;
+							$author = $row->author;
+							if (substr($author, -1) == ')')
+								// If the handle is present in brackets, only show that
+								$author = substr($author, strrpos($author, '(') + 1, -1);
+							$title = $author.' - '.$row->name;
 						} else {
 							// Fallback: Commando.sid
 							$array = explode('/', $file);
@@ -831,10 +835,11 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
-						<h3>January 16, 2019</h3>
+						<h3>January 17, 2019</h3>
 						<ul>
 							<li>The <a href="http://ogp.me/">Open Graph</a> title should now show the composer name and song title (if present).</li>
 							<li>Fixed a bug that prevented the dynamically updated OG tags from appearing in Facebook posts.</li>
+							<li>Fixed a renaming bug that occurred when using special characters in a playlist folder name.</li>
 						</ul>
 
 						<h3>January 16, 2019</h3>

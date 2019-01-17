@@ -196,7 +196,7 @@ Browser.prototype = {
 
 				// Get the unmodified name of this entry
 				// NOTE: Elsewhere, "extra" folders have their prefixed "_" removed for displaying.
-				var name = $tr.find(".name").attr("data-name");
+				var name = decodeURI($tr.find(".name").attr("data-name"));
 
 				if (event.target.tagName === "B") {
 					// Clicked a star to set a rating for a folder or SID file
@@ -231,7 +231,7 @@ Browser.prototype = {
 							} else {
 								// Temporarily make the HTML string of folders into a jQuery object
 								var $folders = $(this.folders);
-								$($folders).find(".name[data-name='"+endName+"']")
+								$($folders).find(".name[data-name='"+encodeURI(endName)+"']")
 									.parents("td").next().find(".rating")
 									.empty().append(stars);
 								// Has to be wrapped to get everything back
@@ -483,7 +483,7 @@ Browser.prototype = {
 				adaptedName = this.adaptBrowserName(adaptedName);
 				files += '<tr>'+
 						'<td class="sid unselectable"><div class="block-wrap"><div class="block">'+(file.subtunes > 1 ? '<div class="subtunes'+(this.isSymlist ? ' specific' : '')+(isNew ? ' newst' : '')+'">'+(this.isSymlist ? file.startsubtune + 1 : file.subtunes)+'</div>' : (isNew ? '<div class="newsid"></div>' : ''))+
-						'<div class="entry name file'+(this.isSearching || this.path.substr(0, 2) === "/$" ? ' search' : '')+'" data-name="'+file.filename+'" data-symid="'+file.symid+'">'+adaptedName+'</div></div></div><br />'+
+						'<div class="entry name file'+(this.isSearching || this.path.substr(0, 2) === "/$" ? ' search' : '')+'" data-name="'+encodeURI(file.filename)+'" data-symid="'+file.symid+'">'+adaptedName+'</div></div></div><br />'+
 						'<span class="info">'+file.copyright.substr(0, 4)+' in '+file.player+'</span></td>'+
 						'<td class="stars filestars"><span class="rating">'+this.buildStars(file.rating)+'</span>'+
 						'<span class="disqus-comment-count" data-disqus-url="http://deepsid.chordian.net/#!'+this.path+"/"+file.filename.replace("/_High Voltage SID Collection", "")+'"></span>'+
@@ -604,7 +604,7 @@ Browser.prototype = {
 									(folder.hvsc == this.HVSC_VERSION || folder.hvsc == this.CGSC_VERSION ? ' new' : '')+
 								'"><div class="block-wrap"><div class="block">'+
 							(folder.filescount > 0 ? '<div class="filescount">'+folder.filescount+'</div>' : '')+
-							'<span class="name entry'+(this.isSearching ? ' search' : '')+'" data-name="'+folder.foldername+'" data-incompat="'+folder.incompatible+'">'+
+							'<span class="name entry'+(this.isSearching ? ' search' : '')+'" data-name="'+encodeURI(folder.foldername)+'" data-incompat="'+folder.incompatible+'">'+
 							adaptedName+'</span></div></div></td>'+
 							'<td class="stars"><span class="rating">'+this.buildStars(folder.rating)+'</span></td>'+
 						'</tr>';
@@ -658,7 +658,7 @@ Browser.prototype = {
 					adaptedName = this.adaptBrowserName(adaptedName);
 					files += '<tr>'+
 							'<td class="sid unselectable"><div class="block-wrap"><div class="block">'+(file.subtunes > 1 ? '<div class="subtunes'+(this.isSymlist ? ' specific' : '')+(isNew ? ' newst' : '')+'">'+(this.isSymlist ? file.startsubtune : file.subtunes)+'</div>' : (isNew ? '<div class="newsid"></div>' : ''))+
-							'<div class="entry name file'+(this.isSearching || this.path.substr(0, 2) === "/$" ? ' search' : '')+'" data-name="'+file.filename+'" data-symid="'+file.symid+'">'+adaptedName+'</div></div></div><br />'+
+							'<div class="entry name file'+(this.isSearching || this.path.substr(0, 2) === "/$" ? ' search' : '')+'" data-name="'+encodeURI(file.filename)+'" data-symid="'+file.symid+'">'+adaptedName+'</div></div></div><br />'+
 							'<span class="info">'+file.copyright.substr(0, 4)+' in '+player+'</span></td>'+
 							'<td class="stars filestars"><span class="rating">'+this.buildStars(file.rating)+'</span>'+
 							'<span class="disqus-comment-count" data-disqus-url="http://deepsid.chordian.net/#!'+rootFile.replace("/_High Voltage SID Collection", "")+'"></span>'+
@@ -1110,7 +1110,7 @@ Browser.prototype = {
 
 		var contents = "";
 		this.contextEntry = $target.find(".entry");
-		this.contextSID = this.contextEntry.attr("data-name");
+		this.contextSID = decodeURI(this.contextEntry.attr("data-name"));
 		this.contextSymID = this.contextEntry.attr("data-symid");
 
 		// Maintain hover background color while showing the context menu

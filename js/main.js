@@ -558,7 +558,7 @@ $(function() { // DOM ready
 					var $name = $(this).find(".name");
 					if (!$name.length) return false;
 					// First try to match the original SID name
-					var found = $name.attr("data-name").toLowerCase().replace(/^\_/, '') == sidFile.toLowerCase();
+					var found = decodeURI($name.attr("data-name")).toLowerCase().replace(/^\_/, '') == sidFile.toLowerCase();
 					if (!found)
 						// If not found, try one more time with the table name (it could be a renamed playlist entry)
 						found = $name.text().toLowerCase() == sidFile.toLowerCase();
