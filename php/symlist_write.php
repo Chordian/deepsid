@@ -100,10 +100,8 @@ try {
 		die(json_encode(array('status' => 'error', 'message' => 'Could not update the count of files in '.$symlist_folder)));
 
 } catch(PDOException $e) {
-	$error_msg = $e->getMessage();
-	$account->LogActivity('User "'.$_SESSION['user_name'].'" invoked a database error in the "symlist_write.php" script:');
-	$account->LogActivity(' '.$error_msg);
-	die(json_encode(array('status' => 'error', 'message' => $error_msg)));
+	$account->LogActivityError('symlist_write.php', $e->getMessage());
+	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 }
 
 echo json_encode(array('status' => 'ok'));

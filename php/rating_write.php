@@ -38,9 +38,8 @@ if ($account->CheckLogin()) {
 		$select->setFetchMode(PDO::FETCH_OBJ);
 
 		if (!$select->rowCount()) {
-			$account->LogActivity('User "'.$_SESSION['user_name'].'" invoked a name error in the "rating_write.php" script');
-			$account->LogActivity(' $_POST[\'fullname\']: '.$_POST['fullname'].' not found in "'.$table.'" table');
-			die(json_encode(array('status' => 'error', 'message' => 'Name "'.$_POST['fullname'].'" not found in "'.$table.'" table')));
+			$account->LogActivityError('rating_write.php', 'Name error; $_POST[\'fullname\'] = '.$_POST['fullname'].' not found in "'.$table.'" table');
+			die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 		}
 
 		// Now get the ID's for all rows that share that hash value
@@ -81,10 +80,8 @@ if ($account->CheckLogin()) {
 		}
 
 	} catch(PDOException $e) {
-		$error_msg = $e->getMessage();
-		$account->LogActivity('User "'.$_SESSION['user_name'].'" invoked a database error in the "rating_write.php" script:');
-		$account->LogActivity(' '.$error_msg);
-		die(json_encode(array('status' => 'error', 'message' => $error_msg)));
+		$account->LogActivityError('rating_write.php', $e->getMessage());
+		die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 	}
 
 } else

@@ -417,12 +417,12 @@ try {
 	}
 
 } catch(PDOException $e) {
-	$error_msg = $e->getMessage();
-	$account->LogActivity('User "'.$_SESSION['user_name'].'" invoked a database error in the "hvsc.php" script:');
-	$account->LogActivity(' '.$error_msg);
-	if (isset($file_ext)) $account->LogActivity(' files: '.$file_ext);
-	if (isset($folders_ext)) $account->LogActivity(' folders: '.$folders_ext);
-	die(json_encode(array('status' => 'error', 'message' => $error_msg)));
+	$account->LogActivityError('hvsc.php', $e->getMessage());
+	$account->LogActivityError('hvsc.php', '$_GET[\'folder\'] = '.(empty($_GET['folder']) ? '(root)' : $_GET['folder']).
+		($isSearching ? ', $_GET[\'searchType\'] = '.$_GET['searchType'].', $_GET[\'searchQuery\'] = '.$_GET['searchQuery'] : ' (user was not searching)'));
+	if (isset($file_ext)) $account->LogActivityError('hvsc.php', 'Files: '.$file_ext);
+	if (isset($folders_ext)) $account->LogActivityError('hvsc.php', 'Folders: '.$folders_ext);
+	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 }
 
 echo json_encode(array('status' => 'ok', 'files' => $files_ext, 'folders' => $folders_ext, 'results' => $found, 'incompatible' => $incompatible, 'owner' => $owner, 'debug' => $debug));

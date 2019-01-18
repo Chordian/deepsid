@@ -9,7 +9,7 @@
  *  - Left and right top lists boxes
  */
 
-require_once("setup.php");
+require_once("class.account.php"); // Includes setup
 require_once("root_generate.php");
 
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest')
@@ -121,7 +121,8 @@ try {
 	$random_id_3 = $good_composers[$choices[2]];
 
 } catch(PDOException $e) {
-	die(json_encode(array('status' => 'error', 'message' => $e->getMessage())));
+	$account->LogActivityError('root.php', $e->getMessage());
+	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 }
 
 $html =

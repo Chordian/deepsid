@@ -50,23 +50,19 @@ if (isset($_GET['fullname'])) {
 				try {
 					$gb64 = unserialize($array);
 				} catch(Exception $e) {
-					$account->LogActivity('User "'.$_SESSION['user_name'].'" invoked a fatal error the "gb64.php" script:');
-					$account->LogActivity(' '.$e);
-					$account->LogActivity(' '.$array);
+					$account->LogActivityError('gb64.php', $e);
+					$account->LogActivityError('gb64.php', $array);
 					die(json_encode(array('status' => 'fatal', 'html' => '<p>Something bad happened. Chordian will be able to see this in a log.</p><p>'.$e.'</p>'.$array)));
 				}
 				//$gb64 = array_reverse($gb64); // To get original game in top (most common order)
 			}
 		} else {
-			$account->LogActivity('User "'.$_SESSION['user_name'].'" received no database info from the "gb64.php" script');
-			$account->LogActivity(' $_GET[\'fullname\']: '.$_GET['fullname']);
+			$account->LogActivityError('gb64.php', 'No database info returned; $_GET[\'fullname\'] = '.$_GET['fullname']);
 			die(json_encode(array('status' => 'error', 'message' => "Couldn't find the information in the database.")));
 		}
 	} catch(PDOException $e) {
-		$error_msg = $e->getMessage();
-		$account->LogActivity('User "'.$_SESSION['user_name'].'" invoked a database error in the "gb64.php" script:');
-		$account->LogActivity(' '.$error_msg);
-		die(json_encode(array('status' => 'error', 'message' => $error_msg)));
+		$account->LogActivityError('gb64.php', $e->getMessage());
+		die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 	}
 
 } else

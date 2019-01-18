@@ -37,10 +37,8 @@ try {
 	}
 
 } catch(PDOException $e) {
-	$error_msg = $e->getMessage();
-	$account->LogActivity('User "'.$_SESSION['user_name'].'" invoked a database error in the "symlist_folders.php" script:');
-	$account->LogActivity(' '.$error_msg);
-	die(json_encode(array('status' => 'error', 'message' => $error_msg)));
+	$account->LogActivityError('symlist_folders.php', $e->getMessage());
+	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 }
 
 echo json_encode(array('status' => 'ok', 'symlists' => $symlists));

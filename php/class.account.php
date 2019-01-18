@@ -205,7 +205,7 @@ class Account {
 	}
 
 	/**
-	 * Writes a line to a log file describing an activity.
+	 * Writes a line to an activity log file describing an activity.
 	 * 
 	 * NOTE: This is used for debugging purposes. Ratings set by users for specific
 	 * SID files are never logged as this is none of my business. However, the names
@@ -218,6 +218,17 @@ class Account {
 			$time_ip = date('Y-m-d H:i:s', strtotime(TIME_ADJUST)).' - '.$_SERVER['REMOTE_ADDR'].' - ';
 			file_put_contents($_SERVER['DOCUMENT_ROOT'].'/deepsid/logs/activity.txt', $time_ip.$str.PHP_EOL, FILE_APPEND);
 		// }
+	}
+
+	/**
+	 * Writes a line to an activity log file describing an error.
+	 * 
+	 * @param		string		name of script
+	 * @param		string		text to be logged
+	 */
+	public function LogActivityError($script, $str) {
+		$str = str_replace('You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use', 'Error in SQL syntax;', $str);
+		$this->LogActivity('<span style="color:#c00;font-weight:bold;">***** '.$script.' ***** '.$str.'</span>');
 	}
 
 	/**

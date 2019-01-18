@@ -44,15 +44,12 @@ if (isset($_GET['fullname'])) {
 			$csdb_type = $row->csdbtype;	// Can be 'release' or 'sid'
 			$csdb_id = $row->csdbid;		// ID relates to the type
 		} else {
-			$account->LogActivity('User "'.$_SESSION['user_name'].'" received no database info from the "csdb.php" script');
-			$account->LogActivity(' $_GET[\'fullname\']: '.$_GET['fullname']);
+			$account->LogActivityError('csdb.php', 'No database info returned; $_GET[\'fullname\'] = '.$_GET['fullname']);
 			die(json_encode(array('status' => 'error', 'message' => "Couldn't find the information in the database.")));
 		}
 	} catch(PDOException $e) {
-		$error_msg = $e->getMessage();
-		$account->LogActivity('User "'.$_SESSION['user_name'].'" invoked a database error in the "csdb.php" script:');
-		$account->LogActivity(' '.$error_msg);
-		die(json_encode(array('status' => 'error', 'message' => $error_msg)));
+		$account->LogActivityError('csdb.php', $e->getMessage());
+		die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 	}
 
 	if (empty($csdb_type))

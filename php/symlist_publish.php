@@ -41,7 +41,8 @@ try {
 	$account->LogActivity('User "'.$_SESSION['user_name'].'" published the "'.$_POST['symlist'].'" playlist');
 
 } catch(PDOException $e) {
-	die(json_encode(array('status' => 'error', 'message' => $e->getMessage())));
+	$account->LogActivityError('symlist_publish.php', $e->getMessage());
+	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 }
 
 echo json_encode(array('status' => 'ok'));

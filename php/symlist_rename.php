@@ -50,6 +50,7 @@ try {
 		$update->execute(array(':old'=>$_POST['symlist'], ':new'=>$char.$_POST['new']));
 		if ($update->rowCount() == 0)
 			die(json_encode(array('status' => 'error', 'message' => 'Could not rename folder "'.$_POST['symlist'].'" => "'.$char.$_POST['new'].'"')));
+		$account->LogActivity('User "'.$_SESSION['user_name'].'" renamed the "'.$_POST['symlist'].'" playlist to "'.$char.$_POST['new'].'"');
 
 	} else {
 
@@ -93,10 +94,8 @@ try {
 	}
 
 } catch(PDOException $e) {
-	$error_msg = $e->getMessage();
-	$account->LogActivity('User "'.$_SESSION['user_name'].'" invoked a database error in the "symlist_rename.php" script:');
-	$account->LogActivity(' '.$error_msg);
-	die(json_encode(array('status' => 'error', 'message' => $error_msg)));
+	$account->LogActivityError('symlist_rename.php', $e->getMessage());
+	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 }
 
 echo json_encode(array('status' => 'ok'));

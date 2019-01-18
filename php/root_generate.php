@@ -193,10 +193,8 @@ function GenerateList($rows, $type) {
 		return $contents;
 
 	} catch(PDOException $e) {
-		$error_msg = $e->getMessage();
-		$account->LogActivity('User "'.$_SESSION['user_name'].'" invoked a database error in the "root_generate.php" script:');
-		$account->LogActivity(' '.$error_msg);
-		die(json_encode(array('status' => 'error', 'message' => $error_msg)));
+		$account->LogActivityError('root_generate.php', $e->getMessage());
+		die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 	}
 }
 ?>
