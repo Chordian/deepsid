@@ -8,6 +8,7 @@
  * @uses		$_GET['folder']
  * @uses		$_GET['searchType']
  * @uses		$_GET['searchQuery']	overrides 'folder' if used
+ * @uses		$_GET['searchHere']		1 = in current folder, 0 = in everything
  */
 
 require_once("class.account.php"); // Includes setup
@@ -23,6 +24,9 @@ $isSearching = isset($_GET['searchQuery']) && !empty($_GET['searchQuery']);
 $isPersonalSymlist = substr($_GET['folder'], 0, 2) == '/!';
 $isPublicSymlist = substr($_GET['folder'], 0, 2) == '/$';
 
+// In current folder or everything?
+$searchContext = $_GET['searchHere'] ? 'fullname LIKE "'.substr($_GET['folder'], 1).'%"' : '1';
+
 try {
 	if ($_SERVER['HTTP_HOST'] == LOCALHOST)
 		$db = new PDO(PDO_LOCALHOST, USER_LOCALHOST, PWD_LOCALHOST);
@@ -31,83 +35,155 @@ try {
 	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	$db->exec("SET NAMES UTF8");
 
+	function PublicSymlistOwner() {
+
+		global $db;
+	
+		// First get its user ID
+		$select = $db->prepare('SELECT user_id FROM hvsc_folders WHERE fullname = :folder LIMIT 1');
+		$select->execute(array(':folder'=>substr($_GET['folder'], 1)));
+		$select->setFetchMode(PDO::FETCH_OBJ);
+	
+		$owner = 'an unknown user';
+		if ($select->rowCount()) {
+			// Now get the name of the user ID
+			$select_user = $db->query('SELECT username FROM users WHERE id = '.$select->fetch()->user_id.' LIMIT 1');
+			$select_user->setFetchMode(PDO::FETCH_OBJ);
+			if ($select_user->rowCount())
+				$owner = $select_user->fetch()->username;
+		}
+		return $owner;
+	}
+	
 	if ($isSearching) {
 
-		// SEARCH
+		// This tricky logic disallows symlists unless searching for everything
+		if ((!$isPublicSymlist && !$isPersonalSymlist) || (!$_GET['searchHere'] && ($isPublicSymlist || $isPersonalSymlist))) {
 
-		// Perform a search query and fill the array with the results of fullnames
-		$select = null;
-		if ($_GET['searchType'] == 'rating') {
-			// Search for a specific user rating (1-5) or a range (e.g. -3 or 3-)
-			$operators = substr($_GET['searchQuery'], 0, 1) == '-' ? '<='
-				: (substr($_GET['searchQuery'], -1) == '-' ? '>=' : '=');
-			$select = $db->prepare('SELECT fullname FROM hvsc_files'.
-				' INNER JOIN ratings ON hvsc_files.id = ratings.table_id'.
-				' WHERE ratings.user_id = '.$user_id.' AND ratings.rating '.$operators.' :rating AND ratings.type = "FILE" LIMIT 1000');
-			$select->execute(array(':rating'=>str_replace('-', '', $_GET['searchQuery'])));
-		} else if ($_GET['searchType'] != 'country') {
-			// Normal type search (handles any position of words and excluding with "-" prepended)
-			// NOTE: This would have been easier with 'Full-Text' search but I'm not using the MyISAM engine.
-			$exclude = '';
-			if ($_GET['searchType'] == 'new') {
-				$include = $_GET['searchType'].' LIKE "%'.str_replace('.', '', $_GET['searchQuery']).'%"';
-			} else {
-				$words = explode('_', $_GET['searchQuery']);
-				$include = '(';
-				$i_and = $e_and = '';
-				foreach($words as $word) {
-					if (substr($word, 0, 1) == '-') {
-						$exclude .= $e_and.$_GET['searchType'].' NOT LIKE "%'.substr($word, 1).'%"';
-						$e_and = ' AND ';
-					} else {
-						$include .= $i_and.$_GET['searchType'].' LIKE "%'.$word.'%"';
-						$i_and = ' AND ';
+			// SEARCH PHYSICAL FILES AND FOLDERS
+
+			// Perform a search query and fill the array with the results of fullnames
+			$select = null;
+			if ($_GET['searchType'] == 'rating') {
+				// Search for a specific user rating (1-5) or a range (e.g. -3 or 3-)
+				$operators = substr($_GET['searchQuery'], 0, 1) == '-' ? '<='
+					: (substr($_GET['searchQuery'], -1) == '-' ? '>=' : '=');
+				$select = $db->prepare('SELECT fullname FROM hvsc_files'.
+					' INNER JOIN ratings ON hvsc_files.id = ratings.table_id'.
+					' WHERE '.$searchContext.' AND ratings.user_id = '.$user_id.' AND ratings.rating '.$operators.' :rating AND ratings.type = "FILE" LIMIT 1000');
+				$select->execute(array(':rating'=>str_replace('-', '', $_GET['searchQuery'])));
+			} else if ($_GET['searchType'] != 'country') {
+				// Normal type search (handles any position of words and excluding with "-" prepended)
+				// NOTE: This would have been easier with 'Full-Text' search but I'm not using the MyISAM engine.
+				$exclude = '';
+				if ($_GET['searchType'] == 'new') {
+					$include = $_GET['searchType'].' LIKE "%'.str_replace('.', '', $_GET['searchQuery']).'%"';
+				} else {
+					$words = explode('_', $_GET['searchQuery']);
+					$include = '(';
+					$i_and = $e_and = '';
+					foreach($words as $word) {
+						if (substr($word, 0, 1) == '-') {
+							$exclude .= $e_and.$_GET['searchType'].' NOT LIKE "%'.substr($word, 1).'%"';
+							$e_and = ' AND ';
+						} else {
+							$include .= $i_and.$_GET['searchType'].' LIKE "%'.$word.'%"';
+							$i_and = ' AND ';
+						}
 					}
+					if (!empty($exclude)) $exclude = ' AND ('.$exclude.')';
+					$include .= ')';
 				}
-				if (!empty($exclude)) $exclude = ' AND ('.$exclude.')';
-				$include .= ')';
+				$select = $db->query('SELECT fullname FROM hvsc_files WHERE '.$searchContext.' AND '.$include.$exclude.' LIMIT 1000');
 			}
-			$select = $db->query('SELECT fullname FROM hvsc_files WHERE '.$include.$exclude.' LIMIT 1000');
-		}
-		$files = array();
-		if ($select) {
-			$select->setFetchMode(PDO::FETCH_OBJ);
+			$files = array();
+			if ($select) {
+				$select->setFetchMode(PDO::FETCH_OBJ);
 
-			$found = $select->rowCount();
+				$found = $select->rowCount();
 
-			foreach ($select as $row)
-				$files[] = $row->fullname;
-		}
-
-		// Repeat search query again but this time for folders
-		// NOTE: Notice the extra "NOT LIKE" to avoid finding personal playlists by other users.
-		$select = null;
-		if ($_GET['searchType'] == 'rating') {
-			$select = $db->prepare('SELECT fullname FROM hvsc_folders'.
-				' INNER JOIN ratings ON hvsc_folders.id = ratings.table_id'.
-				' WHERE ratings.user_id = '.$user_id.' AND ratings.rating '.$operators.' :rating AND ratings.type = "FOLDER" AND (fullname NOT LIKE "!%") LIMIT 1000');
-			$select->execute(array(':rating'=>str_replace('-', '', $_GET['searchQuery'])));
-		} else if ($_GET['searchType'] == 'country') {
-			// Search for country in composer profiles
-			$select = $db->prepare('SELECT fullname FROM composers WHERE country LIKE :query LIMIT 1000');
-			$query = strtolower($_GET['searchQuery']) == 'holland' ? 'netherlands' : $_GET['searchQuery'];
-			$select->execute(array(':query'=>'%'.$query.'%'));
-		} else if ($_GET['searchType'] == 'fullname' || $_GET['searchType'] == 'author' || $_GET['searchType'] == 'new') {
-			// Normal type search
-			if ($_GET['searchType'] == 'author') {
-				// Let 'author' also find folders using 'fullname' as replacement type
-				$exclude = str_replace('author NOT LIKE "%', 'fullname NOT LIKE "%', $exclude);
-				$include = str_replace('author LIKE "%', 'fullname LIKE "%', $include);
+				foreach ($select as $row)
+					$files[] = $row->fullname;
 			}
-			$select = $db->query('SELECT fullname FROM hvsc_folders WHERE '.$include.$exclude.' AND (fullname NOT LIKE "!%") LIMIT 1000');
-		}
-		if ($select) {
-			$select->setFetchMode(PDO::FETCH_OBJ);
 
-			$found += $select->rowCount();
+			// Repeat search query again but this time for folders
+			// NOTE: Notice the extra "NOT LIKE" to avoid finding personal playlists by other users.
+			$select = null;
+			if ($_GET['searchType'] == 'rating') {
+				$select = $db->prepare('SELECT fullname FROM hvsc_folders'.
+					' INNER JOIN ratings ON hvsc_folders.id = ratings.table_id'.
+					' WHERE '.$searchContext.' AND ratings.user_id = '.$user_id.' AND ratings.rating '.$operators.' :rating AND ratings.type = "FOLDER" AND (fullname NOT LIKE "!%") LIMIT 1000');
+				$select->execute(array(':rating'=>str_replace('-', '', $_GET['searchQuery'])));
+			} else if ($_GET['searchType'] == 'country') {
+				// Search for country in composer profiles
+				$select = $db->prepare('SELECT fullname FROM composers WHERE '.$searchContext.' AND country LIKE :query LIMIT 1000');
+				$query = strtolower($_GET['searchQuery']) == 'holland' ? 'netherlands' : $_GET['searchQuery'];
+				$select->execute(array(':query'=>'%'.$query.'%'));
+			} else if ($_GET['searchType'] == 'fullname' || $_GET['searchType'] == 'author' || $_GET['searchType'] == 'new') {
+				// Normal type search
+				if ($_GET['searchType'] == 'author') {
+					// Let 'author' also find folders using 'fullname' as replacement type
+					$exclude = str_replace('author NOT LIKE "%', 'fullname NOT LIKE "%', $exclude);
+					$include = str_replace('author LIKE "%', 'fullname LIKE "%', $include);
+				}
+				$select = $db->query('SELECT fullname FROM hvsc_folders WHERE '.$searchContext.' AND '.$include.$exclude.' AND (fullname NOT LIKE "!%") LIMIT 1000');
+			}
+			if ($select) {
+				$select->setFetchMode(PDO::FETCH_OBJ);
 
-			foreach ($select as $row)
-				$files[] = $row->fullname;
+				$found += $select->rowCount();
+
+				foreach ($select as $row)
+					$files[] = $row->fullname;
+			}
+
+		} else {
+
+			// SEARCH IN SYMLIST
+
+			$files = array();
+
+			// First get the ID of the symlist
+			$select_folder = $db->prepare('SELECT id FROM hvsc_folders WHERE fullname = :fullname'.($isPersonalSymlist ? ' AND user_id = '.$user_id : '').' LIMIT 1');
+			$select_folder->execute(array(':fullname'=>substr($_GET['folder'], 1)));
+			$select_folder->setFetchMode(PDO::FETCH_OBJ);
+
+			if ($select_folder->rowCount()) {
+				$symlist_folder_id = $select_folder->fetch()->id;
+				if ($_GET['searchType'] == 'rating') {
+					// Search for a specific user rating (1-5) or a range (e.g. -3 or 3-)
+					$operators = substr($_GET['searchQuery'], 0, 1) == '-' ? '<='
+						: (substr($_GET['searchQuery'], -1) == '-' ? '>=' : '=');
+					$select_files = $db->prepare('SELECT fullname FROM hvsc_files'.
+						' INNER JOIN symlists ON hvsc_files.id = symlists.file_id'.
+						' INNER JOIN ratings ON symlists.file_id = ratings.table_id'.
+						' WHERE ratings.user_id = '.$user_id.' AND ratings.rating '.$operators.' :rating AND ratings.type = "FILE"  AND symlists.folder_id = '.$symlist_folder_id);
+					$select_files->execute(array(':rating'=>str_replace('-', '', $_GET['searchQuery'])));
+				} else if ($_GET['searchType'] == 'country') {
+					// Search for country in composer profiles
+					$select_files = $db->prepare('SELECT h.fullname FROM hvsc_files h'.
+						' INNER JOIN symlists ON h.id = symlists.file_id'.
+						' INNER JOIN composers c ON h.fullname LIKE CONCAT(c.fullname, "%")'.
+						' WHERE c.country LIKE :query AND symlists.folder_id = '.$symlist_folder_id);
+					$query = strtolower($_GET['searchQuery']) == 'holland' ? 'netherlands' : $_GET['searchQuery'];
+					$select_files->execute(array(':query'=>'%'.$query.'%'));
+				} else {
+					// Search anything else
+					$select_files = $db->prepare('SELECT fullname FROM hvsc_files'.
+						' INNER JOIN symlists ON hvsc_files.id = symlists.file_id'.
+						' WHERE '.$_GET['searchType'].' LIKE :query AND symlists.folder_id = '.$symlist_folder_id);
+					$select_files->execute(array(':query'=>'%'.$_GET['searchQuery'].'%'));
+				}
+				$select_files->setFetchMode(PDO::FETCH_OBJ);
+
+				$found = $select_files->rowCount();
+
+				foreach ($select_files as $row)
+					$files[] = $row->fullname;
+			}
+
+			// If this is a public symlist we need to know who made it
+			if ($isPublicSymlist) $owner = PublicSymlistOwner();
 		}
 
 	} else if ($isPublicSymlist || $isPersonalSymlist) {
@@ -123,11 +199,9 @@ try {
 
 		if ($select_folder->rowCount()) {
 			$symlist_folder_id = $select_folder->fetch()->id;
-
-			$select_files = $db->prepare('SELECT fullname FROM hvsc_files'.
+			$select_files = $db->query('SELECT fullname FROM hvsc_files'.
 				' INNER JOIN symlists ON hvsc_files.id = symlists.file_id'.
 				' WHERE symlists.folder_id = '.$symlist_folder_id);
-			$select_files->execute(array(':rating'=>str_replace('-', '', $_GET['searchQuery'])));
 			$select_files->setFetchMode(PDO::FETCH_OBJ);
 
 			foreach ($select_files as $row)
@@ -135,21 +209,7 @@ try {
 		}
 
 		// If this is a public symlist we need to know who made it
-		if ($isPublicSymlist) {
-			// First get its user ID
-			$select = $db->prepare('SELECT user_id FROM hvsc_folders WHERE fullname = :folder LIMIT 1');
-			$select->execute(array(':folder'=>substr($_GET['folder'], 1)));
-			$select->setFetchMode(PDO::FETCH_OBJ);
-
-			$owner = 'an unknown user';
-			if ($select->rowCount()) {
-				// Now get the name of the user ID
-				$select_user = $db->query('SELECT username FROM users WHERE id = '.$select->fetch()->user_id.' LIMIT 1');
-				$select_user->setFetchMode(PDO::FETCH_OBJ);
-				if ($select_user->rowCount())
-					$owner = $select_user->fetch()->username;
-			}
-		}
+		if ($isPublicSymlist) $owner = PublicSymlistOwner();
 
 	} else {
 

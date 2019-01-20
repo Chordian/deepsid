@@ -1568,7 +1568,7 @@ input[type=range]::-ms-track {
 			position: absolute;
 			top: 14px;
 			left: 105px;
-			width: 242px;
+			width: 184px; /* 242px */
 			font-size: 14px;
 			padding: 4px;
 			height: 21px;
@@ -1581,6 +1581,23 @@ input[type=range]::-ms-track {
 			font-size: 11px;
 			box-shadow: none !important;
 		}
+
+			#search-here-container {
+				display: inline-block;
+				position: absolute;
+				top: 14px;
+				right: 82px;
+			}
+
+				#search-here-container input {
+					margin-right: 0;
+				}
+
+				#search-here-container label {
+					position: relative;
+					top: -1px;
+					font: normal 13px/0 "Montserrat", sans-serif;
+				}
 
 			#search-button {
 				position: absolute;

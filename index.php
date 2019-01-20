@@ -270,6 +270,10 @@
 						<option value="gb64">Game</option>
 					</select>
 					<input type="text" name="search-box" id="search-box" maxlength="32" />
+					<div id="search-here-container">
+						<input type="checkbox" id="search-here" name="shtoggle" class="unselectable" unchecked />
+						<label for="search-here" class="unselectable">Here</label>
+					</div>
 					<button id="search-button" class="medium disabled" disabled="disabled">Search</button>
 				</div>
 			</div>
@@ -839,6 +843,7 @@
 						<ul>
 							<li>Playlists now also update the profile tab based on the file itself.</li>
 							<li>You can now also unpublish a playlist, in case you want to take it back.</li>
+							<li>A check box now makes it possible to search only in the current folder (and its sub folders).</li>
 						</ul>
 
 						<h3>January 19, 2019</h3>
