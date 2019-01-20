@@ -835,6 +835,16 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>January 20, 2019</h3>
+						<ul>
+							<li>Playlists now also update the profile tab based on the file itself.</li>
+						</ul>
+
+						<h3>January 19, 2019</h3>
+						<ul>
+							<li>The <code>Decent</code> and <code>Good</code> modes are now ready for letter folder <code>M</code> in MUSICIANS.</li>
+						</ul>
+
 						<h3>January 17, 2019</h3>
 						<ul>
 							<li>The <a href="http://ogp.me/">Open Graph</a> title should now show the composer name and song title (if present).</li>

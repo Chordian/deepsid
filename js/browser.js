@@ -332,7 +332,7 @@ Browser.prototype = {
 
 						if (typeof paramSkipCSDb === "undefined" || !paramSkipCSDb) {
 							this.getCSDb();
-							if (this.isSearching)
+							if (this.isSearching || this.path.substr(0, 2) === "/$" || this.path.substr(0, 2) === "/!")
 								this.getComposer(this.playlist[this.songPos].fullname);
 						} else
 							this.getComposer();

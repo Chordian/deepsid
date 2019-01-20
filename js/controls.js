@@ -174,7 +174,7 @@ Controls.prototype = {
 					this.updateStil();
 
 					browser.getCSDb();
-					if (browser.isSearching)
+					if (browser.isSearching || browser.path.substr(0, 2) === "/$" || browser.path.substr(0, 2) === "/!")
 						browser.getComposer(browser.playlist[browser.songPos].fullname);
 					browser.getGB64();
 					browser.reloadDisqus(browser.playlist[browser.songPos].fullname);
