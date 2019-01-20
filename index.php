@@ -838,6 +838,7 @@
 						<h3>January 20, 2019</h3>
 						<ul>
 							<li>Playlists now also update the profile tab based on the file itself.</li>
+							<li>You can now also unpublish a playlist, in case you want to take it back.</li>
 						</ul>
 
 						<h3>January 19, 2019</h3>

@@ -1158,7 +1158,9 @@ Browser.prototype = {
 			contents = 																		// Symlist folder in root
 				'<div class="line" data-action="symentry-rename">Rename Playlist</div>'+
 				'<div class="line" data-action="symlist-delete">Delete Playlist</div>'+
-				'<div class="line'+ifAlreadyPublic+'" data-action="symlist-publish">Publish Playlist</div>';
+				(ifAlreadyPublic
+					? '<div class="line" data-action="symlist-unpublish">Unpublish Playlist</div>'
+					:'<div class="line" data-action="symlist-publish">Publish Playlist</div>');
 		} else
 			return;
 
@@ -1278,6 +1280,19 @@ Browser.prototype = {
 				if (this.contextSID.substr(0, 1) === "$") return;
 				// Publish the playlist so that everyone can see it (and edit it if logged in)
 				$.post("php/symlist_publish.php", {
+					publish:	1,
+					symlist:	this.contextSID
+				}, function(data) {
+					this.validateData(data, function() {
+						this.getFolder();
+					});
+				}.bind(this));
+				break;
+			case "symlist-unpublish":
+				if (this.contextSID.substr(0, 1) === "!") return;
+				// Unpublish the playlist so that only the user can see it again (if logged in)
+				$.post("php/symlist_publish.php", {
+					publish:	0,
 					symlist:	this.contextSID
 				}, function(data) {
 					this.validateData(data, function() {
