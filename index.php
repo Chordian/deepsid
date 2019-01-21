@@ -839,6 +839,11 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>January 21, 2019</h3>
+						<ul>
+							<li>Added a new type of recommendation box that sometimes offer a visit to a random <i>decent</i> composer folder.</li>
+						</ul>
+
 						<h3>January 20, 2019</h3>
 						<ul>
 							<li>Playlists now also update the profile tab based on the file itself.</li>

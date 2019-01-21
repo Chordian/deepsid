@@ -5,8 +5,9 @@
  * Build an HTML welcome page for the root.
  * 
  *  - Three recommendation boxes
+ *  - Random "descent" box
  *  - Important message (good or bad)
- *  - Left and right top lists boxes
+ *  - Left and right boxes for top lists
  */
 
 require_once("class.account.php"); // Includes setup
@@ -14,6 +15,8 @@ require_once("root_generate.php");
 
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest')
 	die("Direct access not permitted.");
+
+$decent_box_shown = false;
 
 /* $important = '<b>NOTE:</b> The <b>SOASC handlers</b> are currently ineffective as Stoneoak Valley have
 	<span class="bad">server problems</span>. They are working on the problem. Please use the emulators
@@ -53,7 +56,7 @@ try {
 
 	function CreateRecBox($random_id) {
 
-		global $db;
+		global $db, $decent_box_shown;
 
 		// Get the fullname
 		$select = $db->query('SELECT fullname FROM hvsc_folders WHERE id = '.$random_id);
@@ -66,7 +69,38 @@ try {
 		$row = $select->fetch();
 
 		// Error or irrelevant (such as big parent folders in HVSC)
-		if ($select->rowCount() == 0) return '<table class="tight compo recommended" style="border:none;"></table>';
+		if ($select->rowCount() == 0) {
+			if (!$decent_box_shown) {
+
+				// Show a "decent" randomizer box ("CLICK HERE")
+				$decent_box_shown = true;
+				$decent_composers = [];
+
+				// Get an array of all the folder ID belonging to composers JCH have given 2 stars or more
+				$select_decent = $db->query('SELECT table_id FROM ratings WHERE user_id = '.JCH.' AND rating >= 2 AND type = "FOLDER"');
+				$select_decent->setFetchMode(PDO::FETCH_OBJ);
+				foreach($select_decent as $row_decent)
+					array_push($decent_composers, $row_decent->table_id);
+
+				// Pick a random "decent" folder
+				$random_decent = $decent_composers[array_rand($decent_composers)];
+
+				// Get the fullname of it
+				$select_decent = $db->query('SELECT fullname FROM hvsc_folders WHERE id = '.$random_decent);
+				$select_decent->setFetchMode(PDO::FETCH_OBJ);
+
+				return '<table class="tight compo recommended decent" data-folder="'.$select_decent->fetch()->fullname.'" style="padding-bottom:0;"><tr><td style="height:123px;">'.
+					'<div style="position:absolute;top:10px;right:10px;text-align:right;font-size:17px;font-weight:bold;color:#5e6048;text-shadow:0 0 9px #f7f8f5;">'.
+						'<span style="font-size:36px;color:#333;line-height:0;">Click here</span><br />'.
+						'to visit a random<br />'.
+						'composer folder of a<br />'.
+						'decent quality or better<br />'.
+					'</div>'.
+				'</td></tr></table>';
+			} else
+				// Just shown empty space there
+				return '<table class="tight compo recommended" style="border:none;"></table>';
+		}
 
 		$name = empty($row->shortname) ? $row->name : $row->shortname;
 		$parts = explode(',', $row->handles);

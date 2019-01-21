@@ -2015,6 +2015,20 @@ input[type=range]::-ms-track {
 			border: none;
 		}
 
+			#page table.decent:before {
+				content: "";
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				z-index: -1;
+				background: url(../images/roulette.png) -30px -10px no-repeat;
+				background-size: 70%;
+				opacity: 0.6;
+				transition: all .07s linear;
+			}
+
 			#page table.root div {
 				pointer-events: auto;
 			}
@@ -2036,6 +2050,16 @@ input[type=range]::-ms-track {
 			#page table.rec table.tight:hover {
 				background: #eeefe9;
 			}
+
+				#page table.rec table.decent:hover {
+					background: none;
+				}
+
+				#page table.rec table.decent:hover:before {
+					background-color: #fafff8; /* #eeefe9 */
+					/*background: linear-gradient(to right, #f7f8f5, #eeefe9);*/
+					opacity: 1.0;
+				}
 
 				/* Recommendations */
 				#page table.rec td {
