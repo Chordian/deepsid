@@ -225,17 +225,7 @@ $(function() { // DOM ready
 				$tr.find("span.info").css("color", "");
 				$tr.css("background", "");
 
-				// Disable table rows for folders incompatible with this SID handler
-				$("#songs table").children().each(function() {
-					var $tr = $(this);
-					 // Skip spacers, dividers and files
-					if (!$tr.find(".spacer").length && !$tr.find(".divider").length && !$tr.find("td.sid").length) {
-						$tr.removeClass("disabled");
-						var $span = $tr.find(".name");
-						if ($span.is("[data-incompat]") && $span.attr("data-incompat").indexOf(SID.emulator) !== -1)
-							$tr.addClass("disabled");
-					}
-				});
+				DisableIncompatibleRows();
 
 				if (SID.emulatorFlags.offline) {
 					// Using the player buttons doesn't make sense for the "download" option
@@ -682,6 +672,28 @@ function GetSettingValue(id) {
 function ResizeIframe() {
 	$(window).trigger("resize");
 	$("#page .deepsid-iframe").show();
+}
+
+/**
+ * Disable table rows for folders incompatible with this SID handler. File rows
+ * that emulators can't handle (such as BASIC tunes) will also be disabled.
+ */
+function DisableIncompatibleRows() {
+	$("#songs table").children().each(function() {
+		var $tr = $(this);
+		// Skip spacers, dividers and files for the general incompatibility field (folders only)
+		if (!$tr.find(".spacer").length && !$tr.find(".divider").length && !$tr.find("td.sid").length) {
+			$tr.removeClass("disabled");
+			var $span = $tr.find(".name");
+			if ($span.is("[data-incompat]") && $span.attr("data-incompat").indexOf(SID.emulator) !== -1)
+				$tr.addClass("disabled");
+		} else if ($tr.find("td.sid").length && $tr.find(".name").attr("data-name").indexOf("BASIC.sid") !== -1) {
+			// The emulators can't do tunes made in BASIC
+			SID.emulator == "websid" || SID.emulator == "jssid"
+				? $tr.addClass("disabled")
+				: $tr.removeClass("disabled");
+		}
+	});
 }
 
 /**

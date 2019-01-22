@@ -492,6 +492,7 @@ Browser.prototype = {
 			}.bind(this));
 			$("#songs table").append(this.folders+files);
 			this.updateDisqusCounts();
+			DisableIncompatibleRows();
 		}
 
 		if (this.isMobile)
@@ -726,6 +727,9 @@ Browser.prototype = {
 			});
 			if (this.path == "")
 				ctrls.state("root/back", "disabled");
+
+			DisableIncompatibleRows();
+			
 		}.bind(this));
 	},
 
