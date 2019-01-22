@@ -111,7 +111,10 @@
 			}
 		?>" />
 		<meta property="og:type" content="website" />
-		<meta property="og:image" content="http://chordian.net/deepsid/images/example.png" />
+		<meta property="og:image" content="http://chordian.net/deepsid/images/example<?php
+			if (isset($_GET['file']) && (substr($_GET['file'], -4) == '.sid' || substr($_GET['file'], -4) == '.mus'))
+				echo '_play';
+		?>.png" />
 		<meta property="og:url" content="<?php echo (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]"; ?>" />
 		<meta property="og:description" content="<?php
 			// Example: /MUSICIANS/H/Hubbard_Rob/Commando.sid
@@ -846,6 +849,7 @@
 							<li>The <code>Decent</code> and <code>Good</code> modes are now ready for letter folder <code>N</code> in MUSICIANS.</li>
 							<li>Songs written in BASIC are now disabled for the emulators instead of just applying red error colors.</li>
 							<li>Improved the handling of URL parameters when searching.</li>
+							<li>The <a href="http://ogp.me/">Open Graph</a> image should now look like a play icon if linking to a song.</li></li>
 						</ul>
 
 						<h3>January 21, 2019</h3>
