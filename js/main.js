@@ -710,6 +710,9 @@ function UpdateURL() {
 			: urlFile += browser.playlist[browser.songPos].filename.replace(/^\_/, '');
 	} catch(e) { /* Type error means no SID file clicked */ }
 
+	if (browser.isSearching)
+		urlFile = urlFile.replace("High Voltage SID Collection", "");
+
 	// ?subtune=
 	var urlSubtune = ctrls.subtuneCurrent ? "&subtune="+(ctrls.subtuneCurrent + 1) : "";
 

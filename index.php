@@ -845,6 +845,7 @@
 								Mixer's <a href="http://deepsid.chordian.net/?file=/MUSICIANS/M/Mixer/Dawn.sid">Dawn.sid</a>.</li>
 							<li>The <code>Decent</code> and <code>Good</code> modes are now ready for letter folder <code>N</code> in MUSICIANS.</li>
 							<li>Songs written in BASIC are now disabled for the emulators instead of just applying red error colors.</li>
+							<li>Improved the handling of URL parameters when searching.</li>
 						</ul>
 
 						<h3>January 21, 2019</h3>
