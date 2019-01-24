@@ -18,9 +18,9 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH
 
 $decent_box_shown = false;
 
-$important = 'The file servers for the <b>SOASC handlers</b> are down. Please use the emulators for the time being.';
+// $important = 'The file servers for the <b>SOASC handlers</b> are down. Please use the emulators for the time being.';
 
-// $important = 'The <b>SOASC handlers</b> are working again.';
+$important = 'The <b>SOASC handlers</b> are working again.';
 
 $available_lists = ['maxfiles', 'longest', 'mostgames', 'countries', 'startaddr', 'maxtime'];
 $dropdown_options =
@@ -159,7 +159,7 @@ try {
 
 $html =
 	'<div style="position:relative;top:-2px;left:135px;margin-bottom:150px;font:normal 12px Montserrat,sans-serif;color:#d3d4c6;"><i>Behold!&nbsp;&nbsp;You now find yourself in &ndash;</i></div>'.
-	'<div class="root-wide bad-news">'.$important.'</div>'.
+	'<div class="root-wide good-news">'.$important.'</div>'.
 	// Recommendations
 	'<table class="root rec"><tr>'.
 		'<td style="max-width:10px;">'.

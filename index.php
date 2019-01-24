@@ -416,7 +416,7 @@
 						<div class="edit" style="height:42px;width:683px;">
 							<button id="flood-zoom" class="button-edit button-toggle button-off">Off</button>
 							<label for="flood-zoom" class="unselectable">Zoom</label>
-							<button id="flood-pw" class="button-edit button-toggle button-on">On</button>
+							<button id="flood-pw" class="button-edit button-toggle button-off">Off</button>
 							<label for="flood-pw" class="unselectable">Pulse width</label>
 						</div>
 						<div id="flood">
@@ -841,6 +841,21 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>January 24, 2019</h3>
+						<ul>
+							<li>Added divider lines for each octave in the flood view.</li>
+							<li>The pulse width button in the flood view is now off by default.</li>
+							<li>Changed the way zoom is handled in the flood view. Previously the upper half was just cut
+								off to only show the lower half. Now a steep sine curve is calculated instead to spread out
+								the lower part while huddling up the higher part. This zooms in the lower part while still
+								retaining the entire frequency spectrum in the river.</li>
+						</ul>
+
+						<h3>January 23, 2019</h3>
+						<ul>
+							<li>The <code>Decent</code> and <code>Good</code> modes are now ready for letter folder <code>O</code> in MUSICIANS.</li>
+						</ul>
 
 						<h3>January 22, 2019</h3>
 						<ul>

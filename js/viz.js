@@ -10,7 +10,7 @@ function Viz(emulator) {
 	this.pianoBarBackground = "#111";
 	this.slowSpeed = 0.3;
 	this.floodZoom = false;
-	this.floodPW = true;
+	this.floodPW = false;
 	this.lineInFlood = false;
 
 	this.bufferSize;
@@ -149,7 +149,7 @@ Viz.prototype = {
 				SID.speed($this.hasClass("button-off") ? this.slowSpeed : 1);
 			} else if (event.target.id === "flood-zoom") {
 				this.floodZoom = $this.hasClass("button-off");
-				$("#page .flood-river").css("border-right", this.floodZoom ? "1.5px dashed #ced0c0" : "0.5px solid #ced0c0");
+				this.lineInFlood = true;
 			} else if (event.target.id === "flood-pw") {
 				this.floodPW = $this.hasClass("button-off");
 			} else {
@@ -445,6 +445,16 @@ Viz.prototype = {
 		$("#flood").height(floodHeight);
 		$("#flood .flood-river").empty().append('<canvas height="'+(floodHeight - 1)+'" width="268"></canvas>');
 
+		// Create a 64 KB array with steep sine steps for the zoom button
+		// NOTE: Don't make this into a premade look-up table; such things are not faster these days.
+		this.steepSteps = [];
+		var counter = 0;
+		var increase = Math.PI / (65536 * 2);
+			for (i = 0; i <= 1; i += 1 / 65536) {
+			this.steepSteps.push(Math.sin(counter));
+			counter += increase;
+		}
+
 		// Create canvas rivers and get their contexts
 		for (var voice = 0; voice <= 2; voice++) {
 			this.canvas_river[voice] = $("#flood"+voice+" canvas")[0];
@@ -488,11 +498,24 @@ Viz.prototype = {
 			viz.ctx_river[voice].fillStyle = viz.lineInFlood ? "#eee" : (filterOn ? "#ffffea" : "#fff");
 			viz.ctx_river[voice].fillRect(0, 0, viz.river_width[voice], 1);
 
+			// Add octave dividers
+			viz.ctx_river[voice].lineWidth = 1;
+			viz.ctx_river[voice].strokeStyle = "#eaeaea";
+			for (var freq = 8192; freq < 8192 * 8; freq += 8192) {
+				if (viz.floodZoom) freq = Math.floor(this.steepSteps[freq] * 65536);
+				var x = (freq / 0xFFFF) * viz.river_width[voice];
+				x = x | 0; // This rounds off to avoiding anti-aliased lines
+				viz.ctx_river[voice].beginPath();
+				viz.ctx_river[voice].moveTo(x, 0);
+				viz.ctx_river[voice].lineTo(x, 1);
+				viz.ctx_river[voice].stroke();
+			}
+
 			// Find the X coordinate that corresponds to the current SID voice frequency
 			var freq = SID.readRegister(0xD400 + voice * 7) + SID.readRegister(0xD401 + voice * 7) * 256;
-			if (viz.floodZoom) freq *= 2;
+			if (viz.floodZoom) freq = Math.floor(this.steepSteps[freq] * 65536);
 			var x = (freq / 0xFFFF) * viz.river_width[voice];
-			x = x | 0; // This rounds off to avoiding anti-aliased lines
+			x = x | 0;
 
 			var waveform = SID.readRegister(0xD404 + voice * 7) >> 4;
 
