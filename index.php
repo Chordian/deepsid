@@ -327,7 +327,7 @@
 							<span class="viz-warning" style="position:relative;top:1px;color:#a00;margin-left:12px;font-size:14px;display:none;">You need to enable one of these emulators</span>
 							<div class="viz-buffer">
 								<label for="dropdown-piano-buffer" class="unselectable">Buffer size</label>
-								<select id="dropdown-piano-buffer" class="dropdown-buffer" name="sort">
+								<select id="dropdown-piano-buffer" class="dropdown-buffer">
 									<!--<option value="256">256</option>
 									<option value="512">512</option>-->
 									<option value="1024" selected="selected">1024</option>
@@ -402,7 +402,7 @@
 							<span class="viz-warning" style="position:relative;top:1px;color:#a00;margin-left:12px;font-size:14px;display:none;">You need to enable one of these emulators</span>
 							<div class="viz-buffer">
 								<label for="dropdown-flood-buffer" class="unselectable">Buffer size</label>
-								<select id="dropdown-flood-buffer" class="dropdown-buffer" name="sort">
+								<select id="dropdown-flood-buffer" class="dropdown-buffer">
 									<!--<option value="256">256</option>
 									<option value="512">512</option>-->
 									<option value="1024" selected="selected">1024</option>
@@ -514,7 +514,7 @@
 							<p>Changing a setting here will save it immediately.</p>
 							<div class="edit">
 
-								<select id="dropdown-settings-buffer" class="dropdown-buffer" name="sort">
+								<select id="dropdown-settings-buffer" class="dropdown-buffer">
 									<!--<option value="256">256</option>
 									<option value="512">512</option>-->
 									<option value="1024" selected="selected">1024</option>
@@ -841,6 +841,12 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>January 25, 2019</h3>
+						<ul>
+							<li>The list of CSDb releases can now be sorted. A drop-down box has been added on the header
+								line with number of releases found. The sorting always defaults to newest releases in top.</li>
+						</ul>
 
 						<h3>January 24, 2019</h3>
 						<ul>

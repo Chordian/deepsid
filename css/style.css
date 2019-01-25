@@ -2505,6 +2505,28 @@ input[type=range]::-ms-track {
 		color: #969787;
 	}
 
+
+	#csdb-releases {
+		display: inline-block;
+	}
+
+	/* The drop-down box for how the list of CSDb releases is sorted */
+	#csdb-sort {
+		float: right;
+		position: relative;
+		top: 30px;
+	}
+
+		#csdb-sort label {
+			font: normal 13px/0 "Montserrat", sans-serif;
+			margin-right: 4px;
+			color: #68695a;
+		}
+
+		#dropdown-sort-csdb {
+			font-size: 13px;
+		}
+
 	/* Container for GIF loading spinner IMG */
 	#loading-profile,
 	#loading-csdb,

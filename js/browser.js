@@ -49,6 +49,7 @@ Browser.prototype = {
 
 		$("#songs").on("click", "button,tr", this.onClick.bind(this));
 		$("#dropdown-sort").change(this.onChange.bind(this));
+		$("#topic-csdb").on("change", "#dropdown-sort-csdb", this.onChangeCSDb.bind(this));
 
 		$("#folders table").on("contextmenu", "tr", this.contextMenu.bind(this));
 		$("#panel")
@@ -371,7 +372,57 @@ Browser.prototype = {
 	},
 
 	/**
-	 * When selecting an option in the SORT/FILTER drop-down box.
+	 * When selecting an option in the 'Sort by' drop-down box (CSDb tab).
+	 * 
+	 * @param {*} event 
+	 */
+	onChangeCSDb: function(event) {
+		$("#topic-csdb table.releases").empty();
+		sortedList = "";
+		switch (event.target.value) {
+			case "title":
+				// Sort playlist according to release title
+				this.sidEntries.sort(function(obj1, obj2) {
+					return obj1.title > obj2.title ? 1 : -1;	// A to Z (already lower case)
+				});
+				break;
+			case "type":
+				// Sort playlist according to release type
+				this.sidEntries.sort(function(obj1, obj2) {
+					return obj1.type > obj2.type ? 1 : -1;		// A to Z (already lower case)
+				});
+				break;
+			case "high-id":
+				// Sort CSDb entries according to the ID
+				this.sidEntries.sort(function(obj1, obj2) {
+					return obj2.id - obj1.id;					// Highest ID in top
+				});
+				break;
+			case "low-id":
+				this.sidEntries.sort(function(obj1, obj2) {
+					return obj1.id - obj2.id;					// Lowest ID in top
+				});
+				break;
+			case "newest":
+				// Sort CSDb entries according to the date string (YYYY-MM-DD)
+				this.sidEntries.sort(function(obj1, obj2) {
+					return obj1.date < obj2.date ? 1 : -1;		// Newest year in top
+				});
+				break;
+			case "oldest":
+				this.sidEntries.sort(function(obj1, obj2) {
+					return obj1.date > obj2.date ? 1 : -1;		// Oldest year in top
+				});
+				break;
+		}
+		$.each(this.sidEntries, function(i, entry) {
+			sortedList += entry.html;
+		});
+		$("#topic-csdb table.releases").append(sortedList);
+	},
+
+	/**
+	 * When selecting an option in the SORT/FILTER drop-down box (browser).
 	 * 
 	 * See 'setupSortBox' regarding setting up its contents.
 	 * 
@@ -999,6 +1050,11 @@ Browser.prototype = {
 				clearTimeout(loadingCSDb);
 				$("#topic-csdb").empty().append(data.html)
 					.css("visibility", "visible");
+
+				if (data.entries != "") this.sidEntries = data.entries; // Array used for sorting
+
+				// Add rows sorted by newest by triggering the drop-down box (if present)
+				$("#dropdown-sort-csdb").trigger("change");
 
 				// If there are any entries then show a notification number on the 'CSDb' tab (if not in focus)
 				if (data.count != 0 && $("#tabs .selected").attr("data-topic") !== "csdb" && !this.isCGSC())
