@@ -505,25 +505,23 @@ $(function() { // DOM ready
 		selectTab = GetParam("tab"),
 		typeCSDb = GetParam("csdbtype"),
 		idCSDb = GetParam("csdbid");
-	if (fileParam !== "" || searchQuery !== "") {
 		// Let mobile devices use their own touch scrolling stuff
-		if (browser.isMobile) {
-			// Hack to make sure the bottom search bar sits in the correct bottom of the viewport
-			$(window).trigger("resize");
-		} else {
-			// Hack to make custom scroll bar respect flexbox height
-			$("#folders").height($("#folders").height())
-				.mCustomScrollbar({
-					axis: "y",
-					theme: "dark-3",
-					scrollButtons:{
-						enable: true,
-					},
-					mouseWheel:{
-						scrollAmount: 150,
-					}
-				});
-		}
+	if (browser.isMobile) {
+		// Hack to make sure the bottom search bar sits in the correct bottom of the viewport
+		$(window).trigger("resize");
+	} else {
+		// Hack to make custom scroll bar respect flexbox height
+		$("#folders").height($("#folders").height())
+			.mCustomScrollbar({
+				axis: "y",
+				theme: "dark-3",
+				scrollButtons:{
+					enable: true,
+				},
+				mouseWheel:{
+					scrollAmount: 150,
+				}
+			});
 	}
 	if (fileParam !== "" && fileParam.indexOf("\\") === -1) {
 		// A HVSC folder or file was specified

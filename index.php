@@ -842,10 +842,17 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>January 26, 2019</h3>
+						<ul>
+							<li>Upgraded the WebSid emulator. Added support for non-standard SID address mirroring.</li>
+							<li>Quoted search is now possible and thus no longer issues a database error.</li>
+						</ul>
+
 						<h3>January 25, 2019</h3>
 						<ul>
-							<li>The list of CSDb releases can now be sorted. A drop-down box has been added on the header
+							<li>The list of CSDb releases can now be sorted. A drop-down box has been added to the header
 								line with number of releases found. The sorting always defaults to newest releases in top.</li>
+							<li>Fixed a root bug where the search bar was pushed out of the browser window.</li>
 						</ul>
 
 						<h3>January 24, 2019</h3>

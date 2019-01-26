@@ -79,7 +79,18 @@ try {
 				if ($_GET['searchType'] == 'new') {
 					$include = $_GET['searchType'].' LIKE "%'.str_replace('.', '', $_GET['searchQuery']).'%"';
 				} else {
-					$words = explode('_', $_GET['searchQuery']);
+					$query = $_GET['searchQuery'];
+
+					// Replace spaces ('_') inside quoted queries with '%' and remove the quotes themselves
+					preg_match_all('/"[^"]+"/', $query, $quoted);
+					foreach($quoted[0] as $q) {
+						$adapted = trim(str_replace('_', '%', $q), '"');
+						$query = str_replace($q, $adapted, $query);
+					}
+					// Get rid of any lonely quote stragglers
+					$query = str_replace('"', '', $query);
+
+					$words = explode('_', $query);
 					$include = '(';
 					$i_and = $e_and = '';
 					foreach($words as $word) {
