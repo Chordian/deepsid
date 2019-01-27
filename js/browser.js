@@ -281,7 +281,7 @@ Browser.prototype = {
 					ctrls.state("subtunes", "disabled");
 
 					$("#time-bar").empty().append('<div></div>');
-
+					
 					this.showSpinner($(event.target).parents("tr").children("td.sid"));
 
 					// Either default start subtune, or an override from a "?subtune=" URL parameter
@@ -1032,6 +1032,7 @@ Browser.prototype = {
 		if (this.isMobile) return;
 		if (this.csdb) this.csdb.abort();
 		$("#topic-csdb").empty().append('<div style="height:400px;"><img id="loading-csdb" src="images/loading.svg" style="display:none;" alt="" /></div>');
+		$("#sticky").empty();
 
 		tabScrollPos = 0;
 
@@ -1048,6 +1049,7 @@ Browser.prototype = {
 			this.validateData(data, function(data) {
 
 				clearTimeout(loadingCSDb);
+				$("#sticky").empty().append(data.sticky);
 				$("#topic-csdb").empty().append(data.html)
 					.css("visibility", "visible");
 
@@ -1078,6 +1080,7 @@ Browser.prototype = {
 		if (this.isMobile) return;
 		if (this.compo) this.compo.abort();
 		$("#topic-csdb").empty().append('<div style="height:400px;"><img id="loading-csdb" src="images/loading.svg" style="display:none;" alt="" /></div>');
+		$("#sticky").empty();
 
 		var loadingCSDb = setTimeout(function() {
 			// Fade in a GIF loading spinner if the AJAX call takes a while
@@ -1088,6 +1091,7 @@ Browser.prototype = {
 			this.validateData(data, function(data) {
 
 				clearTimeout(loadingCSDb);
+				$("#sticky").empty().append(data.sticky);
 				$("#topic-csdb").empty().append(data.html)
 					.css("visibility", "visible");
 
@@ -1464,7 +1468,10 @@ Browser.prototype = {
 			data = $.parseJSON(data);
 		} catch(e) {
 			if (document.location.hostname == "chordian")
-				$("body").empty().append(data);
+				if (data == "")
+					alert(e);
+				else
+					$("body").empty().append(data);
 			else
 				alert("An error occurred. If it keeps popping up please tell me about it: chordian@gmail.com");
 			return false;

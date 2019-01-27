@@ -4,8 +4,8 @@
  */
 
 var $=jQuery.noConflict();
-var cacheCSDb = cacheCSDbProfile = cacheBeforeCompo = prevFile = "";
-var cacheTabScrollPos = tabScrollPos = cachePosBeforeCompo = peekCounter = 0;
+var cacheCSDb = cacheSticky = cacheStickyBeforeCompo = cacheCSDbProfile = cacheBeforeCompo = prevFile = "";
+var cacheTabScrollPos = tabScrollPos = cachePosBeforeCompo = cacheDDCSDbSort = peekCounter = 0;
 
 $(function() { // DOM ready
 
@@ -265,7 +265,7 @@ $(function() { // DOM ready
 		var $this = $(this);
 		if ($this.hasClass("selected") || $this.hasClass("disabled")) return false;
 
-		$("#page").mCustomScrollbar("destroy");
+		$("#page").mCustomScrollbar("destroy").removeClass("big-logo-csdb");
 
 		// Select the new tab
 		$("#tabs .tab").removeClass("selected");
@@ -274,7 +274,7 @@ $(function() { // DOM ready
 		var topic = $this.attr("data-topic");
 
 		// Show the selected topic
-		$("#page .topic").hide();
+		$("#page .topic,#sticky").hide();
 		$("#topic-"+topic).show();
 		ShowDexterScrollbar(topic);
 
@@ -285,8 +285,12 @@ $(function() { // DOM ready
 		// If 'Disqus' tab is selected then hide the notification on it
 		if (topic === "disqus") $("#note-disqus").hide();
 
-		// If 'CSDb' tab is selected then hide the notification on it
-		if (topic === "csdb") $("#note-csdb").hide();
+		// If 'CSDb' tab is selected
+		if (topic === "csdb") {
+			$("#note-csdb").hide()					// Hide notification
+			$("#sticky").show();					// Show sticky header
+			$("#page").addClass("big-logo-csdb");	// Displace the big logo
+		};
 
 		// If 'GB64' tab is selected then hide the notification on it
 		if (topic === "gb64") $("#note-gb64").hide();
@@ -350,7 +354,9 @@ $(function() { // DOM ready
 	$("#topic-csdb").on("click", "a.internal", function() {
 		// First cache the list of releases in case we return to it
 		cacheCSDb = $("#topic-csdb").html();
+		cacheSticky = $("#sticky").html();
 		cacheTabScrollPos = tabScrollPos;
+		cacheDDCSDbSort = $("#dropdown-sort-csdb").val();
 		// Now load the new content
 		browser.getCSDb("release", $(this).attr("data-id"));
 		return false;
@@ -359,7 +365,7 @@ $(function() { // DOM ready
 	/**
 	 * When clicking the 'BACK' button on a specific CSDb page to show the releases again.
 	 */
-	$("#topic-csdb").on("click", "#go-back", function() {
+	$("#topic-csdb,#sticky").on("click", "#go-back", function() {
 		if (cacheBeforeCompo === "" && cacheCSDb === "") {
 			// We have been redirecting recently so the tab must be refreshed properly
 			browser.getCSDb();
@@ -369,6 +375,9 @@ $(function() { // DOM ready
 		// Load the cache again (much faster than calling browser.getCSDb() to regenerate it)
 		$("#topic-csdb").css("visibility", "hidden").empty()
 			.append($this.hasClass("compo") ? cacheBeforeCompo : cacheCSDb);
+		$("#sticky").empty().append($this.hasClass("compo") ? cacheStickyBeforeCompo : cacheSticky);
+		// Adjust drop-down box to the sort setting
+		$("#dropdown-sort-csdb").val(cacheDDCSDbSort);
 		// Also set scroll position to where we clicked last time
 		$("#page").mCustomScrollbar("scrollTo",
 			($this.hasClass("compo") ? cachePosBeforeCompo : cacheTabScrollPos), { scrollInertia: 0 });
@@ -383,7 +392,7 @@ $(function() { // DOM ready
 	 * 
 	 * NOTE: This version is used where the release page had a link to the SID tune page.
 	 */
-	$("#topic-csdb").on("click", "#go-back-init", function() {
+	$("#topic-csdb,#sticky").on("click", "#go-back-init", function() {
 		browser.getCSDb("sid", $(this).attr("data-id"));
 	});
 
@@ -392,6 +401,7 @@ $(function() { // DOM ready
 	 */
 	$("#topic-csdb").on("click", "#show-compo", function() {
 		cacheBeforeCompo = $("#topic-csdb").html();
+		cacheStickyBeforeCompo = $("#sticky").html();
 		cachePosBeforeCompo = tabScrollPos;
 		$this = $(this);
 		browser.getCompoResults($this.attr("data-compo"), $this.attr("data-id"), $this.attr("data-mark"));
@@ -438,7 +448,7 @@ $(function() { // DOM ready
 		} else
 			ClickAndScrollToSID(fullname);
 		// Clear caches to force proper refresh of CSDb tab after redirecting 
-		cacheBeforeCompo = cacheCSDb = "";
+		cacheBeforeCompo = cacheCSDb = cacheSticky = cacheStickyBeforeCompo = "";
 		UpdateURL();
 		return false;
 	});
@@ -584,6 +594,8 @@ $(function() { // DOM ready
 	// Show a specific CSDb entry (only loads the content of the CSDb tab)
 	if (typeCSDb === "sid" || typeCSDb === "release") {
 		browser.getCSDb(typeCSDb, idCSDb, false);
+		$("#sticky").show();					// Show sticky header
+		$("#page").addClass("big-logo-csdb");	// Displace the big logo
 	}
 
 	// Turn off the STIL box if the STIL tab was selected
@@ -625,6 +637,10 @@ function ShowDexterScrollbar(topic) {
 				onCreate: function() {
 					// Adjust scrollbar height to fit the up/down arrows perfectly
 					$("#page .mCSB_scrollTools").css("height", $("#page").height() + 13);
+					// Also trigger a resize to be sure it fits
+					setTimeout(function(){
+						$(window).trigger("resize");
+					},1);
 				},
 				whileScrolling: function() {
 					tabScrollPos = this.mcs.top;

@@ -270,16 +270,22 @@ if ($csdb_type == 'sid') {
 			'</table>';
 	}
 
-	// Now build the HTML
-	$html = '<h2 style="display:inline-block;margin-top:0;">'.$csdb->SID->Name.'</h2>'.
-		'<a href="//deepsid.chordian.net?tab=csdb&csdbtype=sid&csdbid='.$csdb->SID->ID.'" title="Permalink">'.$svg_permalink.'</a><br />'.
-		$used_by_releases.
-		'<div id="corner-icons">'.
-			'<a href="https://csdb.dk/sid/?id='.$csdb->SID->ID.'" title="See this at CSDb" target="_blank"><svg class="outlink" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg></a>'.
-		'</div>';
+	// Build the sticky header HTML for the '#sticky' DIV
+	$sticky = '<h2 style="display:inline-block;margin-top:0;">'.$csdb->SID->Name.'</h2>'.
+	'<a href="//deepsid.chordian.net?tab=csdb&csdbtype=sid&csdbid='.$csdb->SID->ID.'" title="Permalink">'.$svg_permalink.'</a>'.
+	'<div id="corner-icons">'.
+		'<a href="https://csdb.dk/sid/?id='.$csdb->SID->ID.'" title="See this at CSDb" target="_blank"><svg class="outlink" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg></a>'.
+	'</div>';
+
+	// And now the body HTML for the '#page' DIV
+	$html = $used_by_releases;
 
 	if (!empty($user_comments) && $amount_releases == 0)
 		$amount_releases = -1; // There are at least comments present in top
+
+	// NOTE: A PHP error may show up in LOCALHOST for very big release lists (such as a lot of those for Rob
+	// Hubbard's game tunes like e.g. "Crazy Comets") but this is not a problem online. Whatever constant is
+	// too low in LOCALHOST is obviously set higher by the web hotel.
 
 } else if ($csdb_type == 'release') {
 
@@ -480,10 +486,15 @@ if ($csdb_type == 'sid') {
 	$comment_button = '<button id="csdb-comment" data-type="release" data-id="'.$csdb->Release->ID.'">Comment</button>'.
 		'<small style="color:#969787;">Shared for all types of comment sections.</small><br />';
 
-	// Now build the HTML
-	$html = '<h2 style="display:inline-block;margin-top:0;">'.$csdb->Release->Name.'</h2>'.$go_back.
-		'<a href="https://deepsid.chordian.net?tab=csdb&csdbtype=release&csdbid='.$csdb->Release->ID.'" title="Permalink">'.$svg_permalink.'</a><br />'.
-		'<table style="border:none;margin-bottom:0;"><tr>'.
+	// Build the sticky header HTML for the '#sticky' DIV
+	$sticky = '<h2 style="display:inline-block;margin-top:0;">'.$csdb->Release->Name.'</h2>'.$go_back.
+		'<a href="https://deepsid.chordian.net?tab=csdb&csdbtype=release&csdbid='.$csdb->Release->ID.'" title="Permalink">'.$svg_permalink.'</a>'.
+		'<div id="corner-icons">'.
+			'<a href="https://csdb.dk/release/?id='.$csdb->Release->ID.'" title="See this at CSDb" target="_blank"><svg class="outlink" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg></a>'.
+		'</div>';		
+
+	// And now the body HTML for the '#page' DIV
+	$html = '<table style="border:none;margin-bottom:0;"><tr>'.
 			'<td style="padding:0;border:none;width:384px;">'.
 				'<img class="screenshot" src="'.$screenshot.'" alt="'.$csdb->Release->Name.'" />'.
 			'</td>'.
@@ -506,10 +517,7 @@ if ($csdb_type == 'sid') {
 		$goofs.
 		$hidden_parts.
 		$user_comments.
-		$comment_button.
-		'<div id="corner-icons">'.
-			'<a href="https://csdb.dk/release/?id='.$csdb->Release->ID.'" title="See this at CSDb" target="_blank"><svg class="outlink" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg></a>'.
-		'</div>';
+		$comment_button;
 }
-echo json_encode(array('status' => 'ok', 'html' => $html.'<i><small>Generated using the <a href="https://csdb.dk/webservice/" target="_blank">CSDb web service</a></small></i>', 'count' => $amount_releases, 'entries' => $sid_entries));
+echo json_encode(array('status' => 'ok', 'sticky' => $sticky, 'html' => $html.'<i><small>Generated using the <a href="https://csdb.dk/webservice/" target="_blank">CSDb web service</a></small></i>', 'count' => $amount_releases, 'entries' => $sid_entries));
 ?>

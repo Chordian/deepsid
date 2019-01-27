@@ -1811,6 +1811,11 @@ input[type=range]::-ms-track {
 		z-index: 2;
 	}
 
+		/* Move the big logo crawl up under the white sticky header bar */
+		.big-logo-csdb {
+			background-position-y: -53px !important;
+		}
+
 		#page h2:first-child {
 			margin-top: 140px;
 		}
@@ -2140,7 +2145,20 @@ input[type=range]::-ms-track {
 			max-width: 250px;
 		}
 
-		#page .ext .permalink {
+		/* Container for a sticky white top header box (used by e.g. the 'CSDb' tab) */
+		#sticky {
+			display: none;
+			position: relative;
+			padding: 8px 10px;
+			height: 51px;
+			border: 1px solid #c8c8b9;
+			border-bottom: none;
+			background: #fff; /* url(../images/biglogo.png) -14px -2px / 890px no-repeat; */
+			z-index: 2;
+		}
+
+		#page .ext .permalink,
+		#sticky .permalink {
 			width: 12px;
 			height: 12px;
 			fill: #c4c5b3;
@@ -2156,6 +2174,11 @@ input[type=range]::-ms-track {
 			height: 24px;
 			text-align: right;
 		}
+
+			#sticky #corner-icons {
+				top: 12px;
+				right: 14px;
+			}
 
 			#corner-icons svg {
 				width: 24px;
@@ -2370,7 +2393,8 @@ input[type=range]::-ms-track {
 				top: 31px;
 			}
 
-			#page .ext button {
+			#page .ext button,
+			#sticky button {
 				font-size: 11px;
 				height: 21px;
 				line-height: 22px;

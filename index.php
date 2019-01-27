@@ -313,6 +313,7 @@
 					<div class="tab right unselectable" data-topic="faq">FAQ</div>
 					<div class="tab right unselectable" data-topic="about">About</div>
 				</div>
+				<div id="sticky"></div>
 				<div id="page">
 
 					<!--<img id="loading-dexter" src="images/loading.svg" style="display:none;" alt="" />-->
@@ -841,6 +842,13 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>January 27, 2019</h3>
+						<ul>
+							<li>The headers on all CSDb pages are now in a sticky white box. This makes it possible to go
+								back to the previous CSDb page without having to scroll up to the top first.</li>
+							<li>The <code>Decent</code> and <code>Good</code> modes are now ready for letter folder <code>P</code> in MUSICIANS.</li>
+						</ul>
 
 						<h3>January 26, 2019</h3>
 						<ul>

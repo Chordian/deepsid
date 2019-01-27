@@ -164,18 +164,20 @@ $user_comments = isset($csdb->Event->UserComment)
 
 $comment_button = '<button id="csdb-comment" data-type="event" data-id="'.$_GET['id'].'">Comment</button><br />';
 
-// Now build the HTML
-$html = '<h2 style="display:inline-block;margin-top:0;">'.$csdb->Event->Name.'</h2>'.
-	'<button id="go-back" class="compo">Back</button><br/>'.
-	'<p style="position:relative;top:-20px;">'.$date_and_country.'</p>'.
-	'<p style="position:relative;top:-12px;">'.$event_image.'</p>'.
-	'<h3 style="margin-top:-8px;">'.$_GET['compo'].' Competition results:</h3>'.
-	$participants.
-	$user_comments.
-	$comment_button.
+// Build the sticky header HTML for the '#sticky' DIV
+$sticky = '<h2 style="display:inline-block;margin-top:0;">'.$csdb->Event->Name.'</h2>'.
+	'<button id="go-back" class="compo">Back</button>'.
 	'<div id="corner-icons">'.
 		'<a href="https://csdb.dk/event/?id='.$csdb->Event->ID.'" title="See this at CSDb" target="_blank"><svg class="outlink" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg></a>'.
 	'</div>';
 
-echo json_encode(array('status' => 'ok', 'html' => $html.'<i><small>Generated using the <a href="https://csdb.dk/webservice/" target="_blank">CSDb web service</a></small></i>'));
+// And now the body HTML for the '#page' DIV
+$html = '<p style="position:relative;top:-20px;margin-top:16px;">'.$date_and_country.'</p>'.
+	'<p style="position:relative;top:-12px;">'.$event_image.'</p>'.
+	'<h3 style="margin-top:-8px;">'.$_GET['compo'].' Competition results:</h3>'.
+	$participants.
+	$user_comments.
+	$comment_button;
+
+echo json_encode(array('status' => 'ok', 'sticky' => $sticky, 'html' => $html.'<i><small>Generated using the <a href="https://csdb.dk/webservice/" target="_blank">CSDb web service</a></small></i>'));
 ?>
