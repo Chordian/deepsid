@@ -158,7 +158,7 @@ try {
 }
 
 $html =
-	'<div style="text-align:center;"><h2>Behold!&nbsp;&nbsp;You now find yourself in DeepSID.</h2></div>'.
+	'<div id="root-logo" style="height:148px;"></div>'.
 	//'<div class="root-wide good-news">'.$important.'</div>'.
 	// Recommendations
 	'<table class="root rec"><tr>'.

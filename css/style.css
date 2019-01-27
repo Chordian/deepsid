@@ -1816,6 +1816,10 @@ input[type=range]::-ms-track {
 			background: #f7f8f5 url(../images/biglogo.png) -14px -2px / 890px no-repeat !important;
 		}
 
+		#root-logo {
+			background: url(../images/biglogo.png) 0 0 / 840px no-repeat;
+		}
+
 		/* Tabs with no big logo should start at the top */
 		#page h2:first-child {
 			margin-top: 0;
