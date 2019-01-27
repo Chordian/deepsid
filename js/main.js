@@ -278,8 +278,8 @@ $(function() { // DOM ready
 		$("#topic-"+topic).show();
 		ShowDexterScrollbar(topic);
 
-		// Show the big logo for certain tabs (and only for the 'Profile' tab when its root page is shown)
-		if (["about", "faq", "changes"].includes(topic) || (topic == "profile" && browser.path == ""))
+		// Show the big logo for the informational tabs only
+		if (["about", "faq", "changes"].includes(topic))
 			$("#page").addClass("big-logo");
 
 		// Toggle the STIL box depending on whether the 'STIL' tab was clicked or not
@@ -596,7 +596,6 @@ $(function() { // DOM ready
 	if (typeCSDb === "sid" || typeCSDb === "release") {
 		browser.getCSDb(typeCSDb, idCSDb, false);
 		$("#sticky").show();					// Show sticky header
-		$("#page").addClass("big-logo-csdb");	// Displace the big logo
 	}
 
 	// Turn off the STIL box if the STIL tab was selected

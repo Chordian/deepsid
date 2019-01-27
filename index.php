@@ -848,6 +848,8 @@
 								back to the previous CSDb page without having to scroll up to the top first.</li>
 							<li>The <code>Decent</code> and <code>Good</code> modes are now ready for letter folder <code>P</code> in MUSICIANS.</li>
 							<li>Fixed the CSDb release list sort drop-down not remembering its setting when going back.</li>
+							<li>The big watermark logo is now only visible in the <code>About</code>, <code>FAQ</code>
+								and <code>Changes</code> tabs.</li>
 						</ul>
 
 						<h3>January 26, 2019</h3>

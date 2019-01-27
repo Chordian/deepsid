@@ -158,8 +158,8 @@ try {
 }
 
 $html =
-	'<div style="position:relative;top:-2px;left:135px;margin-bottom:150px;font:normal 12px Montserrat,sans-serif;color:#d3d4c6;"><i>Behold!&nbsp;&nbsp;You now find yourself in &ndash;</i></div>'.
-	'<div class="root-wide good-news">'.$important.'</div>'.
+	'<div style="text-align:center;"><h2>Behold!&nbsp;&nbsp;You now find yourself in DeepSID.</h2></div>'.
+	//'<div class="root-wide good-news">'.$important.'</div>'.
 	// Recommendations
 	'<table class="root rec"><tr>'.
 		'<td style="max-width:10px;">'.
