@@ -1807,18 +1807,24 @@ input[type=range]::-ms-track {
 		padding: 10px;
 		border: 1px solid #c8c8b9;
 		border-radius: 1px;
-		background: #f7f8f5 url(../images/biglogo.png) -14px -2px / 890px no-repeat;
+		background: #f7f8f5;
 		z-index: 2;
 	}
 
 		/* Move the big logo crawl up under the white sticky header bar */
-		.big-logo-csdb {
-			background-position-y: -53px !important;
+		.big-logo {
+			background: #f7f8f5 url(../images/biglogo.png) -14px -2px / 890px no-repeat !important;
 		}
 
+		/* Tabs with no big logo should start at the top */
 		#page h2:first-child {
-			margin-top: 140px;
+			margin-top: 0;
 		}
+
+			/* Tabs with the big logo present should leave room for it to begin with */
+			#dexter .big-logo h2:first-child {
+				margin-top: 140px !important;
+			}
 
 		#page .h2-note {
 			position: relative;
@@ -1831,7 +1837,7 @@ input[type=range]::-ms-track {
 	#disqus-title {
 		display: block;
 		/*font-size: 19px;*/
-		margin: 140px 0 14px;
+		margin: 20px 0 14px;
 		color: #68695a; /* #474937 */
 	}
 

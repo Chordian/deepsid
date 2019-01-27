@@ -265,7 +265,7 @@ $(function() { // DOM ready
 		var $this = $(this);
 		if ($this.hasClass("selected") || $this.hasClass("disabled")) return false;
 
-		$("#page").mCustomScrollbar("destroy").removeClass("big-logo-csdb");
+		$("#page").mCustomScrollbar("destroy").removeClass("big-logo");
 
 		// Select the new tab
 		$("#tabs .tab").removeClass("selected");
@@ -278,6 +278,10 @@ $(function() { // DOM ready
 		$("#topic-"+topic).show();
 		ShowDexterScrollbar(topic);
 
+		// Show the big logo for certain tabs (and only for the 'Profile' tab when its root page is shown)
+		if (["about", "faq", "changes"].includes(topic) || (topic == "profile" && browser.path == ""))
+			$("#page").addClass("big-logo");
+
 		// Toggle the STIL box depending on whether the 'STIL' tab was clicked or not
 		topic === "stil" ? $("#stil").hide() : $("#stil").show();
 		$(window).trigger("resize", true);
@@ -289,7 +293,6 @@ $(function() { // DOM ready
 		if (topic === "csdb") {
 			$("#note-csdb").hide()					// Hide notification
 			$("#sticky").show();					// Show sticky header
-			$("#page").addClass("big-logo-csdb");	// Displace the big logo
 		};
 
 		// If 'GB64' tab is selected then hide the notification on it
@@ -587,9 +590,7 @@ $(function() { // DOM ready
 
 	// Select and show a "dexter" page tab	
 	selectTab = selectTab !== "" ? selectTab : "profile";
-	$("#dexter .tab[data-topic='"+selectTab+"']").addClass("selected");
-	ShowDexterScrollbar();
-	$("#topic-"+selectTab).show(); // Must be after the custom scrollbar has been created
+	$("#tab-"+selectTab).trigger("click");
 
 	// Show a specific CSDb entry (only loads the content of the CSDb tab)
 	if (typeCSDb === "sid" || typeCSDb === "release") {
