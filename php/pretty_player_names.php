@@ -57,6 +57,7 @@ $prettyPlayerNames = array(
 	'Frank_Tout' =>				'Frank Tout\'s player',
 	'Fred_Gray' =>				'Fred Gray\'s player',
 	'Gavin_Graham' =>			'Gavin Graham\'s player',
+	'Gavin_Raeburn' =>			'Gavin Raeburn\'s player',
 	'Georg_Brandt' =>			'Georg Brandt\'s player',
 	'Gilles_Soulet' =>			'Gilles Soulet\'s player',
 	// Don't add for standalone 'Glover' here

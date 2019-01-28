@@ -221,7 +221,7 @@ Browser.prototype = {
 
 							// But also update the relevant array for later filtering/sorting
 							var isFile = $td.parent("tr").find(".name").hasClass("file"),
-								endName = ratedName.split("/").slice(-1)[0];
+								endName = this.isSymlist ? ratedName : ratedName.split("/").slice(-1)[0];
 							if (isFile) {
 								$.each(this.playlist, function(i, file) {
 									if (file.filename == endName) {

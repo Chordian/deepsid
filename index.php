@@ -842,6 +842,11 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>January 28, 2019</h3>
+						<ul>
+							<li>Fixed a bug where recently set ratings were not updated after sorting a playlist.</li>
+						</ul>
+
 						<h3>January 27, 2019</h3>
 						<ul>
 							<li>The headers on all CSDb pages are now in a sticky white box. This makes it possible to go
