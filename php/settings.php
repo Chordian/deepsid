@@ -11,6 +11,7 @@
  * 
  * @uses		$_POST['skiptune']		0 or 1
  * @uses		$_POST['marktune']		0 or 1
+ * @uses		$_POST['skipbad']		0 or 1
  */
 
 require_once("class.account.php"); // Includes setup
@@ -39,11 +40,13 @@ try {
 		$settings = array(
 			'skiptune' =>	0,
 			'marktune' =>	0,
+			'skipbad' =>	0,
 		);
 
 	// Adjust settings
 	if (isset($_POST['skiptune'])) $settings['skiptune'] = (int)$_POST['skiptune'];
 	if (isset($_POST['marktune'])) $settings['marktune'] = (int)$_POST['marktune'];
+	if (isset($_POST['skipbad'])) $settings['skipbad'] = (int)$_POST['skipbad'];
 
 	if ($_POST) {
 		// Store the settings

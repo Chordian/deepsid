@@ -120,15 +120,19 @@ Controls.prototype = {
 
 			// The DO blocks below makes sure disabled rows are skipped until
 			// a playable row is found (unless a list boundary is hit first)
+			var songRating = 0;
 			if (id == "skip-next") {
 				do {
 					browser.songPos++;
+					songRating = browser.playlist[browser.songPos].rating;
 					if (browser.songPos == browser.playlist.length - 1) {
 						// At the end of the list
 						$("#skip-next").addClass("disabled");
 						break;
 					}
-				} while ($("#songs tr").eq(browser.songPos + browser.subFolders).hasClass("disabled"));
+				} while ($("#songs tr").eq(browser.songPos + browser.subFolders).hasClass("disabled") || 
+					(GetSettingValue("skip-bad") && typeof autoCenter !== "undefined" && (songRating == 1 || songRating == 2)));
+					// The 'autoCenter' check above is just to make sure it comes from auto-progress
 			} else {
 				do {
 					browser.songPos--;

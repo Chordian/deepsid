@@ -535,6 +535,11 @@
 								<button id="setting-mark-tune" class="button-edit button-toggle button-off">Off</button>
 								<label for="setting-mark-tune" class="unselectable">Auto-progress should select and center the next tune as it proceeds to it</label>
 
+								<div class="space"></div>
+
+								<button id="setting-skip-bad" class="button-edit button-toggle button-off">Off</button>
+								<label for="setting-skip-bad" class="unselectable">Auto-progress should automatically skip the tunes I have rated two stars or less</label>
+
 							</div>
 						<?php endif ?>
 					</div>
@@ -845,6 +850,7 @@
 						<h3>January 28, 2019</h3>
 						<ul>
 							<li>Fixed a bug where recently set ratings were not updated after sorting a playlist.</li>
+							<li>New toggle in settings: Auto-progress should automatically skip the tunes I have rated two stars or less.</li>
 						</ul>
 
 						<h3>January 27, 2019</h3>
