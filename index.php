@@ -504,6 +504,37 @@
 					</div>
 
 					<div id="topic-stil" class="topic" style="display:none;">
+						<h2>STIL / Lyrics</h2>
+						<p>This tab will sometimes show one of two things depending on the SID collection you're browsing.
+							It will display the same contents as the box just above the player controls (which is collapsed
+							when this tab is selected).
+						</p>
+
+						<h3>STIL</h3>
+						<p>	
+							If you're clicking a song in the <b>High Voltage SID Collection</b> that has a STIL entry, this will be
+							shown here as well as in the box. Any sub tunes mentioned have green buttons that you can click.
+						</p>
+						<p>
+							STIL stands for <i>SID Tune Information List</i> and contains information beyond the standard
+							<b>TITLE</b>, <b>AUTHOR</b>, and <b>RELEASED</b> fields. This includes cover information,
+							interesting facts, useless trivia, comments by the composers themselves, etc. The STIL, though,
+							is limited to factual data and does not try to provide an encyclopedia about every original artist.
+						</p>
+						<p>
+							For more information about STIL, please refer to <a href="https://www.hvsc.c64.org/download/C64Music/DOCUMENTS/STIL.faq">this FAQ</a>.
+						</p>
+
+						<h3>Lyrics</h3>
+						<p>	
+							If you're clicking a song in <b>Compute's Gazette SID Collection</b> that has lyrics, this will
+							be shown here and in the box.
+						</p>
+						<p>
+							Technically, lyrics are always added in a separate WDS file that accompanies the MUS file that
+							contains the actual music data. However, not all MUS files have a WDS file. Roughly one third
+							of the MUS files in the collection have lyrics.
+						</p>
 					</div>
 
 					<div id="topic-settings" class="topic ext" style="display:none;">
