@@ -158,7 +158,7 @@ try {
 }
 
 $html =
-	'<div id="root-logo" style="height:148px;"></div>'.
+	'<div style="height:149px;"></div>'.
 	//'<div class="root-wide good-news">'.$important.'</div>'.
 	// Recommendations
 	'<table class="root rec"><tr>'.

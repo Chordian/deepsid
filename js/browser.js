@@ -961,6 +961,7 @@ Browser.prototype = {
 
 		if (this.path == "" && overridePath == "") {
 			// Welcome page for the root
+			$("#page").addClass("big-logo");
 			this.composer = $.get("php/root.php", function(data) {
 				this.validateData(data, function(data) {
 
@@ -990,6 +991,7 @@ Browser.prototype = {
 			}.bind(this));
 		} else {
 			// Composer profile page
+			$("#page").removeClass("big-logo");
 			this.composer = $.get("php/composer.php", {
 				fullname: (overridePath == "" ? this.path.substr(1) : overridePath)
 			}, function(data) {
