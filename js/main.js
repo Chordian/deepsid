@@ -280,7 +280,7 @@ $(function() { // DOM ready
 		ShowDexterScrollbar(topic);
 
 		// Show the big logo for the informational tabs only
-		if (["about", "faq", "changes"].includes(topic) || topic == "profile" && browser.path == "")
+		if (["about", "faq", "changes"].includes(topic) || topic == "profile" && browser.path == "" && !browser.isSearching)
 			$("#page").addClass("big-logo");
 
 		// Toggle the STIL box depending on whether the 'STIL' tab was clicked or not

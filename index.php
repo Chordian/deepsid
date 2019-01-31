@@ -878,6 +878,16 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>January 31, 2019</h3>
+						<ul>
+							<li>Fixed a bug that erroneously showed the big logo when searching in the root.</li>
+						</ul>
+
+						<h3>January 29, 2019</h3>
+						<ul>
+							<li>Added information in the <code>STIL</code> tab.</li>
+						</ul>
+
 						<h3>January 28, 2019</h3>
 						<ul>
 							<li>Fixed a bug where recently set ratings were not updated after sorting a playlist.</li>
