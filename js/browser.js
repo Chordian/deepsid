@@ -961,7 +961,8 @@ Browser.prototype = {
 
 		if (this.path == "" && overridePath == "") {
 			// Welcome page for the root
-			$("#page").addClass("big-logo");
+			if ($("#tabs .selected").attr("data-topic") === "profile")
+				$("#page").addClass("big-logo");
 			this.composer = $.get("php/root.php", function(data) {
 				this.validateData(data, function(data) {
 
