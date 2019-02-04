@@ -292,7 +292,7 @@
 						<span>&#9642</span>
 					<!--<a href="https://www.lemon64.com/forum/viewtopic.php?t=68056">Lemon64</a>
 						<span>&#9642</span>-->
-					<a href="https://twitter.com/jchuus">Twitter</a>
+					<a href="https://twitter.com/chordian">Twitter</a>
 						<span>&#9642</span>
 					<a href="https://www.facebook.com/groups/deepsid/">Facebook</a>
 						<span>&#9642</span>
@@ -877,6 +877,11 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>February 4, 2019</h3>
+						<ul>
+							<li>Fixed a bug where auto-progress skipping bad tunes would still play the last tune in the bottom.</li>
+						</ul>
 
 						<h3>January 31, 2019</h3>
 						<ul>

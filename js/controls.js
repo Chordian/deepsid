@@ -128,6 +128,9 @@ Controls.prototype = {
 					if (browser.songPos == browser.playlist.length - 1) {
 						// At the end of the list
 						$("#skip-next").addClass("disabled");
+						// Don't let the setting skipping bad tunes play the one in the bottom (bug fix)
+						if (GetSettingValue("skip-bad") && typeof autoCenter !== "undefined" && (songRating == 1 || songRating == 2))
+							return false;
 						break;
 					}
 				} while ($("#songs tr").eq(browser.songPos + browser.subFolders).hasClass("disabled") || 
