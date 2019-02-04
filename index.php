@@ -881,6 +881,9 @@
 						<h3>February 4, 2019</h3>
 						<ul>
 							<li>Fixed a bug where auto-progress skipping bad tunes would still play the last tune in the bottom.</li>
+							<li>Tweaked how SID handlers stop playing at the bottom of a folder list.</li>
+							<li>The <code>Download File</code> context menu option now stop playing, in case an offline player
+								is about to take over.</li>
 						</ul>
 
 						<h3>January 31, 2019</h3>

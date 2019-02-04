@@ -129,8 +129,11 @@ Controls.prototype = {
 						// At the end of the list
 						$("#skip-next").addClass("disabled");
 						// Don't let the setting skipping bad tunes play the one in the bottom (bug fix)
-						if (GetSettingValue("skip-bad") && typeof autoCenter !== "undefined" && (songRating == 1 || songRating == 2))
+						if (GetSettingValue("skip-bad") && typeof autoCenter !== "undefined" && (songRating == 1 || songRating == 2)) {
+							$("#stop").trigger("mouseup");
+							SID.stop();
 							return false;
+						}
 						break;
 					}
 				} while ($("#songs tr").eq(browser.songPos + browser.subFolders).hasClass("disabled") || 

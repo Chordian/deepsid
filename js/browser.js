@@ -363,6 +363,7 @@ Browser.prototype = {
 							} else {
 								// At the end of everything
 								$("#stop").trigger("mouseup");
+								SID.stop();
 								$("#songs tr").removeClass("selected");
 							}
 						}
@@ -1303,6 +1304,8 @@ Browser.prototype = {
 		var action = $target.attr("data-action");
 		switch (action) {
 			case "download-file":
+				// Stop playing in DeepSID in case an external SID player is going to take over now
+				$("#stop").trigger("click");
 				var symChar = this.path.substr(1, 1);
 				// Force the browser to download it using an invisible <iframe>
 				$("#download").prop("src", this.ROOT_HVSC + '/' + (this.isSearching || symChar == "!" || symChar == "$" ? this.contextSID : this.path.substr(1)+"/"+this.contextSID));
