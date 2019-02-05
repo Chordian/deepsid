@@ -72,11 +72,12 @@ Controls.prototype = {
 	 * When releasing a mouse button.
 	 * 
 	 * @param {*} event 
-	 * @param {boolean} autoCenter	If specified and FALSE, don't autocenter the SID row in the browser list.
+	 * @param {boolean} autoProgress	If specified, auto-progress did the request, not a human.
 	 */
-	onMouseUp: function(event, autoCenter) {
+	onMouseUp: function(event, autoProgress) {
 		var target = event.target;
 		var id = target.id;
+		var isAutoProgress = typeof autoProgress !== "undefined";
 
 		if ($(target).hasClass("disabled") || this.buttonTimer) return false;
 
@@ -99,6 +100,18 @@ Controls.prototype = {
 			// Pick a subtune
 			id == "subtune-plus" ? this.subtuneCurrent++ : this.subtuneCurrent--;
 			$("#time-bar").empty().append('<div></div>');
+
+			// Keep skipping subtunes if a setting is set to ignore those of less than 10 seconds
+			if (isAutoProgress && GetSettingValue("skip-short"))  {
+				while (browser.getLength(this.subtuneCurrent) < 10) {
+					this.subtuneCurrent++;
+					if (this.subtuneCurrent >= this.subtuneMax) {
+						$("#skip-next").trigger("mouseup", false);
+						return false;
+					}
+				}
+			}
+
 			browser.showSpinner($("#folders tr").eq(browser.subFolders + browser.songPos).find("td.sid"));
 			SID.load(this.subtuneCurrent, browser.getLength(this.subtuneCurrent), undefined, function() {
 				browser.clearSpinner();
@@ -110,6 +123,7 @@ Controls.prototype = {
 			this.updateSubtuneText();
 			$(id == "subtune-plus" && !SID.emulatorFlags.offline ? "#subtune-minus" : "#subtune-plus").removeClass("disabled");
 		}
+
 		if (id.substr(0, 4) == "skip") {
 			SID.setVolume(0);
 			browser.clearSpinner();
@@ -120,25 +134,35 @@ Controls.prototype = {
 
 			// The DO blocks below makes sure disabled rows are skipped until
 			// a playable row is found (unless a list boundary is hit first)
-			var songRating = 0;
+			var songRating = songLength = 0, moreSubtunes = false;
 			if (id == "skip-next") {
 				do {
 					browser.songPos++;
 					songRating = browser.playlist[browser.songPos].rating;
+					songLength = browser.getLength(browser.playlist[browser.songPos].startsubtune);
+					moreSubtunes = browser.playlist[browser.songPos].startsubtune < browser.playlist[browser.songPos].subtunes - 1;
+
 					if (browser.songPos == browser.playlist.length - 1) {
 						// At the end of the list
 						$("#skip-next").addClass("disabled");
-						// Don't let the setting skipping bad tunes play the one in the bottom (bug fix)
-						if (GetSettingValue("skip-bad") && typeof autoCenter !== "undefined" && (songRating == 1 || songRating == 2)) {
-							$("#stop").trigger("mouseup");
-							SID.stop();
-							return false;
-						}
+						// Don't play the song in the bottom if a setting is supposed to skip it
+						if (isAutoProgress) {
+							if ((GetSettingValue("skip-bad") && (songRating == 1 || songRating == 2)) ||
+								(GetSettingValue("skip-short") && songLength < 10 && !moreSubtunes)) {
+								$("#stop").trigger("mouseup");
+								SID.stop();
+								return false;
+							} else if (GetSettingValue("skip-short") && songLength < 10) {
+								// The default is too short, but what about the subsequent sub tunes in it?
+								$("#subtune-plus").trigger("mouseup", false);
+								return false;
+							}
+						}	
 						break;
 					}
 				} while ($("#songs tr").eq(browser.songPos + browser.subFolders).hasClass("disabled") || 
-					(GetSettingValue("skip-bad") && typeof autoCenter !== "undefined" && (songRating == 1 || songRating == 2)));
-					// The 'autoCenter' check above is just to make sure it comes from auto-progress
+					(isAutoProgress && GetSettingValue("skip-bad") && (songRating == 1 || songRating == 2)) ||
+					(isAutoProgress && GetSettingValue("skip-short") && songLength < 10 && !moreSubtunes));
 			} else {
 				do {
 					browser.songPos--;
@@ -152,10 +176,22 @@ Controls.prototype = {
 
 			if ($("#songs tr").eq(browser.songPos + browser.subFolders).hasClass("disabled")) return false;
 
+			var subtune = browser.playlist[browser.songPos].startsubtune;
+			// The default is too short, but what about the subsequent sub tunes in it?
+			if (isAutoProgress && GetSettingValue("skip-short") && songLength < 10) {
+				while (browser.getLength(subtune) < 10) {
+					subtune++;
+					if (subtune >= browser.playlist[browser.songPos].subtunes - 1) {
+						// The rest of the sub tunes were all too short - NEXT!
+						$("#skip-next").removeClass("disabled").trigger("mouseup", false);
+						return false;
+					}
+				}
+			}
+
 			// Show loading spinner on the new row we're trying to skip to
 			browser.showSpinner($("#folders tr").eq(browser.subFolders + browser.songPos).find("td.sid"));
 
-			var subtune = browser.playlist[browser.songPos].startsubtune;
 			SID.load(subtune, browser.getLength(subtune), browser.playlist[browser.songPos].fullname, function(error) {
 
 				browser.clearSpinner();
@@ -198,7 +234,7 @@ Controls.prototype = {
 				$("#folders tr").eq(browser.subFolders + browser.songPos).addClass("selected");
 
 				// A timed out tune should only auto-center if a setting demands it
-				if (GetSettingValue("mark-tune") || typeof autoCenter === "undefined") {
+				if (!isAutoProgress || GetSettingValue("mark-tune")) {
 					var rowPos = $("tr").eq($("tr.selected").index())[0].offsetTop;
 					var halfway = $("#folders").height() / 2 - 26; // Last value is half of SID file row height
 					if (browser.isMobile)

@@ -312,6 +312,19 @@ small.u2 { margin-left: 2px; }
 		padding: 20px 16px;
 	}
 
+		#topic-settings h3 {
+			margin-top: 0;
+		}
+
+		#topic-settings label b {
+			color: #000;
+		}
+
+		#topic-settings .edit p {
+			font-size: 14px;
+			margin-bottom: 16px !important;
+		}
+	
 	#waveform-colors {
 		position: absolute;
 		top: 1px;

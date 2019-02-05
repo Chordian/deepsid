@@ -15,6 +15,8 @@ $(function() { // DOM ready
 			SettingToggle("skip-tune", data.settings.skiptune);
 			SettingToggle("mark-tune", data.settings.marktune);
 			SettingToggle("skip-bad", data.settings.skipbad);
+			SettingToggle("skip-long", data.settings.skiplong);
+			SettingToggle("skip-short", data.settings.skipshort);
 		});
 	}.bind(this));
 
@@ -329,6 +331,10 @@ $(function() { // DOM ready
 				settings.marktune = state ? 1 : 0;
 			else if (event.target.id === "setting-skip-bad")
 				settings.skipbad = state ? 1 : 0;
+			else if (event.target.id === "setting-skip-long")
+				settings.skiplong = state ? 1 : 0;
+			else if (event.target.id === "setting-skip-short")
+				settings.skipshort = state ? 1 : 0;
 
 			$.post("php/settings.php", settings, function(data) {
 				browser.validateData(data);

@@ -558,18 +558,31 @@
 
 								<div class="space splitline"></div>
 
+								<h3>Auto-progress</h3>
+								<p>Determine what will happen when a tune has finished playing.</p>
+
 								<button id="setting-skip-tune" class="button-edit button-toggle button-off">Off</button>
-								<label for="setting-skip-tune" class="unselectable">Auto-progress should proceed to the next song instead of the next sub tune</label>
+								<label for="setting-skip-tune" class="unselectable">Auto-progress should proceed to the <b>next song</b> instead of the next sub tune</label>
 
 								<div class="space"></div>
 
 								<button id="setting-mark-tune" class="button-edit button-toggle button-off">Off</button>
-								<label for="setting-mark-tune" class="unselectable">Auto-progress should select and center the next tune as it proceeds to it</label>
+								<label for="setting-mark-tune" class="unselectable">Auto-progress should <b>select and center</b> the next song as it proceeds to it</label>
 
 								<div class="space"></div>
 
 								<button id="setting-skip-bad" class="button-edit button-toggle button-off">Off</button>
-								<label for="setting-skip-bad" class="unselectable">Auto-progress should automatically skip the tunes I have rated two stars or less</label>
+								<label for="setting-skip-bad" class="unselectable">Auto-progress should automatically skip the songs I have rated <b>two stars or less</b></label>
+
+								<!--div class="space"></div>
+
+								<button id="setting-skip-long" class="button-edit button-toggle button-off">Off</button>
+								<label for="setting-skip-long" class="unselectable">Auto-progress should leave for the next song if playing for <b>more than ten minutes</b></label>-->
+
+								<div class="space"></div>
+
+								<button id="setting-skip-short" class="button-edit button-toggle button-off">Off</button>
+								<label for="setting-skip-short" class="unselectable">Auto-progress should automatically skip songs and sub tunes that lasts <b>less than ten seconds</b></label>
 
 							</div>
 						<?php endif ?>
@@ -877,6 +890,11 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>February 5, 2019</h3>
+						<ul>
+							<li>New toggle in settings: Auto-progress should skip songs and sub tunes that lasts less than ten seconds.</li>
+						</ul>
 
 						<h3>February 4, 2019</h3>
 						<ul>

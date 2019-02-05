@@ -356,7 +356,7 @@ Browser.prototype = {
 							$("#faster").trigger("mouseup"); // Easy there cowboy
 							if (!GetSettingValue("skip-tune") && (ctrls.subtuneCurrent < ctrls.subtuneMax && !$("#subtune-plus").hasClass("disabled"))) {
 								// Next subtune
-								$("#subtune-plus").trigger("mouseup");
+								$("#subtune-plus").trigger("mouseup", false);
 							} else if (this.songPos < (this.playlist.length - 1) && !$("#skip-next").hasClass("disabled")) {
 								// Next song
 								$("#skip-next").trigger("mouseup", false);
@@ -1305,7 +1305,8 @@ Browser.prototype = {
 		switch (action) {
 			case "download-file":
 				// Stop playing in DeepSID in case an external SID player is going to take over now
-				$("#stop").trigger("click");
+				$("#stop").trigger("mouseup");
+				SID.stop();
 				var symChar = this.path.substr(1, 1);
 				// Force the browser to download it using an invisible <iframe>
 				$("#download").prop("src", this.ROOT_HVSC + '/' + (this.isSearching || symChar == "!" || symChar == "$" ? this.contextSID : this.path.substr(1)+"/"+this.contextSID));
