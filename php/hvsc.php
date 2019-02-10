@@ -92,7 +92,7 @@ try {
 					$query = str_replace('"', '', $query);
 
 					$words = explode('_', $query);
-					$include = '';
+					$include = '(';
 					$i_and = $e_and = '';
 					foreach($words as $word) {
 						if (substr($word, 0, 1) == '-') {
@@ -103,28 +103,22 @@ try {
 							$i_and = ' AND ';
 						}
 					}
+					$include .= ')';
+					if (!empty($exclude)) $exclude = ' AND ('.$exclude.')';
 
-$account->LogActivity($include);
-$account->LogActivity($exclude);
+// Also need "all" to search: rating (single digit 1-5 with or without "-"), new (?), country...
+
 					if ($_GET['searchType'] == '#all#') {
 						// Searching ALL should of course include a range of columns
-						$columns = array('fullname', 'player');
-						$inner = $include;
-						$include = '(';
-						$i_or = '';
-						foreach($columns as $column) {
-							$include .= $i_or.str_replace('#all#', $column, $inner);
-							if (!empty($exclude)) $include .= ' AND '.str_replace('#all#', $column, $exclude);
-							$i_or = ') OR (';
+						$columns = $comma = '';
+						foreach(array('fullname', 'author', 'copyright', 'player', 'stil', 'gb64') as $column) {
+							$columns .= $comma.$column.', " "';
+							$comma = ', ';
 						}
-						$include .= ')';
-						$exclude = '';
-					} else {
-						$include = '('.$include.')';
-						if (!empty($exclude)) $exclude = ' AND ('.$exclude.')';
+						// Treating all columns as one long search entity is MUCH easier
+						$include = str_replace('#all#', 'CONCAT('.$columns.')', $include);
+						$exclude = str_replace('#all#', 'CONCAT('.$columns.')', $exclude);
 					}
-$account->LogActivity($include);
-$account->LogActivity($exclude);
 				}
 				$select = $db->query('SELECT fullname FROM hvsc_files WHERE '.$searchContext.' AND '.$include.$exclude.' LIMIT 1000');
 			}
