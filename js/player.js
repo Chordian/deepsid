@@ -842,6 +842,39 @@ SIDPlayer.prototype = {
 	},
 
 	/**
+	 * Return the type of digi, if used by the song. Not all handlers support this.
+	 * 
+	 * @return {string}		Returns a short ID string, or empty if digi is not used.
+	 */
+	getDigiType: function() {
+		switch (this.emulator) {
+			case "websid":
+				return SIDBackend.getDigiTypeDesc();
+			case "jssid":
+			case "soasc":
+			case "download":
+				return "";
+		}
+	},
+
+	/**
+	 * Return the sample rate used by the digi samples, if used by the song. Not all
+	 * handlers support this.
+	 * 
+	 * @return {number}		Returns the sample rate, or 0 if digi is not used.
+	 */
+	getDigiRate: function() {
+		switch (this.emulator) {
+			case "websid":
+				return SIDBackend.getDigiRate();
+			case "jssid":
+			case "soasc":
+			case "download":
+				return 0;
+		}
+	},
+
+	/**
 	 * Return the current 8-bit value of a SID register.
 	 * 
 	 * @param {number} register		Register $D400 to $D41C.

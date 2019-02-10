@@ -891,6 +891,19 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>February 10, 2019</h3>
+						<ul>
+							<li>Upgraded the WebSid emulator. Added diagnostic output for digi samples.</li>
+							<li>The digi type and sample rate is also displayed in the pace field now, if the song uses it.
+								This is only utilized by the WebSid emulator as Hermit's emulator doesn't support digi.</li>
+							<li>The pace field is now dynamically updated whenever a song is playing.</li>
+						</ul>
+
+						<h3>February 6, 2019</h3>
+						<ul>
+							<li>The <code>Decent</code> and <code>Good</code> modes are now ready for letter folder <code>R</code> in MUSICIANS.</li>
+						</ul>
+
 						<h3>February 5, 2019</h3>
 						<ul>
 							<li>New toggle in settings: Auto-progress should skip songs and sub tunes that lasts less than ten seconds.</li>

@@ -340,8 +340,6 @@ Browser.prototype = {
 						this.getGB64();
 						this.reloadDisqus(this.playlist[this.songPos].fullname);
 
-						ctrls.pace(); // CIA/VBI/4x etc.
-
 						UpdateURL();
 						viz.enableAllPianoVoices();
 

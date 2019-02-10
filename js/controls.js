@@ -31,6 +31,8 @@ Controls.prototype = {
 		$("#stil,#topic-stil").on("click", ".subtune", this.onClick.bind(this));
 
 		$("#volume").on("input", this.onInput.bind(this));
+
+		setInterval(this.pace.bind(this), 150); // VBI, 2x, 4x, digi, etc.
 	},
 
 	/**
@@ -116,7 +118,6 @@ Controls.prototype = {
 			SID.load(this.subtuneCurrent, browser.getLength(this.subtuneCurrent), undefined, function() {
 				browser.clearSpinner();
 				if (SID.emulatorFlags.forcePlay) SID.play();
-				setTimeout(this.pace, 1); // CIA/VBI/4x etc.
 				UpdateURL();
 				viz.enableAllPianoVoices();
 			});
@@ -246,8 +247,6 @@ Controls.prototype = {
 				if (error) browser.errorRow();
 				else if (SID.emulatorFlags.forcePlay) SID.play();
 
-				setTimeout(this.pace, 1); // CIA/VBI/4x etc.
-
 			}.bind(this));
 		}
 		if (id.substr(0, 7) == "subtune" || id.substr(0, 4) == "skip") {
@@ -354,7 +353,6 @@ Controls.prototype = {
 						if (this.subtuneCurrent > 0 && !SID.emulatorFlags.offline) $("#subtune-minus").removeClass("disabled");
 						this.updateInfo();
 						if (SID.emulatorFlags.forcePlay) SID.play();
-						setTimeout(this.pace, 1); // CIA/VBI/4x etc.
 					}.bind(this));
 				}
 		}
@@ -596,15 +594,25 @@ Controls.prototype = {
 	},
 
 	/**
-	 * Set the pace of the tune (VBI or multiplier for quickspeed). The value is added
-	 * to a field in the top info box.
+	 * Set the pace of the tune (VBI or multiplier for quickspeed). The value is shown
+	 * in a field in the top info box. If digi is used by the song, the type string
+	 * and sample is prepended too.
+	 * 
+	 * This is called periodically by a 'setInterval' loop when adding events.
 	 */
 	pace: function() {
 		$("#pace").remove();
-		if (SID.emulatorFlags.returnCIA) {
-			var pace = SID.getPace();
-			var timer = pace ? (pace == 1 ? "CIA" : pace+"x") : "VBI";
-			$("#info").append('<span id="pace">'+timer+'</span>');
+		if (this.isPlaying()) {
+			// Constantly poll the handler in case digi stuff comes up
+			var digi = SID.getDigiType() !== ""
+				? 'Digi ('+SID.getDigiType()+') <div>'+SID.getDigiRate()+'</div> Hz / '
+				: "";
+			// Now for how the player is actually called
+			if (SID.emulatorFlags.returnCIA) {
+				var pace = SID.getPace();
+				var timer = pace ? (pace == 1 ? "CIA" : '<div style="width:33px;">'+pace+'x</div>') : "VBI";
+				$("#info").append('<span id="pace">'+digi+timer+'</span>');
+			}
 		}
 	},
 

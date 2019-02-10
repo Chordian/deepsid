@@ -1021,6 +1021,19 @@ input[type=range]::-ms-track {
 	#hvsc-version	{ color: #a8ad95; }
 	#pace			{ bottom: 35px; }
 
+		/* Where the digi sample rate is displayed */
+		#pace div {
+			display: inline-block;
+			width: 40px;
+			padding: 0 3px;
+			border: 0.5px solid #c8c8b9; /* #a8ad95 #c8c8b9 #ced0c0 #d3d4c6 #d7d7cb */
+			border-radius: 2px;
+			color: #555;
+			background: #fff; /* #f0f0ea #f2f2ee #f7f8f5 */
+			text-align: right;
+			line-height: 13.5px;
+		}
+
 	/* Light blue bar indicating all of 64 KB RAM */
 	#memory-bar {
 		overflow: hidden;
