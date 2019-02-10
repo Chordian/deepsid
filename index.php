@@ -262,6 +262,7 @@
 				<img id="loading" src="images/loading.svg" style="display:none;" alt="" />
 				<div id="search">
 					<select id="dropdown-search" name="search-type">
+						<option value="#all#">All</option>
 						<option value="fullname">Filename</option>
 						<option value="author">Author</option>
 						<option value="copyright">Copyright</option>

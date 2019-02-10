@@ -82,6 +82,7 @@ try {
 					$query = $_GET['searchQuery'];
 
 					// Replace spaces ('_') inside quoted queries with '%' and remove the quotes themselves
+					// NOTE: This is actually a weird shortcut and sometimes produce unexpected results.
 					preg_match_all('/"[^"]+"/', $query, $quoted);
 					foreach($quoted[0] as $q) {
 						$adapted = trim(str_replace('_', '%', $q), '"');
@@ -91,7 +92,7 @@ try {
 					$query = str_replace('"', '', $query);
 
 					$words = explode('_', $query);
-					$include = '(';
+					$include = '';
 					$i_and = $e_and = '';
 					foreach($words as $word) {
 						if (substr($word, 0, 1) == '-') {
@@ -102,8 +103,28 @@ try {
 							$i_and = ' AND ';
 						}
 					}
-					if (!empty($exclude)) $exclude = ' AND ('.$exclude.')';
-					$include .= ')';
+
+$account->LogActivity($include);
+$account->LogActivity($exclude);
+					if ($_GET['searchType'] == '#all#') {
+						// Searching ALL should of course include a range of columns
+						$columns = array('fullname', 'player');
+						$inner = $include;
+						$include = '(';
+						$i_or = '';
+						foreach($columns as $column) {
+							$include .= $i_or.str_replace('#all#', $column, $inner);
+							if (!empty($exclude)) $include .= ' AND '.str_replace('#all#', $column, $exclude);
+							$i_or = ') OR (';
+						}
+						$include .= ')';
+						$exclude = '';
+					} else {
+						$include = '('.$include.')';
+						if (!empty($exclude)) $exclude = ' AND ('.$exclude.')';
+					}
+$account->LogActivity($include);
+$account->LogActivity($exclude);
 				}
 				$select = $db->query('SELECT fullname FROM hvsc_files WHERE '.$searchContext.' AND '.$include.$exclude.' LIMIT 1000');
 			}
