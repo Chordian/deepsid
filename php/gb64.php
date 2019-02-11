@@ -110,12 +110,15 @@ foreach($gb64 as $entry) {
 			$thumbnails[] = substr($page, $image_pos, stripos($page, '.png', $image_pos) - $image_pos + 4);
 			$last_pos = $last_pos + strlen($find_scr);
 		}
-	} else {
+	} else if (strpos($page, $piece_scr)) {
 		// There's only one screenshot in the "monitor" graphics
 		$image_pos = stripos($page, $piece_scr) + strlen($piece_scr);
 		$thumbnails = array(
 			substr($page, $image_pos, stripos($page, '.png', $image_pos) - $image_pos + 4)
 		);
+	} else {
+		// There are no screenshots at all
+		$thumbnails = array('/noscreenshot.gif');
 	}
 	$thumbnails = array_reverse($thumbnails);		// Want the title screen to be first in line
 	$thumbnails = array_slice($thumbnails, 0, 4);	// Maximum 4 thumbnails
