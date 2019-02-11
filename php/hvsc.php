@@ -106,8 +106,6 @@ try {
 					$include .= ')';
 					if (!empty($exclude)) $exclude = ' AND ('.$exclude.')';
 
-// Also need "all" to search: rating (single digit 1-5 with or without "-"), new (?), country...
-
 					if ($_GET['searchType'] == '#all#') {
 						// Searching ALL should of course include a range of columns
 						$columns = $comma = '';
@@ -116,6 +114,8 @@ try {
 							$comma = ', ';
 						}
 						// Treating all columns as one long search entity is MUCH easier
+						$include_folders = $include;
+						$exclude_folders = $exclude;
 						$include = str_replace('#all#', 'CONCAT('.$columns.')', $include);
 						$exclude = str_replace('#all#', 'CONCAT('.$columns.')', $exclude);
 					}
@@ -145,12 +145,16 @@ try {
 				$select = $db->prepare('SELECT fullname FROM composers WHERE '.$searchContext.' AND country LIKE :query LIMIT 1000');
 				$query = strtolower($_GET['searchQuery']) == 'holland' ? 'netherlands' : $_GET['searchQuery'];
 				$select->execute(array(':query'=>'%'.$query.'%'));
-			} else if ($_GET['searchType'] == 'fullname' || $_GET['searchType'] == 'author' || $_GET['searchType'] == 'new') {
+			} else if ($_GET['searchType'] == '#all#' || $_GET['searchType'] == 'fullname' || $_GET['searchType'] == 'author' || $_GET['searchType'] == 'new') {
 				// Normal type search
 				if ($_GET['searchType'] == 'author') {
 					// Let 'author' also find folders using 'fullname' as replacement type
 					$exclude = str_replace('author NOT LIKE "%', 'fullname NOT LIKE "%', $exclude);
 					$include = str_replace('author LIKE "%', 'fullname LIKE "%', $include);
+				} else if ($_GET['searchType'] == '#all#') {
+					// Just search 'fullname' - none of the other columns exist in this table
+					$include = str_replace('#all#', 'fullname', $include_folders);
+					$exclude = str_replace('#all#', 'fullname', $exclude_folders);
 				}
 				$select = $db->query('SELECT fullname FROM hvsc_folders WHERE '.$searchContext.' AND '.$include.$exclude.' AND (fullname NOT LIKE "!%") LIMIT 1000');
 			}

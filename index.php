@@ -892,6 +892,12 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>February 11, 2019</h3>
+						<ul>
+							<li>The new search type <code>All</code> has been added and this is now also the default. It will search
+								in all fields at once, except <code>Rating</code>, <code>Country</code> and <code>Version</code>.</li>
+						</ul>
+
 						<h3>February 10, 2019</h3>
 						<ul>
 							<li>Upgraded the WebSid emulator. Added diagnostic output for digi samples.</li>
