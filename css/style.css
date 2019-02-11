@@ -1022,7 +1022,8 @@ input[type=range]::-ms-track {
 	#pace			{ bottom: 35px; }
 
 		/* Where the digi sample rate is displayed */
-		#pace div {
+		#pace div,
+		.ptype {
 			display: inline-block;
 			width: 40px;
 			padding: 0 3px;
@@ -1032,6 +1033,22 @@ input[type=range]::-ms-track {
 			background: #fff; /* #f0f0ea #f2f2ee #f7f8f5 */
 			text-align: right;
 			line-height: 13.5px;
+		}
+
+		/* RSID */
+		.ptype {
+			width: auto;
+			padding: 0.68em 2px;
+			font-size: 9px;
+			height: 13px;
+			line-height: 0;
+			margin-left: 5px;
+		}
+
+		.disabled .ptype {
+			color: #d3d4c6;
+			border-color: #d3d4c6;
+			background: transparent;
 		}
 
 	/* Light blue bar indicating all of 64 KB RAM */

@@ -69,7 +69,7 @@ function SIDPlayer(emulator) {
 			 * + Can play 2SID and 3SID tunes
 			 * - Cannot play MUS files in CGSC
 			 * - No encoding options
-			 * - Cannot play BASIC and digi tunes
+			 * - Cannot play BASIC and digi tunes (RSID)
 			 * - Some CIA tunes doesn't work either
 			 */
 			this.jsSID = new jsSID(($("body").attr("data-mobile") !== "0" ? 16384 : viz.bufferSize), 0.0005);

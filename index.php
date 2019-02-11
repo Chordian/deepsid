@@ -897,7 +897,10 @@
 							<li>The new search type <code>All</code> has been added and this is now also the default. It will search
 								in all fields at once, except <code>Rating</code>, <code>Country</code> and <code>Version</code>.</li>
 							<li>Fixed a bug that occurred when an GB64 entry has no screenshots. This fixes
-								<a href="http://deepsid.chordian.net/?file=/GAMES/S-Z/Who_Dares_Wins.sid">Who_Dares_Wins.sid</a></li>
+								<a href="http://deepsid.chordian.net/?file=/GAMES/S-Z/Who_Dares_Wins.sid">Who_Dares_Wins.sid</a>.</li>
+							<li>Songs in the RSID format are now disabled for Hermit's emulator since it can't do digi anyway
+								(or whatever advanced technique is otherwise required by the RSID format).</li>
+							<li>All songs made in the RSID format are now indicated as such in the year/player line.</li>
 						</ul>
 
 						<h3>February 10, 2019</h3>

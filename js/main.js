@@ -704,15 +704,21 @@ function ResizeIframe() {
 function DisableIncompatibleRows() {
 	$("#songs table").children().each(function() {
 		var $tr = $(this);
+		var isSIDFile = $tr.find("td.sid").length;
 		// Skip spacers, dividers and files for the general incompatibility field (folders only)
-		if (!$tr.find(".spacer").length && !$tr.find(".divider").length && !$tr.find("td.sid").length) {
+		if (!$tr.find(".spacer").length && !$tr.find(".divider").length && !isSIDFile) {
 			$tr.removeClass("disabled");
 			var $span = $tr.find(".name");
 			if ($span.is("[data-incompat]") && $span.attr("data-incompat").indexOf(SID.emulator) !== -1)
 				$tr.addClass("disabled");
-		} else if ($tr.find("td.sid").length && $tr.find(".name").attr("data-name").indexOf("BASIC.sid") !== -1) {
+		} else if (isSIDFile && $tr.find(".name").attr("data-name").indexOf("BASIC.sid") !== -1) {
 			// The emulators can't do tunes made in BASIC
 			SID.emulator == "websid" || SID.emulator == "jssid"
+				? $tr.addClass("disabled")
+				: $tr.removeClass("disabled");
+		} else if (isSIDFile && $tr.find(".name").attr("data-type") === "RSID") {
+			// Hermit's emulator can't do virtually any of RSID tunes
+			SID.emulator == "jssid"
 				? $tr.addClass("disabled")
 				: $tr.removeClass("disabled");
 		}

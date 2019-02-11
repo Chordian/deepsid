@@ -481,7 +481,7 @@ try {
 				'substname' =>		$substname,
 				'player' =>			str_replace(array_keys($prettyPlayerNames), $prettyPlayerNames, $player), // Remember it reads the array multiple times!
 				'lengths' => 		$lengths,
-				//'type' => 		$type,
+				'type' => 			$type,
 				//'version' => 		$version,
 				//'playertype' => 	$playertype,
 				//'playercompat' =>	$playercompat,
