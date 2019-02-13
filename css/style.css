@@ -873,7 +873,7 @@ input[type=range]::-ms-track {
 	border: 1px solid #c8c8b9;
 	border-top-left-radius: 1px;
 	border-top-right-radius: 1px;
-	border-bottom-color: #969787; /* #7a88c8 #8a8c7a #969787 #7f8dcb */
+	border-bottom-color: #7a88c8; /* #7a88c8 #8a8c7a #969787 #7f8dcb */
 	background: #f7f8f5;
 	font-size: 14px;
 }
@@ -1088,12 +1088,20 @@ input[type=range]::-ms-track {
 			cursor: help;
 		}
 
-/* ---- STIL Box ------------------------------------------------------------ */
+/* ---- Sundry Box ---------------------------------------------------------- */
 
-#stil {
+/* See also #tabs below for styling shared for the actual tabs */
+#sundry-tabs {
+	flex: 0 0 13px;
+	position: relative;
+	margin: 2px 0 6px;
+}
+
+#sundry {
 	overflow: none; /* Only for tips; changed to "auto" for actual STIL text (hack needed for MS Edge) */
-	flex: 0 0 118px;
+	flex: 0 0 119px;
 	padding: 6px 10px;
+	border-top: 1px solid #c8c8b9;
 	border-left: 1px solid #c8c8b9;
 	border-right: 1px solid #c8c8b9;
 	border-bottom: 0.5px solid #c8c8b9;
@@ -1101,7 +1109,12 @@ input[type=range]::-ms-track {
 	border-bottom-right-radius: 1px;
 	font-size: 14px;
 	background: #f7f8f5;
+	z-index: 2;
 }
+
+	#sundry .stopic {
+		height: calc(100% - 1px);
+	}
 
 	/* The STIL box is used for random tips upon page load */
 	#tips {
@@ -1128,7 +1141,7 @@ input[type=range]::-ms-track {
 		color: #555743;
 	}
 
-	#stil .subtune,
+	#sundry .subtune,
 	#topic-stil .subtune {
 		display: inline-block;
 		height: 16px;
@@ -1143,12 +1156,12 @@ input[type=range]::-ms-track {
 		cursor: pointer;
 	}
 
-		#stil .subtune:hover,
+		#sundry .subtune:hover,
 		#topic-stil .subtune:hover {
 			background: #62644c;
 		}
 
-	#stil hr,
+	#sundry hr,
 	#topic-stil hr {
 		background: transparent;
 		border-bottom: 1px dashed #a8ad95;
@@ -1767,7 +1780,8 @@ input[type=range]::-ms-track {
 		width: 860px;
 	}
 
-		#tabs .tab {
+		#tabs .tab,
+		#sundry-tabs .tab {
 			float: left;
 			position: relative;
 			top: 30.5px;
@@ -1788,7 +1802,13 @@ input[type=range]::-ms-track {
 			cursor: pointer;
 		}
 
-		#tabs .selected {
+			#sundry-tabs .tab {
+				top: 7.5px;
+				/*width: 54px;*/
+			}
+
+		#tabs .selected,
+		#sundry-tabs .selected {
 			border-top: 1px solid #c8c8b9;
 			border-left: 1px solid #c8c8b9;
 			border-right: 1px solid #c8c8b9;
@@ -1798,7 +1818,8 @@ input[type=range]::-ms-track {
 			cursor: default;
 		}
 
-		#tabs .disabled {
+		#tabs .disabled,
+		#sundry-tabs .disabled {
 			border-top: 1px solid #dadace;
 			border-left: 1px solid #dadace;
 			border-right: 1px solid #dadace;
@@ -1807,12 +1828,14 @@ input[type=range]::-ms-track {
 			cursor: default;
 		}
 
-		#tabs .tab:not(.selected):hover.tab:not(.disabled):hover {
+		#tabs .tab:not(.selected):hover.tab:not(.disabled):hover,
+		#sundry-tabs .tab:not(.selected):hover.tab:not(.disabled):hover {
 			color: #62644c;
 			background: #fff;
 		}
 
-		#tabs .right {
+		#tabs .right,
+		#sundry-tabs .right {
 			float: right;
 			margin-left: 3px;
 			margin-right: 0;

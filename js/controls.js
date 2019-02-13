@@ -28,7 +28,7 @@ Controls.prototype = {
 
 		$("#stop,#loop,#time-bar").click(this.onClick.bind(this));
 		$("#info").on("click", "#sid-model,#clockspeed", this.onClick.bind(this));
-		$("#stil,#topic-stil").on("click", ".subtune", this.onClick.bind(this));
+		$("#sundry,#topic-stil").on("click", ".subtune", this.onClick.bind(this));
 
 		$("#volume").on("input", this.onInput.bind(this));
 
@@ -218,7 +218,7 @@ Controls.prototype = {
 					if (subtune > 0 && !SID.emulatorFlags.offline) $("#subtune-minus").removeClass("disabled");
 
 					this.updateInfo();
-					this.updateStil();
+					this.updateSundry();
 
 					browser.getCSDb();
 					if (browser.isSearching || browser.path.substr(0, 2) === "/$" || browser.path.substr(0, 2) === "/!")
@@ -343,7 +343,7 @@ Controls.prototype = {
 				break;
 			default:
 				if (event.target.className == "subtune") {
-					// Play the subtune clicked in the STIL box
+					// Play the subtune clicked in the STIL tab of the sundry box
 					this.subtuneCurrent = event.target.innerHTML - 1;
 					$("#subtune-plus,#subtune-minus").removeClass("disabled").addClass("disabled");
 					$("#time-bar").empty().append('<div></div>');
@@ -617,23 +617,26 @@ Controls.prototype = {
 	},
 
 	/**
-	 * Update the STIL box below the top info box.
+	 * Update the sundry box below the top info box.
 	 * 
 	 * HVSC: Adapted STIL information for the selected SID file, if available.
 	 * CGSC: Lyrics for the MUS file, if available.
 	 */
-	updateStil: function() {
-		$("#stil,#topic-stil")
+	updateSundry: function() {
+		$("#topic-stil,#stopic-stil")
 			.mCustomScrollbar("destroy")
 			.empty()
 			.removeClass("c64font");
+
+		// Tab 'STIL' is called 'Lyrics' in CGSC
+		$("#stab-stil").empty().append(browser.isCGSC() ? "Lyrics" : "STIL");
 
 		var file = browser.playlist[browser.songPos].filename,
 			stil = browser.playlist[browser.songPos].stil,
 			isCGSC = browser.playlist[browser.songPos].fullname.substr(-4) == ".mus";
 
 		if (file.substr(-4) == ".mus") {
-			$("#stil,#topic-stil").addClass("c64font");
+			$("#topic-stil,#stopic-stil").addClass("c64font");
 			// For .mus files, we have to let the server parse the accompanying .wds file (if it exists)
 			$.ajax("php/info.php", { // If there's a "/" then it's a search path and can stand on its own legs
 				data:		{fullname: file.indexOf("/") !== -1 ? "/"+file : browser.path.substr(1)+"/"+file},
@@ -647,12 +650,12 @@ Controls.prototype = {
 		}
 
 		if (stil === "") {
-			$("#stil")
+			$("#stopic-stil")
 				.css("overflow", "none")
 				.append('<div id="tips" style="color:#a1a294;">No '+(isCGSC ? 'lyrics' : 'STIL information')+'</div>')
 			$("#topic-stil").empty().append(isCGSC ? "No lyrics available for this MUS file." : "<i>No STIL information available for this SID file.</i>");
 		} else {
-			$("#stil")
+			$("#stopic-stil")
 				.css("overflow", "auto")
 				.append(stil)
 				.mCustomScrollbar({

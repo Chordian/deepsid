@@ -316,7 +316,7 @@ Browser.prototype = {
 							if (!SID.emulatorFlags.offline) ctrls.state("loop", "enabled");
 
 							ctrls.updateInfo();
-							ctrls.updateStil();
+							ctrls.updateSundry();
 
 							//setTimeout(SID.play(true), 1); // Why did I do this in the first place? Uhh...
 							SID.play(true);
@@ -824,7 +824,7 @@ Browser.prototype = {
 		$("#sid-model,#clockspeed,#hvsc-version").remove();
 		$("#memory-chunk").css({left: "0", width: "0"});
 		$("#info-text").empty();
-		$("#stil").mCustomScrollbar("destroy").empty();
+		$("#sundry").mCustomScrollbar("destroy").empty();
 
 		ctrls.state("play/stop", "disabled");
 		ctrls.state("prev/next", "enabled"); // Still need to skip it

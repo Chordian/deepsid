@@ -191,7 +191,14 @@
 				</div>
 				<div id="memory-bar"><div id="memory-lid"></div><div id="memory-chunk"></div></div>
 			</div>
-			<div id="stil"></div>
+			<div id="sundry-tabs">
+				<div class="tab unselectable selected" data-topic="stil" id="stab-stil">Tips</div>
+				<div class="tab unselectable" data-topic="osc" id="stab-osc">Scope</div>
+			</div>
+			<div id="sundry">
+				<div id="stopic-stil" class="stopic"></div>
+				<div id="stopic-osc" class="stopic" style="display:none;"></div>
+			</div>
 			<div id="slider"></div>
 
 			<div id="interactive">
@@ -891,6 +898,13 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>February #####################################, 2019</h3>
+						<ul>
+							<li>The box previously know as the STIL box is now henceforth known as the <i>sundry box</i> instead.
+								Tabs have have been added on top of it to diversify its purpose.</li>
+						</ul>
+
 
 						<h3>February 11, 2019</h3>
 						<ul>

@@ -42,11 +42,11 @@ $(function() { // DOM ready
 		.styledSetValue(emulator);
 
 	if ($(window).height() <= 840) {
-		$("#stil").hide(); // Hide STIL box on small displays
+		$("#sundry-tabs,#sundry,#slider").hide(); // Hide sundry box on small displays
 	} else {
 		// Otherwise use it upon page load to show random tips
 		$.post("php/tips.php", function(tips) {
-			$("#stil").append('<div id="tips">'+tips+'</div>');
+			$("#stopic-stil").append('<div id="tips">'+tips+'</div>');
 		});
 	}
 
@@ -78,8 +78,8 @@ $(function() { // DOM ready
 				window.open("//deepsid.chordian.net/", "_blank",
 					"left=0,top=0,width=450,height="+(screen.height-150)+",scrollbars=no");
 			else if (event.keyCode == 83) {							// Keyup 's'
-				// Toggle the STIL box on/off
-				$("#stil").toggle();
+				// Toggle the sundry box on/off
+				$("#sundry-tabs,#sundry,#slider").toggle();
 				$(window).trigger("resize", true);
 			}
 		}
@@ -89,11 +89,11 @@ $(function() { // DOM ready
 	 * When resizing the window. Also affected by toggling the developer pane.
 	 * 
 	 * @param {*} event 
-	 * @param {boolean} stilToggle	If specified and TRUE, ignores the STIL box.
+	 * @param {boolean} sundryToggle	If specified and TRUE, ignores the sundry box.
 	 */
-	$(window).on("resize", function(event, stilToggle) {
-		if (!stilToggle && $("#tabs .selected").attr("data-topic") !== "stil")
-			$(window).height() > 840 ? $("#stil").show() : $("#stil").hide();
+	$(window).on("resize", function(event, sundryToggle) {
+		if (!sundryToggle && $("#tabs .selected").attr("data-topic") !== "stil")
+			$(window).height() > 840 ? $("#sundry-tabs,#sundry,#slider").show() : $("#sundry-tabs,#sundry,#slider").hide();
 		// Make sure the browser box always take up all screen height upon resizing the window
 		$("#folders").height(0).height($("#songs").height() - 100);
 		if (!browser.isMobile) {
@@ -110,7 +110,7 @@ $(function() { // DOM ready
 	});
 
 	/**
-	 * When dragging the white line to resize the STIL box smaller or larger.
+	 * When dragging the white line to resize the sundry box smaller or larger.
 	 * 
 	 * @param {*} event 
 	 */
@@ -118,8 +118,8 @@ $(function() { // DOM ready
 		event.preventDefault();
 		$("body").on("mousemove touchmove", function(event) {
 			event.preventDefault();
-			var $stil = $("#stil"), diff = $("#slider").offset().top + 5 - event.pageY;
-			$stil.css("flex-basis", $stil.css("flex-basis").replace("px", "") - diff);
+			var $sundry = $("#sundry"), diff = $("#slider").offset().top + 5 - event.pageY;
+			$sundry.css("flex-basis", $sundry.css("flex-basis").replace("px", "") - diff);
 			$("#folders").height(0).height($("#songs").height() - 100);
 		});
 	});
@@ -285,8 +285,8 @@ $(function() { // DOM ready
 		if (["about", "faq", "changes"].includes(topic) || topic == "profile" && browser.path == "" && !browser.isSearching)
 			$("#page").addClass("big-logo");
 
-		// Toggle the STIL box depending on whether the 'STIL' tab was clicked or not
-		topic === "stil" ? $("#stil").hide() : $("#stil").show();
+		// Toggle the sundry box depending on whether the 'STIL' tab was clicked or not
+		topic === "stil" ? $("#sundry-tabs,#sundry,#slider").hide() : $("#sundry-tabs,#sundry,#slider").show();
 		$(window).trigger("resize", true);
 
 		// If 'Disqus' tab is selected then hide the notification on it
@@ -311,6 +311,24 @@ $(function() { // DOM ready
 			ctYears.update();
 			ctPlayers.update();
 		}
+	});
+
+	/**
+	 * When one of the "sundry" box tabs are clicked.
+	 */
+	$("#sundry-tabs .tab").click(function() {
+		var $this = $(this);
+		if ($this.hasClass("selected") || $this.hasClass("disabled")) return false;
+
+		// Select the new tab
+		$("#sundry-tabs .tab").removeClass("selected");
+		$this.addClass("selected");
+
+		var stopic = $this.attr("data-topic");
+
+		// Show the selected topic
+		$("#sundry .stopic").hide();
+		$("#stopic-"+stopic).show();
 	});
 
 	/**
@@ -447,7 +465,7 @@ $(function() { // DOM ready
 	/**
 	 * When clicking a 'redirect' link to open an arbitrary SID file without reloading DeepSID.
 	 */
-	$("#topic-csdb,#stil,#topic-stil,#topic-changes").on("click", "a.redirect", function() {
+	$("#topic-csdb,#sundry,#topic-stil,#topic-changes").on("click", "a.redirect", function() {
 		var fullname = $(this).html();
 		var path = "/_High Voltage SID Collection"+fullname.substr(0, fullname.lastIndexOf("/"));
 		// @todo If using redirect for custom folders later then copy the 'browser.path' lines from 'fileParam' below.
@@ -607,9 +625,9 @@ $(function() { // DOM ready
 		$("#sticky").show();					// Show sticky header
 	}
 
-	// Turn off the STIL box if the STIL tab was selected
+	// Turn off the sundry box if the STIL tab was selected
 	if (selectTab === "stil") {
-		$("#stil").hide();
+		$("#sundry-tabs,#sundry,#slider").hide();
 		$(window).trigger("resize", true);
 	}
 });
