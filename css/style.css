@@ -1098,7 +1098,7 @@ input[type=range]::-ms-track {
 }
 
 #sundry {
-	overflow: none; /* Only for tips; changed to "auto" for actual STIL text (hack needed for MS Edge) */
+	overflow: hidden;
 	flex: 0 0 119px;
 	padding: 6px 10px;
 	border-top: 1px solid #c8c8b9;
@@ -1112,14 +1112,17 @@ input[type=range]::-ms-track {
 	z-index: 2;
 }
 
+	/* Note that the custom scrollbar height is adjusted both on creation and when moving the slider bar */
 	#sundry .stopic {
-		height: calc(100% - 1px);
+		overflow: none; /* Must be none for no scrollbar on tips; changed to auto by the custom scrollbar */
+		height: 100%;
 	}
 
 	/* The STIL box is used for random tips upon page load */
+	/* NOTE: This is also used for centered lines such as "No STIL information" or "No lyrics" etc. */
 	#tips {
 		position: relative;
-		top: 50%;
+		top: 50%; /* These three lines centers the DIV in the sundry box */
 		transform: translateY(-50%);
 		font-size: 12px;
 		text-align: center;

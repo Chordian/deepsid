@@ -46,7 +46,8 @@ $(function() { // DOM ready
 	} else {
 		// Otherwise use it upon page load to show random tips
 		$.post("php/tips.php", function(tips) {
-			$("#stopic-stil").append('<div id="tips">'+tips+'</div>');
+			$("#stopic-stil")
+				.append('<div id="tips">'+tips+'</div>')
 		});
 	}
 
@@ -120,6 +121,7 @@ $(function() { // DOM ready
 			event.preventDefault();
 			var $sundry = $("#sundry"), diff = $("#slider").offset().top + 5 - event.pageY;
 			$sundry.css("flex-basis", $sundry.css("flex-basis").replace("px", "") - diff);
+			$("#stopic-stil .mCSB_scrollTools").css("height", $("#stopic-stil").height() + 7);
 			$("#folders").height(0).height($("#songs").height() - 100);
 		});
 	});
@@ -328,7 +330,13 @@ $(function() { // DOM ready
 
 		// Show the selected topic
 		$("#sundry .stopic").hide();
-		$("#stopic-"+stopic).show();
+		$("#stopic-"+stopic)
+			.css("visibility", "hidden")
+			.show();
+		setTimeout(function() {
+			// This small delay hides the "hiccup" that happens when the custom scrollbar is re-applied
+			$("#stopic-"+stopic).css("visibility", "visible");
+		}, 125);
 	});
 
 	/**

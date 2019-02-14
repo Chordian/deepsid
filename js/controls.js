@@ -664,8 +664,15 @@ Controls.prototype = {
 					scrollButtons:{
 						enable: true,
 					},
+					callbacks: {
+						onCreate: function() {
+							// Adjust scrollbar height to fit the up/down arrows perfectly
+							// NOTE: This is also set when moving the slider bar (see main.js).
+							$("#stopic-stil .mCSB_scrollTools").css("height", $("#stopic-stil").height() + 7);
+						},
+					},
 				});
-			$("#topic-stil").empty().append(stil);
+				$("#topic-stil").empty().append(stil);
 		}
 	},
 
