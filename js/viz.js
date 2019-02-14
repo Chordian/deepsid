@@ -71,7 +71,8 @@ function Viz(emulator) {
 
 	this.setEmuButton(this.emulator);
 
-	this.initFlood();	
+	this.initScope();
+	this.initFlood();
 	this.addEvents();
 }
 
@@ -273,7 +274,7 @@ Viz.prototype = {
 			var prevOctave = [0, 0, 0], prevNote = [0, 0, 0], prevGoodWaveform = [0, 0, 0], prevClockspeed = "Unknown";
 			
 			SID.setCallbackBufferEnded(function() {
-	
+
 				if ($("#tabs .selected").attr("data-topic") !== "piano") return; // Only if the tab is active!
 	
 				var useOneKeyboard = $("#piano-combine").hasClass("button-on");
@@ -433,6 +434,41 @@ Viz.prototype = {
 	},
 
 	/**
+	 * Scope: Initialize and draw the oscilloscope canvas boxes.
+	 * 
+	 * This makes use of 'sid_tracer.js' (renamed to 'scope.js' in DeepSID) which
+	 * was originally written by Jürgen Wothke for the Tiny'R'Sid web site.
+	 */
+	initScope: function() {
+		this.scopeMode = true;
+		this.scopeZoom = 5;
+
+		this.scopeVoice1 = new VoiceDisplay("scope1", function() { return scope.getDataVoice1(); }, false);
+		this.scopeVoice2 = new VoiceDisplay("scope2", function() { return scope.getDataVoice2(); }, false);
+		this.scopeVoice3 = new VoiceDisplay("scope3", function() { return scope.getDataVoice3(); }, false);
+		this.scopeVoice4 = new VoiceDisplay("scope4", function() { return scope.getDataVoice4(); }, true);
+
+		this.animate();
+	},
+
+	/**
+	 * Scope: Animate the oscilloscope canvas boxes in the sundry box.
+	 * 
+	 * Called by: requestAnimationFrame().
+	 * 
+	 * This makes use of 'sid_tracer.js' (renamed to 'scope.js' in DeepSID) which
+	 * was originally written by Jürgen Wothke for the Tiny'R'Sid web site.
+	 */
+	animateScope: function() {
+		if ($("#sundry-tabs .selected").attr("data-topic") !== "osc") return;
+
+		this.scopeVoice1.redrawGraph(this.scopeMode, this.scopeZoom);
+		this.scopeVoice2.redrawGraph(this.scopeMode, this.scopeZoom);
+		this.scopeVoice3.redrawGraph(this.scopeMode, this.scopeZoom);
+		this.scopeVoice4.redrawGraph(this.scopeMode, this.scopeZoom);
+	},
+
+	/**
 	 * Flood: Initialize and draw the canvas rivers.
 	 */
 	initFlood: function() {
@@ -472,14 +508,6 @@ Viz.prototype = {
 		}.bind(this));
 
 		this.animate();
-	},
-
-	/**
-	 * Animate at 60 hz.
-	 */
-	animate: function() {
-		requestAnimationFrame(this.animate.bind(this));
-		this.animateFlood();
 	},
 
 	/**
@@ -598,5 +626,14 @@ Viz.prototype = {
 
 		// With Frank's fix
 		return (usePound ? "#" : "") + String("000000" + (g | (b << 8) | (r << 16)).toString(16)).slice(-6);
+	},
+
+	/**
+	 * Animate at 60 hz.
+	 */
+	animate: function() {
+		requestAnimationFrame(this.animate.bind(this));
+		this.animateScope();
+		this.animateFlood();
 	},
 }

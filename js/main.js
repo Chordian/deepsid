@@ -32,6 +32,7 @@ $(function() { // DOM ready
 		"download",
 	]) === -1) emulator = "websid";
 
+	scope = new SidTracer(16384);
 	viz = new Viz(emulator);
 	SID = new SIDPlayer(emulator);
 	ctrls = new Controls();
@@ -46,8 +47,7 @@ $(function() { // DOM ready
 	} else {
 		// Otherwise use it upon page load to show random tips
 		$.post("php/tips.php", function(tips) {
-			$("#stopic-stil")
-				.append('<div id="tips">'+tips+'</div>')
+			$("#stopic-stil").append('<div id="tips">'+tips+'</div>');
 		});
 	}
 

@@ -44,7 +44,7 @@ function SIDPlayer(emulator) {
 			 */
 			SIDBackend = new SIDBackendAdapter();
 			Ticker = new AbstractTicker();
-			ScriptNodePlayer.createInstance(SIDBackend, '', [], false, this.onPlayerReady.bind(this), this.onTrackReadyToPlay.bind(this), this.onTrackEnd.bind(this), undefined, Ticker,
+			ScriptNodePlayer.createInstance(SIDBackend, '', [], false, this.onPlayerReady.bind(this), this.onTrackReadyToPlay.bind(this), this.onTrackEnd.bind(this), undefined, scope,
 				($("body").attr("data-mobile") !== "0" ? 16384 : viz.bufferSize));
 			this.WebSid = ScriptNodePlayer.getInstance();
 
@@ -198,6 +198,7 @@ SIDPlayer.prototype = {
 				var options = {};
 				options.track = subtune;
 				options.timeout = timeout;
+				options.traceSID = true;	// Needed for the oscilloscope sundry box view
 
 				// Since 'onCompletion' and 'onProgress' (below) are only utilized when loading
 				// the file for the first time, 'onTrackReadyToPlay' is used instead for callback.
@@ -210,6 +211,8 @@ SIDPlayer.prototype = {
 				}.bind(this));
 
 				// Called at the start of each WebAudio buffer
+				// NOTE: Since the introduction of the oscilloscope code, this is actually called
+				// by the 'start()' function in the scope.js (sid_tracer.js) script.
 				Ticker.start = function() {
 					if (typeof this.callbackBufferEnded === "function")
 						this.callbackBufferEnded();

@@ -50,6 +50,7 @@
 		<script type="text/javascript" src="js/player.js"></script>
 		<script type="text/javascript" src="js/controls.js"></script>
 		<script type="text/javascript" src="js/browser.js"></script>
+		<script type="text/javascript" src="js/scope.js"></script> <!-- <= JW's sid_tracer.js -->
 		<script type="text/javascript" src="js/viz.js"></script>
 		<script type="text/javascript" src="js/main.js"></script>
 		<link rel="icon" href="images/deepsid_icon_32x32.png" sizes="32x32" />
@@ -197,7 +198,12 @@
 			</div>
 			<div id="sundry">
 				<div id="stopic-stil" class="stopic"></div>
-				<div id="stopic-osc" class="stopic" style="display:none;"></div>
+				<div id="stopic-osc" class="stopic" style="display:none;">
+					<canvas class="scope" id="scope1"></canvas>
+					<canvas class="scope" id="scope2"></canvas>
+					<canvas class="scope" id="scope3"></canvas>
+					<canvas class="scope" id="scope4"></canvas>
+				</div>
 			</div>
 			<div id="slider"></div>
 
@@ -902,7 +908,7 @@
 						<h3>February #####################################, 2019</h3>
 						<ul>
 							<li>The box previously know as the STIL box is now henceforth known as the <i>sundry box</i> instead.
-								Tabs have have been added on top of it to diversify its purpose.</li>
+								Tabs have been added on top of it to diversify its purpose.</li>
 						</ul>
 
 
