@@ -42,8 +42,24 @@ function SIDPlayer(emulator) {
 			 * - Emulation quality varies at times
 			 * - Cannot play BASIC program tunes
 			 */
-			SIDBackend = new SIDBackendAdapter();
-			Ticker = new AbstractTicker();
+			if (typeof SIDBackend === "undefined") SIDBackend = new SIDBackendAdapter();
+			if (typeof Ticker === "undefined") Ticker = new AbstractTicker();
+			if (typeof player !== "undefined") {
+				// The audio context must be recreated to avoid choppy updating in the oscilloscope voices
+				_gPlayerAudioCtx.close();
+				_gPlayerAudioCtx.ctx = null;
+				try {			
+					if("AudioContext" in window) {
+						_gPlayerAudioCtx = new AudioContext();
+					} else if('webkitAudioContext' in window) {
+						_gPlayerAudioCtx = new webkitAudioContext(); // Legacy
+					} else {
+						alert(errText + e);
+					}			
+				} catch(e) {
+					alert(errText + e);
+				}
+			}
 			ScriptNodePlayer.createInstance(SIDBackend, '', [], false, this.onPlayerReady.bind(this), this.onTrackReadyToPlay.bind(this), this.onTrackEnd.bind(this), undefined, scope,
 				($("body").attr("data-mobile") !== "0" ? 16384 : viz.bufferSize));
 			this.WebSid = ScriptNodePlayer.getInstance();
@@ -441,6 +457,30 @@ SIDPlayer.prototype = {
 	},
 
 	/**
+	 * Is a song currently playing?
+	 * 
+	 * @return {boolean}	TRUE if currently playing.
+	 */
+	isPlaying: function() {
+		var playing;
+		switch (this.emulator) {
+			case "websid":
+				playing = !this.WebSid.isPaused();
+				break;
+			case "jssid":
+				// @todo
+				break;
+			case "soasc":
+				// @todo
+				break;
+			case "download":
+				// Unknown
+				break;
+		}
+		return playing;
+	},
+
+	/**
 	 * Pause the SID tune.
 	 */
 	pause: function() {
@@ -482,6 +522,7 @@ SIDPlayer.prototype = {
 			case "download":
 				break;
 		}
+		viz.stopScope();
 	},
 
 	/**

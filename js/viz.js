@@ -64,9 +64,9 @@ function Viz(emulator) {
 		"#000000",			// $F0
 	];
 
-	// Set buffersize as previously stored or default to 1024 bytes
+	// Set buffer size as previously stored or default to 16384 bytes
 	this.bufferSize = localStorage.getItem("buffer");
-	if (this.bufferSize == null) this.bufferSize = 1024;
+	if (this.bufferSize == null) this.bufferSize = 16384;
 	$("#page .dropdown-buffer").val(this.bufferSize);
 
 	this.setEmuButton(this.emulator);
@@ -441,7 +441,15 @@ Viz.prototype = {
 	 */
 	initScope: function() {
 		this.scopeMode = true;
-		this.scopeZoom = 5;
+		this.scopeZoom = 5; // Use 1 (closest) to 5 (farthest)
+
+		this.tabOscMode = "";
+
+		// Draw the canvas areas for the oscilloscope voices, as well as the message handler
+		var canvas = '';
+		for (var voice = 1; voice <= 4; voice++)
+			canvas += '<canvas class="scope" id="scope'+voice+'" style="display:none;"></canvas>';
+		$("#stopic-osc").empty().append(canvas+'<div class="sundryMsg" style="display:none;"></div>');
 
 		this.scopeVoice1 = new VoiceDisplay("scope1", function() { return scope.getDataVoice1(); }, false);
 		this.scopeVoice2 = new VoiceDisplay("scope2", function() { return scope.getDataVoice2(); }, false);
@@ -460,12 +468,49 @@ Viz.prototype = {
 	 * was originally written by Jürgen Wothke for the Tiny'R'Sid web site.
 	 */
 	animateScope: function() {
-		if ($("#sundry-tabs .selected").attr("data-topic") !== "osc") return;
+		if ($("#sundry-tabs .selected").attr("data-topic") !== "osc") return; // Tab not active
+		if (SID.emulator !== "websid") {
+			if (this.tabOscMode !== "NOTWEBSID") {
+				$("#scope1,#scope2,#scope3,#scope4").hide(); // Don't use 'canvas' or '.scope' here
+				$("#stopic-osc .sundryMsg").empty().append('This view requires the WebSid emulator.').show();
+				this.tabOscMode = "NOTWEBSID";
+			}
+			return;
+		} else if (viz.bufferSize < 16384) {
+			if (this.tabOscMode !== "NOT16K") {
+				$("#scope1,#scope2,#scope3,#scope4").hide();
+				$("#stopic-osc .sundryMsg").empty().append('A buffer size of 16384 is required.').show();
+				this.tabOscMode = "NOT16K";
+			}
+			return;
+		} else if (this.tabOscMode !== "OSC") {
+			// Okay to draw oscilloscope voices again now
+			$("#stopic-osc .sundryMsg").hide();
+			$("#scope1,#scope2,#scope3,#scope4").show();
+			this.tabOscMode = "OSC";
+		}
+		if (SID.isPlaying()) {
+			this.scopeVoice1.redrawGraph(this.scopeMode, this.scopeZoom);
+			this.scopeVoice2.redrawGraph(this.scopeMode, this.scopeZoom);
+			this.scopeVoice3.redrawGraph(this.scopeMode, this.scopeZoom);
+			this.scopeVoice4.redrawGraph(this.scopeMode, this.scopeZoom);
+		}
+	},
 
-		this.scopeVoice1.redrawGraph(this.scopeMode, this.scopeZoom);
-		this.scopeVoice2.redrawGraph(this.scopeMode, this.scopeZoom);
-		this.scopeVoice3.redrawGraph(this.scopeMode, this.scopeZoom);
-		this.scopeVoice4.redrawGraph(this.scopeMode, this.scopeZoom);
+	/**
+	 * Scope: Show centered horizontal lines to indicate that the music has stopped.
+	 */
+	stopScope: function() {
+		for (var voice = 1; voice <= 4; voice++) {
+			var canvas = $("#scope"+voice)[0];
+			var ctx = canvas.getContext("2d");
+			ctx.clearRect(0, 0, 512, 70);
+			ctx.strokeStyle = "rgba(34, 35, 27, 0.4)"; // Faded color too
+			ctx.beginPath();
+			ctx.moveTo(0, 35);
+			ctx.lineTo(511, 35);
+			ctx.stroke();
+		}
 	},
 
 	/**

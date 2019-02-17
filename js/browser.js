@@ -980,13 +980,15 @@ Browser.prototype = {
 					// Event handler must be set here
 					$("div.styledSelect").change(function() {
 						var side = $(this).prev("select").attr("name").split("-")[3];
-						$.get("php/root_get.php", {
-							type: $("#page .dropdown-top-list-"+side).styledGetValue(),
-							rows: $("#page .dropdown-top-rows-"+side).styledGetValue(),
-						}, function(data) {
-							data = $.parseJSON(data);
-							$("#page .top-list-"+side).empty().append(data.list);
-						});
+						if (side == "left" || side == "right") {
+							$.get("php/root_get.php", {
+								type: $("#page .dropdown-top-list-"+side).styledGetValue(),
+								rows: $("#page .dropdown-top-rows-"+side).styledGetValue(),
+							}, function(data) {
+								data = $.parseJSON(data);
+								$("#page .top-list-"+side).empty().append(data.list);
+							});
+						}
 					});
 				});
 			}.bind(this));

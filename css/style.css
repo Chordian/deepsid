@@ -132,7 +132,7 @@ small.u2 { margin-left: 2px; }
 		left: 0;
 		bottom: 3px;
 		width: 116px;
-		z-index: 3;
+		z-index: 5;
 		font-family: "Asap Condensed", sans-serif;
 	}
 
@@ -1120,14 +1120,20 @@ input[type=range]::-ms-track {
 
 	/* Canvas for an oscilloscope voice */
 	#sundry .scope {
-		width: 100%;
-		height: 60px;
-		border: 1px solid #000;
+		position: relative;
+		top: -0.3px;
+		left: -4.5px;
+		width: 417.5px;
+		height: 70px;
+		border: 0.5px solid #c4c5b3; /* #b0b29a #ced0c0 */
+		background: #fff;
+		border-radius: 1px;
 	}
 
 	/* The STIL box is used for random tips upon page load */
 	/* NOTE: This is also used for centered lines such as "No STIL information" or "No lyrics" etc. */
-	#tips {
+	#tips,
+	.sundryMsg {
 		position: relative;
 		top: 50%; /* These three lines centers the DIV in the sundry box */
 		transform: translateY(-50%);
@@ -1135,11 +1141,13 @@ input[type=range]::-ms-track {
 		text-align: center;
 	}
 
-		#tips p {
+		#tips p,
+		.sundryMsg p {
 			margin: 0 0 6px 0;
 		}
 
-		#tips code {
+		#tips code,
+		.sundryMsg code {
 			font-size: 12px;
 		}
 

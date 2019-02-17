@@ -198,12 +198,7 @@
 			</div>
 			<div id="sundry">
 				<div id="stopic-stil" class="stopic"></div>
-				<div id="stopic-osc" class="stopic" style="display:none;">
-					<canvas class="scope" id="scope1"></canvas>
-					<canvas class="scope" id="scope2"></canvas>
-					<canvas class="scope" id="scope3"></canvas>
-					<canvas class="scope" id="scope4"></canvas>
-				</div>
+				<div id="stopic-osc" class="stopic" style="display:none;"></div>
 			</div>
 			<div id="slider"></div>
 
@@ -345,11 +340,11 @@
 								<select id="dropdown-piano-buffer" class="dropdown-buffer">
 									<!--<option value="256">256</option>
 									<option value="512">512</option>-->
-									<option value="1024" selected="selected">1024</option>
+									<option value="1024">1024</option>
 									<option value="2048">2048</option>
 									<option value="4096">4096</option>
 									<option value="8192">8192</option>
-									<option value="16384">16384</option>
+									<option value="16384" selected="selected">16384</option>
 								</select>
 							</div>
 						</div>
@@ -420,11 +415,11 @@
 								<select id="dropdown-flood-buffer" class="dropdown-buffer">
 									<!--<option value="256">256</option>
 									<option value="512">512</option>-->
-									<option value="1024" selected="selected">1024</option>
+									<option value="1024">1024</option>
 									<option value="2048">2048</option>
 									<option value="4096">4096</option>
 									<option value="8192">8192</option>
-									<option value="16384">16384</option>
+									<option value="16384" selected="selected">16384</option>
 								</select>
 							</div>
 						</div>
@@ -559,16 +554,22 @@
 							<p>Changing a setting here will save it immediately.</p>
 							<div class="edit">
 
+								<h3>Buffer size</h3>
+								<p>Setting the buffer size affects WebSid or Hermit's emulator. If you like viewing the
+									<b>Piano</b> or <b>Flood</b> tabs, decrease the value towards 1024 for smoother
+									updating. If the playback is stuttering, increase it until it doesn't anymore.</p>
+								<p style="margin-top:-10px;">You need to leave it at 16384 for the <b>Scope</b> tab to work.</p>
+
 								<select id="dropdown-settings-buffer" class="dropdown-buffer">
 									<!--<option value="256">256</option>
 									<option value="512">512</option>-->
-									<option value="1024" selected="selected">1024</option>
+									<option value="1024">1024</option>
 									<option value="2048">2048</option>
 									<option value="4096">4096</option>
 									<option value="8192">8192</option>
-									<option value="16384">16384</option>
+									<option value="16384" selected="selected">16384</option>
 								</select>
-								<label for="dropdown-settings-buffer" class="unselectable">Buffer size&nbsp;&nbsp;(<i>decrease</i> for smoother updating in <b>Piano</b> and <b>Flood</b> tabs &ndash; <i>increase</i> if playback is stuttering)</label>
+								<label for="dropdown-settings-buffer" class="unselectable">Buffer size</label>
 
 								<div class="space splitline"></div>
 
@@ -905,13 +906,17 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
-						<h3>February #####################################, 2019</h3>
+						<h3>February 17, 2019</h3>
 						<ul>
 							<li>The box previously know as the STIL box is now henceforth known as the <i>sundry box</i> instead.
 								Tabs have been added on top of it to diversify its purpose.</li>
+							<li>Added a scope tab to the sundry box with oscilloscope views of the three voices of the SID
+								chip, plus a fourth for digi if used by the song. This is for the WebSid emulator only.
+								To conserve vertical space, only the three SID voices are visible at first. You have to
+								drag down the box using the white slider bar to see the digi voice too.</li>
+							<li>The default buffer size is now set to 16384 instead of 1024 in a fresh web browser.</li>
 						</ul>
-
-
+						
 						<h3>February 11, 2019</h3>
 						<ul>
 							<li>The new search type <code>All</code> has been added and this is now also the default. It will search

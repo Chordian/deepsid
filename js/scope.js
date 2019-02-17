@@ -1,7 +1,8 @@
 /**
-* version 1.0
+* version 1.0.1
 *
 * 	Copyright (C) 2018 Juergen Wothke
+*	Slightly modified by JCH for DeepSID
 *
 * Terms of Use: This file is free software. (Other licenses may apply to the remaining 
 * files used in this example.)
@@ -48,7 +49,8 @@ SidTracer = (function(){ var $this = function(outputSize) {
 							];
 			
 			// 3rd step: use "sliding window" approach to fill the actual output buffers
-			this.setOutputSize(this.outputSize);					
+			//this.setOutputSize(this.outputSize);
+			this.setOutputSize(16384); // Added by JCH as the output size needs to be 16384 always
 		},	
 		/**
 		* Marks the start of a new audio buffer, i.e. a new audio buffer is about to be generated.
@@ -56,7 +58,7 @@ SidTracer = (function(){ var $this = function(outputSize) {
 		start: function() {
 			// alternate used output buffers (as base for "sliding window" data access) 			
 			this._activeBufIdx = (this._activeBufIdx ? 0 : 1);
-			Ticker.start(); // Added by JCH	
+			Ticker.start(); // Added by JCH	for other visualizers in DeepSID
 		},
 		/**
 		* Corresponds to one emulator call - after which resampling of its output is required.
@@ -387,7 +389,7 @@ SidWiz.prototype = {
 				oldY2 = newY2;
 				newY2 = t;
 			}
-								
+
 			// draw line
 			if (x == 0) {
 				this.ctx.moveTo(newX, this._resY-newY2);
@@ -407,7 +409,7 @@ SidWiz.prototype = {
 */
 VoiceDisplay = function(divId, getDataFunc, altsync) {
 	this.WIDTH= 512;
-	this.HEIGHT= 80;
+	this.HEIGHT= 70;	// Changed by JCH (originally 80)
 
 	this.divId= divId;
 	this.getData= getDataFunc;
@@ -430,14 +432,15 @@ VoiceDisplay.prototype = {
 	},
 	redrawGraph: function(osciloscopeMode, zoom) {
 		var data= this.getData();
-		
+		if (data.length < 16384) return; // Added by JCH to avoid freezing
+
 		try {
 			// seems that dumbshit Safari (11.0.1 OS X) uses the fillStyle for "clearRect"!
 			this.ctx.fillStyle = "rgba(0, 0, 0, 0.0)";
 		} catch (err) {}
 		this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 				
-		this.ctx.strokeStyle = "rgba(1, 0, 0, 1.0)";
+		this.ctx.strokeStyle = "rgba(34, 35, 27, 1.0)"; // Color modified by JCH (originally 1, 0, 0)
 		this.ctx.save();
 
 		if (!osciloscopeMode) {

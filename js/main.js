@@ -32,7 +32,7 @@ $(function() { // DOM ready
 		"download",
 	]) === -1) emulator = "websid";
 
-	scope = new SidTracer(16384);
+	scope = new SidTracer(16384); // Lower values may freeze DeepSID
 	viz = new Viz(emulator);
 	SID = new SIDPlayer(emulator);
 	ctrls = new Controls();
@@ -121,7 +121,7 @@ $(function() { // DOM ready
 			event.preventDefault();
 			var $sundry = $("#sundry"), diff = $("#slider").offset().top + 5 - event.pageY;
 			$sundry.css("flex-basis", $sundry.css("flex-basis").replace("px", "") - diff);
-			$("#stopic-stil .mCSB_scrollTools").css("height", $("#stopic-stil").height() + 7);
+			$("#stopic-stil .mCSB_scrollTools").css("height", $("#sundry .stopic").height() + 7);
 			$("#folders").height(0).height($("#songs").height() - 100);
 		});
 	});
@@ -196,7 +196,7 @@ $(function() { // DOM ready
 	/**
 	 * When changing one of the *STYLED* drop-down boxes.
 	 * 
-	 * Used by the SID handler and the top 20 lists.
+	 * Used here by the SID handler.
 	 */
 	$("div.styledSelect").change(function() {
 		switch ($(this).prev("select").attr("name")) {
@@ -216,6 +216,7 @@ $(function() { // DOM ready
 				delete SID;
 				SID = new SIDPlayer(emulator);
 				SID.mainVol = mainVol;
+				SID.setVolume(1);
 
 				// The color of the time bar should be unique for the chosen SID handler
 				$("#time-bar").removeClass("websid jssid soasc_r2 soasc_r4 soasc_r5").addClass(emulator)
@@ -322,11 +323,22 @@ $(function() { // DOM ready
 		var $this = $(this);
 		if ($this.hasClass("selected") || $this.hasClass("disabled")) return false;
 
+		var prevTopic = $("#sundry-tabs .selected").attr("data-topic");
+
 		// Select the new tab
 		$("#sundry-tabs .tab").removeClass("selected");
 		$this.addClass("selected");
 
 		var stopic = $this.attr("data-topic");
+
+		// The oscilloscope view requires a minimum amount of vertical space
+		if (stopic == "osc") {
+			var $sundry = $("#sundry");
+			if ($sundry.css("flex-basis").replace("px", "") < 232)
+				$sundry.css("flex-basis", 232);
+		}
+		$("#stopic-stil .mCSB_scrollTools").css("height", $("#stopic-"+prevTopic).height() + 7);
+		$("#folders").height(0).height($("#songs").height() - 100);
 
 		// Show the selected topic
 		$("#sundry .stopic").hide();
