@@ -96,43 +96,52 @@ Viz.prototype = {
 	onKeyUp: function(event) {
 		if (!$("#search-box,#username,#password,#sym-rename,#sym-specify-subtune").is(":focus")) {
 			var voiceMask = SID.voiceMask & 0xF;
-			if (event.keyCode == 49 || event.keyCode == 81) {		// Keyup '1' or 'q'
+			if (event.keyCode == 49 || event.keyCode == 81) {			// Keyup '1' or 'q'
 				if (event.shiftKey) {
-					this.enableAllPianoVoices()
+					this.enableAllPianoVoices();
 					if (voiceMask != 0x1) {
 						// Reverse (solo)
 						$("#page .pv1,#page .pv2").trigger("click");
 						SID.toggleVoice(4);
+						$("#scope4").css("opacity", "0.3");
 					}
-				} else
+				} else {
 					// Toggle a SID voice 1 ON/OFF using the piano toggle buttons
 					$("#page .pv0").trigger("click");
-			} else if (event.keyCode == 50 || event.keyCode == 87)	// Keyup '2' or 'w'
+				}
+			} else if (event.keyCode == 50 || event.keyCode == 87) {	// Keyup '2' or 'w'
 				if (event.shiftKey) {
-					this.enableAllPianoVoices()
+					this.enableAllPianoVoices();
 					if (voiceMask != 0x2) {
 						$("#page .pv0,#page .pv2").trigger("click");
 						SID.toggleVoice(4);
+						$("#scope4").css("opacity", "0.3");
 					}
-				} else
+				} else {
 					$("#page .pv1").trigger("click");
-			else if (event.keyCode == 51 || event.keyCode == 69)	// Keyup '3' or 'e'
+				}
+			} else if (event.keyCode == 51 || event.keyCode == 69) {	// Keyup '3' or 'e'
 				if (event.shiftKey) {
-					this.enableAllPianoVoices()
+					this.enableAllPianoVoices();
 					if (voiceMask != 0x4) {
 						$("#page .pv0,#page .pv1").trigger("click");
 						SID.toggleVoice(4);
+						$("#scope4").css("opacity", "0.3");
 					}
-				} else
+				} else {
 					$("#page .pv2").trigger("click");
-			else if (event.keyCode == 52 || event.keyCode == 82)	// Keyup '4' or 'r'
+				}
+			} else if (event.keyCode == 52 || event.keyCode == 82) {	// Keyup '4' or 'r'
 				if (event.shiftKey) {
-					this.enableAllPianoVoices()
+					this.enableAllPianoVoices();
 					if (voiceMask != 0x8)
 						$("#page .pv0,#page .pv1,#page .pv2").trigger("click");
-				} else
+				} else {
 					// Using direct call (piano view doesn't support digi tunes)
 					SID.toggleVoice(4);
+					$("#scope4").css("opacity", (voiceMask & 0x8 ? "0.3" : "1"));
+				}
+			}
 		}
 	},
 
@@ -192,6 +201,7 @@ Viz.prototype = {
 		$this.removeClass("voice-off voice-on").addClass("voice-"+(state ? "on" : "off"));
 		var voice = parseInt(event.target.classList[1].substr(-1));
 		SID.toggleVoice(voice + 1);
+		$("#scope"+(voice + 1)).css("opacity", (state ? "1" : "0.3"));
 		$("#page .piano"+voice).css("opacity", (state ? "1" : "0.1"));
 		$("#flood"+voice+" canvas").css("opacity", (state ? "1" : "0.3"));
 	},
@@ -426,7 +436,7 @@ Viz.prototype = {
 	enableAllPianoVoices: function() {
 		SID.enableAllVoices();
 		$("#topic-piano .piano-voice").removeClass("voice-off voice-on").addClass("voice-on");
-		$("#topic-piano .piano,#flood canvas").css("opacity", "1");
+		$("#topic-piano .piano,#flood canvas,#scope1,#scope2,#scope3,#scope4").css("opacity", "1");
 		// Also snuck this in to set slow speed again if need be
 		setTimeout(function() {
 			if ($("#piano-slow").hasClass("button-on")) SID.speed(this.slowSpeed);

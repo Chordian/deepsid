@@ -913,6 +913,8 @@
 							<li>Clicking the STIL/Lyrics page tab no longer minimizes the sundry box.</li>
 							<li>Renamed the "Flood" tab to "Graph" instead.</li>
 							<li>Fixed being able to also use search type <code>All</code> in playlists.</li>
+							<li>Upgraded the WebSid emulator. Reduced the risk of integer overflow in voice-data trace.</li>
+							<li>Oscilloscope voices can now be toggled ON and OFF by clicking them. Hold down <code>Shift</code> for soloing.</li>
 						</ul>
 
 						<h3>February 17, 2019</h3>

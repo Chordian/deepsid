@@ -29,6 +29,7 @@ Controls.prototype = {
 		$("#stop,#loop,#time-bar").click(this.onClick.bind(this));
 		$("#info").on("click", "#sid-model,#clockspeed", this.onClick.bind(this));
 		$("#sundry,#topic-stil").on("click", ".subtune", this.onClick.bind(this));
+		$("#sundry").on("click", "canvas", this.onClick.bind(this));
 
 		$("#volume").on("input", this.onInput.bind(this));
 
@@ -294,6 +295,7 @@ Controls.prototype = {
 	 * @param {*} event 
 	 */
 	onClick: function(event) {
+		var voiceMask = SID.voiceMask & 0xF;	
 		switch(event.target.id) {
 			case "stop":
 				// STOP button
@@ -340,6 +342,17 @@ Controls.prototype = {
 						$("#time-bar div").css("transition", "all 1s linear");
 					}, 250);
 				}
+				break;
+			case "scope1":
+			case "scope2":
+			case "scope3":
+			case "scope4":
+				// Toggle voice 1 to 4 (by clicking on scope canvas boxes)
+				// NOTE: The "keyup" event in 'viz.js' catches this.
+				var e = $.Event("keyup");
+				e.which = e.keyCode = 48 + parseInt(event.target.id.slice(-1));
+				e.shiftKey = event.shiftKey;
+				$(window).trigger(e);
 				break;
 			default:
 				if (event.target.className == "subtune") {

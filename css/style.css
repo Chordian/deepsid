@@ -1128,6 +1128,7 @@ input[type=range]::-ms-track {
 		border: 0.5px solid #c4c5b3; /* #b0b29a #ced0c0 */
 		background: #fff;
 		border-radius: 1px;
+		cursor: pointer;
 	}
 
 	/* The STIL box is used for random tips upon page load */
