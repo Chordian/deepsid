@@ -4,8 +4,9 @@
  */
 
 var $=jQuery.noConflict();
-var cacheCSDb = cacheSticky = cacheStickyBeforeCompo = cacheCSDbProfile = cacheBeforeCompo = prevFile = "";
-var cacheTabScrollPos = tabScrollPos = cachePosBeforeCompo = cacheDDCSDbSort = peekCounter = 0;
+var cacheCSDb = cacheSticky = cacheStickyBeforeCompo = cacheCSDbProfile = cacheBeforeCompo = prevFile = sundryTab = "";
+var cacheTabScrollPos = tabScrollPos = cachePosBeforeCompo = cacheDDCSDbSort = peekCounter = sundryHeight = 0;
+var sundryToggle = true;
 
 $(function() { // DOM ready
 
@@ -42,14 +43,10 @@ $(function() { // DOM ready
 		.styledSelect("emulator")
 		.styledSetValue(emulator);
 
-	if ($(window).height() <= 840) {
-		$("#sundry-tabs,#sundry,#slider").hide(); // Hide sundry box on small displays
-	} else {
-		// Otherwise use it upon page load to show random tips
-		$.post("php/tips.php", function(tips) {
-			$("#stopic-stil").append('<div id="tips">'+tips+'</div>');
-		});
-	}
+	// Show a random tip in the sundry box
+	$.post("php/tips.php", function(tips) {
+		$("#stopic-stil").append('<div id="tips">'+tips+'</div>');
+	});
 
 	$("#time-bar").addClass(emulator)
 		.css("cursor", SID.emulatorFlags.supportSeeking ? "pointer" : "default");
@@ -79,8 +76,8 @@ $(function() { // DOM ready
 				window.open("//deepsid.chordian.net/", "_blank",
 					"left=0,top=0,width=450,height="+(screen.height-150)+",scrollbars=no");
 			else if (event.keyCode == 83) {							// Keyup 's'
-				// Toggle the sundry box on/off
-				$("#sundry-tabs,#sundry,#slider").toggle();
+				// Toggle the sundry box minimized or restored
+				ToggleSundry();
 				$(window).trigger("resize", true);
 			}
 		}
@@ -90,11 +87,15 @@ $(function() { // DOM ready
 	 * When resizing the window. Also affected by toggling the developer pane.
 	 * 
 	 * @param {*} event 
-	 * @param {boolean} sundryToggle	If specified and TRUE, ignores the sundry box.
+	 * @param {boolean} sundryIgnore	If specified and TRUE, ignores the sundry box.
 	 */
-	$(window).on("resize", function(event, sundryToggle) {
-		if (!sundryToggle && $("#tabs .selected").attr("data-topic") !== "stil")
-			$(window).height() > 840 ? $("#sundry-tabs,#sundry,#slider").show() : $("#sundry-tabs,#sundry,#slider").hide();
+	$(window).on("resize", function(event, sundryIgnore) {
+		if (!sundryIgnore) {
+			if ($(window).height() > 840 && !sundryToggle)
+				ToggleSundry(false);
+			else if ($(window).height() <= 840 && sundryToggle)
+				ToggleSundry(true);
+		}
 		// Make sure the browser box always take up all screen height upon resizing the window
 		$("#folders").height(0).height($("#songs").height() - 100);
 		if (!browser.isMobile) {
@@ -120,7 +121,16 @@ $(function() { // DOM ready
 		$("body").on("mousemove touchmove", function(event) {
 			event.preventDefault();
 			var $sundry = $("#sundry"), diff = $("#slider").offset().top + 5 - event.pageY;
-			$sundry.css("flex-basis", $sundry.css("flex-basis").replace("px", "") - diff);
+			var newHeight = $sundry.css("flex-basis").replace("px", "") - diff;
+			$sundry.css({
+				"flex-basis":	newHeight,
+				"padding":		"6px 10px",
+			});
+			sundryHeight = newHeight;
+			if (!sundryToggle) {
+				sundryToggle = true;
+				$("#sundry-tabs").find(".tab[data-topic='"+sundryTab+"']").addClass("selected");
+			}
 			$("#stopic-stil .mCSB_scrollTools").css("height", $("#sundry .stopic").height() + 7);
 			$("#folders").height(0).height($("#songs").height() - 100);
 		});
@@ -288,10 +298,6 @@ $(function() { // DOM ready
 		if (["about", "faq", "changes"].includes(topic) || topic == "profile" && browser.path == "" && !browser.isSearching)
 			$("#page").addClass("big-logo");
 
-		// Toggle the sundry box depending on whether the 'STIL' tab was clicked or not
-		topic === "stil" ? $("#sundry-tabs,#sundry,#slider").hide() : $("#sundry-tabs,#sundry,#slider").show();
-		$(window).trigger("resize", true);
-
 		// If 'Disqus' tab is selected then hide the notification on it
 		if (topic === "disqus") $("#note-disqus").hide();
 
@@ -322,6 +328,9 @@ $(function() { // DOM ready
 	$("#sundry-tabs .tab").click(function() {
 		var $this = $(this);
 		if ($this.hasClass("selected") || $this.hasClass("disabled")) return false;
+
+		// If the box was minimized, restore it first
+		if (!sundryToggle) ToggleSundry(false);
 
 		var prevTopic = $("#sundry-tabs .selected").attr("data-topic");
 
@@ -645,11 +654,6 @@ $(function() { // DOM ready
 		$("#sticky").show();					// Show sticky header
 	}
 
-	// Turn off the sundry box if the STIL tab was selected
-	if (selectTab === "stil") {
-		$("#sundry-tabs,#sundry,#slider").hide();
-		$(window).trigger("resize", true);
-	}
 });
 
 /**
@@ -733,6 +737,36 @@ function GetSettingValue(id) {
 function ResizeIframe() {
 	$(window).trigger("resize");
 	$("#page .deepsid-iframe").show();
+}
+
+/**
+ * Minimize or maximize the sundry box in case of a small display. When the box
+ * is minimized, you can still click a tab to restore its size or you can drag
+ * the slider downwards to expand it.
+ * 
+ * All sundry tabs become unselected while minimized.
+ * 
+ * @param {boolean} shrink	TRUE to minimize, FALSE to return to before, or toggle if not specified.
+ */
+function ToggleSundry(shrink) {
+	if (typeof shrink === "undefined") shrink = sundryToggle;
+	if (!shrink) {
+		$("#sundry").css({
+			"flex-basis":	sundryHeight,
+			"padding":		"6px 10px",
+		});
+		sundryToggle = true;
+		$("#sundry-tabs").find(".tab[data-topic='"+sundryTab+"']").addClass("selected");
+	} else {
+		sundryHeight = $("#sundry").css("flex-basis");
+		sundryTab = $("#sundry-tabs .selected").attr("data-topic");
+		$("#sundry").css({
+			"flex-basis":	0,
+			"padding":		0,
+		});
+		sundryToggle = false;
+		$("#sundry-tabs .tab").removeClass("selected"); // No tab selected anymore
+	}
 }
 
 /**
