@@ -912,6 +912,7 @@
 								again either by clicking a sundry tab or by dragging the slider down.</li>
 							<li>Clicking the STIL/Lyrics page tab no longer minimizes the sundry box.</li>
 							<li>Renamed the "Flood" tab to "Graph" instead.</li>
+							<li>Fixed being able to also use search type <code>All</code> in playlists.</li>
 						</ul>
 
 						<h3>February 17, 2019</h3>

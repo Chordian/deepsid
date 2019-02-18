@@ -198,11 +198,54 @@ try {
 					$query = strtolower($_GET['searchQuery']) == 'holland' ? 'netherlands' : $_GET['searchQuery'];
 					$select_files->execute(array(':query'=>'%'.$query.'%'));
 				} else {
-					// Search anything else
-					$select_files = $db->prepare('SELECT fullname FROM hvsc_files'.
+					// Normal type search (handles any position of words and excluding with "-" prepended)
+					// NOTE: This would have been easier with 'Full-Text' search but I'm not using the MyISAM engine.
+					$exclude = '';
+					if ($_GET['searchType'] == 'new') {
+						$include = $_GET['searchType'].' LIKE "%'.str_replace('.', '', $_GET['searchQuery']).'%"';
+					} else {
+						$query = $_GET['searchQuery'];
+
+						// Replace spaces ('_') inside quoted queries with '%' and remove the quotes themselves
+						// NOTE: This is actually a weird shortcut and sometimes produce unexpected results.
+						preg_match_all('/"[^"]+"/', $query, $quoted);
+						foreach($quoted[0] as $q) {
+							$adapted = trim(str_replace('_', '%', $q), '"');
+							$query = str_replace($q, $adapted, $query);
+						}
+						// Get rid of any lonely quote stragglers
+						$query = str_replace('"', '', $query);
+
+						$words = explode('_', $query);
+						$include = '(';
+						$i_and = $e_and = '';
+						foreach($words as $word) {
+							if (substr($word, 0, 1) == '-') {
+								$exclude .= $e_and.$_GET['searchType'].' NOT LIKE "%'.substr($word, 1).'%"';
+								$e_and = ' AND ';
+							} else {
+								$include .= $i_and.$_GET['searchType'].' LIKE "%'.$word.'%"';
+								$i_and = ' AND ';
+							}
+						}
+						$include .= ')';
+						if (!empty($exclude)) $exclude = ' AND ('.$exclude.')';
+
+						if ($_GET['searchType'] == '#all#') {
+							// Searching ALL should of course include a range of columns
+							$columns = $comma = '';
+							foreach(array('fullname', 'author', 'copyright', 'player', 'stil', 'gb64') as $column) {
+								$columns .= $comma.$column.', " "';
+								$comma = ', ';
+							}
+							// Treating all columns as one long search entity is MUCH easier
+							$include = str_replace('#all#', 'CONCAT('.$columns.')', $include);
+							$exclude = str_replace('#all#', 'CONCAT('.$columns.')', $exclude);
+						}
+					}	
+					$select_files = $db->query('SELECT fullname FROM hvsc_files'.
 						' INNER JOIN symlists ON hvsc_files.id = symlists.file_id'.
-						' WHERE '.$_GET['searchType'].' LIKE :query AND symlists.folder_id = '.$symlist_folder_id);
-					$select_files->execute(array(':query'=>'%'.$_GET['searchQuery'].'%'));
+						' WHERE '.$include.$exclude.' AND symlists.folder_id = '.$symlist_folder_id);
 				}
 				$select_files->setFetchMode(PDO::FETCH_OBJ);
 
