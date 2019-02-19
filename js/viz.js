@@ -482,14 +482,14 @@ Viz.prototype = {
 		if (SID.emulator !== "websid") {
 			if (this.tabOscMode !== "NOTWEBSID") {
 				$("#scope1,#scope2,#scope3,#scope4").hide(); // Don't use 'canvas' or '.scope' here
-				$("#stopic-osc .sundryMsg").empty().append('This view requires the WebSid emulator.').show();
+				$("#stopic-osc .sundryMsg").empty().append('This view requires the <button id="set-websid">WebSid</button> emulator.').show();
 				this.tabOscMode = "NOTWEBSID";
 			}
 			return;
 		} else if (viz.bufferSize < 16384) {
 			if (this.tabOscMode !== "NOT16K") {
 				$("#scope1,#scope2,#scope3,#scope4").hide();
-				$("#stopic-osc .sundryMsg").empty().append('A buffer size of 16384 is required.').show();
+				$("#stopic-osc .sundryMsg").empty().append('A buffer size of <button id="set-16k" style="font-size:13px;line-height:13px;">16384</button> is required.').show();
 				this.tabOscMode = "NOT16K";
 			}
 			return;

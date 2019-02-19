@@ -30,6 +30,7 @@ Controls.prototype = {
 		$("#info").on("click", "#sid-model,#clockspeed", this.onClick.bind(this));
 		$("#sundry,#topic-stil").on("click", ".subtune", this.onClick.bind(this));
 		$("#sundry").on("click", "canvas", this.onClick.bind(this));
+		$("#stopic-osc").on("click", "button", this.onClick.bind(this));
 
 		$("#volume").on("input", this.onInput.bind(this));
 
@@ -353,6 +354,14 @@ Controls.prototype = {
 				e.which = e.keyCode = 48 + parseInt(event.target.id.slice(-1));
 				e.shiftKey = event.shiftKey;
 				$(window).trigger(e);
+				break;
+			case "set-websid":
+				// Button in scope sundry box for forcing WebSid emulator
+				$("#dropdown-emulator").styledSetValue("websid").next("div.styledSelect").trigger("change");
+				break;
+			case "set-16k":
+				// Button in scope sundry box for forcing a buffer size of 16384
+				$("#topic-settings .dropdown-buffer").val("16384").trigger("change");
 				break;
 			default:
 				if (event.target.className == "subtune") {

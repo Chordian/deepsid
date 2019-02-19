@@ -201,14 +201,16 @@ small.u2 { margin-left: 2px; }
 
 	#controls button,
 	#songs button,
-	.edit button {
+	.edit button,
+	#sundry button {
 		transition: all .05s linear;
 		box-shadow: 2px 2px 4px #808270; /* #7c7e60 */
 	}
 
 	#controls button:active,
 	#songs button:active,
-	.edit button:active {
+	.edit button:active,
+	#sundry button:active {
 		box-shadow: 0 0 0 transparent;
 	}
 
@@ -590,12 +592,23 @@ small.u2 { margin-left: 2px; }
 					border: 0.3px solid #111;
 				}
 
-	.button-edit {
+	.button-edit,
+	#sundry button {
 		height: 25px !important;
 		padding: 0;
 		border-radius: 10px;
 		vertical-align: top;
 	}
+
+		/* Used for "require" messages */
+		#sundry button {
+			position: relative;
+			top: -4px;
+			font-size: 11px;
+			padding-left: 10px;
+			padding-right: 10px;
+			margin: 0 2px;
+		}
 
 	/* Radio-button style buttons where the text needs to stay the same and only one button may be active */
 	.button-radio {

@@ -899,6 +899,7 @@
 						<ul>
 							<li>You can now use the <code>stab</code> URL parameter to select a sundry box tab.</li>
 							<li>Clicking a sundry box tab is now sticky.</li>
+							<li>The requirement messages in the scope sundry box now have handy buttons for fast fixing.</li>
 						</ul>
 
 						<h3>February 18, 2019</h3>
