@@ -822,20 +822,6 @@
 							You need a modern web browser to use this site.
 						</p>
 
-						<?php if (false): // All handlers should now work fine on iOS ?>
-							<h3>Why doesn't this work perfectly on iPhone or iPad?</h3>
-							<p>
-								Apple hacked their iOS to avoid autoplaying sound on their mobile devices unless the user
-								touches the screen first. This sometimes makes it difficult to make things work 100%. We're
-								revisiting this problem from time to time.
-							</p>
-							<ul>
-								<li><b>WebSid emulator:</b> Currently does not work on iPhone and iPad.</li>
-								<li><b>Hermit's emulator:</b> Since iOS patch 11.4, Hermit's emulator works on iPhone and iPad.</li>
-								<li><b>Howler for SOASC:</b> Fixed 2018-07-15 and thus also works on iPhone and iPad.</li>
-							</ul>
-						<?php endif ?>
-
 						<h3>Why can't I see the load/end addresses and size of the SID tune?</h3>
 						<p>
 							See that blue bar just below the top box with the title, author and copyright lines? It's the C64
@@ -874,7 +860,10 @@
 							<tr>
 								<td>tab</td><td>Set to <code>csdb</code>, <code>gb64</code>, <code>stil</code>, <code>piano</code>, <code>flood</code>,
 									<code>disqus</code>, <code>about</code>, <code>faq</code>, <code>changes</code> or <code>settings</code>
-									(the gear icon) to select that tab</td>
+									(the gear icon) to select that page tab</td>
+							</tr>
+							<tr>
+								<td>stab</td><td>Set to <code>stil</code> (or <code>lyrics</code>) or <code>scope</code> (or <code>osc</code>) to select that sundry box tab</td>
 							</tr>
 							<tr>
 								<td>csdbtype</td><td>Set to <code>sid</code> or <code>release</code> to show a CSDb entry;
@@ -905,6 +894,12 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>February 19, 2019</h3>
+						<ul>
+							<li>You can now use the <code>stab</code> URL parameter to select a sundry box tab.</li>
+							<li>Clicking a sundry box tab is now sticky.</li>
+						</ul>
 
 						<h3>February 18, 2019</h3>
 						<ul>

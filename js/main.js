@@ -339,6 +339,7 @@ $(function() { // DOM ready
 		$this.addClass("selected");
 
 		var stopic = $this.attr("data-topic");
+		localStorage.setItem("sundrytab", stopic);
 
 		// The oscilloscope view requires a minimum amount of vertical space
 		if (stopic == "osc") {
@@ -572,6 +573,7 @@ $(function() { // DOM ready
 	var searchQuery = GetParam("search"),
 		paramSubtune = GetParam("subtune"),
 		selectTab = GetParam("tab"),
+		selectSundryTab = GetParam("stab"),
 		typeCSDb = GetParam("csdbtype"),
 		idCSDb = GetParam("csdbid");
 		// Let mobile devices use their own touch scrolling stuff
@@ -648,10 +650,19 @@ $(function() { // DOM ready
 	selectTab = selectTab !== "" ? selectTab : "profile";
 	$("#tab-"+selectTab).trigger("click");
 
+	// Select and show a "sundry" box tab (an URL parameter overrides the local storage setting)
+	if (selectSundryTab === "") {
+		selectSundryTab = localStorage.getItem("sundrytab");
+		if (selectSundryTab == null) selectSundryTab = "stil";
+	}
+	if (selectSundryTab === "lyrics") selectSundryTab = "stil";
+	if (selectSundryTab === "scope") selectSundryTab = "osc";
+	$("#stab-"+selectSundryTab).trigger("click");
+
 	// Show a specific CSDb entry (only loads the content of the CSDb tab)
 	if (typeCSDb === "sid" || typeCSDb === "release") {
 		browser.getCSDb(typeCSDb, idCSDb, false);
-		$("#sticky").show();					// Show sticky header
+		$("#sticky").show(); // Show sticky header
 	}
 
 });
