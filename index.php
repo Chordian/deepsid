@@ -195,6 +195,7 @@
 			<div id="sundry-tabs">
 				<div class="tab unselectable selected" data-topic="stil" id="stab-stil">Tips</div>
 				<div class="tab unselectable" data-topic="osc" id="stab-osc">Scope</div>
+				<div id="sundry-ctrls"></div>
 			</div>
 			<div id="sundry">
 				<div id="stopic-stil" class="stopic"></div>
@@ -898,6 +899,7 @@
 						<h3>February 20, 2019</h3>
 						<ul>
 							<li>Long CSDb pages now have a small button in the bottom for scrolling back up to the top.</li>
+							<li>Added a zoom slider for the oscilloscope view. You can zoom in five steps.</li>
 						</ul>
 
 						<h3>February 19, 2019</h3>

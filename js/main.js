@@ -332,6 +332,8 @@ $(function() { // DOM ready
 		// If the box was minimized, restore it first
 		if (!sundryToggle) ToggleSundry(false);
 
+		$("#sundry-ctrls").empty(); // Clear corner controls
+
 		var prevTopic = $("#sundry-tabs .selected").attr("data-topic");
 
 		// Select the new tab
@@ -341,12 +343,23 @@ $(function() { // DOM ready
 		var stopic = $this.attr("data-topic");
 		localStorage.setItem("sundrytab", stopic);
 
-		// The oscilloscope view requires a minimum amount of vertical space
-		if (stopic == "osc") {
-			var $sundry = $("#sundry");
-			if ($sundry.css("flex-basis").replace("px", "") < 232)
-				$sundry.css("flex-basis", 232);
+		switch (stopic) {
+			case "stil":
+				break;
+			case "osc":
+				// The oscilloscope view requires a minimum amount of vertical space
+				var $sundry = $("#sundry");
+				if ($sundry.css("flex-basis").replace("px", "") < 232)
+					$sundry.css("flex-basis", 232);
+				// Add corner controls
+				$("#sundry-ctrls").append(
+					'<label for"osc-zoom">Min</label>'+
+					'<input id="osc-zoom" type="range" min="1" max="5" value="'+viz.scopeZoom+'" step="1" />'+
+					'<label for"osc-zoom">Max</label>'
+				);
+				break;
 		}
+
 		$("#stopic-stil .mCSB_scrollTools").css("height", $("#stopic-"+prevTopic).height() + 7);
 		$("#folders").height(0).height($("#songs").height() - 100);
 

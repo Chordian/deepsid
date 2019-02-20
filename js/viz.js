@@ -500,10 +500,10 @@ Viz.prototype = {
 			this.tabOscMode = "OSC";
 		}
 		if (SID.isPlaying()) {
-			this.scopeVoice1.redrawGraph(this.scopeMode, this.scopeZoom);
-			this.scopeVoice2.redrawGraph(this.scopeMode, this.scopeZoom);
-			this.scopeVoice3.redrawGraph(this.scopeMode, this.scopeZoom);
-			this.scopeVoice4.redrawGraph(this.scopeMode, this.scopeZoom);
+			this.scopeVoice1.redrawGraph(this.scopeMode, parseInt(this.scopeZoom));
+			this.scopeVoice2.redrawGraph(this.scopeMode, parseInt(this.scopeZoom));
+			this.scopeVoice3.redrawGraph(this.scopeMode, parseInt(this.scopeZoom));
+			this.scopeVoice4.redrawGraph(this.scopeMode, parseInt(this.scopeZoom));
 		}
 	},
 

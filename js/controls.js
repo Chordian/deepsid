@@ -32,7 +32,7 @@ Controls.prototype = {
 		$("#sundry").on("click", "canvas", this.onClick.bind(this));
 		$("#stopic-osc").on("click", "button", this.onClick.bind(this));
 
-		$("#volume").on("input", this.onInput.bind(this));
+		$("#volume,#sundry-ctrls").on("input", this.onInput.bind(this));
 
 		setInterval(this.pace.bind(this), 150); // VBI, 2x, 4x, digi, etc.
 	},
@@ -381,12 +381,21 @@ Controls.prototype = {
 	},
 
 	/**
-	 * When dragging the vertical slider to change the main volume (between 0 and 1).
+	 * When dragging a range slider.
 	 * 
 	 * @param {*} event 
 	 */
 	onInput: function(event) {
-		SID.setMainVolume(event.currentTarget.value / 100);
+		switch (event.target.id) {
+			case "volume":
+				// Main volume; between 0 and 1
+				SID.setMainVolume(event.currentTarget.value / 100);
+				break;
+			case "osc-zoom":
+				// Oscilloscope zoom; 1 (closest) to 5 (farthest)
+				viz.scopeZoom = event.target.value;
+				break;
+		}
 	},
 
 	/**

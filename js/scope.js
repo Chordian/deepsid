@@ -334,6 +334,7 @@ SidWiz.prototype = {
 				} else { 
 					while ((this._voiceData[offset+qx] >= triggerLevel) && (qx < jac * 2)) qx++; 
 				}
+				// if (qx === 800) break; // JCH: Enable this for debugging if it starts freezing
 
 				//add point to data
 				if (!isUp) {

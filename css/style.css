@@ -744,7 +744,7 @@ input[type=range]::-webkit-slider-thumb {	/* WebKit / Blink */
 		cursor: default;
 	}
 
-input[type=range]::-moz-range-thumb {		/* Firefox*/
+input[type=range]::-moz-range-thumb {		/* Firefox */
 	border: 2px solid #474937;
 	height: 16px;
 	width: 6px;
@@ -842,6 +842,15 @@ input[type=range]::-ms-track {
 	transform-origin: 75px 75px;
 	transform: rotate(-90deg);
 }
+
+#osc-zoom {
+	width: 45px;
+	margin: 0 2px;
+}
+
+	#osc-zoom::-webkit-slider-thumb	{ height: 12px; position: relative; top: 2px; }
+	#osc-zoom::-moz-range-thumb		{ height: 12px; }
+	#osc-zoom::-ms-thumb			{ height: 12px; /* (POSITION YET UNTESTED) */ }
 
 /* ---- The Time/Length Bar ------------------------------------------------- */
 
@@ -1109,6 +1118,22 @@ input[type=range]::-ms-track {
 	position: relative;
 	margin: 2px 0 6px;
 }
+
+#sundry-ctrls {
+	position: absolute;
+	top: 6px;
+	right: 0;
+	height: 21px;
+	width: 170px;
+	text-align: right;
+}
+
+	#sundry-ctrls label {
+		position: relative;
+		top: -6px;
+		font: normal 13px/0 "Montserrat", sans-serif;
+		color: #68695a;
+	}
 
 #sundry {
 	overflow: hidden;
@@ -2676,7 +2701,7 @@ input[type=range]::-ms-track {
 		margin-top: 7px;
 		padding: 0;
 		line-height: 0 !important;
-		width: 16px;
+		width: 21px;
 		height: 15px !important;
 	}
 
