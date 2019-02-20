@@ -895,6 +895,11 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>February 20, 2019</h3>
+						<ul>
+							<li>Long CSDb pages now have a small button in the bottom for scrolling back up to the top.</li>
+						</ul>
+
 						<h3>February 19, 2019</h3>
 						<ul>
 							<li>You can now use the <code>stab</code> URL parameter to select a sundry box tab.</li>

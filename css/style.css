@@ -2670,6 +2670,16 @@ input[type=range]::-ms-track {
 		display:none;
 	}
 
+	/* Small arrow up button in the bottom of CSDb pages (for scrolling back up) */
+	#to-top {
+		float: right;
+		margin-top: 7px;
+		padding: 0;
+		line-height: 0 !important;
+		width: 16px;
+		height: 15px !important;
+	}
+
 /* ---- Overriding Custom Scrollbar Styling --------------------------------- */
 
 .mCSB_inside > .mCSB_container {

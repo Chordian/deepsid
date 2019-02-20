@@ -468,6 +468,13 @@ $(function() { // DOM ready
 	});
 
 	/**
+	 * When clicking the arrow up button in the bottom of CSDb pages to scroll back to the top.
+	 */
+	$("#topic-csdb").on("click", "#to-top", function() {
+		$("#page").mCustomScrollbar("scrollTo", "top");
+	});
+
+	/**
 	 * When clicking an HVSC link in a competition results list to play a different SID tune.
 	 */
 	$("#topic-csdb").on("click", "a.compo-go", function() {
@@ -704,6 +711,11 @@ function ShowDexterScrollbar(topic) {
 						$(window).trigger("resize");
 					},1);
 				},
+				onOverflowY: function() {
+					// Enable the arrow button in the bottom of CSDb pages (for scrolling back to the top)
+					if ($("#tabs .selected").attr("data-topic") === "csdb")
+						$("#to-top").show();
+				},				
 				whileScrolling: function() {
 					tabScrollPos = this.mcs.top;
 				},
