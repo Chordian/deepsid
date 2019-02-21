@@ -4,7 +4,7 @@
  */
 
 var $=jQuery.noConflict();
-var cacheCSDb = cacheSticky = cacheStickyBeforeCompo = cacheCSDbProfile = cacheBeforeCompo = prevFile = sundryTab = "";
+var cacheCSDb = cacheSticky = cacheStickyBeforeCompo = cacheCSDbProfile = cacheBeforeCompo = prevFile = sundryTab = reportSTIL = "";
 var cacheTabScrollPos = tabScrollPos = cachePosBeforeCompo = cacheDDCSDbSort = peekCounter = sundryHeight = 0;
 var sundryToggle = true;
 
@@ -345,6 +345,8 @@ $(function() { // DOM ready
 
 		switch (stopic) {
 			case "stil":
+				// See the 'UpdateURL()' function below
+				if (!browser.isCGSC()) $("#sundry-ctrls").append(reportSTIL);
 				break;
 			case "osc":
 				// The oscilloscope view requires a minimum amount of vertical space
@@ -623,16 +625,16 @@ $(function() { // DOM ready
 		fileParam = fileParam.charAt(0) === "/" ? fileParam : "/"+fileParam;
 		if (fileParam.substr(0, 6) == "/DEMOS" || fileParam.substr(0, 6) == "/GAMES" || fileParam.substr(0, 10) == "/MUSICIANS")
 			fileParam = "/High Voltage SID Collection"+fileParam;
-		var isSidFile = fileParam.indexOf(".sid") === -1 && fileParam.indexOf(".mus") === -1,
+		var isFolder = fileParam.indexOf(".sid") === -1 && fileParam.indexOf(".mus") === -1,
 			isSymlist = fileParam.substr(0, 2) == "/!" || fileParam.substr(0, 2) == "/$";
-		browser.path = isSidFile ? fileParam : fileParam.substr(0, fileParam.lastIndexOf("/"));
+		browser.path = isFolder ? fileParam : fileParam.substr(0, fileParam.lastIndexOf("/"));
 		if (browser.path.substr(0, 7).toLowerCase() != "/demos/" && browser.path.substr(0, 7).toLowerCase() != "/games/" && browser.path.substr(0, 11).toLowerCase() != "/musicians/" && browser.path.substr(0, 2) != "/!" && browser.path.substr(0, 2) != "/$")
 			browser.path = "/_"+browser.path.substr(1); // It's an "extra" folder
 		if (browser.path.substr(-1) === "/") browser.path = browser.path.slice(0, -1); // Remove "/" at end of folder
 		if (isSymlist) browser.path = "/"+browser.path.split("/")[1]; // Symlist SID names could be using "/" chars
 		ctrls.state("root/back", "enabled");
 		browser.getFolder(0, undefined, function() {
-			if (!isSidFile) {
+			if (!isFolder) {
 				// Isolate the SID name, e.g. "music.sid"
 				var sidFile = isSymlist
 					? fileParam.substr(fileParam.substr(1).indexOf("/") + 2)
@@ -867,6 +869,14 @@ function UpdateURL() {
 		history.pushState({}, document.title, link);
 	} else
 		history.replaceState({}, document.title, link);
+
+	// Update STIL change report link
+	reportSTIL = '<a href="mailto:hvsc@c64.org?subject=STIL%20change&body=I%20have%20a%20STIL%20change%20request%20for:%0D%0A'+window.location.href+'%0D%0A%0D%0A" style="position:relative;top:-3px;font-size:11px;">Report a STIL change</a>';
+	if ($("#sundry-tabs .selected").attr("data-topic") === "stil") {
+		var $ctrls = $("#sundry-ctrls");
+		$ctrls.empty();
+		if (!browser.isCGSC()) $ctrls.append(reportSTIL);
+	}
 }
 
 /**

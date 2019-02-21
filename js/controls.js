@@ -711,7 +711,7 @@ Controls.prototype = {
 						},
 					},
 				});
-				$("#topic-stil").empty().append(stil);
+			$("#topic-stil").empty().append(stil);
 		}
 	},
 

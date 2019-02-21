@@ -1500,7 +1500,7 @@ Browser.prototype = {
 	 * @return {boolean}
 	 */
 	isCGSC: function() {
-		return this.path.indexOf("_Compute's Gazette SID Collection") !== -1 ||
+		return (!this.isSearching && this.path.indexOf("_Compute's Gazette SID Collection") !== -1) ||
 			(typeof this.playlist[this.songPos] !== "undefined" &&
 				this.playlist[this.songPos].fullname.indexOf("_Compute's Gazette SID Collection") !== -1);
 	},

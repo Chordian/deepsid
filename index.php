@@ -899,6 +899,8 @@
 						<h3>February 21, 2019</h3>
 						<ul>
 							<li>Added a check box for toggling between SidWiz and normal oscilloscope mode.</li>
+							<li>You can now click a link to report a STIL change for the current song. This uses the
+								"mailto" link method and it automatically prepares the body text with a link to the file.</li>
 						</ul>
 
 						<h3>February 20, 2019</h3>
