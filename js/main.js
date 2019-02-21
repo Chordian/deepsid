@@ -353,9 +353,13 @@ $(function() { // DOM ready
 					$sundry.css("flex-basis", 232);
 				// Add corner controls
 				$("#sundry-ctrls").append(
-					'<label for"osc-zoom">Min</label>'+
+					'<label for"osc-zoom" class="unselectable">Min</label>'+
 					'<input id="osc-zoom" type="range" min="1" max="5" value="'+viz.scopeZoom+'" step="1" />'+
-					'<label for"osc-zoom">Max</label>'
+					'<label for"osc-zoom" class="unselectable">Max</label>'+
+					'<div style="display:inline-block;vertical-align:top;margin-left:13px;">'+
+						'<input type="checkbox" id="sidwiz" name="sidwiztoggle" class="unselectable" '+(viz.scopeMode ? '' : 'un')+'checked />'+
+					'</div>'+
+					'<label for="sidwiz" class="unselectable">SidWiz</label>'
 				);
 				break;
 		}

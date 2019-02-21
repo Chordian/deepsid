@@ -896,6 +896,11 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>February 21, 2019</h3>
+						<ul>
+							<li>Added a check box for toggling between SidWiz and normal oscilloscope mode.</li>
+						</ul>
+
 						<h3>February 20, 2019</h3>
 						<ul>
 							<li>Long CSDb pages now have a small button in the bottom for scrolling back up to the top.</li>

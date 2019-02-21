@@ -850,7 +850,7 @@ input[type=range]::-ms-track {
 
 	#osc-zoom::-webkit-slider-thumb	{ height: 12px; position: relative; top: 2px; }
 	#osc-zoom::-moz-range-thumb		{ height: 12px; }
-	#osc-zoom::-ms-thumb			{ height: 12px; /* (POSITION YET UNTESTED) */ }
+	#osc-zoom::-ms-thumb			{ height: 12px; }
 
 /* ---- The Time/Length Bar ------------------------------------------------- */
 
@@ -1124,7 +1124,7 @@ input[type=range]::-ms-track {
 	top: 6px;
 	right: 0;
 	height: 21px;
-	width: 170px;
+	width: 177px;			/* This leaves room for a maximum of four sundry tabs */
 	text-align: right;
 }
 

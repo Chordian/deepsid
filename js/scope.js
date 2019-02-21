@@ -50,7 +50,7 @@ SidTracer = (function(){ var $this = function(outputSize) {
 			
 			// 3rd step: use "sliding window" approach to fill the actual output buffers
 			//this.setOutputSize(this.outputSize);
-			this.setOutputSize(16384); // Added by JCH as the output size needs to be 16384 always
+			this.setOutputSize(16384); // Added by JCH as the output size needs to be 16384 for SidWiz mode
 		},	
 		/**
 		* Marks the start of a new audio buffer, i.e. a new audio buffer is about to be generated.
@@ -433,7 +433,7 @@ VoiceDisplay.prototype = {
 	},
 	redrawGraph: function(osciloscopeMode, zoom) {
 		var data= this.getData();
-		if (data.length < 16384) return; // Added by JCH to avoid freezing
+		if (osciloscopeMode && data.length < 16384) return; // Added by JCH to avoid freezing
 
 		try {
 			// seems that dumbshit Safari (11.0.1 OS X) uses the fillStyle for "clearRect"!

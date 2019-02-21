@@ -495,6 +495,7 @@ Viz.prototype = {
 			return;
 		} else if (this.tabOscMode !== "OSC") {
 			// Okay to draw oscilloscope voices again now
+			scope.setOutputSize(viz.scopeMode ? 16384 : 246 << viz.scopeZoom);
 			$("#stopic-osc .sundryMsg").hide();
 			$("#scope1,#scope2,#scope3,#scope4").show();
 			this.tabOscMode = "OSC";

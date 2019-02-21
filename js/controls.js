@@ -31,6 +31,7 @@ Controls.prototype = {
 		$("#sundry,#topic-stil").on("click", ".subtune", this.onClick.bind(this));
 		$("#sundry").on("click", "canvas", this.onClick.bind(this));
 		$("#stopic-osc").on("click", "button", this.onClick.bind(this));
+		$("#sundry-ctrls").on("click", "#sidwiz", this.onClick.bind(this));
 
 		$("#volume,#sundry-ctrls").on("input", this.onInput.bind(this));
 
@@ -363,6 +364,12 @@ Controls.prototype = {
 				// Button in scope sundry box for forcing a buffer size of 16384
 				$("#topic-settings .dropdown-buffer").val("16384").trigger("change");
 				break;
+			case "sidwiz":
+				// Toggle 'SidWiz' mode ON or OFF for the oscilloscope voices
+				// NOTE: Don't add the DOM element check in 'animateScope()' as it needs to be fast.
+				viz.scopeMode = $("#sidwiz").is(":checked");
+				scope.setOutputSize(viz.scopeMode ? 16384 : 246 << viz.scopeZoom);
+				break;
 			default:
 				if (event.target.className == "subtune") {
 					// Play the subtune clicked in the STIL tab of the sundry box
@@ -394,6 +401,7 @@ Controls.prototype = {
 			case "osc-zoom":
 				// Oscilloscope zoom; 1 (closest) to 5 (farthest)
 				viz.scopeZoom = event.target.value;
+				scope.setOutputSize(viz.scopeMode ? 16384 : 246 << viz.scopeZoom);
 				break;
 		}
 	},
