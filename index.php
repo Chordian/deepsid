@@ -896,6 +896,12 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>February 22, 2019</h3>
+						<ul>
+							<li>Fixed searching all when specifying a search URL parameter without a type.</li>
+							<li>Added a permalink to search results, ready to be copied.</li>
+						</ul>
+
 						<h3>February 21, 2019</h3>
 						<ul>
 							<li>Added a check box for toggling between SidWiz and normal oscilloscope mode.</li>

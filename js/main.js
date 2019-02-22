@@ -667,7 +667,7 @@ $(function() { // DOM ready
 		});
 	} else if (searchQuery !== "") {
 		// A search query was specified (optionally with a type too)
-		$("#dropdown-search").val(GetParam("type") !== "" ? GetParam("type").toLowerCase() : "fullname");
+		$("#dropdown-search").val(GetParam("type") !== "" ? GetParam("type").toLowerCase() : "#all#");
 		$("#search-box").val(searchQuery).trigger("keyup");
 		$("#search-button").trigger("click");
 	}
