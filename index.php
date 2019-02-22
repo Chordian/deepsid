@@ -864,7 +864,7 @@
 									(the gear icon) to select that page tab</td>
 							</tr>
 							<tr>
-								<td>stab</td><td>Set to <code>stil</code> (or <code>lyrics</code>) or <code>scope</code> (or <code>osc</code>) to select that sundry box tab</td>
+								<td>sundry</td><td>Set to <code>stil</code> (or <code>lyrics</code>) or <code>scope</code> (or <code>osc</code>) to select that sundry box tab</td>
 							</tr>
 							<tr>
 								<td>csdbtype</td><td>Set to <code>sid</code> or <code>release</code> to show a CSDb entry;
@@ -911,7 +911,7 @@
 
 						<h3>February 19, 2019</h3>
 						<ul>
-							<li>You can now use the <code>stab</code> URL parameter to select a sundry box tab.</li>
+							<li>You can now use the <code>sundry</code> URL parameter to select a sundry box tab.</li>
 							<li>Clicking a sundry box tab is now sticky.</li>
 							<li>The requirement messages in the scope sundry box now have handy buttons for fast fixing.</li>
 						</ul>

@@ -599,7 +599,7 @@ $(function() { // DOM ready
 	var searchQuery = GetParam("search"),
 		paramSubtune = GetParam("subtune"),
 		selectTab = GetParam("tab"),
-		selectSundryTab = GetParam("stab"),
+		selectSundryTab = GetParam("sundry"),
 		typeCSDb = GetParam("csdbtype"),
 		idCSDb = GetParam("csdbid");
 		// Let mobile devices use their own touch scrolling stuff
@@ -881,6 +881,11 @@ function UpdateURL() {
 
 /**
  * Get a parameter value from the current URL (or optional custom string).
+ * 
+ * NOTE: This function is compact but has one flaw; it tends to find words
+ * inside other words. For example, if you have "tab" and "stab" as URL
+ * parameters, using "stab" may also invoke "tab" as well. Make sure you
+ * only use unique parameter names that can't be confused like that.
  * 
  * @param {string} name		Parameter to search for.
  * @param {string} alt		If specified, search this custom URL instead.
