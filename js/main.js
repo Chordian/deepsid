@@ -674,6 +674,7 @@ $(function() { // DOM ready
 
 	// Select and show a "dexter" page tab	
 	selectTab = selectTab !== "" ? selectTab : "profile";
+	if (selectTab === "graph") selectTab = "flood";
 	$("#tab-"+selectTab).trigger("click");
 
 	// Select and show a "sundry" box tab (an URL parameter overrides the local storage setting)

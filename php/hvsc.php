@@ -54,7 +54,7 @@ try {
 		}
 		return $owner;
 	}
-	
+
 	if ($isSearching) {
 
 		// This tricky logic disallows symlists unless searching for everything

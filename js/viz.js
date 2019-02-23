@@ -219,6 +219,7 @@ Viz.prototype = {
 		// Re-trigger the same emulator again to set the buffer size
 		// NOTE: Doing it in a specific visualizer tab is deliberate (avoids multiple triggering).
 		$("#topic-piano .viz-emu.button-on").trigger("click");
+		this.setBufferMessage();
 	},
 
 	/**
@@ -236,9 +237,20 @@ Viz.prototype = {
 	setEmuButton: function(emulator) {
 		if (emulator == "websid" || emulator == "jssid") {
 			$("#page .viz-"+emulator).addClass("button-on"); 
-			$("#page .viz-warning").hide();
+			$("#page .viz-msg-emu").hide();
 		} else
-			$("#page .viz-warning").show();
+			$("#page .viz-msg-emu").show();
+		this.setBufferMessage();
+	},
+
+	/**
+	 * If buffer size is not at lowest value then show a message about it in both
+	 * of the visualizer tabs.
+	 */
+	setBufferMessage: function() {
+		this.bufferSize > 1024 && $("#page .viz-msg-emu").css("display") == "none"
+			? $("#page .viz-msg-buffer").show()
+			: $("#page .viz-msg-buffer").hide();
 	},
 
 	/**

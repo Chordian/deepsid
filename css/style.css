@@ -333,6 +333,14 @@ small.u2 { margin-left: 2px; }
 		left: 694px; /* Don't use 'right' here or it will be pushed by the custom scrollbar */
 	}
 
+	.viz-warning {
+		display: none;
+		position: relative;
+		top: 1px;
+		margin-left: 12px;
+		font-size: 14px;
+	}
+
 	.viz-buffer {
 		float: right;
 	}

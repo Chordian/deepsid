@@ -335,7 +335,8 @@
 							<label class="unselectable" style="margin-right:2px;">Emulator</label>
 							<button class="button-edit button-radio button-off viz-emu viz-websid" data-group="viz-emu" data-emu="websid">WebSid</button>
 							<button class="button-edit button-radio button-off viz-emu viz-jssid" data-group="viz-emu" data-emu="jssid">Hermit</button>
-							<span class="viz-warning" style="position:relative;top:1px;color:#a00;margin-left:12px;font-size:14px;display:none;">You need to enable one of these emulators</span>
+							<span class="viz-warning viz-msg-emu" style="color:#a00;">You need to enable one of these emulators</span>
+							<span class="viz-warning viz-msg-buffer"  style="color:#00a;top:0;left:100px;">Decrease this if too slow <img src="images/composer_arrowright.svg" style="position:relative;top:4px;height:18px;" alt="" /></span>
 							<div class="viz-buffer">
 								<label for="dropdown-piano-buffer" class="unselectable">Buffer size</label>
 								<select id="dropdown-piano-buffer" class="dropdown-buffer">
@@ -410,7 +411,8 @@
 							<label class="unselectable" style="margin-right:2px;">Emulator</label>
 							<button class="button-edit button-radio button-off viz-emu viz-websid" data-group="viz-emu" data-emu="websid">WebSid</button>
 							<button class="button-edit button-radio button-off viz-emu viz-jssid" data-group="viz-emu" data-emu="jssid">Hermit</button>
-							<span class="viz-warning" style="position:relative;top:1px;color:#a00;margin-left:12px;font-size:14px;display:none;">You need to enable one of these emulators</span>
+							<span class="viz-warning viz-msg-emu" style="color:#a00;">You need to enable one of these emulators</span>
+							<span class="viz-warning viz-msg-buffer"  style="color:#00a;top:0;left:100px;">Decrease this if too slow <img src="images/composer_arrowright.svg" style="position:relative;top:4px;height:18px;" alt="" /></span>
 							<div class="viz-buffer">
 								<label for="dropdown-flood-buffer" class="unselectable">Buffer size</label>
 								<select id="dropdown-flood-buffer" class="dropdown-buffer">
@@ -516,8 +518,7 @@
 					<div id="topic-stil" class="topic" style="display:none;">
 						<h2>STIL / Lyrics</h2>
 						<p>This tab will sometimes show one of two things depending on the SID collection you're browsing.
-							It will display the same contents as the box just above the player controls (which is collapsed
-							when this tab is selected).
+							It will display the same contents as the first tab in the box just above the player controls.
 						</p>
 
 						<h3>STIL</h3>
@@ -859,7 +860,7 @@
 									<code>gb64</code> (game)</td>
 							</tr>
 							<tr>
-								<td>tab</td><td>Set to <code>csdb</code>, <code>gb64</code>, <code>stil</code>, <code>piano</code>, <code>flood</code>,
+								<td>tab</td><td>Set to <code>csdb</code>, <code>gb64</code>, <code>stil</code>, <code>piano</code>, <code>graph</code> (or <code>flood</code>),
 									<code>disqus</code>, <code>about</code>, <code>faq</code>, <code>changes</code> or <code>settings</code>
 									(the gear icon) to select that page tab</td>
 							</tr>
@@ -895,6 +896,11 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>February 23, 2019</h3>
+						<ul>
+							<li>If the buffer size is higher than 1024 in the piano or graph tabs, a message now appears.</li>
+						</ul>
 
 						<h3>February 22, 2019</h3>
 						<ul>
