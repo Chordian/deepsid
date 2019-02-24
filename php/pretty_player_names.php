@@ -147,9 +147,11 @@ $prettyPlayerNames = array(
 	'Russel_Lieblich' =>		'Russel Lieblich\'s player',
 	'Sentinel' =>				'Sentinel\'s player',
 	'Silas_Warner' =>			'Silas Warner\'s player',
+	'Shaun_Southern' =>			'Shaun Southern\'s player',
 	'Slaygon' =>				'Slaygon\'s player',
 	// Don't add for 'SoedeSoft' here
 	'Sonic_Graffiti' =>			'Sonic Graffiti\'s player',
+	'SounDemon' =>				'SounDemon\'s player',
 	'Spinnaker' =>				'Spinnaker Software\'s player',
 	'Steffen_Wagner' =>			'Steffen Wagner\'s player',
 	'Stephen_Biggs' =>			'Stephen Biggs\' player',

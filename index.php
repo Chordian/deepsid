@@ -900,6 +900,7 @@
 						<h3>February 23, 2019</h3>
 						<ul>
 							<li>If the buffer size is higher than 1024 in the piano or graph tabs, a message now appears.</li>
+							<li>Fixed sundry controls not disappearing properly when the sundry box is minimized.</li>
 						</ul>
 
 						<h3>February 22, 2019</h3>

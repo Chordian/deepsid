@@ -130,6 +130,7 @@ $(function() { // DOM ready
 			if (!sundryToggle) {
 				sundryToggle = true;
 				$("#sundry-tabs").find(".tab[data-topic='"+sundryTab+"']").addClass("selected");
+				$("#sundry-ctrls").show();
 			}
 			$("#stopic-stil .mCSB_scrollTools").css("height", $("#sundry .stopic").height() + 7);
 			$("#folders").height(0).height($("#songs").height() - 100);
@@ -800,6 +801,7 @@ function ToggleSundry(shrink) {
 		});
 		sundryToggle = true;
 		$("#sundry-tabs").find(".tab[data-topic='"+sundryTab+"']").addClass("selected");
+		$("#sundry-ctrls").show();
 	} else {
 		sundryHeight = $("#sundry").css("flex-basis");
 		sundryTab = $("#sundry-tabs .selected").attr("data-topic");
@@ -809,6 +811,7 @@ function ToggleSundry(shrink) {
 		});
 		sundryToggle = false;
 		$("#sundry-tabs .tab").removeClass("selected"); // No tab selected anymore
+		$("#sundry-ctrls").hide();
 	}
 }
 

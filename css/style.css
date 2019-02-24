@@ -1132,7 +1132,7 @@ input[type=range]::-ms-track {
 	top: 6px;
 	right: 0;
 	height: 21px;
-	width: 177px;			/* This leaves room for a maximum of four sundry tabs */
+	width: 185px;			/* This leaves room for a maximum of four sundry tabs */ /* 177 px is too small for iOS */
 	text-align: right;
 }
 
