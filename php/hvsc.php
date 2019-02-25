@@ -23,6 +23,8 @@ $user_id = $account->CheckLogin() ? $account->UserID() : 0;
 $isSearching = isset($_GET['searchQuery']) && !empty($_GET['searchQuery']);
 $isPersonalSymlist = substr($_GET['folder'], 0, 2) == '/!';
 $isPublicSymlist = substr($_GET['folder'], 0, 2) == '/$';
+$isCSDbCompo = substr($_GET['folder'], 0, 24) == '/CSDb Music Competitions';
+$compoName = $isCSDbCompo && strlen($_GET['folder']) > 25 ? substr($_GET['folder'], 25) : '';
 
 // In current folder or everything?
 $searchContext = $_GET['searchHere'] ? 'fullname LIKE "'.substr($_GET['folder'], 1).'%"' : '1';
@@ -284,6 +286,43 @@ try {
 		// If this is a public symlist we need to know who made it
 		if ($isPublicSymlist) $owner = PublicSymlistOwner();
 
+	} else if ($isCSDbCompo) {
+
+		// CONTENTS OF 'CSDb Music Competitions' FOLDER
+
+		$files = array();
+
+		if (empty($compoName)) {
+
+			// PARENT COMPETITION FOLDERS
+
+			$compo = array();
+
+			// Get the full list of competitions
+			$select_compo = $db->query('SELECT competition, year, country, type, event_id FROM competitions');
+			$select_compo->setFetchMode(PDO::FETCH_OBJ);
+
+			foreach ($select_compo as $row) {
+				$files[] = $row->competition;
+				$compo += [strtolower($row->competition) => array(
+					'year' =>		$row->year,
+					'country' =>	$row->country,
+					'type' =>		$row->type,
+					'event_id' =>	$row->event_id,
+				)];
+			}
+
+		} else {
+
+			// CONTENTS OF ONE COMPETITION FOLDER
+
+			// All we'll know to begin with are the amount of tunes in this competition
+			$select = $db->query('SELECT files FROM hvsc_folders WHERE fullname = "'.$compoName.'" AND type = "COMPO" LIMIT 1');
+			$select->setFetchMode(PDO::FETCH_OBJ);
+			$compoCount = $select->rowCount() ? $select->fetch()->files : 0;
+
+		}
+
 	} else {
 
 		// CONTENTS OF PHYSICAL FOLDER
@@ -315,8 +354,11 @@ try {
 			'00_Utils',
 		]));
 
-		// The root is the only place that may list symlist folders (at least for now)
+		// The root is the only place that may list the symlist folders as well as the CSDb compo folder
 		if (empty($_GET['folder'])) {
+			// Append the special folder for CSDb music competitions
+			$files[] = 'CSDb Music Competitions';
+
 			// Append public symlist folders (starts with a "$" character)
 			$select = $db->query('SELECT fullname FROM hvsc_folders WHERE fullname LIKE "$%"');
 			$select->setFetchMode(PDO::FETCH_OBJ);
@@ -348,205 +390,230 @@ try {
 	$files_ext = $folders_ext = array();
 	$multiple = array();
 
-	foreach($files as $file) {
+	if (empty($compoName)) {
 
-		$extension = substr($file, -4);
-		if ($extension != '.sid' && $extension != '.mus') {
+		foreach($files as $file) {
 
-			if ($extension == '.str' || $extension == '.wds')
-				continue; // Don't show those at all
+			$extension = substr($file, -4);
+			if ($extension != '.sid' && $extension != '.mus') {
 
-			// FOLDER
+				if ($extension == '.str' || $extension == '.wds')
+					continue; // Don't show those at all
 
-			$fullname = ($isSearching ? '' : $folder).$file;
+				// FOLDER
 
-			$select = $db->prepare('SELECT * FROM hvsc_folders WHERE fullname = :fullname'.
-				(substr($file, 0, 1) == '!' ? ' AND user_id = '.$user_id : '').' LIMIT 1');
-			$select->execute(array(':fullname'=>$fullname));
-			$select->setFetchMode(PDO::FETCH_OBJ);
+				$fullname = ($isSearching || $isCSDbCompo ? '' : $folder).$file;
 
-			$incompat_row = '';
-			$folder_type = 'FOLDERS';
-			$rating = $filescount = 0;
+				$select = $db->prepare('SELECT * FROM hvsc_folders WHERE fullname = :fullname'.
+					(substr($file, 0, 1) == '!' ? ' AND user_id = '.$user_id : '').' LIMIT 1');
+				$select->execute(array(':fullname'=>$fullname));
+				$select->setFetchMode(PDO::FETCH_OBJ);
 
-			// Figure out the name of the thumbnail (if it exists)
-			$fullname = str_replace('_High Voltage SID Collection/', '', $fullname);
-			$fullname = str_replace("_Compute's Gazette SID Collection/", "cgsc_", $fullname);
-			$fullname = strtolower(str_replace('/', '_', $fullname));
-			$thumbnail = 'images/composers/'.$fullname.'.jpg';
+				$incompat_row = '';
+				$folder_type = 'FOLDERS';
+				$rating = $filescount = 0;
 
-			if ($select->rowCount()) {
-				$row = $select->fetch();							// Example
+				// Figure out the name of the thumbnail (if it exists)
+				$fullname = str_replace('_High Voltage SID Collection/', '', $fullname);
+				$fullname = str_replace("_Compute's Gazette SID Collection/", "cgsc_", $fullname);
+				$fullname = strtolower(str_replace('/', '_', $fullname));
+				$thumbnail = 'images/composers/'.$fullname.'.jpg';
 
-				$folder_type =		$row->type;						// SINGLE
-				$filescount =		$row->files;					// 42
-				$incompat_row =		$row->incompatible;				// jssid
-				$has_photo =		file_exists('../'.$thumbnail);	// TRUE
-				$flags =			$row->flags;					// 1
-				$hvsc = 			$row->new;						// 70
+				if ($select->rowCount()) {
+					$row = $select->fetch();								// Example
 
-				if ($user_id) {
-					// Does the user have any rating for this folder?
-					if (!empty($row->hash)) {
-						// Search hash first (best; will catch it if set for a clone)
-						$select_rating = $db->query('SELECT rating FROM ratings WHERE user_id = '.$user_id.' AND hash = "'.$row->hash.'" AND type = "FOLDER"');
-						$select_rating->setFetchMode(PDO::FETCH_OBJ);
-						$rating = $select_rating->rowCount() ? $select_rating->fetch()->rating : 0;
+					$folder_type =		$row->type;							// SINGLE
+					$filescount =		$row->files;						// 42
+					$incompat_row =		$row->incompatible;					// jssid
+					$has_photo =		file_exists('../'.$thumbnail);		// TRUE
+					$flags =			$row->flags;						// 1
+					$hvsc = 			$row->new;							// 70
+
+					// Extra data for CSDb compo parent folders
+					if ($isCSDbCompo && empty($compoName)) {
+						$compo_year =		$compo[$fullname]['year'];		// 1992
+						$compo_country =	$compo[$fullname]['country'];	// Finland
+						$compo_type =		$compo[$fullname]['type'];		// DEMO
+						$compo_id =			$compo[$fullname]['event_id'];	// 117
 					}
-					if (!$rating) {
-						// Try again with direct table ID (some folders doesn't have a hash value)
-						$select_rating = $db->query('SELECT rating FROM ratings WHERE user_id = '.$user_id.' AND table_id = '.$row->id.' AND type = "FOLDER"');
-						$select_rating->setFetchMode(PDO::FETCH_OBJ);
-						$rating = $select_rating->rowCount() ? $select_rating->fetch()->rating : 0;
-					}
-				}
-			}
 
-			array_push($folders_ext, array(
-				'foldername'	=> $file,
-				'foldertype'	=> $folder_type,
-				'filescount'	=> $filescount,
-				'incompatible'	=> $incompat_row,
-				'hasphoto'		=> $has_photo,
-				'rating'		=> $rating,
-				'flags'			=> $flags,
-				'hvsc'			=> $hvsc,
-			));
-
-		} else {
-
-			// FILE
-
-			$select = $db->prepare('SELECT * FROM hvsc_files WHERE fullname = :fullname LIMIT 1');
-			$select->execute(array(':fullname'=>($isSearching || $isPublicSymlist || $isPersonalSymlist ? '' : $folder).$file));
-			$select->setFetchMode(PDO::FETCH_OBJ);
-
-			$player = $lengths = $type = $version = $playertype = $playercompat = $clockspeed = $sidmodel = $name = $author = $copyright = $hash = $stil = '';
-			$rating = $dataoffset = $datasize = $loadaddr = $initaddr = $playaddr = $subtunes = $startsubtune = $hvsc = 0;
-
-			if ($select->rowCount()) {
-				$row = $select->fetch();
-
-				$player = 			$row->player;		// MoN/FutureComposer
-				$lengths = 			$row->lengths;		// 6:47 0:46 0:04
-				$type = 			$row->type;			// PSID										RSID
-				$version = 			$row->version;		// 2.0										3.0
-				$playertype =		$row->playertype;	// Normal built-in																	(only value seen)
-				$playercompat =		$row->playercompat;	// C64 compatible							PlaySID									(typically for BASIC tunes)
-				$clockspeed =		$row->clockspeed;	// PAL 50Hz									NTSC 60Hz, PAL / NTSC, Unknown
-				$sidmodel =			$row->sidmodel;		// MOS6581									MOS8580, MOS6581 / MOS858, Unknown
-				$dataoffset =		$row->dataoffset;	// 124										0
-				$datasize =			$row->datasize;		// 4557
-				$loadaddr =			$row->loadaddr;		// 57344
-				$initaddr =			$row->initaddr;		// 57344
-				$playaddr =			$row->playaddr;		// 57350
-				$subtunes =			$row->subtunes;		// 3
-				$startsubtune =		$row->startsubtune;	// 1
-				$name =				$row->name;			// Alloyrun
-				$author =			$row->author;		// Jeroen Tel
-				$copyright =		$row->copyright;	// 1988 Starlight
-				$hash =				$row->hash;			// 02df65150cbc4fa8fabf563b26c8cac4
-				$stil =				$row->stil;			// (#1)<br />NAME: Title tune<br />(#2)<br />NAME: High-score<br />(#3)<br />NAME: Get-ready
-				$hvsc =				$row->new;			// 0 (= 49)									50 and up
-				
-				if ($user_id) {
-					// Does the user have any rating for this SID file?
-					if (!empty($row->hash)) {
-						// Search hash first (best; will catch it if set for a clone)
-						$select_rating = $db->query('SELECT rating FROM ratings WHERE user_id = '.$user_id.' AND hash = "'.$row->hash.'" AND type = "FILE"');
-						$select_rating->setFetchMode(PDO::FETCH_OBJ);
-						$rating = $select_rating->rowCount() ? $select_rating->fetch()->rating : 0;
-					}
-					if (!$rating) {
-						// Try again with direct table ID (some SID files doesn't have a hash value)
-						$select_rating = $db->query('SELECT rating FROM ratings WHERE user_id = '.$user_id.' AND table_id = '.$row->id.' AND type = "FILE"');
-						$select_rating->setFetchMode(PDO::FETCH_OBJ);
-						$rating = $select_rating->rowCount() ? $select_rating->fetch()->rating : 0;
+					if ($user_id) {
+						// Does the user have any rating for this folder?
+						if (!empty($row->hash)) {
+							// Search hash first (best; will catch it if set for a clone)
+							$select_rating = $db->query('SELECT rating FROM ratings WHERE user_id = '.$user_id.' AND hash = "'.$row->hash.'" AND type = "FOLDER"');
+							$select_rating->setFetchMode(PDO::FETCH_OBJ);
+							$rating = $select_rating->rowCount() ? $select_rating->fetch()->rating : 0;
+						}
+						if (!$rating) {
+							// Try again with direct table ID (some folders doesn't have a hash value)
+							$select_rating = $db->query('SELECT rating FROM ratings WHERE user_id = '.$user_id.' AND table_id = '.$row->id.' AND type = "FOLDER"');
+							$select_rating->setFetchMode(PDO::FETCH_OBJ);
+							$rating = $select_rating->rowCount() ? $select_rating->fetch()->rating : 0;
+						}
 					}
 				}
-			}
 
-			if ($sidmodel != 'MOS8580') $sidmodel = 'MOS6581'; // Always default to 6581 if not specifically 8580
+				array_push($folders_ext, array(
+					'foldername'	=> $file,
+					'foldertype'	=> $folder_type,
+					'filescount'	=> $filescount,
+					'incompatible'	=> $incompat_row,
+					'hasphoto'		=> $has_photo,
+					'rating'		=> $rating,
+					'flags'			=> $flags,
+					'hvsc'			=> $hvsc,
 
-			if (empty($player) && $extension == '.mus') {
-				// CGSC
-				$player = in_array(str_replace('.mus', '.str', $file), $files)
-					? "Compute's Stereo SidPlayer"	// Uses .mus and .str for 6 voices SID (stereo)
-					: "Compute's SidPlayer";		// Normal 3 voices SID
-				$lengths = '5:00';
-				$subtunes = $startsubtune = 1;
-			} else if (empty($player))
-				$player = 'an unidentified player';
-			else if ($player == 'MoN/Bjerregaard')
-				$player = 'Bjerregaard';
+					'compo_year'	=> empty($compo_year) ? 0 : $compo_year,
+					'compo_country'	=> empty($compo_country) ? '' : $compo_country,
+					'compo_type'	=> empty($compo_type) ? '' : $compo_type,
+					'compo_id'		=> empty($compo_id) ? 0 : $compo_id,
+				));
 
-			$stil = str_replace('<br />',	' ',						$stil);
+			} else {
 
-			$stil = str_replace('<?>', '<small class="u1">?</small>?<small class="u2">?</small>', $stil);
+				// FILE
 
-			$stil = str_replace('ARTIST:',	'<br /><b>ARTIST:</b>',		$stil);
-			$stil = str_replace('AUTHOR:',	'<br /><b>AUTHOR:</b>',		$stil);
-			$stil = str_replace('COMMENT:',	'<br /><b>COMMENT:</b>',	$stil);
-			$stil = str_replace('NAME:',	'<br /><b>NAME:</b>', 		$stil);
-			$stil = str_replace('TITLE:',	'<br /><b>TITLE:</b>', 		$stil);
+				$select = $db->prepare('SELECT * FROM hvsc_files WHERE fullname = :fullname LIMIT 1');
+				$select->execute(array(':fullname'=>($isSearching || $isPublicSymlist || $isPersonalSymlist ? '' : $folder).$file));
+				$select->setFetchMode(PDO::FETCH_OBJ);
 
-			$stil = preg_replace(['/\(#(\d+)\)/'], ['<hr /><div class="subtune">$1</div>'], $stil);
+				$player = $lengths = $type = $version = $playertype = $playercompat = $clockspeed = $sidmodel = $name = $author = $copyright = $hash = $stil = '';
+				$rating = $dataoffset = $datasize = $loadaddr = $initaddr = $playaddr = $subtunes = $startsubtune = $hvsc = 0;
 
-			// Make references to other HVSC tunes into redirect links (i.e. won't refresh the web page)
-			$stil = preg_replace('/(\/DEMO[^\s].+\.sid|\/GAMES[^\s]+\.sid|\/MUSICIANS[^\s]+\.sid)/', '<a class="redirect" href="#">$1</a>', $stil);
+				if ($select->rowCount()) {
+					$row = $select->fetch();
 
-			$symid = $symid_pos = 0;
-			$substname = '';
-			if ($isPublicSymlist || $isPersonalSymlist) {
-				// We're inside a symlist so check now if the file has a different name and sub tune here
-				$symlist = $db->query('SELECT id, sidname, subtune FROM symlists WHERE folder_id = '.$symlist_folder_id.' AND file_id = '.$row->id.' ORDER BY id');
-				$symlist->setFetchMode(PDO::FETCH_OBJ);
-				$row_sym = $symlist->fetchAll();
-
-				$row_count = $symlist->rowCount();
-				if ($row_count) {
-					if ($row_count > 1) {
-						// There are multiple entries of the same SID tune
-						$symid_pos = array_key_exists($row->id, $multiple) ? $multiple[$row->id] : 0;
-						$symid = $row_sym[$symid_pos]->id;
-						$multiple[$row->id] = $symid_pos + 1;
+					$player = 			$row->player;		// MoN/FutureComposer
+					$lengths = 			$row->lengths;		// 6:47 0:46 0:04
+					$type = 			$row->type;			// PSID										RSID
+					$version = 			$row->version;		// 2.0										3.0
+					$playertype =		$row->playertype;	// Normal built-in																	(only value seen)
+					$playercompat =		$row->playercompat;	// C64 compatible							PlaySID									(typically for BASIC tunes)
+					$clockspeed =		$row->clockspeed;	// PAL 50Hz									NTSC 60Hz, PAL / NTSC, Unknown
+					$sidmodel =			$row->sidmodel;		// MOS6581									MOS8580, MOS6581 / MOS858, Unknown
+					$dataoffset =		$row->dataoffset;	// 124										0
+					$datasize =			$row->datasize;		// 4557
+					$loadaddr =			$row->loadaddr;		// 57344
+					$initaddr =			$row->initaddr;		// 57344
+					$playaddr =			$row->playaddr;		// 57350
+					$subtunes =			$row->subtunes;		// 3
+					$startsubtune =		$row->startsubtune;	// 1
+					$name =				$row->name;			// Alloyrun
+					$author =			$row->author;		// Jeroen Tel
+					$copyright =		$row->copyright;	// 1988 Starlight
+					$hash =				$row->hash;			// 02df65150cbc4fa8fabf563b26c8cac4
+					$stil =				$row->stil;			// (#1)<br />NAME: Title tune<br />(#2)<br />NAME: High-score<br />(#3)<br />NAME: Get-ready
+					$hvsc =				$row->new;			// 0 (= 49)									50 and up
+					
+					if ($user_id) {
+						// Does the user have any rating for this SID file?
+						if (!empty($row->hash)) {
+							// Search hash first (best; will catch it if set for a clone)
+							$select_rating = $db->query('SELECT rating FROM ratings WHERE user_id = '.$user_id.' AND hash = "'.$row->hash.'" AND type = "FILE"');
+							$select_rating->setFetchMode(PDO::FETCH_OBJ);
+							$rating = $select_rating->rowCount() ? $select_rating->fetch()->rating : 0;
+						}
+						if (!$rating) {
+							// Try again with direct table ID (some SID files doesn't have a hash value)
+							$select_rating = $db->query('SELECT rating FROM ratings WHERE user_id = '.$user_id.' AND table_id = '.$row->id.' AND type = "FILE"');
+							$select_rating->setFetchMode(PDO::FETCH_OBJ);
+							$rating = $select_rating->rowCount() ? $select_rating->fetch()->rating : 0;
+						}
 					}
-					// Did the user rename it?
-					$substname = $row_sym[$symid_pos]->sidname;
-					if (!empty($substname)) $substname .= substr($file, -4);
-					// Also check if a different sub tune than the default one should play instead
-					if ($row_sym[$symid_pos]->subtune) $startsubtune = $row_sym[$symid_pos]->subtune;
 				}
-			}
 
-			array_push($files_ext, array(
-				'filename' =>		$file,
-				'substname' =>		$substname,
-				'player' =>			str_replace(array_keys($prettyPlayerNames), $prettyPlayerNames, $player), // Remember it reads the array multiple times!
-				'lengths' => 		$lengths,
-				'type' => 			$type,
-				//'version' => 		$version,
-				//'playertype' => 	$playertype,
-				//'playercompat' =>	$playercompat,
-				'clockspeed' => 	$clockspeed,
-				'sidmodel' => 		$sidmodel,
-				//'dataoffset' => 	$dataoffset,
-				'datasize' => 		$datasize,
-				'loadaddr' => 		$loadaddr,
-				'initaddr' => 		$initaddr,
-				'playaddr' => 		$playaddr,
-				'subtunes' => 		$subtunes,
-				'startsubtune' => 	$startsubtune,
-				'name' => 			$name,
-				'author' => 		$author,
-				'copyright' => 		$copyright,
-				//'hash' => 		$hash,
-				'stil' => 			$stil,
-				'rating' =>			$rating,
-				'hvsc' =>			$hvsc,
-				'symid' =>			$symid,
-			));
+				if ($sidmodel != 'MOS8580') $sidmodel = 'MOS6581'; // Always default to 6581 if not specifically 8580
+
+				if (empty($player) && $extension == '.mus') {
+					// CGSC
+					$player = in_array(str_replace('.mus', '.str', $file), $files)
+						? "Compute's Stereo SidPlayer"	// Uses .mus and .str for 6 voices SID (stereo)
+						: "Compute's SidPlayer";		// Normal 3 voices SID
+					$lengths = '5:00';
+					$subtunes = $startsubtune = 1;
+				} else if (empty($player))
+					$player = 'an unidentified player';
+				else if ($player == 'MoN/Bjerregaard')
+					$player = 'Bjerregaard';
+
+				$stil = str_replace('<br />',	' ',						$stil);
+
+				$stil = str_replace('<?>', '<small class="u1">?</small>?<small class="u2">?</small>', $stil);
+
+				$stil = str_replace('ARTIST:',	'<br /><b>ARTIST:</b>',		$stil);
+				$stil = str_replace('AUTHOR:',	'<br /><b>AUTHOR:</b>',		$stil);
+				$stil = str_replace('COMMENT:',	'<br /><b>COMMENT:</b>',	$stil);
+				$stil = str_replace('NAME:',	'<br /><b>NAME:</b>', 		$stil);
+				$stil = str_replace('TITLE:',	'<br /><b>TITLE:</b>', 		$stil);
+
+				$stil = preg_replace(['/\(#(\d+)\)/'], ['<hr /><div class="subtune">$1</div>'], $stil);
+
+				// Make references to other HVSC tunes into redirect links (i.e. won't refresh the web page)
+				$stil = preg_replace('/(\/DEMO[^\s].+\.sid|\/GAMES[^\s]+\.sid|\/MUSICIANS[^\s]+\.sid)/', '<a class="redirect" href="#">$1</a>', $stil);
+
+				$symid = $symid_pos = 0;
+				$substname = '';
+				if ($isPublicSymlist || $isPersonalSymlist) {
+					// We're inside a symlist so check now if the file has a different name and sub tune here
+					$symlist = $db->query('SELECT id, sidname, subtune FROM symlists WHERE folder_id = '.$symlist_folder_id.' AND file_id = '.$row->id.' ORDER BY id');
+					$symlist->setFetchMode(PDO::FETCH_OBJ);
+					$row_sym = $symlist->fetchAll();
+
+					$row_count = $symlist->rowCount();
+					if ($row_count) {
+						if ($row_count > 1) {
+							// There are multiple entries of the same SID tune
+							$symid_pos = array_key_exists($row->id, $multiple) ? $multiple[$row->id] : 0;
+							$symid = $row_sym[$symid_pos]->id;
+							$multiple[$row->id] = $symid_pos + 1;
+						}
+						// Did the user rename it?
+						$substname = $row_sym[$symid_pos]->sidname;
+						if (!empty($substname)) $substname .= substr($file, -4);
+						// Also check if a different sub tune than the default one should play instead
+						if ($row_sym[$symid_pos]->subtune) $startsubtune = $row_sym[$symid_pos]->subtune;
+					}
+				}
+
+				array_push($files_ext, array(
+					'filename' =>		$file,
+					'substname' =>		$substname,
+					'player' =>			str_replace(array_keys($prettyPlayerNames), $prettyPlayerNames, $player), // Remember it reads the array multiple times!
+					'lengths' => 		$lengths,
+					'type' => 			$type,
+					//'version' => 		$version,
+					//'playertype' => 	$playertype,
+					//'playercompat' =>	$playercompat,
+					'clockspeed' => 	$clockspeed,
+					'sidmodel' => 		$sidmodel,
+					//'dataoffset' => 	$dataoffset,
+					'datasize' => 		$datasize,
+					'loadaddr' => 		$loadaddr,
+					'initaddr' => 		$initaddr,
+					'playaddr' => 		$playaddr,
+					'subtunes' => 		$subtunes,
+					'startsubtune' => 	$startsubtune,
+					'name' => 			$name,
+					'author' => 		$author,
+					'copyright' => 		$copyright,
+					//'hash' => 		$hash,
+					'stil' => 			$stil,
+					'rating' =>			$rating,
+					'hvsc' =>			$hvsc,
+					'symid' =>			$symid,
+				));
+			}
 		}
+
+	} else {
+
+		// TEMPORARY PLACEHOLDERS INSIDE ONE COMPETITION FOLDER
+
+		for ($i = 1; $i <= $compoCount; $i++)
+			array_push($files_ext, array(
+				'filename' => str_pad($i, ($compoCount < 100 ? ($compoCount < 10 ? 1 : 2) : 3), '0', STR_PAD_LEFT),
+			));
 	}
 
 } catch(PDOException $e) {
@@ -558,5 +625,5 @@ try {
 	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 }
 
-echo json_encode(array('status' => 'ok', 'files' => $files_ext, 'folders' => $folders_ext, 'results' => $found, 'incompatible' => $incompatible, 'owner' => $owner, 'debug' => $debug));
+echo json_encode(array('status' => 'ok', 'files' => $files_ext, 'folders' => $folders_ext, 'results' => $found, 'incompatible' => $incompatible, 'owner' => $owner, 'compo' => !empty($compoName), 'debug' => $debug));
 ?>

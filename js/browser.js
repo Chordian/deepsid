@@ -636,7 +636,7 @@ Browser.prototype = {
 				});
 
 				var filter = this.setupSortBox();
-				var collections = [],
+				var collections = [], csdbCompoEntry = '';
 					onlyShowPersonal = this.path === "" && filter === "personal",
 					onlyShowCommon = this.path === "" && filter === "common";
 				$.each(data.folders, function(i, folder) {
@@ -667,6 +667,8 @@ Browser.prototype = {
 					if (folder.foldername == "_High Voltage SID Collection" || 			// HVSC or CGSC
 							folder.foldername == "_Compute's Gazette SID Collection")
 						collections.push(folderEntry); // Need to swap the below
+					else if (folder.foldername == 'CSDb Music Competitions')
+						csdbCompoEntry = folderEntry;
 					else if ((folder.foldername.substr(0, 1) == "_" || isPublicSymlist) &&
 						(!onlyShowPersonal || (onlyShowPersonal && myPublic)) &&
 						(!onlyShowCommon || (onlyShowCommon && folder.flags & 0x1)))	// Public symlist or custom?
@@ -691,6 +693,7 @@ Browser.prototype = {
 					}
 					if (collections.length)
 						this.folders = collections[1]+collections[0]; // HVSC should always be first
+					this.folders += csdbCompoEntry;
 					this.folders = '<tr class="disabled"><td class="spacer" colspan="2"></td></tr>'+this.folders;
 					this.folders += '<tr class="disabled"><td class="divider" colspan="2"></td></tr>'+this.extra;
 					this.folders += this.symlists;
@@ -699,52 +702,64 @@ Browser.prototype = {
 
 				// FILES
 
-				// Sort the list of files first
-				data.files.sort(function(obj1, obj2) {
-					var o1 = obj1.substname !== "" ? obj1.substname : this.adaptBrowserName(obj1.filename, true);
-					var o2 = obj2.substname !== "" ? obj2.substname : this.adaptBrowserName(obj2.filename, true);
-					return o1.toLowerCase() > o2.toLowerCase() ? 1 : -1;
-				}.bind(this));
-				$.each(data.files, function(i, file) {
-					// Player: Replace "_" with space + "V" with "v" for versions
-					var player = file.player.replace(/_/g, " ").replace(/(V)(\d)/g, "v$2"),
-						rootFile = (this.isSearching || this.isSymlist ? "" : this.path) + "/" + file.filename,
-						isNew = file.hvsc == this.HVSC_VERSION || file.hvsc == this.CGSC_VERSION;
-					var adaptedName = file.substname == "" ? file.filename.replace(/^\_/, '') : file.substname;
-					adaptedName = this.adaptBrowserName(adaptedName);
-					files += '<tr>'+
-							'<td class="sid unselectable"><div class="block-wrap"><div class="block">'+(file.subtunes > 1 ? '<div class="subtunes'+(this.isSymlist ? ' specific' : '')+(isNew ? ' newst' : '')+'">'+(this.isSymlist ? file.startsubtune : file.subtunes)+'</div>' : (isNew ? '<div class="newsid"></div>' : ''))+
-							'<div class="entry name file'+(this.isSearching || this.path.substr(0, 2) === "/$" ? ' search' : '')+'" data-name="'+encodeURI(file.filename)+'" data-type="'+file.type+'" data-symid="'+file.symid+'">'+adaptedName+'</div></div></div><br />'+
-							'<span class="info">'+file.copyright.substr(0, 4)+' in '+player+(file.type === "RSID" ? '<div class="ptype">RSID</div>' : '')+'</span></td>'+
-							'<td class="stars filestars"><span class="rating">'+this.buildStars(file.rating)+'</span>'+
-							'<span class="disqus-comment-count" data-disqus-url="http://deepsid.chordian.net/#!'+rootFile.replace("/_High Voltage SID Collection", "")+'"></span>'+
-							'</td>'+
-						'</tr>'; // &#9642; is the dot character if needed
-
-					// If the STIL text starts with a <BR> newline or a <HR> line, get rid of it
-					var stil = file.stil;
-					if (stil.substr(2, 4) == "r />") stil = stil.substr(6);
-
-					this.playlist.push({
-						filename:		file.filename,
-						substname:		file.substname, // Symlists can have renamed SID files
-						fullname:		this.ROOT_HVSC + rootFile,
-						player: 		player,
-						length: 		file.lengths,
-						type:			file.type,
-						clockspeed:		file.clockspeed,
-						sidmodel:		file.sidmodel,
-						subtunes:		file.subtunes,
-						startsubtune:	file.startsubtune == 0 ? 0 : file.startsubtune - 1, // If 0 then SIDId skipped it
-						size:			file.datasize,
-						address:		file.loadaddr,
-						copyright:		file.copyright,
-						stil:			stil,
-						rating:			file.rating,
-						hvsc:			file.hvsc,
-						symid:			file.symid,
+				if (data.compo) {
+					// The contents of one competition folder are just placeholders to begin with
+					$.each(data.files, function(i, file) {
+						files += '<tr>'+
+							'<td class="sid unselectable"><div class="block-wrap"><div class="block"><div class="entry name file" data-name="'+file.filename+'">'+file.filename+'. <img src="images/compo.gif" class="gif1" alt="" /></div></div></div><br />'+
+							'<span class="info"><img src="images/compo.gif" class="gif2" alt="" /></div></span></td>'+
+							'<td class="stars filestars"></td>'+
+						'</tr>';
 					});
-				}.bind(this));
+
+				} else {
+					// Sort the list of files first
+					data.files.sort(function(obj1, obj2) {
+						var o1 = obj1.substname !== "" ? obj1.substname : this.adaptBrowserName(obj1.filename, true);
+						var o2 = obj2.substname !== "" ? obj2.substname : this.adaptBrowserName(obj2.filename, true);
+						return o1.toLowerCase() > o2.toLowerCase() ? 1 : -1;
+					}.bind(this));
+					$.each(data.files, function(i, file) {
+						// Player: Replace "_" with space + "V" with "v" for versions
+						var player = file.player.replace(/_/g, " ").replace(/(V)(\d)/g, "v$2"),
+							rootFile = (this.isSearching || this.isSymlist ? "" : this.path) + "/" + file.filename,
+							isNew = file.hvsc == this.HVSC_VERSION || file.hvsc == this.CGSC_VERSION;
+						var adaptedName = file.substname == "" ? file.filename.replace(/^\_/, '') : file.substname;
+						adaptedName = this.adaptBrowserName(adaptedName);
+						files += '<tr>'+
+								'<td class="sid unselectable"><div class="block-wrap"><div class="block">'+(file.subtunes > 1 ? '<div class="subtunes'+(this.isSymlist ? ' specific' : '')+(isNew ? ' newst' : '')+'">'+(this.isSymlist ? file.startsubtune : file.subtunes)+'</div>' : (isNew ? '<div class="newsid"></div>' : ''))+
+								'<div class="entry name file'+(this.isSearching || this.path.substr(0, 2) === "/$" ? ' search' : '')+'" data-name="'+encodeURI(file.filename)+'" data-type="'+file.type+'" data-symid="'+file.symid+'">'+adaptedName+'</div></div></div><br />'+
+								'<span class="info">'+file.copyright.substr(0, 4)+' in '+player+(file.type === "RSID" ? '<div class="ptype">RSID</div>' : '')+'</span></td>'+
+								'<td class="stars filestars"><span class="rating">'+this.buildStars(file.rating)+'</span>'+
+								'<span class="disqus-comment-count" data-disqus-url="http://deepsid.chordian.net/#!'+rootFile.replace("/_High Voltage SID Collection", "")+'"></span>'+
+								'</td>'+
+							'</tr>'; // &#9642; is the dot character if needed
+
+						// If the STIL text starts with a <BR> newline or a <HR> line, get rid of it
+						var stil = file.stil;
+						if (stil.substr(2, 4) == "r />") stil = stil.substr(6);
+
+						this.playlist.push({
+							filename:		file.filename,
+							substname:		file.substname, // Symlists can have renamed SID files
+							fullname:		this.ROOT_HVSC + rootFile,
+							player: 		player,
+							length: 		file.lengths,
+							type:			file.type,
+							clockspeed:		file.clockspeed,
+							sidmodel:		file.sidmodel,
+							subtunes:		file.subtunes,
+							startsubtune:	file.startsubtune == 0 ? 0 : file.startsubtune - 1, // If 0 then SIDId skipped it
+							size:			file.datasize,
+							address:		file.loadaddr,
+							copyright:		file.copyright,
+							stil:			stil,
+							rating:			file.rating,
+							hvsc:			file.hvsc,
+							symid:			file.symid,
+						});
+					}.bind(this));
+				}
 
 				if (files !== "" || this.path === "" || this.isMusiciansLetterFolder()) $("#dropdown-sort").prop("disabled", false);
 				/*var pos = this.folders.lastIndexOf('<tr>');
@@ -1082,7 +1097,7 @@ Browser.prototype = {
 	 * Show a competition results list in the 'CSDb' tab.
 	 * 
 	 * @param {string} compo	Type, e.g. "C64 Music" (obtained from a CSDb page).
-	 * @param {number} id 		The CSDB event ID.
+	 * @param {number} id 		The CSDb event ID.
 	 * @param {number} mark		ID of the release page to mark on the competition results list.
 	 */
 	getCompoResults: function(compo, id, mark) {

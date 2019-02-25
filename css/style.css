@@ -1472,6 +1472,21 @@ input[type=range]::-ms-track {
 			text-overflow: ellipsis;
 		}
 
+			/* Competition placeholder GIF animation for filename */
+			#songs .gif1 {
+				height: 10px;
+				width: 140px;
+				opacity: 0.8;
+			}
+
+			/* Competition placeholder GIF animation for second line */
+			#songs .gif2 {
+				height: 9px;
+				width: 120px;
+				margin-left: 2px;
+				opacity: 0.3;
+			}
+
 		#page .top-item {
 			pointer-events: auto;
 		}
