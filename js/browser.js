@@ -808,6 +808,8 @@ Browser.prototype = {
 
 
 // need 01, 02, 03 etc. here if compo folder...
+// maybe even as "01. amj - sovs blues.sid" format?
+// another prob: need correct order from the beginning without the need for sorting afterwards!
 
 
 
