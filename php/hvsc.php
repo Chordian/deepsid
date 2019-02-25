@@ -312,15 +312,6 @@ try {
 				)];
 			}
 
-		} else {
-
-			// CONTENTS OF ONE COMPETITION FOLDER
-
-			// All we'll know to begin with are the amount of tunes in this competition
-			$select = $db->query('SELECT files FROM hvsc_folders WHERE fullname = "'.$compoName.'" AND type = "COMPO" LIMIT 1');
-			$select->setFetchMode(PDO::FETCH_OBJ);
-			$compoCount = $select->rowCount() ? $select->fetch()->files : 0;
-
 		}
 
 	} else {
@@ -610,10 +601,52 @@ try {
 
 		// TEMPORARY PLACEHOLDERS INSIDE ONE COMPETITION FOLDER
 
-		for ($i = 1; $i <= $compoCount; $i++)
+		// Get CSDb event ID
+		$select = $db->query('SELECT event_id, type FROM competitions WHERE competition = "'.$compoName.'"');
+		$select->setFetchMode(PDO::FETCH_OBJ);
+		$row = $select->fetch();
+
+		$event_id = $row->event_id;
+		$type =		$row->type; 
+
+		// Get the XML from the CSDb web service
+		$xml = file_get_contents('https://csdb.dk/webservice/?type=event&id='.$event_id);
+		if (!strpos($xml, '<CSDbData>'))
+			die(json_encode(array('status' => 'error', 'message' => 'Could not get CSDb data for event ID: '.$event_id)));
+		$csdb = simplexml_load_string(utf8_decode($xml));
+
+		$compos = $csdb->Event->Compo;
+		if (!isset($compos))
+			die(json_encode(array('status' => 'error', 'message' => 'The XML data from CSDb page had no competition entries.')));
+
+		$csdb_types = array(
+			'COPY' =>		'Copy Party',
+			'DEMO' =>		'Demo Party',
+			'MEETING' =>	'Meeting',
+			'INTERNAL' =>	'Internal Meeting',
+			'C64' =>		'C64 Only Party',
+			'8BIT' =>		'8 bit Party',
+			'STANDALONE' =>	'Standalone Compo',
+		);
+
+		foreach($compos as $compo) {
+			if (strtolower($compo->Type) == strtolower($csdb_types[$type])) {
+				$releases = $compo->Releases->Release;
+				break;
+			}
+		}
+		if (!isset($releases))
+			die(json_encode(array('status' => 'error', 'message' => 'No results found for the "'.$csdb_types[$type].'" competition.')));
+
+		$i = 1;
+		$compoCount = count($releases);
+		foreach($releases as $release) {
 			array_push($files_ext, array(
-				'filename' => str_pad($i, ($compoCount < 100 ? ($compoCount < 10 ? 1 : 2) : 3), '0', STR_PAD_LEFT),
+				'filename' =>	str_pad($i, ($compoCount < 100 ? ($compoCount < 10 ? 1 : 2) : 3), '0', STR_PAD_LEFT),
+				'release_id' =>	(isset($release->ID) ? $release->ID : 0),
 			));
+			$i++;
+		}
 	}
 
 } catch(PDOException $e) {

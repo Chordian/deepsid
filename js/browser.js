@@ -706,9 +706,9 @@ Browser.prototype = {
 					// The contents of one competition folder are just placeholders to begin with
 					$.each(data.files, function(i, file) {
 						files += '<tr>'+
-							'<td class="sid unselectable"><div class="block-wrap"><div class="block"><div class="entry name file" data-name="'+file.filename+'">'+file.filename+'. <img src="images/compo.gif" class="gif1" alt="" /></div></div></div><br />'+
+							'<td class="sid unselectable disabled"><div class="block-wrap"><div class="block"><div class="entry name file" data-name="'+file.filename+'.sid" data-id="'+data.release_id+'">'+file.filename+'. <img src="images/compo.gif" class="gif1" alt="" /></div></div></div><br />'+
 							'<span class="info"><img src="images/compo.gif" class="gif2" alt="" /></div></span></td>'+
-							'<td class="stars filestars"></td>'+
+							'<td class="stars filestars" style="cursor:default;"></td>'+
 						'</tr>';
 					});
 
