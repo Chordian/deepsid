@@ -463,7 +463,7 @@ try {
 
 			} else {
 
-				// FILE
+				// FILE   (NOTE: THE SCRIPT 'CSDB_COMPO_RELEASE.PHP' USES AN EXTRACT OF THE CODE BELOW)
 
 				$select = $db->prepare('SELECT * FROM hvsc_files WHERE fullname = :fullname LIMIT 1');
 				$select->execute(array(':fullname'=>($isSearching || $isPublicSymlist || $isPersonalSymlist ? '' : $folder).$file));
@@ -602,12 +602,12 @@ try {
 		// TEMPORARY PLACEHOLDERS INSIDE ONE COMPETITION FOLDER
 
 		// Get CSDb event ID
-		$select = $db->query('SELECT event_id, type FROM competitions WHERE competition = "'.$compoName.'"');
+		$select = $db->query('SELECT event_id, name FROM competitions WHERE competition = "'.$compoName.'"');
 		$select->setFetchMode(PDO::FETCH_OBJ);
 		$row = $select->fetch();
 
 		$event_id = $row->event_id;
-		$type =		$row->type; 
+		$name =		$row->name;
 
 		// Get the XML from the CSDb web service
 		$xml = file_get_contents('https://csdb.dk/webservice/?type=event&id='.$event_id);
@@ -619,31 +619,21 @@ try {
 		if (!isset($compos))
 			die(json_encode(array('status' => 'error', 'message' => 'The XML data from CSDb page had no competition entries.')));
 
-		$csdb_types = array(
-			'COPY' =>		'Copy Party',
-			'DEMO' =>		'Demo Party',
-			'MEETING' =>	'Meeting',
-			'INTERNAL' =>	'Internal Meeting',
-			'C64' =>		'C64 Only Party',
-			'8BIT' =>		'8 bit Party',
-			'STANDALONE' =>	'Standalone Compo',
-		);
-
 		foreach($compos as $compo) {
-			if (strtolower($compo->Type) == strtolower($csdb_types[$type])) {
+			if (strtolower($compo->Type) == strtolower($name)) {
 				$releases = $compo->Releases->Release;
 				break;
 			}
 		}
 		if (!isset($releases))
-			die(json_encode(array('status' => 'error', 'message' => 'No results found for the "'.$csdb_types[$type].'" competition.')));
+			die(json_encode(array('status' => 'error', 'message' => 'No results found for the "'.$name.'" competition.')));
 
 		$i = 1;
 		$compoCount = count($releases);
 		foreach($releases as $release) {
 			array_push($files_ext, array(
 				'filename' =>	str_pad($i, ($compoCount < 100 ? ($compoCount < 10 ? 1 : 2) : 3), '0', STR_PAD_LEFT),
-				'release_id' =>	(isset($release->ID) ? $release->ID : 0),
+				'release_id' =>	(isset($release->ID) ? (int)$release->ID : 0),
 			));
 			$i++;
 		}

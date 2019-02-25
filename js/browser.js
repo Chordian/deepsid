@@ -207,7 +207,7 @@ Browser.prototype = {
 						return false;
 					}
 					var rating = event.shiftKey ? 0 : 5 - $(event.target).index(); // Remember stars are backwards (RTL; see CSS)
-					var ratedName = ((this.isSearching || this.isSymlist ? "/" : this.path+"/")+name).substr(1);
+					var ratedName = ((this.isSearching || this.isSymlist || this.isCompoFolder ? "/" : this.path+"/")+name).substr(1);
 
 					// Star rating for a folder or a SID file (PHP script figures this out by itself)
 					$.post("php/rating_write.php", {fullname: ratedName, rating: rating}, function(data) {
@@ -706,13 +706,14 @@ Browser.prototype = {
 					// The contents of one competition folder are just placeholders to begin with
 					$.each(data.files, function(i, file) {
 						files += '<tr>'+
-							'<td class="sid unselectable disabled"><div class="block-wrap"><div class="block"><div class="entry name file" data-name="'+file.filename+'.sid" data-id="'+data.release_id+'">'+file.filename+'. <img src="images/compo.gif" class="gif1" alt="" /></div></div></div><br />'+
+							'<td class="sid unselectable disabled"><div class="block-wrap"><div class="block"><div class="entry name file" data-name="'+file.filename+'.sid" data-id="'+file.release_id+'">'+file.filename+'. <img src="images/compo.gif" class="gif1" alt="" /></div></div></div><br />'+
 							'<span class="info"><img src="images/compo.gif" class="gif2" alt="" /></div></span></td>'+
 							'<td class="stars filestars" style="cursor:default;"></td>'+
 						'</tr>';
 					});
-
+					this.isCompoFolder = true;
 				} else {
+					this.isCompoFolder = false;
 					// Sort the list of files first
 					data.files.sort(function(obj1, obj2) {
 						var o1 = obj1.substname !== "" ? obj1.substname : this.adaptBrowserName(obj1.filename, true);
@@ -720,44 +721,7 @@ Browser.prototype = {
 						return o1.toLowerCase() > o2.toLowerCase() ? 1 : -1;
 					}.bind(this));
 					$.each(data.files, function(i, file) {
-						// Player: Replace "_" with space + "V" with "v" for versions
-						var player = file.player.replace(/_/g, " ").replace(/(V)(\d)/g, "v$2"),
-							rootFile = (this.isSearching || this.isSymlist ? "" : this.path) + "/" + file.filename,
-							isNew = file.hvsc == this.HVSC_VERSION || file.hvsc == this.CGSC_VERSION;
-						var adaptedName = file.substname == "" ? file.filename.replace(/^\_/, '') : file.substname;
-						adaptedName = this.adaptBrowserName(adaptedName);
-						files += '<tr>'+
-								'<td class="sid unselectable"><div class="block-wrap"><div class="block">'+(file.subtunes > 1 ? '<div class="subtunes'+(this.isSymlist ? ' specific' : '')+(isNew ? ' newst' : '')+'">'+(this.isSymlist ? file.startsubtune : file.subtunes)+'</div>' : (isNew ? '<div class="newsid"></div>' : ''))+
-								'<div class="entry name file'+(this.isSearching || this.path.substr(0, 2) === "/$" ? ' search' : '')+'" data-name="'+encodeURI(file.filename)+'" data-type="'+file.type+'" data-symid="'+file.symid+'">'+adaptedName+'</div></div></div><br />'+
-								'<span class="info">'+file.copyright.substr(0, 4)+' in '+player+(file.type === "RSID" ? '<div class="ptype">RSID</div>' : '')+'</span></td>'+
-								'<td class="stars filestars"><span class="rating">'+this.buildStars(file.rating)+'</span>'+
-								'<span class="disqus-comment-count" data-disqus-url="http://deepsid.chordian.net/#!'+rootFile.replace("/_High Voltage SID Collection", "")+'"></span>'+
-								'</td>'+
-							'</tr>'; // &#9642; is the dot character if needed
-
-						// If the STIL text starts with a <BR> newline or a <HR> line, get rid of it
-						var stil = file.stil;
-						if (stil.substr(2, 4) == "r />") stil = stil.substr(6);
-
-						this.playlist.push({
-							filename:		file.filename,
-							substname:		file.substname, // Symlists can have renamed SID files
-							fullname:		this.ROOT_HVSC + rootFile,
-							player: 		player,
-							length: 		file.lengths,
-							type:			file.type,
-							clockspeed:		file.clockspeed,
-							sidmodel:		file.sidmodel,
-							subtunes:		file.subtunes,
-							startsubtune:	file.startsubtune == 0 ? 0 : file.startsubtune - 1, // If 0 then SIDId skipped it
-							size:			file.datasize,
-							address:		file.loadaddr,
-							copyright:		file.copyright,
-							stil:			stil,
-							rating:			file.rating,
-							hvsc:			file.hvsc,
-							symid:			file.symid,
-						});
+						files += '<tr>'+this.createSongRow(file)+'</tr>';
 					}.bind(this));
 				}
 
@@ -799,8 +763,87 @@ Browser.prototype = {
 				ctrls.state("root/back", "disabled");
 
 			DisableIncompatibleRows();
-			
+
+			if (this.isCompoFolder) {
+				// Populate all the placeholders that were created earlier
+				$("#songs table tr").each(function(i, element) {
+					var $this = $(element);
+					var release_id = $this.find(".name").attr("data-id");
+
+					$.get("php/csdb_compo_release.php", { id: $this.find(".name").attr("data-id") }, function(data) {
+						this.validateData(data, function(data) {
+							switch (data.status) {
+								case "NOXML":
+									break;
+								case "MULTIPLE":
+									break;
+								case "NOSID":
+									break;
+								default:
+									$this.empty().append(this.createSongRow(data.file));
+							}
+						});
+					}.bind(this));
+				}.bind(this));
+			}
 		}.bind(this));
+	},
+
+
+	/**
+	 * Creates the HTML for one <TR> browser song row. Also updates an array.
+	 * 
+	 * @param {object} file		Array from PHP file.
+	 * 
+	 * @return {string}			The table row (excluding <TR> wrapper)
+	 */
+	createSongRow: function(file) {
+		// Player: Replace "_" with space + "V" with "v" for versions
+		var player = file.player.replace(/_/g, " ").replace(/(V)(\d)/g, "v$2"),
+			rootFile = (this.isSearching || this.isSymlist || this.isCompoFolder ? "" : this.path) + "/" + file.filename,
+			isNew = file.hvsc == this.HVSC_VERSION || file.hvsc == this.CGSC_VERSION;
+		var adaptedName = file.substname == "" ? file.filename.replace(/^\_/, '') : file.substname;
+		adaptedName = this.adaptBrowserName(adaptedName);
+
+
+
+// need 01, 02, 03 etc. here if compo folder...
+
+
+
+		var entry =
+			'<td class="sid unselectable"><div class="block-wrap"><div class="block">'+(file.subtunes > 1 ? '<div class="subtunes'+(this.isSymlist ? ' specific' : '')+(isNew ? ' newst' : '')+'">'+(this.isSymlist ? file.startsubtune : file.subtunes)+'</div>' : (isNew ? '<div class="newsid"></div>' : ''))+
+			'<div class="entry name file'+(this.isSearching || this.path.substr(0, 2) === "/$" ? ' search' : '')+'" data-name="'+encodeURI(file.filename)+'" data-type="'+file.type+'" data-symid="'+file.symid+'">'+adaptedName+'</div></div></div><br />'+
+			'<span class="info">'+file.copyright.substr(0, 4)+' in '+player+(file.type === "RSID" ? '<div class="ptype">RSID</div>' : '')+'</span></td>'+
+			'<td class="stars filestars"><span class="rating">'+this.buildStars(file.rating)+'</span>'+
+			'<span class="disqus-comment-count" data-disqus-url="http://deepsid.chordian.net/#!'+rootFile.replace("/_High Voltage SID Collection", "")+'"></span>'+
+			'</td>';
+
+		// If the STIL text starts with a <BR> newline or a <HR> line, get rid of it
+		var stil = file.stil;
+		if (stil.substr(2, 4) == "r />") stil = stil.substr(6);
+
+		this.playlist.push({
+			filename:		file.filename,
+			substname:		file.substname, // Symlists can have renamed SID files
+			fullname:		this.ROOT_HVSC + rootFile,
+			player: 		player,
+			length: 		file.lengths,
+			type:			file.type,
+			clockspeed:		file.clockspeed,
+			sidmodel:		file.sidmodel,
+			subtunes:		file.subtunes,
+			startsubtune:	file.startsubtune == 0 ? 0 : file.startsubtune - 1, // If 0 then SIDId skipped it
+			size:			file.datasize,
+			address:		file.loadaddr,
+			copyright:		file.copyright,
+			stil:			stil,
+			rating:			file.rating,
+			hvsc:			file.hvsc,
+			symid:			file.symid,
+		});
+
+		return entry;
 	},
 
 	/**
