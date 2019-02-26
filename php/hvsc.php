@@ -324,49 +324,81 @@ try {
 			$event_id = $row->event_id;
 			$name =		$row->name;
 
-			// Get the event XML from the CSDb web service
-			$xml = file_get_contents('https://csdb.dk/webservice/?type=event&id='.$event_id);
-			if (!strpos($xml, '<CSDbData>'))
-				die(json_encode(array('status' => 'error', 'message' => 'Could not get CSDb data for event ID: '.$event_id)));
-			$csdb_event = simplexml_load_string(utf8_decode($xml));
-
-			$compos = $csdb_event->Event->Compo;
-			if (!isset($compos))
-				die(json_encode(array('status' => 'error', 'message' => 'The XML data from CSDb page had no competition entries.')));
-
-			foreach($compos as $compo) {
-				if (strtolower($compo->Type) == strtolower($name)) {
-					$releases = $compo->Releases->Release;
-					break;
-				}
-			}
-			if (!isset($releases))
-				die(json_encode(array('status' => 'error', 'message' => 'No results found for the "'.$name.'" competition.')));
-
 			$place = array();
-			$pad_count = count($releases) < 100 ? (count($releases) < 10 ? 1 : 2) : 3;
 
-			foreach($releases as $release) {
-				// If there are errors the file is skipped completely (i.e. SID file will be ABSENT from the list)
-				if (isset($release->ID)) {
-					// Get the release XML from the CSDb web service
+			// Has this folder been cached?
+			$select = $db->query('SELECT file_id, place FROM competitions_cache WHERE event_id = '.$event_id);
+			$select->setFetchMode(PDO::FETCH_OBJ);
+			$entries = $select->rowCount();
 
+			if ($entries) {
 
+				// We have a cache so use that now (this is extremely fast)
 
-					
-					// @todo CREATE SOME KIND OF CACHING FOR THIS!
+				$pad_count = $entries < 100 ? ($entries < 10 ? 1 : 2) : 3;
 
+				foreach($select as $row) {
+					// Get fullname
+					$select_fullname = $db->query('SELECT fullname FROM hvsc_files WHERE id = '.$row->file_id);
+					$select_fullname->setFetchMode(PDO::FETCH_OBJ);
 
+					if ($select_fullname->rowCount()) {
+						$fullname = $select_fullname->fetch()->fullname;
+						$files[] = $fullname;
+						// Value -1 equals place "??" in CSDb jargon
+						$place[$fullname] = $row->place;
+					}
+				}
 
+			} else {
 
-					$xml = file_get_contents('https://csdb.dk/webservice/?type=release&id='.$release->ID);
-					if (strpos($xml, '<CSDbData>')) {
-						$csdb_release = simplexml_load_string(utf8_decode($xml));
-						if (isset($csdb_release->Release->UsedSIDs->SID->HVSCPath) && count($csdb_release->Release->UsedSIDs->SID) == 1) {
-							$fullname = '_High Voltage SID Collection'.$csdb_release->Release->UsedSIDs->SID->HVSCPath;
-							$files[] = $fullname;
-							// Value -1 equals place "??" in CSDb jargon
-							$place[$fullname] = isset($release->Achievement->Place) ? $release->Achievement->Place : -1;
+				// Get the paths from the CSDb web service while caching it (much slower first time)
+
+				// Get the event XML from the CSDb web service
+				$xml = file_get_contents('https://csdb.dk/webservice/?type=event&id='.$event_id);
+				if (!strpos($xml, '<CSDbData>'))
+					die(json_encode(array('status' => 'error', 'message' => 'Could not get CSDb data for event ID: '.$event_id)));
+				$csdb_event = simplexml_load_string(utf8_decode($xml));
+
+				$compos = $csdb_event->Event->Compo;
+				if (!isset($compos))
+					die(json_encode(array('status' => 'error', 'message' => 'The XML data from CSDb page had no competition entries.')));
+
+				foreach($compos as $compo) {
+					if (strtolower($compo->Type) == strtolower($name)) {
+						$releases = $compo->Releases->Release;
+						break;
+					}
+				}
+				if (!isset($releases))
+					die(json_encode(array('status' => 'error', 'message' => 'No results found for the "'.$name.'" competition.')));
+
+				$pad_count = count($releases) < 100 ? (count($releases) < 10 ? 1 : 2) : 3;
+
+				foreach($releases as $release) {
+					// If there are errors the file is skipped completely (i.e. SID file will be ABSENT from the list)
+					if (isset($release->ID)) {
+						// Get the release XML from the CSDb web service
+						$xml = file_get_contents('https://csdb.dk/webservice/?type=release&id='.$release->ID);
+						if (strpos($xml, '<CSDbData>')) {
+							$csdb_release = simplexml_load_string(utf8_decode($xml));
+							if (isset($csdb_release->Release->UsedSIDs->SID->HVSCPath) && count($csdb_release->Release->UsedSIDs->SID) == 1) {
+								$fullname = '_High Voltage SID Collection'.$csdb_release->Release->UsedSIDs->SID->HVSCPath;
+								$files[] = $fullname;
+								// Value -1 equals place "??" in CSDb jargon
+								$place[$fullname] = isset($release->Achievement->Place) ? $release->Achievement->Place : -1;
+
+								// Find file ID of this HVSC path
+								$select = $db->query('SELECT id FROM hvsc_files WHERE fullname = "'.$fullname.'"');
+								$select->setFetchMode(PDO::FETCH_OBJ);
+								$file_id = $select->rowCount() ? $select->fetch()->id : 0;
+
+								if ($file_id)
+									// Cache this competition SID entry
+									// NOTE: The release ID is actually not used but saved anyway as debug info.
+									$insert = $db->query('INSERT INTO competitions_cache (event_id, release_id, file_id, place)'.
+										' VALUES('.$event_id.', '.$release->ID.', '.$file_id.', '.$place[$fullname].')');
+							}
 						}
 					}
 				}

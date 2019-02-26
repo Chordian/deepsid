@@ -23,95 +23,104 @@ if (isset($fullname)) {
 	if (empty($fullname))
 		die(json_encode(array('status' => 'ok', 'html' => ''))); // Don't do root
 
-	try {
-		if ($_SERVER['HTTP_HOST'] == LOCALHOST)
-			$db = new PDO(PDO_LOCALHOST, USER_LOCALHOST, PWD_LOCALHOST);
-		else
-			$db = new PDO(PDO_ONLINE, USER_ONLINE, PWD_ONLINE);
-		$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-		$db->exec("SET NAMES UTF8");
+	if (substr($fullname, 0, 23) == 'CSDb Music Competitions' && strlen($fullname) > 24) {
+		// INSIDE ONE COMPETITION FOLDER
 
-		// If we are in a sub folder of a composer (e.g. work tunes or a previous handle) with no profile then re-use
-		// NOTE: This block is also used in the 'groups.php' file.
-		$folders = explode('/', $fullname);
-		if (count($folders) > 3 && $folders[1] == 'MUSICIANS' && !empty($folders[4])) {
-			// Do we have a profile for the unique sub folder of this composer?
-			$select = $db->prepare('SELECT 1 FROM composers WHERE fullname = :fullname LIMIT 1');
+		$html = '<p><i>&nbsp;&nbsp;&nbsp;Profile pages for competitions will be added soon.</i></p>';
+		die(json_encode(array('status' => 'ok', 'html' => $html)));
+
+	} else {
+
+		try {
+			if ($_SERVER['HTTP_HOST'] == LOCALHOST)
+				$db = new PDO(PDO_LOCALHOST, USER_LOCALHOST, PWD_LOCALHOST);
+			else
+				$db = new PDO(PDO_ONLINE, USER_ONLINE, PWD_ONLINE);
+			$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+			$db->exec("SET NAMES UTF8");
+
+			// If we are in a sub folder of a composer (e.g. work tunes or a previous handle) with no profile then re-use
+			// NOTE: This block is also used in the 'groups.php' file.
+			$folders = explode('/', $fullname);
+			if (count($folders) > 3 && $folders[1] == 'MUSICIANS' && !empty($folders[4])) {
+				// Do we have a profile for the unique sub folder of this composer?
+				$select = $db->prepare('SELECT 1 FROM composers WHERE fullname = :fullname LIMIT 1');
+				$select->execute(array(':fullname'=>$fullname));
+				if ($select->rowCount() == 0)
+					// No, re-use the profile of the parent composer folder then
+					$fullname = str_replace('/'.$folders[count($folders) - 1], '', $fullname);
+			}
+
+			// Get data for top part like birthday, country, etc.
+			$select = $db->prepare('SELECT * FROM composers WHERE fullname = :fullname LIMIT 1');
 			$select->execute(array(':fullname'=>$fullname));
-			if ($select->rowCount() == 0)
-				// No, re-use the profile of the parent composer folder then
-				$fullname = str_replace('/'.$folders[count($folders) - 1], '', $fullname);
+			$select->setFetchMode(PDO::FETCH_OBJ);
+
+			if ($select->rowCount())
+				$row = $select->fetch();
+
+			// Get data about players for the charts
+			$select = $db->prepare('SELECT player, count(player) AS count FROM hvsc_files WHERE fullname LIKE :fullname GROUP BY player');
+			$select->execute(array(':fullname'=>$fullname.'/%'));
+			$select->setFetchMode(PDO::FETCH_OBJ);
+
+			$player_labels = Array();
+			$player_counts = Array();
+			if ($select->rowCount()) {
+				foreach($select as $player_row) {
+					$player_labels[] = empty($player_row->player) ? 'Unidentified player' : $player_row->player;
+					$player_counts[] = $player_row->count;
+				}
+				foreach($player_labels as $key => $label) {
+					if (isset($prettyPlayerNames[$label]))
+						$player_labels[$key] = str_replace('a Basic Program', 'Basic Program', $prettyPlayerNames[$label]);
+					else
+						$player_labels[$key] = str_replace('_', ' ', preg_replace('/(V)(\d)/', 'v$2', $player_labels[$key]));
+					$player_labels[$key] = str_replace('/', ' / ', $player_labels[$key]);
+				}
+
+				$max_allowed = 14; // 9
+				array_multisort($player_counts, $player_labels);
+				if (count($player_counts) > $max_allowed) {
+					$less_counts = array_slice($player_counts, 0, count($player_counts) - $max_allowed);
+					$player_labels = array_slice($player_labels, -$max_allowed);
+					$player_counts = array_slice($player_counts, -$max_allowed);
+					array_unshift($player_labels, 'Other');
+					array_unshift($player_counts, (string)array_sum($less_counts));
+				}
+			}
+
+			// Get data about active years
+			$select = $db->prepare('SELECT copyright FROM hvsc_files WHERE fullname LIKE :fullname');
+			$select->execute(array(':fullname'=>$fullname.'/%'));
+			$select->setFetchMode(PDO::FETCH_OBJ);
+
+			$years = Array();
+			if ($select->rowCount()) {
+				foreach($select as $player_row) {
+					$year = substr($player_row->copyright, 0, 4);
+					if (is_numeric($year)) $years[] = $year;
+				}
+			}
+			sort($years);
+
+			$ycounts = array_count_values($years);
+			/*$years_labels = array_keys($ycounts);
+			$years_counts = Array(array_values($ycounts));*/
+			$years_labels = Array();
+			$years_counts = Array();
+			if (!empty($years)) {
+				for($year = 1982; $year <= date("Y") ; $year++) {
+					$years_labels[] = substr($year, -2);
+					$years_counts[] = array_key_exists($year, $ycounts) ? $ycounts[$year] : null;
+				}
+				$years_counts = Array($years_counts);
+			}
+
+		} catch(PDOException $e) {
+			$account->LogActivityError('composer.php', $e->getMessage());
+			die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 		}
-
-		// Get data for top part like birthday, country, etc.
-		$select = $db->prepare('SELECT * FROM composers WHERE fullname = :fullname LIMIT 1');
-		$select->execute(array(':fullname'=>$fullname));
-		$select->setFetchMode(PDO::FETCH_OBJ);
-
-		if ($select->rowCount())
-			$row = $select->fetch();
-
-		// Get data about players for the charts
-		$select = $db->prepare('SELECT player, count(player) AS count FROM hvsc_files WHERE fullname LIKE :fullname GROUP BY player');
-		$select->execute(array(':fullname'=>$fullname.'/%'));
-		$select->setFetchMode(PDO::FETCH_OBJ);
-
-		$player_labels = Array();
-		$player_counts = Array();
-		if ($select->rowCount()) {
-			foreach($select as $player_row) {
-				$player_labels[] = empty($player_row->player) ? 'Unidentified player' : $player_row->player;
-				$player_counts[] = $player_row->count;
-			}
-			foreach($player_labels as $key => $label) {
-				if (isset($prettyPlayerNames[$label]))
-					$player_labels[$key] = str_replace('a Basic Program', 'Basic Program', $prettyPlayerNames[$label]);
-				else
-					$player_labels[$key] = str_replace('_', ' ', preg_replace('/(V)(\d)/', 'v$2', $player_labels[$key]));
-				$player_labels[$key] = str_replace('/', ' / ', $player_labels[$key]);
-			}
-
-			$max_allowed = 14; // 9
-			array_multisort($player_counts, $player_labels);
-			if (count($player_counts) > $max_allowed) {
-				$less_counts = array_slice($player_counts, 0, count($player_counts) - $max_allowed);
-				$player_labels = array_slice($player_labels, -$max_allowed);
-				$player_counts = array_slice($player_counts, -$max_allowed);
-				array_unshift($player_labels, 'Other');
-				array_unshift($player_counts, (string)array_sum($less_counts));
-			}
-		}
-
-		// Get data about active years
-		$select = $db->prepare('SELECT copyright FROM hvsc_files WHERE fullname LIKE :fullname');
-		$select->execute(array(':fullname'=>$fullname.'/%'));
-		$select->setFetchMode(PDO::FETCH_OBJ);
-
-		$years = Array();
-		if ($select->rowCount()) {
-			foreach($select as $player_row) {
-				$year = substr($player_row->copyright, 0, 4);
-				if (is_numeric($year)) $years[] = $year;
-			}
-		}
-		sort($years);
-
-		$ycounts = array_count_values($years);
-		/*$years_labels = array_keys($ycounts);
-		$years_counts = Array(array_values($ycounts));*/
-		$years_labels = Array();
-		$years_counts = Array();
-		if (!empty($years)) {
-			for($year = 1982; $year <= date("Y") ; $year++) {
-				$years_labels[] = substr($year, -2);
-				$years_counts[] = array_key_exists($year, $ycounts) ? $ycounts[$year] : null;
-			}
-			$years_counts = Array($years_counts);
-		}
-
-	} catch(PDOException $e) {
-		$account->LogActivityError('composer.php', $e->getMessage());
-		die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 	}
 
 } else
@@ -191,6 +200,8 @@ if (isset($row)) {
 	$name = substr($name, 0, 1) == '_' || substr($name, 0, 1) == '!' ? substr($name, 1) : $name;
 }
 
+$csdbCompoFolder = 'CSDb Music Competitions';
+
 // Top part with thumbnail, birthday, country, etc.
 $html = '<table style="border:none;margin-bottom:0;"><tr>'.
 			'<td style="padding:0;border:none;width:184px;">'.
@@ -217,11 +228,12 @@ $html = '<table style="border:none;margin-bottom:0;"><tr>'.
 			'</td>'.
 		'</tr></table>'.
 		// Below is empty groups/work table placeholder
-		'<table id="table-groups" class="tight top" style="min-width:100%;font-size:14px;margin-top:5px;">'.
-			'<tr>'.
-				'<td class="topline bottomline leftline rightline" style="height:30px;padding:0 !important;text-align:center;">'.($spinner ? '<img class="loading-dots" src="images/loading_threedots.svg" alt="" style="margin-top:10px;" />' : '<div style="margin-top:5px;font-size:12px;color:#a1a294;">No profile data</div>').'</td>'.
-			'</tr>'.
-		'</table>'.
+		($fullname != $csdbCompoFolder ?
+			'<table id="table-groups" class="tight top" style="min-width:100%;font-size:14px;margin-top:5px;">'.
+				'<tr>'.
+					'<td class="topline bottomline leftline rightline" style="height:30px;padding:0 !important;text-align:center;">'.($spinner ? '<img class="loading-dots" src="images/loading_threedots.svg" alt="" style="margin-top:10px;" />' : '<div style="margin-top:5px;font-size:12px;color:#a1a294;">No profile data</div>').'</td>'.
+				'</tr>'.
+			'</table>' : '').
 		'<div id="corner-icons">'.
 			($csdbid ? '<a href="https://csdb.dk/'.$csdbtype.'/?id='.$csdbid.'" title="See this at CSDb" target="_blank"><svg class="outlink" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg></a>' : '').
 		'</div>';
@@ -233,7 +245,7 @@ if ($fullname == $cgsc) {
 	// Show an IFRAME with the CGSC web site
 	$html = '<iframe class="deepsid-iframe" src="//www.c64music.co.uk/" onload="ResizeIframe();"></iframe>';
 	
-} else if (substr($fullname, 0, strlen($cgsc)) != $cgsc) {
+} else if (substr($fullname, 0, strlen($cgsc)) != $cgsc && $fullname != $csdbCompoFolder) {
 	// Charts for HVSC sub folders as well as custom "_" folders
 	$html .= '<h3 style="margin-top:21px;">Active years<div class="legend">X = year (1982-)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Y = number of SID files</div></h3>
 		<div id="ct-years"></div>

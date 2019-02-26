@@ -1559,9 +1559,24 @@ input[type=range]::-ms-track {
 			top: -2px;
 		}
 
+			#songs td.compo {
+				padding-top: 4px;
+			}
+
 			#songs .folder span {
 				height: 26px;
 			}
+
+				#songs .folder span.compo {
+					padding-left: 4px;
+					line-height: 30px;
+				}
+
+				#songs .folder span.compo-year {
+					position: relative;
+					left: 4px;
+					top: -11px;
+				}
 
 			/* Folder SVG icon */
 			#songs .folder span:before {
@@ -1574,6 +1589,82 @@ input[type=range]::-ms-track {
 				width: 26px;
 				height: 21px;
 			}
+
+				#songs .folder span.compo:before {
+					width: 32px;
+					background: none;
+				}
+
+				#songs .folder span.compo-year:before {
+					content: "D";
+					left: -4px;
+					top: -7px;
+					height: 32px;
+					width: 32px;
+					font-size: 21px;
+					line-height: 26px;
+					font-weight: bold;
+					text-align: center;
+					background: #fafff8;
+					color: #000;
+					border: 2px solid #000;
+					border-radius: 9px;
+					margin-bottom: -10px;
+				}
+
+				#songs .folder span.compo-copy:before {
+					content: "C";
+					color: #900;
+					border-color: #900;
+					padding: 0 1px 0 0;
+				}
+
+				#songs .folder span.compo-demo:before {
+					content: "D";
+					color: #080;
+					border-color: #080;
+					padding: 0 0 0 1px;
+				}
+
+				#songs .folder span.compo-meeting:before {
+					content: "M";
+					color: #777;
+					border-color: #777;
+					padding: 0;
+				}
+
+				#songs .folder span.compo-internal:before {
+					content: "IM";
+					color: #6f7608;
+					border-color: #6f7608;
+					font-size: 17px;
+					padding: 0;
+				}
+
+/* Sigh. The font sizes fucks up the second line distance. >< */
+
+				#songs .folder span.compo-c64:before {
+					content: "C64";
+					color: #7f8dcb;
+					border-color: #7f8dcb;
+					font-size: 13px;
+					padding: 0;
+				}
+
+				#songs .folder span.compo-8bit:before {
+					content: "8BIT";
+					color: #000;
+					border-color: #000;
+					font-size: 10px;
+					padding: 0;
+				}
+
+				#songs .folder span.compo-standalone:before {
+					content: "S";
+					color: #00a;
+					border-color: #00a;
+					padding: 0;
+				}
 
 			#songs .single span:before {
 				background: url(../images/if_folder_single.svg) 0 0 / 26px 26px no-repeat;
