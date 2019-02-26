@@ -1578,6 +1578,10 @@ input[type=range]::-ms-track {
 					top: -11px;
 				}
 
+				#songs .folder span.compo-internal	{ top: -9px; }
+				#songs .folder span.compo-c64		{ top: -7.5px; }
+				#songs .folder span.compo-8bit		{ top: -6.5px; }
+
 			/* Folder SVG icon */
 			#songs .folder span:before {
 				content: "";
@@ -1595,8 +1599,9 @@ input[type=range]::-ms-track {
 					background: none;
 				}
 
+				/* Competition type "icon" */
 				#songs .folder span.compo-year:before {
-					content: "D";
+					content: "";
 					left: -4px;
 					top: -7px;
 					height: 32px;
@@ -1608,7 +1613,8 @@ input[type=range]::-ms-track {
 					background: #fafff8;
 					color: #000;
 					border: 2px solid #000;
-					border-radius: 9px;
+					border-radius: 10px;				  /* 13px 14px 20px (circle) */
+					box-shadow: 1px 1.5px 3px #b0b29a;	/* #474937 #68695a #a8ad95 */
 					margin-bottom: -10px;
 				}
 
@@ -1628,25 +1634,25 @@ input[type=range]::-ms-track {
 
 				#songs .folder span.compo-meeting:before {
 					content: "M";
-					color: #777;
-					border-color: #777;
+					color: #6c6c6c;
+					border-color: #6c6c6c;
 					padding: 0;
 				}
 
 				#songs .folder span.compo-internal:before {
 					content: "IM";
 					color: #6f7608;
+					top: -9px;
 					border-color: #6f7608;
 					font-size: 17px;
 					padding: 0;
 				}
 
-/* Sigh. The font sizes fucks up the second line distance. >< */
-
 				#songs .folder span.compo-c64:before {
 					content: "C64";
-					color: #7f8dcb;
-					border-color: #7f8dcb;
+					color: #6c7bc2;
+					top: -10.5px;
+					border-color: #6c7bc2;
 					font-size: 13px;
 					padding: 0;
 				}
@@ -1654,9 +1660,10 @@ input[type=range]::-ms-track {
 				#songs .folder span.compo-8bit:before {
 					content: "8BIT";
 					color: #000;
+					top: -12px;
 					border-color: #000;
 					font-size: 10px;
-					padding: 0;
+					padding: 0.5px 0 0 0;
 				}
 
 				#songs .folder span.compo-standalone:before {

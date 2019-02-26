@@ -572,6 +572,7 @@ Browser.prototype = {
 
 		this.playlist = []; // Every folder we enter will become its own local playlist
 		this.subFolders = 0;
+		this.path = this.path.replace("/_CSDb", "/CSDb");
 		// Call the AJAX PHP script that delivers the list of files and folders
 		$.get("php/hvsc.php", {
 				folder:			this.path,
@@ -653,7 +654,7 @@ Browser.prototype = {
 									(folder.filescount > 0 ? '<div class="filescount">'+folder.filescount+'</div>' : '')+
 								'<span class="name entry compo" data-name="'+encodeURI(folder.foldername)+'" data-incompat="'+folder.incompatible+'">'+
 								folder.foldername+'</span></div></div><br />'+
-								'<span class="info compo-year compo-8bit">'+folder.compo_year+(folder.compo_country.substr(0, 1) == "_" ? ' at ' : ' in ')+folder.compo_country.replace("_", "")+'</span></td>'+
+								'<span class="info compo-year compo-'+folder.compo_type.toLowerCase()+'">'+folder.compo_year+(folder.compo_country.substr(0, 1) == "_" ? ' at ' : ' in ')+folder.compo_country.replace("_", "")+'</span></td>'+
 								'</td>'+
 								'<td class="stars"><span class="rating">'+this.buildStars(folder.rating)+'</span><br /></td>'+
 						'</tr>';
