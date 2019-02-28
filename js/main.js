@@ -627,26 +627,38 @@ $(function() { // DOM ready
 		if (fileParam.substr(0, 6) == "/DEMOS" || fileParam.substr(0, 6) == "/GAMES" || fileParam.substr(0, 10) == "/MUSICIANS")
 			fileParam = "/High Voltage SID Collection"+fileParam;
 		var isFolder = fileParam.indexOf(".sid") === -1 && fileParam.indexOf(".mus") === -1,
-			isSymlist = fileParam.substr(0, 2) == "/!" || fileParam.substr(0, 2) == "/$";
+			isSymlist = fileParam.substr(0, 2) == "/!" || fileParam.substr(0, 2) == "/$",
+			isCompoFolder = fileParam.indexOf("/CSDb Music Competitions/") !== -1;
 		browser.path = isFolder ? fileParam : fileParam.substr(0, fileParam.lastIndexOf("/"));
 		if (browser.path.substr(0, 7).toLowerCase() != "/demos/" && browser.path.substr(0, 7).toLowerCase() != "/games/" && browser.path.substr(0, 11).toLowerCase() != "/musicians/" && browser.path.substr(0, 2) != "/!" && browser.path.substr(0, 2) != "/$")
 			browser.path = "/_"+browser.path.substr(1); // It's an "extra" folder
 		if (browser.path.substr(-1) === "/") browser.path = browser.path.slice(0, -1); // Remove "/" at end of folder
 		if (isSymlist) browser.path = "/"+browser.path.split("/")[1]; // Symlist SID names could be using "/" chars
+		if (isCompoFolder && !isFolder) browser.path = "/CSDb Music Competitions/"+browser.path.split("/")[2];
 		ctrls.state("root/back", "enabled");
+
 		browser.getFolder(0, undefined, function() {
+
 			if (!isFolder) {
+
 				// Isolate the SID name, e.g. "music.sid"
-				var sidFile = isSymlist
+				var sidFile = isSymlist || isCompoFolder
 					? fileParam.substr(fileParam.substr(1).indexOf("/") + 2)
 					: fileParam.split("/").slice(-1)[0];
+				if (isCompoFolder)
+					sidFile = sidFile.substr(sidFile.substr(1).indexOf("/") + 2); // Skip also competition name
+
 				var $tr = $("#folders tr").filter(function() {
 					var $name = $(this).find(".name");
 					if (!$name.length) return false;
 					// First try to match the original SID name
-					var found = decodeURI($name.attr("data-name")).toLowerCase().replace(/^\_/, '') == sidFile.toLowerCase();
+					var decodedName = decodeURI($name.attr("data-name")).toLowerCase().replace(/^\_/, '');
+					var found = isCompoFolder
+						// A compo folder is ALWAYS a HVSC path so it should be safe to search like this
+						? decodedName.indexOf(sidFile.toLowerCase()) !== -1
+						: decodedName == sidFile.toLowerCase();
 					if (!found)
-						// If not found, try one more time with the table name (it could be a renamed playlist entry)
+						// If still not found, try one more time with the table name (it could be a renamed playlist entry)
 						found = $name.text().toLowerCase() == sidFile.toLowerCase();
 					return found;
 				}).closest("tr");
@@ -665,7 +677,9 @@ $(function() { // DOM ready
 					$("#folders").mCustomScrollbar("scrollTo", rowPos > halfway ? rowPos - halfway : "top");
 			}
 			browser.getComposer();
+
 		});
+
 	} else if (searchQuery !== "") {
 		// A search query was specified (optionally with a type too)
 		$("#dropdown-search").val(GetParam("type") !== "" ? GetParam("type").toLowerCase() : "#all#");
@@ -852,13 +866,15 @@ function UpdateURL() {
 	if (urlFile.split("/").length - 1 > 2)
 		urlFile = urlFile.replace("/High Voltage SID Collection", "");
 	try {
-		urlFile = browser.playlist[browser.songPos].substname !== ""
+		urlFile = browser.playlist[browser.songPos].substname !== "" && !browser.isCompoFolder
 			? urlFile += browser.playlist[browser.songPos].substname
 			: urlFile += browser.playlist[browser.songPos].filename.replace(/^\_/, '');
 	} catch(e) { /* Type error means no SID file clicked */ }
 
 	if (browser.isSearching)
 		urlFile = urlFile.replace("High Voltage SID Collection", "");
+	else if (browser.isCompoFolder)
+		urlFile = urlFile.replace("/High Voltage SID Collection", "");
 
 	// ?subtune=
 	var urlSubtune = ctrls.subtuneCurrent ? "&subtune="+(ctrls.subtuneCurrent + 1) : "";

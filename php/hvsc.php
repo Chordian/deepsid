@@ -2,8 +2,8 @@
 /**
  * DeepSID
  *
- * Get an array of SID files from the specified folder in the HVSC library, or
- * perform a search query if specified.
+ * Get an array of SID files from the specified folder, or perform a search
+ * query if specified.
  * 
  * @uses		$_GET['folder']
  * @uses		$_GET['searchType']
@@ -24,7 +24,7 @@ $isSearching = isset($_GET['searchQuery']) && !empty($_GET['searchQuery']);
 $isPersonalSymlist = substr($_GET['folder'], 0, 2) == '/!';
 $isPublicSymlist = substr($_GET['folder'], 0, 2) == '/$';
 $isCSDbCompo = substr($_GET['folder'], 0, 24) == '/CSDb Music Competitions';
-$compoName = $isCSDbCompo && strlen($_GET['folder']) > 25 ? substr($_GET['folder'], 25) : '';
+$compoName = $isCSDbCompo && strlen($_GET['folder']) > 25 ? explode('/', $_GET['folder'])[2] : '';
 
 // In current folder or everything?
 $searchContext = $_GET['searchHere'] ? 'fullname LIKE "'.substr($_GET['folder'], 1).'%"' : '1';
@@ -335,8 +335,6 @@ try {
 
 				// We have a cache so use that now (this is extremely fast)
 
-				$pad_count = $entries < 100 ? ($entries < 10 ? 1 : 2) : 3;
-
 				foreach($select as $row) {
 					// Get fullname
 					$select_fullname = $db->query('SELECT fullname FROM hvsc_files WHERE id = '.$row->file_id);
@@ -373,8 +371,7 @@ try {
 				if (!isset($releases))
 					die(json_encode(array('status' => 'error', 'message' => 'No results found for the "'.$name.'" competition.')));
 
-				$pad_count = count($releases) < 100 ? (count($releases) < 10 ? 1 : 2) : 3;
-
+				$real_count = 0;
 				foreach($releases as $release) {
 					// If there are errors the file is skipped completely (i.e. SID file will be ABSENT from the list)
 					if (isset($release->ID)) {
@@ -393,15 +390,21 @@ try {
 								$select->setFetchMode(PDO::FETCH_OBJ);
 								$file_id = $select->rowCount() ? $select->fetch()->id : 0;
 
-								if ($file_id)
+								if ($file_id) {
 									// Cache this competition SID entry
 									// NOTE: The release ID is actually not used but saved anyway as debug info.
 									$insert = $db->query('INSERT INTO competitions_cache (event_id, release_id, file_id, place)'.
 										' VALUES('.$event_id.', '.$release->ID.', '.$file_id.', '.$place[$fullname].')');
+									$real_count++;
+								}
 							}
 						}
 					}
 				}
+
+				// Create the folder entry with the amount of viable files found
+				$insert = $db->query('INSERT INTO hvsc_folders (fullname, type, files, user_id)'.
+					' VALUES("'.$compoName.'", "COMPO", '.$real_count.', 0)');
 			}
 		}
 
@@ -658,8 +661,8 @@ try {
 
 			if (!empty($compoName)) {
 				// Prepend a place number in front of CSDb competition SID files
-				$number = $place[$file] == -1 ? '?' : $place[$file];
-				$substname = str_pad($number, $pad_count, '0', STR_PAD_LEFT).'. '.substr($file, 1);
+				$number = $place[$file] == -1 ? '<span class="q">?</span><span class="q">?</span><span class="dot">.</span> ' : $place[$file].'. ';
+				$substname = str_pad($number, 4, '0', STR_PAD_LEFT).substr($file, 1);
 			}
 
 			array_push($files_ext, array(

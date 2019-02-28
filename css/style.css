@@ -1645,7 +1645,7 @@ input[type=range]::-ms-track {
 					top: -9px;
 					border-color: #6f7608;
 					font-size: 17px;
-					padding: 0;
+					padding: 0.5px 0 0 0;
 				}
 
 				#songs .folder span.compo-c64:before {
@@ -1691,6 +1691,15 @@ input[type=range]::-ms-track {
 
 			#songs .playlist span:before {
 				background: url(../images/if_folder_star.svg) 0 0 / 26px 26px no-repeat;
+			}
+
+			#songs span.q {
+				margin-left: 1px;
+				color: #8a8c7a;
+			}
+
+			#songs span.dot {
+				color: #8a8c7a;
 			}
 
 			/* #songs .playlist span:before {

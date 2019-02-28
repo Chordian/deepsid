@@ -27,18 +27,19 @@ if ($account->CheckLogin()) {
 		$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		$db->exec("SET NAMES UTF8");
 
-		$table = isset($_POST['fullname']) &&
-			(strpos($_POST['fullname'], '.sid') || strpos($_POST['fullname'], '.mus'))
-			? 'hvsc_files' : 'hvsc_folders';
+		$fullname = isset($_POST['fullname']) ? $_POST['fullname'] : '';
+		$fullname = str_replace('CSDb Music Competitions/', '', $fullname);
+
+		$table = strpos($fullname, '.sid') || strpos($fullname, '.mus') ? 'hvsc_files' : 'hvsc_folders';
 		$type = $table == 'hvsc_files' ? 'FILE': 'FOLDER';
 
 		// Get the hash (MD5) in the 'hvsc_files' or 'hvsc_folder' table
 		$select = $db->prepare('SELECT id, hash FROM '.$table.' WHERE fullname = :fullname LIMIT 1');
-		$select->execute(array(':fullname' => $_POST['fullname']));
+		$select->execute(array(':fullname' => $fullname));
 		$select->setFetchMode(PDO::FETCH_OBJ);
 
 		if (!$select->rowCount()) {
-			$account->LogActivityError('rating_write.php', 'Name error; $_POST[\'fullname\'] = '.$_POST['fullname'].' not found in "'.$table.'" table');
+			$account->LogActivityError('rating_write.php', 'Name error; $_POST[\'fullname\'] = '.$fullname.' not found in "'.$table.'" table');
 			die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 		}
 
