@@ -23,7 +23,8 @@ $user_id = $account->CheckLogin() ? $account->UserID() : 0;
 $isSearching = isset($_GET['searchQuery']) && !empty($_GET['searchQuery']);
 $isPersonalSymlist = substr($_GET['folder'], 0, 2) == '/!';
 $isPublicSymlist = substr($_GET['folder'], 0, 2) == '/$';
-$isCSDbCompo = substr($_GET['folder'], 0, 24) == '/CSDb Music Competitions';
+// NOTE: A comparison of the 'COMPO' type is performed below that may also set these variables.
+$isCSDbCompo = substr($_GET['folder'], 0, 24) == '/CSDb Music Competitions' && !$isSearching;
 $compoName = $isCSDbCompo && strlen($_GET['folder']) > 25 ? explode('/', $_GET['folder'])[2] : '';
 
 // In current folder or everything?
@@ -57,10 +58,22 @@ try {
 		return $owner;
 	}
 
+	// What type of folder is it?
+	$select = $db->prepare('SELECT type FROM hvsc_folders WHERE fullname = :folder LIMIT 1');
+	$select->execute(array(':folder'=>substr($_GET['folder'], 1)));
+	$select->setFetchMode(PDO::FETCH_OBJ);
+
+	if ($select->rowCount() && $select->fetch()->type == 'COMPO') {
+		// This is necessary for competition sub folders to work when searching
+		$isCSDbCompo = true;
+		$compoName = substr($_GET['folder'], 1);
+	}
+
 	if ($isSearching) {
 
 		// This tricky logic disallows symlists unless searching for everything
-		if ((!$isPublicSymlist && !$isPersonalSymlist) || (!$_GET['searchHere'] && ($isPublicSymlist || $isPersonalSymlist))) {
+		if ((!$isPublicSymlist && !$isPersonalSymlist) ||
+			(!$_GET['searchHere'] && ($isPublicSymlist || $isPersonalSymlist))) {
 
 			// SEARCH PHYSICAL FILES AND FOLDERS
 
@@ -317,7 +330,7 @@ try {
 			// INSIDE ONE COMPETITION FOLDER
 
 			// Get CSDb event ID
-			$select_compo = $db->query('SELECT event_id, name FROM competitions WHERE competition = "'.$compoName.'"');
+			$select_compo = $db->query('SELECT event_id, name FROM competitions WHERE competition = "'.$compoName.'" LIMIT 1');
 			$select_compo->setFetchMode(PDO::FETCH_OBJ);
 			$row = $select_compo->fetch();
 
@@ -327,7 +340,8 @@ try {
 			$place = array();
 
 			// Has this folder been cached?
-			$select = $db->query('SELECT file_id, place FROM competitions_cache WHERE event_id = '.$event_id);
+
+			$select = $db->query('SELECT file_id, place FROM competitions_cache WHERE event_id = '.$event_id.' AND name = "'.$name.'"');
 			$select->setFetchMode(PDO::FETCH_OBJ);
 			$entries = $select->rowCount();
 
@@ -393,8 +407,8 @@ try {
 								if ($file_id) {
 									// Cache this competition SID entry
 									// NOTE: The release ID is actually not used but saved anyway as debug info.
-									$insert = $db->query('INSERT INTO competitions_cache (event_id, release_id, file_id, place)'.
-										' VALUES('.$event_id.', '.$release->ID.', '.$file_id.', '.$place[$fullname].')');
+									$insert = $db->query('INSERT INTO competitions_cache (event_id, name, release_id, file_id, place)'.
+										' VALUES('.$event_id.', "'.$name.'", '.$release->ID.', '.$file_id.', '.$place[$fullname].')');
 									$real_count++;
 								}
 							}
@@ -475,6 +489,9 @@ try {
 	$files_ext = $folders_ext = array();
 	$multiple = array();
 
+	// Extra data for CSDb compo parent folders
+	$isCompoRoot = $isCSDbCompo && empty($compoName);
+
 	foreach($files as $file) {
 
 		$extension = substr($file, -4);
@@ -493,7 +510,7 @@ try {
 			$select->setFetchMode(PDO::FETCH_OBJ);
 
 			$incompat_row = '';
-			$folder_type = 'FOLDERS';
+			$folder_type = $isCSDbCompo ? 'COMPO' : 'FOLDERS';
 			$rating = $filescount = 0;
 
 			// Figure out the name of the thumbnail (if it exists)
@@ -511,14 +528,6 @@ try {
 				$has_photo =		file_exists('../'.$thumbnail);		// TRUE
 				$flags =			$row->flags;						// 1
 				$hvsc = 			$row->new;							// 70
-
-				// Extra data for CSDb compo parent folders
-				if ($isCSDbCompo && empty($compoName)) {
-					$compo_year =		$compo[$fullname]['year'];		// 1992
-					$compo_country =	$compo[$fullname]['country'];	// Finland
-					$compo_type =		$compo[$fullname]['type'];		// DEMO
-					$compo_id =			$compo[$fullname]['event_id'];	// 117
-				}
 
 				if ($user_id) {
 					// Does the user have any rating for this folder?
@@ -542,15 +551,15 @@ try {
 				'foldertype'	=> $folder_type,
 				'filescount'	=> $filescount,
 				'incompatible'	=> $incompat_row,
-				'hasphoto'		=> $has_photo,
+				'hasphoto'		=> (isset($has_photo) ? $has_photo : false),
 				'rating'		=> $rating,
-				'flags'			=> $flags,
-				'hvsc'			=> $hvsc,
-
-				'compo_year'	=> empty($compo_year) ? 0 : $compo_year,
-				'compo_country'	=> empty($compo_country) ? '' : $compo_country,
-				'compo_type'	=> empty($compo_type) ? '' : $compo_type,
-				'compo_id'		=> empty($compo_id) ? 0 : $compo_id,
+				'flags'			=> (isset($flags) ? $flags : 0),
+				'hvsc'			=> (isset($hvsc) ? $hvsc : 0),							// Example
+				
+				'compo_year'	=> $isCompoRoot ? $compo[$fullname]['year']		: 0,	// 1992
+				'compo_country'	=> $isCompoRoot ? $compo[$fullname]['country']	: '',	// Finland
+				'compo_type'	=> $isCompoRoot ? $compo[$fullname]['type']		: '',	// DEMO
+				'compo_id'		=> $isCompoRoot ? $compo[$fullname]['event_id']	: 0,	// 117
 			));
 
 		} else {

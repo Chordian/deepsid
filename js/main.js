@@ -594,7 +594,6 @@ $(function() { // DOM ready
 	 */
 	hashExcl = decodeURIComponent(location.hash); // Any Disqus link characters "#!" used?
 	fileParam = hashExcl !== "" ? hashExcl.substr(2) : GetParam("file");
-	fileParam = decodeURIComponent(fileParam.replace(/\+/g, "%20"));
 	if (fileParam.substr(0, 2) === "/_")
 		fileParam = "/"+fileParam.substr(2); // Lose custom folder "_" character
 	var searchQuery = GetParam("search"),
@@ -652,7 +651,7 @@ $(function() { // DOM ready
 					var $name = $(this).find(".name");
 					if (!$name.length) return false;
 					// First try to match the original SID name
-					var decodedName = decodeURI($name.attr("data-name")).toLowerCase().replace(/^\_/, '');
+					var decodedName = decodeURIComponent($name.attr("data-name")).toLowerCase().replace(/^\_/, '');
 					var found = isCompoFolder
 						// A compo folder is ALWAYS a HVSC path so it should be safe to search like this
 						? decodedName.indexOf(sidFile.toLowerCase()) !== -1
@@ -861,7 +860,9 @@ function DisableIncompatibleRows() {
  * Update the URL in the web browser address field.
  */
 function UpdateURL() {
-	var urlFile = browser.isSearching || browser.path == "" ? "&file=" : "&file="+browser.path.replace(/^\/_/, '/')+"/";
+	// NOTE: The 'encodeURIComponent()' makes the URL look ugly but it has to be done or things start
+	// falling apart - especially when using characters such as "&" or "#" in competition folders.
+	var urlFile = browser.isSearching || browser.path == "" ? "&file=" : "&file="+encodeURIComponent(browser.path).replace(/^\/_/, '/')+"/";
 	// Special case for HVSC as its collection name is not necessary (except in the HVSC root)
 	if (urlFile.split("/").length - 1 > 2)
 		urlFile = urlFile.replace("/High Voltage SID Collection", "");
