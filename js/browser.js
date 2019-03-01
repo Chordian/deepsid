@@ -694,8 +694,8 @@ Browser.prototype = {
 						if (folder.foldername == "_High Voltage SID Collection" || 			// HVSC or CGSC
 								folder.foldername == "_Compute's Gazette SID Collection")
 							collections.push(folderEntry); // Need to swap the below
-//	ENABLE WHEN			else if (folder.foldername == 'CSDb Music Competitions')
-//	GOING LIVE!				csdbCompoEntry = folderEntry;
+						else if (folder.foldername == 'CSDb Music Competitions')
+							csdbCompoEntry = folderEntry;
 						else if ((folder.foldername.substr(0, 1) == "_" || isPublicSymlist) &&
 							(!onlyShowPersonal || (onlyShowPersonal && myPublic)) &&
 							(!onlyShowCommon || (onlyShowCommon && folder.flags & 0x1)))	// Public symlist or custom?
