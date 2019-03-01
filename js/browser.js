@@ -643,31 +643,30 @@ Browser.prototype = {
 					onlyShowPersonal = this.path === "" && filter === "personal",
 					onlyShowCommon = this.path === "" && filter === "common";
 
-				if (this.path == "/CSDb Music Competitions" && !this.isSearching) {
+				// FOLDERS
 
-					// LIST OF COMPETITION FOLDERS
+				$.each(data.folders, function(i, folder) {
 
-					$.each(data.folders, function(i, folder) {
+					if (folder.foldertype == "COMPO") {
+
+						// COMPETITION FOLDERS
+
 						var folderEntry =
-							'<tr'+(folder.incompatible.indexOf(SID.emulator) !== -1 ? ' class="disabled"' : '')+'>'+
-								'<td class="folder compo"><div class="block-wrap"><div class="block slimfont">'+
-									(folder.filescount > 0 ? '<div class="filescount">'+folder.filescount+'</div>' : '')+
-								'<span class="name entry compo" data-name="'+encodeURIComponent(folder.foldername)+'" data-incompat="'+folder.incompatible+'">'+
-								folder.foldername+'</span></div></div><br />'+
-								'<span class="info compo-year compo-'+folder.compo_type.toLowerCase()+'">'+folder.compo_year+(folder.compo_country.substr(0, 1) == "_" ? ' at ' : ' in ')+folder.compo_country.replace("_", "")+'</span></td>'+
-								'</td>'+
-								'<td class="stars"><span class="rating">'+this.buildStars(folder.rating)+'</span><br /></td>'+
+						'<tr'+(folder.incompatible.indexOf(SID.emulator) !== -1 ? ' class="disabled"' : '')+'>'+
+							'<td class="folder compo"><div class="block-wrap"><div class="block slimfont">'+
+								(folder.filescount > 0 ? '<div class="filescount">'+folder.filescount+'</div>' : '')+
+							'<span class="name entry compo'+(this.isSearching ? ' search' : '')+'" data-name="'+(this.isSearching ? 'CSDb Music Competitions%2F' : '')+encodeURIComponent(folder.foldername)+'" data-incompat="'+folder.incompatible+'">'+
+							folder.foldername+'</span></div></div><br />'+
+							'<span class="info compo-year compo-'+folder.compo_type.toLowerCase()+'">'+folder.compo_year+(folder.compo_country.substr(0, 1) == "_" ? ' at ' : ' in ')+folder.compo_country.replace("_", "")+'</span></td>'+
+							'</td>'+
+							'<td class="stars"><span class="rating">'+this.buildStars(folder.rating)+'</span><br /></td>'+
 						'</tr>';
 						this.folders += folderEntry;
-						this.subFolders++;
 
-					}.bind(this));
+					} else {
 
-				} else {
+						// OTHER KINDS OF FOLDERS
 
-					// MOST FOLDER TYPES
-
-					$.each(data.folders, function(i, folder) {
 						var isPersonalSymlist = folder.foldername.substr(0, 1) == "!",
 							isPublicSymlist = folder.foldername.substr(0, 1) == "$",
 							myPublic = false;
@@ -695,8 +694,8 @@ Browser.prototype = {
 						if (folder.foldername == "_High Voltage SID Collection" || 			// HVSC or CGSC
 								folder.foldername == "_Compute's Gazette SID Collection")
 							collections.push(folderEntry); // Need to swap the below
-						else if (folder.foldername == 'CSDb Music Competitions')
-							csdbCompoEntry = folderEntry;
+//	ENABLE WHEN			else if (folder.foldername == 'CSDb Music Competitions')
+//	GOING LIVE!				csdbCompoEntry = folderEntry;
 						else if ((folder.foldername.substr(0, 1) == "_" || isPublicSymlist) &&
 							(!onlyShowPersonal || (onlyShowPersonal && myPublic)) &&
 							(!onlyShowCommon || (onlyShowCommon && folder.flags & 0x1)))	// Public symlist or custom?
@@ -705,9 +704,10 @@ Browser.prototype = {
 							this.symlists += folderEntry;
 						else
 							this.folders += folderEntry;									// Normal folder
-						this.subFolders++;
-					}.bind(this));
-				}
+					}
+					this.subFolders++;
+
+				}.bind(this));
 
 				if (this.subFolders) {
 					if (this.extra !== "") {
@@ -1251,7 +1251,7 @@ Browser.prototype = {
 
 			contents +=
 				'<div class="line" data-action="download-file">Download File</div>'+
-				'<div class="line'+(this.isSearching || isPersonalSymlist || isPublicSymlist ? " disabled" : "")+'" data-action="copy-link">Copy Link</div>';
+				'<div class="line'+(this.isSearching || this.isCompoFolder || isPersonalSymlist || isPublicSymlist ? " disabled" : "")+'" data-action="copy-link">Copy Link</div>';
 
 		} else if ($target.hasClass("folder") && (this.contextSID.substr(0, 1) == "!" || this.contextSID.substr(0, 1) == "$")) {
 			var ifAlreadyPublic = "";
@@ -1349,7 +1349,7 @@ Browser.prototype = {
 				SID.stop();
 				var symChar = this.path.substr(1, 1);
 				// Force the browser to download it using an invisible <iframe>
-				$("#download").prop("src", this.ROOT_HVSC + '/' + (this.isSearching || symChar == "!" || symChar == "$" ? this.contextSID : this.path.substr(1)+"/"+this.contextSID));
+				$("#download").prop("src", this.ROOT_HVSC + '/' + (this.isSearching || this.isCompoFolder || symChar == "!" || symChar == "$" ? this.contextSID : this.path.substr(1)+"/"+this.contextSID));
 				break;
 			case 'copy-link':
 				var url = window.location.href,
@@ -1370,7 +1370,7 @@ Browser.prototype = {
 			case "symlist-new":
 				// Add the SID file to a symlist (exiting or creating with unique version of SID file name)
 				$.post("php/symlist_write.php", {
-					fullname:	(this.isSearching || this.path.substr(1, 1) == "$" ? this.contextSID : this.path.substr(1)+"/"+this.contextSID),
+					fullname:	(this.isSearching || this.isCompoFolder || this.path.substr(1, 1) == "$" ? this.contextSID : this.path.substr(1)+"/"+this.contextSID),
 					symlist:	(action === "symlist-add" ? (event.target.textContent.indexOf(" [PUBLIC]") !== -1 ? "$" : "!")+event.target.textContent : '')
 				}, function(data) {
 					this.validateData(data);

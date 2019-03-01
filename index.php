@@ -897,6 +897,12 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>March 1, 2019</h3>
+						<ul>
+							<!--<li>The third major folder <a href="//deepsid.chordian.net?file=%2FCSDb%20Music%20Competitions">CSDb Music Competitions</a> has been added, with sub folders containing ranked entries.</li>-->
+							<li>Fortified the encoding of URLs to make them more robust when using special characters.</li>
+						</ul>
+
 						<h3>February 23, 2019</h3>
 						<ul>
 							<li>If the buffer size is higher than 1024 in the piano or graph tabs, a message now appears.</li>

@@ -58,17 +58,6 @@ try {
 		return $owner;
 	}
 
-	// What type of folder is it?
-	$select = $db->prepare('SELECT type FROM hvsc_folders WHERE fullname = :folder LIMIT 1');
-	$select->execute(array(':folder'=>substr($_GET['folder'], 1)));
-	$select->setFetchMode(PDO::FETCH_OBJ);
-
-	if ($select->rowCount() && $select->fetch()->type == 'COMPO') {
-		// This is necessary for competition sub folders to work when searching
-		$isCSDbCompo = true;
-		$compoName = substr($_GET['folder'], 1);
-	}
-
 	if ($isSearching) {
 
 		// This tricky logic disallows symlists unless searching for everything
@@ -407,7 +396,7 @@ try {
 								if ($file_id) {
 									// Cache this competition SID entry
 									// NOTE: The release ID is actually not used but saved anyway as debug info.
-									$insert = $db->query('INSERT INTO competitions_cache (event_id, name, release_id, file_id, place)'.
+									$db->query('INSERT INTO competitions_cache (event_id, name, release_id, file_id, place)'.
 										' VALUES('.$event_id.', "'.$name.'", '.$release->ID.', '.$file_id.', '.$place[$fullname].')');
 									$real_count++;
 								}
@@ -416,9 +405,18 @@ try {
 					}
 				}
 
-				// Create the folder entry with the amount of viable files found
-				$insert = $db->query('INSERT INTO hvsc_folders (fullname, type, files, user_id)'.
-					' VALUES("'.$compoName.'", "COMPO", '.$real_count.', 0)');
+				// Does the corresponding folder already exist?
+				$select_folder = $db->query('SELECT id FROM hvsc_folders WHERE fullname = "'.$compoName.'" LIMIT 1');
+				$select_folder->setFetchMode(PDO::FETCH_OBJ);
+				if ($select_folder->rowCount()) {
+					// Yes; just update its files count then
+					// NOTE: The check and update is necessary if regenerating the cache.
+					$db->query('UPDATE hvsc_folders SET files = '.$real_count.' WHERE id = '.$select_folder->fetch()->id);
+				} else {
+					// No; create the folder entry with the amount of viable files found
+					$db->query('INSERT INTO hvsc_folders (fullname, type, files, user_id)'.
+						' VALUES("'.$compoName.'", "COMPO", '.$real_count.', 0)');
+				}
 			}
 		}
 
@@ -543,6 +541,25 @@ try {
 						$select_rating->setFetchMode(PDO::FETCH_OBJ);
 						$rating = $select_rating->rowCount() ? $select_rating->fetch()->rating : 0;
 					}
+				}
+			}
+
+			// If a competition folder pops up in search results
+			if ($folder_type == 'COMPO' && !$isCSDbCompo) {
+				$compo = array();
+
+				// Get the competition stuff now then
+				$select_compo = $db->query('SELECT year, country, type, event_id FROM competitions WHERE competition = "'.$fullname.'" LIMIT 1');
+				$select_compo->setFetchMode(PDO::FETCH_OBJ);
+
+				if ($select_compo->rowCount()) {
+					$isCompoRoot = true;
+					$row_compo = $select_compo->fetch();
+
+					$compo[$fullname]['year']		= $row_compo->year;
+					$compo[$fullname]['country']	= $row_compo->country;
+					$compo[$fullname]['type']		= $row_compo->type;
+					$compo[$fullname]['event_id']	= $row_compo->event_id;
 				}
 			}
 
