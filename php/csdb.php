@@ -369,7 +369,7 @@ if ($csdb_type == 'sid') {
 		: '';
 	
 	// Credits
-	// NOTE: Handles for ID may already have been added to the '$sceners' array by 'Release by' above.
+	// NOTE: Handles for ID may already have been added to the '$sceners' array by 'Released by' above.
 	$credits = '';
 	$roles = array();
 	if ($csdb->Release->Credits && strtolower($csdb->Release->Type) != 'c64 music') {

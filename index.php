@@ -897,6 +897,13 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>March 3, 2019</h3>
+						<ul>
+							<li>Deleted my public playlists for $11 Music Compo, Ambient SID Music Competition, X'2016 and X'2018
+								because they're now available in the new CMC folder.</li>
+							<li>Added another 102 folder entries in the CMC folder.</li>
+						</ul>
+
 						<h3>March 1, 2019</h3>
 						<ul>
 							<li>The third major folder <a href="//deepsid.chordian.net?file=%2FCSDb%20Music%20Competitions">CSDb Music Competitions</a> has been added, with sub folders containing ranked entries.</li>

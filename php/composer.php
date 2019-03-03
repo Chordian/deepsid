@@ -12,11 +12,14 @@
 
 require_once("class.account.php"); // Includes setup
 require_once("pretty_player_names.php");
+require_once("csdb_compo.php");
+require_once("csdb_comments.php");
 require_once("countries.php");
 
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest')
 	die("Direct access not permitted.");
 
+$html = '';
 $fullname = $_GET['fullname'];
 if (isset($fullname)) {
 
@@ -24,12 +27,48 @@ if (isset($fullname)) {
 		die(json_encode(array('status' => 'ok', 'html' => ''))); // Don't do root
 
 	if (substr($fullname, 0, 23) == 'CSDb Music Competitions' && strlen($fullname) > 24) {
+
 		// INSIDE ONE COMPETITION FOLDER
 
-		$html = '<p><i>&nbsp;&nbsp;&nbsp;Profile pages for competitions will be added soon.</i></p>';
+		try {
+			if ($_SERVER['HTTP_HOST'] == LOCALHOST)
+				$db = new PDO(PDO_LOCALHOST, USER_LOCALHOST, PWD_LOCALHOST);
+			else
+				$db = new PDO(PDO_ONLINE, USER_ONLINE, PWD_ONLINE);
+			$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+			$db->exec("SET NAMES UTF8");
+
+			// Get the event ID of this compo folder
+			$select = $db->prepare('SELECT event_id FROM competitions WHERE competition = :compo LIMIT 1');
+			$select->execute(array(':compo'=>str_replace('CSDb Music Competitions/', '', $fullname)));
+			$select->setFetchMode(PDO::FETCH_OBJ);
+
+			$event_id = $select->rowCount() ? $select->fetch()->event_id : 0;
+
+			if ($event_id) {
+
+				$scener_handle = array();
+				$scener_id = array();
+
+				$csdb =					CompoGetXML($event_id);
+				$compos =				CompoGetEntries($csdb);
+				$type_date_country =	CompoGetTypeDateCountry($csdb);
+				$event_image =			CompoGetImage($event_id);
+
+
+
+
+			}
+
+		} catch(PDOException $e) {
+			$account->LogActivityError('composer.php (compo)', $e->getMessage());
+			die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
+		}
 		die(json_encode(array('status' => 'ok', 'html' => $html)));
 
 	} else {
+
+		// OTHER FOLDERS
 
 		try {
 			if ($_SERVER['HTTP_HOST'] == LOCALHOST)
