@@ -490,7 +490,7 @@ $(function() { // DOM ready
 	/**
 	 * When clicking the arrow up button in the bottom of CSDb pages to scroll back to the top.
 	 */
-	$("#topic-csdb").on("click", "#to-top", function() {
+	$("#topic-profile,#topic-csdb").on("click", "#to-top", function() {
 		$("#page").mCustomScrollbar("scrollTo", "top");
 	});
 
@@ -514,7 +514,7 @@ $(function() { // DOM ready
 	 * 
 	 * NOTE: This opens a new web browser tab.
 	 */
-	$("#topic-csdb").on("click", "#csdb-comment", function() {
+	$("#topic-profile,#topic-csdb").on("click", "#csdb-comment", function() {
 		window.open("https://csdb.dk/"+$(this).attr("data-type")+"/addcomment.php?"+
 			$(this).attr("data-type")+"_id="+$(this).attr("data-id"), "_blank");
 	});
@@ -558,7 +558,7 @@ $(function() { // DOM ready
 	/**
 	 * When clicking a home folder icon in a CSDb comment table.
 	 */
-	$("#topic-csdb").on("click", ".home-folder", function() {
+	$("#topic-profile,#topic-csdb").on("click", ".home-folder", function() {
 		browser.path = "/"+$(this).attr("data-home");
 		ctrls.state("root/back", "enabled");
 		browser.getFolder(0, undefined, function() {
@@ -747,7 +747,8 @@ function ShowDexterScrollbar(topic) {
 				},
 				onOverflowY: function() {
 					// Enable the arrow button in the bottom of CSDb pages (for scrolling back to the top)
-					if ($("#tabs .selected").attr("data-topic") === "csdb")
+					var topic = $("#tabs .selected").attr("data-topic");
+					if (topic === "csdb" || topic === "profile" || browser.isCompoFolder)
 						$("#to-top").show();
 				},				
 				whileScrolling: function() {

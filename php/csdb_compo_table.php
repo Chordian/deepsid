@@ -21,21 +21,76 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH
 if (!isset($_GET['compo']) || !isset($_GET['id']))
 	die(json_encode(array('status' => 'error', 'message' => 'You must specify the proper GET variables.')));
 
-$scener_handle = array();
-$scener_id = array();
-
 $csdb =					CompoGetXML($_GET['id']);
 $compos =				CompoGetEntries($csdb);
 $type_date_country =	CompoGetTypeDateCountry($csdb);
 $event_image =			CompoGetImage($_GET['id']);
-//$participants =			CompoGetTable($compos, $_GET['compo'], $_GET['mark']);
-$participants =			CompoGetTable($compos, 'C64 Demo', -1, true);
+$user_comments = 		CompoGetComments($csdb, $_GET['id']);
 
-$user_comments = isset($csdb->Event->UserComment)
-	? CommentsTable('User comments', $csdb->Event->UserComment, $scener_handle, $scener_id)
-	: '';
+$participants = '';
+$unknown = 0;
+foreach($compos as $compo) {
+	if (strtolower($compo->Type) == strtolower($_GET['compo'])) {
+		$releases = $compo->Releases->Release;
+		if (!isset($releases))
+			die(json_encode(array('status' => 'warning', 'html' => '<p style="margin-top:0;">No results found for this competition.</p>')));
 
-$comment_button = '<button id="csdb-comment" data-type="event" data-id="'.$_GET['id'].'">Comment</button><br />';
+		$participants_array = array();
+		foreach($releases as $release) {
+			$id			= isset($release->ID) ? $release->ID : 0;
+			$place 		= isset($release->Achievement->Place) ? $release->Achievement->Place : '?';
+			$name 		= isset($release->Name) ? $release->Name : '?';
+			$mark		= $id && $id == $_GET['mark']; // Boolean
+
+			// Test cases for mix of numeric places and question marks:
+			// http://chordian/deepsid/?file=/MUSICIANS/Z/Zardax/Proven_Futile.sid&tab=csdb
+			// http://chordian/deepsid/?file=/MUSICIANS/N/Nygaard_Richard/Thats_the_Wave_It_Is.sid&tab=csdb
+			
+			// Test cases for entries that share the exact same place:
+			// http://chordian/deepsid/?file=/MUSICIANS/L/Luca/Boy_Band.sid&tab=csdb
+			// http://chordian/deepsid/?file=/MUSICIANS/A/Agemixer/N_Trans.sid&tab=csdb
+
+			$bold = $mark ? ' class="compo-bold"' : '';
+			$participants_array[substr($place, 0, 1) == '?' ? 'z'.++$unknown : (string)str_pad($place, 3, '0', STR_PAD_LEFT).$name] =
+				'<tr'.$bold.'>'.
+					'<td class="compo-arrow">'.
+						($mark ? '<span class="compo-pos"></span>' : '').
+					'</td>'.
+					'<td class="compo-place">'.
+						$place.
+					'</td>'.
+					'<td class="compo-name">'.
+						($id
+							? '<a class="participant ellipsis" href="https://csdb.dk/release/?id='.$id.'" target="_blank">'.$name.'</a>'
+							: '<span class="participant ellipsis">'.$name.'</span>'
+						).
+					'</td>'.
+					'<td class="compo-path" data-id="'.$id.'">'.
+						// These cells will be filled by 'csdb_compo_path.php' (from 'browser.js')
+					'</td>'.
+				'</tr>';
+		}
+
+		ksort($participants_array);
+		foreach($participants_array as $key => $entry) {
+			$participants .= $entry;
+		}
+
+		if (!empty($participants)) {
+			$participants =
+				'<table class="tight compo">'.
+					'<tr>'.
+						'<th style="width:20px;"></th>'.
+						'<th style="width:1px;text-align:right;padding-right:12px;"><u>#</u></th>'.
+						'<th style="width:1px;"><u>Release</u></th>'.
+						'<th><u>Click to play</u></th>'.
+					'</tr>'.
+					$participants.
+				'</table>';
+		}
+		break;
+	}
+}
 
 // Build the sticky header HTML for the '#sticky' DIV
 $sticky = '<h2 style="display:inline-block;margin-top:0;">'.$csdb->Event->Name.'</h2>'.
@@ -49,8 +104,7 @@ $html = '<p style="position:relative;top:-20px;margin-top:16px;">'.$type_date_co
 	'<p style="position:relative;top:-12px;">'.$event_image.'</p>'.
 	'<h3 style="margin-top:-8px;">'.$_GET['compo'].' Competition results:</h3>'.
 	$participants.
-	$user_comments.
-	$comment_button;
+	$user_comments;
 
 echo json_encode(array('status' => 'ok', 'sticky' => $sticky, 'html' => $html.'<i><small>Generated using the <a href="https://csdb.dk/webservice/" target="_blank">CSDb web service</a></small></i><button id="to-top" title="Scroll back to the top" style="display:none;"><img src="images/to_top.svg" alt="" /></button>'));
 ?>

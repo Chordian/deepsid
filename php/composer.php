@@ -54,10 +54,25 @@ if (isset($fullname)) {
 				$compos =				CompoGetEntries($csdb);
 				$type_date_country =	CompoGetTypeDateCountry($csdb);
 				$event_image =			CompoGetImage($event_id);
+				$user_comments = 		CompoGetComments($csdb, $event_id);
+
+				// Build the page HTML
+				$html = '<h2 style="display:inline-block;margin-top:0;">'.$csdb->Event->Name.'</h2>'.
+					'<div id="corner-icons">'.
+						'<a href="https://csdb.dk/event/?id='.$event_id.'" title="See this at CSDb" target="_blank"><svg class="outlink" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg></a>'.
+					'</div>'.
+					'<p style="position:relative;top:-20px;margin-top:16px;">'.$type_date_country.'</p>'.
+					'<p style="position:relative;top:-12px;">'.$event_image.'</p>'.
 
 
 
+					// Add the other csdb event data sections here.
 
+
+
+					$user_comments;
+
+				die(json_encode(array('status' => 'ok', 'html' => $html.'<i><small>Generated using the <a href="https://csdb.dk/webservice/" target="_blank">CSDb web service</a></small></i><button id="to-top" title="Scroll back to the top" style="display:none;"><img src="images/to_top.svg" alt="" /></button>')));
 			}
 
 		} catch(PDOException $e) {
