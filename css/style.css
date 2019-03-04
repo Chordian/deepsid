@@ -2099,6 +2099,10 @@ input[type=range]::-ms-track {
 		margin: 10px 0;
 	}
 
+	#compo-profile p {
+		margin: 0 0 10px;
+	}
+
 		#page .ext del {
 			color: #a8ad95; /* #969787 */
 		}

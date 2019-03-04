@@ -47,8 +47,7 @@ if (isset($fullname)) {
 
 			if ($event_id) {
 
-				$scener_handle = array();
-				$scener_id = array();
+				$sceners = array();
 
 				$csdb =					CompoGetXML($event_id);
 				$compos =				CompoGetEntries($csdb);
@@ -56,21 +55,110 @@ if (isset($fullname)) {
 				$event_image =			CompoGetImage($event_id);
 				$user_comments = 		CompoGetComments($csdb, $event_id);
 
+				$aka = '<p style="position:relative;top:-6px;left:1px;margin:0 0 4px;"><small>'.(isset($csdb->Event->AKA) ? '('.$csdb->Event->AKA.')' : '&nbsp;').'</small></p>';
+
+				$tagline = isset($csdb->Event->Tagline)
+				? '<p style="position:relative;top:-'.(!empty($aka) ? '10' : '4').'px;margin:0;"><i>- '.$csdb->Event->Tagline.'</i></p>'
+				: '';
+
+				$address = isset($csdb->Event->Address) ? $csdb->Event->Address : '';
+				$city = isset($csdb->Event->City) ? (!empty($address) ? ', ' : '').$csdb->Event->City : '';
+				$state = isset($csdb->Event->State) ? (!empty($address) || !empty($city) ? ', ' : '').$csdb->Event->State : '';
+				//$country = isset($csdb->Event->Country) ? $csdb->Event->Country : '';
+
+				$place = !empty($address.$city.$state/*.$country*/)
+					? '<p><b>Place:</b><br />'.$address.$city.$state./*$country.*/'</p>'
+					: '';
+
+				$website = isset($csdb->Event->Website)
+					? '<p><b>Web Site:</b><br /><a href="'.$csdb->Event->Website.'" target="_blank">'.$csdb->Event->Website.'</a></p>'
+					: '';
+
+				$organizers = $comma = '';
+				$amount = 8;
+				if (isset($csdb->Event->Organizer)) {
+					$orgs = $csdb->Event->Organizer;
+					foreach($orgs as $org) {
+						if (!isset($org->Handle)) break;
+						$id = $org->Handle->ID;
+						if (isset($org->Handle->Handle)) {
+							// There's a handle, get it and store the ID for it for later reference
+							$handle = $org->Handle->Handle.','.$id;
+							$sceners[(string)$id] = $org->Handle->Handle;
+						} else if (array_key_exists((string)$id, $sceners)) {
+							// We've had this scener before so we know the name
+							$handle = $sceners[(string)$id].','.$id;
+						} else {
+							// Can't figure this scener out so just use the ID
+							$handle = $id;
+						}
+						if (strpos($handle, ',')) {
+							$parts = explode(',', $handle);
+							// ID and handle
+							$m = '<a href="https://csdb.dk/scener/?id='.$parts[1].'" target="_blank">'.$parts[0].'</a>';
+						} else {
+							// [Scener:1234]
+							$m = '[<a href="https://csdb.dk/scener/?id='.$handle.'" target="_blank">Scener:'.$handle.'</a>]';
+						}
+						$organizers .= $comma.$m;
+						if (!$amount) {
+							$organizers .= ' [...]';
+							break;
+						}
+						$amount--;
+						$comma = ', ';
+					}
+					$organizers = '<p><b>Organizers:</b><br />'.$organizers.'</p>';
+				}
+
+				$org_groups = $comma = '';
+				$amount = 8;
+				if (isset($csdb->Event->OrganizerGroup)) {
+					$orgs = $csdb->Event->OrganizerGroup;
+					foreach($orgs as $org) {
+						if (!isset($org->Group)) break;
+						$id = $org->Group->ID;
+						if (isset($org->Group->Name)) {
+							// There's a group name
+							$group = $org->Group->Name.','.$id;
+						} else {
+							// Can't figure this group out so just use the ID
+							$group = $id;
+						}
+						if (strpos($group, ',')) {
+							$parts = explode(',', $group);
+							// ID and group
+							$m = '<a href="https://csdb.dk/group/?id='.$parts[1].'" target="_blank">'.$parts[0].'</a>';
+						} else {
+							// [Group:1234]
+							$m = '[<a href="https://csdb.dk/group/?id='.$group.'" target="_blank">Group:'.$group.'</a>]';
+						}
+						$org_groups .= $comma.$m;
+						if (!$amount) {
+							$org_groups .= ' [...]';
+							break;
+						}
+						$amount--;
+						$comma = ', ';
+					}
+					$org_groups = '<p><b>Organizer Groups:</b><br />'.$org_groups.'</p>';
+				}
+
 				// Build the page HTML
-				$html = '<h2 style="display:inline-block;margin-top:0;">'.$csdb->Event->Name.'</h2>'.
+				$html = '<div id="compo-profile"><h2 style="display:inline-block;margin:0;">'.$csdb->Event->Name.'</h2>'.
 					'<div id="corner-icons">'.
 						'<a href="https://csdb.dk/event/?id='.$event_id.'" title="See this at CSDb" target="_blank"><svg class="outlink" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg></a>'.
 					'</div>'.
-					'<p style="position:relative;top:-20px;margin-top:16px;">'.$type_date_country.'</p>'.
-					'<p style="position:relative;top:-12px;">'.$event_image.'</p>'.
-
-
-
-					// Add the other csdb event data sections here.
-
-
-
-					$user_comments;
+					$aka.
+					'<p'.(!empty($aka) ? ' style="position:relative;top:-8px;margin:0 0 4px;"' : '').'>'.$type_date_country.'</p>'.
+					'<p'.(!empty($aka) ? ' style="position:relative;top:-6px;margin:0 0 4px;"' : '').'>'.$event_image.'</p>'.
+					$tagline.
+					'<div style="height:4px;"></div>'.
+					$place.
+					$website.
+					$organizers.
+					$org_groups.
+					$user_comments.'</div>';
 
 				die(json_encode(array('status' => 'ok', 'html' => $html.'<i><small>Generated using the <a href="https://csdb.dk/webservice/" target="_blank">CSDb web service</a></small></i><button id="to-top" title="Scroll back to the top" style="display:none;"><img src="images/to_top.svg" alt="" /></button>')));
 			}

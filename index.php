@@ -897,6 +897,11 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>March 4, 2019</h3>
+						<ul>
+							<li>Sub folders in the CMC folders now each have a profile page generated with the CSDb web service.</li>
+						</ul>
+
 						<h3>March 3, 2019</h3>
 						<ul>
 							<li>Deleted my public playlists for $11 Music Compo, Ambient SID Music Competition, X'2016 and X'2018
