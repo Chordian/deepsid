@@ -13,6 +13,11 @@
 	this.search = "";
 	this.previousOverridePath = "";
 
+	this.cache = {
+		folder:			"",
+		incompatible:	"",
+	};
+
 	this.symlistFolders = [];
 
 	this.currentScrollPos = 0;
@@ -167,7 +172,9 @@ Browser.prototype = {
 					this.path = this.path.substr(0, this.path.lastIndexOf("/"));
 					ctrls.state("prev/next", "disabled");
 					ctrls.state("subtunes", "disabled");
-					this.getFolder(this.scrollPositions.pop());
+					this.getFolder(this.scrollPositions.pop(), undefined,
+						(this.path === "/CSDb Music Competitions" || this.path === "/_Compute's Gazette SID Collection")
+							&& this.cache.folder !== "" /* <- Boolean parameter */ );
 					this.getComposer();
 					UpdateURL();
 				}
@@ -230,13 +237,18 @@ Browser.prototype = {
 									}
 								});
 							} else {
+								var isCacheFolder = (this.path === "/CSDb Music Competitions" || this.path === "/_Compute's Gazette SID Collection") && this.cache.folder !== "";
 								// Temporarily make the HTML string of folders into a jQuery object
-								var $folders = $(this.folders);
-								$($folders).find(".name[data-name='"+encodeURIComponent(endName)+"']")
+								var $folders = $(isCacheFolder ? this.cache.folder : this.folders);
+								$($folders).find('.name[data-name="'+encodeURIComponent(endName)+'"]')
 									.parents("td").next().find(".rating")
 									.empty().append(stars);
 								// Has to be wrapped to get everything back
-								this.folders = $("<div>").append($folders.clone()).html();
+								var wrapped = $("<div>").append($folders.clone()).html();
+								if (isCacheFolder)
+									this.cache.folder = wrapped;
+								else
+									this.folders = wrapped;
 							}
 						});
 					}.bind(this));
@@ -556,236 +568,43 @@ Browser.prototype = {
 	 * 
 	 * @param {number} scrollPos	If specified, jump to position in list (otherwise just stay in top).
 	 * @param {string} searchQuery	If specified, search results will be shown instead.
+	 * @param {boolean} readCache	If specified, TRUE will load from a cache instead.
 	 * @param {function} callback 	If specified, the function to call after showing the contents.
 	 */
-	getFolder: function(scrollPos, searchQuery, callback) {
+	getFolder: function(scrollPos, searchQuery, readCache, callback) {
 		ctrls.state("root/back", "disabled");
 		$("#dropdown-sort").prop("disabled", true);
 		$("#songs table").empty();
 		this.isSearching = typeof searchQuery !== "undefined";
 		this.isSymlist = this.path.substr(0, 2) === "/!" || this.path.substr(0, 2) === "/$";
 
-		var loading = setTimeout(function() {
-			// Fade in a GIF loading spinner if the AJAX call takes longer than usual
-			$("#loading").css("top", $("#songs").height() / 2 - 50 /* Half size of SVG */).fadeIn(350);
-		}, 150);
+		if (typeof readCache !== "undefined" && readCache) {
 
-		this.playlist = []; // Every folder we enter will become its own local playlist
-		this.subFolders = 0;
-		this.path = this.path.replace("/_CSDb", "/CSDb");
+			// LOAD FROM CACHE
 
-		// Call the AJAX PHP script that delivers the list of files and folders
-		$.get("php/hvsc.php", {
-				folder:			this.path,
-				searchType:		$("#dropdown-search").val(),
-				searchQuery:	this.isSearching ? searchQuery : "",
-				searchHere:		($("#search-here").is(":checked") ? 1 : 0),
-		}, function(data) {
-			this.validateData(data, function(data) {
-				clearTimeout(loading);
-				$("#loading").hide();
-				ctrls.state("root/back", "enabled");
-				if (!this.isMobile) $("#folders").mCustomScrollbar("destroy");
-				this.folders = this.extra = this.symlists = "";
-				var files = "";
+			ctrls.state("root/back", "enabled");
+			if (!this.isMobile) $("#folders").mCustomScrollbar("destroy");
 
-				// Disable emulators/handlers in the drop-down according to parent folder attributes
-				$("#dropdown-emulator").styledOptionState("websid jssid soasc_auto soasc_r2 soasc_r4 soasc_r5", "enabled");
-				$("#page .viz-emu").removeClass("disabled");
-				$("#dropdown-emulator").styledOptionState(data.incompatible, "disabled");
-				if (data.incompatible.indexOf("websid") !== -1) $("#page .viz-websid").addClass("disabled");
-				if (data.incompatible.indexOf("jssid") !== -1) $("#page .viz-jssid").addClass("disabled");
+			// Disable emulators/handlers in the drop-down according to parent folder attributes
+			$("#dropdown-emulator").styledOptionState("websid jssid soasc_auto soasc_r2 soasc_r4 soasc_r5", "enabled");
+			$("#page .viz-emu").removeClass("disabled");
+			$("#dropdown-emulator").styledOptionState(this.cache.incompatible, "disabled");
+			if (this.cache.incompatible.indexOf("websid") !== -1) $("#page .viz-websid").addClass("disabled");
+			if (this.cache.incompatible.indexOf("jssid") !== -1) $("#page .viz-jssid").addClass("disabled");
 
-				$("#path").css("top", "5px");
-				var pathText = this.path == "" ? "/" : this.path
+			$("#path").css("top", "5px").empty().append(
+				this.path
 					.replace(/^\/_/, '/')
 					.replace("/Compute's Gazette SID Collection", '<span class="dim">CGSC</span>')
 					.replace("/High Voltage SID Collection", '<span class="dim">HVSC</span>')
-					.replace("/CSDb Music Competitions/", '');
-				if (this.isSearching) {
-					var searchType = $("#dropdown-search").val(),
-						searchQuery = encodeURIComponent($("#search-box").val()); // Need it to be untampered here
-					pathText = data.results+' results found'+
-						'<a href="//deepsid.chordian.net?search='+searchQuery+(searchType !== '#all#' ? '&type='+searchType : '')+'" title="Permalink"><svg class="permalink" style="enable-background:new 0 0 80 80;" version="1.1" viewBox="0 0 80 80" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g><path d="M29.298,63.471l-4.048,4.02c-3.509,3.478-9.216,3.481-12.723,0c-1.686-1.673-2.612-3.895-2.612-6.257 s0.927-4.585,2.611-6.258l14.9-14.783c3.088-3.062,8.897-7.571,13.131-3.372c1.943,1.93,5.081,1.917,7.01-0.025 c1.93-1.942,1.918-5.081-0.025-7.009c-7.197-7.142-17.834-5.822-27.098,3.37L5.543,47.941C1.968,51.49,0,56.21,0,61.234 s1.968,9.743,5.544,13.292C9.223,78.176,14.054,80,18.887,80c4.834,0,9.667-1.824,13.348-5.476l4.051-4.021 c1.942-1.928,1.953-5.066,0.023-7.009C34.382,61.553,31.241,61.542,29.298,63.471z M74.454,6.044 c-7.73-7.67-18.538-8.086-25.694-0.986l-5.046,5.009c-1.943,1.929-1.955,5.066-0.025,7.009c1.93,1.943,5.068,1.954,7.011,0.025 l5.044-5.006c3.707-3.681,8.561-2.155,11.727,0.986c1.688,1.673,2.615,3.896,2.615,6.258c0,2.363-0.928,4.586-2.613,6.259 l-15.897,15.77c-7.269,7.212-10.679,3.827-12.134,2.383c-1.943-1.929-5.08-1.917-7.01,0.025c-1.93,1.942-1.918,5.081,0.025,7.009 c3.337,3.312,7.146,4.954,11.139,4.954c4.889,0,10.053-2.462,14.963-7.337l15.897-15.77C78.03,29.083,80,24.362,80,19.338 C80,14.316,78.03,9.595,74.454,6.044z"/></g><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/></svg></a>'+
-						'<button id="search-cancel" class="medium">Cancel</button>';
-				} else if (this.isSymlist) {
-					$("#path").css("top", "0.5px");
-					pathText = '<span class="playlist">'+this.path.substr(2)+'</span><br />'+
-						(this.path.substr(0, 2) === "/!"
-							? '<span class="maintainer">Personal playlist</span>'
-							: '<span class="maintainer">Playlist by '+data.owner+'</span>');
-				}
-				$("#path").empty().append(pathText);
+					.replace("/CSDb Music Competitions/", '')
+			);
 
-				// Tab 'STIL' is called 'Lyrics' in CGSC
-				$("#tab-stil").empty().append(this.isCGSC() ? "Lyrics" : "STIL");
+			this.setupSortBox();
 
-				// The 'CSDb' and 'GB64' tabs are useless to CGSC
-				var $twoTabs = $("#tab-csdb,#tab-gb64");
-				$twoTabs.removeClass("disabled");
-				if (this.isCGSC()) {
-					$twoTabs.addClass("disabled");
-					$("#note-csdb,#note-gb64").hide();
-					var $selected = $("#tabs .selected");
-					if ($selected.attr("data-topic") === "csdb" || $selected.attr("data-topic") === "gb64")
-						$("#tab-profile").trigger("click");
-				}
-
-				// FOLDERS
-
-				// Sort the list of folders first
-				data.folders.sort(function(obj1, obj2) {
-					return obj1.foldername.replace(/^(\_|\!|\$)/, '').toLowerCase() > obj2.foldername.replace(/^(\_|\!|\$)/, '').toLowerCase() ? 1 : -1;
-				});
-
-				var filter = this.setupSortBox();
-				var collections = [], csdbCompoEntry = "",
-					onlyShowPersonal = this.path === "" && filter === "personal",
-					onlyShowCommon = this.path === "" && filter === "common";
-
-				// FOLDERS
-
-				$.each(data.folders, function(i, folder) {
-
-					if (folder.foldertype == "COMPO") {
-
-						// COMPETITION FOLDERS
-
-						var folderEntry =
-						'<tr'+(folder.incompatible.indexOf(SID.emulator) !== -1 ? ' class="disabled"' : '')+'>'+
-							'<td class="folder compo"><div class="block-wrap"><div class="block slimfont">'+
-								(folder.filescount > 0 ? '<div class="filescount">'+folder.filescount+'</div>' : '')+
-							'<span class="name entry compo'+(this.isSearching ? ' search' : '')+'" data-name="'+(this.isSearching ? 'CSDb Music Competitions%2F' : '')+encodeURIComponent(folder.foldername)+'" data-incompat="'+folder.incompatible+'">'+
-							folder.foldername+'</span></div></div><br />'+
-							'<span class="info compo-year compo-'+folder.compo_type.toLowerCase()+'">'+folder.compo_year+(folder.compo_country.substr(0, 1) == "_" ? ' at ' : ' in ')+folder.compo_country.replace("_", "")+'</span></td>'+
-							'</td>'+
-							'<td class="stars"><span class="rating">'+this.buildStars(folder.rating)+'</span><br /></td>'+
-						'</tr>';
-						this.folders += folderEntry;
-
-					} else {
-
-						// OTHER KINDS OF FOLDERS
-
-						var isPersonalSymlist = folder.foldername.substr(0, 1) == "!",
-							isPublicSymlist = folder.foldername.substr(0, 1) == "$",
-							myPublic = false;
-						if (isPublicSymlist) {
-							var result = $.grep(this.symlistFolders, function(entry) {
-								return entry.fullname == folder.foldername;
-							}.bind(this));
-							if (result.length) myPublic = true;
-						}
-						var adaptedName = folder.foldername.replace(/^(\_|\!|\$)/, '');
-						adaptedName = this.adaptBrowserName(adaptedName);
-						var folderEntry =
-							'<tr'+(folder.incompatible.indexOf(SID.emulator) !== -1 ? ' class="disabled"' : '')+'>'+
-								'<td class="folder '+
-									(isPersonalSymlist || (isPublicSymlist && myPublic)
-										? 'playlist'
-										: folder.foldertype.toLowerCase()+(folder.hasphoto ? '-photo' : ''))+
-										(folder.hvsc == this.HVSC_VERSION || folder.hvsc == this.CGSC_VERSION ? ' new' : '')+
-									'"><div class="block-wrap"><div class="block">'+
-								(folder.filescount > 0 ? '<div class="filescount">'+folder.filescount+'</div>' : '')+
-								'<span class="name entry'+(this.isSearching ? ' search' : '')+'" data-name="'+encodeURIComponent(folder.foldername)+'" data-incompat="'+folder.incompatible+'">'+
-								adaptedName+'</span></div></div></td>'+
-								'<td class="stars"><span class="rating">'+this.buildStars(folder.rating)+'</span></td>'+
-							'</tr>';
-						if (folder.foldername == "_High Voltage SID Collection" || 			// HVSC or CGSC
-								folder.foldername == "_Compute's Gazette SID Collection")
-							collections.push(folderEntry); // Need to swap the below
-						else if (folder.foldername == 'CSDb Music Competitions')
-							csdbCompoEntry = folderEntry;
-						else if ((folder.foldername.substr(0, 1) == "_" || isPublicSymlist) &&
-							(!onlyShowPersonal || (onlyShowPersonal && myPublic)) &&
-							(!onlyShowCommon || (onlyShowCommon && folder.flags & 0x1)))	// Public symlist or custom?
-							this.extra += folderEntry;
-						else if (isPersonalSymlist)											// Personal symlist folder?
-							this.symlists += folderEntry;
-						else
-							this.folders += folderEntry;									// Normal folder
-					}
-					this.subFolders++;
-
-				}.bind(this));
-
-				if (this.subFolders) {
-					if (this.extra !== "") {
-						this.extra = '<tr class="disabled"><td class="spacer" colspan="2"></td></tr>'+this.extra+
-							'<tr class="disabled"><td class="divider" colspan="2"></td></tr>';
-						this.subFolders += 2;
-					}
-					if (this.symlists !== "") {
-						this.symlists = '<tr class="disabled"><td class="spacer" colspan="2"></td></tr>'+this.symlists+
-							'<tr class="disabled"><td class="divider" colspan="2"></td></tr>';
-						this.subFolders += 2;
-					}
-					if (collections.length)
-						this.folders = collections[1]+collections[0]; // HVSC should always be first
-					this.folders += csdbCompoEntry;						
-					this.folders = '<tr class="disabled"><td class="spacer" colspan="2"></td></tr>'+this.folders;
-					this.folders += '<tr class="disabled"><td class="divider" colspan="2"></td></tr>'+this.extra;
-					this.folders += this.symlists;
-					this.subFolders += 2;
-				}
-
-				// FILES
-
-				// Sort the list of files first
-				data.files.sort(function(obj1, obj2) {
-					var o1 = obj1.substname !== "" ? obj1.substname : this.adaptBrowserName(obj1.filename, true);
-					var o2 = obj2.substname !== "" ? obj2.substname : this.adaptBrowserName(obj2.filename, true);
-					return o1.toLowerCase() > o2.toLowerCase() ? 1 : -1;
-				}.bind(this));
-				this.isCompoFolder = data.compo;
-
-				$.each(data.files, function(i, file) {
-					// Player: Replace "_" with space + "V" with "v" for versions
-					var player = file.player.replace(/_/g, " ").replace(/(V)(\d)/g, "v$2"),
-						rootFile = (this.isSearching || this.isSymlist || this.isCompoFolder ? "" : this.path) + "/" + file.filename,
-						isNew = file.hvsc == this.HVSC_VERSION || file.hvsc == this.CGSC_VERSION;
-					var adaptedName = file.substname == "" ? file.filename.replace(/^\_/, '') : file.substname;
-					adaptedName = this.adaptBrowserName(adaptedName);
-					files +=
-						'<tr>'+
-							'<td class="sid unselectable"><div class="block-wrap"><div class="block">'+(file.subtunes > 1 ? '<div class="subtunes'+(this.isSymlist ? ' specific' : '')+(isNew ? ' newst' : '')+'">'+(this.isSymlist ? file.startsubtune : file.subtunes)+'</div>' : (isNew ? '<div class="newsid"></div>' : ''))+
-							'<div class="entry name file'+(this.isSearching || this.isCompoFolder || this.path.substr(0, 2) === "/$" ? ' search' : '')+'" data-name="'+encodeURIComponent(file.filename)+'" data-type="'+file.type+'" data-symid="'+file.symid+'">'+adaptedName+'</div></div></div><br />'+
-							'<span class="info">'+file.copyright.substr(0, 4)+' in '+player+(file.type === "RSID" ? '<div class="ptype">RSID</div>' : '')+'</span></td>'+
-							'<td class="stars filestars"><span class="rating">'+this.buildStars(file.rating)+'</span>'+
-							'<span class="disqus-comment-count" data-disqus-url="http://deepsid.chordian.net/#!'+rootFile.replace("/_High Voltage SID Collection", "")+'"></span>'+
-							'</td>'+
-						'</tr>'; // &#9642; is the dot character if needed
-
-					// If the STIL text starts with a <BR> newline or a <HR> line, get rid of it
-					var stil = file.stil;
-					if (stil.substr(2, 4) == "r />") stil = stil.substr(6);
-
-					this.playlist.push({
-						filename:		file.filename,
-						substname:		file.substname, // Symlists can have renamed SID files
-						fullname:		this.ROOT_HVSC + rootFile,
-						player: 		player,
-						length: 		file.lengths,
-						type:			file.type,
-						clockspeed:		file.clockspeed,
-						sidmodel:		file.sidmodel,
-						subtunes:		file.subtunes,
-						startsubtune:	file.startsubtune == 0 ? 0 : file.startsubtune - 1, // If 0 then SIDId skipped it
-						size:			file.datasize,
-						address:		file.loadaddr,
-						copyright:		file.copyright,
-						stil:			stil,
-						rating:			file.rating,
-						hvsc:			file.hvsc,
-						symid:			file.symid,
-					});
-				}.bind(this));
-
-				if (files !== "" || this.path === "" || this.isMusiciansLetterFolder()) $("#dropdown-sort").prop("disabled", false);
-				/*var pos = this.folders.lastIndexOf('<tr>');
-				this.folders = this.folders.slice(0, pos) + this.folders.slice(pos).replace('<tr>', '<tr class="last">');*/
-				$("#songs table").append(this.folders+files);
-				this.updateDisqusCounts();
+			setTimeout(function() {
+				// Must be in this timer or the emptying above will not be visible
+				$("#songs table").append(this.cache.folder);
 
 				var $browser = this;
 
@@ -813,14 +632,274 @@ Browser.prototype = {
 							}
 						});
 				}
-				if (typeof callback === "function") callback.call(this);
-			});
-			if (this.path == "")
-				ctrls.state("root/back", "disabled");
+				DisableIncompatibleRows();
+			}.bind(this), 1);
 
-			DisableIncompatibleRows();
-			
-		}.bind(this));
+		} else {
+
+			// LOAD FROM HVSC.PHP
+
+			var loading = setTimeout(function() {
+				// Fade in a GIF loading spinner if the AJAX call takes longer than usual
+				$("#loading").css("top", $("#songs").height() / 2 - 50 /* Half size of SVG */).fadeIn(350);
+			}, 150);
+
+			this.playlist = []; // Every folder we enter will become its own local playlist
+			this.subFolders = 0;
+			this.path = this.path.replace("/_CSDb", "/CSDb");
+
+			// Call the AJAX PHP script that delivers the list of files and folders
+			$.get("php/hvsc.php", {
+					folder:			this.path,
+					searchType:		$("#dropdown-search").val(),
+					searchQuery:	this.isSearching ? searchQuery : "",
+					searchHere:		($("#search-here").is(":checked") ? 1 : 0),
+			}, function(data) {
+				this.validateData(data, function(data) {
+					clearTimeout(loading);
+					$("#loading").hide();
+					ctrls.state("root/back", "enabled");
+					if (!this.isMobile) $("#folders").mCustomScrollbar("destroy");
+					this.folders = this.extra = this.symlists = "";
+					var files = "";
+
+					// Disable emulators/handlers in the drop-down according to parent folder attributes
+					$("#dropdown-emulator").styledOptionState("websid jssid soasc_auto soasc_r2 soasc_r4 soasc_r5", "enabled");
+					$("#page .viz-emu").removeClass("disabled");
+					$("#dropdown-emulator").styledOptionState(data.incompatible, "disabled");
+					if (data.incompatible.indexOf("websid") !== -1) $("#page .viz-websid").addClass("disabled");
+					if (data.incompatible.indexOf("jssid") !== -1) $("#page .viz-jssid").addClass("disabled");
+
+					$("#path").css("top", "5px");
+					var pathText = this.path == "" ? "/" : this.path
+						.replace(/^\/_/, '/')
+						.replace("/Compute's Gazette SID Collection", '<span class="dim">CGSC</span>')
+						.replace("/High Voltage SID Collection", '<span class="dim">HVSC</span>')
+						.replace("/CSDb Music Competitions/", '');
+					if (this.isSearching) {
+						var searchType = $("#dropdown-search").val(),
+							searchQuery = encodeURIComponent($("#search-box").val()); // Need it to be untampered here
+						pathText = data.results+' results found'+
+							'<a href="//deepsid.chordian.net?search='+searchQuery+(searchType !== '#all#' ? '&type='+searchType : '')+'" title="Permalink"><svg class="permalink" style="enable-background:new 0 0 80 80;" version="1.1" viewBox="0 0 80 80" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g><path d="M29.298,63.471l-4.048,4.02c-3.509,3.478-9.216,3.481-12.723,0c-1.686-1.673-2.612-3.895-2.612-6.257 s0.927-4.585,2.611-6.258l14.9-14.783c3.088-3.062,8.897-7.571,13.131-3.372c1.943,1.93,5.081,1.917,7.01-0.025 c1.93-1.942,1.918-5.081-0.025-7.009c-7.197-7.142-17.834-5.822-27.098,3.37L5.543,47.941C1.968,51.49,0,56.21,0,61.234 s1.968,9.743,5.544,13.292C9.223,78.176,14.054,80,18.887,80c4.834,0,9.667-1.824,13.348-5.476l4.051-4.021 c1.942-1.928,1.953-5.066,0.023-7.009C34.382,61.553,31.241,61.542,29.298,63.471z M74.454,6.044 c-7.73-7.67-18.538-8.086-25.694-0.986l-5.046,5.009c-1.943,1.929-1.955,5.066-0.025,7.009c1.93,1.943,5.068,1.954,7.011,0.025 l5.044-5.006c3.707-3.681,8.561-2.155,11.727,0.986c1.688,1.673,2.615,3.896,2.615,6.258c0,2.363-0.928,4.586-2.613,6.259 l-15.897,15.77c-7.269,7.212-10.679,3.827-12.134,2.383c-1.943-1.929-5.08-1.917-7.01,0.025c-1.93,1.942-1.918,5.081,0.025,7.009 c3.337,3.312,7.146,4.954,11.139,4.954c4.889,0,10.053-2.462,14.963-7.337l15.897-15.77C78.03,29.083,80,24.362,80,19.338 C80,14.316,78.03,9.595,74.454,6.044z"/></g><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/></svg></a>'+
+							'<button id="search-cancel" class="medium">Cancel</button>';
+					} else if (this.isSymlist) {
+						$("#path").css("top", "0.5px");
+						pathText = '<span class="playlist">'+this.path.substr(2)+'</span><br />'+
+							(this.path.substr(0, 2) === "/!"
+								? '<span class="maintainer">Personal playlist</span>'
+								: '<span class="maintainer">Playlist by '+data.owner+'</span>');
+					}
+					$("#path").empty().append(pathText);
+
+					// Tab 'STIL' is called 'Lyrics' in CGSC
+					$("#tab-stil").empty().append(this.isCGSC() ? "Lyrics" : "STIL");
+
+					// The 'CSDb' and 'GB64' tabs are useless to CGSC
+					var $twoTabs = $("#tab-csdb,#tab-gb64");
+					$twoTabs.removeClass("disabled");
+					if (this.isCGSC()) {
+						$twoTabs.addClass("disabled");
+						$("#note-csdb,#note-gb64").hide();
+						var $selected = $("#tabs .selected");
+						if ($selected.attr("data-topic") === "csdb" || $selected.attr("data-topic") === "gb64")
+							$("#tab-profile").trigger("click");
+					}
+
+					// FOLDERS
+
+					// Sort the list of folders first
+					data.folders.sort(function(obj1, obj2) {
+						return obj1.foldername.replace(/^(\_|\!|\$)/, '').toLowerCase() > obj2.foldername.replace(/^(\_|\!|\$)/, '').toLowerCase() ? 1 : -1;
+					});
+
+					var filter = this.setupSortBox();
+					var collections = [], csdbCompoEntry = "",
+						onlyShowPersonal = this.path === "" && filter === "personal",
+						onlyShowCommon = this.path === "" && filter === "common";
+
+					$.each(data.folders, function(i, folder) {
+
+						if (folder.foldertype == "COMPO") {
+
+							// COMPETITION FOLDERS
+
+							var folderEntry =
+							'<tr'+(folder.incompatible.indexOf(SID.emulator) !== -1 ? ' class="disabled"' : '')+'>'+
+								'<td class="folder compo"><div class="block-wrap"><div class="block slimfont">'+
+									(folder.filescount > 0 ? '<div class="filescount">'+folder.filescount+'</div>' : '')+
+								'<span class="name entry compo'+(this.isSearching ? ' search' : '')+'" data-name="'+(this.isSearching ? 'CSDb Music Competitions%2F' : '')+encodeURIComponent(folder.foldername)+'" data-incompat="'+folder.incompatible+'">'+
+								folder.foldername+'</span></div></div><br />'+
+								'<span class="info compo-year compo-'+folder.compo_type.toLowerCase()+'">'+folder.compo_year+(folder.compo_country.substr(0, 1) == "_" ? ' at ' : ' in ')+folder.compo_country.replace("_", "")+'</span></td>'+
+								'</td>'+
+								'<td class="stars"><span class="rating">'+this.buildStars(folder.rating)+'</span><br /></td>'+
+							'</tr>';
+							this.folders += folderEntry;
+
+						} else {
+
+							// OTHER KINDS OF FOLDERS
+
+							var isPersonalSymlist = folder.foldername.substr(0, 1) == "!",
+								isPublicSymlist = folder.foldername.substr(0, 1) == "$",
+								myPublic = false;
+							if (isPublicSymlist) {
+								var result = $.grep(this.symlistFolders, function(entry) {
+									return entry.fullname == folder.foldername;
+								}.bind(this));
+								if (result.length) myPublic = true;
+							}
+							var adaptedName = folder.foldername.replace(/^(\_|\!|\$)/, '');
+							adaptedName = this.adaptBrowserName(adaptedName);
+							var folderEntry =
+								'<tr'+(folder.incompatible.indexOf(SID.emulator) !== -1 ? ' class="disabled"' : '')+'>'+
+									'<td class="folder '+
+										(isPersonalSymlist || (isPublicSymlist && myPublic)
+											? 'playlist'
+											: folder.foldertype.toLowerCase()+(folder.hasphoto ? '-photo' : ''))+
+											(folder.hvsc == this.HVSC_VERSION || folder.hvsc == this.CGSC_VERSION ? ' new' : '')+
+										'"><div class="block-wrap"><div class="block">'+
+									(folder.filescount > 0 ? '<div class="filescount">'+folder.filescount+'</div>' : '')+
+									'<span class="name entry'+(this.isSearching ? ' search' : '')+'" data-name="'+encodeURIComponent(folder.foldername)+'" data-incompat="'+folder.incompatible+'">'+
+									adaptedName+'</span></div></div></td>'+
+									'<td class="stars"><span class="rating">'+this.buildStars(folder.rating)+'</span></td>'+
+								'</tr>';
+							if (folder.foldername == "_High Voltage SID Collection" || 			// HVSC or CGSC
+									folder.foldername == "_Compute's Gazette SID Collection")
+								collections.push(folderEntry); // Need to swap the below
+							else if (folder.foldername == 'CSDb Music Competitions')
+								csdbCompoEntry = folderEntry;
+							else if ((folder.foldername.substr(0, 1) == "_" || isPublicSymlist) &&
+								(!onlyShowPersonal || (onlyShowPersonal && myPublic)) &&
+								(!onlyShowCommon || (onlyShowCommon && folder.flags & 0x1)))	// Public symlist or custom?
+								this.extra += folderEntry;
+							else if (isPersonalSymlist)											// Personal symlist folder?
+								this.symlists += folderEntry;
+							else
+								this.folders += folderEntry;									// Normal folder
+						}
+						this.subFolders++;
+
+					}.bind(this));
+
+					if (this.subFolders) {
+						if (this.extra !== "") {
+							this.extra = '<tr class="disabled"><td class="spacer" colspan="2"></td></tr>'+this.extra+
+								'<tr class="disabled"><td class="divider" colspan="2"></td></tr>';
+							this.subFolders += 2;
+						}
+						if (this.symlists !== "") {
+							this.symlists = '<tr class="disabled"><td class="spacer" colspan="2"></td></tr>'+this.symlists+
+								'<tr class="disabled"><td class="divider" colspan="2"></td></tr>';
+							this.subFolders += 2;
+						}
+						if (collections.length)
+							this.folders = collections[1]+collections[0]; // HVSC should always be first
+						this.folders += csdbCompoEntry;						
+						this.folders = '<tr class="disabled"><td class="spacer" colspan="2"></td></tr>'+this.folders;
+						this.folders += '<tr class="disabled"><td class="divider" colspan="2"></td></tr>'+this.extra;
+						this.folders += this.symlists;
+						this.subFolders += 2;
+					}
+
+					// FILES
+
+					// Sort the list of files first
+					data.files.sort(function(obj1, obj2) {
+						var o1 = obj1.substname !== "" ? obj1.substname : this.adaptBrowserName(obj1.filename, true);
+						var o2 = obj2.substname !== "" ? obj2.substname : this.adaptBrowserName(obj2.filename, true);
+						return o1.toLowerCase() > o2.toLowerCase() ? 1 : -1;
+					}.bind(this));
+					this.isCompoFolder = data.compo;
+
+					$.each(data.files, function(i, file) {
+						// Player: Replace "_" with space + "V" with "v" for versions
+						var player = file.player.replace(/_/g, " ").replace(/(V)(\d)/g, "v$2"),
+							rootFile = (this.isSearching || this.isSymlist || this.isCompoFolder ? "" : this.path) + "/" + file.filename,
+							isNew = file.hvsc == this.HVSC_VERSION || file.hvsc == this.CGSC_VERSION;
+						var adaptedName = file.substname == "" ? file.filename.replace(/^\_/, '') : file.substname;
+						adaptedName = this.adaptBrowserName(adaptedName);
+						files +=
+							'<tr>'+
+								'<td class="sid unselectable"><div class="block-wrap"><div class="block">'+(file.subtunes > 1 ? '<div class="subtunes'+(this.isSymlist ? ' specific' : '')+(isNew ? ' newst' : '')+'">'+(this.isSymlist ? file.startsubtune : file.subtunes)+'</div>' : (isNew ? '<div class="newsid"></div>' : ''))+
+								'<div class="entry name file'+(this.isSearching || this.isCompoFolder || this.path.substr(0, 2) === "/$" ? ' search' : '')+'" data-name="'+encodeURIComponent(file.filename)+'" data-type="'+file.type+'" data-symid="'+file.symid+'">'+adaptedName+'</div></div></div><br />'+
+								'<span class="info">'+file.copyright.substr(0, 4)+' in '+player+(file.type === "RSID" ? '<div class="ptype">RSID</div>' : '')+'</span></td>'+
+								'<td class="stars filestars"><span class="rating">'+this.buildStars(file.rating)+'</span>'+
+								'<span class="disqus-comment-count" data-disqus-url="http://deepsid.chordian.net/#!'+rootFile.replace("/_High Voltage SID Collection", "")+'"></span>'+
+								'</td>'+
+							'</tr>'; // &#9642; is the dot character if needed
+
+						// If the STIL text starts with a <BR> newline or a <HR> line, get rid of it
+						var stil = file.stil;
+						if (stil.substr(2, 4) == "r />") stil = stil.substr(6);
+
+						this.playlist.push({
+							filename:		file.filename,
+							substname:		file.substname, // Symlists can have renamed SID files
+							fullname:		this.ROOT_HVSC + rootFile,
+							player: 		player,
+							length: 		file.lengths,
+							type:			file.type,
+							clockspeed:		file.clockspeed,
+							sidmodel:		file.sidmodel,
+							subtunes:		file.subtunes,
+							startsubtune:	file.startsubtune == 0 ? 0 : file.startsubtune - 1, // If 0 then SIDId skipped it
+							size:			file.datasize,
+							address:		file.loadaddr,
+							copyright:		file.copyright,
+							stil:			stil,
+							rating:			file.rating,
+							hvsc:			file.hvsc,
+							symid:			file.symid,
+						});
+					}.bind(this));
+
+					if (files !== "" || this.path === "" || this.isMusiciansLetterFolder()) $("#dropdown-sort").prop("disabled", false);
+					/*var pos = this.folders.lastIndexOf('<tr>');
+					this.folders = this.folders.slice(0, pos) + this.folders.slice(pos).replace('<tr>', '<tr class="last">');*/
+					$("#songs table").append(this.folders+files);
+					this.updateDisqusCounts();
+
+					var $browser = this;
+
+					if (this.path == "/CSDb Music Competitions" || this.path == "/_Compute's Gazette SID Collection") {
+						// Cache this big folder for fast back-browsing
+						this.cache.folder = this.folders+files;
+						this.cache.incompatible = data.incompatible;
+					}
+
+					// Let mobile devices use their own touch scrolling stuff
+					if (this.isMobile) {
+						// Hack to make sure the bottom search bar sits in the correct bottom of the viewport
+						$(window).trigger("resize");
+					} else {
+						// Ugly hack to make custom scroll bar respect flexbox height
+						$("#folders").height($("#folders").height())
+							.mCustomScrollbar({
+								axis: "y",
+								theme: "dark-3",
+								setTop: (typeof scrollPos !== "undefined" ? scrollPos+"px" : "0"),
+								scrollButtons:{
+									enable: true,
+								},
+								mouseWheel:{
+									scrollAmount: 150,
+								},
+								callbacks: {
+									whileScrolling: function() {
+										$browser.currentScrollPos = this.mcs.top;
+									}
+								}
+							});
+					}
+					if (typeof callback === "function") callback.call(this);
+				});
+				if (this.path == "")
+					ctrls.state("root/back", "disabled");
+
+				DisableIncompatibleRows();
+				
+			}.bind(this));
+		}
 	},
 
 	/**

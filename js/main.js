@@ -529,7 +529,7 @@ $(function() { // DOM ready
 		ctrls.state("root/back", "enabled");
 		if (path != browser.path) {
 			browser.path = path;
-			browser.getFolder(0, undefined, function() {
+			browser.getFolder(0, undefined, undefined, function() {
 				ClickAndScrollToSID(fullname);
 			});
 		} else
@@ -561,7 +561,7 @@ $(function() { // DOM ready
 	$("#topic-profile,#topic-csdb").on("click", ".home-folder", function() {
 		browser.path = "/"+$(this).attr("data-home");
 		ctrls.state("root/back", "enabled");
-		browser.getFolder(0, undefined, function() {
+		browser.getFolder(0, undefined, undefined, function() {
 			browser.getComposer(); // Comment this out to keep comment thread (not sure what users prefer here?)
 		});
 	});
@@ -636,7 +636,7 @@ $(function() { // DOM ready
 		if (isCompoFolder && !isFolder) browser.path = "/CSDb Music Competitions/"+browser.path.split("/")[2];
 		ctrls.state("root/back", "enabled");
 
-		browser.getFolder(0, undefined, function() {
+		browser.getFolder(0, undefined, undefined, function() {
 
 			if (!isFolder) {
 

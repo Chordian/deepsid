@@ -897,9 +897,15 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>March 5, 2019</h3>
+						<ul>
+							<li>The main CGSC and CMC folders are now cached upon entry, making back-browsing significantly faster.</li>
+						</ul>
+
 						<h3>March 4, 2019</h3>
 						<ul>
 							<li>Sub folders in the CMC folders now each have a profile page generated with the CSDb web service.</li>
+							<li>The <code>Decent</code> and <code>Good</code> modes are now ready for letter folder <code>S</code> in MUSICIANS.</li>
 						</ul>
 
 						<h3>March 3, 2019</h3>
