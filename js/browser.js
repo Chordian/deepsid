@@ -709,7 +709,9 @@ Browser.prototype = {
 
 					// Sort the list of folders first
 					data.folders.sort(function(obj1, obj2) {
-						return obj1.foldername.replace(/^(\_|\!|\$)/, '').toLowerCase() > obj2.foldername.replace(/^(\_|\!|\$)/, '').toLowerCase() ? 1 : -1;
+						o1 = obj1.prefix != "" ? obj1.prefix : obj1.foldername;
+						o2 = obj2.prefix != "" ? obj2.prefix : obj2.foldername;
+						return o1.replace(/^(\_|\!|\$)/, '').toLowerCase() > o2.replace(/^(\_|\!|\$)/, '').toLowerCase() ? 1 : -1;
 					});
 
 					var filter = this.setupSortBox();

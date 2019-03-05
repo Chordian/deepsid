@@ -301,12 +301,13 @@ try {
 			$compo = array();
 
 			// Get the full list of competitions
-			$select_compo = $db->query('SELECT competition, year, country, type, event_id FROM competitions');
+			$select_compo = $db->query('SELECT prefix, competition, year, country, type, event_id FROM competitions');
 			$select_compo->setFetchMode(PDO::FETCH_OBJ);
 
 			foreach ($select_compo as $row) {
 				$files[] = $row->competition;
 				$compo += [strtolower($row->competition) => array(
+					'prefix' =>		$row->prefix,
 					'year' =>		$row->year,
 					'country' =>	$row->country,
 					'type' =>		$row->type,
@@ -549,13 +550,14 @@ try {
 				$compo = array();
 
 				// Get the competition stuff now then
-				$select_compo = $db->query('SELECT year, country, type, event_id FROM competitions WHERE competition = "'.$fullname.'" LIMIT 1');
+				$select_compo = $db->query('SELECT prefix, year, country, type, event_id FROM competitions WHERE competition = "'.$fullname.'" LIMIT 1');
 				$select_compo->setFetchMode(PDO::FETCH_OBJ);
 
 				if ($select_compo->rowCount()) {
 					$isCompoRoot = true;
 					$row_compo = $select_compo->fetch();
 
+					$compo[$fullname]['prefix']		= $row_compo->prefix;
 					$compo[$fullname]['year']		= $row_compo->year;
 					$compo[$fullname]['country']	= $row_compo->country;
 					$compo[$fullname]['type']		= $row_compo->type;
@@ -573,6 +575,8 @@ try {
 				'flags'			=> (isset($flags) ? $flags : 0),
 				'hvsc'			=> (isset($hvsc) ? $hvsc : 0),							// Example
 				
+				'prefix'		=> $isCompoRoot ? $compo[$fullname]['prefix']	: '',	// Sort_Me_Differently
+
 				'compo_year'	=> $isCompoRoot ? $compo[$fullname]['year']		: 0,	// 1992
 				'compo_country'	=> $isCompoRoot ? $compo[$fullname]['country']	: '',	// Finland
 				'compo_type'	=> $isCompoRoot ? $compo[$fullname]['type']		: '',	// DEMO
