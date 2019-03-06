@@ -1842,6 +1842,10 @@ input[type=range]::-ms-track {
 					font: normal 13px/0 "Montserrat", sans-serif;
 				}
 
+				#search-here-container label.disabled {
+					color: #ced0c0; /* #c8c8b9; */
+				}
+
 			#search-button {
 				position: absolute;
 				top: 14px;

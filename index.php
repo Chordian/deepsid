@@ -897,9 +897,15 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>March 6, 2019</h3>
+						<ul>
+							<li>The <code>Here</code> search check box now works correctly in the main CMC folder.</li>
+						</ul>
+
 						<h3>March 5, 2019</h3>
 						<ul>
 							<li>The main CGSC and CMC folders are now cached upon entry, making back-browsing significantly faster.</li>
+							<li>Improved the sorting of the competitions in the CMC folder.</li>
 						</ul>
 
 						<h3>March 4, 2019</h3>

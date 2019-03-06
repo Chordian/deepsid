@@ -24,11 +24,16 @@ $isSearching = isset($_GET['searchQuery']) && !empty($_GET['searchQuery']);
 $isPersonalSymlist = substr($_GET['folder'], 0, 2) == '/!';
 $isPublicSymlist = substr($_GET['folder'], 0, 2) == '/$';
 // NOTE: A comparison of the 'COMPO' type is performed below that may also set these variables.
-$isCSDbCompo = substr($_GET['folder'], 0, 24) == '/CSDb Music Competitions' && !$isSearching;
+$isCSDbFolder = substr($_GET['folder'], 0, 24) == '/CSDb Music Competitions';
+$isCSDbCompo = $isCSDbFolder && !$isSearching;
 $compoName = $isCSDbCompo && strlen($_GET['folder']) > 25 ? explode('/', $_GET['folder'])[2] : '';
 
 // In current folder or everything?
-$searchContext = $_GET['searchHere'] ? 'fullname LIKE "'.substr($_GET['folder'], 1).'%"' : '1';
+$searchContext = '1';
+if ($_GET['searchHere'])
+	$searchContext = $isCSDbFolder
+		? 'type = "COMPO"' // This will also be compared in hvsc_files but it exists and is never "COMPO" anyway
+		: 'fullname LIKE "'.substr($_GET['folder'], 1).'%"';
 
 try {
 	if ($_SERVER['HTTP_HOST'] == LOCALHOST)

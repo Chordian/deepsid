@@ -574,6 +574,8 @@ Browser.prototype = {
 	getFolder: function(scrollPos, searchQuery, readCache, callback) {
 		ctrls.state("root/back", "disabled");
 		$("#dropdown-sort").prop("disabled", true);
+		$("#search-here").prop("disabled", false);
+		$("#search-here-container label").removeClass("disabled");
 		$("#songs table").empty();
 		this.isSearching = typeof searchQuery !== "undefined";
 		this.isSymlist = this.path.substr(0, 2) === "/!" || this.path.substr(0, 2) === "/$";
@@ -811,7 +813,15 @@ Browser.prototype = {
 						var o2 = obj2.substname !== "" ? obj2.substname : this.adaptBrowserName(obj2.filename, true);
 						return o1.toLowerCase() > o2.toLowerCase() ? 1 : -1;
 					}.bind(this));
+
 					this.isCompoFolder = data.compo;
+
+					// Can't use the above boolean here because this also needs to work in search mode
+					if (this.path.substr(0, 24) === "/CSDb Music Competitions" && this.path.length > 25) {
+						// Searching 'Here' in an a single compo folder is currently not supported
+						$("#search-here").prop("checked", false).prop("disabled", true);
+						$("#search-here-container label").addClass("disabled");
+					}
 
 					$.each(data.files, function(i, file) {
 						// Player: Replace "_" with space + "V" with "v" for versions
