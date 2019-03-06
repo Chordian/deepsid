@@ -60,22 +60,34 @@ $(function() { // DOM ready
 	 */
 	$(window).on("keydown", function(event) {
 		if (!$("#search-box,#username,#password,#sym-rename,#sym-specify-subtune").is(":focus")) {
-			if (event.keyCode == 220)								// Keydown key below 'Escape'
+			if (event.keyCode == 220)									// Keydown key below 'Escape'
 				// Fast forward
 				$("#faster").trigger("mousedown");
 		}
 	}).on("keyup", function(event) {
 		if (!$("#search-box,#username,#password,#sym-rename,#sym-specify-subtune").is(":focus")) {
-			if (event.keyCode == 220)								// Keyup key below 'Escape'
+			if (event.keyCode == 220) {									// Keyup key below 'Escape'
 				// Fast forward
 				$("#faster").trigger("mouseup");
-			else if (event.keyCode == 32)							// Keyup 'Space'
+			} else if (event.keyCode == 32)	{							// Keyup 'Space'
 				$("#play-pause").trigger("mouseup");
-			else if (event.keyCode == 80)							// Keyup 'p'
+			} else if (event.keyCode == 80) {							// Keyup 'p'
 				// Open a pop-up window with only the width of the #panel area
 				window.open("//deepsid.chordian.net/", "_blank",
 					"left=0,top=0,width=450,height="+(screen.height-150)+",scrollbars=no");
-			else if (event.keyCode == 83) {							// Keyup 's'
+			} else if (event.keyCode == 67 && browser.isCompoFolder) {	// Keyup 'c'
+				// Refresh the competition cache if inside a single competition folder
+				// NOTE: This is undocumented to the public but if you are reading this and wondering about it,
+				// it's used to refresh the cache in case an HVSC path has been added to a CSDb release page of
+				// a SID file, thereby making it visible to the cache script. This can improve compo lists.
+				$.post("php/csdb_compo_clear_cache.php",
+					{ competition: browser.path.replace("/CSDb Music Competitions/", "") }, function(data) {
+					browser.validateData(data, function() {
+						// Now reload the folder to automatically refresh the cache
+						browser.getFolder();
+					});
+				}.bind(this));
+			} else if (event.keyCode == 83) {							// Keyup 's'
 				// Toggle the sundry box minimized or restored
 				ToggleSundry();
 				$(window).trigger("resize", true);
