@@ -871,19 +871,24 @@ function DisableIncompatibleRows() {
 
 /**
  * Update the URL in the web browser address field.
+ * 
+ * @param {boolean} id		If specified, TRUE to skip file check.
  */
-function UpdateURL() {
+function UpdateURL(skipFileCheck) {
 	// NOTE: The 'encodeURIComponent()' makes the URL look ugly but it has to be done or things start
 	// falling apart - especially when using characters such as "&" or "#" in competition folders.
 	var urlFile = browser.isSearching || browser.path == "" ? "&file=" : "&file="+encodeURIComponent(browser.path).replace(/^\/_/, '/')+"/";
 	// Special case for HVSC as its collection name is not necessary (except in the HVSC root)
 	if (urlFile.split("/").length - 1 > 2)
 		urlFile = urlFile.replace("/High Voltage SID Collection", "");
-	try {
-		urlFile = browser.playlist[browser.songPos].substname !== "" && !browser.isCompoFolder
-			? urlFile += browser.playlist[browser.songPos].substname
-			: urlFile += browser.playlist[browser.songPos].filename.replace(/^\_/, '');
-	} catch(e) { /* Type error means no SID file clicked */ }
+
+	if (typeof skipFileCheck === "undefined" || !skipFileCheck) {
+		try {
+			urlFile = browser.playlist[browser.songPos].substname !== "" && !browser.isCompoFolder
+				? urlFile += browser.playlist[browser.songPos].substname
+				: urlFile += browser.playlist[browser.songPos].filename.replace(/^\_/, '');
+		} catch(e) { /* Type error means no SID file clicked */ }
+	}
 
 	if (browser.isSearching)
 		urlFile = urlFile.replace("High Voltage SID Collection", "");

@@ -176,7 +176,7 @@ Browser.prototype = {
 						(this.path === "/CSDb Music Competitions" || this.path === "/_Compute's Gazette SID Collection")
 							&& this.cache.folder !== "" /* <- Boolean parameter */ );
 					this.getComposer();
-					UpdateURL();
+					UpdateURL(true);
 				}
 				break;
 			case "search-button":

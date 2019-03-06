@@ -900,6 +900,7 @@
 						<h3>March 6, 2019</h3>
 						<ul>
 							<li>The <code>Here</code> search check box now works correctly in the main CMC folder.</li>
+							<li>Fixed a URL bug that happened when backing out of a CMC sub folder after playing a song.</li>
 						</ul>
 
 						<h3>March 5, 2019</h3>
