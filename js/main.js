@@ -308,7 +308,7 @@ $(function() { // DOM ready
 		ShowDexterScrollbar(topic);
 
 		// Show the big logo for the informational tabs only
-		if (["about", "faq", "changes"].includes(topic) || topic == "profile" && browser.path == "" && !browser.isSearching)
+		if (["about", "faq", "changes"].includes(topic) || (topic == "profile" && browser.path == "" && (!browser.isSearching || $("#topic-profile table.root").length)))
 			$("#page").addClass("big-logo");
 
 		// If 'Disqus' tab is selected then hide the notification on it
