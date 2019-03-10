@@ -660,6 +660,26 @@
 							<a href="http://www.6581-8580.com/">http://www.6581-8580.com/</a>
 						</p>
 
+						<h3>Composer profile images</h3>
+						<p>
+							The images for composer profiles come from all over the internet. I have tried
+							to be fair and not use images that the composer did not already have available on a personal
+							web site, social media, interview, or another public place.
+						</p>
+						<ul>
+							<li>Most are publically available profile images from Facebook or LinkedIn.</li>
+							<li>A lot of older retro images (typically lo-res) are from the musicians photos download at <a href="http://www.gamebase64.com/downloads.php">GameBase64</a>.</li>
+							<li>Some were originally taken by Andreas Wallström (<a href="http://www.c64.com/">C64.com</a>).</li>
+							<li>A few were taken from the <a href="http://www.vgmpf.com/Wiki/index.php">Video Game Music Preservation Foundation</a> wikipedia.</li>
+							<li>Some from the <a href="https://8bitlegends.com/">8BitLegends.com</a> web site.</li>
+							<li>And several other places I can't remember anymore.</li>
+						</ul>
+						<p>
+							If you feel you should be credited, let me know and I will add you to this section. Also, if
+							you don't like an image of you here, just let me know and I will of course remove it. You are
+							also welcome to send me a replacement image.
+						</p>
+
 						<h3>Other resources used</h3>
 						<p>
 							SIDId by Lasse Öörni (<a href="https://cadaver.github.io/">Cadaver</a>)<br />
@@ -896,6 +916,11 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>March 9, 2019</h3>
+						<ul>
+							<li>Added another 44 folder entries in the CMC folder.</li>
+						</ul>
 
 						<h3>March 6, 2019</h3>
 						<ul>

@@ -57,6 +57,7 @@ $prettyPlayerNames = array(
 	'FAME' =>					'FAME\'s player',
 	'Frank_Tout' =>				'Frank Tout\'s player',
 	'Fred_Gray' =>				'Fred Gray\'s player',
+	'Frederic_Thiesse' =>		'Frederic Thiesse\'s player',
 	'Gavin_Graham' =>			'Gavin Graham\'s player',
 	'Gavin_Raeburn' =>			'Gavin Raeburn\'s player',
 	'Georg_Brandt' =>			'Georg Brandt\'s player',
