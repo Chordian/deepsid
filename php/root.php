@@ -59,7 +59,7 @@ try {
 		// Get the fullname
 		$select = $db->query('SELECT fullname FROM hvsc_folders WHERE id = '.$random_id);
 		$select->setFetchMode(PDO::FETCH_OBJ);
-		$fullname = $select->fetch()->fullname;
+		$fullname = $select->rowCount() ? $select->fetch()->fullname : '';
 
 		// Get composer data via the fullname
 		$select = $db->query('SELECT name, shortname, handles, shorthandle FROM composers WHERE fullname = "'.$fullname.'"');

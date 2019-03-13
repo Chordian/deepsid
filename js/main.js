@@ -309,7 +309,7 @@ $(function() { // DOM ready
 
 		// Show the big logo for the informational tabs only
 		if (["about", "faq", "changes"].includes(topic) || (topic == "profile" && browser.path == "" && (!browser.isSearching || $("#topic-profile table.root").length)))
-			$("#page").addClass("big-logo"); // 3
+			$("#page").addClass("big-logo");
 
 		// If 'Disqus' tab is selected then hide the notification on it
 		if (topic === "disqus") $("#note-disqus").hide();
@@ -875,12 +875,15 @@ function DisableIncompatibleRows() {
  * @param {boolean} id		If specified, TRUE to skip file check.
  */
 function UpdateURL(skipFileCheck) {
-	// NOTE: The 'encodeURIComponent()' makes the URL look ugly but it has to be done or things start
-	// falling apart - especially when using characters such as "&" or "#" in competition folders.
-	var urlFile = browser.isSearching || browser.path == "" ? "&file=" : "&file="+encodeURIComponent(browser.path).replace(/^\/_/, '/')+"/";
+	var urlFile = browser.isSearching || browser.path == "" ? "&file=" : "&file="+browser.path.replace(/^\/_/, '/')+"/";
+	// For competition folders, the 'encodeURIComponent()' makes the URL look ugly but it has to be done
+	// or things might start falling apart when using special characters such as "&" or "#", etc.
+	if (browser.path.indexOf("CSDb Music Competitions") !== -1 && !browser.isSearching)
+		urlFile = "&file="+encodeURIComponent(browser.path);
+
 	// Special case for HVSC as its collection name is not necessary (except in the HVSC root)
 	if (urlFile.split("/").length - 1 > 2)
-		urlFile = urlFile.replace("/High Voltage SID Collection", "");
+		urlFile = urlFile.replace("/High Voltage SID Collection", "")
 
 	if (typeof skipFileCheck === "undefined" || !skipFileCheck) {
 		try {
@@ -890,10 +893,8 @@ function UpdateURL(skipFileCheck) {
 		} catch(e) { /* Type error means no SID file clicked */ }
 	}
 
-	if (browser.isSearching)
+	if (browser.isSearching || browser.isCompoFolder)
 		urlFile = urlFile.replace("High Voltage SID Collection", "");
-	else if (browser.isCompoFolder)
-		urlFile = urlFile.replace("/High Voltage SID Collection", "");
 
 	// ?subtune=
 	var urlSubtune = ctrls.subtuneCurrent ? "&subtune="+(ctrls.subtuneCurrent + 1) : "";

@@ -917,6 +917,21 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>March 13, 2019</h3>
+						<ul>
+							<li>Optimized how the browser URL is handled. Only CMC folders are now encoded.</li>
+						</ul>
+
+						<h3>March 12, 2019</h3>
+						<ul>
+							<li>The Disqus count script has been enabled again.</li>
+						</ul>
+
+						<h3>March 10, 2019</h3>
+						<ul>
+							<li>Temporarily disabled a Disqus count script as it was creating strange load errors.</li>
+						</ul>
+
 						<h3>March 9, 2019</h3>
 						<ul>
 							<li>Added another 44 folder entries in the CMC folder.</li>
