@@ -168,6 +168,7 @@ $prettyPlayerNames = array(
 	'Tom_Snyder' =>				'Tom Snyder\'s player',
 	'Tommy_Dunbar' =>			'Tommy Dunbar\'s player',
 	'Tonal_Kaos' =>				'Tonal Kaos\' player',
+	'Twynn' =>					'Twynn\'s player',
 	'Ulrich_Muehl' =>			'Ulrik Mühl\'s player',
 	'Ultimate' =>				'Ultimate\'s player',
 	'Urs_Heckmann' =>			'Urs Heckmann\'s player',

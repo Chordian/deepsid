@@ -917,6 +917,12 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>March 14, 2019</h3>
+						<ul>
+							<li>The <code>Decent</code> and <code>Good</code> modes are now ready for letter folders <code>T</code> and <code>U</code> in MUSICIANS.</li>
+							<li>URL file parameters with plus characters (typically from Facebook posts) are now handled properly.</li>
+						</ul>
+
 						<h3>March 13, 2019</h3>
 						<ul>
 							<li>Optimized how the browser URL is handled. Only CMC folders are now encoded.</li>

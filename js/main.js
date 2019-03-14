@@ -928,10 +928,9 @@ function UpdateURL(skipFileCheck) {
  * only use unique parameter names that can't be confused like that.
  * 
  * @param {string} name		Parameter to search for.
- * @param {string} alt		If specified, search this custom URL instead.
  * 
  * @return {string}			Value (empty if non-existent or equal to nothing).
  */
-function GetParam(name, alt) {
-	return decodeURIComponent((RegExp(name + '=' + '(.+?)(&|$)').exec(typeof alt !== "undefined" ? alt : location.search)||[,""])[1]);
+function GetParam(name) {
+	return decodeURIComponent((RegExp(name + '=' + '(.+?)(&|$)').exec(location.search.replace(/\+/g, " "))||[,""])[1]);
 }
