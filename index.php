@@ -296,6 +296,7 @@
 
 			<div id="dexter">
 				<div id="sites">
+					<a href="<?php echo HOST; ?>" style="float:left;margin-left:1px;">Home</a>
 					<a href="http://chordian.net/2018/05/12/deepsid/">Blog Post</a>
 						<span>&#9642</span>
 					<a href="https://csdb.dk/forums/?roomid=14&topicid=129712">CSDb</a>
@@ -916,6 +917,11 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>March 15, 2019</h3>
+						<ul>
+							<li>Added a <code>HOME</code> link in the top.</li>
+						</ul>
 
 						<h3>March 14, 2019</h3>
 						<ul>

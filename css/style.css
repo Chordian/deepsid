@@ -78,10 +78,12 @@ small.u2 { margin-left: 2px; }
 	position: absolute;
 	top: 12px;
 	right: 0;
+	width: 100%;
 	font: normal 10px/0 "Montserrat", sans-serif;
 	text-transform: uppercase;
 	color: #c8c9b9;
 	z-index: 100;
+	text-align: right;
 }
 
 	#sites span {
