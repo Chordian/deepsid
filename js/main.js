@@ -193,7 +193,7 @@ $(function() { // DOM ready
 						userExists = data['exists'];
 						$("#response").empty().removeClass("good bad").addClass("good").append(userExists
 							? "User exists; click to log in"
-							: "User name is available; click to register and log in");
+							: "User name is available; type a password and log in");
 
 					});
 				}.bind(this));
