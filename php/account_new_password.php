@@ -4,6 +4,7 @@
  *
  * Set a new password.
  *
+ * @uses		$_POST['oldpwd']
  * @uses		$_POST['newpwd']
  *
  * @output		json
@@ -15,7 +16,7 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH
 	die("Direct access not permitted.");
 
 if ($account->ChangePassword())
-	echo json_encode(array('result' => true, 'error' => ''));
+	echo json_encode(array('status' => 'ok', 'message' => 'Saved'));
 else
-	echo json_encode(array('result' => false, 'error' => $account->GetErrorMessage()));
+	echo json_encode(array('status' => 'mismatch', 'message' => $account->GetErrorMessage()));
 ?>

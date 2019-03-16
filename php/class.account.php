@@ -169,7 +169,7 @@ class Account {
 	/**
 	 * Changes the password (settings).
 	 *
-	 * @uses		$_POST['oldpwd']		Not used (simplified for DeepSID)
+	 * @uses		$_POST['oldpwd']
 	 * @uses		$_POST['newpwd']
 	 *
 	 * @return		boolean		false = call $this->GetErrorMessage()
@@ -181,10 +181,10 @@ class Account {
 			return false;
 		}
 
-		/*if (empty($_POST['oldpwd'])) {
+		if (empty($_POST['oldpwd'])) {
 			$this->HandleError('The old password is empty');
 			return false;
-		}*/
+		}
 		if (empty($_POST['newpwd'])) {
 			$this->HandleError('The new password is empty');
 			return false;
@@ -194,11 +194,10 @@ class Account {
 		$profile = array();
 		if (!$this->GetProfile($this->UserName(), $profile)) return false;
 
-		/*if ($profile->password != md5(trim($_POST['oldpwd']))) {
+		if ($profile->password != md5(trim($_POST['oldpwd']))) {
 			$this->HandleError('The old password does not match');
 			return false;
-		}*/
-		
+		}
 		// Store the password in the database
 		if (!$this->StorePassword($profile, trim($_POST['newpwd']))) return false;
 		$this->LogActivity('User "'.$_SESSION['user_name'].'" changed the password');

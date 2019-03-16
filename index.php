@@ -559,10 +559,13 @@
 
 								<h3>Credentials</h3>
 
+								<label for="old-password" class="unselectable" style="margin:0 2px 0 0;">Change old </label>
+								<input type="password" name="old-password" id="old-password" maxlength="32" />
+								<label for="new-password" class="unselectable" style="margin: 0 2px;">password to</label>
 								<input type="password" name="new-password" id="new-password" maxlength="32" />
-								<button id="new-password-button" class="medium disabled">CHANGE</button>
-								<label for="new-password" class="unselectable" style="margin-right:10px;">New password</label>
-								<b id="new-password-msg" style="display:none;font-size:12px;color:#080;">SAVED</b>
+								<label for="new-password" class="unselectable" style="margin: 0 6px 0 2px;">instead</label>
+								<button id="new-password-button" class="medium disabled">GO</button>
+								<b id="new-password-msg" style="display:none;font-size:12px;margin-left:6px;"></b>
 
 								<div class="space splitline"></div>
 
