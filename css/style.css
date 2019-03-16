@@ -159,7 +159,9 @@ small.u2 { margin-left: 2px; }
 }
 
 #userform input[type="text"],
-#userform input[type="password"] {
+#userform input[type="password"],
+#topic-settings input[type="text"],
+#topic-settings input[type="password"] {
 	font-size: 14px;
 	padding: 4px;
 	height: 20px;
@@ -168,9 +170,12 @@ small.u2 { margin-left: 2px; }
 	border-radius: 1px;
 }
 
-/*#userform input[type="password"] {
-	width: 80px;
-}*/
+	#topic-settings input[type="text"],
+	#topic-settings input[type="password"] {
+		height: 21px;
+		width: 130px;
+		border-color: #b0b29a;
+	}
 
 #userform button,
 #logout {
@@ -1821,7 +1826,8 @@ input[type=range]::-ms-track {
 			border-radius: 1px;
 		}
 
-		#songs .medium {
+		#songs .medium,
+		#topic-settings .medium {
 			padding: 0 7px;
 			font-size: 11px;
 			box-shadow: none !important;

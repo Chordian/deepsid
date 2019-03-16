@@ -94,7 +94,7 @@ Viz.prototype = {
 	 * @param {*} event 
 	 */
 	onKeyUp: function(event) {
-		if (!$("#search-box,#username,#password,#sym-rename,#sym-specify-subtune").is(":focus")) {
+		if (!$("#search-box,#username,#password,#new-password,#sym-rename,#sym-specify-subtune").is(":focus")) {
 			var voiceMask = SID.voiceMask & 0xF;
 			if (event.keyCode == 49 || event.keyCode == 81) {			// Keyup '1' or 'q'
 				if (event.shiftKey) {

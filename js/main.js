@@ -59,13 +59,13 @@ $(function() { // DOM ready
 	 * @param {*} event 
 	 */
 	$(window).on("keydown", function(event) {
-		if (!$("#search-box,#username,#password,#sym-rename,#sym-specify-subtune").is(":focus")) {
+		if (!$("#search-box,#username,#password,#new-password,#sym-rename,#sym-specify-subtune").is(":focus")) {
 			if (event.keyCode == 220)									// Keydown key below 'Escape'
 				// Fast forward
 				$("#faster").trigger("mousedown");
 		}
 	}).on("keyup", function(event) {
-		if (!$("#search-box,#username,#password,#sym-rename,#sym-specify-subtune").is(":focus")) {
+		if (!$("#search-box,#username,#password,#new-password,#sym-rename,#sym-specify-subtune").is(":focus")) {
 			if (event.keyCode == 220) {									// Keyup key below 'Escape'
 				// Fast forward
 				$("#faster").trigger("mouseup");
@@ -93,6 +93,34 @@ $(function() { // DOM ready
 				$(window).trigger("resize", true);
 			}
 		}
+	});
+
+	/**
+	 * Handle settings edit box and button for changing the password.
+	 */
+	$("#new-password").keydown(function(event) {
+		if (event.keyCode == 13 && $("#new-password").val() !== "")
+			$("#new-password-button").trigger("click");
+	}).keyup(function() {
+		$("#new-password-button").removeClass("disabled");
+		if ($("#new-password").val() !== "")
+			$("#new-password-button").prop("disabled", false);
+		else
+			$("#new-password-button").prop("enabled", false).addClass("disabled");
+	});
+
+	$("#new-password-button").click(function() {
+		if ($("#new-password").val() == "") return false;
+		$(this).prop("enabled", false).addClass("disabled");
+		$.post("php/account_new_password.php", { newpwd: $("#new-password").val() }, function(data) {
+			browser.validateData(data, function() {
+				$("#new-password-msg").show();
+				setTimeout(function(){
+					$("#new-password-msg").fadeOut(250);
+					$("#new-password-button").removeClass("disabled").prop("disabled", false);
+				}, 350);
+			});
+		}.bind(this));
 	});
 
 	/**

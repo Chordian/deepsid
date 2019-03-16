@@ -557,6 +557,15 @@
 							<p>Changing a setting here will save it immediately.</p>
 							<div class="edit">
 
+								<h3>Credentials</h3>
+
+								<input type="password" name="new-password" id="new-password" maxlength="32" />
+								<button id="new-password-button" class="medium disabled">CHANGE</button>
+								<label for="new-password" class="unselectable" style="margin-right:10px;">New password</label>
+								<b id="new-password-msg" style="display:none;font-size:12px;color:#080;">SAVED</b>
+
+								<div class="space splitline"></div>
+
 								<h3>Buffer size</h3>
 								<p>Setting the buffer size affects WebSid or Hermit's emulator. If you like viewing the
 									<b>Piano</b> or <b>Flood</b> tabs, decrease the value towards 1024 for smoother
@@ -601,7 +610,6 @@
 
 								<button id="setting-skip-short" class="button-edit button-toggle button-off">Off</button>
 								<label for="setting-skip-short" class="unselectable">Auto-progress should automatically skip songs and sub tunes that lasts <b>less than ten seconds</b></label>
-
 							</div>
 						<?php endif ?>
 					</div>
@@ -917,6 +925,11 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>March 16, 2019</h3>
+						<ul>
+							<li>You can now change the password in the settings page.</li>
+						</ul>
 
 						<h3>March 15, 2019</h3>
 						<ul>
