@@ -921,6 +921,7 @@
 						<h3>March 15, 2019</h3>
 						<ul>
 							<li>Added a <code>HOME</code> link in the top.</li>
+							<li>The <code>Decent</code> and <code>Good</code> modes are now ready for letter folder <code>V</code> in MUSICIANS.</li>
 						</ul>
 
 						<h3>March 14, 2019</h3>

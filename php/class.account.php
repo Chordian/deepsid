@@ -212,12 +212,11 @@ class Account {
 	 * of playlists being created, renamed, deleted or published will be logged.
 	 * 
 	 * @param		string		text to be logged
+	 * @param		boolean		true if common (will have a weaker color)
 	 */
-	public function LogActivity($str) {
-		// if ($_SERVER['HTTP_HOST'] != LOCALHOST) {
+	public function LogActivity($str, $common = false) {
 			$time_ip = date('Y-m-d H:i:s', strtotime(TIME_ADJUST)).' - '.$_SERVER['REMOTE_ADDR'].' - ';
-			file_put_contents($_SERVER['DOCUMENT_ROOT'].'/deepsid/logs/activity.txt', $time_ip.$str.PHP_EOL, FILE_APPEND);
-		// }
+			file_put_contents($_SERVER['DOCUMENT_ROOT'].'/deepsid/logs/activity.txt', ($common ? '<span style="color:#bbb;">' : '').$time_ip.$str.($common ? '</span>' : '').PHP_EOL, FILE_APPEND);
 	}
 
 	/**
@@ -415,7 +414,7 @@ class Account {
 						$_SESSION['user_id']	= $row->id;
 						$_SESSION[$this->LoginSession()] = $row->username;
 
-						$this->LogActivity('User "'.$row->username.'" has returned via a cookie');
+						$this->LogActivity('User "'.$row->username.'" has returned via a cookie', true);
 
 						// Reset the expiry date
 						setcookie('user', $cookiehash, time()+3600*24*365, '/', ($_SERVER['HTTP_HOST'] == LOCALHOST ? 'localhost_deepsid' : 'deepsid.chordian.net'));
