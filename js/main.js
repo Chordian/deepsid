@@ -142,6 +142,13 @@ $(function() { // DOM ready
 	});
 
 	/**
+	 * When exporting to a CSV file in settings.
+	 */
+	$("#export").click(function(){
+		window.location.href = "export.php";
+	});
+
+	/**
 	 * When resizing the window. Also affected by toggling the developer pane.
 	 * 
 	 * @param {*} event 

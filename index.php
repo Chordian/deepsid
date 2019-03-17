@@ -557,15 +557,21 @@
 							<p>Changing a setting here will save it immediately.</p>
 							<div class="edit">
 
-								<h3>Credentials</h3>
+								<h3>Properties</h3>
 
 								<label for="old-password" class="unselectable" style="margin:0 2px 0 0;">Change old </label>
 								<input type="password" name="old-password" id="old-password" maxlength="32" />
 								<label for="new-password" class="unselectable" style="margin: 0 2px;">password to</label>
 								<input type="password" name="new-password" id="new-password" maxlength="32" />
 								<label for="new-password" class="unselectable" style="margin: 0 6px 0 2px;">instead</label>
-								<button id="new-password-button" class="medium disabled">GO</button>
+								<button id="new-password-button" class="medium disabled">Go</button>
 								<b id="new-password-msg" style="display:none;font-size:12px;margin-left:6px;"></b>
+
+								<div class="space"></div>
+
+								<button id="export" class="medium">Export</button>
+								<label for="export" class="unselectable">Click this button to export your ratings to
+									a <b>CSV file</b> that can be loaded into e.g. Excel</label>
 
 								<div class="space splitline"></div>
 
@@ -928,6 +934,11 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>March 17, 2019</h3>
+						<ul>
+							<li>You can now export your ratings to a CSV file (for e.g. Excel) in the settings page.</li>
+						</ul>
 
 						<h3>March 16, 2019</h3>
 						<ul>
