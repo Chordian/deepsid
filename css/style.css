@@ -217,7 +217,8 @@ small.u2 { margin-left: 2px; }
 	#controls button:active,
 	#songs button:active,
 	.edit button:active,
-	#sundry button:active {
+	#sundry button:active,
+	#faster.button-selected {
 		box-shadow: 0 0 0 transparent;
 	}
 

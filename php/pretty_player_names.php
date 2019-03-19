@@ -110,6 +110,7 @@ $prettyPlayerNames = array(
 	'Martijn_Schutten' =>		'Martijn Schutten\'s player',
 	'Matt_Furniss' =>			'Matt Furniss\' player',
 	'Matt_Gray' =>				'Matt Gray\'s player',
+	'Matthias_Weber' =>			'Matthias Weber\'s player',
 	'Maurizio_Feletto' =>		'Maurizio Feletto\'s player',
 	'Michael_Delaney' =>		'Michael Delaney\'s player',
 	'Michael_Winterberg' =>		'Michael Winterberg\'s player',
