@@ -296,7 +296,12 @@
 
 			<div id="dexter">
 				<div id="sites">
-					<a href="<?php echo HOST; ?>" style="float:left;margin-left:1px;">Home</a>
+					<div style="float:left;margin-left:1px;text-align:left;">
+						<a href="<?php echo HOST; ?>">Home</a>
+							<span>&#9642</span>
+						<a id="recommended" href="#">Recommended</a>
+					</div>
+
 					<a href="http://chordian.net/2018/05/12/deepsid/">Blog Post</a>
 						<span>&#9642</span>
 					<a href="https://csdb.dk/forums/?roomid=14&topicid=129712">CSDb</a>
@@ -934,6 +939,11 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>March 19, 2019</h3>
+						<ul>
+							<li>Added a <code>RECOMMENDED</code> link in the top for viewing all recommended folder boxes at once.</li>
+						</ul>
 
 						<h3>March 17, 2019</h3>
 						<ul>

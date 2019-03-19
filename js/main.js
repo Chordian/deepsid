@@ -6,7 +6,7 @@
 var $=jQuery.noConflict();
 var cacheCSDb = cacheSticky = cacheStickyBeforeCompo = cacheCSDbProfile = cacheBeforeCompo = prevFile = sundryTab = reportSTIL = "";
 var cacheTabScrollPos = tabScrollPos = cachePosBeforeCompo = cacheDDCSDbSort = peekCounter = sundryHeight = 0;
-var sundryToggle = true;
+var sundryToggle = true, recommended = null;
 
 $(function() { // DOM ready
 
@@ -617,6 +617,28 @@ $(function() { // DOM ready
 		else
 			// Open in same browser tab
 			window.location.href = link;
+		return false;
+	});
+
+	/**
+	 * When clicking the "RECOMMENDED" link in top.
+	 */
+	$("#recommended").click(function(){
+		$(this).blur();
+		if (recommended) recommended.abort();
+		$("#topic-profile").empty().append('<div style="height:400px;"><img id="loading-profile" src="images/loading.svg" style="display:none;" alt="" /></div>');
+
+		var loadingRecommended = setTimeout(function() {
+			// Fade in a GIF loading spinner if the AJAX call takes a while
+			$("#loading-profile").fadeIn(500);
+		}, 250);
+
+		recommended = $.get("php/root_recommended.php", function(data) {
+			browser.validateData(data, function(data) {
+				clearTimeout(loadingRecommended);
+				$("#topic-profile").empty().append(data.html);
+			});
+		});
 		return false;
 	});
 
