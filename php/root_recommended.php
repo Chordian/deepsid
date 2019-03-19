@@ -104,7 +104,7 @@ try {
 $html =
 	'<div style="height:149px;"></div>'.
 	"<p><i>Collecting recommended folders is not 100% complete yet, but here's the list so far:</i></p>".
-	'<table class="root rec">'.$boxes.'</table>';
+	'<table class="root rec rec-all">'.$boxes.'</table>';
 
 echo json_encode(array('status' => 'ok', 'html' => $html));
 ?>

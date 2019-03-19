@@ -361,8 +361,10 @@ $(function() { // DOM ready
 		ShowDexterScrollbar(topic);
 
 		// Show the big logo for the informational tabs only
-		if (["about", "faq", "changes"].includes(topic) || (topic == "profile" && browser.path == "" && (!browser.isSearching || $("#topic-profile table.root").length)))
-			$("#page").addClass("big-logo");
+		if (["about", "faq", "changes"].includes(topic) ||
+			(topic == "profile" && browser.path == "" && (!browser.isSearching || $("#topic-profile table.root").length)) ||
+			(topic == "profile" && $("#topic-profile table.rec-all").length))
+				$("#page").addClass("big-logo");
 
 		// If 'Disqus' tab is selected then hide the notification on it
 		if (topic === "disqus") $("#note-disqus").hide();
@@ -628,6 +630,9 @@ $(function() { // DOM ready
 		if (recommended) recommended.abort();
 		$("#topic-profile").empty().append('<div style="height:400px;"><img id="loading-profile" src="images/loading.svg" style="display:none;" alt="" /></div>');
 
+		if ($("#tabs .selected").attr("data-topic") !== "profile")
+			$("#tab-profile").trigger("click");
+
 		var loadingRecommended = setTimeout(function() {
 			// Fade in a GIF loading spinner if the AJAX call takes a while
 			$("#loading-profile").fadeIn(500);
@@ -635,6 +640,7 @@ $(function() { // DOM ready
 
 		recommended = $.get("php/root_recommended.php", function(data) {
 			browser.validateData(data, function(data) {
+				$("#page").removeClass("big-logo").addClass("big-logo");
 				clearTimeout(loadingRecommended);
 				$("#topic-profile").empty().append(data.html);
 			});
