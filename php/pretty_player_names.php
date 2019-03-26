@@ -177,5 +177,6 @@ $prettyPlayerNames = array(
 	'X-Byte' =>					'X-Byte\'s player',
 	'Zardax' =>					'Zardax\'s player',
 	'Zoltan_Mohos' =>			'Zoltan Mohos\' player',
+	'Zyborg' =>					'Zyborg\'s player',
 );
 ?>

@@ -282,7 +282,7 @@
 						<option value="new">Version</option>
 						<option value="gb64">Game</option>
 					</select>
-					<input type="text" name="search-box" id="search-box" maxlength="32" />
+					<form onsubmit="return false;" autocomplete="off"><input type="text" name="search-box" id="search-box" maxlength="64" /></form>
 					<div id="search-here-container">
 						<input type="checkbox" id="search-here" name="shtoggle" class="unselectable" unchecked />
 						<label for="search-here" class="unselectable">Here</label>
@@ -939,6 +939,26 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>March 26, 2019</h3>
+						<ul>
+							<li>Had a therapy talk with the search box and made it accept it wasn't supposed to be a login box.</li>
+						</ul>
+
+						<h3>March 25, 2019</h3>
+						<ul>
+							<li>The <code>Decent</code> and <code>Good</code> modes are now ready for letter folder <code>Z</code> in MUSICIANS.</li>
+						</ul>
+
+						<h3>March 22, 2019</h3>
+						<ul>
+							<li>The <code>Decent</code> and <code>Good</code> modes are now ready for letter folders <code>X</code> and <code>Y</code> in MUSICIANS.</li>
+						</ul>
+
+						<h3>March 21, 2019</h3>
+						<ul>
+							<li>The <code>Decent</code> and <code>Good</code> modes are now ready for letter folder <code>W</code> in MUSICIANS.</li>
+						</ul>
 
 						<h3>March 19, 2019</h3>
 						<ul>
