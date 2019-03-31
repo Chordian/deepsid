@@ -636,6 +636,9 @@
 							that was very popular back in the 80's and 90's. This computer had an amazing sound chip
 							called <a href="https://en.wikipedia.org/wiki/MOS_Technology_SID">SID</a>.
 						</p>
+
+						<img src="images/6581.jpg" alt="6581" />
+
 						<p>
 							The SID chip was really ahead of its time. Although it only had 3 voices, it offered
 							oscillators of 8 octaves, ADSR, four waveforms, pulse width modulation, multi mode filtering,
