@@ -41,7 +41,7 @@ $tips = array(
 	"<p>The default is a JS emulator that can also play digi tunes. The second, ".
 	"<i>Hermit's emulator</i>, can't do that but it's sometimes more accurate.</p>".
 	"The <i>SOASC</i> options are FLAC/MP3 recordings from a real C64. R2 is the 6581 chip ".
-	"with a bright filter, R4 wih a deep, and R5 is the 8580 chip.",
+	"with a bright filter, R4 with a deep, and R5 is the 8580 chip.",
 
 	"<p>You can <b>search</b> for any SID file or folder in the text box in the bottom.</p>".
 	"<p>The drop-down box decides what you want to search for. Select e.g. <i>Player</i> ".

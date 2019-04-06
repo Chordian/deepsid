@@ -943,6 +943,11 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>April 6, 2019</h3>
+						<ul>
+							<li>Fixed shuffle sort not working in Chrome. Thanks to Jürgen Wothke for both finding and fixing this bug.</li>
+						</ul>
+
 						<h3>March 26, 2019</h3>
 						<ul>
 							<li>Had a therapy talk with the search box and made it accept it wasn't supposed to be a login box.</li>

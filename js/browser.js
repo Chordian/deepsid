@@ -529,11 +529,13 @@ Browser.prototype = {
 				break;
 			case "shuffle":
 				// Sort playlist in a random manner (randomize)
-				for (var i = 0; i < 25; i++) {
-					this.playlist.sort(function() {
-						return Math.random() >= 0.5;
-					});
+				// NOTE: Previous "Math.random() >= 0.5" method didn't work in Chrome: this fix by JW.
+				for (var i = 0; i < this.playlist.length; i++) {
+					this.playlist[i].shuffle = Math.random();
 				}
+				this.playlist.sort(function(obj1, obj2) {
+					return obj1.shuffle > obj2.shuffle ? 1 : -1;
+				});
 		}
 
 		if (!filterFolders) {
