@@ -529,7 +529,7 @@ Browser.prototype = {
 				break;
 			case "shuffle":
 				// Sort playlist in a random manner (randomize)
-				// NOTE: Previous "Math.random() >= 0.5" method didn't work in Chrome: this fix by JW.
+				// NOTE: Previous "Math.random() >= 0.5" method didn't work in Chrome; this fix by JW.
 				for (var i = 0; i < this.playlist.length; i++) {
 					this.playlist[i].shuffle = Math.random();
 				}

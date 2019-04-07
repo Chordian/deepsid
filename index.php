@@ -943,6 +943,11 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>April 7, 2019</h3>
+						<ul>
+							<li>Upgraded the WebSid emulator. Fixed oscilloscope output for multi-speed songs.</li>
+						</ul>
+
 						<h3>April 6, 2019</h3>
 						<ul>
 							<li>Fixed shuffle sort not working in Chrome. Thanks to Jürgen Wothke for both finding and fixing this bug.</li>
