@@ -350,6 +350,7 @@ Browser.prototype = {
 						} else
 							this.getComposer();
 						this.getGB64();
+						this.getPlayerInfo(this.playlist[this.songPos].player);
 						this.reloadDisqus(this.playlist[this.songPos].fullname);
 
 						UpdateURL();
@@ -800,7 +801,7 @@ Browser.prototype = {
 						}
 						if (collections.length)
 							this.folders = collections[1]+collections[0]; // HVSC should always be first
-						this.folders += csdbCompoEntry;						
+						this.folders += csdbCompoEntry;
 						this.folders = '<tr class="disabled"><td class="spacer" colspan="2"></td></tr>'+this.folders;
 						this.folders += '<tr class="disabled"><td class="divider" colspan="2"></td></tr>'+this.extra;
 						this.folders += this.symlists;
@@ -1201,6 +1202,41 @@ Browser.prototype = {
 					$("#note-csdb").empty().append(data.count > 0 ? data.count : "&#9679;").show(); // 8901, 9679
 				else
 					$("#note-csdb").hide();
+
+			});
+		}.bind(this));
+	},
+
+	/**
+	 * Show contents in the 'Player' tab pertinent to the selected SID tune, if a release
+	 * page exists about the editor/player at CSDb, and it is linked to.
+	 * 
+	 * Also handles the tab notification counter. 
+	 * 
+	 * @param {string} type		Player string.
+	 */
+	getPlayerInfo: function(type) {
+		if (this.isMobile) return;
+		if (this.playerInfo) this.playerInfo.abort();
+		$("#topic-player").empty().append('<div style="height:400px;"><img id="loading-player" src="images/loading.svg" style="display:none;" alt="" /></div>');
+
+		var loadingPlayer = setTimeout(function() {
+			// Fade in a GIF loading spinner if the AJAX call takes a while
+			$("#loading-player").fadeIn(500);
+		}, 250);
+
+		this.csdb = $.get("php/player.php", {player: type}, function(data) {
+			this.validateData(data, function(data) {
+
+				clearTimeout(loadingPlayer);
+				$("#topic-player").empty().append(data.sticky+data.html)
+					.css("visibility", "visible");
+
+				// If there are any entries then show a special notification character (if not in focus)
+				if (data.count != 0 && $("#tabs .selected").attr("data-topic") !== "player" && data.status !== "warning")
+					$("#note-player").empty().append("&#9679;").show();
+				else
+					$("#note-player").hide();
 
 			});
 		}.bind(this));

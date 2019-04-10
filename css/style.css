@@ -2065,6 +2065,10 @@ input[type=range]::-ms-track {
 			background: #070;
 		}
 
+		#tabs .playercolor {
+			background: #808;
+		}
+
 	/* Where the contents of a dexter tab is shown */
 	#page {
 		flex: 1 1 auto;
@@ -2616,7 +2620,8 @@ input[type=range]::-ms-track {
 				transition: all .2s linear;
 			}
 
-			#topic-csdb .thumbnail {
+			#topic-csdb .thumbnail,
+			#topic-player .thumbnail {
 				width: 116px;
 			}
 
@@ -2838,7 +2843,8 @@ input[type=range]::-ms-track {
 	/* Container for GIF loading spinner IMG */
 	#loading-profile,
 	#loading-csdb,
-	#loading-gb64 {
+	#loading-gb64,
+	#loading-player {
 		position: relative;
 		top: 235px;
 		left: 370px;
@@ -2851,7 +2857,7 @@ input[type=range]::-ms-track {
 	}
 
 	/* Small arrow up button in the bottom of CSDb pages (for scrolling back up) */
-	#to-top {
+	.to-top {
 		float: right;
 		margin-top: 7px;
 		padding: 0;

@@ -318,6 +318,7 @@
 					<div class="tab unselectable" data-topic="profile" id="tab-profile">Profile</div>
 					<div class="tab unselectable" data-topic="csdb" id="tab-csdb">CSDb<div id="note-csdb" class="notification csdbcolor"></div></div>
 					<div class="tab unselectable" data-topic="gb64" id="tab-gb64">GB64<div id="note-gb64" class="notification gb64color"></div></div>
+					<div class="tab unselectable" data-topic="player" id="tab-player">Player<div id="note-player" class="notification playercolor"></div></div>
 					<div class="tab unselectable" data-topic="stil" id="tab-stil">STIL</div>
 					<div class="tab unselectable" data-topic="piano" id="tab-piano">Piano</div>
 					<div class="tab unselectable" data-topic="flood" id="tab-flood">Graph</div>
@@ -519,6 +520,11 @@
 							<i>This does not work in
 							<a href="http://www.c64music.co.uk/" target="_blank">Compute's Gazette SID Collection</a>.</i>
 						</p>
+					</div>
+
+					<div id="topic-player" class="topic ext" style="display:none;">
+						<h2>Player</h2>
+						<p>If it exists and is linked to, this tab will show a CSDb release page for the editor/player that made the song.</p>
 					</div>
 
 					<div id="topic-stil" class="topic" style="display:none;">
@@ -942,6 +948,11 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>April 9, 2019</h3>
+						<ul>
+							<li>Upgraded the WebSid emulator. Fixed issue with <a href="//deepsid.chordian.net?file=/MUSICIANS/L/Lieblich_Russell/Master_of_the_Lamps.sid&subtune=6">Master of the Lamps</a> not playing.</li>
+						</ul>
 
 						<h3>April 7, 2019</h3>
 						<ul>

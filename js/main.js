@@ -378,6 +378,9 @@ $(function() { // DOM ready
 		// If 'GB64' tab is selected then hide the notification on it
 		if (topic === "gb64") $("#note-gb64").hide();
 
+		// If 'Player' tab is selected then hide the notification on it
+		if (topic === "player") $("#note-player").hide();
+
 		// If 'Piano' tab is selected then make the custom scroll bar transparent
 		// NOTE: Must be hidden in other tabs or scrolling may become erratic.
 		$("#dexter .mCSB_container").css("overflow", topic === "piano" ? "visible" : "hidden");
@@ -557,7 +560,7 @@ $(function() { // DOM ready
 	/**
 	 * When clicking the arrow up button in the bottom of CSDb pages to scroll back to the top.
 	 */
-	$("#topic-profile,#topic-csdb").on("click", "#to-top", function() {
+	$("#topic-profile,#topic-csdb,#topic-player").on("click", "button.to-top", function() {
 		$("#page").mCustomScrollbar("scrollTo", "top");
 	});
 
@@ -581,7 +584,7 @@ $(function() { // DOM ready
 	 * 
 	 * NOTE: This opens a new web browser tab.
 	 */
-	$("#topic-profile,#topic-csdb").on("click", "#csdb-comment", function() {
+	$("#topic-profile,#topic-csdb,#topic-player").on("click", "#csdb-comment", function() {
 		window.open("https://csdb.dk/"+$(this).attr("data-type")+"/addcomment.php?"+
 			$(this).attr("data-type")+"_id="+$(this).attr("data-id"), "_blank");
 	});
@@ -589,7 +592,7 @@ $(function() { // DOM ready
 	/**
 	 * When clicking a 'redirect' link to open an arbitrary SID file without reloading DeepSID.
 	 */
-	$("#topic-csdb,#sundry,#topic-stil,#topic-changes").on("click", "a.redirect", function() {
+	$("#topic-csdb,#sundry,#topic-stil,#topic-changes,#topic-player").on("click", "a.redirect", function() {
 		var fullname = $(this).html();
 		var path = "/_High Voltage SID Collection"+fullname.substr(0, fullname.lastIndexOf("/"));
 		// @todo If using redirect for custom folders later then copy the 'browser.path' lines from 'fileParam' below.
@@ -651,7 +654,7 @@ $(function() { // DOM ready
 	/**
 	 * When clicking a home folder icon in a CSDb comment table.
 	 */
-	$("#topic-profile,#topic-csdb").on("click", ".home-folder", function() {
+	$("#topic-profile,#topic-csdb,#topic-player").on("click", ".home-folder", function() {
 		browser.path = "/"+$(this).attr("data-home");
 		ctrls.state("root/back", "enabled");
 		browser.getFolder(0, undefined, undefined, function() {
@@ -841,8 +844,8 @@ function ShowDexterScrollbar(topic) {
 				onOverflowY: function() {
 					// Enable the arrow button in the bottom of CSDb pages (for scrolling back to the top)
 					var topic = $("#tabs .selected").attr("data-topic");
-					if (topic === "csdb" || topic === "profile" || browser.isCompoFolder)
-						$("#to-top").show();
+					if (topic === "csdb" || topic === "profile" || topic === "player" || browser.isCompoFolder)
+						$("#topic-"+topic+" button.to-top").show();
 				},				
 				whileScrolling: function() {
 					tabScrollPos = this.mcs.top;

@@ -519,5 +519,5 @@ if ($csdb_type == 'sid') {
 		$user_comments.
 		$comment_button;
 }
-echo json_encode(array('status' => 'ok', 'sticky' => $sticky, 'html' => $html.'<i><small>Generated using the <a href="https://csdb.dk/webservice/" target="_blank">CSDb web service</a></small></i><button id="to-top" title="Scroll back to the top" style="display:none;"><img src="images/to_top.svg" alt="" /></button>', 'count' => $amount_releases, 'entries' => $sid_entries));
+echo json_encode(array('status' => 'ok', 'sticky' => $sticky, 'html' => $html.'<i><small>Generated using the <a href="https://csdb.dk/webservice/" target="_blank">CSDb web service</a></small></i><button class="to-top" title="Scroll back to the top" style="display:none;"><img src="images/to_top.svg" alt="" /></button>', 'count' => $amount_releases, 'entries' => $sid_entries));
 ?>
