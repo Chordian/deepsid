@@ -1208,8 +1208,8 @@ Browser.prototype = {
 	},
 
 	/**
-	 * Show contents in the 'Player' tab pertinent to the selected SID tune, if a release
-	 * page exists about the editor/player at CSDb, and it is linked to.
+	 * Show contents in the 'Player' tab about the editor/player used to create the
+	 * song, if available.
 	 * 
 	 * Also handles the tab notification counter. 
 	 * 
@@ -1229,7 +1229,7 @@ Browser.prototype = {
 			this.validateData(data, function(data) {
 
 				clearTimeout(loadingPlayer);
-				$("#topic-player").empty().append(data.sticky+data.html)
+				$("#topic-player").empty().append(data.html)
 					.css("visibility", "visible");
 
 				// If there are any entries then show a special notification character (if not in focus)

@@ -2866,6 +2866,25 @@ input[type=range]::-ms-track {
 		height: 15px !important;
 	}
 
+	#topic-player .thumbnail {
+		width: 32.5%;
+		margin-left: 10px;
+		border: 1px solid #ced0c0;
+	}
+
+		#topic-player p + .thumbnail {
+			margin-left: 0;
+		}
+
+	#topic-player table {
+		font-size: 14px;
+	}
+
+	#topic-player td:first-child {
+		width: 185px;
+		font-weight: bold;
+	}
+
 /* ---- Overriding Custom Scrollbar Styling --------------------------------- */
 
 .mCSB_inside > .mCSB_container {

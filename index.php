@@ -524,7 +524,7 @@
 
 					<div id="topic-player" class="topic ext" style="display:none;">
 						<h2>Player</h2>
-						<p>If it exists and is linked to, this tab will show a CSDb release page for the editor/player that made the song.</p>
+						<p>If available, this tab will show information about the editor/player that made the song.</p>
 					</div>
 
 					<div id="topic-stil" class="topic" style="display:none;">
