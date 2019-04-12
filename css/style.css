@@ -2867,22 +2867,48 @@ input[type=range]::-ms-track {
 	}
 
 	#topic-player .thumbnail {
-		width: 32.5%;
-		margin-left: 10px;
+		width: 100%;
 		border: 1px solid #ced0c0;
+		margin-bottom: 4px;
 	}
 
-		#topic-player p + .thumbnail {
-			margin-left: 0;
+	#topic-player .svg {
+		float: left;
+		height: 20px;
+		width: 18px;
+		margin-left: -2px;
+	}
+
+	#topic-player table.playerinfo {
+		font-size: 12px;
+		/* border-color: #ced0c0; */
+		background: #fff;
+		border-width: 1.5px;
+	}
+
+		#topic-player td.corner {
+			font-size: 14px;
+			font-style: italic;
+			border-right: none !important;
 		}
 
-	#topic-player table {
-		font-size: 14px;
-	}
+			#topic-player td.corner span {
+				margin-left: 4px;
+			}
 
-	#topic-player td:first-child {
-		width: 185px;
+		#topic-player table.playerinfo td {
+			padding: 3.33px 8px;
+			border-bottom: 0.5px solid #c4c5b3;
+		}
+
+			#topic-player table.playerinfo tr:last-child td {
+				border-bottom: none;
+			}
+
+	#topic-player table.playerinfo td:first-child {
+		width: 175px;
 		font-weight: bold;
+		border-right: 0.5px solid #c4c5b3;
 	}
 
 /* ---- Overriding Custom Scrollbar Styling --------------------------------- */
