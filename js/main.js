@@ -846,7 +846,7 @@ function ShowDexterScrollbar(topic) {
 					var topic = $("#tabs .selected").attr("data-topic");
 					if (topic === "csdb" || topic === "profile" || topic === "player" || browser.isCompoFolder)
 						$("#topic-"+topic+" button.to-top").show();
-				},				
+				},
 				whileScrolling: function() {
 					tabScrollPos = this.mcs.top;
 				},

@@ -2,7 +2,7 @@
 /**
  * DeepSID
  *
- * Build the HTML page for the 'Players' tab. Use the 'CSDb' script.
+ * Build the HTML page for the 'Players' tab.
  * 
  * @uses		$_GET['player'] - e.g. "GoatTracker v2.x"
  */
@@ -45,9 +45,14 @@ try {
 		$row = $select->fetch();
 
 		// Title must "arrow" to editor name if different
-		$title = $row->title == $_GET['player'] ? $row->title : $_GET['player'].'<img class="arrow" src="images/composer_arrowright.svg" alt="" style="position:relative;top:1px;margin:0 12px;" />'.$row->title ;
+		$title = $row->title == $_GET['player'] ? $row->title : '<span style="color:#a1a294;">'.$_GET['player'].'</span><img class="arrow" src="images/composer_arrowright.svg" alt="" style="position:relative;top:0;margin:0 12px;" />'.$row->title ;
 
-		$developer = '<b>'.str_replace('++', '', $row->developer).'</b>';
+		$devs = explode('|', str_replace('++', '', $row->developer));
+		$developer = $comma = '';
+		foreach ($devs as $dev) {
+			$developer .= $comma.'<b>'.$dev.'</b>';
+			$comma = ', ';
+		}
 		if (strpos($row->developer, '++')) $developer .= ' et al.';
 
 		$years = $row->startyear != '0000' || $row->endyear != '0000' ? ', ' : '';
@@ -74,26 +79,46 @@ try {
 		// Now build the HTML
 		$html = '<h2 style="display:inline-block;margin:0;">'.$title.'</h2><br />'.
 		'<p style="position:relative;top:-9px;left:1px;font-size:13px;margin-bottom:-5px;">Developed by '.$developer.$years.$download.'</p>'.
-		'<p style="margin-bottom:18px;">'.$row->description.'</p>'.
+		'<p style="margin-bottom:12px;">'.$row->description.'</p>'.
 
 		'<table style="border:none;">
 			<tr>
-				<td style="max-width:320px;padding:0;border-right:none;vertical-align:top;">'.
+				<td style="width:384px;padding:0;border-right:none;vertical-align:top;">'.
 					$thumbnails.
 				'</td>
-				<td style="padding:0 0 0 9px;vertical-align:top;">
+				<td style="padding:0 0 0 9px;vertical-align:top;border:none;">
 					<table class="playerinfo">'.
 
-						'<tr><td class="corner" colspan="2" style="background:#f8f1f1;"><img class="svg" src="../images/svg/octicons_package.svg" style="position:relative;top:1px;" alt="" /><span>Package</span></tr>'.
+						(!empty($row->platform) ||
+						 !empty($row->distribution) ||
+						 !empty($row->encoding) ||
+						 !empty($row->sourcecode) ||
+						 !empty($row->docs) ||
+						 !empty($row->exampletunes) ||
+						 !empty($row->fileformat)
+						? '<tr><td class="corner" colspan="2" style="background:#f8f1f1;"><img class="svg" src="../images/svg/octicons_package.svg" style="position:relative;top:1px;" alt="" /><span>Package</span></tr>' : '').
 
 						(!empty($row->platform) ? '<tr><td>Platform</td><td>'.$row->platform.'</td></tr>' : '').
+						(!empty($row->distribution) ? '<tr><td>Distribution</td><td>'.$row->distribution.'</td></tr>' : '').
 						(!empty($row->encoding) ? '<tr><td>PAL / NTSC</td><td>'.$row->encoding.'</td></tr>' : '').
 						(!empty($row->sourcecode) ? '<tr><td>Source code</td><td>'.$row->sourcecode.'</td></tr>' : '').
 						(!empty($row->docs) ? '<tr><td>Documentation</td><td>'.$row->docs.'</td></tr>' : '').
 						(!empty($row->exampletunes) ? '<tr><td>Example tunes</td><td>'.$row->exampletunes.'</td></tr>' : '').
 						(!empty($row->fileformat) ? '<tr><td>Proprietary file format</td><td>'.$row->fileformat.'</td></tr>' : '').
 
-						'<tr><td class="corner" colspan="2" style="background:#fafaee;"><img class="svg" src="../images/svg/fontawesome_check.svg" style="position:relative;top:1px;" alt="" /><span>Features</span></td></tr>'.
+						(!empty($row->sidchipcount) ||
+						 !empty($row->channelsvisible) ||
+						 !empty($row->speeds) ||
+						 !empty($row->digi) ||
+						 !empty($row->auxsupport) ||
+						 !empty($row->importfrom) ||
+						 !empty($row->saveto) ||
+						 !empty($row->packer) ||
+						 !empty($row->relocator) ||
+						 !empty($row->loadsavesnd) ||
+						 !empty($row->instruments) ||
+						 !empty($row->subtunes)
+						? '<tr><td class="corner" colspan="2" style="background:#fafaee;"><img class="svg" src="../images/svg/fontawesome_check.svg" style="position:relative;top:1px;" alt="" /><span>Features</span></td></tr>' : '').
 
 						(!empty($row->sidchipcount) ? '<tr><td>Number of SID chips</td><td>'.$row->sidchipcount.'</td></tr>' : '').
 						(!empty($row->channelsvisible) ? '<tr><td>Channels visible</td><td>'.$row->channelsvisible.'</td></tr>' : '').
@@ -108,7 +133,16 @@ try {
 						(!empty($row->instruments) ? '<tr><td>Instruments / Sounds</td><td>'.$row->instruments.'</td></tr>' : '').
 						(!empty($row->subtunes) ? '<tr><td>Sub tunes</td><td>'.$row->subtunes.'</td></tr>' : '').
 
-						'<tr><td class="corner" colspan="2" style="background:#f1f1f8;"><img class="svg" src="../images/svg/feather_activity.svg" style="position:relative;top:1px;" alt="" /><span>Player</span></td></tr>'.
+						(!empty($row->noteworthy) ||
+						 !empty($row->playersize) ||
+						 !empty($row->zeropages) ||
+						 !empty($row->cputime) ||
+						 !empty($row->arpeggio) ||
+						 !empty($row->pulsating) ||
+						 !empty($row->filtering) ||
+						 !empty($row->vibrato) ||
+						 !empty($row->hardrestart)
+						? '<tr><td class="corner" colspan="2" style="background:#f1f1f8;"><img class="svg" src="../images/svg/feather_activity.svg" style="position:relative;top:1px;" alt="" /><span>Player</span></td></tr>' : '').
 
 						(!empty($row->noteworthy) ? '<tr><td>Noteworthy</td><td>'.$row->noteworthy.'</td></tr>' : '').
 						(!empty($row->playersize) ? '<tr><td>Size of player</td><td>'.$row->playersize.'</td></tr>' : '').
@@ -120,7 +154,14 @@ try {
 						(!empty($row->vibrato) ? '<tr><td>Vibrato</td><td>'.$row->vibrato.'</td></tr>' : '').
 						(!empty($row->hardrestart) ? '<tr><td>Hard restart</td><td>'.$row->hardrestart.'</td></tr>' : '').
 
-						'<tr><td class="corner" colspan="2" style="background:#f2f8f2;"><img class="svg" src="../images/svg/octicons_screenfull.svg" style="position:relative;top:1px;" alt="" /><span>Editor</span></td></tr>'.
+						(!empty($row->tracksystem) ||
+						 !empty($row->patterns) ||
+						 !empty($row->followplay) ||
+						 !empty($row->copypaste) ||
+						 !empty($row->undoing) ||
+						 !empty($row->trackcmds) ||
+						 !empty($row->noteinput)
+						? '<tr><td class="corner" colspan="2" style="background:#f2f8f2;"><img class="svg" src="../images/svg/octicons_screenfull.svg" style="position:relative;top:1px;" alt="" /><span>Editor</span></td></tr>' : '').
 
 						(!empty($row->tracksystem) ? '<tr><td>Track system</td><td>'.$row->tracksystem.'</td></tr>' : '').
 						(!empty($row->patterns) ? '<tr><td>Patterns / Sequences</td><td>'.$row->patterns.'</td></tr>' : '').
@@ -132,7 +173,7 @@ try {
 					'</table>
 				</td>
 			</tr>
-		<table>';
+		</table>';
 	}
 
 } catch(PDOException $e) {
