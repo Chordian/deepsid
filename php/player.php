@@ -96,7 +96,7 @@ try {
 						 !empty($row->docs) ||
 						 !empty($row->exampletunes) ||
 						 !empty($row->fileformat)
-						? '<tr><td class="corner" colspan="2" style="background:#f8f1f1;"><img class="svg" src="../images/svg/octicons_package.svg" style="position:relative;top:1px;" alt="" /><span>Package</span></tr>' : '').
+						? '<tr><td class="corner" colspan="2" style="background:#f8f1f1;"><img class="svg" src="images/players_package.svg" style="position:relative;top:1px;" alt="" /><span>Package</span></tr>' : '').
 
 						(!empty($row->platform) ? '<tr><td>Platform</td><td>'.$row->platform.'</td></tr>' : '').
 						(!empty($row->distribution) ? '<tr><td>Distribution</td><td>'.$row->distribution.'</td></tr>' : '').
@@ -118,7 +118,7 @@ try {
 						 !empty($row->loadsavesnd) ||
 						 !empty($row->instruments) ||
 						 !empty($row->subtunes)
-						? '<tr><td class="corner" colspan="2" style="background:#fafaee;"><img class="svg" src="../images/svg/fontawesome_check.svg" style="position:relative;top:1px;" alt="" /><span>Features</span></td></tr>' : '').
+						? '<tr><td class="corner" colspan="2" style="background:#fafaee;"><img class="svg" src="images/players_features.svg" style="position:relative;top:1px;" alt="" /><span>Features</span></td></tr>' : '').
 
 						(!empty($row->sidchipcount) ? '<tr><td>Number of SID chips</td><td>'.$row->sidchipcount.'</td></tr>' : '').
 						(!empty($row->channelsvisible) ? '<tr><td>Channels visible</td><td>'.$row->channelsvisible.'</td></tr>' : '').
@@ -142,7 +142,7 @@ try {
 						 !empty($row->filtering) ||
 						 !empty($row->vibrato) ||
 						 !empty($row->hardrestart)
-						? '<tr><td class="corner" colspan="2" style="background:#f1f1f8;"><img class="svg" src="../images/svg/feather_activity.svg" style="position:relative;top:1px;" alt="" /><span>Player</span></td></tr>' : '').
+						? '<tr><td class="corner" colspan="2" style="background:#f1f1f8;"><img class="svg" src="images/players_player.svg" style="position:relative;top:1px;" alt="" /><span>Player</span></td></tr>' : '').
 
 						(!empty($row->noteworthy) ? '<tr><td>Noteworthy</td><td>'.$row->noteworthy.'</td></tr>' : '').
 						(!empty($row->playersize) ? '<tr><td>Size of player</td><td>'.$row->playersize.'</td></tr>' : '').
@@ -161,7 +161,7 @@ try {
 						 !empty($row->undoing) ||
 						 !empty($row->trackcmds) ||
 						 !empty($row->noteinput)
-						? '<tr><td class="corner" colspan="2" style="background:#f2f8f2;"><img class="svg" src="../images/svg/octicons_screenfull.svg" style="position:relative;top:1px;" alt="" /><span>Editor</span></td></tr>' : '').
+						? '<tr><td class="corner" colspan="2" style="background:#f2f8f2;"><img class="svg" src="images/players_editor.svg" style="position:relative;top:1px;" alt="" /><span>Editor</span></td></tr>' : '').
 
 						(!empty($row->tracksystem) ? '<tr><td>Track system</td><td>'.$row->tracksystem.'</td></tr>' : '').
 						(!empty($row->patterns) ? '<tr><td>Patterns / Sequences</td><td>'.$row->patterns.'</td></tr>' : '').

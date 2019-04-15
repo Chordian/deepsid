@@ -949,6 +949,13 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>April 15, 2019</h3>
+						<ul>
+							<li>Added a new tab for showing screenshots and data about players/editors. I have added the
+								comprehensive data from my <a href="http://chordian.net/c64editors.htm">comparison page</a>
+								plus a few pages for the most common players. More to come.</li>
+						</ul>
+
 						<h3>April 9, 2019</h3>
 						<ul>
 							<li>Upgraded the WebSid emulator. Fixed issue with <a href="//deepsid.chordian.net?file=/MUSICIANS/L/Lieblich_Russell/Master_of_the_Lamps.sid&subtune=6">Master of the Lamps</a> not playing.</li>
