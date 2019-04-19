@@ -227,7 +227,7 @@ Controls.prototype = {
 					if (browser.isSearching || browser.path.substr(0, 2) === "/$" || browser.path.substr(0, 2) === "/!")
 						browser.getComposer(browser.playlist[browser.songPos].fullname);
 					browser.getGB64();
-					browser.getPlayerInfo(browser.playlist[browser.songPos].player);
+					browser.getPlayerInfo({player: browser.playlist[browser.songPos].player});
 					browser.reloadDisqus(browser.playlist[browser.songPos].fullname);
 					UpdateURL();
 				}

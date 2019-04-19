@@ -18,7 +18,6 @@ try {
 	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	$db->exec("SET NAMES UTF8");
 
-	/////////////$select = $db->query('SELECT id, title, developer, startyear, endyear FROM players_info ORDER BY title');
 	$select = $db->query('SELECT * FROM players_info ORDER BY title');
 	$select->setFetchMode(PDO::FETCH_OBJ);
 
@@ -30,6 +29,8 @@ try {
 	$rows = '';
 
 	foreach ($select as $row) {
+
+		$search = empty($row->search) ? $row->title : $row->search;
 
 		// Figure out the name of the first thumbnail
 		$thumbnail = substr(glob('../images/players/'.$row->id.'_1_*.png')[0], 3);
@@ -58,10 +59,10 @@ try {
 		$rows .=
 			'<tr>'.
 				'<td class="thumbnail">'.
-					'<a class="player-entry" href="#" data-id="'.$row->id.'"><img src="'.$thumbnail.'" alt="'.$row->title.'" /></a>'.
+					'<a class="player-entry" href="#" data-id="'.$row->id.'" data-search="'.$search.'"><img src="'.$thumbnail.'" alt="'.$row->title.'" /></a>'.
 				'</td>'.
 				'<td class="info">'.
-					'<a class="name player-entry" href="#" data-id="'.$row->id.'">'.$row->title.'</a><br />'.
+					'<a class="name player-entry" href="#" data-id="'.$row->id.'" data-search="'.$search.'">'.$row->title.'</a><br />'.
 					trim($years.$developer).
 					'<br /><span class="player-line" style="margin-right:0;">'.$info.'</span>'.
 					(!empty($cputime) ? '<span class="player-line player-right">'.$cputime.'</span>' : '').

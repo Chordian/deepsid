@@ -2714,7 +2714,8 @@ input[type=range]::-ms-track {
 			}
 
 				#go-back,
-				#go-back-init {
+				#go-back-init,
+				#go-back-player {
 					position: relative;
 					top: -4px;
 					margin-left: 10px;

@@ -5,6 +5,10 @@
  * Build the HTML page for the 'Players' tab.
  * 
  * @uses		$_GET['player'] - e.g. "GoatTracker v2.x"
+ * 
+ * 	- OR -
+ * 
+ * @uses		$_GET['id']
  */
 
 require_once("setup.php");
@@ -12,8 +16,8 @@ require_once("setup.php");
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest')
 	die("Direct access not permitted.");
 
-if (!isset($_GET['player']))
-	die(json_encode(array('status' => 'error', 'message' => 'You must specify \'player\' as a GET variable.')));
+if (!isset($_GET['player']) && !isset($_GET['id']))
+	die(json_encode(array('status' => 'error', 'message' => 'You must specify \'player\' or \'id\' as a GET variable.')));
 
 try {
 	if ($_SERVER['HTTP_HOST'] == LOCALHOST)
@@ -23,16 +27,19 @@ try {
 	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	$db->exec("SET NAMES UTF8");
 
-	// First look it up in the many-to-one table
-	$select = $db->prepare('SELECT playerid FROM players_lookup WHERE player = :player LIMIT 1');
-	$select->execute(array(':player'=>$_GET['player']));
-	$select->setFetchMode(PDO::FETCH_OBJ);
+	// If a player string was specified then first look it up in the many-to-one table
+	if (isset($_GET['player'])) {
+		$select = $db->prepare('SELECT playerid FROM players_lookup WHERE player = :player LIMIT 1');
+		$select->execute(array(':player'=>$_GET['player']));
+		$select->setFetchMode(PDO::FETCH_OBJ);
 
-	if ($select->rowCount())
-		$id = $select->fetch()->playerid;
-	else
-		// Not defined (yet)
-		die(json_encode(array('status' => 'warning', 'html' => '<p style="margin-top:0;"><i>No editor/player information available.</i></p>')));
+		if ($select->rowCount())
+			$id = $select->fetch()->playerid;
+		else
+			// Not defined (yet)
+			die(json_encode(array('status' => 'warning', 'html' => '<p style="margin-top:0;"><i>No editor/player information available.</i></p>')));
+	} else
+		$id = $_GET['id'];
 
 	// Get all information available
 	$select = $db->prepare('SELECT * FROM players_info WHERE id = :playerid LIMIT 1');
@@ -45,7 +52,9 @@ try {
 		$row = $select->fetch();
 
 		// Title must "arrow" to editor name if different
-		$title = $row->title == $_GET['player'] ? $row->title : '<span style="color:#a1a294;">'.$_GET['player'].'</span><img class="arrow" src="images/composer_arrowright.svg" alt="" style="position:relative;top:0;margin:0 12px;" />'.$row->title ;
+		$title = isset($_GET['player']) && $row->title != $_GET['player']
+			? '<span style="color:#a1a294;">'.$_GET['player'].'</span><img class="arrow" src="images/composer_arrowright.svg" alt="" style="position:relative;top:0;margin:0 12px;" />'.$row->title
+			: $row->title;
 
 		$devs = explode('|', str_replace('++', '', $row->developer));
 		$developer = ' by ';
@@ -78,7 +87,8 @@ try {
 			$download .= '</span>';
 
 		// Now build the HTML
-		$html = '<h2 style="display:inline-block;margin:0;">'.$title.'</h2><br />'.
+		$html = '<h2 style="display:inline-block;margin:0;">'.$title.'</h2>'.
+		'<button id="go-back-player">Back</button>'.
 		'<p style="position:relative;top:-9px;left:1px;font-size:13px;margin-bottom:-5px;">'.trim($years.$developer).$download.'</p>'.
 		'<p style="margin-bottom:12px;">'.$row->description.'</p>'.
 

@@ -951,6 +951,12 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>April 19, 2019</h3>
+						<ul>
+							<li>Added a <code>PLAYERS</code> link in the top for viewing a list of all players/editors in the
+								database. You can also go back from a player/editor page to see this list at any time.</li>
+						</ul>
+
 						<h3>April 15, 2019</h3>
 						<ul>
 							<li>Added a new tab for showing screenshots and data about players/editors. I have added the

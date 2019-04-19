@@ -4,8 +4,8 @@
  */
 
 var $=jQuery.noConflict();
-var cacheCSDb = cacheSticky = cacheStickyBeforeCompo = cacheCSDbProfile = cacheBeforeCompo = prevFile = sundryTab = reportSTIL = "";
-var cacheTabScrollPos = tabScrollPos = cachePosBeforeCompo = cacheDDCSDbSort = peekCounter = sundryHeight = 0;
+var cacheCSDb = cacheSticky = cacheStickyBeforeCompo = cacheCSDbProfile = cacheBeforeCompo = cachePlayer = prevFile = sundryTab = reportSTIL = "";
+var cacheTabScrollPos = cachePlayerTabScrollPos = tabScrollPos = cachePosBeforeCompo = cacheDDCSDbSort = peekCounter = sundryHeight = 0;
 var sundryToggle = true, recommended = players = null;
 
 $(function() { // DOM ready
@@ -547,6 +547,26 @@ $(function() { // DOM ready
 	});
 
 	/**
+	 * When clicking the 'BACK' button on a player/editor page to show the list of them again.
+	 */
+	$("#topic-player").on("click", "#go-back-player", function() {
+		if (cachePlayer == "") {
+			// First time
+			$("#players").trigger("click");
+		} else {
+			$this = $(this);
+			// Load the cache again
+			$("#topic-player").css("visibility", "hidden").empty().append(cachePlayer);
+			// Also set scroll position to where we clicked last time
+			$("#page").mCustomScrollbar("scrollTo", cachePlayerTabScrollPos, { scrollInertia: 0 });
+			// The 'onScroll' callback is not good enough and this is actually more safe
+			setTimeout(function() {
+				$("#topic-player").css("visibility", "visible");
+			}, 150);
+		}
+	}),
+
+	/**
 	 * When clicking the 'SHOW' button on a CSDb page to show the full list of competition results.
 	 */
 	$("#topic-csdb").on("click", "#show-compo", function() {
@@ -671,10 +691,29 @@ $(function() { // DOM ready
 			browser.validateData(data, function(data) {
 				clearTimeout(loadingPlayers);
 				$("#topic-player").empty().append(data.html);
+				$("#page").mCustomScrollbar("scrollTo", "top");
 			});
 		});
 		return false;
 	});
+
+	/**
+	 * When clicking a row in the "PLAYER" list. This shows the page for the
+	 * specific player/editor.
+	 */
+	$("#topic-player").on("click", ".player-entry", function() {
+		$this = $(this);
+		// First cache the list of releases in case we return to it
+		cachePlayer = $("#topic-player").html();
+		cachePlayerTabScrollPos = tabScrollPos;
+		// Show the page
+		browser.getPlayerInfo({id: $this.attr("data-id")});
+		// Also search for the related players
+		$("#dropdown-search").val("player");
+		$("#search-box").val($this.attr("data-search").toLowerCase()).trigger("keyup");
+		$("#search-button").trigger("click");
+		return false;
+	}),
 
 	/**
 	 * When clicking a home folder icon in a CSDb comment table.

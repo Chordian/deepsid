@@ -350,7 +350,7 @@ Browser.prototype = {
 						} else
 							this.getComposer();
 						this.getGB64();
-						this.getPlayerInfo(this.playlist[this.songPos].player);
+						this.getPlayerInfo({player: this.playlist[this.songPos].player});
 						this.reloadDisqus(this.playlist[this.songPos].fullname);
 
 						UpdateURL();
@@ -1213,9 +1213,9 @@ Browser.prototype = {
 	 * 
 	 * Also handles the tab notification counter. 
 	 * 
-	 * @param {string} type		Player string.
+	 * @param {array} params	player: {string} or id: {number}.
 	 */
-	getPlayerInfo: function(type) {
+	getPlayerInfo: function(params) {
 		if (this.isMobile) return;
 		if (this.playerInfo) this.playerInfo.abort();
 		$("#topic-player").empty().append('<div style="height:400px;"><img id="loading-player" src="images/loading.svg" style="display:none;" alt="" /></div>');
@@ -1225,7 +1225,7 @@ Browser.prototype = {
 			$("#loading-player").fadeIn(500);
 		}, 250);
 
-		this.csdb = $.get("php/player.php", {player: type}, function(data) {
+		this.csdb = $.get("php/player.php", params, function(data) {
 			this.validateData(data, function(data) {
 
 				clearTimeout(loadingPlayer);
