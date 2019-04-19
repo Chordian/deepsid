@@ -2655,7 +2655,7 @@ input[type=range]::-ms-track {
 
 			#page .ext .rdate,
 			#page .ext .language,
-			#page .ext .player-info {
+			#page .ext .player-line {
 				display: inline-block;
 				position: relative;
 				top: 19px;
@@ -2663,6 +2663,22 @@ input[type=range]::-ms-track {
 				margin-right: 6px;
 				color: #7c7e60; /* #969787 */
 			}
+
+				#page .ext .player-right {
+					float: right;
+					top: 20px;
+				}
+
+					#page .ext .player-right:before {
+						content: "";
+						display: inline-block;
+						position: relative;
+						top: 1px;
+						width: 10px;
+						height: 10px;
+						padding-right: 13px;
+						background: url(../images/time.svg) 0 0 / 10px 10px no-repeat;
+					}
 
 			#page .ext .language {
 				left: 1px;
@@ -2678,7 +2694,7 @@ input[type=range]::-ms-track {
 					}
 
 				/* For dot between info */
-				#page .player-info span {
+				#page .player-line span {
 					margin: 0 6px;
 					color: #8a8c7a;
 					font-size: 10px;
@@ -2904,8 +2920,7 @@ input[type=range]::-ms-track {
 				margin-left: 4px;
 			}
 
-		#topic-player table.playerinfo td,
-		#topic-player table.releases table.playerinfo td {
+		#topic-player table.playerinfo td {
 			padding: 3.33px 8px;
 			border-bottom: 0.5px solid #c4c5b3;
 		}
@@ -2919,34 +2934,6 @@ input[type=range]::-ms-track {
 		font-weight: bold;
 		border-right: 0.5px solid #c4c5b3;
 	}
-
-	#topic-player table.playerinfo-list {
-		position: absolute;
-		bottom: -5px;
-		right: 0;
-		width: 420px;
-		font-size: 11px;
-	}
-
-		#topic-player table.releases table.playerinfo th,
-		#topic-player table.releases table.playerinfo td {
-			padding: 2.5px 8px;
-			border-right-width: 0.5px;
-		}
-
-		#topic-player table.releases table.playerinfo td {
-			border-right: 0.5px solid #c4c5b3;
-		}
-
-		#topic-player table.releases table.playerinfo td:first-child {
-			width: auto;
-			font-weight: normal;
-		}
-
-		#topic-player table.releases table.playerinfo td:last-child,
-		#topic-player table.releases table.playerinfo th:last-child {
-			border-right: none;
-		}
 
 /* ---- Overriding Custom Scrollbar Styling --------------------------------- */
 

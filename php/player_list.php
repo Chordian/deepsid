@@ -52,6 +52,9 @@ try {
 		//if (!empty($row->cputime)) $info .= $dot;
 		//$info .= $row->cputime;
 
+		$cputime = str_replace('[SD]', '', $row->cputime);
+		$cputime = str_replace('Approx ', '', $cputime);
+
 		$rows .=
 			'<tr>'.
 				'<td class="thumbnail">'.
@@ -60,31 +63,16 @@ try {
 				'<td class="info">'.
 					'<a class="name player-entry" href="#" data-id="'.$row->id.'">'.$row->title.'</a><br />'.
 					trim($years.$developer).
-					'<br /><span class="player-info" style="margin-right:0;">'.$info.'</span>'.
-					'<table class="playerinfo playerinfo-list">'.
-						'<tr>'.
-							// '<th>CPU time (1x)</th>'.
-							'<th>Arpeggio</th>'.
-							'<th>Pulsating</th>'.
-							'<th>Filtering</th>'.
-							'<th>Vibrato</th>'.
-							'<th>HR</th>'.
-						'</tr>'.
-						'<tr>'.
-							// '<td>'.$row->cputime.'</td>'.
-							'<td>'.$row->arpeggio.'</td>'.
-							'<td>'.$row->pulsating.'</td>'.
-							'<td>'.$row->filtering.'</td>'.
-							'<td>'.$row->vibrato.'</td>'.
-							'<td>'.$row->hardrestart.'</td>'.
-						'</tr>'.
-					'</table>'.
+					'<br /><span class="player-line" style="margin-right:0;">'.$info.'</span>'.
+					(!empty($cputime) ? '<span class="player-line player-right">'.$cputime.'</span>' : '').
 				'</td>'.
 			'</tr>';
 	}
 
 	$html = '<h2 style="display:inline-block;margin-top:0;">Players / Editors</h2>'.
-		'<p>About...</p>'.
+		'<p style="margin-top:0;">This is a list of all the players/editors in the database. If you click to see
+			a page, the SID browser will automatically find all tunes related to it. Most CPU time measures you
+			see here were made with <a href="https://csdb.dk/release/?id=152422">SIDDump</a> and are approximate.</p>'.
 		//'<h3>'.$select->rowCount().' entries found</h3>'.
 		'<table class="releases">'.
 			$rows.
