@@ -48,14 +48,15 @@ try {
 		$title = $row->title == $_GET['player'] ? $row->title : '<span style="color:#a1a294;">'.$_GET['player'].'</span><img class="arrow" src="images/composer_arrowright.svg" alt="" style="position:relative;top:0;margin:0 12px;" />'.$row->title ;
 
 		$devs = explode('|', str_replace('++', '', $row->developer));
-		$developer = $comma = '';
+		$developer = ' by ';
+		$comma = '';
 		foreach ($devs as $dev) {
-			$developer .= $comma.'<b>'.$dev.'</b>';
+			$developer .= $comma.$dev;
 			$comma = ', ';
 		}
 		if (strpos($row->developer, '++')) $developer .= ' et al.';
-
-		$years = $row->startyear != '0000' || $row->endyear != '0000' ? ', ' : '';
+		
+		$years = '';
 		if ($row->startyear != '0000') $years .= $row->startyear;
 		if ($row->endyear != '0000') $years .= '-'.$row->endyear;
 
@@ -78,7 +79,7 @@ try {
 
 		// Now build the HTML
 		$html = '<h2 style="display:inline-block;margin:0;">'.$title.'</h2><br />'.
-		'<p style="position:relative;top:-9px;left:1px;font-size:13px;margin-bottom:-5px;">Developed by '.$developer.$years.$download.'</p>'.
+		'<p style="position:relative;top:-9px;left:1px;font-size:13px;margin-bottom:-5px;">'.trim($years.$developer).$download.'</p>'.
 		'<p style="margin-bottom:12px;">'.$row->description.'</p>'.
 
 		'<table style="border:none;">

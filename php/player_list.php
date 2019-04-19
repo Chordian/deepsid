@@ -18,7 +18,8 @@ try {
 	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	$db->exec("SET NAMES UTF8");
 
-	$select = $db->query('SELECT id, title, developer, startyear, endyear FROM players_info ORDER BY title');
+	/////////////$select = $db->query('SELECT id, title, developer, startyear, endyear FROM players_info ORDER BY title');
+	$select = $db->query('SELECT * FROM players_info ORDER BY title');
 	$select->setFetchMode(PDO::FETCH_OBJ);
 
 	if (!$select->rowCount()) {
@@ -46,6 +47,11 @@ try {
 		if ($row->startyear != '0000') $years .= $row->startyear;
 		if ($row->endyear != '0000') $years .= '-'.$row->endyear;
 
+		$info = $row->platform;
+		//$dot = '<span>&#9642;</span>';
+		//if (!empty($row->cputime)) $info .= $dot;
+		//$info .= $row->cputime;
+
 		$rows .=
 			'<tr>'.
 				'<td class="thumbnail">'.
@@ -54,6 +60,25 @@ try {
 				'<td class="info">'.
 					'<a class="name player-entry" href="#" data-id="'.$row->id.'">'.$row->title.'</a><br />'.
 					trim($years.$developer).
+					'<br /><span class="player-info" style="margin-right:0;">'.$info.'</span>'.
+					'<table class="playerinfo playerinfo-list">'.
+						'<tr>'.
+							// '<th>CPU time (1x)</th>'.
+							'<th>Arpeggio</th>'.
+							'<th>Pulsating</th>'.
+							'<th>Filtering</th>'.
+							'<th>Vibrato</th>'.
+							'<th>HR</th>'.
+						'</tr>'.
+						'<tr>'.
+							// '<td>'.$row->cputime.'</td>'.
+							'<td>'.$row->arpeggio.'</td>'.
+							'<td>'.$row->pulsating.'</td>'.
+							'<td>'.$row->filtering.'</td>'.
+							'<td>'.$row->vibrato.'</td>'.
+							'<td>'.$row->hardrestart.'</td>'.
+						'</tr>'.
+					'</table>'.
 				'</td>'.
 			'</tr>';
 	}
