@@ -300,6 +300,8 @@
 						<a href="<?php echo HOST; ?>">Home</a>
 							<span>&#9642</span>
 						<a id="recommended" href="#">Recommended</a>
+							<span>&#9642</span>
+						<a id="players" href="#">Players</a>
 					</div>
 
 					<a href="http://chordian.net/2018/05/12/deepsid/">Blog Post</a>

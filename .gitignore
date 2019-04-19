@@ -13,7 +13,6 @@ js/_websid/*
 php/_master/*
 php/jbbcode/*
 php/hvsc_update/*
-php/setup.php
 temp/*
 .htaccess
 todo.txt

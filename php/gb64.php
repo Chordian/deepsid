@@ -68,7 +68,7 @@ if (isset($_GET['fullname'])) {
 } else
 	die(json_encode(array('status' => 'error', 'message' => 'You must specify the proper GET variables.')));
 
-	// Collect HTML rows
+// Collect HTML rows
 $rows = '';
 
 $find_scr	= ':showscreenshot';

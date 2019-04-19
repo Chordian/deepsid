@@ -73,7 +73,7 @@ if (!strpos($xml, '<CSDbData>'))
 		'<b>ID:</b> <a href="https://csdb.dk/'.$csdb_type.'/?id='.$csdb_id.'" target="_blank">'.$csdb_id.'</a>')));
 $csdb = simplexml_load_string(utf8_decode($xml));
 
-// Building HTML for release
+// Building HTML
 if ($csdb_type == 'sid') {
 
 	/***** Entry: SID *****/

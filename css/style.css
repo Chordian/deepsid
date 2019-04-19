@@ -2866,11 +2866,10 @@ input[type=range]::-ms-track {
 		height: 15px !important;
 	}
 
-	#topic-player .thumbnail {
+	#topic-player .thumbnail-player {
 		width: 100%;
 		border: 1px solid #ced0c0;
 		margin-bottom: 4px;
-		xcolor: #a1a294
 	}
 
 	#topic-player .svg {

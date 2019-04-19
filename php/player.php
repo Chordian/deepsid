@@ -62,7 +62,7 @@ try {
 		// Use 'id' to figure out the name of the thumbnails (if they exist)
 		$thumbnails = '';
 		foreach (glob('../images/players/'.$id.'_*.png') as $filename) {
-			$thumbnails .= '<img class="thumbnail" src="'.substr($filename, 3).'" alt="" />';
+			$thumbnails .= '<img class="thumbnail-player" src="'.substr($filename, 3).'" alt="" />';
 		}
 
 		$cputime = str_replace('[SD]', '<sup><a href="http://csdb.dk/release/?id=152422" title="Measured with SIDDump">SD</a></sup>', $row->cputime);

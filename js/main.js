@@ -6,7 +6,7 @@
 var $=jQuery.noConflict();
 var cacheCSDb = cacheSticky = cacheStickyBeforeCompo = cacheCSDbProfile = cacheBeforeCompo = prevFile = sundryTab = reportSTIL = "";
 var cacheTabScrollPos = tabScrollPos = cachePosBeforeCompo = cacheDDCSDbSort = peekCounter = sundryHeight = 0;
-var sundryToggle = true, recommended = null;
+var sundryToggle = true, recommended = players = null;
 
 $(function() { // DOM ready
 
@@ -646,6 +646,31 @@ $(function() { // DOM ready
 				$("#page").removeClass("big-logo").addClass("big-logo");
 				clearTimeout(loadingRecommended);
 				$("#topic-profile").empty().append(data.html);
+			});
+		});
+		return false;
+	});
+
+	/**
+	 * When clicking the "PLAYERS" link in top.
+	 */
+	$("#players").click(function(){
+		$(this).blur();
+		if (players) players.abort();
+		$("#topic-players").empty().append('<div style="height:400px;"><img id="loading-profile" src="images/loading.svg" style="display:none;" alt="" /></div>');
+
+		if ($("#tabs .selected").attr("data-topic") !== "player")
+			$("#tab-player").trigger("click");
+
+		var loadingPlayers = setTimeout(function() {
+			// Fade in a GIF loading spinner if the AJAX call takes a while
+			$("#loading-profile").fadeIn(500);
+		}, 250);
+
+		players = $.get("php/player_list.php", function(data) {
+			browser.validateData(data, function(data) {
+				clearTimeout(loadingPlayers);
+				$("#topic-player").empty().append(data.html);
 			});
 		});
 		return false;
