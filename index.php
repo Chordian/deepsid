@@ -922,6 +922,9 @@
 								<td>sundry</td><td>Set to <code>stil</code> (or <code>lyrics</code>) or <code>scope</code> (or <code>osc</code>) to select that sundry box tab</td>
 							</tr>
 							<tr>
+								<td>player</td><td>Set to the ID of the player/editor page. Use a permalink from one to get it right.</td>
+							</tr>
+							<tr>
 								<td>csdbtype</td><td>Set to <code>sid</code> or <code>release</code> to show a CSDb entry;
 									must be used together with <code>csdbid</code></td>
 							</tr>
@@ -950,6 +953,16 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>April 21, 2019</h3>
+						<ul>
+							<li>The list of players/editors is now loaded in its tab when the web site is opened.</li>
+							<li>Added a permalink to the page for any specific player/editor.</li>
+							<li>The <code>?player=</code> URL parameter can now be used to show a player/editor page. It needs
+								an ID number, but just obtain the new permalink in top of a specific page. It also includes the
+								proper search parameters.</li>
+						</ul>
+
 
 						<h3>April 19, 2019</h3>
 						<ul>

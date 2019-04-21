@@ -551,7 +551,7 @@ $(function() { // DOM ready
 	 */
 	$("#topic-player").on("click", "#go-back-player", function() {
 		if (cachePlayer == "") {
-			// First time
+			// First time?
 			$("#players").trigger("click");
 		} else {
 			$this = $(this);
@@ -673,13 +673,16 @@ $(function() { // DOM ready
 
 	/**
 	 * When clicking the "PLAYERS" link in top.
+	 * 
+	 * @param {*} event 
+	 * @param {boolean} noclick		If specified and TRUE, the 'Player' tab won't be clicked.
 	 */
-	$("#players").click(function(){
+	$("#players").click(function(event, noclick){
 		$(this).blur();
 		if (players) players.abort();
 		$("#topic-players").empty().append('<div style="height:400px;"><img id="loading-profile" src="images/loading.svg" style="display:none;" alt="" /></div>');
 
-		if ($("#tabs .selected").attr("data-topic") !== "player")
+		if ($("#tabs .selected").attr("data-topic") !== "player" && typeof noclick == "undefined")
 			$("#tab-player").trigger("click");
 
 		var loadingPlayers = setTimeout(function() {
@@ -760,6 +763,7 @@ $(function() { // DOM ready
 		paramSubtune = GetParam("subtune"),
 		selectTab = GetParam("tab"),
 		selectSundryTab = GetParam("sundry"),
+		playerID = GetParam("player"),
 		typeCSDb = GetParam("csdbtype"),
 		idCSDb = GetParam("csdbid");
 		// Let mobile devices use their own touch scrolling stuff
@@ -859,6 +863,13 @@ $(function() { // DOM ready
 	if (selectSundryTab === "lyrics") selectSundryTab = "stil";
 	if (selectSundryTab === "scope") selectSundryTab = "osc";
 	$("#stab-"+selectSundryTab).trigger("click");
+
+	// Show a specific player/editor in the 'Player' tab
+	if (playerID != "") {
+		browser.getPlayerInfo({id: playerID});	// Show the page
+		$("#tab-player").trigger("click");
+	} else
+		$("#players").trigger("click", true);	// Otherwise just load the list of them
 
 	// Show a specific CSDb entry (only loads the content of the CSDb tab)
 	if (typeCSDb === "sid" || typeCSDb === "release") {
