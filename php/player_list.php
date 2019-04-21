@@ -18,7 +18,7 @@ try {
 	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	$db->exec("SET NAMES UTF8");
 
-	$select = $db->query('SELECT * FROM players_info ORDER BY title');
+	$select = $db->query('SELECT *, case when title like "The %" then trim(substr(title from 4)) else title end as title2 FROM players_info ORDER BY title2');
 	$select->setFetchMode(PDO::FETCH_OBJ);
 
 	if (!$select->rowCount()) {
