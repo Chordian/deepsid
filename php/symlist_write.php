@@ -7,6 +7,7 @@
  * 
  * @uses		$_POST['fullname']
  * @uses		$_POST['symlist']		if not set then create a new symlist
+ * @uses		$_POST['subtune']
  */
 
 require_once("class.account.php"); // Includes setup
@@ -90,7 +91,8 @@ try {
 	$file_id = $select->fetch()->id;
 
 	// Now create the symlist entry (different SID name via renaming is done in a different PHP file)
-	$insert = $db->query('INSERT INTO symlists (folder_id, file_id) VALUES('.$folder_id.', '.$file_id.')');
+	$insert = $db->prepare('INSERT INTO symlists (folder_id, file_id, subtune) VALUES('.$folder_id.', '.$file_id.', :subtune)');
+	$insert->execute(array(':subtune'=>$_POST['subtune']));
 	if ($insert->rowCount() == 0)
 		die(json_encode(array('status' => 'error', 'message' => 'Could not create the entry in '.$symlist_folder)));
 

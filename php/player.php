@@ -51,10 +51,11 @@ try {
 	else {
 		$row = $select->fetch();
 
-		// Title must "arrow" to editor name if different
-		$title = isset($_GET['player']) && $row->title != $_GET['player']
+		// Title must "arrow" to editor name if different - UPDATE: Disabled for now (looks silly most of time)
+		/* $title = isset($_GET['player']) && $row->title != $_GET['player']
 			? '<span style="color:#a1a294;">'.$_GET['player'].'</span><img class="arrow" src="images/composer_arrowright.svg" alt="" style="position:relative;top:0;margin:0 12px;" />'.$row->title
-			: $row->title;
+			: $row->title; */
+		$title = $row->title;
 
 		$devs = explode('|', str_replace('++', '', $row->developer));
 		$developer = ' by ';

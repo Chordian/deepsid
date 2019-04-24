@@ -954,6 +954,11 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>April 24, 2019</h3>
+						<ul>
+							<li>The currently selected subtune is now remembered when adding a song to a playlist.</li>
+						</ul>
+
 						<h3>April 21, 2019</h3>
 						<ul>
 							<li>The list of players/editors is now loaded in its tab when the web site is opened.</li>

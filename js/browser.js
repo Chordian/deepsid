@@ -1497,10 +1497,11 @@ Browser.prototype = {
 				break;
 			case "symlist-add":
 			case "symlist-new":
-				// Add the SID file to a symlist (exiting or creating with unique version of SID file name)
+				// Add the SID file to a symlist (existing or creating with unique version of SID file name)
 				$.post("php/symlist_write.php", {
 					fullname:	(this.isSearching || this.isCompoFolder || this.path.substr(1, 1) == "$" ? this.contextSID : this.path.substr(1)+"/"+this.contextSID),
-					symlist:	(action === "symlist-add" ? (event.target.textContent.indexOf(" [PUBLIC]") !== -1 ? "$" : "!")+event.target.textContent : '')
+					symlist:	(action === "symlist-add" ? (event.target.textContent.indexOf(" [PUBLIC]") !== -1 ? "$" : "!")+event.target.textContent : ''),
+					subtune:	(ctrls.subtuneCurrent ? ctrls.subtuneCurrent + 1 : 0)
 				}, function(data) {
 					this.validateData(data);
 				}.bind(this));
