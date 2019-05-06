@@ -4,7 +4,7 @@ These are the source codes for [DeepSID](http://deepsid.chordian.net), a modern 
 
 ## Setting up for offline use
 
-You can use this in a local version on your own computer, if you want to. First, setup an environment that makes it possible to run PHP and MySQL. I personally use [WampServer](http://www.wampserver.com/en/), but there are a ton of options on the internet.
+You can use this in a local version on your own computer, if you want to. First, setup an environment that makes it possible to run PHP and MySQL. I personally use [WampServer](http://www.wampserver.com/en/) but there are a ton of options on the internet.
 
 ### Folders and files
 
@@ -20,13 +20,13 @@ Download the GitHub tree above as well as the following files:
 
 1. Unpack the GitHub tree archive into a folder that works with your enviroment. I'll assume `/deepsid/` root folder.
 2. If there are files in a `/deepsid/images/` sub folder, delete them all.
-3. Create the `/deepsid/fonts/` sub folder and unpack DeepSID_Fonts.zip into it.
-4. Create the `/deepsid/images/` sub folder and unpack DeepSID_Images.zip into it.
-5. Create the `/deepsid/images/brands/` sub folder and unpack DeepSID_Images_Brands.zip into it.
-6. Create the `/deepsid/images/composers/` sub folder and unpack DeepSID_Images_Composers.zip into it.
-7. Create the `/deepsid/images/countries/` sub folder and unpack DeepSID_Images_Countries.zip into it.
-8. Create the `/deepsid/images/gb64/` sub folder and unpack DeepSID_Images_GB64.zip into it.
-9. Create the `/deepsid/images/players/` sub folder and unpack DeepSID_Images_Players.zip into it.
+3. Create the `/deepsid/fonts/` sub folder and unpack **DeepSID_Fonts.zip** into it.
+4. Create the `/deepsid/images/` sub folder and unpack **DeepSID_Images.zip** into it.
+5. Create the `/deepsid/images/brands/` sub folder and unpack **DeepSID_Images_Brands.zip** into it.
+6. Create the `/deepsid/images/composers/` sub folder and unpack **DeepSID_Images_Composers.zip** into it.
+7. Create the `/deepsid/images/countries/` sub folder and unpack **DeepSID_Images_Countries.zip** into it.
+8. Create the `/deepsid/images/gb64/` sub folder and unpack **DeepSID_Images_GB64.zip** into it.
+9. Create the `/deepsid/images/players/` sub folder and unpack **DeepSID_Images_Players.zip** into it.
 
 Download the following SID collections that will work with the database supplied below:
 
@@ -48,7 +48,7 @@ Download the following file:
 This file contains all the MySQL database files that maches the HVSC and CGSC versions above. It also has one test user (user ID 1) with the password "test" for checking out a few basic ratings. There are no playlists.
 
 1. Create a database in your MySQL database, ready to receive tables.
-2. Import all the SQL files into that database, one by one.
+2. Unpack the archive and import all its SQL files into that database, one by one.
 3. Edit the `/deepsid/php/setup.php` file and change its constants to match your database.
 4. Remember to also change the ROOT_HVSC and HOST constants in the same file.
 
