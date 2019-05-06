@@ -19,13 +19,14 @@ Download the GitHub tree above as well as the following files:
 * [DeepSID_Images_Players.zip](https://chordian.net/files/deepsid/DeepSID_Images_Players.zip)
 
 1. Unpack the GitHub tree archive into a folder that works with your enviroment. I'll assume the root folder of /deepsid/ from now on.
-2. Create the /deepsid/fonts/ sub folder and unpack DeepSID_Fonts.zip into it.
-3. Create the /deepsid/images/ sub folder and unpack DeepSID_Images.zip into it.
-4. Create the /deepsid/images/brands/ sub folder and unpack DeepSID_Images_Brands.zip into it.
-5. Create the /deepsid/images/composers/ sub folder and unpack DeepSID_Images_Composers.zip into it.
-6. Create the /deepsid/images/countries/ sub folder and unpack DeepSID_Images_Countries.zip into it.
-7. Create the /deepsid/images/gb64/ sub folder and unpack DeepSID_Images_GB64.zip into it.
-8. Create the /deepsid/images/players/ sub folder and unpack DeepSID_Images_Players.zip into it.
+2. If there are files in a /deepsid/images/ sub folder, delete them all.
+3. Create the /deepsid/fonts/ sub folder and unpack DeepSID_Fonts.zip into it.
+4. Create the /deepsid/images/ sub folder and unpack DeepSID_Images.zip into it.
+5. Create the /deepsid/images/brands/ sub folder and unpack DeepSID_Images_Brands.zip into it.
+6. Create the /deepsid/images/composers/ sub folder and unpack DeepSID_Images_Composers.zip into it.
+7. Create the /deepsid/images/countries/ sub folder and unpack DeepSID_Images_Countries.zip into it.
+8. Create the /deepsid/images/gb64/ sub folder and unpack DeepSID_Images_GB64.zip into it.
+9. Create the /deepsid/images/players/ sub folder and unpack DeepSID_Images_Players.zip into it.
 
 Download the following SID collections that will work with the database supplied below:
 
