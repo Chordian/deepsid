@@ -35,9 +35,9 @@ Download the following SID collections that will work with the database supplied
 
 1. Create the `/deepsid/hvsc/` sub folder.
 2. Unpack the HVSC archive into the `/deepsid/hvsc/` folder. This should create a `/C64Music/` sub folder.
-3. Rename the /C64Music/ sub folder to `/_High Voltage SID Collection/` instead.
+3. Rename the `/C64Music/` sub folder to `/_High Voltage SID Collection/` instead.
 4. Unpack the CGSC archive into the `/deepsid/hvsc/` folder. This should create a `/CGSC/` sub folder.
-5. Rename the /CGSC/ sub folder to `/_Compute's Gazette SID Collection/` instead.
+5. Rename the `/CGSC/` sub folder to `/_Compute's Gazette SID Collection/` instead.
 
 ### Database
 
