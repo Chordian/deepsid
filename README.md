@@ -45,7 +45,7 @@ Download the following file:
 
 * [DeepSID_Database.zip](https://chordian.net/files/deepsid/DeepSID_Database.zip)
 
-This file contains all the MySQL database files that maches the HVSC and CGSC versions above. It also has one test user (user ID 1) with the password "test" for checking out a few basic ratings. There are no playlists.
+This file contains all the MySQL database files that matches the HVSC and CGSC versions above. It also has one test user (user ID 1) with the password "test" for checking out a few basic ratings. There are no playlists.
 
 1. Create a database in your MySQL database, ready to receive tables.
 2. Unpack the archive and import all its SQL files into that database, one by one.
@@ -54,6 +54,6 @@ This file contains all the MySQL database files that maches the HVSC and CGSC ve
 
 The user ID of 2 assigned to "JCH" in `setup.php` is used for the letter folder quality filters. You can change this ID number to a user of your choice. The folder ratings of this user will then affect those quality filters.
 
-You can run the `/deepsid/logs/activity.htm` to see activity and also any errors. Note that it never logs ratings by other users (what they rate SID tunes is none of our business).
+You can run the `/deepsid/logs/activity.htm` file to see activity and also any errors. Note that it never logs ratings by other users (what they rate SID tunes is none of our business).
 
 If you have any problems getting the offline version to work [please let me know](mailto:chordian@gmail.com) and I'll try to help.
