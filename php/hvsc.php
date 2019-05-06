@@ -436,6 +436,7 @@ try {
 			'..',
 			'DOCUMENTS',			// HVSC
 			'UPDATE',
+			'update',
 			'10_Years_HVSC.d71',
 			'10_Years_HVSC.d81',
 			'10_Years_HVSC.dfi',
