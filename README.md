@@ -6,7 +6,7 @@ These are the source codes for [DeepSID](http://deepsid.chordian.net), a modern 
 
 You can use this in a local version on your own computer, if you want to. First, setup an environment that makes it possible to run PHP and MySQL. I personally use [WampServer](http://www.wampserver.com/en/), but there are a ton of options on the internet.
 
-###Folders and files
+### Folders and files
 
 Download the GitHub tree above as well as the following files:
 
