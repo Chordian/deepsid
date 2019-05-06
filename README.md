@@ -50,9 +50,9 @@ This file contains all the MySQL database files that matches the HVSC and CGSC v
 1. Create a database in your MySQL database, ready to receive tables.
 2. Unpack the archive and import all its SQL files into that database, one by one.
 3. Edit the `/deepsid/php/setup.php` file and change its constants to match your database.
-4. Remember to also change the ROOT_HVSC and HOST constants in the same file.
+4. Remember to also change the ROOT_HVSC, HOST and COOKIE_HOST constants in the same file.
 
-The user ID of 2 assigned to "JCH" in `setup.php` is used for the letter folder quality filters. You can change this ID number to a user of your choice. The folder ratings of this user will then affect those quality filters.
+The user ID of 2 assigned to "JCH" in `setup.php` is used for the letter folder quality filters. You can change this ID number to a user of your choice. The folder ratings of this user will then affect those quality filters. You have to give a letter folder two stars for "Decent" and three stars for "Good" for the drop-down box.
 
 You can run the `/deepsid/logs/activity.htm` file to see activity and also any errors. Note that it never logs ratings by other users (what they rate SID tunes is none of our business).
 

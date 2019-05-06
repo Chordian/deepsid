@@ -94,7 +94,7 @@ class Account {
 
 		// Remember
 		$cookiehash = md5(sha1($_SESSION['user_name'].$_SERVER['REMOTE_ADDR']));
-		setcookie('user', $cookiehash, time()+3600*24*365, '/', ($_SERVER['HTTP_HOST'] == LOCALHOST ? 'localhost_deepsid' : 'deepsid.chordian.net'));
+		setcookie('user', $cookiehash, time()+3600*24*365, '/', COOKIE_HOST);
 
 		try {
 			// Store the hash in the database
@@ -163,7 +163,7 @@ class Account {
 		$_SESSION[$session] = null;
 		unset($_SESSION[$session]);
 
-		setcookie('user', '', time()-3600, '/', ($_SERVER['HTTP_HOST'] == LOCALHOST ? 'localhost_deepsid' : 'deepsid.chordian.net'));
+		setcookie('user', '', time()-3600, '/', COOKIE_HOST);
 	}
 
 	/**
@@ -418,7 +418,7 @@ class Account {
 						$this->LogActivity('User "'.$row->username.'" has returned via a cookie', true);
 
 						// Reset the expiry date
-						setcookie('user', $cookiehash, time()+3600*24*365, '/', ($_SERVER['HTTP_HOST'] == LOCALHOST ? 'localhost_deepsid' : 'deepsid.chordian.net'));
+						setcookie('user', $cookiehash, time()+3600*24*365, '/', COOKIE_HOST);
 						return true;
 					} else {
 						$this->LogError('No rows found containing the cookie hash "'.$cookiehash.'"');
