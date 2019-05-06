@@ -56,4 +56,4 @@ The user ID of 2 assigned to "JCH" in `setup.php` is used for the letter folder 
 
 You can run the `/deepsid/logs/activity.htm` to see activity and also any errors. Note that it never logs ratings by other users (what they rate SID tunes is none of our business).
 
-If you have any troubles getting the offline version to work [please let me know](mailto:chordian@gmail.com) and I'll try to help.
+If you have any problems getting the offline version to work [please let me know](mailto:chordian@gmail.com) and I'll try to help.
