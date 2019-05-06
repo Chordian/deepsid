@@ -1,12 +1,7 @@
 .vscode/*
 fonts/*
 hvsc
-images/backup/*
-images/brands/*
-images/composers/*
-images/countries/*
-images/gb64/*
-images/players/*
+images/*
 logs/*.txt
 js/_jssid/*
 js/_websid/*

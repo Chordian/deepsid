@@ -114,7 +114,7 @@ $prettyPlayerNames = array(
 	'Maurizio_Feletto' =>		'Maurizio Feletto\'s player',
 	'Michael_Delaney' =>		'Michael Delaney\'s player',
 	'Michael_Winterberg' =>		'Michael Winterberg\'s player',
-	'Mixer' =>					'Mixer\'s player',
+	// Don't add for 'Mixer' here
 	'Neil_Baldwin' =>			'Neil Baldwin\'s player',
 	'Neil_Brennan' =>			'Neil Brennan\'s player',
 	'Neil_Crossley' =>			'Neil Crossley\'s player',
