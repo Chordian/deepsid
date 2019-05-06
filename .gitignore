@@ -6,7 +6,6 @@ logs/*.txt
 js/_jssid/*
 js/_websid/*
 php/_master/*
-php/jbbcode/*
 php/hvsc_update/*
 temp/*
 .htaccess
