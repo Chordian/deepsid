@@ -278,7 +278,8 @@ $(function() { // DOM ready
 		switch ($(this).prev("select").attr("name")) {
 			case "select-emulator":
 				// Selecting a different SID handler (emulator or SOASC)
-				var isRowSelected = $("#folders tr.selected").length,
+				var $selected = $("#folders tr.selected");
+				var isRowSelected = $selected.length,
 					wasPlaying = ctrls.isPlaying();
 					mainVol = SID.mainVol;
 				SID.unload();
@@ -309,6 +310,12 @@ $(function() { // DOM ready
 
 				DisableIncompatibleRows();
 
+				if ($selected.hasClass("disabled")) {
+					// The new handler can't play this row so unselect it
+					isRowSelected = wasPlaying = false;
+					$selected.removeClass("selected");
+				}
+
 				if (SID.emulatorFlags.offline) {
 					// Using the player buttons doesn't make sense for the "download" option
 					ctrls.state("play/stop", "disabled");
@@ -320,7 +327,7 @@ $(function() { // DOM ready
 
 				if (isRowSelected && wasPlaying) {
 					// Clicking the same row again is safest
-					$("#folders tr.selected").children("td.sid").trigger("click", ctrls.subtuneCurrent);
+					$selected.children("td.sid").trigger("click", ctrls.subtuneCurrent);
 				} else if (wasPlaying) {
 					ctrls.togglePlayOrPause();
 					ctrls.selectButton($("#play-pause"));

@@ -957,6 +957,7 @@
 						<h3>May 17, 2019</h3>
 						<ul>
 							<li>Fixed a bug where the big logo disappeared from the informational tabs when searching.</li>
+							<li>Choosing another SID handler now unselects the song row if it can't play it.</li>
 						</ul>
 
 						<h3>May 15, 2019</h3>
