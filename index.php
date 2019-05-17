@@ -954,6 +954,16 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>May 17, 2019</h3>
+						<ul>
+							<li>Fixed a bug where the big logo disappeared from the informational tabs when searching.</li>
+						</ul>
+
+						<h3>May 15, 2019</h3>
+						<ul>
+							<li>Search permalinks now replace spaces with plus characters instead.</li>
+						</ul>
+
 						<h3>April 24, 2019</h3>
 						<ul>
 							<li>The currently selected subtune is now remembered when adding a song to a playlist.</li>

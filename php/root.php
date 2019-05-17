@@ -20,7 +20,7 @@ $decent_box_shown = false;
 
 // $important = 'The file servers for the <b>SOASC handlers</b> are down. Please use the emulators for the time being.';
 
-$important = 'The <b>SOASC handlers</b> are working again.';
+$important = "The <b>CSDb</b> web service should be working properly again.&nbsp;&nbsp;&nbsp;&nbsp;&ndash; Jens";
 
 $available_lists = ['maxfiles', 'longest', 'mostgames', 'countries', 'startaddr', 'maxtime'];
 $dropdown_options =
