@@ -162,8 +162,11 @@ if ($csdb_type == 'sid') {
 					} else if (array_key_exists((string)$id, $sid_handles))
 						// We've had this scener before so we know the name
 						$scener = $sid_handles[(string)$id];
+					$yellow = stripos($copyright, strtolower($scener)) > -1
+						? ' style="background:#ffff80;"'
+						: '';
 					$released_by .= (!empty($scener)
-						? ', <a href="https://csdb.dk/scener/?id='.$id.'" target="_blank">'.$scener.'</a>'
+						? ', <a href="https://csdb.dk/scener/?id='.$id.'" target="_blank"'.$yellow.'>'.$scener.'</a>'
 						: ', [<a href="https://csdb.dk/scener/?id='.$id.'" target="_blank">Scener:'.$id.'</a>]'
 					);
 					if (!$amount) {
