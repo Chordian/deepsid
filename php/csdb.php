@@ -2,7 +2,9 @@
 /**
  * DeepSID
  *
- * Call the web service at CSDb and build an HTML page.
+ * Call the web service at CSDb and build an HTML page. This can be a SID entry
+ * which shows a long list of releases all using the same song, or it can be a
+ * RELEASE entry especially made for that particular song.
  * 
  * @uses		$_GET['fullname']
  * 
@@ -36,7 +38,7 @@ if (isset($_GET['fullname'])) {
 		$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		$db->exec("SET NAMES UTF8");
 
-		$select = $db->prepare('SELECT csdbtype, csdbid FROM hvsc_files WHERE fullname = :fullname LIMIT 1');
+		$select = $db->prepare('SELECT copyright, csdbtype, csdbid FROM hvsc_files WHERE fullname = :fullname LIMIT 1');
 		$select->execute(array(':fullname'=>$_GET['fullname']));
 		$select->setFetchMode(PDO::FETCH_OBJ);
 
@@ -44,6 +46,8 @@ if (isset($_GET['fullname'])) {
 			$row = $select->fetch();
 			$csdb_type = $row->csdbtype;	// Can be 'release' or 'sid'
 			$csdb_id = $row->csdbid;		// ID relates to the type
+			$copyright = $row->copyright;	// E.g. "1988 Jewels"
+			$copyright = substr($copyright, strpos($copyright, ' ') + 1); // Only need "Jewels"
 		} else {
 			$account->LogActivityError('csdb.php', 'No database info returned; $_GET[\'fullname\'] = '.$_GET['fullname']);
 			die(json_encode(array('status' => 'error', 'message' => "Couldn't find the information in the database.")));
@@ -62,6 +66,7 @@ if (isset($_GET['fullname'])) {
 	// The 'type' and 'id' was directly specified
 	$csdb_type = $_GET['type'];
 	$csdb_id = $_GET['id'];
+	$copyright = '';
 	$go_back = $_GET['back'] ? '<button id="go-back">Back</button>' : '';
 } else
 	die(json_encode(array('status' => 'error', 'message' => 'You must specify the proper GET variables.')));
@@ -180,8 +185,11 @@ if ($csdb_type == 'sid') {
 					} else if (array_key_exists((string)$id, $sid_groups))
 						// We've had this group before so we know the name
 						$grp = $sid_groups[(string)$id];
+					$yellow = stripos($copyright, strtolower($grp)) > -1
+						? ' style="background:#ffff80;"'
+						: '';
 					$released_by .= (!empty($grp)
-						? ', <a href="https://csdb.dk/group/?id='.$id.'" target="_blank">'.$grp.'</a>'
+						? ', <a href="https://csdb.dk/group/?id='.$id.'" target="_blank"'.$yellow.'>'.$grp.'</a>'
 						: ', [<a href="https://csdb.dk/group/?id='.$id.'" target="_blank">Group:'.$id.'</a>]'
 					);
 					if (!$amount) {
