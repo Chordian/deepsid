@@ -958,6 +958,7 @@
 						<ul>
 							<li>Fixed a bug where the big logo disappeared from the informational tabs when searching.</li>
 							<li>Choosing another SID handler now unselects the song row if it can't play it.</li>
+							<li>The player tab now usually doesn't reload its contents if it's the same information.</li>
 						</ul>
 
 						<h3>May 15, 2019</h3>

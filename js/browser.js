@@ -1218,16 +1218,18 @@ Browser.prototype = {
 	 * @param {array} params	player: {string} or id: {number}.
 	 */
 	getPlayerInfo: function(params) {
-		if (this.isMobile) return;
+		if (this.isMobile || JSON.stringify(params) == JSON.stringify(this.playerParams)) return;
 		if (this.playerInfo) this.playerInfo.abort();
 		$("#topic-player").empty().append('<div style="height:400px;"><img id="loading-player" src="images/loading.svg" style="display:none;" alt="" /></div>');
+
+		this.playerParams = params; // Prevents reloading of the same page (not 100% perfect)
 
 		var loadingPlayer = setTimeout(function() {
 			// Fade in a GIF loading spinner if the AJAX call takes a while
 			$("#loading-player").fadeIn(500);
 		}, 250);
 
-		this.csdb = $.get("php/player.php", params, function(data) {
+		this.playerInfo = $.get("php/player.php", params, function(data) {
 			this.validateData(data, function(data) {
 
 				clearTimeout(loadingPlayer);
