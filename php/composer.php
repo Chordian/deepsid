@@ -146,7 +146,7 @@ if (isset($fullname)) {
 
 				// Build the page HTML
 				$html = '<div id="compo-profile"><h2 style="display:inline-block;margin:0;">'.$csdb->Event->Name.'</h2>'.
-					'<div id="corner-icons">'.
+					'<div class="corner-icons">'.
 						'<a href="https://csdb.dk/event/?id='.$event_id.'" title="See this at CSDb" target="_blank"><svg class="outlink" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg></a>'.
 					'</div>'.
 					$aka.
@@ -376,7 +376,7 @@ $html = '<table style="border:none;margin-bottom:0;"><tr>'.
 					'<td class="topline bottomline leftline rightline" style="height:30px;padding:0 !important;text-align:center;">'.($spinner ? '<img class="loading-dots" src="images/loading_threedots.svg" alt="" style="margin-top:10px;" />' : '<div style="margin-top:5px;font-size:12px;color:#a1a294;">No profile data</div>').'</td>'.
 				'</tr>'.
 			'</table>' : '').
-		'<div id="corner-icons">'.
+		'<div class="corner-icons">'.
 			($csdbid ? '<a href="https://csdb.dk/'.$csdbtype.'/?id='.$csdbid.'" title="See this at CSDb" target="_blank"><svg class="outlink" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg></a>' : '').
 		'</div>';
 

@@ -954,6 +954,11 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>May 20, 2019</h3>
+						<ul>
+							<li>GameBase64 entries are now viewed internally when clicked.</li>
+						</ul>
+
 						<h3>May 17, 2019</h3>
 						<ul>
 							<li>Fixed a bug where the big logo disappeared from the informational tabs when searching.</li>

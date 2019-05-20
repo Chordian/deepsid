@@ -4,8 +4,8 @@
  */
 
 var $=jQuery.noConflict();
-var cacheCSDb = cacheSticky = cacheStickyBeforeCompo = cacheCSDbProfile = cacheBeforeCompo = cachePlayer = prevFile = sundryTab = reportSTIL = "";
-var cacheTabScrollPos = cachePlayerTabScrollPos = tabScrollPos = cachePosBeforeCompo = cacheDDCSDbSort = peekCounter = sundryHeight = 0;
+var cacheCSDb = cacheSticky = cacheStickyBeforeCompo = cacheCSDbProfile = cacheBeforeCompo = cachePlayer = cacheGB64 = prevFile = sundryTab = reportSTIL = "";
+var cacheTabScrollPos = cachePlayerTabScrollPos = cacheGB64TabScrollPos = tabScrollPos = cachePosBeforeCompo = cacheDDCSDbSort = peekCounter = sundryHeight = 0;
 var sundryToggle = true, recommended = players = null;
 
 $(function() { // DOM ready
@@ -574,6 +574,20 @@ $(function() { // DOM ready
 	}),
 
 	/**
+	 * When clicking the 'BACK' button on a GameBase64 page to show the list of them again.
+	 */
+	$("#topic-gb64").on("click", "#go-back-gb64", function() {
+		// Load the cache again
+		$("#topic-gb64").css("visibility", "hidden").empty().append(cacheGB64);
+		// Also set scroll position to where we clicked last time
+		$("#page").mCustomScrollbar("scrollTo", cacheGB64TabScrollPos, { scrollInertia: 0 });
+		// The 'onScroll' callback is not good enough and this is actually more safe
+		setTimeout(function() {
+			$("#topic-gb64").css("visibility", "visible");
+		}, 150);
+	}),
+
+	/**
 	 * When clicking the 'SHOW' button on a CSDb page to show the full list of competition results.
 	 */
 	$("#topic-csdb").on("click", "#show-compo", function() {
@@ -724,6 +738,18 @@ $(function() { // DOM ready
 		$("#search-button").trigger("click");
 		return false;
 	}),
+
+	/**
+	 * When clicking a title or thumbnail in a list of GameBase64 entries.
+	 */
+	$("#topic-gb64").on("click", ".gb64-list-entry", function() {
+		// First cache the list of releases in case we return to it
+		cacheGB64 = $("#topic-gb64").html();
+		cacheGB64TabScrollPos = tabScrollPos;
+		// Show the page
+		browser.getGB64($(this).attr("data-id"));
+		return false;
+	});
 
 	/**
 	 * When clicking a home folder icon in a CSDb comment table.

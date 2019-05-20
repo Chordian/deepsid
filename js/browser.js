@@ -1290,8 +1290,10 @@ Browser.prototype = {
 	 * shown while calling the PHP script.
 	 * 
 	 * Also handles the tab notification counter. 
+	 * 
+	 * @param {number} optionalID		If specified, the ID to show a specific sub page.
 	 */
-	getGB64: function() {
+	getGB64: function(optionalID) {
 		if (this.isMobile) return;
 		if (this.gb64) this.gb64.abort();
 		$("#topic-gb64").empty().append('<div style="height:400px;"><img id="loading-gb64" src="images/loading.svg" style="display:none;" alt="" /></div>');
@@ -1301,7 +1303,11 @@ Browser.prototype = {
 			$("#loading-gb64").fadeIn(500);
 		}, 250);
 
-		this.gb64 = $.get("php/gb64.php", { fullname: browser.playlist[browser.songPos].fullname.substr(5) }, function(data) {
+		var params = typeof optionalID === "undefined"
+			? { fullname: browser.playlist[browser.songPos].fullname.substr(5) }
+			: { id: optionalID };
+
+		this.gb64 = $.get("php/gb64.php", params, function(data) {
 			this.validateData(data, function(data) {
 
 				clearTimeout(loadingGB64);

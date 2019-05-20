@@ -2455,7 +2455,7 @@ input[type=range]::-ms-track {
 				margin: 0 8px 0 5px;
 			}
 
-		#corner-icons {
+		.corner-icons {
 			position: absolute;
 			top: 2px;
 			right: 4px;
@@ -2463,42 +2463,42 @@ input[type=range]::-ms-track {
 			text-align: right;
 		}
 
-			#sticky #corner-icons {
+			#sticky .corner-icons {
 				top: 12px;
 				right: 14px;
 			}
 
-			#corner-icons svg {
+			.corner-icons svg {
 				width: 24px;
 				height: 24px;
 				cursor: pointer;
 				transition: all .07s linear;
 			}
 
-				#corner-icons .profile,
-				#corner-icons .close {
+				.corner-icons .profile,
+				.corner-icons .close {
 					width: 23px;
 					height: 23px;
 					margin-right: 3px;
 					fill: #c4c5b3;
 				}
 
-				#corner-icons .close {
+				.corner-icons .close {
 					position: relative;
 					top: 1px;
 				}
 
-				#corner-icons .close:hover,
-				#corner-icons .profile:hover,
+				.corner-icons .close:hover,
+				.corner-icons .profile:hover,
 				#page .ext .permalink:hover {
 					fill: #969787;
 				}
 
-				#corner-icons .outlink {
+				.corner-icons .outlink {
 					stroke: #c4c5b3; /* #ced0c0 */
 				}
 
-				#corner-icons .outlink:hover {
+				.corner-icons .outlink:hover {
 					stroke: #969787; /* #a8ad95 #b0b29a */
 				}
 
@@ -2715,7 +2715,8 @@ input[type=range]::-ms-track {
 
 				#go-back,
 				#go-back-init,
-				#go-back-player {
+				#go-back-player,
+				#go-back-gb64 {
 					position: relative;
 					top: -4px;
 					margin-left: 10px;
@@ -2891,10 +2892,15 @@ input[type=range]::-ms-track {
 		height: 15px !important;
 	}
 
-	#topic-player .thumbnail-player {
+	#topic-player .thumbnail-player,
+	#topic-gb64 .thumbnail-gb64 {
 		width: 100%;
 		border: 1px solid #ced0c0;
 		margin-bottom: 4px;
+	}
+
+	#topic-gb64 .thumbnail-gb64 {
+		width: 320px;
 	}
 
 	#topic-player .svg {
