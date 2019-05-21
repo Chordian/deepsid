@@ -83,9 +83,11 @@ function ReadRawGB64($id) {
 	$players = $nodes->item(0)->textContent;
 
 	// Find comments (not always present)
-	$nodes = $xpath->query('//td/font[contains(text(), "Comment:")]/..//b');
+	// NOTE: Have to first ensure 'Players:' is just above it to avoid fetching an
+	// irrelevant comment in the 'Version Info' section further down the page.
+	$nodes = $xpath->query('//td/font[contains(text(), "Players:")]/../../../tr/td/font[contains(text(), "Comment:")]/..//b');
 	$comments = isset($nodes->item(0)->textContent) ? ucfirst($nodes->item(0)->textContent) : '';
-	
+
 	// Loop through each occurrence of the screenshot javascript call in the GB64 HTML
 	// @todo This really should be converted to use the xpath stuff too.
 	if (strpos($page, $find_scr)) {
@@ -192,7 +194,7 @@ if ($page_id) {
 
 	$data = ReadRawGB64($page_id);
 
-	$published		= '<p><b>Published:</b><br />'.$data['year'].', '.$data['company'].'</p>';
+	$published		= '<p style="margin-top:-2px;"><b>Published:</b><br />'.$data['year'].', '.$data['company'].'</p>';
 	$musician		= (!empty($data['musician']) ? '<p><b>Music:</b><br />'.$data['musician'].'</p>' : '');
 	$graphics		= (!empty($data['graphics']) ? '<p><b>Graphics:</b><br />'.$data['graphics'].'</p>' : '');
 	$programmer		= (!empty($data['programmer']) ? '<p><b>Programming:</b><br />'.$data['programmer'].'</p>' : '');
@@ -215,22 +217,29 @@ if ($page_id) {
 	'</div>'.
 	'<table style="border:none;">
 		<tr>
-			<td style="padding:0;vertical-align:top;border:none;">
-				<h3 style="margin-top:6px;">Game info</h3>'.
-					$published.
-					$musician.
-					$graphics.
-					$programmer.
-					$language.
-					$genre.
-					$clone.
-					$pcontrol.
-					$players.
-					$comments.'
+			<td style="padding-left:0;vertical-align:top;border:none;">
+				<h3 style="margin-top:6px;">Game info</h3>
 			</td>
-			<td style="width:340px;padding:0;border-right:none;vertical-align:top;text-align:right;"><p>'.
+			<td style="padding-left:19px;vertical-align:top;border:none;">
+				<h3 style="margin-top:6px;">Screenshots</h3>
+			</td>
+		</tr>
+		<tr>
+			<td style="padding:0;vertical-align:top;border:none;">'.
+				$published.
+				$musician.
+				$graphics.
+				$programmer.
+				$language.
+				$genre.
+				$clone.
+				$pcontrol.
+				$players.
+				$comments.'
+			</td>
+			<td style="width:340px;padding:0;border:none;vertical-align:top;text-align:right;">'.
 				$col_of_thumbnails.
-			'</p></td>
+			'</td>
 		</tr>
 	</table>';
 

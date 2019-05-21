@@ -954,6 +954,11 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>May 21, 2019</h3>
+						<ul>
+							<li>Tightened the parsing of optional comments in internal GameBase64 pages.</li>
+						</ul>
+
 						<h3>May 20, 2019</h3>
 						<ul>
 							<li>GameBase64 entries are now viewed internally when clicked.</li>
