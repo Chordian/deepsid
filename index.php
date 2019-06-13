@@ -954,6 +954,11 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>June 13, 2019</h3>
+						<ul>
+							<li>Fixed a bug where the wrong sub tune was set when adding another tune to a playlist.</li>
+						</ul>
+
 						<h3>May 21, 2019</h3>
 						<ul>
 							<li>Tightened the parsing of optional comments in internal GameBase64 pages.</li>

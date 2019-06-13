@@ -1360,6 +1360,7 @@ Browser.prototype = {
 		this.contextEntry = $target.find(".entry");
 		this.contextSID = decodeURIComponent(this.contextEntry.attr("data-name"));
 		this.contextSymID = this.contextEntry.attr("data-symid");
+		this.contextSelected = $target.parents("tr").hasClass("selected");
 
 		// Maintain hover background color while showing the context menu
 		this.contextTR = $target.parent("tr");
@@ -1511,7 +1512,7 @@ Browser.prototype = {
 				$.post("php/symlist_write.php", {
 					fullname:	(this.isSearching || this.isCompoFolder || this.path.substr(1, 1) == "$" ? this.contextSID : this.path.substr(1)+"/"+this.contextSID),
 					symlist:	(action === "symlist-add" ? (event.target.textContent.indexOf(" [PUBLIC]") !== -1 ? "$" : "!")+event.target.textContent : ''),
-					subtune:	(ctrls.subtuneCurrent ? ctrls.subtuneCurrent + 1 : 0)
+					subtune:	(ctrls.subtuneCurrent && this.contextSelected ? ctrls.subtuneCurrent + 1 : 0)
 				}, function(data) {
 					this.validateData(data);
 				}.bind(this));
