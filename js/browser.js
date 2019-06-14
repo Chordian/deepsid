@@ -16,6 +16,8 @@
 	this.cache = {
 		folder:			"",
 		incompatible:	"",
+		compolist:		[],
+		composort:		"name",
 	};
 
 	this.symlistFolders = [];
@@ -490,19 +492,27 @@ Browser.prototype = {
 							$("#songs table").append(filterFolders);
 							localStorage.setItem("letter", event.target.value);
 						} else {
-							alert("The filter option for this folder is not ready yet.");
+							alert("The filter option for this folder has not been updated yet.");
 							$("#dropdown-sort").val("all").trigger("change");
 						}
 					});
 				}.bind(this));
 				break;
 			case "name":
-				// Sort playlist according to the SID filename
-				this.playlist.sort(function(obj1, obj2) {
-					var o1 = obj1.substname !== "" ? obj1.substname : this.adaptBrowserName(obj1.filename, true);
-					var o2 = obj2.substname !== "" ? obj2.substname : this.adaptBrowserName(obj2.filename, true);
-					return o1.toLowerCase() > o2.toLowerCase() ? 1 : -1;
-				}.bind(this));
+				if (this.isBigCompoFolder()) {
+					// Sort compo list according to the folder name
+					this.compolist.sort(function(obj1, obj2) {
+						return obj1.foldername.toLowerCase() > obj2.foldername.toLowerCase() ? 1 : -1;
+					});
+					this.cache.composort = "name";
+				} else {
+					// Sort playlist according to the SID filename
+					this.playlist.sort(function(obj1, obj2) {
+						var o1 = obj1.substname !== "" ? obj1.substname : this.adaptBrowserName(obj1.filename, true);
+						var o2 = obj2.substname !== "" ? obj2.substname : this.adaptBrowserName(obj2.filename, true);
+						return o1.toLowerCase() > o2.toLowerCase() ? 1 : -1;
+					}.bind(this));
+				}
 				break;
 			case "player":
 				// Sort playlist according to music player
@@ -511,22 +521,46 @@ Browser.prototype = {
 				});
 				break;
 			case "rating":
-				// Sort playlist according to rating
-				this.playlist.sort(function(obj1, obj2) {
-					return obj2.rating - obj1.rating;
-				});
+				if (this.isBigCompoFolder()) {
+					// Sort compo list according to rating
+					this.compolist.sort(function(obj1, obj2) {
+						return obj2.rating - obj1.rating;
+					});
+					this.cache.composort = "rating";
+				} else {
+					// Sort playlist according to rating
+					this.playlist.sort(function(obj1, obj2) {
+						return obj2.rating - obj1.rating;
+					});
+				}
 				break;
 			case "oldest":
-				// Sort playlist according to the 'copyright' string (the year in start is used)
-				this.playlist.sort(function(obj1, obj2) {
-					return obj1.copyright > obj2.copyright ? 1 : -1; // Oldest year in top
-				});
+				if (this.isBigCompoFolder()) {
+					// Sort compo list according to the year
+					this.compolist.sort(function(obj1, obj2) {
+						return obj1.compo_year > obj2.compo_year ? 1 : -1; // Oldest year in top
+					});
+					this.cache.composort = "oldest";
+				} else {
+					// Sort playlist according to the 'copyright' string (the year in start is used)
+					this.playlist.sort(function(obj1, obj2) {
+						return obj1.copyright > obj2.copyright ? 1 : -1;
+					});
+				}
 				break;
 			case "newest":
-				// Sort playlist according to the 'copyright' string (the year in start is used)
-				this.playlist.sort(function(obj1, obj2) {
-					return obj1.copyright < obj2.copyright ? 1 : -1; // Newest year in top
-				});
+				if (this.isBigCompoFolder()) {
+					// Sort compo list according to the year
+					this.compolist.sort(function(obj1, obj2) {
+						return obj1.compo_year < obj2.compo_year ? 1 : -1; // Newest year in top
+					});
+					this.cache.composort = "newest";
+				} else {
+					// Sort playlist according to the 'copyright' string (the year in start is used)
+					this.playlist.sort(function(obj1, obj2) {
+						return obj1.copyright < obj2.copyright ? 1 : -1;
+					});
+				}
 				break;
 			case "shuffle":
 				// Sort playlist in a random manner (randomize)
@@ -537,10 +571,37 @@ Browser.prototype = {
 				this.playlist.sort(function(obj1, obj2) {
 					return obj1.shuffle > obj2.shuffle ? 1 : -1;
 				});
-		}
+				break;
+			case "type":
+				if (this.isBigCompoFolder()) {
+					// Sort compo list according to the competition type
+					this.compolist.sort(function(obj1, obj2) {
+						return obj1.compo_type.toLowerCase() > obj2.compo_type.toLowerCase() ? 1 : -1;
+					});
+					this.cache.composort = "type";
+				}
+				break;
+			case "country":
+				if (this.isBigCompoFolder()) {
+					// Sort compo list according to the country
+					this.compolist.sort(function(obj1, obj2) {
+						return obj1.compo_country.toLowerCase() > obj2.compo_country.toLowerCase() ? 1 : -1;
+					});
+					this.cache.composort = "country";
+				}
+				break;
+			case "amount":
+				if (this.isBigCompoFolder()) {
+					// Sort compo list according to the amount of entries in each folder
+					this.compolist.sort(function(obj1, obj2) {
+						return parseInt(obj1.filescount) < parseInt(obj2.filescount) ? 1 : -1;
+					});
+					this.cache.composort = "amount";
+				}
+			}
 
-		if (!filterFolders) {
-			// Now rebuild the reordered table list (files only; the folders in top are just preserved)
+		if (!filterFolders && !this.isBigCompoFolder()) {
+			// Rebuild the reordered table list (files only; the folders in top are just preserved)
 			var files = adaptedName = "";
 			$.each(this.playlist, function(i, file) {
 				var isNew = file.hvsc == this.HVSC_VERSION || file.hvsc == this.CGSC_VERSION;
@@ -558,6 +619,26 @@ Browser.prototype = {
 			$("#songs table").append(this.folders+files);
 			this.updateDisqusCounts();
 			DisableIncompatibleRows();
+		} else if (this.isBigCompoFolder()) {
+			// Rebuild the big CSDb music competitions folder
+			var folders = "";
+			$.each(this.compolist, function(i, folder) {
+				folders +=
+					'<tr'+(folder.incompatible.indexOf(SID.emulator) !== -1 ? ' class="disabled"' : '')+'>'+
+						'<td class="folder compo"><div class="block-wrap"><div class="block slimfont">'+
+							(folder.filescount > 0 ? '<div class="filescount">'+folder.filescount+'</div>' : '')+
+						'<span class="name entry compo'+(this.isSearching ? ' search' : '')+'" data-name="'+(this.isSearching ? 'CSDb Music Competitions%2F' : '')+encodeURIComponent(folder.foldername)+'" data-incompat="'+folder.incompatible+'">'+
+						folder.foldername+'</span></div></div><br />'+
+						'<span class="info compo-year compo-'+folder.compo_type.toLowerCase()+'">'+folder.compo_year+(folder.compo_country.substr(0, 1) == "_" ? ' at ' : ' in ')+folder.compo_country.replace("_", "")+'</span></td>'+
+						'</td>'+
+						'<td class="stars"><span class="rating">'+this.buildStars(folder.rating)+'</span><br /></td>'+
+					'</tr>';
+			}.bind(this));
+			folders = '<tr class="disabled"><td class="spacer" colspan="2"></tr>'+
+				folders+'<tr class="disabled"><td class="divider" colspan="2"></tr>';
+			$("#songs table").append(folders);
+			this.cache.folder = folders;
+			this.cache.compolist = this.compolist;
 		}
 
 		if (this.isMobile)
@@ -610,6 +691,7 @@ Browser.prototype = {
 			setTimeout(function() {
 				// Must be in this timer or the emptying above will not be visible
 				$("#songs table").append(this.cache.folder);
+				this.compolist = this.cache.compolist;
 
 				var $browser = this;
 
@@ -638,6 +720,7 @@ Browser.prototype = {
 						});
 				}
 				DisableIncompatibleRows();
+				if (this.isBigCompoFolder()) $("#dropdown-sort").prop("disabled", false);
 			}.bind(this), 1);
 
 		} else {
@@ -649,7 +732,8 @@ Browser.prototype = {
 				$("#loading").css("top", $("#songs").height() / 2 - 50 /* Half size of SVG */).fadeIn(350);
 			}, 150);
 
-			this.playlist = []; // Every folder we enter will become its own local playlist
+			this.playlist = [];		// Every folder we enter will become its own local playlist
+			this.compolist = [];	// For the big CSDb music competitions folder list
 			this.subFolders = 0;
 			this.path = this.path.replace("/_CSDb", "/CSDb");
 
@@ -731,16 +815,30 @@ Browser.prototype = {
 
 							// COMPETITION FOLDERS
 
+							if (this.cache.compolist.length)
+								// The cache has the correct order if sorted recently
+								folder = this.cache.compolist[i];
+
+							this.compolist.push({
+								incompatible:	folder.incompatible,
+								filescount:		folder.filescount,
+								foldername:		folder.foldername,
+								compo_type:		folder.compo_type,
+								compo_year:		folder.compo_year,
+								compo_country:	folder.compo_country,
+								rating:			folder.rating,
+							});
+
 							var folderEntry =
-							'<tr'+(folder.incompatible.indexOf(SID.emulator) !== -1 ? ' class="disabled"' : '')+'>'+
-								'<td class="folder compo"><div class="block-wrap"><div class="block slimfont">'+
-									(folder.filescount > 0 ? '<div class="filescount">'+folder.filescount+'</div>' : '')+
-								'<span class="name entry compo'+(this.isSearching ? ' search' : '')+'" data-name="'+(this.isSearching ? 'CSDb Music Competitions%2F' : '')+encodeURIComponent(folder.foldername)+'" data-incompat="'+folder.incompatible+'">'+
-								folder.foldername+'</span></div></div><br />'+
-								'<span class="info compo-year compo-'+folder.compo_type.toLowerCase()+'">'+folder.compo_year+(folder.compo_country.substr(0, 1) == "_" ? ' at ' : ' in ')+folder.compo_country.replace("_", "")+'</span></td>'+
-								'</td>'+
-								'<td class="stars"><span class="rating">'+this.buildStars(folder.rating)+'</span><br /></td>'+
-							'</tr>';
+								'<tr'+(folder.incompatible.indexOf(SID.emulator) !== -1 ? ' class="disabled"' : '')+'>'+
+									'<td class="folder compo"><div class="block-wrap"><div class="block slimfont">'+
+										(folder.filescount > 0 ? '<div class="filescount">'+folder.filescount+'</div>' : '')+
+									'<span class="name entry compo'+(this.isSearching ? ' search' : '')+'" data-name="'+(this.isSearching ? 'CSDb Music Competitions%2F' : '')+encodeURIComponent(folder.foldername)+'" data-incompat="'+folder.incompatible+'">'+
+									folder.foldername+'</span></div></div><br />'+
+									'<span class="info compo-year compo-'+folder.compo_type.toLowerCase()+'">'+folder.compo_year+(folder.compo_country.substr(0, 1) == "_" ? ' at ' : ' in ')+folder.compo_country.replace("_", "")+'</span></td>'+
+									'</td>'+
+									'<td class="stars"><span class="rating">'+this.buildStars(folder.rating)+'</span><br /></td>'+
+								'</tr>';
 							this.folders += folderEntry;
 
 						} else {
@@ -869,7 +967,7 @@ Browser.prototype = {
 						});
 					}.bind(this));
 
-					if (files !== "" || this.path === "" || this.isMusiciansLetterFolder()) $("#dropdown-sort").prop("disabled", false);
+					if (files !== "" || this.path === "" || this.isBigCompoFolder() || this.isMusiciansLetterFolder()) $("#dropdown-sort").prop("disabled", false);
 					/*var pos = this.folders.lastIndexOf('<tr>');
 					this.folders = this.folders.slice(0, pos) + this.folders.slice(pos).replace('<tr>', '<tr class="last">');*/
 					$("#songs table").append(this.folders+files);
@@ -881,6 +979,7 @@ Browser.prototype = {
 						// Cache this big folder for fast back-browsing
 						this.cache.folder = this.folders+files;
 						this.cache.incompatible = data.incompatible;
+						if (this.cache.compolist.length == 0) this.cache.compolist = this.compolist;
 					}
 
 					// Let mobile devices use their own touch scrolling stuff
@@ -913,7 +1012,7 @@ Browser.prototype = {
 					ctrls.state("root/back", "disabled");
 
 				DisableIncompatibleRows();
-				
+
 			}.bind(this));
 		}
 	},
@@ -1696,6 +1795,15 @@ Browser.prototype = {
 	},
 
 	/**
+	 * Are we inside the big CSDb music competitions folder?
+	 * 
+	 * @return {boolean}
+	 */
+	isBigCompoFolder: function() {
+		return this.path == "/CSDb Music Competitions";
+	},
+
+	/**
 	 * Empty and then refill the contextual SORT/FILTER drop-down box.
 	 * 
 	 * @return {string}		Currently selected item (FILTER only).
@@ -1728,6 +1836,17 @@ Browser.prototype = {
 				setTimeout(function() {
 					$("#dropdown-sort").val(stickyMode).trigger("change");
 				}, 1);
+		} else if (!this.isSearching && this.isBigCompoFolder()) {
+			// Sort box for the big CSDb music competitions folder
+			$("#dropdown-sort").empty().append(
+				'<option value="name">Name</option>'+
+				'<option value="rating">Rating</option>'+
+				'<option value="oldest">Oldest</option>'+
+				'<option value="newest">Newest</option>'+
+				'<option value="type">Type</option>'+
+				'<option value="country">Country</option>'+
+				'<option value="amount">Amount</option>'
+			).val(this.cache.composort);
 		} else {
 			// Sort box for everything else
 			$("#dropdown-sort").empty().append(

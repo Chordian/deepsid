@@ -18,9 +18,8 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH
 
 $decent_box_shown = false;
 
-// $important = 'The file servers for the <b>SOASC handlers</b> are down. Please use the emulators for the time being.';
-
-$important = "The <b>CSDb</b> web service should be working properly again.&nbsp;&nbsp;&nbsp;&nbsp;&ndash; Jens";
+$important = 'The file servers for the <b>SOASC handlers</b> are being moved and will be unavailable for most of June 2019. Please use the emulators for the time being.';
+//$important = "The <b>CSDb</b> web service should be working properly again.&nbsp;&nbsp;&nbsp;&nbsp;&ndash; Jens";
 
 $available_lists = ['maxfiles', 'longest', 'mostgames', 'countries', 'startaddr', 'maxtime'];
 $dropdown_options =
@@ -159,7 +158,7 @@ try {
 
 $html =
 	'<div style="height:149px;"></div>'.
-	//'<div class="root-wide good-news">'.$important.'</div>'.
+	'<div class="root-wide bad-news">'.$important.'</div>'.
 	// Recommendations
 	'<table class="root rec"><tr>'.
 		'<td style="max-width:10px;">'.
