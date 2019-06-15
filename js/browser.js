@@ -230,7 +230,7 @@ Browser.prototype = {
 
 							// But also update the relevant array for later filtering/sorting
 							var isFile = $td.parent("tr").find(".name").hasClass("file"),
-								endName = this.isSymlist ? ratedName : ratedName.split("/").slice(-1)[0];
+								endName = this.isSymlist || this.isCompoFolder ? ratedName : ratedName.split("/").slice(-1)[0];
 							if (isFile) {
 								// Update the playlist array
 								$.each(this.playlist, function(i, file) {
@@ -255,12 +255,14 @@ Browser.prototype = {
 									this.folders = wrapped;
 							}
 							if (this.isBigCompoFolder()) {
-								// Update the compolist array
-								$.each(this.compolist, function(i, file) {
-									if (file.foldername == endName) {
-										file.rating = data.rating;
-										return false;
-									}
+								// Update the compolist arrays
+								$.each([this.compolist, this.cache.compolist], function() {
+									$.each(this, function(i, file) {
+										if (file.foldername == endName) {
+											file.rating = data.rating;
+											return false;
+										}
+									});
 								});
 							}
 						});

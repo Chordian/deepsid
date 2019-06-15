@@ -954,6 +954,11 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>June 15, 2019</h3>
+						<ul>
+							<li>Tightened the handling of ratings when sorting in the competition folders.</li>
+						</ul>
+
 						<h3>June 14, 2019</h3>
 						<ul>
 							<li>You can now sort the <a href="//deepsid.chordian.net?file=%2FCSDb%20Music%20Competitions">CSDb Music Competitions</a> folder.</li>
