@@ -232,6 +232,7 @@ Browser.prototype = {
 							var isFile = $td.parent("tr").find(".name").hasClass("file"),
 								endName = this.isSymlist ? ratedName : ratedName.split("/").slice(-1)[0];
 							if (isFile) {
+								// Update the playlist array
 								$.each(this.playlist, function(i, file) {
 									if (file.filename == endName) {
 										file.rating = data.rating;
@@ -239,6 +240,7 @@ Browser.prototype = {
 									}
 								});
 							} else {
+								// Update the cache HTML directly
 								var isCacheFolder = (this.path === "/CSDb Music Competitions" || this.path === "/_Compute's Gazette SID Collection") && this.cache.folder !== "";
 								// Temporarily make the HTML string of folders into a jQuery object
 								var $folders = $(isCacheFolder ? this.cache.folder : this.folders);
@@ -251,6 +253,15 @@ Browser.prototype = {
 									this.cache.folder = wrapped;
 								else
 									this.folders = wrapped;
+							}
+							if (this.isBigCompoFolder()) {
+								// Update the compolist array
+								$.each(this.compolist, function(i, file) {
+									if (file.foldername == endName) {
+										file.rating = data.rating;
+										return false;
+									}
+								});
 							}
 						});
 					}.bind(this));
