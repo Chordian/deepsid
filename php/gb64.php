@@ -54,6 +54,9 @@ function ReadRawGB64($id) {
 	$nodes = $xpath->query('//td/font[contains(text(), "Musician:")]/..//b');
 	$musician = $nodes->item(0)->textContent;
 
+	// Sometimes there is a HTML comment appended to the musician(s) that confuses the XML library
+	$musician = str_replace(' >', '', $musician);
+
 	// Find graphics artist(s)
 	$nodes = $xpath->query('//td/font[contains(text(), "Graphician:")]/..//b');
 	$graphics = $nodes->item(0)->textContent;

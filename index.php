@@ -957,6 +957,7 @@
 						<h3>June 17, 2019</h3>
 						<ul>
 							<li>You can now click the middle mouse button on the subtune buttons, for first and last subtune.</li>
+							<li>Fixed a minor character display bug in the GB64 tab.</li>
 						</ul>
 
 						<h3>June 15, 2019</h3>
