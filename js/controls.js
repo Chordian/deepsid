@@ -102,8 +102,15 @@ Controls.prototype = {
 		if (id.substr(0, 7) == "subtune") {
 			SID.setVolume(0);
 			browser.clearSpinner();
+
 			// Pick a subtune
-			id == "subtune-plus" ? this.subtuneCurrent++ : this.subtuneCurrent--;
+			if (event.which == 2 && event.button == 1)
+				// Middle mouse button for absolute ends
+				id == "subtune-plus" ? this.subtuneCurrent = this.subtuneMax : this.subtuneCurrent = 0;
+			else
+				// Normal mouse click
+				id == "subtune-plus" ? this.subtuneCurrent++ : this.subtuneCurrent--;
+
 			$("#time-bar").empty().append('<div></div>');
 
 			// Keep skipping subtunes if a setting is set to ignore those of less than 10 seconds
