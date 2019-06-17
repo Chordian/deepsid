@@ -958,6 +958,8 @@
 						<ul>
 							<li>You can now click the middle mouse button on the subtune buttons, for first and last subtune.</li>
 							<li>Fixed a minor character display bug in the GB64 tab.</li>
+							<li>You can now also click a link to report a profile change for a composer. This uses the
+								"mailto" link method and it automatically prepares the body text with a link to the profile.</li>
 						</ul>
 
 						<h3>June 15, 2019</h3>

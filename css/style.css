@@ -2268,6 +2268,15 @@ input[type=range]::-ms-track {
 			bottom: 6px;
 		}
 
+		/* The 'Report a profile change' link in the composer profile corner */
+		#profilechange {
+			position: absolute;
+			top: 4px;
+			/* Horizontal position is set in composer.php */
+			width: 140px;
+			font-size: 11px;
+		}
+
 		/* An arbitrary page-wide info box on root welcome page */
 		#page .root-wide {
 			padding: 10px;

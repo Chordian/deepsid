@@ -1249,7 +1249,11 @@ Browser.prototype = {
 
 					clearTimeout(loadingComposer);
 					$("#topic-profile").empty().append(data.html);
-		
+
+					// Add report profile change link
+					var composerFolder = "http://deepsid.chordian.net/?file=/"+(overridePath == "" ? this.path.substr(1) : overridePath);
+					$("#profilechange").append('<a href="mailto:chordian@gmail.com?subject=DeepSID%20profile%20change&body=I%20have%20a%20profile%20change%20request%20for:%0D%0A'+composerFolder+'%0D%0A%0D%0A">Report a profile change</a>');
+
 					this.groups = $.get("php/groups.php", {
 						fullname: (overridePath == "" ? this.path.substr(1) : overridePath)
 					}, function(data) {
