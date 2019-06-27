@@ -27,5 +27,5 @@ define('PWD_ONLINE',		'[REDACTED]');
 
 define('DB_ERROR',          'A database error has been written to a log regularly monitored by Chordian.');
 
-define('TIME_ADJUST',		'+1 hours');				// Added to all use of Date() to match correct time
+define('TIME_ADJUST',		'+2 hours');				// Added to all use of Date() to match correct time
 ?>

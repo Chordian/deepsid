@@ -304,6 +304,10 @@
 						<a id="players" href="#">Players</a>
 					</div>
 
+					<span style="position:absolute;top:-7.5px;left:315px;padding:3px 2px 3px 6px;border-radius:3px;background:#dadace;border:0.5px solid #d3d4c6;color:#62644c;">
+						SOASC Status <div id="soasc-status-led" style="display:inline-block;position:relative;top:0;width:7px;height:7px;background:#999;margin:0 0 0 2px;"></div><span id="soasc-status-word">?</span>
+					</span>
+
 					<a href="https://olivi.chordian.net/2018/05/12/deepsid/">Blog Post</a>
 						<span>&#9642</span>
 					<a href="https://csdb.dk/forums/?roomid=14&topicid=129712">CSDb</a>
@@ -964,6 +968,7 @@
 						<h3>June 27, 2019</h3>
 						<ul>
 							<li>New toggle in settings: Always start at the first sub tune in a song instead of the default set by HVSC.</li>
+							<li>The status of the SOASC file servers can now be viewed in the top. This is checked regularly by a cron job.</li>
 						</ul>
 
 						<h3>June 23, 2019</h3>

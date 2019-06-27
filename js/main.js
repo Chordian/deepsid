@@ -52,6 +52,10 @@ $(function() { // DOM ready
 	$("#time-bar").addClass(emulator)
 		.css("cursor", SID.emulatorFlags.supportSeeking ? "pointer" : "default");
 
+	// Check the SOASC status every 5 minutes
+	CheckSOASCStatus();
+	setInterval(CheckSOASCStatus(), 300000);
+
 	/**
 	 * Handle hotkeys.
 	 * 
@@ -1112,6 +1116,34 @@ function UpdateURL(skipFileCheck) {
 		$ctrls.empty();
 		if (!browser.isCGSC()) $ctrls.append(reportSTIL);
 	}
+}
+
+/**
+ * Check the SOASC status and set the status in the top accordingly.
+ */
+function CheckSOASCStatus() {
+	$.get("soasc.txt", function(data) {
+		var fields = data.split(",");
+		var timestamp = fields[0], status = parseInt(fields[1]), color = "#999", word = "?";
+		switch (status) {
+			case 0:
+				// Everything is OK
+				color = "#0a0";
+				word = "UP";
+				break;
+			case 1:
+				// This cron script did not finish
+				color = "#aa0";
+				break;
+			case 2:
+			case 3:
+				// Something timed out
+				color = "#a00";
+				word = "DOWN";
+		}
+		$("#soasc-status-led").css("background", color);
+		$("#soasc-status-word").empty().append(word);
+	}, "text");
 }
 
 /**
