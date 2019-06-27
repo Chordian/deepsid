@@ -9,6 +9,7 @@
  * 
  * Settings that can be specified for saving:
  * 
+ * @uses		$_POST['firstsubtune']	0 or 1
  * @uses		$_POST['skiptune']		0 or 1
  * @uses		$_POST['marktune']		0 or 1
  * @uses		$_POST['skipbad']		0 or 1
@@ -40,14 +41,16 @@ try {
 	if (!$settings)
 		// "First time?"
 		$settings = array(
-			'skiptune' =>	0,
-			'marktune' =>	0,
-			'skipbad' =>	0,
-			'skiplong' =>	0,
-			'skipshort' =>	0,
+			'firstsubtune' =>	0,
+			'skiptune' =>		0,
+			'marktune' =>		0,
+			'skipbad' =>		0,
+			'skiplong' =>		0,
+			'skipshort' =>		0,
 		);
 
 	// Adjust settings
+	if (isset($_POST['firstsubtune']))	$settings['firstsubtune'] =	(int)$_POST['firstsubtune'];
 	if (isset($_POST['skiptune']))		$settings['skiptune'] =		(int)$_POST['skiptune'];
 	if (isset($_POST['marktune']))		$settings['marktune'] =		(int)$_POST['marktune'];
 	if (isset($_POST['skipbad']))		$settings['skipbad'] =		(int)$_POST['skipbad'];

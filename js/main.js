@@ -13,6 +13,7 @@ $(function() { // DOM ready
 	// Get the user's settings
 	$.post("php/settings.php", function(data) {
 		browser.validateData(data, function(data) {
+			SettingToggle("first-subtune", data.settings.firstsubtune);
 			SettingToggle("skip-tune", data.settings.skiptune);
 			SettingToggle("mark-tune", data.settings.marktune);
 			SettingToggle("skip-bad", data.settings.skipbad);
@@ -470,7 +471,9 @@ $(function() { // DOM ready
 			$this.removeClass("button-off button-on").addClass("button-"+(state ? "on" : "off"))
 
 			var settings = {};
-			if (event.target.id === "setting-skip-tune")
+			if (event.target.id === "setting-first-subtune")
+				settings.firstsubtune = state ? 1 : 0;
+			else if (event.target.id === "setting-skip-tune")
 				settings.skiptune = state ? 1 : 0;
 			else if (event.target.id === "setting-mark-tune")
 				settings.marktune = state ? 1 : 0;

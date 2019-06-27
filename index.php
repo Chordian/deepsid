@@ -24,7 +24,7 @@
 		<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans%3A400%2C700%2C400italic%2C700italic%7CQuestrial%7CMontserrat&#038;subset=latin%2Clatin-ext" />
 		<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Asap+Condensed" />
 		<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Kanit" />
-		<link rel="stylesheet" type="text/css" href="//chordian.net/wordpress/wp-content/themes/olivi/style.css" />
+		<link rel="stylesheet" type="text/css" href="//olivi.chordian.net/wordpress/wp-content/themes/olivi/style.css" />
 		<link rel="stylesheet" type="text/css" href="//chordian.net/deepsid/css/jquery.mCustomScrollbar.min.css" />
 		<link rel="stylesheet" type="text/css" href="css/chartist.css" />
 		<link rel="stylesheet" type="text/css" href="css/style.css" />
@@ -304,7 +304,7 @@
 						<a id="players" href="#">Players</a>
 					</div>
 
-					<a href="http://chordian.net/2018/05/12/deepsid/">Blog Post</a>
+					<a href="https://olivi.chordian.net/2018/05/12/deepsid/">Blog Post</a>
 						<span>&#9642</span>
 					<a href="https://csdb.dk/forums/?roomid=14&topicid=129712">CSDb</a>
 						<span>&#9642</span>
@@ -604,6 +604,13 @@
 									<option value="16384" selected="selected">16384</option>
 								</select>
 								<label for="dropdown-settings-buffer" class="unselectable">Buffer size</label>
+
+								<div class="space splitline"></div>
+
+								<h3>Defaults</h3>
+
+								<button id="setting-first-subtune" class="button-edit button-toggle button-off">Off</button>
+								<label for="setting-first-subtune" class="unselectable">Always start at the <b>first sub tune</b> in a song instead of the default set by HVSC</label>
 
 								<div class="space splitline"></div>
 
@@ -953,6 +960,18 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>June 27, 2019</h3>
+						<ul>
+							<li>New toggle in settings: Always start at the first sub tune in a song instead of the default set by HVSC.</li>
+						</ul>
+
+						<h3>June 23, 2019</h3>
+						<ul>
+							<li>The web hotel have upgraded MySQL to a version that requires default values for all database
+								fields. I have now added these for all tables. This should fix the recent
+								issue about not being able to add tunes to playlists.</li>
+						</ul>
 
 						<h3>June 17, 2019</h3>
 						<ul>

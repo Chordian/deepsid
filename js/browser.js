@@ -311,8 +311,10 @@ Browser.prototype = {
 					
 					this.showSpinner($(event.target).parents("tr").children("td.sid"));
 
+					// Override default sub tune to first if demanded by a setting
+					var subtuneStart = GetSettingValue("first-subtune") ? 0 : this.playlist[this.songPos].startsubtune;
 					// Either default start subtune, or an override from a "?subtune=" URL parameter
-					var subtune = typeof paramSubtune !== "undefined" ? paramSubtune : this.playlist[this.songPos].startsubtune,
+					var subtune = typeof paramSubtune !== "undefined" ? paramSubtune : subtuneStart,
 						subtuneMax = this.playlist[this.songPos].subtunes - 1;
 					// Make sure the overridden value is within what is available for that SID tune
 					subtune = subtune < 0 ? 0 : subtune;

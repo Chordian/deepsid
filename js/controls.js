@@ -187,7 +187,8 @@ Controls.prototype = {
 
 			if ($("#songs tr").eq(browser.songPos + browser.subFolders).hasClass("disabled")) return false;
 
-			var subtune = browser.playlist[browser.songPos].startsubtune;
+			// Override default sub tune to first if demanded by a setting
+			var subtune = GetSettingValue("first-subtune") ? 0 : browser.playlist[browser.songPos].startsubtune;
 			// The default is too short, but what about the subsequent sub tunes in it?
 			if (isAutoProgress && GetSettingValue("skip-short") && songLength < 10) {
 				while (browser.getLength(subtune) < 10) {
