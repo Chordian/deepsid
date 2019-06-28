@@ -63,19 +63,20 @@ $test_files = array( // These files are suitable as it's a very short sfx (less 
 	//'hvsc/050/FLAC/MUSICIANS/J/Joseph_Richard/Monster_Museum_T032.sid_MOS6581R4.flac',
 );
 
+// NOTE: Don't add a bad HTTP response code in addition to a non-zero status code. Some online
+// cron job services assume the script itself is in error and will terminate after a while.
+
 foreach($test_files as $file) {
 	$mirror = RequestURL('http://se2a1.bigbox.info/dl.php?d=/soasc/'.$file.'&url=1&survey=1');
 	// file_put_contents('../soasc_mirror.txt', $mirror);
 	if (empty($mirror)) {
 		file_put_contents('../soasc.txt', $time.',2'); // The DL script timed out
-		http_response_code(408);
 		die;
 	}
 	$result = RequestURL($mirror);
 	// file_put_contents('../soasc_result.txt', $result);
 	if (empty($result)) {
 		file_put_contents('../soasc.txt', $time.',3'); // The mirror URL timed out
-		http_response_code(408);
 		die;
 	}
 	sleep(1);
