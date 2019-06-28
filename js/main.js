@@ -1123,26 +1123,33 @@ function UpdateURL(skipFileCheck) {
  */
 function CheckSOASCStatus() {
 	$.get("soasc.txt", function(data) {
-		var fields = data.split(",");
-		var timestamp = fields[0], status = parseInt(fields[1]), color = "#999", word = "?";
-		switch (status) {
-			case 0:
-				// Everything is OK
-				color = "#0a0";
-				word = "UP";
-				break;
-			case 1:
-				// This cron script did not finish
-				color = "#aa0";
-				break;
-			case 2:
-			case 3:
-				// Something timed out
-				color = "#a00";
-				word = "DOWN";
-		}
-		$("#soasc-status-led").css("background", color);
-		$("#soasc-status-word").empty().append(word);
+		var fields = data.split(","), color = "#999", word = "?";
+		// Make sure the timestamp is not too old
+		$.get("php/soasc_timestamp.php", { timestamp: fields[0] }, function(data) {
+			browser.validateData(data, function(data) {
+				if (data.minutes < 10) {
+					// The timestamp is fresh
+					switch (parseInt(fields[1])) {
+						case 0:
+							// Everything is OK
+							color = "#0a0";
+							word = "UP";
+							break;
+						case 1:
+							// This cron script did not finish
+							color = "#aa0";
+							break;
+						case 2:
+						case 3:
+							// Something timed out
+							color = "#a00";
+							word = "DOWN";
+					}
+				}
+				$("#soasc-status-led").css("background", color);
+				$("#soasc-status-word").empty().append(word);
+			});
+		});
 	}, "text");
 }
 

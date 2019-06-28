@@ -965,6 +965,11 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>June 28, 2019</h3>
+						<ul>
+							<li>Fixed a problem that erroneously reported down time from the SOASC file servers.</li>
+						</ul>
+
 						<h3>June 27, 2019</h3>
 						<ul>
 							<li>New toggle in settings: Always start at the first sub tune in a song instead of the default set by HVSC.</li>
