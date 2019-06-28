@@ -968,6 +968,7 @@
 						<h3>June 28, 2019</h3>
 						<ul>
 							<li>Fixed a problem that erroneously reported down time from the SOASC file servers.</li>
+							<li>The SOASC options in the handler drop-down box will now be red too if SOASC is down.</li>
 						</ul>
 
 						<h3>June 27, 2019</h3>

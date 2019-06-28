@@ -1119,7 +1119,8 @@ function UpdateURL(skipFileCheck) {
 }
 
 /**
- * Check the SOASC status and set the status in the top accordingly.
+ * Check the SOASC status and set the status in the top accordingly. The SOASC
+ * options in the handler drop-down box will be colored red too, if down.
  */
 function CheckSOASCStatus() {
 	$.get("soasc.txt", function(data) {
@@ -1148,6 +1149,8 @@ function CheckSOASCStatus() {
 				}
 				$("#soasc-status-led").css("background", color);
 				$("#soasc-status-word").empty().append(word);
+				$("#dropdown-emulator").styledOptionColor("soasc_auto soasc_r2 soasc_r4 soasc_r5",
+					(word == "DOWN" ? "#d00" : false));
 			});
 		});
 	}, "text");

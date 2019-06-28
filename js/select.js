@@ -75,6 +75,7 @@ $.fn.styledSelect = function(cls) {
 				$styledSelect
 					.attr("rel",$li.attr("rel"))
 					.text($li.text())
+					.css("color", (typeof $li.data("color") != "undefined" ? $li.data("color") : ""))
 					.removeClass("active")
 					.trigger("change");
 				$list.hide();
@@ -96,10 +97,12 @@ $.fn.styledSelect = function(cls) {
 		// Reset old LI row and highlight the new one
 		function SelectNewLi($this) {
 			// Reset the previously highlighted LI row
-			$this.parent("ul").children("li.selected")
+			var $selected = $this.parent("ul").children("li.selected");
+			var resetColor = typeof $selected.data("color") != "undefined" ? $selected.data("color") : "#444";
+			$selected
 				.removeClass("selected")
 				.css({
-					color:"#444",
+					color:resetColor,
 					background:"#fff"
 				})
 				.find("div").css("background-position","0 0");
@@ -270,6 +273,35 @@ $.fn.styledOptionState = function(values, state) {
 				var $option = $(this).next("div.styledSelect").next("ul.options").children("li[rel='"+value+"']");
 				$option.removeClass("disabled");
 				if (state == "disabled") $option.addClass("disabled");
+			}.bind(this));
+		}
+	});
+}
+
+/**
+ * Plugin to set the text color of options in the styled drop-down box.
+ * 
+ * @param {string} values	The values of the options, separated by spaces.
+ * @param {string} color	The CSS color to set, or false to reset.
+ */
+$.fn.styledOptionColor = function(values, color) {
+	return this.each(function() {
+		if (typeof values !== "undefined") {
+			var $currentlySelected = $(this).next("div.styledSelect");
+			$currentlySelected.css("color", "");
+			$.each(values.split(" "), function(i, value) {
+				var $option = $currentlySelected.next("ul.options").children("li[rel='"+value+"']");
+				$option
+					.css("color", "")
+					.removeData("color");
+				if (color) {
+					$option
+						.css("color", color)
+						.data("color", color);
+					if ($currentlySelected.attr("rel") === value)
+						$currentlySelected
+							.css("color", color);
+				}
 			}.bind(this));
 		}
 	});
