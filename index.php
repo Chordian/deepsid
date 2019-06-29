@@ -965,6 +965,11 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>June 29, 2019</h3>
+						<ul>
+							<li>Fixed two minor bugs when clicking the time bar while using an SOASC handler to play a song.</li>
+						</ul>
+
 						<h3>June 28, 2019</h3>
 						<ul>
 							<li>Fixed a problem that erroneously reported down time from the SOASC file servers.</li>

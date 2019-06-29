@@ -880,7 +880,8 @@ input[type=range]::-ms-track {
 	#time-bar {
 		overflow: hidden;
 		display: inline-block;
-		width: 346px; /* Width also used in browser.js */
+		position: relative;		/* Adding this gets rid of an invisible DIV subtune overlap */
+		width: 346px;			/* Width also used in browser.js */
 		height: 9px;
 		border: 0.5px solid #c4c5b3; /* #a8ad95 #c8c9b9 */
 		border-radius: 3px;
