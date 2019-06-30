@@ -968,9 +968,10 @@
 						<h3>June 30, 2019</h3>
 						<ul>
 							<li>The <a href="https://www.hvsc.c64.org/">High Voltage SID Collection</a> has been upgraded to the latest version #71.</li>
-							<li>Maximum song length now cuts off the milliseconds shown, but I believe Howler.js still respects them.</li>
+							<li>The maximum song length at the end of the time bar now cuts off the milliseconds shown.</li>
 							<li>Fixed a bug where some STIL entries had letters cut off in the end of the text. This was a bug in a Python
 								script used for importing them. My apologies to the HVSC crew for being accused by users for causing this.</li>
+							<li>Fixed a new search bug that sometimes gave no results.</li>
 						</ul>
 
 
