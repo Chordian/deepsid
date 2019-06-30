@@ -6,7 +6,7 @@
  function Browser() {
 
 	this.ROOT_HVSC = 'hvsc';
-	this.HVSC_VERSION = 70;
+	this.HVSC_VERSION = 71;
 	this.CGSC_VERSION = 136;
 
 	this.path = "";
@@ -1050,7 +1050,7 @@ Browser.prototype = {
 
 		if (typeof noReset === "undefined") {
 			$("#time-current").empty().append("0:00");
-			$("#time-length").empty().append(length);
+			$("#time-length").empty().append(length.split(".")[0]); // No MS
 			return $("#loop").hasClass("button-on") ? 0 : this.secondsLength;
 		}
 		return this.secondsLength;
