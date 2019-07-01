@@ -42,7 +42,7 @@ try {
 		// "First time?"
 		$settings = array(
 			'firstsubtune' =>	0,
-			'skiptune' =>		0,
+			'skiptune' =>		1,
 			'marktune' =>		0,
 			'skipbad' =>		0,
 			'skiplong' =>		0,
