@@ -64,9 +64,10 @@ function GenerateList($rows, $type) {
 				$select->setFetchMode(PDO::FETCH_OBJ);
 				if ($select->rowCount()) {
 					foreach($select as $row) {
+						$length = explode(' ', $row->length)[0];
 						array_push($list, array(
 							'entry' =>	AdaptBrowserName($row->fullname, HOST.'?file=/'.$row->fullname.'&subtune='.($row->subtune + 1)),
-							'value' =>	explode(' ', $row->length)[0],
+							'value' =>	explode('.', $length)[0], // No MS
 						));
 					}
 				}

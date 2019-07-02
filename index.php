@@ -965,6 +965,8 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>July 2, 2019</h3>
+
 						<h3>June 30, 2019</h3>
 						<ul>
 							<li>The <a href="https://www.hvsc.c64.org/">High Voltage SID Collection</a> has been upgraded to the latest version #71.</li>
@@ -973,7 +975,6 @@
 								script used for importing them. My apologies to the HVSC crew for being accused by users for causing this.</li>
 							<li>Fixed a new search bug that sometimes gave no results.</li>
 						</ul>
-
 
 						<h3>June 29, 2019</h3>
 						<ul>
