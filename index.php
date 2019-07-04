@@ -693,7 +693,7 @@
 
 						<h3>Libraries of SID tunes</h3>
 						<p>
-							High Voltage SID Collection #70<br />
+							High Voltage SID Collection #71<br />
 							<a href="https://www.hvsc.c64.org/">https://www.hvsc.c64.org/</a>
 						</p>
 						<p>
@@ -966,6 +966,17 @@
 						<h2>Changes</h2>
 
 						<h3>July 2, 2019</h3>
+						<ul>
+							<li>Fixed a data discrepancy in the top 20 tables with longest and total SID playing times.</li>
+							<li>The top 20 table with the longest SID tunes no longer show milliseconds.</li>
+							<li>All new files in HVSC #71 are now connected to CSDb entries.</li>
+							<li>Added the CSDb music competitions related to HVSC #71.</li>
+						</ul>
+
+						<h3>July 1, 2019</h3>
+						<ul>
+							<li>Added composer profiles for the new folders in HVSC #71.</li>
+						</ul>
 
 						<h3>June 30, 2019</h3>
 						<ul>
