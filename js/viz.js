@@ -12,6 +12,10 @@ function Viz(emulator) {
 	this.floodZoom = false;
 	this.floodPW = false;
 	this.lineInFlood = false;
+	this.scopeLineColor = [
+		"34, 35, 27",	// For bright color theme
+		"255, 0, 0"		// For dark color theme
+	];
 
 	this.bufferSize;
 
@@ -528,7 +532,7 @@ Viz.prototype = {
 			var canvas = $("#scope"+voice)[0];
 			var ctx = canvas.getContext("2d");
 			ctx.clearRect(0, 0, 512, 70);
-			ctx.strokeStyle = "rgba(34, 35, 27, 0.4)"; // Faded color too
+			ctx.strokeStyle = "rgba("+(this.scopeLineColor[colorTheme])+", 0.4)"; // Faded color too
 			ctx.beginPath();
 			ctx.moveTo(0, 35);
 			ctx.lineTo(511, 35);

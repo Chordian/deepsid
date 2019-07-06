@@ -3,10 +3,31 @@
  * DeepSID / CSS
  */
 
-/* NOTE: Some colors are set in the Olivi style sheet! @todo THIS NEEDS TO BE MOVED IN HERE NOW! */
+	/* Todo:
+	
+		- Code the theme selector in the top. It's state must be stored in local storage.
+		- Make the data variable for body element (see web site in browser bookmarks).
+		- Update GIF/SVG animations, SVG images, and colors set by jQuery. Use data variable to select.
+		- ALSO CHECK ALL PHP FILES FOR COLORS!
+		- Color theme selected by custom scrollbar ("dark-3" for bright, and...?).
+
+	   Test:
+
+		- Change password
+		- Good/Bad news in root
+		- Loading SVG (recommended/players)
+		- SOASC status LED
+		- SID file error rows (e.g. when SOASC refuses)
+
+	*/
+
+/* ---- Custom color variables (default theme) ------------------------------- */
+
 :root {
 	--color-top:					#fff;				/* Full white for e.g. hovering on elements */
 	--color-bottom:					#000;				/* Full black for e.g. bolded text in settings */
+
+	--color-bg:						#e7e8e0;			/* Body background */
 
 	--color-logo:					#d3d4c6;			/* Color for e.g. top left logo and disabled song rows */
 	--color-bg-box:					#f7f8f5;			/* General background color for various boxes and pages */
@@ -14,12 +35,24 @@
 	--color-bg-sid-selected:		#ebebe5;			/* Background of e.g. a selected SID row in the browser */
 	--color-bg-sid-hover:			#f1f1ed;			/* Background when hovering on a SID row in the browser */
 	--color-bg-new:					#ef0;				/* Color for small "NEW" labels on SID rows in the browser */
+	--color-bg-edit-area:			rgb(71, 73, 55, 0.08);
+	--color-code-bg:				#f4f3ee;			/* Colors for <CODE> element */
+	--color-code-border:			#ebeae1;
+	--color-anchor:					#5a6701;			/* Standard hyperlink */
+	--color-anchor-hover:			#e95927;
+	--color-table:					#a8ad95;			/* Standard colors for <TABLE>, <TH> and <TD> elements */
+	--color-table-th-bg:			#f5f6f2;
+	--color-input-text:				#666;				/* When text is present in an edit box but not being edited */
+	--color-input-text-focus:		#111;				/* When typing in an edit box */
+	--color-selection-bg:			#d2d5cb;			/* When marking text to be copied */
+	--color-selection-text:			#222;
 
 	--color-border:					#ced0c0;			/* For borders and text labels where its container is disabled */
 	--color-border-box:				#c8c8b9;			/* For borders around various boxes and input fields */
 	--color-border-info:			#7a88c8;			/* Bottom border color for top info box */
 
 	--color-button:					#474937;			/* Darkest green typically used on buttons */
+	--color-button-text:			var(--color-top);	
 	--color-button-hover:			#62644c;			/* When hovering on an ACTIVE button */
 	--color-button-inverted:		#f5f5f1;			/* Almost white */
 	--color-button-disabled:		#c8c9b9;			/* Disabled button */
@@ -27,6 +60,7 @@
 
 	--color-link-hover:				#e95927;			/* Hovering on a link */
 
+	--color-text-body:				#404040;			/* Default text color */
 	--color-text-subtle:			#a1a294;			/* For e.g. top links */
 	--color-text-fine:				#68695a;			/* For e.g. login user name */
 	--color-text-dim:				#b0b29a;			/* For e.g. edit box border and small text on white background */
@@ -38,6 +72,7 @@
 
 	--color-border-subtune:			#888;				/* Border for round sub tune indicators in playlists */
 	--color-text-subtune:			#222;				/* Text color for sub tune indicators in playlists */
+	--color-bg-subtune:				var(--color-top);
 
 	--color-text-resp-good:			#494;				/* Good response text color in user form */
 	--color-text-resp-bad:			#a44;				/* Bad response text color in user form */
@@ -133,12 +168,17 @@
 	--color-styled-select-bg:		var(--color-top);
 	--color-styled-active-bg:		var(--color-button-inverted);
 	--color-styled-arrow:			var(--color-button);
-	--color-styled-arrow-disabled:	#777;
+	--color-styled-disabled:		#777;
+	--color-styled-arrow-disabled:	var(--color-styled-disabled);
 	--color-styled-shadow:			rgba(0, 0, 0, 0.3);
 	--color-styled-item-disabled:	#c8c8ba;
 	--color-styled-dotted-line:		#a4a4a4;
+	--color-styled-resetcolor:		#444;
 
 	/* Piano synth box colors */
+
+	/* NOTE: File 'viz.js' also contains direct color settings for both piano and flood views.
+	         The scope line color is set with a small array in the top of the 'viz.js' file. */
 
 	--color-piano-inverted:			#ddd;				/* Bright gray */
 	--color-piano-bg:				#444;				/* Background of synth box (overridden by a gradient) */
@@ -184,20 +224,100 @@
 	--color-piano-pb-off-lg2:		#1e1e1e;
 	--color-piano-pb-off-border:	#111;
 
-	/* Todo:
-	
-		- Add more.
-		- Import stuff from olivi style sheet that is actually used and REMOVE .css line in index.php.
-		- Also adapt olivi style sheet stuff to use those css variables.
-		- Code the theme selector in the top.
-		- Make the data variable for body element (see web site).
-		- Update GIF/SVG animations, SVG images, and colors set by jQuery. Use data variable to select.
-	*/
+	/* Colors set in jQuery */
+
+	/* NOTE: Some of the above variables are also achieved by jQuery. */
+
+	--color-pwd-good:				#080;				/* When changing the password in settings */
+	--color-pwd-bad:				#a00;
+
+	--color-soasc-status-unknown:	#999;				/* SOASC status field in top */
+	--color-soasc-status-up:		#0a0;
+	--color-soasc-status-down:		#a00;
+	--color-soasc-status-out:		#aa0;
+	--color-soasc-handlers-down:	#d00;				/* Used in the drop-down box for SID handlers */
+
+	--color-sid-row-error-entry:	#a33;				/* Error colors for SID file row that can't be played */
+	--color-sid-row-error-info:		#cc8282;
+	--color-sid-row-error-bg:		#f5eaea;
 }
+
+/* ---- Custom color variables (dark theme) ---------------------------------- */
+
+[data-theme="dark"] {
+	--color-bg:						#333;				/* Body background */
+
+}
+
+/* ---- Overriding Olivi CSS ------------------------------------------------- */
+
+body,
+button,
+input,
+select,
+textarea {
+	color: var(--color-text-body);
+}
+
+code {
+	background: var(--color-code-bg);
+	border-color: var(--color-code-border);
+}
+
+a {
+	color: var(--color-anchor);
+}
+
+a:hover,
+a:focus,
+a:active {
+	color: var(--color-anchor-hover);
+}
+
+table,
+th,
+td {
+	border-color: var(--color-table);
+}
+
+th {
+	background: var(--color-table-th-bg);
+}
+
+button,
+input[type="submit"],
+input[type="button"] {
+	color: var(--color-button-text);
+	background: var(--color-button);
+}
+
+button:hover,
+input[type="button"]:hover,
+input[type="submit"]:hover {
+	background: var(--color-button-hover);
+}
+
+input[type="text"],
+input[type="password"],
+input[type="search"] {
+	color: var(--color-input-text);
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="search"]:focus {
+	color: var(--color-input-text-focus);
+}
+
+::selection { background:var(--color-selection-bg); color:var(--color-selection-text); }
+::-moz-selection { background:var(--color-selection-bg); color:var(--color-selection-text); }
+
+/* ---- DeepSID -------------------------------------------------------------- */
 
 body, html {
 	height: 100%;
 	margin: 0;
+	background: var(--color-bg);
 }
 
  /* Remove pointer events to simplify event handling in jQuery */
@@ -307,6 +427,41 @@ small.u2 { margin-left: 2px; }
 	color:  var(--color-logo);
 	font: bold 43px "Kanit", sans-serif;
 }
+
+#theme-selector {
+	position: absolute;
+	bottom: 6px;
+	left: 143px;
+	width: 14px;
+	height: 14px;
+	background: var(--color-button-inverted);
+	border: 2px solid var(--color-button);
+	border-radius: 10px;
+	cursor: pointer;
+	transition: all .12s linear;
+	box-shadow: 1px 1px 2px var(--color-text-minor);
+	z-index: 2;
+}
+
+	#theme-selector div {
+		float: right;
+		height: 100%;
+		width: 50%;
+		background: var(--color-button);
+	}
+
+	#theme-selector:hover {
+		background: var(--color-top);
+		border-color: var(--color-button-hover);
+	}
+
+		#theme-selector:hover > div {
+			background: var(--color-button-hover);
+		}
+
+	#theme-selector:active {
+		box-shadow: 0 0 0 transparent;
+	}
 
 #logged-in {
 	position: absolute;
@@ -505,7 +660,7 @@ small.u2 { margin-left: 2px; }
 	width: calc(100% - 5px); /* To match the width of the keyboards */
 	padding: 8px;
 	margin: 0 0 10px 2px;
-	background: rgb(71, 73, 55, 0.08);
+	background: var(--color-bg-edit-area);
 	border-radius: 3px;
 }
 
@@ -1124,7 +1279,7 @@ input[type=range]::-ms-track {
 		border-radius: 4px;
 	}
 
-	/* C64 colors for MUS info text (supplied by Peter Weighill) */
+	/* C64 colors for MUS info text (supplied by Peter Weighill) - don't change these for other color schemes! */
 	.c0 { color: #000000; }
 	.c1 { color: #ffffff; }
 	.c2 { color: #880000; }
@@ -1298,8 +1453,6 @@ input[type=range]::-ms-track {
 			left: 0;
 			height: 2px;
 			width: 100%;
-			/*border-top: 2px solid transparent;
-			border-image: linear-gradient(90deg, rgba(68,82,157,0), rgba(68,82,157,1), rgba(68,82,157,0)) 2 stretch;*/
 			background-image: linear-gradient(90deg, var(--color-memory-lid-side), var(--color-memory-lid-middle), var(--color-memory-lid-side));
 		}
 
@@ -1393,6 +1546,10 @@ input[type=range]::-ms-track {
 		#tips code,
 		.sundryMsg code {
 			font-size: 12px;
+		}
+
+		#stopic-stil .noInfo {
+			color: var(--color-text-subtle);
 		}
 
 	/* C64 font for INFO and STIL boxes when browsing CGSC */
@@ -1729,7 +1886,7 @@ input[type=range]::-ms-track {
 			#songs .specific {
 				font-size: 9px;
 				line-height: 1.65em;
-				background: var(--color-top);
+				background: var(--color-bg-subtune);
 				padding: 0 5px;
 				color: var(--color-text-subtune);
 				border: 0.8px solid var(--color-border-subtune);
@@ -3103,7 +3260,6 @@ input[type=range]::-ms-track {
 
 	#topic-player table.playerinfo {
 		font-size: 12px;
-		/* border-color: #ced0c0; */
 		background: var(--color-top);
 		border-width: 1.5px;
 	}

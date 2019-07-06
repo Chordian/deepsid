@@ -107,7 +107,7 @@ SidTracer = (function(){ var $this = function(outputSize) {
 		*/
 		setOutputSize(s) {
 			if (s > this._samplesPerBuffer) {
-				console.log("error: max output size is " + this._samplesPerBuffer);
+				// console.log("error: max output size is " + this._samplesPerBuffer);
 				s= this._samplesPerBuffer;
 			}		
 			this.outputSize= s;
@@ -441,7 +441,7 @@ VoiceDisplay.prototype = {
 		} catch (err) {}
 		this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 				
-		this.ctx.strokeStyle = "rgba(34, 35, 27, 1.0)"; // Color modified by JCH (originally 1, 0, 0)
+		this.ctx.strokeStyle = "rgba("+(viz.scopeLineColor[colorTheme])+", 1.0)"; // Color modified by JCH
 		this.ctx.save();
 
 		if (!osciloscopeMode) {

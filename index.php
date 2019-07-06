@@ -134,13 +134,13 @@
 
 	</head>
 
-	<body class="entry-content" style="background:#e7e8e0;" data-mobile="<?php echo isMobile(); ?>">
+	<body class="entry-content" data-mobile="<?php echo isMobile(); ?>">
 
 		<iframe id="download" style="display:none;"></iframe>
 
 		<div id="panel">
 			<div id="top">
-				<div id="logo">D e e p S I D</div>
+				<div id="logo" class="unselectable">D e e p S I D</div>
 				<select id="dropdown-emulator" name="select-emulator" style="visibility:hidden;">
 					<option value="websid">WebSid emulator</option>
 					<option value="jssid">Hermit's emulator</option>
@@ -150,6 +150,8 @@
 					<option value="soasc_r5">SOASC 8580 R5</option>
 					<option value="download">Download SID file</option>
 				</select>
+
+				<div id="theme-selector" title="Click here to toggle the color theme"><div></div></div>
 
 				<?php if ($user_id) : ?>
 					<div id="logged-in">
@@ -964,6 +966,11 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>July 6, 2019</h3>
+						<ul>
+							<li>Fixed a bug where default settings were not created for guests.</li>
+						</ul>
 
 						<h3>July 2, 2019</h3>
 						<ul>

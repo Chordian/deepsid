@@ -98,19 +98,19 @@ $.fn.styledSelect = function(cls) {
 		function SelectNewLi($this) {
 			// Reset the previously highlighted LI row
 			var $selected = $this.parent("ul").children("li.selected");
-			var resetColor = typeof $selected.data("color") != "undefined" ? $selected.data("color") : "#444";
+			var resetColor = typeof $selected.data("color") != "undefined" ? $selected.data("color") : GetCSSVar("--color-styled-resetcolor");
 			$selected
 				.removeClass("selected")
 				.css({
 					color:resetColor,
-					background:"#fff"
+					background:GetCSSVar("--color-styled-select-bg")
 				})
 				.find("div").css("background-position","0 0");
 			// Highlight the new LI row (and change its icon)
 			$this.addClass("selected")
 				.css({
-					color:"#fff",
-					background:"#474937"
+					color:GetCSSVar("--color-styled-select-bg"),
+					background:GetCSSVar("--color-styled-select-text")
 				})
 				.find("div").css("background-position","-16px 0");
 		};
@@ -247,20 +247,6 @@ $.fn.styledGetValue = function() {
 };
 
 /**
- * Plugin to apply a background color to a styled drop-down box depending on
- * its state - reset/default or not.
- *
- * @param {boolean} bool	TRUE for white (reset/default), FALSE for yellow.
- */
-$.fn.styledDefaultColor = function(bool) {
-	return this.each(function() {
-		$(this)
-			.next("div.styledSelect")
-			.css("background",bool ? "#f4f4f4" : "#f4f4aa");
-	});
-};
-
-/**
  * Plugin to enable or disable options in the styled drop-down box.
  *
  * @param {string} values	The values of the options, separated by spaces.
@@ -318,14 +304,14 @@ $.fn.styledState = function(state) {
 			$(this)
 				.next("div.styledSelect")
 				.removeClass("disabled")
-				.css("color","#444")
+				.css("color",GetCSSVar("--color-styled-resetcolor"))
 				.parents("div.select")
 				.css("opacity","1.0");
 		} else {
 			$(this)
 				.next("div.styledSelect")
 				.addClass("disabled")
-				.css("color","#777")
+				.css("color",GetCSSVar("--color-styled-disabled"))
 				.parents("div.select")
 				.css("opacity","0.5");
 		}

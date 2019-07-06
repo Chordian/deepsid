@@ -719,7 +719,7 @@ Browser.prototype = {
 					$("#folders").height($("#folders").height())
 						.mCustomScrollbar({
 							axis: "y",
-							theme: "dark-3",
+							theme: (colorTheme ? "light-3" : "dark-3"),
 							setTop: (typeof scrollPos !== "undefined" ? scrollPos+"px" : "0"),
 							scrollButtons:{
 								enable: true,
@@ -1006,7 +1006,7 @@ Browser.prototype = {
 						$("#folders").height($("#folders").height())
 							.mCustomScrollbar({
 								axis: "y",
-								theme: "dark-3",
+								theme: (colorTheme ? "light-3" : "dark-3"),
 								setTop: (typeof scrollPos !== "undefined" ? scrollPos+"px" : "0"),
 								scrollButtons:{
 									enable: true,
@@ -1064,9 +1064,9 @@ Browser.prototype = {
 		var $tr = $("#folders tr").eq(this.subFolders + this.songPos);
 
 		// Turn the row all red
-		$tr.find(".entry").css("color", "#a33");
-		$tr.find("span.info").css("color", "#cc8282");
-		$tr.css("background", "#f5eaea");
+		$tr.find(".entry").css("color", GetCSSVar("--color-sid-row-error-entry"));
+		$tr.find("span.info").css("color", GetCSSVar("--color-sid-row-error-info"));
+		$tr.css("background", GetCSSVar("--color-sid-row-error-bg"));
 
 		// Remove stuff, clear boxes, disable buttons
 		$("#sid-model,#clockspeed,#hvsc-version").remove();
@@ -1482,7 +1482,7 @@ Browser.prototype = {
 
 		// Maintain hover background color while showing the context menu
 		this.contextTR = $target.parent("tr");
-		this.contextTR.css("background", "#f1f1ed");
+		this.contextTR.css("background", GetCSSVar("--color-bg-sid-hover"));
 
 		if ($target.hasClass("sid")) {
 			var isPersonalSymlist = this.path.substr(0, 2) == "/!",
@@ -1522,7 +1522,7 @@ Browser.prototype = {
 				ifAlreadyPublic = " disabled";
 			}
 
-			contents = 																		// Symlist folder in root
+			contents = // Symlist folder in root
 				'<div class="line" data-action="symentry-rename">Rename Playlist</div>'+
 				'<div class="line" data-action="symlist-delete">Delete Playlist</div>'+
 				(ifAlreadyPublic

@@ -5,7 +5,7 @@
 
 var $=jQuery.noConflict();
 var cacheCSDb = cacheSticky = cacheStickyBeforeCompo = cacheCSDbProfile = cacheBeforeCompo = cachePlayer = cacheGB64 = prevFile = sundryTab = reportSTIL = "";
-var cacheTabScrollPos = cachePlayerTabScrollPos = cacheGB64TabScrollPos = tabScrollPos = cachePosBeforeCompo = cacheDDCSDbSort = peekCounter = sundryHeight = 0;
+var cacheTabScrollPos = cachePlayerTabScrollPos = cacheGB64TabScrollPos = tabScrollPos = cachePosBeforeCompo = cacheDDCSDbSort = peekCounter = sundryHeight = colorTheme = 0;
 var sundryToggle = true, recommended = players = null;
 
 $(function() { // DOM ready
@@ -135,7 +135,7 @@ $(function() { // DOM ready
 			browser.validateData(data, function(data) {
 				$("#new-password-msg")
 					.empty()
-					.css("color", (data.message.toLowerCase() == "saved" ? "#080" : "#a00"))
+					.css("color", (data.message.toLowerCase() == "saved" ? GetCSSVar("--color-pwd-good") : GetCSSVar("--color-pwd-bad")))
 					.append(data.message)
 					.show();
 				setTimeout(function() {
@@ -350,6 +350,20 @@ $(function() { // DOM ready
 				viz.activatePiano(true);
 				break;
 		}
+	});
+
+	/**
+	 * When the color theme toggle button is clicked.
+	 * 
+	 * A data attribute is set in the BODY element, and the theme class is toggled
+	 * for all of the currently existing custom scrollbars.
+	 */
+	$("#theme-selector").click(function() {
+		colorTheme ^= 1;
+		$("body").attr("data-theme", colorTheme ? "dark" : "")
+			.find(colorTheme ? ".mCS-dark-3" : ".mCS-light-3")
+			.removeClass(colorTheme ? "mCS-dark-3" : ".mCS-light-3")
+			.addClass(colorTheme ? "mCS-light-3" : "mCS-dark-3");
 	});
 
 	/**
@@ -815,7 +829,7 @@ $(function() { // DOM ready
 		$("#folders").height($("#folders").height())
 			.mCustomScrollbar({
 				axis: "y",
-				theme: "dark-3",
+				theme: (colorTheme ? "light-3" : "dark-3"),
 				scrollButtons:{
 					enable: true,
 				},
@@ -939,7 +953,7 @@ function ShowDexterScrollbar(topic) {
 	if ($("#tabs .selected").attr("data-topic") !== "disqus") {
 		$("#page").mCustomScrollbar({
 			axis: "y",
-			theme: "dark-3",
+			theme: (colorTheme ? "light-3" : "dark-3"),
 			autoHideScrollbar: typeof topic !== "undefined" && topic === "piano", // Must hide on piano view page
 			scrollButtons:{
 				enable: true,
@@ -1124,7 +1138,7 @@ function UpdateURL(skipFileCheck) {
  */
 function CheckSOASCStatus() {
 	$.get("soasc.txt", function(data) {
-		var fields = data.split(","), color = "#999", word = "?";
+		var fields = data.split(","), color = "--color-soasc-status-unknown", word = "?";
 		// Make sure the timestamp is not too old
 		$.get("php/soasc_timestamp.php", { timestamp: fields[0] }, function(data) {
 			browser.validateData(data, function(data) {
@@ -1133,27 +1147,40 @@ function CheckSOASCStatus() {
 					switch (parseInt(fields[1])) {
 						case 0:
 							// Everything is OK
-							color = "#0a0";
+							color = "--color-soasc-status-up";
 							word = "UP";
 							break;
 						case 1:
 							// This cron script did not finish
-							color = "#aa0";
+							color = "--color-soasc-status-out";
 							break;
 						case 2:
 						case 3:
 							// Something timed out
-							color = "#a00";
+							color = "--color-soasc-status-down";
 							word = "DOWN";
 					}
 				}
-				$("#soasc-status-led").css("background", color);
+				$("#soasc-status-led").css("background", GetCSSVar(color));
 				$("#soasc-status-word").empty().append(word);
 				$("#dropdown-emulator").styledOptionColor("soasc_auto soasc_r2 soasc_r4 soasc_r5",
-					(word == "DOWN" ? "#d00" : false));
+					(word == "DOWN" ? GetCSSVar("--color-soasc-handlers-down") : false));
 			});
 		});
 	}, "text");
+}
+
+/**
+ * Get a custom variable (usually a color) from the CSS file, according to the
+ * currently selected color scheme.
+ * 
+ * If the variable is not present in the CSS file for the dark theme, it will
+ * automatically default to the ":root" variable.
+ * 
+ * @param {string} cssVar	The custom variable name.
+ */
+function GetCSSVar(cssVar) {
+	return $(colorTheme ? "[data-theme='dark']" : ":root").css(cssVar);
 }
 
 /**
