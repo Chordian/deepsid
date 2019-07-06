@@ -4,12 +4,11 @@
  */
 
 	/* Todo:
-	
-		- Code the theme selector in the top. It's state must be stored in local storage.
-		- Make the data variable for body element (see web site in browser bookmarks).
-		- Update GIF/SVG animations, SVG images, and colors set by jQuery. Use data variable to select.
-		- ALSO CHECK ALL PHP FILES FOR COLORS!
-		- Color theme selected by custom scrollbar ("dark-3" for bright, and...?).
+
+		- The state of the theme selector must be stored in local storage.
+		- Update GIF/SVG animations and SVG images.
+		- Split up avatar/profile background colors - don't juse use "--color-top" for those.
+		- What about the "brand" corner graphics? Some of it have black text or outlines!
 
 	   Test:
 
@@ -46,6 +45,9 @@
 	--color-input-text-focus:		#111;				/* When typing in an edit box */
 	--color-selection-bg:			#d2d5cb;			/* When marking text to be copied */
 	--color-selection-text:			#222;
+	--color-notable:				#f8f848;			/* Color for notable achievements in composer profile */
+	--color-oldest-in-top:			#c86d55;			/* Color for right corner line above CSDb comments table */
+	--color-emphasize:				#ffff80;			/* Color for emphasizing handles or groups in CSDb releases */
 
 	--color-border:					#ced0c0;			/* For borders and text labels where its container is disabled */
 	--color-border-box:				#c8c8b9;			/* For borders around various boxes and input fields */
@@ -57,6 +59,7 @@
 	--color-button-inverted:		#f5f5f1;			/* Almost white */
 	--color-button-disabled:		#c8c9b9;			/* Disabled button */
 	--color-button-shadow:			#808270;			/* Button shadow */
+	--color-button-logout:			var(--color-button-inverted);
 
 	--color-link-hover:				#e95927;			/* Hovering on a link */
 
@@ -76,6 +79,23 @@
 
 	--color-text-resp-good:			#494;				/* Good response text color in user form */
 	--color-text-resp-bad:			#a44;				/* Bad response text color in user form */
+
+	--color-settings-cog-icon:		var(--color-button-hover);
+
+	--color-player-package:			#f8f1f1;			/* Background colors for headers in player/editor table */
+	--color-player-features:		#fafaee;
+	--color-player-player:			#f1f1f8;
+	--color-player-editor:			#f2f8f2;
+
+	--color-pwd-good:				#080;				/* When changing the password in settings */
+	--color-pwd-bad:				#a00;
+
+	--color-viz-msg-emu:			var(--color-pwd-bad);
+	--color-vis-msg-buffer:			#00a;
+
+	--color-sid-row-error-entry:	#a33;				/* Error colors for SID file row that can't be played */
+	--color-sid-row-error-info:		#cc8282;
+	--color-sid-row-error-bg:		#f5eaea;
 
 	/* Custom context menu */
 
@@ -106,6 +126,17 @@
 	--color-notification-gb64:		#070;
 	--color-notification-player:	#808;
 
+	/* SOASC status in top */
+
+	--color-soasc-status-bg:		var(--color-tab-border-disabled);
+	--color-soasc-status-border:	var(--color-logo);
+	--color-soasc-status-text:		var(--color-button-hover);
+	--color-soasc-status-unknown:	#999;				/* SOASC status field in top */
+	--color-soasc-status-up:		#0a0;
+	--color-soasc-status-down:		#a00;
+	--color-soasc-status-out:		#aa0;
+	--color-soasc-handlers-down:	#d00;				/* Used in the drop-down box for SID handlers */
+
 	/* Colors in root (front page) boxes */
 
 	--color-root-good-bg:			#efe;				/* Colors for good front page news */
@@ -116,6 +147,8 @@
 	--color-root-bad-text:			#a00;
 	--color-root-bg-random:			#fafff8;			/* Color for root random folder box when hovering on it */
 	--color-root-bg-rec:			#eeefe9;			/* Color for root recommended folder box when hovering on it */
+	--color-root-random-text:		#5e6048;
+	--color-root-random-bigfont:	#333;
 
 	/* Corner flags in info box */
 
@@ -223,23 +256,6 @@
 	--color-piano-pb-off-lg1:		#333;
 	--color-piano-pb-off-lg2:		#1e1e1e;
 	--color-piano-pb-off-border:	#111;
-
-	/* Colors set in jQuery */
-
-	/* NOTE: Some of the above variables are also achieved by jQuery. */
-
-	--color-pwd-good:				#080;				/* When changing the password in settings */
-	--color-pwd-bad:				#a00;
-
-	--color-soasc-status-unknown:	#999;				/* SOASC status field in top */
-	--color-soasc-status-up:		#0a0;
-	--color-soasc-status-down:		#a00;
-	--color-soasc-status-out:		#aa0;
-	--color-soasc-handlers-down:	#d00;				/* Used in the drop-down box for SID handlers */
-
-	--color-sid-row-error-entry:	#a33;				/* Error colors for SID file row that can't be played */
-	--color-sid-row-error-info:		#cc8282;
-	--color-sid-row-error-bg:		#f5eaea;
 }
 
 /* ---- Custom color variables (dark theme) ---------------------------------- */
@@ -532,6 +548,11 @@ small.u2 { margin-left: 2px; }
 	padding: 0 4px;
 }
 
+#logout svg,
+#userform button svg {
+	fill: var(--color-button-logout);
+}
+
 #response {
 	font-size: 12px;
 	color: var(--color-text-player);
@@ -664,6 +685,10 @@ small.u2 { margin-left: 2px; }
 	border-radius: 3px;
 }
 
+	#dexter .g2 {
+		fill: var(--color-settings-cog-icon);
+	}
+
 	#topic-settings .edit {
 		padding: 20px 16px;
 	}
@@ -694,6 +719,9 @@ small.u2 { margin-left: 2px; }
 		margin-left: 12px;
 		font-size: 14px;
 	}
+
+		.viz-msg-emu	{ color: var(--color-viz-msg-emu); }
+		.viz-msg-buffer	{ color: var(--color-vis-msg-buffer); top:0; left:100px; }
 
 	.viz-buffer {
 		float: right;
@@ -1548,7 +1576,7 @@ input[type=range]::-ms-track {
 			font-size: 12px;
 		}
 
-		#stopic-stil .noInfo {
+		#stopic-stil .no-info {
 			color: var(--color-text-subtle);
 		}
 
@@ -2319,6 +2347,27 @@ input[type=range]::-ms-track {
 	width: 860px;
 }
 
+	#dexter .soasc-status {
+		position: absolute;
+		top: -7.5px;
+		left: 315px;
+		padding: 3px 2px 3px 6px;
+		border-radius: 3px;
+		background: var(--color-soasc-status-bg);
+		border: 0.5px solid var(--color-soasc-status-border);
+		color: var(--color-soasc-status-text);
+	}
+
+	#soasc-status-led {
+		display: inline-block;
+		position: relative;
+		top: 0;
+		width: 7px;
+		height: 7px;
+		background: var(--color-soasc-status-unknown);
+		margin: 0 0 0 2px;
+	}
+
 	#tabs {
 		/* See also #top for additional styling (flex) */
 		width: 860px;
@@ -2474,10 +2523,23 @@ input[type=range]::-ms-track {
 			border: 1px solid var(--color-border);
 		}
 
+		#page .ext .no-profile {
+			margin-top: 5px;
+			font-size: 12px;
+			color: var(--color-text-subtle);
+		}
+
 		#page .ext .composer {
 			width: 184px;
 			height: 184px;
 			border: 1px solid var(--color-border);
+			background: var(--color-top);
+		}
+
+		#page .ext .root-thumbnail {
+			background: var(--color-top);
+			width: 80px;
+			height: 80px;
 		}
 
 			/* Born / Died */
@@ -2492,6 +2554,16 @@ input[type=range]::-ms-track {
 				border: 1px solid var(--color-text-dim);
 				border-radius: 4px;
 				background: var(--color-top);
+			}
+
+			#page .ext .notable {
+				display: block;
+				position: absolute;
+				height: 22px;
+				left: 10px;
+				bottom: 52px;
+				background: var(--color-notable);
+				border-radius: 4px;
 			}
 
 			/* Flag image added after countries */
@@ -2684,6 +2756,23 @@ input[type=range]::-ms-track {
 			#page table.rec table.tight:hover {
 				background: var(--color-root-bg-rec);
 			}
+
+				#page table.rec table.decent .random-container {
+					position: absolute;
+					top: 10px;
+					right: 10px;
+					text-align: right;
+					font-size: 17px;
+					font-weight: bold;
+					color: var(--color-root-random-text);
+					text-shadow: 0 0 9px var(--color-bg-box);
+				}
+
+					#page table.rec .random-container span {
+						font-size: 36px;
+						color: var(--color-root-random-bigfont);
+						line-height: 0;
+					}
 
 				#page table.rec table.decent:hover {
 					background: none;
@@ -2888,6 +2977,27 @@ input[type=range]::-ms-track {
 			border-top-color: var(--color-border);
 		}
 
+		#page .ext .oldest-in-top {
+			float: right;
+			position: relative;
+			top: 24px;
+			font-size: 11px;
+			color: var(--color-oldest-in-top);
+		}
+
+		#page .ext .zero-releases-line {
+			border-top: 1px solid var(--color-border);
+		}
+
+		/* Used to emphasize handles or groups in a list of CSDb releases */
+		#page .ext .emphasize {
+			background: var(--color-emphasize);
+		}
+
+		#page .ext .shared-all-comments {
+			color: var(--color-text-minor);
+		}
+
 		#page .ext .user {
 			position: relative;
 			width: 170px;
@@ -2932,6 +3042,7 @@ input[type=range]::-ms-track {
 				height: 57px;
 				border: 0.5px solid var(--color-border);
 				margin-bottom: -3px;
+				background: var(--color-top);
 			}
 
 		/* The table cell with the actual CSDb comment text */
@@ -3258,6 +3369,12 @@ input[type=range]::-ms-track {
 		margin-left: -2px;
 	}
 
+	#topic-player .download-dot {
+		margin: 0 6px;
+		color: #8a8c7a;
+		font-size: 10px;
+	}
+
 	#topic-player table.playerinfo {
 		font-size: 12px;
 		background: var(--color-top);
@@ -3269,6 +3386,11 @@ input[type=range]::-ms-track {
 			font-style: italic;
 			border-right: none !important;
 		}
+
+		#topic-player td.package	{ background: var(--color-player-package); }
+		#topic-player td.features	{ background: var(--color-player-features); }
+		#topic-player td.player		{ background: var(--color-player-player); }
+		#topic-player td.editor		{ background: var(--color-player-editor); }
 
 			#topic-player td.corner span {
 				margin-left: 4px;

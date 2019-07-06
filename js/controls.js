@@ -700,7 +700,7 @@ Controls.prototype = {
 		if (stil === "") {
 			$("#stopic-stil")
 				.css("overflow", "none")
-				.append('<div id="tips" class="noInfo">No '+(isCGSC ? 'lyrics' : 'STIL information')+'</div>')
+				.append('<div id="tips" class="no-info">No '+(isCGSC ? 'lyrics' : 'STIL information')+'</div>')
 			$("#topic-stil").empty().append(isCGSC ? "No lyrics available for this MUS file." : "<i>No STIL information available for this SID file.</i>");
 		} else {
 			$("#stopic-stil")

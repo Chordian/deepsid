@@ -84,7 +84,7 @@ try {
 					'</tr>'.
 					'<tr>'.
 						'<td style="width:88px;padding-right:8px;">'.
-							'<img class="composer" src="'.$thumbnail.'" alt="" style="background:#fff;width:80px;height:80px;" />'.
+							'<img class="composer root-thumbnail" src="'.$thumbnail.'" alt="" />'.
 						'</td>'.
 						'<td style="padding-top:1px;">'.
 							'<h4>'.$name.'</h4>'.

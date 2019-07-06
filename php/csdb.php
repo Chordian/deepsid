@@ -97,7 +97,7 @@ if ($csdb_type == 'sid') {
 	
 	$comment_button = '<button id="csdb-comment" data-type="sid" data-id="'.$csdb->SID->ID.'">Comment</button><br />';
 
-	$used_by_releases = $user_comments.$comment_button.'<h3>0 releases found</h3><div style="border-top:1px solid #ced0c0;"></div>';
+	$used_by_releases = $user_comments.$comment_button.'<h3>0 releases found</h3><div class="zero-releases-line"></div>';
 	if (isset($csdb->SID->UsedIn)) {
 		$releases = $csdb->SID->UsedIn->Release;
 
@@ -163,7 +163,7 @@ if ($csdb_type == 'sid') {
 						// We've had this scener before so we know the name
 						$scener = $sid_handles[(string)$id];
 					$yellow = stripos($copyright, strtolower($scener)) > -1
-						? ' style="background:#ffff80;"'
+						? ' class="emphasize"'
 						: '';
 					$released_by .= (!empty($scener)
 						? ', <a href="https://csdb.dk/scener/?id='.$id.'" target="_blank"'.$yellow.'>'.$scener.'</a>'
@@ -189,7 +189,7 @@ if ($csdb_type == 'sid') {
 						// We've had this group before so we know the name
 						$grp = $sid_groups[(string)$id];
 					$yellow = stripos($copyright, strtolower($grp)) > -1
-						? ' style="background:#ffff80;"'
+						? ' class="emphasize"'
 						: '';
 					$released_by .= (!empty($grp)
 						? ', <a href="https://csdb.dk/group/?id='.$id.'" target="_blank"'.$yellow.'>'.$grp.'</a>'
@@ -495,7 +495,7 @@ if ($csdb_type == 'sid') {
 	: '';
 
 	$comment_button = '<button id="csdb-comment" data-type="release" data-id="'.$csdb->Release->ID.'">Comment</button>'.
-		'<small style="color:#969787;">Shared for all types of comment sections.</small><br />';
+		'<small class="shared-all-comments">Shared for all types of comment sections.</small><br />';
 
 	// Build the sticky header HTML for the '#sticky' DIV
 	$sticky = '<h2 style="display:inline-block;margin-top:0;">'.$csdb->Release->Name.'</h2>'.$go_back.

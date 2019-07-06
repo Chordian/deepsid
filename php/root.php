@@ -87,8 +87,8 @@ try {
 				$select_decent->setFetchMode(PDO::FETCH_OBJ);
 
 				return '<table class="tight compo recommended decent" data-folder="'.$select_decent->fetch()->fullname.'" style="padding-bottom:0;"><tr><td style="height:123px;">'.
-					'<div style="position:absolute;top:10px;right:10px;text-align:right;font-size:17px;font-weight:bold;color:#5e6048;text-shadow:0 0 9px #f7f8f5;">'.
-						'<span style="font-size:36px;color:#333;line-height:0;">Click here</span><br />'.
+					'<div class="random-container">'.
+						'<span>Click here</span><br />'.
 						'to visit a random<br />'.
 						'composer folder of a<br />'.
 						'decent quality or better<br />'.
@@ -126,7 +126,7 @@ try {
 				'</tr>'.
 				'<tr>'.
 					'<td style="width:88px;padding-right:8px;">'.
-						'<img class="composer" src="'.$thumbnail.'" alt="" style="background:#fff;width:80px;height:80px;" />'.
+						'<img class="composer root-thumbnail" src="'.$thumbnail.'" alt="" />'.
 					'</td>'.
 					'<td style="padding-top:1px;">'.
 						'<h4>'.$name.'</h4>'.

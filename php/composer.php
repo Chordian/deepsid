@@ -347,7 +347,7 @@ $csdbCompoFolder = 'CSDb Music Competitions';
 // Top part with thumbnail, birthday, country, etc.
 $html = '<table style="border:none;margin-bottom:0;"><tr>'.
 			'<td style="padding:0;border:none;width:184px;">'.
-				'<img class="composer" src="'.$thumbnail.'" alt="" style="background:#fff;width:184px;height:184px;" />'.
+				'<img class="composer" src="'.$thumbnail.'" alt="" />'.
 			'</td>'.
 			'<td style="position:relative;vertical-align:top;">'.
 				'<h2 style="margin-top:0;'.(!empty($handles) ? 'margin-bottom:-1px;' : 'margin-bottom:6px;').'">'.$name.'</h2>'.
@@ -358,7 +358,7 @@ $html = '<table style="border:none;margin-bottom:0;"><tr>'.
 					str_replace(', ', ', <img class="arrow" src="images/composer_arrowright.svg" title="...then later..." alt="" />', $onsid) : '').'</span>'.*/
 				($died != '0000' ? '<span class="line"><img class="icon" src="images/composer_stone.svg" title="Died" alt="" style="position:relative;top:3px;height:18px;margin-right:5px;" />'.
 					$died.' '.$cause.'</span>' : '').
-				(!empty($notable) ? '<span style="display:block;position:absolute;height:22px;left:10px;bottom:52px;background:#f8f848;border-radius:4px;">'.
+				(!empty($notable) ? '<span class="notable">'.
 					'<img class="icon" src="images/composer_star.svg" title="Notable" alt="" style="top:-1px;" /><b style="position:relative;top:-5px;">'.$notable.'&nbsp;</b></span>' : '').
 				(!empty($country) ? '<span style="position:absolute;left:10px;bottom:10px;">'.
 					'<img class="icon" src="images/composer_earth.svg" title="Country" alt="" />'.
@@ -373,7 +373,7 @@ $html = '<table style="border:none;margin-bottom:0;"><tr>'.
 		($fullname != $csdbCompoFolder ?
 			'<table id="table-groups" class="tight top" style="min-width:100%;font-size:14px;margin-top:5px;">'.
 				'<tr>'.
-					'<td class="topline bottomline leftline rightline" style="height:30px;padding:0 !important;text-align:center;">'.($spinner ? '<img class="loading-dots" src="images/loading_threedots.svg" alt="" style="margin-top:10px;" />' : '<div style="margin-top:5px;font-size:12px;color:#a1a294;">No profile data</div>').'</td>'.
+					'<td class="topline bottomline leftline rightline" style="height:30px;padding:0 !important;text-align:center;">'.($spinner ? '<img class="loading-dots" src="images/loading_threedots.svg" alt="" style="margin-top:10px;" />' : '<div class="no-profile">No profile data</div>').'</td>'.
 				'</tr>'.
 			'</table>' : '').
 		'<div class="corner-icons">'.

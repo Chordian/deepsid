@@ -51,10 +51,6 @@ try {
 	else {
 		$row = $select->fetch();
 
-		// Title must "arrow" to editor name if different - UPDATE: Disabled for now (looks silly most of the time)
-		/* $title = isset($_GET['player']) && $row->title != $_GET['player']
-			? '<span style="color:#a1a294;">'.$_GET['player'].'</span><img class="arrow" src="images/composer_arrowright.svg" alt="" style="position:relative;top:0;margin:0 12px;" />'.$row->title
-			: $row->title; */
 		$title = $row->title;
 
 		$devs = explode('|', str_replace('++', '', $row->developer));
@@ -83,7 +79,7 @@ try {
 		if (!empty($row->site))
 			$download .= $label.'<a href="'.$row->site.'">Site</a>';
 		if ($row->csdbid)
-			$download .= (!empty($download) ? '<span style="margin:0 6px;color:#8a8c7a;font-size:10px;">&#9642;</span>' : $label).'<a href="https://csdb.dk/release/?id='.$row->csdbid.'">CSDb</a>';
+			$download .= (!empty($download) ? '<span class="download-dot">&#9642;</span>' : $label).'<a href="https://csdb.dk/release/?id='.$row->csdbid.'">CSDb</a>';
 		if (!empty($download))
 			$download .= '</span>';
 
@@ -112,7 +108,7 @@ try {
 						 !empty($row->docs) ||
 						 !empty($row->exampletunes) ||
 						 !empty($row->fileformat)
-						? '<tr><td class="corner" colspan="2" style="background:#f8f1f1;"><img class="svg" src="images/players_package.svg" style="position:relative;top:1px;" alt="" /><span>Package</span></tr>' : '').
+						? '<tr><td class="corner package" colspan="2"><img class="svg" src="images/players_package.svg" style="position:relative;top:1px;" alt="" /><span>Package</span></tr>' : '').
 
 						(!empty($row->platform) ? '<tr><td>Platform</td><td>'.$row->platform.'</td></tr>' : '').
 						(!empty($row->distribution) ? '<tr><td>Distribution</td><td>'.$row->distribution.'</td></tr>' : '').
@@ -134,7 +130,7 @@ try {
 						 !empty($row->loadsavesnd) ||
 						 !empty($row->instruments) ||
 						 !empty($row->subtunes)
-						? '<tr><td class="corner" colspan="2" style="background:#fafaee;"><img class="svg" src="images/players_features.svg" style="position:relative;top:1px;" alt="" /><span>Features</span></td></tr>' : '').
+						? '<tr><td class="corner features" colspan="2"><img class="svg" src="images/players_features.svg" style="position:relative;top:1px;" alt="" /><span>Features</span></td></tr>' : '').
 
 						(!empty($row->sidchipcount) ? '<tr><td>Number of SID chips</td><td>'.$row->sidchipcount.'</td></tr>' : '').
 						(!empty($row->channelsvisible) ? '<tr><td>Channels visible</td><td>'.$row->channelsvisible.'</td></tr>' : '').
@@ -158,7 +154,7 @@ try {
 						 !empty($row->filtering) ||
 						 !empty($row->vibrato) ||
 						 !empty($row->hardrestart)
-						? '<tr><td class="corner" colspan="2" style="background:#f1f1f8;"><img class="svg" src="images/players_player.svg" style="position:relative;top:1px;" alt="" /><span>Player</span></td></tr>' : '').
+						? '<tr><td class="corner player" colspan="2"><img class="svg" src="images/players_player.svg" style="position:relative;top:1px;" alt="" /><span>Player</span></td></tr>' : '').
 
 						(!empty($row->noteworthy) ? '<tr><td>Noteworthy</td><td>'.$row->noteworthy.'</td></tr>' : '').
 						(!empty($row->playersize) ? '<tr><td>Size of player</td><td>'.$row->playersize.'</td></tr>' : '').
@@ -177,7 +173,7 @@ try {
 						 !empty($row->undoing) ||
 						 !empty($row->trackcmds) ||
 						 !empty($row->noteinput)
-						? '<tr><td class="corner" colspan="2" style="background:#f2f8f2;"><img class="svg" src="images/players_editor.svg" style="position:relative;top:1px;" alt="" /><span>Editor</span></td></tr>' : '').
+						? '<tr><td class="corner editor" colspan="2"><img class="svg" src="images/players_editor.svg" style="position:relative;top:1px;" alt="" /><span>Editor</span></td></tr>' : '').
 
 						(!empty($row->tracksystem) ? '<tr><td>Track system</td><td>'.$row->tracksystem.'</td></tr>' : '').
 						(!empty($row->patterns) ? '<tr><td>Patterns / Sequences</td><td>'.$row->patterns.'</td></tr>' : '').
