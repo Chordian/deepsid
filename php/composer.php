@@ -307,7 +307,7 @@ if (isset($row)) {
 	$died		= substr($row->died, 0, 4);
 	$cause		= (!empty($row->cause) ? '('.$row->cause.')' : '');
 	$onsid		= (!empty($row->onsid) ? $row->onsid : $active_years); // Often the generated one will suffice
-	$notable	= str_replace('[#]', '<img class="inline-icon" src="images/composer_editor.svg" title="Music editor" alt="">', $row->notable);
+	$notable	= str_replace('[#]', '<img class="inline-icon icon-editor" src="images/composer_editor.svg" title="Music editor" alt="">', $row->notable);
 	$country	= $row->country;
 	$csdbtype	= $row->csdbtype;
 	$csdbid		= $row->csdbid;
@@ -352,16 +352,16 @@ $html = '<table style="border:none;margin-bottom:0;"><tr>'.
 			'<td style="position:relative;vertical-align:top;">'.
 				'<h2 style="margin-top:0;'.(!empty($handles) ? 'margin-bottom:-1px;' : 'margin-bottom:6px;').'">'.$name.'</h2>'.
 				(!empty($handles) ? '<h3 style="margin-top:0;margin-bottom:7px;">'.$handles.'</h3>' : '').
-				($born != '0000-00-00' ? '<span class="line"><img class="icon" src="images/composer_cake.svg" title="Born" alt="" />'.
+				($born != '0000-00-00' ? '<span class="line"><img class="icon cake" src="images/composer_cake.svg" title="Born" alt="" />'.
 					substr($born, 0, 4).'</span>' : '').
 				/*(!empty($onsid) ? '<span class="line onsid"><img class="icon" src="images/composer_chip.svg" title="OnSID" alt="" style="height:19px;" />'.
 					str_replace(', ', ', <img class="arrow" src="images/composer_arrowright.svg" title="...then later..." alt="" />', $onsid) : '').'</span>'.*/
-				($died != '0000' ? '<span class="line"><img class="icon" src="images/composer_stone.svg" title="Died" alt="" style="position:relative;top:3px;height:18px;margin-right:5px;" />'.
+				($died != '0000' ? '<span class="line"><img class="icon stone" src="images/composer_stone.svg" title="Died" alt="" style="position:relative;top:3px;height:18px;margin-right:5px;" />'.
 					$died.' '.$cause.'</span>' : '').
 				(!empty($notable) ? '<span class="notable">'.
-					'<img class="icon" src="images/composer_star.svg" title="Notable" alt="" style="top:-1px;" /><b style="position:relative;top:-5px;">'.$notable.'&nbsp;</b></span>' : '').
+					'<img class="icon cstar" src="images/composer_star.svg" title="Notable" alt="" style="top:-1px;" /><b style="position:relative;top:-5px;">'.$notable.'&nbsp;</b></span>' : '').
 				(!empty($country) ? '<span style="position:absolute;left:10px;bottom:10px;">'.
-					'<img class="icon" src="images/composer_earth.svg" title="Country" alt="" />'.
+					'<img class="icon earth" src="images/composer_earth.svg" title="Country" alt="" />'.
 					str_replace(', ', ', <img class="arrow" src="images/composer_arrowright.svg" title="Moved" alt="" />', $country).
 				'</span>' : '').
 				(!empty($brand)

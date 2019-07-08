@@ -693,7 +693,7 @@ $(function() { // DOM ready
 	$("#recommended").click(function(){
 		$(this).blur();
 		if (recommended) recommended.abort();
-		$("#topic-profile").empty().append('<div style="height:400px;"><img id="loading-profile" src="images/loading.svg" style="display:none;" alt="" /></div>');
+		$("#topic-profile").empty().append(browser.loadingSpinner("profile"));
 
 		if ($("#tabs .selected").attr("data-topic") !== "profile")
 			$("#tab-profile").trigger("click");
@@ -722,7 +722,7 @@ $(function() { // DOM ready
 	$("#players").click(function(event, noclick){
 		$(this).blur();
 		if (players) players.abort();
-		$("#topic-players").empty().append('<div style="height:400px;"><img id="loading-profile" src="images/loading.svg" style="display:none;" alt="" /></div>');
+		$("#topic-players").empty().append(browser.loadingSpinner("profile"));
 
 		if ($("#tabs .selected").attr("data-topic") !== "player" && typeof noclick == "undefined")
 			$("#tab-player").trigger("click");

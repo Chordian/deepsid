@@ -5,10 +5,11 @@
 
 	/* Todo:
 
-		- The state of the theme selector must be stored in local storage.
-		- Update GIF/SVG animations and SVG images.
 		- Split up avatar/profile background colors - don't juse use "--color-top" for those.
-		- What about the "brand" corner graphics? Some of it have black text or outlines!
+		
+		- What about the "brand" corner graphics? Some of it have black text or outlines! =S
+			- Would it be possible to add a brightening box-shadow?
+		- The state of the theme selector must be stored in local storage.
 
 	   Test:
 
@@ -23,6 +24,7 @@
 /* ---- Custom color variables (default theme) ------------------------------- */
 
 :root {
+
 	--color-top:					#fff;				/* Full white for e.g. hovering on elements */
 	--color-bottom:					#000;				/* Full black for e.g. bolded text in settings */
 
@@ -91,11 +93,35 @@
 	--color-pwd-bad:				#a00;
 
 	--color-viz-msg-emu:			var(--color-pwd-bad);
-	--color-vis-msg-buffer:			#00a;
+	--color-viz-msg-buffer:			#00a;
 
 	--color-sid-row-error-entry:	#a33;				/* Error colors for SID file row that can't be played */
 	--color-sid-row-error-info:		#cc8282;
 	--color-sid-row-error-bg:		#f5eaea;
+
+	/* SVG images */
+
+	/* @link https://codepen.io/sosuke/pen/Pjoqqp - NOTE: The SVG must be black as default for this to work! */
+	--svg-filter-white:				invert(100%) sepia(0%) saturate(7487%) hue-rotate(319deg) brightness(103%) contrast(104%);
+	--svg-filter-button:			invert(26%) sepia(15%) saturate(581%) hue-rotate(27deg) brightness(96%) contrast(93%);
+	--svg-filter-button-disabled:	invert(86%) sepia(12%) saturate(216%) hue-rotate(25deg) brightness(93%) contrast(89%);
+	--svg-filter-text-player:		invert(50%) sepia(14%) saturate(593%) hue-rotate(25deg) brightness(94%) contrast(88%);
+
+	--svg-filter-viz-msg-buffer:	none;
+	--svg-filter-icon-bottom:		none;
+	--svg-filter-loading-spinner:	var(--svg-filter-button);
+	--svg-filter-row-spinner:		var(--svg-filter-button);
+	--svg-filter-icon-flash:		invert(52%) sepia(69%) saturate(1670%) hue-rotate(8deg) brightness(95%) contrast(101%);
+	--svg-filter-icon-plus:			invert(18%) sepia(67%) saturate(7064%) hue-rotate(93deg) brightness(103%) contrast(106%);
+	--svg-filter-icon-office:		invert(23%) sepia(37%) saturate(2924%) hue-rotate(28deg) brightness(96%) contrast(101%);
+	--svg-filter-icon-editor:		invert(26%) sepia(11%) saturate(0%) hue-rotate(244deg) brightness(90%) contrast(90%);
+	--svg-filter-icon-cstar:		invert(8%) sepia(84%) saturate(5326%) hue-rotate(5deg) brightness(93%) contrast(114%);
+	--svg-filter-icon-time:			var(--svg-filter-text-player);
+	--svg-filter-icon-to-top:		var(--svg-filter-white);
+
+	--svg-bg-star-orange:			url(../images/if_star_orange.svg) 0 0 / 18px 18px no-repeat;
+	--svg-bg-star-empty-voted:		url(../images/if_star_empty_voted.svg) 0 0 / 18px 18px no-repeat;
+	--svg-bg-star-empty-unvoted:	url(../images/if_star_empty_unvoted.svg) 0 0 / 18px 18px no-repeat;
 
 	/* Custom context menu */
 
@@ -261,7 +287,21 @@
 /* ---- Custom color variables (dark theme) ---------------------------------- */
 
 [data-theme="dark"] {
+
 	--color-bg:						#333;				/* Body background */
+
+	/* SVG images */
+
+	/* @link https://codepen.io/sosuke/pen/Pjoqqp - NOTE: The SVG must be black as default for this to work! */
+	--svg-filter-viz-msg-buffer: 	var(--svg-filter-white);
+	--svg-filter-icon-bottom:		var(--svg-filter-white);
+	--svg-filter-loading-spinner:	var(--svg-filter-button-disabled);
+	--svg-filter-row-spinner:		var(--svg-filter-button-disabled);
+	--svg-filter-icon-office:		var(--svg-filter-icon-flash);
+
+	--svg-bg-star-orange:			url(../images/if_star_orange_dark.svg) 0 0 / 18px 18px no-repeat;
+	--svg-bg-star-empty-voted:		url(../images/if_star_empty_voted_dark.svg) 0 0 / 18px 18px no-repeat;
+	--svg-bg-star-empty-unvoted:	url(../images/if_star_empty_unvoted_dark.svg) 0 0 / 18px 18px no-repeat;
 
 }
 
@@ -720,8 +760,19 @@ small.u2 { margin-left: 2px; }
 		font-size: 14px;
 	}
 
-		.viz-msg-emu	{ color: var(--color-viz-msg-emu); }
-		.viz-msg-buffer	{ color: var(--color-vis-msg-buffer); top:0; left:100px; }
+		.viz-msg-emu	{
+			color: var(--color-viz-msg-emu);
+		}
+
+		.viz-msg-buffer	{
+			color: var(--color-viz-msg-buffer);
+			top: 0;
+			left: 100px;
+		}
+
+			.viz-msg-buffer img {
+				filter: var(--svg-filter-viz-msg-buffer);
+			}
 
 	.viz-buffer {
 		float: right;
@@ -1649,6 +1700,10 @@ input[type=range]::-ms-track {
 		left: 165px; /* (430 / 2) - 50 */
 	}
 
+		.loading-spinner {
+			filter: var(--svg-filter-loading-spinner);
+		}
+
 	/* The top container with root/back buttons, path and sort drop-down box */
 	#songs-buttons {
 		height: 50px;
@@ -1765,6 +1820,7 @@ input[type=range]::-ms-track {
 			width: 42px;
 			height: 42px;
 			background: url(../images/spinner.svg) no-repeat;
+			filter: var(--svg-filter-row-spinner);
 		}
 
 		#songs td.stars {
@@ -1803,19 +1859,19 @@ input[type=range]::-ms-track {
 			top: 0;
 			width: 18px;
 			height: 18px;
-			background: url(../images/if_star_orange.svg) 0 0 / 18px 18px no-repeat;
+			background: var(--svg-bg-star-orange);
 		}
 
 		#songs b.xv { /* User voted */
-			background: url(../images/if_star_orange.svg) 0 0 / 18px 18px no-repeat;
+			background: var(--svg-bg-star-orange);
 		}
 
 		#songs b.ev { /* Empty voted */
-			background: url(../images/if_star_empty_voted.svg) 0 0 / 18px 18px no-repeat;
+			background: var(--svg-bg-star-empty-voted);
 		}
 
 		#songs b.eu { /* Empty unvoted */
-			background: url(../images/if_star_empty_unvoted.svg) 0 0 / 18px 18px no-repeat;
+			background: var(--svg-bg-star-empty-unvoted);
 		}
 
 		#songs .disqus-comment-count {
@@ -2585,6 +2641,23 @@ input[type=range]::-ms-track {
 				top: 4px;
 				height: 18px;
 				margin-right: 2px;
+				filter: var(--svg-filter-icon-bottom);
+			}
+
+			#page .ext img.cake,
+			#page .ext img.earth,
+			#page .ext img.stone,
+			.doublenote {
+				filter: var(--svg-filter-icon-bottom);
+			}
+
+			.icon-editor {
+				filter: var(--svg-filter-icon-editor);
+			}
+
+			/* Composer star used in notable line */
+			#page .ext img.cstar {
+				filter: var(--svg-filter-icon-cstar);
 			}
 
 			#page .ext .up {
@@ -2604,6 +2677,7 @@ input[type=range]::-ms-track {
 				height: 18px;
 				width: 18px;
 				background: url(../images/composer_arrowright.svg) 0 0 / 18px 18px no-repeat;
+				filter: var(--svg-filter-icon-bottom);
 				margin-right: 2px;
 			}
 
@@ -2612,6 +2686,7 @@ input[type=range]::-ms-track {
 				height: 16px;
 				width: 18px;
 				background: url(../images/composer_arrowright.svg) 0 0 / 18px 18px no-repeat;
+				filter: var(--svg-filter-icon-bottom);
 			}
 
 			#page .ext .icon-founder:before {
@@ -2619,6 +2694,7 @@ input[type=range]::-ms-track {
 				height: 18px;
 				width: 18px;
 				background: url(../images/composer_flash.svg) 0 0 / 18px 18px no-repeat;
+				filter: var(--svg-filter-icon-flash);
 				margin-right: 2px;
 			}
 
@@ -2627,6 +2703,7 @@ input[type=range]::-ms-track {
 				height: 17px;
 				width: 17px;
 				background: url(../images/composer_random.svg) 0 0 / 17px 17px no-repeat;
+				filter: var(--svg-filter-icon-bottom);
 				margin-right: 2px;
 			}
 
@@ -2636,6 +2713,7 @@ input[type=range]::-ms-track {
 				height: 16px;
 				width: 16px;
 				background: url(../images/composer_plus.svg) 0 0 / 16px 16px no-repeat;
+				filter: var(--svg-filter-icon-plus);
 				margin-right: 4px;
 			}
 
@@ -2644,6 +2722,7 @@ input[type=range]::-ms-track {
 				height: 15px;
 				width: 15px;
 				background: url(../images/composer_office.svg) 0 0 / 15px 15px no-repeat;
+				filter: var(--svg-filter-icon-office);
 				margin-right: 4px;
 			}
 
@@ -2653,6 +2732,7 @@ input[type=range]::-ms-track {
 				height: 16px;
 				width: 16px;
 				background: url(../images/composer_downwards.svg) 0 0 / 18px 18px no-repeat;
+				filter: var(--svg-filter-icon-bottom);
 				margin-right: 3px;
 			}
 
@@ -2661,6 +2741,7 @@ input[type=range]::-ms-track {
 				height: 18px;
 				width: 18px;
 				background: url(../images/composer_arrowswing.svg) 0 0 / 18px 18px no-repeat;
+				filter: var(--svg-filter-icon-bottom);
 				margin-right: 2px;
 			}
 
@@ -2670,6 +2751,7 @@ input[type=range]::-ms-track {
 				height: 18px;
 				width: 11px;
 				background: url(../images/composer_singlenote.svg) 0 0 / 11px 18px no-repeat;
+				filter: var(--svg-filter-icon-bottom);
 				margin-right: 6px;
 			}
 
@@ -3137,6 +3219,7 @@ input[type=range]::-ms-track {
 						height: 10px;
 						padding-right: 13px;
 						background: url(../images/time.svg) 0 0 / 10px 10px no-repeat;
+						filter: var(--svg-filter-icon-time);
 					}
 
 			#page .ext .language {
@@ -3350,6 +3433,10 @@ input[type=range]::-ms-track {
 		width: 21px;
 		height: 15px !important;
 	}
+
+		.to-top img {
+			filter: var(--svg-filter-icon-to-top);
+		}
 
 	#topic-player .thumbnail-player,
 	#topic-gb64 .thumbnail-gb64 {

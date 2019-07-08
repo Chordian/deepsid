@@ -173,7 +173,7 @@ try {
 						 !empty($row->undoing) ||
 						 !empty($row->trackcmds) ||
 						 !empty($row->noteinput)
-						? '<tr><td class="corner editor" colspan="2"><img class="svg" src="images/players_editor.svg" style="position:relative;top:1px;" alt="" /><span>Editor</span></td></tr>' : '').
+						? '<tr><td class="corner editor" colspan="2"><img class="svg icon-editor" src="images/players_editor.svg" style="position:relative;top:1px;" alt="" /><span>Editor</span></td></tr>' : '').
 
 						(!empty($row->tracksystem) ? '<tr><td>Track system</td><td>'.$row->tracksystem.'</td></tr>' : '').
 						(!empty($row->patterns) ? '<tr><td>Patterns / Sequences</td><td>'.$row->patterns.'</td></tr>' : '').

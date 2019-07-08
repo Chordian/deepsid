@@ -229,6 +229,7 @@ if ($csdb_type == 'sid') {
 			$external_icon = '';
 			if (!$can_show_internally) {
 				// An external icon indicates that clicking the thumbnail/title goes to CSDb itself
+				// @todo DEPRECATED? I don't think this is used anymore.
 				$external_icon = '<img class="external" src="images/external_link.svg" alt="" />';
 			}
 

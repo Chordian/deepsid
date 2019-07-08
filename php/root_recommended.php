@@ -89,7 +89,7 @@ try {
 						'<td style="padding-top:1px;">'.
 							'<h4>'.$name.'</h4>'.
 							'<h5>'.$handle.'</h5>'.
-							'<div style="position:absolute;bottom:8px;"><img class="icon" src="images/composer_doublenote.svg" title="Country" alt="" />'.$songs.' songs</div>'.
+							'<div style="position:absolute;bottom:8px;"><img class="icon doublenote" src="images/composer_doublenote.svg" title="Country" alt="" />'.$songs.' songs</div>'.
 						'</td>'.
 					'</tr>'.
 				'</table>'.

@@ -270,7 +270,7 @@
 					</div>
 				</div>
 				<div id="folders"><table></table></div>
-				<img id="loading" src="images/loading.svg" style="display:none;" alt="" />
+				<img id="loading" class="loading-spinner" src="images/loading.svg" style="display:none;" alt="" />
 				<div id="search">
 					<select id="dropdown-search" name="search-type">
 						<option value="#all#">All</option>
@@ -340,8 +340,6 @@
 				</div>
 				<div id="sticky"><h2 style="margin-top:0;">CSDb</h2></div>
 				<div id="page">
-
-					<!--<img id="loading-dexter" src="images/loading.svg" style="display:none;" alt="" />-->
 
 					<div id="topic-piano" class="topic ext" style="display:none;">
 						<img id="waveform-colors" src="images/waveform_colors.png" alt="Waveform Colors" />

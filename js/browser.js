@@ -1198,7 +1198,7 @@ Browser.prototype = {
 			return;
 		}
 
-		$("#topic-profile").empty().append('<div style="height:400px;"><img id="loading-profile" src="images/loading.svg" style="display:none;" alt="" /></div>');
+		$("#topic-profile").empty().append(this.loadingSpinner("profile"));
 
 		this.composerCache = "";
 
@@ -1289,7 +1289,7 @@ Browser.prototype = {
 	getCSDb: function(type, id, back) {
 		if (this.isMobile) return;
 		if (this.csdb) this.csdb.abort();
-		$("#topic-csdb").empty().append('<div style="height:400px;"><img id="loading-csdb" src="images/loading.svg" style="display:none;" alt="" /></div>');
+		$("#topic-csdb").empty().append(this.loadingSpinner("csdb"));
 		$("#sticky").empty();
 
 		tabScrollPos = 0;
@@ -1338,7 +1338,7 @@ Browser.prototype = {
 	getPlayerInfo: function(params) {
 		if (this.isMobile || JSON.stringify(params) == JSON.stringify(this.playerParams)) return;
 		if (this.playerInfo) this.playerInfo.abort();
-		$("#topic-player").empty().append('<div style="height:400px;"><img id="loading-player" src="images/loading.svg" style="display:none;" alt="" /></div>');
+		$("#topic-player").empty().append(this.loadingSpinner("player"));
 
 		this.playerParams = params; // Prevents reloading of the same page (not 100% perfect)
 
@@ -1374,7 +1374,7 @@ Browser.prototype = {
 	getCompoResults: function(compo, id, mark) {
 		if (this.isMobile) return;
 		if (this.compo) this.compo.abort();
-		$("#topic-csdb").empty().append('<div style="height:400px;"><img id="loading-csdb" src="images/loading.svg" style="display:none;" alt="" /></div>');
+		$("#topic-csdb").empty().append(this.loadingSpinner("csdb"));
 		$("#sticky").empty();
 
 		var loadingCSDb = setTimeout(function() {
@@ -1414,7 +1414,7 @@ Browser.prototype = {
 	getGB64: function(optionalID) {
 		if (this.isMobile) return;
 		if (this.gb64) this.gb64.abort();
-		$("#topic-gb64").empty().append('<div style="height:400px;"><img id="loading-gb64" src="images/loading.svg" style="display:none;" alt="" /></div>');
+		$("#topic-gb64").empty().append(this.loadingSpinner("gb64"));
 
 		var loadingGB64 = setTimeout(function() {
 			// Fade in a GIF loading spinner if the AJAX call takes a while
@@ -1790,6 +1790,17 @@ Browser.prototype = {
 				callback.call(this, data);
 			return true;
 		}
+	},
+
+	/**
+	 * Prepare a loading SVG spinner for showing if a page takes time to load.
+	 * 
+	 * @param {string} id		CSS ID name.
+	 * 
+	 * @return {string}			The HTML string with the SVG image.
+	 */
+	loadingSpinner: function(id) {
+		return '<div style="height:400px;"><img id="loading-'+id+'" class="loading-spinner" src="images/loading.svg" style="display:none;" alt="" /></div>';
 	},
 
 	/**
