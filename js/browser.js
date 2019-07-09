@@ -1250,6 +1250,7 @@ Browser.prototype = {
 				this.validateData(data, function(data) {
 
 					clearTimeout(loadingComposer);
+					if (colorTheme) data.html = data.html.replace("composer.png", "composer_dark.png");
 					$("#topic-profile").empty().append(data.html);
 
 					// Add report profile change link

@@ -9,6 +9,7 @@
 		- What about the "brand" corner graphics? Some of it have black text or outlines! =S
 			- Would it be possible to add a brightening box-shadow?
 		- The state of the theme selector must be stored in local storage.
+		- When switching theme, disable then reenable Disqus again to make it detect that.
 
 	   Test:
 
@@ -67,6 +68,9 @@
 	--color-button-bg-select:		#f5f5f1;
 	--color-button-text-select:		var(--color-button);
 	--color-button-hover:			#62644c;			/* When hovering on an ACTIVE button */
+	--color-button-bg-hovsel:		var(--color-button-text);
+	--color-button-text-hovsel:		var(--color-button-hover);
+	--color-button-border-hovsel:	var(--color-button-hover);
 	--color-button-inverted:		#f5f5f1;			/* Almost white */
 	--color-button-disabled:		#c8c9b9;			/* Disabled button */
 	--color-button-disabled-text:	var(--color-button-inverted);
@@ -315,9 +319,9 @@
 	--color-bg-edit-area:			#1c1c1c;
 	/*--color-bg-scope:				var(--color-top);
 	--color-bg-slider:				var(--color-top);	  /* Color of the dragging bar for changing the sundry box size */
-	/*--color-bg-songs-buttons:		var(--color-top);	  /* The top container with the root/back buttons and path */
+	--color-bg-songs-buttons:		linear-gradient(to bottom, #343434 10%,#181818 100%);
 	/*--color-new-bg:					#ef0;				/* Color for small "NEW" labels on SID rows in the browser */
-	/*--color-new-shadow:				var(--color-bottom);
+	--color-new-shadow:				none;
 	/*--color-code-bg:				#f4f3ee;			/* Colors for <CODE> element */
 	/*--color-code-border:			#ebeae1;
 	/*--color-anchor:					#5a6701;			/* Standard hyperlink */
@@ -345,9 +349,12 @@
 	--color-button-bg-select:		linear-gradient(to bottom, #daddd7 0%,#a0a999 95%);
 	--color-button-text-select:		#4b5345;
 	--color-button-hover:			linear-gradient(to bottom, #828e78 0%,#5f6957 85%);
+	--color-button-bg-hovsel:		linear-gradient(to bottom, #eeefed 0%,#b4bbaf 95%);
+	--color-button-text-hovsel:		#565f4f;
+	--color-button-border-hovsel:	#c8cdc3;;
 	--color-button-inverted:		#f5f5f1;			/* Almost white */
 	--color-button-disabled:		#31362e;			/* Disabled button */
-	--color-button-disabled-text:	#565f4f;
+	--color-button-disabled-text:	#5a5f56;
 	--color-button-shadow:			none;
 	/*--color-button-logout:			var(--color-button-inverted);*/
 
@@ -361,9 +368,9 @@
 	--color-text-fine:				#a8ada0;			/* For e.g. login user name
 	/*--color-text-dim:				#b0b29a;			/* For e.g. edit box border and small text on white background */
 	/*--color-text-player:			#7c7e60;			/* For e.g. login response text and small text in players tab */
-	/*--color-text-faint:				#a8ad95;			/* For e.g. HVSC version text in info box */
-	--color-text-distinct:			#ddd;				/* For e.g. digi sample rates in info box */
-	--color-text-sid-selected:		#f8f8c0; /* #f8f8c8 */
+	--color-text-faint:				#666;			/* For e.g. HVSC version text in info box */
+	--color-text-distinct:			#cecece;				/* For e.g. digi sample rates in info box */
+	--color-text-sid-selected:		#c8f0c8;
 	--color-text-minor:				#888;			/* For e.g. small text lines in SID rows */
 	--color-text-info-selected:		#aaa;
 	/*--color-text-c64font:			#555743;			/* Used for the C64 font in the CGSC folder */
@@ -791,9 +798,9 @@ small.u2 { margin-left: 2px; }
 
 	.button-selected:hover,
 	.button-on:hover {
-		border-color: var(--color-button-hover);
-		color: var(--color-button-hover);
-		background: var(--color-button-text);
+		border-color: var(--color-button-border-hovsel);
+		color: var(--color-button-text-hovsel);
+		background: var(--color-button-bg-hovsel);
 	}
 
 .button-area {

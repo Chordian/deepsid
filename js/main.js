@@ -360,6 +360,7 @@ $(function() { // DOM ready
 	 */
 	$("#theme-selector").click(function() {
 		colorTheme ^= 1;
+		$("#topic-profile").find("img.composer").attr("src", "images/composer"+(colorTheme ? "_dark" : "")+".png");
 		$("body").attr("data-theme", colorTheme ? "dark" : "")
 			.find(colorTheme ? ".mCS-dark-3" : ".mCS-light-3")
 			.removeClass(colorTheme ? "mCS-dark-3" : ".mCS-light-3")
