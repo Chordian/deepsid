@@ -53,6 +53,14 @@
 		<script type="text/javascript" src="js/scope.js"></script> <!-- <= JW's sid_tracer.js -->
 		<script type="text/javascript" src="js/viz.js"></script>
 		<script type="text/javascript" src="js/main.js"></script>
+		<script type="text/javascript">
+			var colorTheme = 0;
+			function setTheme() {
+				colorTheme = localStorage.getItem("theme");
+				if (colorTheme == 1)
+					$("body").attr("data-theme", "dark");
+			}
+		</script>
 		<link rel="icon" href="images/deepsid_icon_32x32.png" sizes="32x32" />
 		<link rel="apple-touch-icon-precomposed" href="//chordian.net/images/avatar_c_olivi_128x128.png" />
 		<meta name="msapplication-TileImage" content="//chordian.net/images/avatar_c_olivi_128x128.png" />
@@ -135,6 +143,7 @@
 	</head>
 
 	<body class="entry-content" data-mobile="<?php echo isMobile(); ?>">
+		<script type="text/javascript">setTheme();</script>
 
 		<iframe id="download" style="display:none;"></iframe>
 

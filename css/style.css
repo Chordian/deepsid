@@ -8,7 +8,6 @@
 		- H2 and H3 need brighter white than the bread text below them.
 		- What about the "brand" corner graphics? Some of it have black text or outlines! =S
 			- Would it be possible to add a brightening box-shadow?
-		- The state of the theme selector must be stored in local storage.
 		- When switching theme, disable then reenable Disqus again to make it detect that.
 
 	   Test:
@@ -48,6 +47,7 @@
 	--color-anchor-hover:			#e95927;
 	--color-table:					#a8ad95;			/* Standard colors for <TABLE>, <TH> and <TD> elements */
 	--color-table-th-bg:			#f5f6f2;
+	--color-table-border:			#b0b29a;
 	--color-input-text:				#666;				/* When text is present in an edit box but not being edited */
 	--color-input-text-focus:		#111;				/* When typing in an edit box */
 	--color-selection-bg:			#d2d5cb;			/* When marking text to be copied */
@@ -59,6 +59,7 @@
 	--color-border:					#ced0c0;			/* For borders and text labels where its container is disabled */
 	--color-border-box:				#c8c8b9;			/* For borders around various boxes and input fields */
 	--color-border-info:			#7a88c8;			/* Bottom border color for top info box */
+	--color-border-comments:		var(--color-border);
 
 	--color-button:					#474937;			/* Darkest green typically used on buttons */
 	--color-button-border:			var(--color-button);
@@ -85,11 +86,13 @@
 	--color-link-hover:				#e95927;			/* Hovering on a link */
 
 	--color-text-body:				#404040;			/* Default text color */
+	--color-text-notable:			var(--color-text-body);
 	--color-text-subtle:			#a1a294;			/* For e.g. top links */
 	--color-text-fine:				#68695a;			/* For e.g. login user name */
 	--color-text-dim:				#b0b29a;			/* For e.g. edit box border and small text on white background */
 	--color-text-player:			#7c7e60;			/* For e.g. login response text and small text in players tab */
 	--color-text-faint:				#a8ad95;			/* For e.g. HVSC version text in info box */
+	--color-text-del:				var(--color-text-faint);
 	--color-text-distinct:			#555;				/* For e.g. SID title and digi sample rates in info box */
 	--color-text-sid-selected:		var(--color-button);
 	--color-text-minor:				#969787;			/* For e.g. small text lines in SID rows */
@@ -313,41 +316,42 @@
 
 	--color-bg:						#181818;			/* Body background */
 	--color-bg-box:					#242424;			/* General background color for various boxes and pages */
+	--color-avatar-bg:				#393939;
 
-	--color-logo:					#405038;			/* Color for e.g. top left logo and disabled song rows */
+	--color-logo:					#333;			/* Color for e.g. top left logo and disabled song rows */
 	/*--color-dot:					#8a8c7a;			/* Color for e.g. small split dots in text */
 	--color-bg-sid-selected:		#343434;				/* Background of e.g. a selected SID row in the browser */
 	--color-bg-sid-hover:			#2c2c2c;			/* Background when hovering on a SID row in the browser */
-	--color-bg-edit-area:			#1c1c1c;
+	--color-bg-edit-area:			var(--color-bg);
 	/*--color-bg-scope:				var(--color-top);
 	--color-bg-slider:				var(--color-top);	  /* Color of the dragging bar for changing the sundry box size */
 	--color-bg-songs-buttons:		linear-gradient(to bottom, #343434 10%,#181818 100%);
-	/*--color-new-bg:					#ef0;				/* Color for small "NEW" labels on SID rows in the browser */
+	--color-new-bg:					#d9ce6f;
 	--color-new-shadow:				none;
 	--color-code-bg:				#383838;
 	--color-code-border:			#484848;
-	--color-anchor:					#e0d68a;			/* #98a290 #a1ba89 #abc4a1 #d4e4bc #eee1b3 #e0d68a */
+	--color-anchor:					#e0d68a;
 	--color-anchor-hover:			#f5f5f1;
-	/*--color-table:					#a8ad95;			/* Standard colors for <TABLE>, <TH> and <TD> elements */
-	/*--color-table-th-bg:			#f5f6f2;
+	--color-table:					#606060;			/* Standard colors for <TABLE>, <TH> and <TD> elements */
+	--color-table-th-bg:			transparent;
+	--color-table-border:			#4c4c4c;
 	/*--color-input-text:				#666;				/* When text is present in an edit box but not being edited */
 	/*--color-input-text-focus:		#111;				/* When typing in an edit box */
 	/*--color-selection-bg:			#d2d5cb;			/* When marking text to be copied */
-	/*--color-selection-text:			#222;
-	/*--color-notable:				#f8f848;			/* Color for notable achievements in composer profile */
-	/*--color-oldest-in-top:			#c86d55;			/* Color for right corner line above CSDb comments table */
+	/*--color-selection-text:			#222;*/
+	--color-notable:				#d9ce6f;
 	/*--color-emphasize:				#ffff80;			/* Color for emphasizing handles or groups in CSDb releases */
 
 	--color-border:					#0c0c0c;			/* For borders and text labels where its container is disabled */
 	--color-border-box:				#2c2c2c;			/* For borders around various boxes and input fields */
 	--color-border-info:			#7a88c8;			/* Bottom border color for top info box */
+	--color-border-comments:		#4c4c4c;
 
 	--color-button:					linear-gradient(to bottom, #6e7965 0%,#4b5345 85%); /* #4e5648 */
 										/* #565f4f #4a5244 #5a6650 #415d43 */
 	--color-button-border:			#555e4e;
 	--color-button-border-idle:		var(--color-button-border);
 	--color-button-border-select:	#f5f5f1;
-	/*--color-button-text:			var(--color-top);	*/
 	--color-button-bg-select:		linear-gradient(to bottom, #daddd7 0%,#a0a999 95%);
 	--color-button-text-select:		#4b5345;
 	--color-button-hover:			linear-gradient(to bottom, #828e78 0%,#5f6957 85%);
@@ -358,7 +362,6 @@
 	--color-button-disabled:		#31362e;			/* Disabled button */
 	--color-button-disabled-text:	#5a5f56;
 	--color-button-shadow:			none;
-	/*--color-button-logout:			var(--color-button-inverted);*/
 
 	--border-button-select:			#b4bbad;
 	--shadow-button-select:			none; /*inset 1px 1px 6px #111;*/
@@ -368,22 +371,50 @@
 	--color-link-hover:				var(--color-anchor-hover);
 
 	--color-text-body:				#bcbebc;			/* Default text color */ /* #bec0ba */
+	--color-text-notable:			#404040;
 	--color-text-subtle:			#666;			/* For e.g. top links */
-	--color-text-fine:				#a8ada0;			/* For e.g. login user name
-	/*--color-text-dim:				#b0b29a;			/* For e.g. edit box border and small text on white background */
+	--color-text-fine:				#a8ada0;			/* For e.g. login user name*/
+	--color-text-dim:				#777;
 	/*--color-text-player:			#7c7e60;			/* For e.g. login response text and small text in players tab */
 	--color-text-faint:				#666;			/* For e.g. HVSC version text in info box */
+	--color-text-del:				#6c631c;
 	--color-text-distinct:			#cecece;				/* For e.g. digi sample rates in info box */
 	--color-text-sid-selected:		#c8f0c8;
 	--color-text-minor:				#888;			/* For e.g. small text lines in SID rows */
 	--color-text-info-selected:		#aaa;
 	/*--color-text-c64font:			#555743;			/* Used for the C64 font in the CGSC folder */
 
+	/*--color-border-subtune:			#888;				/* Border for round sub tune indicators in playlists */
+	/*--color-text-subtune:			#222;				/* Text color for sub tune indicators in playlists */
+	/*--color-bg-subtune:				var(--color-top);
+
+	/*--color-text-resp-good:			#494;				/* Good response text color in user form */
+	/*--color-text-resp-bad:			#a44;				/* Bad response text color in user form */
+
+	--color-settings-cog-icon:		#6a6c68;
+	--color-settings-bold:			var(--color-top);
+
+	/*--color-bg-playerinfo:			var(--color-top);*/
+	/*--color-player-package:			#f8f1f1;			/* Background colors for headers in player/editor table */
+	/*--color-player-features:		#fafaee;*/
+	/*--color-player-player:			#f1f1f8;*/
+	/*--color-player-editor:			#f2f8f2;*/
+
+	/*--color-pwd-good:				#080;				/* When changing the password in settings */
+	/*--color-pwd-bad:				#a00;*/
+
+	/*--color-viz-msg-emu:			var(--color-pwd-bad);*/
+	/*--color-viz-msg-buffer:			#00a;*/
+
+	/*--color-sid-row-error-entry:	#a33;				/* Error colors for SID file row that can't be played */
+	/*--color-sid-row-error-info:		#cc8282;*/
+	/*--color-sid-row-error-bg:		#f5eaea;*/
+
 	/* SVG images */
 
 	/* @link https://codepen.io/sosuke/pen/Pjoqqp - NOTE: The SVG must be black as default for this to work! */
 	--svg-filter-viz-msg-buffer: 	var(--svg-filter-white);
-	--svg-filter-icon-bottom:		var(--svg-filter-white);
+	--svg-filter-icon-bottom:		invert(87%) sepia(6%) saturate(56%) hue-rotate(71deg) brightness(101%) contrast(90%);
 	--svg-filter-loading-spinner:	var(--svg-filter-button-disabled);
 	--svg-filter-row-spinner:		var(--svg-filter-button-disabled);
 	--svg-filter-icon-office:		var(--svg-filter-icon-flash);
@@ -415,8 +446,20 @@
 	/* CSDb music competition folder icons */
 
 	--color-compo-shadow:			none;
-
 }
+
+[data-theme="dark"] input,
+[data-theme="dark"] select,
+[data-theme="dark"] textarea {
+	color: var(--color-text-notable);
+}
+
+[data-theme="dark"] h2 { color: #fff; }
+[data-theme="dark"] h3 { color: #d8dad8; }
+[data-theme="dark"] #brand { display: none;}
+
+[data-theme="dark"] .ct-label	{ color: #909090; fill: #909090; }
+[data-theme="dark"] .ct-grid	{ stroke: #505050; }
 
 /* ---- Overriding Olivi CSS ------------------------------------------------- */
 
@@ -2692,6 +2735,10 @@ input[type=range]::-ms-track {
 			color: var(--color-text-faint);
 		}
 
+		#page .ext a > del {
+			color: var(--color-text-del);
+		}
+
 		#page .ext .screenshot {
 			width: 384px;
 			height: 272px;
@@ -2738,6 +2785,7 @@ input[type=range]::-ms-track {
 				height: 22px;
 				left: 10px;
 				bottom: 52px;
+				color: var(--color-text-notable);
 				background: var(--color-notable);
 				border-radius: 4px;
 			}
@@ -2771,9 +2819,9 @@ input[type=range]::-ms-track {
 				filter: var(--svg-filter-icon-bottom);
 			}
 
-			.icon-editor {
+			/*.icon-editor {
 				filter: var(--svg-filter-icon-editor);
-			}
+			}*/
 
 			/* Composer star used in notable line */
 			#page .ext img.cstar {
@@ -3176,7 +3224,7 @@ input[type=range]::-ms-track {
 		}
 
 		#page .ext table.comments td {
-			border-top-color: var(--color-border);
+			border-top-color: var(--color-border-comments);
 		}
 
 		#page .ext .oldest-in-top {
@@ -3204,7 +3252,7 @@ input[type=range]::-ms-track {
 			position: relative;
 			width: 170px;
 			vertical-align: top;
-			border-right-color: var(--color-border);
+			border-right-color: var(--color-border-comments);
 			color: var(--color-text-minor);
 		}
 
@@ -3412,20 +3460,20 @@ input[type=range]::-ms-track {
 
 		#page .ext .topline {
 			padding-top: 6px !important;
-			border-top: 1px solid var(--color-text-dim) !important;
+			border-top: 1px solid var(--color-table-border) !important;
 		}
 
 		#page .ext .bottomline {
 			padding-bottom: 8px !important;
-			border-bottom: 1px solid var(--color-text-dim) !important;
+			border-bottom: 1px solid var(--color-table-border) !important;
 		}
 
 		#page .ext .leftline {
-			border-left: 1px solid var(--color-text-dim) !important;
+			border-left: 1px solid var(--color-table-border) !important;
 		}
 
 		#page .ext .rightline {
-			border-right: 1px solid var(--color-text-dim) !important;
+			border-right: 1px solid var(--color-table-border) !important;
 		}
 
 		/* No CSDb profile | No game statics */
@@ -3458,7 +3506,7 @@ input[type=range]::-ms-track {
 		margin: 0;
 		padding: 6px;
 		font-size: 13px;
-		border: 1px solid var(--color-text-dim);
+		border: 1px solid var(--color-table-border);
 	}
 
 	#page .ext table.compo th,

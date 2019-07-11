@@ -5,7 +5,7 @@
 
 var $=jQuery.noConflict();
 var cacheCSDb = cacheSticky = cacheStickyBeforeCompo = cacheCSDbProfile = cacheBeforeCompo = cachePlayer = cacheGB64 = prevFile = sundryTab = reportSTIL = "";
-var cacheTabScrollPos = cachePlayerTabScrollPos = cacheGB64TabScrollPos = tabScrollPos = cachePosBeforeCompo = cacheDDCSDbSort = peekCounter = sundryHeight = colorTheme = 0;
+var cacheTabScrollPos = cachePlayerTabScrollPos = cacheGB64TabScrollPos = tabScrollPos = cachePosBeforeCompo = cacheDDCSDbSort = peekCounter = sundryHeight = 0;
 var sundryToggle = true, recommended = players = null;
 
 $(function() { // DOM ready
@@ -365,6 +365,7 @@ $(function() { // DOM ready
 			.find(colorTheme ? ".mCS-dark-3" : ".mCS-light-3")
 			.removeClass(colorTheme ? "mCS-dark-3" : ".mCS-light-3")
 			.addClass(colorTheme ? "mCS-light-3" : "mCS-dark-3");
+		localStorage.setItem("theme", colorTheme);
 	});
 
 	/**
