@@ -5,9 +5,6 @@
 
 	/* Todo:
 
-		- H2 and H3 need brighter white than the bread text below them.
-		- What about the "brand" corner graphics? Some of it have black text or outlines! =S
-			- Would it be possible to add a brightening box-shadow?
 		- When switching theme, disable then reenable Disqus again to make it detect that.
 
 	   Test:
@@ -32,6 +29,7 @@
 	--color-avatar-bg:				var(--color-top);	  /* Background color for all types of avatars */
 
 	--color-logo:					#d3d4c6;			/* Color for e.g. top left logo and disabled song rows */
+	--color-disabled:				var(--color-logo);
 	--color-dot:					#8a8c7a;			/* Color for e.g. small split dots in text */
 	--color-bg-sid-selected:		#ebebe5;			/* Background of e.g. a selected SID row in the browser */
 	--color-bg-sid-hover:			#f1f1ed;			/* Background when hovering on a SID row in the browser */
@@ -41,10 +39,13 @@
 	--color-bg-songs-buttons:		var(--color-top);	  /* The top container with the root/back buttons and path */
 	--color-new-bg:					#ef0;				/* Color for small "NEW" labels on SID rows in the browser */
 	--color-new-shadow:				var(--color-bottom);
+	--color-bg-ptype:				var(--color-top);	  /* Color for the small "RSID" labels */
 	--color-code-bg:				#f4f3ee;			/* Colors for <CODE> element */
 	--color-code-border:			#ebeae1;
 	--color-anchor:					#5a6701;			/* Standard hyperlink */
 	--color-anchor-hover:			#e95927;
+	--color-anchor-notable:			var(--color-anchor);
+	--color-anchor-hover-notable:	var(--color-anchor-hover);
 	--color-table:					#a8ad95;			/* Standard colors for <TABLE>, <TH> and <TD> elements */
 	--color-table-th-bg:			#f5f6f2;
 	--color-table-border:			#b0b29a;
@@ -94,10 +95,12 @@
 	--color-text-faint:				#a8ad95;			/* For e.g. HVSC version text in info box */
 	--color-text-del:				var(--color-text-faint);
 	--color-text-distinct:			#555;				/* For e.g. SID title and digi sample rates in info box */
+	--color-text-ptype:				var(--color-text-distinct);
 	--color-text-sid-selected:		var(--color-button);
 	--color-text-minor:				#969787;			/* For e.g. small text lines in SID rows */
 	--color-text-info-selected:		none;
 	--color-text-c64font:			#555743;			/* Used for the C64 font in the CGSC folder */
+	--color-text-label-disabled:	var(--color-border);
 
 	--color-border-subtune:			#888;				/* Border for round sub tune indicators in playlists */
 	--color-text-subtune:			#222;				/* Text color for sub tune indicators in playlists */
@@ -142,7 +145,7 @@
 	--svg-filter-icon-office:		invert(23%) sepia(37%) saturate(2924%) hue-rotate(28deg) brightness(96%) contrast(101%);
 	--svg-filter-icon-editor:		invert(26%) sepia(11%) saturate(0%) hue-rotate(244deg) brightness(90%) contrast(90%);
 	--svg-filter-icon-cstar:		invert(8%) sepia(84%) saturate(5326%) hue-rotate(5deg) brightness(93%) contrast(114%);
-	--svg-filter-icon-time:			var(--svg-filter-text-player);
+	--svg-filter-icon-time:			invert(50%) sepia(0%) saturate(0%) hue-rotate(184deg) brightness(93%) contrast(91%);;
 	--svg-filter-icon-to-top:		var(--svg-filter-white);
 
 	--svg-bg-star-orange:			url(../images/if_star_orange.svg) 0 0 / 18px 18px no-repeat;
@@ -154,7 +157,8 @@
 	--color-context-bg:				var(--color-top);
 	--color-context-border:			var(--color-border-box);
 	--color-context-shadow:			rgba(0, 0, 0, 0.2);
-	--color-context-item-hover:		#eeeee8;			/* Color when hovering on a line in a context menu */
+	--color-context-bg-hover:		#eeeee8;			/* Color when hovering on a line in a context menu */
+	--color-context-text-hover:		var(--color-text-body);
 	--color-context-divider:		var(--color-border-box);
 	--color-context-triangle:		var(--color-button);
 	--color-context-disabled:		var(--color-border);
@@ -201,6 +205,9 @@
 	--color-root-bg-rec:			#eeefe9;			/* Color for root recommended folder box when hovering on it */
 	--color-root-random-text:		#5e6048;
 	--color-root-random-bigfont:	#333;
+	--color-root-random-shadow:		var(--color-bg-box);
+
+	--url-roulette:					url(../images/roulette.png);
 
 	/* Corner flags in info box */
 
@@ -219,16 +226,18 @@
 	--color-memory-lid-side:		rgba(68, 82, 157, 0);
 	--color-memory-lid-middle:		rgba(68, 82, 157, 1);
 
+	--shadow-memory:				none;
+
 	/* Time bar colors */
 
 	--color-timebar-bg:				#fcfcfc;			/* Color of the inside of the time bar */
 	--color-timebar-border:			#c4c5b3;			/* Color for border of e.g. time bar, permalinks, etc. */
 	--color-timebar-websid:			var(--color-memory-border-top);
 	--color-timebar-jssid:			rgb(38, 99, 41);
+	--color-timebar-soasc-auto:		rgb(104, 44, 116);
 	--color-timebar-soasc-r2:		#a44;
 	--color-timebar-soasc-r4:		rgb(116, 87, 47);
-	--color-timebar-soasc-r5:		#444;
-	--color-timebar-jhohertz:		rgb(104, 44, 116);	/* This and above are time bar colors for various SID handlers */
+	--color-timebar-soasc-r5:		#444;				/* This and above are time bar colors for various SID handlers */
 
 	--color-slider-track:			#7e8260;			/* Color of the rail track of the volume slider */
 
@@ -319,19 +328,22 @@
 	--color-avatar-bg:				#393939;
 
 	--color-logo:					#333;			/* Color for e.g. top left logo and disabled song rows */
+	--color-disabled:				#444;
 	/*--color-dot:					#8a8c7a;			/* Color for e.g. small split dots in text */
 	--color-bg-sid-selected:		#343434;				/* Background of e.g. a selected SID row in the browser */
 	--color-bg-sid-hover:			#2c2c2c;			/* Background when hovering on a SID row in the browser */
 	--color-bg-edit-area:			var(--color-bg);
-	/*--color-bg-scope:				var(--color-top);
-	--color-bg-slider:				var(--color-top);	  /* Color of the dragging bar for changing the sundry box size */
+	/*--color-bg-scope:				var(--color-top);*/
+	--color-bg-slider:				#5a5a5a;
 	--color-bg-songs-buttons:		linear-gradient(to bottom, #343434 10%,#181818 100%);
 	--color-new-bg:					#d9ce6f;
-	--color-new-shadow:				none;
+	--color-bg-ptype:				#888;
 	--color-code-bg:				#383838;
 	--color-code-border:			#484848;
 	--color-anchor:					#e0d68a;
 	--color-anchor-hover:			#f5f5f1;
+	--color-anchor-notable:			#980000;
+	--color-anchor-hover-notable:	#e80000;
 	--color-table:					#606060;			/* Standard colors for <TABLE>, <TH> and <TD> elements */
 	--color-table-th-bg:			transparent;
 	--color-table-border:			#4c4c4c;
@@ -344,7 +356,7 @@
 
 	--color-border:					#0c0c0c;			/* For borders and text labels where its container is disabled */
 	--color-border-box:				#2c2c2c;			/* For borders around various boxes and input fields */
-	--color-border-info:			#7a88c8;			/* Bottom border color for top info box */
+	--color-border-info:			#303a70;			/* Bottom border color for top info box */
 	--color-border-comments:		#4c4c4c;
 
 	--color-button:					linear-gradient(to bottom, #6e7965 0%,#4b5345 85%); /* #4e5648 */
@@ -375,14 +387,16 @@
 	--color-text-subtle:			#666;			/* For e.g. top links */
 	--color-text-fine:				#a8ada0;			/* For e.g. login user name*/
 	--color-text-dim:				#777;
-	/*--color-text-player:			#7c7e60;			/* For e.g. login response text and small text in players tab */
+	--color-text-player:			#777;
 	--color-text-faint:				#666;			/* For e.g. HVSC version text in info box */
 	--color-text-del:				#6c631c;
-	--color-text-distinct:			#cecece;				/* For e.g. digi sample rates in info box */
+	--color-text-distinct:			#cecece;
+	--color-text-ptype:				#000;				/* For e.g. digi sample rates in info box */
 	--color-text-sid-selected:		#c8f0c8;
 	--color-text-minor:				#888;			/* For e.g. small text lines in SID rows */
 	--color-text-info-selected:		#aaa;
 	/*--color-text-c64font:			#555743;			/* Used for the C64 font in the CGSC folder */
+	--color-text-label-disabled:	#555;
 
 	/*--color-border-subtune:			#888;				/* Border for round sub tune indicators in playlists */
 	/*--color-text-subtune:			#222;				/* Text color for sub tune indicators in playlists */
@@ -394,11 +408,11 @@
 	--color-settings-cog-icon:		#6a6c68;
 	--color-settings-bold:			var(--color-top);
 
-	/*--color-bg-playerinfo:			var(--color-top);*/
-	/*--color-player-package:			#f8f1f1;			/* Background colors for headers in player/editor table */
-	/*--color-player-features:		#fafaee;*/
-	/*--color-player-player:			#f1f1f8;*/
-	/*--color-player-editor:			#f2f8f2;*/
+	--color-bg-playerinfo:			#181818;
+	--color-player-package:			linear-gradient(to bottom, #906868 0%,#704848 90%); /* #805858; */
+	--color-player-features:		linear-gradient(to bottom, #808068 0%,#606048 90%); /* #707058; */
+	--color-player-player:			linear-gradient(to bottom, #707090 0%,#505070 90%); /* #606080; */
+	--color-player-editor:			linear-gradient(to bottom, #709070 0%,#507050 90%); /* #608060; */
 
 	/*--color-pwd-good:				#080;				/* When changing the password in settings */
 	/*--color-pwd-bad:				#a00;*/
@@ -423,24 +437,67 @@
 	--svg-bg-star-empty-voted:		url(../images/if_star_empty_voted_dark.svg) 0 0 / 18px 18px no-repeat;
 	--svg-bg-star-empty-unvoted:	url(../images/if_star_empty_unvoted_dark.svg) 0 0 / 18px 18px no-repeat;
 
-		/* Tabs */
+	/* Custom context menu */
+
+	--color-context-bg:				#383838;
+	--color-context-border:			#666;
+	--color-context-shadow:			rgba(0, 0, 0, 0.6);
+	--color-context-bg-hover:		var(--color-context-border);
+	--color-context-text-hover:		var(--color-button-inverted);
+	--color-context-divider:		var(--color-context-border);
+	--color-context-triangle:		#aaa;
+	/*--color-context-disabled:		var(--color-border);*/
+
+	/* Tabs */
 
 	--color-tab-bg:					linear-gradient(to bottom, #303030 0%,var(--color-bg) 100%);
 	--color-tab-border:				var(--color-border-box);
 	--color-tab-text-color:			#6a6c68;
-	--color-tab-selected-bg:		linear-gradient(to bottom, #464846 0%,var(--color-bg-box) 100%);
-	--color-tab-selected-text:		var(--color-text-fine);
-	/*--color-tab-hover-bg:			var(--color-top);
-	/*--color-tab-hover-text:			var(--color-button-hover);
-	/*--color-tab-text-disabled:		#d7d7cb;			/* For when a tab is disabled */
-	/*--color-tab-border-disabled:	#dadace;
-	/*--color-tab-bg-disabled:		var(--color-context-item-hover);*/
+	--color-tab-selected-bg:		linear-gradient(to bottom, #4c4c4c 0%,var(--color-bg-box) 100%);
+	--color-tab-selected-text:		var(--color-text-body);
+	--color-tab-hover-bg:			linear-gradient(to bottom, var(--color-text-body) 0%,#484848 100%);
+	--color-tab-hover-text:			var(--color-bottom);
+	--color-tab-text-disabled:		#3c3c3c;
+	--color-tab-border-disabled:	#202020;
+	--color-tab-bg-disabled:		#202020;
+
+	/* SOASC status in top */
+
+	--color-soasc-status-bg:		var(--color-tab-border-disabled);
+	--color-soasc-status-border:	#555;
+	--color-soasc-status-text:		var(--color-button-hover);
+
+	/* Colors in root (front page) boxes */
+
+	--color-root-bg-random:			#333;
+	--color-root-bg-rec:			#333;
+	--color-root-random-text:		#f5f5f1;
+	--color-root-random-bigfont:	#e0d68a;
+	--color-root-random-shadow:		#000;
+
+	--url-roulette:					url(../images/roulette_dark.png);
+
+	/* Memory bar colors */
+
+	--color-memory-bg:				#8b97cf;
+	--color-memory-border-top:		#000;
+	--color-memory-chunk:			linear-gradient(to bottom, #616fbb 5%,#44529d 95%);
+	--color-memory-border-lr:		#303a70;
+	--color-memory-lid-side:		transparent;
+	--color-memory-lid-middle:		transparent;
+
+	--shadow-memory:				inset 0 1px 1px #dee1f0; /* #28305c #dee1f0 */
 
 	/* Time bar colors */
 
 	--color-timebar-bg:				linear-gradient(to bottom, #1c1c1c 0%,#3a3a3a 75%);
 	--color-timebar-border:			#555;
-
+	--color-timebar-websid:			linear-gradient(to bottom, #616fbb 20%,#44529d 100%); 	/* #44529d */
+	--color-timebar-jssid:			linear-gradient(to bottom, #368e39 20%,#266329 100%); 	/* #266329 */
+	--color-timebar-soasc-auto:		linear-gradient(to bottom, #a651bd 20%,#843a98 100%); 	/* #682c74 */
+	--color-timebar-soasc-r2:		linear-gradient(to bottom, #bd5b5b 20%,#9d3f3f 100%); 	/* #a44; */
+	--color-timebar-soasc-r4:		linear-gradient(to bottom, #9e7740 20%,#74572f 100%); 	/* #74572f */
+	--color-timebar-soasc-r5:		linear-gradient(to bottom, #777 20%,#484848 100%);		/* #444; */
 	--color-slider-track:			#4a4a4a;
 
 	/* CSDb music competition folder icons */
@@ -454,12 +511,38 @@
 	color: var(--color-text-notable);
 }
 
+[data-theme="dark"] input:disabled,
+[data-theme="dark"] select:disabled,
+[data-theme="dark"] textarea:disabled {
+	color: var(--color-text-distinct);
+}
+
 [data-theme="dark"] h2 { color: #fff; }
 [data-theme="dark"] h3 { color: #d8dad8; }
 [data-theme="dark"] #brand { display: none;}
 
-[data-theme="dark"] .ct-label	{ color: #909090; fill: #909090; }
-[data-theme="dark"] .ct-grid	{ stroke: #505050; }
+[data-theme="dark"] #page .ext .name { color: #f5f5f1; }
+[data-theme="dark"] #page .ext .name:hover { text-decoration: underline; }
+
+[data-theme="dark"] #topic-player table {
+	border-top-width: 1px !important;
+}
+
+[data-theme="dark"] #topic-player table,
+[data-theme="dark"] #topic-player th,
+[data-theme="dark"] #topic-player td {
+	border-color: #363636 !important;
+}
+[data-theme="dark"] #topic-player td.corner {
+	color: #ddd;
+}
+
+[data-theme="dark"] #page .ext table.tight th {
+	color: #e4e4e4;
+}
+
+[data-theme="dark"] .ct-label { color: #909090; fill: #909090; }
+[data-theme="dark"] .ct-grid  { stroke: #505050; }
 
 /* ---- Overriding Olivi CSS ------------------------------------------------- */
 
@@ -1477,12 +1560,12 @@ input[type=range]::-ms-track {
 			pointer-events: none;
 		}
 
-		#time .websid div	{ background: var(--color-timebar-websid); }
-		#time .jssid div	{ background: var(--color-timebar-jssid); }
-		#time .soasc_r2 div	{ background: var(--color-timebar-soasc-r2); }
-		#time .soasc_r4 div	{ background: var(--color-timebar-soasc-r4); }
-		#time .soasc_r5 div	{ background: var(--color-timebar-soasc-r5); }
-		#time .jhohertz div	{ background: var(--color-timebar-jhohertz); } /* Not implemented */
+		#time .websid div		{ background: var(--color-timebar-websid); }
+		#time .jssid div		{ background: var(--color-timebar-jssid); }
+		#time .soasc_auto div	{ background: var(--color-timebar-soasc-auto); }
+		#time .soasc_r2 div		{ background: var(--color-timebar-soasc-r2); }
+		#time .soasc_r4 div		{ background: var(--color-timebar-soasc-r4); }
+		#time .soasc_r5 div		{ background: var(--color-timebar-soasc-r5); }
 
 /* ---- Info Box (Name, Author, Copyright) ---------------------------------- */
 
@@ -1648,7 +1731,7 @@ input[type=range]::-ms-track {
 			padding: 0 3px;
 			border: 0.5px solid var(--color-border-box);
 			border-radius: 2px;
-			color: var(--color-text-distinct);
+			color: var(--color-text-ptype);
 			background: var(--color-top);
 			text-align: right;
 			line-height: 13.5px;
@@ -1662,11 +1745,12 @@ input[type=range]::-ms-track {
 			height: 13px;
 			line-height: 0;
 			margin-left: 5px;
+			background: var(--color-bg-ptype);
 		}
 
 		.disabled .ptype {
-			color: var(--color-logo);
-			border-color: var(--color-logo);
+			color: var(--color-disabled);
+			border-color: var(--color-disabled);
 			background: transparent;
 		}
 
@@ -1682,6 +1766,7 @@ input[type=range]::-ms-track {
 		border-left: 1px solid var(--color-memory-border-lr);
 		border-right: 1px solid var(--color-memory-border-lr);
 		background: var(--color-memory-bg);
+		box-shadow: var(--shadow-memory);
 	}
 
 		#memory-lid {
@@ -2125,7 +2210,7 @@ input[type=range]::-ms-track {
 		}
 
 			#songs .disabled .subtunes {
-				background: var(--color-logo);
+				background: var(--color-disabled);
 			}
 
 			/* In symlists a specific subtune to be played is shown instead */
@@ -2315,6 +2400,7 @@ input[type=range]::-ms-track {
 			top: 16px;
 			left: 24px;
 			padding: 6px 2px 3px;
+			color: var(--color-text-ptype);
 			background: var(--color-new-bg);
 			font: bold 11px/0 "Open Sans", sans-serif;
 			border-radius: 1px;
@@ -2335,7 +2421,6 @@ input[type=range]::-ms-track {
 		}
 
 		#songs td.sid .newst:before {
-			color: var(--color-text-distinct);
 			top: 9px;
 			left: -20px;
 			right: auto;
@@ -2386,7 +2471,7 @@ input[type=range]::-ms-track {
 	#songs .disabled,
 	#songs .disabled tr:hover,
 	#songs .disabled .info {
-		color: var(--color-logo);
+		color: var(--color-disabled);
 		cursor: default;
 	}
 
@@ -2443,7 +2528,7 @@ input[type=range]::-ms-track {
 				}
 
 				#search-here-container label.disabled {
-					color: var(--color-border);
+					color: var(--color-text-label-disabled);
 				}
 
 			#search-button {
@@ -2488,7 +2573,8 @@ input[type=range]::-ms-track {
 	}
 
 		.context .line:hover {
-			background: var(--color-context-item-hover);
+			color: var(--color-context-text-hover);
+			background: var(--color-context-bg-hover);
 		}
 
 	.context .divider {
@@ -2790,6 +2876,9 @@ input[type=range]::-ms-track {
 				border-radius: 4px;
 			}
 
+				#page .ext .notable a 		{ color: var(--color-anchor-notable); }
+				#page .ext .notable a:hover	{ color: var(--color-anchor-hover-notable); }
+
 			/* Flag image added after countries */
 			#page .ext .flag {
 				height: 11px;
@@ -2979,7 +3068,7 @@ input[type=range]::-ms-track {
 				width: 100%;
 				height: 100%;
 				z-index: -1;
-				background: url(../images/roulette.png) -30px -10px no-repeat;
+				background: var(--url-roulette) -30px -10px no-repeat;
 				background-size: 70%;
 				opacity: 0.6;
 				transition: all .07s linear;
@@ -3015,7 +3104,7 @@ input[type=range]::-ms-track {
 					font-size: 17px;
 					font-weight: bold;
 					color: var(--color-root-random-text);
-					text-shadow: 0 0 9px var(--color-bg-box);
+					text-shadow: 0 0 9px var(--color-root-random-shadow);
 				}
 
 					#page table.rec .random-container span {
@@ -3029,7 +3118,7 @@ input[type=range]::-ms-track {
 				}
 
 				#page table.rec table.decent:hover:before {
-					background: var(--color-root-bg-random);
+					background-color: var(--color-root-bg-random);
 					/*background: linear-gradient(to right, var(--color-bg-box), --color-root-bg-rec);*/
 					opacity: 1.0;
 				}

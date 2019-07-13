@@ -301,7 +301,7 @@ $(function() { // DOM ready
 				SID.setVolume(1);
 
 				// The color of the time bar should be unique for the chosen SID handler
-				$("#time-bar").removeClass("websid jssid soasc_r2 soasc_r4 soasc_r5").addClass(emulator)
+				$("#time-bar").removeClass("websid jssid soasc_auto soasc_r2 soasc_r4 soasc_r5").addClass(emulator)
 					.css("cursor", SID.emulatorFlags.supportSeeking ? "pointer" : "default");
 
 				$("#faster").removeClass("disabled");
