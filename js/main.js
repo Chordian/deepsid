@@ -1182,7 +1182,7 @@ function CheckSOASCStatus() {
  * @param {string} cssVar	The custom variable name.
  */
 function GetCSSVar(cssVar) {
-	return $(colorTheme ? "[data-theme='dark']" : ":root").css(cssVar);
+	return $(parseInt(colorTheme) ? "[data-theme='dark']" : ":root").css(cssVar);
 }
 
 /**

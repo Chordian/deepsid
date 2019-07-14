@@ -6,10 +6,13 @@
 	/* Todo:
 
 		- When switching theme, disable then reenable Disqus again to make it detect that.
+		- Need to make default avatar override more solid.
+	
+		- Test reload white theme
 
-	   Test:
+		- Login / Register status texts
 
-		- Change password
+		- Change password status colors
 		- Good/Bad news in root
 		- Loading SVG (recommended/players)
 		- SOASC status LED
@@ -215,7 +218,16 @@
 	--color-pal-hover:				#77a;
 	--color-ntsc:					#955;				/* Color for NTSC corner flag box */
 	--color-ntsc-hover:				#b06c6c;
+	--color-6581-bg:				var(--color-button);
+	--color-6581-text:				var(--color-button-inverted);
+	--color-6581-border:			var(--color-button);
+	--color-6581-bg-hover:			var(--color-button-hover);
+	--color-6581-text-hover:		var(--color-top);
+	--color-6581-border-hover:		var(--color-button-hover);
 	--color-8580-bg:				#fafafa;			/* Background color of 8580 corner flag box */
+	--color-8580-text:				var(--color-text-body);
+	--color-8580-bg-hover:			var(--color-top);
+	--color-8580-text-hover:		var(--color-button-hover);
 
 	/* Memory bar colors */
 
@@ -246,7 +258,6 @@
 	--color-compo-bg:				var(--color-root-bg-random);
 	--color-compo-text:				var(--color-bottom);
 	--color-compo-border:			var(--color-bottom);
-	--color-compo-shadow:			var(--color-text-dim);
 	--color-compo-copy:				#900;
 	--color-compo-demo:				#080;
 	--color-compo-meeting:			#6c6c6c;
@@ -254,6 +265,8 @@
 	--color-compo-c64:				#6c7bc2;
 	--color-compo-8bit:				#000;
 	--color-compo-standalone:		#00a;
+
+	--shadow-compo:					1px 1.5px 3px var(--color-text-dim);
 
 	/* Styled select colors */	
 
@@ -327,7 +340,7 @@
 	--color-bg-box:					#242424;			/* General background color for various boxes and pages */
 	--color-avatar-bg:				#393939;
 
-	--color-logo:					#333;			/* Color for e.g. top left logo and disabled song rows */
+	--color-logo:					#31362e;
 	--color-disabled:				#444;
 	/*--color-dot:					#8a8c7a;			/* Color for e.g. small split dots in text */
 	--color-bg-sid-selected:		#343434;				/* Background of e.g. a selected SID row in the browser */
@@ -461,6 +474,11 @@
 	--color-tab-border-disabled:	#202020;
 	--color-tab-bg-disabled:		#202020;
 
+	--color-notification-default:	#a33;
+	--color-notification-csdb:		#404c92;
+	--color-notification-gb64:		#474;
+	--color-notification-player:	#848;
+
 	/* SOASC status in top */
 
 	--color-soasc-status-bg:		var(--color-tab-border-disabled);
@@ -476,6 +494,19 @@
 	--color-root-random-shadow:		#000;
 
 	--url-roulette:					url(../images/roulette_dark.png);
+
+	/* Corner flags in info box */
+
+	--color-6581-bg:				var(--color-button); /* #585858 */
+	--color-6581-text:				var(--color-button-inverted);
+	--color-6581-border:			#4e5648;
+	--color-6581-bg-hover:			#666;
+	--color-6581-text-hover:		var(--color-top);
+	--color-6581-border-hover:		var(--color-6581-bg-hover);
+	--color-8580-bg:				#f5f5f1;
+	--color-8580-text:				#333;
+	--color-8580-bg-hover:			#fff;
+	--color-8580-text-hover:		var(--color-text-subtle);
 
 	/* Memory bar colors */
 
@@ -502,7 +533,17 @@
 
 	/* CSDb music competition folder icons */
 
-	--color-compo-shadow:			none;
+	--shadow-compo:					0 0 4px #f5f5f1;
+
+	/* Styled select colors */	
+
+	--color-styled-select-text:		#404040;
+	--color-styled-select-border:	var(--color-border-box);
+	--color-styled-select-bg:		#f0f0f0;
+	--color-styled-select-border:	var(--color-border-box);
+	--color-styled-arrow:			var(--color-styled-select-text);
+	--color-styled-shadow:			#000;
+	--color-styled-item-disabled:	#c8c8ba;
 }
 
 [data-theme="dark"] input,
@@ -510,6 +551,21 @@
 [data-theme="dark"] textarea {
 	color: var(--color-text-notable);
 }
+
+[data-theme="dark"] input[type="text"],
+[data-theme="dark"] input[type="password"] {
+	background: var(--color-styled-select-bg);
+}
+
+[data-theme="dark"] select {
+	/* Can't use background color here as that automatically changes the design of the drop-down box in Firefox */
+	opacity: 0.93; /* Try to get close to --color-styled-select-bg */
+}
+
+[data-theme="dark"] select option {
+	background: var(--color-styled-select-bg);
+}
+
 
 [data-theme="dark"] input:disabled,
 [data-theme="dark"] select:disabled,
@@ -539,6 +595,10 @@
 
 [data-theme="dark"] #page .ext table.tight th {
 	color: #e4e4e4;
+}
+
+[data-theme="dark"] #songs .folder span.compo-year:before {
+	border-color: #000;
 }
 
 [data-theme="dark"] .ct-label { color: #909090; fill: #909090; }
@@ -1667,24 +1727,25 @@ input[type=range]::-ms-track {
 		}
 
 		#info .MOS6581 {
-			background: var(--color-button);
-			color: var(--color-button-inverted);
-			border-color: var(--color-button);
+			background: var(--color-6581-bg);
+			color: var(--color-6581-text);
+			border-color: var(--color-6581-border);
 		}
 
 			#info .MOS6581:hover {
-				background: var(--color-button-hover);
-				color: var(--color-top);
-				border-color: var(--color-button-hover);
+				background: var(--color-6581-bg-hover);
+				color: var(--color-6581-text-hover);
+				border-color: var(--color-6581-border-hover);
 			}
 
 		#info .MOS8580 {
 			background: var(--color-8580-bg);
+			color: var(--color-8580-text);
 		}
 
 			#info .MOS8580:hover {
-				color: var(--color-button-hover);
-				background: var(--color-top);
+				color: var(--color-8580-text-hover);
+				background: var(--color-8580-bg-hover);
 			}
 
 		#info .PAL {
@@ -2299,7 +2360,7 @@ input[type=range]::-ms-track {
 					color: var(--color-compo-text);
 					border: 2px solid var(--color-compo-border);
 					border-radius: 10px; /* 13px 14px 20px (circle) */
-					box-shadow: 1px 1.5px 3px var(--color-compo-shadow);
+					box-shadow: var(--shadow-compo);
 					margin-bottom: -10px;
 				}
 
@@ -3810,7 +3871,6 @@ input[type=range]::-ms-track {
 	border: 1px solid var(--color-styled-select-border);
 	border-radius: 1px;
 	background: var(--color-styled-select-bg);
-	
 }
 
 /* Inside the new styled select */
