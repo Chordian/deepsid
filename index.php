@@ -974,6 +974,12 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>July ##, 2019</h3>
+						<ul>
+							<li>You can now click a small button near the logo to toggle between a bright or a dark color theme.</li>
+							<li>The SID handler option <code>SOASC Automatic</code> now shows a magenta color instead of black in the time bar.</li>
+						</ul>
+
 						<h3>July 6, 2019</h3>
 						<ul>
 							<li>Fixed a bug where default settings were not created for guests.</li>

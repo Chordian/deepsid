@@ -708,7 +708,7 @@ Controls.prototype = {
 				.append(stil)
 				.mCustomScrollbar({
 					axis: "y",
-					theme: (colorTheme ? "light-3" : "dark-3"),
+					theme: (parseInt(colorTheme) ? "light-3" : "dark-3"),
 					scrollButtons:{
 						enable: true,
 					},

@@ -719,7 +719,7 @@ Browser.prototype = {
 					$("#folders").height($("#folders").height())
 						.mCustomScrollbar({
 							axis: "y",
-							theme: (colorTheme ? "light-3" : "dark-3"),
+							theme: (parseInt(colorTheme) ? "light-3" : "dark-3"),
 							setTop: (typeof scrollPos !== "undefined" ? scrollPos+"px" : "0"),
 							scrollButtons:{
 								enable: true,
@@ -1006,7 +1006,7 @@ Browser.prototype = {
 						$("#folders").height($("#folders").height())
 							.mCustomScrollbar({
 								axis: "y",
-								theme: (colorTheme ? "light-3" : "dark-3"),
+								theme: (parseInt(colorTheme) ? "light-3" : "dark-3"),
 								setTop: (typeof scrollPos !== "undefined" ? scrollPos+"px" : "0"),
 								scrollButtons:{
 									enable: true,
@@ -1215,6 +1215,7 @@ Browser.prototype = {
 				this.validateData(data, function(data) {
 
 					clearTimeout(loadingComposer);
+					if (parseInt(colorTheme)) data.html = data.html.replace("composer.png", "composer_dark.png");
 					$("#topic-profile").empty().append(data.html);
 
 					$("#page .dropdown-top-list").styledSelect("toplist");
@@ -1250,7 +1251,7 @@ Browser.prototype = {
 				this.validateData(data, function(data) {
 
 					clearTimeout(loadingComposer);
-					if (colorTheme) data.html = data.html.replace("composer.png", "composer_dark.png");
+					if (parseInt(colorTheme)) data.html = data.html.replace("composer.png", "composer_dark.png");
 					$("#topic-profile").empty().append(data.html);
 
 					// Add report profile change link
@@ -1309,6 +1310,7 @@ Browser.prototype = {
 
 				clearTimeout(loadingCSDb);
 				$("#sticky").empty().append(data.sticky);
+				if (parseInt(colorTheme)) data.html = data.html.replace("composer.png", "composer_dark.png");
 				$("#topic-csdb").empty().append(data.html)
 					.css("visibility", "visible");
 
@@ -1388,6 +1390,8 @@ Browser.prototype = {
 
 				clearTimeout(loadingCSDb);
 				$("#sticky").empty().append(data.sticky);
+				if (parseInt(colorTheme))
+					data.html = data.html.replace(/composer\.png/g, "composer_dark.png");
 				$("#topic-csdb").empty().append(data.html)
 					.css("visibility", "visible");
 

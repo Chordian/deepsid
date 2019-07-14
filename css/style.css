@@ -3,23 +3,6 @@
  * DeepSID / CSS
  */
 
-	/* Todo:
-
-		- When switching theme, disable then reenable Disqus again to make it detect that.
-		- Need to make default avatar override more solid.
-	
-		- Test reload white theme
-
-		- Login / Register status texts
-
-		- Change password status colors
-		- Good/Bad news in root
-		- Loading SVG (recommended/players)
-		- SOASC status LED
-		- SID file error rows (e.g. when SOASC refuses)
-
-	*/
-
 /* ---- Custom color variables (default theme) ------------------------------- */
 
 :root {
@@ -64,6 +47,7 @@
 	--color-border-box:				#c8c8b9;			/* For borders around various boxes and input fields */
 	--color-border-info:			#7a88c8;			/* Bottom border color for top info box */
 	--color-border-comments:		var(--color-border);
+	--color-border-scope:			var(--color-timebar-border);
 
 	--color-button:					#474937;			/* Darkest green typically used on buttons */
 	--color-button-border:			var(--color-button);
@@ -84,6 +68,12 @@
 
 	--border-button-select:			var(--color-button-border-select);
 	--shadow-button-select:			0 0 0 transparent;
+
+	--color-theme-selector-bg:		var(--color-button);
+	--color-theme-selector-border:	var(--color-button-border);
+	--color-theme-bg-hovtop:		var(--color-top);
+	--color-theme-bg-hovbot:		var(--color-button-hover);
+	--shadow-theme-selector:		1px 1px 2px var(--color-text-minor);
 
 	--url-biglogo:					url(../images/biglogo.png);
 	
@@ -342,11 +332,10 @@
 
 	--color-logo:					#31362e;
 	--color-disabled:				#444;
-	/*--color-dot:					#8a8c7a;			/* Color for e.g. small split dots in text */
-	--color-bg-sid-selected:		#343434;				/* Background of e.g. a selected SID row in the browser */
+	--color-bg-sid-selected:		#343434;			/* Background of e.g. a selected SID row in the browser */
 	--color-bg-sid-hover:			#2c2c2c;			/* Background when hovering on a SID row in the browser */
 	--color-bg-edit-area:			var(--color-bg);
-	/*--color-bg-scope:				var(--color-top);*/
+	--color-bg-scope:				#111;
 	--color-bg-slider:				#5a5a5a;
 	--color-bg-songs-buttons:		linear-gradient(to bottom, #343434 10%,#181818 100%);
 	--color-new-bg:					#d9ce6f;
@@ -360,20 +349,18 @@
 	--color-table:					#606060;			/* Standard colors for <TABLE>, <TH> and <TD> elements */
 	--color-table-th-bg:			transparent;
 	--color-table-border:			#4c4c4c;
-	/*--color-input-text:				#666;				/* When text is present in an edit box but not being edited */
-	/*--color-input-text-focus:		#111;				/* When typing in an edit box */
-	/*--color-selection-bg:			#d2d5cb;			/* When marking text to be copied */
-	/*--color-selection-text:			#222;*/
+	--color-selection-bg:			#e0d68a;
+	--color-selection-text:			#222;
 	--color-notable:				#d9ce6f;
-	/*--color-emphasize:				#ffff80;			/* Color for emphasizing handles or groups in CSDb releases */
+	--color-emphasize:				#449;
 
 	--color-border:					#0c0c0c;			/* For borders and text labels where its container is disabled */
 	--color-border-box:				#2c2c2c;			/* For borders around various boxes and input fields */
 	--color-border-info:			#303a70;			/* Bottom border color for top info box */
 	--color-border-comments:		#4c4c4c;
+	--color-border-scope:			#3e3e3e;
 
-	--color-button:					linear-gradient(to bottom, #6e7965 0%,#4b5345 85%); /* #4e5648 */
-										/* #565f4f #4a5244 #5a6650 #415d43 */
+	--color-button:					linear-gradient(to bottom, #6e7965 0%,#4b5345 85%); /* #4e5648 #565f4f #4a5244 #5a6650 #415d43 */
 	--color-button-border:			#555e4e;
 	--color-button-border-idle:		var(--color-button-border);
 	--color-button-border-select:	#f5f5f1;
@@ -391,32 +378,37 @@
 	--border-button-select:			#b4bbad;
 	--shadow-button-select:			none; /*inset 1px 1px 6px #111;*/
 
+	--color-theme-selector-bg:		#242424;
+	--color-theme-selector-border:	var(--color-theme-selector-bg);
+	--color-theme-bg-hovtop:		#fff;
+	--color-theme-bg-hovbot:		#000;
+	--shadow-theme-selector:		0 0 4px #f5f5f1;
+
 	--url-biglogo:					url(../images/biglogo_dark.png);
 
 	--color-link-hover:				var(--color-anchor-hover);
 
 	--color-text-body:				#bcbebc;			/* Default text color */ /* #bec0ba */
 	--color-text-notable:			#404040;
-	--color-text-subtle:			#666;			/* For e.g. top links */
+	--color-text-subtle:			#666;				/* For e.g. top links */
 	--color-text-fine:				#a8ada0;			/* For e.g. login user name*/
 	--color-text-dim:				#777;
 	--color-text-player:			#777;
-	--color-text-faint:				#666;			/* For e.g. HVSC version text in info box */
+	--color-text-faint:				#666;				/* For e.g. HVSC version text in info box */
 	--color-text-del:				#6c631c;
 	--color-text-distinct:			#cecece;
 	--color-text-ptype:				#000;				/* For e.g. digi sample rates in info box */
-	--color-text-sid-selected:		#c8f0c8;
-	--color-text-minor:				#888;			/* For e.g. small text lines in SID rows */
+	--color-text-sid-selected:		#fff;
+	--color-text-minor:				#888;				/* For e.g. small text lines in SID rows */
 	--color-text-info-selected:		#aaa;
-	/*--color-text-c64font:			#555743;			/* Used for the C64 font in the CGSC folder */
+	--color-text-c64font:			#a8a8a8;
 	--color-text-label-disabled:	#555;
 
-	/*--color-border-subtune:			#888;				/* Border for round sub tune indicators in playlists */
-	/*--color-text-subtune:			#222;				/* Text color for sub tune indicators in playlists */
-	/*--color-bg-subtune:				var(--color-top);
+	--color-border-subtune:			#000;
+	--color-bg-subtune:				#d4d4d4;
 
-	/*--color-text-resp-good:			#494;				/* Good response text color in user form */
-	/*--color-text-resp-bad:			#a44;				/* Bad response text color in user form */
+	--color-text-resp-good:			#6b6;
+	--color-text-resp-bad:			#d77;
 
 	--color-settings-cog-icon:		#6a6c68;
 	--color-settings-bold:			var(--color-top);
@@ -427,22 +419,21 @@
 	--color-player-player:			linear-gradient(to bottom, #707090 0%,#505070 90%); /* #606080; */
 	--color-player-editor:			linear-gradient(to bottom, #709070 0%,#507050 90%); /* #608060; */
 
-	/*--color-pwd-good:				#080;				/* When changing the password in settings */
-	/*--color-pwd-bad:				#a00;*/
+	--color-pwd-good:				#0a0;
+	--color-pwd-bad:				#c00;
 
-	/*--color-viz-msg-emu:			var(--color-pwd-bad);*/
-	/*--color-viz-msg-buffer:			#00a;*/
+	--color-viz-msg-emu:			#f44;
+	--color-viz-msg-buffer:			#88f;
 
-	/*--color-sid-row-error-entry:	#a33;				/* Error colors for SID file row that can't be played */
-	/*--color-sid-row-error-info:		#cc8282;*/
-	/*--color-sid-row-error-bg:		#f5eaea;*/
+	--color-sid-row-error-entry:	#fdd;
+	--color-sid-row-error-bg:		#382828;
 
 	/* SVG images */
 
 	/* @link https://codepen.io/sosuke/pen/Pjoqqp - NOTE: The SVG must be black as default for this to work! */
 	--svg-filter-viz-msg-buffer: 	var(--svg-filter-white);
 	--svg-filter-icon-bottom:		invert(87%) sepia(6%) saturate(56%) hue-rotate(71deg) brightness(101%) contrast(90%);
-	--svg-filter-loading-spinner:	var(--svg-filter-button-disabled);
+	--svg-filter-loading-spinner:	var(--svg-filter-icon-time);
 	--svg-filter-row-spinner:		var(--svg-filter-button-disabled);
 	--svg-filter-icon-office:		var(--svg-filter-icon-flash);
 
@@ -459,7 +450,7 @@
 	--color-context-text-hover:		var(--color-button-inverted);
 	--color-context-divider:		var(--color-context-border);
 	--color-context-triangle:		#aaa;
-	/*--color-context-disabled:		var(--color-border);*/
+	--color-context-disabled:		#555;
 
 	/* Tabs */
 
@@ -481,9 +472,9 @@
 
 	/* SOASC status in top */
 
-	--color-soasc-status-bg:		var(--color-tab-border-disabled);
-	--color-soasc-status-border:	#555;
-	--color-soasc-status-text:		var(--color-button-hover);
+	--color-soasc-status-bg:		#2a2a2a;
+	--color-soasc-status-border:	#383838;
+	--color-soasc-status-text:		var(--color-text-minor);
 
 	/* Colors in root (front page) boxes */
 
@@ -599,6 +590,10 @@
 
 [data-theme="dark"] #songs .folder span.compo-year:before {
 	border-color: #000;
+}
+
+[data-theme="dark"] #theme-selector:hover {
+	box-shadow: 0 0 6px #f5f5f1;
 }
 
 [data-theme="dark"] .ct-label { color: #909090; fill: #909090; }
@@ -790,11 +785,11 @@ small.u2 { margin-left: 2px; }
 	width: 14px;
 	height: 14px;
 	background: var(--color-button-inverted);
-	border: 2px solid var(--color-button-border);
+	border: 2px solid var(--color-theme-selector-border);
 	border-radius: 10px;
 	cursor: pointer;
 	transition: all .12s linear;
-	box-shadow: 1px 1px 2px var(--color-text-minor);
+	box-shadow: var(--shadow-theme-selector);
 	z-index: 2;
 }
 
@@ -802,20 +797,20 @@ small.u2 { margin-left: 2px; }
 		float: right;
 		height: 100%;
 		width: 50%;
-		background: var(--color-button);
+		background: var(--color-theme-selector-bg);
 	}
 
 	#theme-selector:hover {
-		background: var(--color-top);
-		border-color: var(--color-button-hover);
+		background: var(--color-theme-bg-hovtop);
+		border-color: var(--color-theme-bg-hovbot);
 	}
 
 		#theme-selector:hover > div {
-			background: var(--color-button-hover);
+			background: var(--color-theme-bg-hovbot);
 		}
 
 	#theme-selector:active {
-		box-shadow: 0 0 0 transparent;
+		box-shadow: none;
 	}
 
 #logged-in {
@@ -1904,7 +1899,7 @@ input[type=range]::-ms-track {
 		left: -4.5px;
 		width: 417.5px;
 		height: 70px;
-		border: 0.5px solid var(--color-timebar-border);
+		border: 0.5px solid var(--color-border-scope);
 		background: var(--color-bg-scope);
 		border-radius: 1px;
 		cursor: pointer;
@@ -2665,6 +2660,7 @@ input[type=range]::-ms-track {
 	}
 
 		.context .disabled:hover {
+			color: var(--color-context-disabled);
 			background: transparent;
 		}
 

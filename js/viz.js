@@ -14,7 +14,7 @@ function Viz(emulator) {
 	this.lineInFlood = false;
 	this.scopeLineColor = [
 		"34, 35, 27",	// For bright color theme
-		"255, 0, 0"		// For dark color theme
+		"255, 255, 255"	// For dark color theme
 	];
 
 	this.bufferSize;

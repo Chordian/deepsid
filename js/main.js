@@ -360,11 +360,24 @@ $(function() { // DOM ready
 	 */
 	$("#theme-selector").click(function() {
 		colorTheme ^= 1;
-		$("#topic-profile").find("img.composer").attr("src", "images/composer"+(colorTheme ? "_dark" : "")+".png");
+		$("#topic-profile").find("img.composer").each(function() {
+			var $this = $(this);
+			if ($this.attr("src") == "images/composer"+(colorTheme ? "" : "_dark")+".png")
+				$this.attr("src", "images/composer"+(colorTheme ? "_dark" : "")+".png");
+		});
+		$("#dexter table.comments").find("img.avatar").each(function() {
+			var $this = $(this);
+			if ($this.attr("src") == "images/composer"+(colorTheme ? "" : "_dark")+".png")
+				$this.attr("src", "images/composer"+(colorTheme ? "_dark" : "")+".png");
+		});
 		$("body").attr("data-theme", colorTheme ? "dark" : "")
 			.find(colorTheme ? ".mCS-dark-3" : ".mCS-light-3")
 			.removeClass(colorTheme ? "mCS-dark-3" : ".mCS-light-3")
 			.addClass(colorTheme ? "mCS-light-3" : "mCS-dark-3");
+		// Disqus was implemented before the main folder for HVSC was so it doesn't know it exists
+		browser.reloadDisqus((typeof browser.songPos != "undefined"
+				? browser.playlist[browser.songPos].fullname.replace("/_High Voltage SID Collection", "")
+				: ""), "");
 		localStorage.setItem("theme", colorTheme);
 	});
 
@@ -709,6 +722,8 @@ $(function() { // DOM ready
 			browser.validateData(data, function(data) {
 				$("#page").removeClass("big-logo").addClass("big-logo");
 				clearTimeout(loadingRecommended);
+				if (parseInt(colorTheme))
+					data.html = data.html.replace(/composer\.png/g, "composer_dark.png");
 				$("#topic-profile").empty().append(data.html);
 			});
 		});
@@ -831,7 +846,7 @@ $(function() { // DOM ready
 		$("#folders").height($("#folders").height())
 			.mCustomScrollbar({
 				axis: "y",
-				theme: (colorTheme ? "light-3" : "dark-3"),
+				theme: (parseInt(colorTheme) ? "light-3" : "dark-3"),
 				scrollButtons:{
 					enable: true,
 				},
@@ -955,7 +970,7 @@ function ShowDexterScrollbar(topic) {
 	if ($("#tabs .selected").attr("data-topic") !== "disqus") {
 		$("#page").mCustomScrollbar({
 			axis: "y",
-			theme: (colorTheme ? "light-3" : "dark-3"),
+			theme: (parseInt(colorTheme) ? "light-3" : "dark-3"),
 			autoHideScrollbar: typeof topic !== "undefined" && topic === "piano", // Must hide on piano view page
 			scrollButtons:{
 				enable: true,
