@@ -1310,7 +1310,7 @@ Browser.prototype = {
 
 				clearTimeout(loadingCSDb);
 				$("#sticky").empty().append(data.sticky);
-				if (parseInt(colorTheme)) data.html = data.html.replace("composer.png", "composer_dark.png");
+				if (parseInt(colorTheme)) data.html = data.html.replace(/composer\.png/g, "composer_dark.png");
 				$("#topic-csdb").empty().append(data.html)
 					.css("visibility", "visible");
 
