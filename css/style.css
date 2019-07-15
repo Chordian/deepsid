@@ -229,6 +229,7 @@
 	--color-memory-lid-middle:		rgba(68, 82, 157, 1);
 
 	--shadow-memory:				none;
+	--shadow-memory-chunk:			var(--shadow-memory);
 
 	/* Time bar colors */
 
@@ -491,9 +492,9 @@
 	--color-6581-bg:				var(--color-button); /* #585858 */
 	--color-6581-text:				var(--color-button-inverted);
 	--color-6581-border:			#4e5648;
-	--color-6581-bg-hover:			#666;
+	--color-6581-bg-hover:			var(--color-button-hover);
 	--color-6581-text-hover:		var(--color-top);
-	--color-6581-border-hover:		var(--color-6581-bg-hover);
+	--color-6581-border-hover:		var(--color-6581-border);
 	--color-8580-bg:				#f5f5f1;
 	--color-8580-text:				#333;
 	--color-8580-bg-hover:			#fff;
@@ -509,6 +510,7 @@
 	--color-memory-lid-middle:		transparent;
 
 	--shadow-memory:				inset 0 1px 1px #dee1f0; /* #28305c #dee1f0 */
+	--shadow-memory-chunk:			inset 0 1px 1px #99a2d3;
 
 	/* Time bar colors */
 
@@ -1842,6 +1844,7 @@ input[type=range]::-ms-track {
 			height: 100%;
 			width: 0; /* Changed in jQuery */
 			background: var(--color-memory-chunk);
+			box-shadow: var(--shadow-memory-chunk);
 			z-index: 2;
 			cursor: help;
 		}
