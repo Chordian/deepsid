@@ -61,6 +61,7 @@ Browser.prototype = {
 		$("#folders table").on("contextmenu", "tr", this.contextMenu.bind(this));
 		$("#panel")
 			.on("click", ".context", this.onContextClick.bind(this))
+			.on("contextmenu", "#contextmenu", function() { return false; })
 			.on("mouseenter", "#contextmenu .submenu", this.contextSubMenu.bind(this))
 			.on("mouseleave", "#contextmenu .submenu,#contextsubmenu", function() {
 				if (!$("#contextsubmenu").is(":hover"))
