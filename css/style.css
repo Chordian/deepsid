@@ -275,7 +275,7 @@
 
 	/* Piano synth box colors */
 
-	/* NOTE: File 'viz.js' also contains direct color settings for both piano and flood views.
+	/* NOTE: File 'viz.js' also contains direct color settings for both piano and graphs views.
 	         The scope line color is set with a small array in the top of the 'viz.js' file. */
 
 	--color-piano-inverted:			#ddd;				/* Bright gray */
@@ -1021,7 +1021,7 @@ small.u2 { margin-left: 2px; }
 		color: var(--color-button-disabled);
 	}
 
-/* Used in e.g. the piano tab */
+/* Used in e.g. the piano view */
 .edit {
 	border: 1px solid var(--color-border);
 	width: calc(100% - 5px); /* To match the width of the keyboards */
@@ -1052,10 +1052,11 @@ small.u2 { margin-left: 2px; }
 			margin-bottom: 16px !important;
 		}
 	
-	#waveform-colors {
+	.waveform-colors {
+		display: none;
 		position: absolute;
-		top: 1px;
-		left: 694px; /* Don't use 'right' here or it will be pushed by the custom scrollbar */
+		top: 16px;
+		left: 704px; /* Don't use 'right' here or it will be pushed by the custom scrollbar */
 	}
 
 	.viz-warning {
@@ -1409,14 +1410,14 @@ small.u2 { margin-left: 2px; }
 	font-weight: bold;
 }
 
-#flood {
+#graph {
 	overflow: hidden;
 	position: relative;
 	margin: 0 2px;
 }
 
-	/* A down-scrolling canvas area in the 'Flood' tab */
-	.flood-river {
+	/* A down-scrolling canvas area in the 'Graph' view */
+	.graph-river {
 		position: absolute;
 		top: 0;
 		border: 0.5px solid var(--color-border); /* Color also set in 'viz.jz' script */
@@ -1425,9 +1426,9 @@ small.u2 { margin-left: 2px; }
 		/*background: var(--color-top);*/
 	}
 
-		#flood0 { left: 0; }
-		#flood1 { left: 282px; }
-		#flood2 { right: 0; }
+		#graph0 { left: 0; }
+		#graph1 { left: 282px; }
+		#graph2 { right: 0; }
 
 .thinner {
 	width: 32px;
@@ -1646,7 +1647,7 @@ input[type=range]::-ms-track {
 }
 
 	#info-text {
-		overflow:hidden;
+		overflow: hidden;
 		padding: 6px 10px;
 		height: 70px;
 		hyphens: auto;
@@ -3271,7 +3272,8 @@ input[type=range]::-ms-track {
 		}
 
 		/* Container for a sticky white top header box (used by e.g. the 'CSDb' tab) */
-		#sticky {
+		#sticky-csdb,
+		#sticky-visuals {
 			display: none;
 			position: relative;
 			padding: 8px 10px;
@@ -3279,11 +3281,22 @@ input[type=range]::-ms-track {
 			border: 1px solid var(--color-border-box);
 			border-bottom: none;
 			background: var(--color-bg-songs-buttons); /* url(../images/biglogo.png) -14px -2px / 890px no-repeat; */
-			z-index: 2;
+			z-index: 3;
 		}
 
+			#sticky-visuals {
+				overflow: visible;
+			}
+
+			#dropdown-visuals {
+				position: absolute;
+				top: 14px;
+				left: 125px;
+				font-size: 13px;
+			}
+
 		#page .ext .permalink,
-		#sticky .permalink,
+		#sticky-csdb .permalink,
 		#path .permalink {
 			width: 12px;
 			height: 12px;
@@ -3308,7 +3321,7 @@ input[type=range]::-ms-track {
 			text-align: right;
 		}
 
-			#sticky .corner-icons {
+			#sticky-csdb .corner-icons {
 				top: 12px;
 				right: 14px;
 			}
@@ -3480,7 +3493,7 @@ input[type=range]::-ms-track {
 				padding: 7px 0 2px;
 			}
 
-			#topic-piano .piano {
+			#visuals-piano .piano {
 				position: relative;
 				width: 100%;
 				height: 96px;
@@ -3574,7 +3587,7 @@ input[type=range]::-ms-track {
 			}
 
 			#page .ext button,
-			#sticky button {
+			#sticky-csdb button {
 				font-size: 11px;
 				height: 21px;
 				line-height: 22px;

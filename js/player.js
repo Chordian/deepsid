@@ -195,7 +195,7 @@ SIDPlayer.prototype = {
 	load: function(subtune, timeout, file, callback) {
 
 		this.voiceMask = 0xF;
-		viz.lineInFlood = true;
+		viz.lineInGraph = true;
 
 		subtune = this.subtune = typeof subtune === "undefined" ? this.subtune : subtune;
 		timeout = this.timeout = typeof timeout === "undefined" ? this.timeout : timeout;

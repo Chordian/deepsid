@@ -1293,7 +1293,7 @@ Browser.prototype = {
 		if (this.isMobile) return;
 		if (this.csdb) this.csdb.abort();
 		$("#topic-csdb").empty().append(this.loadingSpinner("csdb"));
-		$("#sticky").empty();
+		$("#sticky-csdb").empty();
 
 		tabScrollPos = 0;
 
@@ -1310,7 +1310,7 @@ Browser.prototype = {
 			this.validateData(data, function(data) {
 
 				clearTimeout(loadingCSDb);
-				$("#sticky").empty().append(data.sticky);
+				$("#sticky-csdb").empty().append(data.sticky);
 				if (parseInt(colorTheme)) data.html = data.html.replace(/composer\.png/g, "composer_dark.png");
 				$("#topic-csdb").empty().append(data.html)
 					.css("visibility", "visible");
@@ -1379,7 +1379,7 @@ Browser.prototype = {
 		if (this.isMobile) return;
 		if (this.compo) this.compo.abort();
 		$("#topic-csdb").empty().append(this.loadingSpinner("csdb"));
-		$("#sticky").empty();
+		$("#sticky-csdb").empty();
 
 		var loadingCSDb = setTimeout(function() {
 			// Fade in a GIF loading spinner if the AJAX call takes a while
@@ -1390,7 +1390,7 @@ Browser.prototype = {
 			this.validateData(data, function(data) {
 
 				clearTimeout(loadingCSDb);
-				$("#sticky").empty().append(data.sticky);
+				$("#sticky-csdb").empty().append(data.sticky);
 				if (parseInt(colorTheme))
 					data.html = data.html.replace(/composer\.png/g, "composer_dark.png");
 				$("#topic-csdb").empty().append(data.html)

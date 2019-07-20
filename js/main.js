@@ -171,11 +171,11 @@ $(function() { // DOM ready
 		if (!browser.isMobile) {
 			// Also make sure the scrollbar for dexter has the correct height
 			$("#page .mCSB_scrollTools").css("height", $("#page").height() + 13);
-			// Correct height for flood river too
-			var floodHeight = $("#page").outerHeight() - 173;
-			$("#flood").height(floodHeight);
-			$("#flood .flood-river canvas").attr("height", floodHeight - 1);
-			viz.river_height[0] = viz.river_height[1] = viz.river_height[2] = floodHeight - 1;
+			// Correct height for graph river too
+			var graphHeight = $("#page").outerHeight() - 127;
+			$("#graph").height(graphHeight);
+			$("#graph .graph-river canvas").attr("height", graphHeight - 1);
+			viz.river_height[0] = viz.river_height[1] = viz.river_height[2] = graphHeight - 1;
 			// And that the web site iframe has the correct height too
 			$("#page .deepsid-iframe").height($("#page").outerHeight() - 61); // 24
 		}
@@ -397,7 +397,7 @@ $(function() { // DOM ready
 		var topic = $this.attr("data-topic");
 
 		// Show the selected topic
-		$("#page .topic,#sticky").hide();
+		$("#page .topic,#sticky-csdb,#sticky-visuals").hide();
 		$("#topic-"+topic).show();
 		ShowDexterScrollbar(topic);
 
@@ -413,8 +413,11 @@ $(function() { // DOM ready
 		// If 'CSDb' tab is selected
 		if (topic === "csdb") {
 			$("#note-csdb").hide()					// Hide notification
-			$("#sticky").show();					// Show sticky header
+			$("#sticky-csdb").show();				// Show sticky header
 		};
+
+		// If 'Visuals' tab is selected show the sticky header
+		if (topic === "visuals") $("#sticky-visuals").show();
 
 		// If 'GB64' tab is selected then hide the notification on it
 		if (topic === "gb64") $("#note-gb64").hide();
@@ -422,9 +425,9 @@ $(function() { // DOM ready
 		// If 'Player' tab is selected then hide the notification on it
 		if (topic === "player") $("#note-player").hide();
 
-		// If 'Piano' tab is selected then make the custom scroll bar transparent
+		// If 'Piano' view is selected then make the custom scroll bar transparent
 		// NOTE: Must be hidden in other tabs or scrolling may become erratic.
-		$("#dexter .mCSB_container").css("overflow", topic === "piano" ? "visible" : "hidden");
+		$("#dexter .mCSB_container").css("overflow", topic === "visuals" && $("#dropdown-visuals").val() === "piano" ? "visible" : "hidden");
 
 		// If 'Profile' tab is selected then refresh the charts if present
 		// NOTE: If this is not done the charts will appear "flattened" towards the left side.
@@ -547,7 +550,7 @@ $(function() { // DOM ready
 	$("#topic-csdb").on("click", "a.internal", function() {
 		// First cache the list of releases in case we return to it
 		cacheCSDb = $("#topic-csdb").html();
-		cacheSticky = $("#sticky").html();
+		cacheSticky = $("#sticky-csdb").html();
 		cacheTabScrollPos = tabScrollPos;
 		cacheDDCSDbSort = $("#dropdown-sort-csdb").val();
 		// Now load the new content
@@ -558,7 +561,7 @@ $(function() { // DOM ready
 	/**
 	 * When clicking the 'BACK' button on a specific CSDb page to show the releases again.
 	 */
-	$("#topic-csdb,#sticky").on("click", "#go-back", function() {
+	$("#topic-csdb,#sticky-csdb").on("click", "#go-back", function() {
 		if (cacheBeforeCompo === "" && cacheCSDb === "") {
 			// We have been redirecting recently so the tab must be refreshed properly
 			browser.getCSDb();
@@ -568,7 +571,7 @@ $(function() { // DOM ready
 		// Load the cache again (much faster than calling browser.getCSDb() to regenerate it)
 		$("#topic-csdb").css("visibility", "hidden").empty()
 			.append($this.hasClass("compo") ? cacheBeforeCompo : cacheCSDb);
-		$("#sticky").empty().append($this.hasClass("compo") ? cacheStickyBeforeCompo : cacheSticky);
+		$("#sticky-csdb").empty().append($this.hasClass("compo") ? cacheStickyBeforeCompo : cacheSticky);
 		// Adjust drop-down box to the sort setting
 		$("#dropdown-sort-csdb").val(cacheDDCSDbSort);
 		// Also set scroll position to where we clicked last time
@@ -585,7 +588,7 @@ $(function() { // DOM ready
 	 * 
 	 * NOTE: This version is used where the release page had a link to the SID tune page.
 	 */
-	$("#topic-csdb,#sticky").on("click", "#go-back-init", function() {
+	$("#topic-csdb,#sticky-csdb").on("click", "#go-back-init", function() {
 		browser.getCSDb("sid", $(this).attr("data-id"));
 	});
 
@@ -628,7 +631,7 @@ $(function() { // DOM ready
 	 */
 	$("#topic-csdb").on("click", "#show-compo", function() {
 		cacheBeforeCompo = $("#topic-csdb").html();
-		cacheStickyBeforeCompo = $("#sticky").html();
+		cacheStickyBeforeCompo = $("#sticky-csdb").html();
 		cachePosBeforeCompo = tabScrollPos;
 		$this = $(this);
 		browser.getCompoResults($this.attr("data-compo"), $this.attr("data-id"), $this.attr("data-mark"));
@@ -923,8 +926,14 @@ $(function() { // DOM ready
 
 	// Select and show a "dexter" page tab	
 	selectTab = selectTab !== "" ? selectTab : "profile";
-	if (selectTab === "graph") selectTab = "flood";
+	var selectView = "";
+	if (selectTab === "flood") selectTab = "graph";
+	if (selectTab === "piano" || selectTab === "graph") {
+		selectView = selectTab;
+		selectTab = "visuals";
+	}
 	$("#tab-"+selectTab).trigger("click");
+	if (selectView !== "") $("#dropdown-visuals").val(selectView).trigger("change"); // Select a visuals view
 
 	// Select and show a "sundry" box tab (an URL parameter overrides the local storage setting)
 	if (selectSundryTab === "") {
@@ -945,7 +954,7 @@ $(function() { // DOM ready
 	// Show a specific CSDb entry (only loads the content of the CSDb tab)
 	if (typeCSDb === "sid" || typeCSDb === "release") {
 		browser.getCSDb(typeCSDb, idCSDb, false);
-		$("#sticky").show(); // Show sticky header
+		$("#sticky-csdb").show(); // Show sticky header
 	}
 
 });
@@ -971,7 +980,8 @@ function ShowDexterScrollbar(topic) {
 		$("#page").mCustomScrollbar({
 			axis: "y",
 			theme: (parseInt(colorTheme) ? "light-3" : "dark-3"),
-			autoHideScrollbar: typeof topic !== "undefined" && topic === "piano", // Must hide on piano view page
+			autoHideScrollbar: typeof topic !== "undefined"
+				&& topic === "visuals"  && $("#dropdown-visuals").val() === "piano", // Must hide on piano view
 			scrollButtons:{
 				enable: true,
 			},

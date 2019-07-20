@@ -337,8 +337,7 @@
 					<div class="tab unselectable" data-topic="gb64" id="tab-gb64">GB64<div id="note-gb64" class="notification gb64color"></div></div>
 					<div class="tab unselectable" data-topic="player" id="tab-player">Player<div id="note-player" class="notification playercolor"></div></div>
 					<div class="tab unselectable" data-topic="stil" id="tab-stil">STIL</div>
-					<div class="tab unselectable" data-topic="piano" id="tab-piano">Piano</div>
-					<div class="tab unselectable" data-topic="flood" id="tab-flood">Graph</div>
+					<div class="tab unselectable" data-topic="visuals" id="tab-visuals">Visuals</div>
 					<div class="tab unselectable" data-topic="disqus" id="tab-disqus">Disqus<div id="note-disqus" class="notification"></div></div>
 					<div class="tab right unselectable" data-topic="settings" id="tab-settings" style="width:26px;">
 						<svg height="12px" width="12px" style="position:relative;top:-5px;" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns" xmlns:xlink="http://www.w3.org/1999/xlink"><g fill="none" fill-rule="evenodd" stroke="none" stroke-width="1"><g class="g2" transform="translate(-464.000000, -380.000000)"><g transform="translate(464.000000, 380.000000)"><path d="M17.4,11 C17.4,10.7 17.5,10.4 17.5,10 C17.5,9.6 17.5,9.3 17.4,9 L19.5,7.3 C19.7,7.1 19.7,6.9 19.6,6.7 L17.6,3.2 C17.5,3.1 17.3,3 17,3.1 L14.5,4.1 C14,3.7 13.4,3.4 12.8,3.1 L12.4,0.5 C12.5,0.2 12.2,0 12,0 L8,0 C7.8,0 7.5,0.2 7.5,0.4 L7.1,3.1 C6.5,3.3 6,3.7 5.4,4.1 L3,3.1 C2.7,3 2.5,3.1 2.3,3.3 L0.3,6.8 C0.2,6.9 0.3,7.2 0.5,7.4 L2.6,9 C2.6,9.3 2.5,9.6 2.5,10 C2.5,10.4 2.5,10.7 2.6,11 L0.5,12.7 C0.3,12.9 0.3,13.1 0.4,13.3 L2.4,16.8 C2.5,16.9 2.7,17 3,16.9 L5.5,15.9 C6,16.3 6.6,16.6 7.2,16.9 L7.6,19.5 C7.6,19.7 7.8,19.9 8.1,19.9 L12.1,19.9 C12.3,19.9 12.6,19.7 12.6,19.5 L13,16.9 C13.6,16.6 14.2,16.3 14.7,15.9 L17.2,16.9 C17.4,17 17.7,16.9 17.8,16.7 L19.8,13.2 C19.9,13 19.9,12.7 19.7,12.6 L17.4,11 L17.4,11 Z M10,13.5 C8.1,13.5 6.5,11.9 6.5,10 C6.5,8.1 8.1,6.5 10,6.5 C11.9,6.5 13.5,8.1 13.5,10 C13.5,11.9 11.9,13.5 10,13.5 L10,13.5 Z"/></g></g></g></svg>
@@ -347,117 +346,122 @@
 					<div class="tab right unselectable" data-topic="faq" id="tab-faq">FAQ</div>
 					<div class="tab right unselectable" data-topic="about" id="tab-about">About</div>
 				</div>
-				<div id="sticky"><h2 style="margin-top:0;">CSDb</h2></div>
+				<div id="sticky-csdb"><h2 style="margin-top:0;">CSDb</h2></div>
+				<div id="sticky-visuals"><h2 style="margin-top:0;">Visuals</h2>
+					<select id="dropdown-visuals">
+						<option value="piano">Piano</option>
+						<option value="graph">Graph</option>
+					</select>
+					<img class="waveform-colors" src="images/waveform_colors.png" alt="Waveform Colors" />
+				</div>
 				<div id="page">
 
-					<div id="topic-piano" class="topic ext" style="display:none;">
-						<img id="waveform-colors" src="images/waveform_colors.png" alt="Waveform Colors" />
-						<h2 style="margin-top:0;">Piano View<span class="h2-note">(Emulators only)</span></h2>
-						<div class="edit" style="height:42px;width:683px;">
-							<label class="unselectable" style="margin-right:2px;">Emulator</label>
-							<button class="button-edit button-radio button-off viz-emu viz-websid" data-group="viz-emu" data-emu="websid">WebSid</button>
-							<button class="button-edit button-radio button-off viz-emu viz-jssid" data-group="viz-emu" data-emu="jssid">Hermit</button>
-							<span class="viz-warning viz-msg-emu">You need to enable one of these emulators</span>
-							<span class="viz-warning viz-msg-buffer">Decrease this if too slow <img src="images/composer_arrowright.svg" style="position:relative;top:4px;height:18px;" alt="" /></span>
-							<div class="viz-buffer">
-								<label for="dropdown-piano-buffer" class="unselectable">Buffer size</label>
-								<select id="dropdown-piano-buffer" class="dropdown-buffer">
-									<!--<option value="256">256</option>
-									<option value="512">512</option>-->
-									<option value="1024">1024</option>
-									<option value="2048">2048</option>
-									<option value="4096">4096</option>
-									<option value="8192">8192</option>
-									<option value="16384" selected="selected">16384</option>
-								</select>
+					<div id="topic-visuals" class="topic ext" style="display:none;">
+						<div id="visuals-piano" class="visuals" style="display:none;">
+							<div class="edit" style="height:42px;width:683px;">
+								<label class="unselectable" style="margin-right:2px;">Emulator</label>
+								<button class="button-edit button-radio button-off viz-emu viz-websid" data-group="viz-emu" data-emu="websid">WebSid</button>
+								<button class="button-edit button-radio button-off viz-emu viz-jssid" data-group="viz-emu" data-emu="jssid">Hermit</button>
+								<span class="viz-warning viz-msg-emu">You need to enable one of these emulators</span>
+								<span class="viz-warning viz-msg-buffer">Decrease this if too slow <img src="images/composer_arrowright.svg" style="position:relative;top:4px;height:18px;" alt="" /></span>
+								<div class="viz-buffer">
+									<label for="dropdown-piano-buffer" class="unselectable">Buffer size</label>
+									<select id="dropdown-piano-buffer" class="dropdown-buffer">
+										<!--<option value="256">256</option>
+										<option value="512">512</option>-->
+										<option value="1024">1024</option>
+										<option value="2048">2048</option>
+										<option value="4096">4096</option>
+										<option value="8192">8192</option>
+										<option value="16384" selected="selected">16384</option>
+									</select>
+								</div>
 							</div>
+							<div class="edit" style="height:42px;width:683px;">
+								<button id="piano-gate" class="button-edit button-toggle button-on">On</button>
+								<label for="piano-gate" class="unselectable">Gate bit</label>
+								<button id="piano-noise" class="button-edit button-toggle button-off">Off</button>
+								<label for="piano-noise" class="unselectable">Noise waveform</label>
+								<button id="piano-slow" class="button-edit button-toggle button-off">Off</button>
+								<label for="piano-slow" class="unselectable">Slow speed</label>
+								<span style="float:right;">
+									<label for="piano-combine" class="unselectable" style="margin-right:1px;">Combine into top piano</label>
+									<button id="piano-combine" class="button-edit button-toggle button-off">Off</button>
+								</span>
+							</div>
+							<?php require_once("php/piano.php"); ?>
+							<h3 style="margin-top:16px;">A few words...</h3>
+							<p>
+								If the playback is choppy, try increasing the buffer size. Smaller values mean faster and
+								smoother updating (default is 1024 which is the lowest possible) but also require a fast
+								computer with a nifty web browser.
+							</p>
+							<p>
+								The top right waveform legend explains the colors of notes on the keyboards. Red is pulse,
+								green is triangle and blue is sawtooth. Gray is noise. Waveforms may be combined, but 31, 61
+								and 71 are only audible on the 8580 SID chip.
+							</p>
+							<p>
+								The numbers above the bars are <a href="https://simple.wikipedia.org/wiki/Hexadecimal_numeral_system" target="_blank">hexadecimal</a>.
+								Pulse width has 12 bits and goes from 0 to 4095.
+								The triangle indicates that it's most audible in the middle. The filter cutoff has 11 bits
+								and thus goes from 0 to 2047.
+							</p>
+							<p>
+								The small yellow bar is the filter resonance. It can go from 0 to 15 (maximum resonance).
+								Resonance is a peaking effect which emphasizes frequency components at the cutoff frequency
+								of the filter, causing a sharper sound.
+							</p>
+							<p>
+								RM is ring modulation (non-harmonic overtones) and HS is hard synchronization (complex
+								harmonic structures). Both effects require two voices &ndash; the previous voice as the
+								carrier and the current voice as the modulator.
+							</p>
+							<p>
+								Sometimes the use of gate bit (i.e. when the piano key is depressed then later released) make
+								notes too quick to sense, or it may in some cases even hide them. Turning it off with the
+								toggle button in top can amend this.
+							</p>
+							<p>
+								Click the green buttons to toggle voices ON or OFF. You can also type
+								<code>1</code>, <code>2</code> and <code>3</code> or alternatively <code>q</code>, <code>w</code>
+								and <code>e</code>. (You can also use <code>4</code> and <code>r</code> for digi if you are using
+								WebSid, but it is not reflected on this page.)
+							</p>
+							<p>If you want to "solo" a voice, hold down <code>Shift</code> while pressing the hotkey.</p>
 						</div>
-						<div class="edit" style="height:42px;width:683px;">
-							<button id="piano-gate" class="button-edit button-toggle button-on">On</button>
-							<label for="piano-gate" class="unselectable">Gate bit</label>
-							<button id="piano-noise" class="button-edit button-toggle button-off">Off</button>
-							<label for="piano-noise" class="unselectable">Noise waveform</label>
-							<button id="piano-slow" class="button-edit button-toggle button-off">Off</button>
-							<label for="piano-slow" class="unselectable">Slow speed</label>
-							<span style="float:right;">
-								<label for="piano-combine" class="unselectable" style="margin-right:1px;">Combine into top piano</label>
-								<button id="piano-combine" class="button-edit button-toggle button-off">Off</button>
-							</span>
-						</div>
-						<?php require_once("php/piano.php"); ?>
-						<h3 style="margin-top:16px;">A few words...</h3>
-						<p>
-							If the playback is choppy, try increasing the buffer size. Smaller values mean faster and
-							smoother updating (default is 1024 which is the lowest possible) but also require a fast
-							computer with a nifty web browser.
-						</p>
-						<p>
-							The top right waveform legend explains the colors of notes on the keyboards. Red is pulse,
-							green is triangle and blue is sawtooth. Gray is noise. Waveforms may be combined, but 31, 61
-							and 71 are only audible on the 8580 SID chip.
-						</p>
-						<p>
-							The numbers above the bars are <a href="https://simple.wikipedia.org/wiki/Hexadecimal_numeral_system" target="_blank">hexadecimal</a>.
-							Pulse width has 12 bits and goes from 0 to 4095.
-							The triangle indicates that it's most audible in the middle. The filter cutoff has 11 bits
-							and thus goes from 0 to 2047.
-						</p>
-						<p>
-							The small yellow bar is the filter resonance. It can go from 0 to 15 (maximum resonance).
-							Resonance is a peaking effect which emphasizes frequency components at the cutoff frequency
-							of the filter, causing a sharper sound.
-						</p>
-						<p>
-							RM is ring modulation (non-harmonic overtones) and HS is hard synchronization (complex
-							harmonic structures). Both effects require two voices &ndash; the previous voice as the
-							carrier and the current voice as the modulator.
-						</p>
-						<p>
-							Sometimes the use of gate bit (i.e. when the piano key is depressed then later released) make
-							notes too quick to sense, or it may in some cases even hide them. Turning it off with the
-							toggle button in top can amend this.
-						</p>
-						<p>
-							Click the green buttons to toggle voices ON or OFF. You can also type
-							<code>1</code>, <code>2</code> and <code>3</code> or alternatively <code>q</code>, <code>w</code>
-							and <code>e</code>. (You can also use <code>4</code> and <code>r</code> for digi if you are using
-							WebSid, but it is not reflected on this page.)
-						</p>
-						<p>If you want to "solo" a voice, hold down <code>Shift</code> while pressing the hotkey.</p>
-					</div>
 
-					<div id="topic-flood" class="topic ext" style="display:none;">
-						<img id="waveform-colors" src="images/waveform_colors.png" alt="Waveform Colors" />
-						<h2 style="margin-top:0;">Graph View<span class="h2-note">(Emulators only)</span></h2>
-						<div class="edit" style="height:42px;width:683px;">
-							<label class="unselectable" style="margin-right:2px;">Emulator</label>
-							<button class="button-edit button-radio button-off viz-emu viz-websid" data-group="viz-emu" data-emu="websid">WebSid</button>
-							<button class="button-edit button-radio button-off viz-emu viz-jssid" data-group="viz-emu" data-emu="jssid">Hermit</button>
-							<span class="viz-warning viz-msg-emu">You need to enable one of these emulators</span>
-							<span class="viz-warning viz-msg-buffer">Decrease this if too slow <img src="images/composer_arrowright.svg" style="position:relative;top:4px;height:18px;" alt="" /></span>
-							<div class="viz-buffer">
-								<label for="dropdown-flood-buffer" class="unselectable">Buffer size</label>
-								<select id="dropdown-flood-buffer" class="dropdown-buffer">
-									<!--<option value="256">256</option>
-									<option value="512">512</option>-->
-									<option value="1024">1024</option>
-									<option value="2048">2048</option>
-									<option value="4096">4096</option>
-									<option value="8192">8192</option>
-									<option value="16384" selected="selected">16384</option>
-								</select>
+						<div id="visuals-graph" class="visuals" style="display:none;">
+							<div class="edit" style="height:42px;width:683px;">
+								<label class="unselectable" style="margin-right:2px;">Emulator</label>
+								<button class="button-edit button-radio button-off viz-emu viz-websid" data-group="viz-emu" data-emu="websid">WebSid</button>
+								<button class="button-edit button-radio button-off viz-emu viz-jssid" data-group="viz-emu" data-emu="jssid">Hermit</button>
+								<span class="viz-warning viz-msg-emu">You need to enable one of these emulators</span>
+								<span class="viz-warning viz-msg-buffer">Decrease this if too slow <img src="images/composer_arrowright.svg" style="position:relative;top:4px;height:18px;" alt="" /></span>
+								<div class="viz-buffer">
+									<label for="dropdown-graph-buffer" class="unselectable">Buffer size</label>
+									<select id="dropdown-graph-buffer" class="dropdown-buffer">
+										<!--<option value="256">256</option>
+										<option value="512">512</option>-->
+										<option value="1024">1024</option>
+										<option value="2048">2048</option>
+										<option value="4096">4096</option>
+										<option value="8192">8192</option>
+										<option value="16384" selected="selected">16384</option>
+									</select>
+								</div>
 							</div>
-						</div>
-						<div class="edit" style="height:42px;width:683px;">
-							<button id="flood-zoom" class="button-edit button-toggle button-off">Off</button>
-							<label for="flood-zoom" class="unselectable">Zoom</label>
-							<button id="flood-pw" class="button-edit button-toggle button-off">Off</button>
-							<label for="flood-pw" class="unselectable">Pulse width</label>
-						</div>
-						<div id="flood">
-							<div id="flood0" class="flood-river"></div>
-							<div id="flood1" class="flood-river"></div>
-							<div id="flood2" class="flood-river"></div>
+							<div class="edit" style="height:42px;width:683px;">
+								<button id="graph-zoom" class="button-edit button-toggle button-off">Off</button>
+								<label for="graph-zoom" class="unselectable">Zoom</label>
+								<button id="graph-pw" class="button-edit button-toggle button-off">Off</button>
+								<label for="graph-pw" class="unselectable">Pulse width</label>
+							</div>
+							<div id="graph">
+								<div id="graph0" class="graph-river"></div>
+								<div id="graph1" class="graph-river"></div>
+								<div id="graph2" class="graph-river"></div>
+							</div>
 						</div>
 					</div>
 
@@ -973,6 +977,16 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>July 20, 2019</h3>
+						<ul>
+							<li>Created a new visuals tab and moved the piano and graph views into a drop-down box inside of it.</li>
+						</ul>
+
+						<h3>July 18, 2019</h3>
+						<ul>
+							<li>Fixed a bug where the browser context menu appeared together with the custom context menu.</li>
+						</ul>
 
 						<h3>July 14, 2019</h3>
 						<ul>

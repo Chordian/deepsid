@@ -1,6 +1,6 @@
 
 /**
- * DeepSID / Viz (tabs 'Piano and 'Flood')
+ * DeepSID / Visuals ('Piano and 'Graph')
  */
 
 function Viz(emulator) {
@@ -9,15 +9,16 @@ function Viz(emulator) {
 
 	this.pianoBarBackground = "#111";
 	this.slowSpeed = 0.3;
-	this.floodZoom = false;
-	this.floodPW = false;
-	this.lineInFlood = false;
+	this.graphZoom = false;
+	this.graphPW = false;
+	this.lineInGraph = false;
 	this.scopeLineColor = [
 		"34, 35, 27",	// For bright color theme
 		"255, 255, 255"	// For dark color theme
 	];
 
 	this.bufferSize;
+	this.visuals;
 
 	// @link http://codebase64.org/doku.php?id=base:pal_frequency_table
 	this.sidFrequenciesPAL = [
@@ -76,8 +77,10 @@ function Viz(emulator) {
 	this.setEmuButton(this.emulator);
 
 	this.initScope();
-	this.initFlood();
+	this.initGraph();
 	this.addEvents();
+
+	$("#dropdown-visuals").trigger("change");
 }
 
 Viz.prototype = {
@@ -87,9 +90,10 @@ Viz.prototype = {
 	 */
 	addEvents: function() {
 		$(window).on("keyup", this.onKeyUp.bind(this));
-		$("#topic-piano,#topic-flood").on("click", ".button-toggle,.button-radio", this.onToggleClick.bind(this));
-		$("#topic-piano,#topic-flood").on("click", ".piano-voice", this.onVoiceClick.bind(this));
-		$("#topic-piano,#topic-flood,#topic-settings .dropdown-buffer").on("change", this.onChangeBufferSize.bind(this));
+		$("#visuals-piano,#visuals-graph").on("click", ".button-toggle,.button-radio", this.onToggleClick.bind(this));
+		$("#visuals-piano,#visuals-graph").on("click", ".piano-voice", this.onVoiceClick.bind(this));
+		$("#visuals-piano,#visuals-graph,#topic-settings .dropdown-buffer").on("change", this.onChangeBufferSize.bind(this));
+		$("#dropdown-visuals").on("change", this.onChangeVisuals.bind(this));
 	},
 
 	/**
@@ -150,7 +154,7 @@ Viz.prototype = {
 	},
 
 	/**
-	 * Click a toggle button in a visualizer tab, checkbox- or radio button style.
+	 * Click a toggle button in a visuals view, checkbox- or radio button style.
 	 * 
 	 * @param {*} event 
 	 */
@@ -161,15 +165,15 @@ Viz.prototype = {
 			$this.empty().append($this.hasClass("button-off") ? "On" : "Off");
 			if (event.target.id === "piano-slow") {
 				SID.speed($this.hasClass("button-off") ? this.slowSpeed : 1);
-			} else if (event.target.id === "flood-zoom") {
-				this.floodZoom = $this.hasClass("button-off");
-				this.lineInFlood = true;
-			} else if (event.target.id === "flood-pw") {
-				this.floodPW = $this.hasClass("button-off");
+			} else if (event.target.id === "graph-zoom") {
+				this.graphZoom = $this.hasClass("button-off");
+				this.lineInGraph = true;
+			} else if (event.target.id === "graph-pw") {
+				this.graphPW = $this.hasClass("button-off");
 			} else {
 				// Clear piano keyboards to make sure there are no hanging colors on it
-				$("#topic-piano .piano svg .black").css("transition", "none").attr("fill", "#000");
-				$("#topic-piano .piano svg .white").css("transition", "none").attr("fill", "#fff");
+				$("#visuals-piano .piano svg .black").css("transition", "none").attr("fill", "#000");
+				$("#visuals-piano .piano svg .white").css("transition", "none").attr("fill", "#fff");
 				// Also clear canvas bars
 				var ctx_pw_height = $("#piano-pw0").height(), ctx_pw_width = $("#piano-pw0").width();			
 				for (var voice = 0; voice <= 2; voice++) {
@@ -207,7 +211,7 @@ Viz.prototype = {
 		SID.toggleVoice(voice + 1);
 		$("#scope"+(voice + 1)).css("opacity", (state ? "1" : "0.3"));
 		$("#page .piano"+voice).css("opacity", (state ? "1" : "0.1"));
-		$("#flood"+voice+" canvas").css("opacity", (state ? "1" : "0.3"));
+		$("#graph"+voice+" canvas").css("opacity", (state ? "1" : "0.3"));
 	},
 
 	/**
@@ -221,9 +225,22 @@ Viz.prototype = {
 		// Make sure all drop-down boxes of this kind agree on the new value
 		$("#page .dropdown-buffer").val(this.bufferSize);
 		// Re-trigger the same emulator again to set the buffer size
-		// NOTE: Doing it in a specific visualizer tab is deliberate (avoids multiple triggering).
-		$("#topic-piano .viz-emu.button-on").trigger("click");
+		// NOTE: Doing it in a specific visuals view is deliberate (avoids multiple triggering).
+		$("#visuals-piano .viz-emu.button-on").trigger("click");
 		this.setBufferMessage();
+	},
+
+	/**
+	 * When a different view of visuals has been selected in the sticky drop-down box.
+	 * 
+	 * @param {*} event 
+	 */
+	onChangeVisuals: function(event) {
+		this.visuals = $(event.target).val();
+		$("#topic-visuals .visuals,#sticky-visuals .waveform-colors").hide();
+		$("#visuals-"+this.visuals).show();
+		if (this.visuals === "piano" || this.visuals === "graph")
+			$("#sticky-visuals .waveform-colors").show();
 	},
 
 	/**
@@ -234,7 +251,7 @@ Viz.prototype = {
 	},
 
 	/**
-	 * Press an emulator button in the visualizer tabs or show a warning about the need.
+	 * Press an emulator button in the visuals views or show a warning about the need.
 	 * 
 	 * @param {string} emulator 
 	 */
@@ -249,7 +266,7 @@ Viz.prototype = {
 
 	/**
 	 * If buffer size is not at lowest value then show a message about it in both
-	 * of the visualizer tabs.
+	 * of the visuals views.
 	 */
 	setBufferMessage: function() {
 		this.bufferSize > 1024 && $("#page .viz-msg-emu").css("display") == "none"
@@ -268,8 +285,8 @@ Viz.prototype = {
 		if ($("body").attr("data-mobile") !== "0") return;
 	
 		// Clear all keyboard notes to default piano colors
-		$("#topic-piano .piano svg .black").css("transition", "none").attr("fill", "#000");
-		$("#topic-piano .piano svg .white").css("transition", "none").attr("fill", "#fff");
+		$("#visuals-piano .piano svg .black").css("transition", "none").attr("fill", "#000");
+		$("#visuals-piano .piano svg .white").css("transition", "none").attr("fill", "#fff");
 	
 		this.enableAllPianoVoices();
 	
@@ -284,16 +301,16 @@ Viz.prototype = {
 		var ctx_pw_height = ctx_fc_height = 8, ctx_pw_width = ctx_fc_width = 200, ctx_res_height = 30, ctx_res_width = 3;
 	
 		// Cache some of the DOM stuff
-		var $piano_ringmod = $("#topic-piano .piano-ringmod"),
-			$piano_hardsync = $("#topic-piano .piano-hardsync"),
-			$piano_rm = [$("#topic-piano .piano-rm0"), $("#topic-piano .piano-rm1"), $("#topic-piano .piano-rm2")],
-			$piano_hs = [$("#topic-piano .piano-hs0"), $("#topic-piano .piano-hs1"), $("#topic-piano .piano-hs2")],
-			$ff = [$("#topic-piano .ff0"), $("#topic-piano .ff1"), $("#topic-piano .ff2")],
-			$ptp = [$("#topic-piano .ptp0"), $("#topic-piano .ptp1"), $("#topic-piano .ptp2")],
-			$piano_pb_led = $("#topic-piano .piano-pb-led"),
-			$pb_lp_div = $("#topic-piano .pb-lp div"),
-			$pb_bp_div = $("#topic-piano .pb-bp div"),
-			$pb_hp_div = $("#topic-piano .pb-hp div"); 
+		var $piano_ringmod = $("#visuals-piano .piano-ringmod"),
+			$piano_hardsync = $("#visuals-piano .piano-hardsync"),
+			$piano_rm = [$("#visuals-piano .piano-rm0"), $("#visuals-piano .piano-rm1"), $("#visuals-piano .piano-rm2")],
+			$piano_hs = [$("#visuals-piano .piano-hs0"), $("#visuals-piano .piano-hs1"), $("#visuals-piano .piano-hs2")],
+			$ff = [$("#visuals-piano .ff0"), $("#visuals-piano .ff1"), $("#visuals-piano .ff2")],
+			$ptp = [$("#visuals-piano .ptp0"), $("#visuals-piano .ptp1"), $("#visuals-piano .ptp2")],
+			$piano_pb_led = $("#visuals-piano .piano-pb-led"),
+			$pb_lp_div = $("#visuals-piano .pb-lp div"),
+			$pb_bp_div = $("#visuals-piano .pb-bp div"),
+			$pb_hp_div = $("#visuals-piano .pb-hp div"); 
 	
 		if (activate) {
 	
@@ -301,7 +318,8 @@ Viz.prototype = {
 			
 			SID.setCallbackBufferEnded(function() {
 
-				if ($("#tabs .selected").attr("data-topic") !== "piano") return; // Only if the tab is active!
+				if ($("#tabs .selected").attr("data-topic") !== "visuals"
+					|| $("#dropdown-visuals").val() !== "piano") return; // Only if the tab and view are active!
 	
 				var useOneKeyboard = $("#piano-combine").hasClass("button-on");
 	
@@ -431,18 +449,18 @@ Viz.prototype = {
 			ctx_res.fillRect(0, 0, $("#piano-res").width(), $("#piano-res").height());
 	
 			// Turn off ring mod and hard sync arrow lamps
-			$("#topic-piano .piano-ringmod").removeClass("pr-on pr-off").addClass("pr-off");
-			$("#topic-piano .piano-hardsync").removeClass("ph-on ph-off").addClass("ph-off");
+			$("#visuals-piano .piano-ringmod").removeClass("pr-on pr-off").addClass("pr-off");
+			$("#visuals-piano .piano-hardsync").removeClass("ph-on ph-off").addClass("ph-off");
 	
 			// Reset filter filet
-			$("#topic-piano .filet").css({
+			$("#visuals-piano .filet").css({
 				fill:	"#000",
 				stroke:	"#000",
 			});
-			$("#topic-piano .piano-top-panel").css("border-bottom", "1px solid #7a7a7a");
+			$("#visuals-piano .piano-top-panel").css("border-bottom", "1px solid #7a7a7a");
 	
 			// Turn off filter passband LED lamps
-			$("#topic-piano .piano-pb-led").removeClass("pb-on pb-off").addClass("pb-off");
+			$("#visuals-piano .piano-pb-led").removeClass("pb-on pb-off").addClass("pb-off");
 		}
 	},
 	
@@ -451,8 +469,8 @@ Viz.prototype = {
 	 */
 	enableAllPianoVoices: function() {
 		SID.enableAllVoices();
-		$("#topic-piano .piano-voice").removeClass("voice-off voice-on").addClass("voice-on");
-		$("#topic-piano .piano,#flood canvas,#scope1,#scope2,#scope3,#scope4").css("opacity", "1");
+		$("#visuals-piano .piano-voice").removeClass("voice-off voice-on").addClass("voice-on");
+		$("#visuals-piano .piano,#graph canvas,#scope1,#scope2,#scope3,#scope4").css("opacity", "1");
 		// Also snuck this in to set slow speed again if need be
 		setTimeout(function() {
 			if ($("#piano-slow").hasClass("button-on")) SID.speed(this.slowSpeed);
@@ -541,17 +559,17 @@ Viz.prototype = {
 	},
 
 	/**
-	 * Flood: Initialize and draw the canvas rivers.
+	 * Graph: Initialize and draw the canvas rivers.
 	 */
-	initFlood: function() {
+	initGraph: function() {
 		if ($("body").attr("data-mobile") !== "0") return;
 
 		this.canvas_river = [], this.ctx_river = [], this.river_width = [], this.river_height = [];
 		this.isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
-		var floodHeight = $("#page").outerHeight() - 173;
-		$("#flood").height(floodHeight);
-		$("#flood .flood-river").empty().append('<canvas height="'+(floodHeight - 1)+'" width="268"></canvas>');
+		var graphHeight = $("#page").outerHeight() - 127;
+		$("#graph").height(graphHeight);
+		$("#graph .graph-river").empty().append('<canvas height="'+(graphHeight - 1)+'" width="268"></canvas>');
 
 		// Create a 64 KB array with steep sine steps for the zoom button
 		// NOTE: Don't make this into a premade look-up table; such things are not faster these days.
@@ -565,10 +583,10 @@ Viz.prototype = {
 
 		// Create canvas rivers and get their contexts
 		for (var voice = 0; voice <= 2; voice++) {
-			this.canvas_river[voice] = $("#flood"+voice+" canvas")[0];
+			this.canvas_river[voice] = $("#graph"+voice+" canvas")[0];
 			this.ctx_river[voice] = this.canvas_river[voice].getContext("2d");
 			this.river_width[voice] = 268;
-			this.river_height[voice] = floodHeight - 1;
+			this.river_height[voice] = graphHeight - 1;
 			// Clear the rivers
 			this.ctx_river[voice].clearRect(0, 0, this.river_width[voice], this.river_height[voice]);
 		}
@@ -583,26 +601,27 @@ Viz.prototype = {
 	},
 
 	/**
-	 * Flood: Animate the canvas rivers.
+	 * Graph: Animate the canvas rivers.
 	 * 
 	 * Called by: requestAnimationFrame() - use 'viz' instead of 'this' here.
 	 */
-	animateFlood: function() {
-		// Not available on mobile devices, and the 'Flood' tab must be visible
-		if ($("body").attr("data-mobile") !== "0" || $("#tabs .selected").attr("data-topic") !== "flood") return;
+	animateGraph: function() {
+		// Not available on mobile devices, and the 'Graph' view and its tab must both be visible
+		if ($("body").attr("data-mobile") !== "0" || $("#tabs .selected").attr("data-topic") !== "visuals"
+			|| $("#dropdown-visuals").val() !== "graph") return;
 
 		for (var voice = 0; voice <= 2; voice++) {
 
 			// Color the top line background to begin with
 			var filterOn = SID.readRegister(0xD417) & (1 << voice);
-			viz.ctx_river[voice].fillStyle = viz.lineInFlood ? "#eee" : (filterOn ? "#ffffea" : "#fff");
+			viz.ctx_river[voice].fillStyle = viz.lineInGraph ? "#eee" : (filterOn ? "#ffffea" : "#fff");
 			viz.ctx_river[voice].fillRect(0, 0, viz.river_width[voice], 1);
 
 			// Add octave dividers
 			viz.ctx_river[voice].lineWidth = 1;
 			viz.ctx_river[voice].strokeStyle = "#eaeaea";
 			for (var freq = 8192; freq < 8192 * 8; freq += 8192) {
-				if (viz.floodZoom) freq = Math.floor(this.steepSteps[freq] * 65536);
+				if (viz.graphZoom) freq = Math.floor(this.steepSteps[freq] * 65536);
 				var x = (freq / 0xFFFF) * viz.river_width[voice];
 				x = x | 0; // This rounds off to avoiding anti-aliased lines
 				viz.ctx_river[voice].beginPath();
@@ -613,7 +632,7 @@ Viz.prototype = {
 
 			// Find the X coordinate that corresponds to the current SID voice frequency
 			var freq = SID.readRegister(0xD400 + voice * 7) + SID.readRegister(0xD401 + voice * 7) * 256;
-			if (viz.floodZoom) freq = Math.floor(this.steepSteps[freq] * 65536);
+			if (viz.graphZoom) freq = Math.floor(this.steepSteps[freq] * 65536);
 			var x = (freq / 0xFFFF) * viz.river_width[voice];
 			x = x | 0;
 
@@ -628,7 +647,7 @@ Viz.prototype = {
 			if (viz.darkerWaveformColors[waveform] != "#000000") {
 				viz.ctx_river[voice].lineWidth = 2;
 				viz.ctx_river[voice].globalAlpha = SID.readRegister(0xD404 + voice * 7) & 1 ? 1 : 0.4; // Gate ON / OFF
-				if (viz.floodPW && waveform == 4) {
+				if (viz.graphPW && waveform == 4) {
 					// Show pulse width as a "coat" around the frequency dot
 					viz.ctx_river[voice].strokeStyle = "#ffd1cb";
 					viz.ctx_river[voice].beginPath();
@@ -658,7 +677,7 @@ Viz.prototype = {
 					1, 1, viz.river_width[voice], viz.river_height[voice] - 1);
 			}
 		}
-		viz.lineInFlood = false;
+		viz.lineInGraph = false;
 	},
 
 	/**
@@ -706,6 +725,6 @@ Viz.prototype = {
 	animate: function() {
 		requestAnimationFrame(this.animate.bind(this));
 		this.animateScope();
-		this.animateFlood();
+		this.animateGraph();
 	},
 }
