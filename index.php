@@ -878,7 +878,7 @@
 							digi stuff (WebSid emulator only).
 						</p>
 						<p>If you want to "solo" a voice, hold down <code>Shift</code> while pressing the hotkey.</p>
-						<p>In the piano view tab, you can also click the green number buttons.</p>
+						<p>In the piano view, you can also click the green number buttons.</p>
 
 						<h3>Any other hotkeys worth knowing about?</h3>
 						<p>
@@ -938,7 +938,7 @@
 									<code>gb64</code> (game)</td>
 							</tr>
 							<tr>
-								<td>tab</td><td>Set to <code>csdb</code>, <code>gb64</code>, <code>stil</code>, <code>piano</code>, <code>graph</code> (or <code>flood</code>),
+								<td>tab</td><td>Set to <code>csdb</code>, <code>gb64</code>, <code>stil</code>, <code>visuals</code>,
 									<code>disqus</code>, <code>about</code>, <code>faq</code>, <code>changes</code> or <code>settings</code>
 									(the gear icon) to select that page tab</td>
 							</tr>
@@ -977,6 +977,16 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>July 22, 2019</h3>
+						<ul>
+							<li>The WebSid emulator has been significantly updated. The previous version of it used a 
+								predictive emulation technique and required hacks for some SID tunes to work. The newly
+								updated version has been overhauled to use a cycle-by-cycle approach and no longer need
+								these hacks. It also emulates digi more faithfully and now supports more
+								difficult SID tunes than ever before. The downside is that the new emulation takes
+								about 50-100% more CPU time, depending on the SID tune itself.</li>
+						</ul>
 
 						<h3>July 20, 2019</h3>
 						<ul>

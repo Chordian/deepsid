@@ -652,7 +652,7 @@ Controls.prototype = {
 		$("#pace").remove();
 		if (this.isPlaying()) {
 			// Constantly poll the handler in case digi stuff comes up
-			var digi = SID.getDigiType() !== ""
+			var digi = SID.getDigiType() !== "" && SID.getDigiType() !== "NONE"
 				? 'Digi ('+SID.getDigiType()+') <div>'+SID.getDigiRate()+'</div> Hz / '
 				: "";
 			// Now for how the player is actually called
