@@ -978,6 +978,12 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>July 23, 2019</h3>
+						<ul>
+							<li>Upgraded the WebSid emulator. Fixed a PSID timer issue with Fred Gray's
+								<a href="http://deepsid.chordian.net/?file=/MUSICIANS/G/Gray_Fred/Madballs.sid">Madballs</a>.</li>
+						</ul>
+
 						<h3>July 22, 2019</h3>
 						<ul>
 							<li>The WebSid emulator has been significantly updated. The previous version of it used a 
