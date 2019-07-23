@@ -452,15 +452,21 @@
 								</div>
 							</div>
 							<div class="edit" style="height:42px;width:683px;">
-								<button id="graph-zoom" class="button-edit button-toggle button-off">Off</button>
-								<label for="graph-zoom" class="unselectable">Zoom</label>
+								<button id="graph-columns" class="button-edit button-toggle button-on">On</button>
+								<label for="graph-columns" class="unselectable">Columns view</label>
 								<button id="graph-pw" class="button-edit button-toggle button-off">Off</button>
 								<label for="graph-pw" class="unselectable">Pulse width</label>
 							</div>
 							<div id="graph">
-								<div id="graph0" class="graph-river"></div>
-								<div id="graph1" class="graph-river"></div>
-								<div id="graph2" class="graph-river"></div>
+								<div id="graph0" class="graph-area"></div>
+								<div id="graph1" class="graph-area"></div>
+								<div id="graph2" class="graph-area"></div>
+								<div id="graph3" class="graph-area"></div>
+								<div id="graph4" class="graph-area"></div>
+								<div id="graph5" class="graph-area"></div>
+								<div id="graph6" class="graph-area"></div>
+								<div id="graph7" class="graph-area"></div>
+								<div id="graph8" class="graph-area"></div>
 							</div>
 						</div>
 					</div>
@@ -607,7 +613,7 @@
 
 								<h3>Buffer size</h3>
 								<p>Setting the buffer size affects WebSid or Hermit's emulator. If you like viewing the
-									<b>Piano</b> or <b>Flood</b> tabs, decrease the value towards 1024 for smoother
+									<b>Visuals</b> tab, decrease the value towards 1024 for smoother
 									updating. If the playback is stuttering, increase it until it doesn't anymore.</p>
 								<p style="margin-top:-10px;">You need to leave it at 16384 for the <b>Scope</b> tab to work.</p>
 
@@ -982,6 +988,8 @@
 						<ul>
 							<li>Upgraded the WebSid emulator. Fixed a PSID timer issue with Fred Gray's
 								<a href="http://deepsid.chordian.net/?file=/MUSICIANS/G/Gray_Fred/Madballs.sid">Madballs</a>.</li>
+							<li>Removed the zoom option in the graph view and instead added a choice between row or column layouts.</li>
+							<li>Fixed a bug where the graph view was updated twice as fast as it needed to be.</li>
 						</ul>
 
 						<h3>July 22, 2019</h3>

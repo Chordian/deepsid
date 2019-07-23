@@ -171,11 +171,8 @@ $(function() { // DOM ready
 		if (!browser.isMobile) {
 			// Also make sure the scrollbar for dexter has the correct height
 			$("#page .mCSB_scrollTools").css("height", $("#page").height() + 13);
-			// Correct height for graph river too
-			var graphHeight = $("#page").outerHeight() - 127;
-			$("#graph").height(graphHeight);
-			$("#graph .graph-river canvas").attr("height", graphHeight - 1);
-			viz.river_height[0] = viz.river_height[1] = viz.river_height[2] = graphHeight - 1;
+			// Recalculate height for graph area too
+			viz.initGraph();
 			// And that the web site iframe has the correct height too
 			$("#page .deepsid-iframe").height($("#page").outerHeight() - 61); // 24
 		}
@@ -1098,6 +1095,14 @@ function DisableIncompatibleRows() {
 		} else if (isSIDFile && $tr.find(".name").attr("data-name").indexOf("BASIC.sid") !== -1) {
 			// The emulators can't do tunes made in BASIC
 			SID.emulator == "websid" || SID.emulator == "jssid"
+				? $tr.addClass("disabled")
+				: $tr.removeClass("disabled");
+		} else if (isSIDFile && SID.emulator == "websid" &&
+			($tr.find(".name").attr("data-name").indexOf("Acid_Flashback.sid") !== -1 || 
+			 $tr.find(".name").attr("data-name").indexOf("Comaland_tune_3.sid") !== -1 ||
+			 $tr.find(".name").attr("data-name").indexOf("Fantasmolytic_tune_2.sid") !== -1)) {
+			// @todo Replace this with a proper imcompatibility system later.
+			SID.emulator == "websid"
 				? $tr.addClass("disabled")
 				: $tr.removeClass("disabled");
 		} else if (isSIDFile && $tr.find(".name").attr("data-type") === "RSID") {

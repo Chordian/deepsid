@@ -9,7 +9,7 @@ function Viz(emulator) {
 
 	this.pianoBarBackground = "#111";
 	this.slowSpeed = 0.3;
-	this.graphZoom = false;
+	this.graphMode = 0;
 	this.graphPW = false;
 	this.lineInGraph = false;
 	this.scopeLineColor = [
@@ -77,7 +77,10 @@ function Viz(emulator) {
 	this.setEmuButton(this.emulator);
 
 	this.initScope();
-	this.initGraph();
+	setTimeout(function() {
+		this.initGraph();
+		this.animate();
+	}.bind(this), 1);
 	this.addEvents();
 
 	$("#dropdown-visuals").trigger("change");
@@ -165,9 +168,9 @@ Viz.prototype = {
 			$this.empty().append($this.hasClass("button-off") ? "On" : "Off");
 			if (event.target.id === "piano-slow") {
 				SID.speed($this.hasClass("button-off") ? this.slowSpeed : 1);
-			} else if (event.target.id === "graph-zoom") {
-				this.graphZoom = $this.hasClass("button-off");
-				this.lineInGraph = true;
+			} else if (event.target.id === "graph-columns") {
+				this.graphMode = $this.hasClass("button-off") ? 0 : 1;
+				this.initGraph();
 			} else if (event.target.id === "graph-pw") {
 				this.graphPW = $this.hasClass("button-off");
 			} else {
@@ -499,8 +502,6 @@ Viz.prototype = {
 		this.scopeVoice2 = new VoiceDisplay("scope2", function() { return scope.getDataVoice2(); }, false);
 		this.scopeVoice3 = new VoiceDisplay("scope3", function() { return scope.getDataVoice3(); }, false);
 		this.scopeVoice4 = new VoiceDisplay("scope4", function() { return scope.getDataVoice4(); }, true);
-
-		this.animate();
 	},
 
 	/**
@@ -559,36 +560,55 @@ Viz.prototype = {
 	},
 
 	/**
-	 * Graph: Initialize and draw the canvas rivers.
+	 * Graph: Initialize and draw the canvas areas.
 	 */
 	initGraph: function() {
 		if ($("body").attr("data-mobile") !== "0") return;
 
-		this.canvas_river = [], this.ctx_river = [], this.river_width = [], this.river_height = [];
+		this.canvas_area = [], this.ctx_area = [], this.area_width = [], this.area_height = [];
 		this.isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
-		var graphHeight = $("#page").outerHeight() - 127;
-		$("#graph").height(graphHeight);
-		$("#graph .graph-river").empty().append('<canvas height="'+(graphHeight - 1)+'" width="268"></canvas>');
-
-		// Create a 64 KB array with steep sine steps for the zoom button
-		// NOTE: Don't make this into a premade look-up table; such things are not faster these days.
-		this.steepSteps = [];
-		var counter = 0;
-		var increase = Math.PI / (65536 * 2);
-			for (i = 0; i <= 1; i += 1 / 65536) {
-			this.steepSteps.push(Math.sin(counter));
-			counter += increase;
+		var totalHeight = $("#page").outerHeight() - 127, totalWidth = 833,
+			graphHeight, graphWidth, maxVoices = 3;
+		
+		switch (this.graphMode) {
+			case 0:
+				// Rows
+				graphWidth = totalWidth;
+				graphHeight = (totalHeight / maxVoices) - 8;
+				for (var voice = 0; voice < maxVoices; voice++) {
+					$("#graph"+voice).css({
+						top:	(totalHeight / maxVoices) * voice + (3.5 * voice),
+						left:	"0"
+					});
+				}
+				break;
+			case 1:
+				// Columns (original |||)
+				graphWidth = (totalWidth / maxVoices) - 8;
+				graphHeight = totalHeight - 1;
+				for (var voice = 0; voice < maxVoices; voice++) {
+					$("#graph"+voice).css({
+						top:	"0",
+						left: 	(totalWidth / maxVoices) * voice + (3.5 * voice)
+					});
+				}
+				break;
 		}
 
-		// Create canvas rivers and get their contexts
-		for (var voice = 0; voice <= 2; voice++) {
-			this.canvas_river[voice] = $("#graph"+voice+" canvas")[0];
-			this.ctx_river[voice] = this.canvas_river[voice].getContext("2d");
-			this.river_width[voice] = 268;
-			this.river_height[voice] = graphHeight - 1;
-			// Clear the rivers
-			this.ctx_river[voice].clearRect(0, 0, this.river_width[voice], this.river_height[voice]);
+		$("#graph").height(totalHeight);
+		$("#graph .graph-area")
+			.height(graphHeight)
+			.empty().append('<canvas height="'+graphHeight+'" width="'+graphWidth+'"></canvas>');
+
+		// Create canvas areas and get their contexts
+		for (var voice = 0; voice < maxVoices; voice++) {
+			this.canvas_area[voice] = $("#graph"+voice+" canvas")[0];
+			this.ctx_area[voice] = this.canvas_area[voice].getContext("2d");
+			this.area_width[voice] = graphWidth;
+			this.area_height[voice] = graphHeight - 1;
+			// Clear the areas
+			this.ctx_area[voice].clearRect(0, 0, this.area_width[voice], this.area_height[voice]);
 		}
 
 		// Clone the waveform color array with darker color versions
@@ -596,12 +616,10 @@ Viz.prototype = {
 		$.each(this.darkerWaveformColors, function(i, color) {
 			this.darkerWaveformColors[i] = this.lightenDarkenColor(color, -40);
 		}.bind(this));
-
-		this.animate();
 	},
 
 	/**
-	 * Graph: Animate the canvas rivers.
+	 * Graph: Animate the canvas areas.
 	 * 
 	 * Called by: requestAnimationFrame() - use 'viz' instead of 'this' here.
 	 */
@@ -614,26 +632,24 @@ Viz.prototype = {
 
 			// Color the top line background to begin with
 			var filterOn = SID.readRegister(0xD417) & (1 << voice);
-			viz.ctx_river[voice].fillStyle = viz.lineInGraph ? "#eee" : (filterOn ? "#ffffea" : "#fff");
-			viz.ctx_river[voice].fillRect(0, 0, viz.river_width[voice], 1);
+			viz.ctx_area[voice].fillStyle = viz.lineInGraph ? "#eee" : (filterOn ? "#ffffea" : "#fff");
+			viz.ctx_area[voice].fillRect(0, 0, viz.area_width[voice], 1);
 
 			// Add octave dividers
-			viz.ctx_river[voice].lineWidth = 1;
-			viz.ctx_river[voice].strokeStyle = "#eaeaea";
+			viz.ctx_area[voice].lineWidth = 1;
+			viz.ctx_area[voice].strokeStyle = "#eaeaea";
 			for (var freq = 8192; freq < 8192 * 8; freq += 8192) {
-				if (viz.graphZoom) freq = Math.floor(this.steepSteps[freq] * 65536);
-				var x = (freq / 0xFFFF) * viz.river_width[voice];
+				var x = (freq / 0xFFFF) * viz.area_width[voice];
 				x = x | 0; // This rounds off to avoiding anti-aliased lines
-				viz.ctx_river[voice].beginPath();
-				viz.ctx_river[voice].moveTo(x, 0);
-				viz.ctx_river[voice].lineTo(x, 1);
-				viz.ctx_river[voice].stroke();
+				viz.ctx_area[voice].beginPath();
+				viz.ctx_area[voice].moveTo(x, 0);
+				viz.ctx_area[voice].lineTo(x, 1);
+				viz.ctx_area[voice].stroke();
 			}
 
 			// Find the X coordinate that corresponds to the current SID voice frequency
 			var freq = SID.readRegister(0xD400 + voice * 7) + SID.readRegister(0xD401 + voice * 7) * 256;
-			if (viz.graphZoom) freq = Math.floor(this.steepSteps[freq] * 65536);
-			var x = (freq / 0xFFFF) * viz.river_width[voice];
+			var x = (freq / 0xFFFF) * viz.area_width[voice];
 			x = x | 0;
 
 			var waveform = SID.readRegister(0xD404 + voice * 7) >> 4;
@@ -645,36 +661,36 @@ Viz.prototype = {
 
 			// Draw the dot representing the frequency
 			if (viz.darkerWaveformColors[waveform] != "#000000") {
-				viz.ctx_river[voice].lineWidth = 2;
-				viz.ctx_river[voice].globalAlpha = SID.readRegister(0xD404 + voice * 7) & 1 ? 1 : 0.4; // Gate ON / OFF
+				viz.ctx_area[voice].lineWidth = 2;
+				viz.ctx_area[voice].globalAlpha = SID.readRegister(0xD404 + voice * 7) & 1 ? 1 : 0.4; // Gate ON / OFF
 				if (viz.graphPW && waveform == 4) {
 					// Show pulse width as a "coat" around the frequency dot
-					viz.ctx_river[voice].strokeStyle = "#ffd1cb";
-					viz.ctx_river[voice].beginPath();
-					viz.ctx_river[voice].moveTo(x - pw, 0);
-					viz.ctx_river[voice].lineTo(x - 1, 0);
-					viz.ctx_river[voice].moveTo(x + 1, 0);
-					viz.ctx_river[voice].lineTo(x + pw, 0);
-					viz.ctx_river[voice].stroke();
+					viz.ctx_area[voice].strokeStyle = "#ffd1cb";
+					viz.ctx_area[voice].beginPath();
+					viz.ctx_area[voice].moveTo(x - pw, 0);
+					viz.ctx_area[voice].lineTo(x - 1, 0);
+					viz.ctx_area[voice].moveTo(x + 1, 0);
+					viz.ctx_area[voice].lineTo(x + pw, 0);
+					viz.ctx_area[voice].stroke();
 				}
-				viz.ctx_river[voice].strokeStyle = viz.darkerWaveformColors[waveform];
-				viz.ctx_river[voice].beginPath();
-				viz.ctx_river[voice].moveTo(x, 0);
-				viz.ctx_river[voice].lineTo(x, 1);
-				viz.ctx_river[voice].stroke();
+				viz.ctx_area[voice].strokeStyle = viz.darkerWaveformColors[waveform];
+				viz.ctx_area[voice].beginPath();
+				viz.ctx_area[voice].moveTo(x, 0);
+				viz.ctx_area[voice].lineTo(x, 1);
+				viz.ctx_area[voice].stroke();
 			}
 
-			// Now scroll the river downwards
-			viz.ctx_river[voice].globalAlpha = 1;
+			// Now scroll the area downwards
+			viz.ctx_area[voice].globalAlpha = 1;
 			if (viz.isSafari) {
 				// Slower but necessary on Mac Safari due to a bug in their drawImage() handling
-				var rect = viz.ctx_river[voice].getImageData(1, 0, viz.river_width[voice], viz.river_height[voice] - 1);
-				viz.ctx_river[voice].putImageData(rect, 1, 1);
+				var rect = viz.ctx_area[voice].getImageData(1, 0, viz.area_width[voice], viz.area_height[voice] - 1);
+				viz.ctx_area[voice].putImageData(rect, 1, 1);
 			} else {
 				// Fastest (no hitches on my PC) and works in both Firefox, Chrome and Edge (slow there but ¯\_(ツ)_/¯)
-				viz.ctx_river[voice].drawImage(viz.canvas_river[voice],
-					1, 0, viz.river_width[voice], viz.river_height[voice] - 1,
-					1, 1, viz.river_width[voice], viz.river_height[voice] - 1);
+				viz.ctx_area[voice].drawImage(viz.canvas_area[voice],
+					1, 0, viz.area_width[voice], viz.area_height[voice] - 1,
+					1, 1, viz.area_width[voice], viz.area_height[voice] - 1);
 			}
 		}
 		viz.lineInGraph = false;
