@@ -578,29 +578,34 @@ Viz.prototype = {
 		this.canvas_area = [], this.ctx_area = [], this.area_width = [], this.area_height = [];
 		this.isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
-		var totalHeight = $("#page").outerHeight() - 127, totalWidth = 833,
+		var totalHeight = $("#page").outerHeight() - 127, totalWidth = 834,
 			graphHeight, graphWidth, maxVoices = 3;
+
+		$("#graph .graph-area").hide();
 		
 		switch (this.graphMode) {
 			case 0:
 				// Rows
-				graphWidth = totalWidth;
-				graphHeight = (totalHeight / maxVoices) - 8;
+				graphWidth = totalWidth - 0.1;
+				graphHeight = (totalHeight / maxVoices) - 0.1;
 				for (var voice = 0; voice < maxVoices; voice++) {
 					$("#graph"+voice).css({
-						top:	(totalHeight / maxVoices) * voice + (3.5 * voice),
-						left:	"0"
+						display:	"inline-block",
+						top:		((totalHeight / maxVoices) * voice) - (0.3 * voice),
+						left:		"0",
+						zIndex:		maxVoices - voice
 					});
 				}
 				break;
 			case 1:
 				// Columns (original |||)
-				graphWidth = (totalWidth / maxVoices) - 8;
+				graphWidth = totalWidth / maxVoices;
 				graphHeight = totalHeight - 1;
 				for (var voice = 0; voice < maxVoices; voice++) {
 					$("#graph"+voice).css({
-						top:	"0",
-						left: 	(totalWidth / maxVoices) * voice + (3.5 * voice)
+						display:	"inline-block",
+						top:		"0",
+						left: 		((totalWidth / maxVoices) * voice) - (0.3 * voice),
 					});
 				}
 				break;
@@ -609,11 +614,12 @@ Viz.prototype = {
 		$("#graph").height(totalHeight);
 		$("#graph .graph-area")
 			.height(graphHeight)
-			.empty().append('<canvas height="'+graphHeight+'" width="'+graphWidth+'"></canvas>');
+			.empty().append('<canvas height="'+graphHeight+'" width="'+graphWidth+'"></canvas><div></div>');
 
 		// Create canvas areas and get their contexts
 		for (var voice = 0; voice < maxVoices; voice++) {
 			this.canvas_area[voice] = $("#graph"+voice+" canvas")[0];
+			$("#graph"+voice+" div").append(voice + 1);
 			this.ctx_area[voice] = this.canvas_area[voice].getContext("2d");
 			this.area_width[voice] = graphWidth;
 			this.area_height[voice] = graphHeight - 1;
@@ -715,7 +721,7 @@ Viz.prototype = {
 				var rect = viz.ctx_area[voice].getImageData(1, 0, viz.area_width[voice], viz.area_height[voice] - 1);
 				viz.ctx_area[voice].putImageData(rect, 1, 1);
 			} else {
-				// Fastest (no hitches on my PC) and works in both Firefox, Chrome and Edge (slow there but ¯\_(ツ)_/¯)
+				// Fastest (no hitches on my PC) and works in both Firefox, Chrome and Edge
 				viz.ctx_area[voice].drawImage(viz.canvas_area[voice],
 					1, 0, viz.area_width[voice], viz.area_height[voice] - 1,
 					1, 1, viz.area_width[voice], viz.area_height[voice] - 1);

@@ -989,6 +989,8 @@
 						<h3>July 24, 2019</h3>
 						<ul>
 							<li>Modulations are now visible in the graph view, and it can be turned off if you find it too obtrusive.</li>
+							<li>Removed the spacing between voices in the graph view. Might as well make use of all of the available space.</li>
+							<li>Added a voice number to each voice in the graph view.</li>
 						</ul>
 
 						<h3>July 23, 2019</h3>

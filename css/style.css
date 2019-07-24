@@ -48,6 +48,7 @@
 	--color-border-info:			#7a88c8;			/* Bottom border color for top info box */
 	--color-border-comments:		var(--color-border);
 	--color-border-scope:			var(--color-timebar-border);
+	--color-border-graph:			#aaa;
 
 	--color-button:					#474937;			/* Darkest green typically used on buttons */
 	--color-button-border:			var(--color-button);
@@ -360,6 +361,7 @@
 	--color-border-info:			#303a70;			/* Bottom border color for top info box */
 	--color-border-comments:		#4c4c4c;
 	--color-border-scope:			#3e3e3e;
+	--color-border-graph:			var(--color-border-box);
 
 	--color-button:					linear-gradient(to bottom, #6e7965 0%,#4b5345 85%); /* #4e5648 #565f4f #4a5244 #5a6650 #415d43 */
 	--color-button-border:			#555e4e;
@@ -1419,8 +1421,23 @@ small.u2 { margin-left: 2px; }
 	/* A down-scrolling canvas area in the 'Graph' view */
 	.graph-area {
 		position: absolute;
-		/*height: 100%;*/
-		border: 0.5px solid var(--color-border); /* Color also set in 'viz.jz' script */
+		border: 0.5px solid var(--color-border-graph);
+		background: #fff;
+	}
+
+	/* Round voice numbers in bottom left corner of canvas areas */
+	.graph-area div {
+		position: absolute;
+		bottom: 6px;
+		left: 6px;
+		width: 20px;
+		height: 20px;
+		font: bold 12px/19px "Montserrat", sans-serif;
+		color: #777; /* No need for CSS variable here */
+		background: #fff;
+		border: 0.5px solid #b4b4b4;
+		border-radius: 20px;
+		text-align: center;
 	}
 
 .thinner {
