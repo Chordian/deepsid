@@ -9,8 +9,9 @@ function Viz(emulator) {
 
 	this.pianoBarBackground = "#111";
 	this.slowSpeed = 0.3;
-	this.graphMode = 0;
+	this.graphMode = 1;
 	this.graphPW = false;
+	this.graphMods = true;
 	this.lineInGraph = false;
 	this.scopeLineColor = [
 		"34, 35, 27",	// For bright color theme
@@ -47,7 +48,7 @@ function Viz(emulator) {
 			0x4310, 0x4710, 0x4B50, 0x4FC0, 0x5480, 0x5980, 0x5EE0, 0x6480, 0x6A90, 0x70D0, 0x7790, 0x7EA0,	// Oct 6
 			0x8620, 0x8E20, 0x96A0, 0x9F80, 0xA900, 0xB300, 0xBDC0, 0xC900, 0xD520, 0xE1A0, 0xEF20, 0xFD40	// Oct 7
 	];
-	
+
 	this.pianoKeyColors = ["#fff", "#000", "#fff", "#000", "#fff", "#fff", "#000", "#fff", "#000", "#fff", "#000", "#fff"];
 	
 	this.waveformColors = [
@@ -67,6 +68,13 @@ function Viz(emulator) {
 		"#000000",			// $D0
 		"#000000",			// $E0
 		"#000000",			// $F0
+	];
+
+	this.modulationColors = [
+		"#000",				// Off
+		"#eef",				// Hard synchronization
+		"#fee",				// Ring modulation
+		"#fef",				// Both
 	];
 
 	// Set buffer size as previously stored or default to 16384 bytes
@@ -173,6 +181,8 @@ Viz.prototype = {
 				this.initGraph();
 			} else if (event.target.id === "graph-pw") {
 				this.graphPW = $this.hasClass("button-off");
+			} else if (event.target.id === "graph-mods") {
+				this.graphMods = $this.hasClass("button-off");
 			} else {
 				// Clear piano keyboards to make sure there are no hanging colors on it
 				$("#visuals-piano .piano svg .black").css("transition", "none").attr("fill", "#000");
@@ -652,7 +662,9 @@ Viz.prototype = {
 			var x = (freq / 0xFFFF) * viz.area_width[voice];
 			x = x | 0;
 
-			var waveform = SID.readRegister(0xD404 + voice * 7) >> 4;
+			var waveform = SID.readRegister(0xD404 + voice * 7) >> 4,
+				thisModulation = (SID.readRegister(0xD404 + voice * 7) & 6) >> 1,
+				prevModulation = (SID.readRegister(0xD404 + (voice == 2 ? 0 : voice + 1) * 7) & 6) >> 1;
 
 			// For pulse width, make middle (0x800) king and shrink for a sensible pixel width
 			var pw = SID.readRegister(0xD402 + voice * 7) + (SID.readRegister(0xD403 + voice * 7) & 0xF) * 256;
@@ -663,6 +675,22 @@ Viz.prototype = {
 			if (viz.darkerWaveformColors[waveform] != "#000000") {
 				viz.ctx_area[voice].lineWidth = 2;
 				viz.ctx_area[voice].globalAlpha = SID.readRegister(0xD404 + voice * 7) & 1 ? 1 : 0.4; // Gate ON / OFF
+				if (viz.graphMods && thisModulation) {
+					// Paint from frequency dot and left towards edge of area ("reaching for previous voice")
+					viz.ctx_area[voice].strokeStyle = viz.modulationColors[thisModulation];
+					viz.ctx_area[voice].beginPath();
+					viz.ctx_area[voice].moveTo(x - 2, 0);
+					viz.ctx_area[voice].lineTo(0, 0);
+					viz.ctx_area[voice].stroke();
+				}
+				if (viz.graphMods && prevModulation) {
+					// Paint from frequency dot and right towards edge of area ("reaching towards master")
+					viz.ctx_area[voice].strokeStyle = viz.modulationColors[prevModulation];
+					viz.ctx_area[voice].beginPath();
+					viz.ctx_area[voice].moveTo(x + 2, 0);
+					viz.ctx_area[voice].lineTo(viz.area_width[voice], 0);
+					viz.ctx_area[voice].stroke();
+				}
 				if (viz.graphPW && waveform == 4) {
 					// Show pulse width as a "coat" around the frequency dot
 					viz.ctx_area[voice].strokeStyle = "#ffd1cb";
