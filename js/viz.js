@@ -575,7 +575,7 @@ Viz.prototype = {
 	initGraph: function() {
 		if ($("body").attr("data-mobile") !== "0") return;
 
-		this.canvas_area = [], this.ctx_area = [], this.area_width = [], this.area_height = [], this.prevPulse = [];
+		this.canvas_area = [], this.ctx_area = [], this.area_width = [], this.area_height = [];
 		this.isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
 		var totalHeight = $("#page").outerHeight() - 127, totalWidth = 834,
@@ -618,7 +618,6 @@ Viz.prototype = {
 
 		// Create canvas areas and get their contexts
 		for (var voice = 0; voice < maxVoices; voice++) {
-			this.prevPulse[voice] = 0;
 			this.canvas_area[voice] = $("#graph"+voice+" canvas")[0];
 			$("#graph"+voice+" div").append(voice + 1);
 			this.ctx_area[voice] = this.canvas_area[voice].getContext("2d");
@@ -674,12 +673,10 @@ Viz.prototype = {
 				prevModulation = (SID.readRegister(0xD404 + (voice == 2 ? 0 : voice + 1) * 7) & 6) >> 1;
 
 			// For pulse width, make middle (0x800) king and shrink for a sensible pixel width
-			var pulse = SID.readRegister(0xD402 + voice * 7) + (SID.readRegister(0xD403 + voice * 7) & 0xF) * 256;
-			pw = pulse < 2048 ? pulse : pulse ^ 0xFFF;
-			pw /= 128; // Smaller value here equals a bigger "coat"
+			var pw = SID.readRegister(0xD402 + voice * 7) + (SID.readRegister(0xD403 + voice * 7) & 0xF) * 256;
+			pw = pw < 2048 ? pw : pw ^ 0xFFF;
+			pw /= (viz.graphMode ? 128 : 48); // Smaller value here equals a bigger "coat"
 
-			pulse = (pulse / 0x7FFF) * viz.area_width[voice];
-			pulse += (0xE000 / 0xFFFF) * viz.area_width[voice];
 
 			// Draw the dot representing the frequency
 			if (viz.darkerWaveformColors[waveform] != "#000000") {
@@ -687,40 +684,37 @@ Viz.prototype = {
 				viz.ctx_area[voice].globalAlpha = SID.readRegister(0xD404 + voice * 7) & 1 ? 1 : 0.4; // Gate ON / OFF
 				if (viz.graphMods && thisModulation) {
 					// Paint from frequency dot and left towards edge of area ("reaching for previous voice")
+					//viz.ctx_area[voice].save();
 					viz.ctx_area[voice].strokeStyle = viz.modulationColors[thisModulation];
+					//viz.ctx_area[voice].setLineDash([1, 1]);
 					viz.ctx_area[voice].beginPath();
 					viz.ctx_area[voice].moveTo(x - 2, 0);
 					viz.ctx_area[voice].lineTo(0, 0);
 					viz.ctx_area[voice].stroke();
+					//viz.ctx_area[voice].restore();
 				}
 				if (viz.graphMods && prevModulation) {
 					// Paint from frequency dot and right towards edge of area ("reaching towards master")
+					//viz.ctx_area[voice].save();
 					viz.ctx_area[voice].strokeStyle = viz.modulationColors[prevModulation];
+					//viz.ctx_area[voice].setLineDash([1, 1]);
 					viz.ctx_area[voice].beginPath();
 					viz.ctx_area[voice].moveTo(x + 2, 0);
 					viz.ctx_area[voice].lineTo(viz.area_width[voice], 0);
 					viz.ctx_area[voice].stroke();
+					//viz.ctx_area[voice].restore();
 				}
 				if (waveform == 4 || waveform == 5) {
-					if (viz.graphPW) {
-						// Show pulse width as a "coat" around the frequency dot
-						viz.ctx_area[voice].strokeStyle = "#ffd1cb";
-						viz.ctx_area[voice].beginPath();
-						viz.ctx_area[voice].moveTo(x - pw, 0);
-						viz.ctx_area[voice].lineTo(x - 1, 0);
-						viz.ctx_area[voice].moveTo(x + 1, 0);
-						viz.ctx_area[voice].lineTo(x + pw, 0);
-						viz.ctx_area[voice].stroke();
-					} else {
-						// Show pulse in the right side of the area
-						//var start = (0xE000 / 0xFFFF) * viz.area_width[voice];
-				viz.ctx_area[voice].strokeStyle = "#f00"; // @todo Change later!
-						viz.ctx_area[voice].beginPath();
-						viz.ctx_area[voice].moveTo(viz.prevPulse[voice], 0);
-						viz.ctx_area[voice].lineTo(pulse + 0.5, 0);
-						viz.ctx_area[voice].stroke();
-						viz.prevPulse[voice] = pulse;
-					}
+					var center = viz.graphPW ? x : (0xF000 / 0xFFFF) * viz.area_width[voice],
+						groove = viz.graphPW ? 1 : -0.5;
+					// Show pulse width as a "coat" (around frequency dot or in the right side)
+					viz.ctx_area[voice].strokeStyle = "#ffd1cb";
+					viz.ctx_area[voice].beginPath();
+					viz.ctx_area[voice].moveTo(center - pw, 0);
+					viz.ctx_area[voice].lineTo(center - groove, 0);
+					viz.ctx_area[voice].moveTo(center + groove, 0);
+					viz.ctx_area[voice].lineTo(center + pw, 0);
+					viz.ctx_area[voice].stroke();
 				}
 				viz.ctx_area[voice].strokeStyle = viz.darkerWaveformColors[waveform];
 				viz.ctx_area[voice].beginPath();

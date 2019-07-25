@@ -453,9 +453,9 @@
 							</div>
 							<div class="edit" style="height:42px;width:683px;">
 								<button id="graph-columns" class="button-edit button-toggle button-off">Off</button>
-								<label for="graph-columns" class="unselectable">Columns view</label>
+								<label for="graph-columns" class="unselectable">Show as rows</label>
 								<button id="graph-pw" class="button-edit button-toggle button-off">Off</button>
-								<label for="graph-pw" class="unselectable">Pulse width</label>
+								<label for="graph-pw" class="unselectable">Pulse coat</label>
 								<button id="graph-mods" class="button-edit button-toggle button-on">On</button>
 								<label for="graph-mods" class="unselectable">Modulations</label>
 							</div>
@@ -985,6 +985,11 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>July 25, 2019</h3>
+						<ul>
+							<li>The pulse width button in the graph view now toggles between a "coat" or showing it in the right side.</li>
+						</ul>
 
 						<h3>July 24, 2019</h3>
 						<ul>
