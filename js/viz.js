@@ -224,7 +224,7 @@ Viz.prototype = {
 		SID.toggleVoice(voice + 1);
 		$("#scope"+(voice + 1)).css("opacity", (state ? "1" : "0.3"));
 		$("#page .piano"+voice).css("opacity", (state ? "1" : "0.1"));
-		$("#graph"+voice+" canvas").css("opacity", (state ? "1" : "0.3"));
+		$("#graph"+voice).css("opacity", (state ? "1" : "0.3"));
 	},
 
 	/**
@@ -483,7 +483,7 @@ Viz.prototype = {
 	enableAllPianoVoices: function() {
 		SID.enableAllVoices();
 		$("#visuals-piano .piano-voice").removeClass("voice-off voice-on").addClass("voice-on");
-		$("#visuals-piano .piano,#graph canvas,#scope1,#scope2,#scope3,#scope4").css("opacity", "1");
+		$("#visuals-piano .piano,#graph .graph-area,#scope1,#scope2,#scope3,#scope4").css("opacity", "1");
 		// Also snuck this in to set slow speed again if need be
 		setTimeout(function() {
 			if ($("#piano-slow").hasClass("button-on")) SID.speed(this.slowSpeed);
@@ -575,7 +575,7 @@ Viz.prototype = {
 	initGraph: function() {
 		if ($("body").attr("data-mobile") !== "0") return;
 
-		this.canvas_area = [], this.ctx_area = [], this.area_width = [], this.area_height = [];
+		this.canvas_area = [], this.ctx_area = [], this.area_width = [], this.area_height = [], this.prevPulse = [];
 		this.isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
 		var totalHeight = $("#page").outerHeight() - 127, totalWidth = 834,
@@ -618,6 +618,7 @@ Viz.prototype = {
 
 		// Create canvas areas and get their contexts
 		for (var voice = 0; voice < maxVoices; voice++) {
+			this.prevPulse[voice] = 0;
 			this.canvas_area[voice] = $("#graph"+voice+" canvas")[0];
 			$("#graph"+voice+" div").append(voice + 1);
 			this.ctx_area[voice] = this.canvas_area[voice].getContext("2d");
@@ -641,8 +642,8 @@ Viz.prototype = {
 	 */
 	animateGraph: function() {
 		// Not available on mobile devices, and the 'Graph' view and its tab must both be visible
-		if ($("body").attr("data-mobile") !== "0" || $("#tabs .selected").attr("data-topic") !== "visuals"
-			|| $("#dropdown-visuals").val() !== "graph") return;
+		/*if ($("body").attr("data-mobile") !== "0" || $("#tabs .selected").attr("data-topic") !== "visuals"
+			|| $("#dropdown-visuals").val() !== "graph") return;*/
 
 		for (var voice = 0; voice <= 2; voice++) {
 
@@ -673,9 +674,12 @@ Viz.prototype = {
 				prevModulation = (SID.readRegister(0xD404 + (voice == 2 ? 0 : voice + 1) * 7) & 6) >> 1;
 
 			// For pulse width, make middle (0x800) king and shrink for a sensible pixel width
-			var pw = SID.readRegister(0xD402 + voice * 7) + (SID.readRegister(0xD403 + voice * 7) & 0xF) * 256;
-			pw = pw < 2048 ? pw : pw ^ 0xFFF;
+			var pulse = SID.readRegister(0xD402 + voice * 7) + (SID.readRegister(0xD403 + voice * 7) & 0xF) * 256;
+			pw = pulse < 2048 ? pulse : pulse ^ 0xFFF;
 			pw /= 128; // Smaller value here equals a bigger "coat"
+
+			pulse = (pulse / 0x7FFF) * viz.area_width[voice];
+			pulse += (0xE000 / 0xFFFF) * viz.area_width[voice];
 
 			// Draw the dot representing the frequency
 			if (viz.darkerWaveformColors[waveform] != "#000000") {
@@ -697,15 +701,26 @@ Viz.prototype = {
 					viz.ctx_area[voice].lineTo(viz.area_width[voice], 0);
 					viz.ctx_area[voice].stroke();
 				}
-				if (viz.graphPW && waveform == 4) {
-					// Show pulse width as a "coat" around the frequency dot
-					viz.ctx_area[voice].strokeStyle = "#ffd1cb";
-					viz.ctx_area[voice].beginPath();
-					viz.ctx_area[voice].moveTo(x - pw, 0);
-					viz.ctx_area[voice].lineTo(x - 1, 0);
-					viz.ctx_area[voice].moveTo(x + 1, 0);
-					viz.ctx_area[voice].lineTo(x + pw, 0);
-					viz.ctx_area[voice].stroke();
+				if (waveform == 4 || waveform == 5) {
+					if (viz.graphPW) {
+						// Show pulse width as a "coat" around the frequency dot
+						viz.ctx_area[voice].strokeStyle = "#ffd1cb";
+						viz.ctx_area[voice].beginPath();
+						viz.ctx_area[voice].moveTo(x - pw, 0);
+						viz.ctx_area[voice].lineTo(x - 1, 0);
+						viz.ctx_area[voice].moveTo(x + 1, 0);
+						viz.ctx_area[voice].lineTo(x + pw, 0);
+						viz.ctx_area[voice].stroke();
+					} else {
+						// Show pulse in the right side of the area
+						//var start = (0xE000 / 0xFFFF) * viz.area_width[voice];
+				viz.ctx_area[voice].strokeStyle = "#f00"; // @todo Change later!
+						viz.ctx_area[voice].beginPath();
+						viz.ctx_area[voice].moveTo(viz.prevPulse[voice], 0);
+						viz.ctx_area[voice].lineTo(pulse + 0.5, 0);
+						viz.ctx_area[voice].stroke();
+						viz.prevPulse[voice] = pulse;
+					}
 				}
 				viz.ctx_area[voice].strokeStyle = viz.darkerWaveformColors[waveform];
 				viz.ctx_area[voice].beginPath();

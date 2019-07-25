@@ -1435,7 +1435,7 @@ small.u2 { margin-left: 2px; }
 		font: bold 12px/19px "Montserrat", sans-serif;
 		color: #777; /* No need for CSS variable here */
 		background: #fff;
-		border: 0.5px solid #b4b4b4;
+		border: 0.5px solid var(--color-border-graph); /* #b4b4b4 */
 		border-radius: 20px;
 		text-align: center;
 	}
