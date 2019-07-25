@@ -641,15 +641,34 @@ Viz.prototype = {
 	 */
 	animateGraph: function() {
 		// Not available on mobile devices, and the 'Graph' view and its tab must both be visible
-		/*if ($("body").attr("data-mobile") !== "0" || $("#tabs .selected").attr("data-topic") !== "visuals"
-			|| $("#dropdown-visuals").val() !== "graph") return;*/
+		if ($("body").attr("data-mobile") !== "0" || $("#tabs .selected").attr("data-topic") !== "visuals"
+			|| $("#dropdown-visuals").val() !== "graph") return;
 
 		for (var voice = 0; voice <= 2; voice++) {
 
 			// Color the top line background to begin with
-			var filterOn = SID.readRegister(0xD417) & (1 << voice);
-			viz.ctx_area[voice].fillStyle = viz.lineInGraph ? "#eee" : (filterOn ? "#ffffea" : "#fff");
+			viz.ctx_area[voice].fillStyle = viz.lineInGraph ? "#eee" : "#fff";
 			viz.ctx_area[voice].fillRect(0, 0, viz.area_width[voice], 1);
+
+			if (!viz.lineInGraph && (SID.readRegister(0xD417) & (1 << voice))) { // Filter on?
+				lineColor = "#ffffea";
+				// Clear yellow up to filter cutoff frequency
+				var fc = SID.readRegister(0xD416) << 3 + (SID.readRegister(0xD415) & 0x7),
+					start = viz.graphMode ? 0 : viz.area_width[voice] / 2,
+					max = viz.graphMode ? viz.area_width[voice] : viz.area_width[voice] / 2.666;
+				var x = (fc / 0x07FF) * max;
+				viz.ctx_area[voice].strokeStyle = "#f8f888";
+				viz.ctx_area[voice].beginPath();
+				viz.ctx_area[voice].moveTo(start, 0);
+				viz.ctx_area[voice].lineTo(start + x, 0);
+				viz.ctx_area[voice].stroke();
+				// Brighter yellow the rest of the way
+				viz.ctx_area[voice].strokeStyle = "#ffffe0";
+				viz.ctx_area[voice].beginPath();
+				viz.ctx_area[voice].moveTo(start + x + 1, 0);
+				viz.ctx_area[voice].lineTo(start + max, 0);
+				viz.ctx_area[voice].stroke();
+			}
 
 			// Add octave dividers
 			viz.ctx_area[voice].lineWidth = 1;
@@ -676,7 +695,6 @@ Viz.prototype = {
 			var pw = SID.readRegister(0xD402 + voice * 7) + (SID.readRegister(0xD403 + voice * 7) & 0xF) * 256;
 			pw = pw < 2048 ? pw : pw ^ 0xFFF;
 			pw /= (viz.graphMode ? 128 : 48); // Smaller value here equals a bigger "coat"
-
 
 			// Draw the dot representing the frequency
 			if (viz.darkerWaveformColors[waveform] != "#000000") {

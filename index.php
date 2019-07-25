@@ -989,6 +989,7 @@
 						<h3>July 25, 2019</h3>
 						<ul>
 							<li>The pulse width button in the graph view now toggles between a "coat" or showing it in the right side.</li>
+							<li>The graph view now show the filter cutoff frequency with a transition from strong to brighter yellow colors.</li>
 						</ul>
 
 						<h3>July 24, 2019</h3>
