@@ -986,6 +986,11 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>July 26, 2019</h3>
+						<ul>
+							<li>The graph view now also supports 2SID and 3SID &ndash; i.e. songs with 6 or 9 voices.</li>
+						</ul>
+
 						<h3>July 25, 2019</h3>
 						<ul>
 							<li>The pulse width button in the graph view now toggles between a "coat" or showing it in the right side.</li>

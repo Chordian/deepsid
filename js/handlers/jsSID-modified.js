@@ -1,12 +1,13 @@
 //jsSID by Hermit (Mihaly Horvath) : a javascript SID emulator and player for the Web Audio API
 //(Year 2016) http://hermit.sidrip.com
 
-//This version 0.9.1 modified .6 by JCH for DeepSID
+//This version 0.9.1 modified .7 by JCH for DeepSID
 // - Added multiplier for fast forward (VBI and CIA timing)
 // - Return 16-bit CIA timer value
 // - Read any SID register
 // - Added a buffer callback
 // - Voice mask for toggling voices ON or OFF (and now bug fixed for 2SID and 3SID)
+// - Read SID chip address
 
 function playSID(sidurl,subtune) { //convenience function to create default-named jsSID object and play in one call, easily includable as inline JS function call in HTML
  if (typeof SIDplayer === 'undefined') SIDplayer = new jsSID(16384,0.0005); //create the object if doesn't exist yet
@@ -17,7 +18,7 @@ function playSID(sidurl,subtune) { //convenience function to create default-name
 function jsSID (bufferlen, background_noise)
 {
 
- this.author='Hermit'; this.sourcecode='http://hermit.sidrip.com'; this.version='0.9.1.6'; this.year='2018';
+ this.author='Hermit'; this.sourcecode='http://hermit.uw.hu'; this.version='0.9.1.7'; this.year='2019';
  
  //create Web Audio context and scriptNode at jsSID object initialization (at the moment only mono output)
  if ( typeof AudioContext !== 'undefined') { var jsSID_audioCtx = new AudioContext(); }
@@ -76,6 +77,7 @@ function jsSID (bufferlen, background_noise)
  this.getoutput = function() { return (output/OUTPUT_SCALEDOWN)*(memory[0xD418]&0xF); }
  this.getplaytime = function() { return parseInt(playtime); } 
  this.getcia = function() { return memory[0xDC04]+memory[0xDC05]*256; } // Added by JCH
+ this.getSIDAddress = function(chip) { return SID_address[chip]; } // Added by JCH
  this.readregister = function(register) { return memory[register]; } // Added by JCH
  this.enableVoices = function(mask) { voiceMask = mask; } // Added by JCH
  this.setmodel = function(model) { SID_model = model; }

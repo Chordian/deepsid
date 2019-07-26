@@ -9,6 +9,7 @@ function Viz(emulator) {
 
 	this.pianoBarBackground = "#111";
 	this.slowSpeed = 0.3;
+	this.maxVoices = 3;
 	this.graphMode = 1;
 	this.graphPW = false;
 	this.graphMods = true;
@@ -86,7 +87,7 @@ function Viz(emulator) {
 
 	this.initScope();
 	setTimeout(function() {
-		this.initGraph();
+		this.initGraph(browser.chips);
 		this.animate();
 	}.bind(this), 1);
 	this.addEvents();
@@ -178,7 +179,7 @@ Viz.prototype = {
 				SID.speed($this.hasClass("button-off") ? this.slowSpeed : 1);
 			} else if (event.target.id === "graph-columns") {
 				this.graphMode = $this.hasClass("button-off") ? 0 : 1;
-				this.initGraph();
+				this.initGraph(browser.chips);
 			} else if (event.target.id === "graph-pw") {
 				this.graphPW = $this.hasClass("button-off");
 			} else if (event.target.id === "graph-mods") {
@@ -571,15 +572,17 @@ Viz.prototype = {
 
 	/**
 	 * Graph: Initialize and draw the canvas areas.
+	 * 
+	 * @param {number} chips		Number of SID chips (default is 1).
 	 */
-	initGraph: function() {
+	initGraph: function(chips) {
 		if ($("body").attr("data-mobile") !== "0") return;
 
 		this.canvas_area = [], this.ctx_area = [], this.area_width = [], this.area_height = [];
 		this.isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
-		var totalHeight = $("#page").outerHeight() - 127, totalWidth = 834,
-			graphHeight, graphWidth, maxVoices = 3;
+		this.maxVoices = typeof chips === "undefined" ? 3 : chips * 3;
+		var totalHeight = $("#page").outerHeight() - 127, totalWidth = 834, graphHeight, graphWidth;
 
 		$("#graph .graph-area").hide();
 		
@@ -587,25 +590,25 @@ Viz.prototype = {
 			case 0:
 				// Rows
 				graphWidth = totalWidth - 0.1;
-				graphHeight = (totalHeight / maxVoices) - 0.1;
-				for (var voice = 0; voice < maxVoices; voice++) {
+				graphHeight = (totalHeight / this.maxVoices) - 0.1;
+				for (var voice = 0; voice < this.maxVoices; voice++) {
 					$("#graph"+voice).css({
 						display:	"inline-block",
-						top:		((totalHeight / maxVoices) * voice) - (0.3 * voice),
+						top:		((totalHeight / this.maxVoices) * voice) - (0.3 * voice),
 						left:		"0",
-						zIndex:		maxVoices - voice
+						zIndex:		this.maxVoices - voice
 					});
 				}
 				break;
 			case 1:
 				// Columns (original |||)
-				graphWidth = totalWidth / maxVoices;
+				graphWidth = totalWidth / this.maxVoices;
 				graphHeight = totalHeight - 1;
-				for (var voice = 0; voice < maxVoices; voice++) {
+				for (var voice = 0; voice < this.maxVoices; voice++) {
 					$("#graph"+voice).css({
 						display:	"inline-block",
 						top:		"0",
-						left: 		((totalWidth / maxVoices) * voice) - (0.3 * voice),
+						left: 		((totalWidth / this.maxVoices) * voice) - (0.3 * voice),
 					});
 				}
 				break;
@@ -617,7 +620,7 @@ Viz.prototype = {
 			.empty().append('<canvas height="'+graphHeight+'" width="'+graphWidth+'"></canvas><div></div>');
 
 		// Create canvas areas and get their contexts
-		for (var voice = 0; voice < maxVoices; voice++) {
+		for (var voice = 0; voice < this.maxVoices; voice++) {
 			this.canvas_area[voice] = $("#graph"+voice+" canvas")[0];
 			$("#graph"+voice+" div").append(voice + 1);
 			this.ctx_area[voice] = this.canvas_area[voice].getContext("2d");
@@ -644,16 +647,19 @@ Viz.prototype = {
 		if ($("body").attr("data-mobile") !== "0" || $("#tabs .selected").attr("data-topic") !== "visuals"
 			|| $("#dropdown-visuals").val() !== "graph") return;
 
-		for (var voice = 0; voice <= 2; voice++) {
+		for (var voice = 0; voice < this.maxVoices; voice++) {
+
+			var chip = ~~(voice / 3) + 1,
+				rawVoice = voice - ~~(voice / 3) * 3;
 
 			// Color the top line background to begin with
 			viz.ctx_area[voice].fillStyle = viz.lineInGraph ? "#eee" : "#fff";
 			viz.ctx_area[voice].fillRect(0, 0, viz.area_width[voice], 1);
 
-			if (!viz.lineInGraph && (SID.readRegister(0xD417) & (1 << voice))) { // Filter on?
+			if (!viz.lineInGraph && (SID.readRegister(0xD417, chip) & (1 << rawVoice))) { // Filter on?
 				lineColor = "#ffffea";
 				// Clear yellow up to filter cutoff frequency
-				var fc = SID.readRegister(0xD416) << 3 + (SID.readRegister(0xD415) & 0x7),
+				var fc = SID.readRegister(0xD416, chip) << 3 + (SID.readRegister(0xD415, chip) & 0x7),
 					start = viz.graphMode ? 0 : viz.area_width[voice] / 2,
 					max = viz.graphMode ? viz.area_width[voice] : viz.area_width[voice] / 2.666;
 				var x = (fc / 0x07FF) * max;
@@ -683,23 +689,23 @@ Viz.prototype = {
 			}
 
 			// Find the X coordinate that corresponds to the current SID voice frequency
-			var freq = SID.readRegister(0xD400 + voice * 7) + SID.readRegister(0xD401 + voice * 7) * 256;
+			var freq = SID.readRegister(0xD400 + rawVoice * 7, chip) + SID.readRegister(0xD401 + rawVoice * 7, chip) * 256;
 			var x = (freq / 0xFFFF) * viz.area_width[voice];
 			x = x | 0;
 
-			var waveform = SID.readRegister(0xD404 + voice * 7) >> 4,
-				thisModulation = (SID.readRegister(0xD404 + voice * 7) & 6) >> 1,
-				prevModulation = (SID.readRegister(0xD404 + (voice == 2 ? 0 : voice + 1) * 7) & 6) >> 1;
+			var waveform = SID.readRegister(0xD404 + rawVoice * 7, chip) >> 4,
+				thisModulation = (SID.readRegister(0xD404 + rawVoice * 7, chip) & 6) >> 1,
+				prevModulation = (SID.readRegister(0xD404 + (rawVoice == 2 ? 0 : rawVoice + 1) * 7, chip) & 6) >> 1;
 
 			// For pulse width, make middle (0x800) king and shrink for a sensible pixel width
-			var pw = SID.readRegister(0xD402 + voice * 7) + (SID.readRegister(0xD403 + voice * 7) & 0xF) * 256;
+			var pw = SID.readRegister(0xD402 + rawVoice * 7, chip) + (SID.readRegister(0xD403 + rawVoice * 7, chip) & 0xF) * 256;
 			pw = pw < 2048 ? pw : pw ^ 0xFFF;
 			pw /= (viz.graphMode ? 128 : 48); // Smaller value here equals a bigger "coat"
 
 			// Draw the dot representing the frequency
 			if (viz.darkerWaveformColors[waveform] != "#000000") {
 				viz.ctx_area[voice].lineWidth = 2;
-				viz.ctx_area[voice].globalAlpha = SID.readRegister(0xD404 + voice * 7) & 1 ? 1 : 0.4; // Gate ON / OFF
+				viz.ctx_area[voice].globalAlpha = SID.readRegister(0xD404 + rawVoice * 7, chip) & 1 ? 1 : 0.5; // Gate ON / OFF
 				if (viz.graphMods && thisModulation) {
 					// Paint from frequency dot and left towards edge of area ("reaching for previous voice")
 					//viz.ctx_area[voice].save();

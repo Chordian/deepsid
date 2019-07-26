@@ -129,6 +129,10 @@ Controls.prototype = {
 				browser.clearSpinner();
 				if (SID.emulatorFlags.forcePlay) SID.play();
 				UpdateURL();
+				browser.chips = 1;
+				if (browser.playlist[browser.songPos].fullname.indexOf("2SID.sid") != -1) browser.chips = 2;
+				else if (browser.playlist[browser.songPos].fullname.indexOf("3SID.sid") != -1) browser.chips = 3;
+				viz.initGraph(browser.chips);
 				viz.enableAllPianoVoices();
 			});
 			this.updateSubtuneText();
@@ -240,6 +244,10 @@ Controls.prototype = {
 					UpdateURL();
 				}
 
+				browser.chips = 1;
+				if (browser.playlist[browser.songPos].fullname.indexOf("2SID.sid") != -1) browser.chips = 2;
+				else if (browser.playlist[browser.songPos].fullname.indexOf("3SID.sid") != -1) browser.chips = 3;
+				viz.initGraph(browser.chips);
 				viz.enableAllPianoVoices();
 
 				// Mark the next row in the browser list

@@ -26,6 +26,7 @@
 	this.scrollPositions = [];
 
 	this.secondsLength = 0;
+	this.chips = 1;
 
 	this.isMobile = $("body").attr("data-mobile") !== "0";
 
@@ -372,6 +373,10 @@ Browser.prototype = {
 						this.reloadDisqus(this.playlist[this.songPos].fullname);
 
 						UpdateURL();
+						this.chips = 1;
+						if (this.playlist[this.songPos].fullname.indexOf("2SID.sid") != -1) this.chips = 2;
+						else if (this.playlist[this.songPos].fullname.indexOf("3SID.sid") != -1) this.chips = 3;
+						viz.initGraph(this.chips);
 						viz.enableAllPianoVoices();
 
 						// Tab 'STIL' is called 'Lyrics' in CGSC

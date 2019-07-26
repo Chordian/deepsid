@@ -115,6 +115,7 @@ SIDBackendAdapter = (function(){ var $this = function () {
 			return 0;	// FS not used in Tiny'R'Sid
 		},
 		loadMusicData: function(sampleRate, path, filename, data, options) {
+			this.sidFileHeader = data.slice(0, data[7]); // Added by JCH
 			var buf = this.Module._malloc(data.length);
 			this.Module.HEAPU8.set(data, buf);
 			

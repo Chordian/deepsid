@@ -96,6 +96,9 @@ $(function() { // DOM ready
 				// Toggle the sundry box minimized or restored
 				ToggleSundry();
 				$(window).trigger("resize", true);
+			} else if (event.keyCode == 84) {						// Keyup 't' for testing stuff
+	console.log(SIDBackend.sidFileHeader[0x7A]);
+	console.log(SIDBackend.sidFileHeader[0x7B]);
 			}
 		}
 	});
@@ -172,7 +175,7 @@ $(function() { // DOM ready
 			// Also make sure the scrollbar for dexter has the correct height
 			$("#page .mCSB_scrollTools").css("height", $("#page").height() + 13);
 			// Recalculate height for graph area too
-			viz.initGraph();
+			viz.initGraph(browser.chips);
 			// And that the web site iframe has the correct height too
 			$("#page .deepsid-iframe").height($("#page").outerHeight() - 61); // 24
 		}
