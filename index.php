@@ -352,6 +352,10 @@
 						<option value="piano">Piano</option>
 						<option value="graph">Graph</option>
 					</select>
+					<div class="visuals-buttons">
+						<button class="icon-piano button-off">Piano</button>
+						<button class="icon-graph button-on">Graph</button>
+					</div>
 					<img class="waveform-colors" src="images/waveform_colors.png" alt="Waveform Colors" />
 				</div>
 				<div id="page">

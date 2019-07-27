@@ -141,6 +141,7 @@
 	--svg-filter-icon-cstar:		invert(8%) sepia(84%) saturate(5326%) hue-rotate(5deg) brightness(93%) contrast(114%);
 	--svg-filter-icon-time:			invert(50%) sepia(0%) saturate(0%) hue-rotate(184deg) brightness(93%) contrast(91%);;
 	--svg-filter-icon-to-top:		var(--svg-filter-white);
+	--svg-filter-icon-visuals:		none;
 
 	--svg-bg-star-orange:			url(../images/if_star_orange.svg) 0 0 / 18px 18px no-repeat;
 	--svg-bg-star-empty-voted:		url(../images/if_star_empty_voted.svg) 0 0 / 18px 18px no-repeat;
@@ -439,6 +440,7 @@
 	--svg-filter-loading-spinner:	var(--svg-filter-icon-time);
 	--svg-filter-row-spinner:		var(--svg-filter-button-disabled);
 	--svg-filter-icon-office:		var(--svg-filter-icon-flash);
+	--svg-filter-icon-visuals:		invert(25%) sepia(10%) saturate(629%) hue-rotate(52deg) brightness(96%) contrast(87%);
 
 	--svg-bg-star-orange:			url(../images/if_star_orange_dark.svg) 0 0 / 18px 18px no-repeat;
 	--svg-bg-star-empty-voted:		url(../images/if_star_empty_voted_dark.svg) 0 0 / 18px 18px no-repeat;
@@ -606,6 +608,15 @@
 
 [data-theme="dark"] #tabs .selected .g2 {
 	fill: var(--color-tab-selected-text);
+}
+
+[data-theme="dark"] #sticky-visuals .visuals-buttons {
+	top: 13px;
+}
+
+[data-theme="dark"] #sticky-visuals .visuals-buttons > button {
+	height: 25px;
+	border: none;
 }
 
 [data-theme="dark"] .ct-label { color: #909090; fill: #909090; }
@@ -922,7 +933,8 @@ small.u2 { margin-left: 2px; }
 	#controls button,
 	#songs button,
 	.edit button,
-	#sundry button {
+	#sundry button,
+	#sticky-visuals button {
 		transition: all .05s linear;
 		box-shadow: 2px 2px 4px var(--color-button-shadow);
 	}
@@ -3304,6 +3316,47 @@ input[type=range]::-ms-track {
 				left: 125px;
 				font-size: 13px;
 			}
+
+			#sticky-visuals .visuals-buttons {
+				position: absolute;
+				top: 12px;
+				left: 200px;
+			}
+
+				#sticky-visuals .visuals-buttons > button {
+					height: 27px;
+					width: 88px;
+					padding: 0 6px;
+					margin-right: 5px;
+					line-height: 0;
+					border-radius: 3px;
+				}
+
+				#sticky-visuals button:before {
+					content: "";
+					position: relative;
+					top: 1px;
+					width: 14px;
+					height: 14px;
+					padding-right: 20px;
+					filter: var(--svg-filter-white);
+				}
+				
+				#sticky-visuals .button-on {
+					font-weight: bold;
+				}
+
+				#sticky-visuals .button-on:before {
+					filter: var(--svg-filter-icon-visuals);
+				}
+
+				#sticky-visuals .icon-piano:before {
+					background: url(../images/visuals-piano.svg) 0 0 / 14.5px 14.5px no-repeat;
+				}
+
+				#sticky-visuals .icon-graph:before {
+					background: url(../images/visuals-graph.svg) 0 0 / 14px 14px no-repeat;
+				}
 
 		#page .ext .permalink,
 		#sticky-csdb .permalink,
