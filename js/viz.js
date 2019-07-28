@@ -312,11 +312,12 @@ Viz.prototype = {
 		this.enableAllPianoVoices();
 	
 		// Cache the canvas contexts
-		var ctx_pw = [];
-		for (var voice = 0; voice <= 2; voice++)
-			ctx_pw[voice] = $("#piano-pw"+voice)[0].getContext("2d");
-		var ctx_fc = $("#piano-fc")[0].getContext("2d"),
-			ctx_res = $("#piano-res")[0].getContext("2d");
+		var ctx_pw = [], ctx_fc = [], ctx_res = [];
+		for (var keyboard = 0; keyboard <= 2; keyboard++) {
+			ctx_pw[keyboard] = $("#piano-pw"+keyboard)[0].getContext("2d");
+			ctx_fc[keyboard] = $("#piano-fc"+keyboard)[0].getContext("2d"),
+			ctx_res[keyboard] = $("#piano-res"+keyboard)[0].getContext("2d");
+		}
 	
 		// Get the canvas dimensions
 		var ctx_pw_height = ctx_fc_height = 8, ctx_pw_width = ctx_fc_width = 200, ctx_res_height = 30, ctx_res_width = 3;
@@ -328,14 +329,17 @@ Viz.prototype = {
 			$piano_hs = [$("#visuals-piano .piano-hs0"), $("#visuals-piano .piano-hs1"), $("#visuals-piano .piano-hs2")],
 			$ff = [$("#visuals-piano .ff0"), $("#visuals-piano .ff1"), $("#visuals-piano .ff2")],
 			$ptp = [$("#visuals-piano .ptp0"), $("#visuals-piano .ptp1"), $("#visuals-piano .ptp2")],
-			$piano_pb_led = $("#visuals-piano .piano-pb-led"),
-			$pb_lp_div = $("#visuals-piano .pb-lp div"),
-			$pb_bp_div = $("#visuals-piano .pb-bp div"),
-			$pb_hp_div = $("#visuals-piano .pb-hp div"); 
+			$piano_pb_led = [$("#visuals-piano .piano-pb-led0"), $("#visuals-piano .piano-pb-led1"), $("#visuals-piano .piano-pb-led2")],
+			$pb_lp_div = [$("#visuals-piano .pb-lp0 div"), $("#visuals-piano .pb-lp1 div"), $("#visuals-piano .pb-lp2 div")],
+			$pb_bp_div = [$("#visuals-piano .pb-bp0 div"), $("#visuals-piano .pb-bp1 div"), $("#visuals-piano .pb-bp2 div")],
+			$pb_hp_div = [$("#visuals-piano .pb-hp0 div"), $("#visuals-piano .pb-hp1 div"), $("#visuals-piano .pb-hp2 div")];
 	
 		if (activate) {
 	
-			var prevOctave = [0, 0, 0], prevNote = [0, 0, 0], prevGoodWaveform = [0, 0, 0], prevClockspeed = "Unknown";
+			var prevOctave = [0, 0, 0, 0, 0, 0, 0, 0, 0],
+				prevNote = [0, 0, 0, 0, 0, 0, 0, 0, 0],
+				prevGoodWaveform = [0, 0, 0, 0, 0, 0, 0, 0, 0],
+				prevClockspeed = "Unknown";
 			
 			SID.setCallbackBufferEnded(function() {
 
@@ -343,117 +347,123 @@ Viz.prototype = {
 				if ($("#tabs .selected").attr("data-topic") !== "visuals" || !$("#sticky-visuals .icon-piano").hasClass("button-on")) return; 
 
 				var useOneKeyboard = $("#piano-combine").hasClass("button-on");
+				var maxChips = useOneKeyboard ? browser.chips : 1;
 	
-				for (var voice = 0; voice <= 2; voice++) {
-	
-					// Combine into top keyboard?
-					var keyboard = useOneKeyboard ? 0 : voice;
-	
-					// Get the raw frequency
-					var freq = SID.readRegister(0xD400 + voice * 7) + SID.readRegister(0xD401 + voice * 7) * 256,
-						closest = null, indexMatch = 0, clockspeed;
-					try {
-						clockspeed = browser.playlist[browser.songPos].clockspeed;
-						prevClockspeed = clockspeed;
-					} catch(e) {
-						clockspeed = prevClockspeed; // Type error usually happens when leaving a folder while playing
-					}
-					// Find the closest match in the array of note frequencies (PAL or NTSC table)
-					this.sidFrequencies = clockspeed.substr(0, 4) === "NTSC" || browser.path.indexOf("Compute's Gazette SID Collection") !== -1 ? this.sidFrequenciesNTSC : this.sidFrequenciesPAL;
-					$.each(this.sidFrequencies, function(index) {
-						if (closest == null || Math.abs(this - freq) < Math.abs(closest - freq)) {
-							closest = this;
-							indexMatch = index;
+				for (var chip = 1; chip <= maxChips; chip++) {
+					for (var voice = 0; voice <= 2; voice++) {
+		
+						// Combine into top keyboard?
+						var keyboard = useOneKeyboard ? chip - 1 : voice;
+		
+						// Get the raw frequency
+						var freq = SID.readRegister(0xD400 + voice * 7, chip) + SID.readRegister(0xD401 + voice * 7, chip) * 256,
+							closest = null, indexMatch = 0, clockspeed;
+						try {
+							clockspeed = browser.playlist[browser.songPos].clockspeed;
+							prevClockspeed = clockspeed;
+						} catch(e) {
+							clockspeed = prevClockspeed; // Type error usually happens when leaving a folder while playing
 						}
-					});
-					var octave = ~~(indexMatch / 12),
-						note = indexMatch % 12,
-						waveform = SID.readRegister(0xD404 + voice * 7) >> 4;
-					waveform = waveform ? prevGoodWaveform[voice] = waveform : waveform = prevGoodWaveform[voice];
-					if (octave !== prevOctave[voice] || note !== prevNote[voice]) {
-						// Clear the previous piano key
-						$("#v"+keyboard+"_oct"+prevOctave[voice]+"_"+prevNote[voice]).css("transition", "none").attr("fill", this.pianoKeyColors[prevNote[voice]]);
-						prevOctave[voice] = octave;
-						prevNote[voice] = note;
-					}
-					if ((SID.readRegister(0xD404 + voice * 7) & 1) || $("#piano-gate").hasClass("button-off")) {
-						// Gate ON
-						if ((waveform >= 1 && waveform <= 7) || (waveform == 8 && $("#piano-noise").hasClass("button-on")))
-							// The waveform is good so color the key on the piano
-							$("#v"+keyboard+"_oct"+octave+"_"+note).css("transition", "none").attr("fill", this.waveformColors[waveform]);
-					} else {
-						// Gate OFF
-						$("#v"+keyboard+"_oct"+octave+"_"+note).css("transition", "fill .05s linear").attr("fill", this.pianoKeyColors[note]);
-					}
-	
-					// Show the pulse width as a horizontal canvas bar
-					var pw = SID.readRegister(0xD402 + voice * 7) + (SID.readRegister(0xD403 + voice * 7) & 0xF) * 256;
-					if (useOneKeyboard) {
-						// Share tinier bars in the top keyboard
-						ctx_pw[0].fillStyle = "#882f24";
-						ctx_pw[0].fillRect(0, (ctx_pw_height / 3) * voice, (pw * 100 / 4095) * ctx_pw_width / 100, 1);
-						ctx_pw[0].fillRect(0, ((ctx_pw_height / 3) * voice) + 1, 1, (ctx_pw_height / 3) - 1);
-						ctx_pw[0].fillStyle = this.waveformColors[4];
-						ctx_pw[0].fillRect(1, ((ctx_pw_height / 3) * voice) + 1, ((pw * 100 / 4095) * ctx_pw_width / 100) - 1, (ctx_pw_height / 3) - 1);
-						ctx_pw[0].fillStyle = this.pianoBarBackground;
-						ctx_pw[0].fillRect(((pw * 100 / 4095) * ctx_pw_width / 100) + 1, (ctx_pw_height / 3) * voice, ctx_pw_width + 1, ctx_pw_height / 3);
-					} else {
-						// Use a bar on each keyboard
-						ctx_pw[voice].fillStyle = this.waveformColors[4];
-						ctx_pw[voice].fillRect(0, 0, (pw * 100 / 4095) * ctx_pw_width / 100, ctx_pw_height);
-						ctx_pw[voice].fillStyle = this.pianoBarBackground;
-						ctx_pw[voice].fillRect((pw * 100 / 4095) * ctx_pw_width / 100, 0, ctx_pw_width, ctx_pw_height);
-					}
-	
-					if (useOneKeyboard) {
-						// Indicating ring mod and hard sync doesn't make any sense in combined mode
-						$piano_ringmod.removeClass("pr-on pr-off").addClass("pr-off");
-						$piano_hardsync.removeClass("ph-on ph-off").addClass("ph-off");
-					} else {
-						// Indicate ring mod and/or hard sync
-						$piano_rm[voice].removeClass("pr-on pr-off");
-						SID.readRegister(0xD404 + voice * 7) & 0x4
-							? $piano_rm[voice].addClass("pr-on")
-							: $piano_rm[voice].addClass("pr-off");
-						$piano_hs[voice].removeClass("ph-on ph-off");
-						SID.readRegister(0xD404 + voice * 7) & 0x2
-							? $piano_hs[voice].addClass("ph-on")
-							: $piano_hs[voice].addClass("ph-off");
-					}
-	
-					// Color the filet above the keys if filter is enabled for this voice
-					var filterOn = SID.readRegister(0xD417) & (1 << voice);
-					$ff[voice].css({
-						fill:	(filterOn ? "#a26300" : "#000"),
-						stroke:	(filterOn ? "#a26300" : "#000"),
-					});
-					$ptp[voice].css("border-bottom", "1px solid "+(filterOn ? "#cc7c00" : "#7a7a7a"));
-	
-					// Top keyboard only
-					if (voice == 0) {
-						// Show the filter cutoff as a horizontal canvas bar
-						var fc = SID.readRegister(0xD416) << 3 + (SID.readRegister(0xD415) & 0x7);
-						ctx_fc.fillStyle = "#cc7c00";
-						ctx_fc.fillRect(0, 0, (fc * 100 / 2047) * ctx_fc_width / 100, ctx_fc_height);
-						ctx_fc.fillStyle = this.pianoBarBackground;
-						ctx_fc.fillRect((fc * 100 / 2047) * ctx_fc_width / 100, 0, ctx_fc_width, ctx_fc_height);
-	
-						// Show the resonance as a small vertical canvas bar
-						var res = SID.readRegister(0xD417) >> 4,
-							fillHeight = (res * 100 / 15) * ctx_res_height / 100;
-						ctx_res.fillStyle = "#fec700";
-						ctx_res.fillRect(0, ctx_res_height - fillHeight, ctx_res_width, fillHeight);
-						ctx_res.fillStyle = this.pianoBarBackground;
-						ctx_res.fillRect(0, 0, ctx_res_width, ctx_res_height - fillHeight);
-	
-						// Indicate filter passband in the LED lamps
-						$piano_pb_led.removeClass("pb-on pb-off");
-						SID.readRegister(0xD418) & 0x10 ? $pb_lp_div.addClass("pb-on") : $pb_lp_div.addClass("pb-off");
-						SID.readRegister(0xD418) & 0x20 ? $pb_bp_div.addClass("pb-on") : $pb_bp_div.addClass("pb-off");
-						SID.readRegister(0xD418) & 0x40 ? $pb_hp_div.addClass("pb-on") : $pb_hp_div.addClass("pb-off");
+						// Find the closest match in the array of note frequencies (PAL or NTSC table)
+						this.sidFrequencies = clockspeed.substr(0, 4) === "NTSC" || browser.path.indexOf("Compute's Gazette SID Collection") !== -1 ? this.sidFrequenciesNTSC : this.sidFrequenciesPAL;
+						$.each(this.sidFrequencies, function(index) {
+							if (closest == null || Math.abs(this - freq) < Math.abs(closest - freq)) {
+								closest = this;
+								indexMatch = index;
+							}
+						});
+						var octave = ~~(indexMatch / 12),
+							note = indexMatch % 12,
+							waveform = SID.readRegister(0xD404 + voice * 7, chip) >> 4,
+							voice_and_chip = ((chip * 3) + voice) - 3;
+						waveform = waveform ? prevGoodWaveform[voice_and_chip] = waveform : waveform = prevGoodWaveform[voice_and_chip];
+						if (octave !== prevOctave[voice_and_chip] || note !== prevNote[voice_and_chip]) {
+							// Clear the previous piano key
+							$("#v"+keyboard+"_oct"+prevOctave[voice_and_chip]+"_"+prevNote[voice_and_chip]).css("transition", "none").attr("fill", this.pianoKeyColors[prevNote[voice_and_chip]]);
+							prevOctave[voice_and_chip] = octave;
+							prevNote[voice_and_chip] = note;
+						}
+						if ((SID.readRegister(0xD404 + voice * 7, chip) & 1) || $("#piano-gate").hasClass("button-off")) {
+							// Gate ON
+							if ((waveform >= 1 && waveform <= 7) || (waveform == 8 && $("#piano-noise").hasClass("button-on")))
+								// The waveform is good so color the key on the piano
+								$("#v"+keyboard+"_oct"+octave+"_"+note).css("transition", "none").attr("fill", this.waveformColors[waveform]);
+						} else {
+							// Gate OFF
+							$("#v"+keyboard+"_oct"+octave+"_"+note).css("transition", "fill .05s linear").attr("fill", this.pianoKeyColors[note]);
+						}
+		
+						// Show the pulse width as a horizontal canvas bar
+						var pw = SID.readRegister(0xD402 + voice * 7, chip) + (SID.readRegister(0xD403 + voice * 7, chip) & 0xF) * 256;
+						if (useOneKeyboard) {
+							// Share tinier bars in the top keyboard
+							ctx_pw[keyboard].fillStyle = "#882f24";
+							ctx_pw[keyboard].fillRect(0, (ctx_pw_height / 3) * voice, (pw * 100 / 4095) * ctx_pw_width / 100, 1);
+							ctx_pw[keyboard].fillRect(0, ((ctx_pw_height / 3) * voice) + 1, 1, (ctx_pw_height / 3) - 1);
+							ctx_pw[keyboard].fillStyle = this.waveformColors[4];
+							ctx_pw[keyboard].fillRect(1, ((ctx_pw_height / 3) * voice) + 1, ((pw * 100 / 4095) * ctx_pw_width / 100) - 1, (ctx_pw_height / 3) - 1);
+							ctx_pw[keyboard].fillStyle = this.pianoBarBackground;
+							ctx_pw[keyboard].fillRect(((pw * 100 / 4095) * ctx_pw_width / 100) + 1, (ctx_pw_height / 3) * voice, ctx_pw_width + 1, ctx_pw_height / 3);
+						} else {
+							// Use a bar on each keyboard
+							ctx_pw[voice].fillStyle = this.waveformColors[4];
+							ctx_pw[voice].fillRect(0, 0, (pw * 100 / 4095) * ctx_pw_width / 100, ctx_pw_height);
+							ctx_pw[voice].fillStyle = this.pianoBarBackground;
+							ctx_pw[voice].fillRect((pw * 100 / 4095) * ctx_pw_width / 100, 0, ctx_pw_width, ctx_pw_height);
+						}
+		
+						if (useOneKeyboard) {
+							// Indicating ring mod and hard sync doesn't make any sense in combined mode
+							$piano_ringmod.removeClass("pr-on pr-off").addClass("pr-off");
+							$piano_hardsync.removeClass("ph-on ph-off").addClass("ph-off");
+						} else {
+							// Indicate ring mod and/or hard sync
+							$piano_rm[voice].removeClass("pr-on pr-off");
+							SID.readRegister(0xD404 + voice * 7) & 0x4
+								? $piano_rm[voice].addClass("pr-on")
+								: $piano_rm[voice].addClass("pr-off");
+							$piano_hs[voice].removeClass("ph-on ph-off");
+							SID.readRegister(0xD404 + voice * 7) & 0x2
+								? $piano_hs[voice].addClass("ph-on")
+								: $piano_hs[voice].addClass("ph-off");
+						}
+		
+						// Color the filet above the keys if filter is enabled for this voice
+						var filterOn = SID.readRegister(0xD417, chip) & (1 << voice);
+						$ff[voice].css({
+							fill:	(filterOn ? "#a26300" : "#000"),
+							stroke:	(filterOn ? "#a26300" : "#000"),
+						});
+						$ptp[voice].css("border-bottom", "1px solid "+(filterOn ? "#cc7c00" : "#7a7a7a"));
+		
+						// Top keyboard only
+						if (useOneKeyboard || voice == 0) {
+							// Show the filter cutoff as a horizontal canvas bar
+							var fc = SID.readRegister(0xD416, chip) << 3 + (SID.readRegister(0xD415, chip) & 0x7);
+							ctx_fc[chip - 1].fillStyle = "#cc7c00";
+							ctx_fc[chip - 1].fillRect(0, 0, (fc * 100 / 2047) * ctx_fc_width / 100, ctx_fc_height);
+							ctx_fc[chip - 1].fillStyle = this.pianoBarBackground;
+							ctx_fc[chip - 1].fillRect((fc * 100 / 2047) * ctx_fc_width / 100, 0, ctx_fc_width, ctx_fc_height);
+		
+							// Show the resonance as a small vertical canvas bar
+							var res = SID.readRegister(0xD417, chip) >> 4,
+								fillHeight = (res * 100 / 15) * ctx_res_height / 100;
+							ctx_res[chip - 1].fillStyle = "#fec700";
+							ctx_res[chip - 1].fillRect(0, ctx_res_height - fillHeight, ctx_res_width, fillHeight);
+							ctx_res[chip - 1].fillStyle = this.pianoBarBackground;
+							ctx_res[chip - 1].fillRect(0, 0, ctx_res_width, ctx_res_height - fillHeight);
+		
+							// Indicate filter passband in the LED lamps
+							$piano_pb_led[chip - 1].removeClass("pb-on pb-off");
+							SID.readRegister(0xD418, chip) & 0x10 ? $pb_lp_div[chip - 1].addClass("pb-on") : $pb_lp_div[chip - 1].addClass("pb-off");
+							SID.readRegister(0xD418, chip) & 0x20 ? $pb_bp_div[chip - 1].addClass("pb-on") : $pb_bp_div[chip - 1].addClass("pb-off");
+							SID.readRegister(0xD418, chip) & 0x40 ? $pb_hp_div[chip - 1].addClass("pb-on") : $pb_hp_div[chip - 1].addClass("pb-off");
+						}
 					}
 				}
 			}.bind(this));
+
+// @todo Brown filet bar doesn't always work correctly.
 	
 		} else {
 	
@@ -461,13 +471,13 @@ Viz.prototype = {
 	
 			// Clear canvas bars
 			var ctx_pw_height = $("#piano-pw0").height(), ctx_pw_width = $("#piano-pw0").width();
-			for (var voice = 0; voice <= 2; voice++) {
-				ctx_pw[voice].fillStyle = this.pianoBarBackground;
-				ctx_pw[voice].fillRect(0, 0, ctx_pw_width, ctx_pw_height);
+			for (var keyboard = 0; keyboard <= 2; keyboard++) {
+				ctx_pw[keyboard].fillStyle = this.pianoBarBackground;
+				ctx_pw[keyboard].fillRect(0, 0, ctx_pw_width, ctx_pw_height);
+				ctx_fc[keyboard].fillStyle = ctx_res[keyboard].fillStyle = this.pianoBarBackground;
+				ctx_fc[keyboard].fillRect(0, 0, $("#piano-fc"+keyboard).width(), $("#piano-fc"+keyboard).height());
+				ctx_res[keyboard].fillRect(0, 0, $("#piano-res"+keyboard).width(), $("#piano-res"+keyboard).height());
 			}
-			ctx_fc.fillStyle = ctx_res.fillStyle = this.pianoBarBackground;
-			ctx_fc.fillRect(0, 0, $("#piano-fc").width(), $("#piano-fc").height());
-			ctx_res.fillRect(0, 0, $("#piano-res").width(), $("#piano-res").height());
 	
 			// Turn off ring mod and hard sync arrow lamps
 			$("#visuals-piano .piano-ringmod").removeClass("pr-on pr-off").addClass("pr-off");

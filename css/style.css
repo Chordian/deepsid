@@ -1292,13 +1292,13 @@ small.u2 { margin-left: 2px; }
 		}
 
 		/* The brown filter cutoff bar */
-		#piano-fc {
+		#piano-fc0, #piano-fc1, #piano-fc2 {
 			float: right;
 			margin-right: 112px;
 		}
 
 		/* The vertical resonance bar */
-		#piano-res {
+		#piano-res0, #piano-res1, #piano-res2 {
 			position: absolute;
 			top: 8px;
 			right: 69px;
