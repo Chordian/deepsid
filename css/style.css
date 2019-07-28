@@ -1375,6 +1375,37 @@ small.u2 { margin-left: 2px; }
 		margin-right: 2px;
 	}
 
+	/* Radio-button style buttons with an icon instead of text */
+	.button-icon {
+		width: 32px;
+		margin-right: 0;
+	}
+
+		.button-left {
+			border-top-right-radius: 0;
+			border-bottom-right-radius: 0;
+		}
+
+		.button-right {
+			border-top-left-radius: 0;
+			border-bottom-left-radius: 0;
+		}
+
+			.button-icon img {
+				position: relative;
+				top: 1.75px;
+				left: 1px;
+				height: 12px;
+				pointer-events: none;
+			}
+
+			.button-right img {
+				left: -1px;
+			}
+
+				.button-icon.button-off	img	{ filter: var(--svg-filter-white); }
+				.button-icon.button-on img	{ filter: var(--svg-filter-icon-visuals); }
+
 	/* Checkbox style toggle buttons that also toggles the text between ON and OFF */
 	.button-toggle {
 		width: 42px;
@@ -3351,11 +3382,11 @@ input[type=range]::-ms-track {
 				}
 
 				#sticky-visuals .icon-piano:before {
-					background: url(../images/visuals-piano.svg) 0 0 / 14.5px 14.5px no-repeat;
+					background: url(../images/visuals_piano.svg) 0 0 / 14.5px 14.5px no-repeat;
 				}
 
 				#sticky-visuals .icon-graph:before {
-					background: url(../images/visuals-graph.svg) 0 0 / 14px 14px no-repeat;
+					background: url(../images/visuals_graph.svg) 0 0 / 14px 14px no-repeat;
 				}
 
 		#page .ext .permalink,

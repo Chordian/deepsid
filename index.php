@@ -452,12 +452,15 @@
 								</div>
 							</div>
 							<div class="edit" style="height:42px;width:683px;">
-								<button id="graph-columns" class="button-edit button-toggle button-off">Off</button>
-								<label for="graph-columns" class="unselectable">Show as rows</label>
 								<button id="graph-pw" class="button-edit button-toggle button-off">Off</button>
 								<label for="graph-pw" class="unselectable">Pulse coat</label>
 								<button id="graph-mods" class="button-edit button-toggle button-on">On</button>
 								<label for="graph-mods" class="unselectable">Modulations</label>
+								<span style="float:right;">
+									<label class="unselectable" style="margin-right:2px;">Layout</label>
+									<button class="button-edit button-icon button-left button-on viz-layout viz-cols" data-group="viz-layout"><img src="images/visuals_graph_bold.svg" alt="" /></button><button
+										class="button-edit button-icon button-right button-off viz-layout viz-rows" data-group="viz-layout"><img src="images/visuals_graph_bold.svg" style="transform:rotate(90deg);" alt="" /></button>
+								</span>
 							</div>
 							<div id="graph">
 								<div id="graph0" class="graph-area"></div>
@@ -988,7 +991,8 @@
 
 						<h3>July 28, 2019</h3>
 						<ul>
-							<li>Replaced the view drop-down box in the visuals tab with buttons instead.</li>
+							<li>Replaced the view drop-down box in the visuals tab with big buttons instead.</li>
+							<li>Changed the graph view layout toggle button into two radio buttons and moved them to the right side.</li>
 						</ul>
 
 						<h3>July 26, 2019</h3>

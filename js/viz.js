@@ -102,7 +102,7 @@ Viz.prototype = {
 	 */
 	addEvents: function() {
 		$(window).on("keyup", this.onKeyUp.bind(this));
-		$("#visuals-piano,#visuals-graph").on("click", ".button-toggle,.button-radio", this.onToggleClick.bind(this));
+		$("#visuals-piano,#visuals-graph").on("click", ".button-toggle,.button-radio,.button-icon", this.onToggleClick.bind(this));
 		$("#visuals-piano,#visuals-graph").on("click", ".piano-voice", this.onVoiceClick.bind(this));
 		$("#visuals-piano,#visuals-graph,#topic-settings .dropdown-buffer").on("change", this.onChangeBufferSize.bind(this));
 		$("#sticky-visuals").on("click", "button", this.onVisualsClick.bind(this));
@@ -177,9 +177,6 @@ Viz.prototype = {
 			$this.empty().append($this.hasClass("button-off") ? "On" : "Off");
 			if (event.target.id === "piano-slow") {
 				SID.speed($this.hasClass("button-off") ? this.slowSpeed : 1);
-			} else if (event.target.id === "graph-columns") {
-				this.graphMode = $this.hasClass("button-off") ? 0 : 1;
-				this.initGraph(browser.chips);
 			} else if (event.target.id === "graph-pw") {
 				this.graphPW = $this.hasClass("button-off");
 			} else if (event.target.id === "graph-mods") {
@@ -196,15 +193,23 @@ Viz.prototype = {
 					ctx_pw.fillRect(0, 0, ctx_pw_width, ctx_pw_height);
 				}
 			}
-		} else if ($this.hasClass("button-radio")) {
+		} else if ($this.hasClass("button-radio") || $this.hasClass("button-icon")) {
 			if ($this.hasClass("disabled")) return false;
 			// Radio-button style button
 			var groupClass = $this.attr("data-group");
 			// First pop all buttons in this group up - there can only be one
 			$("#page ."+groupClass).removeClass("button-off button-on").addClass("button-off");
-			// Adjust the top left drop-down box with SID handlers
-			$("#dropdown-emulator").styledSetValue($this.attr("data-emu"))
-				.next("div.styledSelect").trigger("change");
+			switch (groupClass) {
+				case 'viz-emu':
+					// Adjust the top left drop-down box with SID handlers
+					$("#dropdown-emulator").styledSetValue($this.attr("data-emu"))
+						.next("div.styledSelect").trigger("change");
+					break;
+				case 'viz-layout':
+					this.graphMode = $this.hasClass("viz-rows") ? 0 : 1;
+					this.initGraph(browser.chips);
+					break;
+			}
 		}
 		// Now swap the class state of this button
 		var state = $this.hasClass("button-off");
