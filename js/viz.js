@@ -92,7 +92,7 @@ function Viz(emulator) {
 	}.bind(this), 1);
 	this.addEvents();
 
-	$("#dropdown-visuals").trigger("change");
+	$("#sticky-visuals button.icon-piano").trigger("click");
 }
 
 Viz.prototype = {
@@ -105,7 +105,7 @@ Viz.prototype = {
 		$("#visuals-piano,#visuals-graph").on("click", ".button-toggle,.button-radio", this.onToggleClick.bind(this));
 		$("#visuals-piano,#visuals-graph").on("click", ".piano-voice", this.onVoiceClick.bind(this));
 		$("#visuals-piano,#visuals-graph,#topic-settings .dropdown-buffer").on("change", this.onChangeBufferSize.bind(this));
-		$("#dropdown-visuals").on("change", this.onChangeVisuals.bind(this));
+		$("#sticky-visuals").on("click", "button", this.onVisualsClick.bind(this));
 	},
 
 	/**
@@ -245,13 +245,15 @@ Viz.prototype = {
 	},
 
 	/**
-	 * When a different view of visuals has been selected in the sticky drop-down box.
+	 * When a different view of visuals has been selected by clicking a header button.
 	 * 
 	 * @param {*} event 
 	 */
-	onChangeVisuals: function(event) {
-		this.visuals = $(event.target).val();
+	onVisualsClick: function(event) {
+		this.visuals = $(event.target).attr("data-visual");
 		$("#topic-visuals .visuals,#sticky-visuals .waveform-colors").hide();
+		$("#sticky-visuals .button-on").removeClass("button-on").addClass("button-off");
+		$("#sticky-visuals .icon-"+this.visuals).removeClass("button-off").addClass("button-on");
 		$("#visuals-"+this.visuals).show();
 		if (this.visuals === "piano" || this.visuals === "graph")
 			$("#sticky-visuals .waveform-colors").show();
@@ -332,9 +334,9 @@ Viz.prototype = {
 			
 			SID.setCallbackBufferEnded(function() {
 
-				if ($("#tabs .selected").attr("data-topic") !== "visuals"
-					|| $("#dropdown-visuals").val() !== "piano") return; // Only if the tab and view are active!
-	
+				// Only if the tab and view are active!
+				if ($("#tabs .selected").attr("data-topic") !== "visuals" || !$("#sticky-visuals .icon-piano").hasClass("button-on")) return; 
+
 				var useOneKeyboard = $("#piano-combine").hasClass("button-on");
 	
 				for (var voice = 0; voice <= 2; voice++) {
@@ -645,7 +647,7 @@ Viz.prototype = {
 	animateGraph: function() {
 		// Not available on mobile devices, and the 'Graph' view and its tab must both be visible
 		if ($("body").attr("data-mobile") !== "0" || $("#tabs .selected").attr("data-topic") !== "visuals"
-			|| $("#dropdown-visuals").val() !== "graph") return;
+			|| !$("#sticky-visuals .icon-graph").hasClass("button-on")) return;
 
 		for (var voice = 0; voice < this.maxVoices; voice++) {
 

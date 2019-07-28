@@ -427,7 +427,7 @@ $(function() { // DOM ready
 
 		// If 'Piano' view is selected then make the custom scroll bar transparent
 		// NOTE: Must be hidden in other tabs or scrolling may become erratic.
-		$("#dexter .mCSB_container").css("overflow", topic === "visuals" && $("#dropdown-visuals").val() === "piano" ? "visible" : "hidden");
+		$("#dexter .mCSB_container").css("overflow", topic === "visuals" && $("#sticky-visuals .icon-piano").hasClass("button-on") ? "visible" : "hidden");
 
 		// If 'Profile' tab is selected then refresh the charts if present
 		// NOTE: If this is not done the charts will appear "flattened" towards the left side.
@@ -929,11 +929,11 @@ $(function() { // DOM ready
 	var selectView = "";
 	if (selectTab === "flood") selectTab = "graph";
 	if (selectTab === "piano" || selectTab === "graph") {
-		selectView = selectTab;
+		selectView = selectTab.toLowerCase();
 		selectTab = "visuals";
 	}
 	$("#tab-"+selectTab).trigger("click");
-	if (selectView !== "") $("#dropdown-visuals").val(selectView).trigger("change"); // Select a visuals view
+	if (selectView !== "") $("#sticky-visuals .icon-"+selectView).trigger("click"); // Select a visuals view
 
 	// Select and show a "sundry" box tab (an URL parameter overrides the local storage setting)
 	if (selectSundryTab === "") {
@@ -981,7 +981,7 @@ function ShowDexterScrollbar(topic) {
 			axis: "y",
 			theme: (parseInt(colorTheme) ? "light-3" : "dark-3"),
 			autoHideScrollbar: typeof topic !== "undefined"
-				&& topic === "visuals"  && $("#dropdown-visuals").val() === "piano", // Must hide on piano view
+				&& topic === "visuals" && $("#sticky-visuals .icon-piano").hasClass("button-on"), // Hide on piano
 			scrollButtons:{
 				enable: true,
 			},

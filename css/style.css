@@ -141,7 +141,7 @@
 	--svg-filter-icon-cstar:		invert(8%) sepia(84%) saturate(5326%) hue-rotate(5deg) brightness(93%) contrast(114%);
 	--svg-filter-icon-time:			invert(50%) sepia(0%) saturate(0%) hue-rotate(184deg) brightness(93%) contrast(91%);;
 	--svg-filter-icon-to-top:		var(--svg-filter-white);
-	--svg-filter-icon-visuals:		none;
+	--svg-filter-icon-visuals:		var(--svg-filter-button);
 
 	--svg-bg-star-orange:			url(../images/if_star_orange.svg) 0 0 / 18px 18px no-repeat;
 	--svg-bg-star-empty-voted:		url(../images/if_star_empty_voted.svg) 0 0 / 18px 18px no-repeat;
@@ -3320,7 +3320,7 @@ input[type=range]::-ms-track {
 			#sticky-visuals .visuals-buttons {
 				position: absolute;
 				top: 12px;
-				left: 200px;
+				left: 120px;
 			}
 
 				#sticky-visuals .visuals-buttons > button {

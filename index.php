@@ -348,13 +348,9 @@
 				</div>
 				<div id="sticky-csdb"><h2 style="margin-top:0;">CSDb</h2></div>
 				<div id="sticky-visuals"><h2 style="margin-top:0;">Visuals</h2>
-					<select id="dropdown-visuals">
-						<option value="piano">Piano</option>
-						<option value="graph">Graph</option>
-					</select>
 					<div class="visuals-buttons">
-						<button class="icon-piano button-off">Piano</button>
-						<button class="icon-graph button-on">Graph</button>
+						<button class="icon-piano button-off" data-visual="piano">Piano</button>
+						<button class="icon-graph button-on" data-visual="graph">Graph</button>
 					</div>
 					<img class="waveform-colors" src="images/waveform_colors.png" alt="Waveform Colors" />
 				</div>
@@ -989,6 +985,11 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>July 28, 2019</h3>
+						<ul>
+							<li>Replaced the view drop-down box in the visuals tab with buttons instead.</li>
+						</ul>
 
 						<h3>July 26, 2019</h3>
 						<ul>
