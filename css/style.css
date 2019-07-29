@@ -1109,6 +1109,16 @@ small.u2 { margin-left: 2px; }
 			font-size: 13px;
 		}
 
+	#piano-combine-area span {
+		display: none;
+		position: relative;
+		top: 2px;
+		font-weight: bold;
+	}
+
+		#piano-combine-area span.color-2sid { color: var(--color-viz-msg-buffer); }
+		#piano-combine-area span.color-3sid { color: var(--color-text-resp-bad); }
+
 	.piano-top-panel {
 		position: relative;
 		top: 2px;

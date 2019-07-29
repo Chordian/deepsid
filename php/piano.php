@@ -14,21 +14,19 @@
 		<div class="pm-carpet-left pcl-hardsync"></div><div class="pm-carpet-right pcr-hardsync"></div>
 		<div class="piano-hardsync piano-hs<?php echo $voice; ?> piano-hardsync-left ph-off"></div><div class="piano-hardsync piano-hs<?php echo $voice; ?> piano-hardsync-right ph-off"></div>
 		<div class="bar-num label-mod" style="left:412px;">HS</div>
-		<?php // if ($voice == 0) : ?>
-			<div class="bar-num" style="right:311px;">0</div>
-			<div class="bar-num" style="right:107px;">7FF</div>
-			<div class="bar-num" style="right:186px;">Filter cutoff</div>
-			<div class="edges edges-fc"></div>
-			<canvas class="bar" id="piano-fc<?php echo $voice; ?>" width="200" height="8"></canvas>
-			<div class="bar-num num-res" style="top:10px;">F</div>
-			<div class="bar-num num-res" style="top:24px;right:81px;">Res</div>
-			<div class="bar-num num-res" style="top:39px;">0</div>
-			<div class="edges-res"></div>
-			<canvas class="bar" id="piano-res<?php echo $voice; ?>" width="3" height="30"></canvas>
-			<div class="pb-wrap pb-lp pb-lp<?php echo $voice; ?>"><span>Low</span><div class="piano-pb-led piano-pb-led<?php echo $voice; ?> pb-off"></div></div>
-			<div class="pb-wrap pb-bp pb-bp<?php echo $voice; ?>"><span>Band</span><div class="piano-pb-led piano-pb-led<?php echo $voice; ?> pb-off"></div></div>
-			<div class="pb-wrap pb-hp pb-hp<?php echo $voice; ?>"><span>High</span><div class="piano-pb-led piano-pb-led<?php echo $voice; ?> pb-off"></div></div>
-		<?php // endif; ?>
+		<div class="piano-filter<?php echo $voice; ?> bar-num" style="right:311px;">0</div>
+		<div class="piano-filter<?php echo $voice; ?> bar-num" style="right:107px;">7FF</div>
+		<div class="piano-filter<?php echo $voice; ?> bar-num" style="right:186px;">Filter cutoff</div>
+		<div class="piano-filter<?php echo $voice; ?> edges edges-fc"></div>
+		<canvas class="piano-filter<?php echo $voice; ?> bar" id="piano-fc<?php echo $voice; ?>" width="200" height="8"></canvas>
+		<div class="piano-filter<?php echo $voice; ?> bar-num num-res" style="top:10px;">F</div>
+		<div class="piano-filter<?php echo $voice; ?> bar-num num-res" style="top:24px;right:81px;">Res</div>
+		<div class="piano-filter<?php echo $voice; ?> bar-num num-res" style="top:39px;">0</div>
+		<div class="piano-filter<?php echo $voice; ?> edges-res"></div>
+		<canvas class="piano-filter<?php echo $voice; ?> bar" id="piano-res<?php echo $voice; ?>" width="3" height="30"></canvas>
+		<div class="piano-filter<?php echo $voice; ?> pb-wrap pb-lp pb-lp<?php echo $voice; ?>"><span>Low</span><div class="piano-pb-led piano-pb-led<?php echo $voice; ?> pb-off"></div></div>
+		<div class="piano-filter<?php echo $voice; ?> pb-wrap pb-bp pb-bp<?php echo $voice; ?>"><span>Band</span><div class="piano-pb-led piano-pb-led<?php echo $voice; ?> pb-off"></div></div>
+		<div class="piano-filter<?php echo $voice; ?> pb-wrap pb-hp pb-hp<?php echo $voice; ?>"><span>High</span><div class="piano-pb-led piano-pb-led<?php echo $voice; ?> pb-off"></div></div>
 	</div>
 	<div class="piano piano<?php echo $voice; ?>">
 	<?php for($octave = 0; $octave <= 7; $octave++) : ?>

@@ -222,11 +222,14 @@ Viz.prototype = {
 	 * @param {*} event 
 	 */
 	onVoiceClick: function(event) {
+		var voice = parseInt(event.target.classList[1].substr(-1));
+		if (voice == 2 && browser.chips == 2) return; // Third keyboard is disabled for 2SID tunes
+
 		var $this = $(event.target);
 		// Swap the class state of this button
 		var state = $this.hasClass("voice-off");
 		$this.removeClass("voice-off voice-on").addClass("voice-"+(state ? "on" : "off"));
-		var voice = parseInt(event.target.classList[1].substr(-1));
+
 		SID.toggleVoice(voice + 1);
 		$("#scope"+(voice + 1)).css("opacity", (state ? "1" : "0.3"));
 		$("#page .piano"+voice).css("opacity", (state ? "1" : "0.1"));
@@ -346,7 +349,7 @@ Viz.prototype = {
 				// Only if the tab and view are active!
 				if ($("#tabs .selected").attr("data-topic") !== "visuals" || !$("#sticky-visuals .icon-piano").hasClass("button-on")) return; 
 
-				var useOneKeyboard = $("#piano-combine").hasClass("button-on");
+				var useOneKeyboard = $("#piano-combine").hasClass("button-on") || browser.chips > 1;
 				var maxChips = useOneKeyboard ? browser.chips : 1;
 	
 				for (var chip = 1; chip <= maxChips; chip++) {
@@ -429,14 +432,13 @@ Viz.prototype = {
 						}
 		
 						// Color the filet above the keys if filter is enabled for this voice
-						var filterOn = SID.readRegister(0xD417, chip) & (1 << voice);
-						$ff[voice].css({
+						var filterOn = SID.readRegister(0xD417, chip) & (useOneKeyboard ? 7 : 1 << voice);
+						$ff[keyboard].css({
 							fill:	(filterOn ? "#a26300" : "#000"),
 							stroke:	(filterOn ? "#a26300" : "#000"),
 						});
-						$ptp[voice].css("border-bottom", "1px solid "+(filterOn ? "#cc7c00" : "#7a7a7a"));
+						$ptp[keyboard].css("border-bottom", "1px solid "+(filterOn ? "#cc7c00" : "#7a7a7a"));
 		
-						// Top keyboard only
 						if (useOneKeyboard || voice == 0) {
 							// Show the filter cutoff as a horizontal canvas bar
 							var fc = SID.readRegister(0xD416, chip) << 3 + (SID.readRegister(0xD415, chip) & 0x7);
@@ -463,8 +465,6 @@ Viz.prototype = {
 				}
 			}.bind(this));
 
-// @todo Brown filet bar doesn't always work correctly.
-	
 		} else {
 	
 			SID.setCallbackBufferEnded(undefined);
@@ -506,6 +506,29 @@ Viz.prototype = {
 		setTimeout(function() {
 			if ($("#piano-slow").hasClass("button-on")) SID.speed(this.slowSpeed);
 		}, 1);
+		// And also this to replace the piano combine button with 2SID/3SID when relevant
+		if (browser.chips == 1) {
+			$("#visuals-piano .ptp2").css("opacity", "1");
+			$("#piano-combine-area label,#piano-combine-area button").show();
+			$("#piano-combine-area span,#visuals-piano .piano-filter1,#visuals-piano .piano-filter2").hide();
+		} else {
+			$("#piano-combine-area label,#piano-combine-area button").hide();
+			$("#piano-combine-area span")
+				.empty()
+				.removeClass("color-2sid color-3sid")
+				.addClass("color-"+browser.chips+"sid")
+				.append(browser.chips+"SID")
+				.show();
+			$("#visuals-piano .piano-filter1").show();
+			if (browser.chips == 3) {
+				$("#visuals-piano .piano-filter2").show();
+				$("#visuals-piano .ptp2,#page .piano2").css("opacity", "1");
+			} else {
+				$("#visuals-piano .piano-filter2").hide();
+				$("#visuals-piano .ptp2,#page .piano2").css("opacity", "0.25");
+				$("#visuals-piano .pv2").removeClass("voice-off voice-on").addClass("voice-off");
+			}
+		}
 	},
 
 	/**

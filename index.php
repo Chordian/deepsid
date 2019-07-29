@@ -384,13 +384,19 @@
 								<label for="piano-noise" class="unselectable">Noise waveform</label>
 								<button id="piano-slow" class="button-edit button-toggle button-off">Off</button>
 								<label for="piano-slow" class="unselectable">Slow speed</label>
-								<span style="float:right;">
+								<span id="piano-combine-area" style="float:right;">
 									<label for="piano-combine" class="unselectable" style="margin-right:1px;">Combine into top piano</label>
 									<button id="piano-combine" class="button-edit button-toggle button-off">Off</button>
+									<span>2SID</span>
 								</span>
 							</div>
 							<?php require_once("php/piano.php"); ?>
 							<h3 style="margin-top:16px;">A few words...</h3>
+							<p>
+								<b>NEW:</b> 2SID and 3SID tunes are now supported. Each keyboard will automatically combine
+								to host an entire chip (i.e. 3 voices). For now, the green voice toggle buttons still only
+								relate to the voices in the first SID chip.
+							</p>
 							<p>
 								If the playback is choppy, try increasing the buffer size. Smaller values mean faster and
 								smoother updating (default is 1024 which is the lowest possible) but also require a fast
@@ -988,6 +994,12 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>July 29, 2019</h3>
+						<ul>
+							<li>The piano view now supports 2SID and 3SID too &ndash; i.e. songs with 6 or 9 voices. Each keyboard
+								will automatically combine to host an entire chip (i.e. 3 voices).</li>
+						</ul>
 
 						<h3>July 28, 2019</h3>
 						<ul>

@@ -44,6 +44,9 @@ $(function() { // DOM ready
 		.styledSelect("emulator")
 		.styledSetValue(emulator);
 
+	// Assume 1SID (most common) thus hide the extra filter sections on the pianos
+	$("#visuals-piano .piano-filter1,#visuals-piano .piano-filter2").hide();
+
 	// Show a random tip in the sundry box
 	$.post("php/tips.php", function(tips) {
 		$("#stopic-stil").append('<div id="tips">'+tips+'</div>');
