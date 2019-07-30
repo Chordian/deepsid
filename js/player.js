@@ -919,6 +919,34 @@ SIDPlayer.prototype = {
 	},
 
 	/**
+	 * Return the SID address for the specified SID chip.
+	 * 
+	 * @param {number} chip			SID chip number (1-3).
+	 * 
+	 * @return {*}					SID chip address (e.g. $D400), 0, or FALSE.
+	 */
+	getSIDAddress: function(chip) {
+		if (chip == 1) return 0xD400;
+		switch (this.emulator) {
+			case "websid":
+				// Use the SID file header to figure out the SID chip address
+				// NOTE: A line must be inserted in 'backend_tinyrsid.js' for this to work!
+				var address = 0;
+				if (typeof SIDBackend.sidFileHeader != "undefined") {
+					address = SIDBackend.sidFileHeader[chip == 2 ? 0x7A : 0x7B] << 4;
+					if (address) address += 0xD000;
+				}
+				return address;
+			case "jssid":
+				return this.jsSID.getSIDAddress(chip - 1);
+			case "soasc":
+			case "download":
+				// Not possible
+				return false;
+		}
+	},
+
+	/**
 	 * Return the current 8-bit value of a SID register.
 	 * 
 	 * @param {number} register		Register $D400 to $D41C.
@@ -929,7 +957,7 @@ SIDPlayer.prototype = {
 	readRegister: function(register, chip) {
 		if (register < 0xD400 && register > 0xD41C) return false;
 		register -= 0xD400;
-		if (typeof chip === "undefined") chip = 0; else chip = --chip;
+		if (typeof chip === "undefined") chip = 0; else chip -= 1;
 		switch (this.emulator) {
 			case "websid":
 				if (chip && typeof SIDBackend.sidFileHeader != "undefined")

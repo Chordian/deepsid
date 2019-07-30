@@ -99,9 +99,7 @@ $(function() { // DOM ready
 				// Toggle the sundry box minimized or restored
 				ToggleSundry();
 				$(window).trigger("resize", true);
-			} else if (event.keyCode == 84) {						// Keyup 't' for testing stuff
-	console.log(SIDBackend.sidFileHeader[0x7A]);
-	console.log(SIDBackend.sidFileHeader[0x7B]);
+			// } else if (event.keyCode == 84) {						// Keyup 't' for testing stuff
 			}
 		}
 	});

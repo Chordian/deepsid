@@ -1301,6 +1301,22 @@ small.u2 { margin-left: 2px; }
 			background: linear-gradient(to bottom, var(--color-piano-bar-lg1) 0%,var(--color-piano-bar-lg2) 100%);
 		}
 
+		/* Area for showing SID chip address (2SID and 3SID modes only) */
+		.piano-top-panel .chip-address {
+			display: none;
+			position: absolute;
+			top: 17px;
+			left: 309px;
+			font: normal 10px/0 "Montserrat", sans-serif;
+		}
+
+			.piano-top-panel .chip-address span {
+				position: relative;
+				top: 7px;
+				font: bold 14px "Courier New", serif;
+				color: #ff0;
+			}
+
 		/* The brown filter cutoff bar */
 		#piano-fc0, #piano-fc1, #piano-fc2 {
 			float: right;

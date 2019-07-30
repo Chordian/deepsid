@@ -8,6 +8,7 @@
 		<div class="edges edges-pulse"></div>
 		<div class="flat-triangle"></div>
 		<canvas class="bar" id="piano-pw<?php echo $voice; ?>" width="200" height="8"></canvas>
+		<div class="chip-address chip<?php echo $voice; ?>"><div>SID chip</div><span>$D400</span></div>
 		<div class="pm-carpet-left pcl-ringmod"></div><div class="pm-carpet-right pcr-ringmod"></div>
 		<div class="piano-ringmod piano-rm<?php echo $voice; ?> piano-ringmod-left pr-off"></div><div class="piano-ringmod piano-rm<?php echo $voice; ?> piano-ringmod-right pr-off"></div>
 		<div class="bar-num label-mod" style="left:375px;">RM</div>

@@ -497,6 +497,8 @@ Viz.prototype = {
 	
 	/**
 	 * Piano: Enable all voices, both in the emulator and on the piano keyboards.
+	 * 
+	 * Also sets slow speed and replaces combine button with 2SID/3SID when relevant.
 	 */
 	enableAllPianoVoices: function() {
 		SID.enableAllVoices();
@@ -510,7 +512,7 @@ Viz.prototype = {
 		if (browser.chips == 1) {
 			$("#visuals-piano .ptp2").css("opacity", "1");
 			$("#piano-combine-area label,#piano-combine-area button").show();
-			$("#piano-combine-area span,#visuals-piano .piano-filter1,#visuals-piano .piano-filter2").hide();
+			$("#piano-combine-area span,#visuals-piano .piano-filter1,#visuals-piano .piano-filter2,#visuals-piano .chip-address").hide();
 		} else {
 			$("#piano-combine-area label,#piano-combine-area button").hide();
 			$("#piano-combine-area span")
@@ -519,12 +521,14 @@ Viz.prototype = {
 				.addClass("color-"+browser.chips+"sid")
 				.append(browser.chips+"SID")
 				.show();
-			$("#visuals-piano .piano-filter1").show();
+			$("#visuals-piano .chip1 span").empty().append("$"+SID.getSIDAddress(2).toString(16).toUpperCase());
+			$("#visuals-piano .piano-filter1,#visuals-piano .chip0,#visuals-piano .chip1").show();
 			if (browser.chips == 3) {
-				$("#visuals-piano .piano-filter2").show();
+				$("#visuals-piano .chip2 span").empty().append("$"+SID.getSIDAddress(3).toString(16).toUpperCase());
+				$("#visuals-piano .piano-filter2,#visuals-piano .chip2").show();
 				$("#visuals-piano .ptp2,#page .piano2").css("opacity", "1");
 			} else {
-				$("#visuals-piano .piano-filter2").hide();
+				$("#visuals-piano .piano-filter2,#visuals-piano .chip2").hide();
 				$("#visuals-piano .ptp2,#page .piano2").css("opacity", "0.25");
 				$("#visuals-piano .pv2").removeClass("voice-off voice-on").addClass("voice-off");
 			}

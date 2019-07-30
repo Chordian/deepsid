@@ -995,6 +995,11 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>July 30, 2019</h3>
+						<ul>
+							<li>The SID chip addresses are now shown when playing 2SID or 3SID tunes in the piano view.</li>
+						</ul>
+
 						<h3>July 29, 2019</h3>
 						<ul>
 							<li>The piano view now supports 2SID and 3SID too &ndash; i.e. songs with 6 or 9 voices. Each keyboard
