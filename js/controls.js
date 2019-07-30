@@ -314,7 +314,6 @@ Controls.prototype = {
 	 * @param {*} event 
 	 */
 	onClick: function(event) {
-		var voiceMask = SID.voiceMask & 0xF;	
 		switch(event.target.id) {
 			case "stop":
 				// STOP button

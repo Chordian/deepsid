@@ -115,7 +115,7 @@ Viz.prototype = {
 	 */
 	onKeyUp: function(event) {
 		if (!$("#search-box,#username,#password,#old-password,#new-password,#sym-rename,#sym-specify-subtune").is(":focus")) {
-			var voiceMask = SID.voiceMask & 0xF;
+			var voiceMask = SID.voiceMask[0] & 0xF;
 			if (event.keyCode == 49 || event.keyCode == 81) {			// Keyup '1' or 'q'
 				if (event.shiftKey) {
 					this.enableAllPianoVoices();

@@ -9,7 +9,7 @@ function SIDPlayer(emulator) {
 
 	this.emulator = emulator.toLowerCase();
 	this.chip = "";
-	this.voiceMask = 0xF;
+	this.voiceMask = [0xF, 0xF, 0xF];
 	this.mainVol = 1;
 	
 	this.file = "";
@@ -194,7 +194,7 @@ SIDPlayer.prototype = {
 	 */
 	load: function(subtune, timeout, file, callback) {
 
-		this.voiceMask = 0xF;
+		this.voiceMask = [0xF, 0xF, 0xF];
 		viz.lineInGraph = true;
 
 		subtune = this.subtune = typeof subtune === "undefined" ? this.subtune : subtune;
@@ -430,7 +430,7 @@ SIDPlayer.prototype = {
 	 */
 	 play: function(forcePlay) {
 		if (!this.paused) {
-			this.voiceMask = 0xF;
+			this.voiceMask = [0xF, 0xF, 0xF];
 			viz.activatePiano(true);
 		}
 		switch (this.emulator) {
@@ -824,42 +824,47 @@ SIDPlayer.prototype = {
 	 * 4 bits as some emulators also support toggling a digi channel.
 	 * 
 	 * @param {number} voice	Voice to toggle (1-4).
+	 * @param {number} chip		SID chip number (default is 1).
 	 */
-	toggleVoice: function(voice) {
-		this.voiceMask ^= 1 << (voice - 1); // Toggle a bit in the '1111' mask
+	toggleVoice: function(voice, chip) {
+		if (typeof chip === "undefined") chip = 0; else chip -= 1;
+		this.voiceMask[chip] ^= 1 << (voice - 1); // Toggle a bit in the '1111' mask
 		switch (this.emulator) {
 			case "websid":
-				SIDBackend.enableVoices(this.voiceMask);
+				SIDBackend.enableVoice(chip, voice - 1, this.voiceMask[chip] & 1 << (voice - 1));
 				break;
 			case "jssid":
-				// Don't touch voices in 2SID and 3SID
-				this.jsSID.enableVoices(this.voiceMask | 0x1F8);
+				// Stitch a mask together that works with jsSID (CCCBBBAAA)
+				var jsMask = 0;
+				for (var jsChip = 0; jsChip < 3; jsChip++)
+					jsMask += (this.voiceMask[jsChip] & 7) << (3 * jsChip);
+				this.jsSID.enableVoices(jsMask);
 				break;
 			case "soasc":
-				// Not possible
-				break;
 			case "download":
+				// Not possible
 				break;
 		}
 	},
 
 	/**
-	 * Enable all SID voices.
+	 * Enable all SID voices (including 2SID and 3SID).
 	 */
 	enableAllVoices: function() {
-		this.voiceMask = 0xF;
+		this.voiceMask = [0xF, 0xF, 0xF];
 		switch (this.emulator) {
 			case "websid":
-				SIDBackend.enableVoices(0xF);
+				for (var chip = 0; chip < 3; chip++) {
+					for (var voice = 0; voice < 4; voice++)
+						SIDBackend.enableVoice(chip, voice, true);
+				}
 				break;
 			case "jssid":
-				// Don't touch voices in 2SID and 3SID
 				this.jsSID.enableVoices(0x1FF);
 				break;
 			case "soasc":
-				// Not possible
-				break;
 			case "download":
+				// Not possible
 				break;
 		}
 	},

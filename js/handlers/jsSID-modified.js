@@ -6,7 +6,7 @@
 // - Return 16-bit CIA timer value
 // - Read any SID register
 // - Added a buffer callback
-// - Voice mask for toggling voices ON or OFF (and now bug fixed for 2SID and 3SID)
+// - Voice mask for toggling voices ON or OFF (includes 2SID and 3SID)
 // - Read SID chip address
 
 function playSID(sidurl,subtune) { //convenience function to create default-named jsSID object and play in one call, easily includable as inline JS function call in HTML
