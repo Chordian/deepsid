@@ -394,8 +394,8 @@
 							<h3 style="margin-top:16px;">A few words...</h3>
 							<p>
 								<b>NEW:</b> 2SID and 3SID tunes are now supported. Each keyboard will automatically combine
-								to host an entire chip (i.e. 3 voices). For now, the green voice toggle buttons still only
-								relate to the voices in the first SID chip.
+								to host an entire chip (i.e. 3 voices). The square voice buttons will toggle entire SID
+								chips ON or OFF when playing these types of tunes.
 							</p>
 							<p>
 								If the playback is choppy, try increasing the buffer size. Smaller values mean faster and
@@ -998,6 +998,8 @@
 						<h3>July 30, 2019</h3>
 						<ul>
 							<li>The SID chip addresses are now shown when playing 2SID or 3SID tunes in the piano view.</li>
+							<li>The piano view voice buttons now toggle entire SID chips ON or OFF for 2SID and 3SID tunes.
+								This also covers the numeric hotkeys, and the graph view is similarly affected.</li>
 						</ul>
 
 						<h3>July 29, 2019</h3>

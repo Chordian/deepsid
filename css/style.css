@@ -289,10 +289,14 @@
 	--color-piano-vc-on:			#222;				/* Voice button (overridden by a gradient) */
 	--color-piano-vc-on-rg1:		#f6fcf6;			/* Radial gradient colors for voice button */
 	--color-piano-vc-on-rg2:		#2c2;
+	--color-piano-vc-on-rg2-2sid:	#44d;
+	--color-piano-vc-on-rg2-3sid:	#d44;
 	--color-piano-vc-on-border:		#3c3c3c;
 	--color-piano-vc-on-shadow:		#afa;
 	--color-piano-vc-on-hover1:		#fff;				/* Radial gradient colors for hovering on a voice button */
 	--color-piano-vc-on-hover2:		#4e4;
+	--color-piano-vc-on-h2-2sid:	#66f;
+	--color-piano-vc-on-h2-3sid:	#f66;
 	--color-piano-vc-off-lg1:		#636363;			/* Colors for hovering on a voice button turned off */
 	--color-piano-vc-off-lg2:		#171717;
 	--color-piano-tr-border:		#888;				/* Bottom border of the flat pulsating info triangle */
@@ -1162,11 +1166,27 @@ small.u2 { margin-left: 2px; }
 				box-shadow: 0 0 2px var(--color-piano-vc-on-shadow);
 			}
 
+				.pv-c2sid .voice-on {
+					background: radial-gradient(circle 27px, var(--color-piano-vc-on-rg1), var(--color-piano-vc-on-rg2-2sid));
+				}
+
+				.pv-c3sid .voice-on {
+					background: radial-gradient(circle 27px, var(--color-piano-vc-on-rg1), var(--color-piano-vc-on-rg2-3sid));
+				}
+
 				.voice-on:hover {
 					background: radial-gradient(circle 30px, var(--color-piano-vc-on-hover1), var(--color-piano-vc-on-hover2));
 				}
 
-			.voice-off {
+				.pv-c2sid:hover .voice-on {
+					background: radial-gradient(circle 30px, var(--color-piano-vc-on-hover1), var(--color-piano-vc-on-h2-2sid));
+				}
+
+				.pv-c3sid:hover .voice-on {
+					background: radial-gradient(circle 30px, var(--color-piano-vc-on-hover1), var(--color-piano-vc-on-h2-3sid));
+				}
+
+				.voice-off {
 				color: var(--color-piano-inverted);
 				background: linear-gradient(to bottom, var(--color-piano-bg-lg1) 0%,var(--color-piano-bg-lg2) 100%);
 			}

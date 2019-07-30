@@ -217,7 +217,7 @@ Viz.prototype = {
 	},
 
 	/**
-	 * Piano: Click a green voice ON/OFF button on a piano keyboard.
+	 * Piano: Click a square voice ON/OFF button on a piano keyboard.
 	 * 
 	 * @param {*} event 
 	 */
@@ -230,10 +230,21 @@ Viz.prototype = {
 		var state = $this.hasClass("voice-off");
 		$this.removeClass("voice-off voice-on").addClass("voice-"+(state ? "on" : "off"));
 
-		SID.toggleVoice(voice + 1);
-		$("#scope"+(voice + 1)).css("opacity", (state ? "1" : "0.3"));
 		$("#page .piano"+voice).css("opacity", (state ? "1" : "0.1"));
-		$("#graph"+voice).css("opacity", (state ? "1" : "0.3"));
+		if (browser.chips == 1) {
+			// Standard voices ON/OFF for one SID chip
+			SID.toggleVoice(voice + 1);
+			$("#scope"+(voice + 1)).css("opacity", (state ? "1" : "0.3"));
+			$("#graph"+voice).css("opacity", (state ? "1" : "0.3"));
+		} else {
+			// For 2SID and 3SID, toggle all voices ON/OFF on an entire SID chip
+			var chip = voice + 1;
+			for (var voice = 0; voice < 4; voice++) {
+				SID.toggleVoice(voice, chip);
+				if (voice < 3)
+					$("#graph"+(((chip * 3) + voice) - 3)).css("opacity", (state ? "1" : "0.3"));
+			}
+		}
 	},
 
 	/**
@@ -511,6 +522,7 @@ Viz.prototype = {
 		// And also this to replace the piano combine button with 2SID/3SID when relevant
 		if (browser.chips == 1) {
 			$("#visuals-piano .ptp2").css("opacity", "1");
+			$("#visuals-piano .pv-wrap").removeClass("pv-c2sid pv-c3sid");
 			$("#piano-combine-area label,#piano-combine-area button").show();
 			$("#piano-combine-area span,#visuals-piano .piano-filter1,#visuals-piano .piano-filter2,#visuals-piano .chip-address").hide();
 		} else {
@@ -527,10 +539,12 @@ Viz.prototype = {
 				$("#visuals-piano .chip2 span").empty().append("$"+SID.getSIDAddress(3).toString(16).toUpperCase());
 				$("#visuals-piano .piano-filter2,#visuals-piano .chip2").show();
 				$("#visuals-piano .ptp2,#page .piano2").css("opacity", "1");
+				$("#visuals-piano .pv-wrap").removeClass("pv-c2sid pv-c3sid").addClass("pv-c3sid");
 			} else {
 				$("#visuals-piano .piano-filter2,#visuals-piano .chip2").hide();
 				$("#visuals-piano .ptp2,#page .piano2").css("opacity", "0.25");
 				$("#visuals-piano .pv2").removeClass("voice-off voice-on").addClass("voice-off");
+				$("#visuals-piano .pv-wrap").removeClass("pv-c2sid pv-c3sid").addClass("pv-c2sid");
 			}
 		}
 	},
