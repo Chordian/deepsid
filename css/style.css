@@ -48,7 +48,6 @@
 	--color-border-info:			#7a88c8;			/* Bottom border color for top info box */
 	--color-border-comments:		var(--color-border);
 	--color-border-scope:			var(--color-timebar-border);
-	--color-border-graph:			#aaa;
 
 	--color-button:					#474937;			/* Darkest green typically used on buttons */
 	--color-button-border:			var(--color-button);
@@ -121,6 +120,11 @@
 	--color-sid-row-error-entry:	#a33;				/* Error colors for SID file row that can't be played */
 	--color-sid-row-error-info:		#cc8282;
 	--color-sid-row-error-bg:		#f5eaea;
+
+	--color-graph-channel-text:		#777;
+	--color-graph-channel-bg:		var(--color-top);
+	--color-graph-border:			#aaa;
+	--color-graph-bg:				var(--color-top);
 
 	/* SVG images */
 
@@ -195,7 +199,7 @@
 	--color-root-good-text:			#070;
 	--color-root-bad-bg:			#fee;				/* Colors for bad front page news */
 	--color-root-bad-border:		#caa;
-	--color-root-bad-text:			#a00;
+	--color-root-bad-news-text:		var(--color-text-body);
 	--color-root-bg-random:			#fafff8;			/* Color for root random folder box when hovering on it */
 	--color-root-bg-rec:			#eeefe9;			/* Color for root recommended folder box when hovering on it */
 	--color-root-random-text:		#5e6048;
@@ -366,7 +370,6 @@
 	--color-border-info:			#303a70;			/* Bottom border color for top info box */
 	--color-border-comments:		#4c4c4c;
 	--color-border-scope:			#3e3e3e;
-	--color-border-graph:			var(--color-border-box);
 
 	--color-button:					linear-gradient(to bottom, #6e7965 0%,#4b5345 85%); /* #4e5648 #565f4f #4a5244 #5a6650 #415d43 */
 	--color-button-border:			#555e4e;
@@ -436,6 +439,11 @@
 	--color-sid-row-error-entry:	#fdd;
 	--color-sid-row-error-bg:		#382828;
 
+	--color-graph-channel-text:		var(--color-text-body);
+	--color-graph-channel-bg:		#343434;
+	--color-graph-border:			#373737;
+	--color-graph-bg:				#181818;
+
 	/* SVG images */
 
 	/* @link https://codepen.io/sosuke/pen/Pjoqqp - NOTE: The SVG must be black as default for this to work! */
@@ -489,6 +497,9 @@
 
 	--color-root-bg-random:			#333;
 	--color-root-bg-rec:			#333;
+	--color-root-bad-bg:			#281414;
+	--color-root-bad-border:		#c00;
+	--color-root-bad-news-text:		var(--color-text-body);
 	--color-root-random-text:		#f5f5f1;
 	--color-root-random-bigfont:	#e0d68a;
 	--color-root-random-shadow:		#000;
@@ -1510,8 +1521,8 @@ small.u2 { margin-left: 2px; }
 	/* A down-scrolling canvas area in the 'Graph' view */
 	.graph-area {
 		position: absolute;
-		border: 0.5px solid var(--color-border-graph);
-		background: #fff;
+		border: 0.5px solid var(--color-graph-border);
+		background: var(--color-graph-bg);
 	}
 
 	/* Round voice numbers in bottom left corner of canvas areas */
@@ -1522,9 +1533,9 @@ small.u2 { margin-left: 2px; }
 		width: 20px;
 		height: 20px;
 		font: bold 12px/19px "Montserrat", sans-serif;
-		color: #777; /* No need for CSS variables here */
-		background: #fff;
-		border: 0.5px solid var(--color-border-graph); /* #b4b4b4 */
+		color: var(--color-graph-channel-text);
+		background: var(--color-graph-channel-bg);
+		border: 0.5px solid var(--color-graph-border);
 		border-radius: 20px;
 		text-align: center;
 	}
@@ -3206,11 +3217,13 @@ input[type=range]::-ms-track {
 			#page .good-news {
 				border: 1px solid var(--color-root-good-border);
 				background: var(--color-root-good-bg);
+				color: var(--color-root-good-text);
 			}
 
 			#page .bad-news {
 				border: 1px solid var(--color-root-bad-border);
 				background: var(--color-root-bad-bg);
+				color: var(--color-root-bad-news-text);
 			}
 
 				#page .root-wide .good {

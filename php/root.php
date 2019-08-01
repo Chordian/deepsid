@@ -18,8 +18,7 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH
 
 $decent_box_shown = false;
 
-$important = 'The file servers for the <b>SOASC handlers</b> are back online.';
-//$important = "The <b>CSDb</b> web service should be working properly again.&nbsp;&nbsp;&nbsp;&nbsp;&ndash; Jens";
+$important = 'WebSid support for MUS files (CGSC) is currently broken.';
 
 $available_lists = ['maxfiles', 'longest', 'mostgames', 'countries', 'startaddr', 'maxtime'];
 $dropdown_options =
@@ -158,7 +157,7 @@ try {
 
 $html =
 	'<div style="height:149px;"></div>'.
-	//'<div class="root-wide good-news">'.$important.'</div>'.
+	//'<div class="root-wide bad-news">'.$important.'</div>'.
 	// Recommendations
 	'<table class="root rec"><tr>'.
 		'<td style="max-width:10px;">'.

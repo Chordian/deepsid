@@ -217,7 +217,7 @@ class Account {
 	 */
 	public function LogActivity($str, $common = false) {
 			$time_ip = date('Y-m-d H:i:s', strtotime(TIME_ADJUST)).' - '.$_SERVER['REMOTE_ADDR'].' - ';
-			file_put_contents($_SERVER['DOCUMENT_ROOT'].'/deepsid/logs/activity.txt', ($common ? '<span style="color:#bbb;">' : '').$time_ip.$str.($common ? '</span>' : '').PHP_EOL, FILE_APPEND);
+			file_put_contents($_SERVER['DOCUMENT_ROOT'].'/deepsid/logs/activity.txt', ($common ? '<span style="color:#999;">' : '').$time_ip.$str.($common ? '</span>' : '').PHP_EOL, FILE_APPEND);
 	}
 
 	/**

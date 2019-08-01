@@ -995,6 +995,12 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>August 1, 2019</h3>
+						<ul>
+							<li>Upgraded the WebSid emulator. Fixed broken support for MUS files in CGSC.</li>
+							<li>Created a dark color theme for the graph view channels.</li>
+						</ul>
+
 						<h3>July 30, 2019</h3>
 						<ul>
 							<li>The SID chip addresses are now shown when playing 2SID or 3SID tunes in the piano view.</li>

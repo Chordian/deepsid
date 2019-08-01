@@ -14,9 +14,43 @@ function Viz(emulator) {
 	this.graphPW = false;
 	this.graphMods = true;
 	this.lineInGraph = false;
+
 	this.scopeLineColor = [
 		"34, 35, 27",	// For bright color theme
 		"255, 255, 255"	// For dark color theme
+	];
+
+	this.graphColor = [
+		{
+			background: "#fff",		// For bright color theme
+			line:		"#eee",
+			octave:		"#eaeaea",
+			pwidth:		"#ffd1cb",
+			filterOn:	"#f8f888",
+			filterOff:	"#ffffe0",
+
+			modulation:	[
+				"#000",				// Off
+				"#eef",				// Hard synchronization
+				"#fee",				// Ring modulation
+				"#fef",				// Both
+			]
+		},
+		{
+			background:	"#181818",	// For dark color theme
+			line:		"#242424",
+			octave:		"#292929",
+			pwidth:		"#703028",
+			filterOn:	"#383424",
+			filterOff:	"#28241c",
+
+			modulation:	[
+				"#000",				// Off
+				"#242434",			// Hard synchronization
+				"#342424",			// Ring modulation
+				"#342434",			// Both
+			]
+		}
 	];
 
 	this.bufferSize;
@@ -69,13 +103,6 @@ function Viz(emulator) {
 		"#000000",			// $D0
 		"#000000",			// $E0
 		"#000000",			// $F0
-	];
-
-	this.modulationColors = [
-		"#000",				// Off
-		"#eef",				// Hard synchronization
-		"#fee",				// Ring modulation
-		"#fef",				// Both
 	];
 
 	// Set buffer size as previously stored or default to 16384 bytes
@@ -705,29 +732,28 @@ Viz.prototype = {
 		if ($("body").attr("data-mobile") !== "0" || $("#tabs .selected").attr("data-topic") !== "visuals"
 			|| !$("#sticky-visuals .icon-graph").hasClass("button-on")) return;
 
-		for (var voice = 0; voice < this.maxVoices; voice++) {
+		for (var voice = 0; voice < viz.maxVoices; voice++) {
 
 			var chip = ~~(voice / 3) + 1,
 				rawVoice = voice - ~~(voice / 3) * 3;
 
 			// Color the top line background to begin with
-			viz.ctx_area[voice].fillStyle = viz.lineInGraph ? "#eee" : "#fff";
+			viz.ctx_area[voice].fillStyle = viz.lineInGraph ? viz.graphColor[colorTheme].line : viz.graphColor[colorTheme].background;
 			viz.ctx_area[voice].fillRect(0, 0, viz.area_width[voice], 1);
 
 			if (!viz.lineInGraph && (SID.readRegister(0xD417, chip) & (1 << rawVoice))) { // Filter on?
-				lineColor = "#ffffea";
-				// Clear yellow up to filter cutoff frequency
+				// Strong yellow up to filter cutoff frequency
 				var fc = SID.readRegister(0xD416, chip) << 3 + (SID.readRegister(0xD415, chip) & 0x7),
 					start = viz.graphMode ? 0 : viz.area_width[voice] / 2,
 					max = viz.graphMode ? viz.area_width[voice] : viz.area_width[voice] / 2.666;
 				var x = (fc / 0x07FF) * max;
-				viz.ctx_area[voice].strokeStyle = "#f8f888";
+				viz.ctx_area[voice].strokeStyle = viz.graphColor[colorTheme].filterOn;
 				viz.ctx_area[voice].beginPath();
 				viz.ctx_area[voice].moveTo(start, 0);
 				viz.ctx_area[voice].lineTo(start + x, 0);
 				viz.ctx_area[voice].stroke();
-				// Brighter yellow the rest of the way
-				viz.ctx_area[voice].strokeStyle = "#ffffe0";
+				// Weaker yellow the rest of the way
+				viz.ctx_area[voice].strokeStyle = viz.graphColor[colorTheme].filterOff;
 				viz.ctx_area[voice].beginPath();
 				viz.ctx_area[voice].moveTo(start + x + 1, 0);
 				viz.ctx_area[voice].lineTo(start + max, 0);
@@ -736,7 +762,7 @@ Viz.prototype = {
 
 			// Add octave dividers
 			viz.ctx_area[voice].lineWidth = 1;
-			viz.ctx_area[voice].strokeStyle = "#eaeaea";
+			viz.ctx_area[voice].strokeStyle = viz.graphColor[colorTheme].octave;
 			for (var freq = 8192; freq < 8192 * 8; freq += 8192) {
 				var x = (freq / 0xFFFF) * viz.area_width[voice];
 				x = x | 0; // This rounds off to avoiding anti-aliased lines
@@ -766,31 +792,25 @@ Viz.prototype = {
 				viz.ctx_area[voice].globalAlpha = SID.readRegister(0xD404 + rawVoice * 7, chip) & 1 ? 1 : 0.5; // Gate ON / OFF
 				if (viz.graphMods && thisModulation) {
 					// Paint from frequency dot and left towards edge of area ("reaching for previous voice")
-					//viz.ctx_area[voice].save();
-					viz.ctx_area[voice].strokeStyle = viz.modulationColors[thisModulation];
-					//viz.ctx_area[voice].setLineDash([1, 1]);
+					viz.ctx_area[voice].strokeStyle = viz.graphColor[colorTheme].modulation[thisModulation];
 					viz.ctx_area[voice].beginPath();
 					viz.ctx_area[voice].moveTo(x - 2, 0);
 					viz.ctx_area[voice].lineTo(0, 0);
 					viz.ctx_area[voice].stroke();
-					//viz.ctx_area[voice].restore();
 				}
 				if (viz.graphMods && prevModulation) {
 					// Paint from frequency dot and right towards edge of area ("reaching towards master")
-					//viz.ctx_area[voice].save();
-					viz.ctx_area[voice].strokeStyle = viz.modulationColors[prevModulation];
-					//viz.ctx_area[voice].setLineDash([1, 1]);
+					viz.ctx_area[voice].strokeStyle = viz.graphColor[colorTheme].modulation[prevModulation];
 					viz.ctx_area[voice].beginPath();
 					viz.ctx_area[voice].moveTo(x + 2, 0);
 					viz.ctx_area[voice].lineTo(viz.area_width[voice], 0);
 					viz.ctx_area[voice].stroke();
-					//viz.ctx_area[voice].restore();
 				}
 				if (waveform == 4 || waveform == 5) {
 					var center = viz.graphPW ? x : (0xF000 / 0xFFFF) * viz.area_width[voice],
 						groove = viz.graphPW ? 1 : -0.5;
 					// Show pulse width as a "coat" (around frequency dot or in the right side)
-					viz.ctx_area[voice].strokeStyle = "#ffd1cb";
+					viz.ctx_area[voice].strokeStyle = viz.graphColor[colorTheme].pwidth;
 					viz.ctx_area[voice].beginPath();
 					viz.ctx_area[voice].moveTo(center - pw, 0);
 					viz.ctx_area[voice].lineTo(center - groove, 0);
