@@ -35,11 +35,7 @@
 			<script type="text/javascript" src="http://www.wothke.ch/tmp/backend_tinyrsid.js"></script>
 		<?php else: ?>
 			<script type="text/javascript" src="js/handlers/scriptprocessor_player.js"></script>
-			<?php if (preg_match('/iPhone|iPad|iPod/', $_SERVER['HTTP_USER_AGENT'])): ?>
-				<script type="text/javascript" src="js/handlers/backend_tinyrsid_ios.js"></script>
-			<?php else: ?>
-				<script type="text/javascript" src="js/handlers/backend_tinyrsid.js"></script>
-			<?php endif ?>
+			<script type="text/javascript" src="js/handlers/backend_tinyrsid.js"></script>
 		<?php endif ?>
 
 		<script type="text/javascript" src="js/handlers/jsSID-modified.js"></script>
@@ -999,6 +995,8 @@
 						<ul>
 							<li>Upgraded the WebSid emulator. Fixed broken support for MUS files in CGSC.</li>
 							<li>Created a dark color theme for the graph view channels.</li>
+							<li>Upgraded the script processor and oscilloscope scripts for the WebSid emulator. This was
+								primarily done to eliminate the use of deprecated functions and should not be detectable.</li>
 						</ul>
 
 						<h3>July 30, 2019</h3>

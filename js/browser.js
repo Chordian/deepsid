@@ -72,7 +72,7 @@ Browser.prototype = {
 		setInterval(function() {
 			// Update clock
 			var secondsCurrent = SID.getCurrentPlaytime();
-			$("#time-current").empty().append(Math.floor(secondsCurrent / 60)+":"+(secondsCurrent % 60 < 10 ? "0" : "")+(secondsCurrent % 60));
+			$("#time-current").empty().append((Math.floor(secondsCurrent / 60)+":"+(secondsCurrent % 60 < 10 ? "0" : "")+(secondsCurrent % 60)).split(".")[0] /* No MS */ );
 			// Update time bar
 			$("#time-bar div").css("width", ((secondsCurrent / this.secondsLength) * 346)+"px");
 		}.bind(this), 200);
