@@ -991,6 +991,12 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>August 2, 2019</h3>
+						<ul>
+							<li>Fixed WebSid no longer playing 2SID and 3SID tunes after the script upgrades.</li>
+							<li>The 16384 buffer size button in the scope tab now also works when you're not logged in.</li>
+						</ul>
+
 						<h3>August 1, 2019</h3>
 						<ul>
 							<li>Upgraded the WebSid emulator. Fixed broken support for MUS files in CGSC.</li>

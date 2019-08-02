@@ -378,7 +378,7 @@ Controls.prototype = {
 				break;
 			case "set-16k":
 				// Button in scope sundry box for forcing a buffer size of 16384
-				$("#topic-settings .dropdown-buffer").val("16384").trigger("change");
+				$("#visuals-piano .dropdown-buffer").val("16384").trigger("change");
 				break;
 			case "sidwiz":
 				// Toggle 'SidWiz' mode ON or OFF for the oscilloscope voices
