@@ -1056,7 +1056,9 @@ Browser.prototype = {
 
 		if (typeof noReset === "undefined") {
 			$("#time-current").empty().append("0:00");
-			$("#time-length").empty().append(length.split(".")[0]); // No MS
+			var msInLength = length.indexOf(".") != -1;
+			$("#time-length").empty().append(length.split(".")[0] + (msInLength ? '<div>&#9642;</div>' : ''))
+				.attr("title", msInLength ? length : "");
 			return $("#loop").hasClass("button-on") ? 0 : this.secondsLength;
 		}
 		return this.secondsLength;

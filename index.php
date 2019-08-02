@@ -259,7 +259,7 @@
 						<input id="volume" type="range" min="0" max="100" value="100" step="1" disabled="disabled" />
 					</div>
 				</div>
-				<div id="time"><span id="time-current">0:00</span> <div id="time-bar"><div></div></div> <span id="time-length">0:00</span></div>
+				<div id="time"><span id="time-current">0:00</span> <div id="time-bar"><div></div></div> <span id="time-length" style="position:relative;">0:00</span></div>
 			</div>
 
 			<div id="songs">
@@ -995,6 +995,8 @@
 						<ul>
 							<li>Fixed WebSid no longer playing 2SID and 3SID tunes after the script upgrades.</li>
 							<li>The 16384 buffer size button in the scope tab now also works when you're not logged in.</li>
+							<li>The song length at the end of the time bar now has a small dot added to it when the HVSC data
+								includes milliseconds. You can then hover on the length to see the full time in a tooltip.</li>
 						</ul>
 
 						<h3>August 1, 2019</h3>

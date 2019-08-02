@@ -188,7 +188,7 @@
 	--color-soasc-status-text:		var(--color-button-hover);
 	--color-soasc-status-unknown:	#999;				/* SOASC status field in top */
 	--color-soasc-status-up:		#0a0;
-	--color-soasc-status-down:		#a00;
+	--color-soasc-status-down:		#c22;
 	--color-soasc-status-out:		#aa0;
 	--color-soasc-handlers-down:	#d00;				/* Used in the drop-down box for SID handlers */
 
@@ -1742,6 +1742,16 @@ input[type=range]::-ms-track {
 		#time .soasc_r2 div		{ background: var(--color-timebar-soasc-r2); }
 		#time .soasc_r4 div		{ background: var(--color-timebar-soasc-r4); }
 		#time .soasc_r5 div		{ background: var(--color-timebar-soasc-r5); }
+
+/* Small dot that indicates this time length has millseconds too */
+#time-length div {
+	position: absolute;
+	top: 9px;
+	right: -6px;
+	font-size: 12px;
+	line-height: 0;
+	color: var(--color-text-minor);
+}
 
 /* ---- Info Box (Name, Author, Copyright) ---------------------------------- */
 
