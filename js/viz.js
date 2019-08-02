@@ -645,6 +645,7 @@ Viz.prototype = {
 	stopScope: function() {
 		for (var voice = 1; voice <= 4; voice++) {
 			var canvas = $("#scope"+voice)[0];
+			if (typeof canvas == "undefined") continue;
 			var ctx = canvas.getContext("2d");
 			ctx.clearRect(0, 0, 512, 70);
 			ctx.strokeStyle = "rgba("+(this.scopeLineColor[colorTheme])+", 0.4)"; // Faded color too

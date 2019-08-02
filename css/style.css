@@ -187,7 +187,7 @@
 	--color-soasc-status-border:	var(--color-logo);
 	--color-soasc-status-text:		var(--color-button-hover);
 	--color-soasc-status-unknown:	#999;				/* SOASC status field in top */
-	--color-soasc-status-up:		#0a0;
+	--color-soasc-status-up:		#0b0;
 	--color-soasc-status-down:		#c22;
 	--color-soasc-status-out:		#aa0;
 	--color-soasc-handlers-down:	#d00;				/* Used in the drop-down box for SID handlers */

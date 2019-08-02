@@ -997,6 +997,7 @@
 							<li>The 16384 buffer size button in the scope tab now also works when you're not logged in.</li>
 							<li>The song length at the end of the time bar now has a small dot added to it when the HVSC data
 								includes milliseconds. You can then hover on the length to see the full time in a tooltip.</li>
+							<li>Fixed a bug where the SID handlers stopped responding after SOASC couldn't find a song.</li>
 						</ul>
 
 						<h3>August 1, 2019</h3>

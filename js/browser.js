@@ -1080,7 +1080,7 @@ Browser.prototype = {
 		$("#sid-model,#clockspeed,#hvsc-version").remove();
 		$("#memory-chunk").css({left: "0", width: "0"});
 		$("#info-text").empty();
-		$("#sundry").mCustomScrollbar("destroy").empty();
+		$("#stopic-stil").mCustomScrollbar("destroy").empty();
 
 		ctrls.state("play/stop", "disabled");
 		ctrls.state("prev/next", "enabled"); // Still need to skip it
