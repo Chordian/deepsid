@@ -991,6 +991,11 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>August 3, 2019</h3>
+						<ul>
+							<li>MUS files are now disabled for Hermit's emulator when searching.</li>
+						</ul>
+
 						<h3>August 2, 2019</h3>
 						<ul>
 							<li>Fixed WebSid no longer playing 2SID and 3SID tunes after the script upgrades.</li>

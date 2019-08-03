@@ -1109,8 +1109,8 @@ function DisableIncompatibleRows() {
 			SID.emulator == "websid"
 				? $tr.addClass("disabled")
 				: $tr.removeClass("disabled");
-		} else if (isSIDFile && $tr.find(".name").attr("data-type") === "RSID") {
-			// Hermit's emulator can't do virtually any of RSID tunes
+		} else if (isSIDFile && ($tr.find(".name").attr("data-type") === "RSID" || $tr.find(".name").attr("data-name").indexOf(".mus") !== -1)) {
+			// Hermit's emulator can't do neither any RSID tunes nor any MUS files
 			SID.emulator == "jssid"
 				? $tr.addClass("disabled")
 				: $tr.removeClass("disabled");
