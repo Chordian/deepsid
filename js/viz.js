@@ -130,7 +130,7 @@ Viz.prototype = {
 	addEvents: function() {
 		$(window).on("keyup", this.onKeyUp.bind(this));
 		$("#visuals-piano,#visuals-graph").on("click", ".button-toggle,.button-radio,.button-icon", this.onToggleClick.bind(this));
-		$("#visuals-piano,#visuals-graph").on("click", ".piano-voice", this.onVoiceClick.bind(this));
+		$("#visuals-piano").on("click", ".piano-voice", this.onVoiceClick.bind(this));
 		$("#visuals-piano,#visuals-graph,#topic-settings .dropdown-buffer").on("change", this.onChangeBufferSize.bind(this));
 		$("#sticky-visuals").on("click", "button", this.onVisualsClick.bind(this));
 	},
@@ -142,51 +142,57 @@ Viz.prototype = {
 	 */
 	onKeyUp: function(event) {
 		if (!$("#search-box,#username,#password,#old-password,#new-password,#sym-rename,#sym-specify-subtune").is(":focus")) {
-			var voiceMask = SID.voiceMask[0] & 0xF;
+			var voiceMask = [SID.voiceMask[0], SID.voiceMask[1], SID.voiceMask[2]];
 			if (event.keyCode == 49 || event.keyCode == 81) {			// Keyup '1' or 'q'
-				if (event.shiftKey) {
+				if (event.shiftKey) { // Reverse (solo)
 					this.enableAllPianoVoices();
-					if (voiceMask != 0x1) {
-						// Reverse (solo)
+					if ((browser.chips == 1 && voiceMask[0] != 0x1) ||
+						(browser.chips > 1 && (voiceMask[1] && voiceMask[2]) ||
+						(browser.chips > 1 && voiceMask[0] != 0xF))) {
 						$("#page .pv1,#page .pv2").trigger("click");
-						SID.toggleVoice(4);
-						$("#scope4").css("opacity", "0.3");
+						if (browser.chips == 1) {
+							SID.toggleVoice(4);
+							$("#scope4").css("opacity", "0.3");
+						}
 					}
-				} else {
+				} else
 					// Toggle a SID voice 1 ON/OFF using the piano toggle buttons
 					$("#page .pv0").trigger("click");
-				}
 			} else if (event.keyCode == 50 || event.keyCode == 87) {	// Keyup '2' or 'w'
 				if (event.shiftKey) {
 					this.enableAllPianoVoices();
-					if (voiceMask != 0x2) {
+					if ((browser.chips == 1 && voiceMask[0] != 0x2) ||
+						(browser.chips > 1 && (voiceMask[0] && voiceMask[2]) || voiceMask[1] != 0xF)) {
 						$("#page .pv0,#page .pv2").trigger("click");
-						SID.toggleVoice(4);
-						$("#scope4").css("opacity", "0.3");
+						if (browser.chips == 1) {
+							SID.toggleVoice(4);
+							$("#scope4").css("opacity", "0.3");
+						}
 					}
-				} else {
+				} else
 					$("#page .pv1").trigger("click");
-				}
 			} else if (event.keyCode == 51 || event.keyCode == 69) {	// Keyup '3' or 'e'
 				if (event.shiftKey) {
 					this.enableAllPianoVoices();
-					if (voiceMask != 0x4) {
+					if ((browser.chips == 1 && voiceMask[0] != 0x4) ||
+						(browser.chips > 1 && (voiceMask[0] && voiceMask[1]) || voiceMask[2] != 0xF)) {
 						$("#page .pv0,#page .pv1").trigger("click");
-						SID.toggleVoice(4);
-						$("#scope4").css("opacity", "0.3");
+						if (browser.chips == 1) {
+							SID.toggleVoice(4);
+							$("#scope4").css("opacity", "0.3");
+						}
 					}
-				} else {
+				} else
 					$("#page .pv2").trigger("click");
-				}
 			} else if (event.keyCode == 52 || event.keyCode == 82) {	// Keyup '4' or 'r'
 				if (event.shiftKey) {
 					this.enableAllPianoVoices();
-					if (voiceMask != 0x8)
+					if (browser.chips == 1 && voiceMask[0] != 0x8)
 						$("#page .pv0,#page .pv1,#page .pv2").trigger("click");
 				} else {
 					// Using direct call (piano view doesn't support digi tunes)
 					SID.toggleVoice(4);
-					$("#scope4").css("opacity", (voiceMask & 0x8 ? "0.3" : "1"));
+					$("#scope4").css("opacity", (voiceMask[0] & 0x8 ? "0.3" : "1"));
 				}
 			}
 		}
@@ -266,11 +272,14 @@ Viz.prototype = {
 		} else {
 			// For 2SID and 3SID, toggle all voices ON/OFF on an entire SID chip
 			var chip = voice + 1;
-			for (var voice = 0; voice < 4; voice++) {
+			for (var voice = 1; voice <= 4; voice++) {
 				SID.toggleVoice(voice, chip);
-				if (voice < 3)
-					$("#graph"+(((chip * 3) + voice) - 3)).css("opacity", (state ? "1" : "0.3"));
+				if (voice < 4)
+					$("#graph"+(((chip * 3) + (voice - 1)) - 3)).css("opacity", (state ? "1" : "0.3"));
 			}
+			if (chip == 1)
+				for (var scope = 1; scope <= 4; scope++)
+					$("#scope"+scope).css("opacity", (state ? "1" : "0.3"));
 		}
 	},
 

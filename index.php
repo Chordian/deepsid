@@ -994,6 +994,7 @@
 						<h3>August 3, 2019</h3>
 						<ul>
 							<li>MUS files are now disabled for Hermit's emulator when searching.</li>
+							<li>Tightened the handling of toggling and soloing voices for 2SID and 3SID tunes.</li>
 						</ul>
 
 						<h3>August 2, 2019</h3>

@@ -550,12 +550,10 @@
 	/* Styled select colors */	
 
 	--color-styled-select-text:		#404040;
-	--color-styled-select-border:	var(--color-border-box);
 	--color-styled-select-bg:		#f0f0f0;
-	--color-styled-select-border:	var(--color-border-box);
 	--color-styled-arrow:			var(--color-styled-select-text);
 	--color-styled-shadow:			#000;
-	--color-styled-item-disabled:	#c8c8ba;
+	--color-styled-item-disabled:	#bababa;
 }
 
 [data-theme="dark"] input,
