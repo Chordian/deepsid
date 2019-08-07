@@ -369,6 +369,7 @@ Browser.prototype = {
 						} else
 							this.getComposer();
 						this.getGB64();
+						this.getRemix();
 						this.getPlayerInfo({player: this.playlist[this.songPos].player});
 						this.reloadDisqus(this.playlist[this.songPos].fullname);
 
@@ -805,14 +806,14 @@ Browser.prototype = {
 					// Tab 'STIL' is called 'Lyrics' in CGSC
 					$("#tab-stil").empty().append(this.isCGSC() ? "Lyrics" : "STIL");
 
-					// The 'CSDb' and 'GB64' tabs are useless to CGSC
-					var $twoTabs = $("#tab-csdb,#tab-gb64");
-					$twoTabs.removeClass("disabled");
+					// The 'CSDb', 'GB64' and 'Remix' tabs are useless to CGSC
+					var $uselessTabs = $("#tab-csdb,#tab-gb64,#tab-remix");
+					$uselessTabs.removeClass("disabled");
 					if (this.isCGSC()) {
-						$twoTabs.addClass("disabled");
-						$("#note-csdb,#note-gb64").hide();
+						$uselessTabs.addClass("disabled");
+						$("#note-csdb,#note-gb64,#note-remix").hide();
 						var $selected = $("#tabs .selected");
-						if ($selected.attr("data-topic") === "csdb" || $selected.attr("data-topic") === "gb64")
+						if ($selected.attr("data-topic") === "csdb" || $selected.attr("data-topic") === "gb64" || $selected.attr("data-topic") === "remix")
 							$("#tab-profile").trigger("click");
 					}
 
@@ -1450,6 +1451,45 @@ Browser.prototype = {
 					$("#note-gb64").empty().append(data.count).show();
 				else
 					$("#note-gb64").hide();
+	
+			});
+		}.bind(this));
+	},
+
+	/**
+	 * Show contents in the 'Remix' tab pertinent to the selected SID tune. A spinner is
+	 * shown while calling the PHP script.
+	 * 
+	 * Also handles the tab notification counter. 
+	 * 
+	 * @param {number} optionalID		If specified, the ID to show a specific entry.
+	 */
+	getRemix: function(optionalID) {
+		if (this.isMobile) return;
+		if (this.remix) this.remix.abort();
+		$("#topic-remix").empty().append(this.loadingSpinner("remix"));
+
+		var loadingRemix = setTimeout(function() {
+			// Fade in a GIF loading spinner if the AJAX call takes a while
+			$("#loading-remix").fadeIn(500);
+		}, 250);
+
+		var params = typeof optionalID === "undefined"
+			? { fullname: browser.playlist[browser.songPos].fullname.substr(5) }
+			: { id: optionalID };
+
+		this.remix = $.get("php/remix.php", params, function(data) {
+			this.validateData(data, function(data) {
+
+				clearTimeout(loadingRemix);
+				$("#topic-remix").empty().append(data.html)
+					.css("visibility", "visible");
+	
+				// If there are any entries then show a notification number on the 'Remix' tab (if not in focus)
+				if (data.count > 0 && $("#tabs .selected").attr("data-topic") !== "remix" && !this.isCGSC())
+					$("#note-remix").empty().append(data.count).show();
+				else
+					$("#note-remix").hide();
 	
 			});
 		}.bind(this));

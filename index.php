@@ -333,6 +333,7 @@
 					<div class="tab unselectable" data-topic="gb64" id="tab-gb64">GB64<div id="note-gb64" class="notification gb64color"></div></div>
 					<div class="tab unselectable" data-topic="player" id="tab-player">Player<div id="note-player" class="notification playercolor"></div></div>
 					<div class="tab unselectable" data-topic="stil" id="tab-stil">STIL</div>
+					<div class="tab unselectable" data-topic="remix" id="tab-remix">Remix<div id="note-remix" class="notification csdbcolor"></div></div>
 					<div class="tab unselectable" data-topic="visuals" id="tab-visuals">Visuals</div>
 					<div class="tab unselectable" data-topic="disqus" id="tab-disqus">Disqus<div id="note-disqus" class="notification"></div></div>
 					<div class="tab right unselectable" data-topic="settings" id="tab-settings" style="width:26px;">
@@ -589,6 +590,23 @@
 							Technically, lyrics are always added in a separate WDS file that accompanies the MUS file that
 							contains the actual music data. However, not all MUS files have a WDS file. Roughly one third
 							of the MUS files in the collection have lyrics.
+						</p>
+					</div>
+
+					<div id="topic-remix" class="topic ext" style="display:none;">
+						<h2>Remix64</h2>
+						<p>If you click a SID file that has been remixed into modern forms, this tab will show
+							those entries from Remix64.</p>
+						<p>
+							<a href="http://www.remix64.com/" target="_blank">Remix64</a> is a portal to the unified world
+								of Commodore 64 and Amiga music remixing, containing news, reviews, charts and chat. Remixes
+								can be uploaded and rated here. It's maintained by Markus Klein, also known as 
+								<a href="//deepsid.chordian.net/?file=/MUSICIANS/L/LMan/">LMan</a>.
+						</p>
+						<br />
+						<p>
+							<i>This does not work in
+							<a href="http://www.c64music.co.uk/" target="_blank">Compute's Gazette SID Collection</a>.</i>
 						</p>
 					</div>
 

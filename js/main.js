@@ -4,8 +4,8 @@
  */
 
 var $=jQuery.noConflict();
-var cacheCSDb = cacheSticky = cacheStickyBeforeCompo = cacheCSDbProfile = cacheBeforeCompo = cachePlayer = cacheGB64 = prevFile = sundryTab = reportSTIL = "";
-var cacheTabScrollPos = cachePlayerTabScrollPos = cacheGB64TabScrollPos = tabScrollPos = cachePosBeforeCompo = cacheDDCSDbSort = peekCounter = sundryHeight = 0;
+var cacheCSDb = cacheSticky = cacheStickyBeforeCompo = cacheCSDbProfile = cacheBeforeCompo = cachePlayer = cacheGB64 = cacheRemix = prevFile = sundryTab = reportSTIL = "";
+var cacheTabScrollPos = cachePlayerTabScrollPos = cacheGB64TabScrollPos = cacheRemixTabScrollPos = tabScrollPos = cachePosBeforeCompo = cacheDDCSDbSort = peekCounter = sundryHeight = 0;
 var sundryToggle = true, recommended = players = null;
 
 $(function() { // DOM ready
@@ -423,6 +423,9 @@ $(function() { // DOM ready
 		// If 'GB64' tab is selected then hide the notification on it
 		if (topic === "gb64") $("#note-gb64").hide();
 
+		// If 'Remix' tab is selected then hide the notification on it
+		if (topic === "remix") $("#note-remix").hide();
+
 		// If 'Player' tab is selected then hide the notification on it
 		if (topic === "player") $("#note-player").hide();
 
@@ -628,6 +631,20 @@ $(function() { // DOM ready
 	}),
 
 	/**
+	 * When clicking the 'BACK' button on a GameBase64 page to show the list of them again.
+	 */
+	$("#topic-remix").on("click", "#go-back-remix", function() {
+		// Load the cache again
+		$("#topic-remix").css("visibility", "hidden").empty().append(cacheRemix);
+		// Also set scroll position to where we clicked last time
+		$("#page").mCustomScrollbar("scrollTo", cacheRemixTabScrollPos, { scrollInertia: 0 });
+		// The 'onScroll' callback is not good enough and this is actually more safe
+		setTimeout(function() {
+			$("#topic-remix").css("visibility", "visible");
+		}, 150);
+	}),
+
+	/**
 	 * When clicking the 'SHOW' button on a CSDb page to show the full list of competition results.
 	 */
 	$("#topic-csdb").on("click", "#show-compo", function() {
@@ -790,6 +807,18 @@ $(function() { // DOM ready
 		cacheGB64TabScrollPos = tabScrollPos;
 		// Show the page
 		browser.getGB64($(this).attr("data-id"));
+		return false;
+	});
+
+	/**
+	 * When clicking a title or thumbnail in a list of remix entries.
+	 */
+	$("#topic-remix").on("click", ".remix-list-entry", function() {
+		// First cache the list of releases in case we return to it
+		cacheRemix = $("#topic-remix").html();
+		cacheRemixTabScrollPos = tabScrollPos;
+		// Show the page
+		browser.getRemix($(this).attr("data-id"));
 		return false;
 	});
 
