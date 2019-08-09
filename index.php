@@ -331,9 +331,9 @@
 					<div class="tab unselectable" data-topic="profile" id="tab-profile">Profile</div>
 					<div class="tab unselectable" data-topic="csdb" id="tab-csdb">CSDb<div id="note-csdb" class="notification csdbcolor"></div></div>
 					<div class="tab unselectable" data-topic="gb64" id="tab-gb64">GB64<div id="note-gb64" class="notification gb64color"></div></div>
+					<div class="tab unselectable" data-topic="remix" id="tab-remix">Remix<div id="note-remix" class="notification remixcolor"></div></div>
 					<div class="tab unselectable" data-topic="player" id="tab-player">Player<div id="note-player" class="notification playercolor"></div></div>
 					<div class="tab unselectable" data-topic="stil" id="tab-stil">STIL</div>
-					<div class="tab unselectable" data-topic="remix" id="tab-remix">Remix<div id="note-remix" class="notification csdbcolor"></div></div>
 					<div class="tab unselectable" data-topic="visuals" id="tab-visuals">Visuals</div>
 					<div class="tab unselectable" data-topic="disqus" id="tab-disqus">Disqus<div id="note-disqus" class="notification"></div></div>
 					<div class="tab right unselectable" data-topic="settings" id="tab-settings" style="width:26px;">

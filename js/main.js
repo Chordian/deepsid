@@ -834,6 +834,52 @@ $(function() { // DOM ready
 	});
 
 	/**
+	 * A jQuery plugin required for the <AUDIO> play event below to work.
+	 */
+	$.createEventCapturing = (function() {
+		var special = $.event.special;
+		return function(names) {
+			if (!document.addEventListener) return;
+			if (typeof names == 'string') names = [names];
+			$.each(names, function (i, name) {
+				var handler = function(e) {
+					e = $.event.fix(e);
+					return $.event.dispatch.call(this, e);
+				};
+				special[name] = special[name] || {};
+				if (special[name].setup || special[name].teardown) return;
+				$.extend(special[name], {
+					setup: function() {
+						this.addEventListener(name, handler, true);
+					},
+					teardown: function() {
+						this.removeEventListener(name, handler, true);
+					}
+				});
+			});
+		};
+    })();
+
+	/**
+	 * When clicking play in an <AUDIO> element in the 'Remix' tab.
+	 */
+	$.createEventCapturing(["play"]);
+	$("#topic-remix").on("play", "audio", function() {
+		var $this = $(this)[0];
+		// Stop any SID tune playing to avoid layering sound
+		$("#stop").trigger("mouseup");
+		SID.stop();
+		$("#topic-remix audio").each(function() {
+			var $sound = $(this)[0];
+			if ($sound != $this) {
+				// Stop all the other <AUDIO> elements too
+				$sound.pause();
+				$sound.currentTime = 0;
+			}
+		});
+	});
+
+	/**
 	 * Click a SID file row and then scroll to center it in the browser list.
 	 * 
 	 * @param {string} fullname		The SID filename including folders.

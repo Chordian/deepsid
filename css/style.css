@@ -126,9 +126,9 @@
 	--color-graph-border:			#aaa;
 	--color-graph-bg:				var(--color-top);
 
-	--color-rank-border:			var(--color-border);
-	--color-rank-text:				var(--color-text-body);
-	--color-rank-bg:				var(--color-top);
+	--color-stamp-border:			var(--color-table-border);
+	--color-stamp-text:				var(--color-text-body);
+	--color-stamp-bg:				var(--color-top);
 
 	/* SVG images */
 
@@ -184,6 +184,7 @@
 	--color-notification-csdb:		#100098;			/* Original CSDb color */
 	--color-notification-gb64:		#070;
 	--color-notification-player:	#808;
+	--color-notification-remix:		#777;
 
 	/* SOASC status in top */
 
@@ -448,7 +449,9 @@
 	--color-graph-border:			#373737;
 	--color-graph-bg:				#181818;
 
-	--color-rank-bg:				#333;
+	--color-stamp-border:			#666;
+	--color-stamp-text:				var(--color-top);
+	--color-stamp-bg:				#343434;
 
 	/* SVG images */
 
@@ -492,6 +495,7 @@
 	--color-notification-csdb:		#404c92;
 	--color-notification-gb64:		#474;
 	--color-notification-player:	#848;
+	--color-notification-remix:		#666;
 
 	/* SOASC status in top */
 
@@ -2959,6 +2963,10 @@ input[type=range]::-ms-track {
 			background: var(--color-notification-player);
 		}
 
+		#tabs .remixcolor {
+			background: var(--color-notification-remix);
+		}
+
 	/* Where the contents of a dexter tab is shown */
 	#page {
 		flex: 1 1 auto;
@@ -3699,32 +3707,88 @@ input[type=range]::-ms-track {
 					text-decoration: none;
 				}
 
-			#page .ext .rank {
+				/* Container for the audio element below */
+				#page .ext .remix64-audio {
+					position: relative;
+					top: -2px;
+					margin-top: 7px;
+					padding: 2px 2px;
+					height: 32px; /* <AUDIO> height below + 4 */
+					width: 753px;
+					/*border: 0.5px solid #47a;*/
+					background: #69c; /* General color of remix.kwed.org */
+					border-radius: 3px;
+					pointer-events: auto;
+				}
+
+					/* Audio bar used in 'Remix' dexter tab
+					   NOTE: The style of this element differs wildly across web browsers! */
+					#page .ext audio {
+						height: 28px;
+						width: 538px;
+					}
+
+					/* Image for downloading from remix.kwed.org */
+					#page .ext .remix64-audio img {
+						height: 28px;
+						margin-left: 8px;
+					}
+
+			#page .ext .stamp {
 				width: 55px;
 			}
 
-			#page .ext .remix64-rank {
-				height: 46px;
-				padding: 6px 8px 0;
+			#page .ext .remix64-stamp {
+				height: 85px;
+				width: 60px;
+				padding: 4px 0;
 				margin-right: 1px;
 				margin-bottom: 4.5px;
-				border: 1px solid var(--color-rank-border);
-				color: var(--color-rank-text);
-				background: var(--color-rank-bg);
-				font: normal 12px "Montserrat", sans-serif;
+				border: 1px solid var(--color-stamp-border);
+				color: var(--color-stamp-text);
+				background: var(--color-stamp-bg);
 				text-align: center;
+				line-height: 0;
 			}
 
-			#page .ext .remix64-rank div {
-				font: bold 18px "Courier New", sans-serif;
-			}
+				#page .ext .remix64-smiley {
+					font-size: 13px;
+					margin-top: 2px;
+					margin-bottom: 11px;
+					pointer-events: auto;
+				}
+
+					#page .ext .remix64-smiley img {
+						position: relative;
+						top: 3px;
+						width: 16px;
+						height: 16px;
+						margin-right: 3px;
+					}
+
+				#page .ext .stamp-divider {
+					display: inline-block;
+					height: 1px;
+					width: 80%;
+					margin-bottom: 8px;
+					border-bottom: 1px solid var(--color-stamp-border);
+				}
+
+				#page .ext .rank-label {
+					font: normal 12px "Montserrat", sans-serif;
+				}
+
+				#page .ext .rank-value {
+					font: bold 18px "Courier New", sans-serif;
+				}
 
 			#page .ext .remixer_badge {
-				width: 65px; 
+				display: inline-block;
+				width: 45px; 
 				background: rgba(51, 136, 170, 0.7);
 				color: var(--color-top);
 				font-size: 75%;
-				padding: 2px 7px;
+				padding: 2px 0;
 				margin: 0 1px;
 				border-radius: 6px;
 				text-align: center;
@@ -3734,21 +3798,6 @@ input[type=range]::-ms-track {
 				.badge_veteran_bronce	{ background: rgba(170, 136, 51, 0.7) !important; }
 				.badge_veteran_silver	{ background: rgba(170, 170, 170, 0.7) !important; }
 				.badge_veteran_gold		{ background: rgba(200, 180, 0, 0.8) !important; }
-
-			#page .ext .remix64-smiley {
-				position: absolute;
-				top: 8px;
-				right: 0;
-				font-size: 13px;
-				pointer-events: auto;
-			}
-
-				#page .ext .remix64-smiley img {
-					position: relative;
-					top: 3px;
-					width: 16px;
-					height: 16px;
-				}
 
 			#page .ext .rdate,
 			#page .ext .language,

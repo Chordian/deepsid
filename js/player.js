@@ -454,6 +454,12 @@ SIDPlayer.prototype = {
 			case "download":
 				break;
 		}
+		// Stop all the <AUDIO> elements in the 'Remix' tab
+		$("#topic-remix audio").each(function() {
+			var $sound = $(this)[0];
+			$sound.pause();
+			$sound.currentTime = 0;
+		});
 	},
 
 	/**

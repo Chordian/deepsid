@@ -5,7 +5,6 @@
  * Builds an HTML page with links to Remix64 entries or a specific entry.
  * 
  * @uses		$_GET['fullname']	for a page with links to sub pages
- * @uses		$_GET['id']			optional; for a specific entry
  */
 
 // BEFORE UPLOAD TO GITHUB!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! MAKE API IN SETUP.PHP "REDACTED".
@@ -32,9 +31,6 @@ if (isset($_GET['fullname'])) {
 	}
 
 	$data = json_decode($data);
-
-	if ($data->error_code != "ok")
-		die(json_encode(array('status' => 'warning', 'html' => '<p style="margin:0;"><i>Remix64 responded with the following error message:</i></p>'.$data->error_message)));
 
 	/* Example data: $data->data->[0 to MAX]
 
@@ -71,60 +67,60 @@ if (isset($_GET['fullname'])) {
 
 	*/
 
-	$entries = array();
-	foreach($data->data->data as $remix64_entry) {
-
-
-		$entry = 
-			'<tr>'.
-				'<td class="rank">'.
-					'<div class="remix64-rank">RANK<div>'.$remix64_entry->charts_data->position.'</div></div>'.
-				'</td>'.
-				'<td class="info">'.
-					'<a class="name" href="'.$remix64_entry->link_full.'" target="_blank">'.$remix64_entry->formatted->title.'</a><br />'.
-					substr($remix64_entry->releasedate, 0, 10).
-						' by '.$remix64_entry->arranger->noob_status->tag.
-						' <a href="'.$remix64_entry->arranger->link_full.'" target="_blank">'.$remix64_entry->arranger->formatted->arranger_name.'</a>'.
-					'<div class="remix64-smiley">'.ceil($remix64_entry->total_score).'% '.
-						'<a href="#" onclick="window.open(&quot;https://www.remix64.com/box.php?id='.$remix64_entry->id.'&quot;, &quot;votebox&quot;, &quot;toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=630,height=600,left=350,top=100,screenX=450,screenY=300&quot;); return false;" title="Vote">'.
-						'<img src="https://www.remix64.com/gfx/remix4/remix4/sizes-32x32/sm_'.$remix64_entry->total_smiley.'.png" alt="" /></a></div>'.
-				'</td>'.
-			'</tr>';
-
-		array_push($entries, array(
-			'rank'		=> $remix64_entry->charts_data->position,
-			'html'		=> $entry,
-		));
-	}
-	usort($entries, function($a, $b) {
-		return $a['rank'] - $b['rank'];
-	});
 	$rows = '';
-	foreach($entries as $entry)
-		$rows .= $entry['html'];
+	if ($data->error_code == "ok") {
 
+		$amount = count($data->data->data);
+		$entries = array();
 
+		foreach($data->data->data as $remix64_entry) {
+			$entry = 
+				'<tr>'.
+					'<td class="stamp">'.
+						'<div class="remix64-stamp">'.
+							'<div class="remix64-smiley">'.
+								'<a href="#" onclick="window.open(&quot;https://www.remix64.com/box.php?id='.$remix64_entry->id.'&quot;, &quot;votebox&quot;, &quot;toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=630,height=600,left=350,top=100,screenX=450,screenY=300&quot;); return false;" title="Vote">'.
+								'<img src="https://www.remix64.com/gfx/remix4/remix4/sizes-32x32/sm_'.$remix64_entry->total_smiley.'.png" alt="" /></a>'.
+								ceil($remix64_entry->total_score).'%</div><div class="stamp-divider"></div>'.
+							'<div class="rank-label">RANK</div><div class="rank-value">'.$remix64_entry->charts_data->position.'</div>'.
+						'</div>'.
+					'</td>'.
+					'<td class="info">'.
+						'<a class="name" href="'.$remix64_entry->link_full.'" target="_blank">'.$remix64_entry->formatted->title.'</a><br />'.
+						substr($remix64_entry->releasedate, 0, 10).
+							' by '.$remix64_entry->arranger->noob_status->tag.
+							' <a href="'.$remix64_entry->arranger->link_full.'" target="_blank"><b>'.$remix64_entry->arranger->formatted->arranger_name.'</b></a><br />'.
+						'<div class="remix64-audio"><audio controls="" controlslist="nodownload">'.
+								'<source src="'.$remix64_entry->download_prim.'" type="audio/mpeg">'.
+							'</audio><a href="'.$remix64_entry->lookup_url.'" target="_blank"><img src="images/download_remix.png" alt="Download at Remix.Kwed.Org" /></a>'.
+						'</div>'.
+					'</td>'.
+				'</tr>';
 
+			array_push($entries, array(
+				'rank'		=> $remix64_entry->charts_data->position,
+				'html'		=> $entry,
+			));
+		}
+		usort($entries, function($a, $b) {
+			return $a['rank'] - $b['rank'];
+		});
 
+		foreach($entries as $entry)
+			$rows .= $entry['html'];
 
-	// Now build the HTML
-	$html = '<h2 style="display:inline-block;margin-top:0;">Remix64</h2>'.
-		'<h3>'.count($data->data->data).' entr'.(count($data->data->data) > 1 ? 'ies' : 'y').' found</h3>'.
-		'<table class="releases">'.
-			$rows.
-		'</table>';
+	} else
+		$amount = 0; // No remixes found
 
-	//$html = 'https://www.remix64.com/services/api/de/deepsid/?task=get_remixes&api_user=deepsid&hash='.$hash.'&data='.$encoded;
-
-
-
-
-
-
-	//$remixes = [1];
+// Now build the HTML
+$html = '<h2 style="display:inline-block;margin-top:0;">Remix64</h2>'.
+	'<h3>'.$amount.' entr'.($amount == 0 || $amount > 1 ? 'ies' : 'y').' found</h3>'.
+	'<table class="releases">'.
+		$rows.
+	'</table>';
 
 } else
 	die(json_encode(array('status' => 'error', 'message' => 'You must specify the proper GET variables.')));
 
-echo json_encode(array('status' => 'ok', 'html' => $html, 'count' => count($data->data->data)));
+echo json_encode(array('status' => 'ok', 'html' => $html, 'count' => $amount));
 ?>
