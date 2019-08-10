@@ -126,9 +126,7 @@
 	--color-graph-border:			#aaa;
 	--color-graph-bg:				var(--color-top);
 
-	--color-stamp-border:			var(--color-table-border);
-	--color-stamp-text:				var(--color-text-body);
-	--color-stamp-bg:				var(--color-top);
+	--bottom-connect-down:			-9px;
 
 	/* SVG images */
 
@@ -449,9 +447,7 @@
 	--color-graph-border:			#373737;
 	--color-graph-bg:				#181818;
 
-	--color-stamp-border:			#666;
-	--color-stamp-text:				var(--color-top);
-	--color-stamp-bg:				#343434;
+	--bottom-connect-down:			-8px;
 
 	/* SVG images */
 
@@ -957,7 +953,8 @@ small.u2 { margin-left: 2px; }
 	#songs button,
 	.edit button,
 	#sundry button,
-	#sticky-visuals button {
+	#sticky-visuals button,
+	#topic-remix .action button {
 		transition: all .05s linear;
 		box-shadow: 2px 2px 4px var(--color-button-shadow);
 	}
@@ -966,7 +963,8 @@ small.u2 { margin-left: 2px; }
 	#songs button:active,
 	.edit button:active,
 	#sundry button:active,
-	#faster.button-selected {
+	#faster.button-selected,
+	#topic-remix .action button:active {
 		box-shadow: var(--shadow-button-selected);
 	}
 
@@ -999,6 +997,17 @@ small.u2 { margin-left: 2px; }
 	fill: currentColor;
 	vertical-align: top;
 }
+
+	#topic-remix .button-big {
+		height: 44px !important;
+		margin-bottom: 5px;
+	}
+
+	#topic-remix .remix64-minimize {
+		display: none;
+		position: relative;
+		top: 3px;
+	}
 
 .button-lady {
 	width: 100%;
@@ -3707,17 +3716,60 @@ input[type=range]::-ms-track {
 					text-decoration: none;
 				}
 
+				#page .ext .remix64-connect {
+					position: relative;
+					display: inline-block;
+					width: 57px;
+					height: 32px;
+					padding: 2px;
+					margin: 0;
+					vertical-align: top;
+				}
+
+					#page .ext .action .down {
+						display: none;
+						position: absolute;
+						bottom: var(--bottom-connect-down);;
+						left: 23px;
+						width: 1px;
+						height: 15px;
+						border-left: 2px solid var(--color-table-border);
+						z-index: 2;
+					}
+
+					#page .ext .remix64-connect .up {
+						position: absolute;
+						top: 6px;
+						left: 23px;
+						width: 5px;
+						height: 8px;
+						border-left: 2px solid var(--color-table-border);
+						background: var(--color-bg-box);
+						z-index: 2;
+					}
+
+					#page .ext .remix64-connect .right {
+						position: absolute;
+						top: 10px;
+						right: -6px;
+						width: 40px;
+						height: 8px;
+						border-left: 2px solid var(--color-table-border);
+						border-bottom: 2px solid var(--color-table-border);
+						border-radius: 8px;
+					}
+
 				/* Container for the audio element below */
 				#page .ext .remix64-audio {
 					position: relative;
-					top: -2px;
-					margin-top: 7px;
-					padding: 2px 2px;
+					display: inline-block;
+					padding: 2px;
 					height: 32px; /* <AUDIO> height below + 4 */
 					width: 753px;
 					/*border: 0.5px solid #47a;*/
 					background: #69c; /* General color of remix.kwed.org */
-					border-radius: 3px;
+					border-radius: 2px;
+					z-index: 2;
 					pointer-events: auto;
 				}
 
@@ -3734,53 +3786,12 @@ input[type=range]::-ms-track {
 						margin-left: 8px;
 					}
 
-			#page .ext .stamp {
-				width: 55px;
+			/* The <TD> containing the square play button for a remix */
+			#topic-remix .action {
+				position: relative;
+				width: 53px;
+				vertical-align: top;
 			}
-
-			#page .ext .remix64-stamp {
-				height: 85px;
-				width: 60px;
-				padding: 4px 0;
-				margin-right: 1px;
-				margin-bottom: 4.5px;
-				border: 1px solid var(--color-stamp-border);
-				color: var(--color-stamp-text);
-				background: var(--color-stamp-bg);
-				text-align: center;
-				line-height: 0;
-			}
-
-				#page .ext .remix64-smiley {
-					font-size: 13px;
-					margin-top: 2px;
-					margin-bottom: 11px;
-					pointer-events: auto;
-				}
-
-					#page .ext .remix64-smiley img {
-						position: relative;
-						top: 3px;
-						width: 16px;
-						height: 16px;
-						margin-right: 3px;
-					}
-
-				#page .ext .stamp-divider {
-					display: inline-block;
-					height: 1px;
-					width: 80%;
-					margin-bottom: 8px;
-					border-bottom: 1px solid var(--color-stamp-border);
-				}
-
-				#page .ext .rank-label {
-					font: normal 12px "Montserrat", sans-serif;
-				}
-
-				#page .ext .rank-value {
-					font: bold 18px "Courier New", sans-serif;
-				}
 
 			#page .ext .remixer_badge {
 				display: inline-block;
@@ -3799,6 +3810,42 @@ input[type=range]::-ms-track {
 				.badge_veteran_silver	{ background: rgba(170, 170, 170, 0.7) !important; }
 				.badge_veteran_gold		{ background: rgba(200, 180, 0, 0.8) !important; }
 
+
+			#page .ext .remix64-smiley {
+				position: absolute;
+				top: 8px;
+				right: 0;
+				font-size: 13px;
+				pointer-events: auto;
+			}
+
+				#page .ext .remix64-smiley img {
+					position: relative;
+					top: 3px;
+					width: 16px;
+					height: 16px;
+				}
+
+			#page .ext .remix64-rank {
+				position: absolute;
+				top: 30px;
+				right: 0;
+				color: var(--color-text-player);
+			}
+
+			#page .ext .remix64-more td {
+				border-top: none !important;
+				margin: 0 !important;
+				padding: 0 !important;
+			}
+
+				/* The container that may expand in height to show an <AUDIO> element */
+				#page .ext .remix64-expander {
+					overflow: hidden;
+					height: 0;
+					pointer-events: auto;
+				}
+	
 			#page .ext .rdate,
 			#page .ext .language,
 			#page .ext .player-line {

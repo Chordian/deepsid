@@ -7,8 +7,6 @@
  * @uses		$_GET['fullname']	for a page with links to sub pages
  */
 
-// BEFORE UPLOAD TO GITHUB!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! MAKE API IN SETUP.PHP "REDACTED".
-
 require_once("class.account.php"); // Includes setup
 
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest')
@@ -76,23 +74,36 @@ if (isset($_GET['fullname'])) {
 		foreach($data->data->data as $remix64_entry) {
 			$entry = 
 				'<tr>'.
-					'<td class="stamp">'.
-						'<div class="remix64-stamp">'.
-							'<div class="remix64-smiley">'.
-								'<a href="#" onclick="window.open(&quot;https://www.remix64.com/box.php?id='.$remix64_entry->id.'&quot;, &quot;votebox&quot;, &quot;toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=630,height=600,left=350,top=100,screenX=450,screenY=300&quot;); return false;" title="Vote">'.
-								'<img src="https://www.remix64.com/gfx/remix4/remix4/sizes-32x32/sm_'.$remix64_entry->total_smiley.'.png" alt="" /></a>'.
-								ceil($remix64_entry->total_score).'%</div><div class="stamp-divider"></div>'.
-							'<div class="rank-label">RANK</div><div class="rank-value">'.$remix64_entry->charts_data->position.'</div>'.
-						'</div>'.
+					'<td class="action">'.
+						'<button class="remix64-action button-big button-idle">'.
+							'<svg class="remix64-play" height="40" viewBox="0 0 48 48"><path d="M-838-2232H562v3600H-838z" fill="none"/><path d="M16 10v28l22-14z"/><path d="M0 0h48v48H0z" fill="none"/></svg>'.
+							'<svg class="remix64-minimize" height="30" viewBox="0 0 32 32"><path d="M4 24 H28 L16 6 z"/></svg>'.
+						'</button>'.
+						'<div class="down"></div>'.
 					'</td>'.
 					'<td class="info">'.
 						'<a class="name" href="'.$remix64_entry->link_full.'" target="_blank">'.$remix64_entry->formatted->title.'</a><br />'.
 						substr($remix64_entry->releasedate, 0, 10).
 							' by '.$remix64_entry->arranger->noob_status->tag.
 							' <a href="'.$remix64_entry->arranger->link_full.'" target="_blank"><b>'.$remix64_entry->arranger->formatted->arranger_name.'</b></a><br />'.
-						'<div class="remix64-audio"><audio controls="" controlslist="nodownload">'.
+						/*'<div class="remix64-audio"><audio controls="" controlslist="nodownload">'.
 								'<source src="'.$remix64_entry->download_prim.'" type="audio/mpeg">'.
 							'</audio><a href="'.$remix64_entry->lookup_url.'" target="_blank"><img src="images/download_remix.png" alt="Download at Remix.Kwed.Org" /></a>'.
+						'</div>'.*/
+						'<div class="remix64-smiley">'.ceil($remix64_entry->total_score).'% '.
+							'<a href="#" onclick="window.open(&quot;https://www.remix64.com/box.php?id='.$remix64_entry->id.'&quot;, &quot;votebox&quot;, &quot;toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=630,height=600,left=350,top=100,screenX=450,screenY=300&quot;); return false;" title="Vote">'.
+							'<img src="https://www.remix64.com/gfx/remix4/remix4/sizes-32x32/sm_'.$remix64_entry->total_smiley.'.png" alt="" /></a>'.
+						'</div>'.
+						
+						'<div class="remix64-rank">'.
+							'Rank: '.$remix64_entry->charts_data->position.
+						'</div>'.
+					'</td>'.
+				'</tr>'.
+				'<tr class="remix64-more">'.
+					'<td colspan="2">'.
+						'<div class="remix64-expander" data-download="'.$remix64_entry->download_prim.'" data-lookup="'.$remix64_entry->lookup_url.'">'.
+							'<div class="remix64-connect"><div class="up"></div><div class="right"></div></div><div class="remix64-audio"></div>'.
 						'</div>'.
 					'</td>'.
 				'</tr>';
