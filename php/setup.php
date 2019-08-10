@@ -25,7 +25,7 @@ define('PDO_ONLINE',		'mysql:host='.HOST_ONLINE.';dbname='.DB_ONLINE);
 define('USER_ONLINE',		'[REDACTED]');
 define('PWD_ONLINE',		'[REDACTED]');
 
-define('REMIX64_API',       '[REDACTED]');
+define('REMIX64_API',       'oDqHpvKZp2fM05JydWY2ylR8bCE8Y2PN');
 
 define('DB_ERROR',          'A database error has been written to a log regularly monitored by Chordian.');
 

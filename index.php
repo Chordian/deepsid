@@ -1009,6 +1009,15 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>August 10, 2019</h3>
+						<ul>
+							<li>Added a new tab for listing and playing remixes of SID songs. The list is built using an
+								API for <a href="https://www.remix64.com/">Remix64.com</a> and may play audio from
+								<a href="http://remix.kwed.org/">Remix.Kwed.Org</a>. Both sites have given DeepSID
+								permission to access their resources.
+							</li>
+						</ul>
+
 						<h3>August 3, 2019</h3>
 						<ul>
 							<li>MUS files are now disabled for Hermit's emulator when searching.</li>

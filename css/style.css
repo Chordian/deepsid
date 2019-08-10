@@ -1003,12 +1003,6 @@ small.u2 { margin-left: 2px; }
 		margin-bottom: 5px;
 	}
 
-	#topic-remix .remix64-minimize {
-		display: none;
-		position: relative;
-		top: 3px;
-	}
-
 .button-lady {
 	width: 100%;
 	height: 30px;
@@ -3828,7 +3822,7 @@ input[type=range]::-ms-track {
 
 			#page .ext .remix64-rank {
 				position: absolute;
-				top: 30px;
+				top: 31px;
 				right: 0;
 				color: var(--color-text-player);
 			}

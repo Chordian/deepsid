@@ -320,6 +320,12 @@ Controls.prototype = {
 				// STOP button
 				$("#time-bar").empty().append('<div></div>');
 				SID.stop();
+				// Also stop any <AUDIO> element playing
+				$("#topic-remix audio").each(function() {
+					var $sound = $(this)[0];
+					$sound.pause();
+					$sound.currentTime = 0;
+				});
 				break;
 			case "sid-model":
 				// Toggle between SID model 6581 or 8580

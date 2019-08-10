@@ -23,7 +23,9 @@ if (isset($_GET['fullname'])) {
 	try {
 		// Get the entire JSON tree for the SID file from Remix64
 		// @example https://www.remix64.com/services/api/de/deepsid/?task=get_remixes&api_user=deepsid&hash=d0f7e95f7e2e4ca1f50a8aaf66ca3808&data={%22hvsc_path%22:%22MUSICIANS\/D\/Daglish_Ben\/Cobra.sid%22}
-		$data = file_get_contents('https://www.remix64.com/services/api/de/deepsid/?task=get_remixes&api_user=deepsid&hash='.$hash.'&data='.$encoded);
+		$data = substr($hvsc_path, -4) != '.mus'
+			? file_get_contents('https://www.remix64.com/services/api/de/deepsid/?task=get_remixes&api_user=deepsid&hash='.$hash.'&data='.$encoded)
+			: json_encode(array('error_code' => 'CGSC not supported'));
 	} catch(ErrorException $e) {
 		die(json_encode(array('status' => 'warning', 'html' => '<p style="margin:0;"><i>Uh... Remix64? Are you there?</i></p><small>Come on, Remix64, old buddy, don\'t let me down.</small>')));
 	}
@@ -62,7 +64,6 @@ if (isset($_GET['fullname'])) {
 			- arranger_id		Relates to the platform from which it originates (RKO, AmigaRemix, etc.)
 			- act_id 			Relates to the artist; so LMan RKO and LMan AmigaRemix are combined under act_id "lman"
 			- member			Relates to the user account at Remix64
-
 	*/
 
 	$rows = '';
@@ -77,7 +78,7 @@ if (isset($_GET['fullname'])) {
 					'<td class="action">'.
 						'<button class="remix64-action button-big button-idle">'.
 							'<svg class="remix64-play" height="40" viewBox="0 0 48 48"><path d="M-838-2232H562v3600H-838z" fill="none"/><path d="M16 10v28l22-14z"/><path d="M0 0h48v48H0z" fill="none"/></svg>'.
-							'<svg class="remix64-minimize" height="30" viewBox="0 0 32 32"><path d="M4 24 H28 L16 6 z"/></svg>'.
+							'<svg class="remix64-pause" height="40" viewBox="0 0 48 48" style="display:none;"><path d="M12 38h8V10h-8v28zm16-28v28h8V10h-8z"/><path d="M0 0h48v48H0z" fill="none"/></svg>'.
 						'</button>'.
 						'<div class="down"></div>'.
 					'</td>'.
@@ -133,5 +134,5 @@ $html = '<h2 style="display:inline-block;margin-top:0;">Remix64</h2>'.
 } else
 	die(json_encode(array('status' => 'error', 'message' => 'You must specify the proper GET variables.')));
 
-echo json_encode(array('status' => 'ok', 'html' => $html, 'count' => $amount));
+echo json_encode(array('status' => 'ok', 'html' => $html.'<i><small>Generated using an API for <a href="https://www.remix64.com/" target="_blank">Remix64.com</a></small>', 'count' => $amount));
 ?>

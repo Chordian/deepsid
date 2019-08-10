@@ -834,58 +834,35 @@ $(function() { // DOM ready
 	});
 
 	/**
-	 * Plugin with one easing copied from "jquery.easing.1.3.js" by Robert Penner
-	 * and George McGinley Smith. Used by the .animate() jQuery below.
-	 *
-	 * @link http://gsgd.co.uk/sandbox/jquery/easing/
-	 */
-	/*$.extend($.easing,{
-		easeInOutCubic: function (x, t, b, c, d) {
-			if ((t/=d/2) < 1) return c/2*t*t*t + b;
-			return c/2*((t-=2)*t*t + 2) + b;
-		}
-	});*/
-
-	/**
-	 * When clicking a square action button (play or minimize) in the 'Remix' tab.
+	 * When clicking a square action button (play or pause) in the 'Remix' tab.
 	 */
 	$("#topic-remix").on("click", ".remix64-action", function() {
-		var $all = $("#topic-remix .remix64-action"), $this = $(this);
+		var $this = $(this);
 		var $expander = $this.parents("tr").next("tr").find(".remix64-expander");
 
+		if ($this.find(".remix64-play").css("display") !== "none") {
+			// Prepare an audio bar for the remix
+			// NOTE: When it appears, the audio bar will get the song length from the MP3 file. This counts against
+			// the hourly download limit at remix.kwed.org. This is why there's a check for previous visit first.
+			if (!$expander.find("audio").length)
+				$expander.find(".remix64-audio").empty().append(
+					'<audio controls="" controlslist="nodownload">'+
+						'<source src="'+$expander.attr("data-download")+'" type="audio/mpeg">'+
+					'</audio><a href="'+$expander.attr("data-lookup")+'" target="_blank"><img src="images/download_remix.png" alt="Download at Remix.Kwed.Org" /></a>'
+				);
 
+			// Fade in the part of the connect pin just below the square button
+			$this.parents("td").find(".down").fadeIn("fast");
 
-// @todo stop button svg instead + don't slide open either if audio exists?
-
-
-
-
-
-
-		// Prepare an audio bar for the remix
-		// NOTE: When it appears, the audio bar will get the song length from the MP3 file. This counts against
-		// the hourly download limit at remix.kwed.org. This is why there's a check for previous visit first.
-		if (!$expander.find("audio").length)
-			$expander.find(".remix64-audio").empty().append(
-				'<audio controls="" controlslist="nodownload">'+
-					'<source src="'+$expander.attr("data-download")+'" type="audio/mpeg">'+
-				'</audio><a href="'+$expander.attr("data-lookup")+'" target="_blank"><img src="images/download_remix.png" alt="Download at Remix.Kwed.Org" /></a>'
-			);
-		$this.parents("td").find(".down").fadeIn("fast");
-		// Slide open some more space below the remix row itself
-		$expander.animate({"height": "38px"}, 300, function() {
-			// Hide the 'Play' button and show 'Minimize' instead
-			$all.removeClass("button-idle button-selected").addClass("button-idle").find(".remix64-minimize").hide();
-			$all.find(".remix64-play").show();
-			$this.addClass("button-selected").find(".remix64-play").hide();
-			$this.find(".remix64-minimize").show();
-		});
-
-
-
-
-
-
+			// Slide open some more space below the remix row itself (just calls the function if already open)
+			$expander.animate({"height": "38px"}, 300, function() {
+				// Start playing the audio remix (an event also takes care of the square button)
+				$expander.find("audio")[0].play();
+			});
+		} else {
+			// Pause the audio remix (an event also takes care of the square button)
+			$expander.find("audio")[0].pause();
+		}
 	});
 
 	/**
@@ -932,6 +909,24 @@ $(function() { // DOM ready
 				$sound.currentTime = 0;
 			}
 		});
+		// Hide the 'Play' button and show 'Pause' instead
+		var $button = $(this).parents("tr").prev("tr").find("button"),
+			$all = $("#topic-remix .remix64-action");
+		$all.removeClass("button-idle button-selected").addClass("button-idle").find(".remix64-pause").hide();
+		$all.find(".remix64-play").show();
+		$button.addClass("button-selected").find(".remix64-play").hide();
+		$button.find(".remix64-pause").show();
+	});
+
+	/**
+	 * When clicking pause in an <AUDIO> element in the 'Remix' tab.
+	 */
+	$.createEventCapturing(["pause"]);
+	$("#topic-remix").on("pause", "audio", function() {
+		// Hide the 'Pause' button and show 'Play' instead
+		$button = $(this).parents("tr").prev("tr").find("button");
+		$button.removeClass("button-idle button-selected").addClass("button-idle").find(".remix64-pause").hide();
+		$button.find(".remix64-play").show();
 	});
 
 	/**
