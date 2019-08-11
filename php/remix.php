@@ -83,14 +83,11 @@ if (isset($_GET['fullname'])) {
 						'<div class="down"></div>'.
 					'</td>'.
 					'<td class="info">'.
-						'<a class="name" href="'.$remix64_entry->link_full.'" target="_blank">'.$remix64_entry->formatted->title.'</a><br />'.
+						'<a class="name" href="'.$remix64_entry->link_full.'" target="_blank">'.$remix64_entry->formatted->title.'</a>'.
+							'<span class="remix64-length">('.$remix64_entry->formatted->duration.')</span><br />'.
 						substr($remix64_entry->releasedate, 0, 10).
 							' by '.$remix64_entry->arranger->noob_status->tag.
 							' <a href="'.$remix64_entry->arranger->link_full.'" target="_blank"><b>'.$remix64_entry->arranger->formatted->arranger_name.'</b></a><br />'.
-						/*'<div class="remix64-audio"><audio controls="" controlslist="nodownload">'.
-								'<source src="'.$remix64_entry->download_prim.'" type="audio/mpeg">'.
-							'</audio><a href="'.$remix64_entry->lookup_url.'" target="_blank"><img src="images/download_remix.png" alt="Download at Remix.Kwed.Org" /></a>'.
-						'</div>'.*/
 						'<div class="remix64-smiley">'.ceil($remix64_entry->total_score).'% '.
 							'<a href="#" onclick="window.open(&quot;https://www.remix64.com/box.php?id='.$remix64_entry->id.'&quot;, &quot;votebox&quot;, &quot;toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=630,height=600,left=350,top=100,screenX=450,screenY=300&quot;); return false;" title="Vote">'.
 							'<img src="https://www.remix64.com/gfx/remix4/remix4/sizes-32x32/sm_'.$remix64_entry->total_smiley.'.png" alt="" /></a>'.
@@ -127,6 +124,7 @@ if (isset($_GET['fullname'])) {
 // Now build the HTML
 $html = '<h2 style="display:inline-block;margin-top:0;">Remix64</h2>'.
 	'<h3>'.$amount.' entr'.($amount == 0 || $amount > 1 ? 'ies' : 'y').' found</h3>'.
+	($amount == 0 ? '<div class="zero-releases-line"></div>' : '').
 	'<table class="releases">'.
 		$rows.
 	'</table>';

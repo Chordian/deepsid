@@ -3780,6 +3780,14 @@ input[type=range]::-ms-track {
 						margin-left: 8px;
 					}
 
+				#topic-remix .remix64-length {
+					position: relative;
+					top: -1px;
+					margin-left: 6px;
+					font-size: 11px;
+					color: var(--color-text-player);
+				}
+
 			/* The <TD> containing the square play button for a remix */
 			#topic-remix .action {
 				position: relative;
