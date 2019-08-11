@@ -126,6 +126,7 @@
 	--color-graph-border:			#aaa;
 	--color-graph-bg:				var(--color-top);
 
+	--url-vote:						url(../images/vote_bright.png);
 	--bottom-connect-down:			-9px;
 
 	/* SVG images */
@@ -447,6 +448,7 @@
 	--color-graph-border:			#373737;
 	--color-graph-bg:				#181818;
 
+	--url-vote:						url(../images/vote_dark.png);
 	--bottom-connect-down:			-8px;
 
 	/* SVG images */
@@ -3812,6 +3814,21 @@ input[type=range]::-ms-track {
 				.badge_veteran_silver	{ background: rgba(170, 170, 170, 0.7) !important; }
 				.badge_veteran_gold		{ background: rgba(200, 180, 0, 0.8) !important; }
 
+			#topic-remix h3 {
+				position: relative;
+			}
+
+			/* The "Click a smiley to vote!" graphics */
+			#page .ext .remix64-vote {
+				position: absolute;
+				top: 6px;
+				right: 0;
+				width: 179px;
+				height: 50px;
+				background: var(--url-vote) 0 0 / 177px 41px no-repeat;
+				z-index: 2;
+				pointer-events: none;
+			}
 
 			#page .ext .remix64-smiley {
 				position: absolute;

@@ -969,7 +969,7 @@
 									<code>gb64</code> (game)</td>
 							</tr>
 							<tr>
-								<td>tab</td><td>Set to <code>csdb</code>, <code>gb64</code>, <code>stil</code>, <code>visuals</code>,
+								<td>tab</td><td>Set to <code>csdb</code>, <code>gb64</code>, <code>remix</code>, <code>stil</code>, <code>visuals</code>,
 									<code>disqus</code>, <code>about</code>, <code>faq</code>, <code>changes</code> or <code>settings</code>
 									(the gear icon) to select that page tab</td>
 							</tr>
@@ -1008,6 +1008,11 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>August 11, 2019</h3>
+						<ul>
+							<li>The song length is now shown after a title in the remix tab.</li>
+						</ul>
 
 						<h3>August 10, 2019</h3>
 						<ul>
