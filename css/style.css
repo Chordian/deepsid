@@ -443,8 +443,8 @@
 	--color-sid-row-error-entry:	#fdd;
 	--color-sid-row-error-bg:		#382828;
 
-	--color-graph-channel-text:		var(--color-text-body);
-	--color-graph-channel-bg:		#343434;
+	--color-graph-channel-text:		#181818;
+	--color-graph-channel-bg:		#a4a4a4;
 	--color-graph-border:			#373737;
 	--color-graph-bg:				#181818;
 
