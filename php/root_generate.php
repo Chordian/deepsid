@@ -68,6 +68,7 @@ function GenerateList($rows, $type) {
 						array_push($list, array(
 							'entry' =>	AdaptBrowserName($row->fullname, HOST.'?file=/'.$row->fullname.'&subtune='.($row->subtune + 1)),
 							'value' =>	explode('.', $length)[0], // No MS
+							'subtune' => $row->subtune + 1,
 						));
 					}
 				}
@@ -187,7 +188,9 @@ function GenerateList($rows, $type) {
 			$contents .=
 				'<tr>'.
 					'<td>'.($key + 1).'</td>'.
-					'<td class="middle"><div class="block-wrap"><div class="block"><div class="top-item slimfont">'.$item['entry'].'</div></div></div></td>'.
+					'<td class="middle"><div class="block-wrap"><div class="block">'.
+					(isset($item['subtune']) && $item['subtune'] > 1 ? '<div class="subtunes specific">'.$item['subtune'].'</div>' : '').
+					'<div class="top-item slimfont">'.$item['entry'].'</div></div></div></td>'.
 					'<td>'.$item['value'].'</td>'.
 				'</tr>';
 

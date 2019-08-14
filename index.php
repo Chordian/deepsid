@@ -1009,9 +1009,25 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>August 14, 2019</h3>
+						<ul>
+							<li>The top table with the longest SID playing times now show sub tune numbers when relevant.
+								This was particularly needed for songs with multiple long sub tunes in them.</li>
+						</ul>
+
+						<h3>August 12, 2019</h3>
+						<ul>
+							<li>Added <a href="//deepsid.chordian.net/?file=/MUSICIANS/W/Walker_Martin/">Martin Walker</a>,
+								<a href="//deepsid.chordian.net/?file=/MUSICIANS/F/Fanta/">Fanta</a>,
+								<a href="//deepsid.chordian.net/?file=/MUSICIANS/D/Detert_Thomas/">Thomas Detert</a> and
+								<a href="//deepsid.chordian.net/?file=/MUSICIANS/V/Vincenzo/">Vincenzo</a>
+								to the list of recommended folders.</li>
+						</ul>
+
 						<h3>August 11, 2019</h3>
 						<ul>
 							<li>The song length is now shown after a title in the remix tab.</li>
+							<li>Added corner graphics for pointing out that you can also vote in the remix tab.</li>
 						</ul>
 
 						<h3>August 10, 2019</h3>

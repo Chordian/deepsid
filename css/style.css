@@ -2394,7 +2394,8 @@ input[type=range]::-ms-track {
 		}
 
 		/* Number of subtunes (indicated in the end of the SID filename) */
-		#songs .subtunes {
+		#songs .subtunes,
+		#page .subtunes {
 			float: right;
 			position: relative;
 			top: 9px;
@@ -2410,12 +2411,18 @@ input[type=range]::-ms-track {
 			text-align: center;
 		}
 
+			/* For subtunes in "The longest SID tunes" top list */
+			#page .subtunes {
+				top: 3px;
+			}
+
 			#songs .disabled .subtunes {
 				background: var(--color-disabled);
 			}
 
 			/* In symlists a specific subtune to be played is shown instead */
-			#songs .specific {
+			#songs .specific,
+			#page .subtunes {
 				font-size: 9px;
 				line-height: 1.65em;
 				background: var(--color-bg-subtune);
