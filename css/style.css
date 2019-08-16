@@ -3070,8 +3070,8 @@ input[type=range]::-ms-track {
 
 		#page .redirect.playing:after {
 			top: 3px;
-			left: 0;
-			background: url(../images/redirect_play.svg) 0.5px 0 / 14px 14px no-repeat;
+			left: 1px;
+			background: url(../images/redirect_play.svg) 0.5px 0 / 13px 14px no-repeat;
 			filter: var(--svg-filter-button);
 		}
 

@@ -1322,6 +1322,8 @@ Browser.prototype = {
 				$("#topic-csdb").empty().append(data.html)
 					.css("visibility", "visible");
 
+				UpdateRedirectPlayIcons();
+
 				if (data.entries != "") this.sidEntries = data.entries; // Array used for sorting
 
 				// Add rows sorted by newest by triggering the drop-down box (if present)
@@ -1408,6 +1410,8 @@ Browser.prototype = {
 					var $this = $(this);
 					$.get("php/csdb_compo_path.php", { id: $this.attr("data-id") }, function(data) {
 						browser.validateData(data, function(data) {
+							if (parseInt($this.attr("data-id")) == parseInt(mark))
+								data.path = data.path.replace('redirect"', 'redirect playing"');
 							$this.append(data.path);
 						});
 					});

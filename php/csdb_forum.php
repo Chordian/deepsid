@@ -38,10 +38,32 @@ foreach($csdb->Forum->Room->Topic->Post as $post) {
 	// Shorten ------------------- lines typically used for competition results
 	$comment = str_replace(str_repeat('-', 50), str_repeat('-', 10), $comment);
 
-	$handle 	= $post->Author->Handle;
-	$registered	= $post->Author->RegisteredDate;
-	$scid		= isset($post->Author->ScenerId) ? $post->Author->ScenerId : 0;
-	$uid		= 0; // @todo Perff needs to add this to the XML data.
+	// Figure out handle, and if we get it, store ID too as repeated use doesn't have handle along with it
+	$handle = '';
+	if (isset($post->Author->CSDbUser->Handle))
+		$handle = $post->Author->CSDbUser->Handle;
+	else if (isset($post->Author->CSDbUser->CSDbEntry->Handle->Handle))
+		$handle = $post->Author->CSDbUser->CSDbEntry->Handle->Handle;
+	else if (isset($post->Author->CSDbUser->Login))
+		$handle = $post->Author->CSDbUser->Login;
+
+	$user_id = $post->Author->CSDbUser->ID; // This ID can't be used to find scener ID but it's always available
+
+	$scid = 0;
+	if (isset($post->Author->CSDbUser->CSDbEntry)) {
+		$scid = $post->Author->CSDbUser->CSDbEntry->Handle->ID;
+		// There's a scener ID, store it for later reference
+		$scener_id[(string)$user_id] = $scid;
+	} else if(array_key_exists((string)$user_id, $scener_id))
+		// We've obtained the scener ID for this scener before so get it now
+		$scid = $scener_id[(string)$user_id];
+
+	if (!empty($handle))
+		// There's a handle for this scener; store it for later reference
+		$scener_handle[(string)$user_id] = $handle;
+	else if (array_key_exists((string)$user_id, $scener_handle))
+		// We've had this scener before so we know the name
+		$handle = $scener_handle[(string)$user_id];
 
 	// If the scener ID is in the 'composers' database table then get his/her HVSC home folder
 	$hvsc_folder = '';
@@ -77,13 +99,39 @@ foreach($csdb->Forum->Room->Topic->Post as $post) {
 	$comments_array[(string)$post->ID]['handle'] = $handle;
 	$comments_array[(string)$post->ID]['comment'] = $comment;
 
+	/***** REDIRECT LINK ADAPTATIONS - BEGIN *****/
+
+	$dom = new DOMDocument();
+	libxml_use_internal_errors(true);				// Ignores those pesky PHP warnings
+	$dom->loadHTML('<span>'.$comment.'</span>');	// The <SPAN> hack avoids it being wrapped in <P> tags
+
+	$xpath = new DOMXPath($dom);
+
+	// Get HVSC path from all <a href> (if available) and use it as content + add "redirect" class
+	$anchor_list = $xpath->query('//a');
+	foreach($anchor_list as $a) {
+		$url = $a->getAttribute('href');
+		if (preg_match('/(DEMO[^\s].+\.sid|GAMES[^\s]+\.sid|MUSICIANS[^\s]+\.sid)/i', $url, $matches)) {
+			$a->textContent = '/'.$matches[0]; // Place the raw HVSC path in the anchor content
+			$a->setAttribute('class', 'redirect');
+		}
+	}
+
+
+	// Now to catch raw HVSC paths without grabbing already modified anchor links...
+
+
+	$comment = $dom->saveHTML();
+
+	/***** REDIRECT LINK ADAPTATIONS - END *****/
+
 	// Does THIS post quote something?
 	if (isset($post->Quoting)) {
 		// Prepend it now then
 		$quoted = $comments_array[(string)$post->Quoting->Post->ID];
 		$comment = '<span class="quote">Quote by '.$quoted['handle'].':</span><div class="quote">'.$quoted['comment'].'</div>'.$comment;
 	}
-
+	
 	// Build the HTML row
 	$rows .= '<tr>'.
 		'<td class="user">'.
@@ -93,7 +141,7 @@ foreach($csdb->Forum->Room->Topic->Post as $post) {
 			).
 			'<br /><span class="date">'.$time.'</span><br />'.
 			(!empty($hvsc_folder) ? '<a href="'.HOST.'?file=/'.$hvsc_folder.'"><img class="avatar" src="'.$thumbnail.'" alt="" /></a>' : '').
-			'<span class="count pm"><a href="https://csdb.dk/privatemessages/sendmessage.php?userid='.$uid.'&selectdone.x=1" target="_blank">PM</a></span>'.
+			'<span class="count pm"><a href="https://csdb.dk/privatemessages/sendmessage.php?userid='.$user_id.'&selectdone.x=1" target="_blank">PM</a></span>'.
 			// (!empty($hvsc_folder) ? '<img class="home-folder" src="images/if_folder.svg" alt="" />' : '').
 			(!empty($hvsc_folder) ? '<span class="count home-folder" title="Show DeepSID folder" data-home="'.$hvsc_folder.'"><img style="width:14px;" src="images/if_folder.svg" alt="" /></span>' : '').
 		'</td>'.

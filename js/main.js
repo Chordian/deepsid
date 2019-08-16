@@ -786,7 +786,7 @@ $(function() { // DOM ready
 			$("#loading-csdb").fadeIn(500);
 		}, 250);
 
-		forum = $.get("php/csdb_forum.php", { room: 14, topic: 131591}, function(data) {
+		forum = $.get("php/csdb_forum.php", { room: 14, topic: 131591}, function(data) { // 40934 131591
 			browser.validateData(data, function(data) {
 				clearTimeout(loadingForum);
 				$("#sticky-csdb").empty().append(data.sticky);
@@ -1378,6 +1378,19 @@ function CheckSOASCStatus() {
 			});
 		});
 	}, "text");
+}
+
+/**
+ * Find all "redirect" class play links (typically in CSDb pages) and set the
+ * small icon to a selected state if corresponding to any playing tune.
+ */
+function UpdateRedirectPlayIcons() {
+	// Set "active" icon on all redirect links that has the same tune (HVSC only)
+	$("a.redirect").each(function() {
+		var $this = $(this);
+		if ($this.html() == browser.playlist[browser.songPos].fullname.replace(browser.ROOT_HVSC+"/_High Voltage SID Collection", ""))
+			$this.removeClass("playing").addClass("playing");
+	});
 }
 
 /**

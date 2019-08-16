@@ -26,6 +26,9 @@ function CommentsTable($title, $comments, &$scener_handle, &$scener_id, $backwar
 	$parser->addCodeDefinitionSet(new JBBCode\DefaultCodeDefinitionSet());
 
 	$comments_array = array();
+	$scener_handle = array();
+	$scener_id = array();
+
 	foreach($comments as $comment) { // DD.MM.YYYY => YYYY-MM-DD
 
 		$fixed_date = substr($comment->Date, 6).'-'.substr($comment->Date, 3, 2).'-'.substr($comment->Date, 0, 2);
