@@ -309,6 +309,8 @@
 						<a id="recommended" href="#">Recommended</a>
 							<span>&#9642</span>
 						<a id="players" href="#">Players</a>
+							<span>&#9642</span>
+						<a id="forum" href="#">Forum</a>
 					</div>
 
 					<span class="soasc-status">
@@ -1008,6 +1010,12 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>August 16, 2019</h3>
+						<ul>
+							<li>HVSC path links in CSDb pages (e.g. those listed in music collections) now have a
+								small play icon prepended.</li>
+						</ul>
 
 						<h3>August 14, 2019</h3>
 						<ul>

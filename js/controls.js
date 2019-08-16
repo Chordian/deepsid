@@ -320,6 +320,7 @@ Controls.prototype = {
 				// STOP button
 				$("#time-bar").empty().append('<div></div>');
 				SID.stop();
+				$("a.redirect").removeClass("playing");
 				// Also stop any <AUDIO> element playing
 				$("#topic-remix audio").each(function() {
 					var $sound = $(this)[0];
@@ -461,8 +462,10 @@ Controls.prototype = {
 					this.emulatorChanged = false;
 				} else
 					SID.play(); // Has the power to resume after pause
-			} else
+			} else {
 				SID.pause();
+				$("a.redirect").removeClass("playing");
+			}
 		}
 		if ($("#play-pause").hasClass("button-selected") || ($("#play-pause").hasClass("button-idle") && $("#play").css("display") === "none"))
 			$("#play-pause svg").toggle();

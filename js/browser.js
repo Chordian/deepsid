@@ -349,7 +349,6 @@ Browser.prototype = {
 							ctrls.updateInfo();
 							ctrls.updateSundry();
 
-							//setTimeout(SID.play(true), 1); // Why did I do this in the first place? Uhh...
 							SID.play(true);
 							setTimeout(ctrls.setButtonPlay, 75); // For nice pause-to-play delay animation
 						}

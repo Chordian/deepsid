@@ -6,7 +6,7 @@
 var $=jQuery.noConflict();
 var cacheCSDb = cacheSticky = cacheStickyBeforeCompo = cacheCSDbProfile = cacheBeforeCompo = cachePlayer = cacheGB64 = cacheRemix = prevFile = sundryTab = reportSTIL = "";
 var cacheTabScrollPos = cachePlayerTabScrollPos = cacheGB64TabScrollPos = cacheRemixTabScrollPos = tabScrollPos = cachePosBeforeCompo = cacheDDCSDbSort = peekCounter = sundryHeight = 0;
-var sundryToggle = true, recommended = players = null;
+var sundryToggle = true, recommended = forum = players = null;
 
 $(function() { // DOM ready
 
@@ -688,10 +688,28 @@ $(function() { // DOM ready
 	});
 
 	/**
+	 * When clicking the 'POST REPLY' button to add a post in a CSDb forum thread.
+	 * 
+	 * NOTE: This opens a new web browser tab.
+	 */
+	$("#topic-csdb").on("click", "#csdb-post-reply", function() {
+		window.open("https://csdb.dk/forums/?action=reply&roomid="+$(this).attr("data-roomid")+
+			"&topicid="+$(this).attr("data-topicid"), "_blank");
+	});
+
+	/**
 	 * When clicking a 'redirect' link to open an arbitrary SID file without reloading DeepSID.
 	 */
 	$("#topic-csdb,#sundry,#topic-stil,#topic-changes,#topic-player").on("click", "a.redirect", function() {
-		var fullname = $(this).html();
+		var $this = $(this);
+
+		// Make the small play icon "active" bright
+		if (!$this.hasClass("playing")) {
+			$("a.redirect").removeClass("playing");
+			$this.addClass("playing");
+		}
+
+		var fullname = $this.html();
 		var path = "/_High Voltage SID Collection"+fullname.substr(0, fullname.lastIndexOf("/"));
 		// @todo If using redirect for custom folders later then copy the 'browser.path' lines from 'fileParam' below.
 		ctrls.state("root/back", "enabled");
@@ -726,7 +744,7 @@ $(function() { // DOM ready
 	/**
 	 * When clicking the "RECOMMENDED" link in top.
 	 */
-	$("#recommended").click(function(){
+	$("#recommended").click(function() {
 		$(this).blur();
 		if (recommended) recommended.abort();
 		$("#topic-profile").empty().append(browser.loadingSpinner("profile"));
@@ -746,6 +764,36 @@ $(function() { // DOM ready
 				if (parseInt(colorTheme))
 					data.html = data.html.replace(/composer\.png/g, "composer_dark.png");
 				$("#topic-profile").empty().append(data.html);
+			});
+		});
+		return false;
+	});
+
+	/**
+	 * When clicking the "FORUM" link in top.
+	 */
+	$("#forum").click(function() {
+		$(this).blur();
+		if (forum) forum.abort();
+		$("#topic-csdb").empty().append(browser.loadingSpinner("forum"));
+		$("#sticky-csdb").empty();
+
+		if ($("#tabs .selected").attr("data-topic") !== "csdb")
+			$("#tab-csdb").trigger("click");
+
+		var loadingForum = setTimeout(function() {
+			// Fade in a GIF loading spinner if the AJAX call takes a while
+			$("#loading-csdb").fadeIn(500);
+		}, 250);
+
+		forum = $.get("php/csdb_forum.php", { room: 14, topic: 131591}, function(data) {
+			browser.validateData(data, function(data) {
+				clearTimeout(loadingForum);
+				$("#sticky-csdb").empty().append(data.sticky);
+				if (parseInt(colorTheme))
+					data.html = data.html.replace(/composer\.png/g, "composer_dark.png");
+				$("#topic-csdb").empty().append(data.html);
+				$("#page").mCustomScrollbar("scrollTo", "top");
 			});
 		});
 		return false;
@@ -775,6 +823,7 @@ $(function() { // DOM ready
 				clearTimeout(loadingPlayers);
 				$("#topic-player").empty().append(data.html);
 				$("#page").mCustomScrollbar("scrollTo", "top");
+				$("#note-csdb").hide();
 			});
 		});
 		return false;

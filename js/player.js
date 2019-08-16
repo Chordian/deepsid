@@ -454,6 +454,12 @@ SIDPlayer.prototype = {
 			case "download":
 				break;
 		}
+		// Set "active" icon on all redirect links that has the same tune (HVSC only)
+		$("a.redirect").each(function() {
+			var $this = $(this);
+			if ($this.html() == browser.playlist[browser.songPos].fullname.replace(browser.ROOT_HVSC+"/_High Voltage SID Collection", ""))
+				$this.removeClass("playing").addClass("playing");
+		});
 		// Stop all the <AUDIO> elements in the 'Remix' tab
 		$("#topic-remix audio").each(function() {
 			var $sound = $(this)[0];

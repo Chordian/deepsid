@@ -94,6 +94,7 @@
 	--color-text-info-selected:		none;
 	--color-text-c64font:			#555743;			/* Used for the C64 font in the CGSC folder */
 	--color-text-label-disabled:	var(--color-border);
+	--color-text-time:				#c6c6c6;
 
 	--color-border-subtune:			#888;				/* Border for round sub tune indicators in playlists */
 	--color-text-subtune:			#222;				/* Text color for sub tune indicators in playlists */
@@ -134,6 +135,7 @@
 	/* @link https://codepen.io/sosuke/pen/Pjoqqp - NOTE: The SVG must be black as default for this to work! */
 	--svg-filter-white:				invert(100%) sepia(0%) saturate(7487%) hue-rotate(319deg) brightness(103%) contrast(104%);
 	--svg-filter-button:			invert(26%) sepia(15%) saturate(581%) hue-rotate(27deg) brightness(96%) contrast(93%);
+	--svg-filter-button-hover:		invert(36%) sepia(21%) saturate(406%) hue-rotate(26deg) brightness(99%) contrast(91%);
 	--svg-filter-button-disabled:	invert(86%) sepia(12%) saturate(216%) hue-rotate(25deg) brightness(93%) contrast(89%);
 	--svg-filter-text-player:		invert(50%) sepia(14%) saturate(593%) hue-rotate(25deg) brightness(94%) contrast(88%);
 
@@ -149,6 +151,7 @@
 	--svg-filter-icon-time:			invert(50%) sepia(0%) saturate(0%) hue-rotate(184deg) brightness(93%) contrast(91%);;
 	--svg-filter-icon-to-top:		var(--svg-filter-white);
 	--svg-filter-icon-visuals:		var(--svg-filter-button);
+	--svg-filter-icon-sticky:		var(--svg-filter-icon-editor);
 
 	--svg-bg-star-orange:			url(../images/if_star_orange.svg) 0 0 / 18px 18px no-repeat;
 	--svg-bg-star-empty-voted:		url(../images/if_star_empty_voted.svg) 0 0 / 18px 18px no-repeat;
@@ -418,6 +421,7 @@
 	--color-text-info-selected:		#aaa;
 	--color-text-c64font:			#a8a8a8;
 	--color-text-label-disabled:	#555;
+	--color-text-time:				#484848;
 
 	--color-border-subtune:			#000;
 	--color-bg-subtune:				#d4d4d4;
@@ -460,6 +464,7 @@
 	--svg-filter-row-spinner:		var(--svg-filter-button-disabled);
 	--svg-filter-icon-office:		var(--svg-filter-icon-flash);
 	--svg-filter-icon-visuals:		invert(25%) sepia(10%) saturate(629%) hue-rotate(52deg) brightness(96%) contrast(87%);
+	--svg-filter-icon-sticky:		var(--svg-filter-viz-msg-buffer);
 
 	--svg-bg-star-orange:			url(../images/if_star_orange_dark.svg) 0 0 / 18px 18px no-repeat;
 	--svg-bg-star-empty-voted:		url(../images/if_star_empty_voted_dark.svg) 0 0 / 18px 18px no-repeat;
@@ -583,7 +588,6 @@
 [data-theme="dark"] select option {
 	background: var(--color-styled-select-bg);
 }
-
 
 [data-theme="dark"] input:disabled,
 [data-theme="dark"] select:disabled,
@@ -3030,6 +3034,60 @@ input[type=range]::-ms-track {
 		margin: 0 0 10px;
 	}
 
+	#page .redirect {
+		position: relative;
+		padding-left: 20px;
+	}
+
+		#page .redirect:before,
+		#page .redirect:after {
+			content: "";
+			top: 2px;
+			left: 0;
+			display: inline-block;
+			position: absolute;
+			width: 16px;
+			height: 16px;
+			transition: all .05s linear;
+		}
+
+		#page .redirect:before {
+			border: 1.5px solid var(--color-button-border-idle);
+			background: var(--color-button);
+		}
+
+		#page .redirect.playing:before {
+			border: 1.5px solid var(--border-button-select);
+			background: var(--color-button-bg-select);
+		}
+
+		#page .redirect:after {
+			top: 4px;
+			left: 2px;
+			background: url(../images/redirect_play.svg) 0 0.5px / 12px 12px no-repeat;
+			filter: var(--svg-filter-white);
+		}
+
+		#page .redirect.playing:after {
+			top: 3px;
+			left: 0;
+			background: url(../images/redirect_play.svg) 0.5px 0 / 14px 14px no-repeat;
+			filter: var(--svg-filter-button);
+		}
+
+			#page .redirect:hover:before {
+				background: var(--color-button-hover);
+			}
+
+			#page .redirect.playing:hover:before {
+				border-color: var(--color-button-border-hovsel);
+				background: var(--color-button-bg-hovsel);
+			}
+
+			#page .redirect.playing:hover:after {
+				filter: var(--svg-filter-button-hover);
+			}
+
 		#page .ext del {
 			color: var(--color-text-faint);
 		}
@@ -3584,13 +3642,30 @@ input[type=range]::-ms-track {
 			border-top-color: var(--color-border-comments);
 		}
 
-		#page .ext .oldest-in-top {
+		#sticky-csdb img.arrow {
+			position: relative;
+			top: 2px;
+			height: 22px;
+			filter: var(--svg-filter-icon-sticky);
+		}
+
+		#sticky-csdb .topic {
+			float: right;
+			width: 418px;
+			margin-left: 8px;
+		}
+
+		#page .ext .oldest-in-top,
+		#page .ext .post-count {
 			float: right;
 			position: relative;
 			top: 24px;
 			font-size: 11px;
-			color: var(--color-oldest-in-top);
 		}
+
+			#page .ext .oldest-in-top {
+				color: var(--color-oldest-in-top);
+			}
 
 		#page .ext .zero-releases-line {
 			border-top: 1px solid var(--color-border);
@@ -3623,6 +3698,10 @@ input[type=range]::-ms-track {
 				font-size: 11px;
 				color: var(--color-text-player);
 			}
+
+				#page .ext .time {
+					color: var(--color-text-time);
+				}
 
 			#page .ext .pm {
 				position: absolute;
