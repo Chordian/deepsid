@@ -95,10 +95,6 @@ foreach($csdb->Forum->Room->Topic->Post as $post) {
 	$thumbnail = 'images/composers/'.$fn.'.jpg';
 	if (!file_exists('../'.$thumbnail)) $thumbnail = 'images/composer.png';
 
-	// Store the comment in an array in case someone quotes it later
-	$comments_array[(string)$post->ID]['handle'] = $handle;
-	$comments_array[(string)$post->ID]['comment'] = $comment;
-
 	/***** REDIRECT LINK ADAPTATIONS - BEGIN *****/
 
 	$dom = new DOMDocument();
@@ -107,24 +103,41 @@ foreach($csdb->Forum->Room->Topic->Post as $post) {
 
 	$xpath = new DOMXPath($dom);
 
+	$anchor_paths = array();
+
 	// Get HVSC path from all <a href> (if available) and use it as content + add "redirect" class
 	$anchor_list = $xpath->query('//a');
 	foreach($anchor_list as $a) {
 		$url = $a->getAttribute('href');
-		if (preg_match('/(DEMO[^\s].+\.sid|GAMES[^\s]+\.sid|MUSICIANS[^\s]+\.sid)/i', $url, $matches)) {
+		if (preg_match('/(DEMO[^\s].+\.sid|GAMES[^\s]+\.sid|MUSICIANS[^\s]+\.sid)/', $url, $matches)) {
+			array_push($anchor_paths, strtolower('/'.$matches[0]));
 			$a->textContent = '/'.$matches[0]; // Place the raw HVSC path in the anchor content
 			$a->setAttribute('class', 'redirect');
 		}
 	}
 
-
-	// Now to catch raw HVSC paths without grabbing already modified anchor links...
-
-
 	$comment = $dom->saveHTML();
+
+	// Find all HVSC paths (with or without leading slash) regardless of how they're wrapped
+	preg_match_all('/([\/|\\\]?DEMO[^\s].+\.sid|[\/|\\\]?GAMES[^\s]+\.sid|[\/|\\\]?MUSICIANS[^\s]+\.sid)/', $comment, $matches);
+	for ($i = 0; $i < count($matches[0]); $i++) {
+		// Some posters erroneously use backslashes or don't start with a slash
+		$hvsc_path = str_replace('\\', '/', $matches[0][$i]);
+		if (substr($hvsc_path, 0, 1) != '/') $hvsc_path = '/'.$hvsc_path;
+		// Is this HVSC path one we've handled earlier?
+		if (!in_array(strtolower($hvsc_path), $anchor_paths)) {
+			// No, it must be a new straggler, so handle it now
+			$comment = str_replace($matches[0][$i], '<a href="#" class="redirect">'.$hvsc_path.'</a>', $comment);
+			array_push($anchor_paths, strtolower($hvsc_path));
+		}
+	}
 
 	/***** REDIRECT LINK ADAPTATIONS - END *****/
 
+	// Store the comment in an array in case someone quotes it later
+	$comments_array[(string)$post->ID]['handle'] = $handle;
+	$comments_array[(string)$post->ID]['comment'] = $comment;
+	
 	// Does THIS post quote something?
 	if (isset($post->Quoting)) {
 		// Prepend it now then

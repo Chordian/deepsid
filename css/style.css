@@ -4087,6 +4087,7 @@ input[type=range]::-ms-track {
 			font-size: 12px;
 			border: 1px solid var(--color-text-faint);
 			border-radius: 2px;
+			pointer-events: auto;
 			/*background: var(--color-top);*/
 		}
 

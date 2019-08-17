@@ -786,7 +786,7 @@ $(function() { // DOM ready
 			$("#loading-csdb").fadeIn(500);
 		}, 250);
 
-		forum = $.get("php/csdb_forum.php", { room: 14, topic: 131591}, function(data) { // 40934 131591
+		forum = $.get("php/csdb_forum.php", { room: 14, topic: 40934}, function(data) { // 40934 131591
 			browser.validateData(data, function(data) {
 				clearTimeout(loadingForum);
 				$("#sticky-csdb").empty().append(data.sticky);
@@ -794,6 +794,21 @@ $(function() { // DOM ready
 					data.html = data.html.replace(/composer\.png/g, "composer_dark.png");
 				$("#topic-csdb").empty().append(data.html);
 				$("#page").mCustomScrollbar("scrollTo", "top");
+
+				// Populate all "[type]/?id=" anchor links with HVSC path links instead
+				$.each(["sid", "release"], function(index, type) {
+					$("#topic-csdb table.comments").find("a[href*='"+type+"/?id=']").each(function() {
+						var $this = $(this);
+						$.get("php/csdb_sid_path.php", { type: type, id: $this.attr("href").split("=")[1] }, function(data) {
+							browser.validateData(data, function(data) {
+								if (data.path != "")
+									$this.empty().append(data.path[0]).addClass("redirect");
+								else if (data.name != "")
+									$this.empty().append(data.name[0]); // At least set the name then
+							});
+						});
+					});
+				});
 			});
 		});
 		return false;
