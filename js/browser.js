@@ -1405,7 +1405,7 @@ Browser.prototype = {
 				$("#topic-csdb").empty().append(data.html)
 					.css("visibility", "visible");
 
-				// Populate all path table cells with the HVSC paths (when available in the CSDb release pages)
+				// Populate all path table cells with HVSC plinks (when available in the CSDb release pages)
 				$("#topic-csdb .compo-path").each(function() {
 					var $this = $(this);
 					$.get("php/csdb_compo_path.php", { id: $this.attr("data-id") }, function(data) {

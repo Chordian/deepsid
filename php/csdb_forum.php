@@ -36,7 +36,7 @@ foreach($csdb->Forum->Room->Topic->Post as $post) {
 	$comment = htmlspecialchars_decode($post->Text);
 
 	// Shorten ------------------- lines typically used for competition results
-	$comment = str_replace(str_repeat('-', 50), str_repeat('-', 10), $comment);
+	//$comment = str_replace(str_repeat('-', 50), str_repeat('-', 10), $comment);
 
 	// Figure out handle, and if we get it, store ID too as repeated use doesn't have handle along with it
 	$handle = '';
@@ -95,7 +95,7 @@ foreach($csdb->Forum->Room->Topic->Post as $post) {
 	$thumbnail = 'images/composers/'.$fn.'.jpg';
 	if (!file_exists('../'.$thumbnail)) $thumbnail = 'images/composer.png';
 
-	/***** REDIRECT LINK ADAPTATIONS - BEGIN *****/
+	/***** REDIRECT (PLINKS) ADAPTATIONS - BEGIN *****/
 
 	$dom = new DOMDocument();
 	libxml_use_internal_errors(true);				// Ignores those pesky PHP warnings
@@ -103,22 +103,31 @@ foreach($csdb->Forum->Room->Topic->Post as $post) {
 
 	$xpath = new DOMXPath($dom);
 
-	$anchor_paths = array();
+	$anchor_paths = array(); // Used to ensure that a specific HVSC path is only adapted once
 
-	// Get HVSC path from all <a href> (if available) and use it as content + add "redirect" class
 	$anchor_list = $xpath->query('//a');
 	foreach($anchor_list as $a) {
 		$url = $a->getAttribute('href');
-		if (preg_match('/(DEMO[^\s].+\.sid|GAMES[^\s]+\.sid|MUSICIANS[^\s]+\.sid)/', $url, $matches)) {
-			array_push($anchor_paths, strtolower('/'.$matches[0]));
-			$a->textContent = '/'.$matches[0]; // Place the raw HVSC path in the anchor content
-			$a->setAttribute('class', 'redirect');
+		$hvsc_path = '';
+		// Get HVSC path from all <a href> (if available) and use it as content + add "redirect" class
+		if (preg_match('/(DEMO[^\s].+\.sid|GAMES[^\s]+\.sid|MUSICIANS[^\s]+\.sid)/', $url, $matches))
+			// HVSC path with .sid extension and all
+			$hvsc_path = '/'.$matches[0];
+		else if (strpos(strtolower($url), 'c64.org/hvsc/') && substr(strtolower($url), -4) != '.sid')
+			// Some posters use 'C64.org' HVSC links without a .sid extension in the end
+			$hvsc_path = substr($url, strpos(strtolower($url), '/hvsc/') + 5).'.sid';
+		if (!empty($hvsc_path)) {
+			// We have a genuine HVSC path that DeepSID can play
+			array_push($anchor_paths, strtolower($hvsc_path));
+			$a->textContent = $hvsc_path;
+			$a->setAttribute('class', 'redirect'); // It is now a "plink"
 		}
 	}
 
 	$comment = $dom->saveHTML();
 
 	// Find all HVSC paths (with or without leading slash) regardless of how they're wrapped
+	// NOTE: For now, DEMO/GAMES/MUSICIANS must stay upper case as the regex may be a little too friendly.
 	preg_match_all('/([\/|\\\]?DEMO[^\s].+\.sid|[\/|\\\]?GAMES[^\s]+\.sid|[\/|\\\]?MUSICIANS[^\s]+\.sid)/', $comment, $matches);
 	for ($i = 0; $i < count($matches[0]); $i++) {
 		// Some posters erroneously use backslashes or don't start with a slash
@@ -132,7 +141,7 @@ foreach($csdb->Forum->Room->Topic->Post as $post) {
 		}
 	}
 
-	/***** REDIRECT LINK ADAPTATIONS - END *****/
+	/***** REDIRECT (PLINKS) ADAPTATIONS - END *****/
 
 	// Store the comment in an array in case someone quotes it later
 	$comments_array[(string)$post->ID]['handle'] = $handle;
@@ -172,7 +181,7 @@ $html = '<b style="display:inline-block;margin-top:20px;">'.$csdb->Forum->Room->
 
 // Build the sticky header HTML for the '#sticky' DIV
 $arrow = '<img class="arrow" src="images/composer_arrowright.svg" alt="" />';
-$sticky = '<h2 style="display:inline-block;margin-top:0;">Forums '.$arrow.' '.$csdb->Forum->Room->RoomName.' '.$arrow.' <div class="topic ellipsis" title="'.$csdb->Forum->Room->Topic->TopicName.'">'.$csdb->Forum->Room->Topic->TopicName.'</div></h2>'.
+$sticky = '<h2 style="display:inline-block;margin-top:0;">Forums '.$arrow.' '.$csdb->Forum->Room->RoomName.' '.$arrow.' <div class="topic-wrap"><div class="topic" title="'.$csdb->Forum->Room->Topic->TopicName.'"><div class="topic-inner"><button id="topics" style="position:relative;float:right;margin:2px 0 0 8px;z-index:2;">Back</button>'.$csdb->Forum->Room->Topic->TopicName.'</div></div></div></h2>'.
 	'<div class="corner-icons">'.
 		'<a href="https://csdb.dk/forums/?roomid='.$_GET['room'].'&topicid='.$_GET['topic'].'" title="See this at CSDb" target="_blank"><svg class="outlink" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg></a>'.
 	'</div>';

@@ -698,7 +698,7 @@ $(function() { // DOM ready
 	});
 
 	/**
-	 * When clicking a 'redirect' link to open an arbitrary SID file without reloading DeepSID.
+	 * When clicking a 'redirect' plink to open an arbitrary SID file without reloading DeepSID.
 	 */
 	$("#topic-csdb,#sundry,#topic-stil,#topic-changes,#topic-player").on("click", "a.redirect", function() {
 		var $this = $(this);
@@ -770,12 +770,12 @@ $(function() { // DOM ready
 	});
 
 	/**
-	 * When clicking the "FORUM" link in top.
+	 * When clicking the "FORUM" link in top to show a list of topics. Also
+	 * used when clicking the 'BACK' button in a topic page.
 	 */
-	$("#forum").click(function() {
+	$("#sites,#sticky-csdb").on("click", "#forum,#topics", function() {
 		$(this).blur();
-		if (forum) forum.abort();
-		$("#topic-csdb").empty().append(browser.loadingSpinner("forum"));
+		$("#topic-csdb").empty().append(browser.loadingSpinner("csdb"));
 		$("#sticky-csdb").empty();
 
 		if ($("#tabs .selected").attr("data-topic") !== "csdb")
@@ -786,23 +786,40 @@ $(function() { // DOM ready
 			$("#loading-csdb").fadeIn(500);
 		}, 250);
 
-		forum = $.get("php/csdb_forum.php", { room: 14, topic: 40934}, function(data) { // 40934 131591
+		forum = $.get("php/csdb_forum_root.php", function(data) {
 			browser.validateData(data, function(data) {
 				clearTimeout(loadingForum);
+				$("#sticky-csdb").empty().append(data.sticky);
+				$("#topic-csdb").empty().append(data.html);
+			});
+		});
+	});
+
+	/**
+	 * When clicking one of the topic thread links in the "FORUM" page.
+	 */
+	$("#topic-csdb").on("click", "a.thread", function() {
+		$this = $(this);
+		if (forum) forum.abort();
+		$("#topic-csdb").empty().append(browser.loadingSpinner("csdb"));
+		$("#loading-csdb").fadeIn(500);
+
+		forum = $.get("php/csdb_forum.php", { room: $this.attr("data-roomid"), topic: $this.attr("data-topicid")}, function(data) {
+			browser.validateData(data, function(data) {
 				$("#sticky-csdb").empty().append(data.sticky);
 				if (parseInt(colorTheme))
 					data.html = data.html.replace(/composer\.png/g, "composer_dark.png");
 				$("#topic-csdb").empty().append(data.html);
 				$("#page").mCustomScrollbar("scrollTo", "top");
 
-				// Populate all "[type]/?id=" anchor links with HVSC path links instead
+				// Populate all "[type]/?id=" anchor links with HVSC path "plinks" instead
 				$.each(["sid", "release"], function(index, type) {
 					$("#topic-csdb table.comments").find("a[href*='"+type+"/?id=']").each(function() {
 						var $this = $(this);
 						$.get("php/csdb_sid_path.php", { type: type, id: $this.attr("href").split("=")[1] }, function(data) {
 							browser.validateData(data, function(data) {
 								if (data.path != "")
-									$this.empty().append(data.path[0]).addClass("redirect");
+									$this.empty().append(data.path[0]).addClass("redirect"); // It is now a "plink"
 								else if (data.name != "")
 									$this.empty().append(data.name[0]); // At least set the name then
 							});
@@ -1396,11 +1413,11 @@ function CheckSOASCStatus() {
 }
 
 /**
- * Find all "redirect" class play links (typically in CSDb pages) and set the
+ * Find all "redirect" classes (plinks) - typically in CSDb pages - and set the
  * small icon to a selected state if corresponding to any playing tune.
  */
 function UpdateRedirectPlayIcons() {
-	// Set "active" icon on all redirect links that has the same tune (HVSC only)
+	// Set "active" icon on all plinks that has the same tune (HVSC only)
 	$("a.redirect").each(function() {
 		var $this = $(this);
 		if ($this.html() == browser.playlist[browser.songPos].fullname.replace(browser.ROOT_HVSC+"/_High Voltage SID Collection", ""))

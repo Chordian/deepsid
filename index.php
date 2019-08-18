@@ -1011,6 +1011,14 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>August 18, 2019</h3>
+						<ul>
+							<li>Upgraded the WebSid emulator. Fixed CNT-pin related issue.</li>
+							<li>Added a <code>FORUM</code> link in the top listing a few interesting forum threads
+								from CSDb. These threads have been adapted with "plinks" whenever possible. Click
+								the link for more about this.</li>
+						</ul>
+
 						<h3>August 16, 2019</h3>
 						<ul>
 							<li>HVSC path links in CSDb pages (e.g. those listed in music collections) now have a

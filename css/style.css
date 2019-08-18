@@ -647,6 +647,11 @@
 [data-theme="dark"] .ct-label { color: #909090; fill: #909090; }
 [data-theme="dark"] .ct-grid  { stroke: #505050; }
 
+[data-theme="dark"] blockquote:before {
+	background: url(../images/blockquote.png) no-repeat;
+	opacity: 0.11;
+}
+
 /* ---- Overriding Olivi CSS ------------------------------------------------- */
 
 body,
@@ -2867,7 +2872,7 @@ input[type=range]::-ms-track {
 	#dexter .soasc-status {
 		position: absolute;
 		top: -7.5px;
-		left: 315px;
+		left: 348px;
 		padding: 3px 2px 3px 6px;
 		border-radius: 3px;
 		background: var(--color-soasc-status-bg);
@@ -3034,10 +3039,19 @@ input[type=range]::-ms-track {
 		margin: 0 0 10px;
 	}
 
+	/* Also known as plinks */
 	#page .redirect {
 		position: relative;
 		padding-left: 20px;
 	}
+
+		#page .quote .redirect {
+			padding-left: 15.5px;
+		}
+
+		#page blockquote .redirect {
+			padding-left: 14px;
+		}
 
 		#page .redirect:before,
 		#page .redirect:after {
@@ -3050,6 +3064,18 @@ input[type=range]::-ms-track {
 			height: 16px;
 			transition: all .05s linear;
 		}
+
+			#page .quote .redirect:before,
+			#page .quote .redirect:after {
+				width: 12.5px;
+				height: 12.5px;
+			}
+
+			#page blockquote .redirect:before,
+			#page blockquote .redirect:after {
+				width: 10.5px;
+				height: 10.5px;
+			}
 
 		#page .redirect:before {
 			border: 1.5px solid var(--color-button-border-idle);
@@ -3068,12 +3094,29 @@ input[type=range]::-ms-track {
 			filter: var(--svg-filter-white);
 		}
 
+			#page .quote .redirect:after {
+				background-size: 8px 8px;
+			}
+
+			#page blockquote .redirect:after {
+				top: 3px;
+				background-size: 7px 7px;
+			}
+
 		#page .redirect.playing:after {
 			top: 3px;
 			left: 1px;
 			background: url(../images/redirect_play.svg) 0.5px 0 / 13px 14px no-repeat;
 			filter: var(--svg-filter-button);
 		}
+
+			#page .quote .redirect.playing:after {
+				background-size: 9px 10px;
+			}
+
+			#page blockquote .redirect.playing:after {
+				background-size: 8px 9px;
+			}
 
 			#page .redirect:hover:before {
 				background: var(--color-button-hover);
@@ -3649,11 +3692,24 @@ input[type=range]::-ms-track {
 			filter: var(--svg-filter-icon-sticky);
 		}
 
-		#sticky-csdb .topic {
-			float: right;
-			width: 418px;
-			margin-left: 8px;
+		#sticky-csdb .topic-wrap {
+			position: relative;
+			top: 3px;
+			display: inline-block;
+			max-width: 416px;
 		}
+
+			#sticky-csdb .topic {
+				width: 100%;
+				line-height: 25px;
+			}
+
+			#sticky-csdb .topic-inner {
+				display: block;
+				overflow: hidden;
+				white-space: nowrap;
+				text-overflow: ellipsis;
+			}		
 
 		#page .ext .oldest-in-top,
 		#page .ext .post-count {
