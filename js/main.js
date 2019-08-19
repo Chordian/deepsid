@@ -74,7 +74,9 @@ $(function() { // DOM ready
 		}
 	}).on("keyup", function(event) {
 		if (!$("#search-box,#username,#password,#old-password,#new-password,#sym-rename,#sym-specify-subtune").is(":focus")) {
-			if (event.keyCode == 220) {									// Keyup key below 'Escape'
+			if (event.keyCode == 27) {									// Keyup key 'Escape'
+				$("#dialog-button-no").trigger("click");
+			} else if (event.keyCode == 220) {							// Keyup key below 'Escape'
 				// Fast forward
 				$("#faster").trigger("mouseup");
 			} else if (event.keyCode == 32)	{							// Keyup 'Space'
@@ -99,7 +101,7 @@ $(function() { // DOM ready
 				// Toggle the sundry box minimized or restored
 				ToggleSundry();
 				$(window).trigger("resize", true);
-			// } else if (event.keyCode == 84) {						// Keyup 't' for testing stuff
+			// } else if (event.keyCode == 84) {							// Keyup 't' for testing stuff
 			}
 		}
 	});
@@ -180,6 +182,7 @@ $(function() { // DOM ready
 			// And that the web site iframe has the correct height too
 			$("#page .deepsid-iframe").height($("#page").outerHeight() - 61); // 24
 		}
+		$("#dialog-box").center();
 	});
 
 	/**
@@ -219,20 +222,38 @@ $(function() { // DOM ready
 	$("#userform").submit(function(event) {
 		event.preventDefault();
 		if ($("#username").val() === "" || $("#password").val() === "") return false;
+		if (!userExists) {
+			// Show a dialog confirmation box first
+			CustomDialog({
+				text: '<h3>Register and Login</h3>'+
+					'<p>You are about to register the following user name with the password you just typed:</p>'+
+					'<p style="font-size:20px;font-weight:bold;color:#2a2;">'+$("#username").val()+'</p><p>Okay to proceed?</p>',
+				width: 389,
+				height: 195,
+			}, LoginOrRegister, function() {
+				$("#response").empty().removeClass("good bad").append("Login or register to rate tunes");
+				$("#username,#password").val("");
+			});
+		} else
+			LoginOrRegister();
+	});
+
+	/**
+	 * Function used just above.
+	 */
+	function LoginOrRegister() {
 		$("#response").empty().removeClass("good bad").append("Hang on");
 		$.post("php/account_login_register.php?register="+!userExists, $("#userform").serialize(), function(data) {
 			browser.validateData(data, function(data) {
-
 				if (data['result'] === false) {
 					// PHP login script reported an error
 					$("#response").empty().removeClass("good bad").addClass("bad").append(data['error']);
 					return false;
 				} else
 					window.location.reload();
-	
 			});
 		}.bind(this));
-	});
+	}
 
 	/**
 	 * When typing a user name.
@@ -1422,6 +1443,47 @@ function UpdateRedirectPlayIcons() {
 		var $this = $(this);
 		if ($this.html() == browser.playlist[browser.songPos].fullname.replace(browser.ROOT_HVSC+"/_High Voltage SID Collection", ""))
 			$this.removeClass("playing").addClass("playing");
+	});
+}
+
+/**
+ * Small plugin that centers an element in the middle of the entire window.
+ */
+$.fn.center = function () {
+	return this.each(function(){
+		var top = ($(window).height() - $(this).outerHeight()) / 2,
+			left = ($(window).width() - $(this).outerWidth()) / 2;
+		$(this).css({position:"fixed", margin:0, top: (top > 0 ? top : 0)+"px", left: (left > 0 ? left : 0)+"px"});
+	});
+};
+
+/**
+ * Show a custom dialog box.
+ * 
+ * @param {array} data				Associative array with data.
+ * 								 	 - text	Must be set.
+ * 								 	 - width	A default is used if not set.
+ * 								 	 - height	A default is used if not set.
+ * @param {function} callbackYes	Callback used if YES is clicked.
+ * @param {function} callbackNo		Callback used if NO is clicked.
+ */
+function CustomDialog(data, callbackYes, callbackNo) {
+	var width = typeof data.width != "undefined" ? data.width : 400;
+	var height = typeof data.height != "undefined" ? data.height : 200;
+	$("#dialog-box").css({ width: width, height: height }).center();
+	$("#dialog-text").empty().append(data.text);
+	$("#dialog-cover,#dialog-box").fadeIn("fast");
+
+	$("#dialog-button-yes").click(function() {
+		$("#dialog-cover,#dialog-box").hide();
+		if (typeof callbackYes === "function")
+			callbackYes.call(this);
+	});
+
+	$("#dialog-button-no").click(function() {
+		$("#dialog-cover,#dialog-box").hide();
+		if (typeof callbackNo === "function")
+			callbackNo.call(this);
 	});
 }
 

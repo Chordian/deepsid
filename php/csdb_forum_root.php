@@ -21,6 +21,9 @@ $html = '<h3 style="margin-top:10px;">Forum threads from CSDb</h3>
 		<tr><td>C64 Composing</td><td><a href="#" class="thread" data-roomid="14" data-topicid="131591">sid sound hunt</a></td><td>SID tunes with guitar-like sounds</td></tr>
 		<tr><td>C64 Composing</td><td><a href="#" class="thread" data-roomid="14" data-topicid="40934">Best SID instrument?</a></td><td>SID tunes with great instruments (no digi samples)</td></tr>
 		<tr><td>C64 Composing</td><td><a href="#" class="thread" data-roomid="14" data-topicid="82192">The most moody c64 tune, ever!</a></td><td>SID tunes that invoke a moody feeling</td></tr>
+		<tr><td>C64 Composing</td><td><a href="#" class="thread" data-roomid="14" data-topicid="127786">Multi timberal SIDs</a></td><td>Overcoming the limitation of three channels</td></tr>
+		<tr><td>C64 Composing</td><td><a href="#" class="thread" data-roomid="14" data-topicid="115038">Recommendations for sad SIDs (tearjerkers)?</a></td><td>Eye wateringly sad SID tunes</td></tr>
+		<tr><td>C64 Composing</td><td><a href="#" class="thread" data-roomid="14" data-topicid="44909">Useless(?) facts about sids</a></td><td>Mostly about multi-speed SID tunes</td></tr>
 	</table>';
 
 $sticky = '<h2 style="margin-top:0;">Forums</h2>';

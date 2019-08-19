@@ -141,6 +141,11 @@
 	<body class="entry-content" data-mobile="<?php echo isMobile(); ?>">
 		<script type="text/javascript">setTheme();</script>
 
+		<div id="dialog-cover"></div>
+		<div id="dialog-box">
+			<div id="dialog-text"></div>
+			<div id="dialog-buttons"><button id="dialog-button-yes">Yes</button><button id="dialog-button-no">No</button></div>
+		</div>
 		<iframe id="download" style="display:none;"></iframe>
 
 		<div id="panel">
@@ -1011,10 +1016,15 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>August 19, 2019</h3>
+						<ul>
+							<li>Trying to register a new user name now invokes a confirmation dialog box first.</li>
+						</ul>
+
 						<h3>August 18, 2019</h3>
 						<ul>
 							<li>Upgraded the WebSid emulator. Fixed CNT-pin related issue.</li>
-							<li>Added a <code>FORUM</code> link in the top listing a few interesting forum threads
+							<li>Added a <code>FORUM</code> link in the top, listing a few interesting forum threads
 								from CSDb. These threads have been adapted with "plinks" whenever possible. Click
 								the link for more about this.</li>
 						</ul>
