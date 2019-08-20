@@ -1019,6 +1019,7 @@
 						<h3>August 20, 2019</h3>
 						<ul>
 							<li>Songs started from a "plink" will now stop when done instead of proceeding to next sub tune or song.</li>
+							<li>Clicking an illegal "plink" path will now stop playing and strike the link itself through.</li>
 						</ul>
 
 						<h3>August 19, 2019</h3>

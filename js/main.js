@@ -737,10 +737,11 @@ $(function() { // DOM ready
 		if (path != browser.path) {
 			browser.path = path;
 			browser.getFolder(0, undefined, undefined, function() {
-				ClickAndScrollToSID(fullname);
+				if (!ClickAndScrollToSID(fullname))
+					$this.wrapInner('<del></del>');
 			});
-		} else
-			ClickAndScrollToSID(fullname);
+		} else if (!ClickAndScrollToSID(fullname))
+			$this.wrapInner('<del></del>');
 		// Clear caches to force proper refresh of CSDb tab after redirecting 
 		cacheBeforeCompo = cacheCSDb = cacheSticky = cacheStickyBeforeCompo = "";
 		UpdateURL();
@@ -1037,6 +1038,8 @@ $(function() { // DOM ready
 	 * Only used by redirect "plinks" for now.
 	 * 
 	 * @param {string} fullname		The SID filename including folders.
+	 * 
+	 * @return {boolean}			TRUE if the SID was found and is now playing.
 	 */
 	function ClickAndScrollToSID(fullname) {
 		// Isolate the SID name, e.g. "music.sid"
@@ -1044,16 +1047,24 @@ $(function() { // DOM ready
 		var $tr = $("#folders tr").filter(function() {
 			return $(this).find(".name").text().toLowerCase() == sidFile.toLowerCase();
 		}).closest("tr");
-		// This is the <TR> row with the SID file we need to play
-		var $trPlay = $("#folders tr").eq($tr.index());
-		$trPlay.children("td.sid").trigger("click", [undefined, true, true]); // Don't refresh CSDb + Stop when done
-		// Scroll the row into the middle of the list
-		var rowPos = $trPlay[0].offsetTop,
-			halfway = $("#folders").height() / 2 - 26; // Last value is half of SID file row height
-		if (browser.isMobile)
-			$("#folders").scrollTop(rowPos > halfway ? rowPos - halfway : 0);
-		else
-			$("#folders").mCustomScrollbar("scrollTo", rowPos > halfway ? rowPos - halfway : "top");
+		// Did we find the SID file?
+		if ($tr.length) {
+			// Yes; this is the <TR> row with the SID file we need to play
+			var $trPlay = $("#folders tr").eq($tr.index());
+			$trPlay.children("td.sid").trigger("click", [undefined, true, true]); // Don't refresh CSDb + Stop when done
+			// Scroll the row into the middle of the list
+			var rowPos = $trPlay[0].offsetTop,
+				halfway = $("#folders").height() / 2 - 26; // Last value is half of SID file row height
+			if (browser.isMobile)
+				$("#folders").scrollTop(rowPos > halfway ? rowPos - halfway : 0);
+			else
+				$("#folders").mCustomScrollbar("scrollTo", rowPos > halfway ? rowPos - halfway : "top");
+			return true;
+		} else {
+			// No; just stop playing
+			$("#stop").trigger("mouseup").trigger("click");
+			return false;
+		}
 	}
 
 	/**
