@@ -1034,6 +1034,8 @@ $(function() { // DOM ready
 	/**
 	 * Click a SID file row and then scroll to center it in the browser list.
 	 * 
+	 * Only used by redirect "plinks" for now.
+	 * 
 	 * @param {string} fullname		The SID filename including folders.
 	 */
 	function ClickAndScrollToSID(fullname) {
@@ -1044,7 +1046,7 @@ $(function() { // DOM ready
 		}).closest("tr");
 		// This is the <TR> row with the SID file we need to play
 		var $trPlay = $("#folders tr").eq($tr.index());
-		$trPlay.children("td.sid").trigger("click", [undefined, true]);
+		$trPlay.children("td.sid").trigger("click", [undefined, true, true]); // Don't refresh CSDb + Stop when done
 		// Scroll the row into the middle of the list
 		var rowPos = $trPlay[0].offsetTop,
 			halfway = $("#folders").height() / 2 - 26; // Last value is half of SID file row height

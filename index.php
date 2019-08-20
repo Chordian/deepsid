@@ -1016,6 +1016,11 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>August 20, 2019</h3>
+						<ul>
+							<li>Songs started from a "plink" will now stop when done instead of proceeding to next sub tune or song.</li>
+						</ul>
+
 						<h3>August 19, 2019</h3>
 						<ul>
 							<li>Trying to register a new user name now invokes a confirmation dialog box first.</li>

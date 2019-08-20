@@ -153,8 +153,9 @@ Browser.prototype = {
 	 * @param {*} event 
 	 * @param {number} paramSubtune		If specified, override subtune number with a URL parameter.
 	 * @param {boolean} paramSkipCSDb	If specified and TRUE, skip generating the 'CSDb' tab contents.
+	 * @param {boolean} paramSolitary	If specified and TRUE, just stop the tune when it's done.
 	 */
-	onClick: function(event, paramSubtune, paramSkipCSDb) {
+	onClick: function(event, paramSubtune, paramSkipCSDb, paramSolitary) {
 		this.clearSpinner();
 
 		switch (event.target.id) {
@@ -353,10 +354,10 @@ Browser.prototype = {
 							setTimeout(ctrls.setButtonPlay, 75); // For nice pause-to-play delay animation
 						}
 
-						// Disable PREV or NEXT if at list boundaries
-						if (this.songPos == this.playlist.length - 1)
+						// Disable PREV or NEXT if at list boundaries, or if it's a solitary playing
+						if (this.songPos == this.playlist.length - 1 || paramSolitary)
 							$("#skip-next").addClass("disabled");
-						if (this.songPos == 0)
+						if (this.songPos == 0 || paramSolitary)
 							$("#skip-prev").addClass("disabled");
 
 						ctrls.emulatorChanged = false;
@@ -388,18 +389,15 @@ Browser.prototype = {
 						if ($("#loop").hasClass("button-off")) {
 							// Play the next subtune, or if no more subtunes, the next tune in the list
 							$("#faster").trigger("mouseup"); // Easy there cowboy
-							if (!GetSettingValue("skip-tune") && (ctrls.subtuneCurrent < ctrls.subtuneMax && !$("#subtune-plus").hasClass("disabled"))) {
+							if (!paramSolitary && !GetSettingValue("skip-tune") && (ctrls.subtuneCurrent < ctrls.subtuneMax && !$("#subtune-plus").hasClass("disabled")))
 								// Next subtune
 								$("#subtune-plus").trigger("mouseup", false);
-							} else if (this.songPos < (this.playlist.length - 1) && !$("#skip-next").hasClass("disabled")) {
+							else if (this.songPos < (this.playlist.length - 1) && !$("#skip-next").hasClass("disabled"))
 								// Next song
 								$("#skip-next").trigger("mouseup", false);
-							} else {
+							else
 								// At the end of everything
-								$("#stop").trigger("mouseup");
-								SID.stop();
-								$("#songs tr").removeClass("selected");
-							}
+								$("#stop").trigger("mouseup").trigger("click");
 						}
 					}.bind(this));
 				}
