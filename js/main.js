@@ -9,18 +9,18 @@ var cacheTabScrollPos = cachePlayerTabScrollPos = cacheGB64TabScrollPos = cacheR
 var sundryToggle = true, recommended = forum = players = null;
 
 var tabPrevScrollPos = {
-	profile:	0,
-	csdb:		0,
-	gb64:		0,
-	remix:		0,
-	player:		0,
-	stil:		0,
-	visuals:	0,
-	disqus:		0,
-	settings:	0,
-	changes:	0,
-	faq:		0,
-	about:		0,
+	profile:	{ pos: 0, reset: false },
+	csdb:		{ pos: 0, reset: false },
+	gb64:		{ pos: 0, reset: false },
+	remix:		{ pos: 0, reset: false },
+	player:		{ pos: 0, reset: false },
+	stil:		{ pos: 0, reset: false },
+	visuals:	{ pos: 0, reset: false },
+	disqus:		{ pos: 0, reset: false },
+	settings:	{ pos: 0, reset: false },
+	changes:	{ pos: 0, reset: false },
+	faq:		{ pos: 0, reset: false },
+	about:		{ pos: 0, reset: false },
 }
 
 $(function() { // DOM ready
@@ -427,7 +427,10 @@ $(function() { // DOM ready
 
 		// Store the custom scroll bar position as it is now for the tab we're about to leave
 		var oldTopic = $("#tabs .selected").attr("data-topic");
-		if (typeof oldTopic != "undefined") tabPrevScrollPos[oldTopic] = tabScrollPos;
+		if (typeof oldTopic != "undefined") {
+			tabPrevScrollPos[oldTopic].pos = tabPrevScrollPos[oldTopic].reset ? 0 : tabScrollPos;
+			tabPrevScrollPos[oldTopic].reset = false;
+		}
 
 		$("#page").mCustomScrollbar("destroy").removeClass("big-logo");
 
@@ -805,7 +808,7 @@ $(function() { // DOM ready
 				if (parseInt(colorTheme))
 					data.html = data.html.replace(/composer\.png/g, "composer_dark.png");
 				$("#topic-profile").empty().append(data.html);
-				tabScrollPos = tabPrevScrollPos["profile"] = 0;
+				ResetDexterScrollBar("profile");
 			});
 		});
 		return false;
@@ -833,7 +836,7 @@ $(function() { // DOM ready
 				clearTimeout(loadingForum);
 				$("#sticky-csdb").empty().append(data.sticky);
 				$("#topic-csdb").empty().append(data.html);
-				tabScrollPos = tabPrevScrollPos["csdb"] = 0;
+				ResetDexterScrollBar("csdb");
 			});
 		});
 	});
@@ -853,7 +856,7 @@ $(function() { // DOM ready
 				if (parseInt(colorTheme))
 					data.html = data.html.replace(/composer\.png/g, "composer_dark.png");
 				$("#topic-csdb").empty().append(data.html);
-				tabScrollPos = tabPrevScrollPos["csdb"] = 0;
+				ResetDexterScrollBar("csdb");
 
 				// Populate all "[type]/?id=" anchor links with HVSC path "plinks" instead
 				$.each(["sid", "release"], function(index, type) {
@@ -897,7 +900,7 @@ $(function() { // DOM ready
 			browser.validateData(data, function(data) {
 				clearTimeout(loadingPlayers);
 				$("#topic-player").empty().append(data.html);
-				tabScrollPos = tabPrevScrollPos["player"] = 0;
+				ResetDexterScrollBar("player");
 				$("#note-csdb").hide();
 			});
 		});
@@ -1250,7 +1253,7 @@ function ShowDexterScrollbar(topic) {
 			mouseWheel:{
 				scrollAmount: 150,
 			},
-			setTop: tabPrevScrollPos[topic]+"px",
+			setTop: tabPrevScrollPos[topic].pos+"px",
 			callbacks: {
 				onCreate: function() {
 					// Adjust scrollbar height to fit the up/down arrows perfectly
@@ -1269,10 +1272,19 @@ function ShowDexterScrollbar(topic) {
 				},
 				whileScrolling: function() {
 					tabScrollPos = this.mcs.top;
+					tabPrevScrollPos[topic].reset = false;
 				},
 			},
 		});
 	}
+}
+
+/**
+ * Reset the custom scrollbar in a "dexter" page to the top.
+ */
+function ResetDexterScrollBar(topic) {
+	tabPrevScrollPos[topic].pos = 0;
+	tabPrevScrollPos[topic].reset = true;
 }
 
 /**
