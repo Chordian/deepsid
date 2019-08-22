@@ -176,7 +176,7 @@ foreach($csdb->Forum->Room->Topic->Post as $post) {
 // Wrap all the rows in a table
 $html = '<b style="display:inline-block;margin-top:20px;">'.$csdb->Forum->Room->Topic->TopicName.'</b>'.
 	'<span class="post-count">'.$csdb->Forum->Room->Topic->Replies.' replies</span>'.
-	'<table class="comments">'.$rows.'</table>'.
+	'<table class="thread comments">'.$rows.'</table>'.
 	'<button id="csdb-post-reply" data-roomid="'.$_GET['room'].'" data-topicid="'.$_GET['topic'].'">Post Reply</button><br />';
 
 // Build the sticky header HTML for the '#sticky' DIV

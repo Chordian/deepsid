@@ -8,6 +8,21 @@ var cacheCSDb = cacheSticky = cacheStickyBeforeCompo = cacheCSDbProfile = cacheB
 var cacheTabScrollPos = cachePlayerTabScrollPos = cacheGB64TabScrollPos = cacheRemixTabScrollPos = tabScrollPos = cachePosBeforeCompo = cacheDDCSDbSort = peekCounter = sundryHeight = 0;
 var sundryToggle = true, recommended = forum = players = null;
 
+var tabPrevScrollPos = {
+	profile:	0,
+	csdb:		0,
+	gb64:		0,
+	remix:		0,
+	player:		0,
+	stil:		0,
+	visuals:	0,
+	disqus:		0,
+	settings:	0,
+	changes:	0,
+	faq:		0,
+	about:		0,
+}
+
 $(function() { // DOM ready
 
 	// Get the user's settings
@@ -410,13 +425,17 @@ $(function() { // DOM ready
 		var $this = $(this);
 		if ($this.hasClass("selected") || $this.hasClass("disabled")) return false;
 
+		// Store the custom scroll bar position as it is now for the tab we're about to leave
+		var oldTopic = $("#tabs .selected").attr("data-topic");
+		if (typeof oldTopic != "undefined") tabPrevScrollPos[oldTopic] = tabScrollPos;
+
 		$("#page").mCustomScrollbar("destroy").removeClass("big-logo");
+
+		var topic = $this.attr("data-topic");
 
 		// Select the new tab
 		$("#tabs .tab").removeClass("selected");
 		$this.addClass("selected");
-
-		var topic = $this.attr("data-topic");
 
 		// Show the selected topic
 		$("#page .topic,#sticky-csdb,#sticky-visuals").hide();
@@ -738,10 +757,10 @@ $(function() { // DOM ready
 			browser.path = path;
 			browser.getFolder(0, undefined, undefined, function() {
 				if (!ClickAndScrollToSID(fullname))
-					$this.wrapInner('<del></del>');
+					$this.wrap('<del class="redirect"></del>').contents().unwrap();
 			});
 		} else if (!ClickAndScrollToSID(fullname))
-			$this.wrapInner('<del></del>');
+			$this.wrap('<del class="redirect"></del>').contents().unwrap();
 		// Clear caches to force proper refresh of CSDb tab after redirecting 
 		cacheBeforeCompo = cacheCSDb = cacheSticky = cacheStickyBeforeCompo = "";
 		UpdateURL();
@@ -786,6 +805,7 @@ $(function() { // DOM ready
 				if (parseInt(colorTheme))
 					data.html = data.html.replace(/composer\.png/g, "composer_dark.png");
 				$("#topic-profile").empty().append(data.html);
+				tabScrollPos = tabPrevScrollPos["profile"] = 0;
 			});
 		});
 		return false;
@@ -813,6 +833,7 @@ $(function() { // DOM ready
 				clearTimeout(loadingForum);
 				$("#sticky-csdb").empty().append(data.sticky);
 				$("#topic-csdb").empty().append(data.html);
+				tabScrollPos = tabPrevScrollPos["csdb"] = 0;
 			});
 		});
 	});
@@ -832,7 +853,7 @@ $(function() { // DOM ready
 				if (parseInt(colorTheme))
 					data.html = data.html.replace(/composer\.png/g, "composer_dark.png");
 				$("#topic-csdb").empty().append(data.html);
-				$("#page").mCustomScrollbar("scrollTo", "top");
+				tabScrollPos = tabPrevScrollPos["csdb"] = 0;
 
 				// Populate all "[type]/?id=" anchor links with HVSC path "plinks" instead
 				$.each(["sid", "release"], function(index, type) {
@@ -876,7 +897,7 @@ $(function() { // DOM ready
 			browser.validateData(data, function(data) {
 				clearTimeout(loadingPlayers);
 				$("#topic-player").empty().append(data.html);
-				$("#page").mCustomScrollbar("scrollTo", "top");
+				tabScrollPos = tabPrevScrollPos["player"] = 0;
 				$("#note-csdb").hide();
 			});
 		});
@@ -1229,14 +1250,16 @@ function ShowDexterScrollbar(topic) {
 			mouseWheel:{
 				scrollAmount: 150,
 			},
+			setTop: tabPrevScrollPos[topic]+"px",
 			callbacks: {
 				onCreate: function() {
 					// Adjust scrollbar height to fit the up/down arrows perfectly
 					$("#page .mCSB_scrollTools").css("height", $("#page").height() + 13);
 					// Also trigger a resize to be sure it fits
-					setTimeout(function(){
+					setTimeout(function() {
 						$(window).trigger("resize");
-					},1);
+					}, 1);
+					tabScrollPos = 0;
 				},
 				onOverflowY: function() {
 					// Enable the arrow button in the bottom of CSDb pages (for scrolling back to the top)

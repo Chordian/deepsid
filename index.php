@@ -518,12 +518,14 @@
 									// This can be used to do something when all comments have loaded...
 								}];*/
 							};
-							(function() { // DON'T EDIT BELOW THIS LINE
-								var d = document, s = d.createElement('script');
-								s.src = 'https://deepsid.disqus.com/embed.js';
-								s.setAttribute('data-timestamp', +new Date());
-								(d.head || d.body).appendChild(s);
-							})();
+							<?php if ($_SERVER['HTTP_HOST'] != LOCALHOST) : // To avoid seeing the CSP error ?>
+								(function() { // DON'T EDIT BELOW THIS LINE
+									var d = document, s = d.createElement('script');
+									s.src = 'https://deepsid.disqus.com/embed.js';
+									s.setAttribute('data-timestamp', +new Date());
+									(d.head || d.body).appendChild(s);
+								})();
+							<?php endif ?>
 						</script>
 						<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 						<!-- DISQUS END -->
@@ -755,6 +757,17 @@
 							Stone Oakvalley's Authentic SID Collection<br />
 							<a href="http://www.6581-8580.com/">http://www.6581-8580.com/</a>
 						</p>
+
+						<h3>Remixes of SID tunes</h3>
+						<p>
+							Remix64 API by Markus Klein (<a href="https://markus-klein-artwork.de/music/">LMan</a>)<br />
+							<a href="https://www.remix64.com/">https://www.remix64.com/</a>
+						</p>
+						<p>
+							Hosting by Jan Lund Thomsen (QED)<br />
+							<a href="http://remix.kwed.org/">http://remix.kwed.org/</a>
+						</p>
+
 
 						<h3>Composer profile images</h3>
 						<p>
@@ -1016,6 +1029,11 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>August 22, 2019</h3>
+						<ul>
+							<li>All page tabs now remember their scroll bar positions when clicking around among them.</li>
+						</ul>
+
 						<h3>August 20, 2019</h3>
 						<ul>
 							<li>Songs started from a "plink" will now stop when done instead of proceeding to next sub tune or song.</li>
@@ -1032,7 +1050,7 @@
 							<li>Upgraded the WebSid emulator. Fixed CNT-pin related issue.</li>
 							<li>Added a <code>FORUM</code> link in the top, listing a few interesting forum threads
 								from CSDb. These threads have been adapted with "plinks" whenever possible. Click
-								the link for more about this.</li>
+								the <code>FORUM</code> link for more about this.</li>
 						</ul>
 
 						<h3>August 16, 2019</h3>

@@ -1259,6 +1259,7 @@ Browser.prototype = {
 					clearTimeout(loadingComposer);
 					if (parseInt(colorTheme)) data.html = data.html.replace(/composer\.png/g, "composer_dark.png");
 					$("#topic-profile").empty().append(data.html);
+					tabScrollPos = tabPrevScrollPos["profile"] = 0;
 
 					// Add report profile change link
 					var composerFolder = "http://deepsid.chordian.net/?file=/"+(overridePath == "" ? this.path.substr(1) : overridePath);
@@ -1319,6 +1320,7 @@ Browser.prototype = {
 				if (parseInt(colorTheme)) data.html = data.html.replace(/composer\.png/g, "composer_dark.png");
 				$("#topic-csdb").empty().append(data.html)
 					.css("visibility", "visible");
+				tabScrollPos = tabPrevScrollPos["csdb"] = 0;
 
 				UpdateRedirectPlayIcons();
 
@@ -1364,6 +1366,7 @@ Browser.prototype = {
 				clearTimeout(loadingPlayer);
 				$("#topic-player").empty().append(data.html)
 					.css("visibility", "visible");
+				tabScrollPos = tabPrevScrollPos["player"] = 0;
 
 				// If there are any entries then show a special notification character (if not in focus)
 				if (data.count != 0 && $("#tabs .selected").attr("data-topic") !== "player" && data.status !== "warning")
@@ -1402,6 +1405,7 @@ Browser.prototype = {
 					data.html = data.html.replace(/composer\.png/g, "composer_dark.png");
 				$("#topic-csdb").empty().append(data.html)
 					.css("visibility", "visible");
+				tabScrollPos = tabPrevScrollPos["csdb"] = 0;
 
 				// Populate all path table cells with HVSC plinks (when available in the CSDb release pages)
 				$("#topic-csdb .compo-path").each(function() {
@@ -1446,6 +1450,7 @@ Browser.prototype = {
 				clearTimeout(loadingGB64);
 				$("#topic-gb64").empty().append(data.html)
 					.css("visibility", "visible");
+				tabScrollPos = tabPrevScrollPos["gb64"] = 0;
 	
 				// If there are any entries then show a notification number on the 'GB64' tab (if not in focus)
 				if (data.count > 0 && $("#tabs .selected").attr("data-topic") !== "gb64" && !this.isCGSC())
@@ -1485,6 +1490,7 @@ Browser.prototype = {
 				clearTimeout(loadingRemix);
 				$("#topic-remix").empty().append(data.html)
 					.css("visibility", "visible");
+				tabScrollPos = tabPrevScrollPos["remix"] = 0;
 	
 				// If there are any entries then show a notification number on the 'Remix' tab (if not in focus)
 				if (data.count > 0 && $("#tabs .selected").attr("data-topic") !== "remix" && !this.isCGSC())
