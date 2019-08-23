@@ -675,7 +675,7 @@ Controls.prototype = {
 			// Now for how the player is actually called
 			if (SID.emulatorFlags.returnCIA) {
 				var pace = SID.getPace();
-				var timer = pace ? (pace == 1 ? "CIA" : '<div style="width:33px;">'+pace+'x</div>') : "VBI";
+				var timer = pace ? (pace == 1 ? "CIA" : '<div style="width:34.5px;">'+pace+'x</div>') : "VBI";
 				$("#info").append('<span id="pace">'+digi+timer+'</span>');
 			}
 		}
