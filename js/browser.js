@@ -1501,12 +1501,14 @@ Browser.prototype = {
 	},
 
 	/**
-	 * Get an array with the personal and public symlist folders the user currently have.
-	 * 
-	 * @return {array}	An array with a list of symlists available to the user.
+	 * Fill an array with the personal and public symlist folders the user currently have.
 	 */
 	getSymlists: function() {
-		$.get("php/symlist_folders.php", function(data) {
+		$.ajax({
+			url:	"php/symlist_folders.php",
+			type:	"get",
+			async:	false, // Have to wait to make sure this.getFolder() afterwards include the data
+		}).done(function(data) {
 			this.validateData(data, function(data) {
 				data.symlists.sort(function(obj1, obj2) {
 					return obj1.fullname.substr(1).toLowerCase() > obj2.fullname.substr(1).toLowerCase() ? 1 : -1;

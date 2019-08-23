@@ -25,18 +25,6 @@ var tabPrevScrollPos = {
 
 $(function() { // DOM ready
 
-	// Get the user's settings
-	$.post("php/settings.php", function(data) {
-		browser.validateData(data, function(data) {
-			SettingToggle("first-subtune", data.settings.firstsubtune);
-			SettingToggle("skip-tune", data.settings.skiptune);
-			SettingToggle("mark-tune", data.settings.marktune);
-			SettingToggle("skip-bad", data.settings.skipbad);
-			SettingToggle("skip-long", data.settings.skiplong);
-			SettingToggle("skip-short", data.settings.skipshort);
-		});
-	}.bind(this));
-
 	var userExists = false;
 	var emulator = GetParam("emulator").toLowerCase();
 	if ($.inArray(emulator, [
@@ -55,6 +43,18 @@ $(function() { // DOM ready
 	ctrls = new Controls();
 	browser = new Browser();
 
+	// Get the user's settings
+	$.post("php/settings.php", function(data) {
+		browser.validateData(data, function(data) {
+			SettingToggle("first-subtune", data.settings.firstsubtune);
+			SettingToggle("skip-tune", data.settings.skiptune);
+			SettingToggle("mark-tune", data.settings.marktune);
+			SettingToggle("skip-bad", data.settings.skipbad);
+			SettingToggle("skip-long", data.settings.skiplong);
+			SettingToggle("skip-short", data.settings.skipshort);
+		});
+	}.bind(this));
+	
 	$("#dropdown-emulator")
 		.styledSelect("emulator")
 		.styledSetValue(emulator);
@@ -116,7 +116,7 @@ $(function() { // DOM ready
 				// Toggle the sundry box minimized or restored
 				ToggleSundry();
 				$(window).trigger("resize", true);
-			// } else if (event.keyCode == 84) {							// Keyup 't' for testing stuff
+			// } else if (event.keyCode == 84) {						// Keyup 't' for testing stuff
 			}
 		}
 	});
