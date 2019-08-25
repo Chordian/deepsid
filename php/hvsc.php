@@ -701,10 +701,21 @@ try {
 				$substname = str_pad($number, 4, '0', STR_PAD_LEFT).substr($file, 1);
 			}
 
+			// Get an array of tags for this file ("Jazz", "Rock", etc.)
+			$list_of_tags = array();
+			$tag_ids = $db->query('SELECT tags_id FROM tags_lookup WHERE files_id = '.$row->id);
+			$tag_ids->setFetchMode(PDO::FETCH_OBJ);
+			foreach($tag_ids as $tag_row) {
+				$tag = $db->query('SELECT name FROM tags_info WHERE id = '.$tag_row->tags_id.' LIMIT 1');
+				$tag->setFetchMode(PDO::FETCH_OBJ);
+				array_push($list_of_tags, $tag->fetch()->name);
+			}
+
 			array_push($files_ext, array(
 				'filename' =>		$file,
 				'substname' =>		$substname,
 				'player' =>			str_replace(array_keys($prettyPlayerNames), $prettyPlayerNames, $player), // Remember it reads the array multiple times!
+				'tags' =>			$list_of_tags,
 				'lengths' => 		$lengths,
 				'type' => 			$type,
 				//'version' => 		$version,

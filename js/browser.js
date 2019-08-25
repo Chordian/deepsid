@@ -629,7 +629,7 @@ Browser.prototype = {
 				files += '<tr>'+
 						'<td class="sid unselectable"><div class="block-wrap"><div class="block">'+(file.subtunes > 1 ? '<div class="subtunes'+(this.isSymlist ? ' specific' : '')+(isNew ? ' newst' : '')+'">'+(this.isSymlist ? file.startsubtune + 1 : file.subtunes)+'</div>' : (isNew ? '<div class="newsid"></div>' : ''))+
 						'<div class="entry name file'+(this.isSearching || this.isCompoFolder || this.path.substr(0, 2) === "/$" ? ' search' : '')+'" data-name="'+encodeURIComponent(file.filename)+'" data-type="'+file.type+'" data-symid="'+file.symid+'">'+adaptedName+'</div></div></div><br />'+
-						'<span class="info">'+file.copyright.substr(0, 4)+' in '+file.player+(file.type === "RSID" ? '<div class="ptype">RSID</div>' : '')+'</span></td>'+
+						'<span class="info">'+file.copyright.substr(0, 4)+' in '+file.player+(file.type === "RSID" ? '<div class="ptype">RSID</div>' : '')+file.tags+'</span></td>'+
 						'<td class="stars filestars"><span class="rating">'+this.buildStars(file.rating)+'</span>'+
 						'<span class="disqus-comment-count" data-disqus-url="http://deepsid.chordian.net/#!'+this.path+"/"+file.filename.replace("/_High Voltage SID Collection", "")+'"></span>'+
 						'</td>'+
@@ -951,12 +951,16 @@ Browser.prototype = {
 							isNew = file.hvsc == this.HVSC_VERSION || file.hvsc == this.CGSC_VERSION;
 						var adaptedName = file.substname == "" ? file.filename.replace(/^\_/, '') : file.substname;
 						adaptedName = this.adaptBrowserName(adaptedName);
+						// Collect tags for this file
+						var list_of_tags = '';
+						$.each(file.tags, function(i, tag) {
+							list_of_tags += '<div class="tag">'+tag+'</div>';
+						});
 						files +=
 							'<tr>'+
 								'<td class="sid unselectable"><div class="block-wrap"><div class="block">'+(file.subtunes > 1 ? '<div class="subtunes'+(this.isSymlist ? ' specific' : '')+(isNew ? ' newst' : '')+'">'+(this.isSymlist ? file.startsubtune : file.subtunes)+'</div>' : (isNew ? '<div class="newsid"></div>' : ''))+
 								'<div class="entry name file'+(this.isSearching || this.isCompoFolder || this.path.substr(0, 2) === "/$" ? ' search' : '')+'" data-name="'+encodeURIComponent(file.filename)+'" data-type="'+file.type+'" data-symid="'+file.symid+'">'+adaptedName+'</div></div></div><br />'+
-								'<span class="info">'+file.copyright.substr(0, 4)+' in '+player+(file.type === "RSID" ? '<div class="ptype">RSID</div>' : '')+
-								'<div class="tag">Bozzanova</div><div class="tag">Jazz</div></span></td>'+
+								'<span class="info">'+file.copyright.substr(0, 4)+' in '+player+(file.type === "RSID" ? '<div class="ptype">RSID</div>' : '')+list_of_tags+'</span></td>'+
 								'<td class="stars filestars"><span class="rating">'+this.buildStars(file.rating)+'</span>'+
 								'<span class="disqus-comment-count" data-disqus-url="http://deepsid.chordian.net/#!'+rootFile.replace("/_High Voltage SID Collection", "")+'"></span>'+
 								'</td>'+
@@ -971,6 +975,7 @@ Browser.prototype = {
 							substname:		file.substname, // Symlists can have renamed SID files
 							fullname:		this.ROOT_HVSC + rootFile,
 							player: 		player,
+							tags:			list_of_tags,
 							length: 		file.lengths,
 							type:			file.type,
 							clockspeed:		file.clockspeed,
