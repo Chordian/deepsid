@@ -288,6 +288,7 @@
 						<option value="author">Author</option>
 						<option value="copyright">Copyright</option>
 						<option value="player">Player</option>
+						<option value="tag">Tag</option>
 						<option value="stil">STIL</option>
 						<option value="rating">Rating</option>
 						<option value="country">Country</option>
@@ -1028,6 +1029,14 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>August 25, 2019</h3>
+						<ul>
+							<li>Added basic support for tags, shown in the line with year and player. To begin with only
+								a few tags have been added. More tags will come, and later it will also be possible for
+								logged in users to edit tags as well.</li>
+							<li>You can search for a tag when the corresponding type is set in the drop-down box.</li>
+						</ul>
 
 						<h3>August 22, 2019</h3>
 						<ul>

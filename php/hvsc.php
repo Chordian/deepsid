@@ -81,6 +81,12 @@ try {
 					' INNER JOIN ratings ON hvsc_files.id = ratings.table_id'.
 					' WHERE '.$searchContext.' AND ratings.user_id = '.$user_id.' AND ratings.rating '.$operators.' :rating AND ratings.type = "FILE" LIMIT 1000');
 				$select->execute(array(':rating'=>str_replace('-', '', $_GET['searchQuery'])));
+			} else if ($_GET['searchType'] == 'tag') {
+				// Search for tags
+				$select = $db->query('SELECT fullname FROM hvsc_files'.
+					' LEFT JOIN tags_lookup ON hvsc_files.id = tags_lookup.files_id'.
+					' LEFT JOIN tags_info ON tags_info.id = tags_lookup.tags_id'.
+					' WHERE '.str_replace('fullname', 'hvsc_files.fullname', $searchContext).' AND tags_info.name LIKE "%'.$_GET['searchQuery'].'%" LIMIT 1000');
 			} else if ($_GET['searchType'] != 'country') {
 				// Normal type search (handles any position of words and excluding with "-" prepended)
 				// NOTE: This would have been easier with 'Full-Text' search but I'm not using the MyISAM engine.

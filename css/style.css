@@ -376,6 +376,8 @@
 	--color-selection-text:			#222;
 	--color-notable:				#d9ce6f;
 	--color-emphasize:				#449;
+	--color-text-tag:				var(--color-bottom);
+	--color-bg-tag:					#b0b0b0;
 
 	--color-border:					#0c0c0c;			/* For borders and text labels where its container is disabled */
 	--color-border-box:				#2c2c2c;			/* For borders around various boxes and input fields */
@@ -392,7 +394,7 @@
 	--color-button-hover:			linear-gradient(to bottom, #828e78 0%,#5f6957 85%);
 	--color-button-bg-hovsel:		linear-gradient(to bottom, #eeefed 0%,#b4bbaf 95%);
 	--color-button-text-hovsel:		#565f4f;
-	--color-button-border-hovsel:	#c8cdc3;;
+	--color-button-border-hovsel:	#c8cdc3;
 	--color-button-inverted:		#f5f5f1;			/* Almost white */
 	--color-button-disabled:		#31362e;			/* Disabled button */
 	--color-button-disabled-text:	#5a5f56;
@@ -2000,6 +2002,27 @@ input[type=range]::-ms-track {
 				background: var(--color-bg-box);
 			}
 
+				#songs tr.selected .tag:before,
+				#songs tr.selected:hover .tag:before {
+					background: var(--color-bg-sid-selected);
+				}
+
+				#songs tr:hover .tag:before {
+					background: var(--color-bg-sid-hover);
+				}
+
+				.disabled .tag {
+					background: var(--color-disabled);
+				}
+
+				.disabled .tag:before {
+					border-color: transparent var(--color-disabled) transparent transparent;
+				}
+
+				.disabled:hover .tag:before {
+					background: var(--color-bg-box) !important;
+				}
+			
 			/* The small "hole" in the triangle part of the tag */
 			.tag:after {
 				content: ".";
