@@ -42,6 +42,8 @@
 	--color-notable:				#f8f848;			/* Color for notable achievements in composer profile */
 	--color-oldest-in-top:			#c86d55;			/* Color for right corner line above CSDb comments table */
 	--color-emphasize:				#ffff80;			/* Color for emphasizing handles or groups in CSDb releases */
+	--color-text-tag:				var(--color-top);
+	--color-bg-tag:					#a8ad95;
 
 	--color-border:					#ced0c0;			/* For borders and text labels where its container is disabled */
 	--color-border-box:				#c8c8b9;			/* For borders around various boxes and input fields */
@@ -1940,7 +1942,8 @@ input[type=range]::-ms-track {
 
 		/* Where the digi sample rate is displayed */
 		#pace div,
-		.ptype {
+		.ptype,
+		.tag {
 			display: inline-block;
 			width: 40px;
 			padding: 0 3px;
@@ -1952,8 +1955,9 @@ input[type=range]::-ms-track {
 			line-height: 13.5px;
 		}
 
-		/* RSID */
-		.ptype {
+		/* RSID and "Jazz" tags */
+		.ptype,
+		.tag {
 			width: auto;
 			padding: 0.68em 2px;
 			font-size: 9px;
@@ -1968,6 +1972,48 @@ input[type=range]::-ms-track {
 			border-color: var(--color-disabled);
 			background: transparent;
 		}
+
+		/* Tags like "Jazz" in browser list */
+		.tag {
+			position: relative;
+			top: -0.5px;
+			padding: 0 3px 0 0;
+			border-radius: 1.75px;
+			color: var(--color-text-tag);
+			border: none;
+			background: var(--color-bg-tag);
+			line-height: 1.35em;
+		}
+
+			/* The pointy triangle part of the tag */
+			.tag:before {
+				content: "";
+				float: left;
+				position: relative;
+				left: -5px;
+				padding: 0;
+				margin-right: -3px;
+				width: 0;
+				height: 100%;
+				border: 6px solid transparent;
+				border-color: transparent var(--color-bg-tag) transparent transparent;
+				background: var(--color-bg-box);
+			}
+
+			/* The small "hole" in the triangle part of the tag */
+			.tag:after {
+				content: ".";
+				float: left;
+				position: relative;
+				top: 2px;
+				margin-left: -10px;
+				padding: 0;
+				width: 8px;
+				height: 100%;
+				font-size: 15px;
+				color: var(--color-text-tag);
+				line-height: 0;
+			}
 
 	/* Light blue bar indicating all of 64 KB RAM */
 	#memory-bar {
