@@ -90,7 +90,7 @@ $(function() { // DOM ready
 	}).on("keyup", function(event) {
 		if (!$("#search-box,#username,#password,#old-password,#new-password,#sym-rename,#sym-specify-subtune").is(":focus")) {
 			if (event.keyCode == 27) {									// Keyup key 'Escape'
-				$("#dialog-button-no").trigger("click");
+				$(".dialog-box .dialog-button-no").trigger("click");
 			} else if (event.keyCode == 220) {							// Keyup key below 'Escape'
 				// Fast forward
 				$("#faster").trigger("mouseup");
@@ -197,7 +197,7 @@ $(function() { // DOM ready
 			// And that the web site iframe has the correct height too
 			$("#page .deepsid-iframe").height($("#page").outerHeight() - 61); // 24
 		}
-		$("#dialog-box").center();
+		$(".dialog-box").center();
 	});
 
 	/**
@@ -240,6 +240,7 @@ $(function() { // DOM ready
 		if (!userExists) {
 			// Show a dialog confirmation box first
 			CustomDialog({
+				id: '#dialog-register',
 				text: '<h3>Register and Login</h3>'+
 					'<p>You are about to register the following user name with the password you just typed:</p>'+
 					'<p style="font-size:20px;font-weight:bold;color:#2a2;">'+$("#username").val()+'</p><p>Okay to proceed?</p>',
@@ -1509,7 +1510,8 @@ $.fn.center = function () {
  * Show a custom dialog box.
  * 
  * @param {array} data				Associative array with data.
- * 								 	 - text	Must be set.
+ * 									 - id		Must be set.
+ * 								 	 - text		Must be set.
  * 								 	 - width	A default is used if not set.
  * 								 	 - height	A default is used if not set.
  * @param {function} callbackYes	Callback used if YES is clicked.
@@ -1518,18 +1520,18 @@ $.fn.center = function () {
 function CustomDialog(data, callbackYes, callbackNo) {
 	var width = typeof data.width != "undefined" ? data.width : 400;
 	var height = typeof data.height != "undefined" ? data.height : 200;
-	$("#dialog-box").css({ width: width, height: height }).center();
-	$("#dialog-text").empty().append(data.text);
-	$("#dialog-cover,#dialog-box").fadeIn("fast");
+	$(data.id).css({ width: width, height: height }).center();
+	$(data.id+" .dialog-text").empty().append(data.text);
+	$("#dialog-cover,"+data.id).fadeIn("fast");
 
-	$("#dialog-button-yes").click(function() {
-		$("#dialog-cover,#dialog-box").hide();
+	$(data.id+" .dialog-button-yes").click(function() {
+		$("#dialog-cover,"+data.id).hide();
 		if (typeof callbackYes === "function")
 			callbackYes.call(this);
 	});
 
-	$("#dialog-button-no").click(function() {
-		$("#dialog-cover,#dialog-box").hide();
+	$(data.id+" .dialog-button-no").click(function() {
+		$("#dialog-cover,"+data.id).hide();
 		if (typeof callbackNo === "function")
 			callbackNo.call(this);
 	});

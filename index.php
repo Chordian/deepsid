@@ -142,10 +142,41 @@
 		<script type="text/javascript">setTheme();</script>
 
 		<div id="dialog-cover"></div>
-		<div id="dialog-box">
-			<div id="dialog-text"></div>
-			<div id="dialog-buttons"><button id="dialog-button-yes">Yes</button><button id="dialog-button-no">No</button></div>
+
+		<div id="dialog-register" class="dialog-box">
+			<div class="dialog-text"></div>
+			<div class="dialog-buttons"><button class="dialog-button-yes">Yes</button><button class="dialog-button-no">No</button></div>
 		</div>
+
+		<div id="dialog-tags" class="dialog-box">
+			<div class="dialog-text"></div>
+			<select id="dialog-all-tags" name="all-tags" size="13" multiple>
+				<option value="jazz">jazz</option>
+				<option value="cover">cover</option>
+				<option value="intro">intro</option>
+				<option value="unfinished">Unfinished</option>
+				<option value="jazz">jazz</option>
+				<option value="cover">cover</option>
+				<option value="intro">intro</option>
+				<option value="unfinished">Unfinished</option>
+				<option value="jazz">jazz</option>
+				<option value="cover">cover</option>
+				<option value="intro">intro</option>
+				<option value="unfinished">Unfinished</option>
+				<option value="jazz">jazz</option>
+				<option value="cover">cover</option>
+				<option value="intro">intro</option>
+				<option value="unfinished">Unfinished</option>
+			</select>
+			<div class="dialog-transfer">
+				<button class="dialog-to-right">R</button><button class="dialog-to-left">L</button>
+			</div>
+			<select id="dialog-song-tags" name="song-tags" size="5" multiple>
+				<option value="sovs">Sovs</option>
+			</select> 			
+			<div class="dialog-buttons"><button class="dialog-button-yes">OK</button><button class="dialog-button-no dialog-cancel">Cancel</button></div>
+		</div>
+
 		<iframe id="download" style="display:none;"></iframe>
 
 		<div id="panel">

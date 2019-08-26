@@ -4454,7 +4454,7 @@ input[type=range]::-ms-track {
 	opacity: 0.3;
 }
 
-#dialog-box {
+.dialog-box {
 	display: none;
 	position: relative;
 	padding: 20px;
@@ -4464,25 +4464,57 @@ input[type=range]::-ms-track {
 	box-shadow: 3px 3px 6px var(--color-dialog-shadow);
 }
 
-	#dialog-box h2,
-	#dialog-box h3 {
+	.dialog-box h2,
+	.dialog-box h3 {
 		margin-top: 0;
 	}
 
-	#dialog-box p {
+	.dialog-box p {
 		margin: 10px 0;
 	}
 
-	#dialog-buttons {
+	.dialog-buttons {
 		position: absolute;
 		bottom: 20px;
 		right: 20px;
 	}
 
-		#dialog-buttons button {
+		.dialog-buttons button {
 			width: 60px;
 			margin-left: 6px;
 		}
+
+		.dialog-cancel {
+			width: auto !important;
+		}
+
+.dialog-label-top {
+	font: normal 13px "Montserrat", sans-serif;
+	color: var(--color-text-fine);
+	margin-bottom: 4px;
+}
+
+#dialog-all-tags,
+#dialog-song-tags {
+	font-size: 14px;
+	width: 150px;
+}
+
+#dialog-all-tags {
+	/*height: 258px;*/
+}
+
+#dialog-song-tags {
+	float: right;
+	/*height: 100px;*/
+}
+
+.dialog-transfer {
+	position: absolute;
+	top: 100px;
+	left: 160px;
+	width: 20px;
+}
 
 /* ---- Styled Select ------------------------------------------------------- */
 

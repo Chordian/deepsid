@@ -238,7 +238,14 @@ Browser.prototype = {
 				var name = decodeURIComponent($tr.find(".name").attr("data-name"));
 
 				if (event.target.className === "edit-tags") {
-console.log("+ button clicked.");
+					CustomDialog({
+						id: '#dialog-tags',
+						text: '<h3>Edit tags</h3><p>NEED NAME OF SID HERE!!!</p><span class="dialog-label-top" style="float:left;">All tags available:</span><span class="dialog-label-top" style="float:right;width:150px;">Tags for this file:</span>',
+						width: 390,
+						height: 600,
+					}, function() {
+console.log("action!");
+					});
 					return false;
 				}
 
