@@ -55,7 +55,10 @@ Browser.prototype = {
 			return false; // Prevent SID row from playing if an edit box in a SID row is clicked
 		});
 
-		$("#songs").on("click", "button,tr", this.onClick.bind(this));
+		$("#songs")
+			.on("click", "button,tr", this.onClick.bind(this))
+			.on("mouseover", "tr", this.onMouseOver.bind(this))
+			.on("mouseleave", "tr", this.onMouseLeave.bind(this))
 		$("#dropdown-sort").change(this.onChange.bind(this));
 		$("#topic-csdb").on("change", "#dropdown-sort-csdb", this.onChangeCSDb.bind(this));
 
@@ -148,6 +151,29 @@ Browser.prototype = {
 	},
 
 	/**
+	 * Move the mouse over a SID row.
+	 * 
+	 * @param {*} event 
+	 */
+	onMouseOver: function(event) {
+		if (event.target.className != "edit-tags") {
+			// Show the edit tag "+" button on that SID row only
+			$("#songs .edit-tags").hide();
+			$(event.target).parents("tr").find("div.edit-tags").css("display", "inline-block");
+		}
+	},
+
+	/**
+	 * Move the mouse away from a SID row.
+	 * 
+	 * @param {*} event 
+	 */
+	onMouseLeave: function() {
+		// Hide all edit tag "+" buttons
+		$("#songs .edit-tags").hide();
+	},
+
+	/**
 	 * Click the left mouse button somewhere below the control buttons.
 	 * 
 	 * @param {*} event 
@@ -210,6 +236,11 @@ Browser.prototype = {
 				// Get the unmodified name of this entry
 				// NOTE: Elsewhere, "extra" folders have their prefixed "_" removed for displaying.
 				var name = decodeURIComponent($tr.find(".name").attr("data-name"));
+
+				if (event.target.className === "edit-tags") {
+console.log("+ button clicked.");
+					return false;
+				}
 
 				if (event.target.tagName === "B") {
 					// Clicked a star to set a rating for a folder or SID file
@@ -956,6 +987,7 @@ Browser.prototype = {
 						$.each(file.tags, function(i, tag) {
 							list_of_tags += '<div class="tag">'+tag+'</div>';
 						});
+						list_of_tags += '<div class="edit-tags" title="Edit tags">&nbsp;</div>';
 						files +=
 							'<tr>'+
 								'<td class="sid unselectable"><div class="block-wrap"><div class="block">'+(file.subtunes > 1 ? '<div class="subtunes'+(this.isSymlist ? ' specific' : '')+(isNew ? ' newst' : '')+'">'+(this.isSymlist ? file.startsubtune : file.subtunes)+'</div>' : (isNew ? '<div class="newsid"></div>' : ''))+

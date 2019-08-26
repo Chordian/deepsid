@@ -44,6 +44,7 @@
 	--color-emphasize:				#ffff80;			/* Color for emphasizing handles or groups in CSDb releases */
 	--color-text-tag:				var(--color-top);
 	--color-bg-tag:					#a8ad95;
+	--color-bg-tag-hover:			#b6b9a5;
 
 	--color-border:					#ced0c0;			/* For borders and text labels where its container is disabled */
 	--color-border-box:				#c8c8b9;			/* For borders around various boxes and input fields */
@@ -157,6 +158,7 @@
 	--svg-filter-icon-to-top:		var(--svg-filter-white);
 	--svg-filter-icon-visuals:		var(--svg-filter-button);
 	--svg-filter-icon-sticky:		var(--svg-filter-icon-editor);
+	--svg-filter-edit-tags:			var(--svg-filter-white);
 
 	--svg-bg-star-orange:			url(../images/if_star_orange.svg) 0 0 / 18px 18px no-repeat;
 	--svg-bg-star-empty-voted:		url(../images/if_star_empty_voted.svg) 0 0 / 18px 18px no-repeat;
@@ -377,7 +379,8 @@
 	--color-notable:				#d9ce6f;
 	--color-emphasize:				#449;
 	--color-text-tag:				var(--color-bottom);
-	--color-bg-tag:					#b0b0b0;
+	--color-bg-tag:					#b6b9a5;
+	--color-bg-tag-hover:			#c8cbbb;
 
 	--color-border:					#0c0c0c;			/* For borders and text labels where its container is disabled */
 	--color-border-box:				#2c2c2c;			/* For borders around various boxes and input fields */
@@ -475,6 +478,7 @@
 	--svg-filter-icon-office:		var(--svg-filter-icon-flash);
 	--svg-filter-icon-visuals:		invert(25%) sepia(10%) saturate(629%) hue-rotate(52deg) brightness(96%) contrast(87%);
 	--svg-filter-icon-sticky:		var(--svg-filter-viz-msg-buffer);
+	--svg-filter-edit-tags:			none;
 
 	--svg-bg-star-orange:			url(../images/if_star_orange_dark.svg) 0 0 / 18px 18px no-repeat;
 	--svg-bg-star-empty-voted:		url(../images/if_star_empty_voted_dark.svg) 0 0 / 18px 18px no-repeat;
@@ -1945,7 +1949,8 @@ input[type=range]::-ms-track {
 		/* Where the digi sample rate is displayed */
 		#pace div,
 		.ptype,
-		.tag {
+		.tag,
+		.edit-tags {
 			display: inline-block;
 			width: 40px;
 			padding: 0 3px;
@@ -1959,7 +1964,8 @@ input[type=range]::-ms-track {
 
 		/* RSID and "Jazz" tags */
 		.ptype,
-		.tag {
+		.tag,
+		.edit-tags {
 			width: auto;
 			padding: 0.68em 2px;
 			font-size: 9px;
@@ -1976,7 +1982,8 @@ input[type=range]::-ms-track {
 		}
 
 		/* Tags like "Jazz" in browser list */
-		.tag {
+		.tag,
+		.edit-tags {
 			position: relative;
 			top: -0.5px;
 			padding: 0 3px 0 0;
@@ -1986,6 +1993,25 @@ input[type=range]::-ms-track {
 			background: var(--color-bg-tag);
 			line-height: 1.35em;
 		}
+
+		.edit-tags {
+			display: none;
+			padding: 0;
+			pointer-events: auto;
+		}
+
+			.edit-tags:before {
+				content: "";
+				float: left;
+				width: 11.5px;
+				height: 10px;
+				background: url(../images/composer_plus.svg) 2px 1px / 10px 11px no-repeat;
+				filter: var(--svg-filter-edit-tags);
+			}
+
+			.edit-tags:hover {
+				background: var(--color-bg-tag-hover);
+			}
 
 			/* The pointy triangle part of the tag */
 			.tag:before {
