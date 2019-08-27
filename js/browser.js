@@ -21,6 +21,7 @@
 	};
 
 	this.symlistFolders = [];
+	this.fileTags = [];
 
 	this.currentScrollPos = 0;
 	this.scrollPositions = [];
@@ -59,6 +60,7 @@ Browser.prototype = {
 			.on("click", "button,tr", this.onClick.bind(this))
 			.on("mouseover", "tr", this.onMouseOver.bind(this))
 			.on("mouseleave", "tr", this.onMouseLeave.bind(this))
+		$("#dialog-tags").on("click", "button", this.onClickDialogBox.bind(this));
 		$("#dropdown-sort").change(this.onChange.bind(this));
 		$("#topic-csdb").on("change", "#dropdown-sort-csdb", this.onChangeCSDb.bind(this));
 
@@ -89,6 +91,22 @@ Browser.prototype = {
 				$("#search-button").prop("disabled", false);
 			else
 				$("#search-button").prop("enabled", false).addClass("disabled");
+		});
+
+		$("#new-tag").keyup(function() {
+			$("#dialog-tags-plus").removeClass("disabled");
+			if ($("#new-tag").val() !== "")
+				$("#dialog-tags-plus").prop("disabled", false);
+			else
+				$("#dialog-tags-plus").prop("enabled", false).addClass("disabled");
+		});
+
+		$("#dialog-all-tags").on("dblclick", "option", function() {
+			$("#dialog-tags-right").trigger("click");
+		});
+
+		$("#dialog-song-tags").on("dblclick", "option", function() {
+			$("#dialog-tags-left").trigger("click");
 		});
 
 		$(document).on("click", function(event) {
@@ -244,20 +262,9 @@ Browser.prototype = {
 						fullname: thisFullname
 					}, function(data) {
 						this.validateData(data, function(data) {
-							// Prepare the two list boxes with tags
-							var allTags = songTags = "";
-							$.each(data.sid, function(i, tagID) {
-								var tagName = $.grep(data.all, function(entry) {
-									return entry.id == tagID;
-								})[0];
-								songTags += '<option value="'+tagID+'">'+tagName.name+'</option>';
-							});
-							$("#dialog-song-tags").empty().append(songTags);
-							$.each(data.all, function(i, tag) {
-								if (data.sid.indexOf(parseInt(tag.id)) == -1) // Exclude those also chosen
-									allTags += '<option value="'+tag.id+'">'+tag.name+'</option>';
-							});
-							$("#dialog-all-tags").empty().append(allTags);
+							this.allTags = data.all;
+							this.fileTags = data.sid;
+							this.updateTagLists(this.allTags, this.fileTags);
 							// Show the dialog box
 							CustomDialog({
 								id: '#dialog-tags',
@@ -464,6 +471,40 @@ Browser.prototype = {
 						}
 					}.bind(this));
 				}
+		}
+	},
+
+	/**
+	 * Click a button in a dialog box.
+	 * 
+	 * NOTE: For now only bound to the dialog box for editing tags.
+	 * 
+	 * @param {*} event 
+	 */
+	onClickDialogBox: function(event) {
+		switch (event.target.id) {
+			case "dialog-tags-right":
+				// Transfer items from left to right list in the dialog box for editing tags
+				$("#dialog-all-tags option").each(function() {
+					if (this.selected)
+						browser.fileTags.push(parseInt(this.value)); // Add ID
+				});
+				this.updateTagLists(this.allTags, this.fileTags);
+				break;
+			case "dialog-tags-left":
+				// Transfer items from right to left list in the dialog box for editing tags
+				$("#dialog-song-tags option").each(function() {
+					if (this.selected)
+						var index = browser.fileTags.indexOf(parseInt(this.value));
+						if (index > -1) browser.fileTags.splice(index, 1); // Remove ID
+				});
+				this.updateTagLists(this.allTags, this.fileTags);
+				break;
+			case "dialog-tags-plus":
+				event.stopPropagation();
+				if ($(event.target).hasClass("disabled")) return false;
+console.log("action for adding a new tag name");
+				return false;
 		}
 	},
 
@@ -1965,6 +2006,30 @@ Browser.prototype = {
 	 */
 	isBigCompoFolder: function() {
 		return this.path == "/CSDb Music Competitions";
+	},
+
+	/**
+	 * Update the two list boxes in the dialog box for editing tags.
+	 * 
+	 * @param {array} arrAll		Associative array with ID and names.
+	 * @param {array} arrSong		Standard array with ID used by file.
+	 */
+	updateTagLists: function(arrAll, arrSong) {
+		var allTags = songTags = "";
+
+		$.each(arrSong, function(i, tagID) {
+			var tagName = $.grep(arrAll, function(entry) {
+				return entry.id == tagID;
+			})[0];
+			songTags += '<option value="'+tagID+'">'+tagName.name+'</option>';
+		});
+		$("#dialog-song-tags").empty().append(songTags);
+
+		$.each(arrAll, function(i, tag) {
+			if (arrSong.indexOf(parseInt(tag.id)) == -1) // Exclude those also chosen
+				allTags += '<option value="'+tag.id+'">'+tag.name+'</option>';
+		});
+		$("#dialog-all-tags").empty().append(allTags);
 	},
 
 	/**

@@ -1000,7 +1000,8 @@ small.u2 { margin-left: 2px; }
 	#controls button.disabled,
 	#songs button.disabled,
 	#userform button.disabled,
-	.edit button.disabled {
+	.edit button.disabled,
+	.dialog-new button.disabled {
 		cursor: default;
 		background: var(--color-button-disabled);
 		border-color: var(--color-button-disabled);

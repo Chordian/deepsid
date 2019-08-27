@@ -152,10 +152,10 @@
 			<div class="dialog-text"></div>
 			<select id="dialog-all-tags" name="all-tags" multiple></select>
 			<div class="dialog-transfer">
-				<button class="dialog-to-left">
+				<button id="dialog-tags-left" class="dialog-to-left">
 					<svg height="24" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><path d="M30.83 32.67l-9.17-9.17 9.17-9.17-2.83-2.83-12 12 12 12z"/><path d="M0-.5h48v48h-48z" fill="none"/></svg>
 				</button>
-				<button class="dialog-to-right" style="margin-left:2px;">
+				<button id="dialog-tags-right" class="dialog-to-right" style="margin-left:2px;">
 					<svg height="24" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><path d="M17.17 32.92l9.17-9.17-9.17-9.17 2.83-2.83 12 12-12 12z"/><path d="M0-.25h48v48h-48z" fill="none"/></svg>
 				</button>
 			</div>
@@ -163,7 +163,7 @@
 			<div class="dialog-new">
 				<label for="new-tag">New tag:</label><br />
 				<form onsubmit="return false;" autocomplete="off"><input type="text" name="new-tag" id="new-tag" maxlength="32" />
-				<button style="float:right;">
+				<button id="dialog-tags-plus" class="disabled" style="float:right;">
 					<svg height="16" style="enable-background:new 0 0 512 512;" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><polygon points="448,224 288,224 288,64 224,64 224,224 64,224 64,288 224,288 224,448 288,448 288,288 448,288 "/></svg>
 				</button></form>
 			</div>
