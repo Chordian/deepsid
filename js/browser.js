@@ -236,16 +236,42 @@ Browser.prototype = {
 				// Get the unmodified name of this entry
 				// NOTE: Elsewhere, "extra" folders have their prefixed "_" removed for displaying.
 				var name = decodeURIComponent($tr.find(".name").attr("data-name"));
+				var thisFullname = ((this.isSearching || this.isSymlist || this.isCompoFolder ? "/" : this.path+"/")+name).substr(1);
 
 				if (event.target.className === "edit-tags") {
-					CustomDialog({
-						id: '#dialog-tags',
-						text: '<h3>Edit tags</h3><p>NEED NAME OF SID HERE!!!</p><span class="dialog-label-top" style="float:left;">All tags available:</span><span class="dialog-label-top" style="float:right;width:150px;">Tags for this file:</span>',
-						width: 390,
-						height: 600,
-					}, function() {
-console.log("action!");
-					});
+					// Clicked the "+" icon button to edit tags for a SID file
+					$.get("php/tags_get.php", {
+						fullname: thisFullname
+					}, function(data) {
+						this.validateData(data, function(data) {
+							// Prepare the two list boxes with tags
+							var allTags = songTags = "";
+							$.each(data.sid, function(i, tagID) {
+								var tagName = $.grep(data.all, function(entry) {
+									return entry.id == tagID;
+								})[0];
+								songTags += '<option value="'+tagID+'">'+tagName.name+'</option>';
+							});
+							$("#dialog-song-tags").empty().append(songTags);
+							$.each(data.all, function(i, tag) {
+								if (data.sid.indexOf(parseInt(tag.id)) == -1) // Exclude those also chosen
+									allTags += '<option value="'+tag.id+'">'+tag.name+'</option>';
+							});
+							$("#dialog-all-tags").empty().append(allTags);
+							// Show the dialog box
+							CustomDialog({
+								id: '#dialog-tags',
+								text: '<h3>Edit tags</h3><p>'+name.split("/").slice(-1)[0]+'</p>'+
+									'<span class="dialog-label-top" style="float:left;">All tags available:</span>'+
+									'<span class="dialog-label-top" style="float:right;width:136px;">Tags for this file:</span>',
+								width: 390,
+								height: 345,
+							}, function() {
+								// OK was clicked; make the tag changes
+		console.log("action!");
+							});
+						});
+					}.bind(this));
 					return false;
 				}
 
@@ -257,10 +283,9 @@ console.log("action!");
 						return false;
 					}
 					var rating = event.shiftKey ? 0 : 5 - $(event.target).index(); // Remember stars are backwards (RTL; see CSS)
-					var ratedName = ((this.isSearching || this.isSymlist || this.isCompoFolder ? "/" : this.path+"/")+name).substr(1);
 
 					// Star rating for a folder or a SID file (PHP script figures this out by itself)
-					$.post("php/rating_write.php", {fullname: ratedName, rating: rating}, function(data) {
+					$.post("php/rating_write.php", {fullname: thisFullname, rating: rating}, function(data) {
 						this.validateData(data, function(data) {
 
 							var stars = this.buildStars(data.rating);
@@ -271,7 +296,7 @@ console.log("action!");
 
 							// But also update the relevant array for later filtering/sorting
 							var isFile = $td.parent("tr").find(".name").hasClass("file"),
-								endName = this.isSymlist || this.isCompoFolder ? ratedName : ratedName.split("/").slice(-1)[0];
+								endName = this.isSymlist || this.isCompoFolder ? thisFullname : thisFullname.split("/").slice(-1)[0];
 							if (isFile) {
 								// Update the playlist array
 								$.each(this.playlist, function(i, file) {
@@ -1614,6 +1639,7 @@ console.log("action!");
 
 			contents +=
 				'<div class="line" data-action="download-file">Download File</div>'+
+				'<div class="line" data-action="edit-tags">Edit Tags</div>'+
 				'<div class="line'+(this.isSearching || this.isCompoFolder || isPersonalSymlist || isPublicSymlist ? " disabled" : "")+'" data-action="copy-link">Copy Link</div>';
 
 		} else if ($target.hasClass("folder") && (this.contextSID.substr(0, 1) == "!" || this.contextSID.substr(0, 1) == "$")) {
@@ -1714,6 +1740,9 @@ console.log("action!");
 				// Force the browser to download it using an invisible <iframe>
 				$("#download").prop("src", this.ROOT_HVSC + '/' + (this.isSearching || this.isCompoFolder || symChar == "!" || symChar == "$" ? this.contextSID : this.path.substr(1)+"/"+this.contextSID));
 				break;
+			case 'edit-tags':
+				// Just click the "+" button (it may be hidden but it should still react to this)
+				this.contextEntry.parents("tr").find(".edit-tags").trigger("click");
 			case 'copy-link':
 				var url = window.location.href,
 					more = url.indexOf("&") != -1;

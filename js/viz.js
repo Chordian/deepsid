@@ -141,7 +141,7 @@ Viz.prototype = {
 	 * @param {*} event 
 	 */
 	onKeyUp: function(event) {
-		if (!$("#search-box,#username,#password,#old-password,#new-password,#sym-rename,#sym-specify-subtune").is(":focus")) {
+		if (!$("#search-box,#username,#password,#old-password,#new-password,#sym-rename,#sym-specify-subtune,#new-tag").is(":focus")) {
 			var voiceMask = [SID.voiceMask[0], SID.voiceMask[1], SID.voiceMask[2]];
 			if (event.keyCode == 49 || event.keyCode == 81) {			// Keyup '1' or 'q'
 				if (event.shiftKey) { // Reverse (solo)

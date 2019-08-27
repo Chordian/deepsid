@@ -979,7 +979,9 @@ small.u2 { margin-left: 2px; }
 	.edit button,
 	#sundry button,
 	#sticky-visuals button,
-	#topic-remix .action button {
+	#topic-remix .action button,
+	.dialog-transfer button,
+	.dialog-new button {
 		transition: all .05s linear;
 		box-shadow: 2px 2px 4px var(--color-button-shadow);
 	}
@@ -989,7 +991,9 @@ small.u2 { margin-left: 2px; }
 	.edit button:active,
 	#sundry button:active,
 	#faster.button-selected,
-	#topic-remix .action button:active {
+	#topic-remix .action button:active,
+	.dialog-transfer button:active,
+	.dialog-new button:active {
 		box-shadow: var(--shadow-button-selected);
 	}
 
@@ -4473,6 +4477,10 @@ input[type=range]::-ms-track {
 		margin: 10px 0;
 	}
 
+	.dialog-box select {
+		border: 1px solid var(--color-border-box);
+	}
+
 	.dialog-buttons {
 		position: absolute;
 		bottom: 20px;
@@ -4484,11 +4492,12 @@ input[type=range]::-ms-track {
 			margin-left: 6px;
 		}
 
-		.dialog-cancel {
+		.dialog-auto {
 			width: auto !important;
 		}
 
-.dialog-label-top {
+.dialog-label-top,
+.dialog-new label {
 	font: normal 13px "Montserrat", sans-serif;
 	color: var(--color-text-fine);
 	margin-bottom: 4px;
@@ -4497,24 +4506,47 @@ input[type=range]::-ms-track {
 #dialog-all-tags,
 #dialog-song-tags {
 	font-size: 14px;
-	width: 150px;
+	width: 136px;
 }
 
 #dialog-all-tags {
-	/*height: 258px;*/
+	height: 210px;
 }
 
 #dialog-song-tags {
 	float: right;
-	/*height: 100px;*/
 }
 
 .dialog-transfer {
 	position: absolute;
-	top: 100px;
-	left: 160px;
-	width: 20px;
+	top: 144px;
+	left: 168px;
 }
+
+	/* The "<" and ">" buttons */
+	.dialog-transfer button,
+	.dialog-new button {
+		padding: 0;
+		height: 24px;
+		fill: currentColor;
+	}
+
+		.dialog-new button {
+			width: 24px;
+		}
+
+	.dialog-new {
+		position: relative;
+		top: -104px;
+		float: right;
+		width: 136px;
+	}
+
+	#new-tag {
+		font-size: 14px;
+		width: 108px;
+		height: 24px;
+	}
 
 /* ---- Styled Select ------------------------------------------------------- */
 

@@ -150,31 +150,24 @@
 
 		<div id="dialog-tags" class="dialog-box">
 			<div class="dialog-text"></div>
-			<select id="dialog-all-tags" name="all-tags" size="13" multiple>
-				<option value="jazz">jazz</option>
-				<option value="cover">cover</option>
-				<option value="intro">intro</option>
-				<option value="unfinished">Unfinished</option>
-				<option value="jazz">jazz</option>
-				<option value="cover">cover</option>
-				<option value="intro">intro</option>
-				<option value="unfinished">Unfinished</option>
-				<option value="jazz">jazz</option>
-				<option value="cover">cover</option>
-				<option value="intro">intro</option>
-				<option value="unfinished">Unfinished</option>
-				<option value="jazz">jazz</option>
-				<option value="cover">cover</option>
-				<option value="intro">intro</option>
-				<option value="unfinished">Unfinished</option>
-			</select>
+			<select id="dialog-all-tags" name="all-tags" multiple></select>
 			<div class="dialog-transfer">
-				<button class="dialog-to-right">R</button><button class="dialog-to-left">L</button>
+				<button class="dialog-to-left">
+					<svg height="24" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><path d="M30.83 32.67l-9.17-9.17 9.17-9.17-2.83-2.83-12 12 12 12z"/><path d="M0-.5h48v48h-48z" fill="none"/></svg>
+				</button>
+				<button class="dialog-to-right" style="margin-left:2px;">
+					<svg height="24" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><path d="M17.17 32.92l9.17-9.17-9.17-9.17 2.83-2.83 12 12-12 12z"/><path d="M0-.25h48v48h-48z" fill="none"/></svg>
+				</button>
 			</div>
-			<select id="dialog-song-tags" name="song-tags" size="5" multiple>
-				<option value="sovs">Sovs</option>
-			</select> 			
-			<div class="dialog-buttons"><button class="dialog-button-yes">OK</button><button class="dialog-button-no dialog-cancel">Cancel</button></div>
+			<select id="dialog-song-tags" name="song-tags" size="5" multiple></select>
+			<div class="dialog-new">
+				<label for="new-tag">New tag:</label><br />
+				<form onsubmit="return false;" autocomplete="off"><input type="text" name="new-tag" id="new-tag" maxlength="32" />
+				<button style="float:right;">
+					<svg height="16" style="enable-background:new 0 0 512 512;" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><polygon points="448,224 288,224 288,64 224,64 224,224 64,224 64,288 224,288 224,448 288,448 288,288 448,288 "/></svg>
+				</button></form>
+			</div>
+			<div class="dialog-buttons" style="width:136px;"><button class="dialog-button-yes dialog-auto" style="float:left;margin:0;">OK</button><button class="dialog-button-no dialog-auto" style="float:right;margin:0;">Cancel</button></div>
 		</div>
 
 		<iframe id="download" style="display:none;"></iframe>

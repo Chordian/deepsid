@@ -1,0 +1,55 @@
+<?php
+/**
+ * DeepSID
+ *
+ * Get two arrays; one with all tags and one with tags for a specific file.
+ * 
+ * @uses		$_GET['fullname']
+ */
+
+require_once("setup.php");
+
+if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest')
+	die("Direct access not permitted.");
+
+try {
+	if ($_SERVER['HTTP_HOST'] == LOCALHOST)
+		$db = new PDO(PDO_LOCALHOST, USER_LOCALHOST, PWD_LOCALHOST);
+	else
+		$db = new PDO(PDO_ONLINE, USER_ONLINE, PWD_ONLINE);
+	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+	$db->exec("SET NAMES UTF8");
+
+	// Get a list of all tags
+	$select = $db->query('SELECT id, name FROM tags_info ORDER BY name');
+	$select->setFetchMode(PDO::FETCH_OBJ);
+
+	$all_tags = array();
+	foreach ($select as $row) {
+		array_push($all_tags, array(
+			'id' =>				$row->id,
+			'name' =>			$row->name,
+		));
+	}
+
+	// Get the ID of this file
+	$select = $db->prepare('SELECT id FROM hvsc_files WHERE fullname = :fullname LIMIT 1');
+	$select->execute(array(':fullname'=>$_GET['fullname']));
+	$select->setFetchMode(PDO::FETCH_OBJ);
+	$file_id = $select->rowCount() ? $select->fetch()->id : 0;
+
+	// Get a list of the tags ID numbers used by this file ID
+	$select = $db->query('SELECT tags_id FROM tags_lookup where files_id = '.$file_id);
+	$select->setFetchMode(PDO::FETCH_OBJ);
+
+	$sid_tags = array();
+	foreach ($select as $row)
+		$sid_tags[] += $row->tags_id;
+
+} catch(PDOException $e) {
+	$account->LogActivityError('tags_get.php', $e->getMessage());
+	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
+}
+
+echo json_encode(array('status' => 'ok', 'all' => $all_tags, 'sid' => $sid_tags));
+?>
