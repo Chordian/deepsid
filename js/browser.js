@@ -258,6 +258,12 @@ Browser.prototype = {
 
 				if (event.target.className === "edit-tags") {
 					// Clicked the "+" icon button to edit tags for a SID file
+					if (!$("#logout").length) {
+						// But must be logged in to do that
+						alert("Login or register and you can edit the tags for this file.");
+						return false;
+					}
+
 					$.get("php/tags_get.php", {
 						fullname: thisFullname
 					}, function(data) {
@@ -1077,11 +1083,11 @@ Browser.prototype = {
 						var adaptedName = file.substname == "" ? file.filename.replace(/^\_/, '') : file.substname;
 						adaptedName = this.adaptBrowserName(adaptedName);
 						// Collect tags for this file
-						var list_of_tags = '';
+						var list_of_tags = '<div class="tags-line">';
 						$.each(file.tags, function(i, tag) {
 							list_of_tags += '<div class="tag">'+tag+'</div>';
 						});
-						list_of_tags += '<div class="edit-tags" title="Edit tags">&nbsp;</div>';
+						list_of_tags += '<div class="edit-tags" title="Edit tags">&nbsp;</div></div>';
 						files +=
 							'<tr>'+
 								'<td class="sid unselectable"><div class="block-wrap"><div class="block">'+(file.subtunes > 1 ? '<div class="subtunes'+(this.isSymlist ? ' specific' : '')+(isNew ? ' newst' : '')+'">'+(this.isSymlist ? file.startsubtune : file.subtunes)+'</div>' : (isNew ? '<div class="newsid"></div>' : ''))+

@@ -1951,6 +1951,16 @@ input[type=range]::-ms-track {
 	#hvsc-version	{ color: var(--color-text-faint); }
 	#pace			{ bottom: 35px; }
 
+	/* Encapsulates tags - they are allowed to line up through the next <TD> cell and to the edge of #songs */
+	.tags-line {
+		position: relative;
+		display: table-cell;
+		overflow: visible;
+		max-height: 15px;
+		max-width: 130px;
+		z-index: 2;
+}
+
 		/* Where the digi sample rate is displayed */
 		#pace div,
 		.ptype,
@@ -2553,10 +2563,12 @@ input[type=range]::-ms-track {
 
 		/* 1988 in MoN/FutureComposer (second line below SID filename itself) */
 		#songs .info {
+			overflow: hidden;
 			position: relative;
 			top: -7px;
 			font-size: 11px;
 			color: var(--color-text-minor);
+			white-space: nowrap; /* Needed for the line of tags to work */
 		}
 
 		/* Tel_Jeroen (folder) */

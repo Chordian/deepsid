@@ -43,7 +43,7 @@ function LogTagActivity($action, $tag_id, $tag_name) {
 			$fullname.','.
 			$action.','.
 			$tag_id.','.
-			$tag_name.','.
+			$tag_name.
 		PHP_EOL, FILE_APPEND);
 }
 
@@ -115,8 +115,6 @@ try {
 			LogTagActivity('ADD', $tag_id, $select->fetch()->name);
 		}
 	}
-
-	// $account->LogActivity($tag['name']);
 
 } catch(PDOException $e) {
 	$account->LogActivityError('tags_write.php', $e->getMessage());
