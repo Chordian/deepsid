@@ -262,9 +262,12 @@ Browser.prototype = {
 						fullname: thisFullname
 					}, function(data) {
 						this.validateData(data, function(data) {
-							this.allTags = data.all;
-							this.fileTags = data.sid;
+							this.fileID		= data.id;
+							this.allTags	= data.all;
+							this.fileTags	= data.sid;
+							this.newTagID	= 60000;
 							this.updateTagLists(this.allTags, this.fileTags);
+							$("#new-tag").val("");
 							// Show the dialog box
 							CustomDialog({
 								id: '#dialog-tags',
@@ -274,8 +277,16 @@ Browser.prototype = {
 								width: 390,
 								height: 345,
 							}, function() {
-								// OK was clicked; make the tag changes
-		console.log("action!");
+								// OK was clicked; make all the tag changes
+								$.post("php/tags_write.php", {
+									fileID:		browser.fileID,
+									allTags:	browser.allTags,
+									fileTags:	browser.fileTags
+								}, function(data) {
+									browser.validateData(data, function(data) {
+										this.getFolder();
+									});
+								}.bind(this));
 							});
 						});
 					}.bind(this));
@@ -292,7 +303,7 @@ Browser.prototype = {
 					var rating = event.shiftKey ? 0 : 5 - $(event.target).index(); // Remember stars are backwards (RTL; see CSS)
 
 					// Star rating for a folder or a SID file (PHP script figures this out by itself)
-					$.post("php/rating_write.php", {fullname: thisFullname, rating: rating}, function(data) {
+					$.post("php/rating_write.php", { fullname: thisFullname, rating: rating }, function(data) {
 						this.validateData(data, function(data) {
 
 							var stars = this.buildStars(data.rating);
@@ -484,26 +495,36 @@ Browser.prototype = {
 	onClickDialogBox: function(event) {
 		switch (event.target.id) {
 			case "dialog-tags-right":
-				// Transfer items from left to right list in the dialog box for editing tags
+				// Edit tags: Transfer items from left to right list
 				$("#dialog-all-tags option").each(function() {
-					if (this.selected)
-						browser.fileTags.push(parseInt(this.value)); // Add ID
+					if (this.selected) // Add ID
+						browser.fileTags.push(parseInt(this.value));		
 				});
 				this.updateTagLists(this.allTags, this.fileTags);
 				break;
 			case "dialog-tags-left":
-				// Transfer items from right to left list in the dialog box for editing tags
+				// Edit tags: Transfer items from right to left list
 				$("#dialog-song-tags option").each(function() {
-					if (this.selected)
+					if (this.selected) // Remove ID
 						var index = browser.fileTags.indexOf(parseInt(this.value));
-						if (index > -1) browser.fileTags.splice(index, 1); // Remove ID
+						if (index > -1) browser.fileTags.splice(index, 1);
 				});
 				this.updateTagLists(this.allTags, this.fileTags);
 				break;
 			case "dialog-tags-plus":
-				event.stopPropagation();
-				if ($(event.target).hasClass("disabled")) return false;
-console.log("action for adding a new tag name");
+				// Edit tags: Add a new tag in the right list
+				// NOTE: New ID's are set to 60000 and up until processed by the PHP script.
+				if (!$(event.target).hasClass("disabled")) {
+					// Add "fake" ID for now
+					this.allTags.push({
+						id:		this.newTagID,
+						name:	$("#new-tag").val()
+					});
+					browser.fileTags.push(this.newTagID);
+					this.newTagID++;
+					this.updateTagLists(this.allTags, this.fileTags);
+					$("#new-tag").val("");
+				}
 				return false;
 		}
 	},
@@ -2011,8 +2032,8 @@ console.log("action for adding a new tag name");
 	/**
 	 * Update the two list boxes in the dialog box for editing tags.
 	 * 
-	 * @param {array} arrAll		Associative array with ID and names.
-	 * @param {array} arrSong		Standard array with ID used by file.
+	 * @param {array} arrAll		Associative array with ID's and names.
+	 * @param {array} arrSong		Standard array with ID's used by file.
 	 */
 	updateTagLists: function(arrAll, arrSong) {
 		var allTags = songTags = "";

@@ -46,12 +46,12 @@ $(function() { // DOM ready
 	// Get the user's settings
 	$.post("php/settings.php", function(data) {
 		browser.validateData(data, function(data) {
-			SettingToggle("first-subtune", data.settings.firstsubtune);
-			SettingToggle("skip-tune", data.settings.skiptune);
-			SettingToggle("mark-tune", data.settings.marktune);
-			SettingToggle("skip-bad", data.settings.skipbad);
-			SettingToggle("skip-long", data.settings.skiplong);
-			SettingToggle("skip-short", data.settings.skipshort);
+			SettingToggle("first-subtune",	data.settings.firstsubtune);
+			SettingToggle("skip-tune",		data.settings.skiptune);
+			SettingToggle("mark-tune",		data.settings.marktune);
+			SettingToggle("skip-bad",		data.settings.skipbad);
+			SettingToggle("skip-long",		data.settings.skiplong);
+			SettingToggle("skip-short",		data.settings.skipshort);
 		});
 	}.bind(this));
 	
@@ -283,7 +283,7 @@ $(function() { // DOM ready
 			// Throttle the reaction to the typing
 			setTimeout(function() {
 				// So does this username exist?
-				$.post("php/account_exists.php", {username: $("#username").val()}, function(data) {
+				$.post("php/account_exists.php", { username: $("#username").val() }, function(data) {
 					browser.validateData(data, function(data) {
 
 						userExists = data['exists'];
@@ -851,7 +851,7 @@ $(function() { // DOM ready
 		$("#topic-csdb").empty().append(browser.loadingSpinner("csdb"));
 		$("#loading-csdb").fadeIn(500);
 
-		forum = $.get("php/csdb_forum.php", { room: $this.attr("data-roomid"), topic: $this.attr("data-topicid")}, function(data) {
+		forum = $.get("php/csdb_forum.php", { room: $this.attr("data-roomid"), topic: $this.attr("data-topicid") }, function(data) {
 			browser.validateData(data, function(data) {
 				$("#sticky-csdb").empty().append(data.sticky);
 				if (parseInt(colorTheme))
@@ -1518,22 +1518,28 @@ $.fn.center = function () {
  * @param {function} callbackNo		Callback used if NO is clicked.
  */
 function CustomDialog(data, callbackYes, callbackNo) {
+	$(data.id).off("click", ".dialog-button-yes");
+	$(data.id).off("click", ".dialog-button-no");
+
 	var width = typeof data.width != "undefined" ? data.width : 400;
 	var height = typeof data.height != "undefined" ? data.height : 200;
+
 	$(data.id).css({ width: width, height: height }).center();
 	$(data.id+" .dialog-text").empty().append(data.text);
 	$("#dialog-cover,"+data.id).fadeIn("fast");
 
-	$(data.id+" .dialog-button-yes").click(function() {
+	$(data.id).on("click", ".dialog-button-yes", function() {
 		$("#dialog-cover,"+data.id).hide();
 		if (typeof callbackYes === "function")
 			callbackYes.call(this);
+		return false;
 	});
 
-	$(data.id+" .dialog-button-no").click(function() {
+	$(data.id).on("click", ".dialog-button-no", function() {
 		$("#dialog-cover,"+data.id).hide();
 		if (typeof callbackNo === "function")
 			callbackNo.call(this);
+		return false;
 	});
 }
 

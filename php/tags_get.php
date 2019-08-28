@@ -51,5 +51,5 @@ try {
 	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 }
 
-echo json_encode(array('status' => 'ok', 'all' => $all_tags, 'sid' => $sid_tags));
+echo json_encode(array('status' => 'ok', 'all' => $all_tags, 'sid' => $sid_tags, 'id' => $file_id));
 ?>

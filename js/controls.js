@@ -704,7 +704,7 @@ Controls.prototype = {
 			$("#topic-stil,#stopic-stil").addClass("c64font");
 			// For .mus files, we have to let the server parse the accompanying .wds file (if it exists)
 			$.ajax("php/info.php", { // If there's a "/" then it's a search path and can stand on its own legs
-				data:		{fullname: file.indexOf("/") !== -1 ? "/"+file : browser.path.substr(1)+"/"+file},
+				data:		{ fullname: file.indexOf("/") !== -1 ? "/"+file : browser.path.substr(1)+"/"+file },
 				async:		false, // Have to wait to make sure the variable is appended below
 				success:	function(data) {
 					browser.validateData(data, function(data) {
