@@ -547,7 +547,7 @@ Browser.prototype = {
 				// Edit tags: Add a new tag in the right list
 				var newTag = $("#new-tag").val();
 				// I apologize in advance for the following words but I have to test for them! =)
-				if (["sid", "c64", "fuck", "crap", "shit", "cunt", "piss", "dick", "rubbish", "arse"].indexOf(newTag.toLowerCase()) != -1) {
+				if (["sid", "c64", "fuck", "crap", "shit", "cunt", "piss", "dick", "rubbish", "arse", "chiptune"].indexOf(newTag.toLowerCase()) != -1) {
 					alert("Sorry, that tag name is not allowed.\n\nLook, if you really want to I'm sure you can find a way to circumvent this check, but please be nice.\n\nAlso, if I see in my log that you have added a bad tag name, I will most likely undo your work.");
 					return false;
 				}
@@ -791,7 +791,7 @@ Browser.prototype = {
 				files += '<tr>'+
 						'<td class="sid unselectable"><div class="block-wrap"><div class="block">'+(file.subtunes > 1 ? '<div class="subtunes'+(this.isSymlist ? ' specific' : '')+(isNew ? ' newst' : '')+'">'+(this.isSymlist ? file.startsubtune + 1 : file.subtunes)+'</div>' : (isNew ? '<div class="newsid"></div>' : ''))+
 						'<div class="entry name file'+(this.isSearching || this.isCompoFolder || this.path.substr(0, 2) === "/$" ? ' search' : '')+'" data-name="'+encodeURIComponent(file.filename)+'" data-type="'+file.type+'" data-symid="'+file.symid+'">'+adaptedName+'</div></div></div><br />'+
-						'<span class="info">'+file.copyright.substr(0, 4)+' in '+file.player+(file.type === "RSID" ? '<div class="ptype">RSID</div>' : '')+'<div class="tags-line">'+file.tags+'</div></span></td>'+
+						'<span class="info">'+file.copyright.substr(0, 4)+' in '+file.player+'<div class="tags-line">'+file.tags+'</div></span></td>'+
 						'<td class="stars filestars"><span class="rating">'+this.buildStars(file.rating)+'</span>'+
 						'<span class="disqus-comment-count" data-disqus-url="http://deepsid.chordian.net/#!'+this.path+"/"+file.filename.replace("/_High Voltage SID Collection", "")+'"></span>'+
 						'</td>'+
@@ -1118,7 +1118,7 @@ Browser.prototype = {
 							'<tr>'+
 								'<td class="sid unselectable"><div class="block-wrap"><div class="block">'+(file.subtunes > 1 ? '<div class="subtunes'+(this.isSymlist ? ' specific' : '')+(isNew ? ' newst' : '')+'">'+(this.isSymlist ? file.startsubtune : file.subtunes)+'</div>' : (isNew ? '<div class="newsid"></div>' : ''))+
 								'<div class="entry name file'+(this.isSearching || this.isCompoFolder || this.path.substr(0, 2) === "/$" ? ' search' : '')+'" data-name="'+encodeURIComponent(file.filename)+'" data-type="'+file.type+'" data-symid="'+file.symid+'">'+adaptedName+'</div></div></div><br />'+
-								'<span class="info">'+file.copyright.substr(0, 4)+' in '+player+(file.type === "RSID" ? '<div class="ptype">RSID</div>' : '')+'<div class="tags-line">'+list_of_tags+'</div></span></td>'+
+								'<span class="info">'+file.copyright.substr(0, 4)+' in '+player+'<div class="tags-line">'+list_of_tags+'</div></span></td>'+
 								'<td class="stars filestars"><span class="rating">'+this.buildStars(file.rating)+'</span>'+
 								'<span class="disqus-comment-count" data-disqus-url="http://deepsid.chordian.net/#!'+rootFile.replace("/_High Voltage SID Collection", "")+'"></span>'+
 								'</td>'+

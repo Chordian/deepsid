@@ -1063,6 +1063,7 @@
 							<li>To accommodate the impending editing of tags, a ton of genres has been added to the list
 								of available tags.</li>
 							<li>Tweaked the color of tags in the dark color theme to have a more greenish tone.</li>
+							<li>The <code>RSID</code> field is no longer shown in a SID row, to make more room for tags.</li>
 						</ul>
 
 						<h3>August 25, 2019</h3>
