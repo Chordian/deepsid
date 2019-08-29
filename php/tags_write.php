@@ -116,10 +116,22 @@ try {
 		}
 	}
 
+	// Now get a sorted array of the tag names used by this file right now
+	$list_of_tags = array();
+	$select = $db->prepare('SELECT tags_id FROM tags_lookup WHERE files_id = :id');
+	$select->execute(array(':id'=>$_POST['fileID']));
+	$select->setFetchMode(PDO::FETCH_OBJ);
+	foreach($select as $row) {
+		$tag = $db->query('SELECT name FROM tags_info WHERE id = '.$row->tags_id.' LIMIT 1');
+		$tag->setFetchMode(PDO::FETCH_OBJ);
+		array_push($list_of_tags, $tag->fetch()->name);
+	}
+	sort($list_of_tags);
+
 } catch(PDOException $e) {
 	$account->LogActivityError('tags_write.php', $e->getMessage());
 	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 }
 
-echo json_encode(array('status' => 'ok'));
+echo json_encode(array('status' => 'ok', 'tags' => $list_of_tags));
 ?>

@@ -1054,6 +1054,17 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>August 29, 2019</h3>
+						<ul>
+							<li>Tags can now be edited for songs when you're logged in. When hovering on a SID row, a
+								small <code>+</code> icon button appears at the end of the second line. Click this to
+								open a dialog box where you can edit its tags. Alternatively, you can also select the
+								new context menu option <code>Edit Tags</code> to open this dialog box.</li>
+							<li>To accommodate the impending editing of tags, a ton of genres has been added to the list
+								of available tags.</li>
+							<li>Tweaked the color of tags in the dark color theme to have a more greenish tone.</li>
+						</ul>
+
 						<h3>August 25, 2019</h3>
 						<ul>
 							<li>Added basic support for tags, shown in the line with year and player. To begin with only

@@ -716,6 +716,7 @@ try {
 				$tag->setFetchMode(PDO::FETCH_OBJ);
 				array_push($list_of_tags, $tag->fetch()->name);
 			}
+			sort($list_of_tags);
 
 			array_push($files_ext, array(
 				'filename' =>		$file,

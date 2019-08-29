@@ -290,7 +290,33 @@ Browser.prototype = {
 									fileTags:	browser.fileTags
 								}, function(data) {
 									browser.validateData(data, function(data) {
-										this.getFolder();
+
+										var list_of_tags = browser.buildTags(data.tags),
+											endName = browser.isSymlist || browser.isCompoFolder ? thisFullname : thisFullname.split("/").slice(-1)[0];
+
+										// Make the tags sticky without refreshing the page
+										var $td = $(event.target).parents("td");
+										$td.find(".tags-line").empty().append(list_of_tags);
+
+										// Update the playlist array
+										$.each(browser.playlist, function(i, file) {
+											if (file.filename == endName) {
+												file.tags = list_of_tags;
+												return false;
+											}
+										});
+
+										if (browser.isBigCompoFolder()) {
+											// Update the compolist arrays
+											$.each([browser.compolist, browser.cache.compolist], function() {
+												$.each(this, function(i, file) {
+													if (file.foldername == endName) {
+														file.tags = list_of_tags;
+														return false;
+													}
+												});
+											});
+										}
 									});
 								}.bind(this));
 							});
@@ -519,12 +545,17 @@ Browser.prototype = {
 				break;
 			case "dialog-tags-plus":
 				// Edit tags: Add a new tag in the right list
-				// NOTE: New ID's are set to 60000 and up until processed by the PHP script.
+				var newTag = $("#new-tag").val();
+				// I apologize in advance for the following words but I have to test for them! =)
+				if (["sid", "c64", "fuck", "crap", "shit", "cunt", "piss", "dick", "rubbish", "arse"].indexOf(newTag.toLowerCase()) != -1) {
+					alert("Sorry, that tag name is not allowed.\n\nLook, if you really want to I'm sure you can find a way to circumvent this check, but please be nice.\n\nAlso, if I see in my log that you have added a bad tag name, I will most likely undo your work.");
+					return false;
+				}
 				if (!$(event.target).hasClass("disabled")) {
 					// Add "fake" ID for now
 					this.allTags.push({
 						id:		this.newTagID,
-						name:	$("#new-tag").val()
+						name:	newTag
 					});
 					browser.fileTags.push(this.newTagID);
 					this.newTagID++;
@@ -760,7 +791,7 @@ Browser.prototype = {
 				files += '<tr>'+
 						'<td class="sid unselectable"><div class="block-wrap"><div class="block">'+(file.subtunes > 1 ? '<div class="subtunes'+(this.isSymlist ? ' specific' : '')+(isNew ? ' newst' : '')+'">'+(this.isSymlist ? file.startsubtune + 1 : file.subtunes)+'</div>' : (isNew ? '<div class="newsid"></div>' : ''))+
 						'<div class="entry name file'+(this.isSearching || this.isCompoFolder || this.path.substr(0, 2) === "/$" ? ' search' : '')+'" data-name="'+encodeURIComponent(file.filename)+'" data-type="'+file.type+'" data-symid="'+file.symid+'">'+adaptedName+'</div></div></div><br />'+
-						'<span class="info">'+file.copyright.substr(0, 4)+' in '+file.player+(file.type === "RSID" ? '<div class="ptype">RSID</div>' : '')+file.tags+'</span></td>'+
+						'<span class="info">'+file.copyright.substr(0, 4)+' in '+file.player+(file.type === "RSID" ? '<div class="ptype">RSID</div>' : '')+'<div class="tags-line">'+file.tags+'</div></span></td>'+
 						'<td class="stars filestars"><span class="rating">'+this.buildStars(file.rating)+'</span>'+
 						'<span class="disqus-comment-count" data-disqus-url="http://deepsid.chordian.net/#!'+this.path+"/"+file.filename.replace("/_High Voltage SID Collection", "")+'"></span>'+
 						'</td>'+
@@ -1082,17 +1113,12 @@ Browser.prototype = {
 							isNew = file.hvsc == this.HVSC_VERSION || file.hvsc == this.CGSC_VERSION;
 						var adaptedName = file.substname == "" ? file.filename.replace(/^\_/, '') : file.substname;
 						adaptedName = this.adaptBrowserName(adaptedName);
-						// Collect tags for this file
-						var list_of_tags = '<div class="tags-line">';
-						$.each(file.tags, function(i, tag) {
-							list_of_tags += '<div class="tag">'+tag+'</div>';
-						});
-						list_of_tags += '<div class="edit-tags" title="Edit tags">&nbsp;</div></div>';
+						var list_of_tags = this.buildTags(file.tags);
 						files +=
 							'<tr>'+
 								'<td class="sid unselectable"><div class="block-wrap"><div class="block">'+(file.subtunes > 1 ? '<div class="subtunes'+(this.isSymlist ? ' specific' : '')+(isNew ? ' newst' : '')+'">'+(this.isSymlist ? file.startsubtune : file.subtunes)+'</div>' : (isNew ? '<div class="newsid"></div>' : ''))+
 								'<div class="entry name file'+(this.isSearching || this.isCompoFolder || this.path.substr(0, 2) === "/$" ? ' search' : '')+'" data-name="'+encodeURIComponent(file.filename)+'" data-type="'+file.type+'" data-symid="'+file.symid+'">'+adaptedName+'</div></div></div><br />'+
-								'<span class="info">'+file.copyright.substr(0, 4)+' in '+player+(file.type === "RSID" ? '<div class="ptype">RSID</div>' : '')+list_of_tags+'</span></td>'+
+								'<span class="info">'+file.copyright.substr(0, 4)+' in '+player+(file.type === "RSID" ? '<div class="ptype">RSID</div>' : '')+'<div class="tags-line">'+list_of_tags+'</div></span></td>'+
 								'<td class="stars filestars"><span class="rating">'+this.buildStars(file.rating)+'</span>'+
 								'<span class="disqus-comment-count" data-disqus-url="http://deepsid.chordian.net/#!'+rootFile.replace("/_High Voltage SID Collection", "")+'"></span>'+
 								'</td>'+
@@ -1246,6 +1272,23 @@ Browser.prototype = {
 			stars += '<b class="'+s+'xv"></b>';
 
 		return stars;
+	},
+
+	/**
+	 * Build the HTML elements needed to show the tags in the SID file row. 
+	 * 
+	 * @param {array} tags		Array with (sorted) tag names only.
+	 * 
+	 * @return {string}			The HTML string to put into the SID row.
+	 */
+	buildTags: function(tags) {
+		var list_of_tags = '';
+		$.each(tags, function(i, tag) {
+			list_of_tags += '<div class="tag">'+tag+'</div>';
+		});
+		list_of_tags += '<div class="edit-tags" title="Edit tags">&nbsp;</div>';
+
+		return list_of_tags;
 	},
 
 	/**
