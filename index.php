@@ -1054,6 +1054,11 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>August 31, 2019</h3>
+						<ul>
+							<li>You can now also use <code>ENTER</code> to transfer list entries in the dialog box for editing tags.</li>
+						</ul>
+
 						<h3>August 29, 2019</h3>
 						<ul>
 							<li>Tags can now be edited for songs when you're logged in. When hovering on a SID row, a

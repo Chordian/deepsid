@@ -1957,7 +1957,7 @@ input[type=range]::-ms-track {
 		display: table-cell;
 		overflow: visible;
 		max-height: 15px;
-		max-width: 130px;
+		max-width: 80px;
 		z-index: 2;
 }
 

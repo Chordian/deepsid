@@ -101,13 +101,23 @@ Browser.prototype = {
 				$("#dialog-tags-plus").prop("enabled", false).addClass("disabled");
 		});
 
-		$("#dialog-all-tags").on("dblclick", "option", function() {
-			$("#dialog-tags-right").trigger("click");
-		});
+		$("#dialog-all-tags")
+			.on("dblclick", "option", function() {
+				$("#dialog-tags-right").trigger("click");
+			})
+			.on("keydown", function(event) {
+				if (event.keyCode == 13)
+					$("#dialog-tags-right").trigger("click");
+			});
 
-		$("#dialog-song-tags").on("dblclick", "option", function() {
-			$("#dialog-tags-left").trigger("click");
-		});
+		$("#dialog-song-tags")
+			.on("dblclick", "option", function() {
+				$("#dialog-tags-left").trigger("click");
+			})
+			.on("keydown", function(event) {
+				if (event.keyCode == 13)
+					$("#dialog-tags-left").trigger("click");
+			});
 
 		$(document).on("click", function(event) {
 			$target = $(event.target);
