@@ -1057,6 +1057,7 @@
 						<h3>August 31, 2019</h3>
 						<ul>
 							<li>You can now also use <code>ENTER</code> to transfer list entries in the dialog box for editing tags.</li>
+							<li>It is no longer possible to add a new tag name that already exists.</li>
 						</ul>
 
 						<h3>August 29, 2019</h3>

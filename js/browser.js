@@ -561,6 +561,12 @@ Browser.prototype = {
 					alert("Sorry, that tag name is not allowed.\n\nLook, if you really want to I'm sure you can find a way to circumvent this check, but please be nice.\n\nAlso, if I see in my log that you have added a bad tag name, I will most likely undo your work.");
 					return false;
 				}
+				$.each(this.allTags, function(i, tag) {
+					if (newTag.toLowerCase() == tag.name.toLowerCase()) {
+						alert("That tag already exists.");
+						return false;
+					}
+				});
 				if (!$(event.target).hasClass("disabled")) {
 					// Add "fake" ID for now
 					this.allTags.push({
