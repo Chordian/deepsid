@@ -106,8 +106,12 @@ Browser.prototype = {
 				$("#dialog-tags-right").trigger("click");
 			})
 			.on("keydown", function(event) {
-				if (event.keyCode == 13)
-					$("#dialog-tags-right").trigger("click");
+				if (event.keyCode == 13) {
+					if ($("#dialog-all-tags option:selected").length)
+						$("#dialog-tags-right").trigger("click");				// Transfer entry
+					else
+						$("#dialog-tags .dialog-button-yes").trigger("click");	// Click 'OK' button
+				}
 			});
 
 		$("#dialog-song-tags")
@@ -115,9 +119,13 @@ Browser.prototype = {
 				$("#dialog-tags-left").trigger("click");
 			})
 			.on("keydown", function(event) {
-				if (event.keyCode == 13)
-					$("#dialog-tags-left").trigger("click");
-			});
+				if (event.keyCode == 13) {
+					if ($("#dialog-song-tags option:selected").length)
+						$("#dialog-tags-left").trigger("click");				// Transfer entry
+					else
+						$("#dialog-tags .dialog-button-yes").trigger("click");	// Click 'OK' button
+				}
+	});
 
 		$(document).on("click", function(event) {
 			$target = $(event.target);

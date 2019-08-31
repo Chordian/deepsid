@@ -1057,6 +1057,9 @@
 						<h3>August 31, 2019</h3>
 						<ul>
 							<li>You can now also use <code>ENTER</code> to transfer list entries in the dialog box for editing tags.</li>
+							<li>Hitting <code>ENTER</code> in the dialog box without any entries marked is now like clicking <code>OK</code>.
+								This can make for really fast tag editing. Just open the dialog box, type-to-find a tag,
+								<code>ENTER</code> to transfer it, then <code>ENTER</code> again to accept.</li>
 							<li>It is no longer possible to add a new tag name that already exists.</li>
 						</ul>
 
