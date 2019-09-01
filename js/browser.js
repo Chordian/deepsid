@@ -141,6 +141,7 @@ Browser.prototype = {
 		$(document).keyup(function(event) {
 			switch (event.keyCode) {
 				case 27: // ESC
+					$(".dialog-box .dialog-button-no").trigger("click");
 					$("#contextmenu,#contextsubmenu").remove();
 					this.contextTR.css("background", "");
 					this.restoreSIDRow();

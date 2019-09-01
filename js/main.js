@@ -89,9 +89,7 @@ $(function() { // DOM ready
 		}
 	}).on("keyup", function(event) {
 		if (!$("#search-box,#username,#password,#old-password,#new-password,#sym-rename,#sym-specify-subtune,#new-tag,#dialog-all-tags,#dialog-song-tags").is(":focus")) {
-			if (event.keyCode == 27) {									// Keyup key 'Escape'
-				$(".dialog-box .dialog-button-no").trigger("click");
-			} else if (event.keyCode == 220) {							// Keyup key below 'Escape'
+			if (event.keyCode == 220) {									// Keyup key below 'Escape'
 				// Fast forward
 				$("#faster").trigger("mouseup");
 			} else if (event.keyCode == 32)	{							// Keyup 'Space'
