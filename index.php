@@ -1054,6 +1054,15 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>September #, 2019</h3>
+						<ul>
+							<li>Upgraded the WebSid emulator. Added support for a custom SID format that can play an
+								arbitrary number of SID chips, with optional stereo support.</li>
+							<li>The fourth major folder <a href="//deepsid.chordian.net/?file=%2FExotic%20SID%20Tunes%20Collection">Exotic SID Tunes Collection</a>
+								has been added with a small selection of special SID tunes that uses the custom SID
+								format now supported by the WebSid emulator.</li>
+						</ul>
+
 						<h3>August 31, 2019</h3>
 						<ul>
 							<li>You can now also use <code>ENTER</code> to transfer list entries in the dialog box for editing tags.</li>

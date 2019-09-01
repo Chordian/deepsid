@@ -151,7 +151,7 @@ Browser.prototype = {
 						$specifySubtune = $("#sym-specify-subtune");
 					if ($rename.length) {
 						// If the user maintained the collection shortcodes, restore their HTML formatting
-						var newName =  $rename.val().replace(/(^HVSC\/(D|G|M)|CGSC)/, '<font class="dim">$1</font>');
+						var newName =  $rename.val().replace(/(^HVSC\/(D|G|M)|CGSC|ESTC)/, '<font class="dim">$1</font>');
 						$.post("php/symlist_rename.php", {
 							symlist:	(this.isFileRenamed ? this.path.substr(1) : this.contextSID),
 							fullname:	(this.isFileRenamed ? this.contextSID : ''),
@@ -897,6 +897,7 @@ Browser.prototype = {
 					.replace(/^\/_/, '/')
 					.replace("/Compute's Gazette SID Collection", '<span class="dim">CGSC</span>')
 					.replace("/High Voltage SID Collection", '<span class="dim">HVSC</span>')
+					.replace("/Exotic SID Tunes Collection", '<span class="dim">ESTC</span>')
 					.replace("/CSDb Music Competitions/", '')
 			);
 
@@ -978,6 +979,7 @@ Browser.prototype = {
 						.replace(/^\/_/, '/')
 						.replace("/Compute's Gazette SID Collection", '<span class="dim">CGSC</span>')
 						.replace("/High Voltage SID Collection", '<span class="dim">HVSC</span>')
+						.replace("/Exotic SID Tunes Collection", '<span class="dim">ESTC</span>')
 						.replace("/CSDb Music Competitions/", '');
 					if (this.isSearching) {
 						var searchType = $("#dropdown-search").val(),
@@ -1019,7 +1021,7 @@ Browser.prototype = {
 					});
 
 					var filter = this.setupSortBox();
-					var collections = [], csdbCompoEntry = "",
+					var collections = [], csdbCompoEntry = exoticCollection = "",
 						onlyShowPersonal = this.path === "" && filter === "personal",
 						onlyShowCommon = this.path === "" && filter === "common";
 
@@ -1088,6 +1090,8 @@ Browser.prototype = {
 								collections.push(folderEntry); // Need to swap the below
 							else if (folder.foldername == 'CSDb Music Competitions')
 								csdbCompoEntry = folderEntry;
+							else if (folder.foldername == '_Exotic SID Tunes Collection')
+								exoticCollection = folderEntry;
 							else if ((folder.foldername.substr(0, 1) == "_" || isPublicSymlist) &&
 								(!onlyShowPersonal || (onlyShowPersonal && myPublic)) &&
 								(!onlyShowCommon || (onlyShowCommon && folder.flags & 0x1)))	// Public symlist or custom?
@@ -1115,6 +1119,7 @@ Browser.prototype = {
 						if (collections.length)
 							this.folders = collections[1]+collections[0]; // HVSC should always be first
 						this.folders += csdbCompoEntry;
+						this.folders += exoticCollection;
 						this.folders = '<tr class="disabled"><td class="spacer" colspan="2"></td></tr>'+this.folders;
 						this.folders += '<tr class="disabled"><td class="divider" colspan="2"></td></tr>'+this.extra;
 						this.folders += this.symlists;
@@ -2022,10 +2027,10 @@ Browser.prototype = {
 	},
 
 	/**
-	 * Shorten a SID filename by abbreviating long HVSC and CGSC collection names.
+	 * Shorten a SID filename by abbreviating long collection names.
 	 * 
 	 * @param {string} name		The original SID filename.
-	 * @param {boolean} raw		TRUE to use raw HVSC/CGSC collection names
+	 * @param {boolean} raw		TRUE to use raw HVSC/CGSC/ESTC collection names
 	 * 
 	 * @return {string}			The shortened SID filename.
 	 */
@@ -2036,7 +2041,8 @@ Browser.prototype = {
 			.replace("HVSC</font>/DEMOS", "HVSC/D</font>")
 			.replace("HVSC</font>/GAMES", "HVSC/G</font>")
 			.replace("HVSC</font>/MUSICIANS", "HVSC/M</font>")
-			.replace(underscore+"Compute's Gazette SID Collection", '<font class="dim">CGSC</font>');
+			.replace(underscore+"Compute's Gazette SID Collection", '<font class="dim">CGSC</font>')
+			.replace(underscore+"Exotic SID Tunes Collection", '<font class="dim">ESTC</font>');
 	},
 
 	/**
