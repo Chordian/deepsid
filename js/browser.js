@@ -566,11 +566,15 @@ Browser.prototype = {
 			case "dialog-tags-plus":
 				// Edit tags: Add a new tag in the right list
 				var newTag = $("#new-tag").val();
-				// I apologize in advance for the following words but I have to test for them! =)
+				if (newTag == "")
+					$("#dialog-tags .dialog-button-yes").trigger("click");	// Click 'OK' button
+
+					// I apologize in advance for the following words but I have to test for them! =)
 				if (["sid", "c64", "fuck", "crap", "shit", "cunt", "piss", "dick", "rubbish", "arse", "chiptune"].indexOf(newTag.toLowerCase()) != -1) {
 					alert("Sorry, that tag name is not allowed.\n\nLook, if you really want to I'm sure you can find a way to circumvent this check, but please be nice.\n\nAlso, if I see in my log that you have added a bad tag name, I will most likely undo your work.");
 					return false;
 				}
+
 				var isDuplicate = false;
 				$.each(this.allTags, function(i, tag) {
 					if (newTag.toLowerCase() == tag.name.toLowerCase()) {
@@ -579,6 +583,7 @@ Browser.prototype = {
 					}
 				});
 				if (isDuplicate) return false;
+
 				if (!$(event.target).hasClass("disabled")) {
 					// Add "fake" ID for now
 					this.allTags.push({
