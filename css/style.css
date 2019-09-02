@@ -106,6 +106,9 @@
 	--color-text-resp-good:			#494;				/* Good response text color in user form */
 	--color-text-resp-bad:			#a44;				/* Bad response text color in user form */
 
+	--color-bg-ffi:					var(--color-top);
+	--color-text-ffi:				#181818;
+
 	--color-settings-cog-icon:		var(--color-button-hover);
 	--color-settings-bold:			var(--color-bottom);
 
@@ -438,6 +441,9 @@
 
 	--color-text-resp-good:			#6b6;
 	--color-text-resp-bad:			#d77;
+
+	--color-bg-ffi:					var(--color-bg);
+	--color-text-ffi:				var(--color-text-body);
 
 	--color-settings-cog-icon:		#6a6c68;
 	--color-settings-bold:			var(--color-top);
@@ -4352,9 +4358,23 @@ input[type=range]::-ms-track {
 	}
 
 	#page .deepsid-iframe {
-		border:1px solid var(--color-text-dim);
-		width:100%;
-		display:none;
+		display: none;
+		border: 1px solid var(--color-text-dim);
+		width: 100%;
+	}
+
+	/* For e.g. the information about JW's custom SID format for 4SID, 8SID, etc. */
+	#page pre.fixed-font-info {
+		color: var(--color-text-ffi);
+		background: var(--color-bg-ffi);
+		border: 1px solid var(--color-border);
+		width: 100%;
+		padding: 6px 10px;
+		/*font: normal 14px "Courier New", serif;*/
+		font-size: 14px;
+		margin-top: 5px;
+		white-space: pre-wrap;
+		word-wrap: break-word;		
 	}
 
 	/* Small arrow up button in the bottom of CSDb pages (for scrolling back up) */

@@ -343,6 +343,7 @@ if (isset($row)) {
 }
 
 $csdbCompoFolder = 'CSDb Music Competitions';
+$exoticFolder = '_Exotic SID Tunes Collection';
 
 // Top part with thumbnail, birthday, country, etc.
 $html = '<table style="border:none;margin-bottom:0;"><tr>'.
@@ -370,7 +371,7 @@ $html = '<table style="border:none;margin-bottom:0;"><tr>'.
 			'</td>'.
 		'</tr></table>'.
 		// Below is empty groups/work table placeholder
-		($fullname != $csdbCompoFolder ?
+		($fullname != $csdbCompoFolder && $fullname != $exoticFolder ?
 			'<table id="table-groups" class="tight top" style="min-width:100%;font-size:14px;margin-top:5px;">'.
 				'<tr>'.
 					'<td class="topline bottomline leftline rightline" style="height:30px;padding:0 !important;text-align:center;">'.($spinner ? '<img class="loading-dots" src="images/loading_threedots.svg" alt="" style="margin-top:10px;" />' : '<div class="no-profile">No profile data</div>').'</td>'.
@@ -387,6 +388,11 @@ $cgsc = "_Compute's Gazette SID Collection";
 if ($fullname == $cgsc) {
 	// Show an IFRAME with the CGSC web site
 	$html = '<iframe class="deepsid-iframe" src="//www.c64music.co.uk/" onload="ResizeIframe();"></iframe>';
+
+} else if ($fullname == $exoticFolder) {
+	// Show a box with technical information about the custom SID format
+	$info = file_get_contents('../sidv4e.txt');
+	$html .= '<pre class="fixed-font-info">'.$info.'</pre>';
 	
 } else if (substr($fullname, 0, strlen($cgsc)) != $cgsc && $fullname != $csdbCompoFolder) {
 	// Charts for HVSC sub folders as well as custom "_" folders

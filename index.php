@@ -1054,7 +1054,7 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
-						<h3>September #, 2019</h3>
+						<h3>September 2, 2019</h3>
 						<ul>
 							<li>Upgraded the WebSid emulator. Added support for a custom SID format that can play an
 								arbitrary number of SID chips, with optional stereo support.</li>
