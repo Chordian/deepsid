@@ -13,7 +13,7 @@ INTRODUCTION
 This document describes the "SID file format+" used for multi-SID tunes played by WebSid. The format is a simple generalization of the respective SID FILE FORMAT used by the HVSC and this document uses the same structure as the respective HVSC document. This is not an official HVSC format but a "proprietary" modification. It addresses shortcomings of the official SID FILE FORMAT with regard to multi-SID songs:
 
 1) it allows to use an arbitrary number of SIDs (rather than hard coded special cases) 
-2) it allows to model how SIDs should be wired to available mono/stereo (etc) output channels
+2) it allows to model how SIDs should be wired to available mono/stereo output channels
 
 Ideally the respective extensions should eventually be integrated as an official HVSC version. 
 

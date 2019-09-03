@@ -1054,6 +1054,11 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>September 3, 2019</h3>
+						<ul>
+							<li>Upgraded the WebSid emulator. Added n-SID stereo support, fixed D41B read bug, better performance.</li>
+						</ul>
+
 						<h3>September 2, 2019</h3>
 						<ul>
 							<li>Upgraded the WebSid emulator. Added support for a custom SID format that can play an
@@ -1061,6 +1066,7 @@
 							<li>The fourth major folder <a href="//deepsid.chordian.net/?file=%2FExotic%20SID%20Tunes%20Collection">Exotic SID Tunes Collection</a>
 								has been added with a small selection of special SID tunes that uses the custom SID
 								format now supported by the WebSid emulator.</li>
+							<li>The technical document about the custom SID format can now be read in the new folder.</li>
 						</ul>
 
 						<h3>August 31, 2019</h3>
