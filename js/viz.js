@@ -603,10 +603,17 @@ Viz.prototype = {
 			canvas += '<canvas class="scope" id="scope'+voice+'" style="display:none;"></canvas>';
 		$("#stopic-osc").empty().append(canvas+'<div class="sundryMsg" style="display:none;"></div>');
 
-		this.scopeVoice1 = new VoiceDisplay("scope1", function() { return scope.getData(0); }, false);
-		this.scopeVoice2 = new VoiceDisplay("scope2", function() { return scope.getData(1); }, false);
-		this.scopeVoice3 = new VoiceDisplay("scope3", function() { return scope.getData(2); }, false);
-		this.scopeVoice4 = new VoiceDisplay("scope4", function() { return scope.getData(3); }, true);
+		if ($("body").attr("data-mobile") === "0") {
+			this.scopeVoice1 = new VoiceDisplay("scope1", function() { return scope.getData(0); }, false);
+			this.scopeVoice2 = new VoiceDisplay("scope2", function() { return scope.getData(1); }, false);
+			this.scopeVoice3 = new VoiceDisplay("scope3", function() { return scope.getData(2); }, false);
+			this.scopeVoice4 = new VoiceDisplay("scope4", function() { return scope.getData(3); }, true);
+		} else {
+			this.scopeVoice1 = new VoiceDisplay("scope1", function() { return scope.getDataVoice1(); }, false);
+			this.scopeVoice2 = new VoiceDisplay("scope2", function() { return scope.getDataVoice2(); }, false);
+			this.scopeVoice3 = new VoiceDisplay("scope3", function() { return scope.getDataVoice3(); }, false);
+			this.scopeVoice4 = new VoiceDisplay("scope4", function() { return scope.getDataVoice4(); }, true);		
+		}
 	},
 
 	/**

@@ -37,7 +37,9 @@ $(function() { // DOM ready
 		"download",
 	]) === -1) emulator = "websid";
 
-	scope = new Tracer(16384, 40); // Lower buffer size values may freeze DeepSID
+	// Lower buffer size values may freeze DeepSID
+	scope = $("body").attr("data-mobile") === "0" ? new Tracer(16384, 40) : new SidTracer(16384);
+
 	viz = new Viz(emulator);
 	SID = new SIDPlayer(emulator);
 	ctrls = new Controls();

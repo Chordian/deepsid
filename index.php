@@ -35,7 +35,11 @@
 			<script type="text/javascript" src="http://www.wothke.ch/tmp/backend_tinyrsid.js"></script>
 		<?php else: ?>
 			<script type="text/javascript" src="js/handlers/scriptprocessor_player.js"></script>
-			<script type="text/javascript" src="js/handlers/backend_tinyrsid.js"></script>
+			<?php if (!isMobile()): ?>
+				<script type="text/javascript" src="js/handlers/backend_tinyrsid.js"></script>
+			<?php else : ?>
+				<script type="text/javascript" src="js/handlers/backend_tinyrsid_legacy.js"></script>
+			<?php endif ?>
 		<?php endif ?>
 
 		<script type="text/javascript" src="js/handlers/jsSID-modified.js"></script>
@@ -46,7 +50,11 @@
 		<script type="text/javascript" src="js/player.js"></script>
 		<script type="text/javascript" src="js/controls.js"></script>
 		<script type="text/javascript" src="js/browser.js"></script>
-		<script type="text/javascript" src="js/scope.js"></script> <!-- <= JW's sid_tracer.js -->
+		<?php if (!isMobile()): ?>
+			<script type="text/javascript" src="js/scope.js"></script> <!-- <= JW's sid_tracer.js -->
+		<?php else : ?>
+			<script type="text/javascript" src="js/scope_mobile.js"></script>
+		<?php endif ?>
 		<script type="text/javascript" src="js/viz.js"></script>
 		<script type="text/javascript" src="js/main.js"></script>
 		<script type="text/javascript">
@@ -1054,9 +1062,15 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>September 6, 2019</h3>
+						<ul>
+							<li>The legacy WebSid emulator (from before the cycle-by-cycle overhaul) is now used by mobile devices.</li>
+						</ul>
+
 						<h3>September 3, 2019</h3>
 						<ul>
 							<li>Upgraded the WebSid emulator. Added n-SID stereo support, fixed D41B read bug, better performance.</li>
+							<li>Imported the new GameBase64 collection v16 with new game entries and screenshots.</li>
 						</ul>
 
 						<h3>September 2, 2019</h3>

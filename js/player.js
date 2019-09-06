@@ -838,7 +838,8 @@ SIDPlayer.prototype = {
 		this.voiceMask[chip] ^= 1 << (voice - 1); // Toggle a bit in the '1111' mask
 		switch (this.emulator) {
 			case "websid":
-				SIDBackend.enableVoice(chip, voice - 1, this.voiceMask[chip] & 1 << (voice - 1));
+				if ($("body").attr("data-mobile") === "0")
+					SIDBackend.enableVoice(chip, voice - 1, this.voiceMask[chip] & 1 << (voice - 1));
 				break;
 			case "jssid":
 				// Stitch a mask together that works with jsSID (CCCBBBAAA)
@@ -861,9 +862,11 @@ SIDPlayer.prototype = {
 		this.voiceMask = [0xF, 0xF, 0xF];
 		switch (this.emulator) {
 			case "websid":
-				for (var chip = 0; chip < 3; chip++) {
-					for (var voice = 0; voice < 4; voice++)
-						SIDBackend.enableVoice(chip, voice, true);
+				if ($("body").attr("data-mobile") === "0") {
+					for (var chip = 0; chip < 3; chip++) {
+						for (var voice = 0; voice < 4; voice++)
+							SIDBackend.enableVoice(chip, voice, true);
+					}
 				}
 				break;
 			case "jssid":
