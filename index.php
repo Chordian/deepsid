@@ -9,6 +9,10 @@
 			? $_GET['mobile']
 			: preg_match("/(android|avantgo|blackberry|bolt|boost|cricket|docomo|fone|hiptop|mini|mobi|palm|phone|pie|tablet|up\.browser|up\.link|webos|wos)/i", $_SERVER["HTTP_USER_AGENT"]);
 	}
+
+	function isIOS() {
+		return preg_match("/(iphone||ipad|ipod)/i", $_SERVER["HTTP_USER_AGENT"]);
+	}
 ?>
 <!DOCTYPE html>
 <html lang="en-US" style="overflow:scroll-x;">
@@ -38,7 +42,11 @@
 			<?php if (!isMobile()): ?>
 				<script type="text/javascript" src="js/handlers/backend_tinyrsid.js"></script>
 			<?php else : ?>
-				<script type="text/javascript" src="js/handlers/backend_tinyrsid_legacy.js"></script>
+				<?php if (!isIOS()) : ?>
+					<script type="text/javascript" src="js/handlers/backend_tinyrsid_legacy.js"></script>
+				<?php else : ?>
+					<script type="text/javascript" src="js/handlers/backend_tinyrsid_ios.js"></script>
+				<?php endif ?>
 			<?php endif ?>
 		<?php endif ?>
 
