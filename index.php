@@ -1062,6 +1062,11 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>September 7, 2019</h3>
+						<ul>
+							<li>You can now also search for tags inside playlists only.</li>
+						</ul>
+
 						<h3>September 6, 2019</h3>
 						<ul>
 							<li>The legacy WebSid emulator (from before the cycle-by-cycle overhaul) is now used by mobile devices.</li>

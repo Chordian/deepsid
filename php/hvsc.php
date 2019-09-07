@@ -202,8 +202,16 @@ try {
 					$select_files = $db->prepare('SELECT fullname FROM hvsc_files'.
 						' INNER JOIN symlists ON hvsc_files.id = symlists.file_id'.
 						' INNER JOIN ratings ON symlists.file_id = ratings.table_id'.
-						' WHERE ratings.user_id = '.$user_id.' AND ratings.rating '.$operators.' :rating AND ratings.type = "FILE"  AND symlists.folder_id = '.$symlist_folder_id);
+						' WHERE ratings.user_id = '.$user_id.' AND ratings.rating '.$operators.' :rating AND ratings.type = "FILE" AND symlists.folder_id = '.$symlist_folder_id);
 					$select_files->execute(array(':rating'=>str_replace('-', '', $_GET['searchQuery'])));
+				} else if ($_GET['searchType'] == 'tag') {
+					// Search for tags
+					$select_files = $db->prepare('SELECT h.fullname FROM hvsc_files h'.
+						' INNER JOIN symlists ON h.id = symlists.file_id'.
+						' LEFT JOIN tags_lookup ON h.id = tags_lookup.files_id'.
+						' LEFT JOIN tags_info ON tags_info.id = tags_lookup.tags_id'.
+						' WHERE tags_info.name LIKE :query AND symlists.folder_id = '.$symlist_folder_id);
+					$select_files->execute(array(':query'=>'%'.$_GET['searchQuery'].'%'));
 				} else if ($_GET['searchType'] == 'country') {
 					// Search for country in composer profiles
 					$select_files = $db->prepare('SELECT h.fullname FROM hvsc_files h'.
