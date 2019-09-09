@@ -386,6 +386,7 @@ $(function() { // DOM ready
 				ctrls.emulatorChanged = true;
 				UpdateURL();
 				viz.activatePiano(true);
+				viz.activateMemory(true);
 				break;
 		}
 	});
@@ -462,7 +463,11 @@ $(function() { // DOM ready
 		};
 
 		// If 'Visuals' tab is selected show the sticky header
-		if (topic === "visuals") $("#sticky-visuals").show();
+		if (topic === "visuals") {
+			$("#sticky-visuals").show();
+			if (typeof viz.visuals == "undefined")
+				$("#sticky-visuals button.icon-piano").trigger("click");
+		}
 
 		// If 'GB64' tab is selected then hide the notification on it
 		if (topic === "gb64") $("#note-gb64").hide();

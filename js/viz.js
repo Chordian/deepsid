@@ -120,8 +120,6 @@ function Viz(emulator) {
 		this.animate();
 	}.bind(this), 1);
 	this.addEvents();
-
-	$("#sticky-visuals button.icon-piano").trigger("click");
 }
 
 Viz.prototype = {
@@ -218,7 +216,7 @@ Viz.prototype = {
 				this.graphMods = $this.hasClass("button-off");
 			} else if (event.target.id === "memory-lc-toggle") {
 				this.petsciiLowerCase = $this.hasClass("button-off");
-				this.initMemory();
+				this.activateMemory(true);
 			} else {
 				// Clear piano keyboards to make sure there are no hanging colors on it
 				$("#visuals-piano .piano svg .black").css("transition", "none").attr("fill", "#000");
@@ -316,10 +314,19 @@ Viz.prototype = {
 		$("#sticky-visuals .visuals-buttons .button-on").removeClass("button-on").addClass("button-off");
 		$("#sticky-visuals .icon-"+this.visuals).removeClass("button-off").addClass("button-on");
 		$("#visuals-"+this.visuals).show();
-		if (this.visuals === "piano" || this.visuals === "graph")
-			$("#sticky-visuals .waveform-colors").show();
-		else if (this.visuals === "memory")
-			$("#memory-lc").show();
+		switch (this.visuals) {
+			case "piano":
+				$("#sticky-visuals .waveform-colors").show();
+				this.activatePiano(true);
+				break;
+			case "graph":
+				$("#sticky-visuals .waveform-colors").show();
+				break;
+			case "memory":
+				$("#memory-lc").show();
+				this.activateMemory(true);
+				break;
+		}
 	},
 
 	/**
@@ -908,13 +915,13 @@ Viz.prototype = {
 	/**
 	 * Memory: Show the monitor-style byte tables.
 	 */
-	initMemory: function(chips) {
+	showMemory: function(chips) {
 		if ($("body").attr("data-mobile") !== "0") return;
 
 		var address, half, n0, n1,
 			row = 0, block = hexrow = petscii = "";
 		for (var addr = 0; addr <= 0xFF; addr++) {
-			var byte = addr;
+			var byte = SID.readMemory(addr);
 			hexrow += (byte < 0x10 ? "0" : "")+byte.toString(16).toUpperCase()+" ";
 
 			half = byte & 0x7F;
@@ -958,6 +965,23 @@ Viz.prototype = {
 		}
 
 		$("#visuals-memory .monitor").empty().append(block);
+	},
+
+	/**
+	 * Activate or deactive the updating of the monitor-style tables.
+	 * 
+	 * This makes use of the SID.setCallbackBufferEnded() callback.
+	 * 
+	 * @param {boolean} activate	TRUE to activate, FALSE to turn off.
+	 */
+	activateMemory: function(activate) {
+		// Only if the tab and view are active!
+		if ($("#tabs .selected").attr("data-topic") !== "visuals" || !$("#sticky-visuals .icon-memory").hasClass("button-on")) return; 
+
+		if (activate)
+			SID.setCallbackBufferEnded(this.showMemory);
+		else
+			SID.setCallbackBufferEnded(undefined);
 	},
 
 	/**

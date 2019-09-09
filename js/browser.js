@@ -512,7 +512,7 @@ Browser.prototype = {
 						else if (this.playlist[this.songPos].fullname.indexOf("3SID.sid") != -1) this.chips = 3;
 						viz.initGraph(this.chips);
 						viz.enableAllPianoVoices();
-						viz.initMemory();
+						viz.activateMemory(true);
 
 						// Tab 'STIL' is called 'Lyrics' in CGSC
 						$("#tab-stil").empty().append(this.isCGSC() ? "Lyrics" : "STIL");

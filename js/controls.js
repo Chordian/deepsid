@@ -134,7 +134,7 @@ Controls.prototype = {
 				else if (browser.playlist[browser.songPos].fullname.indexOf("3SID.sid") != -1) browser.chips = 3;
 				viz.initGraph(browser.chips);
 				viz.enableAllPianoVoices();
-				viz.initMemory();
+				viz.activateMemory(true);
 			});
 			this.updateSubtuneText();
 			$(id == "subtune-plus" && !SID.emulatorFlags.offline ? "#subtune-minus" : "#subtune-plus").removeClass("disabled");
@@ -251,7 +251,7 @@ Controls.prototype = {
 				else if (browser.playlist[browser.songPos].fullname.indexOf("3SID.sid") != -1) browser.chips = 3;
 				viz.initGraph(browser.chips);
 				viz.enableAllPianoVoices();
-				viz.initMemory();
+				viz.activateMemory(true);
 
 				// Mark the next row in the browser list
 				$("#songs tr").removeClass("selected");
