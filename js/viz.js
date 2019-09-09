@@ -15,6 +15,8 @@ function Viz(emulator) {
 	this.graphMods = true;
 	this.lineInGraph = false;
 
+	this.petsciiLowerCase = false;
+
 	this.scopeLineColor = [
 		"34, 35, 27",	// For bright color theme
 		"255, 255, 255"	// For dark color theme
@@ -129,7 +131,7 @@ Viz.prototype = {
 	 */
 	addEvents: function() {
 		$(window).on("keyup", this.onKeyUp.bind(this));
-		$("#visuals-piano,#visuals-graph").on("click", ".button-toggle,.button-radio,.button-icon", this.onToggleClick.bind(this));
+		$("#visuals-piano,#visuals-graph,#sticky-right-buttons").on("click", ".button-toggle,.button-radio,.button-icon", this.onToggleClick.bind(this));
 		$("#visuals-piano").on("click", ".piano-voice", this.onVoiceClick.bind(this));
 		$("#visuals-piano,#visuals-graph,#topic-settings .dropdown-buffer").on("change", this.onChangeBufferSize.bind(this));
 		$("#sticky-visuals").on("click", "button", this.onVisualsClick.bind(this));
@@ -214,6 +216,9 @@ Viz.prototype = {
 				this.graphPW = $this.hasClass("button-off");
 			} else if (event.target.id === "graph-mods") {
 				this.graphMods = $this.hasClass("button-off");
+			} else if (event.target.id === "memory-lc-toggle") {
+				this.petsciiLowerCase = $this.hasClass("button-off");
+				this.initMemory();
 			} else {
 				// Clear piano keyboards to make sure there are no hanging colors on it
 				$("#visuals-piano .piano svg .black").css("transition", "none").attr("fill", "#000");
@@ -306,12 +311,15 @@ Viz.prototype = {
 	 */
 	onVisualsClick: function(event) {
 		this.visuals = $(event.target).attr("data-visual");
-		$("#topic-visuals .visuals,#sticky-visuals .waveform-colors").hide();
-		$("#sticky-visuals .button-on").removeClass("button-on").addClass("button-off");
+		if (typeof this.visuals == "undefined") return false;
+		$("#topic-visuals .visuals,#sticky-visuals .waveform-colors,#memory-lc").hide();
+		$("#sticky-visuals .visuals-buttons .button-on").removeClass("button-on").addClass("button-off");
 		$("#sticky-visuals .icon-"+this.visuals).removeClass("button-off").addClass("button-on");
 		$("#visuals-"+this.visuals).show();
 		if (this.visuals === "piano" || this.visuals === "graph")
 			$("#sticky-visuals .waveform-colors").show();
+		else if (this.visuals === "memory")
+			$("#memory-lc").show();
 	},
 
 	/**
@@ -903,19 +911,41 @@ Viz.prototype = {
 	initMemory: function(chips) {
 		if ($("body").attr("data-mobile") !== "0") return;
 
-		var address, row = 0, block = hexrow = petscii = "";
+		var address, half, n0, n1,
+			row = 0, block = hexrow = petscii = "";
 		for (var addr = 0; addr <= 0xFF; addr++) {
 			var byte = addr;
 			hexrow += (byte < 0x10 ? "0" : "")+byte.toString(16).toUpperCase()+" ";
 
-			if (byte >= 0 && byte <= 26)	{ petscii += '<span class="n">'+String.fromCharCode(byte + 64)+'</span>'; }
-			if (byte >= 27 && byte <= 31)	{ petscii += '<span class="n">&#'+(57344 + byte + 64)+';</span>'; }
-			if (byte == 32)					{ petscii += "&nbsp;"; }
-			if (byte >= 33 && byte <= 63)	{ petscii += String.fromCharCode(byte); }
-			if (byte >= 64 && byte <= 90)	{ petscii += String.fromCharCode(byte); }
-			if (byte >= 91 && byte <= 127)	{ petscii += "&#"+(57344 + byte)+";"; }
-			if (byte >= 128 && byte <= 159)	{ petscii += '<span class="n">&#'+(57344 + byte - 32)+';</span>'; }
-			if (byte >= 161 && byte <= 255)	{ petscii += "&#"+(57344 + byte)+";"; }
+			half = byte & 0x7F;
+			n0 = '<span class="n">', n1 = '</span>'; // Negative chars ($80-$FF)
+			if (byte < 0x80) n0 = n1 = "";
+
+			if (this.petsciiLowerCase) {
+				// Lower case PETSCII
+				if (half == 0)					{ petscii += n0+String.fromCharCode(half + 64)+n1; }
+				if (half >= 1 && half <= 26)	{ petscii += n0+String.fromCharCode(half + 96)+n1; }
+				if (half >= 27 && half <= 31)	{ petscii += n0+"&#"+(57344 + half + 64)+";"+n1; }
+				if (half == 32)					{ petscii += n0+"&nbsp;"+n1; }
+				if (half >= 33 && half <= 63)	{ petscii += n0+String.fromCharCode(half)+n1; }
+				if (half == 64)					{ petscii += n0+"&#"+(57344 + half + 32)+";"+n1; }
+				if (half >= 65 && half <= 90)	{ petscii += n0+String.fromCharCode(half)+n1; }
+				if (half >= 91 && half <= 93)	{ petscii += n0+"&#"+(57344 + half + 32)+";"+n1; }
+				if (half >= 94 && half <= 95)	{ petscii += n0+"."+n1; } // ??
+				if (half >= 96 && half <= 104)	{ petscii += n0+"&#"+(57344 + half + 64)+";"+n1; }
+				if (half == 105)				{ petscii += n0+"."+n1; } // ??
+				if (half >= 106 && half <= 121)	{ petscii += n0+"&#"+(57344 + half + 64)+";"+n1; }
+				if (half == 122)				{ petscii += n0+"."+n1; } // ??
+				if (half >= 123 && half <= 127)	{ petscii += n0+"&#"+(57344 + half + 64)+";"+n1; }
+			} else {
+				// Upper case PETSCII
+				if (half >= 0 && half <= 26)	{ petscii += n0+String.fromCharCode(half + 64)+n1; }
+				if (half >= 27 && half <= 31)	{ petscii += n0+"&#"+(57344 + half + 64)+";"+n1; }
+				if (half == 32)					{ petscii += n0+"&nbsp;"+n1; }
+				if (half >= 33 && half <= 63)	{ petscii += n0+String.fromCharCode(half)+n1; }
+				if (half >= 64 && half <= 95)	{ petscii += n0+"&#"+(57344 + half + 32)+";"+n1; }
+				if (half >= 96 && half <= 127)	{ petscii += n0+"&#"+(57344 + half + 64)+";"+n1; }
+			}
 
 			row++;
 

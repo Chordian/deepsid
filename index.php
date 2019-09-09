@@ -399,6 +399,12 @@
 						<button class="icon-memory button-on" data-visual="memory">Memo</button>
 					</div>
 					<img class="waveform-colors" src="images/waveform_colors.png" alt="Waveform Colors" />
+					<div id="sticky-right-buttons">
+						<span id="memory-lc">
+							<label for="memory-lc-toggle" class="unselectable" style="margin-right:1px;">Lower case C64 font</label>
+							<button id="memory-lc-toggle" class="button-edit button-toggle button-off">Off</button>
+						</span>
+					</div>
 				</div>
 				<div id="page">
 

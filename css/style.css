@@ -987,7 +987,8 @@ small.u2 { margin-left: 2px; }
 	#sticky-visuals button,
 	#topic-remix .action button,
 	.dialog-transfer button,
-	.dialog-new button {
+	.dialog-new button,
+	#sticky-right-buttons button {
 		transition: all .05s linear;
 		box-shadow: 2px 2px 4px var(--color-button-shadow);
 	}
@@ -999,7 +1000,8 @@ small.u2 { margin-left: 2px; }
 	#faster.button-selected,
 	#topic-remix .action button:active,
 	.dialog-transfer button:active,
-	.dialog-new button:active {
+	.dialog-new button:active,
+	#sticky-right-buttons button:active {
 		box-shadow: var(--shadow-button-selected);
 	}
 
@@ -1007,7 +1009,8 @@ small.u2 { margin-left: 2px; }
 	#songs button.disabled,
 	#userform button.disabled,
 	.edit button.disabled,
-	.dialog-new button.disabled {
+	.dialog-new button.disabled,
+	#sticky-right-buttons button.disabled {
 		cursor: default;
 		background: var(--color-button-disabled);
 		border-color: var(--color-button-disabled);
@@ -1515,7 +1518,8 @@ small.u2 { margin-left: 2px; }
 		width: 42px;
 	}
 
-	.edit label {
+	.edit label,
+	#sticky-right-buttons label {
 		font: normal 13px/0 "Montserrat", sans-serif;
 		color: var(--color-text-fine);
 		margin: 0 16px 0 1px;
@@ -3711,6 +3715,24 @@ input[type=range]::-ms-track {
 					background: url(../images/visuals_graph.svg) 0 0 / 14px 14px no-repeat;
 				}
 
+		/* Container for buttons in the right side of the sticky white top header box */
+		#sticky-right-buttons {
+			width: 240px;
+			position: absolute;
+			top: 13px;
+			right: 10px;
+			text-align: right;
+		}
+
+			/* Resets the padding for the icon in the visual page selector buttons */
+			#sticky-right-buttons button:before {
+				padding: 0;
+			}
+
+			#memory-lc {
+				display: none;
+			}
+
 		#page .ext .permalink,
 		#sticky-csdb .permalink,
 		#path .permalink {
@@ -3952,7 +3974,6 @@ input[type=range]::-ms-track {
 
 			/* For a monitor-style output with a row of hexadecimal bytes and their PETSCII characters */
 			#visuals-memory .monitor {
-				/* font: normal 14px Monaco, Consolas, "Andale Mono", "DejaVu Sans Mono", monospace; */
 				font: normal 10px "Commodore 64", sans-serif;
 				/*margin-left: 50px;*/
 			}
@@ -4203,7 +4224,8 @@ input[type=range]::-ms-track {
 			}
 
 			#page .ext button,
-			#sticky-csdb button {
+			#sticky-csdb button,
+			#sticky-right-buttons button {
 				font-size: 11px;
 				height: 21px;
 				line-height: 22px;
