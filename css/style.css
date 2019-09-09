@@ -3707,6 +3707,10 @@ input[type=range]::-ms-track {
 					background: url(../images/visuals_graph.svg) 0 0 / 14px 14px no-repeat;
 				}
 
+				#sticky-visuals .icon-memory:before {
+					background: url(../images/visuals_graph.svg) 0 0 / 14px 14px no-repeat;
+				}
+
 		#page .ext .permalink,
 		#sticky-csdb .permalink,
 		#path .permalink {
@@ -3945,6 +3949,19 @@ input[type=range]::-ms-track {
 				height: 96px;
 				transition: all .2s linear;
 			}
+
+			/* For a monitor-style output with a row of hexadecimal bytes and their PETSCII characters */
+			#visuals-memory .monitor {
+				/* font: normal 14px Monaco, Consolas, "Andale Mono", "DejaVu Sans Mono", monospace; */
+				font: normal 10px "Commodore 64", sans-serif;
+				/*margin-left: 50px;*/
+			}
+
+				/* Negative PETSCII character */
+				#visuals-memory .n {
+					color: var(--color-bg-box);
+					background: var(--color-text-body);
+				}
 
 			#topic-csdb .thumbnail,
 			#topic-player .thumbnail {

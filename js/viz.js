@@ -1,6 +1,6 @@
 
 /**
- * DeepSID / Visuals ('Piano and 'Graph')
+ * DeepSID / Visuals
  */
 
 function Viz(emulator) {
@@ -895,6 +895,39 @@ Viz.prototype = {
 
 		// With Frank's fix
 		return (usePound ? "#" : "") + String("000000" + (g | (b << 8) | (r << 16)).toString(16)).slice(-6);
+	},
+
+	/**
+	 * Memory: Show the monitor-style byte tables.
+	 */
+	initMemory: function(chips) {
+		if ($("body").attr("data-mobile") !== "0") return;
+
+		var address, row = 0, block = hexrow = petscii = "";
+		for (var addr = 0; addr <= 0xFF; addr++) {
+			var byte = addr;
+			hexrow += (byte < 0x10 ? "0" : "")+byte.toString(16).toUpperCase()+" ";
+
+			if (byte >= 0 && byte <= 26)	{ petscii += '<span class="n">'+String.fromCharCode(byte + 64)+'</span>'; }
+			if (byte >= 27 && byte <= 31)	{ petscii += '<span class="n">&#'+(57344 + byte + 64)+';</span>'; }
+			if (byte == 32)					{ petscii += "&nbsp;"; }
+			if (byte >= 33 && byte <= 63)	{ petscii += String.fromCharCode(byte); }
+			if (byte >= 64 && byte <= 90)	{ petscii += String.fromCharCode(byte); }
+			if (byte >= 91 && byte <= 127)	{ petscii += "&#"+(57344 + byte)+";"; }
+			if (byte >= 128 && byte <= 159)	{ petscii += '<span class="n">&#'+(57344 + byte - 32)+';</span>'; }
+			if (byte >= 161 && byte <= 255)	{ petscii += "&#"+(57344 + byte)+";"; }
+
+			row++;
+
+			if (row == 16) {
+				address = (addr - 15).toString(16).toUpperCase();
+				block += "0000".substr(address.length)+address+": "+hexrow+petscii + '<br />';
+				hexrow = petscii = ""
+				row = 0;
+			}
+		}
+
+		$("#visuals-memory .monitor").empty().append(block);
 	},
 
 	/**

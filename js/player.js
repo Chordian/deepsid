@@ -988,4 +988,24 @@ SIDPlayer.prototype = {
 				return false;
 		}
 	},
+
+	/**
+	 * Return the 8-bit value of a C64 memory address.
+	 * 
+	 * @param {number} address		Address $0000 to $FFFF.
+	 * 
+	 * @return {*}					Byte value of the register, or FALSE.
+	 */
+	readMemory: function(address) {
+		switch (this.emulator) {
+			case "websid":
+				return 42;
+			case "jssid":
+				return 42;
+			case "soasc":
+			case "download":
+				// Not possible
+				return false;
+		}
+	},
 }

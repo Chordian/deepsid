@@ -396,6 +396,7 @@
 					<div class="visuals-buttons">
 						<button class="icon-piano button-off" data-visual="piano">Piano</button>
 						<button class="icon-graph button-on" data-visual="graph">Graph</button>
+						<button class="icon-memory button-on" data-visual="memory">Memo</button>
 					</div>
 					<img class="waveform-colors" src="images/waveform_colors.png" alt="Waveform Colors" />
 				</div>
@@ -524,6 +525,10 @@
 								<div id="graph7" class="graph-area"></div>
 								<div id="graph8" class="graph-area"></div>
 							</div>
+						</div>
+
+						<div id="visuals-memory" class="visuals" style="display:none;">
+							<div class="monitor"></div>
 						</div>
 					</div>
 
@@ -1070,9 +1075,16 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>September 8, 2019</h3>
+						<ul>
+							<li>Added almost 140 tunes in the <a href="//deepsid.chordian.net/?file=/Exotic%20SID%20Tunes%20Collection/Stereo%202SID/">Stereo 2SID</a>
+								folder, converted from existing HVSC files.</li>
+						</ul>
+
 						<h3>September 7, 2019</h3>
 						<ul>
 							<li>You can now also search for tags inside playlists only.</li>
+							<li>SID tunes should play properly on iOS devices (i.e. iPhone, iPad and iPod) again.</li>
 						</ul>
 
 						<h3>September 6, 2019</h3>
