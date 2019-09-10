@@ -918,11 +918,25 @@ Viz.prototype = {
 	showMemory: function(chips) {
 		if ($("body").attr("data-mobile") !== "0") return;
 
-		var address, half, n0, n1,
-			row = 0, block = hexrow = petscii = "";
+		var address, half, n0, n1, span,
+			row = 0, coltoggle = true, block = "", hexrow = petscii = '<span class="bt">';
 		for (var addr = 0; addr <= 0xFF; addr++) {
+
+			row++;
+			if (row == 5 || row == 9 || row == 13 || row == 16) {
+				// Change color for the next four bytes
+				hexrow += '</span>';
+				petscii += '</span>';
+				coltoggle = !coltoggle;
+				if (row < 16) {
+					span = '<span'+(coltoggle ? ' class="bt"' : '')+'>';
+					hexrow += span;
+					petscii += span;
+				}
+			}
+
 			var byte = SID.readMemory(addr);
-			hexrow += (byte < 0x10 ? "0" : "")+byte.toString(16).toUpperCase()+"&nbsp;"+((addr + 1) % 4 ? "" : "&nbsp;");
+			hexrow += (byte < 0x10 ? "0" : "")+byte.toString(16).toUpperCase()+"&nbsp;";
 
 			half = byte & 0x7F;
 			n0 = '<span class="n">', n1 = '</span>'; // Negative chars ($80-$FF)
@@ -954,17 +968,14 @@ Viz.prototype = {
 				if (half >= 96 && half <= 127)	{ petscii += n0+"&#"+(57344 + half + 64)+";"+n1; }
 			}
 
-			row++;
-
 			if (row == 16) {
 				address = (addr - 15).toString(16).toUpperCase();
-				block += "0000".substr(address.length)+address+":&nbsp;"+hexrow+petscii + '<br />';
-				hexrow = petscii = ""
+				block += "0000".substr(address.length)+address+"&nbsp;"+hexrow+petscii+'<br />';
+				hexrow = petscii = '<span class="bt">';
 				row = 0;
 			}
 		}
-		block = '<table><tr><td class="block-info">Sovs</td><td class="block-data">'+block+'</td></tr></table>';
-
+		block = '<table><tr><td class="block-info"><b>Zero Page</b><br />$0000-$00FF</td><td class="block-data">'+block+'</td></tr></table>';
 		$("#visuals-memory .monitor").empty().append(block);
 	},
 
