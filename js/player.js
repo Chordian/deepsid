@@ -605,6 +605,7 @@ SIDPlayer.prototype = {
 						} else {
 							result.actualSubsong	= this.subtune;
 							result.loadAddr			= data.info.loadaddr;
+							result.dataSize			= data.info.datasize;
 							result.maxSubsong		= data.info.subtunes - 1;
 							result.songAuthor		= data.info.author;
 							result.songName			= data.info.name;

@@ -47,7 +47,7 @@
 	--color-bg-tag-hover:			#b6b9a5;
 	--color-bg-block-data:			var(--color-top);
 	--color-text-block:				var(--color-bottom);
-	--color-text-block-toggled:		#707064;			/* #7c7e60 */
+	--color-text-block-toggled:		#848680;			/* #7c7e60 */
 
 	--color-border:					#ced0c0;			/* For borders and text labels where its container is disabled */
 	--color-border-box:				#c8c8b9;			/* For borders around various boxes and input fields */
@@ -3981,7 +3981,6 @@ input[type=range]::-ms-track {
 			/* For a monitor-style output with a row of hexadecimal bytes and their PETSCII characters */
 			#visuals-memory .monitor {
 				font: normal 10px "Commodore 64", sans-serif;
-				/*margin-left: 50px;*/
 			}
 
 				#visuals-memory td.block-info {

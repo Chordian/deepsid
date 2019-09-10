@@ -913,15 +913,17 @@ Viz.prototype = {
 	},
 
 	/**
-	 * Memory: Show the monitor-style byte tables.
+	 * Memory: Get a table cell with a monitor-style memory dump of C64 RAM.
+	 * 
+	 * @param {number} addrStart	Start address in C64 RAM.
+	 * @param {number} addrEnd		End address in C64 RAM.
+	 * 
+	 * @return {string}				HTML block.
 	 */
-	showMemory: function(chips) {
-		if ($("body").attr("data-mobile") !== "0") return;
-
+	showMemoryBlock: function(addrStart, addrEnd) {
 		var address, half, n0, n1, span,
 			row = 0, coltoggle = true, block = "", hexrow = petscii = '<span class="bt">';
-		for (var addr = 0; addr <= 0xFF; addr++) {
-
+		for (var addr = addrStart; addr <= addrEnd; addr++) {
 			row++;
 			if (row == 5 || row == 9 || row == 13 || row == 16) {
 				// Change color for the next four bytes
@@ -948,7 +950,9 @@ Viz.prototype = {
 				if (half >= 1 && half <= 26)	{ petscii += n0+String.fromCharCode(half + 96)+n1; }
 				if (half >= 27 && half <= 31)	{ petscii += n0+"&#"+(57344 + half + 64)+";"+n1; }
 				if (half == 32)					{ petscii += n0+"&nbsp;"+n1; }
-				if (half >= 33 && half <= 63)	{ petscii += n0+String.fromCharCode(half)+n1; }
+				if (half >= 33 && half <= 59)	{ petscii += n0+String.fromCharCode(half)+n1; }
+				if (half == 60)					{ petscii += n0+"&lt;"+n1; }
+				if (half >= 61 && half <= 63)	{ petscii += n0+String.fromCharCode(half)+n1; }
 				if (half == 64)					{ petscii += n0+"&#"+(57344 + half + 32)+";"+n1; }
 				if (half >= 65 && half <= 90)	{ petscii += n0+String.fromCharCode(half)+n1; }
 				if (half >= 91 && half <= 93)	{ petscii += n0+"&#"+(57344 + half + 32)+";"+n1; }
@@ -963,7 +967,9 @@ Viz.prototype = {
 				if (half >= 0 && half <= 26)	{ petscii += n0+String.fromCharCode(half + 64)+n1; }
 				if (half >= 27 && half <= 31)	{ petscii += n0+"&#"+(57344 + half + 64)+";"+n1; }
 				if (half == 32)					{ petscii += n0+"&nbsp;"+n1; }
-				if (half >= 33 && half <= 63)	{ petscii += n0+String.fromCharCode(half)+n1; }
+				if (half >= 33 && half <= 59)	{ petscii += n0+String.fromCharCode(half)+n1; }
+				if (half == 60)					{ petscii += n0+"&lt;"+n1; }
+				if (half >= 61 && half <= 63)	{ petscii += n0+String.fromCharCode(half)+n1; }
 				if (half >= 64 && half <= 95)	{ petscii += n0+"&#"+(57344 + half + 32)+";"+n1; }
 				if (half >= 96 && half <= 127)	{ petscii += n0+"&#"+(57344 + half + 64)+";"+n1; }
 			}
@@ -975,12 +981,34 @@ Viz.prototype = {
 				row = 0;
 			}
 		}
-		block = '<table><tr><td class="block-info"><b>Zero Page</b><br />$0000-$00FF</td><td class="block-data">'+block+'</td></tr></table>';
-		$("#visuals-memory .monitor").empty().append(block);
+		return block;
 	},
 
 	/**
-	 * Activate or deactive the updating of the monitor-style tables.
+	 * Memory: Show all the tables.
+	 */
+	showMemoryTables: function() {
+		if ($("body").attr("data-mobile") !== "0") return;
+
+		var $monitor = $("#visuals-memory .monitor");
+		$monitor.empty();
+
+		// Block: ZP
+		var blockZP = viz.showMemoryBlock(0x0000, 0x00FF);
+
+		// Block: Player
+		var startAddr = Number(browser.playlist[browser.songPos].address);
+		var endAddr = startAddr + Number(browser.playlist[browser.songPos].size) - 2;
+		var blockPlayer = viz.showMemoryBlock(startAddr, endAddr);
+
+		$monitor.append('<table>'+
+			'<tr><td class="block-info"><b>Zero Page</b><br />$0000-$00FF</td><td class="block-data block-zp">'+blockZP+'</td></tr>'+
+			'<tr><td class="block-info"><b>Player</b><br />$1000-$1100<br /><br /><small>&nbsp;(NOT UPDATED)</small></td><td class="block-data">'+blockPlayer+'</td></tr>'+
+		'</table>');
+	},
+
+	/**
+	 * Memory: Activate or deactive the updating of the monitor-style tables.
 	 * 
 	 * This makes use of the SID.setCallbackBufferEnded() callback.
 	 * 
@@ -989,9 +1017,14 @@ Viz.prototype = {
 	activateMemory: function(activate) {
 		// Only if the tab and view are active!
 		if ($("#tabs .selected").attr("data-topic") !== "visuals" || !$("#sticky-visuals .icon-memory").hasClass("button-on")) return; 
-
+		this.showMemoryTables(); // First once where everything is displayed
 		if (activate)
-			SID.setCallbackBufferEnded(this.showMemory);
+			SID.setCallbackBufferEnded(function() {
+				var $zp = $("#visuals-memory .block-zp");
+				$zp.empty();
+				var blockZP = viz.showMemoryBlock(0x0000, 0x00FF);
+				$zp.append(blockZP);
+			}.bind(this));
 		else
 			SID.setCallbackBufferEnded(undefined);
 	},
