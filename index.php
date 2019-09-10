@@ -402,7 +402,7 @@
 					<div id="sticky-right-buttons">
 						<span id="memory-lc">
 							<label for="memory-lc-toggle" class="unselectable" style="margin-right:1px;">Lower case C64 font</label>
-							<button id="memory-lc-toggle" class="button-edit button-toggle button-off">Off</button>
+							<button id="memory-lc-toggle" class="button-edit button-toggle button-on">On</button>
 						</span>
 					</div>
 				</div>
@@ -534,7 +534,16 @@
 						</div>
 
 						<div id="visuals-memory" class="visuals" style="display:none;">
-							<div class="monitor"></div>
+							<div class="monitor">
+								<table id="block-memory">
+									<tr>
+										<td class="block-info"><b>Zero Page</b><br />$0000-$00FF</td><td class="block-data block-zp"></td>
+									</tr>
+									<tr>
+										<td class="block-info"><b>Player Block</b><br /><span id="player-addr"></span></td><td class="block-data block-player"></td>
+									</tr>
+								</table>
+							</div>
 						</div>
 					</div>
 

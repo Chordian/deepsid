@@ -15,7 +15,7 @@ function Viz(emulator) {
 	this.graphMods = true;
 	this.lineInGraph = false;
 
-	this.petsciiLowerCase = false;
+	this.petsciiLowerCase = true;
 
 	this.scopeLineColor = [
 		"34, 35, 27",	// For bright color theme
@@ -921,7 +921,7 @@ Viz.prototype = {
 	 * @return {string}				HTML block.
 	 */
 	showMemoryBlock: function(addrStart, addrEnd) {
-		var address, half, n0, n1, span,
+		var half, n0, n1, span,
 			row = 0, coltoggle = true, block = "", hexrow = petscii = '<span class="bt">';
 		for (var addr = addrStart; addr <= addrEnd; addr++) {
 			row++;
@@ -946,65 +946,51 @@ Viz.prototype = {
 
 			if (this.petsciiLowerCase) {
 				// Lower case PETSCII
-				if (half == 0)					{ petscii += n0+String.fromCharCode(half + 64)+n1; }
-				if (half >= 1 && half <= 26)	{ petscii += n0+String.fromCharCode(half + 96)+n1; }
-				if (half >= 27 && half <= 31)	{ petscii += n0+"&#"+(57344 + half + 64)+";"+n1; }
-				if (half == 32)					{ petscii += n0+"&nbsp;"+n1; }
-				if (half >= 33 && half <= 59)	{ petscii += n0+String.fromCharCode(half)+n1; }
-				if (half == 60)					{ petscii += n0+"&lt;"+n1; }
-				if (half >= 61 && half <= 63)	{ petscii += n0+String.fromCharCode(half)+n1; }
-				if (half == 64)					{ petscii += n0+"&#"+(57344 + half + 32)+";"+n1; }
-				if (half >= 65 && half <= 90)	{ petscii += n0+String.fromCharCode(half)+n1; }
-				if (half >= 91 && half <= 93)	{ petscii += n0+"&#"+(57344 + half + 32)+";"+n1; }
-				if (half >= 94 && half <= 95)	{ petscii += n0+"."+n1; } // ??
-				if (half >= 96 && half <= 104)	{ petscii += n0+"&#"+(57344 + half + 64)+";"+n1; }
-				if (half == 105)				{ petscii += n0+"."+n1; } // ??
-				if (half >= 106 && half <= 121)	{ petscii += n0+"&#"+(57344 + half + 64)+";"+n1; }
-				if (half == 122)				{ petscii += n0+"."+n1; } // ??
-				if (half >= 123 && half <= 127)	{ petscii += n0+"&#"+(57344 + half + 64)+";"+n1; }
+				if (half == 0)							{ petscii += n0+String.fromCharCode(half + 64)+n1; }
+				else if (half >= 1 && half <= 26)		{ petscii += n0+String.fromCharCode(half + 96)+n1; }
+				else if (half >= 27 && half <= 31)		{ petscii += n0+"&#"+(57344 + half + 64)+";"+n1; }
+				else if (half == 32)					{ petscii += n0+"&nbsp;"+n1; }
+				else if (half >= 33 && half <= 59)		{ petscii += n0+String.fromCharCode(half)+n1; }
+				else if (half == 60)					{ petscii += n0+"&lt;"+n1; }
+				else if (half >= 61 && half <= 63)		{ petscii += n0+String.fromCharCode(half)+n1; }
+				else if (half == 64)					{ petscii += n0+"&#"+(57344 + half + 32)+";"+n1; }
+				else if (half >= 65 && half <= 90)		{ petscii += n0+String.fromCharCode(half)+n1; }
+				else if (half >= 91 && half <= 93)		{ petscii += n0+"&#"+(57344 + half + 32)+";"+n1; }
+				else if (half >= 94 && half <= 95)		{ petscii += n0+"."+n1; } // ??
+				else if (half >= 96 && half <= 104)		{ petscii += n0+"&#"+(57344 + half + 64)+";"+n1; }
+				else if (half == 105)					{ petscii += n0+"."+n1; } // ??
+				else if (half >= 106 && half <= 121)	{ petscii += n0+"&#"+(57344 + half + 64)+";"+n1; }
+				else if (half == 122)					{ petscii += n0+"."+n1; } // ??
+				else if (half >= 123 && half <= 127)	{ petscii += n0+"&#"+(57344 + half + 64)+";"+n1; }
 			} else {
 				// Upper case PETSCII
-				if (half >= 0 && half <= 26)	{ petscii += n0+String.fromCharCode(half + 64)+n1; }
-				if (half >= 27 && half <= 31)	{ petscii += n0+"&#"+(57344 + half + 64)+";"+n1; }
-				if (half == 32)					{ petscii += n0+"&nbsp;"+n1; }
-				if (half >= 33 && half <= 59)	{ petscii += n0+String.fromCharCode(half)+n1; }
-				if (half == 60)					{ petscii += n0+"&lt;"+n1; }
-				if (half >= 61 && half <= 63)	{ petscii += n0+String.fromCharCode(half)+n1; }
-				if (half >= 64 && half <= 95)	{ petscii += n0+"&#"+(57344 + half + 32)+";"+n1; }
-				if (half >= 96 && half <= 127)	{ petscii += n0+"&#"+(57344 + half + 64)+";"+n1; }
+				if (half >= 0 && half <= 26)			{ petscii += n0+String.fromCharCode(half + 64)+n1; }
+				else if (half >= 27 && half <= 31)		{ petscii += n0+"&#"+(57344 + half + 64)+";"+n1; }
+				else if (half == 32)					{ petscii += n0+"&nbsp;"+n1; }
+				else if (half >= 33 && half <= 59)		{ petscii += n0+String.fromCharCode(half)+n1; }
+				else if (half == 60)					{ petscii += n0+"&lt;"+n1; }
+				else if (half >= 61 && half <= 63)		{ petscii += n0+String.fromCharCode(half)+n1; }
+				else if (half >= 64 && half <= 95)		{ petscii += n0+"&#"+(57344 + half + 32)+";"+n1; }
+				else if (half >= 96 && half <= 127)		{ petscii += n0+"&#"+(57344 + half + 64)+";"+n1; }
+			}
+
+			if (addr == addrEnd) {
+				// Just pad the rest with nothingness
+				for (; row < 16; row++) {
+					hexrow += "&nbsp;&nbsp;&nbsp;";
+					petscii += "&nbsp;";
+					addr++;
+				}
 			}
 
 			if (row == 16) {
-				address = (addr - 15).toString(16).toUpperCase();
-				block += "0000".substr(address.length)+address+"&nbsp;"+hexrow+petscii+'<br />';
+				// Build the row with C64 address, hexademical bytes and PETSCII characters
+				block += this.paddedAddress(addr - 15)+"&nbsp;"+hexrow+petscii+'<br />';
 				hexrow = petscii = '<span class="bt">';
 				row = 0;
 			}
 		}
 		return block;
-	},
-
-	/**
-	 * Memory: Show all the tables.
-	 */
-	showMemoryTables: function() {
-		if ($("body").attr("data-mobile") !== "0") return;
-
-		var $monitor = $("#visuals-memory .monitor");
-		$monitor.empty();
-
-		// Block: ZP
-		var blockZP = viz.showMemoryBlock(0x0000, 0x00FF);
-
-		// Block: Player
-		var startAddr = Number(browser.playlist[browser.songPos].address);
-		var endAddr = startAddr + Number(browser.playlist[browser.songPos].size) - 2;
-		var blockPlayer = viz.showMemoryBlock(startAddr, endAddr);
-
-		$monitor.append('<table>'+
-			'<tr><td class="block-info"><b>Zero Page</b><br />$0000-$00FF</td><td class="block-data block-zp">'+blockZP+'</td></tr>'+
-			'<tr><td class="block-info"><b>Player</b><br />$1000-$1100<br /><br /><small>&nbsp;(NOT UPDATED)</small></td><td class="block-data">'+blockPlayer+'</td></tr>'+
-		'</table>');
 	},
 
 	/**
@@ -1016,17 +1002,47 @@ Viz.prototype = {
 	 */
 	activateMemory: function(activate) {
 		// Only if the tab and view are active!
-		if ($("#tabs .selected").attr("data-topic") !== "visuals" || !$("#sticky-visuals .icon-memory").hasClass("button-on")) return; 
-		this.showMemoryTables(); // First once where everything is displayed
-		if (activate)
+		if ($("#tabs .selected").attr("data-topic") !== "visuals" || !$("#sticky-visuals .icon-memory").hasClass("button-on") || $("body").attr("data-mobile") !== "0") return; 
+
+		if (activate) {
+			this.playerAddrCurrent = Number(browser.playlist[browser.songPos].address);
+			this.playerAddrEnd = this.playerAddrCurrent + Number(browser.playlist[browser.songPos].size) - 3;
+			
+			$("#player-addr").empty().append("$"+this.paddedAddress(this.playerAddrCurrent)+"-$"+this.paddedAddress(this.playerAddrEnd));
+
+			var $zp = $("#visuals-memory .block-zp"),
+				$player = $("#visuals-memory .block-player");
+			$player.empty();
+
 			SID.setCallbackBufferEnded(function() {
-				var $zp = $("#visuals-memory .block-zp");
+				// Update zero page block
 				$zp.empty();
 				var blockZP = viz.showMemoryBlock(0x0000, 0x00FF);
 				$zp.append(blockZP);
+				// Build up player table
+				if (viz.playerAddrCurrent + 256 < viz.playerAddrEnd) {
+					$player.append(viz.showMemoryBlock(viz.playerAddrCurrent, viz.playerAddrCurrent + 255));
+					viz.playerAddrCurrent += 256;
+				} else if (viz.playerAddrCurrent != viz.playerAddrEnd) {
+					$player.append(viz.showMemoryBlock(viz.playerAddrCurrent, viz.playerAddrEnd));
+					viz.playerAddrCurrent = viz.playerAddrEnd;
+				}
 			}.bind(this));
-		else
+		} else {
 			SID.setCallbackBufferEnded(undefined);
+		}
+	},
+
+	/**
+	 * Return a correctly padded hexadecimal memory address for displaying.
+	 * 
+	 * @param {number} address		Address 0 to 65535.
+	 * 
+	 * @return {string}				Address 0000 to FFFF.
+	 */
+	paddedAddress: function(address) {
+		address = address.toString(16).toUpperCase();
+		return "0000".substr(address.length)+address;
 	},
 
 	/**

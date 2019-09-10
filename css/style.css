@@ -47,7 +47,7 @@
 	--color-bg-tag-hover:			#b6b9a5;
 	--color-bg-block-data:			var(--color-top);
 	--color-text-block:				var(--color-bottom);
-	--color-text-block-toggled:		#848680;			/* #7c7e60 */
+	--color-text-block-toggled:		#929292;			/* #7c7e60 */
 
 	--color-border:					#ced0c0;			/* For borders and text labels where its container is disabled */
 	--color-border-box:				#c8c8b9;			/* For borders around various boxes and input fields */
@@ -3980,19 +3980,27 @@ input[type=range]::-ms-track {
 
 			/* For a monitor-style output with a row of hexadecimal bytes and their PETSCII characters */
 			#visuals-memory .monitor {
-				font: normal 10px "Commodore 64", sans-serif;
+				font: normal 10px/12px "Commodore 64", sans-serif;
 			}
+
+				#block-memory {
+					width: 820px;
+				}
 
 				#visuals-memory td.block-info {
 					/*font: normal 15px "Asap Condensed", sans-serif;*/
 					font: normal 13px "Open Sans", helvetica, sans-serif;
 					vertical-align: top;
 					padding: 4px 8px;
+					width: 107px;
+				}
+
+				#visuals-memory td.block-zp {
+					height: 204px;
 				}
 
 				#visuals-memory td.block-data {
-					width: 1px;
-					padding: 6px 10px;
+					padding: 6px 0 6px 10px;
 					color: var(--color-text-block);
 					background: var(--color-bg-block-data);
 				}

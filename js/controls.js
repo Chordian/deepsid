@@ -134,7 +134,6 @@ Controls.prototype = {
 				else if (browser.playlist[browser.songPos].fullname.indexOf("3SID.sid") != -1) browser.chips = 3;
 				viz.initGraph(browser.chips);
 				viz.enableAllPianoVoices();
-				viz.activateMemory(true);
 			});
 			this.updateSubtuneText();
 			$(id == "subtune-plus" && !SID.emulatorFlags.offline ? "#subtune-minus" : "#subtune-plus").removeClass("disabled");
@@ -543,7 +542,7 @@ Controls.prototype = {
 		}
 		// Memory bar
 		var address = parseInt(browser.playlist[browser.songPos].address),
-			size = parseInt(browser.playlist[browser.songPos].size) - 2;
+			size = parseInt(browser.playlist[browser.songPos].size) - 3;
 		var hexStart = address.toString(16).toUpperCase(),
 			hexEnd = (address + size).toString(16).toUpperCase();
 		$("#memory-chunk").css({
