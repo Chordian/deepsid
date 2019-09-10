@@ -922,7 +922,7 @@ Viz.prototype = {
 			row = 0, block = hexrow = petscii = "";
 		for (var addr = 0; addr <= 0xFF; addr++) {
 			var byte = SID.readMemory(addr);
-			hexrow += (byte < 0x10 ? "0" : "")+byte.toString(16).toUpperCase()+" ";
+			hexrow += (byte < 0x10 ? "0" : "")+byte.toString(16).toUpperCase()+"&nbsp;"+((addr + 1) % 4 ? "" : "&nbsp;");
 
 			half = byte & 0x7F;
 			n0 = '<span class="n">', n1 = '</span>'; // Negative chars ($80-$FF)
@@ -958,11 +958,12 @@ Viz.prototype = {
 
 			if (row == 16) {
 				address = (addr - 15).toString(16).toUpperCase();
-				block += "0000".substr(address.length)+address+": "+hexrow+petscii + '<br />';
+				block += "0000".substr(address.length)+address+":&nbsp;"+hexrow+petscii + '<br />';
 				hexrow = petscii = ""
 				row = 0;
 			}
 		}
+		block = '<table><tr><td class="block-info">Sovs</td><td class="block-data">'+block+'</td></tr></table>';
 
 		$("#visuals-memory .monitor").empty().append(block);
 	},

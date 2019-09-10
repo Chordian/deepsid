@@ -3978,6 +3978,15 @@ input[type=range]::-ms-track {
 				/*margin-left: 50px;*/
 			}
 
+				#visuals-memory td.block-info {
+					vertical-align: top;
+					text-align: center;
+				}
+
+				#visuals-memory td.block-data {
+					width: 1px;
+				}
+
 				/* Negative PETSCII character */
 				#visuals-memory .n {
 					color: var(--color-bg-box);
