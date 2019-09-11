@@ -1015,8 +1015,7 @@ Viz.prototype = {
 	 * @param {boolean} activate	TRUE to activate, FALSE to turn off.
 	 */
 	activateMemory: function(activate) {
-		// Only if the tab and view are active (mobile devices don't have access either)
-		if ($("#tabs .selected").attr("data-topic") !== "visuals" || !$("#sticky-visuals .icon-memory").hasClass("button-on") || $("body").attr("data-mobile") !== "0") return; 
+		if ($("body").attr("data-mobile") !== "0") return; 
 
 		if (activate && typeof browser.songPos != "undefined") {
 			this.playerAddrStart = this.playerAddrCurrent = Number(browser.playlist[browser.songPos].address);
@@ -1041,10 +1040,13 @@ Viz.prototype = {
 	 * Memory: Start updating of the monitor-style tables.
 	 */
 	animateMemory: function() {
+		if ($("body").attr("data-mobile") !== "0") return; 
+
 		var $zp = $("#visuals-memory .block-zp"),
 			$player = $("#visuals-memory .block-player");
 
 		SID.setCallbackBufferEnded(function() {
+			if ($("#tabs .selected").attr("data-topic") !== "visuals" || !$("#sticky-visuals .icon-memory").hasClass("button-on")) return;
 			// Update zero page block
 			$zp.empty();
 			var blockZP = viz.showMemoryBlock(0x0000, 0x00FF);
