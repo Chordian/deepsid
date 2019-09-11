@@ -15,8 +15,6 @@ function Viz(emulator) {
 	this.graphMods = true;
 	this.lineInGraph = false;
 
-	this.petsciiLowerCase = true;
-
 	this.scopeLineColor = [
 		"34, 35, 27",	// For bright color theme
 		"255, 255, 255"	// For dark color theme
@@ -215,8 +213,14 @@ Viz.prototype = {
 			} else if (event.target.id === "graph-mods") {
 				this.graphMods = $this.hasClass("button-off");
 			} else if (event.target.id === "memory-lc-toggle") {
-				this.petsciiLowerCase = $this.hasClass("button-off");
-				this.activateMemory(true);
+				// Toggle C64 font letter casing in MEMO visuals view
+				if ($this.hasClass("button-off")) {
+					$("#visuals-memory .uc").hide();
+					$("#visuals-memory .lc").show();
+				} else {
+					$("#visuals-memory .lc").hide();
+					$("#visuals-memory .uc").show();
+				}
 			} else {
 				// Clear piano keyboards to make sure there are no hanging colors on it
 				$("#visuals-piano .piano svg .black").css("transition", "none").attr("fill", "#000");
@@ -922,18 +926,23 @@ Viz.prototype = {
 	 */
 	showMemoryBlock: function(addrStart, addrEnd) {
 		var half, n0, n1, span,
-			row = 0, coltoggle = true, block = "", hexrow = petscii = '<span class="bt">';
+			row = 0, coltoggle = true, block = "", hexrow = '<span class="bt">',
+			petscii_LC = '<span class="lc">', petscii_UC = '<span class="uc">';
+		petscii_LC += hexrow;
+		petscii_UC += hexrow;
 		for (var addr = addrStart; addr <= addrEnd; addr++) {
 			row++;
 			if (row == 5 || row == 9 || row == 13 || row == 16) {
 				// Change color for the next four bytes
 				hexrow += '</span>';
-				petscii += '</span>';
+				petscii_LC += '</span>';
+				petscii_UC += '</span>';
 				coltoggle = !coltoggle;
 				if (row < 16) {
 					span = '<span'+(coltoggle ? ' class="bt"' : '')+'>';
 					hexrow += span;
-					petscii += span;
+					petscii_LC += span;
+					petscii_UC += span;
 				}
 			}
 
@@ -944,49 +953,54 @@ Viz.prototype = {
 			n0 = '<span class="n">', n1 = '</span>'; // Negative chars ($80-$FF)
 			if (byte < 0x80) n0 = n1 = "";
 
-			if (this.petsciiLowerCase) {
-				// Lower case PETSCII
-				if (half == 0)							{ petscii += n0+String.fromCharCode(half + 64)+n1; }
-				else if (half >= 1 && half <= 26)		{ petscii += n0+String.fromCharCode(half + 96)+n1; }
-				else if (half >= 27 && half <= 31)		{ petscii += n0+"&#"+(57344 + half + 64)+";"+n1; }
-				else if (half == 32)					{ petscii += n0+"&nbsp;"+n1; }
-				else if (half >= 33 && half <= 59)		{ petscii += n0+String.fromCharCode(half)+n1; }
-				else if (half == 60)					{ petscii += n0+"&lt;"+n1; }
-				else if (half >= 61 && half <= 63)		{ petscii += n0+String.fromCharCode(half)+n1; }
-				else if (half == 64)					{ petscii += n0+"&#"+(57344 + half + 32)+";"+n1; }
-				else if (half >= 65 && half <= 90)		{ petscii += n0+String.fromCharCode(half)+n1; }
-				else if (half >= 91 && half <= 93)		{ petscii += n0+"&#"+(57344 + half + 32)+";"+n1; }
-				else if (half >= 94 && half <= 95)		{ petscii += n0+"."+n1; } // ??
-				else if (half >= 96 && half <= 104)		{ petscii += n0+"&#"+(57344 + half + 64)+";"+n1; }
-				else if (half == 105)					{ petscii += n0+"."+n1; } // ??
-				else if (half >= 106 && half <= 121)	{ petscii += n0+"&#"+(57344 + half + 64)+";"+n1; }
-				else if (half == 122)					{ petscii += n0+"."+n1; } // ??
-				else if (half >= 123 && half <= 127)	{ petscii += n0+"&#"+(57344 + half + 64)+";"+n1; }
-			} else {
-				// Upper case PETSCII
-				if (half >= 0 && half <= 26)			{ petscii += n0+String.fromCharCode(half + 64)+n1; }
-				else if (half >= 27 && half <= 31)		{ petscii += n0+"&#"+(57344 + half + 64)+";"+n1; }
-				else if (half == 32)					{ petscii += n0+"&nbsp;"+n1; }
-				else if (half >= 33 && half <= 59)		{ petscii += n0+String.fromCharCode(half)+n1; }
-				else if (half == 60)					{ petscii += n0+"&lt;"+n1; }
-				else if (half >= 61 && half <= 63)		{ petscii += n0+String.fromCharCode(half)+n1; }
-				else if (half >= 64 && half <= 95)		{ petscii += n0+"&#"+(57344 + half + 32)+";"+n1; }
-				else if (half >= 96 && half <= 127)		{ petscii += n0+"&#"+(57344 + half + 64)+";"+n1; }
-			}
+			// Lower case PETSCII
+			if (half == 0)							{ petscii_LC += n0+String.fromCharCode(half + 64)+n1; }
+			else if (half >= 1 && half <= 26)		{ petscii_LC += n0+String.fromCharCode(half + 96)+n1; }
+			else if (half >= 27 && half <= 31)		{ petscii_LC += n0+"&#"+(57344 + half + 64)+";"+n1; }
+			else if (half == 32)					{ petscii_LC += n0+"&nbsp;"+n1; }
+			else if (half >= 33 && half <= 59)		{ petscii_LC += n0+String.fromCharCode(half)+n1; }
+			else if (half == 60)					{ petscii_LC += n0+"&lt;"+n1; }
+			else if (half >= 61 && half <= 63)		{ petscii_LC += n0+String.fromCharCode(half)+n1; }
+			else if (half == 64)					{ petscii_LC += n0+"&#"+(57344 + half + 32)+";"+n1; }
+			else if (half >= 65 && half <= 90)		{ petscii_LC += n0+String.fromCharCode(half)+n1; }
+			else if (half >= 91 && half <= 93)		{ petscii_LC += n0+"&#"+(57344 + half + 32)+";"+n1; }
+			else if (half >= 94 && half <= 95)		{ petscii_LC += n0+"."+n1; } // ??
+			else if (half >= 96 && half <= 104)		{ petscii_LC += n0+"&#"+(57344 + half + 64)+";"+n1; }
+			else if (half == 105)					{ petscii_LC += n0+"."+n1; } // ??
+			else if (half >= 106 && half <= 121)	{ petscii_LC += n0+"&#"+(57344 + half + 64)+";"+n1; }
+			else if (half == 122)					{ petscii_LC += n0+"."+n1; } // ??
+			else if (half >= 123 && half <= 127)	{ petscii_LC += n0+"&#"+(57344 + half + 64)+";"+n1; }
+
+			// Upper case PETSCII
+			if (half >= 0 && half <= 26)			{ petscii_UC += n0+String.fromCharCode(half + 64)+n1; }
+			else if (half >= 27 && half <= 31)		{ petscii_UC += n0+"&#"+(57344 + half + 64)+";"+n1; }
+			else if (half == 32)					{ petscii_UC += n0+"&nbsp;"+n1; }
+			else if (half >= 33 && half <= 59)		{ petscii_UC += n0+String.fromCharCode(half)+n1; }
+			else if (half == 60)					{ petscii_UC += n0+"&lt;"+n1; }
+			else if (half >= 61 && half <= 63)		{ petscii_UC += n0+String.fromCharCode(half)+n1; }
+			else if (half >= 64 && half <= 95)		{ petscii_UC += n0+"&#"+(57344 + half + 32)+";"+n1; }
+			else if (half >= 96 && half <= 127)		{ petscii_UC += n0+"&#"+(57344 + half + 64)+";"+n1; }
 
 			if (addr == addrEnd) {
+					hexrow += '</span>';
+					petscii_LC += '</span>';
+					petscii_UC += '</span>';
 				// Just pad the rest with nothingness
 				for (; row < 16; row++) {
 					hexrow += "&nbsp;&nbsp;&nbsp;";
-					petscii += "&nbsp;";
+					petscii_LC += "&nbsp;";
+					petscii_UC += "&nbsp;";
 					addr++;
 				}
 			}
 
 			if (row == 16) {
 				// Build the row with C64 address, hexademical bytes and PETSCII characters
-				block += this.paddedAddress(addr - 15)+"&nbsp;"+hexrow+petscii+'<br />';
-				hexrow = petscii = '<span class="bt">';
+				block += this.paddedAddress(addr - 15)+"&nbsp;"+hexrow+petscii_LC+'</span>'+petscii_UC+'</span><br />';
+				hexrow = '<span class="bt">';
+				petscii_LC = '<span class="lc">', petscii_UC = '<span class="uc">';
+				petscii_LC += hexrow;
+				petscii_UC += hexrow;
 				row = 0;
 			}
 		}

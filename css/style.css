@@ -4019,6 +4019,10 @@ input[type=range]::-ms-track {
 						background: var(--color-text-block-toggled);
 					}
 
+				#visuals-memory .uc {
+					display: none;
+				}
+
 			#topic-csdb .thumbnail,
 			#topic-player .thumbnail {
 				width: 116px;
