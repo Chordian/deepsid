@@ -1090,6 +1090,15 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>September 11, 2019</h3>
+						<ul>
+							<li>A memo view button has been added in the visuals tab. Click it to see two parts of the
+								C64 memory &ndash; one continuously updating zero page block, and a static view of the player
+								block with code and music data. Note that the latter will be cut short if the block is
+								too big (more than 8K) to maintain performance.</li>
+							<li>You can now click the dark blue memory chunk to jump to the new memo view.</li>
+						</ul>
+
 						<h3>September 8, 2019</h3>
 						<ul>
 							<li>Added almost 140 tunes in the <a href="//deepsid.chordian.net/?file=/Exotic%20SID%20Tunes%20Collection/Stereo%202SID/">Stereo 2SID</a>

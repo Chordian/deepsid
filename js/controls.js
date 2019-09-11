@@ -35,6 +35,12 @@ Controls.prototype = {
 
 		$("#volume,#sundry-ctrls").on("input", this.onInput.bind(this));
 
+		$("#memory-chunk").on("click", function() {
+			// Go to 'Visuals > MEMO' when the blue memory chunk is clicked
+			$("#tab-visuals").trigger("click");
+			$("#sticky-visuals button.icon-memory").trigger("click");
+		});
+
 		setInterval(this.pace.bind(this), 150); // VBI, 2x, 4x, digi, etc.
 	},
 

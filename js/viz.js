@@ -328,7 +328,7 @@ Viz.prototype = {
 				break;
 			case "memory":
 				$("#memory-lc").show();
-				this.activateMemory(true);
+				this.playerAddrEnd ? this.animateMemory() : this.activateMemory(true);
 				break;
 		}
 	},
@@ -1015,36 +1015,57 @@ Viz.prototype = {
 	 * @param {boolean} activate	TRUE to activate, FALSE to turn off.
 	 */
 	activateMemory: function(activate) {
-		// Only if the tab and view are active!
+		// Only if the tab and view are active (mobile devices don't have access either)
 		if ($("#tabs .selected").attr("data-topic") !== "visuals" || !$("#sticky-visuals .icon-memory").hasClass("button-on") || $("body").attr("data-mobile") !== "0") return; 
 
-		if (activate) {
-			this.playerAddrCurrent = Number(browser.playlist[browser.songPos].address);
+		if (activate && typeof browser.songPos != "undefined") {
+			this.playerAddrStart = this.playerAddrCurrent = Number(browser.playlist[browser.songPos].address);
 			this.playerAddrEnd = this.playerAddrCurrent + Number(browser.playlist[browser.songPos].size) - 3;
-			
-			$("#player-addr").empty().append("$"+this.paddedAddress(this.playerAddrCurrent)+"-$"+this.paddedAddress(this.playerAddrEnd));
 
-			var $zp = $("#visuals-memory .block-zp"),
-				$player = $("#visuals-memory .block-player");
+			var $player = $("#visuals-memory .block-player");
 			$player.empty();
 
-			SID.setCallbackBufferEnded(function() {
-				// Update zero page block
-				$zp.empty();
-				var blockZP = viz.showMemoryBlock(0x0000, 0x00FF);
-				$zp.append(blockZP);
-				// Build up player table
+			if (browser.playlist[browser.songPos].fullname.substr(-4) == ".mus") {
+				// MUS files in CGSC doesn't have an interesting player block to look at
+				$player.append('<div class="more">N/A</div>');
+				viz.playerAddrCurrent = 0;
+			} else
+				$("#player-addr").empty().append("$"+this.paddedAddress(this.playerAddrCurrent)+"-$"+this.paddedAddress(this.playerAddrEnd));
+
+			this.animateMemory();
+		} else
+			SID.setCallbackBufferEnded(undefined);
+	},
+
+	/**
+	 * Memory: Start updating of the monitor-style tables.
+	 */
+	animateMemory: function() {
+		var $zp = $("#visuals-memory .block-zp"),
+			$player = $("#visuals-memory .block-player");
+
+		SID.setCallbackBufferEnded(function() {
+			// Update zero page block
+			$zp.empty();
+			var blockZP = viz.showMemoryBlock(0x0000, 0x00FF);
+			$zp.append(blockZP);
+			// Build up player table
+			if (viz.playerAddrCurrent) {
 				if (viz.playerAddrCurrent + 256 < viz.playerAddrEnd) {
 					$player.append(viz.showMemoryBlock(viz.playerAddrCurrent, viz.playerAddrCurrent + 255));
 					viz.playerAddrCurrent += 256;
 				} else if (viz.playerAddrCurrent != viz.playerAddrEnd) {
+					// End of the player block
 					$player.append(viz.showMemoryBlock(viz.playerAddrCurrent, viz.playerAddrEnd));
 					viz.playerAddrCurrent = viz.playerAddrEnd;
 				}
-			}.bind(this));
-		} else {
-			SID.setCallbackBufferEnded(undefined);
-		}
+				if (viz.playerAddrCurrent - viz.playerAddrStart > 8192) {
+					// Need to stop here or the web browser may bog down under the pressure
+					$player.append('<div class="more">&gt;&nbsp;&nbsp;CUT SHORT TO MAINTAIN PERFORMANCE&nbsp;&nbsp;&lt;</div>');
+					viz.playerAddrCurrent = 0;
+				}
+			}
+		}.bind(this));
 	},
 
 	/**

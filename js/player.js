@@ -432,7 +432,7 @@ SIDPlayer.prototype = {
 		if (!this.paused) {
 			this.voiceMask = [0xF, 0xF, 0xF];
 			viz.activatePiano(true);
-			viz.activateMemory(true);
+			viz.animateMemory();
 		}
 		switch (this.emulator) {
 			case "websid":
@@ -1004,7 +1004,7 @@ SIDPlayer.prototype = {
 			case "websid":
 				return SIDBackend.getRAM(address);
 			case "jssid":
-				return 42;
+				return this.jsSID.readregister(address);
 			case "soasc":
 			case "download":
 				// Not possible

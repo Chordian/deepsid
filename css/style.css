@@ -2129,7 +2129,7 @@ input[type=range]::-ms-track {
 			background: var(--color-memory-chunk);
 			box-shadow: var(--shadow-memory-chunk);
 			z-index: 2;
-			cursor: help;
+			cursor: pointer;
 		}
 
 /* ---- Sundry Box ---------------------------------------------------------- */
@@ -4021,6 +4021,13 @@ input[type=range]::-ms-track {
 
 				#visuals-memory .uc {
 					display: none;
+				}
+
+				#visuals-memory .more {
+					font: normal 14px "Open Sans", helvetica, sans-serif;
+					color: var(--color-text-subtle);
+					margin: 12px 0;
+					text-align: center;
 				}
 
 			#topic-csdb .thumbnail,
