@@ -3718,7 +3718,7 @@ input[type=range]::-ms-track {
 				}
 
 				#sticky-visuals .icon-memory:before {
-					background: url(../images/visuals_graph.svg) 0 0 / 14px 14px no-repeat;
+					background: url(../images/visuals_memory.svg) 0 -2.4px / 14px 19px no-repeat;
 				}
 
 		/* Container for buttons in the right side of the sticky white top header box */

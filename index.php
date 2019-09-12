@@ -1096,6 +1096,8 @@
 							<li>Overhauled the way the piano and memory views are updated. If anything suddenly looks
 								strange or doesn't work right (especially in the piano view) then please
 								<a href="https://about.me/chordian" target="_blank">let me know</a>.</li>
+							<li>Upgraded the WebSid emulator. Fixed handling of NTSC for PSID v2 and above.</li>
+							<li>Added David Youd's <a href="//deepsid.chordian.net/?file=/Exotic%20SID%20Tunes%20Collection/Nutcracker_10SID.sid">Dance of the Sugar Plum Fairy</a> composed for ten SID chips.</li>
 						</ul>
 
 						<h3>September 11, 2019</h3>
