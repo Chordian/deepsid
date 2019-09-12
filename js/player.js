@@ -431,8 +431,7 @@ SIDPlayer.prototype = {
 	 play: function(forcePlay) {
 		if (!this.paused) {
 			this.voiceMask = [0xF, 0xF, 0xF];
-			viz.activatePiano(true);
-			viz.animateMemory();
+			viz.startBufferEndedEffects();
 		}
 		switch (this.emulator) {
 			case "websid":
@@ -513,8 +512,7 @@ SIDPlayer.prototype = {
 	 */
 	stop: function() {
 		this.paused = false;
-		viz.activatePiano(false);
-		viz.activateMemory(false);
+		viz.stopBufferEndedEffects();
 		switch (this.emulator) {
 			case "websid":
 				this.load(); // Dirty hack to make sure the tune is restarted next time it is played

@@ -386,8 +386,8 @@ $(function() { // DOM ready
 				}
 				ctrls.emulatorChanged = true;
 				UpdateURL();
-				viz.activatePiano(true);
-				viz.activateMemory(true);
+				viz.animateBufferEnded();
+				viz.startBufferEndedEffects();
 				break;
 		}
 	});

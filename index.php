@@ -1090,6 +1090,14 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>September 12, 2019</h3>
+						<ul>
+							<li>Fixed a bug where the piano view wasn't animating when clicking another song.</li>
+							<li>Overhauled the way the piano and memory views are updated. If anything suddenly looks
+								strange or doesn't work right (especially in the piano view) then please
+								<a href="https://about.me/chordian" target="_blank">let me know</a>.</li>
+						</ul>
+
 						<h3>September 11, 2019</h3>
 						<ul>
 							<li>A memo view button has been added in the visuals tab. Click it to see two parts of the

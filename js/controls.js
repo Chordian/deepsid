@@ -255,8 +255,7 @@ Controls.prototype = {
 				if (browser.playlist[browser.songPos].fullname.indexOf("2SID.sid") != -1) browser.chips = 2;
 				else if (browser.playlist[browser.songPos].fullname.indexOf("3SID.sid") != -1) browser.chips = 3;
 				viz.initGraph(browser.chips);
-				viz.enableAllPianoVoices();
-				viz.activateMemory(true);
+				viz.startBufferEndedEffects();
 
 				// Mark the next row in the browser list
 				$("#songs tr").removeClass("selected");
