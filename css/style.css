@@ -48,6 +48,7 @@
 	--color-bg-block-data:			var(--color-top);
 	--color-text-block:				var(--color-bottom);
 	--color-text-block-toggled:		#9a9a90;			/* #7c7e60 #929292 */
+	--color-text-block-changed:		#c00;
 
 	--color-border:					#ced0c0;			/* For borders and text labels where its container is disabled */
 	--color-border-box:				#c8c8b9;			/* For borders around various boxes and input fields */
@@ -390,6 +391,7 @@
 	--color-bg-block-data:			var(--color-bottom);
 	--color-text-block:				#bcbebc;
 	--color-text-block-toggled:		var(--color-top);
+	--color-text-block-changed:		#e66;
 
 	--color-border:					#0c0c0c;			/* For borders and text labels where its container is disabled */
 	--color-border-box:				#2c2c2c;			/* For borders around various boxes and input fields */
@@ -4015,13 +4017,22 @@ input[type=range]::-ms-track {
 					background: var(--color-text-body);
 				}
 
-					#visuals-memory .bt .n {
+					#visuals-memory .bt.n {
 						background: var(--color-text-block-toggled);
 					}
 
 				#visuals-memory .uc {
 					display: none;
 				}
+
+				#visuals-memory .ch {
+					color: var(--color-text-block-changed);
+				}
+
+					#visuals-memory .n.ch {
+						color: var(--color-bg-box);
+						background: var(--color-text-block-changed);
+					}
 
 				#visuals-memory .msg {
 					font: normal 14px "Open Sans", helvetica, sans-serif;

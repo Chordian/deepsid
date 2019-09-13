@@ -939,72 +939,40 @@ Viz.prototype = {
 	},
 
 	/**
-	 * Memory: Get a table cell with a monitor-style memory dump of C64 RAM.
+	 * Memory: Build a block for a table cell with a monitor-style memory dump of
+	 * the RAM in a Commodore 64.
 	 * 
 	 * @param {number} addrStart	Start address in C64 RAM.
 	 * @param {number} addrEnd		End address in C64 RAM.
+	 * @param {array} arrMemory		Array to contain the bytes of the address span.
 	 * 
 	 * @return {string}				HTML block.
 	 */
-	showMemoryBlock: function(addrStart, addrEnd) {
-		var half, n0, n1, span,
-			row = 0, coltoggle = true, block = "", hexrow = '<span class="bt">',
+	showMemoryBlock: function(addrStart, addrEnd, arrMemory) {
+		var row = 0, zebra = false, block = hexrow = "",
 			petscii_LC = '<span class="lc">', petscii_UC = '<span class="uc">';
-		petscii_LC += hexrow;
-		petscii_UC += hexrow;
+
 		for (var addr = addrStart; addr <= addrEnd; addr++) {
 			row++;
-			if (row == 5 || row == 9 || row == 13 || row == 16) {
+			//if (row == 5 || row == 9 || row == 13 || row == 16) {
+			if (row == 1 || row == 5 || row == 9 || row == 13)
 				// Change color for the next four bytes
-				hexrow += '</span>';
-				petscii_LC += '</span>';
-				petscii_UC += '</span>';
-				coltoggle = !coltoggle;
-				if (row < 16) {
-					span = '<span'+(coltoggle ? ' class="bt"' : '')+'>';
-					hexrow += span;
-					petscii_LC += span;
-					petscii_UC += span;
-				}
-			}
+				zebra = !zebra;
 
 			var byte = SID.readMemory(addr);
-			hexrow += (byte < 0x10 ? "0" : "")+byte.toString(16).toUpperCase()+"&nbsp;";
+			arrMemory.push(byte);
+			var cByte = this.convertByte(byte);
 
-			half = byte & 0x7F;
-			n0 = '<span class="n">', n1 = '</span>'; // Negative chars ($80-$FF)
-			if (byte < 0x80) n0 = n1 = "";
+			// Decide zebra striping colors for the byte and PETSCII
+			var normal = zebra ? ' class="bt"' : '';
+				negated = zebra ? ' class="bt n"' : ' class="n"';
 
-			// Lower case PETSCII
-			if (half == 0)							{ petscii_LC += n0+String.fromCharCode(half + 64)+n1; }
-			else if (half >= 1 && half <= 26)		{ petscii_LC += n0+String.fromCharCode(half + 96)+n1; }
-			else if (half >= 27 && half <= 31)		{ petscii_LC += n0+"&#"+(57344 + half + 64)+";"+n1; }
-			else if (half == 32)					{ petscii_LC += n0+"&nbsp;"+n1; }
-			else if (half >= 33 && half <= 59)		{ petscii_LC += n0+String.fromCharCode(half)+n1; }
-			else if (half == 60)					{ petscii_LC += n0+"&lt;"+n1; }
-			else if (half >= 61 && half <= 63)		{ petscii_LC += n0+String.fromCharCode(half)+n1; }
-			else if (half == 64)					{ petscii_LC += n0+"&#"+(57344 + half + 32)+";"+n1; }
-			else if (half >= 65 && half <= 90)		{ petscii_LC += n0+String.fromCharCode(half)+n1; }
-			else if (half >= 91 && half <= 93)		{ petscii_LC += n0+"&#"+(57344 + half + 32)+";"+n1; }
-			else if (half >= 94 && half <= 95)		{ petscii_LC += n0+"."+n1; } // ??
-			else if (half >= 96 && half <= 104)		{ petscii_LC += n0+"&#"+(57344 + half + 64)+";"+n1; }
-			else if (half == 105)					{ petscii_LC += n0+"."+n1; } // ??
-			else if (half >= 106 && half <= 121)	{ petscii_LC += n0+"&#"+(57344 + half + 64)+";"+n1; }
-			else if (half == 122)					{ petscii_LC += n0+"."+n1; } // ??
-			else if (half >= 123 && half <= 127)	{ petscii_LC += n0+"&#"+(57344 + half + 64)+";"+n1; }
-
-			// Upper case PETSCII
-			if (half >= 0 && half <= 26)			{ petscii_UC += n0+String.fromCharCode(half + 64)+n1; }
-			else if (half >= 27 && half <= 31)		{ petscii_UC += n0+"&#"+(57344 + half + 64)+";"+n1; }
-			else if (half == 32)					{ petscii_UC += n0+"&nbsp;"+n1; }
-			else if (half >= 33 && half <= 59)		{ petscii_UC += n0+String.fromCharCode(half)+n1; }
-			else if (half == 60)					{ petscii_UC += n0+"&lt;"+n1; }
-			else if (half >= 61 && half <= 63)		{ petscii_UC += n0+String.fromCharCode(half)+n1; }
-			else if (half >= 64 && half <= 95)		{ petscii_UC += n0+"&#"+(57344 + half + 32)+";"+n1; }
-			else if (half >= 96 && half <= 127)		{ petscii_UC += n0+"&#"+(57344 + half + 64)+";"+n1; }
+			// Wrap a byte and a PETSCII in a memory address <SPAN> so it can be referred to later
+			hexrow += '<span id="h'+addr+'"'+normal+'>'+cByte.hex+'</span>';
+			petscii_LC += '<span id="l'+addr+'"'+(byte > 0x80 ? negated : normal)+'>'+cByte.lc+'</span>';
+			petscii_UC += '<span id="u'+addr+'"'+(byte > 0x80 ? negated : normal)+'>'+cByte.uc+'</span>';
 
 			if (addr == addrEnd) {
-					hexrow += '</span>';
 					petscii_LC += '</span>';
 					petscii_UC += '</span>';
 				// Just pad the rest with nothingness
@@ -1019,14 +987,83 @@ Viz.prototype = {
 			if (row == 16) {
 				// Build the row with C64 address, hexademical bytes and PETSCII characters
 				block += this.paddedAddress(addr - 15)+"&nbsp;"+hexrow+petscii_LC+'</span>'+petscii_UC+'</span><br />';
-				hexrow = '<span class="bt">';
+				hexrow = "";
 				petscii_LC = '<span class="lc">', petscii_UC = '<span class="uc">';
-				petscii_LC += hexrow;
-				petscii_UC += hexrow;
 				row = 0;
 			}
 		}
 		return block;
+	},
+
+	/**
+	 * Covert a byte to hexadecimal + both lower and upper case PETSCII characters.
+	 * 
+	 * NOTE: The caller must handle the negative class for PETSCII.
+	 * 
+	 * @param {number} byte		Byte value 0 to 255.
+	 * 
+	 * @return {array}			Array with strings for all types.
+	 */
+	convertByte: function(byte) {
+
+		var half = byte & 0x7F, pLC, pUC;
+
+		// Lower case PETSCII
+		if (half == 0)							{ pLC = String.fromCharCode(half + 64); }
+		else if (half >= 1 && half <= 26)		{ pLC = String.fromCharCode(half + 96); }
+		else if (half >= 27 && half <= 31)		{ pLC = "&#"+(57344 + half + 64)+";"; }
+		else if (half == 32)					{ pLC = "&nbsp;"; }
+		else if (half >= 33 && half <= 59)		{ pLC = String.fromCharCode(half); }
+		else if (half == 60)					{ pLC = "&lt;"; }
+		else if (half >= 61 && half <= 63)		{ pLC = String.fromCharCode(half); }
+		else if (half == 64)					{ pLC = "&#"+(57344 + half + 32)+";"; }
+		else if (half >= 65 && half <= 90)		{ pLC = String.fromCharCode(half); }
+		else if (half >= 91 && half <= 93)		{ pLC = "&#"+(57344 + half + 32)+";"; }
+		else if (half >= 94 && half <= 95)		{ pLC = "."; } // ??
+		else if (half >= 96 && half <= 104)		{ pLC = "&#"+(57344 + half + 64)+";"; }
+		else if (half == 105)					{ pLC = "."; } // ??
+		else if (half >= 106 && half <= 121)	{ pLC = "&#"+(57344 + half + 64)+";"; }
+		else if (half == 122)					{ pLC = "."; } // ??
+		else if (half >= 123 && half <= 127)	{ pLC = "&#"+(57344 + half + 64)+";"; }
+
+		// Upper case PETSCII
+		if (half >= 0 && half <= 26)			{ pUC = String.fromCharCode(half + 64); }
+		else if (half >= 27 && half <= 31)		{ pUC = "&#"+(57344 + half + 64)+";"; }
+		else if (half == 32)					{ pUC = "&nbsp;"; }
+		else if (half >= 33 && half <= 59)		{ pUC = String.fromCharCode(half); }
+		else if (half == 60)					{ pUC = "&lt;"; }
+		else if (half >= 61 && half <= 63)		{ pUC = String.fromCharCode(half); }
+		else if (half >= 64 && half <= 95)		{ pUC = "&#"+(57344 + half + 32)+";"; }
+		else if (half >= 96 && half <= 127)		{ pUC = "&#"+(57344 + half + 64)+";"; }
+
+		return {
+			hex:	(byte < 0x10 ? "0" : "")+byte.toString(16).toUpperCase()+"&nbsp;",	// Hexadecimal 00 to FF
+			lc:		pLC,																// Lower case PETSCII char
+			uc:		pUC,																// Upper case PETSCII char
+		};
+	},
+
+	/**
+	 * Memory: Compare a current block of bytes from previous update, then only
+	 * update those hexadecimal bytes and PETSCII characters that changed.
+	 * 
+	 * @param {number} addrStart	Start address in C64 RAM.
+	 * @param {number} addrEnd		End address in C64 RAM.
+	 * @param {array} arrMemory		Array to contain the bytes of the address span.
+	 */
+	patchMemoryBlock: function(addrStart, addrEnd, arrMemory) {
+		var byte, cByte;
+		for (var addr = addrStart; addr <= addrEnd; addr++) {
+			byte = SID.readMemory(addr);
+			if (byte != arrMemory[addr - addrStart]) {
+				// Byte has changed; update array and <SPAN> addresses in HTML block
+				arrMemory[addr - addrStart] = byte;
+				cByte = this.convertByte(byte);
+				$("#h"+addr).empty().append(cByte.hex).removeClass("ch").addClass("ch");
+				$("#l"+addr).empty().append(cByte.lc).removeClass("ch").addClass("ch");
+				$("#u"+addr).empty().append(cByte.uc).removeClass("ch").addClass("ch");
+			}
+		}
 	},
 
 	/**
@@ -1038,11 +1075,14 @@ Viz.prototype = {
 		if ($("body").attr("data-mobile") !== "0") return;
 
 		if (activate && typeof browser.songPos != "undefined") {
+
+			var $zp = $("#visuals-memory .block-zp"),
+				$player = $("#visuals-memory .block-player");
+			$zp.empty();
+			$player.empty();
+
 			this.playerAddrStart = this.playerAddrCurrent = Number(browser.playlist[browser.songPos].address);
 			this.playerAddrEnd = this.playerAddrStart + Number(browser.playlist[browser.songPos].size) - 3;
-
-			var $player = $("#visuals-memory .block-player");
-			$player.empty();
 
 			if (browser.playlist[browser.songPos].fullname.substr(-4) == ".mus") {
 				// MUS files in CGSC doesn't have an interesting player block to look at
@@ -1051,6 +1091,11 @@ Viz.prototype = {
 			} else {
 				$("#player-addr").empty().append("$"+this.paddedAddress(this.playerAddrCurrent)+"-$"+this.paddedAddress(this.playerAddrEnd));
 			}
+
+			// Show ZP block and first block of player
+			this.blockZP = [], this.blockPlayer = [];
+			$zp.append(this.showMemoryBlock(0x0000, 0x00FF, this.blockZP));
+			$player.append(this.showMemoryBlock(this.playerAddrCurrent, this.playerAddrCurrent + PAGESIZE_PLAYER - 1, this.blockPlayer));
 		}
 		this.runningMemory = activate;
 	},
@@ -1065,8 +1110,12 @@ Viz.prototype = {
 		if (!this.runningMemory || $("#tabs .selected").attr("data-topic") !== "visuals" ||
 			!$("#sticky-visuals .icon-memory").hasClass("button-on")) return;
 
-		// Update zero page block
-		$("#visuals-memory .block-zp").empty().append(this.showMemoryBlock(0x0000, 0x00FF));
+		// Patch zero page block with changed bytes only
+		this.patchMemoryBlock(0x0000, 0x00FF, this.blockZP);
+
+		this.patchMemoryBlock(this.playerAddrCurrent, this.playerAddrCurrent + PAGESIZE_PLAYER - 1, this.blockPlayer);
+
+return;////////////////////////////////////
 
 		// Update current player table page
 		if (this.playerAddrCurrent) {
