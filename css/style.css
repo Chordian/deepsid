@@ -4023,7 +4023,7 @@ input[type=range]::-ms-track {
 					display: none;
 				}
 
-				#visuals-memory .more {
+				#visuals-memory .msg {
 					font: normal 14px "Open Sans", helvetica, sans-serif;
 					color: var(--color-text-subtle);
 					margin: 12px 0;

@@ -3,6 +3,8 @@
  * DeepSID / Visuals
  */
 
+const PAGESIZE_PLAYER = 512;
+
 function Viz(emulator) {
 
 	this.emulator = emulator.toLowerCase();
@@ -15,8 +17,8 @@ function Viz(emulator) {
 	this.graphMods = true;
 	this.lineInGraph = false;
 
-	this.runningPiano = true;
-	this.runningMemory = true;
+	this.runningPiano = false;
+	this.runningMemory = false;
 
 	this.ctx_pw = [];
 	this.ctx_fc = [];
@@ -450,7 +452,7 @@ Viz.prototype = {
 	 */
 	animatePiano: function() {
 		// Only if the tab and view are active
-		if (!viz.runningPiano || $("#tabs .selected").attr("data-topic") !== "visuals" ||
+		if (!this.runningPiano || $("#tabs .selected").attr("data-topic") !== "visuals" ||
 			!$("#sticky-visuals .icon-piano").hasClass("button-on")) return; 
 
 		var useOneKeyboard = $("#piano-combine").hasClass("button-on") || browser.chips > 1;
@@ -672,7 +674,7 @@ Viz.prototype = {
 				this.tabOscMode = "NOTWEBSID";
 			}
 			return;
-		} else if (viz.bufferSize < 16384) {
+		} else if (this.bufferSize < 16384) {
 			if (this.tabOscMode !== "NOT16K") {
 				$("#scope1,#scope2,#scope3,#scope4").hide();
 				$("#stopic-osc .sundryMsg").empty().append('A buffer size of <button id="set-16k" style="font-size:13px;line-height:13px;">16384</button> is required.').show();
@@ -681,7 +683,7 @@ Viz.prototype = {
 			return;
 		} else if (this.tabOscMode !== "OSC") {
 			// Okay to draw oscilloscope voices again now
-			scope.setOutputSize(viz.scopeMode ? 16384 : 246 << viz.scopeZoom);
+			scope.setOutputSize(this.scopeMode ? 16384 : 246 << this.scopeZoom);
 			$("#stopic-osc .sundryMsg").hide();
 			$("#scope1,#scope2,#scope3,#scope4").show();
 			this.tabOscMode = "OSC";
@@ -1033,19 +1035,19 @@ Viz.prototype = {
 	 * @param {boolean} activate	TRUE to activate, FALSE to turn off.
 	 */
 	activateMemory: function(activate) {
-		if ($("body").attr("data-mobile") !== "0") return; 
+		if ($("body").attr("data-mobile") !== "0") return;
 
 		if (activate && typeof browser.songPos != "undefined") {
 			this.playerAddrStart = this.playerAddrCurrent = Number(browser.playlist[browser.songPos].address);
-			this.playerAddrEnd = this.playerAddrCurrent + Number(browser.playlist[browser.songPos].size) - 3;
+			this.playerAddrEnd = this.playerAddrStart + Number(browser.playlist[browser.songPos].size) - 3;
 
 			var $player = $("#visuals-memory .block-player");
 			$player.empty();
 
 			if (browser.playlist[browser.songPos].fullname.substr(-4) == ".mus") {
 				// MUS files in CGSC doesn't have an interesting player block to look at
-				$player.append('<div class="more">N/A</div>');
-				viz.playerAddrCurrent = 0;
+				$player.append('<div class="msg">N/A</div>');
+				this.playerAddrCurrent = 0;
 			} else {
 				$("#player-addr").empty().append("$"+this.paddedAddress(this.playerAddrCurrent)+"-$"+this.paddedAddress(this.playerAddrEnd));
 			}
@@ -1060,27 +1062,23 @@ Viz.prototype = {
 	 */
 	animateMemory: function() {
 		// Only if the tab and view are active
-		if (!viz.runningMemory || $("#tabs .selected").attr("data-topic") !== "visuals" ||
+		if (!this.runningMemory || $("#tabs .selected").attr("data-topic") !== "visuals" ||
 			!$("#sticky-visuals .icon-memory").hasClass("button-on")) return;
 
 		// Update zero page block
 		$("#visuals-memory .block-zp").empty().append(this.showMemoryBlock(0x0000, 0x00FF));
 
-		// Build up player table
-		if (viz.playerAddrCurrent) {
+		// Update current player table page
+		if (this.playerAddrCurrent) {
 			var $player = $("#visuals-memory .block-player");
-			if (viz.playerAddrCurrent + 256 < viz.playerAddrEnd) {
-				$player.append(viz.showMemoryBlock(viz.playerAddrCurrent, viz.playerAddrCurrent + 255));
-				viz.playerAddrCurrent += 256;
-			} else if (viz.playerAddrCurrent != viz.playerAddrEnd) {
-				// End of the player block
-				$player.append(viz.showMemoryBlock(viz.playerAddrCurrent, viz.playerAddrEnd));
-				viz.playerAddrCurrent = viz.playerAddrEnd;
-			}
-			if (viz.playerAddrCurrent - viz.playerAddrStart > 8192) {
-				// Need to stop here or the web browser may bog down under the pressure
-				$player.append('<div class="more">&gt;&nbsp;&nbsp;CUT SHORT TO MAINTAIN PERFORMANCE&nbsp;&nbsp;&lt;</div>');
-				viz.playerAddrCurrent = 0;
+			$player.empty();
+			if (this.playerAddrCurrent + PAGESIZE_PLAYER < this.playerAddrEnd) {
+				// Show current block page
+				$player.append(this.showMemoryBlock(this.playerAddrCurrent, this.playerAddrCurrent + PAGESIZE_PLAYER - 1));
+			} else {
+				// Show last block page
+				$player.append(this.showMemoryBlock(this.playerAddrCurrent, this.playerAddrEnd)+
+					'<div class="msg">&gt;&nbsp;&nbsp;END OF PLAYER BLOCK&nbsp;&nbsp;&lt;</div>');
 			}
 		}
 	},
