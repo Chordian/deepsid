@@ -537,10 +537,22 @@
 							<div class="monitor">
 								<table id="block-memory">
 									<tr>
-										<td class="block-info"><b>Zero Page</b><br />$0000-$00FF</td><td class="block-data block-zp"></td>
+										<td class="block-info">
+											<b>Zero Page</b><br />$0000-$00FF</td>
+										<td class="block-data block-zp"></td>
 									</tr>
 									<tr>
-										<td class="block-info"><b>Player Block</b><br /><span id="player-addr"></span></td><td class="block-data block-player"></td>
+										<td class="block-info">
+											<b>Player Block</b><br />
+											<span id="player-addr"></span>
+											<button class="player-to-left disabled">
+												<svg height="24" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><path d="M30.83 32.67l-9.17-9.17 9.17-9.17-2.83-2.83-12 12 12 12z"/><path d="M0-.5h48v48h-48z" fill="none"/></svg>
+											</button>
+											<button class="player-to-right" style="margin-left:4px;">
+												<svg height="24" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><path d="M17.17 32.92l9.17-9.17-9.17-9.17 2.83-2.83 12 12-12 12z"/><path d="M0-.25h48v48h-48z" fill="none"/></svg>
+											</button>
+										</td>
+										<td class="block-data block-player"></td>
 									</tr>
 								</table>
 							</div>
@@ -1090,6 +1102,15 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>September 13, 2019</h3>
+						<ul>
+							<li>Improved the performance of the updating of the memory view tables.</li>
+							<li>Replaced the cutting of the the player block with page browsing instead. This makes it
+								possible to see everything in pages of 512 bytes each.</li>
+							<li>Both the zero page block and the player block are now continuously updated.</li>
+							<li>All bytes updated in the memory view by the player code now turns red for easy spotting.</li>
+						</ul>
+
 						<h3>September 12, 2019</h3>
 						<ul>
 							<li>Fixed a bug where the piano view wasn't animating when clicking another song.</li>
@@ -1104,8 +1125,8 @@
 						<ul>
 							<li>A memo view button has been added in the visuals tab. Click it to see two parts of the
 								C64 memory &ndash; one continuously updating zero page block, and a static view of the player
-								block with code and music data. Note that the latter will be cut short if the block is
-								too big (more than 8K) to maintain performance.</li>
+								block with code and music data. <del>Note that the latter will be cut short if the block is
+								too big (more than 8K) to maintain performance.</del></li>
 							<li>You can now click the dark blue memory chunk to jump to the new memo view.</li>
 						</ul>
 

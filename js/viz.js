@@ -147,6 +147,7 @@ Viz.prototype = {
 		$("#visuals-piano").on("click", ".piano-voice", this.onVoiceClick.bind(this));
 		$("#visuals-piano,#visuals-graph,#topic-settings .dropdown-buffer").on("change", this.onChangeBufferSize.bind(this));
 		$("#sticky-visuals").on("click", "button", this.onVisualsClick.bind(this));
+		$("#visuals-memory .block-info").on("click", "button", this.onPlayerBrowseClick.bind(this));
 	},
 
 	/**
@@ -346,6 +347,35 @@ Viz.prototype = {
 				$("#memory-lc").show();
 				// if (this.playerAddrEnd == 0) this.activateMemory(true);
 				break;
+		}
+	},
+
+	/**
+	 * When clicking a player block browser left/right button.
+	 * 
+	 * @param {*} event 
+	 */
+	onPlayerBrowseClick: function(event) {
+		var $this = $(event.target);
+		if ($this.hasClass("disabled")) return false;
+
+		this.blockPlayer = [];
+		$player = $("#visuals-memory .block-player");
+		$player.empty();
+		if ($this.hasClass("player-to-left")) {
+			this.playerAddrCurrent -= PAGESIZE_PLAYER;
+			if (this.playerAddrCurrent == this.playerAddrStart)
+				$this.addClass("disabled");
+			$("#visuals-memory .player-to-right").removeClass("disabled");
+			$player.append(this.showMemoryBlock(this.playerAddrCurrent, this.playerAddrCurrent + PAGESIZE_PLAYER - 1, this.blockPlayer));
+		} else {
+			this.playerAddrCurrent += PAGESIZE_PLAYER;
+			if (this.playerAddrCurrent + PAGESIZE_PLAYER  > this.playerAddrEnd) {
+				$this.addClass("disabled");
+				$player.append(this.showMemoryBlock(this.playerAddrCurrent, this.playerAddrEnd, this.blockPlayer));
+			} else
+				$player.append(this.showMemoryBlock(this.playerAddrCurrent, this.playerAddrCurrent + PAGESIZE_PLAYER - 1, this.blockPlayer));
+			$("#visuals-memory .player-to-left").removeClass("disabled");
 		}
 	},
 
@@ -949,8 +979,10 @@ Viz.prototype = {
 	 * @return {string}				HTML block.
 	 */
 	showMemoryBlock: function(addrStart, addrEnd, arrMemory) {
+		var isLC = $("#memory-lc-toggle").hasClass("button-on"), dispNone = ' style="display:none;"';
 		var row = 0, zebra = false, block = hexrow = "",
-			petscii_LC = '<span class="lc">', petscii_UC = '<span class="uc">';
+			petscii_LC = '<span class="lc"'+(isLC ? '' : dispNone)+'>',
+			petscii_UC = '<span class="uc"'+(isLC ? dispNone : '')+'>';
 
 		for (var addr = addrStart; addr <= addrEnd; addr++) {
 			row++;
@@ -973,13 +1005,11 @@ Viz.prototype = {
 			petscii_UC += '<span id="u'+addr+'"'+(byte > 0x80 ? negated : normal)+'>'+cByte.uc+'</span>';
 
 			if (addr == addrEnd) {
-					petscii_LC += '</span>';
-					petscii_UC += '</span>';
+				petscii_LC += '</span>';
+				petscii_UC += '</span>';
 				// Just pad the rest with nothingness
 				for (; row < 16; row++) {
 					hexrow += "&nbsp;&nbsp;&nbsp;";
-					petscii_LC += "&nbsp;";
-					petscii_UC += "&nbsp;";
 					addr++;
 				}
 			}
@@ -988,7 +1018,8 @@ Viz.prototype = {
 				// Build the row with C64 address, hexademical bytes and PETSCII characters
 				block += this.paddedAddress(addr - 15)+"&nbsp;"+hexrow+petscii_LC+'</span>'+petscii_UC+'</span><br />';
 				hexrow = "";
-				petscii_LC = '<span class="lc">', petscii_UC = '<span class="uc">';
+				petscii_LC = '<span class="lc"'+(isLC ? '' : dispNone)+'>',
+				petscii_UC = '<span class="uc"'+(isLC ? dispNone : '')+'>';
 				row = 0;
 			}
 		}
@@ -1059,7 +1090,7 @@ Viz.prototype = {
 				// Byte has changed; update array and <SPAN> addresses in HTML block
 				arrMemory[addr - addrStart] = byte;
 				cByte = this.convertByte(byte);
-				$("#h"+addr).empty().append(cByte.hex).removeClass("ch").addClass("ch");
+				$("#h"+addr).empty().append(cByte.hex).removeClass("ch").addClass("ch"); // Apply red color
 				$("#l"+addr).empty().append(cByte.lc).removeClass("ch").addClass("ch");
 				$("#u"+addr).empty().append(cByte.uc).removeClass("ch").addClass("ch");
 			}
@@ -1110,26 +1141,8 @@ Viz.prototype = {
 		if (!this.runningMemory || $("#tabs .selected").attr("data-topic") !== "visuals" ||
 			!$("#sticky-visuals .icon-memory").hasClass("button-on")) return;
 
-		// Patch zero page block with changed bytes only
 		this.patchMemoryBlock(0x0000, 0x00FF, this.blockZP);
-
 		this.patchMemoryBlock(this.playerAddrCurrent, this.playerAddrCurrent + PAGESIZE_PLAYER - 1, this.blockPlayer);
-
-return;////////////////////////////////////
-
-		// Update current player table page
-		if (this.playerAddrCurrent) {
-			var $player = $("#visuals-memory .block-player");
-			$player.empty();
-			if (this.playerAddrCurrent + PAGESIZE_PLAYER < this.playerAddrEnd) {
-				// Show current block page
-				$player.append(this.showMemoryBlock(this.playerAddrCurrent, this.playerAddrCurrent + PAGESIZE_PLAYER - 1));
-			} else {
-				// Show last block page
-				$player.append(this.showMemoryBlock(this.playerAddrCurrent, this.playerAddrEnd)+
-					'<div class="msg">&gt;&nbsp;&nbsp;END OF PLAYER BLOCK&nbsp;&nbsp;&lt;</div>');
-			}
-		}
 	},
 
 	/**
@@ -1148,6 +1161,8 @@ return;////////////////////////////////////
 	 * Start updating the views that use the SID.setCallbackBufferEnded() callback.
 	 */
 	startBufferEndedEffects: function() {
+		$("#visuals-memory .player-to-left").removeClass("disabled").addClass("disabled");
+		$("#visuals-memory .player-to-right").removeClass("disabled");
 		this.activatePiano(true);
 		this.activateMemory(true);
 	},

@@ -996,7 +996,8 @@ small.u2 { margin-left: 2px; }
 	#topic-remix .action button,
 	.dialog-transfer button,
 	.dialog-new button,
-	#sticky-right-buttons button {
+	#sticky-right-buttons button,
+	.block-info button {
 		transition: all .05s linear;
 		box-shadow: 2px 2px 4px var(--color-button-shadow);
 	}
@@ -1009,7 +1010,8 @@ small.u2 { margin-left: 2px; }
 	#topic-remix .action button:active,
 	.dialog-transfer button:active,
 	.dialog-new button:active,
-	#sticky-right-buttons button:active {
+	#sticky-right-buttons button:active,
+	.block-info button:active {
 		box-shadow: var(--shadow-button-selected);
 	}
 
@@ -1018,7 +1020,8 @@ small.u2 { margin-left: 2px; }
 	#userform button.disabled,
 	.edit button.disabled,
 	.dialog-new button.disabled,
-	#sticky-right-buttons button.disabled {
+	#sticky-right-buttons button.disabled,
+	.block-info button.disabled {
 		cursor: default;
 		background: var(--color-button-disabled);
 		border-color: var(--color-button-disabled);
@@ -3997,6 +4000,14 @@ input[type=range]::-ms-track {
 					width: 107px;
 				}
 
+					#visuals-memory .player-to-left {
+						margin-top: 6px;
+					}
+
+					#visuals-memory td.block-info button {
+						height: 24px;
+					}
+
 				#visuals-memory td.block-zp {
 					height: 204px;
 				}
@@ -4020,10 +4031,6 @@ input[type=range]::-ms-track {
 					#visuals-memory .bt.n {
 						background: var(--color-text-block-toggled);
 					}
-
-				#visuals-memory .uc {
-					display: none;
-				}
 
 				#visuals-memory .ch {
 					color: var(--color-text-block-changed);
@@ -4654,7 +4661,8 @@ input[type=range]::-ms-track {
 
 	/* The "<" and ">" buttons */
 	.dialog-transfer button,
-	.dialog-new button {
+	.dialog-new button,
+	.block-info button {
 		padding: 0;
 		height: 24px;
 		fill: currentColor;
