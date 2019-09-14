@@ -1376,7 +1376,8 @@ function DisableIncompatibleRows() {
 		if (!$tr.find(".spacer").length && !$tr.find(".divider").length && !isSIDFile) {
 			$tr.removeClass("disabled");
 			var $span = $tr.find(".name");
-			if ($span.is("[data-incompat]") && $span.attr("data-incompat").indexOf(SID.emulator) !== -1)
+			if ($span.is("[data-incompat]") && ($span.attr("data-incompat").indexOf(SID.emulator) !== -1 ||
+			($span.attr("data-incompat").indexOf("mobile") !== -1 && browser.isMobile)))
 				$tr.addClass("disabled");
 		} else if (isSIDFile && $tr.find(".name").attr("data-name").indexOf("BASIC.sid") !== -1) {
 			// The emulators can't do tunes made in BASIC
@@ -1387,7 +1388,7 @@ function DisableIncompatibleRows() {
 			($tr.find(".name").attr("data-name").indexOf("Acid_Flashback.sid") !== -1 || 
 			 $tr.find(".name").attr("data-name").indexOf("Comaland_tune_3.sid") !== -1 ||
 			 $tr.find(".name").attr("data-name").indexOf("Fantasmolytic_tune_2.sid") !== -1)) {
-			// @todo Replace this with a proper imcompatibility system later.
+			// @todo Replace this with a proper incompatibility system later.
 			SID.emulator == "websid"
 				? $tr.addClass("disabled")
 				: $tr.removeClass("disabled");

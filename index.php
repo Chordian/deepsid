@@ -1102,6 +1102,13 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>September 14, 2019</h3>
+						<ul>
+							<li>Mobile devices can no longer enter the folder with exotic SID files. Due to performance
+								reasons, mobile devices use an older version of the WebSid emulator that is not
+								compatible with the SID format used in this folder. </li>
+						</ul>
+
 						<h3>September 13, 2019</h3>
 						<ul>
 							<li>Improved the performance of the updating of the memory view tables.</li>

@@ -837,8 +837,9 @@ Browser.prototype = {
 			// Rebuild the big CSDb music competitions folder
 			var folders = "";
 			$.each(this.compolist, function(i, folder) {
+				var isMobileDenied = folder.incompatible.indexOf("mobile") !== -1 && this.isMobile;
 				folders +=
-					'<tr'+(folder.incompatible.indexOf(SID.emulator) !== -1 ? ' class="disabled"' : '')+'>'+
+					'<tr'+(folder.incompatible.indexOf(SID.emulator) !== -1 || isMobileDenied ? ' class="disabled"' : '')+'>'+
 						'<td class="folder compo"><div class="block-wrap"><div class="block slimfont">'+
 							(folder.filescount > 0 ? '<div class="filescount">'+folder.filescount+'</div>' : '')+
 						'<span class="name entry compo'+(this.isSearching ? ' search' : '')+'" data-name="'+(this.isSearching ? 'CSDb Music Competitions%2F' : '')+encodeURIComponent(folder.foldername)+'" data-incompat="'+folder.incompatible+'">'+
@@ -1027,6 +1028,8 @@ Browser.prototype = {
 
 					$.each(data.folders, function(i, folder) {
 
+						var isMobileDenied = folder.incompatible.indexOf("mobile") !== -1 && this.isMobile;
+
 						if (folder.foldertype == "COMPO") {
 
 							// COMPETITION FOLDERS
@@ -1046,7 +1049,7 @@ Browser.prototype = {
 							});
 
 							var folderEntry =
-								'<tr'+(folder.incompatible.indexOf(SID.emulator) !== -1 ? ' class="disabled"' : '')+'>'+
+								'<tr'+(folder.incompatible.indexOf(SID.emulator) !== -1 || isMobileDenied ? ' class="disabled"' : '')+'>'+
 									'<td class="folder compo"><div class="block-wrap"><div class="block slimfont">'+
 										(folder.filescount > 0 ? '<div class="filescount">'+folder.filescount+'</div>' : '')+
 									'<span class="name entry compo'+(this.isSearching ? ' search' : '')+'" data-name="'+(this.isSearching ? 'CSDb Music Competitions%2F' : '')+encodeURIComponent(folder.foldername)+'" data-incompat="'+folder.incompatible+'">'+
@@ -1073,7 +1076,7 @@ Browser.prototype = {
 							var adaptedName = folder.foldername.replace(/^(\_|\!|\$)/, '');
 							adaptedName = this.adaptBrowserName(adaptedName);
 							var folderEntry =
-								'<tr'+(folder.incompatible.indexOf(SID.emulator) !== -1 ? ' class="disabled"' : '')+'>'+
+								'<tr'+(folder.incompatible.indexOf(SID.emulator) !== -1 || isMobileDenied ? ' class="disabled"' : '')+'>'+
 									'<td class="folder '+
 										(isPersonalSymlist || (isPublicSymlist && myPublic)
 											? 'playlist'
