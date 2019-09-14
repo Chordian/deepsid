@@ -4,6 +4,8 @@
 	require_once("php/class.account.php"); // Includes setup
 	$user_id = $account->CheckLogin() ? $account->UserID() : 0;
 
+	$websid = 'WebSid emulator';
+
 	function isMobile() {
 		return isset($_GET['mobile'])
 			? $_GET['mobile']
@@ -42,9 +44,9 @@
 			<?php if (!isMobile()): ?>
 				<script type="text/javascript" src="js/handlers/backend_tinyrsid.js"></script>
 			<?php else : ?>
-				<?php if (!isIOS()) : ?>
+				<?php if (!isIOS()) : $websid = 'WebSid (Legacy)'; ?>
 					<script type="text/javascript" src="js/handlers/backend_tinyrsid_legacy.js"></script>
-				<?php else : ?>
+				<?php else : $websid = 'WebSid (iOS)'; ?>
 					<script type="text/javascript" src="js/handlers/backend_tinyrsid_ios.js"></script>
 				<?php endif ?>
 			<?php endif ?>
@@ -192,7 +194,7 @@
 			<div id="top">
 				<div id="logo" class="unselectable">D e e p S I D</div>
 				<select id="dropdown-emulator" name="select-emulator" style="visibility:hidden;">
-					<option value="websid">WebSid emulator</option>
+					<option value="websid"><?php echo $websid; ?></option>
 					<option value="jssid">Hermit's emulator</option>
 					<option value="soasc_auto">SOASC Automatic</option>
 					<option value="soasc_r2">SOASC 6581 R2</option>
@@ -1108,6 +1110,10 @@
 								reasons, mobile devices use an older version of the WebSid emulator that is not
 								compatible with the SID format used in this folder.</li>
 							<li>Fixed a memo view bug where the beginning of C64 memory was shown for MUS files in CGSC.</li>
+							<li>The WebSid emulator now changes its drop-down box text depending on the device. Desktop computers
+								will continue to use <code>WebSid emulator</code> for the latest cycle-by-cycle version. Most
+								mobile devices will use <code>WebSid (Legacy)</code> which is older but faster. And finally, iOS
+								will use <code>WebSid (iOS)</code> to ensure continuous play.</li>
 						</ul>
 
 						<h3>September 13, 2019</h3>
