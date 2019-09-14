@@ -1106,7 +1106,8 @@
 						<ul>
 							<li>Mobile devices can no longer enter the folder with exotic SID files. Due to performance
 								reasons, mobile devices use an older version of the WebSid emulator that is not
-								compatible with the SID format used in this folder. </li>
+								compatible with the SID format used in this folder.</li>
+							<li>Fixed a memo view bug where the beginning of C64 memory was shown for MUS files in CGSC.</li>
 						</ul>
 
 						<h3>September 13, 2019</h3>

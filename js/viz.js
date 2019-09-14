@@ -1112,6 +1112,9 @@ Viz.prototype = {
 			$zp.empty();
 			$player.empty();
 
+			this.blockZP = [], this.blockPlayer = [];
+			$zp.append(this.showMemoryBlock(0x0000, 0x00FF, this.blockZP));
+
 			this.playerAddrStart = this.playerAddrCurrent = Number(browser.playlist[browser.songPos].address);
 			this.playerAddrEnd = this.playerAddrStart + Number(browser.playlist[browser.songPos].size) - 3;
 
@@ -1119,14 +1122,12 @@ Viz.prototype = {
 				// MUS files in CGSC doesn't have an interesting player block to look at
 				$player.append('<div class="msg">N/A</div>');
 				this.playerAddrCurrent = 0;
+				$("#visuals-memory .player-to-left,#visuals-memory .player-to-right")
+					.removeClass("disabled").addClass("disabled");
 			} else {
 				$("#player-addr").empty().append("$"+this.paddedAddress(this.playerAddrCurrent)+"-$"+this.paddedAddress(this.playerAddrEnd));
+				$player.append(this.showMemoryBlock(this.playerAddrCurrent, this.playerAddrCurrent + PAGESIZE_PLAYER - 1, this.blockPlayer));
 			}
-
-			// Show ZP block and first block of player
-			this.blockZP = [], this.blockPlayer = [];
-			$zp.append(this.showMemoryBlock(0x0000, 0x00FF, this.blockZP));
-			$player.append(this.showMemoryBlock(this.playerAddrCurrent, this.playerAddrCurrent + PAGESIZE_PLAYER - 1, this.blockPlayer));
 		}
 		this.runningMemory = activate;
 	},
@@ -1142,7 +1143,8 @@ Viz.prototype = {
 			!$("#sticky-visuals .icon-memory").hasClass("button-on")) return;
 
 		this.patchMemoryBlock(0x0000, 0x00FF, this.blockZP);
-		this.patchMemoryBlock(this.playerAddrCurrent, this.playerAddrCurrent + PAGESIZE_PLAYER - 1, this.blockPlayer);
+		if (this.playerAddrCurrent)
+			this.patchMemoryBlock(this.playerAddrCurrent, this.playerAddrCurrent + PAGESIZE_PLAYER - 1, this.blockPlayer);
 	},
 
 	/**
