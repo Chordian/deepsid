@@ -3983,6 +3983,35 @@ input[type=range]::-ms-track {
 				transition: all .2s linear;
 			}
 
+			#visuals-memory .sid-info {
+				float: left;
+				height: 133px;
+				width: 405px;
+				padding: 8px 16px;
+			}
+
+				#visuals-memory .label,
+				#visuals-memory .m {
+					font: normal 13px "Montserrat", sans-serif;
+				}
+
+				#visuals-memory .label {
+					display: inline-block;
+					width: 130px;
+				}
+
+				#visuals-memory .si {
+					font: normal 10px "Commodore 64", sans-serif;
+				}
+
+			#visuals-memory .sid-info-left {
+				margin: 0 10px 10px 0;
+			}
+
+			#visuals-memory .sid-info-right {
+				margin: 0 0 10px 0;
+			}
+
 			/* For a monitor-style output with a row of hexadecimal bytes and their PETSCII characters */
 			#visuals-memory .monitor {
 				font: normal 10px/12px "Commodore 64", sans-serif;

@@ -45,7 +45,8 @@
 				<script type="text/javascript" src="js/handlers/backend_tinyrsid.js"></script>
 			<?php else : ?>
 				<?php if (!isIOS()) : $websid = 'WebSid (Legacy)'; ?>
-					<script type="text/javascript" src="js/handlers/backend_tinyrsid_legacy.js"></script>
+					<!--<script type="text/javascript" src="js/handlers/backend_tinyrsid_legacy.js"></script>-->
+					<script type="text/javascript" src="js/handlers/backend_tinyrsid_ios.js"></script>
 				<?php else : $websid = 'WebSid (iOS)'; ?>
 					<script type="text/javascript" src="js/handlers/backend_tinyrsid_ios.js"></script>
 				<?php endif ?>
@@ -536,6 +537,20 @@
 						</div>
 
 						<div id="visuals-memory" class="visuals" style="display:none;">
+							<div class="edit sid-info sid-info-left">
+								<div class="label">Player size</div><span class="si si-size"></span><br />
+								<div class="label">Load address</div><span class="si si-load"></span><br />
+								<div class="label">Init address</div><span class="si si-init"></span><br />
+								<div class="label">Play address</div><span class="si si-play"></span><br />
+								<div class="label">Default subtune</div><span class="si si-subtune"></span>
+							</div>
+							<div class="edit sid-info sid-info-right">
+								<div class="label">SID file type</div><span class="si si-type"></span><br />
+								<div class="label">Encoding</div><span class="si si-enc"></span><br />
+								<div class="label">Pace (Speed)</div><span class="si si-pace"></span><br />
+								<div class="label">SID model</div><span class="si si-model"></span><br />
+								<div class="label">SID addresses</div><span class="si si-sid"></span>
+							</div>
 							<div class="monitor">
 								<table id="block-memory">
 									<tr>
@@ -1103,6 +1118,12 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>September 15, 2019</h3>
+						<ul>
+							<li>Android users now use the older iOS version of the WebSid emulator for performance testing.</li>
+							<li>Added general SID info in the memo view which may be useful to programmers.</li>
+						</ul>
 
 						<h3>September 14, 2019</h3>
 						<ul>

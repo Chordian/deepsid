@@ -4,6 +4,7 @@
  */
 
 const PAGESIZE_PLAYER = 512;
+const NOT_APPLICABLE = '<span class="m">N/A</span>';
 
 function Viz(emulator) {
 
@@ -338,14 +339,12 @@ Viz.prototype = {
 		switch (this.visuals) {
 			case "piano":
 				$("#sticky-visuals .waveform-colors").show();
-				// this.activatePiano(true);
 				break;
 			case "graph":
 				$("#sticky-visuals .waveform-colors").show();
 				break;
 			case "memory":
 				$("#memory-lc").show();
-				// if (this.playerAddrEnd == 0) this.activateMemory(true);
 				break;
 		}
 	},
@@ -1155,8 +1154,50 @@ Viz.prototype = {
 	 * @return {string}				Address 0000 to FFFF.
 	 */
 	paddedAddress: function(address) {
-		address = address.toString(16).toUpperCase();
+		address = Number(address).toString(16).toUpperCase();
 		return "0000".substr(address.length)+address;
+	},
+
+	/**
+	 * Show details about the SID file just above the ZP and player table blocks.
+	 */
+	showSIDInfo: function() {
+		if (typeof browser.songPos != "undefined") {
+
+			var size = browser.playlist[browser.songPos].size - 3,
+				load = browser.playlist[browser.songPos].address,
+				init = browser.playlist[browser.songPos].init,
+				play = browser.playlist[browser.songPos].play;
+				sub  = browser.playlist[browser.songPos].startsubtune + 1;
+				max  = browser.playlist[browser.songPos].subtunes;
+				type = browser.playlist[browser.songPos].type,
+				vers = browser.playlist[browser.songPos].version,
+				enc  = browser.playlist[browser.songPos].clockspeed,
+				chip = browser.playlist[browser.songPos].sidmodel;
+
+			$("#visuals-memory .si-size").empty().append("$"+this.paddedAddress(size)+" ("+size+" bytes)");
+			$("#visuals-memory .si-load").empty().append("$"+this.paddedAddress(load)+" ("+load+")");
+			$("#visuals-memory .si-init").empty().append("$"+this.paddedAddress(init)+" ("+init+")");
+			$("#visuals-memory .si-play").empty().append(Number(play) ? "$"+this.paddedAddress(play)+" ("+play+")" : NOT_APPLICABLE);
+			$("#visuals-memory .si-subtune").empty().append(sub+'<span style="font-family:Montserrat,sans-serif;"> <b>/</b> </span>'+max);
+			$("#visuals-memory .si-type").empty().append(type+" "+(vers.substr(0, 1) != "v" ? "v" : "")+vers);
+			$("#visuals-memory .si-enc").empty().append(enc);
+			$("#visuals-memory .si-model").empty().append(chip);
+
+			var timer = NOT_APPLICABLE;
+			if (SID.emulatorFlags.returnCIA) {
+				var pace = SID.getPace();
+				timer = pace ? (pace == 1 ? 'CIA <span class="m">(on a 16-bit interval timer)</span>' : pace+'x <span class="m">(called '+pace+' times per VBI)</span>') : 'VBI <span class="m">(Vertical Blanking Interrupt)</span>';
+			}
+			$("#visuals-memory .si-pace").empty().append(timer);
+
+			var addr = '$D400';
+			for (var chip = 2; chip <= browser.chips; chip++) {
+				var sid = SID.getSIDAddress(chip);
+				addr += sid ? ',$'+sid.toString(16).toUpperCase() : ','+NOT_APPLICABLE;
+			}
+			$("#visuals-memory .si-sid").empty().append(addr);
+		}
 	},
 
 	/**
@@ -1166,6 +1207,7 @@ Viz.prototype = {
 		$("#visuals-memory .player-to-left").removeClass("disabled").addClass("disabled");
 		$("#visuals-memory .player-to-right").removeClass("disabled");
 		this.activatePiano(true);
+		this.showSIDInfo();
 		this.activateMemory(true);
 	},
 

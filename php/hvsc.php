@@ -733,7 +733,7 @@ try {
 				'tags' =>			$list_of_tags,
 				'lengths' => 		$lengths,
 				'type' => 			$type,
-				//'version' => 		$version,
+				'version' => 		$version,
 				//'playertype' => 	$playertype,
 				//'playercompat' =>	$playercompat,
 				'clockspeed' => 	$clockspeed,
