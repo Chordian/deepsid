@@ -1162,7 +1162,7 @@ Viz.prototype = {
 	 * Show details about the SID file just above the ZP and player table blocks.
 	 */
 	showSIDInfo: function() {
-		if (typeof browser.songPos != "undefined") {
+		if (typeof browser.songPos != "undefined" && browser.playlist[browser.songPos].fullname.substr(-4) != ".mus") {
 
 			var size = browser.playlist[browser.songPos].size - 3,
 				load = browser.playlist[browser.songPos].address,
@@ -1197,6 +1197,8 @@ Viz.prototype = {
 				addr += sid ? ',$'+sid.toString(16).toUpperCase() : ','+NOT_APPLICABLE;
 			}
 			$("#visuals-memory .si-sid").empty().append(addr);
+		} else {
+			$("#visuals-memory .si").empty().append(NOT_APPLICABLE);
 		}
 	},
 

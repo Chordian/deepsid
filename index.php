@@ -13,7 +13,7 @@
 	}
 
 	function isIOS() {
-		return preg_match("/(iphone||ipad|ipod)/i", $_SERVER["HTTP_USER_AGENT"]);
+		return preg_match("/(iphone|ipad|ipod)/i", $_SERVER["HTTP_USER_AGENT"]);
 	}
 ?>
 <!DOCTYPE html>
@@ -45,8 +45,7 @@
 				<script type="text/javascript" src="js/handlers/backend_tinyrsid.js"></script>
 			<?php else : ?>
 				<?php if (!isIOS()) : $websid = 'WebSid (Legacy)'; ?>
-					<!--<script type="text/javascript" src="js/handlers/backend_tinyrsid_legacy.js"></script>-->
-					<script type="text/javascript" src="js/handlers/backend_tinyrsid_ios.js"></script>
+					<script type="text/javascript" src="js/handlers/backend_tinyrsid_legacy.js"></script>
 				<?php else : $websid = 'WebSid (iOS)'; ?>
 					<script type="text/javascript" src="js/handlers/backend_tinyrsid_ios.js"></script>
 				<?php endif ?>
@@ -1118,6 +1117,11 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>September 16, 2019</h3>
+						<ul>
+							<li>Fixed SID info in the memo view showing nonsense for MUS files in CGSC.</li>
+						</ul>
 
 						<h3>September 15, 2019</h3>
 						<ul>
