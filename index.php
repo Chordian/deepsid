@@ -1121,6 +1121,7 @@
 						<h3>September 16, 2019</h3>
 						<ul>
 							<li>Fixed SID info in the memo view showing nonsense for MUS files in CGSC.</li>
+							<li>Fixed non-emulator SID handlers showing <code>FALSE</code> words all over the memo view blocks.</li>
 						</ul>
 
 						<h3>September 15, 2019</h3>

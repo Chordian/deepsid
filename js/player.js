@@ -1006,7 +1006,7 @@ SIDPlayer.prototype = {
 			case "soasc":
 			case "download":
 				// Not possible
-				return false;
+				return 0;
 		}
 	},
 }
