@@ -1118,6 +1118,11 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>September 18, 2019</h3>
+						<ul>
+							<li>Exotic SID folders for specific composers now have the same profiles as in HVSC.</li>
+						</ul>
+
 						<h3>September 16, 2019</h3>
 						<ul>
 							<li>Fixed SID info in the memo view showing nonsense for MUS files in CGSC.</li>
@@ -1126,7 +1131,7 @@
 
 						<h3>September 15, 2019</h3>
 						<ul>
-							<li>Android users now use the older iOS version of the WebSid emulator for performance testing.</li>
+							<li><del>Android users now use the older iOS version of the WebSid emulator for performance testing.</del></li>
 							<li>Added general SID info in the memo view which may be useful to programmers.</li>
 						</ul>
 

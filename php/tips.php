@@ -47,7 +47,7 @@ $tips = array(
 	"<p>The drop-down box decides what you want to search for. Select e.g. <i>Player</i> ".
 	'and type "goat" to see all tunes that were made in GoatTracker.</p>'.
 	'With <i>rating</i> you can search those you rated 3 stars and up with "3-", '.
-	"and with <i>HVSC</i> you can type a version number to see what's new in it.",
+	"and with <i>version</i> you can type a number to see what's new in e.g. HVSC.",
 
 	"<p>If you are using the default <i>WebSid emulator</i>, you can turn voices on or off ".
 	"with <b>hotkeys</b> <code>1</code>, <code>2</code>, <code>3</code> and <code>4</code> (digi) ".

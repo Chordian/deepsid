@@ -173,6 +173,49 @@ if (isset($fullname)) {
 
 		// OTHER FOLDERS
 
+		if (substr($fullname, 0, 28) == '_Exotic SID Tunes Collection' && substr_count($fullname, '/') > 1) {
+
+			// INSIDE EXOTIC SUB FOLDER   (NOTE: Also used in groups.php!)
+
+			$folders = explode('/', $fullname);
+			$final_folder = end($folders);
+
+			$letter_folder = array(
+				'Bayliss_Richard'		=> 'B',
+				'Cadaver'				=> 'C',
+				'Crowley_Owen'			=> 'C',
+				'Data'					=> 'D',
+				'Gallefoss_Glenn'		=> 'B/Blues_Muz',
+				'Gantar_Peter'			=> 'G',
+				'GI-Joe'				=> 'G',
+				'Hannula_Antti'			=> 'H',
+				'Hermit'				=> 'H',
+				'Jammer'				=> 'J',
+				'Jellica'				=> 'J',
+				'Kozaki_Soft'			=> 'K',
+				'MCH'					=> 'M',
+				'MovieMovies1'			=> 'M',
+				'Nata'					=> 'N',
+				'Nobody'				=> 'N',
+				'Noplanet'				=> 'N',
+				'PCH'					=> 'P',
+				'Phobos'				=> 'P',
+				'Randall'				=> 'R',
+				'Rayden'				=> 'R',
+				'Rosenfeldt_Harald'		=> 'R',
+				'Scarzix'				=> 'S',
+				'Shogoon'				=> 'S',
+				'Sidder'				=> 'S',
+				'Surgeon'				=> 'S',
+				'Televicious'			=> 'T',
+				'TSM'					=> 'T',
+				'Uctumi'				=> 'U',
+			)[$final_folder];
+			
+			// Use the original HVSC profile as a proxy
+			$fullname = '_High Voltage SID Collection/MUSICIANS/'.$letter_folder.'/'.$final_folder;
+		}
+
 		try {
 			if ($_SERVER['HTTP_HOST'] == LOCALHOST)
 				$db = new PDO(PDO_LOCALHOST, USER_LOCALHOST, PWD_LOCALHOST);
