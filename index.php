@@ -1118,6 +1118,12 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>September 20, 2019</h3>
+						<ul>
+							<li>Sub folders in <a href="//deepsid.chordian.net?file=%2FCSDb%20Music%20Competitions">CSDb Music Competitions</a>
+								now show both the competition name and its type.</li>
+						</ul>
+
 						<h3>September 18, 2019</h3>
 						<ul>
 							<li>Exotic SID folders for specific composers now have the same profiles as in HVSC.</li>

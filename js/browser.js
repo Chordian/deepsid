@@ -980,8 +980,7 @@ Browser.prototype = {
 						.replace(/^\/_/, '/')
 						.replace("/Compute's Gazette SID Collection", '<span class="dim">CGSC</span>')
 						.replace("/High Voltage SID Collection", '<span class="dim">HVSC</span>')
-						.replace("/Exotic SID Tunes Collection", '<span class="dim">ESTC</span>')
-						.replace("/CSDb Music Competitions/", '');
+						.replace("/Exotic SID Tunes Collection", '<span class="dim">ESTC</span>');
 					if (this.isSearching) {
 						var searchType = $("#dropdown-search").val(),
 							searchQuery = encodeURIComponent($("#search-box").val()); // Need it to be untampered here
@@ -995,6 +994,10 @@ Browser.prototype = {
 							(this.path.substr(0, 2) === "/!"
 								? '<span class="maintainer">Personal playlist</span>'
 								: '<span class="maintainer">Playlist by '+data.owner+'</span>');
+					} else if (data.compo) {
+						$("#path").css("top", "0.5px");
+						pathText = '<span class="playlist">'+this.path.replace("/CSDb Music Competitions/", '')+'</span><br />'+
+							'<span class="maintainer">'+data.owner+'</span>'; // Competition type
 					}
 					$("#path").empty().append(pathText);
 

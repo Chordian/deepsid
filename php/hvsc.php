@@ -343,8 +343,8 @@ try {
 			$select_compo->setFetchMode(PDO::FETCH_OBJ);
 			$row = $select_compo->fetch();
 
-			$event_id = $row->event_id;
-			$name =		$row->name;
+			$event_id		= $row->event_id;
+			$name =	$owner	= $row->name;			// Owner is reused for competition type here
 
 			$place = array();
 
