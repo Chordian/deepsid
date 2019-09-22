@@ -18,7 +18,7 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH
 
 $decent_box_shown = false;
 
-$important = 'WebSid support for MUS files (CGSC) is currently broken.';
+$important = 'SOASC is up again. An address was dropped and replaced with a redirection, and my scripts are now updated too.';
 
 $available_lists = ['maxfiles', 'longest', 'mostgames', 'countries', 'startaddr', 'maxtime'];
 $dropdown_options =
@@ -157,7 +157,7 @@ try {
 
 $html =
 	'<div style="height:149px;"></div>'.
-	//'<div class="root-wide bad-news">'.$important.'</div>'.
+	'<div class="root-wide good-news">'.$important.'</div>'.
 	// Recommendations
 	'<table class="root rec"><tr>'.
 		'<td style="max-width:10px;">'.
