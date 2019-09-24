@@ -18,7 +18,7 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH
 
 $decent_box_shown = false;
 
-$important = 'SOASC is up again. An address was dropped and replaced with a redirection, and my scripts are now updated too.';
+$important = 'The database connections sometimes act up at the moment. If it persists I will consult the web hotel provider.';
 
 $available_lists = ['maxfiles', 'longest', 'mostgames', 'countries', 'startaddr', 'maxtime'];
 $dropdown_options =
@@ -157,7 +157,7 @@ try {
 
 $html =
 	'<div style="height:149px;"></div>'.
-	'<div class="root-wide good-news">'.$important.'</div>'.
+	'<div class="root-wide bad-news">'.$important.'</div>'.
 	// Recommendations
 	'<table class="root rec"><tr>'.
 		'<td style="max-width:10px;">'.
