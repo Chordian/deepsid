@@ -2,7 +2,7 @@
 /**
  * DeepSID
  *
- * Build URL's for SOASC, then request through http://www.se2a1.net. The
+ * Build URL's for SOASC, then request through http://se2a1.iiiii.info. The
  * HVSC version, which is part of the URL's, is retrieved from the database.
  * For CGSC, version 133 is just used for the time being (no other version
  * available at the mirrors anyway).
@@ -10,12 +10,12 @@
  * If the file is located in a custom folder, the script will try to find the
  * HVSC counterpart and play that instead, if it exists.
  * 
- * Request goes to http://www.se2a1.net/dl.php?d=/soasc/.../&url=1 which
+ * Request goes to http://se2a1.iiiii.info/dl.php?d=/soasc/.../&url=1 which
  * then returns the full URL to a SOASC mirror site.
  * 
  * Mirrors for testing:
  * 
- * http://www.se2a1.net:40000/files/index.php
+ * http://se2a1.iiiii.info:40000/files/index.php
  * http://anorien.csc.warwick.ac.uk/mirrors/oakvalley/soasc/
  * http://ftp.acc.umu.se/mirror/media/Oakvalley/soasc/
  * 
@@ -49,7 +49,7 @@ function RequestURL($path) {
 	curl_setopt($ch, CURLOPT_HEADER, false);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 	curl_setopt($ch, CURLOPT_USERAGENT, 'DeepSID');
-	curl_setopt($ch, CURLOPT_URL, 'http://www.se2a1.net/dl.php?d=/soasc/'.$path.'&url=1');
+	curl_setopt($ch, CURLOPT_URL, 'http://se2a1.iiiii.info/dl.php?d=/soasc/'.$path.'&url=1');
 	// curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
 	curl_setopt($ch, CURLOPT_TIMEOUT, 5);
 	curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);

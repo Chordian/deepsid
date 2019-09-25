@@ -6,7 +6,7 @@
  * called periodically by either a cron job or an online cron service. Calling
  * it about every 3-5 minutes should suffice.
  * 
- * First, a request goes to http://www.se2a1.net/dl.php?d=/soasc/.../&url=1
+ * First, a request goes to http://se2a1.iiiii.info/dl.php?d=/soasc/.../&url=1
  * which then returns the full URL to a SOASC mirror site. If successful, the
  * script then tries to access the mirror URL returned from it. This is then
  * repeated for an array of test files for each SID model, just to be sure.
@@ -26,7 +26,7 @@
  * 
  * Mirrors for testing:
  * 
- * http://www.se2a1.net:40000/files/index.php
+ * http://se2a1.iiiii.info:40000/files/index.php
  * http://anorien.csc.warwick.ac.uk/mirrors/oakvalley/soasc/
  * http://ftp.acc.umu.se/mirror/media/Oakvalley/soasc/
  */
@@ -67,7 +67,7 @@ $test_files = array( // These files are suitable as it's a very short sfx (less 
 // cron job services assume the script itself is in error and will terminate after a while.
 
 foreach($test_files as $file) {
-	$mirror = RequestURL('http://www.se2a1.net/dl.php?d=/soasc/'.$file.'&url=1&survey=1');
+	$mirror = RequestURL('http://se2a1.iiiii.info/dl.php?d=/soasc/'.$file.'&url=1&survey=1');
 	// file_put_contents('../soasc_mirror.txt', $mirror);
 	if (empty($mirror)) {
 		file_put_contents('../soasc.txt', $time.',2'); // The DL script timed out
