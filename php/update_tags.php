@@ -10,8 +10,34 @@
 
 require_once("class.account.php"); // Includes setup
 
-// SET THE TAG PARSING MODE HERE
-define('MODE', 'Game');
+define('MODE_GAME', 'Game');
+define('MODE_COOP', 'Coop');
+
+define('MODE', MODE_COOP); // <---- SET THE TAG PARSING MODE HERE!
+
+function GetTagID($name) {
+
+	global $db;
+
+	$tag = $db->query('SELECT id FROM tags_info WHERE name LIKE "'.$name.'" LIMIT 1');
+	$tag ->setFetchMode(PDO::FETCH_OBJ);
+	return $tag->fetch()->id;
+}
+
+function AddTag($tagid) {
+
+	global $db, $row;
+
+	// Does the row already have this tag?
+	$tag = $db->query('SELECT 1 FROM tags_lookup WHERE files_id = '.$row->id.' AND tags_id = '.$tagid.' LIMIT 1');
+	if ($tag->rowCount()) {
+		echo '<tr><td>Tag already exists for</td><td>'.$row->id.'</td><td>'.$row->fullname.'</td></tr>';
+	} else {
+		// No; add it now
+		$db->query('INSERT INTO tags_lookup (files_id, tags_id) VALUES('.$row->id.', '.$tagid.')');
+		echo '<tr><td>Tag added to</td><td>'.$row->id.'</td><td>'.$row->fullname.'</td></tr>';
+	}
+}
 
 try {
 	if ($_SERVER['HTTP_HOST'] == LOCALHOST)
@@ -25,40 +51,33 @@ try {
 	$select = $db->query('SELECT * FROM hvsc_files WHERE fullname LIKE "_High Voltage SID Collection/%" ORDER BY id');
 	$select->setFetchMode(PDO::FETCH_OBJ);
 
-	// Get the ID of the relevant tag
-	switch (MODE) {
-		case 'Game':
-			$tag = $db->query('SELECT id FROM tags_info WHERE name LIKE "Game" LIMIT 1');
-			$tag ->setFetchMode(PDO::FETCH_OBJ);
-			$tagid_game = $tag->fetch()->id;
-			break;
-	}
+	// Get the ID of the relevant tag name
+	$tagid = GetTagID(MODE);
 
-	echo 'Tag: "'.MODE.'" (ID: '.$tagid_game.')<br /><br />
-		<style>body, table { font: normal 15px arial, sans-serif; } td { padding-right: 20px; }</style>
+	echo 'Tag: "'.MODE.'" (ID: '.$tagid.')<br /><br />
+		<style>body,table { font: normal 15px arial, sans-serif; } td { padding-right: 20px; }</style>
 		<table style="text-align:left;"><tr><th>Action</th><th>ID</th><th>Fullname</th></tr>';
 
 	//$test_max = 1000;
 
-	// NOTE: Temporarily increase 'max_execution_time' to 800 in PHP.INI when done in LOCALHOST.
-	// Don't worry about doing it online; it's crazy fast there (less than half a minute).
-	foreach($select as $row) {
+	// NOTE: LOCALHOST can be slow - use the '$test_max' variable for testing.
+	foreach ($select as $row) {
 		switch (MODE) {
 			case 'Game':
-				// Does the file need to have this tag?
-				if (!empty($row->application)) {
-					// But wait, does it already have this tag?
-					$tag = $db->query('SELECT 1 FROM tags_lookup WHERE files_id = '.$row->id.' AND tags_id = '.$tagid_game.' LIMIT 1');
-					if ($tag->rowCount()) {
-						echo '<tr><td>Tag already exists for</td><td>'.$row->id.'</td><td>'.$row->fullname.'</td></tr>';
-					} else {
-						$db->query('INSERT INTO tags_lookup (files_id, tags_id) VALUES('.$row->id.', '.$tagid_game.')');
-						echo '<tr><td>Tag added to</td><td>'.$row->id.'</td><td>'.$row->fullname.'</td></tr>';
-					}
-				}
+				// Condition: The 'Application' field is used (indicating GB64 activity)
+				if (!empty($row->application))
+					AddTag($tagid);
+				break;
+			case 'Coop':
+				// Condition: The 'Author' field must be like e.g. "Stan & Laurel"
+				if (strpos($row->author, ' & '))
+					AddTag($tagid);
 				break;
 		}
-		//$test_max--; if (!$test_max) die("</table><br />Test stop.");
+		if (isset($test_max)) {
+			$test_max--;
+			if (!$test_max) die("</table><br />Test stop.");
+		}
 	}
 
 	echo "</table><br />Script 'update_tags.php' has completed.";
