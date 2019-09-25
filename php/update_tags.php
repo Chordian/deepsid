@@ -10,10 +10,11 @@
 
 require_once("class.account.php"); // Includes setup
 
-define('MODE_GAME', 'Game');
-define('MODE_COOP', 'Coop');
+define('MODE_GAME',	'Game');
+define('MODE_COOP',	'Coop');
+define('MODE_UNF',	'Unfinished');
 
-define('MODE', MODE_COOP); // <---- SET THE TAG PARSING MODE HERE!
+define('MODE', MODE_UNF); // <---- SET THE TAG PARSING MODE HERE!
 
 function GetTagID($name) {
 
@@ -60,17 +61,22 @@ try {
 
 	//$test_max = 1000;
 
-	// NOTE: LOCALHOST can be slow - use the '$test_max' variable for testing.
+	// NOTE: LOCALHOST can be slow - you can temporarily active the '$test_max' variable for testing.
 	foreach ($select as $row) {
 		switch (MODE) {
-			case 'Game':
+			case MODE_GAME:
 				// Condition: The 'Application' field is used (indicating GB64 activity)
 				if (!empty($row->application))
 					AddTag($tagid);
 				break;
-			case 'Coop':
+			case MODE_COOP:
 				// Condition: The 'Author' field must be like e.g. "Stan & Laurel"
 				if (strpos($row->author, ' & '))
+					AddTag($tagid);
+				break;
+			case MODE_UNF:
+				// Condition: The 'Fullname' field must have "/Worktunes" in it
+				if (strpos($row->fullname, '/Worktunes'))
 					AddTag($tagid);
 				break;
 		}
