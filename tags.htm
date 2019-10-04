@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+
+<html lang="en-US">
+
+	<style>
+		li {
+			padding-top: 5px;
+			padding-down: 5px;
+		}
+
+		li:first-child {
+			padding-top: 0;
+		}
+
+		table {
+			margin-left: 10px;
+			text-align: left;
+		}
+
+		th {
+			text-decoration: underline;
+			padding-bottom: 6px;
+		}
+
+		td:first-child {
+			font-weight: bold;
+		}
+
+		td {
+			padding-right: 20px;
+		}
+	</style>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>DeepSID: Tag Guidelines</title>
+	</head>
+
+	<body style="width:820px;font-family:arial;">
+
+		<h2 style="margin-top:0;">Guidelines for Editing Tags at DeepSID</h2>
+		<p><i>You are welcome to disagree with any of these guidelines but it might be cool to talk about it first.
+			Use one of the links in the top of the web site. If you're on Facebook, I recommend using the
+			<a href="https://www.facebook.com/groups/deepsid/">group</a> there.</i></p>
+
+		<h3>In general</h3>
+		<p>All tags described below are used even if only one of several sub tunes apply. For example, if
+			there are a total of eight sub tunes but only one of them uses digi and another 2x multispeed, both
+			<b>Digi</b> and <b>2x</b> tags are applied.</p>
+		<p>Always be careful when adding actual genre tags. Even if a composer used a genre word in the filename, it may
+			still be wrong. This is especially common with funk or jazz words. If you are in doubt about a genre for a
+			tune, perhaps it's best to just forget it for now and move on.</p>
+
+		<p>Comments about certain genre tags:</p>
+
+		<table>
+			<tr><th>Genre</th><th>Comments</th></tr>
+			<tr><td>Funk</td><td>Be careful &ndash; it may not be what the composer thinks it is!</td></tr>
+			<tr><td>Jazz</td><td>Same as the above</td></tr>
+			<tr><td>Jazz-Funk</td><td>Think Mezzoforte</td></tr>
+			<tr><td></td><td></td></tr>
+			<tr><td></td><td></td></tr>
+		</table>
+
+		<h3>Specific tags</h3>
+
+		<h4>1ch, 2ch, etc.</h4>
+		<p>When the three voices of the SID chip are not all used as default.</p>
+		<ul>
+			<li>The <b>1ch</b> and <b>2ch</b> tags are typically used for level tunes where one or two voices are used
+			for SFX.</li>
+			<li>There should be no such thing as a <b>3ch</b> tag as that's the default use of the SID chip. However,
+			there may be an exception when chords are created using all voices. See the <b>3ch Chords</b> tag below.</li>
+			<li>In rare situations a <b>4ch</b> is used to indicate that the SID is patched up to play four channels,
+			typically from an Amiga MOD. If you are looking at this in a HVSC folder, there should be a counterpart in
+			the exotic root folder.</li>
+		</ul>
+
+		<h4>3ch Chords</h4>
+		<p>There are moments in the SID tune where chords are created across all three voices, usually with the
+			same type of instrument. <a href="http://deepsid.chordian.net/?file=/MUSICIANS/L/Laxity/">Laxity</a> made a
+			few that starts this way, but it can also come later in a song.</p>
+		<ul>
+			<li>Also applies even if digi is added, but the chords must still be all SID only.</li>
+			<li>Does not apply to 2SID and above (too easy going that route on one of the chips there).</li>
+			<li>Does <i>usually</i> not apply to simple "beep" tunes where chord situations may arise too easily.</li>
+			<li>Does <i>usually</i> not apply if the piece maintains an octave or more between two notes.</li>
+		</ul>
+
+		<h4>$11, $41, etc.</h4>
+		<p>The tune <i>only</i> uses the specified waveform, with no exceptions. The <b>$11</b> tag (for the triangle
+			waveform) is more common because there has once been a
+			<a href="http://deepsid.chordian.net/?file=%2FCSDb%20Music%20Competitions%2FWaveform%20%2411%20Music%20Compo">
+			competition</a> based around this.</p>
+
+		<h4>2x, 3x, 4x, 5x, etc.</h4>
+		<p>Indicates the multispeed multiplier used by the tune.</p>
+		<ul>
+			<li>The speed should be stable. If it fluctuates, the generic <b>Multispeed</b> tag should be used
+			instead.</li>
+			<li>Does not apply if the tune is digi and the multispeed value is unusually big.</li>
+			<li>Does not apply if the tune was made in a "beep" player (typically very old stuff) and clearly does not
+			exploit it.</li>
+		</ul>
+
+		<h4>4SID, 8SID, 10SID</h4>
+		<p>Either the tune itself is such a file (residing in the exotic folder) or you are looking at a file in HVSC
+			that, by having this tag attached, indicates that such a file exists in the exotic folder.</p>
+
+		<h4>Bug</h4>
+		<p>The tune has one or more bugs &ndash; usually acknowledged by HVSC in a STIL comment. It can be e.g. notes
+			playing out of tune. Be careful with this tag. Maybe the composer wanted the tune to sound like that.</p>
+
+		<h4>Coop</h4>
+		<p>Two or more persons collaborated. One made the instruments and the other the music, or each made a part of the
+		tune, etc. Anything goes.</p>
+		<ul>
+			<li>Usually the best hint is when more than one person is listed in the author field.</li>
+			<li>It can also be if the composer admits in e.g. a CSDb comment that someone helped create the song.</li>
+		</ul>
+
+		<h4>Compo</h4>
+		<p>The tune took part in a music competition. Additional production tags are allowed.</p>
+		<ul>
+			<li>If the tune also won it, an additional <b>Winner</b> tag is used too.</li>
+			<li>Mixed competitions with other song formats or even crazy mixing of all kinds of productions (of which music
+			is one of them) are also allowed.</li>
+			<li>Does not apply to tunes that were part of larger productions taking place in a competition. For example, if
+			the tune was used somewhere in a demo that took part in a competition (maybe even won) it doesn't count.</li>
+		</ul>
+
+		<h4>Conversion</h4>
+		<p>This SID tune has been converted from a different format or device, e.g. an arcade game, a console, or a
+			different home computer. A secondary tag is usually included to specify the origin.</p>
+		<p>If the SID tune is a remake or a remix of another SID tune, the <b>Remake</b> or <b>Remix</b> tags should be
+			used instead.<br />If the SID tune is a cover of a REAL song, the <b>Cover</b> tag should be used instead.</p>
+		<ul>
+			<li>If the secondary tag intrinsically suggests the format or device, it is not specified as a third tag. For
+			example, <b>XM</b> and <b>MOD</b> can stand alone because the origin of <b>XM</b> is PC and the origin of
+			<b>MOD</b> is the Amiga, but conversions from a generic Amiga game would of course have to use the <b>Amiga</b>
+			tag instead.</li>
+			<li>The <b>PC</b> tag can be used for PC demos with unknown music software origin, but use <b>PC Game</b> for...
+			those.</li>
+			<li>If the device is rare or otherwise somewhat exotic, you can use the generic <b>Console</b> tag.</li>
+			<li>An additional <b>Remix</b> tag can be added when relevant. If the song has been altered so significantly
+			as to only serve as inspiration or template, consider using the <b>Pastiche</b> tag (see below) instead of
+			<b>Conversion</b>.</li>
+		</ul>
+
+		<p>Here's a list of the secondary conversion tags used so far:</p>
+
+		<table>
+			<tr><th>Tag</th><th>Comments</th></tr>
+			<tr><td>AdLib</td><td>From AdLib (or Sound Blaster) on PC (don't add <b>PC</b> tag too)</td></tr>
+			<tr><td>Amiga</td><td>From the Amiga (unknown format or a game)</td></tr>
+			<tr><td>Arcade</td><td>From an arcade game</td></tr>
+			<tr><td>Atari 2600</td><td>From the Atari 2600 (TIA)</td></tr>
+			<tr><td>Atari ST</td><td>From the Atari ST</td></tr>
+			<tr><td>AY</td><td>A <a href="https://en.wikipedia.org/wiki/General_Instrument_AY-3-8910">sound chip</a> used in many old home computers</td></tr>
+			<tr><td>C16 / +4</td><td>From the Commodore 16 or Commodore Plus/4</td></tr>
+			<tr><td>Console</td><td>From a console (use if rare or exotic)</td></tr>
+			<tr><td>GB</td><td>From a Game Boy (generalized)</td></tr>
+			<tr><td>GBA</td><td>From the Game Boy Advance</td></tr>
+			<tr><td>IT</td><td>From <a href="https://en.wikipedia.org/wiki/Impulse_Tracker">Impulse Tracker</a> on PC (don't add <b>PC</b> tag too)</td></tr>
+			<tr><td>MOD</td><td>From an Amiga MOD (don't add <b>Amiga</b> tag too)</td></tr>
+			<tr><td>NES</td><td>From the <a href="https://en.wikipedia.org/wiki/Nintendo_Entertainment_System">Nintendo Entertainment System</a></td></tr>
+			<tr><td>PC</td><td>From a production on PC (typically a demo)</td></tr>
+			<tr><td>PC Game</td><td>From music originally used in a PC game</td></tr>
+			<tr><td>Pinball</td><td>From a pinball machine</td></tr>
+			<tr><td>Pokey</td><td>An <a href="https://en.wikipedia.org/wiki/POKEY">I/O chip</a> used in e.g. Atari 400/800 computers</td></tr>
+			<tr><td>PS</td><td>From a PlayStation console</td></tr>
+			<tr><td>S3M</td><td>From <a href="https://en.wikipedia.org/wiki/Scream_Tracker">ScreamTracker 3</a> on PC (don't add <b>PC</b> tag too)</td></tr>
+			<tr><td>Sega</td><td>From a Sega console (may need to be revised later)</td></tr>
+			<tr><td>Spectrum</td><td>From the ZX Spectrum (sometimes accompanied by the <b>AY</b> tag too)</td></tr>
+			<tr><td>SNES</td><td>From the Super Nintendo / Famicom</td></tr>
+			<tr><td>XM</td><td>From <a href="https://en.wikipedia.org/wiki/FastTracker_2">FastTracker 2</a> on PC (don't add <b>PC</b> tag too)</td></tr>
+		</table>
+
+		<p><i>More conversion tags may have been created since the above list was last updated.</i></p>
+
+		<h4>Cover</h4>
+		<p>The SID tune is a cover of a REAL song. A secondary genre tag is usually not added.</p>
+		<p>If the SID tune is a remake or a remix of another SID tune, the <b>Remake</b> or <b>Remix</b> tags should be
+			used instead.<br />If the SID tune was converted from another format or device, the <b>Conversion</b> tag should
+			be used instead.</p>
+		<ul>
+			<li>A secondary genre tag should only be used if the genre is so strong that it easily affects the SID song
+			too. Examples of this can be <b>Ragtime</b>, <b>Classical</b>, <b>Anthem</b>, or <b>Rock'n'roll</b>.</li>
+			<li>Does not apply if the tune is all digi samples of a real song, i.e. the SID channels are not used.</li>
+			<li>Does <i>usually</i> not apply if the cover is just a small jingle or a minor excerpt in a much larger
+			tune.</li>
+			<li>An additional <b>TV</b> or <b>Soundtrack</b> tag may sometimes be useful, as well as an assisting
+			<b>Theme</b> tag.</li>
+			<li>An additional <b>Remix</b> tag can be added when relevant. If the song has been altered so significantly
+			as to only serve as inspiration or template, consider using the <b>Pastiche</b> tag (see below) instead of
+			<b>Cover</b>.</li>
+		</ul>
+
+		<h4>Crack Intro</h4>
+		<p>The tune was used in one or more crack intros. Additional production tags are allowed. Note that "demo-style"
+		intros (e.g. as used in competitions) usually receive the <b>Demo</b> tag instead.</p>
+
+		<h4>Demo</h4>
+		<p>The tune was written for a demo (or variants &ndash; see below) and subsequently used in it. Additional
+		production tags are allowed.</p>
+		<ul>
+			<li>Applies to demos (multi/one/fake), graphic collections, and "demo-style" intros (e.g. as used in
+			competitions).</li>
+			<li>Does not apply to tools, other collections (including music) nor miscellanous.</li>
+		</ul>
+		<p>You read that right &ndash; music collections never get a tag. Many composers have several music collection
+		productions but as a tag indicating this, it's not really that valuable &ndash; and it tends to overpopulate
+		folders like a virus.</p>
+
+		<h4>Diskmag</h4>
+		<p>The tune was written for a disk magazine and subsequently used in it. Additional production tags are allowed.</p>
+
+		<h4>Digi</h4>
+		<p>A "fits all" description of anything digi. If the digi is standard 4-bit $D418 used as assisting channels,
+			a second tag should not be used. Note that a <b>Cover</b> tag should never be used for real songs turned
+			into digi.</p>
+		<p>When a second tag may be used to narrow it down:</p>
+		<ul>
+			<li><b>Samples</b> can be used as a second tag if the file is <i>all</i> 4-bit $D418 digi only (i.e. no
+			SID voices are used).</li>
+			<li><b>OSC</b> can be used as a second tag if the file uses the oscillator method as demonstrated by e.g.
+			the FRODIGI player. It's low on CPU usage but sounds a bit murky. You can detect it by watching the piano
+			view; if $11 waveform notes (green) are whizzing all over the place, it's using this technique.</li>
+			<li><b>PWM</b> can be used as a second tag if the file uses the pulse width modulation technique. If you
+			are using the WebSid emulator it should state this, but you can also detect it in the piano view. If the
+			notes are waveform $41 (orange) but stuck with only the pulse widths working hard, it's using this
+			technique.</li>
+			<li><b>8bit</b> can be used as a second tag if the file uses an advanced 8-bit technique. If you are using
+			the WebSid emulator it should state this. The name of the player may also be a hint.</li>
+		</ul>
+
+		<h4>Echo</h4>
+		<p>The tune makes use of a digi channel to recreate a delayed SID channel in real time, thereby adding an echo
+			effect. This was a technique devised by
+			<a href="http://deepsid.chordian.net/?file=/MUSICIANS/T/Tjelta_Geir/">Geir Tjelta</a>.</p>
+
+		<h4>Edit</h4>
+		<p>The tune has subsequently been edited to improve or change it.</p>
+		<ul>
+			<li>Typically applies to when two or more versions of the same song are present in the same folder,
+			especially if the additional copies have "v2" or similar words added to their filenames.</li>
+			<li>Also applies when a SID tune originally composed by one composer has been moved-and-modified by
+			someone else. For example, to add a digi track on top. It may be wise to compare the player of each file.
+			If the player is the same, chances are it's an <b>Edit</b>. If the player is different, it may be a
+			<b>Remake</b> instead.</li>
+		</ul>
+
+		<h4>Excerpt</h4>
+		<p>Rarely used. It indicates that the SID tune in an excerpt of another bigger SID tune, for example if it was
+			clipped out of it. Usually it is more appropriate to use the <b>Edit</b> tag instead.</p>
+
+		<h4>Fast</h4>
+		<p>The tune is really fast paced. This is not tied to any specific genre.</p>
+
+		<h4>First</h4>
+		<p>Usually indicates the very first tune the composer ever made, but may also sometimes be used for the first
+			release (like a game) that the composer was involved with, especially if there are no other tunes available
+			before that time.</p>
+
+		<h4>FM</h4>
+		<p>The tune emulates a true ring modulation or hard synchronization relationship for musical notes.</p>
+		<ul>
+			<li>Applies to a coherent instrument across two or three voices, i.e. the composer knew exactly how to
+			produce this relationship and thus didn't just turn on the bits to create awesome effects.</li>
+		</ul>
+
+		<h4>Game</h4>
+		<p>The tune (or file) was written for a C64 game and subsequently used in it. Also applies to 4K games.
+			Additional production tags are allowed.</p>
+		<ul>
+			<li>Also applies if the tune is used in a game at a later time, if it has an entry in GameBase64. This
+			includes games where the composer did not give the permission to use it.</li>
+			<li>If the game is only available in CSDb, it depends. For example, if it has been used in other
+			productions and then in a game only a few years later, the tag should probably not be used.</li>
+			<li>If the game was written in <a href="https://en.wikipedia.org/wiki/Shoot-%27Em-Up_Construction_Kit">
+			Shoot-'Em-Up Construction Kit</a>, an additional <b>SEUCK</b> tag should be used. Both CSDb entries and
+			GameBase64 usually indicates when a game was made in it.</li>
+			<li>Does not apply if the game usage is indirect. For example, if the tune is a conversion from a different
+			format or device where it was used in a game, the tag should not be used.</li>
+		</ul>
+
+		<h4>Happy</h4>
+		<p>The tune is really happy and uplifting. This is not tied to any specific genre.</p>
+
+		<h4>Interactive</h4>
+		<p>Although the tune may not be interactive in DeepSID, it might have been part of a production where the user
+			could change the song in real time.</p>
+
+		<h4>Jingle</h4>
+		<p>The file contains one of more jingles. A jingle stops at one point &ndash; usually after less than half a
+			minute, but may be longer. Additional meta tags are allowed.</p>
+		<p>If the tune is short but restarts over and over, it should probably use a <b>Loop</b> tag instead. However,
+			sometimes a jingle that restarts may actually still be a jingle &ndash; it might just be the player that either
+			doesn't support stopping, or the composer didn't know how to add it. If there's a good closure to the
+			jingle and maybe even a short pause before it restarts, it should probably still use a <b>Jingle</b> tag.</p>
+
+		<h4>Loop</h4>
+		<p>The file contains one or more short pieces (typically less than ~30 seconds) that loops around. There is no
+			pause or closure when it wraps around. Additional meta tags are allowed.</p>
+		<p>The length of ~30 seconds is more of a suggestion, but the tag should primarily be used for such short loops
+			to make it really valuable for searching. Don't add it to a wrapping tune if it's several minutes long.</p>
+
+		<h4>Melancholic</h4>
+		<p>The tune is gloomy, maybe even sad and depressing. This is not tied to any specific genre.</p>
+
+		<h4>Medley</h4>
+		<p>The tune is a piece composed from parts of existing pieces, played one after another, sometimes overlapping.
+			The tag can be used for any type of medley combination of covers, remakes and conversions.</p>
+
+		<h4>MIDI</h4>
+		<p>This SID tune was composed with MIDI software.</p>
+
+		<h4>Nonstandard</h4>
+		<p>The tune uses a nonstandard time signature other than 4/4.</p>
+
+		<h4>Organ</h4>
+		<p>This is not a genre tag. It indicates when two or more channels are combined in a specific way that emulates
+			an organ sound. One of the best examples can be found in a level tune of Ghouls 'n' Ghosts by
+			<a href="http://deepsid.chordian.net/?file=/MUSICIANS/F/Follin_Tim/">Tim Follin</a>.</p>
+
+		<h4>Pan Flute</h4>
+		<p>This is not a genre tag. Instead, it indicates a specific use of modulations that may create a SID instrument
+			that sounds a little bit like a pan flute.</p>
+
+		<h4>Pastiche</h4>
+		<p><i>This tag was created by Roman Chlebec (CreaMD).</i></p>
+		<p>The SID tune may have been inspired by (or have "borrowed from") something else. This can be anything &ndash;
+		another SID tune, a real song, a tune on a different format/device, or maybe even a recognizable style used as
+		a trademark by another composer that has been deliberately mimicked.</p>
+
+		<h4>Piano</h4>
+		<p>This can be a vague tag as it sort of indicates that the tune mimicks playing on the piano. It can be a tune
+			that was composed for the piano (maybe indicated by a cover) or the composer tried hard to create a piano
+			instrument.</p>
+
+		<h4>Remake</h4>
+		<p>The tune is a remake of another SID tune. If the tune was remixed or changed to a certain degree, you should
+			consider <i>replacing</i> it with the <b>Remix</b> tag instead.</p>
+		<p>If the SID tune is a cover of a REAL song, the <b>Cover</b> tag should be used instead.<br />If the SID tune
+			was converted from another format or device, the <b>Conversion</b> tag should be used instead.</p>
+
+		<h4>Remix</h4>
+		<p>The tune is based on a <b>Cover</b>, a <b>Remake</b> or a <b>Conversion</b> &ndash; but has also been remixed
+			with new material.</p>
+		<p>This is usually added to complement <b>Cover</b> or <b>Conversion</b> tags, while a <b>Remake</b> tag is usually
+			<i>replaced</i> by it.</p>
+
+		<h4>Remix64</h4>
+		<p>The tune has one or more remixes at <a href="https://www.remix64.com/">Remix64.com</a>. Clicking this tune
+			should show entries in the <b>Remix</b> tab.</p>
+
+		<h4>SFX</h4>
+		<p>The file contains one or more sound effects. Digi sound effects are allowed too.</p>
+		<ul>
+			<li>Does not apply to tunes that starts out as a SFX (or has later parts) if there are musical notes in it.</li>
+		</ul>
+
+		<h4>Speech</h4>
+		<p>The tune tries to emulate speech or singing, typically by using advanced modulation techniques.</p>
+		<p>Digi is not involved in any way (including the OSC technique). It also doesn't apply to speech digi as used
+        by e.g. sub tunes in
+		<a href="http://deepsid.chordian.net/?file=/MUSICIANS/C/Cox_Chris/Tales_of_the_Arabian_Nights.sid&subtune=2">
+		Tales of the Arabian Nights</a>.</p>
+
+		<h4>Unfinished</h4>
+		<p>The tune is not final. All tunes in <b>Worktunes</b> folders automatically obtain this tag, but there may
+			also be stragglers in main folders that may get this tag.</p>
+		<p>Make sure it's really unfinished, e.g. either you're the composer and know it's not done, or the composer
+			mentioned in a CSDb comment that they don't consider the tune to be finished.</p>
+
+		<!--
+		<h4></h4>
+		<p></p>
+		<ul>
+			<li></li>
+			<li></li>
+		</ul>
+		-->
+
+	</body>
+</html>

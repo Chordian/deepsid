@@ -4684,7 +4684,7 @@ input[type=range]::-ms-track {
 
 .dialog-transfer {
 	position: absolute;
-	top: 144px;
+	top: 155px;
 	left: 168px;
 }
 
@@ -4703,7 +4703,7 @@ input[type=range]::-ms-track {
 
 	.dialog-new {
 		position: relative;
-		top: -104px;
+		top: -91px;
 		float: right;
 		width: 136px;
 	}

@@ -167,6 +167,7 @@
 		</div>
 
 		<div id="dialog-tags" class="dialog-box">
+			<a href="tags.htm" target="_blank" style="position:absolute;top:20px;right:21px;font-size:14px;">Guidelines</a>
 			<div class="dialog-text"></div>
 			<select id="dialog-all-tags" name="all-tags" multiple></select>
 			<div class="dialog-transfer">
@@ -177,7 +178,7 @@
 					<svg height="24" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><path d="M17.17 32.92l9.17-9.17-9.17-9.17 2.83-2.83 12 12-12 12z"/><path d="M0-.25h48v48h-48z" fill="none"/></svg>
 				</button>
 			</div>
-			<select id="dialog-song-tags" name="song-tags" size="5" multiple></select>
+			<select id="dialog-song-tags" name="song-tags" size="6" multiple></select>
 			<div class="dialog-new">
 				<label for="new-tag">New tag:</label><br />
 				<form onsubmit="return false;" autocomplete="off"><input type="text" name="new-tag" id="new-tag" maxlength="32" />
@@ -1117,6 +1118,20 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>October 4, 2019</h3>
+						<ul>
+							<li>Made the right list box taller (6 lines instead of 5) in the dialog box for editing tags.</li>
+							<li>Added a link in the dialog box to a separate tab page with
+								<a href="tags.htm" target="_blank">guidelines</a> for editing tags.</li>
+						</ul>
+
+						<h3>October 2, 2019</h3>
+						<ul>
+							<li>Tidied up tags for songs converted from other devices or formats, such as Amiga, Game Boy,
+								Spectrum, Atari ST, Arcade, etc. These kind of covers now always use the tag
+								<a href="//deepsid.chordian.net/?search=conversion&type=tag">Conversion</a>.</li>
+						</ul>
 
 						<h3>September 20, 2019</h3>
 						<ul>
