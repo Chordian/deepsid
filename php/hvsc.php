@@ -716,15 +716,35 @@ try {
 			}
 
 			// Get an array of tags for this file ("Jazz", "Rock", etc.)
-			$list_of_tags = array();
+			$tags_origin = array();
+			$tags_suborigin = array();
+			$tags_production = array();
+			$tags_other = array();
 			$tag_ids = $db->query('SELECT tags_id FROM tags_lookup WHERE files_id = '.$row->id);
 			$tag_ids->setFetchMode(PDO::FETCH_OBJ);
 			foreach($tag_ids as $tag_row) {
-				$tag = $db->query('SELECT name FROM tags_info WHERE id = '.$tag_row->tags_id.' LIMIT 1');
+				$tag = $db->query('SELECT name, type FROM tags_info WHERE id = '.$tag_row->tags_id.' LIMIT 1');
 				$tag->setFetchMode(PDO::FETCH_OBJ);
-				array_push($list_of_tags, $tag->fetch()->name);
+				$tag_info = $tag->fetch();
+				switch ($tag_info->type) {
+					case 'ORIGIN':
+						array_push($tags_origin, $tag_info->name);
+						break;
+					case 'SUBORIGIN':
+						array_push($tags_suborigin, $tag_info->name);
+						break;
+					case 'PRODUCTION':
+						array_push($tags_production, $tag_info->name);
+						break;
+					default:
+						array_push($tags_other, $tag_info->name);
+				}
 			}
-			sort($list_of_tags);
+			sort($tags_origin);
+			sort($tags_suborigin);
+			sort($tags_production);
+			sort($tags_other);
+			$list_of_tags = array_merge($tags_origin, $tags_suborigin, $tags_production, $tags_other);
 
 			array_push($files_ext, array(
 				'filename' =>		$file,

@@ -1119,6 +1119,13 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>October 9, 2019</h3>
+						<ul>
+							<li>Tags are now partly sorted in groups. Origin always come first (cover, remake, conversion
+								and their subtypes) followed by production (demo, game, etc.) and then other stuff just
+								sorted alphabetically for now.</li>
+						</ul>
+
 						<h3>October 4, 2019</h3>
 						<ul>
 							<li>Made the right list box taller (6 lines instead of 5) in the dialog box for editing tags.</li>
