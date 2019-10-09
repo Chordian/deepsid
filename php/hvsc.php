@@ -744,7 +744,7 @@ try {
 			sort($tags_suborigin);
 			sort($tags_production);
 			sort($tags_other);
-			$list_of_tags = array_merge($tags_origin, $tags_suborigin, $tags_production, $tags_other);
+			$list_of_tags = array_merge($tags_production, $tags_origin, $tags_suborigin, $tags_other);
 
 			array_push($files_ext, array(
 				'filename' =>		$file,

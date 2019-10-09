@@ -1121,8 +1121,8 @@
 
 						<h3>October 9, 2019</h3>
 						<ul>
-							<li>Tags are now partly sorted in groups. Origin always come first (cover, remake, conversion
-								and their subtypes) followed by production (demo, game, etc.) and then other stuff just
+							<li>Tags are now partly sorted in groups. Productions always come first (demo, game, etc.)
+								followed by origin (cover, remake, conversion and their subtypes) and then other stuff
 								sorted alphabetically for now.</li>
 						</ul>
 
