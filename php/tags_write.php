@@ -70,6 +70,7 @@ try {
 	$fullname = $select->fetch()->fullname;
 
 	// Add new typed-in tags
+	// NOTE: The type is indirectly set to a default value and will be updated by an administrator later.
 	foreach($_POST['allTags'] as $tag) {
 		if ($tag['id'] >= 60000) {
 			$insert = $db->prepare('INSERT INTO tags_info (name) VALUES(:name)');
@@ -117,21 +118,48 @@ try {
 	}
 
 	// Now get a sorted array of the tag names used by this file right now
-	$list_of_tags = array();
-	$select = $db->prepare('SELECT tags_id FROM tags_lookup WHERE files_id = :id');
-	$select->execute(array(':id'=>$_POST['fileID']));
-	$select->setFetchMode(PDO::FETCH_OBJ);
-	foreach($select as $row) {
-		$tag = $db->query('SELECT name FROM tags_info WHERE id = '.$row->tags_id.' LIMIT 1');
+	$tags_origin = array();
+	$tags_suborigin = array();
+	$tags_production = array();
+	$tags_other = array();
+	$tag_ids = $db->prepare('SELECT tags_id FROM tags_lookup WHERE files_id = :id');
+	$tag_ids->execute(array(':id'=>$_POST['fileID']));
+	$tag_ids->setFetchMode(PDO::FETCH_OBJ);
+	foreach($tag_ids as $row) {
+		$tag = $db->query('SELECT name, type FROM tags_info WHERE id = '.$row->tags_id.' LIMIT 1');
 		$tag->setFetchMode(PDO::FETCH_OBJ);
-		array_push($list_of_tags, $tag->fetch()->name);
+		$tag_info = $tag->fetch();
+		switch ($tag_info->type) {
+			case 'ORIGIN':
+				array_push($tags_origin, $tag_info->name);
+				break;
+			case 'SUBORIGIN':
+				array_push($tags_suborigin, $tag_info->name);
+				break;
+			case 'PRODUCTION':
+				array_push($tags_production, $tag_info->name);
+				break;
+			default:
+				array_push($tags_other, $tag_info->name);
+		}
 	}
-	sort($list_of_tags);
+	sort($tags_origin);
+	sort($tags_suborigin);
+	sort($tags_production);
+	sort($tags_other);
+	$list_of_tags = array_merge($tags_production, $tags_origin, $tags_suborigin, $tags_other);
+
+	$type_of_tags = array_merge(
+		array_fill(0, count($tags_production),	'production'),
+		array_fill(0, count($tags_origin),		'origin'),
+		array_fill(0, count($tags_suborigin),	'suborigin'),
+		array_fill(0, count($tags_other),		'other')
+	);
 
 } catch(PDOException $e) {
 	$account->LogActivityError('tags_write.php', $e->getMessage());
 	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 }
 
-echo json_encode(array('status' => 'ok', 'tags' => $list_of_tags));
+echo json_encode(array('status' => 'ok', 'tags' => $list_of_tags, 'tagtypes' => $type_of_tags));
 ?>

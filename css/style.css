@@ -42,13 +42,18 @@
 	--color-notable:				#f8f848;			/* Color for notable achievements in composer profile */
 	--color-oldest-in-top:			#c86d55;			/* Color for right corner line above CSDb comments table */
 	--color-emphasize:				#ffff80;			/* Color for emphasizing handles or groups in CSDb releases */
-	--color-text-tag:				var(--color-top);
-	--color-bg-tag:					#a8ad95;
-	--color-bg-tag-hover:			#b6b9a5;
 	--color-bg-block-data:			var(--color-top);
 	--color-text-block:				var(--color-bottom);
 	--color-text-block-toggled:		#9a9a90;			/* #7c7e60 #929292 */
 	--color-text-block-changed:		#c00;
+
+	--color-text-tag:				var(--color-top);	  /* Default tag colors */
+	--color-bg-tag:					#a8ad95;
+	--color-bg-tag-hover:			#b6b9a5;
+	--color-text-tag-prod:			var(--color-text-tag);
+	--color-bg-tag-prod:			#959aad;
+	--color-text-tag-origin:		var(--color-text-tag);
+	--color-bg-tag-origin:			#b09292;
 
 	--color-border:					#ced0c0;			/* For borders and text labels where its container is disabled */
 	--color-border-box:				#c8c8b9;			/* For borders around various boxes and input fields */
@@ -385,13 +390,18 @@
 	--color-selection-text:			#222;
 	--color-notable:				#d9ce6f;
 	--color-emphasize:				#449;
-	--color-text-tag:				var(--color-bottom);
-	--color-bg-tag:					#b6b9a5;
-	--color-bg-tag-hover:			#c8cbbb;
 	--color-bg-block-data:			var(--color-bottom);
 	--color-text-block:				#bcbebc;
 	--color-text-block-toggled:		var(--color-top);
 	--color-text-block-changed:		#e66;
+
+	--color-text-tag:				var(--color-bottom);  /* Default tag colors */
+	--color-bg-tag:					#b6b9a5;
+	--color-bg-tag-hover:			#c8cbbb;
+	--color-text-tag-prod:			var(--color-text-tag);
+	--color-bg-tag-prod:			#a5a9b9;
+	--color-text-tag-origin:		var(--color-text-tag);
+	--color-bg-tag-origin:			#bca3a2;
 
 	--color-border:					#0c0c0c;			/* For borders and text labels where its container is disabled */
 	--color-border-box:				#2c2c2c;			/* For borders around various boxes and input fields */
@@ -2030,6 +2040,17 @@ input[type=range]::-ms-track {
 			line-height: 1.35em;
 		}
 
+			.tag-production {
+				color: var(--color-text-tag-prod);
+				background: var(--color-bg-tag-prod);
+			}
+
+			.tag-origin,
+			.tag-suborigin {
+				color: var(--color-text-tag-origin);
+				background: var(--color-bg-tag-origin);
+			}
+
 		.edit-tags {
 			display: none;
 			padding: 0;
@@ -2063,6 +2084,15 @@ input[type=range]::-ms-track {
 				border-color: transparent var(--color-bg-tag) transparent transparent;
 				background: var(--color-bg-box);
 			}
+
+				.tag-production:before {
+					border-color: transparent var(--color-bg-tag-prod) transparent transparent;
+				}
+
+				.tag-origin:before,
+				.tag-suborigin:before {
+					border-color: transparent var(--color-bg-tag-origin) transparent transparent;
+				}
 
 				#songs tr.selected .tag:before,
 				#songs tr.selected:hover .tag:before {
@@ -2099,6 +2129,15 @@ input[type=range]::-ms-track {
 				color: var(--color-text-tag);
 				line-height: 0;
 			}
+
+				.tag-production:after {
+					color: var(--color-text-tag-prod);
+				}
+
+				.tag-origin:after,
+				.tag-suborigin:after {
+					color: var(--color-text-tag-origin);
+				}
 
 	/* Light blue bar indicating all of 64 KB RAM */
 	#memory-bar {

@@ -746,11 +746,19 @@ try {
 			sort($tags_other);
 			$list_of_tags = array_merge($tags_production, $tags_origin, $tags_suborigin, $tags_other);
 
+			$type_of_tags = array_merge(
+				array_fill(0, count($tags_production),	'production'),
+				array_fill(0, count($tags_origin),		'origin'),
+				array_fill(0, count($tags_suborigin),	'suborigin'),
+				array_fill(0, count($tags_other),		'other')
+			);
+
 			array_push($files_ext, array(
 				'filename' =>		$file,
 				'substname' =>		$substname,
 				'player' =>			str_replace(array_keys($prettyPlayerNames), $prettyPlayerNames, $player), // Remember it reads the array multiple times!
 				'tags' =>			$list_of_tags,
+				'tagtypes' =>		$type_of_tags,
 				'lengths' => 		$lengths,
 				'type' => 			$type,
 				'version' => 		$version,

@@ -1119,6 +1119,13 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>October 14, 2019</h3>
+						<ul>
+							<li>Different colors are now applied to production tags (blue) and origin tags (magenta)
+								while all other types of tags still use the default tag color.</li>
+							<li>Tags are now sorted correctly in the browser row after editing them.</li>
+						</ul>
+
 						<h3>October 9, 2019</h3>
 						<ul>
 							<li>Tags are now partly sorted in groups. Productions always come first (demo, game, etc.)

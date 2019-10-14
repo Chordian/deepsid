@@ -314,7 +314,7 @@ Browser.prototype = {
 								}, function(data) {
 									browser.validateData(data, function(data) {
 
-										var list_of_tags = browser.buildTags(data.tags),
+										var list_of_tags = browser.buildTags(data.tags, data.tagtypes),
 											endName = browser.isSymlist || browser.isCompoFolder ? thisFullname : thisFullname.split("/").slice(-1)[0];
 
 										// Make the tags sticky without refreshing the page
@@ -1161,7 +1161,7 @@ Browser.prototype = {
 							isNew = file.hvsc == this.HVSC_VERSION || file.hvsc == this.CGSC_VERSION;
 						var adaptedName = file.substname == "" ? file.filename.replace(/^\_/, '') : file.substname;
 						adaptedName = this.adaptBrowserName(adaptedName);
-						var list_of_tags = this.buildTags(file.tags);
+						var list_of_tags = this.buildTags(file.tags, file.tagtypes);
 						files +=
 							'<tr>'+
 								'<td class="sid unselectable"><div class="block-wrap"><div class="block">'+(file.subtunes > 1 ? '<div class="subtunes'+(this.isSymlist ? ' specific' : '')+(isNew ? ' newst' : '')+'">'+(this.isSymlist ? file.startsubtune : file.subtunes)+'</div>' : (isNew ? '<div class="newsid"></div>' : ''))+
@@ -1329,13 +1329,14 @@ Browser.prototype = {
 	 * Build the HTML elements needed to show the tags in the SID file row. 
 	 * 
 	 * @param {array} tags		Array with (sorted) tag names only.
+	 * @param {array} types		Array with (sorted) tag types only.
 	 * 
 	 * @return {string}			The HTML string to put into the SID row.
 	 */
-	buildTags: function(tags) {
+	buildTags: function(tags, types) {
 		var list_of_tags = '';
 		$.each(tags, function(i, tag) {
-			list_of_tags += '<div class="tag">'+tag+'</div>';
+			list_of_tags += '<div class="tag tag-'+types[i]+'">'+tag+'</div>';
 		});
 		list_of_tags += '<div class="edit-tags" title="Edit tags">&nbsp;</div>';
 
