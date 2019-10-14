@@ -107,10 +107,12 @@ Browser.prototype = {
 			})
 			.on("keydown", function(event) {
 				if (event.keyCode == 13) {
-					if ($("#dialog-all-tags option:selected").length)
+					if ($("#dialog-all-tags option:selected").length) {
 						$("#dialog-tags-right").trigger("click");				// Transfer entry
-					else
+					} else {
 						$("#dialog-tags .dialog-button-yes").trigger("click");	// Click 'OK' button
+						$("#dialog-all-tags").blur();
+					}
 				}
 			});
 
@@ -120,12 +122,14 @@ Browser.prototype = {
 			})
 			.on("keydown", function(event) {
 				if (event.keyCode == 13) {
-					if ($("#dialog-song-tags option:selected").length)
+					if ($("#dialog-song-tags option:selected").length) {
 						$("#dialog-tags-left").trigger("click");				// Transfer entry
-					else
+					} else {
 						$("#dialog-tags .dialog-button-yes").trigger("click");	// Click 'OK' button
+						$("#dialog-song-tags").blur();
+					}
 				}
-	});
+			});
 
 		$(document).on("click", function(event) {
 			$target = $(event.target);
