@@ -4,6 +4,8 @@
 	require_once("php/class.account.php"); // Includes setup
 	$user_id = $account->CheckLogin() ? $account->UserID() : 0;
 
+	require_once("tracking.php"); // Also called every 10 minutes by 'main.js'
+
 	$websid = 'WebSid emulator';
 
 	function isMobile() {

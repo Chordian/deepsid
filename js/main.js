@@ -76,6 +76,11 @@ $(function() { // DOM ready
 	CheckSOASCStatus();
 	setInterval(CheckSOASCStatus(), 300000);
 
+	// Update tracking every 10 minutes (also called once by 'index.php' upon load)
+	setInterval(function() {
+		$.get("tracking.php");
+	}, 600000);
+
 	/**
 	 * Handle hotkeys.
 	 * 
