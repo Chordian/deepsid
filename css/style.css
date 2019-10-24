@@ -2463,15 +2463,25 @@ input[type=range]::-ms-track {
 			padding-top: 6px;
 		}
 
-		#songs .rating {
+		#songs .rating,
+		#topic-profile .folder-rating {
 			position: relative;
-			display: block;
-			unicode-bidi: bidi-override; /* @link https://css-tricks.com/star-ratings/ */
+			unicode-bidi: isolate; /*bidi-override;*/ /* @link https://css-tricks.com/star-ratings/ */
 			direction: rtl;
 		}
 
+		#songs .rating {
+			display: block;
+		}
+
+		#topic-profile .folder-rating {
+			cursor: pointer;
+		}
+
 		#songs b.s,
-		#songs b.sh { /* Star */
+		#songs b.sh,
+		#topic-profile b.s,
+		#topic-profile b.sh { /* Star */
 			display: inline-block;
 			position: relative;
 			top: 3px;
@@ -2481,7 +2491,9 @@ input[type=range]::-ms-track {
 
 		/* Show filled stars when hovering on them (only when logged in) */
 		#songs .rating > b.sh:hover:before,
-		#songs .rating > b.sh:hover ~ b.sh:before {
+		#songs .rating > b.sh:hover ~ b.sh:before,
+		#topic-profile .folder-rating > b.sh:hover:before,
+		#topic-profile .folder-rating > b.sh:hover ~ b.sh:before {
 			content: "";
 			display: inline-block;
 			position: relative;
@@ -2491,15 +2503,18 @@ input[type=range]::-ms-track {
 			background: var(--svg-bg-star-orange);
 		}
 
-		#songs b.xv { /* User voted */
+		#songs b.xv,
+		#topic-profile b.xv { /* User voted */
 			background: var(--svg-bg-star-orange);
 		}
 
-		#songs b.ev { /* Empty voted */
+		#songs b.ev,
+		#topic-profile b.ev { /* Empty voted */
 			background: var(--svg-bg-star-empty-voted);
 		}
 
-		#songs b.eu { /* Empty unvoted */
+		#songs b.eu,
+		#topic-profile b.eu { /* Empty unvoted */
 			background: var(--svg-bg-star-empty-unvoted);
 		}
 

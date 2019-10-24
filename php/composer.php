@@ -21,6 +21,7 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH
 	die("Direct access not permitted.");
 
 $html = '';
+$rating = 0;
 $fullname = $_GET['fullname'];
 if (isset($fullname)) {
 
@@ -250,8 +251,6 @@ if (isset($fullname)) {
 			sort($years);
 
 			$ycounts = array_count_values($years);
-			/*$years_labels = array_keys($ycounts);
-			$years_counts = Array(array_values($ycounts));*/
 			$years_labels = Array();
 			$years_counts = Array();
 			if (!empty($years)) {
@@ -260,6 +259,31 @@ if (isset($fullname)) {
 					$years_counts[] = array_key_exists($year, $ycounts) ? $ycounts[$year] : null;
 				}
 				$years_counts = Array($years_counts);
+			}
+
+			// Get the user's rating for the folder
+			$select = $db->prepare('SELECT id, hash FROM hvsc_folders WHERE fullname = :fullname'.
+				(substr($fullname, 0, 1) == '!' ? ' AND user_id = '.$user_id : '').' LIMIT 1');
+			$select->execute(array(':fullname'=>$fullname));
+			$select->setFetchMode(PDO::FETCH_OBJ);
+			$row_folder = $select->fetch();
+
+			$user_id = $account->CheckLogin() ? $account->UserID() : 0;
+
+			if ($user_id) {
+				// Does the user have any rating for this folder?
+				if (!empty($row_folder->hash)) {
+					// Search hash first (best; will catch it if set for a clone)
+					$select_rating = $db->query('SELECT rating FROM ratings WHERE user_id = '.$user_id.' AND hash = "'.$row_folder->hash.'" AND type = "FOLDER"');
+					$select_rating->setFetchMode(PDO::FETCH_OBJ);
+					$rating = $select_rating->rowCount() ? $select_rating->fetch()->rating : 0;
+				}
+				if (!$rating) {
+					// Try again with direct table ID (some folders doesn't have a hash value)
+					$select_rating = $db->query('SELECT rating FROM ratings WHERE user_id = '.$user_id.' AND table_id = '.$row_folder->id.' AND type = "FOLDER"');
+					$select_rating->setFetchMode(PDO::FETCH_OBJ);
+					$rating = $select_rating->rowCount() ? $select_rating->fetch()->rating : 0;
+				}
 			}
 
 		} catch(PDOException $e) {
@@ -357,10 +381,9 @@ $html = '<table style="border:none;margin-bottom:0;"><tr>'.
 			'<td style="position:relative;vertical-align:top;">'.
 				'<h2 style="margin-top:0;'.(!empty($handles) ? 'margin-bottom:-1px;' : 'margin-bottom:6px;').'">'.$name.'</h2>'.
 				(!empty($handles) ? '<h3 style="margin-top:0;margin-bottom:7px;">'.$handles.'</h3>' : '').
+				'<span class="line folder-rating"></span>'. // Placeholder for star ratings (handled by JS)
 				($born != '0000-00-00' ? '<span class="line"><img class="icon cake" src="images/composer_cake.svg" title="Born" alt="" />'.
 					substr($born, 0, 4).'</span>' : '').
-				/*(!empty($onsid) ? '<span class="line onsid"><img class="icon" src="images/composer_chip.svg" title="OnSID" alt="" style="height:19px;" />'.
-					str_replace(', ', ', <img class="arrow" src="images/composer_arrowright.svg" title="...then later..." alt="" />', $onsid) : '').'</span>'.*/
 				($died != '0000' ? '<span class="line"><img class="icon stone" src="images/composer_stone.svg" title="Died" alt="" style="position:relative;top:3px;height:18px;margin-right:5px;" />'.
 					$died.' '.$cause.'</span>' : '').
 				(!empty($notable) ? '<span class="notable">'.
@@ -460,5 +483,5 @@ if ($fullname == $cgsc) {
 		</script>';
 }
 
-echo json_encode(array('status' => 'ok', 'html' => $html));
+echo json_encode(array('status' => 'ok', 'html' => $html, 'rating' => $rating));
 ?>

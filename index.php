@@ -1121,6 +1121,13 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>October 24, 2019</h3>
+						<ul>
+							<li>Composer and folder profiles now also show star ratings that you can click. They are the
+								same as is normally shown for a folder before entering it.
+							</li>
+						</ul>
+
 						<h3>October 18, 2019</h3>
 						<ul>
 							<li>Upgraded the WebSid emulator. Increased the initialization timeout for ALiH type players.</li>

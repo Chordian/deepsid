@@ -1494,6 +1494,9 @@ Browser.prototype = {
 					$("#topic-profile").empty().append(data.html);
 					ResetDexterScrollBar("profile");
 
+					// Add star rating for this composer profile
+					$("#topic-profile .folder-rating").append(this.buildStars(data.rating));
+
 					// Add report profile change link
 					var composerFolder = "http://deepsid.chordian.net/?file=/"+(overridePath == "" ? this.path.substr(1) : overridePath);
 					$("#profilechange").append('<a href="mailto:chordian@gmail.com?subject=DeepSID%20profile%20change&body=I%20have%20a%20profile%20change%20request%20for:%0D%0A'+composerFolder+'%0D%0A%0D%0A">Report a profile change</a>');

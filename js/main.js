@@ -753,6 +753,35 @@ $(function() { // DOM ready
 	});
 
 	/**
+	 * When clicking a rating star in a composer profile.
+	 */
+	$("#topic-profile").on("click", ".folder-rating b", function(event) {
+		// Clicked a star to set a rating for a folder or SID file
+		if (!$("#logout").length) {
+			// But must be logged in to do that
+			alert("Login or register and you can click these stars to vote for this folder/composer.");
+			return false;
+		}
+		var rating = event.shiftKey ? 0 : 5 - $(event.target).index();	// Remember stars are backwards (RTL; see CSS)
+		var homePath = browser.path.substr(1);							// Assume no searching to begin with
+
+		var $selected = $("#folders tr.selected");
+		if (browser.isSearching && $selected.length) {
+			// The user is searching and has clicked a specific song so the path is now specific to that
+			var fullname = decodeURIComponent($selected.find(".entry").attr("data-name"));
+			var sidFile = fullname.split("/").slice(-1)[0];
+			homePath = fullname.replace(sidFile, "").slice(0, -1); // Lose trailing slash
+		}
+
+		$.post("php/rating_write.php", { fullname: homePath, rating: rating }, function(data) {
+			browser.validateData(data, function(data) {
+				$("#topic-profile .folder-rating").empty().append(browser.buildStars(data.rating));
+			});
+		});
+		return false;
+	});
+
+	/**
 	 * When clicking a 'redirect' plink to open an arbitrary SID file without reloading DeepSID.
 	 */
 	$("#topic-csdb,#sundry,#topic-stil,#topic-changes,#topic-player").on("click", "a.redirect", function() {
