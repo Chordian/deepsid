@@ -3,7 +3,7 @@
  * DeepSID / Tracking
  *
  * Tracks IP addresses visiting the web site in real time. Called once upon
- * load by 'index.php' and then every 10 minutes by 'main.js'.
+ * load by 'index.php' and then every 5 minutes by 'main.js'.
  * 
  * The resulting file, 'visitors.txt', can then be examined and its data output
  * to e.g. another web page to keep track of visitors to the site.
@@ -35,8 +35,8 @@ fclose($handle);
 // Delete expired lines
 foreach($lines as $index => $visitor) {
 	$minutes = round(($now - $visitor['time_updated']) / 60);
-	if ($minutes > 20)
-		unset($lines[$index]); // 20 minutes has passed; remove it
+	if ($minutes > 10)
+		unset($lines[$index]); // 10 minutes has passed; remove it
 }
 
 $exists = false;
@@ -52,8 +52,8 @@ foreach($lines as $index => $visitor) {
 	}
 }
 
-if (!$exists) {
-	// Add new visitor to array
+if (!$exists && strpos($_SERVER['HTTP_USER_AGENT'], 'facebookexternalhit') == false) {
+	// Add new visitor to array (except external hits from Facebook as they can be spammy)
 	array_push($lines, array(
 		'ip_address'	=> $_SERVER['REMOTE_ADDR'],
 		'user_agent'	=> $_SERVER['HTTP_USER_AGENT'],

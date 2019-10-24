@@ -4,7 +4,7 @@
 	require_once("php/class.account.php"); // Includes setup
 	$user_id = $account->CheckLogin() ? $account->UserID() : 0;
 
-	require_once("tracking.php"); // Also called every 10 minutes by 'main.js'
+	require_once("tracking.php"); // Also called every 5 minutes by 'main.js'
 
 	$websid = 'WebSid emulator';
 
@@ -1120,6 +1120,11 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>October 18, 2019</h3>
+						<ul>
+							<li>Upgraded the WebSid emulator. Increased the initialization timeout for ALiH type players.</li>
+						</ul>
 
 						<h3>October 14, 2019</h3>
 						<ul>
