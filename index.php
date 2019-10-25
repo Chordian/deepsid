@@ -1124,6 +1124,9 @@
 						<h3>October 25, 2019</h3>
 						<ul>
 							<li>Parent folders in CGSC now also remember an updated profile rating when going back.</li>
+							<li>Composer profiles reused in other locations (such as in the exotic stereo 2SID folder or
+								in sub folders with work tunes) no longer show star ratings as it doesn't directly relate
+								to the parent folder in those situations.</li>
 						</ul>
 
 						<h3>October 24, 2019</h3>

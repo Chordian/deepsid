@@ -175,7 +175,9 @@ if (isset($fullname)) {
 
 		// OTHER FOLDERS
 
-		$fullname = ProxyExotic($fullname);
+		$exoticFullname = ProxyExotic($fullname);
+		$isExoticComposerFolder = ($fullname != $exoticFullname);
+		$fullname = $exoticFullname;
 
 		try {
 			if ($_SERVER['HTTP_HOST'] == LOCALHOST)
@@ -188,13 +190,16 @@ if (isset($fullname)) {
 			// If we are in a sub folder of a composer (e.g. work tunes or a previous handle) with no profile then re-use
 			// NOTE: This block is also used in the 'groups.php' file.
 			$folders = explode('/', $fullname);
+			$isBorrowedProfile = false;
 			if (count($folders) > 3 && $folders[1] == 'MUSICIANS' && !empty($folders[4])) {
 				// Do we have a profile for the unique sub folder of this composer?
 				$select = $db->prepare('SELECT 1 FROM composers WHERE fullname = :fullname LIMIT 1');
 				$select->execute(array(':fullname'=>$fullname));
-				if ($select->rowCount() == 0)
+				if ($select->rowCount() == 0) {
 					// No, re-use the profile of the parent composer folder then
 					$fullname = str_replace('/'.$folders[count($folders) - 1], '', $fullname);
+					$isBorrowedProfile = true;
+				}
 			}
 
 			// Get data for top part like birthday, country, etc.
@@ -381,7 +386,7 @@ $html = '<table style="border:none;margin-bottom:0;"><tr>'.
 			'<td style="position:relative;vertical-align:top;">'.
 				'<h2 style="margin-top:0;'.(!empty($handles) ? 'margin-bottom:-1px;' : 'margin-bottom:6px;').'">'.$name.'</h2>'.
 				(!empty($handles) ? '<h3 style="margin-top:0;margin-bottom:7px;">'.$handles.'</h3>' : '').
-				'<span class="line folder-rating"></span>'. // Placeholder for star ratings (handled by JS)
+				($isExoticComposerFolder || $isBorrowedProfile ? '' : '<span class="line folder-rating"></span>'). // Placeholder for star ratings (handled by JS)
 				($born != '0000-00-00' ? '<span class="line"><img class="icon cake" src="images/composer_cake.svg" title="Born" alt="" />'.
 					substr($born, 0, 4).'</span>' : '').
 				($died != '0000' ? '<span class="line"><img class="icon stone" src="images/composer_stone.svg" title="Died" alt="" style="position:relative;top:3px;height:18px;margin-right:5px;" />'.
