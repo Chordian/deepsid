@@ -1121,6 +1121,11 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>October 25, 2019</h3>
+						<ul>
+							<li>Parent folders in CGSC now also remember an updated profile rating when going back.</li>
+						</ul>
+
 						<h3>October 24, 2019</h3>
 						<ul>
 							<li>Composer and folder profiles now also show star ratings that you can click. They are the

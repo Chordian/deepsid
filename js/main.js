@@ -775,7 +775,19 @@ $(function() { // DOM ready
 
 		$.post("php/rating_write.php", { fullname: homePath, rating: rating }, function(data) {
 			browser.validateData(data, function(data) {
-				$("#topic-profile .folder-rating").empty().append(browser.buildStars(data.rating));
+				var stars = browser.buildStars(data.rating);
+				$("#topic-profile .folder-rating").empty().append(stars);
+
+				if (browser.path.indexOf("Compute's Gazette SID Collection") !== -1 && browser.cache.folder !== "") {
+					// Update the folder cache for CGSC too
+					var $folders = $(browser.cache.folder),
+						endName = homePath.indexOf("/") == -1 ? homePath : homePath.split("/").slice(-1)[0];
+					$($folders).find('.name[data-name="'+encodeURIComponent(endName)+'"]')
+					.parents("td").next().find(".rating")
+					.empty().append(stars);
+					// Has to be wrapped to get everything back
+					browser.cache.folder = $("<div>").append($folders.clone()).html();
+				}
 			});
 		});
 		return false;
