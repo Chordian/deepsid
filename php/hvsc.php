@@ -718,6 +718,7 @@ try {
 			// Get an array of tags for this file ("Jazz", "Rock", etc.)
 			$tags_origin = array();
 			$tags_suborigin = array();
+			$tags_mixorigin = array();
 			$tags_production = array();
 			$tags_other = array();
 			$tag_ids = $db->query('SELECT tags_id FROM tags_lookup WHERE files_id = '.$row->id);
@@ -733,6 +734,9 @@ try {
 					case 'SUBORIGIN':
 						array_push($tags_suborigin, $tag_info->name);
 						break;
+					case 'MIXORIGIN':
+						array_push($tags_mixorigin, $tag_info->name);
+						break;
 					case 'PRODUCTION':
 						array_push($tags_production, $tag_info->name);
 						break;
@@ -742,14 +746,16 @@ try {
 			}
 			sort($tags_origin);
 			sort($tags_suborigin);
+			sort($tags_mixorigin);
 			sort($tags_production);
 			sort($tags_other);
-			$list_of_tags = array_merge($tags_production, $tags_origin, $tags_suborigin, $tags_other);
+			$list_of_tags = array_merge($tags_production, $tags_origin, $tags_suborigin, $tags_mixorigin, $tags_other);
 
 			$type_of_tags = array_merge(
 				array_fill(0, count($tags_production),	'production'),
 				array_fill(0, count($tags_origin),		'origin'),
 				array_fill(0, count($tags_suborigin),	'suborigin'),
+				array_fill(0, count($tags_mixorigin),	'mixorigin'),
 				array_fill(0, count($tags_other),		'other')
 			);
 

@@ -1126,6 +1126,7 @@
 							<li>The legacy iOS version of the WebSid emulator broke in the latest iOS 13 update and thus
 								has been replaced by the latest WebSid version also used on desktop computers. Yes, it is
 								very demanding &ndash; but at least it works.</li>
+							<li>The <b>Remix</b> and <b>Pastiche</b> tags now have a faded color (origin to normal).</li>
 						</ul>
 
 						<h3>October 25, 2019</h3>

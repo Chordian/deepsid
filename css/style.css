@@ -54,6 +54,8 @@
 	--color-bg-tag-prod:			#959aad;
 	--color-text-tag-origin:		var(--color-text-tag);
 	--color-bg-tag-origin:			#b09292;
+	--color-text-tag-mixorigin:		var(--color-text-tag);
+	--color-bg-tag-mixorigin:		linear-gradient(to right, #b09292 5%,#a8ad95 95%);
 
 	--color-border:					#ced0c0;			/* For borders and text labels where its container is disabled */
 	--color-border-box:				#c8c8b9;			/* For borders around various boxes and input fields */
@@ -402,6 +404,8 @@
 	--color-bg-tag-prod:			#a5a9b9;
 	--color-text-tag-origin:		var(--color-text-tag);
 	--color-bg-tag-origin:			#bca3a2;
+	--color-text-tag-mixorigin:		var(--color-text-tag);
+	--color-bg-tag-mixorigin:		linear-gradient(to right, #bca3a2 25%,#b6b9a5 100%);
 
 	--color-border:					#0c0c0c;			/* For borders and text labels where its container is disabled */
 	--color-border-box:				#2c2c2c;			/* For borders around various boxes and input fields */
@@ -2051,6 +2055,11 @@ input[type=range]::-ms-track {
 				background: var(--color-bg-tag-origin);
 			}
 
+			.tag-mixorigin {
+				color: var(--color-text-tag-mixorigin);
+				background: var(--color-bg-tag-mixorigin);
+			}
+
 		.edit-tags {
 			display: none;
 			padding: 0;
@@ -2090,7 +2099,8 @@ input[type=range]::-ms-track {
 				}
 
 				.tag-origin:before,
-				.tag-suborigin:before {
+				.tag-suborigin:before,
+				.tag-mixorigin:before {
 					border-color: transparent var(--color-bg-tag-origin) transparent transparent;
 				}
 
@@ -2137,6 +2147,10 @@ input[type=range]::-ms-track {
 				.tag-origin:after,
 				.tag-suborigin:after {
 					color: var(--color-text-tag-origin);
+				}
+
+				.tag-mixorigin:after {
+					color: var(--color-text-tag-mixorigin);
 				}
 
 	/* Light blue bar indicating all of 64 KB RAM */
