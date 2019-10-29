@@ -48,9 +48,9 @@
 			<?php else : ?>
 				<?php if (!isIOS()) : $websid = 'WebSid (Legacy)'; ?>
 					<script type="text/javascript" src="js/handlers/backend_tinyrsid_legacy.js"></script>
-				<?php else : $websid = 'WebSid (iOS)'; ?>
-					<script type="text/javascript" src="js/handlers/backend_tinyrsid_ios.js"></script>
-				<?php endif ?>
+				<?php else : $websid = 'WebSid (SLOW)'; ?>
+					<script type="text/javascript" src="js/handlers/backend_tinyrsid.js"></script>
+				<?php endif // The legacy iOS version of WebSid broke in iOS update 13 ?>
 			<?php endif ?>
 		<?php endif ?>
 
@@ -1120,6 +1120,13 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>October 29, 2019</h3>
+						<ul>
+							<li>The legacy iOS version of the WebSid emulator broke in the latest iOS 13 update and thus
+								has been replaced by the latest WebSid version also used on desktop computers. Yes, it is
+								very demanding &ndash; but at least it works.</li>
+						</ul>
 
 						<h3>October 25, 2019</h3>
 						<ul>

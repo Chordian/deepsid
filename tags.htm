@@ -92,6 +92,9 @@
 			waveform) is more common because there has once been a
 			<a href="http://deepsid.chordian.net/?file=%2FCSDb%20Music%20Competitions%2FWaveform%20%2411%20Music%20Compo">
 			competition</a> based around this.</p>
+		<p>The <b>$71</b> tag is a special case as it does not exclude other waveforms in the song. It's used for songs
+			that uses this waveform in a channel for e.g. a leader, not just in something like a wave table step. This
+			waveform is rarely used in a clean manner which is the reason for this exception.</p>
 
 		<h4>2x, 3x, 4x, 5x, etc.</h4>
 		<p>Indicates the multispeed multiplier used by the tune.</p>
@@ -200,20 +203,21 @@
 		</ul>
 
 		<h4>Crack Intro</h4>
-		<p>The tune was used in one or more crack intros. Additional production tags are allowed. Note that "demo-style"
-		intros (e.g. as used in competitions) usually receive the <b>Demo</b> tag instead.</p>
+		<p>The tune was used in one or more crack intros. Additional production tags are allowed. Note that standalone or
+			"demo-style" intros (e.g. as used in competitions) usually receive the smaller <b>Intro</b> tag instead.</p>
 
 		<h4>Demo</h4>
 		<p>The tune was written for a demo (or variants &ndash; see below) and subsequently used in it. Additional
 		production tags are allowed.</p>
 		<ul>
-			<li>Applies to demos (multi/one/fake), graphic collections, and "demo-style" intros (e.g. as used in
-			competitions).</li>
-			<li>Does not apply to tools, other collections (including music) nor miscellanous.</li>
+			<li>Applies to demos (multi/one/fake) and graphic collections.</li>
+			<li>Does not apply to tools, single graphics, other collections (including music) nor miscellanous.</li>
 		</ul>
 		<p>You read that right &ndash; music collections never get a tag. Many composers have several music collection
-		productions but as a tag indicating this, it's not really that valuable &ndash; and it tends to overpopulate
-		folders like a virus.</p>
+			productions but as a tag indicating this, it's not really that valuable &ndash; and it tends to overpopulate
+			folders like a virus.</p>
+		<p>Previously standalone or "demo-style" intros also received this tag, but it was later changed so they receive
+			a proper <b>Intro</b> tag instead. (For cracks, use the <b>Crack Intro</b> tag.)</p>
 
 		<h4>Diskmag</h4>
 		<p>The tune was written for a disk magazine and subsequently used in it. Additional production tags are allowed.</p>
@@ -298,8 +302,12 @@
 		<p>Although the tune may not be interactive in DeepSID, it might have been part of a production where the user
 			could change the song in real time.</p>
 
+		<h4>Intro</h4>
+		<p>The tune was used in a "demo-style" or otherwise standalone intro. Additional production tags are allowed. If
+			it is an intro meant for cracks (whether utilized or not) it should receive the <b>Crack Intro</b> tag instead.</p>
+
 		<h4>Jingle</h4>
-		<p>The file contains one of more jingles. A jingle stops at one point &ndash; usually after less than half a
+		<p>The file contains one or more jingles. A jingle stops at one point &ndash; usually after less than half a
 			minute, but may be longer. Additional meta tags are allowed.</p>
 		<p>If the tune is short but restarts over and over, it should probably use a <b>Loop</b> tag instead. However,
 			sometimes a jingle that restarts may actually still be a jingle &ndash; it might just be the player that either
@@ -329,6 +337,8 @@
 		<p>This is not a genre tag. It indicates when two or more channels are combined in a specific way that emulates
 			an organ sound. One of the best examples can be found in a level tune of Ghouls 'n' Ghosts by
 			<a href="http://deepsid.chordian.net/?file=/MUSICIANS/F/Follin_Tim/">Tim Follin</a>.</p>
+		<p>Sometimes the tag can also be added to songs that also demonstrate organ sounds produced by single channels,
+			but they would have to be convincing.</p>
 
 		<h4>Pan Flute</h4>
 		<p>This is not a genre tag. Instead, it indicates a specific use of modulations that may create a SID instrument
@@ -366,6 +376,12 @@
 		<ul>
 			<li>Does not apply to tunes that starts out as a SFX (or has later parts) if there are musical notes in it.</li>
 		</ul>
+
+		<h4>Short</h4>
+		<p>The tune is a jingle or a loop that is shorter than 10 seconds.
+		<p>This tag should only be applied to files with
+			just one tune in it. Files with several game sub tunes would be too easy a target as you already expect them to
+			have very short jingles and such.</p>
 
 		<h4>Solo</h4>
 		<p>The tune has a solo with a lead instrument.</p>
