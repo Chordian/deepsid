@@ -1336,7 +1336,11 @@ Browser.prototype = {
 	buildTags: function(tags, types) {
 		var list_of_tags = '';
 		$.each(tags, function(i, tag) {
-			list_of_tags += '<div class="tag tag-'+types[i]+'">'+tag+'</div>';
+			if (tag == "Remix64")
+				// A special look for the "Remix 64" tag
+				list_of_tags += '<div class="tag tag-remix64">&nbsp;</div>';
+			else
+				list_of_tags += '<div class="tag tag-'+types[i]+'">'+tag+'</div>';
 		});
 		list_of_tags += '<div class="edit-tags" title="Edit tags">&nbsp;</div>';
 

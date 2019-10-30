@@ -1052,6 +1052,11 @@
 							space. If you hover your mouse pointer on it, the tooltip will tell you the memory boundaries in
 							hex and the size in bytes.
 						</p>
+						<p>
+							If you want a box with this information and more, click the <b>Visuals</b> tab and then the
+							<b>MEMO</b> button. And nifty shortcut to this is to just click the dark blue blob in that blue
+							bar mentioned before.
+						</p>
 
 						<h3>What URL parameters are available?</h3>
 						<p>
@@ -1120,6 +1125,11 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>October 30, 2019</h3>
+						<ul>
+							<li>Spiced up the tag for <b>Remix64</b> to make it more recognizable.</li>
+						</ul>
 
 						<h3>October 29, 2019</h3>
 						<ul>
