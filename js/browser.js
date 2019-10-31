@@ -313,33 +313,11 @@ Browser.prototype = {
 									fileTags:	browser.fileTags
 								}, function(data) {
 									browser.validateData(data, function(data) {
-
-										var list_of_tags = browser.buildTags(data.tags, data.tagtypes),
-											endName = browser.isSymlist || browser.isCompoFolder ? thisFullname : thisFullname.split("/").slice(-1)[0];
-
-										// Make the tags sticky without refreshing the page
-										var $td = $(event.target).parents("td");
-										$td.find(".tags-line").empty().append(list_of_tags);
-
-										// Update the playlist array
-										$.each(browser.playlist, function(i, file) {
-											if (file.filename == endName) {
-												file.tags = list_of_tags;
-												return false;
-											}
-										});
-
-										if (browser.isBigCompoFolder()) {
-											// Update the compolist arrays
-											$.each([browser.compolist, browser.cache.compolist], function() {
-												$.each(this, function(i, file) {
-													if (file.foldername == endName) {
-														file.tags = list_of_tags;
-														return false;
-													}
-												});
-											});
-										}
+										browser.updateStickyTags(
+											$(event.target).parents("td"),
+											browser.buildTags(data.tags, data.tagtypes),
+											(browser.isSymlist || browser.isCompoFolder ? thisFullname : thisFullname.split("/").slice(-1)[0])	
+										);
 									});
 								}.bind(this));
 							});
@@ -1718,8 +1696,10 @@ Browser.prototype = {
 			$("#loading-remix").fadeIn(500);
 		}, 250);
 
+		var thisFullname = browser.playlist[browser.songPos].fullname.substr(5); 
+
 		var params = typeof optionalID === "undefined"
-			? { fullname: browser.playlist[browser.songPos].fullname.substr(5) }
+			? { fullname: thisFullname }
 			: { id: optionalID };
 
 		this.remix = $.get("php/remix.php", params, function(data) {
@@ -1729,13 +1709,28 @@ Browser.prototype = {
 				$("#topic-remix").empty().append(data.html)
 					.css("visibility", "visible");
 				ResetDexterScrollBar("remix");
-	
+
 				// If there are any entries then show a notification number on the 'Remix' tab (if not in focus)
 				if (data.count > 0 && $("#tabs .selected").attr("data-topic") !== "remix" && !this.isCGSC())
 					$("#note-remix").empty().append(data.count).show();
 				else
 					$("#note-remix").hide();
-	
+
+				// IF there are entries but no "Remix64" tag then add it now
+				if (data.count > 0 && browser.playlist[browser.songPos].tags.indexOf("tag-remix64") == -1) {
+					$.post("php/tags_write_single.php", {
+						fullname:	thisFullname,
+						tag:		"Remix64",
+					}, function(data) {
+						browser.validateData(data, function(data) {
+							browser.updateStickyTags(
+								$("#songs tr.selected"),
+								browser.buildTags(data.tags, data.tagtypes),
+								thisFullname.split("/").slice(-1)[0]
+							);
+						});
+					}.bind(this));
+				}
 			});
 		}.bind(this));
 	},
@@ -2136,6 +2131,39 @@ Browser.prototype = {
 	 */
 	isBigCompoFolder: function() {
 		return this.path == "/CSDb Music Competitions";
+	},
+
+	/**
+	 * Update the tags directly in the SID row. Also updates arrays.
+	 * 
+	 * @param {object} $selected		The DOM object with the <TD> SID row.
+	 * @param {string} list_of_tags		HTML list of tags.
+	 * @param {string} endName			The SID name without prepended path.
+	 */
+	updateStickyTags: function($selected, list_of_tags, endName) {
+	 
+		// Make the tags sticky without refreshing the page
+		$selected.find(".tags-line").empty().append(list_of_tags);
+
+		// Update the playlist array
+		$.each(this.playlist, function(i, file) {
+			if (file.filename == endName) {
+				file.tags = list_of_tags;
+				return false;
+			}
+		});
+
+		if (browser.isBigCompoFolder()) {
+			// Update the compolist arrays
+			$.each([this.compolist, this.cache.compolist], function() {
+				$.each(this, function(i, file) {
+					if (file.foldername == endName) {
+						file.tags = list_of_tags;
+						return false;
+					}
+				});
+			});
+		}
 	},
 
 	/**

@@ -1126,6 +1126,12 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>October 31, 2019</h3>
+						<ul>
+							<li>If you click a song and DeepSID detects that it has entries in the remix tab, a <b>Remix64</b>
+								tag will automatically be added to it if it doesn't already have it.</li>
+						</ul>
+
 						<h3>October 30, 2019</h3>
 						<ul>
 							<li>Spiced up the tag for <b>Remix64</b> to make it more recognizable.</li>

@@ -56,7 +56,6 @@
 	--color-bg-tag-origin:			#b09292;
 	--color-text-tag-mixorigin:		var(--color-text-tag);
 	--color-bg-tag-mixorigin:		linear-gradient(to right, #b09292 5%,#a8ad95 95%);
-	/*--color-bg-tag-remix64:			#6878c0;*/
 	--color-bg-tag-r64start:		#6c7cc0;
 	--color-bg-tag-remix64:			linear-gradient(to right, var(--color-bg-tag-r64start) 0%,#5458b0 100%);
 
