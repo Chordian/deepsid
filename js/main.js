@@ -26,16 +26,25 @@ var tabPrevScrollPos = {
 $(function() { // DOM ready
 
 	var userExists = false;
+
+	// Get the emulator last used by the visitor
+	// ###################################### NEED TO REPLACE WITH COOKIE FOR PHP TO WORK WITH TOO!!!!!!!!!!
+	var storedEmulator = localStorage.getItem("emulator");
+	if (storedEmulator == null) storedEmulator = "websid";
+
+	// However, a URL switch may TEMPORARILY override the stored emulator
+	// NOTE: Don't set this URL override in the local storage too.
 	var emulator = GetParam("emulator").toLowerCase();
 	if ($.inArray(emulator, [
 		"websid",
+		"legacy",
 		"jssid",
 		"soasc_auto",
 		"soasc_r2",
 		"soasc_r4",
 		"soasc_r5",
 		"download",
-	]) === -1) emulator = "websid";
+	]) === -1) emulator = storedEmulator;
 
 	// Lower buffer size values may freeze DeepSID
 	scope = $("body").attr("data-mobile") === "0" ? new Tracer(16384, 40) : new SidTracer(16384);
@@ -336,7 +345,14 @@ $(function() { // DOM ready
 				viz.allEmuButtonsOff();
 
 				var emulator = $("#dropdown-emulator").styledGetValue();
+				localStorage.setItem("emulator", emulator);
 				viz.setEmuButton(emulator);
+
+
+
+// ##### code here for refreshing browser if alternating the websid twins
+
+
 
 				SID = null;
 				delete SID;
@@ -345,7 +361,7 @@ $(function() { // DOM ready
 				SID.setVolume(1);
 
 				// The color of the time bar should be unique for the chosen SID handler
-				$("#time-bar").removeClass("websid jssid soasc_auto soasc_r2 soasc_r4 soasc_r5").addClass(emulator)
+				$("#time-bar").removeClass("websid legacy jssid soasc_auto soasc_r2 soasc_r4 soasc_r5").addClass(emulator)
 					.css("cursor", SID.emulatorFlags.supportSeeking ? "pointer" : "default");
 
 				$("#faster").removeClass("disabled");
@@ -1427,15 +1443,15 @@ function DisableIncompatibleRows() {
 				$tr.addClass("disabled");
 		} else if (isSIDFile && $tr.find(".name").attr("data-name").indexOf("BASIC.sid") !== -1) {
 			// The emulators can't do tunes made in BASIC
-			SID.emulator == "websid" || SID.emulator == "jssid"
+			SID.emulator == "websid" || SID.emulator == "legacy" || SID.emulator == "jssid"
 				? $tr.addClass("disabled")
 				: $tr.removeClass("disabled");
-		} else if (isSIDFile && SID.emulator == "websid" &&
+		} else if (isSIDFile && (SID.emulator == "websid" || SID.emulator == "legacy") &&
 			($tr.find(".name").attr("data-name").indexOf("Acid_Flashback.sid") !== -1 || 
 			 $tr.find(".name").attr("data-name").indexOf("Comaland_tune_3.sid") !== -1 ||
 			 $tr.find(".name").attr("data-name").indexOf("Fantasmolytic_tune_2.sid") !== -1)) {
 			// @todo Replace this with a proper incompatibility system later.
-			SID.emulator == "websid"
+			SID.emulator == "websid" || SID.emulator == "legacy"
 				? $tr.addClass("disabled")
 				: $tr.removeClass("disabled");
 		} else if (isSIDFile && ($tr.find(".name").attr("data-type") === "RSID" || $tr.find(".name").attr("data-name").indexOf(".mus") !== -1)) {

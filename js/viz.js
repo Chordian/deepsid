@@ -391,7 +391,7 @@ Viz.prototype = {
 	 * @param {string} emulator 
 	 */
 	setEmuButton: function(emulator) {
-		if (emulator == "websid" || emulator == "jssid") {
+		if (emulator == "websid" || emulator == "legacy" || emulator == "jssid") {
 			$("#page .viz-"+emulator).addClass("button-on"); 
 			$("#page .viz-msg-emu").hide();
 		} else
@@ -696,7 +696,7 @@ Viz.prototype = {
 	 */
 	animateScope: function() {
 		if ($("#sundry-tabs .selected").attr("data-topic") !== "osc") return; // Tab not active
-		if (SID.emulator !== "websid") {
+		if (SID.emulator !== "websid" && SID.emulator !== "legacy") {
 			if (this.tabOscMode !== "NOTWEBSID") {
 				$("#scope1,#scope2,#scope3,#scope4").hide(); // Don't use 'canvas' or '.scope' here
 				$("#stopic-osc .sundryMsg").empty().append('This view requires the <button id="set-websid">WebSid</button> emulator.').show();

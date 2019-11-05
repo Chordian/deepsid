@@ -61,7 +61,7 @@ if (($handle = fopen(TRACKFILE, 'r')) != false) {
 			$type = ' jch';
 		elseif (!empty($line[2]))
 			$type = ' user';
-		elseif (strpos($line[1], 'facebookexternalhit'))
+		elseif (strpos($line[1], 'www.facebook.com'))
 			$type = ' fb';
 		$html .= '
 			<div class="tracking'.$type.'">

@@ -31,6 +31,7 @@ function SIDPlayer(emulator) {
 	switch (this.emulator) {
 
 		case "websid":
+		case "legacy":
 
 			/**
 			 * WebSid by Jürgen Wothke (Tiny'R'Sid)
@@ -207,6 +208,7 @@ SIDPlayer.prototype = {
 		switch (this.emulator) {
 
 			case "websid":
+			case "legacy":
 
 				var error = file.indexOf("_BASIC.") !== -1;
 				if (error) this.setVolume(0);
@@ -410,6 +412,7 @@ SIDPlayer.prototype = {
 	unload: function() {
 		switch (this.emulator) {
 			case "websid":
+			case "legacy":
 			case "jssid":
 				// At least stop the tune
 				this.stop();
@@ -435,6 +438,7 @@ SIDPlayer.prototype = {
 		}
 		switch (this.emulator) {
 			case "websid":
+			case "legacy":
 				if (typeof forcePlay !== "undefined")
 					this.WebSid.play();
 				else
@@ -472,6 +476,7 @@ SIDPlayer.prototype = {
 		var playing;
 		switch (this.emulator) {
 			case "websid":
+			case "legacy":
 				playing = !this.WebSid.isPaused();
 				break;
 			case "jssid":
@@ -494,6 +499,7 @@ SIDPlayer.prototype = {
 		this.paused = true;
 		switch (this.emulator) {
 			case "websid":
+			case "legacy":
 				this.WebSid.pause();
 				break;
 			case "jssid":
@@ -515,6 +521,7 @@ SIDPlayer.prototype = {
 		viz.stopBufferEndedEffects();
 		switch (this.emulator) {
 			case "websid":
+			case "legacy":
 				this.load(); // Dirty hack to make sure the tune is restarted next time it is played
 				this.WebSid.pause();
 				break;
@@ -542,6 +549,7 @@ SIDPlayer.prototype = {
 	speed: function(multiplier) {
 		switch (this.emulator) {
 			case "websid":
+			case "legacy":
 				var normalSampleRate = this.WebSid.getDefaultSampleRate();
 				this.WebSid.resetSampleRate(normalSampleRate / multiplier);
 				break;
@@ -569,10 +577,8 @@ SIDPlayer.prototype = {
 			isCGSC = this.file.indexOf("_Compute's Gazette SID Collection") !== -1;
 		switch (override || this.emulator) {
 			case "websid":
+			case "legacy":
 				SIDBackend.updateSongInfo(this.file, result);
-				// iOS uses an older WebSID scriptprocessor script
-				var iOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-				if (!iOS) result.maxSubsong = isCGSC ? 0 : result.maxSubsong - 1;
 				break;
 			case "jssid":
 				result.actualSubsong	= this.subtune;
@@ -625,6 +631,7 @@ SIDPlayer.prototype = {
 		this.mainVol = value;
 		switch (this.emulator) {
 			case "websid":
+			case "legacy":
 				this.WebSid.setVolume(value);
 				break;
 			case "jssid":
@@ -646,6 +653,7 @@ SIDPlayer.prototype = {
 	setVolume: function(value) {
 		switch (this.emulator) {
 			case "websid":
+			case "legacy":
 				this.WebSid.setVolume(value * this.mainVol);
 				break;
 			case "jssid":
@@ -668,6 +676,7 @@ SIDPlayer.prototype = {
 		var time = 0;
 		switch (this.emulator) {
 			case "websid":
+			case "legacy":
 				time = this.WebSid.getCurrentPlaytime();
 				break;
 			case "jssid":
@@ -708,6 +717,7 @@ SIDPlayer.prototype = {
 	disableTimeout: function() {
 		switch (this.emulator) {
 			case "websid":
+			case "legacy":
 				this.WebSid._currentTimeout = -1;
 				break;
 			case "jssid":
@@ -728,6 +738,7 @@ SIDPlayer.prototype = {
 	enableTimeout: function(length) {
 		switch (this.emulator) {
 			case "websid":
+			case "legacy":
 				this.WebSid._currentTimeout = length * this.WebSid._sampleRate;
 				break;
 			case "jssid":
@@ -748,6 +759,7 @@ SIDPlayer.prototype = {
 	setModel: function(model) {
 		switch (this.emulator) {
 			case "websid":
+			case "legacy":
 				SIDBackend.setSID6581(model === "6581" ? 1 : 0);
 				break;
 			case "jssid":
@@ -776,6 +788,7 @@ SIDPlayer.prototype = {
 	getModel: function() {
 		switch (this.emulator) {
 			case "websid":
+			case "legacy":
 				return SIDBackend.isSID6581() ? "6581" : "8580";
 			case "jssid":
 				return this.jsSID.getmodel() === 6581.0 ? "6581" : "8580";
@@ -794,6 +807,7 @@ SIDPlayer.prototype = {
 	setEncoding: function(encoding) {
 		switch (this.emulator) {
 			case "websid":
+			case "legacy":
 				SIDBackend.setNTSC(encoding === "NTSC" ? 1 : 0);
 				break;
 			case "jssid":
@@ -816,6 +830,7 @@ SIDPlayer.prototype = {
 	getEncoding: function() {
 		switch (this.emulator) {
 			case "websid":
+			case "legacy":
 				return SIDBackend.isNTSC() ? "NTSC" : "PAL";
 			case "jssid":
 				// jsSID always defaults to PAL
@@ -839,6 +854,7 @@ SIDPlayer.prototype = {
 		this.voiceMask[chip] ^= 1 << (voice - 1); // Toggle a bit in the '1111' mask
 		switch (this.emulator) {
 			case "websid":
+			case "legacy":
 				if ($("body").attr("data-mobile") === "0")
 					SIDBackend.enableVoice(chip, voice - 1, this.voiceMask[chip] & 1 << (voice - 1));
 				break;
@@ -863,6 +879,7 @@ SIDPlayer.prototype = {
 		this.voiceMask = [0xF, 0xF, 0xF];
 		switch (this.emulator) {
 			case "websid":
+			case "legacy":
 				if ($("body").attr("data-mobile") === "0") {
 					for (var chip = 0; chip < 3; chip++) {
 						for (var voice = 0; voice < 4; voice++)
@@ -889,6 +906,7 @@ SIDPlayer.prototype = {
 	getPace: function() {
 		switch (this.emulator) {
 			case "websid":
+			case "legacy":
 				var cia = SIDBackend.getRAM(0xDC04) + SIDBackend.getRAM(0xDC05) * 256;
 				// 19654 relates to 1x; lower values speed up the tune
 				return cia ? Math.round(19654 / cia) : 0;
@@ -909,6 +927,7 @@ SIDPlayer.prototype = {
 	getDigiType: function() {
 		switch (this.emulator) {
 			case "websid":
+			case "legacy":
 				return SIDBackend.getDigiTypeDesc();
 			case "jssid":
 			case "soasc":
@@ -926,6 +945,7 @@ SIDPlayer.prototype = {
 	getDigiRate: function() {
 		switch (this.emulator) {
 			case "websid":
+			case "legacy":
 				return SIDBackend.getDigiRate();
 			case "jssid":
 			case "soasc":
@@ -945,6 +965,7 @@ SIDPlayer.prototype = {
 		if (chip == 1) return 0xD400;
 		switch (this.emulator) {
 			case "websid":
+			case "legacy":
 				// Use the SID file header to figure out the SID chip address
 				// NOTE: A line must be inserted in 'backend_tinyrsid.js' for this to work!
 				var address = 0;
@@ -976,6 +997,7 @@ SIDPlayer.prototype = {
 		if (typeof chip === "undefined") chip = 0; else chip -= 1;
 		switch (this.emulator) {
 			case "websid":
+			case "legacy":
 				if (chip && typeof SIDBackend.sidFileHeader != "undefined")
 					// Use the SID file header to figure out the SID chip address
 					// NOTE: A line must be inserted in 'backend_tinyrsid.js' for this to work!
@@ -1000,6 +1022,7 @@ SIDPlayer.prototype = {
 	readMemory: function(address) {
 		switch (this.emulator) {
 			case "websid":
+			case "legacy":
 				return SIDBackend.getRAM(address);
 			case "jssid":
 				return this.jsSID.readregister(address);

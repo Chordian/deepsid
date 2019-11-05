@@ -52,7 +52,7 @@ foreach($lines as $index => $visitor) {
 	}
 }
 
-if (!$exists && strpos($_SERVER['HTTP_USER_AGENT'], 'facebookexternalhit') == false) {
+if (!$exists && strpos($_SERVER['HTTP_USER_AGENT'], 'www.facebook.com') == false) {
 	// Add new visitor to array (except external hits from Facebook as they can be spammy)
 	array_push($lines, array(
 		'ip_address'	=> $_SERVER['REMOTE_ADDR'],

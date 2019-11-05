@@ -42,16 +42,20 @@
 			<script type="text/javascript" src="http://www.wothke.ch/tmp/scriptprocessor_player.js"></script>
 			<script type="text/javascript" src="http://www.wothke.ch/tmp/backend_tinyrsid.js"></script>
 		<?php else: ?>
+			<script type="text/javascript">
+				// Use legacy WebSid if; 1. Specified by URL switch, 2. Used the last time
+				var legacy = decodeURIComponent((RegExp('emulator=' + '(.+?)(&|$)').exec(location.search.replace(/\+/g, " "))||[,""])[1]).toLowerCase() == "legacy" ||
+					localStorage.getItem("emulator") == "legacy"
+						? "_legacy" : "";
+				// $.getScript("js/handlers/backend_tinyrsid"+legacy+".js");
+				$.ajax({
+					url:		"js/handlers/backend_tinyrsid"+legacy+".js",
+					dataType:	"script",
+					async:		false,
+				});				
+			</script>
 			<script type="text/javascript" src="js/handlers/scriptprocessor_player.js"></script>
-			<?php if (!isMobile()): ?>
-				<script type="text/javascript" src="js/handlers/backend_tinyrsid.js"></script>
-			<?php else : ?>
-				<?php if (!isIOS()) : $websid = 'WebSid (Legacy)'; ?>
-					<script type="text/javascript" src="js/handlers/backend_tinyrsid_legacy.js"></script>
-				<?php else : $websid = 'WebSid (SLOW)'; ?>
-					<script type="text/javascript" src="js/handlers/backend_tinyrsid.js"></script>
-				<?php endif // The legacy iOS version of WebSid broke in iOS update 13 ?>
-			<?php endif ?>
+			<!--<script type="text/javascript" src="js/handlers/backend_tinyrsid.js"></script>-->
 		<?php endif ?>
 
 		<script type="text/javascript" src="js/handlers/jsSID-modified.js"></script>
@@ -198,6 +202,9 @@
 				<div id="logo" class="unselectable">D e e p S I D</div>
 				<select id="dropdown-emulator" name="select-emulator" style="visibility:hidden;">
 					<option value="websid"><?php echo $websid; ?></option>
+					<?php if (!isMobile()): ?>
+						<option value="legacy">WebSid (Legacy)</option>
+					<?php endif; ?>
 					<option value="jssid">Hermit's emulator</option>
 					<option value="soasc_auto">SOASC Automatic</option>
 					<option value="soasc_r2">SOASC 6581 R2</option>

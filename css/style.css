@@ -1816,7 +1816,8 @@ input[type=range]::-ms-track {
 			pointer-events: none;
 		}
 
-		#time .websid div		{ background: var(--color-timebar-websid); }
+		#time .websid div,
+		#time .legacy div		{ background: var(--color-timebar-websid); }
 		#time .jssid div		{ background: var(--color-timebar-jssid); }
 		#time .soasc_auto div	{ background: var(--color-timebar-soasc-auto); }
 		#time .soasc_r2 div		{ background: var(--color-timebar-soasc-r2); }
