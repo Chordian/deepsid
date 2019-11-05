@@ -388,7 +388,8 @@ Controls.prototype = {
 				break;
 			case "set-websid":
 				// Button in scope sundry box for forcing WebSid emulator
-				$("#dropdown-emulator").styledSetValue("websid").next("div.styledSelect").trigger("change");
+				$("#dropdown-emulator").styledSetValue(isLegacyWebSid ? "legacy" : "websid")
+					.next("div.styledSelect").trigger("change");
 				break;
 			case "set-16k":
 				// Button in scope sundry box for forcing a buffer size of 16384

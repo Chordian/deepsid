@@ -6,8 +6,6 @@
 
 	require_once("tracking.php"); // Also called every 5 minutes by 'main.js'
 
-	$websid = 'WebSid emulator';
-
 	function isMobile() {
 		return isset($_GET['mobile'])
 			? $_GET['mobile']
@@ -16,6 +14,11 @@
 
 	function isIOS() {
 		return preg_match("/(iphone|ipad|ipod)/i", $_SERVER["HTTP_USER_AGENT"]);
+	}
+
+	function isLegacyWebSid() {
+		return (isset($_GET['emulator']) && strtolower($_GET['emulator']) == 'legacy') ||
+			(isset($_COOKIE['emulator']) && strtolower($_COOKIE['emulator']) == 'legacy');
 	}
 ?>
 <!DOCTYPE html>
@@ -42,34 +45,28 @@
 			<script type="text/javascript" src="http://www.wothke.ch/tmp/scriptprocessor_player.js"></script>
 			<script type="text/javascript" src="http://www.wothke.ch/tmp/backend_tinyrsid.js"></script>
 		<?php else: ?>
-			<script type="text/javascript">
-				// Use legacy WebSid if; 1. Specified by URL switch, 2. Used the last time
-				var legacy = decodeURIComponent((RegExp('emulator=' + '(.+?)(&|$)').exec(location.search.replace(/\+/g, " "))||[,""])[1]).toLowerCase() == "legacy" ||
-					localStorage.getItem("emulator") == "legacy"
-						? "_legacy" : "";
-				// $.getScript("js/handlers/backend_tinyrsid"+legacy+".js");
-				$.ajax({
-					url:		"js/handlers/backend_tinyrsid"+legacy+".js",
-					dataType:	"script",
-					async:		false,
-				});				
-			</script>
 			<script type="text/javascript" src="js/handlers/scriptprocessor_player.js"></script>
-			<!--<script type="text/javascript" src="js/handlers/backend_tinyrsid.js"></script>-->
+			<?php if (isLegacyWebSid()): ?>
+				<script type="text/javascript" src="js/handlers/backend_tinyrsid_legacy.js"></script>
+			<?php else: ?>
+				<script type="text/javascript" src="js/handlers/backend_tinyrsid.js"></script>
+			<?php endif ?>
 		<?php endif ?>
 
 		<script type="text/javascript" src="js/handlers/jsSID-modified.js"></script>
 		<script type="text/javascript" src="js/handlers/howler.core.js"></script>
 		<script type="text/javascript" src="js/jquery.mCustomScrollbar.concat.min.js"></script>
 		<script type="text/javascript" src="js/chartist.min.js"></script>
+		<?php // @link https://github.com/madmurphy/cookies.js ?>
+		<script type="text/javascript" src="js/cookies.min.js"></script>
 		<script type="text/javascript" src="js/select.js"></script>
 		<script type="text/javascript" src="js/player.js"></script>
 		<script type="text/javascript" src="js/controls.js"></script>
 		<script type="text/javascript" src="js/browser.js"></script>
-		<?php if (!isMobile()): ?>
-			<script type="text/javascript" src="js/scope.js"></script> <!-- <= JW's sid_tracer.js -->
+		<?php if (isLegacyWebSid()): ?>
+			<script type="text/javascript" src="js/scope_legacy.js"></script>
 		<?php else : ?>
-			<script type="text/javascript" src="js/scope_mobile.js"></script>
+			<script type="text/javascript" src="js/scope.js"></script> <!-- <= JW's sid_tracer.js -->
 		<?php endif ?>
 		<script type="text/javascript" src="js/viz.js"></script>
 		<script type="text/javascript" src="js/main.js"></script>
@@ -201,10 +198,8 @@
 			<div id="top">
 				<div id="logo" class="unselectable">D e e p S I D</div>
 				<select id="dropdown-emulator" name="select-emulator" style="visibility:hidden;">
-					<option value="websid"><?php echo $websid; ?></option>
-					<?php if (!isMobile()): ?>
-						<option value="legacy">WebSid (Legacy)</option>
-					<?php endif; ?>
+					<option value="websid">WebSid emulator</option>
+					<option value="legacy">WebSid (Legacy)</option>
 					<option value="jssid">Hermit's emulator</option>
 					<option value="soasc_auto">SOASC Automatic</option>
 					<option value="soasc_r2">SOASC 6581 R2</option>
@@ -424,7 +419,7 @@
 						<div id="visuals-piano" class="visuals" style="display:none;">
 							<div class="edit" style="height:42px;width:683px;">
 								<label class="unselectable" style="margin-right:2px;">Emulator</label>
-								<button class="button-edit button-radio button-off viz-emu viz-websid" data-group="viz-emu" data-emu="websid">WebSid</button>
+								<button class="button-edit button-radio button-off viz-emu viz-websid viz-legacy" data-group="viz-emu" data-emu="websid">WebSid</button>
 								<button class="button-edit button-radio button-off viz-emu viz-jssid" data-group="viz-emu" data-emu="jssid">Hermit</button>
 								<span class="viz-warning viz-msg-emu">You need to enable one of these emulators</span>
 								<span class="viz-warning viz-msg-buffer">Decrease this if too slow <img src="images/composer_arrowright.svg" style="position:relative;top:4px;height:18px;" alt="" /></span>
@@ -504,7 +499,7 @@
 						<div id="visuals-graph" class="visuals" style="display:none;">
 							<div class="edit" style="height:42px;width:683px;">
 								<label class="unselectable" style="margin-right:2px;">Emulator</label>
-								<button class="button-edit button-radio button-off viz-emu viz-websid" data-group="viz-emu" data-emu="websid">WebSid</button>
+								<button class="button-edit button-radio button-off viz-emu viz-websid viz-legacy" data-group="viz-emu" data-emu="websid">WebSid</button>
 								<button class="button-edit button-radio button-off viz-emu viz-jssid" data-group="viz-emu" data-emu="jssid">Hermit</button>
 								<span class="viz-warning viz-msg-emu">You need to enable one of these emulators</span>
 								<span class="viz-warning viz-msg-buffer">Decrease this if too slow <img src="images/composer_arrowright.svg" style="position:relative;top:4px;height:18px;" alt="" /></span>
@@ -1080,8 +1075,9 @@
 								<td>subtune</td><td>The subtune to play; must be used together with <code>file</code></td>
 							</tr>
 							<tr>
-								<td>emulator</td><td>Set to <code>websid</code>, <code>jssid</code>, <code>soasc_auto</code>,
-									<code>soasc_r2</code>,<code>soasc_r4</code>, <code>soasc_r5</code> or <code>download</code></td>
+								<td>emulator</td><td>Set to <code>websid</code>, <code>legacy</code>, <code>jssid</code>,
+									<code>soasc_auto</code>, <code>soasc_r2</code>,<code>soasc_r4</code>, <code>soasc_r5</code>
+									or <code>download</code></td>
 							</tr>
 							<tr>
 								<td>search</td><td>A search query (just like when typed in the bottom)</td>
@@ -1132,6 +1128,18 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>November ?, 2019</h3>
+						<ul>
+							<li>Added an additional SID handler for legacy WebSid. This is the version of WebSid from
+								before adding cycle-by-cycle processing. It's faster and has clearer digi sound, but
+								it doesn't emulate quite as faithfully.</li>
+							<li>Selecting a SID handler now uses a cookie to make the choice sticky between sessions.</li>
+							<li>Because of the cookie code, the <code>?emulator=</code> switch is no longer appended
+								to the URL when switching around. However, you can still specify the switch and it will
+								then temporarily override the cookie setting. See the table in the FAQ tab for a list
+								of the switch values.</li>
+						</ul>
 
 						<h3>October 31, 2019</h3>
 						<ul>

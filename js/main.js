@@ -8,6 +8,8 @@ var cacheCSDb = cacheSticky = cacheStickyBeforeCompo = cacheCSDbProfile = cacheB
 var cacheTabScrollPos = cachePlayerTabScrollPos = cacheGB64TabScrollPos = cacheRemixTabScrollPos = tabScrollPos = cachePosBeforeCompo = cacheDDCSDbSort = peekCounter = sundryHeight = 0;
 var sundryToggle = true, recommended = forum = players = null;
 
+var isLegacyWebSid = $("script[src='js/handlers/backend_tinyrsid_legacy.js']").length;
+
 var tabPrevScrollPos = {
 	profile:	{ pos: 0, reset: false },
 	csdb:		{ pos: 0, reset: false },
@@ -26,10 +28,9 @@ var tabPrevScrollPos = {
 $(function() { // DOM ready
 
 	var userExists = false;
-
+	
 	// Get the emulator last used by the visitor
-	// ###################################### NEED TO REPLACE WITH COOKIE FOR PHP TO WORK WITH TOO!!!!!!!!!!
-	var storedEmulator = localStorage.getItem("emulator");
+	var storedEmulator = docCookies.getItem("emulator");
 	if (storedEmulator == null) storedEmulator = "websid";
 
 	// However, a URL switch may TEMPORARILY override the stored emulator
@@ -47,7 +48,7 @@ $(function() { // DOM ready
 	]) === -1) emulator = storedEmulator;
 
 	// Lower buffer size values may freeze DeepSID
-	scope = $("body").attr("data-mobile") === "0" ? new Tracer(16384, 40) : new SidTracer(16384);
+	scope = isLegacyWebSid ? new SidTracer(16384) : new Tracer(16384, 40);
 
 	viz = new Viz(emulator);
 	SID = new SIDPlayer(emulator);
@@ -338,21 +339,21 @@ $(function() { // DOM ready
 				// Selecting a different SID handler (emulator or SOASC)
 				var $selected = $("#folders tr.selected");
 				var isRowSelected = $selected.length,
-					wasPlaying = ctrls.isPlaying();
+					wasPlaying = ctrls.isPlaying(),
 					mainVol = SID.mainVol;
 				SID.unload();
 				ctrls.selectButton($("#stop"));
 				viz.allEmuButtonsOff();
 
 				var emulator = $("#dropdown-emulator").styledGetValue();
-				localStorage.setItem("emulator", emulator);
+				docCookies.setItem("emulator", emulator, "Infinity", "/");
 				viz.setEmuButton(emulator);
 
-
-
-// ##### code here for refreshing browser if alternating the websid twins
-
-
+				// If a different version of WebSid was used last then we need to refresh the browser
+				if ((emulator == "websid" && isLegacyWebSid) || (emulator == "legacy") && !isLegacyWebSid) {
+					window.location.reload();
+					return false;
+				}
 
 				SID = null;
 				delete SID;
@@ -1493,10 +1494,7 @@ function UpdateURL(skipFileCheck) {
 	// ?subtune=
 	var urlSubtune = ctrls.subtuneCurrent ? "&subtune="+(ctrls.subtuneCurrent + 1) : "";
 
-	// ?emulator=
-	var urlEmulator = SID.getHandler() == "websid" ? "" : "&emulator="+SID.getHandler();
-
-	var link = (urlFile+urlSubtune+urlEmulator).replace(/&/, "?"); // Replace first occurrence only
+	var link = (urlFile+urlSubtune).replace(/&/, "?"); // Replace first occurrence only
 
 	if (urlFile != prevFile) {
 		prevFile = urlFile; // Need a new file clicked before we proceed in the browser history
