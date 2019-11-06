@@ -1143,8 +1143,8 @@
 								it will then temporarily override the stored setting. See the table in the FAQ tab for a
 								list of the switch values.</li>
 							<li>The default SID handler for first time visitors now depends on the device. The best
-								WebSid emulator is set for desktop computers, legacy WebSid for most mobile devices, and
-								Hermit's emulator for iOS devices.</li>
+								WebSid emulator is set for desktop computers, while the legacy WebSid emulator is set for
+								mobile devices.</li>
 						</ul>
 
 						<h3>October 31, 2019</h3>

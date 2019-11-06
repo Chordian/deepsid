@@ -33,10 +33,8 @@ $(function() { // DOM ready
 	var storedEmulator = docCookies.getItem("emulator");
 	if (storedEmulator == null) {
 		// Set a default emulator
-		if (navigator.userAgent.match(/(iPod|iPhone|iPad)/))
-			storedEmulator = "jssid";	// Hermit's emulator for iOS devices
-		else if ($("body").attr("data-mobile") !== "0")
-			storedEmulator = "legacy";	// Legacy WebSid for Android and other mobile devices
+		if ($("body").attr("data-mobile") !== "0")
+			storedEmulator = "legacy";	// Legacy WebSid for mobile devices
 		else
 			storedEmulator = "websid";	// The best WebSid for desktop computers
 	}
