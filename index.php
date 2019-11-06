@@ -12,10 +12,6 @@
 			: preg_match("/(android|avantgo|blackberry|bolt|boost|cricket|docomo|fone|hiptop|mini|mobi|palm|phone|pie|tablet|up\.browser|up\.link|webos|wos)/i", $_SERVER["HTTP_USER_AGENT"]);
 	}
 
-	function isIOS() {
-		return preg_match("/(iphone|ipad|ipod)/i", $_SERVER["HTTP_USER_AGENT"]);
-	}
-
 	function isLegacyWebSid() {
 		return (isset($_GET['emulator']) && strtolower($_GET['emulator']) == 'legacy') ||
 			(isset($_COOKIE['emulator']) && strtolower($_COOKIE['emulator']) == 'legacy');
@@ -965,10 +961,16 @@
 								<th style="width:150px;">Handler</th><th>Description</th>
 							</tr>
 							<tr>
-								<td>WebSid emulator</td><td>The default option is the JS emulator originally used
-								by <a href="http://www.wothke.ch/tinyrsid/index.php">Tiny'R'Sid</a>. It emulates standard
+								<td>WebSid emulator</td><td>This is the JS emulator originally used by the
+								<a href="http://www.wothke.ch/tinyrsid/index.php">Tiny'R'Sid</a> web site. It emulates standard
 								SID as well as digi tunes, 2SID and 3SID, and even MUS files in Compute's Gazette SID
-								Collection.</td>
+								Collection. This is the best quality version of WebSid with cycle-by-cycle processing.</td>
+							</tr>
+							<tr>
+								<td>WebSid (Legacy)</td><td>This is an older version of WebSid from before it was
+								overhauled to cycle-by-cycle processing. It's faster and has clearer digi sound, but it
+								doesn't emulate quite as faithfully. If your computer has trouble keeping up with the
+								above WebSid version, try this one instead.</td>
 							</tr>
 							<tr>
 								<td>Hermit's emulator</td><td>Hermit's jsSID emulator is extremely compact and can
@@ -1077,7 +1079,8 @@
 							<tr>
 								<td>emulator</td><td>Set to <code>websid</code>, <code>legacy</code>, <code>jssid</code>,
 									<code>soasc_auto</code>, <code>soasc_r2</code>,<code>soasc_r4</code>, <code>soasc_r5</code>
-									or <code>download</code></td>
+									or <code>download</code> to temporarily override the SID handler (reloading the web site
+									returns to the previous SID handler)</td>
 							</tr>
 							<tr>
 								<td>search</td><td>A search query (just like when typed in the bottom)</td>
@@ -1129,16 +1132,19 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
-						<h3>November ?, 2019</h3>
+						<h3>November 6, 2019</h3>
 						<ul>
 							<li>Added an additional SID handler for legacy WebSid. This is the version of WebSid from
 								before adding cycle-by-cycle processing. It's faster and has clearer digi sound, but
 								it doesn't emulate quite as faithfully.</li>
-							<li>Selecting a SID handler now uses a cookie to make the choice sticky between sessions.</li>
-							<li>Because of the cookie code, the <code>?emulator=</code> switch is no longer appended
-								to the URL when switching around. However, you can still specify the switch and it will
-								then temporarily override the cookie setting. See the table in the FAQ tab for a list
-								of the switch values.</li>
+							<li>Selecting a SID handler is now stored to make the choice sticky between sessions.</li>
+							<li>Because of now storing the SID handler, the <code>?emulator=</code> switch is no longer
+								appended to the URL when switching around. However, you can still specify the switch and
+								it will then temporarily override the stored setting. See the table in the FAQ tab for a
+								list of the switch values.</li>
+							<li>The default SID handler for first time visitors now depends on the device. The best
+								WebSid emulator is set for desktop computers, legacy WebSid for most mobile devices, and
+								Hermit's emulator for iOS devices.</li>
 						</ul>
 
 						<h3>October 31, 2019</h3>

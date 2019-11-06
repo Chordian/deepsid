@@ -31,10 +31,17 @@ $(function() { // DOM ready
 	
 	// Get the emulator last used by the visitor
 	var storedEmulator = docCookies.getItem("emulator");
-	if (storedEmulator == null) storedEmulator = "websid";
+	if (storedEmulator == null) {
+		// Set a default emulator
+		if (navigator.userAgent.match(/(iPod|iPhone|iPad)/))
+			storedEmulator = "jssid";	// Hermit's emulator for iOS devices
+		else if ($("body").attr("data-mobile") !== "0")
+			storedEmulator = "legacy";	// Legacy WebSid for Android and other mobile devices
+		else
+			storedEmulator = "websid";	// The best WebSid for desktop computers
+	}
 
 	// However, a URL switch may TEMPORARILY override the stored emulator
-	// NOTE: Don't set this URL override in the local storage too.
 	var emulator = GetParam("emulator").toLowerCase();
 	if ($.inArray(emulator, [
 		"websid",

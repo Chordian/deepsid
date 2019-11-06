@@ -579,6 +579,7 @@ SIDPlayer.prototype = {
 			case "websid":
 			case "legacy":
 				SIDBackend.updateSongInfo(this.file, result);
+				result.maxSubsong = isCGSC ? 0 : result.maxSubsong - 1;				
 				break;
 			case "jssid":
 				result.actualSubsong	= this.subtune;
@@ -858,7 +859,7 @@ SIDPlayer.prototype = {
 					SIDBackend.enableVoice(chip, voice - 1, this.voiceMask[chip] & 1 << (voice - 1));
 				break;
 			case "legacy":
-				SIDBackend.enableVoices(this.voiceMask);
+				SIDBackend.enableVoices(this.voiceMask[0]); // Legacy only controls 1SID voices ON/OFF
 				break;
 			case "jssid":
 				// Stitch a mask together that works with jsSID (CCCBBBAAA)

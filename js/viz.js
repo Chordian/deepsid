@@ -286,6 +286,7 @@ Viz.prototype = {
 	onVoiceClick: function(event) {
 		var voice = parseInt(event.target.classList[1].substr(-1));
 		if (voice == 2 && browser.chips == 2) return; // Third keyboard is disabled for 2SID tunes
+		if (this.emulator == "legacy" && browser.chips > 1) return;
 
 		var $this = $(event.target);
 		// Swap the class state of this button
