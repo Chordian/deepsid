@@ -147,6 +147,7 @@ Browser.prototype = {
 				case 27: // ESC
 					$(".dialog-box .dialog-button-no").trigger("click");
 					$("#contextmenu,#contextsubmenu").remove();
+					$("#dialog-all-tags").blur();
 					this.contextTR.css("background", "");
 					this.restoreSIDRow();
 					break;

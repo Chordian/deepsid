@@ -331,7 +331,7 @@
 						<option value="author">Author</option>
 						<option value="copyright">Copyright</option>
 						<option value="player">Player</option>
-						<option value="tag">Tag</option>
+						<option value="tag">Tags</option>
 						<option value="stil">STIL</option>
 						<option value="rating">Rating</option>
 						<option value="country">Country</option>
@@ -1131,6 +1131,11 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>November 8, 2019</h3>
+						<ul>
+							<li>You can now search for multiple tags to narrow down your search.</li>
+						</ul>
 
 						<h3>November 6, 2019</h3>
 						<ul>
