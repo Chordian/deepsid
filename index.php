@@ -1135,6 +1135,7 @@
 						<h3>November 9, 2019</h3>
 						<ul>
 							<li>The WebSid emulators no longer skips ahead when a song is playing silence.</li>
+							<li>The search permalink now also includes the <code>Here</code> check box when it has been ticked.</li>
 						</ul>
 
 						<h3>November 8, 2019</h3>

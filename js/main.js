@@ -1252,17 +1252,18 @@ $(function() { // DOM ready
 					$("#folders").scrollTop(rowPos > halfway ? rowPos - halfway : 0);
 				else
 					$("#folders").mCustomScrollbar("scrollTo", rowPos > halfway ? rowPos - halfway : "top");
-			}
+
+			} else if (GetParam("here") == "1") {
+				setTimeout(function() {
+					PerformSearchQuery(searchQuery);
+					$("#loading").hide();
+				}, 200);
+			}	
 			browser.getComposer();
 
 		});
-
-	} else if (searchQuery !== "") {
-		// A search query was specified (optionally with a type too)
-		$("#dropdown-search").val(GetParam("type") !== "" ? GetParam("type").toLowerCase() : "#all#");
-		$("#search-box").val(searchQuery).trigger("keyup");
-		$("#search-button").trigger("click");
-	}
+	} else if (searchQuery !== "")
+		PerformSearchQuery(searchQuery);
 
 	// Select and show a "dexter" page tab	
 	selectTab = selectTab !== "" ? selectTab : "profile";
@@ -1308,6 +1309,18 @@ $(window).on("load", function() {
 		$("#username,#password").trigger("keydown");
 	}, 350);
 });
+
+/**
+ * Perform a search query, optionally with a type too.
+ * 
+ * @param {string} searchQuery	The search query string.
+ */
+function PerformSearchQuery(searchQuery) {
+	$("#dropdown-search").val(GetParam("type") !== "" ? GetParam("type").toLowerCase() : "#all#");
+	$("#search-here").prop('checked', GetParam("here") == "1");
+	$("#search-box").val(searchQuery).trigger("keyup");
+	$("#search-button").trigger("click");
+}
 
 /**
  * Show the custom scrollbar in a "dexter" page.
