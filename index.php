@@ -1132,6 +1132,11 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>November 9, 2019</h3>
+						<ul>
+							<li>The WebSid emulators no longer skips ahead when a song is playing silence.</li>
+						</ul>
+
 						<h3>November 8, 2019</h3>
 						<ul>
 							<li>You can now search for multiple tags to narrow down your search.</li>

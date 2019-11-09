@@ -63,13 +63,17 @@ if (($handle = fopen(TRACKFILE, 'r')) != false) {
 			$type = ' user';
 		elseif (strpos($line[1], 'www.facebook.com'))
 			$type = ' fb';
-		$html .= '
+		$box = '
 			<div class="tracking'.$type.'">
 				'.(!empty($line[2]) ? '<b>'.$line[2].'</b> ('.$line[0].')' : $line[0]).'<br />
 				'.date('H:i', $line[3]).' ('.($duration > 2 ? ($hours ? '<b>'.$hours.'</b> hours ' : '').'<b>'.$minutes.'</b> minutes ago' : '<b>just now</b>').')
 				- last updated '.($last > 2 ? '<b>'.$last.'</b> minutes ago' : '<b>just now</b>').'<br />
 				'.($parser->fullname != 'unknown' ? $parser->fullname : $line[1]).'
 			</div>';
+		if ($type == ' user')
+			$html = $box.$html;
+		else
+			$html .= $box;
 	}
 }
 fclose($handle);

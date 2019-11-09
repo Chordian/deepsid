@@ -65,6 +65,8 @@ function SIDPlayer(emulator) {
 				($("body").attr("data-mobile") !== "0" ? 16384 : viz.bufferSize));
 			this.WebSid = ScriptNodePlayer.getInstance();
 
+			this.WebSid.setSilenceTimeout(0); // Don't skip ahead when tunes are playing nothing
+
 			this.emulatorFlags.supportFaster	= true;
 			this.emulatorFlags.supportEncoding	= true;
 			this.emulatorFlags.supportSeeking	= false;
