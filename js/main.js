@@ -136,10 +136,47 @@ $(function() { // DOM ready
 				// Toggle the sundry box minimized or restored
 				ToggleSundry();
 				$(window).trigger("resize", true);
+			} else if (event.keyCode == 76) {							// Keyup 'l'
+				// Upload an external SID tune for emulator testing
+				$("#upload").trigger("click");
 			} else if (event.keyCode == 84) {							// Keyup 't' for testing stuff
 				console.log(browser.playlist[browser.songPos].address);
 			}
 		}
+	});
+
+	/**
+	 * Upload the external SID file for emulator testing and play it.
+	 */
+	$("#upload").change(function() {
+		var sidFile = new FormData();
+		sidFile.append("sid", $("#upload")[0].files[0]);
+		$.ajax({
+			url:			"php/upload_test.php",
+			type: 			"POST",
+			processData:	false,
+			contentType:	false,
+			data:			sidFile,
+			success: function(data) {
+				browser.validateData(data, function() {
+					data = $.parseJSON(data);
+					// data.filename
+
+
+
+
+
+
+					// @ToDo probably need to create a single browser entry here
+
+
+
+
+
+
+				});
+			}
+		});
 	});
 
 	/**
