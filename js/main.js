@@ -160,14 +160,8 @@ $(function() { // DOM ready
 			success: function(data) {
 				browser.validateData(data, function() {
 					data = $.parseJSON(data);
-					// data.filename
-
-
-
-
-
-
-					// @ToDo probably need to create a single browser entry here
+					console.log(data.files);
+					
 
 
 

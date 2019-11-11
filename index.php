@@ -189,7 +189,7 @@
 		</div>
 
 		<iframe id="download" style="display:none;"></iframe>
-		<input id="upload" type="file" accept=".sid" style="display:none;" required />
+		<input id="upload" type="file" accept=".sid,.mus" style="display:none;" required />
 
 		<div id="panel">
 			<div id="top">
