@@ -535,7 +535,7 @@ Controls.prototype = {
 			// If the SID tune is not played in its home folder, add links to song name and author
 			var songName = info.songName.replace("<?>", unknown),
 				songAuthor = info.songAuthor.replace("<?>", unknown);
-			if (fullname.indexOf(browser.path) === -1 || browser.isSearching) {
+			if ((fullname.indexOf(browser.path) === -1 || browser.isSearching) && !browser.isTempTestFile()) {
 				var homePath = decodeURIComponent($("#songs tr").eq(browser.songPos + browser.subFolders).find(".entry").attr("data-name")).replace("_High Voltage SID Collection/", ""),
 					sidFile = fullname.split("/").slice(-1)[0];
 				songName = '<a href="?file=/'+homePath+'" class="redirect">'+songName+'</a>';

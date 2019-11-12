@@ -641,6 +641,7 @@ Browser.prototype = {
 	 */
 	onChange: function(event) {
 		// Another sorting method chosen in the top right drop-down box
+		var isTempFolder = this.isTempFolder();
 		$("#songs table").empty();
 		ctrls.state("prev/next", "disabled");
 		ctrls.state("subtunes", "disabled");
@@ -797,7 +798,20 @@ Browser.prototype = {
 				}
 			}
 
-		if (!filterFolders && !this.isBigCompoFolder()) {
+		if (isTempFolder) {
+			var files = "";
+			$.each(this.playlist, function(i, file) {
+				var year = isNaN(file.copyright.substr(0, 4)) ? "unknown year" : file.copyright.substr(0, 4);
+				files += '<tr>'+
+						'<td class="sid temp unselectable"><div class="block-wrap"><div class="block">'+(file.subtunes > 1 ? '<div class="subtunes">'+file.subtunes+'</div>' : '')+
+						'<div class="entry name file" data-name="'+encodeURIComponent(file.filename)+'" data-type="'+file.type+'">'+browser.adaptBrowserName(file.filename.replace(/^\_/, ''))+'</div></div></div><br />'+
+						'<span class="info">'+year+' in file format '+file.type+' v'+file.version+'</span></td>'+
+						'<td></td>'+
+					'</tr>';
+			}.bind(this));
+			$("#songs table").append(files);
+			DisableIncompatibleRows();
+		} else if (!filterFolders && !this.isBigCompoFolder()) {
 			// Rebuild the reordered table list (files only; the folders in top are just preserved)
 			var files = adaptedName = "";
 			$.each(this.playlist, function(i, file) {
@@ -892,8 +906,6 @@ Browser.prototype = {
 				$("#songs table").append(this.cache.folder);
 				this.compolist = this.cache.compolist;
 
-				var $browser = this;
-
 				// Let mobile devices use their own touch scrolling stuff
 				if (this.isMobile) {
 					// Hack to make sure the bottom search bar sits in the correct bottom of the viewport
@@ -913,7 +925,7 @@ Browser.prototype = {
 							},
 							callbacks: {
 								whileScrolling: function() {
-									$browser.currentScrollPos = this.mcs.top;
+									browser.currentScrollPos = this.mcs.top;
 								}
 							}
 						});
@@ -990,7 +1002,7 @@ Browser.prototype = {
 
 					// The 'CSDb', 'GB64' and 'Remix' tabs are useless to CGSC
 					var $uselessTabs = $("#tab-csdb,#tab-gb64,#tab-remix");
-					$uselessTabs.removeClass("disabled");
+					$("#tabs .tab").removeClass("disabled");
 					if (this.isCGSC()) {
 						$uselessTabs.addClass("disabled");
 						$("#note-csdb,#note-gb64,#note-remix").hide();
@@ -1187,8 +1199,6 @@ Browser.prototype = {
 					$("#songs table").append(this.folders+files);
 					this.updateDisqusCounts();
 
-					var $browser = this;
-
 					if (this.path == "/CSDb Music Competitions" || this.path == "/_Compute's Gazette SID Collection") {
 						// Cache this big folder for fast back-browsing
 						this.cache.folder = this.folders+files;
@@ -1215,7 +1225,7 @@ Browser.prototype = {
 								},
 								callbacks: {
 									whileScrolling: function() {
-										$browser.currentScrollPos = this.mcs.top;
+										browser.currentScrollPos = this.mcs.top;
 									}
 								}
 							});
@@ -1516,7 +1526,7 @@ Browser.prototype = {
 	 * @param {boolean} back	If specified and TRUE, show a 'BACK' button.
 	 */
 	getCSDb: function(type, id, back) {
-		if (this.isMobile) return;
+		if (this.isMobile || this.isTempTestFile()) return;
 		if (this.csdb) this.csdb.abort();
 		$("#topic-csdb").empty().append(this.loadingSpinner("csdb"));
 		$("#sticky-csdb").empty();
@@ -1649,7 +1659,7 @@ Browser.prototype = {
 	 * @param {number} optionalID		If specified, the ID to show a specific sub page.
 	 */
 	getGB64: function(optionalID) {
-		if (this.isMobile) return;
+		if (this.isMobile || this.isTempTestFile()) return;
 		if (this.gb64) this.gb64.abort();
 		$("#topic-gb64").empty().append(this.loadingSpinner("gb64"));
 
@@ -1689,7 +1699,7 @@ Browser.prototype = {
 	 * @param {number} optionalID		If specified, the ID to show a specific entry.
 	 */
 	getRemix: function(optionalID) {
-		if (this.isMobile) return;
+		if (this.isMobile || this.isTempTestFile()) return;
 		if (this.remix) this.remix.abort();
 		$("#topic-remix").empty().append(this.loadingSpinner("remix"));
 
@@ -1762,6 +1772,7 @@ Browser.prototype = {
 	 * @param {*} event 
 	 */
 	contextMenu: function(event) {
+		if (this.isTempTestFile()) return false;
 		this.getSymlists();
 
 		var $panel = $("#panel"),
@@ -2133,6 +2144,26 @@ Browser.prototype = {
 	 */
 	isBigCompoFolder: function() {
 		return this.path == "/CSDb Music Competitions";
+	},
+
+	/**
+	 * Is this a temporary test SID file thus is has no entries in the database?
+	 * 
+	 * @return {boolean}
+	 */
+	isTempTestFile: function() {
+		return typeof this.playlist[this.songPos] !== "undefined"
+			? this.playlist[this.songPos].fullname.indexOf("temp/test/") !== -1
+			: false;
+	},
+
+	/**
+	 * Is a list of temporary SID files currently present?
+	 * 
+	 * @return {boolean}
+	 */
+	isTempFolder: function() {
+		return $("#songs td.temp").length;
 	},
 
 	/**

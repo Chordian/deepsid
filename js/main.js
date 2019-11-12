@@ -116,7 +116,7 @@ $(function() { // DOM ready
 				$("#faster").trigger("mouseup");
 			} else if (event.keyCode == 32)	{							// Keyup 'Space'
 				$("#play-pause").trigger("mouseup");
-			} else if (event.keyCode == 80) {							// Keyup 'p'
+			} else if (event.keyCode == 80) {							// Keyup 'p' (pop-up window)
 				// Open a pop-up window with only the width of the #panel area
 				window.open("//deepsid.chordian.net/", "_blank",
 					"left=0,top=0,width=450,height="+(screen.height-150)+",scrollbars=no");
@@ -132,42 +132,135 @@ $(function() { // DOM ready
 						browser.getFolder();
 					});
 				}.bind(this));
-			} else if (event.keyCode == 83) {							// Keyup 's'
+			} else if (event.keyCode == 83) {							// Keyup 's' (sundry)
 				// Toggle the sundry box minimized or restored
 				ToggleSundry();
 				$(window).trigger("resize", true);
-			} else if (event.keyCode == 76) {							// Keyup 'l'
-				// Upload an external SID tune for emulator testing
+			} else if (event.keyCode == 76) {							// Keyup 'l' (load)
+				// Upload and test one or more external SID tune(s)
 				$("#upload").trigger("click");
-			} else if (event.keyCode == 84) {							// Keyup 't' for testing stuff
+			} else if (event.keyCode == 84) {							// Keyup 't' (test something)
 				console.log(browser.playlist[browser.songPos].address);
 			}
 		}
 	});
 
 	/**
-	 * Upload the external SID file for emulator testing and play it.
+	 * Upload the external SID file(s) for temporary emulator testing.
 	 */
 	$("#upload").change(function() {
-		var sidFile = new FormData();
-		sidFile.append("sid", $("#upload")[0].files[0]);
+		var sidFile = new FormData(), files = "";
+		$.each($("#upload")[0].files, function(i, file) {
+			sidFile.append(i, file);
+		});
+		browser.folders = browser.extra = browser.symlists = "";
+		browser.playlist = [];
+		browser.subFolders = 0;
+
+		$("#dropdown-sort").empty().append(
+			'<option value="name">Name</option>'+
+			'<option value="oldest">Oldest</option>'+
+			'<option value="newest">Newest</option>'
+		).val("name");
+
+		$("#tab-visuals").trigger("click");
+		$("#sundry-ctrls").empty();
+		history.replaceState({}, document.title, "");
+
 		$.ajax({
 			url:			"php/upload_test.php",
 			type: 			"POST",
+			cache:			false,
 			processData:	false,
 			contentType:	false,
 			data:			sidFile,
 			success: function(data) {
 				browser.validateData(data, function() {
 					data = $.parseJSON(data);
-					console.log(data.files);
-					
 
+					ctrls.state("root/back", "enabled");
+					if (!browser.isMobile) $("#folders").mCustomScrollbar("destroy");
 
+					$("#dropdown-emulator").styledOptionState("websid legacy jssid", "enabled");
+					$("#dropdown-emulator").styledOptionState("soasc_auto soasc_r2 soasc_r4 soasc_r5", "disabled");
+					$("#path").css("top", "5px").empty().append("Temporary emulator testing");
+					$("#stab-stil,#tab-stil").empty().append("STIL");
 
+					// Only disable the ".." button
+					$("#folder-root,#folder-back").removeClass("disabled");
+					$("#folder-back").addClass("disabled");
 
+					// Disable tabs useless to the temporary testing
+					$("#tab-csdb,#tab-gb64,#tab-remix,#tab-stil,#tab-disqus").removeClass("disabled").addClass("disabled");
 
+					// Sort the list of files first
+					data.files.sort(function(obj1, obj2) {
+						var o1 = browser.adaptBrowserName(obj1.filename, true);
+						var o2 = browser.adaptBrowserName(obj2.filename, true);
+						return o1.toLowerCase() > o2.toLowerCase() ? 1 : -1;
+					});
 
+					$.each(data.files, function(i, file) {
+						var year = isNaN(file.copyright.substr(0, 4)) ? "unknown year" : file.copyright.substr(0, 4);
+						files +=
+							'<tr>'+
+								'<td class="sid temp unselectable"><div class="block-wrap"><div class="block">'+(file.subtunes > 1 ? '<div class="subtunes">'+file.subtunes+'</div>' : '')+
+								'<div class="entry name file" data-name="'+encodeURIComponent(file.filename)+'" data-type="'+file.type+'">'+browser.adaptBrowserName(file.filename.replace(/^\_/, ''))+'</div></div></div><br />'+
+								'<span class="info">'+year+' in file format '+file.type+' v'+file.version+'</span></td>'+
+								'<td></td>'+
+							'</tr>';
+
+						browser.playlist.push({
+							filename:		file.filename,
+							substname:		"",
+							fullname:		"temp/test/" + file.filename,
+							player: 		file.player,
+							tags:			"",
+							length: 		file.lengths,
+							type:			file.type,
+							version:		file.version,
+							clockspeed:		"(Skipped)",
+							sidmodel:		"(Skipped)",
+							subtunes:		file.subtunes,
+							startsubtune:	file.startsubtune == 0 ? 0 : file.startsubtune - 1,
+							size:			file.datasize,
+							address:		file.loadaddr,
+							init:			file.initaddr,
+							play:			file.playaddr,
+							copyright:		file.copyright,
+							stil:			file.stil,
+							rating:			file.rating,
+							hvsc:			"",
+							symid:			0,
+						});
+					});
+					$("#songs table").empty().append(files);
+
+					// Let mobile devices use their own touch scrolling stuff
+					if (browser.isMobile) {
+						// Hack to make sure the bottom search bar sits in the correct bottom of the viewport
+						$(window).trigger("resize");
+					} else {
+						// Ugly hack to make custom scroll bar respect flexbox height
+						$("#folders").height($("#folders").height())
+							.mCustomScrollbar({
+								axis: "y",
+								theme: (parseInt(colorTheme) ? "light-3" : "dark-3"),
+								setTop: (typeof scrollPos !== "undefined" ? scrollPos+"px" : "0"),
+								scrollButtons:{
+									enable: true,
+								},
+								mouseWheel:{
+									scrollAmount: 150,
+								},
+								callbacks: {
+									whileScrolling: function() {
+										browser.currentScrollPos = this.mcs.top;
+									}
+								}
+							});
+					}
+					DisableIncompatibleRows();
 				});
 			}
 		});
@@ -573,7 +666,7 @@ $(function() { // DOM ready
 		switch (stopic) {
 			case "stil":
 				// See the 'UpdateURL()' function below
-				if (!browser.isCGSC()) $("#sundry-ctrls").append(reportSTIL);
+				if (!browser.isCGSC() && !browser.isTempTestFile()) $("#sundry-ctrls").append(reportSTIL);
 				break;
 			case "osc":
 				// The oscilloscope view requires a minimum amount of vertical space
@@ -1519,6 +1612,8 @@ function DisableIncompatibleRows() {
  * @param {boolean} id		If specified, TRUE to skip file check.
  */
 function UpdateURL(skipFileCheck) {
+	if (browser.isTempTestFile()) return;
+
 	var urlFile = browser.isSearching || browser.path == "" ? "&file=" : "&file="+browser.path.replace(/^\/_/, '/')+"/";
 	// For competition folders, the 'encodeURIComponent()' makes the URL look ugly but it has to be done
 	// or things might start falling apart when using special characters such as "&" or "#", etc.
