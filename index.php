@@ -189,7 +189,7 @@
 		</div>
 
 		<iframe id="download" style="display:none;"></iframe>
-		<input id="upload" type="file" accept=".sid,.mus" style="display:none;" multiple required />
+		<input id="upload" type="file" accept=".sid" style="display:none;" multiple required />
 
 		<div id="panel">
 			<div id="top">
@@ -1132,6 +1132,13 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>November 12, 2019</h3>
+						<ul>
+							<li>External SID files can now be temporarily loaded into DeepSID for testing against the JS
+								emulators by clicking the <code>l</code> hotkey. You can load several SID files at once.
+								Only you have temporary access to these files.</li>
+						</ul>
 
 						<h3>November 9, 2019</h3>
 						<ul>

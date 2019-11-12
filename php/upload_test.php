@@ -22,7 +22,6 @@ foreach($_FILES as $sid) {
 		die(json_encode(array('status' => 'error', 'message' => 'File size limit exceeded.')));
 
 	$file = @file_get_contents($sid['tmp_name']);
-// @todo also need to check for MUS file...
 	if ($file[0x1] !== 'S' || $file[0x2] !== 'I' || $file[0x3] !== 'D')
 		die(json_encode(array('status' => 'error', 'message' => 'Invalid file format.')));
 	file_put_contents('../temp/test/'.$sid['name'], $file);
