@@ -1133,6 +1133,12 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>November 13, 2019</h3>
+						<ul>
+							<li>Tags for digi (and its supplemental tags) now have a stark contrast color and are huddled
+								together.</li>
+						</ul>
+
 						<h3>November 12, 2019</h3>
 						<ul>
 							<li>External SID files can now be temporarily loaded into DeepSID for testing against the JS

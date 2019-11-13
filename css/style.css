@@ -56,6 +56,8 @@
 	--color-bg-tag-origin:			#b09292;
 	--color-text-tag-mixorigin:		var(--color-text-tag);
 	--color-bg-tag-mixorigin:		linear-gradient(to right, #b09292 5%,#a8ad95 95%);
+	--color-bg-tag-digi:			#6c6c6c;
+	--color-text-tag-digi:			var(--color-text-tag);
 	--color-bg-tag-r64start:		#6c7cc0;
 	--color-bg-tag-remix64:			linear-gradient(to right, var(--color-bg-tag-r64start) 0%,#5458b0 100%);
 
@@ -408,6 +410,8 @@
 	--color-bg-tag-origin:			#bca3a2;
 	--color-text-tag-mixorigin:		var(--color-text-tag);
 	--color-bg-tag-mixorigin:		linear-gradient(to right, #bca3a2 25%,#b6b9a5 100%);
+	--color-bg-tag-digi:			#fafafa;
+	--color-text-tag-digi:			var(--color-text-tag);
 	--color-bg-tag-r64start:		#6878b0;
 	--color-bg-tag-remix64:			linear-gradient(to right, var(--color-bg-tag-r64start) 25%,#465692 100%);
 
@@ -2065,6 +2069,12 @@ input[type=range]::-ms-track {
 				background: var(--color-bg-tag-mixorigin);
 			}
 
+			.tag-digi,
+			.tag-subdigi {
+				color: var(--color-text-tag-digi);
+				background: var(--color-bg-tag-digi);
+			}
+
 			.tag-remix64 {
 				width: 69px;
 				background: url(../images/remix64.png) 11px 2.5px / 54px 7.5px no-repeat, var(--color-bg-tag-remix64);
@@ -2112,6 +2122,11 @@ input[type=range]::-ms-track {
 				.tag-suborigin:before,
 				.tag-mixorigin:before {
 					border-color: transparent var(--color-bg-tag-origin) transparent transparent;
+				}
+
+				.tag-digi:before,
+				.tag-subdigi:before {
+					border-color: transparent var(--color-bg-tag-digi) transparent transparent;
 				}
 
 				.tag-remix64:before {
