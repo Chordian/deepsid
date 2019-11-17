@@ -1144,6 +1144,8 @@
 							<li>A check box by the new sundry tab for tags allows you to avoid displaying tags in
 								SID rows. This is useful if you find the tags there too "noisy" and only want to rely
 								on what the new sundry tab shows you.</li>
+							<li>Fixed two bugs regarding the <code>Remix64</code> tag; one where it failed to search
+								"here" and one where it didn't show up in the sundry box when being the only tag.</li>
 						</ul>
 
 

@@ -1328,7 +1328,7 @@ Browser.prototype = {
 		$.each(tags, function(i, tag) {
 			if (tag == "Remix64")
 				// A special look for the "Remix 64" tag
-				list_of_tags += '<div class="tag tag-remix64">&nbsp;</div>';
+				list_of_tags += '<div class="tag tag-remix64">&nbsp;&nbsp;</div>';
 			else
 				list_of_tags += '<div class="tag tag-'+types[i]+'">'+tag+'</div>';
 		});

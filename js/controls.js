@@ -421,9 +421,10 @@ Controls.prototype = {
 					}.bind(this));
 				} else if (event.target.className.substr(0, 3) == "tag") {
 					// Clicked a tag in the sundry box; search "here" for it now
+					var tag = event.target.innerHTML == "&nbsp;&nbsp;" ? "remix64" : event.target.innerHTML.toLowerCase();
 					$("#dropdown-search").val("tag");
 					$("#search-here").prop('checked', true);
-					$("#search-box").val(event.target.innerHTML.toLowerCase()).trigger("keyup");
+					$("#search-box").val(tag).trigger("keyup");
 					$("#search-button").trigger("click");
 				}
 		}
