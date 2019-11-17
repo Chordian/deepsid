@@ -2034,6 +2034,12 @@ input[type=range]::-ms-track {
 			background: var(--color-bg-ptype);
 		}
 
+			#stopic-tags .tag {
+				margin-left: 0;
+				margin-right: 5px;
+				cursor: pointer;
+			}
+
 		.disabled .ptype {
 			color: var(--color-disabled);
 			border-color: var(--color-disabled);
@@ -2299,7 +2305,8 @@ input[type=range]::-ms-track {
 			font-size: 12px;
 		}
 
-		#stopic-stil .no-info {
+		#stopic-stil .no-info,
+		#stopic-tags .no-info {
 			color: var(--color-text-subtle);
 		}
 

@@ -6,7 +6,7 @@
 var $=jQuery.noConflict();
 var cacheCSDb = cacheSticky = cacheStickyBeforeCompo = cacheCSDbProfile = cacheBeforeCompo = cachePlayer = cacheGB64 = cacheRemix = prevFile = sundryTab = reportSTIL = "";
 var cacheTabScrollPos = cachePlayerTabScrollPos = cacheGB64TabScrollPos = cacheRemixTabScrollPos = tabScrollPos = cachePosBeforeCompo = cacheDDCSDbSort = peekCounter = sundryHeight = 0;
-var sundryToggle = true, recommended = forum = players = null;
+var sundryToggle = showTags = true, recommended = forum = players = null;
 
 var isLegacyWebSid = $("script[src='js/handlers/backend_tinyrsid_legacy.js']").length;
 
@@ -366,7 +366,8 @@ $(function() { // DOM ready
 				$("#sundry-tabs").find(".tab[data-topic='"+sundryTab+"']").addClass("selected");
 				$("#sundry-ctrls").show();
 			}
-			$("#stopic-stil .mCSB_scrollTools").css("height", $("#sundry .stopic").height() + 7);
+			$("#stopic-stil .mCSB_scrollTools").css("height", $("#stopic-stil").height() + 7);
+			$("#stopic-tags .mCSB_scrollTools").css("height", $("#stopic-tags").height() + 7);
 			$("#folders").height(0).height($("#songs").height() - 100);
 		});
 	});
@@ -668,6 +669,12 @@ $(function() { // DOM ready
 				// See the 'UpdateURL()' function below
 				if (!browser.isCGSC() && !browser.isTempTestFile()) $("#sundry-ctrls").append(reportSTIL);
 				break;
+			case "tags":
+				$("#sundry-ctrls").append(
+					'<input type="checkbox" id="showtags" name="showtagstoggle" class="unselectable"'+(showTags ? '' : 'un')+'checked />'+
+					'<label for="showtags" class="unselectable" style="position:relative;top:-2px;">Show tags in SID rows</label>'
+				);
+				break;
 			case "osc":
 				// The oscilloscope view requires a minimum amount of vertical space
 				var $sundry = $("#sundry");
@@ -686,7 +693,8 @@ $(function() { // DOM ready
 				break;
 		}
 
-		$("#stopic-stil .mCSB_scrollTools").css("height", $("#stopic-"+prevTopic).height() + 7);
+		$("#stopic-stil .mCSB_scrollTools,#stopic-tags .mCSB_scrollTools")
+			.css("height", $("#stopic-"+prevTopic).height() + 7);
 		$("#folders").height(0).height($("#songs").height() - 100);
 
 		// Show the selected topic

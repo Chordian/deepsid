@@ -250,11 +250,13 @@
 			</div>
 			<div id="sundry-tabs">
 				<div class="tab unselectable selected" data-topic="stil" id="stab-stil">Tips</div>
+				<div class="tab unselectable" data-topic="tags" id="stab-tags">Tags</div>
 				<div class="tab unselectable" data-topic="osc" id="stab-osc">Scope</div>
 				<div id="sundry-ctrls"></div>
 			</div>
 			<div id="sundry">
 				<div id="stopic-stil" class="stopic"></div>
+				<div id="stopic-tags" class="stopic" style="display:none;"></div>
 				<div id="stopic-osc" class="stopic" style="display:none;"></div>
 			</div>
 			<div id="slider"></div>
@@ -1132,6 +1134,23 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>November 17, 2019</h3>
+						<ul>
+							<li>Added a new sundry tab for viewing all tags. This is particularly useful for songs that
+								have so many tags that the SID row fails to display all of them.</li>
+							<li>Clicking one of the tags shown in the new sundry tab performs a "here" search in the
+								current folder.</li>
+							<li>A check box by the new sundry tab for tags allows you to avoid displaying tags in
+								SID rows. This is useful if you find the tags there too "noisy" and only want to rely
+								on what the new sundry tab shows you.</li>
+						</ul>
+
+
+						<h3>November 15, 2019</h3>
+						<ul>
+							<li>Added information about zero page usage in almost all of the player/editor pages.</li>
+						</ul>
 
 						<h3>November 13, 2019</h3>
 						<ul>

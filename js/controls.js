@@ -29,9 +29,9 @@ Controls.prototype = {
 		$("#stop,#loop,#time-bar").click(this.onClick.bind(this));
 		$("#info").on("click", "#sid-model,#clockspeed", this.onClick.bind(this));
 		$("#sundry,#topic-stil").on("click", ".subtune", this.onClick.bind(this));
-		$("#sundry").on("click", "canvas", this.onClick.bind(this));
+		$("#sundry").on("click", "canvas,.tag", this.onClick.bind(this));
 		$("#stopic-osc").on("click", "button", this.onClick.bind(this));
-		$("#sundry-ctrls").on("click", "#sidwiz", this.onClick.bind(this));
+		$("#sundry-ctrls").on("click", "#sidwiz,#showtags", this.onClick.bind(this));
 
 		$("#volume,#sundry-ctrls").on("input", this.onInput.bind(this));
 
@@ -401,6 +401,11 @@ Controls.prototype = {
 				viz.scopeMode = $("#sidwiz").is(":checked");
 				scope.setOutputSize(viz.scopeMode ? 16384 : 246 << viz.scopeZoom);
 				break;
+			case "showtags":
+				// Toggle tags shown in SID rows ON or OFF
+				showTags = $("#showtags").is(":checked");
+				showTags ? $("#songs .tags-line").show() : $("#songs .tags-line").hide();
+				break;
 			default:
 				if (event.target.className == "subtune") {
 					// Play the subtune clicked in the STIL tab of the sundry box
@@ -414,6 +419,12 @@ Controls.prototype = {
 						this.updateInfo();
 						if (SID.emulatorFlags.forcePlay) SID.play();
 					}.bind(this));
+				} else if (event.target.className.substr(0, 3) == "tag") {
+					// Clicked a tag in the sundry box; search "here" for it now
+					$("#dropdown-search").val("tag");
+					$("#search-here").prop('checked', true);
+					$("#search-box").val(event.target.innerHTML.toLowerCase()).trigger("keyup");
+					$("#search-button").trigger("click");
 				}
 		}
 	},
@@ -745,6 +756,37 @@ Controls.prototype = {
 					},
 				});
 			$("#topic-stil").empty().append(stil);
+		}
+
+		// Tab 'Tags'
+		$("#stopic-tags")
+			.mCustomScrollbar("destroy")
+			.empty();
+
+		var tags = browser.playlist[browser.songPos].tags;
+
+		if ($(tags).html() === "&nbsp;") {
+			$("#stopic-tags")
+				.css("overflow", "none")
+				.append('<div class="sundryMsg no-info">No tags found</div>');
+		} else {
+			$("#stopic-tags")
+				.css("overflow", "auto")
+				.append(tags)
+				.mCustomScrollbar({
+					axis: "y",
+					theme: (parseInt(colorTheme) ? "light-3" : "dark-3"),
+					scrollButtons:{
+						enable: true,
+					},
+					callbacks: {
+						onCreate: function() {
+							// Adjust scrollbar height to fit the up/down arrows perfectly
+							// NOTE: This is also set when moving the slider bar (see main.js).
+							$("#stopic-tags .mCSB_scrollTools").css("height", $("#stopic-tags").height() + 7);
+						},
+					},
+				});
 		}
 	},
 
