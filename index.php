@@ -261,7 +261,7 @@
 			</div>
 			<div id="slider">
 				<div id="slider-button">
-					<button id="get-all-tags" class="rect">Folder</button>
+					<button id="get-all-tags" class="rect" style="display:none;">Folder</button>
 				</div>
 			</div>
 
@@ -1138,6 +1138,13 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>November 18, 2019</h3>
+						<ul>
+							<li>Entering a folder with SID files now shows all their tags in the new sundry tab,
+								ready to be clicked for filtering. When a SID file is clicked and only its tags are shown,
+								a corner button can bring you back to the overview.</li>
+						</ul>
 
 						<h3>November 17, 2019</h3>
 						<ul>

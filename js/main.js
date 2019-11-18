@@ -675,7 +675,8 @@ $(function() { // DOM ready
 					'<input type="checkbox" id="showtags" name="showtagstoggle" class="unselectable"'+(showTags ? '' : 'un')+'checked />'+
 					'<label for="showtags" class="unselectable" style="position:relative;top:-2px;">Show tags in SID rows</label>'
 				);
-				$("#get-all-tags").show();
+				if ($("#songs tr.selected").length > 0)
+					$("#get-all-tags").show();
 				break;
 			case "osc":
 				// The oscilloscope view requires a minimum amount of vertical space
@@ -1392,7 +1393,8 @@ $(function() { // DOM ready
 					PerformSearchQuery(searchQuery);
 					$("#loading").hide();
 				}, 200);
-			}	
+			}
+			if (isFolder) browser.showFolderTags();
 			browser.getComposer();
 
 		});

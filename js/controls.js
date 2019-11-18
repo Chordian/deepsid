@@ -774,7 +774,7 @@ Controls.prototype = {
 			.mCustomScrollbar("destroy")
 			.empty();
 
-		if (tags === "" || $(tags).html() === "&nbsp;") {
+		if (tags === "" || tags === "0" || $(tags).html() === "&nbsp;") {
 			$sundryTags
 				.css("overflow", "none")
 				.append('<div class="sundryMsg no-info">No tags found</div>');

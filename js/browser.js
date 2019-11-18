@@ -18,6 +18,7 @@
 		incompatible:	"",
 		compolist:		[],
 		composort:		"name",
+		folderTags:		"0",
 	};
 
 	this.symlistFolders = [];
@@ -92,6 +93,10 @@ Browser.prototype = {
 			else
 				$("#search-button").prop("enabled", false).addClass("disabled");
 		});
+
+		$("#get-all-tags").click(function() {
+			this.showFolderTags(this.cache.folderTags);
+		}.bind(this));
 
 		$("#new-tag").keyup(function() {
 			$("#dialog-tags-plus").removeClass("disabled");
@@ -405,37 +410,7 @@ Browser.prototype = {
 					this.scrollPositions.push(this.currentScrollPos); // Remember where we parked
 					this.currentScrollPos = 0;
 					this.getFolder(0, undefined, undefined, function() {
-						// Collect tags for all files and present them in the relevant sundry tab
-						var tagType = {
-							production:	"",
-							origin:		"",
-							suborigin:	"",
-							mixorigin:	"",
-							digi:		"",
-							subdigi:	"",
-							remix64:	"",
-							other:		"",
-						};
-						$.each(this.playlist, function(i, file) {
-							// Parse each DIV with one tag each							
-							$(file.tags).each(function() {
-								if (this.className.indexOf("tag-") != -1) {
-									var typeName = this.className.split(" ")[1].substr(4);
-									if (tagType[typeName].indexOf(">"+this.innerHTML+"<") == -1)
-										tagType[typeName] += this.outerHTML; // No duplicates
-								}
-							});
-						});
-						ctrls.updateSundryTags(
-							tagType.origin+
-							tagType.suborigin+
-							tagType.mixorigin+
-							tagType.production+
-							tagType.digi+
-							tagType.subdigi+
-							tagType.remix64+
-							tagType.other
-						);
+						this.cache.folderTags = this.showFolderTags();
 					});
 					this.getComposer();
 
@@ -471,7 +446,7 @@ Browser.prototype = {
 					subtune = subtune < 0 ? 0 : subtune;
 					subtune = subtune > subtuneMax ? subtuneMax : subtune;
 
-					// NOTE: These two lines uses to be placed below SID.load(). Placing them up here instead
+					// NOTE: These two lines used to be placed below SID.load(). Placing them up here instead
 					// fixed a row marking bug on iOS in playlists with duplicate use of songs.
 					$("#songs tr").removeClass("selected");
 					$tr.addClass("selected");
@@ -497,6 +472,9 @@ Browser.prototype = {
 
 							ctrls.updateInfo();
 							ctrls.updateSundry();
+
+							if ($("#sundry-tabs .selected").attr("data-topic") == "tags")
+								$("#get-all-tags").show();
 
 							SID.play(true);
 							setTimeout(ctrls.setButtonPlay, 75); // For nice pause-to-play delay animation
@@ -2136,6 +2114,52 @@ Browser.prototype = {
 				callback.call(this, data);
 			return true;
 		}
+	},
+
+	/**
+	 * Collect tags for all files and present them in the relevant sundry tab.
+	 * 
+	 * @param {string} tags		List of tags from a previous collection to be shown now.
+	 * 
+	 * @return {string}			Tags collected this time.
+	 */
+	showFolderTags: function(tags) {
+		var allTags = tags;
+		$("#get-all-tags").hide();
+		if (typeof tags == "undefined" || this.cache.folderTags == "0") {
+			var tagType = {
+				production:	"",
+				origin:		"",
+				suborigin:	"",
+				mixorigin:	"",
+				digi:		"",
+				subdigi:	"",
+				remix64:	"",
+				other:		"",
+			};
+
+			$.each(browser.playlist, function(i, file) {
+				// Parse each DIV with one tag each							
+				$(file.tags).each(function() {
+					if (this.className.indexOf("tag-") != -1) {
+						var typeName = this.className.split(" ")[1].substr(4);
+						if (tagType[typeName].indexOf(">"+this.innerHTML+"<") == -1)
+							tagType[typeName] += this.outerHTML; // No duplicates
+					}
+				});
+			});
+			allTags =
+				tagType.origin+
+				tagType.suborigin+
+				tagType.mixorigin+
+				tagType.production+
+				tagType.digi+
+				tagType.subdigi+
+				tagType.remix64+
+				tagType.other;
+		}
+		ctrls.updateSundryTags(allTags);
+		return allTags;
 	},
 
 	/**
