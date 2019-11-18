@@ -259,7 +259,11 @@
 				<div id="stopic-tags" class="stopic" style="display:none;"></div>
 				<div id="stopic-osc" class="stopic" style="display:none;"></div>
 			</div>
-			<div id="slider"></div>
+			<div id="slider">
+				<div id="slider-button">
+					<button id="get-all-tags" class="rect">Folder</button>
+				</div>
+			</div>
 
 			<div id="interactive">
 				<div id="controls">

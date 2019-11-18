@@ -654,6 +654,7 @@ $(function() { // DOM ready
 		if (!sundryToggle) ToggleSundry(false);
 
 		$("#sundry-ctrls").empty(); // Clear corner controls
+		$("#get-all-tags").hide();
 
 		var prevTopic = $("#sundry-tabs .selected").attr("data-topic");
 
@@ -674,6 +675,7 @@ $(function() { // DOM ready
 					'<input type="checkbox" id="showtags" name="showtagstoggle" class="unselectable"'+(showTags ? '' : 'un')+'checked />'+
 					'<label for="showtags" class="unselectable" style="position:relative;top:-2px;">Show tags in SID rows</label>'
 				);
+				$("#get-all-tags").show();
 				break;
 			case "osc":
 				// The oscilloscope view requires a minimum amount of vertical space

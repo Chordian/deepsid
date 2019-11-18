@@ -760,18 +760,26 @@ Controls.prototype = {
 		}
 
 		// Tab 'Tags'
-		$("#stopic-tags")
+		this.updateSundryTags(browser.playlist[browser.songPos].tags);
+	},
+
+	/**
+	 * Update the sundry box with tags.
+	 * 
+	 * @param {string} tags		An HTML list of the tags.
+	 */
+	updateSundryTags: function(tags) {
+		var $sundryTags = $("#stopic-tags");
+		$sundryTags
 			.mCustomScrollbar("destroy")
 			.empty();
 
-		var tags = browser.playlist[browser.songPos].tags;
-
-		if ($(tags).html() === "&nbsp;") {
-			$("#stopic-tags")
+		if (tags === "" || $(tags).html() === "&nbsp;") {
+			$sundryTags
 				.css("overflow", "none")
 				.append('<div class="sundryMsg no-info">No tags found</div>');
 		} else {
-			$("#stopic-tags")
+			$sundryTags
 				.css("overflow", "auto")
 				.append(tags)
 				.mCustomScrollbar({
@@ -785,6 +793,14 @@ Controls.prototype = {
 							// Adjust scrollbar height to fit the up/down arrows perfectly
 							// NOTE: This is also set when moving the slider bar (see main.js).
 							$("#stopic-tags .mCSB_scrollTools").css("height", $("#stopic-tags").height() + 7);
+						},
+						onOverflowY: function() {
+							// Move slider button slightly to the left when a scrollbar appears
+							$("#slider-button").css("right", "30px");
+						},
+						onOverflowYNone: function() {
+							// Move slider button back to the right when the scrollbar disappears
+							$("#slider-button").css("right", "10px");
 						},
 					},
 				});

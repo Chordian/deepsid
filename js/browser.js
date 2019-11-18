@@ -404,7 +404,39 @@ Browser.prototype = {
 
 					this.scrollPositions.push(this.currentScrollPos); // Remember where we parked
 					this.currentScrollPos = 0;
-					this.getFolder();
+					this.getFolder(0, undefined, undefined, function() {
+						// Collect tags for all files and present them in the relevant sundry tab
+						var tagType = {
+							production:	"",
+							origin:		"",
+							suborigin:	"",
+							mixorigin:	"",
+							digi:		"",
+							subdigi:	"",
+							remix64:	"",
+							other:		"",
+						};
+						$.each(this.playlist, function(i, file) {
+							// Parse each DIV with one tag each							
+							$(file.tags).each(function() {
+								if (this.className.indexOf("tag-") != -1) {
+									var typeName = this.className.split(" ")[1].substr(4);
+									if (tagType[typeName].indexOf(">"+this.innerHTML+"<") == -1)
+										tagType[typeName] += this.outerHTML; // No duplicates
+								}
+							});
+						});
+						ctrls.updateSundryTags(
+							tagType.origin+
+							tagType.suborigin+
+							tagType.mixorigin+
+							tagType.production+
+							tagType.digi+
+							tagType.subdigi+
+							tagType.remix64+
+							tagType.other
+						);
+					});
 					this.getComposer();
 
 					UpdateURL();
@@ -1330,6 +1362,7 @@ Browser.prototype = {
 				// A special look for the "Remix 64" tag
 				list_of_tags += '<div class="tag tag-remix64">&nbsp;&nbsp;</div>';
 			else
+				// NOTE: Don't change the order of tags or the collector for a folder will break!
 				list_of_tags += '<div class="tag tag-'+types[i]+'">'+tag+'</div>';
 		});
 		list_of_tags += '<div class="edit-tags" title="Edit tags">&nbsp;</div>';
