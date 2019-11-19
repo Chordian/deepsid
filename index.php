@@ -1139,6 +1139,12 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>November 19, 2019</h3>
+						<ul>
+							<li>Tags names with spaces in them can now be searched for when enclosed in quotes.</li>
+							<li>Fixed not getting results when clicking tags with multiple words in the sundry tab.</li>
+						</ul>
+
 						<h3>November 18, 2019</h3>
 						<ul>
 							<li>Entering a folder with SID files now shows all their tags in the new sundry tab,

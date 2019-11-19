@@ -64,6 +64,18 @@ try {
 		return $owner;
 	}
 
+	function ParseQuery($query) {
+		// Replace spaces ('_') inside quoted queries with '%' and remove the quotes themselves
+		// NOTE: This is actually a weird shortcut and sometimes produce unexpected results.
+		preg_match_all('/"[^"]+"/', $query, $quoted);
+		foreach($quoted[0] as $q) {
+			$adapted = trim(str_replace('_', '%', $q), '"');
+			$query = str_replace($q, $adapted, $query);
+		}
+		// Get rid of any lonely quote stragglers and return an array
+		return explode('_', str_replace('"', '', $query));
+	}
+
 	if ($isSearching) {
 
 		// This tricky logic disallows symlists unless searching for everything
@@ -85,9 +97,10 @@ try {
 			} else if ($_GET['searchType'] == 'tag') {
 				// Search for one or more tags
 				$tag_list = '';
-				$search_tags = explode('_', $_GET['searchQuery']);
+				$search_tags = ParseQuery($_GET['searchQuery']);
 				foreach($search_tags as $tag)
 					$tag_list .= ' OR tags_info.name LIKE "%'.$tag.'%"';
+
 				$select = $db->query('SELECT fullname FROM hvsc_files'.
 					' LEFT JOIN tags_lookup ON hvsc_files.id = tags_lookup.files_id'.
 					' LEFT JOIN tags_info ON tags_info.id = tags_lookup.tags_id'.
@@ -102,19 +115,7 @@ try {
 				if ($_GET['searchType'] == 'new') {
 					$include = $_GET['searchType'].' LIKE "%'.str_replace('.', '', $_GET['searchQuery']).'%"';
 				} else {
-					$query = $_GET['searchQuery'];
-
-					// Replace spaces ('_') inside quoted queries with '%' and remove the quotes themselves
-					// NOTE: This is actually a weird shortcut and sometimes produce unexpected results.
-					preg_match_all('/"[^"]+"/', $query, $quoted);
-					foreach($quoted[0] as $q) {
-						$adapted = trim(str_replace('_', '%', $q), '"');
-						$query = str_replace($q, $adapted, $query);
-					}
-					// Get rid of any lonely quote stragglers
-					$query = str_replace('"', '', $query);
-
-					$words = explode('_', $query);
+					$words = ParseQuery($_GET['searchQuery']);
 					$include = '(';
 					$i_and = $e_and = '';
 					foreach($words as $word) {

@@ -424,7 +424,7 @@ Controls.prototype = {
 					var tag = event.target.innerHTML == "&nbsp;&nbsp;" ? "remix64" : event.target.innerHTML.toLowerCase();
 					$("#dropdown-search").val("tag");
 					$("#search-here").prop('checked', true);
-					$("#search-box").val(tag).trigger("keyup");
+					$("#search-box").val('"'+tag+'"').trigger("keyup");
 					$("#search-button").trigger("click");
 				}
 		}
