@@ -260,8 +260,8 @@
 				<div id="stopic-osc" class="stopic" style="display:none;"></div>
 			</div>
 			<div id="slider">
-				<div id="slider-button">
-					<button id="get-all-tags" class="rect" style="display:none;">Folder</button>
+				<div id="slider-button" style="display:none;">
+					<button id="get-all-tags" class="rect">Folder</button>
 				</div>
 			</div>
 
@@ -1141,7 +1141,7 @@
 
 						<h3>November 19, 2019</h3>
 						<ul>
-							<li>Tags names with spaces in them can now be searched for when enclosed in quotes.</li>
+							<li>Tag names with spaces in them can now be searched for when enclosed in quotes.</li>
 							<li>Fixed not getting results when clicking tags with multiple words in the sundry tab.</li>
 						</ul>
 

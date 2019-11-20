@@ -474,7 +474,7 @@ Browser.prototype = {
 							ctrls.updateSundry();
 
 							if ($("#sundry-tabs .selected").attr("data-topic") == "tags")
-								$("#get-all-tags").show();
+								$("#slider-button").show();
 
 							SID.play(true);
 							setTimeout(ctrls.setButtonPlay, 75); // For nice pause-to-play delay animation
@@ -2125,7 +2125,7 @@ Browser.prototype = {
 	 */
 	showFolderTags: function(tags) {
 		var allTags = tags;
-		$("#get-all-tags").hide();
+		$("#slider-button").hide();
 		if (typeof tags == "undefined" || this.cache.folderTags == "0") {
 			var tagType = {
 				production:	"",
