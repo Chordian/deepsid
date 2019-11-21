@@ -49,7 +49,7 @@ function RequestURL($path) {
 	curl_setopt($ch, CURLOPT_HEADER, false);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 	curl_setopt($ch, CURLOPT_USERAGENT, 'DeepSID');
-	curl_setopt($ch, CURLOPT_URL, 'http://se2a1.iiiii.info/dl.php?d=/soasc/'.$path.'&url=1');
+	curl_setopt($ch, CURLOPT_URL, 'http://www.se2a1.net/dl.php?url=1&d=/soasc/'.$path);
 	// curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
 	curl_setopt($ch, CURLOPT_TIMEOUT, 5);
 	curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
