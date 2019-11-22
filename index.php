@@ -1139,6 +1139,11 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>November 22, 2019</h3>
+						<ul>
+							<li>Fixed a database bug that occurred when searching for quoted tags in playlists.</li>
+						</ul>
+
 						<h3>November 19, 2019</h3>
 						<ul>
 							<li>Tag names with spaces in them can now be searched for when enclosed in quotes.</li>

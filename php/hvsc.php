@@ -216,9 +216,10 @@ try {
 				} else if ($_GET['searchType'] == 'tag') {
 					// Search for one or more tags
 					$tag_list = '';
-					$search_tags = explode('_', $_GET['searchQuery']);
+					$search_tags = ParseQuery($_GET['searchQuery']);
 					foreach($search_tags as $tag)
 						$tag_list .= ' OR tags_info.name LIKE "%'.$tag.'%"';
+
 					$select_files = $db->query('SELECT h.fullname FROM hvsc_files h'.
 						' INNER JOIN symlists ON h.id = symlists.file_id'.
 						' LEFT JOIN tags_lookup ON h.id = tags_lookup.files_id'.
