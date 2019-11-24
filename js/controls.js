@@ -117,6 +117,14 @@ Controls.prototype = {
 				// Normal mouse click
 				id == "subtune-plus" ? this.subtuneCurrent++ : this.subtuneCurrent--;
 
+			if (id == "subtune-plus") {
+				// Remove the mouse pointer for a very small time for the user to spot new subtune info
+				$("#subtune-plus").css("cursor", "none");
+				setTimeout(function() {
+					$("#subtune-plus").css("cursor", "pointer");
+				}, 450);
+			}
+
 			$("#time-bar").empty().append('<div></div>');
 
 			// Keep skipping subtunes if a setting is set to ignore those of less than 10 seconds
