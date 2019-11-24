@@ -1139,6 +1139,11 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>November 24, 2019</h3>
+						<li>Upgraded the WebSid emulator. Added 6581 voltage offset handling to improve respective $D418
+							digis, fixed a bug in the IRQ ROM routine, and removed output normalization which caused
+							some unexpected problems.</li>
+
 						<h3>November 22, 2019</h3>
 						<ul>
 							<li>Fixed a database bug that occurred when searching for quoted tags in playlists.</li>
