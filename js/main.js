@@ -139,6 +139,8 @@ $(function() { // DOM ready
 			} else if (event.keyCode == 76) {							// Keyup 'l' (load)
 				// Upload and test one or more external SID tune(s)
 				$("#upload").trigger("click");
+			} else if (event.keyCode == 66) {							// Keyup 'b' (back before redirect)
+				$("#redirect-back").trigger("click");
 			} else if (event.keyCode == 84) {							// Keyup 't' (test something)
 				console.log(browser.playlist[browser.songPos].address);
 			}
@@ -955,6 +957,9 @@ $(function() { // DOM ready
 	 */
 	$("#topic-csdb,#sundry,#topic-stil,#topic-changes,#topic-player").on("click", "a.redirect", function() {
 		var $this = $(this);
+		if ($this.html() == "") return false;
+
+		var prevRedirect = browser.playlist[browser.songPos].fullname.replace(browser.ROOT_HVSC+"/_High Voltage SID Collection", "");
 
 		// Make the small play icon "active" bright
 		if (!$this.hasClass("playing")) {
@@ -964,6 +969,7 @@ $(function() { // DOM ready
 
 		var fullname = $this.html();
 		var path = "/_High Voltage SID Collection"+fullname.substr(0, fullname.lastIndexOf("/"));
+
 		// @todo If using redirect for custom folders later then copy the 'browser.path' lines from 'fileParam' below.
 		ctrls.state("root/back", "enabled");
 		if (path != browser.path) {
@@ -977,6 +983,8 @@ $(function() { // DOM ready
 		// Clear caches to force proper refresh of CSDb tab after redirecting 
 		cacheBeforeCompo = cacheCSDb = cacheSticky = cacheStickyBeforeCompo = "";
 		UpdateURL();
+		// Store SID location before redirecting in case the user wants to go back afterwards
+		$("#redirect-back").empty().append(prevRedirect);
 		return false;
 	});
 

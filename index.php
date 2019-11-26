@@ -258,6 +258,7 @@
 				<div id="stopic-stil" class="stopic"></div>
 				<div id="stopic-tags" class="stopic" style="display:none;"></div>
 				<div id="stopic-osc" class="stopic" style="display:none;"></div>
+				<a id="redirect-back" class="redirect" href="#" style="display:none"></a>
 			</div>
 			<div id="slider">
 				<div id="slider-button" style="display:none;">
@@ -1138,6 +1139,13 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>November 26, 2019</h3>
+						<ul>
+							<li>After clicking a "plink" (a redirecting HVSC path link) you can now go back by pressing
+								the <code>b</code> hotkey. You can also keep hitting it to toggle between the two locations
+								if you want to compare the songs.</li>
+						</ul>
 
 						<h3>November 24, 2019</h3>
 						<ul>
