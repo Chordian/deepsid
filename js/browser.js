@@ -1506,6 +1506,9 @@ Browser.prototype = {
 					var composerFolder = "http://deepsid.chordian.net/?file=/"+(overridePath == "" ? this.path.substr(1) : overridePath);
 					$("#profilechange").append('<a href="mailto:chordian@gmail.com?subject=DeepSID%20profile%20change&body=I%20have%20a%20profile%20change%20request%20for:%0D%0A'+composerFolder+'%0D%0A%0D%0A">Report a profile change</a>');
 
+					// Enable the brand image (if available) for the correct color theme
+					$("#brand-"+(parseInt(colorTheme) ? "dark" : "light")).show();
+
 					this.groups = $.get("php/groups.php", {
 						fullname: (overridePath == "" ? this.path.substr(1) : overridePath)
 					}, function(data) {

@@ -1140,6 +1140,11 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>November 28, 2019</h3>
+						<ul>
+							<li>Some profile pages may now show the brand or logo in both color themes.</li>
+						</ul>
+
 						<h3>November 26, 2019</h3>
 						<ul>
 							<li>After clicking a "plink" (a redirecting HVSC path link) you can now go back by pressing

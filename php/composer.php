@@ -334,18 +334,19 @@ $active_years = !empty($years) ? ($years[0] == end($years) ? $years[0] : $years[
 
 if (isset($row)) {
 	// We have extended info from the 'composers' database table
-	$name		= $row->name;
-	$handles	= str_replace(', ', ', <img class="arrow" src="images/composer_arrowright.svg" alt="" style="position:relative;top:1px;" />', $row->handles);
-	$born		= $row->born; 
-	$died		= substr($row->died, 0, 4);
-	$cause		= (!empty($row->cause) ? '('.$row->cause.')' : '');
-	$onsid		= (!empty($row->onsid) ? $row->onsid : $active_years); // Often the generated one will suffice
-	$notable	= str_replace('[#]', '<img class="inline-icon icon-editor" src="images/composer_editor.svg" title="Music editor" alt="">', $row->notable);
-	$country	= $row->country;
-	$csdbtype	= $row->csdbtype;
-	$csdbid		= $row->csdbid;
-	$brand		= $row->brand;
-	$spinner	= true;
+	$name			= $row->name;
+	$handles		= str_replace(', ', ', <img class="arrow" src="images/composer_arrowright.svg" alt="" style="position:relative;top:1px;" />', $row->handles);
+	$born			= $row->born; 
+	$died			= substr($row->died, 0, 4);
+	$cause			= (!empty($row->cause) ? '('.$row->cause.')' : '');
+	$onsid			= (!empty($row->onsid) ? $row->onsid : $active_years); // Often the generated one will suffice
+	$notable		= str_replace('[#]', '<img class="inline-icon icon-editor" src="images/composer_editor.svg" title="Music editor" alt="">', $row->notable);
+	$country		= $row->country;
+	$csdbtype		= $row->csdbtype;
+	$csdbid			= $row->csdbid;
+	$brand_light	= $row->brand;
+	$brand_dark		= $row->branddark;
+	$spinner		= true;
 
 	$died = $died == '1970' ? '<i>Unknown date</i>' : $died;
 
@@ -358,17 +359,18 @@ if (isset($row)) {
 
 } else {
 	// No database help; we have to figure things out for ourselves
-	$name		= substr('/'.$fullname, strrpos('/'.$fullname, '/') + 1);
-	$handles	= '';
-	$born		= '0000-00-00';
-	$died		= '0000';
-	$cause		= '';
-	$onsid		= $active_years;
-	$notable	= '';
-	$country	= '';
-	$csdbid		= 0;
-	$brand		= '';
-	$spinner	= false;
+	$name			= substr('/'.$fullname, strrpos('/'.$fullname, '/') + 1);
+	$handles		= '';
+	$born			= '0000-00-00';
+	$died			= '0000';
+	$cause			= '';
+	$onsid			= $active_years;
+	$notable		= '';
+	$country		= '';
+	$csdbid			= 0;
+	$brand_light	= '';
+	$brand_dark		= '';
+	$spinner		= false;
 
 	// Ditch the prepended custom "_" or symlist "!" character
 	// @todo Uh, why is '!' here? Does that ever appear in a composer name!?
@@ -397,8 +399,11 @@ $html = '<table style="border:none;margin-bottom:0;"><tr>'.
 					'<img class="icon earth" src="images/composer_earth.svg" title="Country" alt="" />'.
 					str_replace(', ', ', <img class="arrow" src="images/composer_arrowright.svg" title="Moved" alt="" />', $country).
 				'</span>' : '').
-				(!empty($brand)
-				? '<img id="brand" src="images/brands/'.$brand.'" alt="'.$brand.'" />'
+				(!empty($brand_light)
+				? '<img id="brand-light" class="brand" src="images/brands/'.$brand_light.'" alt="'.$brand_light.'" style="display:none;" />'
+				: '').
+				(!empty($brand_dark)
+				? '<img id="brand-dark" class="brand" src="images/brands/'.$brand_dark.'" alt="'.$brand_dark.'" style="display:none;" />'
 				: '').
 			'</td>'.
 		'</tr></table>'.

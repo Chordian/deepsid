@@ -568,6 +568,9 @@ $(function() { // DOM ready
 			.find(colorTheme ? ".mCS-dark-3" : ".mCS-light-3")
 			.removeClass(colorTheme ? "mCS-dark-3" : ".mCS-light-3")
 			.addClass(colorTheme ? "mCS-light-3" : "mCS-dark-3");
+		// Change the brand image too (if available)
+		$("#brand-"+(colorTheme ? "light" : "dark")).hide();
+		$("#brand-"+(colorTheme ? "dark" : "light")).show();
 		// Disqus was implemented before the main folder for HVSC was so it doesn't know it exists
 		browser.reloadDisqus((typeof browser.songPos != "undefined"
 				? browser.playlist[browser.songPos].fullname.replace("/_High Voltage SID Collection", "")

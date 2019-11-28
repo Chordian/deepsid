@@ -647,7 +647,6 @@
 
 [data-theme="dark"] h2 { color: #fff; }
 [data-theme="dark"] h3 { color: #d8dad8; }
-[data-theme="dark"] #brand { display: none;}
 
 [data-theme="dark"] #page .ext .name { color: #f5f5f1; }
 [data-theme="dark"] #page .ext .name:hover { text-decoration: underline; }
@@ -3589,7 +3588,7 @@ input[type=range]::-ms-track {
 			}
 
 		/* Some composer profiles may show a group logo/name image too */
-		#brand {
+		#page .brand {
 			position: absolute;
 			right: 0;
 			bottom: 6px;
