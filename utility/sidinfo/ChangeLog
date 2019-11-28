@@ -1,0 +1,390 @@
+2018-12-21  Matti Hamalainen <ccr@tnsp.org>
+
+	* .hgsigs: Added signature for changeset 1db4c97b0b54
+	* .hgtags: Added tag rel-0_7_9 for changeset c073c7eda531
+	* sidinfo.c: Bump version.
+	* sidinfo.c: Autodetect which version of Songlength database file
+	  is available (.md5 or .txt), prefer .md5 version.
+
+2018-12-11  Matti Hamalainen <ccr@tnsp.org>
+
+	* .hgsigs: Added signature for changeset 45f06cb6d270
+	* .hgtags: Added tag rel-0_7_8 for changeset c05a8351dc9b
+	* sidinfo.c: Bump version.
+	* sidinfo.c: Enable -v verbosity option.
+	* sidlib.c: Actually fix the load address handling in hash
+	  calculation.
+
+2018-12-01  Matti Hamalainen <ccr@tnsp.org>
+
+	* Makefile.w32: Build system cleanups.
+
+2018-11-27  Matti Hamalainen <ccr@tnsp.org>
+
+	* endianchk.c: Remove unused file.
+
+2018-10-01  Matti Hamalainen <ccr@tnsp.org>
+
+	* sidinfo.c: Add a NULL check for language variable.
+
+2018-09-30  Matti Hamalainen <ccr@tnsp.org>
+
+	* .hgsigs: Added signature for changeset dc4eac62d5b2
+	* .hgtags: Added tag rel-0_7_7 for changeset a7a0d8bf16cd
+	* sidinfo.c: Bump version.
+	* sidinfo.c: Add internal fallback ISO-8859-1 to UTF-8 converter
+	  and improve iconv() support.
+
+2018-07-09  Matti Hamalainen <ccr@tnsp.org>
+
+	* .hgtags: Added tag rel-0_7_6 for changeset 05e2332070a7
+	* README.txt: Fix some typos and cleanup.
+	* README.txt: Update examples.
+	* sidinfo.c: Oops, bump version.
+	* Makefile.gen sidinfo.c: Add internal directory reading and
+	  filename matching, plus optional subdirectory recursion via '-R'
+	  option.
+	* Makefile.w32: Disable BOOL type that comes from Windows header
+	  files.
+	* sidinfo.c: Deconstify.
+	* sidinfo.c: Add separator empty line between "files" when in
+	  normal output mode.
+	* sidinfo.c: Improve error output.
+	* sidinfo.c: Adjust to new th_io_fopen() API.
+	* sidlib.c: Improve error handling through ioctx.
+	* endianchk.c: Remove empty line at end.
+	* .hgsigs: Added signature for changeset 6cf0e524e4d3
+
+2018-07-07  Matti Hamalainen <ccr@tnsp.org>
+
+	* .hgtags: Added tag rel-0_7_5 for changeset 5bc837384177
+	* sidinfo.c: Bump version again.
+	* sidinfo.c: Add separate escape characters option (-e <chars>),
+	  but make -l <separator> option to set escape chars if it has not
+	  been explicitly set via -e.
+
+2018-07-06  Matti Hamalainen <ccr@tnsp.org>
+
+	* .hgtags: Added tag rel-0_7_4 for changeset fe42ad960bc8
+	* Makefile.gen: Oops, forgot to add the necessary th-libs module
+	  th_datastruct.o to depencies, needed for the new string escaping
+	  stuff.
+	* sidinfo.c: Add a comment.
+	* sidinfo.c: Add functionality for escaping the separator
+	  characters (-l <str> option) in printed out string data.
+
+2018-07-02  Matti Hamalainen <ccr@tnsp.org>
+
+	* Makefile.gen: Improve build system.
+
+2018-06-04  Matti Hamalainen <ccr@tnsp.org>
+
+	* sidinfo.c: Bump version.
+	* sidinfo.c: Add the license into the program itself, displayable
+	  via --license option.
+	* sidinfo.c: Change to match th-libs' verbosity level changes.
+	* sidinfo.c sidlib.c sidlib.h: Change copyright blurbs slightly.
+
+2018-02-17  Matti Hamalainen <ccr@tnsp.org>
+
+	* sidlib.c: NULL checks.
+
+2018-02-16  Matti Hamalainen <ccr@tnsp.org>
+
+	* COPYING README.txt sidinfo.c sidlib.c sidlib.h: Bump copyright
+	  years.
+	* .hgtags: Added tag rel-0_7_3 for changeset a498edd91bcc
+	* sidinfo.c: Bump version again.
+	* sidlib.c: Fix the load address handling in case of new SLDB
+	  format.
+	* .hgtags: Added tag rel-0_7_2 for changeset 9cc9ce46f4a0
+	* sidinfo.c: Bump version.
+	* sidinfo.c sidlib.c sidlib.h: Implement support for the "new" MD5
+	  format of SLDB.
+	* sidlib.c: Clarify some comments.
+
+2018-02-07  Matti Hamalainen <ccr@tnsp.org>
+
+	* sidinfo.c: Cleanups.
+
+2018-02-05  Matti Hamalainen <ccr@tnsp.org>
+
+	* sidlib.c: Cleanup.
+
+2017-10-26  Matti Hamalainen <ccr@tnsp.org>
+
+	* .hgtags: Added tag rel-0_7_1 for changeset a8c24f1f460f
+	* sidinfo.c: Bump version.
+	* Makefile README.txt sidinfo.c: Implement iconv support for
+	  converting from PSID de-facto latin-1/ISO-8859-* to whatever we
+	  are using currently (default to UTF-8). Support for iconv can be
+	  turned off via compile-time define (see Makefile).
+	* sidinfo.c: Simplify things by having separate PRS/PRI macros for
+	  printing string and integer fields. Also prepare for iconv
+	  support.
+	* sidinfo.c: Simplify by removing few lines of duplicate code.
+
+2017-10-25  Matti Hamalainen <ccr@tnsp.org>
+
+	* .hgtags: Added tag rel-0_7_0 for changeset e3be2ae6120e
+	* README.txt sidinfo.c: Delete trailing whitespace.
+	* README.txt: Update documentation a bit.
+	* .hgtags: Removed tag rel-0_7_0
+	* sidinfo.c: Make the hash field also formattable.
+	* .hgtags: Added tag rel-0_7_0 for changeset 01cde57da297
+	* sidinfo.c: Bump version.
+	* sidinfo.c: Implement C printf-style format specifiers for -F
+	  option @fields@.
+
+2017-06-13  Matti Hamalainen <ccr@tnsp.org>
+
+	* sidinfo.c: Simplify data printing.
+	* sidinfo.c: Bump version.
+	* sidinfo.c sidlib.h: Cosmetics.
+	* sidinfo.c: Improve format string parsing.
+
+2017-06-05  Matti Hamalainen <ccr@tnsp.org>
+
+	* sidinfo.c: Better check for number of songlengths.
+	* sidinfo.c: Do not show full help if no filenames are specified.
+
+2017-06-02  Matti Hamalainen <ccr@tnsp.org>
+
+	* sidinfo.c: Don't print songlengths field if there are none.
+	* .hgtags: Added tag rel-0_6_2 for changeset d40c371ce1f9
+	* sidinfo.c: Bump version.
+	* Makefile.gen: Buildsystem fix.
+	* COPYING README.txt: Bump copyright years.
+	* sidinfo.c: Add preprocessor guards around iconv stuff.
+	* sidinfo.c: Implement support for showing second and third SID
+	  chip addresses and models for PSID/RSID v3/v4 files.
+	* sidlib.c sidlib.h: Add support for reading PSID/RSID v4 in
+	  sidlib.
+	* sidinfo.c sidlib.c sidlib.h: Change how certain flags (for SID
+	  model and clock) are handled.
+	* sidinfo.c sidlib.c sidlib.h: Bump copyrights.
+	* Makefile Makefile.w32: Build system cleanups.
+
+2016-10-27  Matti Hamalainen <ccr@tnsp.org>
+
+	* sidinfo.c: Fix iconv initialization.
+	* sidlib.c sidlib.h: Add si_fread_str() helper function.
+	* sidinfo.c: Rename a variable, cosmetics.
+	* sidinfo.c sidlib.c sidlib.h: Make si_read_sid_file() to allocate
+	  the PSIDHeader struct itself, adjust API/ABI accordingly.
+
+2016-10-26  Matti Hamalainen <ccr@tnsp.org>
+
+	* sidinfo.c: Fix build.
+
+2016-03-09  Matti Hamalainen <ccr@tnsp.org>
+
+	* Makefile: Fix build.
+	* Makefile.gen: Use generic build stuff from thlibs Makefile.inc.
+	* Makefile Makefile.gen: Make build process less noisy and also
+	  work with parallel make.
+
+2016-03-03  Matti Hamalainen <ccr@tnsp.org>
+
+	* sidinfo.c: Change in th_args API.
+
+2016-02-17  Matti Hamalainen <ccr@tnsp.org>
+
+	* sidinfo.c: Initial work on iconv support.
+	* README.txt: UTF-8.
+
+2016-02-16  Matti Hamalainen <ccr@tnsp.org>
+
+	* sidinfo.c: Simplify.
+
+2016-02-15  Matti Hamalainen <ccr@tnsp.org>
+
+	* sidinfo.c: Fix th_strndup_trim() usage.
+	* sidinfo.c: Cleanups.
+	* sidinfo.c: Simplify.
+	* sidinfo.c: Simplify error handling logic.
+	* sidinfo.c: Prepare for some possible future enhancements by
+	  specifying a type for each data field.
+	* sidinfo.c: Rename a variable.
+	* sidinfo.c: Improve error handling.
+	* sidinfo.c: Reimplement '-f' option differently.
+	* sidinfo.c: UTF-8.
+	* sidinfo.c: Align cosmetics.
+	* sidinfo.c: Improve error handling.
+	* endianchk.c: More robust endian check.
+	* sidlib.c: Change to match changed th_ioctx API.
+	* sidlib.c: Move definitions to start of the file.
+	* sidlib.c: Rename function arguments.
+	* sidlib.c sidlib.h: Add si_sldb_{read,write}_bin() functions to
+	  write and read a binary format SLDB database, which is faster
+	  than parsing Songlengths.txt.
+	* sidlib.c sidlib.h: Rename a structure member.
+
+2016-02-14  Matti Hamalainen <ccr@tnsp.org>
+
+	* sidlib.c: Use th_calloc() here.
+	* sidlib.c: Match with th-libs API change.
+
+2016-02-12  Matti Hamalainen <ccr@tnsp.org>
+
+	* sidlib.h: UTF-8.
+	* README.txt: Add line about 'make install'.
+	* sidlib.c: Use th_md5_append_le*() functions instead.
+	* sidinfo.c: Oops, 100L.
+	* sidlib.c: UTF-8.
+	* .hgsigs: Added signature for changeset f0eca0f9256a
+	* sidinfo.c: Fix to comply with th_ioctx API change.
+	* sidinfo.c: Some fixes.
+	* sidinfo.c: Implement initial SLDB support.
+	* sidlib.c sidlib.h: More work on sidlib SLDB code.
+	* sidinfo.c: Remove some unused constant defines.
+
+2016-02-11  Matti Hamalainen <ccr@tnsp.org>
+
+	* sidlib.c sidlib.h: Initial port of songlength database (SLDB)
+	  handling code from XMMS-SID to here. Needs refactoring.
+	* Makefile.gen sidinfo.c sidlib.c sidlib.h: Rename various
+	  variables and functions and change relevant places to use the
+	  new th_ctx API.
+	* Makefile.gen: Build system improvements.
+
+2016-01-05  Matti Hamalainen <ccr@tnsp.org>
+
+	* sidinfo.c: Fix some warnings.
+
+2016-01-02  Matti Hamalainen <ccr@tnsp.org>
+
+	* sidinfo.c: Cleanups.
+
+2016-01-01  Matti Hamalainen <ccr@tnsp.org>
+
+	* sidinfo.c: Oops, fix a 10L.
+	* .hgignore: Add .hgignore file.
+	* sidinfo.c: Avoid using a global variable here.
+	* sidinfo.c: Clean up error handling for field parsing.
+	* sidlib.c: Cosmetic.
+	* README.txt: s/gmake/make/g
+	* sidinfo.c: Improve listing of available fields in --help.
+	* sidlib.h: Cosmetics.
+	* COPYING README.txt sidinfo.c sidlib.c sidlib.h: Update copyright
+	  years. Yay. It's 2016!
+	* sidlib.h: Add C++ include guards.
+	* sidlib.c: Rename a function argument.
+	* Makefile.gen sidinfo.c sidlib.c sidlib.h: Split some
+	  functionality into sidlib.[ch].
+	* Makefile.w32: Fix the build again for win32.
+
+2015-12-27  Matti Hamalainen <ccr@tnsp.org>
+
+	* Makefile Makefile.gen Makefile.w32: Improve build process.
+	* README.txt: Update documentation a bit.
+	* .hgtags: Added tag rel-0_6_0 for changeset f0eca0f9256a
+	* COPYING README.txt: Bump copyright.
+	* README.txt: Update documentation a bit.
+	* sidinfo.c: Cleanup.
+	* sidinfo.c: Factor escape printing to a separate function.
+
+2015-12-26  Matti Hamalainen <ccr@tnsp.org>
+
+	* sidinfo.c: Improve help.
+	* sidinfo.c: Bump version.
+	* sidinfo.c: Initial implementation of -F format string option.
+	* sidinfo.c: Cosmetics.
+	* sidinfo.c: Remove useless code.
+	* sidinfo.c: Update copyright year.
+	* sidinfo.c: Begin slight refactoring of how output is done.
+	* Makefile: Add config.h to targets.
+
+2015-07-09  Matti Hamalainen <ccr@tnsp.org>
+
+	* sidinfo.c: Remove dead code line.
+
+2015-04-17  Matti Hamalainen <ccr@tnsp.org>
+
+	* Makefile.gen: Stricter compiler options.
+	* sidinfo.c: Portability fix.
+
+2015-03-04  Matti Hamalainen <ccr@tnsp.org>
+
+	* sidinfo.c: Bump version.
+	* .hgtags: Added tag rel-0_5_3 for changeset af1e12c8ebf1
+
+2015-02-19  Matti Hamalainen <ccr@tnsp.org>
+
+	* sidinfo.c: Use th_strncasecmp().
+
+2014-12-15  Matti Hamalainen <ccr@tnsp.org>
+
+	* .hgtags: Added tag rel-0_5_2 for changeset 8b7b1315ca2b
+	* sidinfo.c: Bump version.
+	* sidinfo.c: Static constify.
+
+2014-11-22  Matti Hamalainen <ccr@tnsp.org>
+
+	* sidinfo.c: Fix to match the changes in th_args API.
+
+2014-10-01  Matti Hamalainen <ccr@tnsp.org>
+
+	* README.txt: Update instructions.
+
+2014-09-28  Matti Hamalainen <ccr@tnsp.org>
+
+	* .hgtags: Added tag rel-0_5_1 for changeset 3414fc882229
+	* sidinfo.c: Bump version.
+	* README.txt: Update documentation a bit.
+
+2014-09-27  Matti Hamalainen <ccr@tnsp.org>
+
+	* sidinfo.c: Grab the actual loading address from data block if
+	  PSID header loadAddr value is 0.
+
+2014-09-26  Matti Hamalainen <ccr@tnsp.org>
+
+	* .hgtags: Added tag rel-0_5 for changeset 1d62d7a4958a
+	* sidinfo.c: Bump version.
+	* sidinfo.c: Adjust some field titles.
+	* sidinfo.c: Add more information fields, including SID model,
+	  video clock speed, etc.
+	* sidinfo.c: Fix non-one-line entry output.
+	* sidinfo.c: Add field separator argument to -l option.
+	* sidinfo.c: Indentation cosmetics.
+	* sidinfo.c: Rename a function.
+
+2014-09-25  Matti Hamalainen <ccr@tnsp.org>
+
+	* README.txt: Update documentation.
+	* sidinfo.c: Add one line output format.
+	* sidinfo.c: Cleanups.
+	* sidinfo.c: Fix argument handling when file does not exist.
+	* .hgtags: Added tag rel-0_4 for changeset 055c2355dd0a
+	* sidinfo.c: Bump version.
+	* sidinfo.c: Disable verbose option for now, it does not do
+	  anything at the moment.
+	* sidinfo.c: Improve option handling.
+	* .hgtags: Added tag rel-0_3 for changeset 6ba8403930ab
+	* sidinfo.c: Bump version.
+	* sidinfo.c: Update usage.
+	* sidinfo.c: Handle multiple files.
+	* .hgtags: Added tag rel-0_2 for changeset 46d21c77bbb1
+	* README.txt: Update documentation.
+	* sidinfo.c: Oops, 10L.
+	* sidinfo.c: Bump version.
+	* sidinfo.c: Oops, missed ' : ' from normal output.
+	* .hgtags: Added tag rel-0_1 for changeset 4053f29843db
+	* COPYING README.txt: Add some "documentation" and a license.
+	* Makefile.gen: Fix build .. not using config.h in Win32 builds.
+	* sidinfo.c: Make filename printing optional.
+	* sidinfo.c: Fix handling of "large" SID files.
+	* sidinfo.c: Add NoPrefix option -n.
+	* Makefile: Improve build.
+	* sidinfo.c: Add usage example.
+	* Makefile Makefile.gen Makefile.w32: Fix build system.
+	* sidinfo.c: Cleanup.
+	* sidinfo.c: More work.
+
+2014-09-24  Matti Hamalainen <ccr@tnsp.org>
+
+	* Makefile.gen sidinfo.c: Moar work.
+	* Makefile Makefile.gen Makefile.w32 endianchk.c sidinfo.c:
+	  Initial import.
+

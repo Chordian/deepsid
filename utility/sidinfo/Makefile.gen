@@ -1,0 +1,22 @@
+CFLAGS += -W -Wall -Wextra -std=c11 -pedantic -I./ -D_XOPEN_SOURCE=500
+CFLAGS += -g
+CFLAGS += -O2
+THLIBS = th-libs/
+
+
+#
+# Objects
+#
+THLIBS_OBJ=th_util.o th_string.o th_ioctx.o \
+	th_file.o th_args.o th_crypto.o th_datastruct.o
+
+SIDINFO_OBJ=sidlib.o sidinfo.o
+SIDINFO_BIN=$(BINPATH)sidinfo$(EXEEXT)
+
+TARGETS += $(SIDINFO_BIN)
+
+include $(THLIBS)/Makefile.inc
+
+$(SIDINFO_BIN): $(addprefix $(OBJPATH),$(SIDINFO_OBJ)) $(THLIBS_A) $(EXTRAOBJS)
+	$(LINK_BIN)
+

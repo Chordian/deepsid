@@ -1,0 +1,7 @@
+syntax: glob
+ChangeLog
+*~
+*.orig
+*.diff
+*.o
+obj/

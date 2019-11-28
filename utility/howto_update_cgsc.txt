@@ -1,0 +1,142 @@
+How to update DeepSID to a new version of Compute's Gazette SID Collection.
+
+Requirements
+¯¯¯¯¯¯¯¯¯¯¯¯
+  o  Access to MySQL databases (LOCALHOST and/or ONLINE) through PhpMyAdmin.
+  o  Access to the DeepSID files (LOCALHOST and/or ONLINE via FTP).
+  o  Notepad++ is mentioned here, but you can use any text editor you want.
+
+
+
+  @todo ADD TO BELOW NEXT TIME: Fields "new" and "updated" must be added to Format: 136 (i.e. no dot)
+
+
+
+FOLDER
+¯¯¯¯¯¯
+Local version:
+
+  1. Rename the old "_Compute's Gazette SID Collection" in the music library root to e.g. "DELETE_ME".
+  2. Download archive from web site. Copy it to the music library root folder and unpack to "here".
+  3. Rename the "CGSC" folder to "_Compute's Gazette SID Collection" PLUS new version appended to it.
+  4. Try deleting the renamed folder from step 1, but be prepared for Windows 10 acting up. Sometimes
+     it takes forever to finish deleting it, at other times it's fast as is there nothing to it.
+
+Online version:
+
+  1. Log on with FTP program and copy the new LOCAL folder to the online music library root folder.
+     It's important that it retains the appended version number. This takes about half an hour or so.
+  2. When done, rename the new LOCAL folder to the normal name it has without the version number.
+
+Don't delete the old online folder yet, and keep the version number on the new online folder until you're
+through with the database updates below.
+
+UPDATING CHANGES TO FILES AND FOLDERS
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+This will be done manually. There are usually few changes, but it may still be a cumbersome process.
+
+  1. Load the phpMyAdmin page for both the LOCAL and ONLINE databases, in two tabs side by side.
+  2. Open the file "UPDATE_BAT_###.txt" in Notepad, where ### is the new version number.
+
+RENAMED FILES AND FOLDERS
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+Go down to the "MOVE OR RENAME TUNES" section in the update text file.
+
+For "REN" files with ".mus" extensions:
+
+  1. Copy the "before" filename (including ".mus" extension) and in the "hvsc_files" table in each
+     database tab, search "fullname" for %[filename]. You should get *ONE* hit in each tab. If you have
+     to include a folder because the filename is too generic, change "\" to "/" when pasting.
+  2. Edit the "fullname" field in the database row and replace the filename with the "after" filename.
+  3. Repeat steps 1 and 2 for additional "REN" lines with ".mus" extensions. (Skip ".wds" and ".str" files.)
+
+For "REN" folders:
+
+  1. Copy the "before" part (including prepended folders) and in the "hvsc_files" table in each database
+     tab, change "LIKE" for "fullname" to "LIKE %...%" then paste the "before" part. Change the "\" to
+     "/" instead. Search. You will probably get multiple hits - hopefully it's not a lot.
+  2. Copy the "after" part (usually just the last folder) and edit the "filename" field for each database
+     row. Change the destination folder in these to the new one. (Be careful not to mangle the filenames.)
+  3. Repeat steps 1 and 2 for additional folders.
+  4. Go to "hvsc_folders" in both database tabs.
+  5. Search for the for the "before" version of the folder. Again, you should get *ONE* hit, or you may
+     have to include the parent folder and then change "\" to "/" when pasting.
+  6. Edit the "fullname" field and change the last folder to the new "after" version.
+  7. You may want to check that the file count for the folder is still correct.
+
+For "MOVE" files with ".mus" extensions:
+
+  1. Copy the "before" filename (including ".mus" extension) and in the "hvsc_files" table in each
+     database tab, search "fullname" for %[filename]. You should get *ONE* hit in each tab. If you have
+     to include a folder because the filename is too generic, change "\" to "/" when pasting.
+  2. Copy the "after" FOLDER (!) and edit the "filename" field for each database row. Change the
+     destination folder to the new one. (Be careful not to mangle the filename.)
+  3. Repeat steps 1 and 2 for additional move lines.
+
+SKIP
+¯¯¯¯
+You should be able to skip the "REPLACE TUNES OR WDS" section as these should not affect the "fullname"
+fields in the database, but you may want to check the section to see if this still holds water.
+
+DELETED FILES AND FOLDERS
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+Go down to the "DELETE" section in the update text file.
+
+  1. If the line is not about a ".mus" file, you can ignore it. The ".wds" and ".str" files are not stored
+     in the database at all. But if it does, continue to the next step:
+  2. Copy the "before" filename (including ".mus" extension) and in the "hvsc_files" table in each
+     database tab, search "fullname" for %[filename]. You should get *ONE* hit in each tab. If you have
+     to include a folder because the filename is too generic, change "\" to "/" when pasting.
+  3. Delete that database row in each of the database tabs. (If the row is not deleted in the database, you
+     will still erroneously be able to search for it in DeepSID.)
+  4. Repeat step 1 to 3 for additional delete lines with ".mus" extensions.
+
+That should be it for the "UPDATE_BAT_###.txt" file, but don't close Notepad just yet.
+
+ADDING NEW FILES
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+  1. Open the file "Whats_new_in_v###.txt" in Notepad, where ### is the new version number.
+  2. In the first step of the file, copy all the lines with new files into a new Notepad++ file. (Ignore
+     the other steps with updated and deleted files.)
+  3. Save the Notepad++ in e.g. TEMP. The filename is unimportant.
+  4. Delete all the lines that does not end with the ".mus" extension.
+  5. Copy this to the clipboard now: _Compute's Gazette SID Collection/
+  6. Home on each line and insert the string. (If there are a lot of new files, record and repeat a macro.)
+  7. Ctrl+H, "Replace All" backslashes to forward slashes instead.
+  8. Save the Notepad++ file and exit.
+
+Don't close "Whats_new_in_v###.txt" in Notepad just yet.
+
+  1. In the LOCAL database tab, enter the "hvsc_files" table in phpMyAdmin and click "Import".
+  2. Click "Browse" and click the Notepad++ file.
+  3. Change "Format" to "CSV".
+  4. Write "fullname" in the "Column names" edit box.
+  5. Click "Go".
+
+Check the end of the "hvsc_files" table to see if the new files were added properly. Then do the same thing
+for the ONLINE database tab.
+
+ADDING NEW FOLDERS
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+Folders created for moving should already have been taken care of in the MOVE section above.
+
+  1. Bring the "Whats_new_in_v###.txt" in Notepad into focus again.
+  2. Look at the list of new files (those you copied to Notepad++) and try searching for each end folder in
+     the "hvsc_folders" table. Use the "LIKE %...%" option while searching.
+  3. If the folder exists, enter it in DeepSID and update the file count in the table if it's incorrect.
+     (If there are a ton of files you may have to do a "dir *.mus" in a command box for the folder.)
+  4. If the folder doesn't exist, insert:
+        fullname:       _Compute's Gazette SID Collection/[Folders (may be several up to end folder)]
+                        (Remember to change any "\" to "/" instead.)
+        files:          (See below.)
+        incompatible:   jssid
+     For the file count, go to the folder and do a "dir *.mus" in a command box for the folder and add the
+     count here. While you're in the folder, it's important that you delete all "noise" files such as readme
+     text files, all capital files without an extension, and whatever else you may find irrelevant. Only
+     the ".mus", ".wds" and ".str" file extensions should be present. If you don't do this, entering the
+     folder in the local DeepSID will show an "Undefined variable: has_photo" PHP error.
+
+TESTING LOCAL
+¯¯¯¯¯¯¯¯¯¯¯¯¯
+Refer to the changes in the two CGSC update text files and try clicking the same tunes in DeepSID. You
+should not get errors for changed files/folders and you should not be able to search for deleted files.

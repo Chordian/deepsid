@@ -1,0 +1,27 @@
+#
+# For win32 version cross-compilation with MinGW suite @ Linux
+#
+
+# Compiler, flags and linker flags
+BINTOOL_PREFIX=i686-w64-mingw32-
+WINDRES = $(BINTOOL_PREFIX)windres
+
+CFLAGS += -DTH_BYTEORDER=TH_LITTLE_ENDIAN -mconsole -D_NO_BOOL_TYPEDEF
+LDFLAGS += -s
+
+CFLAGS += -DHAVE_STRING_H
+CFLAGS += -DHAVE_STDINT_H
+#CFLAGS += -DHAVE_SYS_TYPES_H
+#CFLAGS += -DHAVE_INTTYPES_H
+
+# Miscellaneous
+EXEEXT=.exe
+OBJPATH=obj/win32/
+BINPATH=./
+
+
+###
+### Stuff
+###
+include Makefile.gen
+

@@ -8,6 +8,13 @@ js/_websid/*
 php/_master/*
 php/hvsc_update/*
 temp/*
+utility/*.csv
+utility/python/count/*.csv
+utility/python/csdb/*.csv
+utility/python/gb64/*.csv
+utility/python/specific/*.csv
+utility/python/stil/*.csv
+utility/python/stil/STIL.txt
 .htaccess
 todo.txt
 soasc.txt

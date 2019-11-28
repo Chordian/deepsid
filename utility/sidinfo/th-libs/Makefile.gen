@@ -1,0 +1,31 @@
+CFLAGS += -W -Wall -Wextra -D_XOPEN_SOURCE=500 -I./
+#CFLAGS += -std=c11 -pedantic
+CFLAGS += -g
+CFLAGS += -O2
+CFLAGS += -DTH_USE_INTERNAL_SPRINTF=1
+CFLAGS += -DTH_PRINTF_DEBUG=1
+
+THLIBS  = ./
+
+#
+# Objects
+#
+THLIBS_A=$(OBJPATH)thlibs.a
+THLIBS_OBJ=th_util.o th_config.o th_string.o th_ioctx.o \
+	th_args.o th_crypto.o th_datastruct.o th_network.o \
+	th_file.o
+
+
+TESTS_OBJ=tests.o
+TESTS_BIN=$(BINPATH)tests$(EXEEXT)
+
+TARGETS += $(TESTS_BIN)
+
+include $(THLIBS)/Makefile.inc
+
+$(TESTS_BIN): $(addprefix $(OBJPATH),$(TESTS_OBJ)) $(THLIBS_A)
+	$(LINK_BIN)
+
+check: $(TESTS_BIN)
+	$(TESTS_BIN) -v
+

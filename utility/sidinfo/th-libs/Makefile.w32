@@ -1,0 +1,24 @@
+#
+# For win32 version cross-compilation with MinGW suite @ Linux
+#
+
+# Miscellaneous
+BINTOOL_PREFIX = i686-w64-mingw32-
+PREFIX =
+BINPATH = ./
+OBJPATH = obj/win32/
+EXEEXT = .exe
+
+# Compiler flags and linker flags
+CFLAGS += -DHAVE_STRING_H -DTH_BYTEORDER=TH_LITTLE_ENDIAN -mconsole
+
+
+
+###
+### Stuff
+###
+#NOINST_TARGETS += $(ENDIANCHK_BIN) config.h
+#THLIBS_DEP += config.h
+
+include Makefile.gen
+

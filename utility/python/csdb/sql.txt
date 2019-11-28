@@ -1,0 +1,4 @@
+UPDATE hvsc_files
+INNER JOIN hvsc_files_import on hvsc_files_import.fullname = hvsc_files.fullname
+SET hvsc_files.csdbtype = hvsc_files_import.csdbtype,
+    hvsc_files.csdbid = hvsc_files_import.csdbid

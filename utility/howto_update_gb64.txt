@@ -1,0 +1,97 @@
+How to update DeepSID to a new version of GameBase64.
+
+Let's call the new version ## in this document.
+
+Requirements
+¯¯¯¯¯¯¯¯¯¯¯¯
+  o  Access to MySQL databases (LOCALHOST and/or ONLINE) through PhpMyAdmin.
+  o  Access to the DeepSID files (LOCALHOST and/or ONLINE via FTP).
+  o  Notepad++ for its line sorting features.
+  o  A program that can edit an MDB file as a worksheet - I use Excel below.
+  o  Python 2.7 for running one script.
+  o  The Python scripts ready in the "python" sub folder.
+
+Screenshots:
+
+  1. Download the v## screenshots; unpack as "images/gb64_new" in DeepSID root.
+  2. Upload the "gb64_new" folder to online DeepSID. It takes more than an hour.
+
+Database:
+
+  1. Download the new v## database archive; unpack and run it to install a folder.
+  2. Run Excel. Open and go to the "C:\Program Files (x86)\GameBase\GBC_v##" folder. 
+  3. Open the GBC_v##.mdb file. Excel will complain; just enable data connections.
+  4. Mark the table line called "Games" and click OK.
+  5. Leave it at the "Table" radio button and click OK.
+  6. After a few seconds you should have a GBC_v## sheet tab with cyan/white rows.
+  7. Save it in "../deepsid/temp/" as "gamebase##_00_original.xlsx" now.
+
+  8. Delete all rows except the "GA_id", "Name" and "SidFilename" columns.
+  9. Cut the "SidFilename" column and insert it as the first column instead.
+ 10. Optionally save it as "gamebase##_01_adapted.xlsx" now.
+
+ 11. Click the drop-down for "SidFilename" and scroll to the bottom of check boxes.
+ 12. Untick the "(Blanks)" check box in the bottom.
+ 13. Click the top left corner to mark all rows in this mode.
+ 14. Copy, then create a new sheet and paste there. This should give you a new
+     sheet without empty rows and no colors either.
+ 15. Delete the original sheet tab, leaving only the single new one.
+ 16. Save it as "gamebase##_02_condensed.xlsx" now.
+
+ 17. Export. Choose to change file type, then choose the CSV format.
+ 18. Save it as "gamebase##_03_sorted.csv" now. Yes, it's a new format. Quit Excel.
+ 19. Load it in Notepad++ and delete the header with the three columns.
+ 20. Choose menu: Edit > Line Operations > Sort Lines Lexographically Ascending
+ 21. There may be an empty line in top after this. Delete it.
+ 22. Stay in top, Ctrl+H, "Replace All" backslashes to forward slashes instead.
+
+ 23. If you wish, you can load the CSV from the previous version of GB64 and use the
+     compare function in Notepad++ now to see what the differences are. In fact,
+     this is recommended as it can help ensure that the new CSV file makes sense.
+
+Adapting:
+
+  1. Copy the CSV file to the "python/gb64" folder.
+  2. Rename it to "gbsource.csv" instead.
+  3. Open a command box in that folder and run: python gb64.py
+  4. This should yield a new "gbdest.csv" file with fancy arrays in them.
+
+Importing:
+
+  1. Enter the "hvsc_files" table and click "Operations".
+  2. In "Copy table to (database.table):" select "Structure only"
+  3. Enter "hvsc_files_import" as the destination name.
+  4. Click "Go" to create it.
+
+  1. Enter the new "hvsc_files_import" table and click "Import".
+  2. Click "Browse" and click the "gbdest.csv" file.
+  3. Change "Format" to "CSV".
+  4. Change "Columns separated with" to ";".
+  5. Write "fullname,application,gb64" in the "Column names" edit box.
+  6. There may be a few duplicate HVSC paths, so tick the "Do not about on INSERT
+     error" check box too.
+  7. Click "Go".
+
+  1. Enter the "hvsc_files" table and click "SQL" (empty the box).
+  2. Run the following:
+
+       UPDATE hvsc_files
+       INNER JOIN hvsc_files_import on hvsc_files_import.fullname = hvsc_files.fullname
+       SET hvsc_files.application = hvsc_files_import.application,
+           hvsc_files.gb64 = hvsc_files_import.gb64
+
+  3. Export the "hvsc_files_import" table to an SQL file for the online version. Here,
+     you create the "hvsc_files_import" table as usual and import the SQL file instead
+     of the CSV file. The reason for this is that the newer phpMyAdmin online may
+     complain about invalid column counts when importing the CSV file.
+  4. Enter the "hvsc_files_import" table and click "Operations".
+  5. Drop the table.
+
+Finalizing:
+
+  1. In the "images" folder, rename the "gb64" folder to "gb64_old".
+  2. Rename "gb64_new" to "gb64" instead.
+
+Remember to do this online too.
+
+--------------------------------
