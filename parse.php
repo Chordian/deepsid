@@ -21,14 +21,14 @@ $parser->includeMacOSName	= true;
 
 $now = strtotime(date('Y-m-d H:i:s', strtotime(TIME_ADJUST)));
 
-$html = '
+$styling = '
 	<style>
 		.tracking {
 			border: 1px solid #000;
 			margin-bottom: 10px;
 			padding: 4px 6px;
 			width: 400px;
-			font-size: 14px;
+			font-size: 13px;
 			overflow: hidden;
 			white-space: nowrap;
 			text-overflow: ellipsis;
@@ -39,7 +39,20 @@ $html = '
 		.user { background: #ffffe6; }
 		.jch { background: #efe; }
 		.fb { background: #eee; }
+		table td {
+			vertical-align: top;
+			padding-right: 6px;
+		}
 	</style>';
+
+$stacked = array(
+	'user'		=> '',
+	'mobile'	=> '',
+	'bot'		=> '',
+	'jch'		=> '',
+	'fb'		=> '',
+	'other'		=> '',
+);
 
 if (($handle = fopen(TRACKFILE, 'r')) != false) {
 	while (($line = fgetcsv($handle)) != false) {
@@ -52,8 +65,8 @@ if (($handle = fopen(TRACKFILE, 'r')) != false) {
 			$minutes = $duration % 60;
 		}
 		$last = round(($now - $line[4]) / 60);
-		$type = '';
-		if ($parser->type == 'bot')
+		$type = ' other';
+		if ($parser->type == 'bot' || stripos('x'.$line[1], 'python-') || stripos('x'.$line[1], 'googlebot'))
 			$type = ' bot';
 		elseif ($parser->type == 'mobile')
 			$type = ' mobile';
@@ -70,13 +83,15 @@ if (($handle = fopen(TRACKFILE, 'r')) != false) {
 				- last updated '.($last > 2 ? '<b>'.$last.'</b> minutes ago' : '<b>just now</b>').'<br />
 				'.($parser->fullname != 'unknown' ? $parser->fullname : $line[1]).'
 			</div>';
-		if ($type == ' user')
-			$html = $box.$html;
-		else
-			$html .= $box;
+		$stacked[ltrim($type)] .= $box;
 	}
 }
 fclose($handle);
 
-echo $html;
+echo $styling.
+	'<table>
+		<tr>
+			<td>'.$stacked['jch'].$stacked['user'].$stacked['mobile'].'</td><td>'.$stacked['other'].'</td><td>'.$stacked['bot'].$stacked['fb'].'</td>
+		</tr>
+	</table>';
 ?>
