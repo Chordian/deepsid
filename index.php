@@ -1140,6 +1140,11 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>December 2, 2019</h3>
+						<ul>
+							<li>Upgraded the WebSid emulator. Fixed proper playback of two specific SID files.</li>
+						</ul>
+
 						<h3>November 28, 2019</h3>
 						<ul>
 							<li>Some profile pages may now show the brand or logo in both color themes.</li>

@@ -64,6 +64,10 @@
 
 		<h3>Specific tags</h3>
 
+		<h4>?</h4>
+		<p>The <b>?</b> tag means that one or more of the other tags applied to this tune is ambiguous or uncertain. If
+			someone who knows more could clear up this conundrum, that'd be great.</p>
+
 		<h4>1ch, 2ch, etc.</h4>
 		<p>When the three voices of the SID chip are not all used as default.</p>
 		<ul>
@@ -105,6 +109,12 @@
 		<h4>4SID, 8SID, 10SID</h4>
 		<p>Either the tune itself is such a file (residing in the exotic folder) or you are looking at a file in HVSC
 			that, by having this tag attached, indicates that such a file exists in the exotic folder.</p>
+
+		<h4>Boost</h4>
+		<p>One or more voices has been copied to play the exact same notes on top of each other. This is usually a lazy
+			editing technique that just makes everything louder. It is mostly a derogatory tag, serving as a warning.</p>
+		<p>If the notes across voices have been detuned to create a nice "fat" effect then use the <b>Flanging</b> tag
+			instead.</p>
 
 		<h4>Bug</h4>
 		<p>The tune has one or more bugs &ndash; usually acknowledged by HVSC in a STIL comment. It can be e.g. notes
@@ -229,8 +239,8 @@
 			voices, and in that case a second <b>Samples</b> tag still applies.)</p>
 		<p>When a second tag may be used to narrow it down the <b>Digi</b> tag:</p>
 		<ul>
-			<li><b>Samples</b> can be used as a second tag if the file is <i>all</i> 4-bit $D418 digi only (i.e. no
-			SID voices are used).</li>
+			<li><b>Samples</b> can be used as a second or third tag if the file is <i>all</i> digi only (i.e. no SID voices
+			are used).</li>
 			<li><b>OSC</b> can be used as a second tag if the file uses the oscillator method as demonstrated by e.g.
 			the FRODIGI player. It's low on CPU usage but sounds a bit murky. You can detect it by watching the piano
 			view; if $11 waveform notes (green) are whizzing all over the place, it's using this technique.</li>
@@ -242,24 +252,19 @@
 			the WebSid emulator it should state this. The name of the player may also be a hint.</li>
 		</ul>
 
-		<h4>Echo</h4>
-		<p>The tune makes use of a digi channel to recreate a delayed SID channel in real time, thereby adding an echo
-			effect. This was a technique devised by
-			<a href="http://deepsid.chordian.net/?file=/MUSICIANS/T/Tjelta_Geir/">Geir Tjelta</a>.</p>
-
 		<h4>Edit</h4>
 		<p>The tune has subsequently been edited to improve or change it.</p>
 		<ul>
 			<li>Typically applies to when two or more versions of the same song are present in the same folder,
 			especially if the additional copies have "v2" or similar words added to their filenames.</li>
 			<li>Also applies when a SID tune originally composed by one composer has been moved-and-modified by
-			someone else. For example, to add a digi track on top. It may be wise to compare the player of each file.
-			If the player is the same, chances are it's an <b>Edit</b>. If the player is different, it may be a
-			<b>Remake</b> instead.</li>
+			someone else. For example, to add a digi track on top. If this is the case, you should also add a <b>Hack</b>
+			tag. However, it may be wise to compare the player of each file. If the player is the same, chances are it's
+			indeed an <b>Edit</b>. If the player is different, it may be a <b>Remake</b> instead.</li>
 		</ul>
 
 		<h4>Excerpt</h4>
-		<p><i>Deprecated. Use the <b>Edit</b> tag instead.</i></p>
+		<p><i>Deprecated. Use the above <b>Edit</b> tag instead.</i></p>
 
 		<h4>Fast</h4>
 		<p>The tune is really fast paced. This is not tied to any specific genre.</p>
@@ -268,6 +273,11 @@
 		<p>Usually indicates the very first tune the composer ever made, but may also sometimes be used for the first
 			release (like a game) that the composer was involved with, especially if there are no other tunes available
 			before that time.</p>
+
+		<h4>Flanging</h4>
+		<p>The tune uses the effect of two identical notes where one has been slightly detuned to create a "fat" effect.</p>
+		<p>This does not apply to lazy copying that just makes the whole thing louder. If that is what the tune is doing
+			then you should use the <b>Boost</b> tag instead.</p>
 
 		<h4>FM</h4>
 		<p>The tune emulates a true ring modulation or hard synchronization relationship for musical notes.</p>
@@ -290,6 +300,18 @@
 			<li>Does not apply if the game usage is indirect. For example, if the tune is a conversion from a different
 			format or device where it was used in a game, the tag should not be used.</li>
 		</ul>
+
+		<h4>GT-Echo</h4>
+		<p>The tune makes use of a digi channel to recreate a delayed SID channel in real time, thereby adding an echo
+			effect. This was a technique devised by
+			<a href="http://deepsid.chordian.net/?file=/MUSICIANS/T/Tjelta_Geir/">Geir Tjelta</a>.</p>
+		<p><i>This tag was previously just named <b>Echo</b> but later renamed to this in order to avoid confusion.</i></p>
+
+		<h4>Hack</h4>
+		<p> This is somewhat derogatory tag and is usually always added together with the <b>Edit</b> tag. It indicates
+			that the tune was originally made by someone else, then copied and edited to change or add something. A
+			typical example is when someone merely added an extra digi track on top of a tune that wasn't originally
+			designed to have one.</p>
 
 		<h4>Happy</h4>
 		<p>The tune is really happy and uplifting. This is not tied to any specific genre.</p>
@@ -355,7 +377,8 @@
 		<h4>Piano</h4>
 		<p>This can be a vague tag as it sort of indicates that the tune mimicks playing on the piano. It can be a tune
 			that was composed for the piano (maybe indicated by a cover) or the composer tried hard to create a piano
-			instrument.</p>
+			instrument. It can also be a good hint that the piano bit uses a polyphonic exchange of notes across two or
+			three voices.</p>
 
 		<h4>Remake</h4>
 		<p>The tune is a remake of another SID tune. If the tune was remixed or changed to a certain degree, you should
@@ -372,6 +395,9 @@
 		<h4>Remix64</h4>
 		<p>The tune has one or more remixes at <a href="https://www.remix64.com/">Remix64.com</a>. Clicking this tune
 			should show entries in the <b>Remix</b> tab.</p>
+
+		<h4>Reverb</h4>
+		<p>The tune plays a melody in two or three voices with notes slightly displaced to create a reverb/echo effect.</p>
 
 		<h4>SFX</h4>
 		<p>The file contains one or more sound effects. Digi sound effects are allowed too.</p>
