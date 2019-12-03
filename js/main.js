@@ -6,7 +6,7 @@
 var $=jQuery.noConflict();
 var cacheCSDb = cacheSticky = cacheStickyBeforeCompo = cacheCSDbProfile = cacheBeforeCompo = cachePlayer = cacheGB64 = cacheRemix = prevFile = sundryTab = reportSTIL = "";
 var cacheTabScrollPos = cachePlayerTabScrollPos = cacheGB64TabScrollPos = cacheRemixTabScrollPos = tabScrollPos = cachePosBeforeCompo = cacheDDCSDbSort = peekCounter = sundryHeight = 0;
-var sundryToggle = showTags = true, recommended = forum = players = null;
+var sundryToggle = showTags = true, recommended = forum = players = $trAutoPlay = null;
 
 var isLegacyWebSid = $("script[src='js/handlers/backend_tinyrsid_legacy.js']").length;
 
@@ -1320,7 +1320,6 @@ $(function() { // DOM ready
 	if (fileParam.substr(0, 2) === "/_")
 		fileParam = "/"+fileParam.substr(2); // Lose custom folder "_" character
 	var searchQuery = GetParam("search"),
-		paramSubtune = GetParam("subtune"),
 		selectTab = GetParam("tab"),
 		selectSundryTab = GetParam("sundry"),
 		playerID = GetParam("player"),
@@ -1386,18 +1385,16 @@ $(function() { // DOM ready
 					return found;
 				}).closest("tr");
 				// This is the <TR> row with the SID file we need to play
-				var $trPlay = $("#folders tr").eq($tr.index());
-				if (paramSubtune == "")
-					$trPlay.children("td.sid").trigger("click");
-				else
-					$trPlay.children("td.sid").trigger("click", paramSubtune == 0 ? 0 : paramSubtune - 1);
+				$trAutoPlay = $("#folders tr").eq($tr.index());
 				// Scroll the row into the middle of the list
-				var rowPos = $trPlay[0].offsetTop;
+				var rowPos = $trAutoPlay[0].offsetTop;
 				var halfway = $("#folders").height() / 2 - 26; // Last value is half of SID file row height
 				if (browser.isMobile)
 					$("#folders").scrollTop(rowPos > halfway ? rowPos - halfway : 0);
 				else
 					$("#folders").mCustomScrollbar("scrollTo", rowPos > halfway ? rowPos - halfway : "top");
+				// Before we play the user needs to click a overlay question to satisfy browser auto-play prevention
+				$("#dialog-cover,#click-to-play-cover").show();
 
 			} else if (GetParam("here") == "1") {
 				setTimeout(function() {
@@ -1411,6 +1408,19 @@ $(function() { // DOM ready
 		});
 	} else if (searchQuery !== "")
 		PerformSearchQuery(searchQuery);
+
+	/**
+	 * When clicking the overlay to satisfy the browser auto-play prevention. This
+	 * hides the overlay and plays the SID row that was ready to go.
+	 */
+	$("#click-to-play-cover").click(function() {
+		$("#dialog-cover,#click-to-play-cover").hide();
+		var paramSubtune = GetParam("subtune");
+		if (paramSubtune == "")
+			$trAutoPlay.children("td.sid").trigger("click");
+		else
+			$trAutoPlay.children("td.sid").trigger("click", paramSubtune == 0 ? 0 : paramSubtune - 1);
+	});
 
 	// Select and show a "dexter" page tab	
 	selectTab = selectTab !== "" ? selectTab : "profile";

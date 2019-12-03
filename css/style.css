@@ -134,7 +134,8 @@
 	--color-player-editor:			#f2f8f2;
 
 	--color-dialog-cover:			var(--color-bottom);
-	--color-dialog-shadow:			#333;
+	--color-dialog-shadow:			#040404;
+	--color-ctp-circle:				#111;
 
 	--color-pwd-good:				#080;				/* When changing the password in settings */
 	--color-pwd-bad:				#a00;
@@ -484,8 +485,9 @@
 	--color-player-player:			linear-gradient(to bottom, #707090 0%,#505070 90%); /* #606080; */
 	--color-player-editor:			linear-gradient(to bottom, #709070 0%,#507050 90%); /* #608060; */
 
-	--color-dialog-cover:			#666;
-	--color-dialog-shadow:			#080808;
+	--color-dialog-cover:			#111;
+	--color-dialog-shadow:			#000;
+	--color-ctp-circle:				#0a0a0a;
 
 	--color-pwd-good:				#0a0;
 	--color-pwd-bad:				#c00;
@@ -862,6 +864,48 @@ small.u2 { margin-left: 2px; }
 	#sites a:hover {
 		color: var(--color-link-hover);
 	}
+
+	#click-to-play-cover {
+		display: none;
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background: radial-gradient(circle, var(--color-ctp-circle), 40%, transparent 100%);
+		z-index: 9999;
+		cursor: pointer;
+		text-align: center;
+	}
+
+		/* Box in center with image and text */
+		#click-to-play-cover .center {
+			display: inline-block;
+			position: relative;
+			top: 50%; /* These three lines centers the DIV in the sundry box */
+			transform: translateY(-50%);
+			z-index: 9999;
+		}
+
+		/* The example play image */
+		#click-to-play-cover .play {
+			width: 154px;
+			height: 154px;
+			margin-bottom: 6px;
+			background: url(../images/center_play.png) 0 0 / 200% 100% no-repeat;
+			box-shadow: 0 0 12px #000;
+			border: 2px solid #e7e8e0;
+		}
+
+			#click-to-play-cover .play:hover {
+				background: url(../images/center_play.png) -150px 0 / 200% 100% no-repeat;
+			}
+
+		#click-to-play-cover .text-below {
+			font: normal 21px "Montserrat", sans-serif;
+			color: #e7e8e0;
+
+		}
 
 /* ---- Top (Login / Register) ----------------------------------------------- */
 
@@ -4741,8 +4785,8 @@ input[type=range]::-ms-track {
 	width: 100%;
 	height: 100%;
 	background: var(--color-dialog-cover);
-	z-index: 9999;
-	opacity: 0.3;
+	z-index: 9998;
+	opacity: 0.7;
 }
 
 .dialog-box {
@@ -4752,7 +4796,7 @@ input[type=range]::-ms-track {
 	background: var(--color-bg-box);
 	border-radius: 2px;
 	z-index: 10001;
-	box-shadow: 3px 3px 6px var(--color-dialog-shadow);
+	box-shadow: 1px 1px 10px var(--color-dialog-shadow);
 }
 
 	.dialog-box h2,

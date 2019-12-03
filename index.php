@@ -159,6 +159,12 @@
 		<script type="text/javascript">setTheme();</script>
 
 		<div id="dialog-cover"></div>
+		<div id="click-to-play-cover">
+			<div class="center">
+				<div class="play"></div>
+				<span class="text-below">Click to play</span>
+			</div>
+		</div>
 
 		<div id="dialog-register" class="dialog-box">
 			<div class="dialog-text"></div>
