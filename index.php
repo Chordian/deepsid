@@ -162,7 +162,7 @@
 		<div id="click-to-play-cover">
 			<div class="center">
 				<div class="play"></div>
-				<span class="text-below">Click to play</span>
+				<span class="text-below"><?php echo isMobile() ? 'Touch' : 'Click'; ?> to play</span>
 			</div>
 		</div>
 
@@ -1145,6 +1145,20 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>December 5, 2019</h3>
+						<ul>
+							<li>The <b>Boost</b> and <b>Hack</b> tags now have a vivid red color to serve as warnings.
+								Please refer to <a href="tags.htm" target="_blank">this list of guidelines</a> for an
+								explanation of these (and other) tags.</li>
+						</ul>
+
+						<h3>December 3, 2019</h3>
+						<ul>
+							<li>Clicking a link for playing a DeepSID tune from another site now invokes a big overlay
+								with a button that must first be clicked. This is necessary because most web browsers
+								today won't allow auto-playing audio.</li>
+						</ul>
 
 						<h3>December 2, 2019</h3>
 						<ul>

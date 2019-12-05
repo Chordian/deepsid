@@ -60,6 +60,8 @@
 	--color-text-tag-digi:			var(--color-text-tag);
 	--color-bg-tag-r64start:		#6c7cc0;
 	--color-bg-tag-remix64:			linear-gradient(to right, var(--color-bg-tag-r64start) 0%,#5458b0 100%);
+	--color-text-tag-warning:		var(--color-text-tag);
+	--color-bg-tag-warning:			#c33;
 
 	--color-border:					#ced0c0;			/* For borders and text labels where its container is disabled */
 	--color-border-box:				#c8c8b9;			/* For borders around various boxes and input fields */
@@ -415,6 +417,8 @@
 	--color-text-tag-digi:			var(--color-text-tag);
 	--color-bg-tag-r64start:		#6878b0;
 	--color-bg-tag-remix64:			linear-gradient(to right, var(--color-bg-tag-r64start) 25%,#465692 100%);
+	--color-text-tag-warning:		var(--color-text-tag);
+	--color-bg-tag-warning:			#f88;
 
 	--color-border:					#0c0c0c;			/* For borders and text labels where its container is disabled */
 	--color-border-box:				#2c2c2c;			/* For borders around various boxes and input fields */
@@ -2143,6 +2147,11 @@ input[type=range]::-ms-track {
 				background: var(--color-bg-tag-digi);
 			}
 
+			.tag-warning {
+				color: var(--color-text-tag-warning);
+				background: var(--color-bg-tag-warning);
+			}
+
 			.tag-remix64 {
 				width: 69px;
 				background: url(../images/remix64.png) 11px 2.5px / 54px 7.5px no-repeat, var(--color-bg-tag-remix64);
@@ -2195,6 +2204,10 @@ input[type=range]::-ms-track {
 				.tag-digi:before,
 				.tag-subdigi:before {
 					border-color: transparent var(--color-bg-tag-digi) transparent transparent;
+				}
+
+				.tag-warning:before {
+					border-color: transparent var(--color-bg-tag-warning) transparent transparent;
 				}
 
 				.tag-remix64:before {

@@ -229,17 +229,17 @@
 		<p>The tune was written for a disk magazine and subsequently used in it. Additional production tags are allowed.</p>
 
 		<h4>Digi</h4>
-		<p>A "fits all" description of almost anything digi. If the digi is standard 4-bit $D418 used as assisting channels,
-			a second tag should not be used. Note that a <b>Cover</b> tag should never be used for real songs turned
-			into digi.</p>
+		<p>A "fits all" description of almost anything digi. If the digi is just standard 4-bit $D418 used as one or more
+			assisting channels, a second tag should not be used.</p>
+		<p>Note that a <b>Cover</b> tag should never be used for real songs turned into digi.</p>
 		<p>If you can see in the memo view that the
 			<a href="http://deepsid.chordian.net/?player=43&type=player&search=digi-organizer">Digi-Organizer</a> was used
 			to add digi to a music player that normally doesn't support digi, use the <b>Digi-Org</b> tag alone (i.e. don't
 			also use the <b>Digi</b> tag). (However, note that it's possible to use this tool by itself without any SID
 			voices, and in that case a second <b>Samples</b> tag still applies.)</p>
-		<p>When a second tag may be used to narrow it down the <b>Digi</b> tag:</p>
+		<p>When a second tag may be used to narrow down the <b>Digi</b> tag:</p>
 		<ul>
-			<li><b>Samples</b> can be used as a second or third tag if the file is <i>all</i> digi only (i.e. no SID voices
+			<li><b>Samples</b> should be used as a second or third tag if the file is <i>all</i> digi only (i.e. no SID voices
 			are used).</li>
 			<li><b>OSC</b> can be used as a second tag if the file uses the oscillator method as demonstrated by e.g.
 			the FRODIGI player. It's low on CPU usage but sounds a bit murky. You can detect it by watching the piano
@@ -251,6 +251,10 @@
 			<li><b>8bit</b> can be used as a second tag if the file uses an advanced 8-bit technique. If you are using
 			the WebSid emulator it should state this. The name of the player may also be a hint.</li>
 		</ul>
+		<p>Please don't be too eager to just slap on a <b>Digi</b> tag if it's a SoundMonitor spin-off with digi tracks added
+			(such as the many RockMon editors). Although admittedly rare, I have found a few tunes in HVSC that was
+			made in RockMon yet never used any digi samples at all. My guess is that the composer forgot about the digi track
+			or maybe even didn't know what it was for. Such tunes should not receive the tag. Better listen to all of it first to be sure.</p>
 
 		<h4>Edit</h4>
 		<p>The tune has subsequently been edited to improve or change it.</p>
@@ -420,6 +424,9 @@
         by e.g. sub tunes in
 		<a href="http://deepsid.chordian.net/?file=/MUSICIANS/C/Cox_Chris/Tales_of_the_Arabian_Nights.sid&subtune=2">
 		Tales of the Arabian Nights</a>.</p>
+
+		<h4>Tiny</h4>
+		<p>The player and its data (all of it) takes up very little memory (less than 512 bytes).</p>
 
 		<h4>Unfinished</h4>
 		<p>The tune is not final. All tunes in <b>Worktunes</b> folders automatically obtain this tag, but there may

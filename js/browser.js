@@ -1339,6 +1339,9 @@ Browser.prototype = {
 			if (tag == "Remix64")
 				// A special look for the "Remix 64" tag
 				list_of_tags += '<div class="tag tag-remix64">&nbsp;&nbsp;</div>';
+			else if (tag == "Boost" || tag == "Hack")
+				// A unique color for tags that serves as a warning
+				list_of_tags += '<div class="tag tag-warning">'+tag+'</div>';
 			else
 				// NOTE: Don't change the order of tags or the collector for a folder will break!
 				list_of_tags += '<div class="tag tag-'+types[i]+'">'+tag+'</div>';
@@ -2139,6 +2142,7 @@ Browser.prototype = {
 				subdigi:	"",
 				remix64:	"",
 				other:		"",
+				warning:	"",
 			};
 
 			$.each(browser.playlist, function(i, file) {
@@ -2159,7 +2163,8 @@ Browser.prototype = {
 				tagType.digi+
 				tagType.subdigi+
 				tagType.remix64+
-				tagType.other;
+				tagType.other+
+				tagType.warning;
 		}
 		ctrls.updateSundryTags(allTags);
 		return allTags;
