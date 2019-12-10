@@ -197,6 +197,8 @@ SIDPlayer.prototype = {
 	 */
 	load: function(subtune, timeout, file, callback) {
 
+		if (isDebug) _(_HEADER, "player.js:load()");
+
 		this.voiceMask = [0xF, 0xF, 0xF];
 		viz.lineInGraph = true;
 
@@ -206,6 +208,13 @@ SIDPlayer.prototype = {
 
 		// Show the raw SID filename in the title
 		$(document).attr("title", "DeepSID | "+file.split("/").slice(-1)[0]);
+
+		if (isDebug) {
+			_(_PARAM, 'subtune', subtune);
+			_(_PARAM, 'timeout', timeout+" seconds");
+			_(_PARAM, 'file', file);
+			_(_PARAM, 'callback', callback);
+		}
 
 		switch (this.emulator) {
 
@@ -434,6 +443,7 @@ SIDPlayer.prototype = {
 	 * @param {boolean} forcePlay	TRUE if forcing play state (cold start).
 	 */
 	 play: function(forcePlay) {
+		if (isDebug) _(_SINGLE, "player.js:play()");
 		if (!this.paused) {
 			this.voiceMask = [0xF, 0xF, 0xF];
 			viz.startBufferEndedEffects();
@@ -519,6 +529,7 @@ SIDPlayer.prototype = {
 	 * Stop the SID tune.
 	 */
 	stop: function() {
+		if (isDebug) _(_SINGLE, "player.js:stop()");
 		this.paused = false;
 		viz.stopBufferEndedEffects();
 		switch (this.emulator) {

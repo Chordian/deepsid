@@ -911,6 +911,39 @@ small.u2 { margin-left: 2px; }
 
 		}
 
+#topic-debug table {
+	text-align: left;
+	padding: 0;
+	border: 0;
+	font-size: 11px;
+}
+
+	#topic-debug table td,
+	#topic-debug table th {
+		padding: 0;
+		border-left: 0;
+		border-right: 0;
+		border-bottom: 0;
+	}
+
+	#topic-debug table td {
+		border-top: 0;
+	}
+
+	#topic-debug table th {
+		padding-top: 4px;
+	}
+
+	#topic-debug table td.top {
+		padding-top: 7px;
+	}
+
+	#topic-debug table td.first {
+		width: 1px;
+		padding-right: 8px;
+		white-space: nowrap;
+	}
+
 /* ---- Top (Login / Register) ----------------------------------------------- */
 
 #top, #tabs {

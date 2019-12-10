@@ -270,6 +270,13 @@
 		<h4>Excerpt</h4>
 		<p><i>Deprecated. Use the above <b>Edit</b> tag instead.</i></p>
 
+		<h4>Fade-In</h4>
+		<p>The tune begins by fading in. All methods are fine, i.e. main volume or using ADSR.</p>
+
+		<h4>Fade-Out</h4>
+		<p>The tune ends by fading out. Although using ADSR is not strictly discarded, the tag mostly refers to fading
+			out using the main volume register. If ADSR is used, it should simulate the same effect.</p>
+
 		<h4>Fast</h4>
 		<p>The tune is really fast paced. This is not tied to any specific genre.</p>
 
@@ -355,6 +362,12 @@
 		<h4>Nonstandard</h4>
 		<p>The tune uses a nonstandard time signature other than 4/4.</p>
 
+		<h4>No Digi</h4>
+		<p>This tag is useful for tunes that doesn't use digi at all even though they were composed in an editor that is
+			normally designed for this purpose (e.g. one of the many RockMon editors).</p>
+		<p>Not adding a <b>Digi</b> tag at all might sound like a better solution, but adding a <b>No Digi</b> tag may
+			prevent other users from adding the former tag just by spotting the name of the player used.</p>
+
 		<h4>Only $11, Only $41, etc.</h4>
 		<p>The tune <i>only</i> uses the specified waveform, with no exceptions. The <b>Only $11</b> tag (for the triangle
 			waveform) is more common because there has once been a
@@ -383,6 +396,16 @@
 			that was composed for the piano (maybe indicated by a cover) or the composer tried hard to create a piano
 			instrument. It can also be a good hint that the piano bit uses a polyphonic exchange of notes across two or
 			three voices.</p>
+
+		<h4>Pure</h4>
+		<p>The tune uses a player that does not change SID registers in real time, e.g. vibrato, filter sweeping, etc.
+			However, it is allowed to change SID registers on a note-by-note basis, for example by having an intro with
+			one setup of ADSR and waveforms and then change all these for the chorus.</p>
+		<p>This tag is most useful for players that doesn't immediately indicate their quality, especially if
+			it is an unidentified player. It is less useful for players like e.g. Master Composer that is known to have
+			such limitations.</p>
+		<p>That being said, the tag should also be used for tunes that qualifies by using simple notes even though they
+			were actually composed in a modern editor that could have delivered.</p>
 
 		<h4>Remake</h4>
 		<p>The tune is a remake of another SID tune. If the tune was remixed or changed to a certain degree, you should

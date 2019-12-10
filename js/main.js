@@ -4,9 +4,10 @@
  */
 
 var $=jQuery.noConflict();
+
 var cacheCSDb = cacheSticky = cacheStickyBeforeCompo = cacheCSDbProfile = cacheBeforeCompo = cachePlayer = cacheGB64 = cacheRemix = prevFile = sundryTab = reportSTIL = "";
 var cacheTabScrollPos = cachePlayerTabScrollPos = cacheGB64TabScrollPos = cacheRemixTabScrollPos = tabScrollPos = cachePosBeforeCompo = cacheDDCSDbSort = peekCounter = sundryHeight = 0;
-var sundryToggle = showTags = true, recommended = forum = players = $trAutoPlay = null;
+var sundryToggle = showTags = true, recommended = forum = players = $trAutoPlay = null, isDebug;
 
 var isLegacyWebSid = $("script[src='js/handlers/backend_tinyrsid_legacy.js']").length;
 
@@ -19,16 +20,22 @@ var tabPrevScrollPos = {
 	stil:		{ pos: 0, reset: false },
 	visuals:	{ pos: 0, reset: false },
 	disqus:		{ pos: 0, reset: false },
+	debug:		{ pos: 0, reset: false },
 	settings:	{ pos: 0, reset: false },
 	changes:	{ pos: 0, reset: false },
 	faq:		{ pos: 0, reset: false },
 	about:		{ pos: 0, reset: false },
 }
 
+const _HEADER	= 1;
+const _SINGLE	= 2;
+const _PARAM	= 3;
+
 $(function() { // DOM ready
 
 	var userExists = false;
-	
+	isDebug = $("#tab-debug").length;
+
 	// Get the emulator last used by the visitor
 	var storedEmulator = docCookies.getItem("emulator");
 	if (storedEmulator == null) {
@@ -1798,6 +1805,32 @@ function CustomDialog(data, callbackYes, callbackNo) {
  */
 function GetCSSVar(cssVar) {
 	return $(parseInt(colorTheme) ? "[data-theme='dark']" : ":root").css(cssVar);
+}
+
+/**
+ * Print some text in the debug tab.
+ * 
+ * @param {number} format	Format constant (see top of this file).
+ * @param {string} text		String to print.
+ * @param {*} value			If specified, value associated with text.
+ */
+function _(format, text, value) {
+	if (!isDebug) return;
+
+	switch (format) {
+		case _HEADER:
+			text = ($("#topic-debug tr").length ? '<tr><td colspan="20" class="top"></td></tr>': '')+
+				'<tr><th colspan="20">'+text+'</th></tr>';
+			break;
+		case _SINGLE:
+			text = '<tr><td colspan="20"><b>'+text+'</b></td></tr>'
+			break;
+		case _PARAM:
+			text = '<tr><td>&nbsp;&nbsp;</td><td class="first">param '+text+'</td><td>'+value+'</td></tr>';
+			break;
+		default:
+	}
+	$("#topic-debug table").append(text);
 }
 
 /**

@@ -16,7 +16,7 @@
  * Mirrors for testing:
  * 
  * http://se2a1.iiiii.info:40000/files/index.php
- * http://anorien.csc.warwick.ac.uk/mirrors/oakvalley/soasc/
+ * http://anorien.csc.warwick.ac.uk/mirrors/oakvalley/soasc/ (CGSC only)
  * http://ftp.acc.umu.se/mirror/media/Oakvalley/soasc/
  * 
  * @uses		$_GET['file']			fullname path to SID file
@@ -43,19 +43,21 @@ $file = str_replace('hvsc', '', $_GET['file']);
 $subtune = $_GET['subtune'] + 1;
 $model = $soasc_models[$_GET['sidModel']];
 
+// Test: http://www.se2a1.net/dl.php?url=1&d=soasc/hvsc/070/FLAC/MUSICIANS/J/JCH/Yoko_Tsuno_T001.sid_MOS6581R2.flac
 function RequestURL($path) {
 
 	$ch = curl_init();
 	curl_setopt($ch, CURLOPT_HEADER, false);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 	curl_setopt($ch, CURLOPT_USERAGENT, 'DeepSID');
-	curl_setopt($ch, CURLOPT_URL, 'http://www.se2a1.net/dl.php?url=1&d=/soasc/'.$path);
+	curl_setopt($ch, CURLOPT_URL, 'http://www.se2a1.net/dl.php?url=1&d=soasc/'.$path);
 	// curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
 	curl_setopt($ch, CURLOPT_TIMEOUT, 5);
 	curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
 
 	$data = curl_exec($ch);
-	if ($data == false)
+	// echo $path.'<br />'.$data.'<br />';
+	if ($data == false || stripos($data, 'ERROR: File not found'))
 		// die(json_encode(array('status' => 'error', 'message' => curl_error($ch))));
 		die(json_encode(array('status' => 'ok', 'url' => 'ERROR')));
 	curl_close($ch);
@@ -130,7 +132,7 @@ try {
 		if ($hvsc < 50) {
 			// SOASC started at HVSC version 49 with the MP3 format only
 			$hvsc = 'hvsc/049';
-			$subtune = str_pad($subtune, 2, '0', STR_PAD_LEFT);
+			$subtune = str_pad($subtune, 3, '0', STR_PAD_LEFT); // Upped from 2 to 3 in late 2019
 		} else {
 			// SOASC changed the path rules from version 50 and up while also favoring the FLAC format
 			$hvsc = 'hvsc/0'.$hvsc;

@@ -67,7 +67,7 @@ $test_files = array( // These files are suitable as it's a very short sfx (less 
 // cron job services assume the script itself is in error and will terminate after a while.
 
 foreach($test_files as $file) {
-	$mirror = RequestURL('http://www.se2a1.net/dl.php?url=1&survey=1&d=/soasc/'.$file);
+	$mirror = RequestURL('http://www.se2a1.net/dl.php?url=1&survey=1&d=soasc/'.$file);
 	// file_put_contents('../soasc_mirror.txt', $mirror);
 	if (empty($mirror)) {
 		file_put_contents('../soasc.txt', $time.',2'); // The DL script timed out
