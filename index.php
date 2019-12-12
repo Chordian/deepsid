@@ -401,7 +401,7 @@
 					<div class="tab unselectable" data-topic="stil" id="tab-stil">STIL</div>
 					<div class="tab unselectable" data-topic="visuals" id="tab-visuals">Visuals</div>
 					<div class="tab unselectable" data-topic="disqus" id="tab-disqus">Disqus<div id="note-disqus" class="notification"></div></div>
-					<?php if ($user_id == JCH || isset($_GET['debug'])) : ?>				
+					<?php if (isset($_GET['debug'])) : ?>				
 						<div class="tab unselectable" data-topic="debug" id="tab-debug" style="color:#f66;">Debug</div>
 					<?php endif ?>
 					<div class="tab right unselectable" data-topic="settings" id="tab-settings" style="width:26px;">
@@ -725,7 +725,7 @@
 						</p>
 					</div>
 
-					<?php if ($user_id == JCH || isset($_GET['debug'])) : ?>				
+					<?php if (isset($_GET['debug'])) : ?>				
 						<div id="topic-debug" class="topic ext" style="display:none;">
 							<h2>Debug</h2>
 							<table></table>

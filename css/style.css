@@ -921,27 +921,31 @@ small.u2 { margin-left: 2px; }
 	#topic-debug table td,
 	#topic-debug table th {
 		padding: 0;
-		border-left: 0;
-		border-right: 0;
-		border-bottom: 0;
+		border: 0;
+		vertical-align: top;
 	}
 
-	#topic-debug table td {
-		border-top: 0;
-	}
-
-	#topic-debug table th {
-		padding-top: 4px;
-	}
-
-	#topic-debug table td.top {
+	#topic-debug table td.top1 {
 		padding-top: 7px;
+	}
+
+	#topic-debug table td.top2 {
+		padding-top: 6px;
+		border-top: 1px solid var(--color-table);
 	}
 
 	#topic-debug table td.first {
 		width: 1px;
 		padding-right: 8px;
 		white-space: nowrap;
+	}
+
+	#topic-debug table td.second {
+		width: 99%;
+	}
+
+	#topic-debug code {
+		font-size: 12px;
 	}
 
 /* ---- Top (Login / Register) ----------------------------------------------- */

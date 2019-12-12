@@ -886,6 +886,14 @@ Browser.prototype = {
 		this.isSearching = typeof searchQuery !== "undefined";
 		this.isSymlist = this.path.substr(0, 2) === "/!" || this.path.substr(0, 2) === "/$";
 
+		if (isDebug) {
+			_(_SECTION, "browser.js: getFolder()");
+			_(_PARAM, "scrollPos", scrollPos);
+			_(_PARAM, "searchQuery", searchQuery);
+			_(_PARAM, "readCache", readCache);
+			_(_PARAM, "callback", typeof callback != "undefined");
+		}
+
 		if (typeof readCache !== "undefined" && readCache) {
 
 			// LOAD FROM CACHE
@@ -959,6 +967,13 @@ Browser.prototype = {
 			this.path = this.path.replace("/_CSDb", "/CSDb");
 
 			// Call the AJAX PHP script that delivers the list of files and folders
+			if (isDebug) {
+				_(_HEADER, "GET hvsc.php");
+				_(_PARAM, "folder", this.path);
+				_(_PARAM, "searchType", $("#dropdown-search").val());
+				_(_PARAM, "searchQuery", this.isSearching ? searchQuery : "");
+				_(_PARAM, "searchHere", $("#search-here").is(":checked"));
+			}
 			$.get("php/hvsc.php", {
 					folder:			this.path,
 					searchType:		$("#dropdown-search").val(),
@@ -966,6 +981,23 @@ Browser.prototype = {
 					searchHere:		($("#search-here").is(":checked") ? 1 : 0),
 			}, function(data) {
 				this.validateData(data, function(data) {
+					if (isDebug) {
+						_(_RESULTS);
+						_(_DATA, "status", data.status);
+						if (data.status != "ok") {
+							_(_DATA, "message", data.message);
+						} else {
+							_(_DATA, "files", "[see console]");
+							console.log("data.files", data.files);
+							_(_DATA, "folders", "[see console]");
+							console.log("data.folders", data.folders);
+							_(_DATA, "results", data.results);
+							_(_DATA, "incompatible", data.incompatible);
+							_(_DATA, "owner", data.owner);
+							_(_DATA, "compo", data.compo);
+							_(_DATA, "debug", data.debug);
+						}
+					}
 					clearTimeout(loading);
 					$("#loading").hide();
 					ctrls.state("root/back", "enabled");

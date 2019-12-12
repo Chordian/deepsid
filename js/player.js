@@ -13,6 +13,7 @@ function SIDPlayer(emulator) {
 	this.mainVol = 1;
 	
 	this.file = "";
+	this.debugFile = "";
 
 	this.emulatorFlags = {
 		supportFaster:		true,	// True if the handler supports the "Faster" button
@@ -197,8 +198,6 @@ SIDPlayer.prototype = {
 	 */
 	load: function(subtune, timeout, file, callback) {
 
-		if (isDebug) _(_HEADER, "player.js:load()");
-
 		this.voiceMask = [0xF, 0xF, 0xF];
 		viz.lineInGraph = true;
 
@@ -209,11 +208,42 @@ SIDPlayer.prototype = {
 		// Show the raw SID filename in the title
 		$(document).attr("title", "DeepSID | "+file.split("/").slice(-1)[0]);
 
-		if (isDebug) {
-			_(_PARAM, 'subtune', subtune);
-			_(_PARAM, 'timeout', timeout+" seconds");
-			_(_PARAM, 'file', file);
-			_(_PARAM, 'callback', callback);
+		if (isDebug && file != this.debugFile) {
+			this.debugFile = file; // Must be a new SID file for the verbose info
+
+			_(_SECTION, "player.js: load()");
+
+			_(_PARAM, "subtune", subtune);
+			_(_PARAM, "timeout", timeout+" seconds");
+			_(_PARAM, "file", file);
+			_(_PARAM, "callback", typeof callback != "undefined");
+
+			_(_HEADER, "ARRAY browser.playlist["+browser.songPos+"]");
+
+			_(_PLAYLIST, "filename", browser.playlist[browser.songPos].filename);
+			_(_PLAYLIST, "substname", browser.playlist[browser.songPos].substname);
+			_(_PLAYLIST, "fullname", browser.playlist[browser.songPos].fullname);
+			_(_PLAYLIST, "player", browser.playlist[browser.songPos].player);
+			_(_PLAYLIST, "tags", browser.playlist[browser.songPos].tags);
+			_(_PLAYLIST, "length", browser.playlist[browser.songPos].length);
+			_(_PLAYLIST, "type", browser.playlist[browser.songPos].type);
+			_(_PLAYLIST, "version", browser.playlist[browser.songPos].version);
+			_(_PLAYLIST, "clockspeed", browser.playlist[browser.songPos].clockspeed);
+			_(_PLAYLIST, "sidmodel", browser.playlist[browser.songPos].sidmodel);
+			_(_PLAYLIST, "subtunes", browser.playlist[browser.songPos].subtunes+' (total)');
+			_(_PLAYLIST, "startsubtune", browser.playlist[browser.songPos].startsubtune);
+			_(_PLAYLIST, "size", browser.playlist[browser.songPos].size+' bytes');
+			_(_PLAYLIST, "address", '<code>$'+parseInt(browser.playlist[browser.songPos].address).toString(16).toUpperCase()+
+				'</code> ('+browser.playlist[browser.songPos].address+')');
+			_(_PLAYLIST, "init", '<code>$'+parseInt(browser.playlist[browser.songPos].init).toString(16).toUpperCase()+
+				'</code> ('+browser.playlist[browser.songPos].init+')');
+			_(_PLAYLIST, "play", '<code>$'+parseInt(browser.playlist[browser.songPos].play).toString(16).toUpperCase()+
+				'</code> ('+browser.playlist[browser.songPos].play+')');
+			_(_PLAYLIST, "copyright", browser.playlist[browser.songPos].copyright);
+			_(_PLAYLIST, "stil", $('<div>').text(browser.playlist[browser.songPos].stil).html());
+			_(_PLAYLIST, "rating", browser.playlist[browser.songPos].rating);
+			_(_PLAYLIST, "hvsc", browser.playlist[browser.songPos].hvsc);
+			_(_PLAYLIST, "symid", browser.playlist[browser.songPos].symid);
 		}
 
 		switch (this.emulator) {
@@ -360,6 +390,12 @@ SIDPlayer.prototype = {
 				} else {
 					// NOTE: Not playing on a mobile device makes for a lot more flexibility. The timeout is
 					// not necessary anymore and the PHP script can be called asynchronously.
+					if (isDebug) {
+						_(_HEADER, "GET soasc.php");
+						_(_PARAM, "file", file);
+						_(_PARAM, "sidModel", this.chip);
+						_(_PARAM, "subtune", subtune);
+					}
 					this.soasc = $.get("php/soasc.php", {
 						file: 		file,
 						sidModel:	this.chip,
@@ -377,6 +413,17 @@ SIDPlayer.prototype = {
 						if (data.status == "error") {
 							alert(data.message);
 							return false;
+						}
+						if (isDebug) {
+							_(_RESULTS);
+							_(_DATA, "status", data.status);
+							if (data.status != "ok") {
+								_(_DATA, "message", data.message);
+							} else {
+								_(_DATA, "request (debug)", '<a href="'+data.request.replace("url=1", "dbg=1")+'" target="_blank">'+data.request+'</a>');
+								_(_DATA, "url (to play)", data.url.indexOf("ERROR: File not found") == -1 ? '<a href="'+data.url+'" target="_blank">'+data.url+'</a>' : data.url);
+								_(_DATA, "model", data.model);
+							}
 						}
 						this.modelSOASC = data.model;
 						this.howler = new Howl({
@@ -443,7 +490,7 @@ SIDPlayer.prototype = {
 	 * @param {boolean} forcePlay	TRUE if forcing play state (cold start).
 	 */
 	 play: function(forcePlay) {
-		if (isDebug) _(_SINGLE, "player.js:play()");
+		// if (isDebug) _(_HEADER, "player.js: play()");
 		if (!this.paused) {
 			this.voiceMask = [0xF, 0xF, 0xF];
 			viz.startBufferEndedEffects();
@@ -508,6 +555,7 @@ SIDPlayer.prototype = {
 	 * Pause the SID tune.
 	 */
 	pause: function() {
+		// if (isDebug) _(_HEADER, "player.js: pause()");
 		this.paused = true;
 		switch (this.emulator) {
 			case "websid":
@@ -529,7 +577,7 @@ SIDPlayer.prototype = {
 	 * Stop the SID tune.
 	 */
 	stop: function() {
-		if (isDebug) _(_SINGLE, "player.js:stop()");
+		// if (isDebug) _(_HEADER, "player.js: stop()");
 		this.paused = false;
 		viz.stopBufferEndedEffects();
 		switch (this.emulator) {

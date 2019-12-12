@@ -2,15 +2,15 @@
 /**
  * DeepSID
  *
- * Build URL's for SOASC, then request through http://se2a1.iiiii.info. The
- * HVSC version, which is part of the URL's, is retrieved from the database.
- * For CGSC, version 133 is just used for the time being (no other version
+ * Build URL's for SOASC, then request through http://www.se2a1.net. The HVSC
+ * version, which is part of the URL's, is retrieved from the database. For
+ * CGSC, version 133 is just used for the time being (no other version
  * available at the mirrors anyway).
  * 
  * If the file is located in a custom folder, the script will try to find the
- * HVSC counterpart and play that instead, if it exists.
+ * HVSC counterpart and play that instead, if it exists. [Deprecated]
  * 
- * Request goes to http://se2a1.iiiii.info/dl.php?d=/soasc/.../&url=1 which
+ * Request goes to http://www.se2a1.net/dl.php?d=/soasc/.../&url=1 which
  * then returns the full URL to a SOASC mirror site.
  * 
  * Mirrors for testing:
@@ -18,6 +18,7 @@
  * http://se2a1.iiiii.info:40000/files/index.php
  * http://anorien.csc.warwick.ac.uk/mirrors/oakvalley/soasc/ (CGSC only)
  * http://ftp.acc.umu.se/mirror/media/Oakvalley/soasc/
+ * http://teamarchive1.fnf.archive.org/OAKVALLEY/soasc/
  * 
  * @uses		$_GET['file']			fullname path to SID file
  * @uses		$_GET['sidModel']		a key in $soasc_models, or 'auto'
@@ -25,6 +26,8 @@
  */
 
 require_once("class.account.php"); // Includes setup
+
+define('SOASC', 'http://www.se2a1.net/dl.php?url=1&d=soasc/');
 
 $soasc_models = array(
 	'r2' 	=> 'MOS6581R2',
@@ -50,16 +53,15 @@ function RequestURL($path) {
 	curl_setopt($ch, CURLOPT_HEADER, false);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 	curl_setopt($ch, CURLOPT_USERAGENT, 'DeepSID');
-	curl_setopt($ch, CURLOPT_URL, 'http://www.se2a1.net/dl.php?url=1&d=soasc/'.$path);
+	curl_setopt($ch, CURLOPT_URL, SOASC.$path);
 	// curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
 	curl_setopt($ch, CURLOPT_TIMEOUT, 5);
 	curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
 
 	$data = curl_exec($ch);
-	// echo $path.'<br />'.$data.'<br />';
 	if ($data == false || stripos($data, 'ERROR: File not found'))
 		// die(json_encode(array('status' => 'error', 'message' => curl_error($ch))));
-		die(json_encode(array('status' => 'ok', 'url' => 'ERROR')));
+		die(json_encode(array('status' => 'ok', 'url' => $data, 'request' => SOASC.$path, 'model' => '')));
 	curl_close($ch);
 
 	return $data;
@@ -90,9 +92,10 @@ try {
 
 		// Compute's Gazette SID Collection
 
-		$url = RequestURL('cgsc/133/FLAC'.str_replace('.mus', '_T001.mus_'.$model.'.flac',
-			str_replace("/_Compute's Gazette SID Collection", "", $file)));
-		die(json_encode(array('status' => 'ok', 'url' => $url, 'model' => $model)));
+		$path = 'cgsc/133/FLAC'.str_replace('.mus', '_T001.mus_'.$model.'.flac',
+			str_replace("/_Compute's Gazette SID Collection", "", $file));
+		$url = RequestURL($path);
+		die(json_encode(array('status' => 'ok', 'url' => $url, 'request' => SOASC.$path, 'model' => $model)));
 
 	} else {
 
@@ -132,7 +135,8 @@ try {
 		if ($hvsc < 50) {
 			// SOASC started at HVSC version 49 with the MP3 format only
 			$hvsc = 'hvsc/049';
-			$subtune = str_pad($subtune, 3, '0', STR_PAD_LEFT); // Upped from 2 to 3 in late 2019
+			$format = '/MP3';
+			$subtune = str_pad($subtune, 2, '0', STR_PAD_LEFT);
 		} else {
 			// SOASC changed the path rules from version 50 and up while also favoring the FLAC format
 			$hvsc = 'hvsc/0'.$hvsc;
@@ -141,9 +145,10 @@ try {
 			$subtune = str_pad($subtune, 3, '0', STR_PAD_LEFT);
 		}
 
-		$url = RequestURL($hvsc.$format.str_replace('.sid', '_T'.$subtune.'.sid_'.$model.$ext,
-			str_replace('/_High Voltage SID Collection', '', $file)));
-		die(json_encode(array('status' => 'ok', 'url' => $url, 'model' => $model)));
+		$path = $hvsc.$format.str_replace('.sid', '_T'.$subtune.'.sid_'.$model.$ext,
+			str_replace('/_High Voltage SID Collection', '', $file));
+		$url = RequestURL($path);
+		die(json_encode(array('status' => 'ok', 'url' => $url, 'request' => SOASC.$path, 'model' => $model)));
 	}
 
 } catch(PDOException $e) {

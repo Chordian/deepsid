@@ -27,9 +27,13 @@ var tabPrevScrollPos = {
 	about:		{ pos: 0, reset: false },
 }
 
-const _HEADER	= 1;
-const _SINGLE	= 2;
+const _SECTION	= 1;
+const _HEADER	= 2;
 const _PARAM	= 3;
+const _PLAYLIST	= 4;
+const _OBJECT	= 5;
+const _DATA		= 6;
+const _RESULTS	= 7;
 
 $(function() { // DOM ready
 
@@ -642,6 +646,10 @@ $(function() { // DOM ready
 
 		// If 'Player' tab is selected then hide the notification on it
 		if (topic === "player") $("#note-player").hide();
+
+		// Always go to the bottom of the 'Debug' tab to show the latest stuff
+		if (topic === "debug")
+			$("#page").mCustomScrollbar("scrollTo", "bottom", { scrollInertia: 0 });
 
 		// If 'Piano' view is selected then make the custom scroll bar transparent
 		// NOTE: Must be hidden in other tabs or scrolling may become erratic.
@@ -1808,29 +1816,55 @@ function GetCSSVar(cssVar) {
 }
 
 /**
- * Print some text in the debug tab.
+ * Display some text in the debug tab.
  * 
- * @param {number} format	Format constant (see top of this file).
- * @param {string} text		String to print.
+ * @param {number} format	Format constant (defined in the top of this file).
+ * @param {string} text		String to display.
  * @param {*} value			If specified, value associated with text.
  */
 function _(format, text, value) {
 	if (!isDebug) return;
 
 	switch (format) {
-		case _HEADER:
-			text = ($("#topic-debug tr").length ? '<tr><td colspan="20" class="top"></td></tr>': '')+
+		case _SECTION:
+			text = ($("#topic-debug tr").length ? '<tr><td colspan="20" class="top1"></td></tr><tr><td colspan="20" class="top2"></td></tr>': '')+
 				'<tr><th colspan="20">'+text+'</th></tr>';
 			break;
-		case _SINGLE:
-			text = '<tr><td colspan="20"><b>'+text+'</b></td></tr>'
+		case _HEADER:
+			text = '<tr><th>&nbsp;&nbsp;&nbsp;</th><th colspan="19">'+text+'</th></tr>';
+			break;
+		case _RESULTS:
+			if (typeof text == "undefined") text = "Data";
+			text = '<tr><th>&nbsp;&nbsp;&nbsp;</th><th colspan="19">&#11206; '+text+'</th></tr>';
 			break;
 		case _PARAM:
-			text = '<tr><td>&nbsp;&nbsp;</td><td class="first">param '+text+'</td><td>'+value+'</td></tr>';
+			text = _Value("param", text, value);
+			break;
+		case _PLAYLIST:
+			text = _Value("playlist", text, value);
+			break;
+		case _OBJECT:
+			text = '<tr><td>&nbsp;&nbsp;&nbsp;</td><td class="first">object '+text+'</td><td class="second">'+JSON.stringify(value)+'</td></tr>';
+			break;
+		case _DATA:
+			text = _Value("data", text, value);
 			break;
 		default:
 	}
 	$("#topic-debug table").append(text);
+	$("#page").mCustomScrollbar("scrollTo", "bottom", { scrollInertia: 300 });
+}
+
+/**
+ * Return the most typical piece of HTML used for displaying debug info.
+ * 
+ * @param {string} type		Type of variable.
+ * @param {string} text		Text to expand on type.
+ * @param {string} value	The value of the variable.
+ */
+function _Value(type, text, value) {
+	if (value === "") value = '<span class="dim">empty</span>';
+	return '<tr><td>&nbsp;&nbsp;&nbsp;</td><td class="first">'+type+'.'+text+'</td><td class="second">'+value+'</td></tr>';
 }
 
 /**
