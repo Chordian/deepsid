@@ -46,9 +46,11 @@ $file = str_replace('hvsc', '', $_GET['file']);
 $subtune = $_GET['subtune'] + 1;
 $model = $soasc_models[$_GET['sidModel']];
 
-// Test: http://www.se2a1.net/dl.php?url=1&d=soasc/hvsc/070/FLAC/MUSICIANS/J/JCH/Yoko_Tsuno_T001.sid_MOS6581R2.flac
+// http://www.se2a1.net/dl.php?url=1&d=soasc/hvsc/070/FLAC/MUSICIANS/J/JCH/Yoko_Tsuno_T001.sid_MOS6581R2.flac
+// http://se2a1.iiiii.info:40000/files/soasc/hvsc/068/FLAC/DEMOS/0-9/8-bit_Panda-Ending_Theme_T001.sid_CSG8580R5.flac
 function RequestURL($path) {
 
+	/*
 	$ch = curl_init();
 	curl_setopt($ch, CURLOPT_HEADER, false);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -63,6 +65,15 @@ function RequestURL($path) {
 		// die(json_encode(array('status' => 'error', 'message' => curl_error($ch))));
 		die(json_encode(array('status' => 'ok', 'url' => $data, 'request' => SOASC.$path, 'model' => '')));
 	curl_close($ch);
+	*/
+
+	// OVERRIDE CODE: Handling the SOASC mirror sites myself at the moment. There's a problem with
+	// redirecting paths in their PHP script as of late 2019 and it causes most file requests to fail.
+	$data = 'http://se2a1.iiiii.info:40000/files/soasc/'.$path;
+
+	$file_headers = @get_headers($data);
+	if(!$file_headers || $file_headers[0] == 'HTTP/1.1 404 Not Found')
+		$data = 'http://ftp.acc.umu.se/mirror/media/Oakvalley/soasc/'.$path;
 
 	return $data;
 }

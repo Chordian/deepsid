@@ -35,6 +35,7 @@ require_once("setup.php");
 
 function RequestURL($path) {
 
+	/*
 	$ch = curl_init();
 	curl_setopt($ch, CURLOPT_HEADER, false);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -49,7 +50,19 @@ function RequestURL($path) {
 	$data = curl_exec($ch);
 	if ($data == false) $data = '';
 	curl_close($ch);
+	*/
 
+	// OVERRIDE CODE: Handling the SOASC mirror sites myself at the moment. There's a problem with
+	// redirecting paths in their PHP script as of late 2019 and it causes most file requests to fail.
+	$data = 'http://se2a1.iiiii.info:40000/files/soasc/'.$path;
+	$file_headers = @get_headers($data);
+	if(!$file_headers || $file_headers[0] == 'HTTP/1.1 404 Not Found') {
+		// Try the other mirror then
+		$data = 'http://ftp.acc.umu.se/mirror/media/Oakvalley/soasc/'.$path;
+		$file_headers = @get_headers($data);
+		if(!$file_headers || $file_headers[0] == 'HTTP/1.1 404 Not Found')
+			$data = ''; // All failed
+	}
 	return $data;
 }
 
@@ -67,13 +80,13 @@ $test_files = array( // These files are suitable as it's a very short sfx (less 
 // cron job services assume the script itself is in error and will terminate after a while.
 
 foreach($test_files as $file) {
-	$mirror = RequestURL('http://www.se2a1.net/dl.php?url=1&survey=1&d=soasc/'.$file);
+	/*$mirror = RequestURL('http://www.se2a1.net/dl.php?url=1&survey=1&d=soasc/'.$file);
 	// file_put_contents('../soasc_mirror.txt', $mirror);
 	if (empty($mirror)) {
 		file_put_contents('../soasc.txt', $time.',2'); // The DL script timed out
 		die;
-	}
-	$result = RequestURL($mirror);
+	}*/
+	$result = RequestURL($file); // @todo Replace with $mirror when uncommenting the above!
 	// file_put_contents('../soasc_result.txt', $result);
 	if (empty($result)) {
 		file_put_contents('../soasc.txt', $time.',3'); // The mirror URL timed out
