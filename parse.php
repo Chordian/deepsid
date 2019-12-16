@@ -66,7 +66,7 @@ if (($handle = fopen(TRACKFILE, 'r')) != false) {
 		}
 		$last = round(($now - $line[4]) / 60);
 		$type = ' other';
-		if ($parser->type == 'bot' || stripos('x'.$line[1], 'python-') || stripos('x'.$line[1], 'googlebot'))
+		if ($parser->type == 'bot' || stripos('x'.$line[1], 'python-') || stripos('x'.$line[1], 'googlebot') || stripos('x'.$line[1], 'twitterbot'))
 			$type = ' bot';
 		elseif ($parser->type == 'mobile')
 			$type = ' mobile';

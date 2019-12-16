@@ -27,7 +27,8 @@
 
 require_once("class.account.php"); // Includes setup
 
-define('SOASC', 'http://www.se2a1.net/dl.php?url=1&d=soasc/');
+// define('SOASC', 'http://www.se2a1.net/dl.php?url=1&d=soasc/');
+define('SOASC', 'http://www.6581-8580.com/socse/dl.php?url=1&d=soasc/');
 
 $soasc_models = array(
 	'r2' 	=> 'MOS6581R2',

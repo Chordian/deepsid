@@ -453,6 +453,24 @@ Unfortunately PHP.ini cannot be edited there, so you have to import the LOCALHOS
 When done, compare the top 20 table with the longest tunes across LOCALHOST and ONLINE. They should
 be exactly the same now.
 
+SPECIAL DB UPDATING
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+The 'special_updating.sql' (located in the same folder as this text file) is not actually a real SQL
+file and must be parsed by a PHP script for DeepSID as stated below.
+
+  o  Run this: http://chordian/deepsid/php/update_special.php
+
+Note that some of the fields doesn't hit correctly in the LOCALHOST database (such as deleting tags)
+but it doesn't matter (especially tags are just a test chaos there).
+
+  o  Run this: http://deepsid.chordian.net/php/update_special.php
+
+To test that things went well, you can check the player info for these links:
+
+http://deepsid.chordian.net/?file=/DEMOS/G-L/Kinetix_Blasting_Power_Mix.sid
+http://deepsid.chordian.net/?file=/DEMOS/S-Z/Wize_Mixes.sid
+http://deepsid.chordian.net/?file=/MUSICIANS/N/Nebula&here=1&search=mixer&type=player  (8 rows found)
+
 SKIPPED
 ¯¯¯¯¯¯¯
 Updating Disqus paths.
