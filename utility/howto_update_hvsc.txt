@@ -465,10 +465,10 @@ but it doesn't matter (especially tags are just a test chaos there).
 
   o  Run this: http://deepsid.chordian.net/php/update_special.php
 
-To test that things went well, you can check the player info for these links:
+To test that things went well, here are some links you can check out:
 
-http://deepsid.chordian.net/?file=/DEMOS/G-L/Kinetix_Blasting_Power_Mix.sid
-http://deepsid.chordian.net/?file=/DEMOS/S-Z/Wize_Mixes.sid
+http://deepsid.chordian.net/?file=/DEMOS/G-L/Kinetix_Blasting_Power_Mix.sid  (player)
+http://deepsid.chordian.net/?file=/DEMOS/S-Z/Wize_Mixes.sid  (player)
 http://deepsid.chordian.net/?file=/MUSICIANS/N/Nebula&here=1&search=mixer&type=player  (8 rows found)
 
 SKIPPED

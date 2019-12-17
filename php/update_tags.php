@@ -13,8 +13,9 @@ require_once("class.account.php"); // Includes setup
 define('MODE_GAME',	'Game');
 define('MODE_COOP',	'Coop');
 define('MODE_UNF',	'Unfinished');
+define('MODE_TINY', 'Tiny');
 
-define('MODE', MODE_UNF); // <---- SET THE TAG PARSING MODE HERE!
+define('MODE', MODE_TINY); // <---- SET THE TAG PARSING MODE HERE!
 
 function GetTagID($name) {
 
@@ -65,21 +66,26 @@ try {
 	foreach ($select as $row) {
 		switch (MODE) {
 			case MODE_GAME:
-				// Condition: The 'Application' field is used (indicating GB64 activity)
+				// Condition: The 'application' field is used (indicating GB64 activity)
 				if (!empty($row->application))
 					AddTag($tagid);
 				break;
 			case MODE_COOP:
-				// Condition: The 'Author' field must be like e.g. "Stan & Laurel"
+				// Condition: The 'author' field must be like e.g. "Stan & Laurel"
 				if (strpos($row->author, ' & '))
 					AddTag($tagid);
 				break;
 			case MODE_UNF:
-				// Condition: The 'Fullname' field must have "/Worktunes" in it
+				// Condition: The 'fullname' field must have "/Worktunes" in it
 				if (strpos($row->fullname, '/Worktunes'))
 					AddTag($tagid);
 				break;
-		}
+			case MODE_TINY:
+				// Condition: Number of bytes in the 'datasize' field must be less than 512
+				if ($row->datasize < 512)
+					AddTag($tagid);
+				break;
+			}
 		if (isset($test_max)) {
 			$test_max--;
 			if (!$test_max) die("</table><br />Test stop.");
