@@ -73,8 +73,10 @@
 		<ul>
 			<li>The <b>1ch</b> and <b>2ch</b> tags are typically used for level tunes where one or two voices are used
 			for SFX.</li>
-			<li>There should be no such thing as a <b>3ch</b> tag as that's the default use of the SID chip. However,
-			there may be an exception when chords are created using all voices. See the <b>3ch Chords</b> tag below.</li>
+			<li>For tunes that uses all voices (solitary or all of its sub tunes) a <b>3ch</b> tag should never be added
+				as that's the default use of the SID chip. However, it may often be a good idea to add it to files with
+				multiple sub tunes where <i>some</i> use all voices, <i>some</i> only a few. This avoids confusing the
+				listener to erroneously think that none of the tunes use all three voices.</li>
 			<li>In rare situations a <b>4ch</b> is used to indicate that the SID is patched up to play four channels,
 			typically from an Amiga MOD. If you are looking at this in a HVSC folder, there should be a counterpart in
 			the exotic root folder.</li>
@@ -401,6 +403,7 @@
 		<p>The tune uses a player that does not change SID registers in real time, e.g. vibrato, filter sweeping, etc.
 			However, it is allowed to change SID registers on a note-by-note basis, for example by having an intro with
 			one setup of ADSR and waveforms and then change all these for the chorus.</p>
+		<p>In other words, the tune is allowed to change anything it wants, just not during the lifetime of a note.</p>
 		<p>This tag is most useful for players that doesn't immediately indicate their quality, especially if
 			it is an unidentified player. It is less useful for players like e.g. Master Composer that is known to have
 			such limitations.</p>

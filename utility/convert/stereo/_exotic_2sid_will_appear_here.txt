@@ -1,0 +1,1 @@
+2SID files converted to the exotic format will appear in this folder.

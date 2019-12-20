@@ -15,7 +15,8 @@ UPDATE hvsc_files SET player = "a player by JO of Visage Studios" WHERE id = 661
 UPDATE hvsc_files SET player = "Zoolook's player" WHERE id = 24177							-- _High Voltage SID Collection/MUSICIANS/J/JCH/Test_in_Zoolooks_Player.sid
 
 /* Tags */
-DELETE FROM tags_lookup WHERE files_id = 66429 AND tags_id = 9								-- _High Voltage SID Collection/DEMOS/M-R/Mr_Brightside.sid + Tag ID 9 = "Coop"
+DELETE FROM tags_lookup WHERE files_id = 66429 AND tags_id = 9								-- Tag ID 9 = "Coop" + _High Voltage SID Collection/DEMOS/M-R/Mr_Brightside.sid
+DELETE FROM tags_lookup WHERE files_id = 2429 AND tags_id = 9								-- Tag ID 9 = "Coop" + _High Voltage SID Collection/GAMES/A-F/Athanor.sid
 
 /* Replace 'Music Assembler' with 'Padua's Music Mixer' which used the same player */
 UPDATE hvsc_files SET player = "Padua's Music Mixer" WHERE id = 32528						-- _High Voltage SID Collection/MUSICIANS/N/Nebula/Catman.sid

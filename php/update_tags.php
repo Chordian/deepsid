@@ -10,7 +10,7 @@
 
 require_once("class.account.php"); // Includes setup
 
-define('MODE_GAME',	'Game');
+define('MODE_GAME',	'Game'); // @todo Make the code test for 'Game Prev' tag too (don't add 'Game' if exists!)
 define('MODE_COOP',	'Coop');
 define('MODE_UNF',	'Unfinished');
 define('MODE_TINY', 'Tiny');
