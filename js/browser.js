@@ -6,7 +6,7 @@
  function Browser() {
 
 	this.ROOT_HVSC = 'hvsc';
-	this.HVSC_VERSION = 71;
+	this.HVSC_VERSION = 72;
 	this.CGSC_VERSION = 136;
 
 	this.path = "";

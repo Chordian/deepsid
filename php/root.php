@@ -19,7 +19,7 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH
 $decent_box_shown = false;
 
 // $important = 'The database connections sometimes act up at the moment. If it persists I will consult the web hotel provider.';
-$important = "<b>SOASC</b> works again (for the most part) but is <b>very slow</b>. I'll see if I can speed it up later.";
+$important = 'HVSC has been updated to the latest version #72. Click <a href="//deepsid.chordian.net/?search=72&type=new">here</a> to see what\'s new in it.';
 
 $available_lists = ['maxfiles', 'longest', 'mostgames', 'countries', 'startaddr', 'maxtime'];
 $dropdown_options =
@@ -158,7 +158,7 @@ try {
 
 $html =
 	'<div style="height:149px;"></div>'.
-	// '<div class="root-wide good-news">'.$important.'</div>'.
+	'<div class="root-wide good-news">'.$important.'</div>'.
 	// Recommendations
 	'<table class="root rec"><tr>'.
 		'<td style="max-width:10px;">'.

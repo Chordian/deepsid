@@ -13,6 +13,8 @@ UPDATE hvsc_files SET player = "Galway's player + Hubbard's players" WHERE id = 
 UPDATE hvsc_files SET player = "JCH IntroPlayer" WHERE id = 24152							-- _High Voltage SID Collection/MUSICIANS/J/JCH/Fooled.sid
 UPDATE hvsc_files SET player = "a player by JO of Visage Studios" WHERE id = 66100			-- _High Voltage SID Collection/MUSICIANS/J/JCH/JCH_in_Visages_Editor.sid
 UPDATE hvsc_files SET player = "Zoolook's player" WHERE id = 24177							-- _High Voltage SID Collection/MUSICIANS/J/JCH/Test_in_Zoolooks_Player.sid
+UPDATE hvsc_files SET player = "JammicroV0" WHERE id = 67945								-- _High Voltage SID Collection/MUSICIANS/J/Jammer/Aye_Contact.sid
+UPDATE hvsc_files SET player = "JammicroV0" WHERE id = 67946								-- _High Voltage SID Collection/MUSICIANS/J/Jammer/Tillax.sid
 
 /* Tags */
 DELETE FROM tags_lookup WHERE files_id = 66429 AND tags_id = 9								-- Tag ID 9 = "Coop" + _High Voltage SID Collection/DEMOS/M-R/Mr_Brightside.sid
@@ -28,3 +30,5 @@ UPDATE hvsc_files SET player = "Padua's Music Mixer" WHERE id = 32592						-- _H
 UPDATE hvsc_files SET player = "Padua's Music Mixer" WHERE id = 32597						-- _High Voltage SID Collection/MUSICIANS/N/Nebula/Sockendurst.sid
 UPDATE hvsc_files SET player = "Padua's Music Mixer" WHERE id = 32609						-- _High Voltage SID Collection/MUSICIANS/N/Nebula/Urlaubskurs.sid
 
+/* Lengths */
+UPDATE hvsc_files SET lengths = "1:47" WHERE id = 68061										-- _High Voltage SID Collection/MUSICIANS/P/Proton/Mellow_Bite.sid

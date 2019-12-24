@@ -51,11 +51,15 @@ For the next HVSC version:
 
 First, do steps 1 to 7 above as you will need the big file later.
 
-  1. On the local machine, delete the old HVSC folder tree and copy in the new one.
+  1. On the local machine, you should already have deleted the old HVSC folder tree and
+     copied in the new one. If you haven't yet, do it now.
   2. Edit the HVSC_VERSION constant in the "hvsc_update_db.php" script.
   3. Copy the new "Update##.hvs" file to the ./deepsid/php/hvsc_update/ folder.
   4. Edit the file and check the "Cleaning Up" section. If a real file is deleted
-     there (e.g. something in DOCUMENTS) then delete that line and save.
+     there (e.g. something in DOCUMENTS) then delete that line and save. This goes for
+     the sections below "Cleaning Up" as well. If you forget it doesn't matter much. You
+     will just get a red error line in the bottom of the PHP script below, but at that
+     point it should have done its job.
   5. Run the script now like this: http://chordian/deepsid/php/update_hvsc_db.php
   6. Look through the output and compare stuff in database to see if things went well.
   7. If there's a red move error, someone forgot to add backslashes to folders. Find
@@ -102,7 +106,7 @@ Import general SIDId player data:
   9. In "Find what", type: \ +     (<- space between \ and +)
  10. In "Replace with", type: ,
  11. Click "Replace All".
- 12. Copy this now: _High Voltage SID Collection/
+ 12. Copy this string now: _High Voltage SID Collection/
  13. Home on start of the first line and record a macro:
         1. Paste the string from step 12.
         2. Down to next line (again home on start of the line).
@@ -121,6 +125,8 @@ Import general SIDId player data:
   4. Write "fullname,player" in the "Column names" edit box.
   5. Click "Go".
   6. Repeat the above steps again for the second and third CSV files.
+  7. Export the "hvsc_files_import" to an SQL file for later import online. This way you won't
+     have to import the parts above, just that SQL file.
 
   1. Enter the "hvsc_files" table and click "SQL" (empty the box).
   2. Run the following:
@@ -162,6 +168,8 @@ Import specific SIDId player data:
   3. Change "Format" to "CSV".
   4. Write "fullname,player" in the "Column names" edit box.
   5. Click "Go".
+  6. Export the "hvsc_files_import" to an SQL file for later import online. This way you won't
+     have to import the above, just that SQL file.
 
   1. Enter the "hvsc_files" table and click "SQL" (empty the box).
   2. Run the following:
@@ -178,7 +186,7 @@ Import HVSC song lengths:
   1. Go to HSVC root, enter DOCUMENTS, then open "Songlengths.md5" in Notepad++.
      (MD5 is better than TXT as the latter uses attributes in parenthesis we don't need.)
   2. Delete the first "[Database]" line.
-  3. Copy this now: _High Voltage SID Collection
+  3. Copy this string now: _High Voltage SID Collection
   4. Home on first line with ";" and record a Notepad++ macro:
         1. Delete x 2.
         2. Ctrl+V to paste the string from step 3.
@@ -371,6 +379,8 @@ Import count of files in folders:
   3. Change "Format" to "CSV".
   4. Write "fullname,files" in the "Column names" edit box.
   5. Click "Go".
+  6. Export the "hvsc_folders_import" to an SQL file for later import online. This way you won't
+     have to import the above, just that SQL file.
 
   1. Enter the "hvsc_folders" table and click "SQL" (empty the box).
   2. Run the following:
