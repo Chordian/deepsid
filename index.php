@@ -264,7 +264,7 @@
 				<div id="stopic-stil" class="stopic"></div>
 				<div id="stopic-tags" class="stopic" style="display:none;"></div>
 				<div id="stopic-osc" class="stopic" style="display:none;"></div>
-				<a id="redirect-back" class="redirect" href="#" style="display:none"></a>
+				<a id="redirect-back" class="redirect continue" href="#" style="display:none"></a>
 			</div>
 			<div id="slider">
 				<div id="slider-button" style="display:none;">
@@ -1154,6 +1154,13 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>December 24, 2019</h3>
+						<ul>
+							<li>Fixed a bug that prevented "plinks" from playing in the CSDb forum threads.</li>
+							<li>Toggling between two redirecting "plinks" with the <code>b</code> hotkey no longer disables
+								the skip buttons.</li>
+						</ul>
 
 						<h3>December 22, 2019</h3>
 						<ul>

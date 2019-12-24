@@ -972,12 +972,18 @@ $(function() { // DOM ready
 
 	/**
 	 * When clicking a 'redirect' plink to open an arbitrary SID file without reloading DeepSID.
+	 * 
+	 * NOTE: If the 'redirect' class is accompanied by a 'continue' class too, the skip buttons
+	 * are not disabled as is usually the default.
 	 */
 	$("#topic-csdb,#sundry,#topic-stil,#topic-changes,#topic-player").on("click", "a.redirect", function() {
 		var $this = $(this);
 		if ($this.html() == "") return false;
 
-		var prevRedirect = browser.playlist[browser.songPos].fullname.replace(browser.ROOT_HVSC+"/_High Voltage SID Collection", "");
+		var solitary = !$this.hasClass("continue"),
+			prevRedirect = typeof browser.songPos != "undefined"
+				? browser.playlist[browser.songPos].fullname.replace(browser.ROOT_HVSC+"/_High Voltage SID Collection", "")
+				: "";
 
 		// Make the small play icon "active" bright
 		if (!$this.hasClass("playing")) {
@@ -993,10 +999,10 @@ $(function() { // DOM ready
 		if (path != browser.path) {
 			browser.path = path;
 			browser.getFolder(0, undefined, undefined, function() {
-				if (!ClickAndScrollToSID(fullname))
+				if (!ClickAndScrollToSID(fullname, solitary))
 					$this.wrap('<del class="redirect"></del>').contents().unwrap();
 			});
-		} else if (!ClickAndScrollToSID(fullname))
+		} else if (!ClickAndScrollToSID(fullname, solitary))
 			$this.wrap('<del class="redirect"></del>').contents().unwrap();
 		// Clear caches to force proper refresh of CSDb tab after redirecting 
 		cacheBeforeCompo = cacheCSDb = cacheSticky = cacheStickyBeforeCompo = "";
@@ -1298,10 +1304,12 @@ $(function() { // DOM ready
 	 * Only used by redirect "plinks" for now.
 	 * 
 	 * @param {string} fullname		The SID filename including folders.
+	 * @param {boolean} solitary	If specified and FALSE, the tune will continue like in a playlist.
 	 * 
 	 * @return {boolean}			TRUE if the SID was found and is now playing.
 	 */
-	function ClickAndScrollToSID(fullname) {
+	function ClickAndScrollToSID(fullname, solitary) {
+		if (typeof solitary == "undefined") solitary = true;
 		// Isolate the SID name, e.g. "music.sid"
 		var sidFile = fullname.split("/").slice(-1)[0];
 		var $tr = $("#folders tr").filter(function() {
@@ -1311,7 +1319,7 @@ $(function() { // DOM ready
 		if ($tr.length) {
 			// Yes; this is the <TR> row with the SID file we need to play
 			var $trPlay = $("#folders tr").eq($tr.index());
-			$trPlay.children("td.sid").trigger("click", [undefined, true, true]); // Don't refresh CSDb + Stop when done
+			$trPlay.children("td.sid").trigger("click", [undefined, true, solitary]); // Don't refresh CSDb + [Stop when done]
 			// Scroll the row into the middle of the list
 			var rowPos = $trPlay[0].offsetTop,
 				halfway = $("#folders").height() / 2 - 26; // Last value is half of SID file row height
