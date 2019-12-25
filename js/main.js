@@ -7,7 +7,7 @@ var $=jQuery.noConflict();
 
 var cacheCSDb = cacheSticky = cacheStickyBeforeCompo = cacheCSDbProfile = cacheBeforeCompo = cachePlayer = cacheGB64 = cacheRemix = prevFile = sundryTab = reportSTIL = "";
 var cacheTabScrollPos = cachePlayerTabScrollPos = cacheGB64TabScrollPos = cacheRemixTabScrollPos = tabScrollPos = cachePosBeforeCompo = cacheDDCSDbSort = peekCounter = sundryHeight = 0;
-var sundryToggle = showTags = true, recommended = forum = players = $trAutoPlay = null, isDebug;
+var sundryToggle = true, recommended = forum = players = $trAutoPlay = null, isDebug, showTags;
 
 var isLegacyWebSid = $("script[src='js/handlers/backend_tinyrsid_legacy.js']").length;
 
@@ -49,6 +49,9 @@ $(function() { // DOM ready
 		else
 			storedEmulator = "websid";	// The best WebSid for desktop computers
 	}
+
+	// Don't show tags on mobile devices as the non-custom scroll there might give way to sideways dragging
+	showTags = $("body").attr("data-mobile") == "0";
 
 	// However, a URL switch may TEMPORARILY override the stored emulator
 	var emulator = GetParam("emulator").toLowerCase();
@@ -151,6 +154,7 @@ $(function() { // DOM ready
 				// Upload and test one or more external SID tune(s)
 				$("#upload").trigger("click");
 			} else if (event.keyCode == 66) {							// Keyup 'b' (back before redirect)
+				$("a.redirect").removeClass("playing");
 				$("#redirect-back").trigger("click");
 			} else if (event.keyCode == 84) {							// Keyup 't' (test something)
 				console.log(browser.playlist[browser.songPos].address);

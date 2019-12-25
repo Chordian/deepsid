@@ -1155,6 +1155,13 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>December 25, 2019</h3>
+						<ul>
+							<li>Tags are no longer shown by default on mobile devices. This is to prevent sideways dragging
+								of the browser list. However, you can still turn them on with the check box in the sundry
+								tab for viewing tags.</li>
+						</ul>
+
 						<h3>December 24, 2019</h3>
 						<ul>
 							<li>Fixed a bug that prevented "plinks" from playing in the CSDb forum threads.</li>
