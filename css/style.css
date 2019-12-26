@@ -35,6 +35,7 @@
 	--color-table:					#a8ad95;			/* Standard colors for <TABLE>, <TH> and <TD> elements */
 	--color-table-th-bg:			#f5f6f2;
 	--color-table-border:			#b0b29a;
+	--color-table-border-thandle:	#d5d5c9;			/* Color of line below tiny handle in group table */
 	--color-input-text:				#666;				/* When text is present in an edit box but not being edited */
 	--color-input-text-focus:		#111;				/* When typing in an edit box */
 	--color-selection-bg:			#d2d5cb;			/* When marking text to be copied */
@@ -395,6 +396,7 @@
 	--color-table:					#606060;			/* Standard colors for <TABLE>, <TH> and <TD> elements */
 	--color-table-th-bg:			transparent;
 	--color-table-border:			#4c4c4c;
+	--color-table-border-thandle:	#3c3c3c;
 	--color-selection-bg:			#e0d68a;
 	--color-selection-text:			#222;
 	--color-notable:				#d9ce6f;
@@ -3590,6 +3592,25 @@ input[type=range]::-ms-track {
 				position: relative;
 				top: -2px;
 			}
+
+		#page .ext .tinyhandle {
+			font-size: 10px;
+			padding-top: 4px !important;
+			/*padding-bottom: 1px !important;*/
+			border-bottom: 1px solid var(--color-table-border-thandle) !important;
+		}
+
+		#page .ext .tinytop {
+			font-size: 2px;
+		}
+
+		#page .ext .tinybottom {
+			font-size: 6px;
+		}
+
+		#page .ext .filler {
+			visibility: hidden;
+		}
 
 		#page .ext .icon-before:before,
 		#page .ext .compo-pos:before {

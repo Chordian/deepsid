@@ -1155,6 +1155,13 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>December 26, 2019</h3>
+						<ul>
+							<li>In the profile tab, the table with groups now show affiliations for all of the handles that
+								the user have registered at CSDb. Also, the counts of credits and releases in the bottom is
+								a sum of all these handles combined.</li>
+						</ul>
+
 						<h3>December 25, 2019</h3>
 						<ul>
 							<li>Tags are no longer shown by default on mobile devices. This is to prevent sideways dragging

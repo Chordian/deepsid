@@ -78,111 +78,132 @@ if ($row->csdbtype == 'scener') {
 	// SCENER
 
 	$count_releases = $count_credits = 0;
-	$member_of = '';
-	$members_array = array();
+	$groups_array = array();
 	$founder_array = array();
 
 	// Loop through all of the handles this user have ever had
-	$handles = $csdb->Handle->Scener->Handles->Handle;
-	foreach($handles as $handle) {
+	if (isset($csdb->Handle->Scener->Handles->Handle)) {
+		$handles = $csdb->Handle->Scener->Handles->Handle;
+		foreach($handles as $handle) {
 
-		if ($handle->ID == $row->csdbid) {
-			// Already fiddling with that one (no need to get it again)
-			$csdb_handle = $csdb;
-		} else {
-			// There another handle so get the XML for it now
-			$xml = file_get_contents('https://csdb.dk/webservice/?type=scener&id='.$handle->ID);
-			if (!strpos($xml, '<CSDbData>'))
-				die(json_encode(array('status' => 'error', 'message' => '<p style="margin-top:0;"><i>Uh... CSDb? Are you there?</i></p>'.
-					'<b>ID:</b> <a href="https://csdb.dk/scener/?id='.$handle->ID.'" target="_blank">'.$handle->ID.'</a>')));
-			$csdb_handle = simplexml_load_string(utf8_decode($xml));
-		}
-
-		// Get an array of ID values for groups this user was a founder of (if any)
-		if (isset($csdb_handle->Handle->Founded->Group)) {
-			$founded_group = $csdb_handle->Handle->Founded->Group;
-			foreach($founded_group as $grp) {
-				$founder_array[] = $grp->ID;
+			if ($handle->ID == $row->csdbid) {
+				// Already fiddling with that one (no need to get it again)
+				$csdb_handle = $csdb;
+				$this_handle = $csdb->Handle->Handle;
+			} else {
+				// There another handle so get the XML for it now
+				$xml = file_get_contents('https://csdb.dk/webservice/?type=scener&id='.$handle->ID);
+				if (!strpos($xml, '<CSDbData>'))
+					die(json_encode(array('status' => 'error', 'message' => '<p style="margin-top:0;"><i>Uh... CSDb? Are you there?</i></p>'.
+						'<b>ID:</b> <a href="https://csdb.dk/scener/?id='.$handle->ID.'" target="_blank">'.$handle->ID.'</a>')));
+				$csdb_handle = simplexml_load_string(utf8_decode($xml));
+				$this_handle = $handle->Handle;
 			}
-		}
 
-		// Build left table with list of groups in the demo scene
-		if (isset($csdb_handle->Handle->MemberOf)) {
-			$members = $csdb_handle->Handle->MemberOf;
-			foreach($members as $member) {
-				if (isset($member->Group)) {
-					$id			= $member->Group->ID;
-					$name		= $member->Group->Name;
-					$status		= $member->Status;
-					$founder	= in_array((string)$id, $founder_array);
-
-					$dateStart = '';
-					if (isset($member->JoinYear)) {
-						$dateStart = $member->JoinYear;
-						if (isset($member->JoinMonth)) {
-							$dateStart .= '-'.str_pad($member->JoinMonth, 2, '0', STR_PAD_LEFT);
-							if (isset($member->JoinDay))
-								$dateStart .= '-'.str_pad($member->JoinDay, 2, '0', STR_PAD_LEFT);
-						}
-					}
-
-					$dateEnd = '';
-					if (isset($member->LeaveYear)) {
-						$dateEnd = $member->LeaveYear;
-						if (isset($member->LeaveMonth)) {
-							$dateEnd .= '-'.str_pad($member->LeaveMonth, 2, '0', STR_PAD_LEFT);
-							if (isset($member->LeaveDay))
-								$dateEnd .= '-'.str_pad($member->LeaveDay, 2, '0', STR_PAD_LEFT);
-						}
-					}
-
-					$members_array[($status == 'active' ? 'z' : $status).$dateStart.$name] = // $status = 'z' or 'ex'
-						'<tr>'.
-							'<td>'.
-								//'<span class="up icon-before icon-arrowright" title="Joined...">'.
-								'<span class="up icon-before '.($founder ? 'icon-founder" title="Founded...">' : 'icon-arrowright" title="Joined...">').
-								'<a class="group ellipsis" href="https://csdb.dk/group/?id='.$id.'" target="_blank">'.($status == 'ex' ? '<del>'.$name.'</del>' : $name).'</a></span>'.
-							'</td>'.
-							'<td>'.
-								$dateStart.
-							'</td>'.
-							'<td>'.
-								$dateEnd.
-							'</td>'.
-						'</tr>';
+			// Get an array of ID values for groups this user was a founder of (if any)
+			if (isset($csdb_handle->Handle->Founded->Group)) {
+				$founded_group = $csdb_handle->Handle->Founded->Group;
+				foreach($founded_group as $grp) {
+					$founder_array[] = $grp->ID;
 				}
 			}
+
+			$all_dates = array();
+			$members_array = array();
+
+			// Build left table with list of groups in the demo scene
+			if (isset($csdb_handle->Handle->MemberOf)) {
+				$members = $csdb_handle->Handle->MemberOf;
+				foreach($members as $member) {
+					if (isset($member->Group)) {
+						$id			= $member->Group->ID;
+						$name		= $member->Group->Name;
+						$status		= $member->Status;
+						$founder	= in_array((string)$id, $founder_array);
+
+						$dateStart = '';
+						if (isset($member->JoinYear)) {
+							$dateStart = $member->JoinYear;
+							if (isset($member->JoinMonth)) {
+								$dateStart .= '-'.str_pad($member->JoinMonth, 2, '0', STR_PAD_LEFT);
+								if (isset($member->JoinDay))
+									$dateStart .= '-'.str_pad($member->JoinDay, 2, '0', STR_PAD_LEFT);
+							}
+							$all_dates[] = $dateStart;
+						}
+
+						$dateEnd = '';
+						if (isset($member->LeaveYear)) {
+							$dateEnd = $member->LeaveYear;
+							if (isset($member->LeaveMonth)) {
+								$dateEnd .= '-'.str_pad($member->LeaveMonth, 2, '0', STR_PAD_LEFT);
+								if (isset($member->LeaveDay))
+									$dateEnd .= '-'.str_pad($member->LeaveDay, 2, '0', STR_PAD_LEFT);
+							}
+							$all_dates[] = $dateEnd;
+						}
+
+						$members_array[($status == 'active' ? 'z' : $status).$dateStart.$name] = // $status = 'z' or 'ex'
+							'<tr>'.
+								'<td>'.
+									//'<span class="up icon-before icon-arrowright" title="Joined...">'.
+									'<span class="up icon-before '.($founder ? 'icon-founder" title="Founded...">' : 'icon-arrowright" title="Joined...">').
+									'<a class="group ellipsis" href="https://csdb.dk/group/?id='.$id.'" target="_blank">'.($status == 'ex' ? '<del>'.$name.'</del>' : $name).'</a></span>'.
+								'</td>'.
+								'<td>'.
+									(empty($dateStart) ? '<span class="filler">0000-00-00</span>' : $dateStart).
+								'</td>'.
+								'<td>'.
+									(empty($dateEnd) ? '<span class="filler">0000-00-00</span>' : $dateEnd).
+								'</td>'.
+							'</tr>';
+					}
+				}
+			}
+			sort($all_dates);
+			ksort($members_array);
+			$member_of = '<tr><td colspan="3" class="tinyhandle">'.$this_handle.'</td></tr>
+				<tr><td colspan="3" class="tinytop">&nbsp;</td></tr>';
+			if (empty($members_array)) {
+				$member_of .= '<tr><td class="dim">N/A</td><td></td><td><span class="filler">0000-00-00</span></td></tr>';
+			} else {
+				foreach($members_array as $key => $member) {
+					$member_of .= $member;
+				}
+			}
+			$member_of .= '<tr><td colspan="3" class="tinybottom">&nbsp;</td></tr>';
+			$groups_array[end($all_dates).str_replace(' ', '_', $this_handle)] = $member_of;
+		
+			if (isset($csdb_handle->Handle->Released))
+				$count_releases += $csdb_handle->Handle->Released->Release->count();
+			if (isset($csdb_handle->Handle->Credits))
+				$count_credits += $csdb_handle->Handle->Credits->Credit->count();
 		}
 
-		if (isset($csdb_handle->Handle->Released))
-			$count_releases += $csdb_handle->Handle->Released->Release->count();
-		if (isset($csdb_handle->Handle->Credits))
-			$count_credits += $csdb_handle->Handle->Credits->Credit->count();
-	}
+		$all_groups = '';
+		ksort($groups_array);
+		foreach($groups_array as $group) {
+			$all_groups .= $group;
+		}
 
-	ksort($members_array);
-	foreach($members_array as $key => $member) {
-		if (substr($key, 0, 1) == 'z' || (substr($key, 0, 2) == 'ex' && empty($members_array['z'.substr($key, 2)])))
-			$member_of .= $member;
-	}
+		if (!empty($all_groups)) {
+			$member_of =
+				'<table class="tight" style="margin-top:0;">'.
+					'<tr>'.
+						'<th style="width:220px;padding:0 16px 6px 18px;"><u>Group</u></th>'.
+						'<th style="width:100px;padding-bottom:6px;"><u>Joined</u></th>'.
+						'<th style="padding-bottom:6px;"><u>Quit</u></th>'.
+					'</tr>'.
+					$all_groups.
+				'</table>';
+		}
 
-	if (!empty($member_of)) {
-		$member_of =
-			'<table class="tight" style="margin-top:0;">'.
-				'<tr>'.
-					'<th style="width:220px;padding:0 16px 6px 18px;"><u>Group</u></th>'.
-					'<th style="width:100px;padding-bottom:6px;"><u>Joined</u></th>'.
-					'<th style="padding-bottom:6px;"><u>Quit</u></th>'.
-				'</tr>'.
-				$member_of.
-			'</table>';
+		$counts = '';
+		if ($count_releases)
+			$counts = $count_releases.' scener release'.($count_releases == 1 ? '' : 's');
+		if ($count_credits)
+			$counts .= (!empty($counts) ? ' +' : '').' Credit'.($count_credits == 1 ? '' : 's').' in '.$count_credits.' scene production'.($count_credits == 1 ? '' : 's');
 	}
-
-	$counts = '';
-	if ($count_releases)
-		$counts = $count_releases.' scener release'.($count_releases == 1 ? '' : 's');
-	if ($count_credits)
-		$counts .= (!empty($counts) ? ' +' : '').' Credit'.($count_credits == 1 ? '' : 's').' in '.$count_credits.' scene production'.($count_credits == 1 ? '' : 's');
 
 } else {
 
@@ -304,8 +325,8 @@ if (!empty($row->employment)) {
 }
 $html = /*'<table class="tight top" style="min-width:100%;font-size:14px;">'.*/
 			(!empty($member_of) || !empty($employment) ? '<tr>'.
-				'<td class="topline leftline" style="padding:0 0 6px 10px;width:50%;">'.$member_of.'</td>'.
-				'<td class="topline leftline rightline" style="padding:0 0 6px 10px;width:50%;">'.$employment.'</td>'.
+				'<td class="topline leftline" style="padding:0 0 6px 10px;width:50%;">'.(!empty($member_of) ? $member_of : '').'</td>'.
+				'<td class="topline leftline rightline" style="padding:0 0 6px 10px;width:50%;">'.(!empty($employment) ? $employment : '').'</td>'.
 			'</tr>' : '').
 			'<tr>'.
 				'<td class="topline bottomline leftline" style="padding-left:10px;width:50%;">'.(!empty($counts) ? '<span class="icon-before icon-swing title="Produced...">'.$counts.'</span>' : '<div class="nocounts">No CSDb profile</div>').'</td>'.
