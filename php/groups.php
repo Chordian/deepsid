@@ -108,7 +108,7 @@ if ($row->csdbtype == 'scener') {
 				}
 			}
 
-			$all_dates = array();
+			$all_dates = ['0000-00-00'];
 			$members_array = array();
 
 			// Build left table with list of groups in the demo scene

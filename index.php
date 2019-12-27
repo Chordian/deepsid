@@ -452,7 +452,7 @@
 							<div class="edit" style="height:42px;width:683px;">
 								<button id="piano-gate" class="button-edit button-toggle button-on">On</button>
 								<label for="piano-gate" class="unselectable">Gate bit</label>
-								<button id="piano-noise" class="button-edit button-toggle button-off">Off</button>
+								<button id="piano-noise" class="button-edit button-toggle button-on">On</button>
 								<label for="piano-noise" class="unselectable">Noise waveform</label>
 								<button id="piano-slow" class="button-edit button-toggle button-off">Off</button>
 								<label for="piano-slow" class="unselectable">Slow speed</label>
@@ -1154,6 +1154,11 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>December 27, 2019</h3>
+						<ul>
+							<li>The noise waveform is now on by default in the piano view.</li>
+						</ul>
 
 						<h3>December 26, 2019</h3>
 						<ul>
