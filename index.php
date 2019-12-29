@@ -1155,9 +1155,18 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>December 29, 2019</h3>
+						<ul>
+							<li>If a SID row has too many tags to show at once, hover on one of the tags to
+								temporarily slide them to the left side so that more tags are revealed.
+							</li>
+						</ul>
+
 						<h3>December 27, 2019</h3>
 						<ul>
 							<li>The noise waveform is now on by default in the piano view.</li>
+							<li>All new files in HVSC #72 are now connected to CSDb entries.</li>
+							<li>Added the CSDb music competitions related to HVSC #72.</li>
 						</ul>
 
 						<h3>December 26, 2019</h3>

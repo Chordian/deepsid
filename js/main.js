@@ -1880,6 +1880,18 @@ function _Value(type, text, value) {
 }
 
 /**
+ * Plugin with one easing copied from "jquery.easing.1.3.js" by Robert Penner
+ * and George McGinley Smith. Use it in the .animate() jQuery method.
+ *
+ * @link http://gsgd.co.uk/sandbox/jquery/easing/
+ */
+$.extend($.easing,{
+	easeOutQuint: function (x, t, b, c, d) {
+		return c*((t=t/d-1)*t*t*t*t + 1) + b;
+	},
+});
+
+/**
  * Get a parameter value from the current URL (or optional custom string).
  * 
  * NOTE: This function is compact but has one flaw; it tends to find words

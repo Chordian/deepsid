@@ -2108,7 +2108,11 @@ input[type=range]::-ms-track {
 		max-height: 15px;
 		max-width: 80px;
 		z-index: 2;
-}
+	}
+
+	.tag {
+		pointer-events: auto;
+	}
 
 		/* Where the digi sample rate is displayed */
 		#pace div,

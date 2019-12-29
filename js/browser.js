@@ -203,6 +203,21 @@ Browser.prototype = {
 	 * @param {*} event 
 	 */
 	onMouseOver: function(event) {
+		if (event.target.className.substr(0, 4) == "tag ") {
+			// Slide a tag line to the left to show more tags at once
+			var $tagsLine = $(event.target).parents(".tags-line");
+			if ($($tagsLine[0].lastChild).offset().left > 420) {
+				// The edit tags "+" button is hard to get at thus the line is ripe for sliding
+				var dataLeft = $tagsLine.data("left");
+				if (typeof dataLeft == "undefined" || dataLeft == 0) {
+					$tagsLine.data("left", 1) // It is now processed
+						.stop(true)
+						.animate({
+							left: "-"+($tagsLine[0].offsetLeft + 6)+"px",
+						}, 600, "easeOutQuint");
+				}
+			}
+		}
 		if (event.target.className != "edit-tags") {
 			// Show the edit tag "+" button on that SID row only
 			$("#songs .edit-tags").hide();
@@ -216,6 +231,10 @@ Browser.prototype = {
 	 * @param {*} event 
 	 */
 	onMouseLeave: function() {
+		// Slide previously moved tag lines back to their default spot
+		$("#songs .tags-line").animate({
+				left: "0",
+			}, 600, "easeOutQuint").data("left", 0);
 		// Hide all edit tag "+" buttons
 		$("#songs .edit-tags").hide();
 	},
