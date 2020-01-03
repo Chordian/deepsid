@@ -194,8 +194,20 @@
 			<div class="dialog-buttons" style="width:136px;"><button class="dialog-button-yes dialog-auto" style="float:left;margin:0;">OK</button><button class="dialog-button-no dialog-auto" style="float:right;margin:0;">Cancel</button></div>
 		</div>
 
+		<input id="upload-new" type="file" accept=".sid" style="display:none;" />
+		<div id="dialog-upload-wiz2" class="dialog-box dialog-wizard">
+			<div class="dialog-text"></div>
+			<div class="dialog-buttons"><button class="dialog-button-no dialog-auto">Cancel</button><button class="dialog-button-yes dialog-auto">Next</button></div>
+		</div>
+		<div id="dialog-upload-wiz3" class="dialog-box dialog-wizard">
+			<div class="dialog-text"></div>
+			<label for="upload-profile">Profile page:</label>
+			<select id="dropdown-upload-profile" name="upload-profile"></select>
+			<div class="dialog-buttons"><button class="dialog-button-no dialog-auto">Back</button><button class="dialog-button-yes dialog-auto">Next</button></div>
+		</div>
+
 		<iframe id="download" style="display:none;"></iframe>
-		<input id="upload" type="file" accept=".sid" style="display:none;" multiple required />
+		<input id="upload-test" type="file" accept=".sid" style="display:none;" multiple required />
 
 		<div id="panel">
 			<div id="top">
@@ -1154,6 +1166,22 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>January 2, 2019</h3>
+						<ul>
+							<li>The red <b>Boost</b> tag has been renamed to the more apt name <b>Doubling</b> instead.</li>
+						</ul>
+
+						<h3>December 31, 2019</h3>
+						<ul>
+							<li>Fixed a UTF-8 encoding bug in download filenames in some CSDb pages.</li>
+						</ul>
+
+						<h3>December 30, 2019</h3>
+						<ul>
+							<li>Added the new red tag <b>Mock</b>. This can be used to indicate a song that has been
+								deliberately made to be bad, for example to be used in a fake demo.</li>
+						</ul>
 
 						<h3>December 29, 2019</h3>
 						<ul>

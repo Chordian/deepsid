@@ -2560,6 +2560,16 @@ input[type=range]::-ms-track {
 			font-style: italic;
 		}
 
+		#upload-wizard {
+			position: absolute;
+			top: 0;
+			left: 40px;
+			height: 20px;
+			line-height: 0;
+			padding: 10px;
+			font-size: 11px;
+		}
+
 	/* The drop-down box for how the list is sorted */
 	#sort {
 		position: absolute;
@@ -4903,7 +4913,8 @@ input[type=range]::-ms-track {
 		}
 
 .dialog-label-top,
-.dialog-new label {
+.dialog-new label,
+.dialog-wizard label {
 	font: normal 13px "Montserrat", sans-serif;
 	color: var(--color-text-fine);
 	margin-bottom: 4px;
@@ -4953,6 +4964,27 @@ input[type=range]::-ms-track {
 		font-size: 14px;
 		width: 108px;
 		height: 24px;
+	}
+
+	table.sid-info {
+		font-size: 13px;
+		margin-bottom: 0;
+	}
+
+		table.sid-info td:first-child {
+			font-weight: bold;
+			width: 1px;
+			white-space: nowrap;
+		}
+
+		table.sid-info td {
+			padding: 2px 6px;
+		}
+
+	/* The drop-down box in upload wizard */
+	#dropdown-upload-profile {
+		width: 100%;
+		font-size: 13px;
 	}
 
 /* ---- Styled Select ------------------------------------------------------- */

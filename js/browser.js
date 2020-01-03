@@ -64,6 +64,7 @@ Browser.prototype = {
 		$("#dialog-tags").on("click", "button", this.onClickDialogBox.bind(this));
 		$("#dropdown-sort").change(this.onChange.bind(this));
 		$("#topic-csdb").on("change", "#dropdown-sort-csdb", this.onChangeCSDb.bind(this));
+		$("#upload-new").change(this.onUpload.bind(this));
 
 		$("#folders table").on("contextmenu", "tr", this.contextMenu.bind(this));
 		$("#panel")
@@ -151,9 +152,11 @@ Browser.prototype = {
 			switch (event.keyCode) {
 				case 27: // ESC
 					$(".dialog-box .dialog-button-no").trigger("click");
+					$("#dialog-cover,.dialog-box").hide();
 					$("#contextmenu,#contextsubmenu").remove();
 					$("#dialog-all-tags").blur();
-					this.contextTR.css("background", "");
+					if (typeof this.contextTR != "undefined")
+						this.contextTR.css("background", "");
 					this.restoreSIDRow();
 					break;
 				case 13: // Enter
@@ -294,6 +297,15 @@ Browser.prototype = {
 				this.getFolder(this.scrollPositions.pop());
 				this.getComposer();
 				break;
+			case "upload-wizard":
+				// Clicked the button for uploading a new public SID file
+				if (!$("#logout").length) {
+					// But must be logged in to do that
+					alert("Login or register and you can upload new SID files here.");
+					return false;
+				}
+				this.uploadWizard();
+				break;
 			default:
 				// A TD element was clicked (folder, SID file, star rating)
 				var $tr = $(event.currentTarget);
@@ -341,7 +353,7 @@ Browser.prototype = {
 										browser.updateStickyTags(
 											$(event.target).parents("td"),
 											browser.buildTags(data.tags, data.tagtypes),
-											(browser.isSymlist || browser.isCompoFolder ? thisFullname : thisFullname.split("/").slice(-1)[0])	
+											(browser.isSymlist || browser.isCompoFolder ? thisFullname : thisFullname.split("/").slice(-1)[0])
 										);
 									});
 								}.bind(this));
@@ -904,6 +916,7 @@ Browser.prototype = {
 		$("#songs table").empty();
 		this.isSearching = typeof searchQuery !== "undefined";
 		this.isSymlist = this.path.substr(0, 2) === "/!" || this.path.substr(0, 2) === "/$";
+		this.isUploads = this.path == "/"+PATH_UPLOADS;
 
 		if (isDebug) {
 			_(_SECTION, "browser.js: getFolder()");
@@ -1055,6 +1068,8 @@ Browser.prototype = {
 						$("#path").css("top", "0.5px");
 						pathText = '<span class="playlist">'+this.path.replace("/CSDb Music Competitions/", '')+'</span><br />'+
 							'<span class="maintainer">'+data.owner+'</span>'; // Competition type
+					} else if (this.isUploads) {
+						pathText = '<button id="upload-wizard">Upload New SID File</button>';
 					}
 					$("#path").empty().append(pathText);
 
@@ -1082,7 +1097,7 @@ Browser.prototype = {
 					});
 
 					var filter = this.setupSortBox();
-					var collections = [], csdbCompoEntry = exoticCollection = "",
+					var collections = [], csdbCompoEntry = exoticCollection = publicUploadFolder = "",
 						onlyShowPersonal = this.path === "" && filter === "personal",
 						onlyShowCommon = this.path === "" && filter === "common";
 
@@ -1155,6 +1170,9 @@ Browser.prototype = {
 								csdbCompoEntry = folderEntry;
 							else if (folder.foldername == '_Exotic SID Tunes Collection')
 								exoticCollection = folderEntry;
+							else if (folder.foldername == PATH_UPLOADS)
+								publicUploadFolder = folderEntry+'<tr class="disabled"><td class="divider" colspan="2"></td></tr>'+
+									'<tr class="disabled"><td class="spacer" colspan="2"></td></tr>';
 							else if ((folder.foldername.substr(0, 1) == "_" || isPublicSymlist) &&
 								(!onlyShowPersonal || (onlyShowPersonal && myPublic)) &&
 								(!onlyShowCommon || (onlyShowCommon && folder.flags & 0x1)))	// Public symlist or custom?
@@ -1180,7 +1198,7 @@ Browser.prototype = {
 							this.subFolders += 2;
 						}
 						if (collections.length)
-							this.folders = collections[1]+collections[0]; // HVSC should always be first
+							this.folders = publicUploadFolder+collections[1]+collections[0]; // HVSC should be before CGSC
 						this.folders += csdbCompoEntry;
 						this.folders += exoticCollection;
 						this.folders = '<tr class="disabled"><td class="spacer" colspan="2"></td></tr>'+this.folders;
@@ -1390,7 +1408,7 @@ Browser.prototype = {
 			if (tag == "Remix64")
 				// A special look for the "Remix 64" tag
 				list_of_tags += '<div class="tag tag-remix64">&nbsp;&nbsp;</div>';
-			else if (tag == "Boost" || tag == "Hack")
+			else if (tag == "Doubling" || tag == "Hack" || tag == "Mock")
 				// A unique color for tags that serves as a warning
 				list_of_tags += '<div class="tag tag-warning">'+tag+'</div>';
 			else
@@ -2395,5 +2413,87 @@ Browser.prototype = {
 			).val("name");
 		}
 		return stickyMode;
+	},
+
+	/**
+	 * Ask to upload a SID file (this is sort of wizard step 0).
+	 */
+	onUpload: function() {
+		var sidFile = new FormData();
+		sidFile.append(0, $("#upload-new")[0].files[0]); // Only a single SID file at a time
+
+		$.ajax({
+			url:			"php/upload_new.php",
+			type: 			"POST",
+			cache:			false,
+			processData:	false,
+			contentType:	false,
+			data:			sidFile,
+			success: function(data) {
+				browser.validateData(data, function() {
+					data = $.parseJSON(data);
+					this.uploadWizard(1, data);
+				});
+			}
+		});
+	},
+
+	/**
+	 * Show the wizard dialog box for uploading a new SID file.
+	 */
+	uploadWizard: function(step, data) {
+		if (typeof step == "undefined") {
+			$("#upload-new").trigger("click"); // Calls 'onUpload()' above
+			return;
+		}
+		switch (step) {
+			case 1:
+				// Present the SID file format information
+				CustomDialog({
+					id: '#dialog-upload-wiz2',
+					text: '<h3>Upload SID File Wizard (1/4)</h3><p>The SID file contains the following information:</p>'+
+						'<table class="sid-info">'+
+							'<tr><td>Type</td><td>'+data.file.type+' v'+data.file.version+'</td></tr>'+
+							'<tr><td>Clock</td><td>'+data.file.clockspeed+'</td></tr>'+
+							'<tr><td>SID Model</td><td>'+data.file.sidmodel+'</td></tr>'+
+							'<tr><td>Name</td><td>'+data.file.name+'</td></tr>'+
+							'<tr><td>Author</td><td>'+data.file.author+'</td></tr>'+
+							'<tr><td>Copyright</td><td>'+data.file.copyright+'</td></tr>'+
+							'<tr><td>Subtune</td><td>'+data.file.startsubtune+' / '+data.file.subtunes+'</td></tr>'+
+						'</table>'+
+						'<p>If you wish to edit any of the above, please cancel and use a SID tool to do so, then upload again.</p>',
+					height: 378,
+					wizard: true,
+				}, function() {
+					$("#dropdown-upload-profile").empty();
+					$.get("php/upload_get_profiles.php", function(data) {
+						this.validateData(data, function(data) {
+							var profiles = '<option value="unset">No profile set</option>';
+							for (var i = 0; i < data.profiles.length; i++)
+								profiles += '<option value="'+data.profiles[i]+'">'+data.profiles[i]+'</option>';
+							// NOTE: Don't use the styled drop-down box; it is too slow to handle a list this big.
+							$("#dropdown-upload-profile").append(profiles);
+						});
+					}.bind(this));
+					browser.uploadWizard(2, data);
+				}.bind(this));
+				break;
+			case 2:
+				// Edit composer profile, CSDb ID and lengths
+				CustomDialog({
+					id: '#dialog-upload-wiz3',
+					text: '<h3>Upload SID File Wizard (2/4)</h3><p>You can optionally connect a profile, a CSDb page, or edit the song length'+(data.file.subtunes > 1 ? 's' : '')+'.</p>',
+					height: 420,
+					wizard: true,
+				}, function() {
+					browser.uploadWizard(3, data);
+				}, function() {
+					browser.uploadWizard(1, data);
+				});
+				break;
+			case 3:
+				// Edit custom STIL box text
+				break;
+			}
 	},
 }

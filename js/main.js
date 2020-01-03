@@ -27,6 +27,8 @@ var tabPrevScrollPos = {
 	about:		{ pos: 0, reset: false },
 }
 
+const PATH_UPLOADS = "_File Uploads";
+
 const _SECTION	= 1;
 const _HEADER	= 2;
 const _PARAM	= 3;
@@ -152,7 +154,7 @@ $(function() { // DOM ready
 				$(window).trigger("resize", true);
 			} else if (event.keyCode == 76) {							// Keyup 'l' (load)
 				// Upload and test one or more external SID tune(s)
-				$("#upload").trigger("click");
+				$("#upload-test").trigger("click");
 			} else if (event.keyCode == 66) {							// Keyup 'b' (back before redirect)
 				$("a.redirect").removeClass("playing");
 				$("#redirect-back").trigger("click");
@@ -165,9 +167,9 @@ $(function() { // DOM ready
 	/**
 	 * Upload the external SID file(s) for temporary emulator testing.
 	 */
-	$("#upload").change(function() {
+	$("#upload-test").change(function() {
 		var sidFile = new FormData(), files = "";
-		$.each($("#upload")[0].files, function(i, file) {
+		$.each($("#upload-test")[0].files, function(i, file) {
 			sidFile.append(i, file);
 		});
 		browser.folders = browser.extra = browser.symlists = "";
@@ -1785,6 +1787,7 @@ $.fn.center = function () {
  * 								 	 - text		Must be set.
  * 								 	 - width	A default is used if not set.
  * 								 	 - height	A default is used if not set.
+ * 									 - wizard	Don't fade cover if set and TRUE.
  * @param {function} callbackYes	Callback used if YES is clicked.
  * @param {function} callbackNo		Callback used if NO is clicked.
  */
@@ -1795,19 +1798,24 @@ function CustomDialog(data, callbackYes, callbackNo) {
 	var width = typeof data.width != "undefined" ? data.width : 400;
 	var height = typeof data.height != "undefined" ? data.height : 200;
 
+	var $dialog = $("#dialog-cover,"+data.id);
+
 	$(data.id).css({ width: width, height: height }).center();
 	$(data.id+" .dialog-text").empty().append(data.text);
-	$("#dialog-cover,"+data.id).fadeIn("fast");
+	if (typeof data.wizard == "undefined" || !data.wizard)
+		$dialog.fadeIn("fast");
+	else
+		$dialog.show();
 
 	$(data.id).on("click", ".dialog-button-yes", function() {
-		$("#dialog-cover,"+data.id).hide();
+		$dialog.hide();
 		if (typeof callbackYes === "function")
 			callbackYes.call(this);
 		return false;
 	});
 
 	$(data.id).on("click", ".dialog-button-no", function() {
-		$("#dialog-cover,"+data.id).hide();
+		$dialog.hide();
 		if (typeof callbackNo === "function")
 			callbackNo.call(this);
 		return false;

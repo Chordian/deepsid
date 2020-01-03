@@ -465,7 +465,9 @@ if ($csdb_type == 'sid') {
 	if (isset($csdb->Release->DownloadLinks)) {
 		$dlinks = $csdb->Release->DownloadLinks->DownloadLink;
 		foreach($dlinks as $dlink) {
-			$download_links .= '<br /><a href="'.$dlink->CounterLink.'">'.utf8_decode(urldecode($dlink->Link)).'</a>'.
+			// $link = utf8_decode(urldecode($dlink->Link)); <- Didn't work with e.g. "Skåneland 2" demo
+			$link = urldecode($dlink->Link);
+			$download_links .= '<br /><a href="'.$dlink->CounterLink.'">'.$link.'</a>'.
 				'<span class="count">'.$dlink->Downloads.'</span>';
 		}
 		$download_links = '<p><b>Download:</b>'.$download_links.'</p>';
