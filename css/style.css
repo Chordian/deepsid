@@ -1129,7 +1129,8 @@ small.u2 { margin-left: 2px; }
 	.edit button.disabled,
 	.dialog-new button.disabled,
 	#sticky-right-buttons button.disabled,
-	.block-info button.disabled {
+	.block-info button.disabled,
+	.dialog-box button.disabled {
 		cursor: default;
 		background: var(--color-button-disabled);
 		border-color: var(--color-button-disabled);
@@ -1241,7 +1242,9 @@ small.u2 { margin-left: 2px; }
 			margin-top: 0;
 		}
 
-		#topic-settings label b {
+		#topic-settings label b,
+		#dialog-upload-wiz3 label b,
+		#dialog-upload-wiz4 label b {
 			color: var(--color-settings-bold);
 		}
 
@@ -4903,6 +4906,18 @@ input[type=range]::-ms-track {
 		right: 20px;
 	}
 
+		.dialog-cancel {
+			font-family: "Montserrat", sans-serif;
+			font-weight: bold;
+			font-size: 13px;
+			font-size: 0.8125rem;
+			letter-spacing: 0.5px;
+			line-height: 2.4;
+			text-transform: uppercase;
+			text-decoration: none;
+			margin-right: 8px;
+		}
+
 		.dialog-buttons button {
 			width: 60px;
 			margin-left: 6px;
@@ -4966,6 +4981,13 @@ input[type=range]::-ms-track {
 		height: 24px;
 	}
 
+	.top-right-corner {
+		position: absolute;
+		top: 22.5px;
+		right: 20px;
+		color: var(--color-text-subtle);
+	}
+
 	table.sid-info {
 		font-size: 13px;
 		margin-bottom: 0;
@@ -4985,6 +5007,44 @@ input[type=range]::-ms-track {
 	#dropdown-upload-profile {
 		width: 100%;
 		font-size: 13px;
+		margin-bottom: 10px;
+	}
+
+	#dialog-upload-wiz3 .url {
+		font-size: 13px;
+	}
+
+	#dialog-upload-wiz3 label {
+		width: 1000px !important;
+	}
+
+	#dialog-upload-wiz3 form {
+		display: inline-block;
+		margin-bottom: 10px;
+	}
+
+		/* Edit box */
+		#upload-csdb-id,
+		#upload-lengths-list {
+			height: 21px;
+			font-size: 13px;
+		}
+
+			#upload-csdb-id {
+				width: 54px;
+			}
+
+			#form-lengths,
+			#upload-lengths-list {
+				width: 100%;
+			}
+
+	#dialog-upload-wiz4 textarea {
+		height: 170px;
+		width: 100%;
+		font-size: 13px;
+		resize: none;
+		padding: 2px 6px;
 	}
 
 /* ---- Styled Select ------------------------------------------------------- */

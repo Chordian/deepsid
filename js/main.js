@@ -120,13 +120,13 @@ $(function() { // DOM ready
 	 * @param {*} event 
 	 */
 	$(window).on("keydown", function(event) {
-		if (!$("#search-box,#username,#password,#old-password,#new-password,#sym-rename,#sym-specify-subtune,#new-tag,#dialog-all-tags,#dialog-song-tags").is(":focus")) {
+		if (!$("#search-box,#username,#password,#old-password,#new-password,#sym-rename,#sym-specify-subtune,#new-tag,#dialog-all-tags,#dialog-song-tags,#upload-csdb-id,#upload-lengths-list,#upload-stil-text").is(":focus")) {
 			if (event.keyCode == 220)									// Keydown key below 'Escape'
 				// Fast forward
 				$("#faster").trigger("mousedown");
 		}
 	}).on("keyup", function(event) {
-		if (!$("#search-box,#username,#password,#old-password,#new-password,#sym-rename,#sym-specify-subtune,#new-tag,#dialog-all-tags,#dialog-song-tags").is(":focus")) {
+		if (!$("#search-box,#username,#password,#old-password,#new-password,#sym-rename,#sym-specify-subtune,#new-tag,#dialog-all-tags,#dialog-song-tags,#upload-csdb-id,#upload-lengths-list,#upload-stil-text").is(":focus")) {
 			if (event.keyCode == 220) {									// Keyup key below 'Escape'
 				// Fast forward
 				$("#faster").trigger("mouseup");
@@ -1818,6 +1818,11 @@ function CustomDialog(data, callbackYes, callbackNo) {
 		$dialog.hide();
 		if (typeof callbackNo === "function")
 			callbackNo.call(this);
+		return false;
+	});
+
+	$(data.id).on("click", ".dialog-cancel", function() {
+		$("#dialog-cover,.dialog-box").hide();
 		return false;
 	});
 }

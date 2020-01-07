@@ -197,13 +197,23 @@
 		<input id="upload-new" type="file" accept=".sid" style="display:none;" />
 		<div id="dialog-upload-wiz2" class="dialog-box dialog-wizard">
 			<div class="dialog-text"></div>
-			<div class="dialog-buttons"><button class="dialog-button-no dialog-auto">Cancel</button><button class="dialog-button-yes dialog-auto">Next</button></div>
+			<div class="dialog-buttons"><a href="#" class="dialog-cancel">Cancel</a><button class="dialog-button-no dialog-auto">Back</button><button class="dialog-button-yes dialog-auto">Next</button></div>
 		</div>
 		<div id="dialog-upload-wiz3" class="dialog-box dialog-wizard">
 			<div class="dialog-text"></div>
-			<label for="upload-profile">Profile page:</label>
+			<label for="upload-profile">Connect <b>profile</b> page:</label>
 			<select id="dropdown-upload-profile" name="upload-profile"></select>
-			<div class="dialog-buttons"><button class="dialog-button-no dialog-auto">Back</button><button class="dialog-button-yes dialog-auto">Next</button></div>
+			<label for="upload-csdb">Connect <b>CSDb</b> ID:</label><form onsubmit="return false;" autocomplete="off" style="float:right;"><span class="url">https://csdb.dk/release/?id<span style="margin:0 2px;">=</span></span><input type="text" name="upload-csdb" id="upload-csdb-id" onkeypress='return event.charCode >= 48 && event.charCode <= 57;' maxlength="6" value="0" /></form>
+			<label id="label-lengths" for="upload-lengths" style="white-space:nowrap;">Define <b>lengths</b> of tunes:</label><br />
+			<form id="form-lengths" onsubmit="return false;" autocomplete="off"><input type="text" name="upload-lengths" id="upload-lengths-list" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.key == ":" || event.charCode == 32;' /></form>
+			<p>If you don't know the <span id="span-lengths">lengths just leave them</span> as is for now. You can edit the file again later.</p>
+			<div class="dialog-buttons"><a href="#" class="dialog-cancel">Cancel</a><button class="dialog-button-no dialog-auto">Back</button><button class="dialog-button-yes dialog-auto">Next</button></div>
+		</div>
+		<div id="dialog-upload-wiz4" class="dialog-box dialog-wizard">
+			<div class="dialog-text"></div>
+			<label for="upload-stil">Custom text for the <b>STIL</b> tabs:</label>
+			<textarea id="upload-stil-text" name="upload-stil" maxlength="8192"></textarea>
+			<div class="dialog-buttons"><a href="#" class="dialog-cancel">Cancel</a><button class="dialog-button-no dialog-auto">Back</button><button class="dialog-button-yes dialog-auto">Finish</button></div>
 		</div>
 
 		<iframe id="download" style="display:none;"></iframe>

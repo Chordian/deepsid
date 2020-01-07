@@ -2,7 +2,7 @@
 /**
  * DeepSID
  *
- * Get a list of profiles for a drop-down box in the upload wizard.
+ * Get a list of HVSC profiles for a drop-down box in the upload wizard.
  */
 
 require_once("setup.php");
@@ -20,17 +20,10 @@ try {
 
 	$all_profiles = array();
 
-	$select = $db->query('SELECT fullname FROM hvsc_folders ORDER BY fullname');
+	$select = $db->query('SELECT fullname FROM hvsc_folders WHERE fullname LIKE "_High Voltage SID Collection/%" ORDER BY fullname');
 	$select->setFetchMode(PDO::FETCH_OBJ);
-	foreach($select as $row) {
-		$folder = $row->fullname;
-		if (strpos($folder, '/') && in_array(substr($folder, 0, 5), array('_High', '_Comp', '_Exot'))) {
-			$folder = str_replace('_High Voltage SID Collection/', 'HVSC/', $folder);
-			$folder = str_replace('_Compute\'s Gazette SID Collection/', 'CGSC/', $folder);
-			$folder = str_replace('_Exotic SID Tunes Collection/', 'ESTC/', $folder);
-			$all_profiles[] = $folder;
-		}
-	}
+	foreach($select as $row)
+		$all_profiles[] = str_replace('_High Voltage SID Collection', 'HVSC', $row->fullname);
 
 } catch(PDOException $e) {
 	$account->LogActivityError('upload_get_profiles.php', $e->getMessage());

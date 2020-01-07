@@ -151,7 +151,6 @@ Browser.prototype = {
 		$(document).keyup(function(event) {
 			switch (event.keyCode) {
 				case 27: // ESC
-					$(".dialog-box .dialog-button-no").trigger("click");
 					$("#dialog-cover,.dialog-box").hide();
 					$("#contextmenu,#contextsubmenu").remove();
 					$("#dialog-all-tags").blur();
@@ -2443,6 +2442,7 @@ Browser.prototype = {
 	 */
 	uploadWizard: function(step, data) {
 		if (typeof step == "undefined") {
+			this.wizardContinued = false;
 			$("#upload-new").trigger("click"); // Calls 'onUpload()' above
 			return;
 		}
@@ -2451,7 +2451,7 @@ Browser.prototype = {
 				// Present the SID file format information
 				CustomDialog({
 					id: '#dialog-upload-wiz2',
-					text: '<h3>Upload SID File Wizard (1/4)</h3><p>The SID file contains the following information:</p>'+
+					text: '<h3>Upload SID File Wizard</h3><div class="top-right-corner">1/3</div><p>The SID file contains the following information:</p>'+
 						'<table class="sid-info">'+
 							'<tr><td>Type</td><td>'+data.file.type+' v'+data.file.version+'</td></tr>'+
 							'<tr><td>Clock</td><td>'+data.file.clockspeed+'</td></tr>'+
@@ -2465,34 +2465,101 @@ Browser.prototype = {
 					height: 378,
 					wizard: true,
 				}, function() {
-					$("#dropdown-upload-profile").empty();
-					$.get("php/upload_get_profiles.php", function(data) {
-						this.validateData(data, function(data) {
-							var profiles = '<option value="unset">No profile set</option>';
-							for (var i = 0; i < data.profiles.length; i++)
-								profiles += '<option value="'+data.profiles[i]+'">'+data.profiles[i]+'</option>';
-							// NOTE: Don't use the styled drop-down box; it is too slow to handle a list this big.
-							$("#dropdown-upload-profile").append(profiles);
-						});
-					}.bind(this));
+					if (!this.wizardContinued) {
+						// First time continuing to next wizard step so set these things up
+						$("#dropdown-upload-profile").empty();
+						$.get("php/upload_get_profiles.php", function(data) {
+							this.validateData(data, function(data) {
+								var profiles = '<option value="unset">Not connected to a profile page yet</option>';
+								for (var i = 0; i < data.profiles.length; i++)
+									profiles += '<option value="'+data.profiles[i]+'">'+data.profiles[i]+'</option>';
+								// NOTE: Don't use the styled drop-down box; it is too slow to handle a list this big.
+								$("#dropdown-upload-profile").append(profiles);
+							});
+						}.bind(this));
+						$("#upload-lengths-list")
+							.css("background", "")
+							.val("5:00 ".repeat(data.file.subtunes).trim());
+					}
 					browser.uploadWizard(2, data);
-				}.bind(this));
+				}.bind(this), function() {
+					// Go back to the wizard step where the file itself is selected
+					browser.uploadWizard();
+				});
 				break;
 			case 2:
 				// Edit composer profile, CSDb ID and lengths
+				this.wizardContinued = true;
+				if (data.file.subtunes > 1) {
+					$("#label-lengths").empty().append("Define <b>lengths</b> of tunes:");
+					$("#span-lengths").empty().append("lengths then just leave them");
+				} else {
+					$("#label-lengths").empty().append("Define the <b>length</b> of the tune:");
+					$("#span-lengths").empty().append("length then just leave it");
+				}
 				CustomDialog({
 					id: '#dialog-upload-wiz3',
-					text: '<h3>Upload SID File Wizard (2/4)</h3><p>You can optionally connect a profile, a CSDb page, or edit the song length'+(data.file.subtunes > 1 ? 's' : '')+'.</p>',
-					height: 420,
+					text: '<h3>Upload SID File Wizard</h3><div class="top-right-corner">2/3</div><p>You can optionally connect a profile, a CSDb page, and edit the song length'+(data.file.subtunes > 1 ? 's' : '')+'.</p>',
+					height: 378,
 					wizard: true,
 				}, function() {
-					browser.uploadWizard(3, data);
+					// Validate that the lengths are correct (don't let the user leave if they are not)
+					var lengths = $("#upload-lengths-list").val().split(" "), nextStep = 3;
+					$.each(lengths, function(i, length) {
+						// Check that the format of minutes and seconds are acceptable
+						if (!/(\d+):(\d\d\s)/.test(length+" ") || length.split(":")[0].length > 2 || length.split(":")[1] > 59) {
+							var $lengths = $("#upload-lengths-list");
+							// Flash the edit box red a few times indicating a fix is required
+							$lengths.css({
+								border:		"#800",
+								background:	"#f88",
+							});
+							setTimeout(function() {
+								$lengths.css({
+									border: 	"",
+									background:	"",
+								});
+								setTimeout(function() {
+									$lengths.css({
+										border:		"#800",
+										background:	"#f88",
+									});
+									setTimeout(function() {
+										$lengths.css({
+											border: 	"",
+											background:	"",
+										});
+									}, 150);
+								}, 100);
+							}, 150);
+							nextStep = 2;
+							return false;
+						}
+					});
+					browser.uploadWizard(nextStep, data);
 				}, function() {
+					// Go back to the wizard step with the SID format info
 					browser.uploadWizard(1, data);
 				});
 				break;
 			case 3:
 				// Edit custom STIL box text
+				CustomDialog({
+					id: '#dialog-upload-wiz4',
+					text: '<h3>Upload SID File Wizard</h3><div class="top-right-corner">3/3</div><p>You can optionally write a custom text entry for the STIL tabs too. HTML tags are allowed.</p>',
+					height: 378,
+					wizard: true,
+				}, function() {
+					// Wizard is closed; add the new file and its database entry
+
+
+					// @todo
+
+
+				}, function() {
+					// Go back to the wizard step with the profile/ID/lengths data
+					browser.uploadWizard(2, data);
+				});
 				break;
 			}
 	},
