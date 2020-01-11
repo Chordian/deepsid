@@ -2699,7 +2699,8 @@ input[type=range]::-ms-track {
 			background: var(--svg-bg-star-empty-unvoted);
 		}
 
-		#songs .disqus-comment-count {
+		#songs .disqus-comment-count,
+		#songs .uploaded-time {
 			float: right;
 			position: relative;
 			top: -1px;

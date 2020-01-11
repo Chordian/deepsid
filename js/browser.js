@@ -520,7 +520,9 @@ Browser.prototype = {
 
 						if (typeof paramSkipCSDb === "undefined" || !paramSkipCSDb) {
 							this.getCSDb();
-							if (this.isSearching || this.path.substr(0, 2) === "/$" || this.path.substr(0, 2) === "/!")
+							if (typeof this.playlist[this.songPos].profile != "undefined" && this.playlist[this.songPos].profile != "")
+								this.getComposer(this.playlist[this.songPos].profile, true);
+							else if (this.isSearching || this.path.substr(0, 2) === "/$" || this.path.substr(0, 2) === "/!")
 								this.getComposer(this.playlist[this.songPos].fullname);
 						} else
 							this.getComposer();
@@ -861,9 +863,9 @@ Browser.prototype = {
 				files += '<tr>'+
 						'<td class="sid unselectable"><div class="block-wrap"><div class="block">'+(file.subtunes > 1 ? '<div class="subtunes'+(this.isSymlist ? ' specific' : '')+(isNew ? ' newst' : '')+'">'+(this.isSymlist ? file.startsubtune + 1 : file.subtunes)+'</div>' : (isNew ? '<div class="newsid"></div>' : ''))+
 						'<div class="entry name file'+(this.isSearching || this.isCompoFolder || this.path.substr(0, 2) === "/$" ? ' search' : '')+'" data-name="'+encodeURIComponent(file.filename)+'" data-type="'+file.type+'" data-symid="'+file.symid+'">'+adaptedName+'</div></div></div><br />'+
-						'<span class="info">'+file.copyright.substr(0, 4)+' in '+file.player+'<div class="tags-line"'+(showTags ? '' : ' style="display:none"')+'>'+file.tags+'</div></span></td>'+
+						'<span class="info">'+file.copyright.substr(0, 4)+file.infosec+'<div class="tags-line"'+(showTags ? '' : ' style="display:none"')+'>'+file.tags+'</div></span></td>'+
 						'<td class="stars filestars"><span class="rating">'+this.buildStars(file.rating)+'</span>'+
-						'<span class="disqus-comment-count" data-disqus-url="http://deepsid.chordian.net/#!'+this.path+"/"+file.filename.replace("/_High Voltage SID Collection", "")+'"></span>'+
+						(typeof file.uploaded == "undefined" ? '<span class="disqus-comment-count" data-disqus-url="http://deepsid.chordian.net/#!'+this.path+"/"+file.filename.replace("/_High Voltage SID Collection", "")+'"></span>' : '<span class="uploaded-time">'+file.uploaded.substr(0, 10)+'</span>')+
 						'</td>'+
 					'</tr>';
 			}.bind(this));
@@ -1231,14 +1233,15 @@ Browser.prototype = {
 							isNew = file.hvsc == this.HVSC_VERSION || file.hvsc == this.CGSC_VERSION;
 						var adaptedName = file.substname == "" ? file.filename.replace(/^\_/, '') : file.substname;
 						adaptedName = this.adaptBrowserName(adaptedName);
-						var list_of_tags = this.buildTags(file.tags, file.tagtypes);
+						var list_of_tags = this.buildTags(file.tags, file.tagtypes),
+							infoSecondary = typeof file.uploaded != "undefined" ? ' by '+file.author : ' in '+player;
 						files +=
 							'<tr>'+
 								'<td class="sid unselectable"><div class="block-wrap"><div class="block">'+(file.subtunes > 1 ? '<div class="subtunes'+(this.isSymlist ? ' specific' : '')+(isNew ? ' newst' : '')+'">'+(this.isSymlist ? file.startsubtune : file.subtunes)+'</div>' : (isNew ? '<div class="newsid"></div>' : ''))+
 								'<div class="entry name file'+(this.isSearching || this.isCompoFolder || this.path.substr(0, 2) === "/$" ? ' search' : '')+'" data-name="'+encodeURIComponent(file.filename)+'" data-type="'+file.type+'" data-symid="'+file.symid+'">'+adaptedName+'</div></div></div><br />'+
-								'<span class="info">'+file.copyright.substr(0, 4)+' in '+player+'<div class="tags-line"'+(showTags ? '' : ' style="display:none"')+'>'+list_of_tags+'</div></span></td>'+
+								'<span class="info">'+file.copyright.substr(0, 4)+infoSecondary+'<div class="tags-line"'+(showTags ? '' : ' style="display:none"')+'>'+list_of_tags+'</div></span></td>'+
 								'<td class="stars filestars"><span class="rating">'+this.buildStars(file.rating)+'</span>'+
-								'<span class="disqus-comment-count" data-disqus-url="http://deepsid.chordian.net/#!'+rootFile.replace("/_High Voltage SID Collection", "")+'"></span>'+
+								(typeof file.uploaded == "undefined" ? '<span class="disqus-comment-count" data-disqus-url="http://deepsid.chordian.net/#!'+rootFile.replace("/_High Voltage SID Collection", "")+'"></span>' : '<span class="uploaded-time">'+file.uploaded.substr(0, 10)+'</span>')+
 								'</td>'+
 							'</tr>'; // &#9642; is the dot character if needed
 
@@ -1248,7 +1251,7 @@ Browser.prototype = {
 
 						this.playlist.push({
 							filename:		file.filename,
-							substname:		file.substname, // Symlists can have renamed SID files
+							substname:		file.substname,	// Symlists can have renamed SID files
 							fullname:		this.ROOT_HVSC + rootFile,
 							player: 		player,
 							tags:			list_of_tags,
@@ -1259,6 +1262,7 @@ Browser.prototype = {
 							sidmodel:		file.sidmodel,
 							subtunes:		file.subtunes,
 							startsubtune:	file.startsubtune == 0 ? 0 : file.startsubtune - 1, // If 0 then SIDId skipped it
+							infosec:		infoSecondary,
 							size:			file.datasize,
 							address:		file.loadaddr,
 							init:			file.initaddr,
@@ -1268,6 +1272,8 @@ Browser.prototype = {
 							rating:			file.rating,
 							hvsc:			file.hvsc,
 							symid:			file.symid,
+							profile:		file.profile,	// Only files from 'SID Happens'
+							uploaded:		file.uploaded,	// Only files from 'SID Happens'
 						});
 					}.bind(this));
 
@@ -1490,8 +1496,9 @@ Browser.prototype = {
 	 * Show the composer page in the 'Profile' tab.
 	 * 
 	 * @param {string} overridePath		If specified, fullname for profile (including file).
+	 * @param {boolean} rawPath			Unless, if specified, this is set to TRUE (path only).
 	 */
-	getComposer: function(overridePath) {
+	getComposer: function(overridePath, rawPath) {
 		if (this.isMobile) return;
 		if (this.composer) this.composer.abort();
 		if (this.groups) this.groups.abort();
@@ -1500,8 +1507,10 @@ Browser.prototype = {
 			overridePath = "";
 		else {
 			// We have an override path for a search entry
-			overridePath = overridePath.substr(overridePath.indexOf("/") + 1);
-			overridePath = overridePath.substr(0, overridePath.lastIndexOf("/"));
+			if (typeof rawPath == "undefined" || !rawPath) {
+				overridePath = overridePath.substr(overridePath.indexOf("/") + 1);
+				overridePath = overridePath.substr(0, overridePath.lastIndexOf("/"));
+			}
 			// Don't reload the same profile again and again
 			if (overridePath == this.previousOverridePath) return;
 			this.previousOverridePath = overridePath;
@@ -2418,8 +2427,8 @@ Browser.prototype = {
 	 * Ask to upload a SID file (this is sort of wizard step 0).
 	 */
 	onUpload: function() {
-		var sidFile = new FormData();
-		sidFile.append(0, $("#upload-new")[0].files[0]); // Only a single SID file at a time
+		this.sidFile = new FormData();
+		this.sidFile.append(0, $("#upload-new")[0].files[0]); // Only a single SID file at a time
 
 		$.ajax({
 			url:			"php/upload_new.php",
@@ -2427,7 +2436,7 @@ Browser.prototype = {
 			cache:			false,
 			processData:	false,
 			contentType:	false,
-			data:			sidFile,
+			data:			this.sidFile,
 			success: function(data) {
 				browser.validateData(data, function() {
 					data = $.parseJSON(data);
@@ -2436,6 +2445,16 @@ Browser.prototype = {
 			}
 		});
 	},
+
+
+	/**
+	 * @todo
+	 * 
+	 * - Disable gb64 and remix tabs.
+	 * - Test that a hash can later connect ratings to an existing HVSC entry.
+	 */
+
+
 
 	/**
 	 * Show the wizard dialog box for uploading a new SID file.
@@ -2453,13 +2472,13 @@ Browser.prototype = {
 					id: '#dialog-upload-wiz2',
 					text: '<h3>Upload SID File Wizard</h3><div class="top-right-corner">1/3</div><p>The SID file contains the following information:</p>'+
 						'<table class="sid-info">'+
-							'<tr><td>Type</td><td>'+data.file.type+' v'+data.file.version+'</td></tr>'+
-							'<tr><td>Clock</td><td>'+data.file.clockspeed+'</td></tr>'+
-							'<tr><td>SID Model</td><td>'+data.file.sidmodel+'</td></tr>'+
-							'<tr><td>Name</td><td>'+data.file.name+'</td></tr>'+
-							'<tr><td>Author</td><td>'+data.file.author+'</td></tr>'+
-							'<tr><td>Copyright</td><td>'+data.file.copyright+'</td></tr>'+
-							'<tr><td>Subtune</td><td>'+data.file.startsubtune+' / '+data.file.subtunes+'</td></tr>'+
+							'<tr><td>Type</td><td>'+data.info.type+' v'+data.info.version+'</td></tr>'+
+							'<tr><td>Clock</td><td>'+data.info.clockspeed+'</td></tr>'+
+							'<tr><td>SID Model</td><td>'+data.info.sidmodel+'</td></tr>'+
+							'<tr><td>Name</td><td>'+data.info.name+'</td></tr>'+
+							'<tr><td>Author</td><td>'+data.info.author+'</td></tr>'+
+							'<tr><td>Copyright</td><td>'+data.info.copyright+'</td></tr>'+
+							'<tr><td>Subtune</td><td>'+data.info.startsubtune+' / '+data.info.subtunes+'</td></tr>'+
 						'</table>'+
 						'<p>If you wish to edit any of the above, please cancel and use a SID tool to do so, then upload again.</p>',
 					height: 378,
@@ -2479,7 +2498,7 @@ Browser.prototype = {
 						}.bind(this));
 						$("#upload-lengths-list")
 							.css("background", "")
-							.val("5:00 ".repeat(data.file.subtunes).trim());
+							.val("5:00 ".repeat(data.info.subtunes).trim());
 					}
 					browser.uploadWizard(2, data);
 				}.bind(this), function() {
@@ -2490,7 +2509,7 @@ Browser.prototype = {
 			case 2:
 				// Edit composer profile, CSDb ID and lengths
 				this.wizardContinued = true;
-				if (data.file.subtunes > 1) {
+				if (data.info.subtunes > 1) {
 					$("#label-lengths").empty().append("Define <b>lengths</b> of tunes:");
 					$("#span-lengths").empty().append("lengths then just leave them");
 				} else {
@@ -2499,15 +2518,16 @@ Browser.prototype = {
 				}
 				CustomDialog({
 					id: '#dialog-upload-wiz3',
-					text: '<h3>Upload SID File Wizard</h3><div class="top-right-corner">2/3</div><p>You can optionally connect a profile, a CSDb page, and edit the song length'+(data.file.subtunes > 1 ? 's' : '')+'.</p>',
+					text: '<h3>Upload SID File Wizard</h3><div class="top-right-corner">2/3</div><p>You can optionally connect a profile, a CSDb page, and edit the song length'+(data.info.subtunes > 1 ? 's' : '')+'.</p>',
 					height: 378,
 					wizard: true,
 				}, function() {
 					// Validate that the lengths are correct (don't let the user leave if they are not)
 					var lengths = $("#upload-lengths-list").val().split(" "), nextStep = 3;
+					var correctCount = lengths.length == data.info.subtunes;
 					$.each(lengths, function(i, length) {
 						// Check that the format of minutes and seconds are acceptable
-						if (!/(\d+):(\d\d\s)/.test(length+" ") || length.split(":")[0].length > 2 || length.split(":")[1] > 59) {
+						if (!/(\d+):(\d\d\s)/.test(length+" ") || length.split(":")[0].length > 2 || length.split(":")[1] > 59 || !correctCount) {
 							var $lengths = $("#upload-lengths-list");
 							// Flash the edit box red a few times indicating a fix is required
 							$lengths.css({
@@ -2551,12 +2571,16 @@ Browser.prototype = {
 					wizard: true,
 				}, function() {
 					// Wizard is closed; add the new file and its database entry
-
-
-					// @todo
-
-
-				}, function() {
+					data.info.profile	= $("#dropdown-upload-profile").val();
+					data.info.csdbid	= parseInt($("#upload-csdb-id").val());
+					data.info.lengths	= $("#upload-lengths-list").val();
+					data.info.stil		= $("#upload-stil-text").val();
+					$.post("php/upload_final.php", { info: data.info }, function(data) {
+						this.validateData(data, function() {
+							this.getFolder();
+						});
+					}.bind(this));
+				}.bind(this), function() {
 					// Go back to the wizard step with the profile/ID/lengths data
 					browser.uploadWizard(2, data);
 				});

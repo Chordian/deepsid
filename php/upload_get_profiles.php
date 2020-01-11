@@ -2,7 +2,7 @@
 /**
  * DeepSID
  *
- * Get a list of HVSC profiles for a drop-down box in the upload wizard.
+ * Get a list of composer profiles for a drop-down box in the upload wizard.
  */
 
 require_once("setup.php");
@@ -20,7 +20,7 @@ try {
 
 	$all_profiles = array();
 
-	$select = $db->query('SELECT fullname FROM hvsc_folders WHERE fullname LIKE "_High Voltage SID Collection/%" ORDER BY fullname');
+	$select = $db->query('SELECT fullname FROM composers WHERE fullname LIKE "_High Voltage SID Collection/%" ORDER BY fullname');
 	$select->setFetchMode(PDO::FETCH_OBJ);
 	foreach($select as $row)
 		$all_profiles[] = str_replace('_High Voltage SID Collection', 'HVSC', $row->fullname);

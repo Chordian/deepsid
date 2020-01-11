@@ -250,7 +250,9 @@ Controls.prototype = {
 					this.updateSundry();
 
 					browser.getCSDb();
-					if (browser.isSearching || browser.path.substr(0, 2) === "/$" || browser.path.substr(0, 2) === "/!")
+					if (typeof browser.playlist[browser.songPos].profile != "undefined" && browser.playlist[browser.songPos].profile != "")
+						browser.getComposer(browser.playlist[browser.songPos].profile, true);
+					else if (browser.isSearching || browser.path.substr(0, 2) === "/$" || browser.path.substr(0, 2) === "/!")
 						browser.getComposer(browser.playlist[browser.songPos].fullname);
 					browser.getGB64();
 					browser.getRemix();

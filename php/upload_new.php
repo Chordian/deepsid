@@ -6,20 +6,31 @@
  * 
  * Information is gathered from the SID file format header and returned in an
  * array. The user can then edit some more information in a few wizard steps,
- * after which the final array of information is passed on to another PHP
- * script for inserting a new row in the database.
+ * after which the updated information is passed on to another PHP script for
+ * uploading the file properly and inserting new rows in the database.
  * 
  * If the file is not a SID file or the filename exists, it is denied.
  * 
  * @uses		$_FILES
  */
 
- require_once("class.account.php"); // Includes setup
+require_once("class.account.php"); // Includes setup
 
-define('PATH_UPLOADS', '_File Uploads/');
+define('PATH_UPLOADS', '_SID Happens/');
 
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest')
 	die("Direct access not permitted.");
+
+if (!$account->CheckLogin())
+	die(json_encode(array('status' => 'error', 'message' => 'You must be logged in to upload SID files.')));
+
+// Make sure we have a clean upload folder before adding a new file to it
+foreach(glob('../temp/upload/*.sid') as $filename) {
+	$file_age = time() - filectime($filename);
+	// Files older than 20 minutes will be deleted
+    if ($file_age > (20 * 60))
+		unlink($filename);
+}
 
 $sid = $_FILES[0];
 
@@ -45,7 +56,9 @@ try {
 	if ($exists->rowCount())
 		die(json_encode(array('status' => 'error', 'message' => 'There is already SID file of that name here. Duplicate names are not allowed. Try renaming it first.')));
 
-	////// NO SAVE WHILE TESTING... //////file_put_contents(ROOT_HVSC.'/_File Uploads/'.$sid['name'], $file);
+	// Upload the file to a temp folder until it is decided to move it
+	// NOTE: Can't rely on 'tmp_name' since the PHP script deletes it when completed.
+	file_put_contents('../temp/upload/'.$sid['name'], $file);
 
 	$byte = array_values(unpack('C*', $file));
 
@@ -90,7 +103,7 @@ try {
 			$sidmodel = 'Unknown';
 	}
 
-	$file = array(
+	$info = array(
 		'fullname' =>		PATH_UPLOADS.$sid['name'],
 		'filename' =>		$sid['name'],
 		'player' =>			'an undetermined player',
@@ -113,55 +126,10 @@ try {
 		'copyright' => 		$copyright,
 	);
 
-// @todo WAIT UNTIL ASSOC + STIL EDIT STEPS ARE DONE (and probably in a different PHP file)
-	// Add a new database entry for it
-	// NOTE: A duplicate filename is blocked further above.
-	/*$db->query('INSERT INTO hvsc_files (
-			fullname,
-			player,
-			lengths,
-			type,
-			version,
-			playertype,
-			playercompat,
-			clockspeed,
-			sidmodel,
-			dataoffset,
-			datasize,
-			loadaddr,
-			initaddr,
-			playaddr,
-			subtunes,
-			startsubtune,
-			name,
-			author,
-			copyright,
-		) VALUES('.
-			'"'.PATH_UPLOADS.$file['filename'].'",'.
-			'"'.$file['player'].'",'.
-			'"'.$file['lengths'].'",'.
-			'"'.$file['type'].'",'.
-			'"'.$version.'",'.
-			'"Normal built-in",'.
-			'"'.$compatible.'",'.
-			'"'.$clockspeed.'",'.
-			'"'.$sidmodel.'",'.
-			$data_offset.','.
-			$file['datasize'].','.
-			$file['loadaddr'].','.
-			$file['initaddr'].','.
-			$file['playaddr'].','.
-			$subtunes.','.
-			$file['startsubtune'].','.
-			$name.','.
-			$author.','.
-			$copyright.','.
-		')');*/
-
 } catch(PDOException $e) {
 	$account->LogActivityError('upload_new.php', $e->getMessage());
 	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 }
 
-echo json_encode(array('status' => 'ok', 'file' => $file));
+echo json_encode(array('status' => 'ok', 'info' => $info));
 ?>

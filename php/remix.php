@@ -23,9 +23,9 @@ if (isset($_GET['fullname'])) {
 	try {
 		// Get the entire JSON tree for the SID file from Remix64
 		// @example https://www.remix64.com/services/api/de/deepsid/?task=get_remixes&api_user=deepsid&hash=d0f7e95f7e2e4ca1f50a8aaf66ca3808&data={%22hvsc_path%22:%22MUSICIANS\/D\/Daglish_Ben\/Cobra.sid%22}
-		$data = substr($hvsc_path, -4) != '.mus' && !strpos($hvsc_path, 'Exotic SID Tunes Collection')
+		$data = substr($hvsc_path, -4) != '.mus' && !strpos($hvsc_path, 'Exotic SID Tunes Collection') && !strpos($hvsc_path, 'SID Happens')
 			? file_get_contents('https://www.remix64.com/services/api/de/deepsid/?task=get_remixes&api_user=deepsid&hash='.$hash.'&data='.$encoded)
-			: json_encode(array('error_code' => 'CGSC and ESTC not supported'));
+			: json_encode(array('error_code' => 'SH, CGSC and ESTC not supported'));
 	} catch(ErrorException $e) {
 		die(json_encode(array('status' => 'warning', 'html' => '<p style="margin:0;"><i>Uh... Remix64? Are you there?</i></p><small>Come on, Remix64, old buddy, don\'t let me down.</small>')));
 	}

@@ -244,6 +244,8 @@ SIDPlayer.prototype = {
 			_(_PLAYLIST, "rating", browser.playlist[browser.songPos].rating);
 			_(_PLAYLIST, "hvsc", browser.playlist[browser.songPos].hvsc);
 			_(_PLAYLIST, "symid", browser.playlist[browser.songPos].symid);
+			_(_PLAYLIST, "profile (SH)", browser.playlist[browser.songPos].profile);
+			_(_PLAYLIST, "updated (SH)", browser.playlist[browser.songPos].uploaded);
 		}
 
 		switch (this.emulator) {

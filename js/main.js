@@ -27,7 +27,7 @@ var tabPrevScrollPos = {
 	about:		{ pos: 0, reset: false },
 }
 
-const PATH_UPLOADS = "_File Uploads";
+const PATH_UPLOADS = "_SID Happens";
 
 const _SECTION	= 1;
 const _HEADER	= 2;
