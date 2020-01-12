@@ -1647,8 +1647,8 @@ function DisableIncompatibleRows() {
 			($span.attr("data-incompat").indexOf("mobile") !== -1 && browser.isMobile)))
 				$tr.addClass("disabled");
 		} else if (isSIDFile && $tr.find(".name").attr("data-name").indexOf("BASIC.sid") !== -1) {
-			// The emulators can't do tunes made in BASIC
-			SID.emulator == "websid" || SID.emulator == "legacy" || SID.emulator == "jssid"
+			// These emulators can't do tunes made in BASIC
+			SID.emulator == "legacy" || SID.emulator == "jssid"
 				? $tr.addClass("disabled")
 				: $tr.removeClass("disabled");
 		} else if (isSIDFile && (SID.emulator == "websid" || SID.emulator == "legacy") &&

@@ -1181,6 +1181,8 @@
 						<ul>
 							<li>The new major folder <a href="//deepsid.chordian.net?file=/SID Happens/">SID Happens</a> has
 								been added where users can upload and edit new SID files.</li>
+							<li>Upgraded the WebSid (HQ) emulator. Added support for ROM images; i.e. it can now play
+								BASIC tunes.</li>
 						</ul>
 
 						<h3>January 2, 2019</h3>
