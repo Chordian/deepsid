@@ -54,7 +54,7 @@ try {
 	// Make sure a file of the same name doesn't already exist in the database
 	$exists = $db->query('SELECT 1 FROM hvsc_files WHERE fullname LIKE "'.PATH_UPLOADS.$sid['name'].'" LIMIT 1');
 	if ($exists->rowCount())
-		die(json_encode(array('status' => 'error', 'message' => 'There is already SID file of that name here. Duplicate names are not allowed. Try renaming it first.')));
+		die(json_encode(array('status' => 'error', 'message' => 'There is already a SID file of that name here. Duplicate names are not allowed. Try renaming it first.')));
 
 	// Upload the file to a temp folder until it is decided to move it
 	// NOTE: Can't rely on 'tmp_name' since the PHP script deletes it when completed.

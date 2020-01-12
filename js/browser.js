@@ -756,6 +756,7 @@ Browser.prototype = {
 				break;
 			case "player":
 				// Sort playlist according to music player
+				// NOTE: This is not available in 'SID Happens' because all players are undetermined there.
 				this.playlist.sort(function(obj1, obj2) {
 					return obj1.player.toLowerCase() > obj2.player.toLowerCase() ? 1 : -1;
 				});
@@ -781,6 +782,11 @@ Browser.prototype = {
 						return obj1.compo_year > obj2.compo_year ? 1 : -1; // Oldest year in top
 					});
 					this.cache.composort = "oldest";
+				} else if (this.isUploadFolder()) {
+					// Sort 'SID Happens' folder according to upload date/time
+					this.playlist.sort(function(obj1, obj2) {
+						return obj1.uploaded > obj2.uploaded ? 1 : -1;
+					});
 				} else {
 					// Sort playlist according to the 'copyright' string (the year in start is used)
 					this.playlist.sort(function(obj1, obj2) {
@@ -795,6 +801,11 @@ Browser.prototype = {
 						return obj1.compo_year < obj2.compo_year ? 1 : -1; // Newest year in top
 					});
 					this.cache.composort = "newest";
+				} else if (this.isUploadFolder()) {
+					// Sort 'SID Happens' folder according to upload date/time
+					this.playlist.sort(function(obj1, obj2) {
+						return obj1.uploaded < obj2.uploaded ? 1 : -1;
+					});
 				} else {
 					// Sort playlist according to the 'copyright' string (the year in start is used)
 					this.playlist.sort(function(obj1, obj2) {
@@ -917,7 +928,6 @@ Browser.prototype = {
 		$("#songs table").empty();
 		this.isSearching = typeof searchQuery !== "undefined";
 		this.isSymlist = this.path.substr(0, 2) === "/!" || this.path.substr(0, 2) === "/$";
-		this.isUploads = this.path == "/"+PATH_UPLOADS;
 
 		if (isDebug) {
 			_(_SECTION, "browser.js: getFolder()");
@@ -1069,7 +1079,7 @@ Browser.prototype = {
 						$("#path").css("top", "0.5px");
 						pathText = '<span class="playlist">'+this.path.replace("/CSDb Music Competitions/", '')+'</span><br />'+
 							'<span class="maintainer">'+data.owner+'</span>'; // Competition type
-					} else if (this.isUploads) {
+					} else if (this.isUploadFolder()) {
 						pathText = '<button id="upload-wizard">Upload New SID File</button>';
 					}
 					$("#path").empty().append(pathText);
@@ -1211,11 +1221,19 @@ Browser.prototype = {
 					// FILES
 
 					// Sort the list of files first
-					data.files.sort(function(obj1, obj2) {
-						var o1 = obj1.substname !== "" ? obj1.substname : this.adaptBrowserName(obj1.filename, true);
-						var o2 = obj2.substname !== "" ? obj2.substname : this.adaptBrowserName(obj2.filename, true);
-						return o1.toLowerCase() > o2.toLowerCase() ? 1 : -1;
-					}.bind(this));
+					if (this.isUploadFolder()) {
+						// Sort the 'SID Happens' folder by newest upload date/time
+						data.files.sort(function(obj1, obj2) {
+							return obj1.uploaded < obj2.uploaded ? 1 : -1;
+						}.bind(this));
+					} else {
+						// All other folders sort files by name to begin with
+						data.files.sort(function(obj1, obj2) {
+							var o1 = obj1.substname !== "" ? obj1.substname : this.adaptBrowserName(obj1.filename, true);
+							var o2 = obj2.substname !== "" ? obj2.substname : this.adaptBrowserName(obj2.filename, true);
+							return o1.toLowerCase() > o2.toLowerCase() ? 1 : -1;
+						}.bind(this));
+					}
 
 					this.isCompoFolder = data.compo;
 
@@ -1888,7 +1906,8 @@ Browser.prototype = {
 
 		if ($target.hasClass("sid")) {
 			var isPersonalSymlist = this.path.substr(0, 2) == "/!",
-				isPublicSymlist = this.path.substr(0, 2) == "/$";
+				isPublicSymlist = this.path.substr(0, 2) == "/$",
+				thisRow = $target.parent("tr").index();
 
 			if (isPublicSymlist && !this.isSearching) {
 				var result = $.grep(this.symlistFolders, function(entry) {
@@ -1901,7 +1920,7 @@ Browser.prototype = {
 
 				? '<div class="line" data-action="symentry-rename">Rename</div>'+			// SID in symlist folder
 				  '<div class="line" data-action="symentry-remove">Remove</div>'+
-				  '<div class="line'+(this.playlist[$target.parent("tr").index()].subtunes > 1 ? '' : ' disabled')+'" data-action="symentry-subtune">Select Subtune</div>'
+				  '<div class="line'+(this.playlist[thisRow].subtunes > 1 ? '' : ' disabled')+'" data-action="symentry-subtune">Select Subtune</div>'
 					
 				: '<div class="line" data-action="symlist-new">Add to New Playlist</div>'+	// SID in normal folder
 				  '<div class="line submenu'+(this.symlistFolders.length === 0 ? ' disabled' : '')+'">Add to Playlist</div>';
@@ -1913,6 +1932,12 @@ Browser.prototype = {
 				'<div class="line" data-action="download-file">Download File</div>'+
 				'<div class="line" data-action="edit-tags">Edit Tags</div>'+
 				'<div class="line'+(this.isSearching || this.isCompoFolder || isPersonalSymlist || isPublicSymlist ? " disabled" : "")+'" data-action="copy-link">Copy Link</div>';
+
+			if (typeof this.playlist[thisRow].uploaded != "undefined") {
+				// It's a SID row from the 'Sid Happens' folder and thus can be edited
+				contents += '<div class="divider"></div>'+
+					'<div class="line" data-action="edit-upload">Edit Uploaded File</div>';
+			}
 
 		} else if ($target.hasClass("folder") && (this.contextSID.substr(0, 1) == "!" || this.contextSID.substr(0, 1) == "$")) {
 			var ifAlreadyPublic = "";
@@ -2029,6 +2054,32 @@ Browser.prototype = {
 				$temp.val(url).select();
 				document.execCommand("copy");
 				$temp.remove();
+				break;
+			case 'edit-upload':
+				// Clicked the button for editing a public SID file
+				if (!$("#logout").length) {
+					// But must be logged in to do that
+					alert("Login or register and you can edit this SID file.");
+					return false;
+				}
+				// Get a full array of the SID row
+				$.get("php/upload_edit.php", {
+					fullname:	(this.isSearching || this.path.substr(1, 1) == "!" ||  this.path.substr(1, 1) == "$" ? this.contextSID : this.path.substr(1)+"/"+this.contextSID)
+				}, function(data) {
+					this.validateData(data, function(data) {
+						// Going back to earlier wizard steps should not be allowed
+						$("#dialog-upload-wiz3 .dialog-button-no")
+							.prop("disabled", true)
+							.removeClass("disabled")
+							.addClass("disabled");
+						// Set controls to show what was previously accepted
+						this.getProfiles(data, data.info.profile.replace("_High Voltage SID Collection/", "HVSC/"));
+						$("#upload-csdb-id").val(data.info.csdbid);
+						$("#upload-lengths-list").css("background", "").val(data.info.lengths);
+						$("#upload-stil-text").val(data.info.stil);
+						this.uploadWizard(2, data);
+					});
+				}.bind(this));
 				break;
 			case "symlist-add":
 			case "symlist-new":
@@ -2289,6 +2340,15 @@ Browser.prototype = {
 	},
 
 	/**
+	 * Are we inside the 'SID Happens' upload folder?
+	 * 
+	 * @return {boolean}
+	 */
+	isUploadFolder: function() {
+		return this.path == "/"+PATH_UPLOADS;
+	},
+
+	/**
 	 * Is this a temporary test SID file thus is has no entries in the database?
 	 * 
 	 * @return {boolean}
@@ -2409,6 +2469,15 @@ Browser.prototype = {
 				'<option value="country">Country</option>'+
 				'<option value="amount">Amount</option>'
 			).val(this.cache.composort);
+		} else if (!this.isSearching && this.isUploadFolder()) {
+			// Sort box for 'SID Happens' folder
+			$("#dropdown-sort").empty().append(
+				'<option value="name">Name</option>'+
+				'<option value="rating">Rating</option>'+
+				'<option value="oldest">Oldest</option>'+
+				'<option value="newest">Newest</option>'+
+				'<option value="shuffle">Shuffle</option>'
+			).val("newest");
 		} else {
 			// Sort box for everything else
 			$("#dropdown-sort").empty().append(
@@ -2427,6 +2496,8 @@ Browser.prototype = {
 	 * Ask to upload a SID file (this is sort of wizard step 0).
 	 */
 	onUpload: function() {
+		$("#dialog-upload-wiz3 .dialog-button-no").prop("disabled", false).removeClass("disabled");
+
 		this.sidFile = new FormData();
 		this.sidFile.append(0, $("#upload-new")[0].files[0]); // Only a single SID file at a time
 
@@ -2446,18 +2517,31 @@ Browser.prototype = {
 		});
 	},
 
-
 	/**
-	 * @todo
+	 * Fill the drop-down box with profile paths with options.
 	 * 
-	 * - Disable gb64 and remix tabs.
-	 * - Test that a hash can later connect ratings to an existing HVSC entry.
+	 * @param {array} data		Array with SID file information.
+	 * @param {string} value	Optional option value to set.
 	 */
-
-
+	getProfiles: function(data, value) {
+		$("#dropdown-upload-profile").empty();
+		this.profileValue = typeof value == "undefined" ? "unset" : value;
+		$.get("php/upload_get_profiles.php", function(data) {
+			this.validateData(data, function(data) {
+				var profiles = '<option value="unset">Not connected to a profile page yet</option>';
+				for (var i = 0; i < data.profiles.length; i++)
+					profiles += '<option value="'+data.profiles[i]+'">'+data.profiles[i]+'</option>';
+				// NOTE: Don't use the styled drop-down box; it is too slow to handle a list this big.
+				$("#dropdown-upload-profile").append(profiles).val(this.profileValue);
+			});
+		}.bind(this));
+	},
 
 	/**
 	 * Show the wizard dialog box for uploading a new SID file.
+	 * 
+	 * @param {number} step		Wizard step to be shown.
+	 * @param {array} data		Array with SID file information.
 	 */
 	uploadWizard: function(step, data) {
 		if (typeof step == "undefined") {
@@ -2486,19 +2570,12 @@ Browser.prototype = {
 				}, function() {
 					if (!this.wizardContinued) {
 						// First time continuing to next wizard step so set these things up
-						$("#dropdown-upload-profile").empty();
-						$.get("php/upload_get_profiles.php", function(data) {
-							this.validateData(data, function(data) {
-								var profiles = '<option value="unset">Not connected to a profile page yet</option>';
-								for (var i = 0; i < data.profiles.length; i++)
-									profiles += '<option value="'+data.profiles[i]+'">'+data.profiles[i]+'</option>';
-								// NOTE: Don't use the styled drop-down box; it is too slow to handle a list this big.
-								$("#dropdown-upload-profile").append(profiles);
-							});
-						}.bind(this));
+						this.getProfiles(data);
+						$("#upload-csdb-id").val("0");
 						$("#upload-lengths-list")
 							.css("background", "")
 							.val("5:00 ".repeat(data.info.subtunes).trim());
+						$("#upload-stil-text").val("");
 					}
 					browser.uploadWizard(2, data);
 				}.bind(this), function() {
@@ -2575,6 +2652,7 @@ Browser.prototype = {
 					data.info.csdbid	= parseInt($("#upload-csdb-id").val());
 					data.info.lengths	= $("#upload-lengths-list").val();
 					data.info.stil		= $("#upload-stil-text").val();
+					// The PHP script figures out on its own whether to edit or upload
 					$.post("php/upload_final.php", { info: data.info }, function(data) {
 						this.validateData(data, function() {
 							this.getFolder();
