@@ -2,7 +2,7 @@
 /**
  * DeepSID
  *
- * This script us used both for finalizing editing or uploading.
+ * This script us used both for finalizing editing and uploading.
  * 
  * EDIT:
  * 

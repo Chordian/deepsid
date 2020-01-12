@@ -481,6 +481,14 @@ http://deepsid.chordian.net/?file=/DEMOS/G-L/Kinetix_Blasting_Power_Mix.sid  (pl
 http://deepsid.chordian.net/?file=/DEMOS/S-Z/Wize_Mixes.sid  (player)
 http://deepsid.chordian.net/?file=/MUSICIANS/N/Nebula&here=1&search=mixer&type=player  (8 rows found)
 
+LINKS AND VERSION
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+Update various minor stuff:
+
+  o  The version number in the 'About' tab.
+  o  The "notable" (yellow line) link in the profile page.
+  o  Update the top corner link in the profile page to point at the latest CSDb page.
+
 SKIPPED
 ¯¯¯¯¯¯¯
 Updating Disqus paths.

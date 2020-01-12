@@ -1177,6 +1177,12 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>January 12, 2019</h3>
+						<ul>
+							<li>The new major folder <a href="//deepsid.chordian.net?file=/SID Happens/">SID Happens</a> has
+								been added where users can upload and edit new SID files.</li>
+						</ul>
+
 						<h3>January 2, 2019</h3>
 						<ul>
 							<li>The red <b>Boost</b> tag has been renamed to the more apt name <b>Doubling</b> instead.</li>

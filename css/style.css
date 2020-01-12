@@ -3033,6 +3033,27 @@ input[type=range]::-ms-track {
 			text-align: center;
 		}
 
+		#songs .new-uploads {
+			float: right;
+			position: relative;
+			top: 9px;
+			margin-left: 12px;
+			height: 14px;
+			padding: 7.5px 3.5px 1.5px;
+			color: var(--color-text-ptype);
+			background: var(--color-new-bg);
+			font: bold 9px/0 "Open Sans", sans-serif;
+			border-radius: 2px;
+			text-transform: uppercase;
+			box-shadow: 0 0 2px var(--color-new-shadow);
+		}
+
+			#songs .no-new {
+				box-shadow: none;
+				color: var(--color-text-fine);
+				background: var(--color-disabled);
+			}
+
 		/* Breathing room in top of folders */
 		#songs .spacer {
 			padding-bottom: 5px;
@@ -3532,6 +3553,11 @@ input[type=range]::-ms-track {
 			border: 1px solid var(--color-border);
 			background: var(--color-avatar-bg);
 		}
+
+			#page .ext .nobg {
+				border: none;
+				background: none;
+			}
 
 		#page .ext .root-thumbnail {
 			background: var(--color-avatar-bg);

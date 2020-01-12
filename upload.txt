@@ -1,0 +1,26 @@
+
+                                             ==============
+                                             UPLOADED FILES
+                                             ==============
+
+ABOUT
+=====
+
+Everyone that has logged in can upload and edit files in this area. All files here are independent of other collections and will not be removed when they are later updated to include the same files. However, your rating will then be connected to be shared across those twins.
+
+- To upload a new file, just click the wide 'UPLOAD NEW SID FILE' button to select a file.
+- To edit an existing file, right-click a SID row and choose the 'Edit Uploaded File' option.
+
+In both cases, a wizard allows you to attach a composer profile, a CSDb page, define the song lengths, and edit a custom text for the STIL tabs. The player cannot be edited since it's not shown here anyway.
+
+Note that everyone can edit files, there is no ownership.
+
+Also note that the filename must be unique. If there is already a song with the same name, you will have to rename yours. However, it is my intention to create sub folders as time goes by (probably divided up into years) and duplicates across those sub folders should be allowed.
+
+It is currently not possible to delete files. (I will add this if there's a demand.)
+
+The default sorting of this folder is always the latest uploaded files in top. The date below the star ratings show the date the file was uploaded. There's also a time attached for accuracy but this is not shown. The player line has been replaced with the author of the SID tune instead.
+
+You can search, edit tags and add uploaded files to your own playlists as usual.
+
+So, do you have a new SID? Let's hear it! =)

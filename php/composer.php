@@ -300,6 +300,8 @@ if (isset($fullname)) {
 } else
 	die(json_encode(array('status' => 'error', 'message' => 'You must specify the proper GET variables.')));
 
+$uploadFolder = '_SID Happens';
+
 // Figure out if the fullname is a folder with folders or a folder belonging to a composer (or group)
 $files = glob(ROOT_HVSC.'/'.$fullname.'/*.{sid,mus}', GLOB_BRACE);
 if (!empty($files) && !in_array($fullname, Array(
@@ -314,15 +316,19 @@ if (!empty($files) && !in_array($fullname, Array(
 	'GAMES/G-L',
 	'GAMES/M-R',
 	'GAMES/S-Z',
-	'_Datastorm 2018',
-	'_From JCH\'s Special Collection',
+	'_Datastorm 2018',						// Deprecated
+	'_From JCH\'s Special Collection',		// Deprecated
 ))) {
 	// Use 'fullname' parameter to figure out the name of the thumbnail (if it exists)
-	$fn = str_replace('_High Voltage SID Collection/', '', $fullname);
-	$fn = str_replace("_Compute's Gazette SID Collection/", "cgsc_", $fn);
-	$fn = str_replace('_Exotic SID Tunes Collection', 'estc', $fn);
-	$fn = strtolower(str_replace('/', '_', $fn));
-	$thumbnail = 'images/composers/'.$fn.'.jpg';
+	if ($fullname == $uploadFolder) {
+		$thumbnail = 'images/composers/_sh.png';
+	} else {
+		$fn = str_replace('_High Voltage SID Collection/', '', $fullname);
+		$fn = str_replace("_Compute's Gazette SID Collection/", "cgsc_", $fn);
+		$fn = str_replace('_Exotic SID Tunes Collection', 'estc', $fn);
+		$fn = strtolower(str_replace('/', '_', $fn));
+		$thumbnail = 'images/composers/'.$fn.'.jpg';
+	}
 	if (!file_exists('../'.$thumbnail)) $thumbnail = 'images/composer.png';
 } else {
 	// Folder with folders
@@ -383,7 +389,7 @@ $exoticFolder = '_Exotic SID Tunes Collection';
 // Top part with thumbnail, birthday, country, etc.
 $html = '<table style="border:none;margin-bottom:0;"><tr>'.
 			'<td style="padding:0;border:none;width:184px;">'.
-				'<img class="composer" src="'.$thumbnail.'" alt="" />'.
+				'<img class="composer'.($fullname == $uploadFolder ? ' nobg' : '').'" src="'.$thumbnail.'" alt="" />'.
 			'</td>'.
 			'<td style="position:relative;vertical-align:top;">'.
 				'<h2 style="margin-top:0;'.(!empty($handles) ? 'margin-bottom:-1px;' : 'margin-bottom:6px;').'">'.$name.'</h2>'.
@@ -408,7 +414,7 @@ $html = '<table style="border:none;margin-bottom:0;"><tr>'.
 			'</td>'.
 		'</tr></table>'.
 		// Below is empty groups/work table placeholder
-		($fullname != $csdbCompoFolder && $fullname != $exoticFolder ?
+		($fullname != $csdbCompoFolder && $fullname != $exoticFolder && $fullname != $uploadFolder ?
 			'<table id="table-groups" class="tight top" style="min-width:100%;font-size:14px;margin-top:5px;">'.
 				'<tr>'.
 					'<td class="topline bottomline leftline rightline" style="height:30px;padding:0 !important;text-align:center;">'.($spinner ? '<img class="loading-dots" src="images/loading_threedots.svg" alt="" style="margin-top:10px;" />' : '<div class="no-profile">No profile data</div>').'</td>'.
@@ -429,6 +435,11 @@ if ($fullname == $cgsc) {
 } else if ($fullname == $exoticFolder) {
 	// Show a box with technical information about the custom SID format
 	$info = file_get_contents('../sidv4e.txt');
+	$html .= '<pre class="fixed-font-info">'.$info.'</pre>';
+
+} else if ($fullname == $uploadFolder) {
+	// Show a box with information about uploading to the 'SID Happens' folder
+	$info = file_get_contents('../upload.txt');
 	$html .= '<pre class="fixed-font-info">'.$info.'</pre>';
 	
 } else if (substr($fullname, 0, strlen($cgsc)) != $cgsc && $fullname != $csdbCompoFolder) {

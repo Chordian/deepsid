@@ -19,7 +19,7 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH
 	die("Direct access not permitted.");
 
 $found = $symlist_folder_id = 0;
-$debug = $incompatible = $owner = '';
+$debug = $incompatible = $owner = $new_uploads = '';
 $user_id = $account->CheckLogin() ? $account->UserID() : 0;
 $isSearching = isset($_GET['searchQuery']) && !empty($_GET['searchQuery']);
 $isPersonalSymlist = substr($_GET['folder'], 0, 2) == '/!';
@@ -511,6 +511,15 @@ try {
 			}
 		}
 
+		// The root is also home to 'SID Happens' which needs a count of files uploaded today
+		$select = $db->query('SELECT 1 FROM uploads WHERE DATE(NOW()) = DATE(uploaded)');
+		if ($select->rowCount() == 0)
+			$new_uploads = 'NO NEW FILES TODAY';
+		else if ($select->rowCount() == 1)
+			$new_uploads = 'ONE NEW FILE TODAY';
+		else
+			$new_uploads = $select->rowCount().' NEW FILES TODAY';
+
 		// Get the incompatibility emulators/handlers for the parent folder
 		$select = $db->prepare('SELECT incompatible FROM hvsc_folders WHERE fullname = :folder LIMIT 1');
 		$select->execute(array(':folder'=>ltrim($_GET['folder'], '/')));
@@ -794,5 +803,5 @@ try {
 	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 }
 
-echo json_encode(array('status' => 'ok', 'files' => $files_ext, 'folders' => $folders_ext, 'results' => $found, 'incompatible' => $incompatible, 'owner' => $owner, 'compo' => !empty($compoName), 'debug' => $debug));
+echo json_encode(array('status' => 'ok', 'files' => $files_ext, 'folders' => $folders_ext, 'results' => $found, 'incompatible' => $incompatible, 'owner' => $owner, 'compo' => !empty($compoName), 'today' => date('Y-m-d H:i:s', strtotime(TIME_ADJUST)), 'uploads' => $new_uploads, 'debug' => $debug));
 ?>

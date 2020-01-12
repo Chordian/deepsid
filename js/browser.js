@@ -868,7 +868,8 @@ Browser.prototype = {
 			// Rebuild the reordered table list (files only; the folders in top are just preserved)
 			var files = adaptedName = "";
 			$.each(this.playlist, function(i, file) {
-				var isNew = file.hvsc == this.HVSC_VERSION || file.hvsc == this.CGSC_VERSION;
+				var isNew = file.hvsc == this.HVSC_VERSION || file.hvsc == this.CGSC_VERSION ||
+					(typeof file.uploaded != "undefined" && file.uploaded.substr(0, 10) == this.today.substr(0, 10));
 				adaptedName = file.substname == "" ? file.filename.replace(/^\_/, '') : file.substname;
 				adaptedName = this.adaptBrowserName(adaptedName);
 				files += '<tr>'+
@@ -1038,6 +1039,8 @@ Browser.prototype = {
 							_(_DATA, "incompatible", data.incompatible);
 							_(_DATA, "owner", data.owner);
 							_(_DATA, "compo", data.compo);
+							_(_DATA, "today", data.today);
+							_(_DATA, "uploads", data.uploads);
 							_(_DATA, "debug", data.debug);
 						}
 					}
@@ -1087,14 +1090,20 @@ Browser.prototype = {
 					// Tab 'STIL' is called 'Lyrics' in CGSC
 					$("#tab-stil").empty().append(this.isCGSC() ? "Lyrics" : "STIL");
 
-					// The 'CSDb', 'GB64' and 'Remix' tabs are useless to CGSC
-					var $uselessTabs = $("#tab-csdb,#tab-gb64,#tab-remix");
 					$("#tabs .tab").removeClass("disabled");
 					if (this.isCGSC()) {
-						$uselessTabs.addClass("disabled");
+						// The 'CSDb', 'GB64' and 'Remix' tabs are useless to CGSC
+						$("#tab-csdb,#tab-gb64,#tab-remix").addClass("disabled");
 						$("#note-csdb,#note-gb64,#note-remix").hide();
 						var $selected = $("#tabs .selected");
 						if ($selected.attr("data-topic") === "csdb" || $selected.attr("data-topic") === "gb64" || $selected.attr("data-topic") === "remix")
+							$("#tab-profile").trigger("click");
+					} else if (this.isUploadFolder()) {
+						// The 'GB64' and 'Remix' tabs are useless to 'SID Happens'
+						$("#tab-gb64,#tab-remix").addClass("disabled");
+						$("#note-gb64,#note-remix").hide();
+						var $selected = $("#tabs .selected");
+						if ($selected.attr("data-topic") === "gb64" || $selected.attr("data-topic") === "remix")
 							$("#tab-profile").trigger("click");
 					}
 
@@ -1170,6 +1179,7 @@ Browser.prototype = {
 											(folder.hvsc == this.HVSC_VERSION || folder.hvsc == this.CGSC_VERSION ? ' new' : '')+
 										'"><div class="block-wrap"><div class="block">'+
 									(folder.filescount > 0 ? '<div class="filescount">'+folder.filescount+'</div>' : '')+
+									(folder.foldername == "_SID Happens" ? '<div class="new-uploads'+(data.uploads.substr(0, 6) == "NO NEW" ? ' no-new' : '')+'">'+data.uploads+'</div>' : '')+
 									'<span class="name entry'+(this.isSearching ? ' search' : '')+'" data-name="'+encodeURIComponent(folder.foldername)+'" data-incompat="'+folder.incompatible+'">'+
 									adaptedName+'</span></div></div></td>'+
 									'<td class="stars"><span class="rating">'+this.buildStars(folder.rating)+'</span></td>'+
@@ -1236,6 +1246,7 @@ Browser.prototype = {
 					}
 
 					this.isCompoFolder = data.compo;
+					this.today = data.today;
 
 					// Can't use the above boolean here because this also needs to work in search mode
 					if (this.path.substr(0, 24) === "/CSDb Music Competitions" && this.path.length > 25) {
@@ -1248,7 +1259,8 @@ Browser.prototype = {
 						// Player: Replace "_" with space + "V" with "v" for versions
 						var player = file.player.replace(/_/g, " ").replace(/(V)(\d)/g, "v$2"),
 							rootFile = (this.isSearching || this.isSymlist || this.isCompoFolder ? "" : this.path) + "/" + file.filename,
-							isNew = file.hvsc == this.HVSC_VERSION || file.hvsc == this.CGSC_VERSION;
+							isNew = file.hvsc == this.HVSC_VERSION || file.hvsc == this.CGSC_VERSION ||
+								(typeof file.uploaded != "undefined" && file.uploaded.substr(0, 10) == this.today.substr(0, 10));
 						var adaptedName = file.substname == "" ? file.filename.replace(/^\_/, '') : file.substname;
 						adaptedName = this.adaptBrowserName(adaptedName);
 						var list_of_tags = this.buildTags(file.tags, file.tagtypes),
@@ -2073,6 +2085,7 @@ Browser.prototype = {
 							.removeClass("disabled")
 							.addClass("disabled");
 						// Set controls to show what was previously accepted
+						this.UploadEdit = "Edit";
 						this.getProfiles(data, data.info.profile.replace("_High Voltage SID Collection/", "HVSC/"));
 						$("#upload-csdb-id").val(data.info.csdbid);
 						$("#upload-lengths-list").css("background", "").val(data.info.lengths);
@@ -2570,6 +2583,7 @@ Browser.prototype = {
 				}, function() {
 					if (!this.wizardContinued) {
 						// First time continuing to next wizard step so set these things up
+						this.UploadEdit = "Upload";
 						this.getProfiles(data);
 						$("#upload-csdb-id").val("0");
 						$("#upload-lengths-list")
@@ -2595,7 +2609,7 @@ Browser.prototype = {
 				}
 				CustomDialog({
 					id: '#dialog-upload-wiz3',
-					text: '<h3>Upload SID File Wizard</h3><div class="top-right-corner">2/3</div><p>You can optionally connect a profile, a CSDb page, and edit the song length'+(data.info.subtunes > 1 ? 's' : '')+'.</p>',
+					text: '<h3><span class="upload-edit">'+this.UploadEdit+'</span> SID File Wizard</h3><div class="top-right-corner">2/3</div><p>You can optionally connect a profile, a CSDb page, and edit the song length'+(data.info.subtunes > 1 ? 's' : '')+'.</p>',
 					height: 378,
 					wizard: true,
 				}, function() {
@@ -2643,7 +2657,7 @@ Browser.prototype = {
 				// Edit custom STIL box text
 				CustomDialog({
 					id: '#dialog-upload-wiz4',
-					text: '<h3>Upload SID File Wizard</h3><div class="top-right-corner">3/3</div><p>You can optionally write a custom text entry for the STIL tabs too. HTML tags are allowed.</p>',
+					text: '<h3><span class="upload-edit">'+this.UploadEdit+'</span> SID File Wizard</h3><div class="top-right-corner">3/3</div><p>You can optionally write a custom text entry for the STIL tabs too. HTML tags are allowed.</p>',
 					height: 378,
 					wizard: true,
 				}, function() {
