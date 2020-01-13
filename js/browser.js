@@ -520,8 +520,11 @@ Browser.prototype = {
 
 						if (typeof paramSkipCSDb === "undefined" || !paramSkipCSDb) {
 							this.getCSDb();
-							if (typeof this.playlist[this.songPos].profile != "undefined" && this.playlist[this.songPos].profile != "")
-								this.getComposer(this.playlist[this.songPos].profile, true);
+							if (typeof this.playlist[this.songPos].profile != "undefined")
+								this.getComposer((this.playlist[this.songPos].profile != ""
+									? this.playlist[this.songPos].profile
+									: "_SID Happens" // If composers_id = 0 then just show the upload folder profile
+								), true);
 							else if (this.isSearching || this.path.substr(0, 2) === "/$" || this.path.substr(0, 2) === "/!")
 								this.getComposer(this.playlist[this.songPos].fullname);
 						} else

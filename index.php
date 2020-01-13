@@ -1180,6 +1180,7 @@
 						<h3>January 13, 2019</h3>
 						<ul>
 							<li>Upgraded the WebSid (HQ) emulator. An issue with the BASIC loader has been fixed.</li>
+							<li>Songs with no profile set in the SH folder now show the default folder profile.</li>
 						</ul>
 
 						<h3>January 12, 2019</h3>

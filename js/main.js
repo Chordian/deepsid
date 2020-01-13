@@ -1652,9 +1652,14 @@ function DisableIncompatibleRows() {
 				? $tr.addClass("disabled")
 				: $tr.removeClass("disabled");
 		} else if (isSIDFile && (SID.emulator == "websid" || SID.emulator == "legacy") &&
-			($tr.find(".name").attr("data-name").indexOf("Acid_Flashback.sid") !== -1 || 
-			 $tr.find(".name").attr("data-name").indexOf("Comaland_tune_3.sid") !== -1 ||
+			($tr.find(".name").attr("data-name").indexOf("Comaland_tune_3.sid") !== -1 ||
 			 $tr.find(".name").attr("data-name").indexOf("Fantasmolytic_tune_2.sid") !== -1)) {
+			// @todo Replace this with a proper incompatibility system later.
+			SID.emulator == "websid" || SID.emulator == "legacy"
+				? $tr.addClass("disabled")
+				: $tr.removeClass("disabled");
+		} else if (isSIDFile && SID.emulator == "legacy" &&
+			$tr.find(".name").attr("data-name").indexOf("Acid_Flashback.sid") !== -1) { // WebSid HQ now supports this
 			// @todo Replace this with a proper incompatibility system later.
 			SID.emulator == "websid" || SID.emulator == "legacy"
 				? $tr.addClass("disabled")
