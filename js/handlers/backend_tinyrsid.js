@@ -351,7 +351,7 @@ SIDBackendAdapter = (function(){ var $this = function (basicROM, charROM, kernal
 
 					for (i = 0; (i < 3); i++) {
 						var val= arr3[i];
-						ret[ri++]= val;						
+						ret[ri++]= val;
 					}
 					i = 0;
 				}
@@ -363,15 +363,15 @@ SIDBackendAdapter = (function(){ var $this = function (basicROM, charROM, kernal
 				arr3[0] = (arr4[0] << 2) + ((arr4[1] & 0x30) >> 4);
 				arr3[1] = ((arr4[1] & 0xf) << 4) + ((arr4[2] & 0x3c) >> 2);
 
-				for (j = 0; (j < i - 1); j++) { 
+				for (j = 0; (j < i - 1); j++) {
 					var val= arr3[j];
-					ret[ri++]= val;											
+					ret[ri++]= val;
 				}
 			}
 			if (ri == romSize) {
 				return ret;
 			}
 			return 0;
-		},			
+		},
 	});	return $this; })();
 	

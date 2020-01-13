@@ -1177,6 +1177,11 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>January 13, 2019</h3>
+						<ul>
+							<li>Upgraded the WebSid (HQ) emulator. An issue with the BASIC loader has been fixed.</li>
+						</ul>
+
 						<h3>January 12, 2019</h3>
 						<ul>
 							<li>The new major folder <a href="//deepsid.chordian.net?file=/SID Happens/">SID Happens</a> has
