@@ -1181,6 +1181,8 @@
 						<ul>
 							<li>Fixed a bug preventing the in-site context menu for some of the bottom SID rows from appearing.</li>
 							<li>The author field for a SH row now turns into a HVSC link if there's a profile that points to it.</li>
+							<li>A file uploaded to the SH folder will now have its filename adapted to conform with the HVSC naming
+								standard, i.e. mostly capitalized words and underscore characters instead of spaces.</li>
 						</ul>
 
 						<h3>January 14, 2020</h3>

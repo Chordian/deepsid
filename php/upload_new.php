@@ -51,6 +51,13 @@ try {
 	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	$db->exec("SET NAMES UTF8");
 
+	// Make sure the filename uses the HVSC standard (e.g. 'laurel and hardy.sid' = 'Laurel_and_Hardy.sid')
+	$filename = ucwords(str_replace('_', ' ', $sid['name']));
+	$excluded = [' a ', ' n ', ' an ', ' the ', ' for ', ' and ', ' nor ', ' but ', ' or ', ' yet ', ' so ', ' such ', ' as ', ' at ', ' around ', ' by ', ' after ', ' along ', ' for ', ' from ', ' of ', ' on ', ' to ', ' with ', ' without '];
+	foreach($excluded as $no_cap)
+		$filename = str_replace(ucwords($no_cap), strtolower($no_cap), $filename);
+	$sid['name'] = str_replace(' ', '_', $filename);
+
 	// Make sure a file of the same name doesn't already exist in the database
 	$exists = $db->query('SELECT 1 FROM hvsc_files WHERE fullname LIKE "'.PATH_UPLOADS.$sid['name'].'" LIMIT 1');
 	if ($exists->rowCount())
