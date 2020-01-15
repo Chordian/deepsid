@@ -42,6 +42,7 @@
 			'Scarzix'					=> 'S',
 			'Shogoon'					=> 'S',
 			'Sidder'					=> 'S',
+			'Stinsen'					=> 'S',
 			'Surgeon'					=> 'S',
 			'Televicious'				=> 'T',
 			'TSM'						=> 'T',

@@ -776,20 +776,22 @@ try {
 			));
 
 			// Add extra values for uploaded SID files too if available
-			$select_upload = $db->query('SELECT composers_id, uploaded FROM uploads WHERE files_id = '.$row->id.' LIMIT 1');
-			$select_upload->setFetchMode(PDO::FETCH_OBJ);
-			if ($select_upload->rowCount()) {
-				$row_upload = $select_upload->fetch();
+			if (isset($row->id)) {
+				$select_upload = $db->query('SELECT composers_id, uploaded FROM uploads WHERE files_id = '.$row->id.' LIMIT 1');
+				$select_upload->setFetchMode(PDO::FETCH_OBJ);
+				if ($select_upload->rowCount()) {
+					$row_upload = $select_upload->fetch();
 
-				// Get the full path to the composer profile
-				$select_comp = $db->query('SELECT fullname FROM composers WHERE id = '.$row_upload->composers_id.' LIMIT 1');
-				$select_comp->setFetchMode(PDO::FETCH_OBJ);
+					// Get the full path to the composer profile
+					$select_comp = $db->query('SELECT fullname FROM composers WHERE id = '.$row_upload->composers_id.' LIMIT 1');
+					$select_comp->setFetchMode(PDO::FETCH_OBJ);
 
-				// Append to what was just pushed above
-				$files_ext[count($files_ext) - 1] += array(
-					'profile' =>		$select_comp->rowCount() ? $select_comp->fetch()->fullname : '',
-					'uploaded' =>		$row_upload->uploaded,
-				);
+					// Append to what was just pushed above
+					$files_ext[count($files_ext) - 1] += array(
+						'profile' =>		$select_comp->rowCount() ? $select_comp->fetch()->fullname : '',
+						'uploaded' =>		$row_upload->uploaded,
+					);
+				}
 			}
 		}
 	}
@@ -798,8 +800,8 @@ try {
 	$account->LogActivityError('hvsc.php', $e->getMessage());
 	$account->LogActivityError('hvsc.php', '$_GET[\'folder\'] = '.(empty($_GET['folder']) ? '(root)' : $_GET['folder']).
 		($isSearching ? ', $_GET[\'searchType\'] = '.$_GET['searchType'].', $_GET[\'searchQuery\'] = '.$_GET['searchQuery'] : ' (user was not searching)'));
-	if (isset($file_ext)) $account->LogActivityError('hvsc.php', 'Files: '.$file_ext);
-	if (isset($folders_ext)) $account->LogActivityError('hvsc.php', 'Folders: '.$folders_ext);
+	// if (isset($files_ext)) $account->LogActivityError('hvsc.php', 'Files: '.print_r($files_ext, true));
+	// if (isset($folders_ext)) $account->LogActivityError('hvsc.php', 'Folders: '.print_r($folders_ext, true));
 	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 }
 

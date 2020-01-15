@@ -1920,9 +1920,10 @@ Browser.prototype = {
 		this.contextTR.css("background", GetCSSVar("--color-bg-sid-hover"));
 
 		if ($target.hasClass("sid")) {
+			var notSidRows = $target.parents("table").find("td.folder,td.spacer,td.divider").length;
 			var isPersonalSymlist = this.path.substr(0, 2) == "/!",
 				isPublicSymlist = this.path.substr(0, 2) == "/$",
-				thisRow = $target.parent("tr").index();
+				thisRow = $target.parent("tr").index() - notSidRows;
 
 			if (isPublicSymlist && !this.isSearching) {
 				var result = $.grep(this.symlistFolders, function(entry) {

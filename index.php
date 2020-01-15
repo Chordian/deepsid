@@ -1177,13 +1177,23 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
-						<h3>January 13, 2019</h3>
+						<h3>January 15, 2020</h3>
+						<ul>
+							<li>Fixed a bug preventing the in-site context menu for some of the bottom SID rows from appearing.</li>
+						</ul>
+
+						<h3>January 14, 2020</h3>
+						<ul>
+							<li>Fixed a database bug when reading a folder added after the introduction of the SH folder.</li>
+						</ul>
+
+						<h3>January 13, 2020</h3>
 						<ul>
 							<li>Upgraded the WebSid (HQ) emulator. An issue with the BASIC loader has been fixed.</li>
 							<li>Songs with no profile set in the SH folder now show the default folder profile.</li>
 						</ul>
 
-						<h3>January 12, 2019</h3>
+						<h3>January 12, 2020</h3>
 						<ul>
 							<li>The new major folder <a href="//deepsid.chordian.net?file=/SID Happens/">SID Happens</a> has
 								been added where users can upload and edit new SID files.</li>
@@ -1191,7 +1201,7 @@
 								BASIC tunes.</li>
 						</ul>
 
-						<h3>January 2, 2019</h3>
+						<h3>January 2, 2020</h3>
 						<ul>
 							<li>The red <b>Boost</b> tag has been renamed to the more apt name <b>Doubling</b> instead.</li>
 						</ul>
