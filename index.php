@@ -1180,6 +1180,7 @@
 						<h3>January 15, 2020</h3>
 						<ul>
 							<li>Fixed a bug preventing the in-site context menu for some of the bottom SID rows from appearing.</li>
+							<li>The author field for a SH row now turns into a HVSC link if there's a profile that points to it.</li>
 						</ul>
 
 						<h3>January 14, 2020</h3>

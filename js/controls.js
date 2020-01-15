@@ -547,7 +547,8 @@ Controls.prototype = {
 	 * CGSC: A colorful PETSCII box using a C64 font.
 	 */
 	updateInfo: function() {
-		var fullname = browser.playlist[browser.songPos].fullname;
+		var fullname = browser.playlist[browser.songPos].fullname,
+			profile = browser.playlist[browser.songPos].profile;
 		var isCGSC = fullname.substr(-4) == ".mus";
 		var info = SID.getSongInfo(isCGSC ? "info" : false), // Always parse .mus files
 			unknown = '<small class="u1">?</small>?<small class="u2">?</small>';
@@ -565,7 +566,9 @@ Controls.prototype = {
 					sidFile = fullname.split("/").slice(-1)[0];
 				songName = '<a href="?file=/'+homePath+'" class="redirect">'+songName+'</a>';
 				songAuthor = '<a href="?file=/'+homePath.replace(sidFile, "")+'" class="redirect">'+songAuthor+'</a>';
-			}
+			} else if (typeof profile != "undefined" && profile != "")
+				// It's a 'SID Happens' file that points to a profile so change the author to that
+				songAuthor = '<a href="?file=/'+profile+'" class="redirect">'+songAuthor+'</a>';
 			$infoText.append(
 				songName+'<br />'+
 				songAuthor+'<br />'+
