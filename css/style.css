@@ -2709,6 +2709,10 @@ input[type=range]::-ms-track {
 			color: var(--color-text-minor);
 		}
 
+		#songs .disqus-sh {
+			display: none !important;
+		}
+
 		#songs .block-wrap,
 		#page .block-wrap {
 			position: relative;

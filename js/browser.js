@@ -880,7 +880,7 @@ Browser.prototype = {
 						'<div class="entry name file'+(this.isSearching || this.isCompoFolder || this.path.substr(0, 2) === "/$" ? ' search' : '')+'" data-name="'+encodeURIComponent(file.filename)+'" data-type="'+file.type+'" data-symid="'+file.symid+'">'+adaptedName+'</div></div></div><br />'+
 						'<span class="info">'+file.copyright.substr(0, 4)+file.infosec+'<div class="tags-line"'+(showTags ? '' : ' style="display:none"')+'>'+file.tags+'</div></span></td>'+
 						'<td class="stars filestars"><span class="rating">'+this.buildStars(file.rating)+'</span>'+
-						(typeof file.uploaded == "undefined" ? '<span class="disqus-comment-count" data-disqus-url="http://deepsid.chordian.net/#!'+this.path+"/"+file.filename.replace("/_High Voltage SID Collection", "")+'"></span>' : '<span class="uploaded-time">'+file.uploaded.substr(0, 10)+'</span>')+
+						'<span class="disqus-comment-count'+(typeof file.uploaded != "undefined" ? ' disqus-sh' : '')+'" data-disqus-url="http://deepsid.chordian.net/#!'+this.path.replace("/_High Voltage SID Collection", "")+"/"+file.filename.replace("/_High Voltage SID Collection", "")+'"></span>'+(typeof file.uploaded != "undefined" ? '<span class="uploaded-time">'+file.uploaded.substr(0, 10)+'</span>' : '')+
 						'</td>'+
 					'</tr>';
 			}.bind(this));
@@ -1274,7 +1274,7 @@ Browser.prototype = {
 								'<div class="entry name file'+(this.isSearching || this.isCompoFolder || this.path.substr(0, 2) === "/$" ? ' search' : '')+'" data-name="'+encodeURIComponent(file.filename)+'" data-type="'+file.type+'" data-symid="'+file.symid+'">'+adaptedName+'</div></div></div><br />'+
 								'<span class="info">'+file.copyright.substr(0, 4)+infoSecondary+'<div class="tags-line"'+(showTags ? '' : ' style="display:none"')+'>'+list_of_tags+'</div></span></td>'+
 								'<td class="stars filestars"><span class="rating">'+this.buildStars(file.rating)+'</span>'+
-								(typeof file.uploaded == "undefined" ? '<span class="disqus-comment-count" data-disqus-url="http://deepsid.chordian.net/#!'+rootFile.replace("/_High Voltage SID Collection", "")+'"></span>' : '<span class="uploaded-time">'+file.uploaded.substr(0, 10)+'</span>')+
+								'<span class="disqus-comment-count'+(typeof file.uploaded != "undefined" ? ' disqus-sh' : '')+'" data-disqus-url="http://deepsid.chordian.net/#!'+rootFile.replace("/_High Voltage SID Collection", "")+'"></span>'+(typeof file.uploaded != "undefined" ? '<span class="uploaded-time">'+file.uploaded.substr(0, 10)+'</span>' : '')+
 								'</td>'+
 							'</tr>'; // &#9642; is the dot character if needed
 

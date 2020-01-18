@@ -1177,6 +1177,12 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>January 18, 2020</h3>
+						<ul>
+							<li>The SH folder now displays a notification count for the Disqus tab too, if there are comments.</li>
+							<li>Fixed a bug where the Disqus comment counts below stars were no longer seen after sorting differently.</li>
+						</ul>
+
 						<h3>January 15, 2020</h3>
 						<ul>
 							<li>Fixed a bug preventing the in-site context menu for some of the bottom SID rows from appearing.</li>
