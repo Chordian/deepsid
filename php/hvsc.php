@@ -108,6 +108,15 @@ try {
 					' AND ('.substr($tag_list, 4).')'.
 					' GROUP BY tags_lookup.files_id'.
 					' HAVING COUNT(*) = '.count($search_tags).' LIMIT 1000');
+			} else if ($_GET['searchType'] == 'location') {
+				$select = $db->prepare('SELECT fullname FROM hvsc_files'.
+					' WHERE '.$searchContext.' AND loadaddr = :loadaddr LIMIT 1000');
+				$location = $_GET['searchQuery'];
+				if (substr($location, 0, 1) == '$')
+					$location = hexdec(substr($location, 1));
+				else if (substr($location, 0, 2) == '0x')
+					$location = hexdec(substr($location, 2));
+				$select->execute(array(':loadaddr'=>$location));
 			} else if ($_GET['searchType'] != 'country') {
 				// Normal type search (handles any position of words and excluding with "-" prepended)
 				// NOTE: This would have been easier with 'Full-Text' search but I'm not using the MyISAM engine.
@@ -228,6 +237,16 @@ try {
 						' AND ('.substr($tag_list, 4).')'.
 						' GROUP BY tags_lookup.files_id'.
 						' HAVING COUNT(*) = '.count($search_tags).' LIMIT 1000');
+				} else if ($_GET['searchType'] == 'location') {
+					$select_files = $db->prepare('SELECT h.fullname FROM hvsc_files h'.
+						' INNER JOIN symlists ON h.id = symlists.file_id'.
+						' WHERE symlists.folder_id = '.$symlist_folder_id.' AND loadaddr = :loadaddr LIMIT 1000');
+					$location = $_GET['searchQuery'];
+					if (substr($location, 0, 1) == '$')
+						$location = hexdec(substr($location, 1));
+					else if (substr($location, 0, 2) == '0x')
+						$location = hexdec(substr($location, 2));
+					$select_files->execute(array(':loadaddr'=>$location));
 				} else if ($_GET['searchType'] == 'country') {
 					// Search for country in composer profiles
 					$select_files = $db->prepare('SELECT h.fullname FROM hvsc_files h'.

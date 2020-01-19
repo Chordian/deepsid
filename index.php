@@ -367,6 +367,7 @@
 						<option value="author">Author</option>
 						<option value="copyright">Copyright</option>
 						<option value="player">Player</option>
+						<option value="location">Location</option>
 						<option value="tag">Tags</option>
 						<option value="stil">STIL</option>
 						<option value="rating">Rating</option>
@@ -1179,6 +1180,9 @@
 
 						<h3>January 19, 2020</h3>
 						<ul>
+							<li>You can now also search for a start location. Choose <code>Location</code> and then type the address.
+								Use raw numbers for decimal or prepend hexadecimal numbers with either <code>$</code> or <code>0x</code>.
+								(For example, <code>16384</code> or <code>0x4000</code>.)</li>
 							<li>Fixed another UTF-8 encoding bug in download filenames in some CSDb pages.</li>
 							<li>Fixed not enabling the <code>Download SID file</code> handler option after leaving the exotic folders.</li>
 							<li>To make sure you can always spot it, the <code>Remix64</code> tag is now always the very first tag in line.</li>
