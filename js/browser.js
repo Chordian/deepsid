@@ -1572,7 +1572,7 @@ Browser.prototype = {
 				this.validateData(data, function(data) {
 
 					clearTimeout(loadingComposer);
-					if (parseInt(colorTheme)) data.html = data.html.replace("composer.png", "composer_dark.png");
+					if (parseInt(colorTheme)) data.html = data.html.replace(/composer\.png/g, "composer_dark.png");
 					$("#topic-profile").empty().append(data.html);
 
 					$("#page .dropdown-top-list").styledSelect("toplist");
