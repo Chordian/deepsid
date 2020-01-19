@@ -1180,6 +1180,8 @@
 						<h3>January 19, 2020</h3>
 						<ul>
 							<li>Fixed another UTF-8 encoding bug in download filenames in some CSDb pages.</li>
+							<li>Fixed not enabling the <code>Download SID file</code> handler option after leaving the exotic folders.</li>
+							<li>To make sure you can always spot it, the <code>Remix64</code> tag is now always the very first tag in line.</li>
 						</ul>
 
 						<h3>January 18, 2020</h3>

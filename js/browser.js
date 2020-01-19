@@ -1441,11 +1441,11 @@ Browser.prototype = {
 	 * @return {string}			The HTML string to put into the SID row.
 	 */
 	buildTags: function(tags, types) {
-		var list_of_tags = '';
+		var list_of_tags = remix64 = '';
 		$.each(tags, function(i, tag) {
 			if (tag == "Remix64")
 				// A special look for the "Remix 64" tag
-				list_of_tags += '<div class="tag tag-remix64">&nbsp;&nbsp;</div>';
+				remix64 = '<div class="tag tag-remix64">&nbsp;&nbsp;</div>';
 			else if (tag == "Doubling" || tag == "Hack" || tag == "Mock")
 				// A unique color for tags that serves as a warning
 				list_of_tags += '<div class="tag tag-warning">'+tag+'</div>';
@@ -1455,7 +1455,7 @@ Browser.prototype = {
 		});
 		list_of_tags += '<div class="edit-tags" title="Edit tags">&nbsp;</div>';
 
-		return list_of_tags;
+		return remix64+list_of_tags;
 	},
 
 	/**
