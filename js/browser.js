@@ -949,7 +949,7 @@ Browser.prototype = {
 			if (!this.isMobile) $("#folders").mCustomScrollbar("destroy");
 
 			// Disable emulators/handlers in the drop-down according to parent folder attributes
-			$("#dropdown-emulator").styledOptionState("websid legacy jssid soasc_auto soasc_r2 soasc_r4 soasc_r5", "enabled");
+			$("#dropdown-emulator").styledOptionState("websid legacy jssid soasc_auto soasc_r2 soasc_r4 soasc_r5 download", "enabled");
 			$("#page .viz-emu").removeClass("disabled");
 			$("#dropdown-emulator").styledOptionState(this.cache.incompatible, "disabled");
 			if (this.cache.incompatible.indexOf("websid") !== -1) $("#page .viz-websid").addClass("disabled");
@@ -1055,7 +1055,7 @@ Browser.prototype = {
 					var files = "";
 
 					// Disable emulators/handlers in the drop-down according to parent folder attributes
-					$("#dropdown-emulator").styledOptionState("websid legacy jssid soasc_auto soasc_r2 soasc_r4 soasc_r5", "enabled");
+					$("#dropdown-emulator").styledOptionState("websid legacy jssid soasc_auto soasc_r2 soasc_r4 soasc_r5 download", "enabled");
 					$("#page .viz-emu").removeClass("disabled");
 					$("#dropdown-emulator").styledOptionState(data.incompatible, "disabled");
 					if (data.incompatible.indexOf("websid") !== -1) $("#page .viz-websid").addClass("disabled");
