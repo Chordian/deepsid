@@ -1177,6 +1177,11 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>January 19, 2020</h3>
+						<ul>
+							<li>Fixed another UTF-8 encoding bug in download filenames in some CSDb pages.</li>
+						</ul>
+
 						<h3>January 18, 2020</h3>
 						<ul>
 							<li>The SH folder now displays a notification count for the Disqus tab too, if there are comments.</li>
