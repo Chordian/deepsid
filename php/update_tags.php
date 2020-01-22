@@ -4,18 +4,20 @@
  *
  * Add a specific tag to all files in HVSC according to evidence that reveals
  * when it should have it. A file is ignored if the tag is already present.
- * 
- * Note that CGSC is not involved, only HVSC.
  */
 
 require_once("class.account.php"); // Includes setup
 
-define('MODE_GAME',	'Game'); // @todo Make the code test for 'Game Prev' tag too (don't add 'Game' if exists!)
-define('MODE_COOP',	'Coop');
-define('MODE_UNF',	'Unfinished');
-define('MODE_TINY', 'Tiny');
+define('MODE_GAME',		'Game');	// @todo Make the code test for 'Game Prev' tag too (don't add 'Game' if exists!)
+define('MODE_COOP',		'Coop');
+define('MODE_UNF',		'Unfinished');
+define('MODE_TINY',		'Tiny');
+define('MODE_PURE',		'Pure');
+define('MODE_LONG',		'Long');
+define('MODE_SHORT',	'Short');
+define('MODE_LYRICS',	'Lyrics');	// CGSC only
 
-define('MODE', MODE_TINY); // <---- SET THE TAG PARSING MODE HERE!
+define('MODE', MODE_LYRICS); // <---- SET THE TAG PARSING MODE HERE!
 
 function GetTagID($name) {
 
@@ -49,8 +51,9 @@ try {
 	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	$db->exec("SET NAMES UTF8");
 
-	// Get a list of all file rows in HVSC only
-	$select = $db->query('SELECT * FROM hvsc_files WHERE fullname LIKE "_High Voltage SID Collection/%" ORDER BY id');
+	$collection = MODE == MODE_LYRICS ? "_Compute's Gazette SID Collection/%" : '_High Voltage SID Collection/%';
+	// Get a list of all file rows in the relevant collection
+	$select = $db->query('SELECT * FROM hvsc_files WHERE fullname LIKE "'.$collection.'" ORDER BY id');
 	$select->setFetchMode(PDO::FETCH_OBJ);
 
 	// Get the ID of the relevant tag name
@@ -60,7 +63,7 @@ try {
 		<style>body,table { font: normal 15px arial, sans-serif; } td { padding-right: 20px; }</style>
 		<table style="text-align:left;"><tr><th>Action</th><th>ID</th><th>Fullname</th></tr>';
 
-	//$test_max = 1000;
+	// $test_max = 1000;
 
 	// NOTE: LOCALHOST can be slow - you can temporarily active the '$test_max' variable for testing.
 	foreach ($select as $row) {
@@ -83,6 +86,35 @@ try {
 			case MODE_TINY:
 				// Condition: Number of bytes in the 'datasize' field must be less than 512
 				if ($row->datasize < 512)
+					AddTag($tagid);
+				break;
+			case MODE_PURE:
+				// Condition: The 'player' field must have "Master_Composer" in it
+				if ($row->player == 'Master_Composer')
+					AddTag($tagid);
+				break;
+			case MODE_LONG:
+				// Condition: One of the sub tunes is longer than 10 minutes
+				$lengths = explode(' ', $row->lengths);
+				foreach ($lengths as $length) {
+					if (substr($length, 0, 2) >= 10)
+						AddTag($tagid);
+					break;
+				}
+			case MODE_SHORT:
+				// Condition: None of all the sub tunes are longer than 10 seconds
+				$lengths = explode(' ', $row->lengths);
+				$all_short = true;
+				foreach ($lengths as $length) {
+					$min_sec = explode(':', $length);
+					if ($min_sec[0] > 0 || $min_sec[1] > 10)
+						$all_short = false; // It's too long
+				}
+				if ($all_short) AddTag($tagid);
+				break;
+			case MODE_LYRICS:
+				// Condition: If there's an accompanying .WDS file thereby indicating that lyrics exists (CGSC)
+				if (file_exists(ROOT_HVSC.'/'.substr($row->fullname, 0, -4).'.wds'))
 					AddTag($tagid);
 				break;
 			}
