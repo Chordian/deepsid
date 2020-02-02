@@ -886,7 +886,7 @@
 							<a href="https://www.hvsc.c64.org/">https://www.hvsc.c64.org/</a>
 						</p>
 						<p>
-							Compute's Gazette SID Collection #136<br />
+							Compute's Gazette SID Collection #137<br />
 							<a href="http://www.c64music.co.uk/">http://www.c64music.co.uk/</a>
 						</p>
 						<p>
@@ -1177,6 +1177,21 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>February 2, 2020</h3>
+						<ul>
+							<li>DeepSID's copy of <a href="http://www.c64music.co.uk/">Compute's Gazette SID Collection</a> has now been upgraded to version 1.37.</li>
+						</ul>
+
+						<h3>February 1, 2020</h3>
+						<ul>
+							<li>All brand logos now have a counterpart in the dark color theme.</li>
+						</ul>
+
+						<h3>January 29, 2020</h3>
+						<ul>
+							<li>Tags can now have longer names (upped from 80 to 100 pixels).</li>
+						</ul>
 
 						<h3>January 19, 2020</h3>
 						<ul>

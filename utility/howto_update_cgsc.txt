@@ -6,12 +6,6 @@ Requirements
   o  Access to the DeepSID files (LOCALHOST and/or ONLINE via FTP).
   o  Notepad++ is mentioned here, but you can use any text editor you want.
 
-
-
-  @todo ADD TO BELOW NEXT TIME: Fields "new" and "updated" must be added to Format: 136 (i.e. no dot)
-
-
-
 FOLDER
 ¯¯¯¯¯¯
 Local version:
@@ -48,7 +42,8 @@ For "REN" files with ".mus" extensions:
      database tab, search "fullname" for %[filename]. You should get *ONE* hit in each tab. If you have
      to include a folder because the filename is too generic, change "\" to "/" when pasting.
   2. Edit the "fullname" field in the database row and replace the filename with the "after" filename.
-  3. Repeat steps 1 and 2 for additional "REN" lines with ".mus" extensions. (Skip ".wds" and ".str" files.)
+  3. Edit the "updated" field and add the latest ### version number in it.
+  4. Repeat steps 1-3 for additional "REN" lines with ".mus" extensions. (Skip ".wds" and ".str" files.)
 
 For "REN" folders:
 
@@ -57,12 +52,13 @@ For "REN" folders:
      "/" instead. Search. You will probably get multiple hits - hopefully it's not a lot.
   2. Copy the "after" part (usually just the last folder) and edit the "filename" field for each database
      row. Change the destination folder in these to the new one. (Be careful not to mangle the filenames.)
-  3. Repeat steps 1 and 2 for additional folders.
-  4. Go to "hvsc_folders" in both database tabs.
-  5. Search for the for the "before" version of the folder. Again, you should get *ONE* hit, or you may
+  3. Edit the "updated" field and add the latest ### version number in it.
+  4. Repeat steps 1-3 for additional folders.
+  5. Go to "hvsc_folders" in both database tabs.
+  6. Search for the for the "before" version of the folder. Again, you should get *ONE* hit, or you may
      have to include the parent folder and then change "\" to "/" when pasting.
-  6. Edit the "fullname" field and change the last folder to the new "after" version.
-  7. You may want to check that the file count for the folder is still correct.
+  7. Edit the "fullname" field and change the last folder to the new "after" version.
+  8. You may want to check that the file count for the folder is still correct.
 
 For "MOVE" files with ".mus" extensions:
 
@@ -71,7 +67,8 @@ For "MOVE" files with ".mus" extensions:
      to include a folder because the filename is too generic, change "\" to "/" when pasting.
   2. Copy the "after" FOLDER (!) and edit the "filename" field for each database row. Change the
      destination folder to the new one. (Be careful not to mangle the filename.)
-  3. Repeat steps 1 and 2 for additional move lines.
+  3. Edit the "updated" field and add the latest ### version number in it.
+  4. Repeat steps 1-3 for additional move lines.
 
 SKIP
 ¯¯¯¯
@@ -113,8 +110,8 @@ Don't close "Whats_new_in_v###.txt" in Notepad just yet.
   4. Write "fullname" in the "Column names" edit box.
   5. Click "Go".
 
-Check the end of the "hvsc_files" table to see if the new files were added properly. Then do the same thing
-for the ONLINE database tab.
+Check the end of the "hvsc_files" table to see if the new files were added properly. If they were, add the
+latest ### version number in the "new" field for each file. Do the same thing for the ONLINE database tab.
 
 ADDING NEW FOLDERS
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
@@ -135,6 +132,10 @@ Folders created for moving should already have been taken care of in the MOVE se
      text files, all capital files without an extension, and whatever else you may find irrelevant. Only
      the ".mus", ".wds" and ".str" file extensions should be present. If you don't do this, entering the
      folder in the local DeepSID will show an "Undefined variable: has_photo" PHP error.
+
+VERSIONS
+¯¯¯¯¯¯¯¯
+Increase the version number to the latest ### in the browser.js, index.php and readme.md files.
 
 TESTING LOCAL
 ¯¯¯¯¯¯¯¯¯¯¯¯¯
