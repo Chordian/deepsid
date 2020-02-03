@@ -1178,6 +1178,12 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>February 3, 2020</h3>
+						<ul>
+							<li>Upgraded the WebSid (HQ) emulator. Undid flawed frequency pulse step improvements, improved
+								silence detection for BASIC tunes, and cleaned up file loading logic.</li>
+						</ul>
+
 						<h3>February 2, 2020</h3>
 						<ul>
 							<li>DeepSID's copy of <a href="http://www.c64music.co.uk/">Compute's Gazette SID Collection</a> has now been upgraded to version 1.37.</li>
