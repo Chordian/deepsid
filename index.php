@@ -1182,6 +1182,7 @@
 						<ul>
 							<li>Upgraded the WebSid (HQ) emulator. Undid flawed frequency pulse step improvements, improved
 								silence detection for BASIC tunes, and cleaned up file loading logic.</li>
+							<li>Added banner exchange in the root page for promoting different Commodore communities.</li>
 						</ul>
 
 						<h3>February 2, 2020</h3>

@@ -200,7 +200,12 @@ $html =
 				GenerateList(10, $choice_right).
 			'</table>'.
 		'</td>'.
-	'</tr></table>';
+	'</tr></table>'.
+	// Banner exchange
+	'<div style="text-align:center;">'.
+		'<iframe src="https://cbm8bit.com/banner-exchange/show-random-banner/any?width=468" title="Commodore Banner Exchange" frameborder="0" style="width: 468px; height: 60px; border: 0; margin: 5px;"></iframe><br />'.
+		'<small style="position:relative;top:-13px;"><a target="_blank" href="https://cbm8bit.com/banner-exchange/" title="Commodore Banner Exchange">Commodore Banner Exchange</a></small>'.
+	'</div>';
 
 echo json_encode(array('status' => 'ok', 'html' => $html, 'left' => $choice_left, 'right' => $choice_right));
 ?>
