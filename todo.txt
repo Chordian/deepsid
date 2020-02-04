@@ -1,0 +1,305 @@
+ToDo
+¯¯¯¯
+
+SHOULD BE DONE
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+#
+
+----
+
+- When CGSC tagging is done:
+  - Perhaps make a playlist with original (non-cover) CGSC songs?
+  - Go through "Cover"-only songs and see if there are extra candidates (e.g. Garth Brooks
+    and Richard Marx).
+  - Search the new cover artist tags in all of HVSC and add them there too.
+
+
+CONSIDER THIS
+¯¯¯¯¯¯¯¯¯¯¯¯¯
+- HVSC versions: Update with later changes, e.g. "Better Late Than Never" renaming. But how?
+
+- CSDb: If possible, convert ID cross-references in comments into the pertinent links.
+  - Maybe with separate post-AJAX scripts to avoid slowing the CSDb tab down? (Because the
+    problem is, I may have to call the CSDb web service for each of the links found.)
+
+- Buttons 'Attach' and 'Detach' for CSDb release pages (maybe only for me to begin with).
+- Maybe use .duration method for Howler instead of database length?
+- CGSC: For SOASC, get file lengths and overwrite 5:00 with them. (Change 5:00 to 0:00?)
+- Need an extra URL parameter for file request to set loop on, e.g. "&loop=true".
+- Place an external link icon in the bottom right corner of the new CGSC iframe page.
+- Continue updating CGSC profiles (next up is "D").
+- Can you let the custom scrollbar catch Home/End/PageUp/PageDn keys?
+- Maybe place "Misc" in CGSC in top, above a divider line?
+- Tilt the years in the activity chart on the composer profiles, so you can have full four digits.
+- Hover on profile images to slide up a transparent bottom panel with image credits.
+- The player text lines by the Chartist bars could be filter links.
+- JW says browser.js loads stuff before the user settings in main.js have been loaded.
+- With nothing selected, play should start playing the tune in top of a browser list.
+- In the far left side, a "+" tab to add a another tab page for extremely wide browser windows.
+- How about user ratings for players/editors too?
+- Support for 2SID and 3SID in the scope tab as a mosaic of 2 x 3 (4) or 3 x 3 (4) boxes.
+- An adaptation list for CSDb forum HVSC paths that have since been moved/renamed in an update.
+- Far right side (outside of dexter) could have C64 link exchange ads.
+- Add WebSid's stereo panning as a slider somewhere.
+- Up/Down cursor keys to change sub tune, Left/Right cursor keys to skip previous/next.
+- Consider using specialized cookies to strengthen the uniqueness of visitors for tracking.
+- Feature request by Digger: Sort playlist by date added to playlist.
+- Consider also updating the sundry tab for tags when editing these for a SID row.
+- For redirect links, add a BACK button in both STIL tabs (to complement the 'b' hotkey).
+- Go full HTTPS? Test online first to make sure it works without bugs and slowdowns.
+- Go through the late 2019 batch of STIL updates and mail Wilfred about the neglected ones.
+- Ensure that the hash connection between SH and HVSC works instantaneously.
+- How about making the redirecting 'deepsid.com' domain into a URL shortener too?
+
+- MEMO, player block: A tall rectangle with a zoom box showing where we are in C64 RAM.
+  - Maybe it would be best if it always shows the entire span of the C64's RAM?
+
+- Need new settings option: When SOASC fails playing a SID row, set ON to stop there instead
+  of just proceeding to the next row.
+
+- Tags:
+  - Settings option: "+" button ON/OFF. Probably ON by default.
+  - Write the "Undo" admin script.
+  - Write a "delete tag" script and remove all those real song genres.
+
+- Recommendation boxes:
+  - If from HVSC, add the brand image in the bottom left corner (there's room for it).
+
+- Bug: Backing out of a playlist folder renamed to include a "/" character is problematic.
+- Bug: Country flag appears in the middle of the country name here:
+  http://deepsid.chordian.net/?file=/MUSICIANS/M/Mega9man/
+- Bug: When a CSDb page title is too long:
+  http://deepsid.chordian.net/?file=/MUSICIANS/D/DRAX/Balance.sid&tab=csdb (click image then SHOW)
+- Bug: Copy link using the context menu triggers a console error if not logged in.
+- Bug: Players: Show list. Enter entry. Back. Entering the same entry again is now impossible.
+- Bug: Groepaz's profile header text overlaps the "report a profile change" link.
+- Bug: Theme color change in root doesn't maintain the root Disqus thread.
+- Bug: With little horizontal browser space in dark theme, the top area is not dark all the way.
+- Bug: CSDb: Start redirect play link, enter compo page, stop tune, back = icon still set to playing.
+- Bug: CSDb: Also a similar problem when opening a release page to already playing "redirect" tune.
+- BUG: Searching for the specific word "data" just returns a compo error.
+
+- NOT A BUG: SOASC tunes won't play in Firefox from an external link. Although the emulators do,
+  it's still not a bug - it's the anti-auto-play setting in Firefox. Turn it off and it works.
+  - @todo Is this still a problem after adding "click-to-play" in December 2019? (It shouldn't be.)
+
+- See also:
+  - A list of similar SID tunes, for example found by comparing STIL artists.
+  - I was thinking a new tab at first, but there are already a lot of those. Alternatives?
+
+- Remix tab:
+  - Remix64's own site banner in top - maybe even animated the same way?
+  - Ask MK for new API endpoint for HVSC path only; returns SID names and number of remixes per
+    song. This could be used for indication in SID rows (where Disqus comments are currently seen).
+    UPDATE: Not really needed anymore since the "Remix64" tag now covers most of it.
+  - Ask MK for new API endpoint for shouts. Add as a canvas-animated scroller above audio bar.
+
+- Piano view:
+  - Maybe a fourth pseudo keyboard with a green '4' button and... a digi oscilloscope?
+
+- Statistics on player/editor page, listing composers using it (with most hits in top spot).
+  - How about tabs to toggle between the info table or this?
+
+- Graph view:
+  - In the graph view, clicking a column/row graph could toggle it on or off.
+
+- A filter mode for MUSICIANS that shows folders for guys mostly involved with games.
+  - May need two SQL queries; "if more than 50% of tunes are for games" at first, but also
+    a "if made for 24 games or more" - otherwise people like Jeroen Tel would not make it.
+  - The above covers most, but still misses Matt Gray and Ed Bogas. Add as exceptions.
+  - Or, add a new database column in 'composers' where GAMES is one of the options.
+
+- CSDb Music Competitions:
+  - Add a flag icon after countries in the browser SID list itself?
+  - Empty: North Party v9.0 [C64 Sample Music], Skurup Party 1993, Devotion [C64 Sample Music]
+
+- Context menu:
+  - Make "Copy Link" possible in search lists, symlists and compo folders too?
+
+- Secondary compo table page:
+  - Clicking release link should open in DeepSID itself (remember cache handling for BACK button).
+  - Reduce long SID path to just the filename, and instead prepend a composer name link.
+    The reason for this is that multiple SID or not found means the composer name cannot be seen!
+  - [GH] Bug: Too wide SID path link here: http://chordian/deepsid/?tab=csdb&csdbtype=release&csdbid=129004
+
+- Symlists, next version:
+  - First version is text only with no editing (so admin privilege to begin with). Editing later.
+  - Unique "STIL" text for folder upon entering.
+  - And of course for each song too.
+  - New shared tab in sundry box for both of the above - the folder text is replaced for songs.
+  - Or could replace STIL text UNLESS there are no notes, then STIL text is still displayed.
+  - If new tab, what should it be called? About? Notes?
+
+- Infinity radio. Plays tunes of two stars rating and above forever. Each time it is supposed to
+  auto-progress, it will jump to a random tune anywhere else in another folder.
+  - Jump algorithm randomly selects one of two (maybe three) methods at first:
+    1. Play any tune inside a MUSICIANS letter folder that JCH have given two stars or more.
+    2. Play any tune in all collections that JCH have specifically given two stars or more.
+    3. How about as 2. but judging from average of all star ratings given by all users? (In
+       that case you better go for three stars or more, not two.)
+    NOTE: Maybe not do step 2 at all? For individual tunes, JCH's ratings may be too biased.
+  - (Man, it feels weird referring to myself in the third person.)
+  - Place the button for it in the white PATH box, which is ~empty anyway in the root.
+  - Maybe make certain control buttons wine red (including the starter button) to show that this
+    will affect the infinity radio mode. For example, wine red STOP button = stop and turn off.
+    You will stay in the current folder but everything has now returned to normal. If you want to
+    restart the infinity radio, you have to return to the root and click the starter button again.
+
+- A tab with post effects, applied by the web audio synth library.
+  - And maybe a setting toggle for applying this to the URL as a settings parameter string.
+  - UPDATE: I tried for a day making 'Tuna.js' work, but I couldn't make it work under any
+    circumstances. I tried with audio contexts from both emulators as well as Howler (even with
+    a dedicated effects plugin) to no avail. I never felt I got close to the cause for this
+    not working at all, and in the end I decided to shelve it until further notice. This would
+    have been a "luxury tab" anyway and is not in any way important.
+  - Tuna.js: https://github.com/Theodeus/tuna (easy and compact; would have been great for DeepSID)
+  - Tone.js: https://github.com/Tonejs/Tone.js (allows setting audio context too but is quite messy)
+  - Howler effect-chain: https://github.com/alexanderwallin/howler-plugin-effect-chain
+  - See "temp/tuna_attempt.txt" for the piece of code I tested in player.js/load() functions.
+
+- Settings tab page:
+  - The user should be able to change the username (but only if the new one is not already taken).
+  - Merge with Disqus account, so Disqus user ID somehow points to star ratings.
+  - Attach to a HVSC/CGSC folder as being the same person now logged in. This gives privileges
+    such as e.g. being able to upload a different avatar picture, or add external links.
+  - Import CSV to Playlist. (See the 'import_symlist_hvsc.php' file to begin with.)
+  - Enable fade-out volume at end of song, just before auto-progressing to the next. Defaults to OFF.
+  - Auto-progress skip (sub-)tune if playing for more than... 10 minutes? Or maybe user-definable?
+
+
+PROBABLY NOT?
+¯¯¯¯¯¯¯¯¯¯¯¯¯
+- Replace the drop-down boxes in the browser panel with the styled one.
+- Fade out in the last 1-2 seconds of Howler (SOASC) time.
+- Drag-and-drop support. Maybe somehow tagged onto the existing emulator testing upload feature.
+- Consider using storage to remember the main volume setting between sessions.
+- Add a command-line switch for turning off Disqus.
+- To avoid stutter when Disqus is loading, can the emulators be placed in a web worker?
+- Add search for Disqus comments by using their API (in a world where Disqus comments are aplenty).
+- Is it possible to detect unpacked JCH NewPlayer tunes and prepend " (unpacked)" to them?
+- A slider for altering the filtering of the emulators (requested by Matty Seito).
+- Replace ".." with a back arrow SVG instead? (I think people have gotten used to the ".." by now.)
+- A filter sort option in letter folders that show the crap only (one stars).
+- A filter sort option in letter folders for undecided (awaits evalution) for HVSC updates.
+
+- Link icons next to birth and death icons. E.g. #SoundCloud, etc.
+  - Two problems: 1. Composers that don't want this? 2. Keeping up with links that changes over time.
+
+- After updating HVSC, I miss a solid way of listing now orphan Disqus threads. I'm not even sure if
+  this is possible at all. Until a way is found, I'm going to have to ignore adjusting their paths.
+
+- [GH] Bug: Seek clicking is not precise on Edge; it goes a few centimeters too far each time.
+- [GH] Bug: It's currently possible to specify an "?emulator="" that is incompatible with "?file=".
+- [GH] Bug: If you load a tune from URL with "#!" from Disqus, sorting and then playing invokes an error.
+
+- Bug: One of Ben Daglish's game tunes has a title long enough to erroneously expand the GB64 entry:
+  http://deepsid.chordian.net/?file=/MUSICIANS/D/Daglish_Ben/Challenge_of_the_Gobots_on_the_Moebius_Strip.sid
+
+- Let the time pass for "download" tunes so that automatic skip to next tune works in playlists.
+  - Problem is subtunes. You can't advance to next subtune in the offline player.
+  - But maybe just discard that then so it just always advances to the next SID row.
+
+- An "add entire folder as playlist" for a symbolically linked version with a unique folder.
+  - I'm actually not hot on making this but it was a feature request from the Facebook group.
+    UPDATE: I've moved it to this section as I find it to be a weird idea that will rarely be used.
+  - So if new files are adding in the original folder, you will also see them here.
+  - You can rename and remove files as usual, though (they're technically just hidden).
+  - A notification "NEW" is added to it when new files are added after an update.
+  - Entering such a folder would remove the "NEW" tag.
+
+- Would it be possible to have Disqus on mobile devices?
+  - Perhaps sliding Disqus in from the right by clicking a general static button always available?
+  - Or instead of sliding in, just replace #panel contents with Disqus.
+- Same with STIL, a general static button to replace #panel with STIL contents.
+- To be honest, Disqus is barely used at all so this is probably not worth the trouble.
+
+- Some way of adding avatar images in CSDb comments for people that are NOT composers.
+  - And clicking their avatar image would just bring up their CSDb page in a new browser tab.
+  - Counter argument: Nobody expects this, and it makes it harder to spot composers in threads.
+
+- Use the new image credit field - hover on composer image to slide up a small "Source:" row.
+  - If set to "UNKNOWN" then nothing is sliding up (i.e. as before).
+
+- [GH] Both 'Share to Facebook' and 'Share to Twitter' context menu options.
+  - Sharing on Facebook requires an app ID. Creating and setting up the app is easy enough, but they
+    require a privacy policy URL to enable it, and that's not acceptable for a mere share dialog.
+    UPDATE: I later activated it anyway and just pointed the URL to the root site.
+  - I haven't investigated if Twitter have the same problem.
+  - The share options are low on priority anyway as I predict that it would be a feature no one would
+    use. Except maybe once, every third year or so. The 'Copy Link' option must suffice for now.
+
+- Better support for searching inside MUS files and their lyrics.
+  - Idea: Just copy MUS meta data and lyrics data to the corresponding columns in the database?
+    The STIL column could hold the lyrics, for example. Counter argument: There are a ton of common
+    words in CGSC lyrics. If they were copied into the STIL column, search "all" would show a lot
+    of "noise" results from an ocean of CGSC tunes.
+
+- Idea for alternate handles:
+  - Third line in profile with alternate handles. Line 1 is name and 2 is one prominent handle.
+  - Get alternate handles from CSDb. Show three dot animation in line 3 while obtaining.
+  - Sift out all <del></del> stuff, so it's not shown in line 2 anymore.
+  - If no list of alternate handles, consider examining entire list of SID tunes to get a list
+    of all handles used among them. Situation where SID tunes have more: "Gummibeer" composer.
+
+- Add the third and last JavaScript emulator, the one used in hamat's visualizer?
+  - I believe it even had a lot of different quality settings. They could be a handler option each?
+  - However, it doesn't really add anything to the table that the other emulators can't already do and
+    better too. And the tunes they have problems with, this emulator also have problems with. And just
+    like Hermit's emulator, it can't do digi tunes at all.
+
+- If SOASC new method continues to be slow, here's an idea: First request via new method, then
+  immediately try to play using the old direct mirror method. If that works, play and ignore request.
+  If it fails, see if the request gets it right, and if it does, play that. Otherwise go red error row
+  at that point. Maybe show dots moving below ratings when direct mirror fails and request is examined.
+  But only do this if the new abort() system for "soasc.php" is not enough; it's probably not nice.
+
+- In Settings, make buffer size available for users NOT logged in. Then write below that you
+  can edit more settings if you log in.
+  - The reason I put this in this section is that the "require" message in the oscilloscope tab about the
+    buffer size now shows an immmediate fix button, making it much less necessary to do the above.
+
+- If not logged in, more than ~10 ratings for a folder or file is shown with stars (in a different color).
+- And those stars can be completely partially shown (not just half stars).
+
+- Now that the "download" option is available, it would make sense to play CGSC stereo files. However,
+  there's a problem there. Stereo files are two files; one MUS and one STR file, yet a row click
+  obviously only downloads the MUS file. If only ZIP files were supported - then again, I'm not going to
+  ZIP thousands of MUS files!
+
+- Symlists, next version:
+  - A fourth option could be "Make a copy for myself only" to be used on a public folder.
+  - A big list of symlists must use a custom scrollbar on the sub context menu.
+  - A unique profile tab page that the user can edit and which supports headers, etc. (Maybe find a
+    great JS plugin that allows for advanced editing?) - Counter argument: I predict that too many users
+    would create a badly formatted page with typos and the like. Also, it would rarely be utilized.
+
+- Some process (Python?) that can detect "Made in 19xx, released in 20xx" STIL entries and put
+  the first year into the year field in the database. I don't agree with how HVSC does this; it
+  screws up the chart statistics.
+  - I looked at various examples in the STIL text file, but the expressions are all over the
+    place. It may not be possible to write a solid regex to catch enough of them to be viable.
+
+- CSDb Music Competitions:
+  - Thought about a better inside "path" box info where year and country is also visible, but it's not
+    really needed after the event profile page was added. It's shows the same information.
+  - Known bug: Disqus always loads the root. I have no plans to fix this since Disqus is used so rarely
+    by users anyway. The SID files exist in other folders; they can go comment on them there instead.
+
+- Web site widget box:
+  - Someone on Facebook suggested support for a box on other web sites showing a particular tune or
+    maybe even en entire playlist. I consider this narrow niche and thus probably not worth the trouble.
+
+- MobyGames API support:
+  - After two sessions of reconsideration, I have decided NOT to do this. The information retrieved
+    from the API is too sparse and have a lot of request cap restrictions, forcing me to cache it all
+    in the database first. It also doesn't give that much more information than GameBase64, apart from
+    a nice description and more screenshots (and the latter have to be achieved in a separate call).
+  - Access granted by Simon Carless of MobyGames and API key is ready (put it in setup.php).
+  - Test API and write a PHP page to show the game ID in a page tab.
+  - See text file "Howto_Mobygames_API.txt" for more.
+
+- New handler: Silence - for development and just for looking up stuff.
+  - Play is never activated. (Don't disable the buttons, though.)
+  - Counter argument: Just mute the web browser tab! (Works in Firefox which I'm using.)
+
+END
