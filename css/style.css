@@ -3403,6 +3403,7 @@ input[type=range]::-ms-track {
 		/* Make the big logo crawl up under the white sticky header bar */
 		.big-logo {
 			background: var(--color-bg-box) var(--url-biglogo) -14px -2px / 890px no-repeat !important;
+			image-rendering: crisp-edges;
 		}
 
 		/* Tabs with no big logo should start at the top */
