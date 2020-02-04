@@ -27,9 +27,7 @@ CONSIDER THIS
 - CGSC: For SOASC, get file lengths and overwrite 5:00 with them. (Change 5:00 to 0:00?)
 - Need an extra URL parameter for file request to set loop on, e.g. "&loop=true".
 - Place an external link icon in the bottom right corner of the new CGSC iframe page.
-- Continue updating CGSC profiles (next up is "D").
 - Can you let the custom scrollbar catch Home/End/PageUp/PageDn keys?
-- Maybe place "Misc" in CGSC in top, above a divider line?
 - Tilt the years in the activity chart on the composer profiles, so you can have full four digits.
 - Hover on profile images to slide up a transparent bottom panel with image credits.
 - The player text lines by the Chartist bars could be filter links.
@@ -41,15 +39,20 @@ CONSIDER THIS
 - An adaptation list for CSDb forum HVSC paths that have since been moved/renamed in an update.
 - Far right side (outside of dexter) could have C64 link exchange ads.
 - Add WebSid's stereo panning as a slider somewhere.
-- Up/Down cursor keys to change sub tune, Left/Right cursor keys to skip previous/next.
 - Consider using specialized cookies to strengthen the uniqueness of visitors for tracking.
 - Feature request by Digger: Sort playlist by date added to playlist.
-- Consider also updating the sundry tab for tags when editing these for a SID row.
-- For redirect links, add a BACK button in both STIL tabs (to complement the 'b' hotkey).
 - Go full HTTPS? Test online first to make sure it works without bugs and slowdowns.
 - Go through the late 2019 batch of STIL updates and mail Wilfred about the neglected ones.
 - Ensure that the hash connection between SH and HVSC works instantaneously.
 - How about making the redirecting 'deepsid.com' domain into a URL shortener too?
+
+- SOLID "SHOULD BE DONE" CANDIDATES:
+-
+- Continue updating CGSC profiles (next up is "D").
+- Maybe place "Misc" in CGSC in top, above a divider line?
+- Consider also updating the sundry tab for tags when editing these for a SID row.
+- Up/Down cursor keys to change sub tune, Left/Right cursor keys to skip previous/next.
+- For redirect links, add a BACK button in both STIL tabs (to complement the 'b' hotkey).
 
 - MEMO, player block: A tall rectangle with a zoom box showing where we are in C64 RAM.
   - Maybe it would be best if it always shows the entire span of the C64's RAM?
@@ -97,6 +100,8 @@ CONSIDER THIS
 - Piano view:
   - Maybe a fourth pseudo keyboard with a green '4' button and... a digi oscilloscope?
 
+- SOLID "SHOULD BE DONE" CANDIDATE:
+-
 - Statistics on player/editor page, listing composers using it (with most hits in top spot).
   - How about tabs to toggle between the info table or this?
 
@@ -111,7 +116,7 @@ CONSIDER THIS
 
 - CSDb Music Competitions:
   - Add a flag icon after countries in the browser SID list itself?
-  - Empty: North Party v9.0 [C64 Sample Music], Skurup Party 1993, Devotion [C64 Sample Music]
+  - Empty: Devotion [C64 Sample Music], North Party v9.0 [C64 Sample Music], Skurup Party 1993
 
 - Context menu:
   - Make "Copy Link" possible in search lists, symlists and compo folders too?
@@ -130,6 +135,8 @@ CONSIDER THIS
   - Or could replace STIL text UNLESS there are no notes, then STIL text is still displayed.
   - If new tab, what should it be called? About? Notes?
 
+- SOLID "SHOULD BE DONE" CANDIDATE:
+-
 - Infinity radio. Plays tunes of two stars rating and above forever. Each time it is supposed to
   auto-progress, it will jump to a random tune anywhere else in another folder.
   - Jump algorithm randomly selects one of two (maybe three) methods at first:
