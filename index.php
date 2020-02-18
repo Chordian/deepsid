@@ -1178,10 +1178,16 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>February 18, 2020</h3>
+						<ul>
+							<li>Rolled back the WebSid (HQ) emulator to the previous version because it couldn't play CGSC files.</li>
+							<li>Slowed down the vertical scroll speed when using the custom scrollbar buttons.</li>
+						</ul>
+
 						<h3>February 3, 2020</h3>
 						<ul>
-							<li>Upgraded the WebSid (HQ) emulator. Undid flawed frequency pulse step improvements, improved
-								silence detection for BASIC tunes, and cleaned up file loading logic.</li>
+							<li><del>Upgraded the WebSid (HQ) emulator. Undid flawed frequency pulse step improvements, improved
+								silence detection for BASIC tunes, and cleaned up file loading logic.</del></li>
 							<li>Added banner exchange in the root page for promoting different Commodore communities.</li>
 						</ul>
 

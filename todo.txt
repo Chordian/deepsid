@@ -11,7 +11,8 @@ SHOULD BE DONE
   - Perhaps make a playlist with original (non-cover) CGSC songs?
   - Go through "Cover"-only songs and see if there are extra candidates (e.g. Garth Brooks
     and Richard Marx).
-  - Search the new cover artist tags in all of HVSC and add them there too.
+  - Search the newest cover artist tags in all of HVSC and add them there too. I have made an
+    file on the desktop ("Artists.csv") with "DONE" markers.
 
 
 CONSIDER THIS
@@ -45,6 +46,7 @@ CONSIDER THIS
 - Go through the late 2019 batch of STIL updates and mail Wilfred about the neglected ones.
 - Ensure that the hash connection between SH and HVSC works instantaneously.
 - How about making the redirecting 'deepsid.com' domain into a URL shortener too?
+- Some way to see what playlists are including a specific song. Perhaps from the context menu?
 
 - SOLID "SHOULD BE DONE" CANDIDATES:
 -

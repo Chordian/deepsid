@@ -268,6 +268,7 @@ $(function() { // DOM ready
 								setTop: (typeof scrollPos !== "undefined" ? scrollPos+"px" : "0"),
 								scrollButtons:{
 									enable: true,
+									scrollAmount: 6,
 								},
 								mouseWheel:{
 									scrollAmount: 150,
@@ -1366,6 +1367,7 @@ $(function() { // DOM ready
 				theme: (parseInt(colorTheme) ? "light-3" : "dark-3"),
 				scrollButtons:{
 					enable: true,
+					scrollAmount: 6,
 				},
 				mouseWheel:{
 					scrollAmount: 150,
@@ -1523,6 +1525,7 @@ function ShowDexterScrollbar(topic) {
 				&& topic === "visuals" && $("#sticky-visuals .icon-piano").hasClass("button-on"), // Hide on piano
 			scrollButtons:{
 				enable: true,
+				scrollAmount: 6,
 			},
 			mouseWheel:{
 				scrollAmount: 150,

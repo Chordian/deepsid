@@ -8,6 +8,8 @@ ABOUT
 
 Everyone that has logged in can upload and edit files in this area. All files here are independent of other collections and will not be removed when they are later updated to include the same files. However, your rating will then be connected to be shared across those twins.
 
+THE FILE MUST BE GENUINELY NEW. IF IT ALREADY EXISTS IN ANY OF THE COLLECTIONS IT WILL BE DELETED.
+
 - To upload a new file, just click the wide 'UPLOAD NEW SID FILE' button to select a file.
 - To edit an existing file, right-click a SID row and choose the 'Edit Uploaded File' option.
 

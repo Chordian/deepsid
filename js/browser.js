@@ -984,6 +984,7 @@ Browser.prototype = {
 							setTop: (typeof scrollPos !== "undefined" ? scrollPos+"px" : "0"),
 							scrollButtons:{
 								enable: true,
+								scrollAmount: 6,
 							},
 							mouseWheel:{
 								scrollAmount: 150,
@@ -1336,6 +1337,7 @@ Browser.prototype = {
 								setTop: (typeof scrollPos !== "undefined" ? scrollPos+"px" : "0"),
 								scrollButtons:{
 									enable: true,
+									scrollAmount: 6,
 								},
 								mouseWheel:{
 									scrollAmount: 150,
