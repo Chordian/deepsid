@@ -3,7 +3,11 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-#
+- There's a duplicate tag for Gershwin - it should be merged.
+- Update the sundry tab for tags when editing these for a SID row.
+
+- Statistics on player/editor page, listing composers using it (with most hits in top spot).
+  - With tabs to toggle between the info table or this.
 
 ----
 
@@ -11,8 +15,7 @@ SHOULD BE DONE
   - Perhaps make a playlist with original (non-cover) CGSC songs?
   - Go through "Cover"-only songs and see if there are extra candidates (e.g. Garth Brooks
     and Richard Marx).
-  - Search the newest cover artist tags in all of HVSC and add them there too. I have made an
-    file on the desktop ("Artists.csv") with "DONE" markers.
+  - Maybe also go through again to add years to the database?
 
 
 CONSIDER THIS
@@ -52,7 +55,6 @@ CONSIDER THIS
 -
 - Continue updating CGSC profiles (next up is "D").
 - Maybe place "Misc" in CGSC in top, above a divider line?
-- Consider also updating the sundry tab for tags when editing these for a SID row.
 - Up/Down cursor keys to change sub tune, Left/Right cursor keys to skip previous/next.
 - For redirect links, add a BACK button in both STIL tabs (to complement the 'b' hotkey).
 
@@ -101,11 +103,6 @@ CONSIDER THIS
 
 - Piano view:
   - Maybe a fourth pseudo keyboard with a green '4' button and... a digi oscilloscope?
-
-- SOLID "SHOULD BE DONE" CANDIDATE:
--
-- Statistics on player/editor page, listing composers using it (with most hits in top spot).
-  - How about tabs to toggle between the info table or this?
 
 - Graph view:
   - In the graph view, clicking a column/row graph could toggle it on or off.

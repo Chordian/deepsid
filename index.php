@@ -488,11 +488,6 @@
 							<?php require_once("php/piano.php"); ?>
 							<h3 style="margin-top:16px;">A few words...</h3>
 							<p>
-								<b>NEW:</b> 2SID and 3SID tunes are now supported. Each keyboard will automatically combine
-								to host an entire chip (i.e. 3 voices). The square voice buttons will toggle entire SID
-								chips ON or OFF when playing these types of tunes.
-							</p>
-							<p>
 								If the playback is choppy, try increasing the buffer size. Smaller values mean faster and
 								smoother updating (default is 1024 which is the lowest possible) but also require a fast
 								computer with a nifty web browser.
@@ -528,6 +523,11 @@
 								<code>1</code>, <code>2</code> and <code>3</code> or alternatively <code>q</code>, <code>w</code>
 								and <code>e</code>. (You can also use <code>4</code> and <code>r</code> for digi if you are using
 								WebSid, but it is not reflected on this page.)
+							</p>
+							<p>
+								2SID and 3SID tunes are supported. Each keyboard will automatically combine
+								to host an entire chip (i.e. 3 voices). The square voice buttons will toggle entire SID
+								chips ON or OFF when playing these types of tunes.
 							</p>
 							<p>If you want to "solo" a voice, hold down <code>Shift</code> while pressing the hotkey.</p>
 						</div>
