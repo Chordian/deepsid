@@ -194,6 +194,15 @@
 			<div class="dialog-buttons" style="width:136px;"><button class="dialog-button-yes dialog-auto" style="float:left;margin:0;">OK</button><button class="dialog-button-no dialog-auto" style="float:right;margin:0;">Cancel</button></div>
 		</div>
 
+		<div id="dialog-edit-file" class="dialog-box">
+			<div class="dialog-text"></div>
+			<form id="form-edit-file" onsubmit="return false;" autocomplete="off">
+				<label id="label-edit-file-year" for="edit-file-year">Year</label>
+				<input type="text" name="edit-file-year" id="edit-file-year-number" onkeypress='return event.charCode >= 48 && event.charCode <= 57;' maxlength="4" value="1986"/>
+			</form>
+			<div class="dialog-buttons"><a href="#" class="dialog-cancel">Cancel</a><button class="dialog-button-yes dialog-auto">OK</button></div>
+		</div>
+
 		<input id="upload-new" type="file" accept=".sid" style="display:none;" />
 		<div id="dialog-upload-wiz2" class="dialog-box dialog-wizard">
 			<div class="dialog-text"></div>

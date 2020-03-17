@@ -120,13 +120,13 @@ $(function() { // DOM ready
 	 * @param {*} event 
 	 */
 	$(window).on("keydown", function(event) {
-		if (!$("#search-box,#username,#password,#old-password,#new-password,#sym-rename,#sym-specify-subtune,#new-tag,#dialog-all-tags,#dialog-song-tags,#upload-csdb-id,#upload-lengths-list,#upload-stil-text").is(":focus")) {
+		if (!$("#search-box,#username,#password,#old-password,#new-password,#sym-rename,#sym-specify-subtune,#new-tag,#dialog-all-tags,#dialog-song-tags,#upload-csdb-id,#upload-lengths-list,#upload-stil-text,#form-edit-file input").is(":focus")) {
 			if (event.keyCode == 220)									// Keydown key below 'Escape'
 				// Fast forward
 				$("#faster").trigger("mousedown");
 		}
 	}).on("keyup", function(event) {
-		if (!$("#search-box,#username,#password,#old-password,#new-password,#sym-rename,#sym-specify-subtune,#new-tag,#dialog-all-tags,#dialog-song-tags,#upload-csdb-id,#upload-lengths-list,#upload-stil-text").is(":focus")) {
+		if (!$("#search-box,#username,#password,#old-password,#new-password,#sym-rename,#sym-specify-subtune,#new-tag,#dialog-all-tags,#dialog-song-tags,#upload-csdb-id,#upload-lengths-list,#upload-stil-text,#form-edit-file input").is(":focus")) {
 			if (event.keyCode == 220) {									// Keyup key below 'Escape'
 				// Fast forward
 				$("#faster").trigger("mouseup");
@@ -158,6 +158,28 @@ $(function() { // DOM ready
 			} else if (event.keyCode == 66) {							// Keyup 'b' (back before redirect)
 				$("a.redirect").removeClass("playing");
 				$("#redirect-back").trigger("click");
+			} else if (event.keyCode == 106) {							// Keyup 'Keypad Multiply'
+				var $selected = $("#folders tr.selected");
+				var name = decodeURIComponent($selected.find(".name").attr("data-name"));
+				if (name != "undefined" && $("#logged-username").text() == "JCH") {
+					// Show dialog box for editing the file (only the year for now)
+					CustomDialog({
+						id: '#dialog-edit-file',
+						text: '<h3>Edit year</h3><p>'+name.split("/").slice(-1)[0]+'</p>',
+						width: 390,
+						height: 160,
+					}, function() {
+						// OK was clicked; make the changes to the file row in the database
+						$.post("php/update_file.php", {
+							fullname:	browser.playlist[browser.songPos].fullname.replace(browser.ROOT_HVSC+"/", ""),
+							year:		$("#edit-file-year-number").val(),
+						}, function(data) {
+							browser.validateData(data, function() {
+								browser.getFolder(); // Reload the folder to include the change
+							});
+						});
+					});
+				}
 			} else if (event.keyCode == 84) {							// Keyup 't' (test something)
 				console.log(browser.playlist[browser.songPos].address);
 			}

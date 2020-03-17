@@ -5,6 +5,8 @@ SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
 - There's a duplicate tag for Gershwin - it should be merged.
 - Update the sundry tab for tags when editing these for a SID row.
+- Stars in JT's folder are pushed a bit, may have to shorten a player or two.
+- Change 'Cancel' button in all dialogs to the "Jensen"-hyperlink instead.
 
 - Statistics on player/editor page, listing composers using it (with most hits in top spot).
   - With tabs to toggle between the info table or this.
@@ -50,6 +52,7 @@ CONSIDER THIS
 - Ensure that the hash connection between SH and HVSC works instantaneously.
 - How about making the redirecting 'deepsid.com' domain into a URL shortener too?
 - Some way to see what playlists are including a specific song. Perhaps from the context menu?
+- Statistics for how many times a tune has been played. (But shown where?)
 
 - SOLID "SHOULD BE DONE" CANDIDATES:
 -

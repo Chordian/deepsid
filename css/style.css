@@ -5079,6 +5079,21 @@ input[type=range]::-ms-track {
 		padding: 2px 6px;
 	}
 
+		/* Edit box for year in edit file dialog box */
+		#edit-file-year-number {
+			padding-left: 6px;
+			padding-right: 6px;
+			width: 50px;
+		}
+
+		#form-edit-file label {
+			position: relative;
+			top: -4px;
+			font: normal 15px "Montserrat", sans-serif;
+			color: var(--color-text-fine);
+			margin-right: 4px;
+		}
+
 /* ---- Styled Select ------------------------------------------------------- */
 
 /* Used to make the original select hidden but still functional */
