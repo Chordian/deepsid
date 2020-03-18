@@ -159,7 +159,8 @@ $(function() { // DOM ready
 				$("a.redirect").removeClass("playing");
 				$("#redirect-back").trigger("click");
 			} else if (event.keyCode == 106) {							// Keyup 'Keypad Multiply'
-				var $selected = $("#folders tr.selected");
+				var $selected = $("#folders tr.selected"),
+					$year = $("#edit-file-year-number");
 				var name = decodeURIComponent($selected.find(".name").attr("data-name"));
 				if (name != "undefined" && $("#logged-username").text() == "JCH") {
 					// Show dialog box for editing the file (only the year for now)
@@ -170,19 +171,39 @@ $(function() { // DOM ready
 						height: 160,
 					}, function() {
 						// OK was clicked; make the changes to the file row in the database
+						var year = $year.val();
 						$.post("php/update_file.php", {
 							fullname:	browser.playlist[browser.songPos].fullname.replace(browser.ROOT_HVSC+"/", ""),
-							year:		$("#edit-file-year-number").val(),
+							year:		year,
 						}, function(data) {
 							browser.validateData(data, function() {
-								browser.getFolder(); // Reload the folder to include the change
+								// Change the info in the currently selected file row (folder not refreshed)
+								var $infoLine = $selected.find("span.info");
+								var info = $infoLine.html();
+								if (info.substr(1, 3) == "in " || info.substr(1, 3) == "by ")
+									info = year+info; 			// Prepend the year (didn't have any year yet)
+								else
+									info = year+info.substr(4);	// Replace the year
+								$infoLine.empty().append(info);
 							});
 						});
 					});
+					var year = $year.val();
+					$year.focus().val("").val(year); // Hack that puts the caret at the end
 				}
 			} else if (event.keyCode == 84) {							// Keyup 't' (test something)
 				console.log(browser.playlist[browser.songPos].address);
 			}
+		}
+	});
+
+	/**
+	 * Handle key presses in the dialog box for editing a file row.
+	 */
+	$("#dialog-edit-file").on("keydown", function(event) {
+		if (event.keyCode == 13) {
+			$("#dialog-edit-file .dialog-button-yes").trigger("click");	// Click 'OK' button
+			$("#dialog-edit-file input").blur();
 		}
 	});
 
