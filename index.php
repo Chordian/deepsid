@@ -197,8 +197,12 @@
 		<div id="dialog-edit-file" class="dialog-box">
 			<div class="dialog-text"></div>
 			<form id="form-edit-file" onsubmit="return false;" autocomplete="off">
-				<label id="label-edit-file-year" for="edit-file-year">Year</label>
-				<input type="text" name="edit-file-year" id="edit-file-year-number" onkeypress='return event.charCode >= 48 && event.charCode <= 57;' maxlength="4" value="1986"/>
+				<label id="label-edit-file-player" for="edit-file-player" style="margin-bottom:15px;">Player</label>
+				<input type="text" name="edit-file-player" id="edit-file-player-input" maxlength="48"  style="margin-bottom:11px;" /><br />
+				<label id="label-edit-file-author" for="edit-file-author">Author</label>
+				<input type="text" name="edit-file-author" id="edit-file-author-input" maxlength="128" /><br />
+				<label id="label-edit-file-copyright" for="edit-file-copyright">Copyright</label>
+				<input type="text" name="edit-file-copyright" id="edit-file-copyright-input" maxlength="128" />
 			</form>
 			<div class="dialog-buttons"><a href="#" class="dialog-cancel">Cancel</a><button class="dialog-button-yes dialog-auto">OK</button></div>
 		</div>

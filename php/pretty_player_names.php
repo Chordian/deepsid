@@ -115,6 +115,7 @@ $prettyPlayerNames = array(
 	'Michael_Delaney' =>		'Michael Delaney\'s player',
 	'Michael_Winterberg' =>		'Michael Winterberg\'s player',
 	// Don't add for 'Mixer' here
+	'MoN/FutureComposer/Deenen_Digi' => 'MoN/FC/Deenen_Digi', // Avoids rating stars being pushed out
 	'Neil_Baldwin' =>			'Neil Baldwin\'s player',
 	'Neil_Brennan' =>			'Neil Brennan\'s player',
 	'Neil_Crossley' =>			'Neil Crossley\'s player',

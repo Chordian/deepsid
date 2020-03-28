@@ -159,37 +159,33 @@ $(function() { // DOM ready
 				$("a.redirect").removeClass("playing");
 				$("#redirect-back").trigger("click");
 			} else if (event.keyCode == 106) {							// Keyup 'Keypad Multiply'
-				var $selected = $("#folders tr.selected"),
-					$year = $("#edit-file-year-number");
+				var $selected = $("#folders tr.selected");
 				var name = decodeURIComponent($selected.find(".name").attr("data-name"));
 				if (name != "undefined" && $("#logged-username").text() == "JCH") {
+					// Prepare some edit boxes with current data
+					var playerInfo = SID.getSongInfo("info");
+					$("#edit-file-player-input").val(browser.playlist[browser.songPos].playerraw);
+					$("#edit-file-author-input").val(playerInfo.songAuthor);
+					$("#edit-file-copyright-input").val(playerInfo.songReleased);
 					// Show dialog box for editing the file (only the year for now)
 					CustomDialog({
 						id: '#dialog-edit-file',
-						text: '<h3>Edit year</h3><p>'+name.split("/").slice(-1)[0]+'</p>',
+						text: '<h3>Edit file</h3><p>'+name.split("/").slice(-1)[0]+'</p>',
 						width: 390,
-						height: 160,
+						height: 258,
 					}, function() {
 						// OK was clicked; make the changes to the file row in the database
-						var year = $year.val();
 						$.post("php/update_file.php", {
 							fullname:	browser.playlist[browser.songPos].fullname.replace(browser.ROOT_HVSC+"/", ""),
-							year:		year,
+							player:		$("#edit-file-player-input").val(),
+							author:		$("#edit-file-author-input").val(),
+							copyright:	$("#edit-file-copyright-input").val(),
 						}, function(data) {
 							browser.validateData(data, function() {
-								// Change the info in the currently selected file row (folder not refreshed)
-								var $infoLine = $selected.find("span.info");
-								var info = $infoLine.html();
-								if (info.substr(1, 3) == "in " || info.substr(1, 3) == "by ")
-									info = year+info; 			// Prepend the year (didn't have any year yet)
-								else
-									info = year+info.substr(4);	// Replace the year
-								$infoLine.empty().append(info);
+								browser.getFolder();
 							});
 						});
 					});
-					var year = $year.val();
-					$year.focus().val("").val(year); // Hack that puts the caret at the end
 				}
 			} else if (event.keyCode == 84) {							// Keyup 't' (test something)
 				console.log(browser.playlist[browser.songPos].address);

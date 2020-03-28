@@ -4,15 +4,20 @@
  *
  * Update the file row in the database. Only available to an administrator.
  * 
- * For now, only the year can be changed. This may be expanded to cover more
- * fields in the file row later.
+ * For now, only the following fields are updated:
+ * 
+ * 	player
+ * 	author
+ * 	copyright
  * 
  * Please be aware that an HVSC update may later overwrite fields in the file
  * row too. It makes more sense to use the script for other collections such
  * as e.g. CGSC and SID Happens.
  * 
  * @uses		$_POST['fullname']
- * @uses		$_POST['year']
+ * @uses		$_POST['player']
+ * @uses		$_POST['author']
+ * @uses		$_POST['copyright']
  */
 
 require_once("class.account.php"); // Includes setup
@@ -22,7 +27,7 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH
 
 $user_id = $account->CheckLogin() ? $account->UserID() : 0;
 
-if ($user_id != JCH) // For now, the administrator is just JCH and that's it
+if ($user_id != JCH)
 	die(json_encode(array('status' => 'error', 'message' => 'Only an administrator may edit a file row in the database.')));
 
 try {
@@ -33,9 +38,14 @@ try {
 	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	$db->exec("SET NAMES UTF8");
 
-	// Update the 'copyright' field (which is the one that contains the year)
-	$update = $db->prepare('UPDATE hvsc_files SET copyright = :year WHERE fullname = :fullname LIMIT 1');
-	$update->execute(array(':year' => $_POST['year'], ':fullname' => $_POST['fullname']));
+	// Update the fields
+	$update = $db->prepare('UPDATE hvsc_files SET player = :player, author = :author, copyright = :copyright WHERE fullname = :fullname LIMIT 1');
+	$update->execute(array(
+		':player'		=> $_POST['player'],
+		':author'		=> $_POST['author'],
+		':copyright'	=> $_POST['copyright'],
+		':fullname'		=> $_POST['fullname'],
+	));
 	if ($update->rowCount() == 0)
 		die(json_encode(array('status' => 'error', 'message' => 'Could not update the file row for '.$_POST['fullname'])));
 

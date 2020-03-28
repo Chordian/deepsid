@@ -1289,6 +1289,7 @@ Browser.prototype = {
 							filename:		file.filename,
 							substname:		file.substname,	// Symlists can have renamed SID files
 							fullname:		this.ROOT_HVSC + rootFile,
+							playerraw:		file.playerraw,
 							player: 		player,
 							tags:			list_of_tags,
 							length: 		file.lengths,

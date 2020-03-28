@@ -3,13 +3,7 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- There's a duplicate tag for Gershwin - it should be merged.
-- Stars in JT's folder are pushed a bit, may have to shorten a player or two.
-- Change 'Cancel' button in all dialogs to the "Jensen"-hyperlink instead.
-- Expand "*" year edit to include the stuff needed to edit new SID Happens uploads.
-
-- Statistics on player/editor page, listing composers using it (with most hits in top spot).
-  - With tabs to toggle between the info table or this.
+- (Idle)
 
 
 CONSIDER THIS
@@ -46,6 +40,7 @@ CONSIDER THIS
 - Some way to see what playlists are including a specific song. Perhaps from the context menu?
 - Statistics for how many times a tune has been played. (But shown where?)
 - A link in far top for showing a tags cloud (get rid of blog post link to make room for it).
+- Change 'Cancel' button in all dialogs to the "Jensen"-hyperlink instead.
 
 - SOLID "SHOULD BE DONE" CANDIDATES:
 -
@@ -59,6 +54,11 @@ CONSIDER THIS
 
 - Need new settings option: When SOASC fails playing a SID row, set ON to stop there instead
   of just proceeding to the next row.
+
+- Statistics on player/editor page, listing composers using it (with most hits in top spot).
+  - With tabs to toggle between the info table or this.
+  - Might not be worth the trouble? Most editors have few users and you can get a perfectly
+    good overview just by looking and the browser list yourself.
 
 - Tags:
   - Settings option: "+" button ON/OFF. Probably ON by default.

@@ -767,6 +767,7 @@ try {
 			array_push($files_ext, array(
 				'filename' =>		$file,
 				'substname' =>		$substname,
+				'playerraw' =>		$player,
 				'player' =>			str_replace(array_keys($prettyPlayerNames), $prettyPlayerNames, $player), // Remember it reads the array multiple times!
 				'tags' =>			$list_of_tags,
 				'tagtypes' =>		$type_of_tags,

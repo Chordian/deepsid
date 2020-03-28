@@ -5080,18 +5080,21 @@ input[type=range]::-ms-track {
 	}
 
 		/* Edit box for year in edit file dialog box */
-		#edit-file-year-number {
-			padding-left: 6px;
-			padding-right: 6px;
-			width: 50px;
+		#form-edit-file input {
+			float: right;
+			position: relative;
+			top: 4px;
+			font-size: 14px;
+			width: 255px;
+			height: 24px;
 		}
 
 		#form-edit-file label {
-			position: relative;
-			top: -4px;
+			display: inline-block;
 			font: normal 15px "Montserrat", sans-serif;
+			width: 86px;
 			color: var(--color-text-fine);
-			margin-right: 4px;
+			margin: 5px 4px 5px 0;
 		}
 
 /* ---- Styled Select ------------------------------------------------------- */
