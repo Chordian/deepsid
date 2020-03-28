@@ -1187,6 +1187,17 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>March 28, 2020</h3>
+						<ul>
+							<li>Updating tags for a SID row now immediately updates the sundry tab with tags too.</li>
+						</ul>
+
+						<h3>March 19, 2020</h3>
+						<ul>
+							<li>Years have been added to the info lines of all the CGSC files that contained this information.
+								Thanks to Peter Weighill for helping out with this.</li>
+						</ul>
+
 						<h3>February 18, 2020</h3>
 						<ul>
 							<li>Rolled back the WebSid (HQ) emulator to the previous version because it couldn't play CGSC files.</li>

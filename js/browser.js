@@ -349,11 +349,13 @@ Browser.prototype = {
 									fileTags:	browser.fileTags
 								}, function(data) {
 									browser.validateData(data, function(data) {
+										var htmlTags = browser.buildTags(data.tags, data.tagtypes);
 										browser.updateStickyTags(
 											$(event.target).parents("td"),
-											browser.buildTags(data.tags, data.tagtypes),
+											htmlTags,
 											(browser.isSymlist || browser.isCompoFolder ? thisFullname : thisFullname.split("/").slice(-1)[0])
 										);
+										ctrls.updateSundryTags(htmlTags);
 									});
 								}.bind(this));
 							});

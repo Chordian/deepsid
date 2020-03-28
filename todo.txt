@@ -4,20 +4,12 @@ ToDo
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
 - There's a duplicate tag for Gershwin - it should be merged.
-- Update the sundry tab for tags when editing these for a SID row.
 - Stars in JT's folder are pushed a bit, may have to shorten a player or two.
 - Change 'Cancel' button in all dialogs to the "Jensen"-hyperlink instead.
+- Expand "*" year edit to include the stuff needed to edit new SID Happens uploads.
 
 - Statistics on player/editor page, listing composers using it (with most hits in top spot).
   - With tabs to toggle between the info table or this.
-
-----
-
-- When CGSC tagging is done:
-  - Perhaps make a playlist with original (non-cover) CGSC songs?
-  - Go through "Cover"-only songs and see if there are extra candidates (e.g. Garth Brooks
-    and Richard Marx).
-  - Maybe also go through again to add years to the database?
 
 
 CONSIDER THIS
@@ -53,6 +45,7 @@ CONSIDER THIS
 - How about making the redirecting 'deepsid.com' domain into a URL shortener too?
 - Some way to see what playlists are including a specific song. Perhaps from the context menu?
 - Statistics for how many times a tune has been played. (But shown where?)
+- A link in far top for showing a tags cloud (get rid of blog post link to make room for it).
 
 - SOLID "SHOULD BE DONE" CANDIDATES:
 -
