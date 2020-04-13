@@ -3,7 +3,7 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- (Idle)
+- Bug: Entering 'SID Happens' and playing a song doesn't show its profile this first time.
 
 
 CONSIDER THIS

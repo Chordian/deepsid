@@ -542,7 +542,7 @@
 								to host an entire chip (i.e. 3 voices). The square voice buttons will toggle entire SID
 								chips ON or OFF when playing these types of tunes.
 							</p>
-							<p>If you want to "solo" a voice, hold down <code>Shift</code> while pressing the hotkey.</p>
+							<p>If you want to "solo" a voice/chip, hold down <code>Shift</code> while pressing the hotkey.</p>
 						</div>
 
 						<div id="visuals-graph" class="visuals" style="display:none;">
@@ -899,7 +899,7 @@
 							<a href="https://www.hvsc.c64.org/">https://www.hvsc.c64.org/</a>
 						</p>
 						<p>
-							Compute's Gazette SID Collection #137<br />
+							Compute's Gazette SID Collection #138<br />
 							<a href="http://www.c64music.co.uk/">http://www.c64music.co.uk/</a>
 						</p>
 						<p>
@@ -1190,6 +1190,11 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>April 13, 2020</h3>
+						<ul>
+							<li>DeepSID's copy of <a href="http://www.c64music.co.uk/">Compute's Gazette SID Collection</a> has now been upgraded to version 1.38.</li>
+						</ul>
 
 						<h3>March 28, 2020</h3>
 						<ul>

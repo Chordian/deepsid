@@ -241,6 +241,7 @@ SIDPlayer.prototype = {
 			_(_PLAYLIST, "filename", browser.playlist[browser.songPos].filename);
 			_(_PLAYLIST, "substname", browser.playlist[browser.songPos].substname);
 			_(_PLAYLIST, "fullname", browser.playlist[browser.songPos].fullname);
+			_(_PLAYLIST, "playerraw", browser.playlist[browser.songPos].playerraw);
 			_(_PLAYLIST, "player", browser.playlist[browser.songPos].player);
 			_(_PLAYLIST, "tags", browser.playlist[browser.songPos].tags);
 			_(_PLAYLIST, "length", browser.playlist[browser.songPos].length);

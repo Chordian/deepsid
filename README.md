@@ -31,7 +31,7 @@ Download the GitHub tree above as well as the following files:
 Download the following SID collections that will work with the database supplied below:
 
 * [High Voltage SID Collection #70](http://www.prg.dtu.dk/HVSC/HVSC_70-all-of-them.7z)
-* [Compute's Gazette SID Collection v1.37](http://www.c64music.co.uk/CGSC_v137.7z)
+* [Compute's Gazette SID Collection v1.38](http://www.c64music.co.uk/CGSC_v138.7z)
 
 1. Create the `/deepsid/hvsc/` sub folder.
 2. Unpack the HVSC archive into the `/deepsid/hvsc/` folder. This should create a `/C64Music/` sub folder.
