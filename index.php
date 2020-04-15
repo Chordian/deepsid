@@ -23,7 +23,12 @@
 	<head>
 
 		<meta charset="utf-8" />
-		<meta name="viewport" content="width=450" />
+		<script type="text/javascript">
+			var viewport = document.createElement("meta");
+			viewport.setAttribute("name", "viewport");
+			viewport.setAttribute("content", "width="+(screen.width < 450 ? "450" : "1320"));
+			document.head.appendChild(viewport);
+		</script>
 		<meta name="description" content="A modern online SID player for the High Voltage and Compute's Gazette SID collections." /> <!-- Max 150 characters -->
 		<meta name="keywords" content="c64,commodore 64,sid,6581,8580,hvsc,high voltage,cgsc,compute's gazette,visualizer,stil,websid,jssid,hermit,soasc" />
 		<meta name="author" content="Jens-Christian Huus" />
@@ -1190,6 +1195,11 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>April 15, 2020</h3>
+						<ul>
+							<li>DeepSID should now display properly on iPad using the full desktop mode.</li>
+						</ul>
 
 						<h3>April 13, 2020</h3>
 						<ul>

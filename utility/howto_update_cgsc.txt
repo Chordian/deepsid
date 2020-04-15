@@ -137,6 +137,17 @@ VERSIONS
 ¯¯¯¯¯¯¯¯
 Increase the version number to the latest ### in the browser.js, index.php and readme.md files.
 
+DELETING TEXT FILES
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+Go inside the CGSC folder on your local machine, open a command box, then do the following:
+
+  1. Run this DOS command: dir /s *.txt
+  2. Scroll down (ignoring the utility folders) until you get to artist folders.
+  3. Log on to the FTP for the ONLINE version and enter its CGSC folder.
+  4. Enter sub folders and delete .txt files. Usually these are order and readme files. In the "Misc"
+     folder, there may also be a capital letter file with no extension in all of the sub folders where a .txt
+     file was also found. Make sure you delete those too.
+
 TESTING LOCAL
 ¯¯¯¯¯¯¯¯¯¯¯¯¯
 Refer to the changes in the two CGSC update text files and try clicking the same tunes in DeepSID. You
