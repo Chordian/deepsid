@@ -1196,6 +1196,12 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>April 21, 2020</h3>
+						<ul>
+							<li>Fixed a bug that sometimes caused an alert box with HTML to pop up on a profile page.</li>
+							<li>All profiles with unknown name (only a handle) now show a question mark instead of nothing.</li>
+						</ul>
+
 						<h3>April 15, 2020</h3>
 						<ul>
 							<li>DeepSID should now display properly on iPad using the full desktop mode.</li>

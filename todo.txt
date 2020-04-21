@@ -4,6 +4,10 @@ ToDo
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
 - Bug: Entering 'SID Happens' and playing a song doesn't show its profile this first time.
+- Add search for file size.
+- Digger and Mordi have requested keys fading out in piano view, for easier arpeggio reading.
+- Better update the database files at GitHub.
+- Maybe the new "?" for unknown profile name should also be made into "???" (various sizes).
 
 
 CONSIDER THIS
@@ -39,8 +43,9 @@ CONSIDER THIS
 - How about making the redirecting 'deepsid.com' domain into a URL shortener too?
 - Some way to see what playlists are including a specific song. Perhaps from the context menu?
 - Statistics for how many times a tune has been played. (But shown where?)
+- Change the 'Cancel' button in all dialogs to the "Jensen"-hyperlink instead.
 - A link in far top for showing a tags cloud (get rid of blog post link to make room for it).
-- Change 'Cancel' button in all dialogs to the "Jensen"-hyperlink instead.
+- Change isMobile() to also check for tablet width. PHP can't do this so you have to be tricky.
 
 - SOLID "SHOULD BE DONE" CANDIDATES:
 -

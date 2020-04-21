@@ -4,7 +4,7 @@ These are the source codes for [DeepSID](http://deepsid.chordian.net), a modern 
 
 ## Setting up for offline use
 
-You can use this in a local version on your own computer, if you want to. First, setup an environment that makes it possible to run PHP and MySQL. I personally use [WampServer](http://www.wampserver.com/en/) but there are a ton of options on the internet.
+You can use this in a local version on your own computer, if you want to. First, setup an environment that makes it possible to run PHP and MySQL. I personally use [WampServer](http://wampserver.aviatechno.net/?lang=en) but there are a ton of options on the internet.
 
 ### Folders and files
 
@@ -18,7 +18,7 @@ Download the GitHub tree above as well as the following files:
 * [DeepSID_Images_GB64.zip](https://chordian.net/files/deepsid/DeepSID_Images_GB64.zip)
 * [DeepSID_Images_Players.zip](https://chordian.net/files/deepsid/DeepSID_Images_Players.zip)
 
-1. Unpack the GitHub tree archive into a folder that works with your enviroment. I'll assume `/deepsid/` root folder.
+1. Unpack the GitHub tree archive into a folder that works with your environment. I'll assume `/deepsid/` root folder.
 2. If there are files in a `/deepsid/images/` sub folder, delete them all.
 3. Create the `/deepsid/fonts/` sub folder and unpack **DeepSID_Fonts.zip** into it.
 4. Create the `/deepsid/images/` sub folder and unpack **DeepSID_Images.zip** into it.
@@ -30,7 +30,7 @@ Download the GitHub tree above as well as the following files:
 
 Download the following SID collections that will work with the database supplied below:
 
-* [High Voltage SID Collection #70](http://www.prg.dtu.dk/HVSC/HVSC_70-all-of-them.7z)
+* [High Voltage SID Collection #72](http://www.prg.dtu.dk/HVSC/HVSC_72-all-of-them.7z)
 * [Compute's Gazette SID Collection v1.38](http://www.c64music.co.uk/CGSC_v138.7z)
 
 1. Create the `/deepsid/hvsc/` sub folder.
@@ -38,6 +38,16 @@ Download the following SID collections that will work with the database supplied
 3. Rename the `/C64Music/` sub folder to `/_High Voltage SID Collection/` instead.
 4. Unpack the CGSC archive into the `/deepsid/hvsc/` folder. This should create a `/CGSC/` sub folder.
 5. Rename the `/CGSC/` sub folder to `/_Compute's Gazette SID Collection/` instead.
+
+Some collections are proprietary DeepSID collections. Download those here:
+
+* [DeepSID_Collection_Exotic_Tunes.zip](https://chordian.net/files/deepsid/DeepSID_Collection_Exotic_Tunes.zip)
+* [DeepSID_Collection_SID_Happens.zip](https://chordian.net/files/deepsid/DeepSID_Collection_SID_Happens.zip)
+
+1. Create the `/_Exotic SID Tunes Collection/` sub folder inside the `/deepsid/hvsc/` folder.
+2. Unpack the archive with exotic tunes into the new folder.
+3. Create the `/_SID Happens/` sub folder inside the `/deepsid/hvsc/` folder.
+4. Unpack the other archive into the new folder.
 
 ### Database
 
@@ -54,6 +64,6 @@ This file contains all the MySQL database files that matches the HVSC and CGSC v
 
 The user ID of 2 assigned to "JCH" in `setup.php` is used for the letter folder quality filters. You can change this ID number to a user of your choice. The folder ratings of this user will then affect those quality filters. You have to give a letter folder two stars for the "Decent" option and three stars for the "Good" option.
 
-You can run the `/deepsid/logs/activity.htm` file to see activity and also any errors. Note that it never logs ratings by other users (what they rate SID tunes is none of our business).
+You can run the `/deepsid/logs/activity.htm` file to see activity and also any errors. Note that it never logs ratings by other users (what they rate SID tunes is none of our business). If you want to see what tags were added, run the `/deepsid/logs/tags.htm` file.
 
 If you have any problems getting the offline version to work [please let me know](mailto:chordian@gmail.com) and I'll try to help.

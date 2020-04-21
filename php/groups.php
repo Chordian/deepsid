@@ -94,8 +94,9 @@ if ($row->csdbtype == 'scener') {
 				// There another handle so get the XML for it now
 				$xml = file_get_contents('https://csdb.dk/webservice/?type=scener&id='.$handle->ID);
 				if (!strpos($xml, '<CSDbData>'))
-					die(json_encode(array('status' => 'error', 'message' => '<p style="margin-top:0;"><i>Uh... CSDb? Are you there?</i></p>'.
-						'<b>ID:</b> <a href="https://csdb.dk/scener/?id='.$handle->ID.'" target="_blank">'.$handle->ID.'</a>')));
+					continue; // BUG FIX: Don't show alert box but just silently ignore and continue
+					/*die(json_encode(array('status' => 'warning', 'message' => '<p style="margin-top:0;"><i>Uh... CSDb? Are you there?</i></p>'.
+						'<b>ID:</b> <a href="https://csdb.dk/scener/?id='.$handle->ID.'" target="_blank">'.$handle->ID.'</a>')));*/
 				$csdb_handle = simplexml_load_string(utf8_decode($xml));
 				$this_handle = $handle->Handle;
 			}

@@ -1,0 +1,101 @@
+How to update the DeepSID files for the README file in GitHub.
+
+Requirements
+¯¯¯¯¯¯¯¯¯¯¯¯
+  o  Access to MySQL databases (ONLINE only) through PhpMyAdmin.
+  o  Access to the DeepSID files (ONLINE only via FTP).
+  o  Notepad++ is mentioned here, but you can use any text editor you want.
+
+DATABASE
+¯¯¯¯¯¯¯¯
+  1. Enter PhpMyAdmin and export every single table into an SQL file, one by one.
+  2. Open "hvsc_folders.sql" in a text editor and delete all personal playlist lines. You can
+     find them by searching for this: , '!
+  3. Save the file and open "ratings.sql" in your text editor instead.
+  4. Search for "22632," - you may get many hits but it doesn't matter as they all have the
+     same hash number. Copy this hash number and paste it between the apostrophes in the fifth
+     and last line in the cluster seen in the next step. (You don't need to save this file.)
+  5. Now purge ALL of the "INSERT INTO" sub lines then replace them with these instead:
+
+       (1, 1, 2241, 'FOLDER', '', 5),
+       (2, 1, 3, 'FOLDER', '', 5),
+       (3, 1, 681, 'FOLDER', '', 5),
+       (4, 1, 565, 'FOLDER', '', 5),
+       (5, 1, 22632, 'FILE', '<PASTE HASH NUMBER HERE>', 5);
+
+  6. Save the file and open "symlists.sql" in your text editor instead.
+  7. Remove "INSERT INTO" and ALL of its lines, then save the now completely purged skeleton.
+  8. Save the file and open "users.sql" in your text editor instead.
+  9. Now purge ALL of the "INSERT INTO" sub lines then replace them with this one instead:
+
+       (1, 'Test', '098f6bcd4621d373cade4e832627b4f6', '2018-10-03', '', '6ca7a8bcb9ad10061951723828eedef9', 0, '2018-10-03 09:11:19', '0.0.0.0');
+
+ 10. Save the file. The other SQL files should be fine as is.
+ 11. Update the two text files with the latest version numbers for HVSC and CGSC. (Note that
+     there's also a version number inside the text files themselves.)
+ 12. Zip the folder contents (no folder inside - just root files) as: DeepSID_Database.zip
+ 13. Enter the DeepSID folder with your FTP program and replace the ZIP file here:
+
+       <ROOT>/files/deepsid/DeepSID_Database.zip
+
+ 14. Make sure the version numbers and file links in the README.md for GitHub are updated too.
+
+FILES
+¯¯¯¯¯
+  1. ZIP the contents of /deepsid/fonts/ (files only) and upload as:
+
+       <ROOT>/files/deepsid/DeepSID_Fonts.zip
+
+     This folder rarely changes and chances are you don't have to update it now.
+
+  2. Enter the /deepsid/images/ folder. Select all files (no folders) and ZIP it. Uploads as:
+
+       <ROOT>/files/deepsid/DeepSID_Images.zip
+
+     There are a few images that are unused but it doesn't really matter.
+
+  3. ZIP the contents of /deepsid/images/brands/ (files only) and upload as:
+
+       <ROOT>/files/deepsid/DeepSID_Images_Brands.zip
+
+     Again, there are a few images that are unused but it doesn't really matter.
+
+  4. ZIP the contents of /deepsid/images/composers/ (files only) and upload as:
+
+       <ROOT>/files/deepsid/DeepSID_Images_Composers.zip
+
+     There are a few images that are unused here too but it doesn't really matter.
+
+  5. ZIP the contents of /deepsid/images/countries/ (files only) and upload as:
+
+       <ROOT>/files/deepsid/DeepSID_Images_Countries.zip
+
+     This folder rarely changes and chances are you don't have to update it now.
+
+  6. ZIP the contents of /deepsid/images/players/ (files only) and upload as:
+
+       <ROOT>/files/deepsid/DeepSID_Images_Players.zip
+
+  7. ZIP the contents of /deepsid/images/gb64/ (files only) and upload as:
+
+       <ROOT>/files/deepsid/DeepSID_Images_GB64.zip
+
+     This is by far the biggest archive of them all. Close to or around 100 MB.
+
+SID FILES
+¯¯¯¯¯¯¯¯¯
+The README.md informs users to download HVSC and CGSC from their source sites, but other stuff
+that is proprietary to DeepSID has to be uploaded.
+
+  1. Zip the contents of /deepsid/hvsc/_Exotic SID Tunes Collection/ and upload as:
+
+       <ROOT>/files/deepsid/DeepSID_Collection_Exotic_Tunes.zip
+
+  2. For files in "SID Happens" you have to download those online as it's a living folder that
+     other users contribute to. Connect with FTP and enter the /deepsid/hvsc/ folder there.
+     Download the entire "_SID Happens" folder to a local folder.
+  3. ZIP the contents of this local "_SID Happens" folder and upload as:
+
+       <ROOT>/files/deepsid/DeepSID_Collection_SID_Happens.zip
+
+Finally, read through the README.md file and make sure it all works.
