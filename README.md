@@ -45,9 +45,9 @@ Some collections are proprietary DeepSID collections. Download those here:
 * [DeepSID_Collection_SID_Happens.zip](https://chordian.net/files/deepsid/DeepSID_Collection_SID_Happens.zip)
 
 1. Create the `/_Exotic SID Tunes Collection/` sub folder inside the `/deepsid/hvsc/` folder.
-2. Unpack the archive with exotic tunes into the new folder.
+2. Unpack **DeepSID_Collection_Exotic_Tunes.zip** into the new folder.
 3. Create the `/_SID Happens/` sub folder inside the `/deepsid/hvsc/` folder.
-4. Unpack the other archive into the new folder.
+4. Unpack **DeepSID_Collection_SID_Happens.zip** into the new folder.
 
 ### Database
 
