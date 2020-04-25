@@ -48,7 +48,7 @@ FILES
 
      This folder rarely changes and chances are you don't have to update it now.
 
-  2. Enter the /deepsid/images/ folder. Select all files (no folders) and ZIP it. Uploads as:
+  2. Enter the /deepsid/images/ folder. Select all files (no folders) and ZIP it. Upload as:
 
        <ROOT>/files/deepsid/DeepSID_Images.zip
 
@@ -76,7 +76,7 @@ FILES
 
        <ROOT>/files/deepsid/DeepSID_Images_Players.zip
 
-  7. ZIP the contents of /deepsid/images/gb64/ (files only) and upload as:
+  7. ZIP the contents of /deepsid/images/gb64/ and upload as:
 
        <ROOT>/files/deepsid/DeepSID_Images_GB64.zip
 

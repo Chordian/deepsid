@@ -3,11 +3,10 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+- Maybe the new "?" for unknown profile name should also be made into "???" (various sizes).
 - Bug: Entering 'SID Happens' and playing a song doesn't show its profile this first time.
 - Add search for file size.
 - Digger and Mordi have requested keys fading out in piano view, for easier arpeggio reading.
-- Better update the database files at GitHub.
-- Maybe the new "?" for unknown profile name should also be made into "???" (various sizes).
 
 
 CONSIDER THIS

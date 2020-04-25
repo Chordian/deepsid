@@ -383,6 +383,9 @@ if (isset($row)) {
 	$name = substr($name, 0, 1) == '_' || substr($name, 0, 1) == '!' ? substr($name, 1) : $name;
 }
 
+if ($name == '?')
+	$name = '<small class="u1">?</small>?<small class="u2">?</small>';
+
 $csdbCompoFolder = 'CSDb Music Competitions';
 $exoticFolder = '_Exotic SID Tunes Collection';
 
