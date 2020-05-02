@@ -3,10 +3,10 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- Maybe the new "?" for unknown profile name should also be made into "???" (various sizes).
 - Bug: Entering 'SID Happens' and playing a song doesn't show its profile this first time.
-- Add search for file size.
-- Digger and Mordi have requested keys fading out in piano view, for easier arpeggio reading.
+- Add search for file size. (Should it just be a "less than this" value?)
+
+- See e-mail from Stefano Tognon about using PETSCII to show colorful CGSC lyrics.
 
 
 CONSIDER THIS
@@ -45,6 +45,8 @@ CONSIDER THIS
 - Change the 'Cancel' button in all dialogs to the "Jensen"-hyperlink instead.
 - A link in far top for showing a tags cloud (get rid of blog post link to make room for it).
 - Change isMobile() to also check for tablet width. PHP can't do this so you have to be tricky.
+- Digger and Mordi have requested keys fading out in piano view, for easier arpeggio reading.
+- Is it possible to have individual ratings for multiple sub tune clones in a playlist?
 
 - SOLID "SHOULD BE DONE" CANDIDATES:
 -

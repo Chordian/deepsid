@@ -1196,10 +1196,16 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>May 2, 2020</h3>
+						<ul>
+							<li>Improved the error handling further in the profile page. Now a message is displayed in the
+								groups table and it retries the CSDb connection after a few seconds.</li>
+						</ul>
+
 						<h3>April 21, 2020</h3>
 						<ul>
 							<li>Fixed a bug that sometimes caused an alert box with HTML to pop up on a profile page.</li>
-							<li>All profiles with unknown name (only a handle) now show a question mark instead of nothing.</li>
+							<li>All profiles with unknown name (only a handle) now show question marks instead of nothing.</li>
 						</ul>
 
 						<h3>April 15, 2020</h3>

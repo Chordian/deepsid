@@ -1627,24 +1627,46 @@ Browser.prototype = {
 					// Enable the brand image (if available) for the correct color theme
 					$("#brand-"+(parseInt(colorTheme) ? "dark" : "light")).show();
 
-					this.groups = $.get("php/groups.php", {
-						fullname: (overridePath == "" ? this.path.substr(1) : overridePath)
-					}, function(data) {
-						this.validateData(data, function(data) {
-
-							if (data.html !== "") {
-								$("#table-groups").empty().append(data.html);
-								var html = $("#topic-profile").html();
-								// Don't include the script or the chart stuff will be shown twice
-								this.composerCache = html.substr(0, html.indexOf("<script"));
+					this.groupsFullname = overridePath == "" ? this.path.substr(1) : overridePath;
+					if (!this.getGroups(this.groupsFullname))
+						// CSDb is acting up; retry after a minute
+						this.groupsTimer = setInterval(function() {
+							// Show the spinner again before retrying
+							$("#table-message").empty().append('<img class="loading-dots" src="images/loading_threedots.svg" alt="" style="margin-top:10px;" />');
+							if (this.getGroups(this.groupsFullname)) {
+								clearInterval(this.groupsTimer);
+								return false;
 							}
-		
-						});
-					}.bind(this));
-
+						}.bind(this), 20000);
 				});
 			}.bind(this));
 		}
+	},
+
+	/**
+	 * Get the contents of the groups table and display it in the composer profile.
+	 * 
+	 * @param {string} fullname		The SID filename including folders.
+	 */
+	getGroups: function(fullname) {
+		this.groups = $.get("php/groups.php", { fullname: fullname }, function(data) {
+			try {
+				data = $.parseJSON(data);
+			} catch(e) {
+				alert("An error occurred. If it keeps popping up please tell me about it: chordian@gmail.com");
+				return false;
+			}
+			if (data.status == "error" || data.status == "warning") {
+				$("#table-message").empty().append("<i>Could not read the group data from CSDb. Retrying again in a few seconds.</i>");
+				return false;
+			} else if (data.html !== "") {
+				$("#table-groups").empty().append(data.html);
+				var html = $("#topic-profile").html();
+				// Don't include the script or the chart stuff will be shown twice
+				this.composerCache = html.substr(0, html.indexOf("<script"));
+				return true;
+			}
+		}.bind(this));
 	},
 
 	/**

@@ -420,7 +420,7 @@ $html = '<table style="border:none;margin-bottom:0;"><tr>'.
 		($fullname != $csdbCompoFolder && $fullname != $exoticFolder && $fullname != $uploadFolder ?
 			'<table id="table-groups" class="tight top" style="min-width:100%;font-size:14px;margin-top:5px;">'.
 				'<tr>'.
-					'<td class="topline bottomline leftline rightline" style="height:30px;padding:0 !important;text-align:center;">'.($spinner ? '<img class="loading-dots" src="images/loading_threedots.svg" alt="" style="margin-top:10px;" />' : '<div class="no-profile">No profile data</div>').'</td>'.
+					'<td id="table-message" class="topline bottomline leftline rightline" style="height:30px;padding:0 !important;line-height:28px;text-align:center;">'.($spinner ? '<img class="loading-dots" src="images/loading_threedots.svg" alt="" style="margin-top:10px;" />' : '<div class="no-profile">No profile data</div>').'</td>'.
 				'</tr>'.
 			'</table>' : '').
 		'<div class="corner-icons">'.
