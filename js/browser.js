@@ -1628,16 +1628,7 @@ Browser.prototype = {
 					$("#brand-"+(parseInt(colorTheme) ? "dark" : "light")).show();
 
 					this.groupsFullname = overridePath == "" ? this.path.substr(1) : overridePath;
-					if (!this.getGroups(this.groupsFullname))
-						// CSDb is acting up; retry after a minute
-						this.groupsTimer = setInterval(function() {
-							// Show the spinner again before retrying
-							$("#table-message").empty().append('<img class="loading-dots" src="images/loading_threedots.svg" alt="" style="margin-top:10px;" />');
-							if (this.getGroups(this.groupsFullname)) {
-								clearInterval(this.groupsTimer);
-								return false;
-							}
-						}.bind(this), 20000);
+					this.getGroups(this.groupsFullname);
 				});
 			}.bind(this));
 		}
@@ -1649,6 +1640,7 @@ Browser.prototype = {
 	 * @param {string} fullname		The SID filename including folders.
 	 */
 	getGroups: function(fullname) {
+		clearTimeout(this.groupsTimer);
 		this.groups = $.get("php/groups.php", { fullname: fullname }, function(data) {
 			try {
 				data = $.parseJSON(data);
@@ -1657,14 +1649,18 @@ Browser.prototype = {
 				return false;
 			}
 			if (data.status == "error" || data.status == "warning") {
-				$("#table-message").empty().append("<i>Could not read the group data from CSDb. Retrying again in a few seconds.</i>");
-				return false;
+				$("#table-message").empty().append('<div class="no-profile">Could not read the group data from CSDb. Retrying again in a few seconds.</div>');
+				// CSDb is acting up; retry after a minute
+				this.groupsTimer = setTimeout(function() {
+					// Show the spinner again before retrying
+					$("#table-message").empty().append('<img class="loading-dots" src="images/loading_threedots.svg" alt="" style="margin-top:10px;" />');
+					this.getGroups(this.groupsFullname);
+				}.bind(this), 20000);
 			} else if (data.html !== "") {
 				$("#table-groups").empty().append(data.html);
 				var html = $("#topic-profile").html();
 				// Don't include the script or the chart stuff will be shown twice
 				this.composerCache = html.substr(0, html.indexOf("<script"));
-				return true;
 			}
 		}.bind(this));
 	},
