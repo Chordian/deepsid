@@ -664,7 +664,11 @@ Controls.prototype = {
 					if (charin == 158)	{ cnow = 7;  }
 					if (charin == 159)	{ cnow = 3;  }
 
-					if (charin >= 33 && charin <= 63)	{ charouttext=String.fromCharCode(charin); }   
+					if (charin >= 33 && charin <= 63)	{
+						charouttext=String.fromCharCode(charin);
+						if (charin == 60) charouttext=String.fromCharCode("&lt;");
+						if (charin == 62) charouttext=String.fromCharCode("&gt;");
+					}
 					if (charin >= 64 && charin <= 90)	{ charouttext=String.fromCharCode(charin); }   
 					if (charin >= 91 && charin <= 127)	{ charouttext="&#"+(57344+charin)+";"; }   
 					if (charin >= 161 && charin <= 255)	{ charouttext="&#"+(57344+charin)+";"; }   
@@ -738,7 +742,7 @@ Controls.prototype = {
 		if (file.substr(-4) == ".mus") {
 			$("#topic-stil,#stopic-stil").addClass("c64font");
 			// For .mus files, we have to let the server parse the accompanying .wds file (if it exists)
-			$.ajax("php/info.php", { // If there's a "/" then it's a search path and can stand on its own legs
+			/*$.ajax("php/info.php", { // If there's a "/" then it's a search path and can stand on its own legs
 				data:		{ fullname: file.indexOf("/") !== -1 ? "/"+file : browser.path.substr(1)+"/"+file },
 				async:		false, // Have to wait to make sure the variable is appended below
 				success:	function(data) {
@@ -746,10 +750,152 @@ Controls.prototype = {
 						stil = data.info.stil;
 					});
 				}
+			});*/
+
+
+
+
+
+			var fullname = file.indexOf("/") !== -1 ? "/"+file : browser.path.substr(1)+"/"+file;
+			fullname = browser.ROOT_HVSC+"/"+fullname.replace(".mus", ".wds");
+			$.ajax({
+				url: fullname,
+				type: "HEAD",
+				error: function() {
+					// WDS file does not exist
+					$("#topic-stil").empty().append('NOTHING!');
+				},
+				success: function() {
+					// WDS file exists
+					fetch(fullname)
+					.then(response => response.blob())
+					.then(function(blob) {
+						var reader = new FileReader();
+			
+						reader.onloadend = function() {
+							var strContents = reader.result,
+								rep = 1,
+								cnow = clast = 14,
+								i = revnow = revlast = 0,
+								isExtended = isMatrix = false,
+								out = '<span class=\"c14\">',
+								len = strContents.length,
+								charin, charouttext;
+
+							while (i < len) {
+								charin = strContents.charCodeAt(i) & 0xff;
+								if (i + 1 < len) charnext = strContents.charCodeAt(i + 1) & 0xff;
+								else charnext = 0;
+								charouttext = "";
+
+								// Look for extended WDS and line/matrix part
+								if (charin == 0xFF) {
+									isExtended = true;  
+									if (i == 0) isMatrix = false;
+									i++;
+									continue;
+								}
+
+								if (!isExtended) {
+									if (charin > 127) charin -= 128;
+									out += (charin < 32 || charin > 126)
+										? (charin == 13 ? "<br />" : " ")
+										: String.fromCharCode(charin);
+									i++;
+									continue;
+								}
+
+								if (isExtended && !isMatrix) {
+									if (charin == 0) isMatrix = true;
+									i++;
+									continue;
+								}    
+
+								// Special repeat char: 01 NN CC (repeat NN times the CC char)
+								if (charin == 1 || (charin == 0 && charnext == 5)) {
+									rep = charnext;
+									i += 2; 
+									continue;
+								}   
+
+								if (charin == 146)	{ revnow = 0; }
+								if (charin == 18)	{ revnow = 128; }
+								if (charin == 13)	{ charouttext = "<br>"; }
+			
+								if (charin == 29)	{ charouttext = "&nbsp;"; }   
+								if (charin == 32)	{ charouttext = "&nbsp;"; }   
+								if (charin == 160)	{ charouttext = "&nbsp;"; }   
+			
+								if (charin == 5)	{ cnow = 1;  }
+								if (charin == 28)	{ cnow = 2;  }
+								if (charin == 30)	{ cnow = 5;  }
+								if (charin == 31)	{ cnow = 6;  }
+								if (charin == 129)	{ cnow = 8;  }
+								if (charin == 144)	{ cnow = 0;  }
+								if (charin == 149)	{ cnow = 9;  }
+								if (charin == 150)	{ cnow = 10; }
+								if (charin == 151)	{ cnow = 11; }
+								if (charin == 152)	{ cnow = 12; }
+								if (charin == 153)	{ cnow = 13; }
+								if (charin == 154)	{ cnow = 14; }
+								if (charin == 155)	{ cnow = 15; }
+								if (charin == 156)	{ cnow = 4;  }
+								if (charin == 158)	{ cnow = 7;  }
+								if (charin == 159)	{ cnow = 3;  }
+			
+								if (charin >= 33 && charin <= 63)	{
+									charouttext=String.fromCharCode(charin);
+									if (charin == 60) charouttext=String.fromCharCode("&lt;");
+									if (charin == 62) charouttext=String.fromCharCode("&gt;");
+								}
+								if (charin >= 64 && charin <= 90)	{ charouttext=String.fromCharCode(charin); }   
+								if (charin >= 91 && charin <= 127)	{ charouttext="&#"+(57344+charin)+";"; }   
+								if (charin >= 161 && charin <= 255)	{ charouttext="&#"+(57344+charin)+";"; }   
+
+								if (isExtended && !isMatrix) {
+									if (charin >= 192 && charin <= 218)
+										charouttext="&#"+String.fromCharCode(57600+charin-128)+";"; 
+								 }
+
+								if (clast != cnow || revlast != revnow) {
+									out += '</span>';
+									if (revnow == 0)
+										out += '<span class=\"c'+cnow+'\">';
+									else
+										out += '<span class=\"b'+cnow+'\">';
+								}
+			
+								if (charnext == 157) { /* CRSR-LEFT */ charouttext = ""; }
+			
+								for (var j = 0; j < rep; j++)
+									out += charouttext;
+			
+								clast = cnow;
+								revlast = revnow;
+			
+								rep = 1;
+								i++;
+							}
+							out += "</span>";
+							$("#topic-stil").empty().append(out).css("background", "#000"); ///////////////////////
+						}
+						reader.readAsBinaryString(blob);
+					});
+				}
 			});
+
+		
+
+
+
+
+
+
+
+
 		}
 
-		if (stil === "") {
+		/*if (stil === "") {
 			$("#stopic-stil")
 				.css("overflow", "none")
 				.append('<div id="tips" class="no-info">No '+(isCGSC ? 'lyrics' : 'STIL information')+'</div>')
@@ -773,7 +919,7 @@ Controls.prototype = {
 					},
 				});
 			$("#topic-stil").empty().append(stil);
-		}
+		}*/
 
 		// Tab 'Tags'
 		this.updateSundryTags(browser.playlist[browser.songPos].tags);
