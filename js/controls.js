@@ -732,9 +732,6 @@ Controls.prototype = {
 			.empty()
 			.removeClass("c64font");
 
-		if (typeof this.cgscLyrics != "undefined")
-			this.cgscLyrics.abort();
-
 		// Tab 'STIL' is called 'Lyrics' in CGSC
 		$("#stab-stil").empty().append(browser.isCGSC() ? "Lyrics" : "STIL");
 
@@ -747,17 +744,9 @@ Controls.prototype = {
 			// If there's a .wds file (with lyrics) for the .mus file then read and process it
 			var fullname = file.indexOf("/") !== -1 ? "/"+file : browser.path.substr(1)+"/"+file;
 			fullname = browser.ROOT_HVSC+"/"+fullname.replace(".mus", ".wds");
-			this.cgscLyrics = $.ajax({
-				url:	fullname,
-				type: 	"HEAD",
-				error: function() {
-					// WDS file does not exist
-					$("#stopic-stil")
-						.css("overflow", "none")
-						.append('<div id="tips" class="no-info">No lyrics</div>');
-					$("#topic-stil").empty().append("No lyrics available for this MUS file.");
-				},
-				success: function() {
+
+			$.get("php/file_exists.php", { file: fullname }, function(wdsExists) {
+				if (wdsExists) {
 					// WDS file exists
 					fetch(fullname)
 					.then(response => response.blob())
@@ -873,6 +862,12 @@ Controls.prototype = {
 						}
 						reader.readAsBinaryString(blob);
 					});
+				} else {
+					// WDS file does not exist
+					$("#stopic-stil")
+						.css("overflow", "none")
+						.empty().append('<div id="tips" class="no-info">No lyrics</div>');
+					$("#topic-stil").empty().append("No lyrics available for this MUS file.");
 				}
 			});
 		} else {
