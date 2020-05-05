@@ -691,7 +691,7 @@ Controls.prototype = {
 					i++;
 				}
 				out += "</span>";
-				$("#info-text").append('<div id="info-mus" class="c64font">'+out+'</div>');
+				$("#info-text").append('<div class="c64blackbg c64font">'+out+'</div>');
 			}
 			reader.readAsBinaryString(blob);
 		});
@@ -732,6 +732,9 @@ Controls.prototype = {
 			.empty()
 			.removeClass("c64font");
 
+		if (typeof this.cgscLyrics != "undefined")
+			this.cgscLyrics.abort();
+
 		// Tab 'STIL' is called 'Lyrics' in CGSC
 		$("#stab-stil").empty().append(browser.isCGSC() ? "Lyrics" : "STIL");
 
@@ -739,31 +742,20 @@ Controls.prototype = {
 			stil = browser.playlist[browser.songPos].stil,
 			isCGSC = browser.playlist[browser.songPos].fullname.substr(-4) == ".mus";
 
-		if (file.substr(-4) == ".mus") {
+		if (isCGSC) {
 			$("#topic-stil,#stopic-stil").addClass("c64font");
-			// For .mus files, we have to let the server parse the accompanying .wds file (if it exists)
-			/*$.ajax("php/info.php", { // If there's a "/" then it's a search path and can stand on its own legs
-				data:		{ fullname: file.indexOf("/") !== -1 ? "/"+file : browser.path.substr(1)+"/"+file },
-				async:		false, // Have to wait to make sure the variable is appended below
-				success:	function(data) {
-					browser.validateData(data, function(data) {
-						stil = data.info.stil;
-					});
-				}
-			});*/
-
-
-
-
-
+			// If there's a .wds file (with lyrics) for the .mus file then read and process it
 			var fullname = file.indexOf("/") !== -1 ? "/"+file : browser.path.substr(1)+"/"+file;
 			fullname = browser.ROOT_HVSC+"/"+fullname.replace(".mus", ".wds");
-			$.ajax({
-				url: fullname,
-				type: "HEAD",
+			this.cgscLyrics = $.ajax({
+				url:	fullname,
+				type: 	"HEAD",
 				error: function() {
 					// WDS file does not exist
-					$("#topic-stil").empty().append('NOTHING!');
+					$("#stopic-stil")
+						.css("overflow", "none")
+						.append('<div id="tips" class="no-info">No lyrics</div>');
+					$("#topic-stil").empty().append("No lyrics available for this MUS file.");
 				},
 				success: function() {
 					// WDS file exists
@@ -877,52 +869,52 @@ Controls.prototype = {
 								i++;
 							}
 							out += "</span>";
-							$("#topic-stil").empty().append(out).css("background", "#000"); ///////////////////////
+							ctrls.stilDexterScrollbar('<div class="c64blackbg">'+out+'</div>');
 						}
 						reader.readAsBinaryString(blob);
 					});
 				}
 			});
-
-		
-
-
-
-
-
-
-
-
-		}
-
-		/*if (stil === "") {
-			$("#stopic-stil")
-				.css("overflow", "none")
-				.append('<div id="tips" class="no-info">No '+(isCGSC ? 'lyrics' : 'STIL information')+'</div>')
-			$("#topic-stil").empty().append(isCGSC ? "No lyrics available for this MUS file." : "<i>No STIL information available for this SID file.</i>");
 		} else {
-			$("#stopic-stil")
-				.css("overflow", "auto")
-				.append(stil)
-				.mCustomScrollbar({
-					axis: "y",
-					theme: (parseInt(colorTheme) ? "light-3" : "dark-3"),
-					scrollButtons:{
-						enable: true,
-					},
-					callbacks: {
-						onCreate: function() {
-							// Adjust scrollbar height to fit the up/down arrows perfectly
-							// NOTE: This is also set when moving the slider bar (see main.js).
-							$("#stopic-stil .mCSB_scrollTools").css("height", $("#stopic-stil").height() + 7);
-						},
-					},
-				});
-			$("#topic-stil").empty().append(stil);
-		}*/
+			// Standard .sid file so show STIL information from HVSC
+			if (stil === "") {
+				$("#stopic-stil")
+					.css("overflow", "none")
+					.append('<div id="tips" class="no-info">No STIL information</div>');
+				$("#topic-stil").empty().append("<i>No STIL information available for this SID file.</i>");
+			} else {
+				this.stilDexterScrollbar(stil);
+			}
+		}
 
 		// Tab 'Tags'
 		this.updateSundryTags(browser.playlist[browser.songPos].tags);
+	},
+
+	/**
+	 * Update the sundry and tab with STIL text and adjust the custom scrollbar.
+	 * 
+	 * @param {string} stil		The STIL or lyrics string.
+	 */
+	stilDexterScrollbar: function(stil) {
+		$("#stopic-stil")
+			.css("overflow", "auto")
+			.append(stil)
+			.mCustomScrollbar({
+				axis: "y",
+				theme: (parseInt(colorTheme) ? "light-3" : "dark-3"),
+				scrollButtons:{
+					enable: true,
+				},
+				callbacks: {
+					onCreate: function() {
+						// Adjust scrollbar height to fit the up/down arrows perfectly
+						// NOTE: This is also set when moving the slider bar (see main.js).
+						$("#stopic-stil .mCSB_scrollTools").css("height", $("#stopic-stil").height() + 7);
+					},
+				},
+			});
+		$("#topic-stil").empty().append(stil);
 	},
 
 	/**

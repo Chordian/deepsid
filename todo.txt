@@ -5,8 +5,7 @@ SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
 - Bug: Entering 'SID Happens' and playing a song doesn't show its profile this first time.
 - Add search for file size. (Should it just be a "less than this" value?)
-
-- See e-mail from Stefano Tognon about using PETSCII to show colorful CGSC lyrics.
+- Swapping color themes fiddles with the C64font colors. What's up with that?
 
 
 CONSIDER THIS

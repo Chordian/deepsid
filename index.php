@@ -1196,6 +1196,12 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>May 5, 2020</h3>
+						<ul>
+							<li>Extended lyrics in CGSC are now supported. Thanks to <a href="//deepsid.chordian.net/?file=/MUSICIANS/T/Tognon_Stefano/">Stefano Tognon</a> for suggesting it with an
+								included code sample. Click <a href="//deepsid.chordian.net/?file=/Compute%27s%20Gazette%20SID%20Collection/DC_Star/You_are_the_Girl.mus">here</a> for an example of a song with extended lyrics.</li>
+						</ul>
+
 						<h3>May 2, 2020</h3>
 						<ul>
 							<li>Improved the error handling further in the profile page. Now a message is displayed in the

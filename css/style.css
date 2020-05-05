@@ -1967,16 +1967,29 @@ input[type=range]::-ms-track {
 	}
 
 	/* Black box for the MUS info text */
-	#info-mus {
+	.c64blackbg {
 		position: relative;
 		top: 3px;
-		left: -2px;
 		background: var(--color-bottom);
 		color: var(--color-bottom);
-		width: 330px; /* 320 + (BORDER * 2) */
-		border: 5px solid var(--color-bottom);
+		border: 1px solid var(--color-bottom);
 		border-radius: 4px;
 	}
+
+		#info .c64blackbg {
+			/*left: -2px;*/
+			border-width: 5px;
+			width: 330px; /* 320 + (BORDER * 2) */
+		}
+
+		#sundry .c64blackbg {
+			border-top-width: 5px;
+			border-bottom-width: 5px;
+		}
+
+		#topic-stil .c64blackbg {
+			border-width: 5px;
+		}
 
 	/* C64 colors for MUS info text (supplied by Peter Weighill) - don't change these for other color schemes! */
 	.c0 { color: #000000; }
