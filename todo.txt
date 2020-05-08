@@ -3,8 +3,7 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- Bug: Entering 'SID Happens' and playing a song doesn't show its profile this first time.
-- Add search for file size. (Should it just be a "less than this" value?)
+- I like pizza with pepperoni and pineapple.
 
 
 CONSIDER THIS

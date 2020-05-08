@@ -1111,6 +1111,7 @@ Browser.prototype = {
 						var $selected = $("#tabs .selected");
 						if ($selected.attr("data-topic") === "gb64" || $selected.attr("data-topic") === "remix")
 							$("#tab-profile").trigger("click");
+						this.previousOverridePath = "";
 					}
 
 					// FOLDERS

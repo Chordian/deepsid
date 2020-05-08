@@ -1202,6 +1202,7 @@
 							<li>You can now also search for a maximum size. Choose <code>Maximum</code> and then type the size.
 								Use raw numbers for decimal or prepend hexadecimal numbers with either <code>$</code> or <code>0x</code>.
 								(For example, <code>4096</code> or <code>0x1000</code>.)</li>
+							<li>Fixed a bug where the profile page wasn't always updated correctly in the SH folder.</li>
 						</ul>
 
 						<h3>May 5, 2020</h3>
