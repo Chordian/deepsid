@@ -117,6 +117,15 @@ try {
 				else if (substr($location, 0, 2) == '0x')
 					$location = hexdec(substr($location, 2));
 				$select->execute(array(':loadaddr'=>$location));
+			} else if ($_GET['searchType'] == 'maximum') {
+				$select = $db->prepare('SELECT fullname FROM hvsc_files'.
+					' WHERE '.$searchContext.' AND datasize <= :datasize AND fullname LIKE "_High Voltage SID Collection%" LIMIT 1000');
+				$datasize = $_GET['searchQuery'];
+				if (substr($datasize, 0, 1) == '$')
+					$datasize = hexdec(substr($datasize, 1));
+				else if (substr($datasize, 0, 2) == '0x')
+					$datasize = hexdec(substr($datasize, 2));
+				$select->execute(array(':datasize'=>$datasize));
 			} else if ($_GET['searchType'] != 'country') {
 				// Normal type search (handles any position of words and excluding with "-" prepended)
 				// NOTE: This would have been easier with 'Full-Text' search but I'm not using the MyISAM engine.
@@ -247,6 +256,16 @@ try {
 					else if (substr($location, 0, 2) == '0x')
 						$location = hexdec(substr($location, 2));
 					$select_files->execute(array(':loadaddr'=>$location));
+				} else if ($_GET['searchType'] == 'maximum') {
+					$select_files = $db->prepare('SELECT h.fullname FROM hvsc_files h'.
+						' INNER JOIN symlists ON h.id = symlists.file_id'.
+						' WHERE symlists.folder_id = '.$symlist_folder_id.' AND datasize <= :datasize AND fullname LIKE "_High Voltage SID Collection%" LIMIT 1000');
+					$datasize = $_GET['searchQuery'];
+					if (substr($datasize, 0, 1) == '$')
+						$datasize = hexdec(substr($datasize, 1));
+					else if (substr($datasize, 0, 2) == '0x')
+						$datasize = hexdec(substr($datasize, 2));
+					$select_files->execute(array(':datasize'=>$datasize));
 				} else if ($_GET['searchType'] == 'country') {
 					// Search for country in composer profiles
 					$select_files = $db->prepare('SELECT h.fullname FROM hvsc_files h'.

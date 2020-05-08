@@ -386,6 +386,7 @@
 						<option value="copyright">Copyright</option>
 						<option value="player">Player</option>
 						<option value="location">Location</option>
+						<option value="maximum">Maximum</option>
 						<option value="tag">Tags</option>
 						<option value="stil">STIL</option>
 						<option value="rating">Rating</option>
@@ -1195,6 +1196,13 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>May 8, 2020</h3>
+						<ul>
+							<li>You can now also search for a maximum size. Choose <code>Maximum</code> and then type the size.
+								Use raw numbers for decimal or prepend hexadecimal numbers with either <code>$</code> or <code>0x</code>.
+								(For example, <code>4096</code> or <code>0x1000</code>.)</li>
+						</ul>
 
 						<h3>May 5, 2020</h3>
 						<ul>

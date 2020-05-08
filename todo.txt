@@ -5,7 +5,6 @@ SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
 - Bug: Entering 'SID Happens' and playing a song doesn't show its profile this first time.
 - Add search for file size. (Should it just be a "less than this" value?)
-- Swapping color themes fiddles with the C64font colors. What's up with that?
 
 
 CONSIDER THIS
@@ -86,6 +85,7 @@ CONSIDER THIS
 - Bug: CSDb: Start redirect play link, enter compo page, stop tune, back = icon still set to playing.
 - Bug: CSDb: Also a similar problem when opening a release page to already playing "redirect" tune.
 - BUG: Searching for the specific word "data" just returns a compo error.
+- BUG: Swapping color themes fiddles with at least a gray C64font color (maybe more).
 
 - NOT A BUG: SOASC tunes won't play in Firefox from an external link. Although the emulators do,
   it's still not a bug - it's the anti-auto-play setting in Firefox. Turn it off and it works.
