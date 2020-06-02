@@ -3,7 +3,16 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- I like pizza with pepperoni and pineapple.
+- BUG: Fix security hole. A user reported this:
+  Better add escaping to <meta property="og:description"> content attribute, as it allows one to
+  insert possibly maliscious HTML - see http://deepsid.chordian.net/?file=%22%3E%3Ch1%3Efoobarbaz
+
+- Add the newest search types to the FAQ.
+
+- VBI detection can be handled better in WebSid. JW said:
+  "I have PSID specific APIs that might allow you to handle the PSID labels "more correctly", e.g.
+  envIsPSID() to check if it is one of those crappy PSID files, and then envIsTimerDrivenPSID() to
+  check if it is timer driven (which for PSIDs reports the opposite of envIsRasterDrivenPSID())."
 
 
 CONSIDER THIS
@@ -267,10 +276,26 @@ PROBABLY NOT?
 - If not logged in, more than ~10 ratings for a folder or file is shown with stars (in a different color).
 - And those stars can be completely partially shown (not just half stars).
 
+- Someone asked for a context menu option for exporting SID to MIDI, but it would be way too much work.
+  I would need someone to have created a SID to MIDI library in JS or PHP so I can use it right away.
+  Converting e.g. the XSID source code is not an option.
+
 - Now that the "download" option is available, it would make sense to play CGSC stereo files. However,
   there's a problem there. Stereo files are two files; one MUS and one STR file, yet a row click
   obviously only downloads the MUS file. If only ZIP files were supported - then again, I'm not going to
   ZIP thousands of MUS files!
+
+- For the SH folder: A way to position custom scrollbar to the point in the STIL image where it gives
+  the most information. Must be possible to set from the STIL text itelf. (A custom HTML tag?)
+
+- When clicking a tune; if a CSDb page exists with a thumbnail, the path to this thumbnail could be
+  copied below existing STIL text (if any) in an <IMG> tag. Remember 6px margin if existing text is
+  detected, otherwise no margin. Also, do nothing if an <IMG> tag is detected in the STIL text (it was
+  previously added manually in the "SID Happens" folder). And, of course, this is only done for direct
+  release pages, not if there's just a list of CSDb search results.
+  Counter argument: You have to scroll down to see bits of the image (not cool) or if you want to expand
+  the sundry box, you need to have a big screen with a lot of vertical space. Visit the "SID Happens"
+  folder to observe this problem.
 
 - Symlists, next version:
   - A fourth option could be "Make a copy for myself only" to be used on a public folder.

@@ -14,7 +14,7 @@ Local version:
   2. Download archive from web site. Copy it to the music library root folder and unpack to "here".
   3. Rename the "CGSC" folder to "_Compute's Gazette SID Collection" PLUS new version appended to it.
   4. Try deleting the renamed folder from step 1, but be prepared for Windows 10 acting up. Sometimes
-     it takes forever to finish deleting it, at other times it's fast as is there nothing to it.
+     it takes forever to finish deleting it, at other times it's fast as if there's nothing to it.
 
 Online version:
 
@@ -70,6 +70,9 @@ For "MOVE" files with ".mus" extensions:
   3. Edit the "updated" field and add the latest ### version number in it.
   4. Repeat steps 1-3 for additional move lines.
 
+Check that the destination folders the files were moved to exists in the "hvsc_folders" table. You can
+copy an existing one and rename it of necessary (remember to also specify the correct count of files).
+
 SKIP
 ¯¯¯¯
 You should be able to skip the "REPLACE TUNES OR WDS" section as these should not affect the "fullname"
@@ -99,19 +102,21 @@ ADDING NEW FILES
   4. Delete all the lines that does not end with the ".mus" extension.
   5. Copy this to the clipboard now: _Compute's Gazette SID Collection/
   6. Home on each line and insert the string. (If there are a lot of new files, record and repeat a macro.)
-  7. Ctrl+H, "Replace All" backslashes to forward slashes instead.
-  8. Save the Notepad++ file and exit.
+  7. Add ",###" to the end of each string, where ### is the new version number. (If there are a lot of new
+     files, record and repeat a macro.)
+  8. Ctrl+H, "Replace All" backslashes to forward slashes instead.
+  9. Save the Notepad++ file and exit.
 
 Don't close "Whats_new_in_v###.txt" in Notepad just yet.
 
   1. In the LOCAL database tab, enter the "hvsc_files" table in phpMyAdmin and click "Import".
   2. Click "Browse" and click the Notepad++ file.
   3. Change "Format" to "CSV".
-  4. Write "fullname" in the "Column names" edit box.
+  4. Write "fullname,new" in the "Column names" edit box.
   5. Click "Go".
 
-Check the end of the "hvsc_files" table to see if the new files were added properly. If they were, add the
-latest ### version number in the "new" field for each file. Do the same thing for the ONLINE database tab.
+Check the end of the "hvsc_files" table to see if the new files were added properly. If they were then do
+the same thing for the ONLINE database tab.
 
 ADDING NEW FOLDERS
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
@@ -132,6 +137,8 @@ Folders created for moving should already have been taken care of in the MOVE se
      text files, all capital files without an extension, and whatever else you may find irrelevant. Only
      the ".mus", ".wds" and ".str" file extensions should be present. If you don't do this, entering the
      folder in the local DeepSID will show an "Undefined variable: has_photo" PHP error.
+
+Make sure the latest version ### is also added in the "New" column for the new folders.
 
 VERSIONS
 ¯¯¯¯¯¯¯¯

@@ -905,7 +905,7 @@
 							<a href="https://www.hvsc.c64.org/">https://www.hvsc.c64.org/</a>
 						</p>
 						<p>
-							Compute's Gazette SID Collection #138<br />
+							Compute's Gazette SID Collection #139<br />
 							<a href="http://www.c64music.co.uk/">http://www.c64music.co.uk/</a>
 						</p>
 						<p>
@@ -1196,6 +1196,11 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>June 2, 2020</h3>
+						<ul>
+							<li>DeepSID's copy of <a href="http://www.c64music.co.uk/">Compute's Gazette SID Collection</a> has now been upgraded to version 1.39.</li>
+						</ul>
 
 						<h3>May 8, 2020</h3>
 						<ul>

@@ -7,7 +7,7 @@
 
 	this.ROOT_HVSC = 'hvsc';
 	this.HVSC_VERSION = 72;
-	this.CGSC_VERSION = 138;
+	this.CGSC_VERSION = 139;
 
 	this.path = "";
 	this.search = "";
@@ -1111,7 +1111,7 @@ Browser.prototype = {
 						var $selected = $("#tabs .selected");
 						if ($selected.attr("data-topic") === "gb64" || $selected.attr("data-topic") === "remix")
 							$("#tab-profile").trigger("click");
-						this.previousOverridePath = "";
+						this.previousOverridePath = "_SID Happens";
 					}
 
 					// FOLDERS
