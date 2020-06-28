@@ -901,7 +901,7 @@
 
 						<h3>Libraries of SID tunes</h3>
 						<p>
-							High Voltage SID Collection #72<br />
+							High Voltage SID Collection #73<br />
 							<a href="https://www.hvsc.c64.org/">https://www.hvsc.c64.org/</a>
 						</p>
 						<p>
@@ -1196,6 +1196,22 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>June 27, 2020</h3>
+						<ul>
+							<li>The <a href="https://www.hvsc.c64.org/">High Voltage SID Collection</a> has been upgraded to the latest version #73.</li>
+							<li>Added composer profiles for the new folders in HVSC #73.</li>
+						</ul>
+
+						<h3>June 25, 2020</h3>
+						<ul>
+							<li>Upgraded the WebSid (HQ) emulator. Fixed a wrong timer default issue.</li>
+						</ul>
+
+						<h3>June 23, 2020</h3>
+						<ul>
+							<li>Fixed a bug where the graph view didn't work until the color theme had been changed.</li>
+						</ul>
 
 						<h3>June 2, 2020</h3>
 						<ul>

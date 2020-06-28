@@ -16,8 +16,26 @@ UPDATE hvsc_files SET player = "Zoolook's player" WHERE id = 24177							-- _Hig
 UPDATE hvsc_files SET player = "JammicroV0" WHERE id = 67945								-- _High Voltage SID Collection/MUSICIANS/J/Jammer/Aye_Contact.sid
 UPDATE hvsc_files SET player = "JammicroV0" WHERE id = 67946								-- _High Voltage SID Collection/MUSICIANS/J/Jammer/Tillax.sid
 UPDATE hvsc_files SET player = "SidFactory II" WHERE id = 67984								-- _High Voltage SID Collection/MUSICIANS/L/Laxity/Pipe_and_Pearls.sid
+UPDATE hvsc_files SET player = "SidFactory II" WHERE id = 68893								-- _High Voltage SID Collection/MUSICIANS/J/JCH/All_Around_the_World.sid
 UPDATE hvsc_files SET player = "JO's player + THCM" WHERE id = 22304						-- _High Voltage SID Collection/MUSICIANS/H/HJE/Megademo_part_2.sid
 UPDATE hvsc_files SET player = "Vibrants/JO" WHERE id = 22322								-- _High Voltage SID Collection/MUSICIANS/H/HJE/Woody_the_Worm.sid
+
+/* Laxity tunes in SID Player II */
+UPDATE hvsc_files SET player = "SidFactory II" WHERE id = 68914
+UPDATE hvsc_files SET player = "SidFactory II" WHERE id = 68915
+UPDATE hvsc_files SET player = "SidFactory II" WHERE id = 68916
+UPDATE hvsc_files SET player = "SidFactory II" WHERE id = 68917
+UPDATE hvsc_files SET player = "SidFactory II" WHERE id = 68918
+UPDATE hvsc_files SET player = "SidFactory II" WHERE id = 68919
+UPDATE hvsc_files SET player = "SidFactory II" WHERE id = 68920
+UPDATE hvsc_files SET player = "SidFactory II" WHERE id = 68921
+UPDATE hvsc_files SET player = "SidFactory II" WHERE id = 68922
+UPDATE hvsc_files SET player = "SidFactory II" WHERE id = 68923
+UPDATE hvsc_files SET player = "SidFactory II" WHERE id = 68924
+UPDATE hvsc_files SET player = "SidFactory II" WHERE id = 68925
+UPDATE hvsc_files SET player = "SidFactory II" WHERE id = 68926
+UPDATE hvsc_files SET player = "SidFactory II" WHERE id = 68927
+UPDATE hvsc_files SET player = "SidFactory II" WHERE id = 68928
 
 /* Tags */
 DELETE FROM tags_lookup WHERE files_id = 66429 AND tags_id = 9								-- Tag ID 9 = "Coop" + _High Voltage SID Collection/DEMOS/M-R/Mr_Brightside.sid

@@ -823,6 +823,7 @@ Viz.prototype = {
 		// Not available on mobile devices, and the 'Graph' view and its tab must both be visible
 		if ($("body").attr("data-mobile") !== "0" || $("#tabs .selected").attr("data-topic") !== "visuals"
 			|| !$("#sticky-visuals .icon-graph").hasClass("button-on")) return;
+		if (colorTheme == null) colorTheme = 0;
 
 		for (var voice = 0; voice < viz.maxVoices; voice++) {
 

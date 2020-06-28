@@ -62,16 +62,16 @@ First, do steps 1 to 7 above as you will need the big file later.
      point it should have done its job.
   5. Run the script now like this: http://chordian/deepsid/php/update_hvsc_db.php
   6. Look through the output and compare stuff in database to see if things went well.
-  7. If there's a red move error, someone forgot to add backslashes to folders. Find
+  7. If there's a red move error, someone forgot to add end slashes to folders. Find
      the entries, add the backslashes, make a new tiny .hvs file with just those lines,
-     then run the script in step 4 again. That should patch it. If you intend to run
+     then run the script in step 5 again. That should patch it. If you intend to run
      these steps online in a minute, edit the big one once and for all first. (Also, to
      be absolutely honest, you really should update the PHP script to handle that!)
   8. Make a security backup of the "hvsc_files" and "hvsc_folders" tables.
 
   The upgrade process may have moved or deleted folders that the script didn't take care
   of. For example, in HVSC #70 the contents of a lot of sub folders for old tunes were
-  moved into their parent folder. This left duplicate folders that prevented the filter
+  moved into their parent folder. This left duplicate folders that may prevent the filter
   modes for letter folders in MUSICIANS from working properly.
 
   To fix this problem:
@@ -112,7 +112,8 @@ Import general SIDId player data:
         2. Down to next line (again home on start of the line).
  14. Stop recording and repeat the macro until end of file. (The bottom should be okay.)
  15. Save.
- 16. Split the file into three CSV files (PhpMyAdmin can't handle it all).
+ 16. Split the file into four CSV files of max 15000 lines using FileSplitter, which is present in the
+     utility folder. (PhpMyAdmin can't handle it all).
 
   1. Enter the "hvsc_files" table and click "Operations".
   2. In "Copy table to (database.table):" select "Structure only"
@@ -124,7 +125,7 @@ Import general SIDId player data:
   3. Change "Format" to "CSV".
   4. Write "fullname,player" in the "Column names" edit box.
   5. Click "Go".
-  6. Repeat the above steps again for the second and third CSV files.
+  6. Repeat the above steps again for the other CSV file parts.
   7. Export the "hvsc_files_import" to an SQL file for later import online. This way you won't
      have to import the parts above, just that SQL file.
 
@@ -197,7 +198,8 @@ Import HVSC song lengths:
         7. Home + down to next line.
   5. Stop recording and repeat the macro until end of file. (The bottom should be okay.)
   6. Forward slashes in fullnames should already be used. Validate that this is still true.
-  7. Split the file into three CSV files (PhpMyAdmin can't handle it all).
+  7. Split the file into four CSV files of max 15000 lines using FileSplitter, which is present in the
+     utility folder. (PhpMyAdmin can't handle it all).
 
   1. Repeat the same DB import procedure as for players earlier, except:
         1. Specify "fullname,lengths" instead in the "Column names" edit box.
@@ -218,7 +220,7 @@ Import data from the SID files themselves:
         3. ">>sidinfo.csv         (notice two ">" this time!)
         4. Home + down to next line.
   8. Stop recording and repeat the macro until end of file. (The bottom should be okay.)
-  9. Save the file, then open a command box in the HVSC root.
+  9. Save the file, then open a command box in the parent folder just outside the HVSC root.
  10. Run the "sid.bat" file in the command box.
  11. This can take anything from minutes to several hours to do. (Don't touch "sidinfo.csv" until done.)
  12. When done, edit it in Notepad++.
@@ -238,7 +240,8 @@ Import data from the SID files themselves:
  20. You can also find all "..," occurrences and expand titles that were cut off ( > 32 characters).
      Look at the SID filename to see what the title should read in full.
  21. If the file is not already UTF-8, choose menu Encoding > Convert to UTF8. Now save it.
- 22. Split "sidinfo.csv" into four CSV files (PhpMyAdmin can't handle it all at once).
+ 22. Split "sidinfo.csv" into six CSV files of max 10000 lines using FileSplitter, which is present in
+     the utility folder. (PhpMyAdmin can't handle it all).
 
   1. Repeat the same DB import procedure as for players earlier, except:
         1. In "Columns enclosed with" delete the quote character there, leaving the edit box empty.
@@ -247,7 +250,7 @@ Import data from the SID files themselves:
            datasize,loadaddr,initaddr,playaddr,subtunes,startsubtune,name,author,copyright,hash
         4. If you missed something, you'll get red import errors. The good news is that the error reports
            the line you have to edit.
-        5. When all four CSV files have been succesfully imported, run the following SQL:
+        5. When all of the CSV files have been succesfully imported, run the following SQL:
 
              UPDATE hvsc_files
              INNER JOIN hvsc_files_import on hvsc_files_import.fullname = hvsc_files.fullname
@@ -440,25 +443,12 @@ After a HVSC update, do this:
   7. Set 'max_execution_time' back to 120 in PHP.ini and restart the WampServer services again.
   8. Check the top 20 table with the longest tunes.
 
-Back when DeepSID was on a fast server, the following sufficed for doing it online:
+Don't try to run the PHP script ONLINE as the One.com server won't allow it to finish. Besides, the
+following alternative method is easy enough to do instead:
 
-  1. Empty (truncate) the ONLINE "hvsc_lengths" table.
-  2. Run this: http://deepsid.chordian.net/php/update_songlengths.php
-  3. Unlike LOCALHOST this *was* crazy fast - usually less than half a minute.
-  4. Again, check the top 20 table with the longest tunes online.
-
-However, since then One.com moved servers, and the new one was too slow for HVSC #71 to keep up.
-Unfortunately PHP.ini cannot be edited there, so you have to import the LOCALHOST table instead:
-
-  1. Enter the "hvsc_lengths" table in LOCALHOST and export it to a standard CSV (not Excel).
-  2. Split it up into four parts (PhpMyAdmin can't handle it all at once).
-  3. Empty (truncate) the ONLINE "hvsc_lengths" table.
-  4. Click "Import" there.
-  5. Click "Browse" and select a CSV file.
-  6. Change "Format" to "CSV".
-  7. Write "id,fullname,length,subtune" in the "Column names" edit box.
-  8. Click "Go".
-  9. Repeat for the other CSV files until all four have been imported.
+  1. Enter the "hvsc_lengths" table in LOCALHOST and export it to an SQL file.
+  2. Empty (truncate) the ONLINE "hvsc_lengths" table.
+  3. Import the SQL file into the table.
 
 When done, compare the top 20 table with the longest tunes across LOCALHOST and ONLINE. They should
 be exactly the same now.
@@ -488,6 +478,7 @@ Update various minor stuff:
   o  The version number in the 'About' tab.
   o  The "notable" (yellow line) link in the profile page.
   o  Update the top corner link in the profile page to point at the latest CSDb page.
+  o  Update "HVSC_VERSION" in browser.js.
 
 SKIPPED
 ¯¯¯¯¯¯¯

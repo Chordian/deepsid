@@ -14,6 +14,8 @@ SHOULD BE DONE
   envIsPSID() to check if it is one of those crappy PSID files, and then envIsTimerDrivenPSID() to
   check if it is timer driven (which for PSIDs reports the opposite of envIsRasterDrivenPSID())."
 
+- See Sebastian Sprenger's e-mail for a few good ideas.
+
 
 CONSIDER THIS
 ¯¯¯¯¯¯¯¯¯¯¯¯¯
