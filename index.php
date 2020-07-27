@@ -1197,6 +1197,39 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>July 24, 2020</h3>
+						<ul>
+							<li>Upgraded the WebSid (HQ) emulator. Added API to poke in between frame calls and fixed MUS init issue.</li>
+						</ul>
+
+						<h3>July 19, 2020</h3>
+						<ul>
+							<li>Upgraded the WebSid (HQ) emulator. Changed the meta info for digi playback.</li>
+						</ul>
+
+						<h3>July 18, 2020</h3>
+						<ul>
+							<li>Upgraded the WebSid (HQ) emulator. Fixed missing AD.R initialization and disabled digi detection.</li>
+						</ul>
+
+						<h3>July 17, 2020</h3>
+						<ul>
+							<li>Upgraded the WebSid (HQ) emulator. Fixed bugs in timing page crossings and added sprite-bad-cycle hack.</li>
+							<li>Fixed a bug that sometimes caused the filter cutoff bar in the piano view to flicker.</li>
+						</ul>
+
+						<h3>July 6, 2020</h3>
+						<ul>
+							<li>All new files in HVSC #73 are now connected to CSDb entries.</li>
+							<li>Added the CSDb music competitions related to HVSC #73.</li>
+						</ul>
+
+						<h3>July 4, 2020</h3>
+						<ul>
+							<li>Fixed a lot of bad sub tunes set in the <a href="//deepsid.chordian.net/?file=/$Chordian%27s%20Revised%20GAMES/">Revised GAMES</a>
+								playlist that caused songs to loop indefinitely.</li>
+						</ul>
+
 						<h3>June 27, 2020</h3>
 						<ul>
 							<li>The <a href="https://www.hvsc.c64.org/">High Voltage SID Collection</a> has been upgraded to the latest version #73.</li>

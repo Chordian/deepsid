@@ -593,7 +593,7 @@ Viz.prototype = {
 
 				if (useOneKeyboard || voice == 0) {
 					// Show the filter cutoff as a horizontal canvas bar
-					var fc = SID.readRegister(0xD416, chip) << 3 + (SID.readRegister(0xD415, chip) & 0x7);
+					var fc = SID.readRegister(0xD416, chip) << 3 | (SID.readRegister(0xD415, chip) & 0x7);
 					this.ctx_fc[chip - 1].fillStyle = "#cc7c00";
 					this.ctx_fc[chip - 1].fillRect(0, 0, (fc * 100 / 2047) * this.ctx_fc_width / 100, this.ctx_fc_height);
 					this.ctx_fc[chip - 1].fillStyle = this.pianoBarBackground;
@@ -836,7 +836,7 @@ Viz.prototype = {
 
 			if (!viz.lineInGraph && (SID.readRegister(0xD417, chip) & (1 << rawVoice))) { // Filter on?
 				// Strong yellow up to filter cutoff frequency
-				var fc = SID.readRegister(0xD416, chip) << 3 + (SID.readRegister(0xD415, chip) & 0x7),
+				var fc = SID.readRegister(0xD416, chip) << 3 | (SID.readRegister(0xD415, chip) & 0x7),
 					start = viz.graphMode ? 0 : viz.area_width[voice] / 2,
 					max = viz.graphMode ? viz.area_width[voice] : viz.area_width[voice] / 2.666;
 				var x = (fc / 0x07FF) * max;

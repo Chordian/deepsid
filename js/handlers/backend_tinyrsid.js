@@ -35,15 +35,15 @@ if(k.memory){b=k.memory;var c=a.buffer;b.byteLength<c.byteLength&&z("the new buf
 b);x(b)})}if("object"!==typeof WebAssembly)return z("no native wasm support detected"),!1;if(!(a.wasmMemory instanceof WebAssembly.Memory))return z("no native wasm Memory in use"),!1;b.memory=a.wasmMemory;f.global={NaN:NaN,Infinity:Infinity};f["global.Math"]=Math;f.env=b;V++;a.monitorRunDependencies&&a.monitorRunDependencies(V);if(a.instantiateWasm)try{return a.instantiateWasm(f,d)}catch(pa){return z("Module.instantiateWasm callback failed with error: "+pa),!1}a.wasmBinary||"function"!==typeof WebAssembly.instantiateStreaming||
 Y(g)||"function"!==typeof fetch?h(e):WebAssembly.instantiateStreaming(fetch(g,{credentials:"same-origin"}),f).then(e,function(b){z("wasm streaming compile failed: "+b);z("falling back to ArrayBuffer instantiation");h(e)});return{}}var d="tinyrsid.wast",g="tinyrsid.wasm",h="tinyrsid.temp.asm.js";Y(d)||(d=u(d));Y(g)||(g=u(g));Y(h)||(h=u(h));var f={global:null,env:null,asm2wasm:aa,parent:a},k=null;a.asmPreload=a.asm;var H=a.reallocBuffer;a.reallocBuffer=function(b){if("asmjs"===qa)var c=H(b);else a:{var d=
 a.usingWasm?65536:16777216;0<b%d&&(b+=d-b%d);d=a.buffer.byteLength;if(a.usingWasm)try{c=-1!==a.wasmMemory.grow((b-d)/65536)?a.buffer=a.wasmMemory.buffer:null;break a}catch(va){c=null;break a}c=void 0}return c};var qa="";a.asm=function(b,c){if(!c.table){b=a.wasmTableSize;void 0===b&&(b=1024);var d=a.wasmMaxTableSize;c.table="object"===typeof WebAssembly&&"function"===typeof WebAssembly.Table?void 0!==d?new WebAssembly.Table({initial:b,maximum:d,element:"anyfunc"}):new WebAssembly.Table({initial:b,
-element:"anyfunc"}):Array(b);a.wasmTable=c.table}c.memoryBase||(c.memoryBase=a.STATIC_BASE);c.tableBase||(c.tableBase=0);c=e(c);assert(c,"no binaryen method succeeded.");return c}})();var ma=[function(){console.log("info cannot be retrieved  from corrupt .mus file")},function(){console.log("FATAL ERROR: no free memory for driver")},function(b){console.log("BRK from:        $"+b.toString(16))},function(){console.log("ERROR: PSID INIT hangs")}];L=1024;M=L+309568;ha.push({f:function(){na()}});
-a.STATIC_BASE=L;a.STATIC_BUMP=309568;M+=16;function ra(b){return Math.pow(2,b)}var sa=M;M=M+4+15&-16;R=sa;N=O=A(M);P=N+T;Q=A(P);K[R>>2]=Q;a.wasmTableSize=9;a.wasmMaxTableSize=9;a.b={};
+element:"anyfunc"}):Array(b);a.wasmTable=c.table}c.memoryBase||(c.memoryBase=a.STATIC_BASE);c.tableBase||(c.tableBase=0);c=e(c);assert(c,"no binaryen method succeeded.");return c}})();var ma=[function(){console.log("info cannot be retrieved  from corrupt .mus file")},function(){console.log("FATAL ERROR: no free memory for driver")},function(){console.log("ERROR: PSID INIT hangs")},function(b){console.log("BRK from:        $"+b.toString(16))}];L=1024;M=L+309600;ha.push({f:function(){na()}});
+a.STATIC_BASE=L;a.STATIC_BUMP=309600;M+=16;function ra(b){return Math.pow(2,b)}var sa=M;M=M+4+15&-16;R=sa;N=O=A(M);P=N+T;Q=A(P);K[R>>2]=Q;a.wasmTableSize=17;a.wasmMaxTableSize=17;a.b={};
 a.c={abort:x,enlargeMemory:function(){ea()},getTotalMemory:function(){return S},abortOnCannotGrowMemory:ea,___setErrNo:function(b){a.___errno_location&&(K[a.___errno_location()>>2]=b);return b},_emscripten_asm_const_i:function(b){return ma[b]()},_emscripten_asm_const_ii:function(b,c){return ma[b](c)},_emscripten_memcpy_big:function(b,c,e){G.set(G.subarray(c,c+e),b);return b},_llvm_exp2_f64:function(){return ra.apply(null,arguments)},DYNAMICTOP_PTR:R,STACKTOP:O};var ta=a.asm(a.b,a.c,buffer);
 a.asm=ta;var na=a.__GLOBAL__sub_I_sid_cpp=function(){return a.asm.__GLOBAL__sub_I_sid_cpp.apply(null,arguments)};a._computeAudioSamples=function(){return a.asm._computeAudioSamples.apply(null,arguments)};a._enableVoice=function(){return a.asm._enableVoice.apply(null,arguments)};a._enableVoices=function(){return a.asm._enableVoices.apply(null,arguments)};a._envIsNTSC=function(){return a.asm._envIsNTSC.apply(null,arguments)};a._envIsSID6581=function(){return a.asm._envIsSID6581.apply(null,arguments)};
-a._envSetNTSC=function(){return a.asm._envSetNTSC.apply(null,arguments)};a._envSetSID6581=function(){return a.asm._envSetSID6581.apply(null,arguments)};a._envSidVersion=function(){return a.asm._envSidVersion.apply(null,arguments)};a._free=function(){return a.asm._free.apply(null,arguments)};a._getBufferVoice1=function(){return a.asm._getBufferVoice1.apply(null,arguments)};a._getBufferVoice2=function(){return a.asm._getBufferVoice2.apply(null,arguments)};
-a._getBufferVoice3=function(){return a.asm._getBufferVoice3.apply(null,arguments)};a._getBufferVoice4=function(){return a.asm._getBufferVoice4.apply(null,arguments)};a._getDigiRate=function(){return a.asm._getDigiRate.apply(null,arguments)};a._getDigiType=function(){return a.asm._getDigiType.apply(null,arguments)};a._getDigiTypeDesc=function(){return a.asm._getDigiTypeDesc.apply(null,arguments)};a._getGlobalDigiRate=function(){return a.asm._getGlobalDigiRate.apply(null,arguments)};
-a._getGlobalDigiType=function(){return a.asm._getGlobalDigiType.apply(null,arguments)};a._getGlobalDigiTypeDesc=function(){return a.asm._getGlobalDigiTypeDesc.apply(null,arguments)};a._getMusicInfo=function(){return a.asm._getMusicInfo.apply(null,arguments)};a._getNumberTraceStreams=function(){return a.asm._getNumberTraceStreams.apply(null,arguments)};a._getRAM=function(){return a.asm._getRAM.apply(null,arguments)};a._getRegisterSID=function(){return a.asm._getRegisterSID.apply(null,arguments)};
-a._getSampleRate=function(){return a.asm._getSampleRate.apply(null,arguments)};a._getSoundBuffer=function(){return a.asm._getSoundBuffer.apply(null,arguments)};a._getSoundBufferLen=function(){return a.asm._getSoundBufferLen.apply(null,arguments)};a._getTraceStreams=function(){return a.asm._getTraceStreams.apply(null,arguments)};a._loadSidFile=function(){return a.asm._loadSidFile.apply(null,arguments)};a._malloc=function(){return a.asm._malloc.apply(null,arguments)};
-a._playTune=function(){return a.asm._playTune.apply(null,arguments)};var E=a.stackAlloc=function(){return a.asm.stackAlloc.apply(null,arguments)},D=a.stackRestore=function(){return a.asm.stackRestore.apply(null,arguments)},C=a.stackSave=function(){return a.asm.stackSave.apply(null,arguments)};a.dynCall_v=function(){return a.asm.dynCall_v.apply(null,arguments)};a.asm=ta;
+a._envSetNTSC=function(){return a.asm._envSetNTSC.apply(null,arguments)};a._envSetSID6581=function(){return a.asm._envSetSID6581.apply(null,arguments)};a._free=function(){return a.asm._free.apply(null,arguments)};a._getBufferVoice1=function(){return a.asm._getBufferVoice1.apply(null,arguments)};a._getBufferVoice2=function(){return a.asm._getBufferVoice2.apply(null,arguments)};a._getBufferVoice3=function(){return a.asm._getBufferVoice3.apply(null,arguments)};
+a._getBufferVoice4=function(){return a.asm._getBufferVoice4.apply(null,arguments)};a._getDigiRate=function(){return a.asm._getDigiRate.apply(null,arguments)};a._getDigiType=function(){return a.asm._getDigiType.apply(null,arguments)};a._getDigiTypeDesc=function(){return a.asm._getDigiTypeDesc.apply(null,arguments)};a._getGlobalDigiRate=function(){return a.asm._getGlobalDigiRate.apply(null,arguments)};a._getGlobalDigiType=function(){return a.asm._getGlobalDigiType.apply(null,arguments)};
+a._getGlobalDigiTypeDesc=function(){return a.asm._getGlobalDigiTypeDesc.apply(null,arguments)};a._getMusicInfo=function(){return a.asm._getMusicInfo.apply(null,arguments)};a._getNumberTraceStreams=function(){return a.asm._getNumberTraceStreams.apply(null,arguments)};a._getRAM=function(){return a.asm._getRAM.apply(null,arguments)};a._getRegisterSID=function(){return a.asm._getRegisterSID.apply(null,arguments)};a._getSampleRate=function(){return a.asm._getSampleRate.apply(null,arguments)};
+a._getSoundBuffer=function(){return a.asm._getSoundBuffer.apply(null,arguments)};a._getSoundBufferLen=function(){return a.asm._getSoundBufferLen.apply(null,arguments)};a._getTraceStreams=function(){return a.asm._getTraceStreams.apply(null,arguments)};a._loadSidFile=function(){return a.asm._loadSidFile.apply(null,arguments)};a._malloc=function(){return a.asm._malloc.apply(null,arguments)};a._playTune=function(){return a.asm._playTune.apply(null,arguments)};
+a._setRegisterSID=function(){return a.asm._setRegisterSID.apply(null,arguments)};var E=a.stackAlloc=function(){return a.asm.stackAlloc.apply(null,arguments)},D=a.stackRestore=function(){return a.asm.stackRestore.apply(null,arguments)},C=a.stackSave=function(){return a.asm.stackSave.apply(null,arguments)};a.dynCall_v=function(){return a.asm.dynCall_v.apply(null,arguments)};a.asm=ta;
 a.ccall=function(b,c,e,d){var g=a["_"+b];assert(g,"Cannot call unknown function "+b+", make sure it is exported");var h=[];b=0;if(d)for(var f=0;f<d.length;f++){var k=ba[e[f]];k?(0===b&&(b=C()),h[f]=k(d[f])):h[f]=d[f]}e=g.apply(null,h);e="string"===c?ca(e):"boolean"===c?!!e:e;0!==b&&D(b);return e};X=function ua(){a.calledRun||Z();a.calledRun||(X=ua)};
 function Z(){function b(){if(!a.calledRun&&(a.calledRun=!0,!B)){ka||(ka=!0,U(ha));U(ia);if(a.onRuntimeInitialized)a.onRuntimeInitialized();if(a.postRun)for("function"==typeof a.postRun&&(a.postRun=[a.postRun]);a.postRun.length;){var b=a.postRun.shift();ja.unshift(b)}U(ja)}}if(!(0<V)){if(a.preRun)for("function"==typeof a.preRun&&(a.preRun=[a.preRun]);a.preRun.length;)la();U(fa);0<V||a.calledRun||(a.setStatus?(a.setStatus("Running..."),setTimeout(function(){setTimeout(function(){a.setStatus("")},1);
 b()},1)):b())}}a.run=Z;function x(b){if(a.onAbort)a.onAbort(b);void 0!==b?(y(b),z(b),b=JSON.stringify(b)):b="";B=!0;throw"abort("+b+"). Build with -s ASSERTIONS=1 for more info.";}a.abort=x;if(a.preInit)for("function"==typeof a.preInit&&(a.preInit=[a.preInit]);0<a.preInit.length;)a.preInit.pop()();a.noExitRuntime=!0;Z();
@@ -63,7 +63,7 @@ b()},1)):b())}}a.run=Z;function x(b){if(a.onAbort)a.onAbort(b);void 0!==b?(y(b),
  This software is licensed under a CC BY-NC-SA 
  (http://creativecommons.org/licenses/by-nc-sa/4.0/).
 */
-SIDBackendAdapter = (function(){ var $this = function (basicROM, charROM, kernalROM) { 
+SIDBackendAdapter = (function(){ var $this = function (basicROM, charROM, kernalROM, nextFrameCB) { 
 		$this.base.call(this, backend_SID.Module, 2);	// use stereo (for the benefit of multi-SID songs)
 		this.playerSampleRate;
 		
@@ -73,13 +73,28 @@ SIDBackendAdapter = (function(){ var $this = function (basicROM, charROM, kernal
 		this._ROM_SIZE= 0x2000;
 		this._CHAR_ROM_SIZE= 0x1000;
 		
+		this._nextFrameCB= (typeof nextFrameCB == 'undefined') ? this.nopCB : nextFrameCB;
+		
 		this._basicROM= this.base64DecodeROM(basicROM, this._ROM_SIZE);
 		this._charROM= this.base64DecodeROM(charROM, this._CHAR_ROM_SIZE);
 		this._kernalROM= this.base64DecodeROM(kernalROM, this._ROM_SIZE);
+		
+		this._digiShownLabel= "";
+		this._digiShownRate= 0;
+		
+		this.resetDigiMeta();
 	}; 
 	// TinyRSid's sample buffer contains 2-byte (signed short) sample data 
 	// for 1 channel
 	extend(EmsHEAP16BackendAdapter, $this, {
+		nopCB: function() {
+		},
+		resetDigiMeta: function() {
+			this._digiTypes= {};
+			this._digiRate= 0;
+			this._digiBatches= 0;
+			this._digiEmuCalls= 0;
+		},
 		enableScope: function(enable) {
 			this._scopeEnabled= enable;
 		},		
@@ -109,11 +124,49 @@ SIDBackendAdapter = (function(){ var $this = function (basicROM, charROM, kernal
 			text+= (j?(line+"\n"):"")+"}\n";
 			console.log(text);
 		},
+		updateDigiMeta: function() {
+			// get a "not so jumpy" status describing digi output
+			
+			var dTypeStr= this.getExtAsciiString(this.Module.ccall('getDigiTypeDesc', 'number'));
+			var dRate= this.Module.ccall('getDigiRate', 'number');
+			// "computeAudioSamples" correspond to 50/60Hz, i.e. to show some
+			// status for at least half a second, labels should only be updated every
+			// 25/30 calls..
+
+			if (!isNaN(dRate) && dRate) {
+				this._digiBatches++;
+				this._digiRate+= dRate;
+				this._digiTypes[dTypeStr]= 1;	// collect labels
+			}
+			
+			this._digiEmuCalls++;
+			if (this._digiEmuCalls == 20) {
+				this._digiShownLabel= "";
+				
+				if (!this._digiBatches) {
+					this._digiShownRate= 0;
+				} else {
+					this._digiShownRate= Math.round(this._digiRate/this._digiBatches);
+					
+					const arr = Object.keys(this._digiTypes).sort();
+					for (const key of arr) {
+						if (key.length && (key != "NONE"))
+							this._digiShownLabel+= (this._digiShownLabel.length ? "&"+key : key);
+					}
+				}
+				this.resetDigiMeta();
+			}
+		},
 		computeAudioSamples: function() {
+			this._nextFrameCB();	// used for "interactive mode"
+			
 			var len= this.Module.ccall('computeAudioSamples', 'number');
-			if (len <= 0) {			
+			if (len <= 0) {
+				this.resetDigiMeta();
 				return 1; // >0 means "end song"
-			}		
+			}
+			this.updateDigiMeta();
+			
 			return 0;	
 		},
 		getPathAndFilename: function(filename) {
@@ -166,6 +219,8 @@ SIDBackendAdapter = (function(){ var $this = function (basicROM, charROM, kernal
 			if (typeof options.track == 'undefined') {
 				options.track= -1;
 			}
+			this.resetDigiMeta();
+		
 			return this.Module.ccall('playTune', 'number', ['number', 'number'], [options.track, traceSID]);
 		},
 		teardown: function() {
@@ -272,6 +327,9 @@ SIDBackendAdapter = (function(){ var $this = function (basicROM, charROM, kernal
 		getRAM: function(offset) {
 			return this.Module.ccall('getRAM', 'number', ['number'], [offset]);
 		},
+		setRegisterSID: function(offset, value) {
+			this.Module.ccall('setRegisterSID', 'number', ['number', 'number'], [offset, value]);
+		},
 		/**
 		* Diagnostics digi-samples (if any).
 		*/
@@ -279,10 +337,10 @@ SIDBackendAdapter = (function(){ var $this = function (basicROM, charROM, kernal
 			return this.Module.ccall('getDigiType', 'number');
 		},
 		getDigiTypeDesc: function() {
-			return this.getExtAsciiString(this.Module.ccall('getDigiTypeDesc', 'number'));
+			return this._digiShownLabel;
 		},
 		getDigiRate: function() {
-			return this.Module.ccall('getDigiRate', 'number');
+			return this._digiShownRate;
 		},
 		enableVoice: function(sidIdx, voice, on) {
 			this.Module.ccall('enableVoice', 'number', ['number', 'number', 'number'], [sidIdx, voice, on]);

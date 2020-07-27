@@ -6,7 +6,7 @@
 ABOUT
 =====
 
-Everyone that has logged in can upload and edit files in this area. All files here are independent of other collections and will not be removed when they are later updated to include the same files. However, your rating will then be connected to be shared across those twins.
+Everyone that has logged in can upload and edit files in this area. All files here are independent of other collections and will not be removed when they are later updated to include the same files.
 
 THE FILE MUST BE GENUINELY NEW. IF IT ALREADY EXISTS IN ANY OF THE COLLECTIONS IT WILL BE DELETED.
 

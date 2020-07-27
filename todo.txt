@@ -7,6 +7,16 @@ SHOULD BE DONE
   Better add escaping to <meta property="og:description"> content attribute, as it allows one to
   insert possibly maliscious HTML - see http://deepsid.chordian.net/?file=%22%3E%3Ch1%3Efoobarbaz
 
+- BUG: When uploading to SH, make sure .SID is renamed to .sid to avoid a folder creation bug.
+
+- I'm beginning to suspect that the piano view sound chugging is not a memory leak in WebSid after
+  all, but in the piano view code itself. Might be worth looking into it?
+
+- Front page top 10 list: Add most common birth years, now that you have the data for it.
+
+- Write a PHP version of SIDInfo that the SH folder can use when a new SID is uploaded. Leave the
+  CFG file as an external read file so you can easily replace it.
+
 - Add the newest search types to the FAQ.
 
 - VBI detection can be handled better in WebSid. JW said:
@@ -55,6 +65,9 @@ CONSIDER THIS
 - Change isMobile() to also check for tablet width. PHP can't do this so you have to be tricky.
 - Digger and Mordi have requested keys fading out in piano view, for easier arpeggio reading.
 - Is it possible to have individual ratings for multiple sub tune clones in a playlist?
+
+- In a profile page, make the small handles in group table into links and remove the corner external
+  link icon. Then users can choose what handle to open in CSDb themselves.
 
 - SOLID "SHOULD BE DONE" CANDIDATES:
 -
