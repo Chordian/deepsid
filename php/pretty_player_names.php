@@ -52,6 +52,7 @@ $prettyPlayerNames = array(
 	'Dave_Lowe' =>				'Dave Lowe\'s player',
 	'Dave_Warhol' =>			'Dave Warhol\'s player',
 	'David_Dunn' =>				'David Dunn\'s player',
+	'DefMon' =>					'defMON',
 	'Electronic_Speech_Sys' =>	'Electronic Speech Systems',
 	'Emmanuel_Lavall' =>		'Emmanuel Lavall\'s player',
 	'FAME' =>					'FAME\'s player',

@@ -3,6 +3,8 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+- SOASC is useless. Disable their items everywhere and remove top site checker.
+
 - BUG: Fix security hole. A user reported this:
   Better add escaping to <meta property="og:description"> content attribute, as it allows one to
   insert possibly maliscious HTML - see http://deepsid.chordian.net/?file=%22%3E%3Ch1%3Efoobarbaz
@@ -25,6 +27,8 @@ SHOULD BE DONE
   check if it is timer driven (which for PSIDs reports the opposite of envIsRasterDrivenPSID())."
 
 - See Sebastian Sprenger's e-mail for a few good ideas.
+
+- Add exotic stereo tunes for the 2SID and 3SID that arrived in the last couple of HVSC updates.
 
 
 CONSIDER THIS

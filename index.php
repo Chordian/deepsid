@@ -36,7 +36,7 @@
 		<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans%3A400%2C700%2C400italic%2C700italic%7CQuestrial%7CMontserrat&#038;subset=latin%2Clatin-ext" />
 		<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Asap+Condensed" />
 		<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Kanit" />
-		<link rel="stylesheet" type="text/css" href="//olivi.chordian.net/wordpress/wp-content/themes/olivi/style.css" />
+		<link rel="stylesheet" type="text/css" href="//blog.chordian.net/wordpress/wp-content/themes/olivi/style.css" />
 		<link rel="stylesheet" type="text/css" href="//chordian.net/deepsid/css/jquery.mCustomScrollbar.min.css" />
 		<link rel="stylesheet" type="text/css" href="css/chartist.css" />
 		<link rel="stylesheet" type="text/css" href="css/style.css" />
@@ -422,7 +422,7 @@
 						SOASC Status <div id="soasc-status-led"></div><span id="soasc-status-word">?</span>
 					</span>
 
-					<a href="https://olivi.chordian.net/2018/05/12/deepsid/">Blog Post</a>
+					<a href="https://blog.chordian.net/2018/05/12/deepsid/">Blog Post</a>
 						<span>&#9642</span>
 					<a href="https://csdb.dk/forums/?roomid=14&topicid=129712">CSDb</a>
 						<span>&#9642</span>
