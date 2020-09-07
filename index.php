@@ -30,7 +30,7 @@
 			document.head.appendChild(viewport);
 		</script>
 		<meta name="description" content="A modern online SID player for the High Voltage and Compute's Gazette SID collections." /> <!-- Max 150 characters -->
-		<meta name="keywords" content="c64,commodore 64,sid,6581,8580,hvsc,high voltage,cgsc,compute's gazette,visualizer,stil,websid,jssid,hermit,soasc" />
+		<meta name="keywords" content="c64,commodore 64,sid,6581,8580,hvsc,high voltage,cgsc,compute's gazette,visualizer,stil,websid,jssid,hermit" />
 		<meta name="author" content="Jens-Christian Huus" />
 		<title>DeepSID | Chordian.net</title>
 		<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans%3A400%2C700%2C400italic%2C700italic%7CQuestrial%7CMontserrat&#038;subset=latin%2Clatin-ext" />
@@ -244,10 +244,10 @@
 					<option value="websid">WebSid emulator</option>
 					<option value="legacy">WebSid (Legacy)</option>
 					<option value="jssid">Hermit's emulator</option>
-					<option value="soasc_auto">SOASC Automatic</option>
+					<!--<option value="soasc_auto">SOASC Automatic</option>
 					<option value="soasc_r2">SOASC 6581 R2</option>
 					<option value="soasc_r4">SOASC 6581 R4</option>
-					<option value="soasc_r5">SOASC 8580 R5</option>
+					<option value="soasc_r5">SOASC 8580 R5</option>-->
 					<option value="download">Download SID file</option>
 				</select>
 
@@ -418,19 +418,19 @@
 						<a id="forum" href="#">Forum</a>
 					</div>
 
-					<span class="soasc-status">
+					<!--<span class="soasc-status">
 						SOASC Status <div id="soasc-status-led"></div><span id="soasc-status-word">?</span>
-					</span>
+					</span>-->
 
-					<a href="https://blog.chordian.net/2018/05/12/deepsid/">Blog Post</a>
-						<span>&#9642</span>
-					<a href="https://csdb.dk/forums/?roomid=14&topicid=129712">CSDb</a>
+					<!--<a href="https://blog.chordian.net/2018/05/12/deepsid/">Blog Post</a>
+						<span>&#9642</span>-->
+					<a href="https://www.facebook.com/groups/deepsid/">Facebook</a>
 						<span>&#9642</span>
 					<!--<a href="https://www.lemon64.com/forum/viewtopic.php?t=68056">Lemon64</a>
 						<span>&#9642</span>-->
 					<a href="https://twitter.com/chordian">Twitter</a>
 						<span>&#9642</span>
-					<a href="https://www.facebook.com/groups/deepsid/">Facebook</a>
+					<a href="https://csdb.dk/forums/?roomid=14&topicid=129712">CSDb</a>
 						<span>&#9642</span>
 					<a href="https://github.com/Chordian/deepsid">GitHub</a>
 					</div>
@@ -893,11 +893,11 @@
 							<a href="http://hermit.uw.hu/index.php">http://hermit.uw.hu/index.php</a>
 						</p>
 
-						<h3>Audio API library for SOASC</h3>
+						<!--<h3>Audio API library for SOASC</h3>
 						<p>
 							Howler by James Simpson (<a href="https://goldfirestudios.com/">GoldFire Studios</a>)<br />
 							<a href="https://github.com/goldfire/howler.js">https://github.com/goldfire/howler.js</a>
-						</p>
+						</p>-->
 
 						<h3>Libraries of SID tunes</h3>
 						<p>
@@ -908,10 +908,10 @@
 							Compute's Gazette SID Collection #139<br />
 							<a href="http://www.c64music.co.uk/">http://www.c64music.co.uk/</a>
 						</p>
-						<p>
+						<!--<p>
 							Stone Oakvalley's Authentic SID Collection<br />
 							<a href="http://www.6581-8580.com/">http://www.6581-8580.com/</a>
-						</p>
+						</p>-->
 
 						<h3>Remixes of SID tunes</h3>
 						<p>
@@ -988,6 +988,18 @@
 							associate your offline player with automatically playing the tunes.
 						</p>
 
+						<h3>Where did the audio handlers for SOASC go?</h3>
+						<p>
+							The audio handlers for Stone Oakvalley's Authentic SID Collection were removed in September 2020.
+							The connections to these real-time recordings were always spotty at best and later the reaction
+							times also became painfully slow.
+						</p>
+						<p>
+							I have repeatedly tried to fix the reaction times to no avail. It's a shame having to leave this
+							library behind as it would have been nice with real-time recordings to complement the emulations,
+							but I finally decided that the quality of the SOASC implemention was inadequate for DeepSID.
+						</p>
+
 						<h3>How do I make my own playlists?</h3>
 						<p>
 							You need to be using a mouse to create and manage playlists. This cannot be done on a mobile
@@ -1042,7 +1054,7 @@
 								play standard SID as well as 2SID and 3SID. Unfortunately it can't do digi tunes, but it
 								makes up for that by being a steadfast emulator.</td>
 							</tr>
-							<tr>
+							<!--<tr>
 								<td>SOASC R2, R4, R5</td><td>These are real C64 recordings streamed from
 								<a href="http://www.6581-8580.com/">Stone Oakvalley's Authentic SID Collection</a>. R2 is
 								bright filter, R4 is deep filter (think drowning radio) and R5 is 8580 with its improved
@@ -1051,16 +1063,16 @@
 							<tr>
 								<td>SOASC Automatic</td><td>This option automatically chooses the recording type that is
 								correct for the SID tune. R2 is chosen for 6581 tunes and R5 is chosen for 8580 tunes.</td>
-							</tr>
+							</tr>-->
 							<tr>
 								<td>Download SID file</td><td>This makes the browser download the tunes. This is especially
 								useful if an offline player has been associated with automatically playing it. Then it's like
 								having an extra play option.</td>
 							</tr>
 						</table>
-						<p>Note that for the SOASC options, playing SID tunes may be delayed 1-3 seconds due to handshaking
+						<!--<p>Note that for the SOASC options, playing SID tunes may be delayed 1-3 seconds due to handshaking
 							with a download script on Stone Oakvalley's server. Also, none of the emulators can play BASIC
-							tunes as that requires ROM code.</p>
+							tunes as that requires ROM code.</p>-->
 
 						<h3>Why can't I see the right text area on mobile devices?</h3>
 						<p>
@@ -1142,8 +1154,8 @@
 								<td>subtune</td><td>The subtune to play; must be used together with <code>file</code></td>
 							</tr>
 							<tr>
-								<td>emulator</td><td>Set to <code>websid</code>, <code>legacy</code>, <code>jssid</code>,
-									<code>soasc_auto</code>, <code>soasc_r2</code>,<code>soasc_r4</code>, <code>soasc_r5</code>
+								<td>emulator</td><td>Set to <code>websid</code>, <code>legacy</code>, <code>jssid</code><!--,
+									<code>soasc_auto</code>, <code>soasc_r2</code>,<code>soasc_r4</code>, <code>soasc_r5</code>-->
 									or <code>download</code> to temporarily override the SID handler (reloading the web site
 									returns to the previous SID handler)</td>
 							</tr>
@@ -1196,6 +1208,12 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>September 7, 2020</h3>
+						<ul>
+							<li>All SOASC audio handlers have been removed. The connections to these real-time recordings were spotty at
+								best and later the reaction times also became painfully slow.</li>
+						</ul>
 
 						<h3>July 24, 2020</h3>
 						<ul>

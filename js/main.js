@@ -61,10 +61,10 @@ $(function() { // DOM ready
 		"websid",
 		"legacy",
 		"jssid",
-		"soasc_auto",
-		"soasc_r2",
-		"soasc_r4",
-		"soasc_r5",
+		// "soasc_auto",
+		// "soasc_r2",
+		// "soasc_r4",
+		// "soasc_r5",
 		"download",
 	]) === -1) emulator = storedEmulator;
 
@@ -104,8 +104,8 @@ $(function() { // DOM ready
 		.css("cursor", SID.emulatorFlags.supportSeeking ? "pointer" : "default");
 
 	// Check the SOASC status every 5 minutes
-	CheckSOASCStatus();
-	setInterval(CheckSOASCStatus(), 300000);
+	/*CheckSOASCStatus();
+	setInterval(CheckSOASCStatus(), 300000);*/
 
 	// Update tracking every 5 minutes (also called once by 'index.php' upon load)
 	setInterval(function() {

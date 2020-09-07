@@ -26,7 +26,7 @@ $html = '<h3 style="margin-top:10px;">Forum threads from CSDb</h3>
 		<tr><td>C64 Composing</td><td><a href="#" class="thread" data-roomid="14" data-topicid="44909">Useless(?) facts about sids</a></td><td>Mostly about multi-speed SID tunes</td></tr>
 	</table>
 	<h3 style="margin-top:1em;">Other forums</h3>
-	<p>For individiual SID tunes you can comment in the CSDb or Disqus tabs, but DeepSID itself doesn\'t
+	<p>For individual SID tunes you can comment in the CSDb or Disqus tabs, but DeepSID itself doesn\'t
 		have a built-in forum as such. Alternatives are the <a href="https://www.facebook.com/groups/deepsid/" target="_blank">Facebook group</a>,
 		a specific <a href="https://csdb.dk/forums/?roomid=14&topicid=129712" target="_blank">forum thread at CSDb</a>,
 		or my <a href="https://twitter.com/chordian" target="_blank">Twitter account</a>.</p>';
