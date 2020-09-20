@@ -871,6 +871,23 @@ small.u2 { margin-left: 2px; }
 		color: var(--color-link-hover);
 	}
 
+	#sites .msg {
+		margin-left: 53px;
+		color: var(--color-text-fine);
+		text-transform: none;
+		letter-spacing: 0.3px;
+	}
+
+		#sites .msg a {
+			color: var(--color-anchor);
+			font-weight: bold;
+			text-decoration: underline;
+		}
+
+			#sites .msg a:hover {
+				color: var(--color-anchor-hover);
+			}
+
 	#click-to-play-cover {
 		display: none;
 		position: fixed;

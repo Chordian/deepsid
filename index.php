@@ -416,6 +416,7 @@
 						<a id="players" href="#">Players</a>
 							<span>&#9642</span>
 						<a id="forum" href="#">Forum</a>
+						<span class="msg">Visit <a href="http://www.wothke.ch/playmod/">PlayMOD</a> for <b>ModLand</b> and <b>VGMRips</b> in this UI</span>
 					</div>
 
 					<!--<span class="soasc-status">
@@ -1208,6 +1209,16 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>September 20, 2020</h3>
+						<ul>
+							<li>Added a link to <a href="http://www.wothke.ch/playmod/">PlayMOD</a> in the top of the screen. This is a
+								spin-off of the UI used by DeepSID combined with the enormous libraries of
+								<a href="http://ftp.modland.com/pub/modules/">ModLand</a> and
+								<a href="https://vgmrips.net/packs/">VGMRips</a>.
+								It was created by Jürgen Wothke &ndash; the creator of the WebSid emulator used by DeepSID &ndash;
+								back in February 2019.</li>
+						</ul>
 
 						<h3>September 7, 2020</h3>
 						<ul>
