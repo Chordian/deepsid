@@ -36,6 +36,7 @@
 			'Noplanet'					=> 'N',
 			'PCH'						=> 'P',
 			'Phobos'					=> 'P',
+			'Proton'					=> 'P',
 			'Randall'					=> 'R',
 			'Rayden'					=> 'R',
 			'Rosenfeldt_Harald'			=> 'R',

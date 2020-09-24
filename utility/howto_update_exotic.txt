@@ -1,0 +1,61 @@
+How to update the exotic folder in DeepSID with 2SID from e.g. a new HVSC update.
+
+Requirements
+¯¯¯¯¯¯¯¯¯¯¯¯
+  o  Access to MySQL databases (ONLINE only) through PhpMyAdmin.
+  o  Access to the DeepSID files (ONLINE only via FTP).
+
+DATABASE
+¯¯¯¯¯¯¯¯
+  1. Enter PhpMyAdmin and select the "hvsc_files" table, then click "Search" in top.
+  2. For "fullname" LIKE type "%2SID.sid" as well as the HVSC version number in "new" too.
+  3. Click "+ Options" in the bottom and only mark the "fullname" column, then click "Go" to search.
+  4. If "fullname" doesn't show full paths, click the "<- T ->" button to turn it into "-> T <-".
+
+The entire "fullname" fields should now be shown.
+
+  1. First, just see if it appears in the exotic folder in the search results. However, you can't trust
+     it's new if not there, especially if the file has been merged from several parts. So, to be sure:
+  2. Open DeepSID in a web browser tab.
+  3. Search for just the filename of the SID tune (excluding the end like e.g. "_2SID").
+  4. If the tune appears in the exotic folder too (it may be shortened to ESTC) go back to step 1.
+  5. If there are no exotic folder hits, right-click and download it. Go back to step 1.
+
+Don't close the search results yet when done downloading the files.
+
+  1. Move the cluster of files to the "[DeepSID]\utility\convert\2sid_to_stereo\" folder.
+  2. Back out and double-click the "Convert 2SID to Exotic Format" shortcut.
+  3. The "[DeepSID]\utility\convert\stereo\" folder should now have conversions of all the files.
+
+Now to create the new database entries for the exotic versions.
+
+  1. In DeepSID, enter the "Exotic SID Tunes Collection" and its "Stereo 2SID" folder.
+  2. Click the "Copy" link for a new file in the search results that you have downloaded.
+  3. Adapt the "fullname" field, but first check DeepSID to see if the composer has a sub folder. If
+     not (a composer that has less than three files) just replace everything up to the beginning of the
+     SID file. For example:
+
+       _High Voltage SID Collection/GAMES/S-Z/Super_Mario_Bros_64_2SID.sid
+
+     Becomes:
+
+       _Exotic SID Tunes Collection/Stereo 2SID/Super_Mario_Bros_64_2SID.sid
+
+     But if the composer DOES have a folder, add his sub folder right before the filename. It's also
+     possible that the composer reaches three files and you now have to create a sub folder for the
+     first time - something to be aware of while fiddling with this.
+
+     If you do create a new folder then remember to also do this:
+
+       o  Create a row for it in the "hvsc_folders" table (just copy and change the original folder).
+       o  Add an entry in the "composer_exotic.php" file and upload it.
+
+  4. Change the "version" field to read "v4E" and "dataoffset" to "126". Clear the "hash" field.
+
+  5. Now open an FTP client and upload the file to that folder.
+  6. Check if it plays properly in DeepSID. While you're listening, search for the original to see what
+     tags it has (if any) then apply those to the exotic version as well.
+  7. Remember to delete that file in the conversion folder.
+  8. Go back to step 2 and process the next file.
+
+Remember to also update folder counts in the "hvsc_folders" table (including the parent folders).

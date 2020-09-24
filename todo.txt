@@ -22,12 +22,17 @@ SHOULD BE DONE
 
 - Add the newest search types to the FAQ.
 
+- A "Recommended" random box for JW's PlayMOD.
+
 - VBI detection can be handled better in WebSid. JW said:
   "I have PSID specific APIs that might allow you to handle the PSID labels "more correctly", e.g.
   envIsPSID() to check if it is one of those crappy PSID files, and then envIsTimerDrivenPSID() to
   check if it is timer driven (which for PSIDs reports the opposite of envIsRasterDrivenPSID())."
 
 - See Sebastian Sprenger's e-mail for a few good ideas.
+
+- Solarex in lemon64: "I thought it could be great if the nodes on the curve could serve as a
+  search. From a mouse click. Simply present that composer that year on the selection on the left."
 
 - Add exotic stereo tunes for the 2SID and 3SID that arrived in the last couple of HVSC updates.
 
