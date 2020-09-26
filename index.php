@@ -1210,6 +1210,12 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>September 26, 2020</h3>
+						<ul>
+							<li>Added support for forum avatars from CSDb users that are <i>not</i> composers, to make the CSDb
+								forum threads even more interesting to read. Various images will be added over time.</li>
+						</ul>
+
 						<h3>September 20, 2020</h3>
 						<ul>
 							<li>Added a link to <a href="http://www.wothke.ch/playmod/">PlayMOD</a> in the top of the screen. This is a

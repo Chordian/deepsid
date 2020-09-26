@@ -13,7 +13,8 @@ SHOULD BE DONE
   With this you can preset to bright or dark color scheme the first time it is visited.
 
 - I'm beginning to suspect that the piano view sound chugging is not a memory leak in WebSid after
-  all, but in the piano view code itself. Might be worth looking into it?
+  all, but in the piano view code itself. Might be worth looking into it? Maybe you need to add
+  some plugs to prevent stuff from being created more than the one time the tab is first shown.
 
 - Front page top 10 list: Add most common birth years, now that you have the data for it.
 
@@ -24,17 +25,10 @@ SHOULD BE DONE
 
 - A "Recommended" random box for JW's PlayMOD.
 
-- VBI detection can be handled better in WebSid. JW said:
-  "I have PSID specific APIs that might allow you to handle the PSID labels "more correctly", e.g.
-  envIsPSID() to check if it is one of those crappy PSID files, and then envIsTimerDrivenPSID() to
-  check if it is timer driven (which for PSIDs reports the opposite of envIsRasterDrivenPSID())."
-
 - See Sebastian Sprenger's e-mail for a few good ideas.
 
 - Solarex in lemon64: "I thought it could be great if the nodes on the curve could serve as a
   search. From a mouse click. Simply present that composer that year on the selection on the left."
-
-- Add exotic stereo tunes for the 2SID and 3SID that arrived in the last couple of HVSC updates.
 
 
 CONSIDER THIS
@@ -127,6 +121,13 @@ CONSIDER THIS
 - See also:
   - A list of similar SID tunes, for example found by comparing STIL artists.
   - I was thinking a new tab at first, but there are already a lot of those. Alternatives?
+
+- VBI detection can be handled better in WebSid. JW said in Facebook Messenger:
+  "I have PSID specific APIs that might allow you to handle the PSID labels "more correctly", e.g.
+  envIsPSID() to check if it is one of those crappy PSID files, and then envIsTimerDrivenPSID() to
+  check if it is timer driven (which for PSIDs reports the opposite of envIsRasterDrivenPSID())."
+  However, note that these functions are not currently in the published backend JS file ready to be
+  called. Looks like JW will have to add them first.
 
 - Remix tab:
   - Remix64's own site banner in top - maybe even animated the same way?

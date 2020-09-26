@@ -89,11 +89,21 @@ foreach($csdb->Forum->Room->Topic->Post as $post) {
 	}
 
 	// Figure out the name of the thumbnail (if it exists) for the composer
-	$fn = str_replace('_High Voltage SID Collection/', '', $hvsc_folder);
-	$fn = str_replace("_Compute's Gazette SID Collection/", "cgsc_", $fn);
-	$fn = strtolower(str_replace('/', '_', $fn));
-	$thumbnail = 'images/composers/'.$fn.'.jpg';
-	if (!file_exists('../'.$thumbnail)) $thumbnail = 'images/composer.png';
+	if (!empty($hvsc_folder)) {
+		$fn = str_replace('_High Voltage SID Collection/', '', $hvsc_folder);
+		$fn = str_replace("_Compute's Gazette SID Collection/", "cgsc_", $fn);
+		$fn = strtolower(str_replace('/', '_', $fn));
+		$thumbnail = 'images/composers/'.$fn.'.jpg';
+		if (!file_exists('../'.$thumbnail)) $thumbnail = 'images/composer.png';
+	} else {
+		// Not a composer but there might be a thumbnail in a different folder
+		$fn = preg_replace('/[^a-z0-9]+/i', ' ', $handle);
+		$fn = trim($fn);
+		$fn = str_replace(" ", "_", $fn);
+		$fn = strtolower($fn);
+		$thumbnail = 'images/csdb/'.$fn.'.jpg';
+		if (!file_exists('../'.$thumbnail)) $thumbnail = '';
+	}
 
 	/***** REDIRECT (PLINKS) ADAPTATIONS - BEGIN *****/
 
@@ -162,7 +172,10 @@ foreach($csdb->Forum->Room->Topic->Post as $post) {
 				: '<b>'.(!empty($handle) ? $handle : '[?]').'</b>'
 			).
 			'<br /><span class="date">'.$time.'</span><br />'.
-			(!empty($hvsc_folder) ? '<a href="'.HOST.'?file=/'.$hvsc_folder.'"><img class="avatar" src="'.$thumbnail.'" alt="" /></a>' : '').
+			(!empty($hvsc_folder)
+				? '<a href="'.HOST.'?file=/'.$hvsc_folder.'"><img class="avatar" src="'.$thumbnail.'" alt="" /></a>'
+				: ((!empty($thumbnail)) ? '<img class="avatar" src="'.$thumbnail.'" title="Not a composer" alt="" style="cursor:not-allowed;" />' : '')
+			).
 			'<span class="count pm"><a href="https://csdb.dk/privatemessages/sendmessage.php?userid='.$user_id.'&selectdone.x=1" target="_blank">PM</a></span>'.
 			// (!empty($hvsc_folder) ? '<img class="home-folder" src="images/if_folder.svg" alt="" />' : '').
 			(!empty($hvsc_folder) ? '<span class="count home-folder" title="Show DeepSID folder" data-home="'.$hvsc_folder.'"><img style="width:14px;" src="images/if_folder.svg" alt="" /></span>' : '').

@@ -54,7 +54,7 @@ Now to create the new database entries for the exotic versions.
 
   5. Now open an FTP client and upload the file to that folder.
   6. Check if it plays properly in DeepSID. While you're listening, search for the original to see what
-     tags it has (if any) then apply those to the exotic version as well.
+     tags it has (if any) then apply those to the exotic version as well (remember "Stereo" tag too).
   7. Remember to delete that file in the conversion folder.
   8. Go back to step 2 and process the next file.
 
