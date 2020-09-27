@@ -1210,6 +1210,11 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>September 27, 2020</h3>
+						<ul>
+							<li>Fixed a bug that sometimes caused ID numbers to appear instead of user names in CSDb comment threads.</li>
+						</ul>
+
 						<h3>September 26, 2020</h3>
 						<ul>
 							<li>Added support for forum avatars from CSDb users that are <i>not</i> composers, to make the CSDb

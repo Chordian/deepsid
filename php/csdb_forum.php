@@ -174,7 +174,7 @@ foreach($csdb->Forum->Room->Topic->Post as $post) {
 			'<br /><span class="date">'.$time.'</span><br />'.
 			(!empty($hvsc_folder)
 				? '<a href="'.HOST.'?file=/'.$hvsc_folder.'"><img class="avatar" src="'.$thumbnail.'" alt="" /></a>'
-				: ((!empty($thumbnail)) ? '<img class="avatar" src="'.$thumbnail.'" title="Not a composer" alt="" style="cursor:not-allowed;" />' : '')
+				: (!empty($thumbnail) ? '<img class="avatar" src="'.$thumbnail.'" title="Not a composer" alt="" style="cursor:not-allowed;" />' : '')
 			).
 			'<span class="count pm"><a href="https://csdb.dk/privatemessages/sendmessage.php?userid='.$user_id.'&selectdone.x=1" target="_blank">PM</a></span>'.
 			// (!empty($hvsc_folder) ? '<img class="home-folder" src="images/if_folder.svg" alt="" />' : '').

@@ -26,8 +26,6 @@ function CommentsTable($title, $comments, &$scener_handle, &$scener_id, $backwar
 	$parser->addCodeDefinitionSet(new JBBCode\DefaultCodeDefinitionSet());
 
 	$comments_array = array();
-	$scener_handle = array();
-	$scener_id = array();
 
 	foreach($comments as $comment) { // DD.MM.YYYY => YYYY-MM-DD
 
@@ -191,7 +189,7 @@ function CommentsTable($title, $comments, &$scener_handle, &$scener_id, $backwar
 				'<br /><span class="date">'.$fixed_date.'</span><br />'.
 				(!empty($hvsc_folder)
 					? '<a href="'.HOST.'?file=/'.$hvsc_folder.'"><img class="avatar" src="'.$thumbnail.'" alt="" /></a>'
-					: ((!empty($thumbnail)) ? '<img class="avatar" src="'.$thumbnail.'" title="Not a composer" alt="" style="cursor:not-allowed;" />' : '')
+					: (!empty($thumbnail) ? '<img class="avatar" src="'.$thumbnail.'" title="Not a composer" alt="" style="cursor:not-allowed;" />' : '')
 				).
 				'<span class="count pm"><a href="https://csdb.dk/privatemessages/sendmessage.php?userid='.$comment->CSDbUser->ID.'&selectdone.x=1" target="_blank">PM</a></span>'.
 				// (!empty($hvsc_folder) ? '<img class="home-folder" src="images/if_folder.svg" alt="" />' : '').

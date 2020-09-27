@@ -254,10 +254,6 @@ PROBABLY NOT?
 - Same with STIL, a general static button to replace #panel with STIL contents.
 - To be honest, Disqus is barely used at all so this is probably not worth the trouble.
 
-- Some way of adding avatar images in CSDb comments for people that are NOT composers.
-  - And clicking their avatar image would just bring up their CSDb page in a new browser tab.
-  - Counter argument: Nobody expects this, and it makes it harder to spot composers in threads.
-
 - Use the new image credit field - hover on composer image to slide up a small "Source:" row.
   - If set to "UNKNOWN" then nothing is sliding up (i.e. as before).
 
