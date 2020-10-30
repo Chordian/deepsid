@@ -1210,6 +1210,12 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>October 30, 2020</h3>
+						<ul>
+							<li>Replaced a method for calling the CSDb web service. This should reduce the connection errors considerably.</li>
+							<li>Fixed a bug that created "empty holes" in the list of groups for a composer.</li>
+						</ul>
+
 						<h3>October 26, 2020</h3>
 						<ul>
 							<li>Upgraded the WebSid (HQ) emulator. Fixed incorrect LFSR threshold table and minor code reformatting.</li>

@@ -111,17 +111,25 @@ if ($row->csdbtype == 'scener') {
 
 			$all_dates = ['0000-00-00'];
 			$members_array = array();
+			$group_array = array();
 
 			// Build left table with list of groups in the demo scene
 			if (isset($csdb_handle->Handle->MemberOf)) {
 				$members = $csdb_handle->Handle->MemberOf;
 				foreach($members as $member) {
 					if (isset($member->Group)) {
-						$id			= $member->Group->ID;
-						$name		= $member->Group->Name;
-						$status		= $member->Status;
-						$founder	= in_array((string)$id, $founder_array);
+						$id = (int)$member->Group->ID;
+						if (!isset($group_array[$id]))
+						$group_array[$id] = array(
+							'name'		=> $member->Group->Name,
+							'status'	=> $member->Status,
+							'founder'	=> in_array((string)$id, $founder_array)
+						);
 
+						$name = $group_array[$id]['name'];
+						$status = $group_array[$id]['status'];
+						$founder = $group_array[$id]['founder'];
+	
 						$dateStart = '';
 						if (isset($member->JoinYear)) {
 							$dateStart = $member->JoinYear;

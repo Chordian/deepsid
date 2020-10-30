@@ -3,8 +3,6 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- Replace all 'file_get_contents' with the 'curl' function from CShellDB.
-
 - BUG: Fix security hole. A user reported this:
   Better add escaping to <meta property="og:description"> content attribute, as it allows one to
   insert possibly maliscious HTML - see http://deepsid.chordian.net/?file=%22%3E%3Ch1%3Efoobarbaz

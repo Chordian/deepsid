@@ -31,7 +31,7 @@ define('DB_ERROR',          'A database error has been written to a log regularl
 
 define('TIME_ADJUST',		'+1 hours');				// Added to all use of Date() to match correct time
 
-// Use this instead of 'get_file_contents' as that sometimes returns empty strings from CSDb
+// Use this instead of 'file_get_contents' as that sometimes returns empty strings from CSDb
 function curl($url) {
 
     $ch = curl_init();
