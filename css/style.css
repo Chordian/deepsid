@@ -176,7 +176,7 @@
 	--svg-filter-icon-office:		invert(23%) sepia(37%) saturate(2924%) hue-rotate(28deg) brightness(96%) contrast(101%);
 	--svg-filter-icon-editor:		invert(26%) sepia(11%) saturate(0%) hue-rotate(244deg) brightness(90%) contrast(90%);
 	--svg-filter-icon-cstar:		invert(8%) sepia(84%) saturate(5326%) hue-rotate(5deg) brightness(93%) contrast(114%);
-	--svg-filter-icon-time:			invert(50%) sepia(0%) saturate(0%) hue-rotate(184deg) brightness(93%) contrast(91%);;
+	--svg-filter-icon-time:			invert(50%) sepia(0%) saturate(0%) hue-rotate(184deg) brightness(93%) contrast(91%);
 	--svg-filter-icon-to-top:		var(--svg-filter-white);
 	--svg-filter-icon-visuals:		var(--svg-filter-button);
 	--svg-filter-icon-sticky:		var(--svg-filter-icon-editor);
@@ -4438,7 +4438,7 @@ input[type=range]::-ms-track {
 					#page .ext .action .down {
 						display: none;
 						position: absolute;
-						bottom: var(--bottom-connect-down);;
+						bottom: var(--bottom-connect-down);
 						left: 23px;
 						width: 1px;
 						height: 15px;

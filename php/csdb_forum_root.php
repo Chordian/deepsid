@@ -2,7 +2,7 @@
 /**
  * DeepSID
  *
- * Call the web service at CSDb and build a list of forum topics.
+ * Build a list of a few specific forum topics.
  */
 
 require_once("setup.php");

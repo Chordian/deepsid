@@ -3,6 +3,8 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+- Replace all 'file_get_contents' with the 'curl' function from CShellDB.
+
 - BUG: Fix security hole. A user reported this:
   Better add escaping to <meta property="og:description"> content attribute, as it allows one to
   insert possibly maliscious HTML - see http://deepsid.chordian.net/?file=%22%3E%3Ch1%3Efoobarbaz
@@ -22,6 +24,8 @@ SHOULD BE DONE
   CFG file as an external read file so you can easily replace it.
 
 - Add the newest search types to the FAQ.
+
+- Change "A few words..." in the piano view to "Help" where the text is closed tight as default.
 
 - A "Recommended" random box for JW's PlayMOD.
 

@@ -67,7 +67,7 @@ if (isset($fullname)) {
 	die(json_encode(array('status' => 'error', 'message' => 'You must specify the proper GET variables.')));
 
 // Get the XML from the CSDb web service
-$xml = file_get_contents('https://csdb.dk/webservice/?type='.$row->csdbtype.'&id='.$row->csdbid);
+$xml = curl('https://csdb.dk/webservice/?type='.$row->csdbtype.'&id='.$row->csdbid);
 if (!strpos($xml, '<CSDbData>'))
 	die(json_encode(array('status' => 'error', 'warning' => '<p style="margin-top:0;"><i>Uh... CSDb? Are you there?</i></p>'.
 		'<b>ID:</b> <a href="https://csdb.dk/'.$row->csdbtype.'/?id='.$row->csdbid.'" target="_blank">'.$row->csdbid.'</a>')));
@@ -92,7 +92,7 @@ if ($row->csdbtype == 'scener') {
 				$this_handle = $csdb->Handle->Handle;
 			} else {
 				// There another handle so get the XML for it now
-				$xml = file_get_contents('https://csdb.dk/webservice/?type=scener&id='.$handle->ID);
+				$xml = curl('https://csdb.dk/webservice/?type=scener&id='.$handle->ID);
 				if (!strpos($xml, '<CSDbData>'))
 					continue; // BUG FIX: Don't show alert box but just silently ignore and continue
 					/*die(json_encode(array('status' => 'warning', 'message' => '<p style="margin-top:0;"><i>Uh... CSDb? Are you there?</i></p>'.

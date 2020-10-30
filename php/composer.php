@@ -3,7 +3,7 @@
  * DeepSID
  *
  * Build an HTML page with details about the folder/composer. Includes charts
- * for players (pie chart) and active years (graph).
+ * for players (bar chart) and active years (graph).
  * 
  * The group/work tables have been moved to the 'groups.php' file instead.
  * 

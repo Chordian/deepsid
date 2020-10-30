@@ -103,10 +103,6 @@ $(function() { // DOM ready
 	$("#time-bar").addClass(emulator)
 		.css("cursor", SID.emulatorFlags.supportSeeking ? "pointer" : "default");
 
-	// Check the SOASC status every 5 minutes
-	/*CheckSOASCStatus();
-	setInterval(CheckSOASCStatus(), 300000);*/
-
 	// Update tracking every 5 minutes (also called once by 'index.php' upon load)
 	setInterval(function() {
 		$.get("tracking.php");
@@ -1762,44 +1758,6 @@ function UpdateURL(skipFileCheck) {
 		$ctrls.empty();
 		if (!browser.isCGSC()) $ctrls.append(reportSTIL);
 	}
-}
-
-/**
- * Check the SOASC status and set the status in the top accordingly. The SOASC
- * options in the handler drop-down box will be colored red too, if down.
- */
-function CheckSOASCStatus() {
-	$.get("soasc.txt", function(data) {
-		var fields = data.split(","), color = "--color-soasc-status-unknown", word = "?";
-		// Make sure the timestamp is not too old
-		$.get("php/soasc_timestamp.php", { timestamp: fields[0] }, function(data) {
-			browser.validateData(data, function(data) {
-				if (data.minutes < 10) {
-					// The timestamp is fresh
-					switch (parseInt(fields[1])) {
-						case 0:
-							// Everything is OK
-							color = "--color-soasc-status-up";
-							word = "UP";
-							break;
-						case 1:
-							// This cron script did not finish
-							color = "--color-soasc-status-out";
-							break;
-						case 2:
-						case 3:
-							// Something timed out
-							color = "--color-soasc-status-down";
-							word = "DOWN";
-					}
-				}
-				$("#soasc-status-led").css("background", GetCSSVar(color));
-				$("#soasc-status-word").empty().append(word);
-				$("#dropdown-emulator").styledOptionColor("soasc_auto soasc_r2 soasc_r4 soasc_r5",
-					(word == "DOWN" ? GetCSSVar("--color-soasc-handlers-down") : false));
-			});
-		});
-	}, "text");
 }
 
 /**

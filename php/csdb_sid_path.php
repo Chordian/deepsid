@@ -24,7 +24,7 @@ if (!isset($_GET['type']) || !isset($_GET['id']))
 	die(json_encode(array('status' => 'error', 'message' => 'You must specify the proper GET variable.')));
 
 // Get the XML from the CSDb web service
-$xml = file_get_contents('https://csdb.dk/webservice/?type='.$_GET['type'].'&id='.$_GET['id']);
+$xml = curl('https://csdb.dk/webservice/?type='.$_GET['type'].'&id='.$_GET['id']);
 if (!strpos($xml, '<CSDbData>'))
 	die(json_encode(array('status' => 'warning', 'path' => 'N/A')));
 $csdb = simplexml_load_string(utf8_decode($xml));

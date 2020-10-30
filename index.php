@@ -1210,6 +1210,11 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>October 26, 2020</h3>
+						<ul>
+							<li>Upgraded the WebSid (HQ) emulator. Fixed incorrect LFSR threshold table and minor code reformatting.</li>
+						</ul>
+
 						<h3>September 27, 2020</h3>
 						<ul>
 							<li>Fixed a bug that sometimes caused ID numbers to appear instead of user names in CSDb comment threads.</li>

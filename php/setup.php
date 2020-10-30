@@ -30,4 +30,22 @@ define('REMIX64_API',       'oDqHpvKZp2fM05JydWY2ylR8bCE8Y2PN');
 define('DB_ERROR',          'A database error has been written to a log regularly monitored by Chordian.');
 
 define('TIME_ADJUST',		'+1 hours');				// Added to all use of Date() to match correct time
+
+// Use this instead of 'get_file_contents' as that sometimes returns empty strings from CSDb
+function curl($url) {
+
+    $ch = curl_init();
+
+    curl_setopt($ch, CURLOPT_HEADER, false);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+    $data = curl_exec($ch);
+    // echo curl_error($ch);
+    curl_close($ch);
+
+    return $data;
+}
 ?>

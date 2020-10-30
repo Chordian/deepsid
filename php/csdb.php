@@ -100,7 +100,7 @@ if (isset($_GET['fullname'])) {
 	die(json_encode(array('status' => 'error', 'message' => 'You must specify the proper GET variables.')));
 
 // Get the XML from the CSDb web service
-$xml = file_get_contents('https://csdb.dk/webservice/?type='.$csdb_type.'&id='.$csdb_id.($csdb_type == 'sid' ? '&depth=3' : ''));
+$xml = curl('https://csdb.dk/webservice/?type='.$csdb_type.'&id='.$csdb_id.($csdb_type == 'sid' ? '&depth=3' : ''));
 if (!strpos($xml, '<CSDbData>'))
 	die(json_encode(array('status' => 'warning', 'html' => '<p style="margin-top:0;"><i>Uh... CSDb? Are you there?</i></p>'.
 		'<b>ID:</b> <a href="https://csdb.dk/'.$csdb_type.'/?id='.$csdb_id.'" target="_blank">'.$csdb_id.'</a>')));
@@ -115,7 +115,7 @@ if ($csdb_type == 'sid') {
 	$sid_groups = array();
 
 	// For user comments in "sid" entries, we need to get them with lower depth to ensure we get all handles
-	$xml = file_get_contents('https://csdb.dk/webservice/?type=sid&id='.$csdb_id);
+	$xml = curl('https://csdb.dk/webservice/?type=sid&id='.$csdb_id);
 	$simple_csdb = !strpos($xml, '<CSDbData>') ? $csdb : simplexml_load_string(utf8_decode($xml));
 
 	// For some reason the XML user comments for "sid" entries are not backwards

@@ -30,7 +30,7 @@ function ReadRawGB64($id) {
 
 	try {
 		// Read the raw HTML of that GameBase64 entry page
-		$page = file_get_contents('http://www.gamebase64.com/game.php?id='.$id);
+		$page = curl('http://www.gamebase64.com/game.php?id='.$id);
 	} catch(ErrorException $e) {
 		die(json_encode(array('status' => 'warning', 'html' => '<p style="margin:0;"><i>Uh... GameBase64? Are you there?</i></p><small>Come on, GB64, old buddy, don\'t let me down.</small>')));
 	}
