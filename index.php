@@ -138,10 +138,16 @@
 			}
 		?>" />
 		<meta property="og:type" content="website" />
-		<meta property="og:image" content="http://chordian.net/deepsid/images/example<?php
+		<meta property="og:image" content="<?php
 			if (isset($_GET['file']) && (substr($_GET['file'], -4) == '.sid' || substr($_GET['file'], -4) == '.mus'))
-				echo '_play';
-		?>.png" />
+				echo 'http://chordian.net/deepsid/images/example_play.png';
+			else if (isset($_GET['file']) && (strtolower(substr($_GET['file'], 0, 10))) == '/musicians') {
+				$image = 'images/composers/'.strtolower(str_replace('/', '_', trim($_GET['file'], '/'))).'.jpg';
+				if (!file_exists($image)) $image = 'images/composer_dark.png';
+				echo 'http://chordian.net/deepsid/'.$image;
+			} else 
+				echo 'http://chordian.net/deepsid/images/example.png';
+		?>" />
 		<meta property="og:url" content="<?php echo (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]"; ?>" />
 		<meta property="og:description" content="<?php
 			// Example: /MUSICIANS/H/Hubbard_Rob/Commando.sid
@@ -1209,6 +1215,11 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>November 1, 2020</h3>
+						<ul>
+							<li>Updated the OpenGraph image handling to show an avatar image when linking to a HVSC musician.</li>
+						</ul>
 
 						<h3>October 31, 2020</h3>
 						<ul>
