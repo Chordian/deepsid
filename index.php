@@ -998,7 +998,7 @@
 						<p>
 							I have repeatedly tried to fix the reaction times to no avail. It's a shame having to leave this
 							library behind as it would have been nice with real-time recordings to complement the emulations,
-							but I finally decided that the quality of the SOASC implemention was inadequate for DeepSID.
+							but I finally decided that the quality of the SOASC implementation was inadequate for DeepSID.
 						</p>
 
 						<h3>How do I make my own playlists?</h3>
@@ -1209,6 +1209,12 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>October 31, 2020</h3>
+						<ul>
+							<li>Upgraded the WebSid (HQ) emulator. Added noise-oversampling, refactored wave generation, and optimized
+								the performance of the <a href="//deepsid.chordian.net/?file=/Exotic%20SID%20Tunes%20Collection/Nutcracker_10SID.sid">10SID song</a> by ~20%.</li>
+						</ul>
 
 						<h3>October 30, 2020</h3>
 						<ul>
