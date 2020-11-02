@@ -6,6 +6,7 @@
  * 
  * For now, only the following fields are updated:
  * 
+ *  name
  * 	player
  * 	author
  * 	copyright
@@ -15,6 +16,7 @@
  * as e.g. CGSC and SID Happens.
  * 
  * @uses		$_POST['fullname']
+ * @uses		$_POST['name']
  * @uses		$_POST['player']
  * @uses		$_POST['author']
  * @uses		$_POST['copyright']
@@ -38,16 +40,27 @@ try {
 	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	$db->exec("SET NAMES UTF8");
 
+	$select = $db->prepare('SELECT id FROM hvsc_files WHERE fullname = :fullname LIMIT 1');
+	$select->execute(array(':fullname' => $_POST['fullname']));
+	$select->setFetchMode(PDO::FETCH_OBJ);
+	$id = $select->rowCount() ? $select->fetch()->id : 0;
+
+	$new_name = substr($_POST['fullname'], 0, strrpos($_POST['fullname'], '/') + 1).$_POST['name'];
+
 	// Update the fields
-	$update = $db->prepare('UPDATE hvsc_files SET player = :player, author = :author, copyright = :copyright WHERE fullname = :fullname LIMIT 1');
+	$update = $db->prepare('UPDATE hvsc_files SET fullname = :newername, player = :player, author = :author, copyright = :copyright WHERE id = '.$id.' LIMIT 1');
 	$update->execute(array(
+		':newername'	=> $new_name,
 		':player'		=> $_POST['player'],
 		':author'		=> $_POST['author'],
 		':copyright'	=> $_POST['copyright'],
-		':fullname'		=> $_POST['fullname'],
 	));
 	if ($update->rowCount() == 0)
 		die(json_encode(array('status' => 'error', 'message' => 'Could not update the file row for '.$_POST['fullname'])));
+
+	// Rename the physical file too if needed
+	if ($_POST['fullname'] != $new_name)
+		rename(ROOT_HVSC.'/'.$_POST['fullname'], ROOT_HVSC.'/'.$new_name);
 
 } catch(PDOException $e) {
 	$account->LogActivityError('update_file.php', $e->getMessage());

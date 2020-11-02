@@ -160,19 +160,21 @@ $(function() { // DOM ready
 				if (name != "undefined" && $("#logged-username").text() == "JCH") {
 					// Prepare some edit boxes with current data
 					var playerInfo = SID.getSongInfo("info");
+					$("#edit-file-name-input").val(name.split("/").slice(-1)[0]);
 					$("#edit-file-player-input").val(browser.playlist[browser.songPos].playerraw);
 					$("#edit-file-author-input").val(playerInfo.songAuthor);
 					$("#edit-file-copyright-input").val(playerInfo.songReleased);
 					// Show dialog box for editing the file (only the year for now)
 					CustomDialog({
 						id: '#dialog-edit-file',
-						text: '<h3>Edit file</h3><p>'+name.split("/").slice(-1)[0]+'</p>',
+						text: '<h3>Edit file</h3>',
 						width: 390,
 						height: 258,
 					}, function() {
 						// OK was clicked; make the changes to the file row in the database
 						$.post("php/update_file.php", {
 							fullname:	browser.playlist[browser.songPos].fullname.replace(browser.ROOT_HVSC+"/", ""),
+							name:		$("#edit-file-name-input").val(),
 							player:		$("#edit-file-player-input").val(),
 							author:		$("#edit-file-author-input").val(),
 							copyright:	$("#edit-file-copyright-input").val(),

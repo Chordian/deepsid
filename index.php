@@ -143,7 +143,7 @@
 				echo 'http://chordian.net/deepsid/images/example_play.png';
 			else if (isset($_GET['file']) && (strtolower(substr($_GET['file'], 0, 10))) == '/musicians') {
 				$image = 'images/composers/'.strtolower(str_replace('/', '_', trim($_GET['file'], '/'))).'.jpg';
-				if (!file_exists($image)) $image = 'images/composer_dark.png';
+				if (!file_exists($image)) $image = 'images/composer.png';
 				echo 'http://chordian.net/deepsid/'.$image;
 			} else 
 				echo 'http://chordian.net/deepsid/images/example.png';
@@ -208,6 +208,8 @@
 		<div id="dialog-edit-file" class="dialog-box">
 			<div class="dialog-text"></div>
 			<form id="form-edit-file" onsubmit="return false;" autocomplete="off">
+				<label id="label-edit-file-name" for="edit-file-name" style="margin-bottom:15px;">Name</label>
+				<input type="text" name="edit-file-name" id="edit-file-name-input" maxlength="64"  style="margin-bottom:11px;" /><br />
 				<label id="label-edit-file-player" for="edit-file-player" style="margin-bottom:15px;">Player</label>
 				<input type="text" name="edit-file-player" id="edit-file-player-input" maxlength="48"  style="margin-bottom:11px;" /><br />
 				<label id="label-edit-file-author" for="edit-file-author">Author</label>
