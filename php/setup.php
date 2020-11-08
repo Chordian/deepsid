@@ -48,4 +48,59 @@ function curl($url) {
 
     return $data;
 }
+
+// Return the avatar image path for the user, if one exists
+function GetAvatar($id, $name, $hvsc_folder) {
+
+    if (!empty($hvsc_folder)) {
+
+        // Figure out the name of the thumbnail (if it exists) for the composer
+        $fn = str_replace('_High Voltage SID Collection/', '', $hvsc_folder);
+        $fn = str_replace("_Compute's Gazette SID Collection/", "cgsc_", $fn);
+        $fn = strtolower(str_replace('/', '_', $fn));
+        $avatar = 'images/composers/'.$fn.'.jpg';
+        if (!file_exists('../'.$avatar)) $avatar = 'images/composer.png';
+
+    } else {
+
+        // It's a scener, not a composer
+        $undefined_image = $avatar = 'images/composer.png';
+
+        if ($id) {
+            // Try to use the ID number to fetch image (reliable)
+            // Example: "000848_Rastlin.jpg" - the part after "_" can be changed and it will still work (but see below)
+            $file = glob($_SERVER['DOCUMENT_ROOT'].'/deepsid/images/csdb/'.str_pad($id, 6, '0', STR_PAD_LEFT).'_*.jpg');
+            $avatar = isset($file[0]) ? substr($file[0], strpos($file[0], 'images/csdb/')) : $undefined_image;
+        }
+
+        if ($avatar == $undefined_image) {
+            // Must use handle name to figure it out (not entirely reliable)
+            $fn = preg_replace('/[^a-z0-9]+/i', ' ', $name);
+            $fn = trim($fn);
+            $fn = str_replace(' ', '_', $fn);
+            $fn = strtolower($fn);
+
+            // First try to match the handle name after the 6-digit ID part
+            $file = glob($_SERVER['DOCUMENT_ROOT'].'/deepsid/images/csdb/??????_'.$fn.'.jpg');
+            if (isset($file[0]))
+                $avatar = substr($file[0], strpos($file[0], 'images/csdb/'));
+            else {
+                // Try again with the avatars for composers
+                $avatar = '/deepsid/images/composers/musicians_'.$fn[0].'_'.$fn.'.jpg';
+                if (!file_exists($_SERVER['DOCUMENT_ROOT'].$avatar)) {
+                    if (strpos($fn, '_') !== false) {
+                        // Try again with the avatars for composers where the first and second names are swapped
+                        $parts = explode('_', $fn);
+                        $avatar = '/deepsid/images/composers/musicians_'.$parts[1][0].'_'.$parts[1].'_'.$parts[0].'.jpg';
+                        if (!file_exists($_SERVER['DOCUMENT_ROOT'].$avatar))
+                            $avatar = $undefined_image;
+                    } else
+                        $avatar = $undefined_image;
+                }
+            }
+        }
+    }
+
+	return $avatar;
+}
 ?>

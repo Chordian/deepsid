@@ -163,22 +163,7 @@ function CommentsTable($title, $comments, &$scener_handle, &$scener_id, $backwar
 			}
 		}
 
-		if (!empty($hvsc_folder)) {
-			// Figure out the name of the thumbnail (if it exists) for the composer
-			$fn = str_replace('_High Voltage SID Collection/', '', $hvsc_folder);
-			$fn = str_replace("_Compute's Gazette SID Collection/", "cgsc_", $fn);
-			$fn = strtolower(str_replace('/', '_', $fn));
-			$thumbnail = 'images/composers/'.$fn.'.jpg';
-			if (!file_exists('../'.$thumbnail)) $thumbnail = 'images/composer.png';
-		} else {
-			// Not a composer but there might be a thumbnail in a different folder
-			$fn = preg_replace('/[^a-z0-9]+/i', ' ', $handle);
-			$fn = trim($fn);
-			$fn = str_replace(" ", "_", $fn);
-			$fn = strtolower($fn);
-			$thumbnail = 'images/csdb/'.$fn.'.jpg';
-			if (!file_exists('../'.$thumbnail)) $thumbnail = '';
-		}
+		$thumbnail = GetAvatar($scid, $handle, $hvsc_folder);
 
 		array_push($comments_array, '<tr>'.
 			'<td class="user">'.

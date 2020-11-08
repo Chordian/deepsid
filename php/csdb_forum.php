@@ -88,22 +88,7 @@ foreach($csdb->Forum->Room->Topic->Post as $post) {
 		}
 	}
 
-	// Figure out the name of the thumbnail (if it exists) for the composer
-	if (!empty($hvsc_folder)) {
-		$fn = str_replace('_High Voltage SID Collection/', '', $hvsc_folder);
-		$fn = str_replace("_Compute's Gazette SID Collection/", "cgsc_", $fn);
-		$fn = strtolower(str_replace('/', '_', $fn));
-		$thumbnail = 'images/composers/'.$fn.'.jpg';
-		if (!file_exists('../'.$thumbnail)) $thumbnail = 'images/composer.png';
-	} else {
-		// Not a composer but there might be a thumbnail in a different folder
-		$fn = preg_replace('/[^a-z0-9]+/i', ' ', $handle);
-		$fn = trim($fn);
-		$fn = str_replace(" ", "_", $fn);
-		$fn = strtolower($fn);
-		$thumbnail = 'images/csdb/'.$fn.'.jpg';
-		if (!file_exists('../'.$thumbnail)) $thumbnail = '';
-	}
+	$thumbnail = GetAvatar($scid, $handle, $hvsc_folder);
 
 	/***** REDIRECT (PLINKS) ADAPTATIONS - BEGIN *****/
 

@@ -310,19 +310,7 @@ PROBABLY NOT?
   there's a problem there. Stereo files are two files; one MUS and one STR file, yet a row click
   obviously only downloads the MUS file. If only ZIP files were supported - then again, I'm not going to
   ZIP thousands of MUS files!
-
-- For the SH folder: A way to position custom scrollbar to the point in the STIL image where it gives
-  the most information. Must be possible to set from the STIL text itelf. (A custom HTML tag?)
-
-- When clicking a tune; if a CSDb page exists with a thumbnail, the path to this thumbnail could be
-  copied below existing STIL text (if any) in an <IMG> tag. Remember 6px margin if existing text is
-  detected, otherwise no margin. Also, do nothing if an <IMG> tag is detected in the STIL text (it was
-  previously added manually in the "SID Happens" folder). And, of course, this is only done for direct
-  release pages, not if there's just a list of CSDb search results.
-  Counter argument: You have to scroll down to see bits of the image (not cool) or if you want to expand
-  the sundry box, you need to have a big screen with a lot of vertical space. Visit the "SID Happens"
-  folder to observe this problem.
-
+  
 - Symlists, next version:
   - A fourth option could be "Make a copy for myself only" to be used on a public folder.
   - A big list of symlists must use a custom scrollbar on the sub context menu.
