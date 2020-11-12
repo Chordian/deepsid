@@ -49,6 +49,17 @@ function curl($url) {
     return $data;
 }
 
+// Convert a CSDb user name to a more file friendly format
+function GetFriendlyName($name) {
+
+	$fn = preg_replace('/[^a-z0-9]+/i', ' ', $name);
+	$fn = trim($fn);
+	$fn = str_replace(' ', '_', $fn);
+	$fn = strtolower($fn);
+
+	return $fn;
+}
+
 // Return the avatar image path for the user, if one exists
 function GetAvatar($id, $name, $hvsc_folder) {
 
@@ -75,10 +86,7 @@ function GetAvatar($id, $name, $hvsc_folder) {
 
         if ($avatar == $undefined_image) {
             // Must use handle name to figure it out (not entirely reliable)
-            $fn = preg_replace('/[^a-z0-9]+/i', ' ', $name);
-            $fn = trim($fn);
-            $fn = str_replace(' ', '_', $fn);
-            $fn = strtolower($fn);
+            $fn = GetFriendlyName($name);
 
             // First try to match the handle name after the 6-digit ID part
             $file = glob($_SERVER['DOCUMENT_ROOT'].'/deepsid/images/csdb/??????_'.$fn.'.jpg');
@@ -102,5 +110,49 @@ function GetAvatar($id, $name, $hvsc_folder) {
     }
 
 	return $avatar;
+}
+
+// Return the correct color code for the CSDb user
+function GetUserColor($name) {
+
+	$fn = GetFriendlyName($name);
+
+	// @link https://csdb.dk/help.php?section=intro
+	switch ($fn) {
+		case 'perff':
+		case 'cyberbrain':
+		case 'kbs':
+		case 'celtic':
+			$color = ' class="forum-user-admin" title="Administrator"';     // Color for site admins
+			break;
+
+		case 'creamd':
+		case 'zyron':
+		case 'dishy':
+		case 'the_communist':
+		case 'hedning':
+		case 'moloch':
+		case 'e_g':
+		case 'count_zero':
+		case 'bugjam':
+		case 'ian_coog':
+			$color = ' class="forum-user-moderator" title="Moderator"';     // Color for site moderators
+			break;
+
+		case 'cba':
+		case 'fred':
+		case 'dymo':
+		case 'mace':
+		case 'wacek':
+		case 'a3':
+		case 'jch':
+		case 'acidchild':
+			$color = ' class="forum-user-trusted" title="Trusted User"';    // Color for trusted users
+			break;
+
+		default:
+			$color = '';                                                    // Default color for silly mortals
+	}
+	return $color;
 }
 ?>

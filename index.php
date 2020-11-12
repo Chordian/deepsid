@@ -1218,6 +1218,12 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>November 12, 2020</h3>
+						<ul>
+							<li>Added color coding to handles in CSDB forums and comments on e.g. release pages. Red for administrators,
+								blue for moderators and green for trusted users.</li>
+						</ul>
+
 						<h3>November 1, 2020</h3>
 						<ul>
 							<li>Updated the OpenGraph image handling to show an avatar image when linking to a HVSC musician.</li>

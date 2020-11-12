@@ -136,6 +136,10 @@
 	--color-player-player:			#f1f1f8;
 	--color-player-editor:			#f2f8f2;
 
+	--color-forum-admin:			#b44;
+	--color-forum-moderator:		#44b;
+	--color-forum-trusted:			#1a1;
+
 	--color-dialog-cover:			var(--color-bottom);
 	--color-dialog-shadow:			#040404;
 	--color-ctp-circle:				#111;
@@ -490,6 +494,10 @@
 	--color-player-features:		linear-gradient(to bottom, #808068 0%,#606048 90%); /* #707058; */
 	--color-player-player:			linear-gradient(to bottom, #707090 0%,#505070 90%); /* #606080; */
 	--color-player-editor:			linear-gradient(to bottom, #709070 0%,#507050 90%); /* #608060; */
+
+	--color-forum-admin:			#ebb;
+	--color-forum-moderator:		#bbe;
+	--color-forum-trusted:			#beb;
 
 	--color-dialog-cover:			#111;
 	--color-dialog-shadow:			#000;
@@ -4213,6 +4221,16 @@ input[type=range]::-ms-track {
 			color: var(--color-text-minor);
 		}
 
+		#page .ext .forum-user-admin		{ color: var(--color-forum-admin); }
+		#page .ext .forum-user-moderator	{ color: var(--color-forum-moderator); }
+		#page .ext .forum-user-trusted		{ color: var(--color-forum-trusted); }
+	
+		#page .ext .forum-user-admin:hover,
+		#page .ext .forum-user-moderator:hover,
+		#page .ext .forum-user-trusted:hover {
+			color: var(--color-anchor-hover);
+		}
+	
 		#page .ext .user {
 			position: relative;
 			width: 170px;

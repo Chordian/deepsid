@@ -89,6 +89,7 @@ foreach($csdb->Forum->Room->Topic->Post as $post) {
 	}
 
 	$thumbnail = GetAvatar($scid, $handle, $hvsc_folder);
+	$color = GetUserColor($handle);
 
 	/***** REDIRECT (PLINKS) ADAPTATIONS - BEGIN *****/
 
@@ -153,7 +154,7 @@ foreach($csdb->Forum->Room->Topic->Post as $post) {
 	$rows .= '<tr>'.
 		'<td class="user">'.
 			($scid
-				? '<a href="https://csdb.dk/scener/?id='.$scid.'" target="_blank"><b>'.$handle.'</b></a>'
+				? '<a'.$color.' href="https://csdb.dk/scener/?id='.$scid.'" target="_blank"><b>'.$handle.'</b></a>'
 				: '<b>'.(!empty($handle) ? $handle : '[?]').'</b>'
 			).
 			'<br /><span class="date">'.$time.'</span><br />'.

@@ -26,6 +26,7 @@ SHOULD BE DONE
 - Change "A few words..." in the piano view to "Help" where the text is closed tight as default.
 
 - A "Recommended" random box for JW's PlayMOD.
+- And one for CShellDB too.
 
 - Transfer Mahoney's 2SID songs to exotic.
 

@@ -164,11 +164,12 @@ function CommentsTable($title, $comments, &$scener_handle, &$scener_id, $backwar
 		}
 
 		$thumbnail = GetAvatar($scid, $handle, $hvsc_folder);
+		$color = GetUserColor($handle);
 
 		array_push($comments_array, '<tr>'.
 			'<td class="user">'.
 				($scid
-					? '<a href="https://csdb.dk/scener/?id='.$scid.'" target="_blank"><b>'.$handle.'</b></a>'
+					? '<a'.$color.' href="https://csdb.dk/scener/?id='.$scid.'" target="_blank"><b>'.$handle.'</b></a>'
 					: '<b>'.(!empty($handle) ? $handle : '[ID:'.$comment->CSDbUser->ID.']').'</b>'
 				).
 				'<br /><span class="date">'.$fixed_date.'</span><br />'.
