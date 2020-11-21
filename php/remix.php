@@ -85,7 +85,7 @@ if (isset($_GET['fullname'])) {
 					'<td class="info">'.
 						'<a class="name" href="'.$remix64_entry->link_full.'" target="_blank">'.$remix64_entry->formatted->title.'</a>'.
 							'<span class="remix64-length">('.$remix64_entry->formatted->duration.')</span><br />'.
-						substr($remix64_entry->releasedate, 0, 10).
+						(isset($remix64_entry->releasedate) ? substr($remix64_entry->releasedate, 0, 10) : '').
 							' by '.$remix64_entry->arranger->noob_status->tag.
 							' <a href="'.$remix64_entry->arranger->link_full.'" target="_blank"><b>'.$remix64_entry->arranger->formatted->arranger_name.'</b></a><br />'.
 						'<div class="remix64-smiley">'.ceil($remix64_entry->total_score).'% '.

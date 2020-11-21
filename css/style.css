@@ -880,6 +880,8 @@ small.u2 { margin-left: 2px; }
 	}
 
 	#sites .msg {
+		position: relative;
+		top: -0.5px;
 		margin-left: 53px;
 		color: var(--color-text-fine);
 		text-transform: none;

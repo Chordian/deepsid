@@ -424,7 +424,12 @@
 						<a id="players" href="#">Players</a>
 							<span>&#9642</span>
 						<a id="forum" href="#">Forum</a>
-						<span class="msg">Visit <a href="http://www.wothke.ch/playmod/">PlayMOD</a> for <b>ModLand</b> and <b>VGMRips</b> in this UI</span>
+						<span class="msg"><?php
+							if (mt_rand(0,1))
+								echo 'Visit <a href="http://www.wothke.ch/playmod/">PlayMOD</a> for <b>ModLand</b> and <b>VGMRips</b> in this UI';
+							else
+								echo 'Check out <a href="http://csdb.chordian.net/">CShellDB</a> &ndash; a modern interface for <b>CSDb</b>';
+						?></span>
 					</div>
 
 					<!--<span class="soasc-status">
@@ -1217,6 +1222,12 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>November 15, 2020</h3>
+						<ul>
+							<li>Upgraded the WebSid (HQ) emulator. Redesigned the timer and interrupt scheduling, and optimized
+								read-modify-write handling.</li>
+						</ul>
 
 						<h3>November 12, 2020</h3>
 						<ul>

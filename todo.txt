@@ -9,8 +9,8 @@ SHOULD BE DONE
 
 - BUG: When uploading to SH, make sure .SID is renamed to .sid to avoid a folder creation bug.
 
-- See here: https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-color-scheme
-  With this you can preset to bright or dark color scheme the first time it is visited.
+- BUG: What is happening to rodney's avatar picture here?
+  http://deepsid.chordian.net/?tab=csdb&csdbtype=release&csdbid=108379
 
 - I'm beginning to suspect that the piano view sound chugging is not a memory leak in WebSid after
   all, but in the piano view code itself. Might be worth looking into it? Maybe you need to add
@@ -244,6 +244,9 @@ PROBABLY NOT?
 - Let the time pass for "download" tunes so that automatic skip to next tune works in playlists.
   - Problem is subtunes. You can't advance to next subtune in the offline player.
   - But maybe just discard that then so it just always advances to the next SID row.
+
+- See here: https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-color-scheme
+  With this you can preset to bright or dark color scheme the first time it is visited.
 
 - An "add entire folder as playlist" for a symbolically linked version with a unique folder.
   - I'm actually not hot on making this but it was a feature request from the Facebook group.
