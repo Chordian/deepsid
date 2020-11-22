@@ -12,21 +12,12 @@ SHOULD BE DONE
 - BUG: What is happening to rodney's avatar picture here?
   http://deepsid.chordian.net/?tab=csdb&csdbtype=release&csdbid=108379
 
-- I'm beginning to suspect that the piano view sound chugging is not a memory leak in WebSid after
-  all, but in the piano view code itself. Might be worth looking into it? Maybe you need to add
-  some plugs to prevent stuff from being created more than the one time the tab is first shown.
-
-- Front page top 10 list: Add most common birth years, now that you have the data for it.
-
 - Write a PHP version of SIDInfo that the SH folder can use when a new SID is uploaded. Leave the
   CFG file as an external read file so you can easily replace it.
 
 - Add the newest search types to the FAQ.
 
 - Change "A few words..." in the piano view to "Help" where the text is closed tight as default.
-
-- A "Recommended" random box for JW's PlayMOD.
-- And one for CShellDB too.
 
 - Transfer Mahoney's 2SID songs to exotic.
 
@@ -84,6 +75,11 @@ CONSIDER THIS
 - Maybe place "Misc" in CGSC in top, above a divider line?
 - Up/Down cursor keys to change sub tune, Left/Right cursor keys to skip previous/next.
 - For redirect links, add a BACK button in both STIL tabs (to complement the 'b' hotkey).
+- Front page top 10 list: Add most common birth years, now that you have the data for it.
+
+- I'm beginning to suspect that the piano view sound chugging is not a memory leak in WebSid after
+  all, but in the piano view code itself. Might be worth looking into it? Maybe you need to add
+  some plugs to prevent stuff from being created more than the one time the tab is first shown.
 
 - MEMO, player block: A tall rectangle with a zoom box showing where we are in C64 RAM.
   - Maybe it would be best if it always shows the entire span of the C64's RAM?
@@ -247,6 +243,10 @@ PROBABLY NOT?
 
 - See here: https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-color-scheme
   With this you can preset to bright or dark color scheme the first time it is visited.
+
+- A "Recommended" random advertising box for Jürgen Wothke's PlayMOD, and another one for CShellDB.
+  - I have decided to not to this as it smells too much of the kind of advertising an adblocker would
+    want to eliminate. I have instead settled with randomly showing one of two top messages.
 
 - An "add entire folder as playlist" for a symbolically linked version with a unique folder.
   - I'm actually not hot on making this but it was a feature request from the Facebook group.

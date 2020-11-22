@@ -425,7 +425,7 @@
 							<span>&#9642</span>
 						<a id="forum" href="#">Forum</a>
 						<span class="msg"><?php
-							if (mt_rand(0,1))
+							if (mt_rand(0, 1))
 								echo 'Visit <a href="http://www.wothke.ch/playmod/">PlayMOD</a> for <b>ModLand</b> and <b>VGMRips</b> in this UI';
 							else
 								echo 'Check out <a href="http://csdb.chordian.net/">CShellDB</a> &ndash; a modern interface for <b>CSDb</b>';

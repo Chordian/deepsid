@@ -58,6 +58,9 @@ try {
 		$filename = str_replace(ucwords($no_cap), strtolower($no_cap), $filename);
 	$sid['name'] = str_replace(' ', '_', $filename);
 
+	// Make sure the extension is all lower case
+	$sid['name'] = substr($sid['name'], 0, -4).'.sid';
+
 	// Make sure a file of the same name doesn't already exist in the database
 	$exists = $db->query('SELECT 1 FROM hvsc_files WHERE fullname LIKE "'.PATH_UPLOADS.$sid['name'].'" LIMIT 1');
 	if ($exists->rowCount())
