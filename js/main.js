@@ -1411,7 +1411,9 @@ $(function() { // DOM ready
 				}
 			});
 	}
+
 	if (fileParam !== "" && fileParam.indexOf("\\") === -1) {
+
 		// A HVSC folder or file was specified
 		fileParam = fileParam.charAt(0) === "/" ? fileParam : "/"+fileParam;
 		if (fileParam.substr(0, 6) == "/DEMOS" || fileParam.substr(0, 6) == "/GAMES" || fileParam.substr(0, 10) == "/MUSICIANS")

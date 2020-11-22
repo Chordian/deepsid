@@ -6,6 +6,14 @@
 
 	require_once("tracking.php"); // Also called every 5 minutes by 'main.js'
 
+	// Detect and block if the URL contains unwanted characters
+	// Example: http://deepsid.chordian.net/?file=%22%3E%3Ch1%3Efoobarbaz
+	$special_chars = array('[', ']', '<', '>', ';', ',', '"', '*');
+	$url = urldecode("http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]");
+	foreach ($special_chars as $char)
+		if (strpos($url, $char) !== false)
+			die("Malignant switch contents detected. Please fix the URL and try again.");
+
 	function isMobile() {
 		return isset($_GET['mobile'])
 			? $_GET['mobile']

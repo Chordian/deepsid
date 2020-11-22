@@ -3,12 +3,6 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- BUG: Fix security hole. A user reported this:
-  Better add escaping to <meta property="og:description"> content attribute, as it allows one to
-  insert possibly maliscious HTML - see http://deepsid.chordian.net/?file=%22%3E%3Ch1%3Efoobarbaz
-
-- BUG: When uploading to SH, make sure .SID is renamed to .sid to avoid a folder creation bug.
-
 - BUG: What is happening to rodney's avatar picture here?
   http://deepsid.chordian.net/?tab=csdb&csdbtype=release&csdbid=108379
 
