@@ -2600,12 +2600,13 @@ Browser.prototype = {
 							'<tr><td>Type</td><td>'+data.info.type+' v'+data.info.version+'</td></tr>'+
 							'<tr><td>Clock</td><td>'+data.info.clockspeed+'</td></tr>'+
 							'<tr><td>SID Model</td><td>'+data.info.sidmodel+'</td></tr>'+
+							'<tr><td>Player</td><td>'+(data.info.player == "" ? "Unknown" : data.info.player)+'</td></tr>'+
 							'<tr><td>Name</td><td>'+data.info.name+'</td></tr>'+
 							'<tr><td>Author</td><td>'+data.info.author+'</td></tr>'+
 							'<tr><td>Copyright</td><td>'+data.info.copyright+'</td></tr>'+
 							'<tr><td>Subtune</td><td>'+data.info.startsubtune+' / '+data.info.subtunes+'</td></tr>'+
 						'</table>'+
-						'<p>If you wish to edit any of the above, please cancel and use a SID tool to do so, then upload again.</p>',
+						'<p>Use an offline SID tool if you want to edit this.</p>',
 					height: 378,
 					wizard: true,
 				}, function() {

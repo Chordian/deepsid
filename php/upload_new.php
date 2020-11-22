@@ -15,6 +15,7 @@
  */
 
 require_once("class.account.php"); // Includes setup
+require_once("sid_id.php");
 
 define('PATH_UPLOADS', '_SID Happens/');
 
@@ -116,7 +117,7 @@ try {
 	$info = array(
 		'fullname' =>		PATH_UPLOADS.$sid['name'],
 		'filename' =>		$sid['name'],
-		'player' =>			'an undetermined player',
+		'player' =>			IdentifyPlayer($sid['tmp_name']),
 		'lengths' => 		rtrim(str_repeat('20:00 ', $subtunes)),
 		'type' => 			$file[0].'SID',
 		'version' => 		$version,

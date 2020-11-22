@@ -1231,6 +1231,12 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>November 22, 2020</h3>
+						<ul>
+							<li>The upload process for adding a new SID file in the SH folder now automatically detects the player used.
+								This makes use of the same configuration file that the offline <a href="https://csdb.dk/release/?id=112201">SIDId</a> tool also uses.</li>
+						</ul>
+	
 						<h3>November 15, 2020</h3>
 						<ul>
 							<li>Upgraded the WebSid (HQ) emulator. Redesigned the timer and interrupt scheduling, and optimized
