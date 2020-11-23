@@ -6,11 +6,6 @@ SHOULD BE DONE
 - BUG: What is happening to rodney's avatar picture here?
   http://deepsid.chordian.net/?tab=csdb&csdbtype=release&csdbid=108379
 
-- Write a PHP version of SIDInfo that the SH folder can use when a new SID is uploaded. Leave the
-  CFG file as an external read file so you can easily replace it.
-
-- Add the newest search types to the FAQ.
-
 - Change "A few words..." in the piano view to "Help" where the text is closed tight as default.
 
 - Transfer Mahoney's 2SID songs to exotic.

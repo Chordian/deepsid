@@ -260,10 +260,10 @@
 					<option value="websid">WebSid emulator</option>
 					<option value="legacy">WebSid (Legacy)</option>
 					<option value="jssid">Hermit's emulator</option>
-					<!--<option value="soasc_auto">SOASC Automatic</option>
+					<?php /* <option value="soasc_auto">SOASC Automatic</option>
 					<option value="soasc_r2">SOASC 6581 R2</option>
 					<option value="soasc_r4">SOASC 6581 R4</option>
-					<option value="soasc_r5">SOASC 8580 R5</option>-->
+					<option value="soasc_r5">SOASC 8580 R5</option> */ ?>
 					<option value="download">Download SID file</option>
 				</select>
 
@@ -440,9 +440,9 @@
 						?></span>
 					</div>
 
-					<!--<span class="soasc-status">
+					<?php /* <span class="soasc-status">
 						SOASC Status <div id="soasc-status-led"></div><span id="soasc-status-word">?</span>
-					</span>-->
+					</span> */ ?>
 
 					<!--<a href="https://blog.chordian.net/2018/05/12/deepsid/">Blog Post</a>
 						<span>&#9642</span>-->
@@ -915,11 +915,11 @@
 							<a href="http://hermit.uw.hu/index.php">http://hermit.uw.hu/index.php</a>
 						</p>
 
-						<!--<h3>Audio API library for SOASC</h3>
+						<?php /* <h3>Audio API library for SOASC</h3>
 						<p>
 							Howler by James Simpson (<a href="https://goldfirestudios.com/">GoldFire Studios</a>)<br />
 							<a href="https://github.com/goldfire/howler.js">https://github.com/goldfire/howler.js</a>
-						</p>-->
+						</p> */ ?>
 
 						<h3>Libraries of SID tunes</h3>
 						<p>
@@ -930,10 +930,10 @@
 							Compute's Gazette SID Collection #139<br />
 							<a href="http://www.c64music.co.uk/">http://www.c64music.co.uk/</a>
 						</p>
-						<!--<p>
+						<?php /* <p>
 							Stone Oakvalley's Authentic SID Collection<br />
 							<a href="http://www.6581-8580.com/">http://www.6581-8580.com/</a>
-						</p>-->
+						</p> */ ?>
 
 						<h3>Remixes of SID tunes</h3>
 						<p>
@@ -1076,7 +1076,7 @@
 								play standard SID as well as 2SID and 3SID. Unfortunately it can't do digi tunes, but it
 								makes up for that by being a steadfast emulator.</td>
 							</tr>
-							<!--<tr>
+							<?php /* <tr>
 								<td>SOASC R2, R4, R5</td><td>These are real C64 recordings streamed from
 								<a href="http://www.6581-8580.com/">Stone Oakvalley's Authentic SID Collection</a>. R2 is
 								bright filter, R4 is deep filter (think drowning radio) and R5 is 8580 with its improved
@@ -1085,16 +1085,16 @@
 							<tr>
 								<td>SOASC Automatic</td><td>This option automatically chooses the recording type that is
 								correct for the SID tune. R2 is chosen for 6581 tunes and R5 is chosen for 8580 tunes.</td>
-							</tr>-->
+							</tr> */ ?>
 							<tr>
 								<td>Download SID file</td><td>This makes the browser download the tunes. This is especially
 								useful if an offline player has been associated with automatically playing it. Then it's like
 								having an extra play option.</td>
 							</tr>
 						</table>
-						<!--<p>Note that for the SOASC options, playing SID tunes may be delayed 1-3 seconds due to handshaking
+						<?php /* <p>Note that for the SOASC options, playing SID tunes may be delayed 1-3 seconds due to handshaking
 							with a download script on Stone Oakvalley's server. Also, none of the emulators can play BASIC
-							tunes as that requires ROM code.</p>-->
+							tunes as that requires ROM code.</p> */ ?>
 
 						<h3>Why can't I see the right text area on mobile devices?</h3>
 						<p>
@@ -1176,19 +1176,21 @@
 								<td>subtune</td><td>The subtune to play; must be used together with <code>file</code></td>
 							</tr>
 							<tr>
-								<td>emulator</td><td>Set to <code>websid</code>, <code>legacy</code>, <code>jssid</code><!--,
-									<code>soasc_auto</code>, <code>soasc_r2</code>,<code>soasc_r4</code>, <code>soasc_r5</code>-->
+								<td>emulator</td><td>Set to <code>websid</code>, <code>legacy</code>, <code>jssid</code><?php /* ,
+									<code>soasc_auto</code>, <code>soasc_r2</code>,<code>soasc_r4</code>, <code>soasc_r5</code> */ ?>
 									or <code>download</code> to temporarily override the SID handler (reloading the web site
 									returns to the previous SID handler)</td>
 							</tr>
 							<tr>
 								<td>search</td><td>A search query (just like when typed in the bottom)</td>
 							</tr>
+
 							<tr>
 								<td>type</td><td>Search type; <code>fullname</code> (title), <code>author</code>,
-									<code>copyright</code>, <code>player</code>, <code>stil</code>, <code>rating</code>,
-									<code>country</code>, <code>new</code> (HVSC or CGSC version number) or
-									<code>gb64</code> (game)</td>
+									<code>copyright</code>, <code>player</code>, <code>location</code> (in RAM &ndash; e.g. <code>16384</code>
+									or <code>0x4000</code>), <code>maximum</code> (as size &ndash; e.g. <code>16384</code> or <code>0x4000</code>),
+									<code>tag</code>, <code>stil</code>, <code>rating</code>, <code>country</code>, <code>new</code>
+									(HVSC or CGSC version number) or <code>gb64</code> (game)</td>
 							</tr>
 							<tr>
 								<td>tab</td><td>Set to <code>csdb</code>, <code>gb64</code>, <code>remix</code>, <code>stil</code>, <code>visuals</code>,
