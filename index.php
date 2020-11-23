@@ -527,50 +527,52 @@
 								</span>
 							</div>
 							<?php require_once("php/piano.php"); ?>
-							<h3 style="margin-top:16px;">A few words...</h3>
-							<p>
-								If the playback is choppy, try increasing the buffer size. Smaller values mean faster and
-								smoother updating (default is 1024 which is the lowest possible) but also require a fast
-								computer with a nifty web browser.
-							</p>
-							<p>
-								The top right waveform legend explains the colors of notes on the keyboards. Red is pulse,
-								green is triangle and blue is sawtooth. Gray is noise. Waveforms may be combined, but 31, 61
-								and 71 are only audible on the 8580 SID chip.
-							</p>
-							<p>
-								The numbers above the bars are <a href="https://simple.wikipedia.org/wiki/Hexadecimal_numeral_system" target="_blank">hexadecimal</a>.
-								Pulse width has 12 bits and goes from 0 to 4095.
-								The triangle indicates that it's most audible in the middle. The filter cutoff has 11 bits
-								and thus goes from 0 to 2047.
-							</p>
-							<p>
-								The small yellow bar is the filter resonance. It can go from 0 to 15 (maximum resonance).
-								Resonance is a peaking effect which emphasizes frequency components at the cutoff frequency
-								of the filter, causing a sharper sound.
-							</p>
-							<p>
-								RM is ring modulation (non-harmonic overtones) and HS is hard synchronization (complex
-								harmonic structures). Both effects require two voices &ndash; the previous voice as the
-								carrier and the current voice as the modulator.
-							</p>
-							<p>
-								Sometimes the use of gate bit (i.e. when the piano key is depressed then later released) make
-								notes too quick to sense, or it may in some cases even hide them. Turning it off with the
-								toggle button in top can amend this.
-							</p>
-							<p>
-								Click the green buttons to toggle voices ON or OFF. You can also type
-								<code>1</code>, <code>2</code> and <code>3</code> or alternatively <code>q</code>, <code>w</code>
-								and <code>e</code>. (You can also use <code>4</code> and <code>r</code> for digi if you are using
-								WebSid, but it is not reflected on this page.)
-							</p>
-							<p>
-								2SID and 3SID tunes are supported. Each keyboard will automatically combine
-								to host an entire chip (i.e. 3 voices). The square voice buttons will toggle entire SID
-								chips ON or OFF when playing these types of tunes.
-							</p>
-							<p>If you want to "solo" a voice/chip, hold down <code>Shift</code> while pressing the hotkey.</p>
+							<h3 style="display:inline-block;margin-top:16px;">Help</h3><button id="info-piano-button" style="position:relative;top:-2px;left:8px;width:60px;">SHOW</button>
+							<div id="info-piano-text" style="display:none;">
+								<p>
+									If the playback is choppy, try increasing the buffer size. Smaller values mean faster and
+									smoother updating (default is 1024 which is the lowest possible) but also require a fast
+									computer with a nifty web browser.
+								</p>
+								<p>
+									The top right waveform legend explains the colors of notes on the keyboards. Red is pulse,
+									green is triangle and blue is sawtooth. Gray is noise. Waveforms may be combined, but 31, 61
+									and 71 are only audible on the 8580 SID chip.
+								</p>
+								<p>
+									The numbers above the bars are <a href="https://simple.wikipedia.org/wiki/Hexadecimal_numeral_system" target="_blank">hexadecimal</a>.
+									Pulse width has 12 bits and goes from 0 to 4095.
+									The triangle indicates that it's most audible in the middle. The filter cutoff has 11 bits
+									and thus goes from 0 to 2047.
+								</p>
+								<p>
+									The small yellow bar is the filter resonance. It can go from 0 to 15 (maximum resonance).
+									Resonance is a peaking effect which emphasizes frequency components at the cutoff frequency
+									of the filter, causing a sharper sound.
+								</p>
+								<p>
+									RM is ring modulation (non-harmonic overtones) and HS is hard synchronization (complex
+									harmonic structures). Both effects require two voices &ndash; the previous voice as the
+									carrier and the current voice as the modulator.
+								</p>
+								<p>
+									Sometimes the use of gate bit (i.e. when the piano key is depressed then later released) make
+									notes too quick to sense, or it may in some cases even hide them. Turning it off with the
+									toggle button in top can amend this.
+								</p>
+								<p>
+									Click the green buttons to toggle voices ON or OFF. You can also type
+									<code>1</code>, <code>2</code> and <code>3</code> or alternatively <code>q</code>, <code>w</code>
+									and <code>e</code>. (You can also use <code>4</code> and <code>r</code> for digi if you are using
+									WebSid, but it is not reflected on this page.)
+								</p>
+								<p>
+									2SID and 3SID tunes are supported. Each keyboard will automatically combine
+									to host an entire chip (i.e. 3 voices). The square voice buttons will toggle entire SID
+									chips ON or OFF when playing these types of tunes.
+								</p>
+								<p>If you want to "solo" a voice/chip, hold down <code>Shift</code> while pressing the hotkey.</p>
+							</div>
 						</div>
 
 						<div id="visuals-graph" class="visuals" style="display:none;">
@@ -1232,6 +1234,11 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>November 23, 2020</h3>
+						<ul>
+							<li>Put the information text in the piano view in a help container that can be opened.</li>
+						</ul>
 
 						<h3>November 22, 2020</h3>
 						<ul>

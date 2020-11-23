@@ -6,8 +6,6 @@ SHOULD BE DONE
 - BUG: What is happening to rodney's avatar picture here?
   http://deepsid.chordian.net/?tab=csdb&csdbtype=release&csdbid=108379
 
-- Change "A few words..." in the piano view to "Help" where the text is closed tight as default.
-
 - Transfer Mahoney's 2SID songs to exotic.
 
 - See Sebastian Sprenger's e-mail for a few good ideas.

@@ -974,6 +974,20 @@ $(function() { // DOM ready
 	});
 
 	/**
+	 * When clicking the SHOW/HIDE button for information text in the piano view.
+	 */
+	$("#info-piano-button").click(function() {
+		var $this = $(this);
+		if ($this.html() == "SHOW") {
+			$this.empty().append("HIDE");
+			$("#info-piano-text").slideDown();
+		} else {
+			$this.empty().append("SHOW");
+			$("#info-piano-text").slideUp();
+		}
+	});
+
+	/**
 	 * When clicking a rating star in a composer profile.
 	 */
 	$("#topic-profile").on("click", ".folder-rating b", function(event) {
