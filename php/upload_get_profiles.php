@@ -20,10 +20,28 @@ try {
 
 	$all_profiles = array();
 
-	$select = $db->query('SELECT fullname FROM composers WHERE fullname LIKE "_High Voltage SID Collection/%" ORDER BY fullname');
+	$select = $db->query('SELECT fullname, name, handles FROM composers WHERE fullname LIKE "_High Voltage SID Collection/%" ORDER BY fullname');
 	$select->setFetchMode(PDO::FETCH_OBJ);
-	foreach($select as $row)
-		$all_profiles[] = str_replace('_High Voltage SID Collection', 'HVSC', $row->fullname);
+
+	foreach($select as $row) {
+		$name = $row->name;
+		$all_handles = explode(',', $row->handles);
+		$latest_handle = trim(end($all_handles));
+		$handle = strpos($latest_handle, '<del>') === false ? $latest_handle : '';
+		if ((empty($name) || $name == '?') && !empty($handle))
+			$author = $handle;
+		else if (!empty($name) && empty($handle))
+			$author = $name;
+		else if (!empty($name) && !empty($handle))
+			$author = $name.' ('.$handle.')';
+		else
+			$author = '';
+
+		$all_profiles[] = array(
+			'fullname'	=> str_replace('_High Voltage SID Collection', 'HVSC', $row->fullname),
+			'author'	=> $author
+		);
+	}
 
 } catch(PDOException $e) {
 	$account->LogActivityError('upload_get_profiles.php', $e->getMessage());

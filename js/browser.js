@@ -2575,7 +2575,7 @@ Browser.prototype = {
 			this.validateData(data, function(data) {
 				var profiles = '<option value="unset">Not connected to a profile page yet</option>';
 				for (var i = 0; i < data.profiles.length; i++)
-					profiles += '<option value="'+data.profiles[i]+'">'+data.profiles[i]+'</option>';
+					profiles += '<option value="'+data.profiles[i]['fullname']+'" data-author="'+data.profiles[i]['author']+'">'+data.profiles[i]['fullname']+'</option>';
 				// NOTE: Don't use the styled drop-down box; it is too slow to handle a list this big.
 				$("#dropdown-upload-profile").append(profiles).val(this.profileValue);
 			});
@@ -2624,7 +2624,6 @@ Browser.prototype = {
 						$("#upload-stil-text").val("");
 						$("#upload-file-name-input").val(data.info.filename);
 						$("#upload-file-player-input").val(data.info.player);
-						$("#upload-file-author-input").val(data.info.author);
 						// Try to move appended year to the beginning instead
 						var copyright = data.info.copyright;
 						var parts = copyright.split(" ");
@@ -2697,6 +2696,9 @@ Browser.prototype = {
 				break;
 			case 3:
 				// Edit filename, player, author and copyright in database
+				var author = $("#dropdown-upload-profile").find("option:selected").attr("data-author");
+				if (author == "" || typeof author == "undefined") author = data.info.author;
+				$("#upload-file-author-input").val(author);
 				CustomDialog({
 					id: '#dialog-upload-wiz4',
 					text: '<h3><span class="upload-edit">'+this.UploadEdit+'</span> SID File Wizard</h3><div class="top-right-corner">3/4</div><p>You can optionally rename the file and edit the info that goes into the database.</p>',

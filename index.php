@@ -1263,6 +1263,7 @@
 							<li>The upload/edit wizard for the SH folder has been expanded with another step. You can now rename the
 								file, and you can edit the player, author and copyright texts.</li>
 							<li>An appended year in the copyright text in the new wizard step is now moved to the beginning instead.</li>
+							<li>The new wizard step will now also try to suggest a pretty name and/or handle for the author.</li>
 						</ul>
 
 						<h3>November 23, 2020</h3>
