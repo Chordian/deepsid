@@ -2625,7 +2625,13 @@ Browser.prototype = {
 						$("#upload-file-name-input").val(data.info.filename);
 						$("#upload-file-player-input").val(data.info.player);
 						$("#upload-file-author-input").val(data.info.author);
-						$("#upload-file-copyright-input").val(data.info.copyright);
+						// Try to move appended year to the beginning instead
+						var copyright = data.info.copyright;
+						var parts = copyright.split(" ");
+						var endWord = parts[parts.length - 1];
+						if (!isNaN(endWord) && endWord.length == 4 && (endWord.substr(0, 2) == "19" || endWord.substr(0, 2) == "20"))
+							copyright = parts[parts.length - 1]+" "+parts.slice(0, -1); // Swap places
+						$("#upload-file-copyright-input").val(copyright);
 					}
 					browser.uploadWizard(2, data);
 				}.bind(this), function() {

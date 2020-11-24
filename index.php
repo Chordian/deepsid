@@ -1262,6 +1262,7 @@
 								files. It should provide 30-50% faster emulation for some PSID files.</li>
 							<li>The upload/edit wizard for the SH folder has been expanded with another step. You can now rename the
 								file, and you can edit the player, author and copyright texts.</li>
+							<li>An appended year in the copyright text in the new wizard step is now moved to the beginning instead.</li>
 						</ul>
 
 						<h3>November 23, 2020</h3>
