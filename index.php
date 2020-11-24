@@ -213,7 +213,7 @@
 			<div class="dialog-buttons" style="width:136px;"><button class="dialog-button-yes dialog-auto" style="float:left;margin:0;">OK</button><button class="dialog-button-no dialog-auto" style="float:right;margin:0;">Cancel</button></div>
 		</div>
 
-		<div id="dialog-edit-file" class="dialog-box">
+		<?php /* <div id="dialog-edit-file" class="dialog-box">
 			<div class="dialog-text"></div>
 			<form id="form-edit-file" onsubmit="return false;" autocomplete="off">
 				<label id="label-edit-file-name" for="edit-file-name" style="margin-bottom:15px;">Name</label>
@@ -226,7 +226,7 @@
 				<input type="text" name="edit-file-copyright" id="edit-file-copyright-input" maxlength="128" />
 			</form>
 			<div class="dialog-buttons"><a href="#" class="dialog-cancel">Cancel</a><button class="dialog-button-yes dialog-auto">OK</button></div>
-		</div>
+		</div> */ ?>
 
 		<input id="upload-new" type="file" accept=".sid" style="display:none;" />
 		<div id="dialog-upload-wiz2" class="dialog-box dialog-wizard">
@@ -244,6 +244,27 @@
 			<div class="dialog-buttons"><a href="#" class="dialog-cancel">Cancel</a><button class="dialog-button-no dialog-auto">Back</button><button class="dialog-button-yes dialog-auto">Next</button></div>
 		</div>
 		<div id="dialog-upload-wiz4" class="dialog-box dialog-wizard">
+			<div class="dialog-text"></div>
+			<form id="form-upload-file" onsubmit="return false;" autocomplete="off">
+				<label id="label-upload-file-name" for="upload-file-name">Filename</label>
+				<input type="text" name="upload-file-name" id="upload-file-name-input" maxlength="64" /><br />
+				<div style="margin-top:16px;">
+					<label id="label-upload-file-player" for="upload-file-player">Player</label>
+					<input type="text" name="upload-file-player" id="upload-file-player-input" maxlength="48" /><br />
+				</div>
+				<div style="margin-top:16px;">
+					<label id="label-upload-file-author" for="upload-file-author">Author</label>
+					<input type="text" name="upload-file-author" id="upload-file-author-input" maxlength="128" /><br />
+				</div>
+				<div style="margin-top:6px;">
+					<label id="label-upload-file-copyright" for="upload-file-copyright">Copyright</label>
+					<input type="text" name="upload-file-copyright" id="upload-file-copyright-input" maxlength="128" />
+				</div>
+			</form>
+			<p>This only affects the lines you see in the folder list as the top left box reflects the SID file itself.</p>
+			<div class="dialog-buttons"><a href="#" class="dialog-cancel">Cancel</a><button class="dialog-button-no dialog-auto">Back</button><button class="dialog-button-yes dialog-auto">Next</button></div>
+		</div>
+		<div id="dialog-upload-wiz5" class="dialog-box dialog-wizard">
 			<div class="dialog-text"></div>
 			<label for="upload-stil">Custom text for the <b>STIL</b> tabs:</label>
 			<textarea id="upload-stil-text" name="upload-stil" maxlength="8192"></textarea>
@@ -1234,6 +1255,14 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>November 24, 2020</h3>
+						<ul>
+							<li>Upgraded the WebSid (HQ) emulator. This is an experimental optimization that disables unused stuff in PSID
+								files. It should provide 30-50% faster emulation for some PSID files.</li>
+							<li>The upload/edit wizard for the SH folder has been expanded with another step. You can now rename the
+								file, and you can edit the player, author and copyright texts.</li>
+						</ul>
 
 						<h3>November 23, 2020</h3>
 						<ul>

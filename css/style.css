@@ -1271,7 +1271,7 @@ small.u2 { margin-left: 2px; }
 
 		#topic-settings label b,
 		#dialog-upload-wiz3 label b,
-		#dialog-upload-wiz4 label b {
+		#dialog-upload-wiz5 label b {
 			color: var(--color-settings-bold);
 		}
 
@@ -5107,21 +5107,34 @@ input[type=range]::-ms-track {
 
 		/* Edit box */
 		#upload-csdb-id,
-		#upload-lengths-list {
+		#upload-lengths-list,
+		#form-upload-file input {
 			height: 21px;
 			font-size: 13px;
 		}
+
+			#form-upload-file input {
+				position: relative;
+				top: 2px;
+				float: right;
+				width: 265px;
+			}
 
 			#upload-csdb-id {
 				width: 54px;
 			}
 
 			#form-lengths,
-			#upload-lengths-list {
+			#upload-lengths-list,
+			#form-upload-file {
 				width: 100%;
 			}
+			
+			#form-upload-file {
+				margin: 16px 0 18px;
+			}
 
-	#dialog-upload-wiz4 textarea {
+	#dialog-upload-wiz5 textarea {
 		height: 170px;
 		width: 100%;
 		font-size: 13px;

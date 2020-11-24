@@ -7,7 +7,9 @@
  * EDIT:
  * 
  * The existing two rows in the database are updated with the new information
- * about the profile, CSDb ID, song lengths and custom STIL text.
+ * about the profile, CSDb ID, song lengths and custom STIL text. An additional
+ * wizard step was later added to also update the player, author and copyright
+ * as well as rename the file itself both physically and in the database.
  * 
  * UPLOAD:
  * 
@@ -47,6 +49,9 @@ try {
 	$select->execute(array(':fullname' => $info['fullname']));
 	$select->setFetchMode(PDO::FETCH_OBJ);
 
+	// Make sure the extension is there and is lower case
+	$info['newname'] = pathinfo($info['newname'])['filename'].'.sid';
+
 	if ($select->rowCount()) {
 		
 		// EDIT
@@ -56,19 +61,28 @@ try {
 		$array = explode('/', $info['fullname']);
 		$filename = end($array);
 
+		$new_name = substr($info['fullname'], 0, strrpos($info['fullname'], '/') + 1).$info['newname'];
+
 		// Update the general database row
 		$update = $db->prepare('UPDATE hvsc_files SET
+				fullname		= :newername,
+				player			= :player,
 				lengths 		= :lengths,
 				stil 			= :stil,
+				author 			= :author,
+				copyright		= :copyright,
 				csdbtype 		= :csdbtype,
 				csdbid 			= :csdbid
-			WHERE fullname = :fullname LIMIT 1');
+			WHERE id = '.$files_id.' LIMIT 1');
 		$update->execute(array(
+				':newername'	=> $new_name,
+				':player'		=> $info['player'],
 				':lengths'		=> $info['lengths'],
 				':stil'			=> $info['stil'],
+				':author'		=> $info['author'],
+				':copyright'	=> $info['copyright'],
 				':csdbtype'		=> $info['csdbid'] ? 'release' : '',
 				':csdbid'		=> $info['csdbid'],
-				':fullname'		=> $info['fullname']
 			));
 
 		// Get the ID of the specified composer profile
@@ -81,15 +95,20 @@ try {
 		// Update the composer profile in the special database row
 		$update = $db->query('UPDATE uploads SET composers_id = '.$composers_id.' WHERE files_id = '.$files_id.' LIMIT 1');
 
+		// Rename the physical file too if needed
+		if ($info['fullname'] != $new_name)
+			rename(ROOT_HVSC.'/'.$info['fullname'], ROOT_HVSC.'/'.$new_name);
+
 		// Finally log it
-		$account->LogActivity('User "'.$account->UserName().'" edited the "'.$filename.'" file');
+		$account->LogActivity('User "'.$account->UserName().'" edited the "'.$filename.'" file'.
+			($info['fullname'] != $new_name ? ' (renamed to "'.$new_name.'")' : ''));
 
 	} else {
 
 		// UPLOAD
 
 		// Move the new SID file to the proper location
-		rename('../temp/upload/'.$info['filename'], ROOT_HVSC.'/'.PATH_UPLOADS.$info['filename']);
+		rename('../temp/upload/'.$info['filename'], ROOT_HVSC.'/'.PATH_UPLOADS.$info['newname']);
 
 		// Add a new general database row for the new SID file
 		$insert = $db->prepare('INSERT INTO hvsc_files(
@@ -141,8 +160,8 @@ try {
 			)');
 
 		$insert->execute(array(
-				':fullname'		=> PATH_UPLOADS.$info['filename'],
-				':player'		=> $info['player'],
+				':fullname'		=> PATH_UPLOADS.$info['newname'],		// Renamed by upload wizard
+				':player'		=> $info['player'],						// Modified by upload wizard
 				':lengths'		=> $info['lengths'],					// Modified by upload wizard
 				':type'			=> $info['type'],
 				':version'		=> $info['version'],
@@ -157,8 +176,8 @@ try {
 				':subtunes'		=> $info['subtunes'],
 				':startsubtune'	=> $info['startsubtune'],
 				':name'			=> $info['name'],
-				':author'		=> $info['author'],
-				':copyright'	=> $info['copyright'],
+				':author'		=> $info['author'],						// Modified by upload wizard
+				':copyright'	=> $info['copyright'],					// Modified by upload wizard
 				':stil'			=> $info['stil'],						// Created by upload wizard
 				':csdbid'		=> $info['csdbid'],						// Created by upload wizard
 			));
@@ -166,7 +185,7 @@ try {
 		$files_id = $db->lastInsertId();
 
 		if ($insert->rowCount() == 0)
-			die(json_encode(array('status' => 'error', 'message' => 'Could not create the general database entry for the "'.$info['filename'].'" file.')));
+			die(json_encode(array('status' => 'error', 'message' => 'Could not create the general database entry for the "'.$info['newname'].'" file.')));
 
 		// Get the ID of the specified composer profile
 		$select = $db->prepare('SELECT id FROM composers WHERE fullname = :profile LIMIT 1');
@@ -187,10 +206,10 @@ try {
 			)');
 
 		if ($insert->rowCount() == 0)
-			die(json_encode(array('status' => 'error', 'message' => 'Could not create the special database entry for the "'.$info['filename'].'" file.')));
+			die(json_encode(array('status' => 'error', 'message' => 'Could not create the special database entry for the "'.$info['newname'].'" file.')));
 
 		// Finally log it
-		$account->LogActivity('User "'.$account->UserName().'" uploaded the "'.$info['filename'].'" file');
+		$account->LogActivity('User "'.$account->UserName().'" uploaded the "'.$info['newname'].'" file');
 	}
 
 } catch(PDOException $e) {

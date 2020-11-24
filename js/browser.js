@@ -2115,6 +2115,10 @@ Browser.prototype = {
 						// Set controls to show what was previously accepted
 						this.UploadEdit = "Edit";
 						this.getProfiles(data, data.info.profile.replace("_High Voltage SID Collection/", "HVSC/"));
+						$("#upload-file-name-input").val(data.info.fullname.split("/").slice(-1)[0]);
+						$("#upload-file-player-input").val(data.info.player);
+						$("#upload-file-author-input").val(data.info.author);
+						$("#upload-file-copyright-input").val(data.info.copyright);
 						$("#upload-csdb-id").val(data.info.csdbid);
 						$("#upload-lengths-list").css("background", "").val(data.info.lengths);
 						$("#upload-stil-text").val(data.info.stil);
@@ -2595,18 +2599,17 @@ Browser.prototype = {
 				// Present the SID file format information
 				CustomDialog({
 					id: '#dialog-upload-wiz2',
-					text: '<h3>Upload SID File Wizard</h3><div class="top-right-corner">1/3</div><p>The SID file contains the following information:</p>'+
+					text: '<h3>Upload SID File Wizard</h3><div class="top-right-corner">1/4</div><p>The SID file contains the following information:</p>'+
 						'<table class="sid-info">'+
 							'<tr><td>Type</td><td>'+data.info.type+' v'+data.info.version+'</td></tr>'+
 							'<tr><td>Clock</td><td>'+data.info.clockspeed+'</td></tr>'+
 							'<tr><td>SID Model</td><td>'+data.info.sidmodel+'</td></tr>'+
-							'<tr><td>Player</td><td>'+(data.info.player == "" ? "Unknown" : data.info.player)+'</td></tr>'+
 							'<tr><td>Name</td><td>'+data.info.name+'</td></tr>'+
 							'<tr><td>Author</td><td>'+data.info.author+'</td></tr>'+
 							'<tr><td>Copyright</td><td>'+data.info.copyright+'</td></tr>'+
 							'<tr><td>Subtune</td><td>'+data.info.startsubtune+' / '+data.info.subtunes+'</td></tr>'+
 						'</table>'+
-						'<p>Use an offline SID tool if you want to edit this.</p>',
+						'<p>If you wish to edit the SID file itself, cancel and use a SID tool to do so, then upload again.</p>',
 					height: 378,
 					wizard: true,
 				}, function() {
@@ -2619,6 +2622,10 @@ Browser.prototype = {
 							.css("background", "")
 							.val("5:00 ".repeat(data.info.subtunes).trim());
 						$("#upload-stil-text").val("");
+						$("#upload-file-name-input").val(data.info.filename);
+						$("#upload-file-player-input").val(data.info.player);
+						$("#upload-file-author-input").val(data.info.author);
+						$("#upload-file-copyright-input").val(data.info.copyright);
 					}
 					browser.uploadWizard(2, data);
 				}.bind(this), function() {
@@ -2638,7 +2645,7 @@ Browser.prototype = {
 				}
 				CustomDialog({
 					id: '#dialog-upload-wiz3',
-					text: '<h3><span class="upload-edit">'+this.UploadEdit+'</span> SID File Wizard</h3><div class="top-right-corner">2/3</div><p>You can optionally connect a profile, a CSDb page, and edit the song length'+(data.info.subtunes > 1 ? 's' : '')+'.</p>',
+					text: '<h3><span class="upload-edit">'+this.UploadEdit+'</span> SID File Wizard</h3><div class="top-right-corner">2/4</div><p>You can optionally connect a profile, a CSDb page, and edit the song length'+(data.info.subtunes > 1 ? 's' : '')+'.</p>',
 					height: 378,
 					wizard: true,
 				}, function() {
@@ -2683,14 +2690,33 @@ Browser.prototype = {
 				});
 				break;
 			case 3:
-				// Edit custom STIL box text
+				// Edit filename, player, author and copyright in database
 				CustomDialog({
 					id: '#dialog-upload-wiz4',
-					text: '<h3><span class="upload-edit">'+this.UploadEdit+'</span> SID File Wizard</h3><div class="top-right-corner">3/3</div><p>You can optionally write a custom text entry for the STIL tabs too. HTML tags are allowed.</p>',
+					text: '<h3><span class="upload-edit">'+this.UploadEdit+'</span> SID File Wizard</h3><div class="top-right-corner">3/4</div><p>You can optionally rename the file and edit the info that goes into the database.</p>',
+					height: 378,
+					wizard: true,
+				}, function() {
+					// Make sure the extension is still there
+					browser.uploadWizard(4, data);
+				}, function() {
+					// Go back to the wizard step with the SID format info
+					browser.uploadWizard(2, data);
+				});
+				break;
+			case 4:
+				// Edit custom STIL box text
+				CustomDialog({
+					id: '#dialog-upload-wiz5',
+					text: '<h3><span class="upload-edit">'+this.UploadEdit+'</span> SID File Wizard</h3><div class="top-right-corner">4/4</div><p>You can optionally write a custom text entry for the STIL tabs too. HTML tags are allowed.</p>',
 					height: 378,
 					wizard: true,
 				}, function() {
 					// Wizard is closed; add the new file and its database entry
+					data.info.newname	= $("#upload-file-name-input").val();
+					data.info.player	= $("#upload-file-player-input").val();
+					data.info.author	= $("#upload-file-author-input").val();
+					data.info.copyright	= $("#upload-file-copyright-input").val();
 					data.info.profile	= $("#dropdown-upload-profile").val();
 					data.info.csdbid	= parseInt($("#upload-csdb-id").val());
 					data.info.lengths	= $("#upload-lengths-list").val();
@@ -2702,8 +2728,8 @@ Browser.prototype = {
 						});
 					}.bind(this));
 				}.bind(this), function() {
-					// Go back to the wizard step with the profile/ID/lengths data
-					browser.uploadWizard(2, data);
+					// Go back to the wizard step with the database info
+					browser.uploadWizard(3, data);
 				});
 				break;
 			}

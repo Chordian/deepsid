@@ -8,6 +8,10 @@ SHOULD BE DONE
 
 - Transfer Mahoney's 2SID songs to exotic.
 
+- Regarding the new SH wizard step:
+  - Automate year insertion with e.g. a regular expression.
+  - Automate author - based on drop-down selection?
+
 - See Sebastian Sprenger's e-mail for a few good ideas.
 
 - Solarex in lemon64: "I thought it could be great if the nodes on the curve could serve as a

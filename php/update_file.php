@@ -4,6 +4,9 @@
  *
  * Update the file row in the database. Only available to an administrator.
  * 
+ * The purpose of this script was copied as a new step in the upload wizard for
+ * the SH folder. This script may still serve as a shortcut, however.
+ * 
  * For now, only the following fields are updated:
  * 
  *  name
