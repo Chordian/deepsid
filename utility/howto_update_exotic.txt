@@ -29,8 +29,8 @@ Don't close the search results yet when done downloading the files.
 
 Now to create the new database entries for the exotic versions.
 
-  1. In DeepSID, enter the "Exotic SID Tunes Collection" and its "Stereo 2SID" folder.
-  2. Click the "Copy" link for a new file in the search results that you have downloaded.
+  1. In DeepSID, enter the "Exotic SID Tunes Collection" and its "Stereo 2SID" folder. [Uh, do you mean DB?]
+  2. Click the "Copy" link for a new file in the search results that you have downloaded. [Downloaded!?]
   3. Adapt the "fullname" field, but first check DeepSID to see if the composer has a sub folder. If
      not (a composer that has less than three files) just replace everything up to the beginning of the
      SID file. For example:

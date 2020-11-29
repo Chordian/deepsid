@@ -485,7 +485,7 @@
 					<div class="tab unselectable" data-topic="player" id="tab-player">Player<div id="note-player" class="notification playercolor"></div></div>
 					<div class="tab unselectable" data-topic="stil" id="tab-stil">STIL</div>
 					<div class="tab unselectable" data-topic="visuals" id="tab-visuals">Visuals</div>
-					<div class="tab unselectable" data-topic="disqus" id="tab-disqus">Disqus<div id="note-disqus" class="notification"></div></div>
+					<!--<div class="tab unselectable" data-topic="disqus" id="tab-disqus">Disqus<div id="note-disqus" class="notification"></div></div>-->
 					<?php if (isset($_GET['debug'])) : ?>				
 						<div class="tab unselectable" data-topic="debug" id="tab-debug" style="color:#f66;">Debug</div>
 					<?php endif ?>
@@ -680,50 +680,7 @@
 						</div>
 					</div>
 
-					<div id="topic-disqus" class="topic" style="display:none;">
-						<input type="checkbox" id="disqus-toggle" name="dtoggle" class="unselectable" checked />
-						<label for="disqus-toggle" class="unselectable">Enable Disqus</label>
-						<b id="disqus-title">File: /</b>
-						<!-- DISQUS BEGIN -->
-						<div id="disqus_thread" style="margin-right:2px;"></div>
-						<script>
-							/**
-							 * If refreshing a page with a '?file=' URL parameter in it, we have to adapt the code below
-							 * to use the path. The reason for this is that after about 3-5 minutes of inactivity, Disqus
-							 * somehow clears a cache that will make the code below take longer to load. Long enough for
-							 * the 'browser.reloadDisqus()' function not to get handled. That could have been solved with
-							 * a timer, but adapting the code below instead seemed more elegant.
-							 */
-							hashExcl = decodeURIComponent(location.hash); // Any Disqus link characters "#!" used?
-							rootFile = hashExcl !== "" ? hashExcl.substr(2) : GetParam("file");
-							rootFile = rootFile.replace("/_High Voltage SID Collection", "")
-							if (rootFile.substr(0, 2) === "/_")
-								rootFile = "/"+rootFile.substr(2); // Lose custom folder "_" character
-							rootFile = rootFile.indexOf(".sid") === -1 && rootFile.indexOf(".mus") === -1 ? "" : "/#!"+rootFile;
-
-							// @link https://disqus.com/admin/universalcode/#configuration-variables
-							var disqus_config = function () {
-								this.page.url = "http://deepsid.chordian.net"+rootFile;;
-								this.page.identifier = "http://deepsid.chordian.net"+rootFile;;
-								this.page.title = rootFile.substr(3);
-								$("#disqus-title").empty().append("File: "+rootFile.substr(3));
-
-								/*this.callbacks.onReady = [function() { 
-									// This can be used to do something when all comments have loaded...
-								}];*/
-							};
-							<?php if ($_SERVER['HTTP_HOST'] != LOCALHOST) : // To avoid seeing the CSP error ?>
-								(function() { // DON'T EDIT BELOW THIS LINE
-									var d = document, s = d.createElement('script');
-									s.src = 'https://deepsid.disqus.com/embed.js';
-									s.setAttribute('data-timestamp', +new Date());
-									(d.head || d.body).appendChild(s);
-								})();
-							<?php endif ?>
-						</script>
-						<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-						<!-- DISQUS END -->
-					</div>
+					<!-- DIV with ID "topic-disqus" has been cut out and placed in disqus.txt -->
 
 					<div id="topic-profile" class="topic ext" style="display:none;"></div>
 
@@ -1255,6 +1212,11 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>November 28, 2020</h3>
+						<ul>
+							<li>Disqus has been temporarily disabled to see if it improves performance.</li>
+						</ul>
 
 						<h3>November 24, 2020</h3>
 						<ul>
@@ -2108,7 +2070,7 @@
 				</div>
 			</div>
 
-			<script id="dsq-count-scr" src="//deepsid.disqus.com/count.js" async></script> <!-- DISQUS -->
+			<!--<script id="dsq-count-scr" src="//deepsid.disqus.com/count.js" async></script>--> <!-- DISQUS -->
 
 		<?php endif ?>
 

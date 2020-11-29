@@ -101,7 +101,7 @@ try {
 
 		// Finally log it
 		$account->LogActivity('User "'.$account->UserName().'" edited the "'.$filename.'" file'.
-			($info['fullname'] != $new_name ? ' (renamed to "'.$new_name.'")' : ''));
+			($info['fullname'] != $new_name ? ' (renamed to "'.$info['newname'].'")' : ''));
 
 	} else {
 

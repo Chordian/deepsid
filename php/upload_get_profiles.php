@@ -36,6 +36,11 @@ try {
 			$author = $name.' ('.$handle.')';
 		else
 			$author = '';
+		
+		// Special treatment
+		$author = str_replace('Riku Kangas', 'Riku Ö', $author);
+		$author = str_replace('Wojciech Radziejewski', 'W. Radziejewski', $author);
+		$author = str_replace('Psycho8580 / psych858o', 'psych858o', $author);
 
 		$all_profiles[] = array(
 			'fullname'	=> str_replace('_High Voltage SID Collection', 'HVSC', $row->fullname),

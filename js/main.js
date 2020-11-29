@@ -627,9 +627,9 @@ $(function() { // DOM ready
 		$("#brand-"+(colorTheme ? "light" : "dark")).hide();
 		$("#brand-"+(colorTheme ? "dark" : "light")).show();
 		// Disqus was implemented before the main folder for HVSC was so it doesn't know it exists
-		browser.reloadDisqus((typeof browser.songPos != "undefined"
+		/*browser.reloadDisqus((typeof browser.songPos != "undefined"
 				? browser.playlist[browser.songPos].fullname.replace("/_High Voltage SID Collection", "")
-				: ""), "");
+				: ""), "");*/
 		localStorage.setItem("theme", colorTheme);
 	});
 
@@ -667,7 +667,7 @@ $(function() { // DOM ready
 				$("#page").addClass("big-logo");
 
 		// If 'Disqus' tab is selected then hide the notification on it
-		if (topic === "disqus") $("#note-disqus").hide();
+		// if (topic === "disqus") $("#note-disqus").hide();
 
 		// If 'CSDb' tab is selected
 		if (topic === "csdb") {
@@ -811,7 +811,7 @@ $(function() { // DOM ready
 	 * 
 	 * This check box is only visible in the 'Disqus' tab.
 	 */
-	$("#disqus-toggle").click(function() {
+	/*$("#disqus-toggle").click(function() {
 		if ($(this).is(":checked")) {
 			// Turn Disqus ON
 			$("#disqus-title,#disqus_thread").show();
@@ -822,7 +822,7 @@ $(function() { // DOM ready
 			// Turn Disqus OFF
 			$("#disqus-title,#disqus_thread").hide();
 		}
-	});
+	});*/
 
 	/**
 	 * When clicking a thumbnail/title in a CSDb release row to open it internally.

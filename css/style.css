@@ -5029,6 +5029,7 @@ input[type=range]::-ms-track {
 
 #dialog-song-tags {
 	float: right;
+	max-height: 115px;
 }
 
 .dialog-transfer {

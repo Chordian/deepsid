@@ -534,7 +534,7 @@ Browser.prototype = {
 						this.getGB64();
 						this.getRemix();
 						this.getPlayerInfo({player: this.playlist[this.songPos].player});
-						this.reloadDisqus(this.playlist[this.songPos].fullname);
+						//this.reloadDisqus(this.playlist[this.songPos].fullname);
 
 						UpdateURL();
 						this.chips = 1;
@@ -887,7 +887,7 @@ Browser.prototype = {
 					'</tr>';
 			}.bind(this));
 			$("#songs table").append(this.folders+files);
-			this.updateDisqusCounts();
+			//this.updateDisqusCounts();
 			DisableIncompatibleRows();
 		} else if (this.isBigCompoFolder()) {
 			// Rebuild the big CSDb music competitions folder
@@ -1319,7 +1319,7 @@ Browser.prototype = {
 					/*var pos = this.folders.lastIndexOf('<tr>');
 					this.folders = this.folders.slice(0, pos) + this.folders.slice(pos).replace('<tr>', '<tr class="last">');*/
 					$("#songs table").append(this.folders+files);
-					this.updateDisqusCounts();
+					//this.updateDisqusCounts();
 
 					if (this.path == "/CSDb Music Competitions" || this.path == "/_Compute's Gazette SID Collection") {
 						// Cache this big folder for fast back-browsing
@@ -1491,7 +1491,7 @@ Browser.prototype = {
 	 * 
 	 * @param {string} file		SID fullname string.
 	 */
-	reloadDisqus: function(file) {
+	/*reloadDisqus: function(file) {
 		if (this.isMobile) return;
 		if ($("#topic-disqus").length && $("#disqus-toggle").is(":checked") && typeof DISQUS !== "undefined") {
 			// Disqus was implemented before the main folder for HVSC was so it doesn't know it exists
@@ -1507,12 +1507,12 @@ Browser.prototype = {
 			});
 		}
 		this.rowDisqusCount();
-	},
+	},*/
 
 	/**
 	 * If there are any Disqus comments then show a notification number on the 'Disqus' tab (if not in focus).
 	 */
-	rowDisqusCount: function() {
+	/*rowDisqusCount: function() {
 		if (this.isMobile) return;
 		var count = $("#folders tr").eq(this.subFolders + this.songPos).find(".disqus-comment-count")
 			.text().trim().split(" ")[0];
@@ -1520,16 +1520,16 @@ Browser.prototype = {
 			$("#note-disqus").empty().append(count).show();
 		else
 			$("#note-disqus").hide();
-	},
+	},*/
 
 	/**
 	 * Show number of Disqus comments for each SID file (if any).
 	 */
-	updateDisqusCounts: function() {
+	/*updateDisqusCounts: function() {
 		if (this.isMobile) return;
 		if ($("#topic-disqus").length && $("#disqus-toggle").is(":checked") && typeof DISQUSWIDGETS !== "undefined")
 			DISQUSWIDGETS.getCount({reset: true});
-	},
+	},*/
 
 	/**
 	 * Show the composer page in the 'Profile' tab.

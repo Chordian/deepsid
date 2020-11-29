@@ -6,7 +6,7 @@ SHOULD BE DONE
 - BUG: What is happening to rodney's avatar picture here?
   http://deepsid.chordian.net/?tab=csdb&csdbtype=release&csdbid=108379
 
-- Transfer Mahoney's 2SID songs to exotic.
+- Start-up hiccups: Try completely disabling Disqus then let people try again.
 
 - See Sebastian Sprenger's e-mail for a few good ideas.
 
