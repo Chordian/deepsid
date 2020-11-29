@@ -6,8 +6,6 @@ SHOULD BE DONE
 - BUG: What is happening to rodney's avatar picture here?
   http://deepsid.chordian.net/?tab=csdb&csdbtype=release&csdbid=108379
 
-- Start-up hiccups: Try completely disabling Disqus then let people try again.
-
 - See Sebastian Sprenger's e-mail for a few good ideas.
 
 - Solarex in lemon64: "I thought it could be great if the nodes on the curve could serve as a
@@ -95,7 +93,6 @@ CONSIDER THIS
 - Bug: Copy link using the context menu triggers a console error if not logged in.
 - Bug: Players: Show list. Enter entry. Back. Entering the same entry again is now impossible.
 - Bug: Groepaz's profile header text overlaps the "report a profile change" link.
-- Bug: Theme color change in root doesn't maintain the root Disqus thread.
 - Bug: With little horizontal browser space in dark theme, the top area is not dark all the way.
 - Bug: CSDb: Start redirect play link, enter compo page, stop tune, back = icon still set to playing.
 - Bug: CSDb: Also a similar problem when opening a release page to already playing "redirect" tune.
@@ -120,7 +117,7 @@ CONSIDER THIS
 - Remix tab:
   - Remix64's own site banner in top - maybe even animated the same way?
   - Ask MK for new API endpoint for HVSC path only; returns SID names and number of remixes per
-    song. This could be used for indication in SID rows (where Disqus comments are currently seen).
+    song. This could be used for indication in SID rows (where Disqus comments were once seen).
     UPDATE: Not really needed anymore since the "Remix64" tag now covers most of it.
   - Ask MK for new API endpoint for shouts. Add as a canvas-animated scroller above audio bar.
 
@@ -188,7 +185,6 @@ CONSIDER THIS
 
 - Settings tab page:
   - The user should be able to change the username (but only if the new one is not already taken).
-  - Merge with Disqus account, so Disqus user ID somehow points to star ratings.
   - Attach to a HVSC/CGSC folder as being the same person now logged in. This gives privileges
     such as e.g. being able to upload a different avatar picture, or add external links.
   - Import CSV to Playlist. (See the 'import_symlist_hvsc.php' file to begin with.)
@@ -202,9 +198,7 @@ PROBABLY NOT?
 - Fade out in the last 1-2 seconds of Howler (SOASC) time.
 - Drag-and-drop support. Maybe somehow tagged onto the existing emulator testing upload feature.
 - Consider using storage to remember the main volume setting between sessions.
-- Add a command-line switch for turning off Disqus.
-- To avoid stutter when Disqus is loading, can the emulators be placed in a web worker?
-- Add search for Disqus comments by using their API (in a world where Disqus comments are aplenty).
+- To avoid stutter when stuff is loading, can the emulators be placed in a web worker?
 - Is it possible to detect unpacked JCH NewPlayer tunes and prepend " (unpacked)" to them?
 - A slider for altering the filtering of the emulators (requested by Matty Seito).
 - Replace ".." with a back arrow SVG instead? (I think people have gotten used to the ".." by now.)
@@ -214,12 +208,8 @@ PROBABLY NOT?
 - Link icons next to birth and death icons. E.g. #SoundCloud, etc.
   - Two problems: 1. Composers that don't want this? 2. Keeping up with links that changes over time.
 
-- After updating HVSC, I miss a solid way of listing now orphan Disqus threads. I'm not even sure if
-  this is possible at all. Until a way is found, I'm going to have to ignore adjusting their paths.
-
 - [GH] Bug: Seek clicking is not precise on Edge; it goes a few centimeters too far each time.
 - [GH] Bug: It's currently possible to specify an "?emulator="" that is incompatible with "?file=".
-- [GH] Bug: If you load a tune from URL with "#!" from Disqus, sorting and then playing invokes an error.
 
 - Bug: One of Ben Daglish's game tunes has a title long enough to erroneously expand the GB64 entry:
   http://deepsid.chordian.net/?file=/MUSICIANS/D/Daglish_Ben/Challenge_of_the_Gobots_on_the_Moebius_Strip.sid
@@ -243,11 +233,9 @@ PROBABLY NOT?
   - A notification "NEW" is added to it when new files are added after an update.
   - Entering such a folder would remove the "NEW" tag.
 
-- Would it be possible to have Disqus on mobile devices?
-  - Perhaps sliding Disqus in from the right by clicking a general static button always available?
-  - Or instead of sliding in, just replace #panel contents with Disqus.
-- Same with STIL, a general static button to replace #panel with STIL contents.
-- To be honest, Disqus is barely used at all so this is probably not worth the trouble.
+- Would it be possible to have STIL on mobile devices?
+  - A general static button to replace #panel with STIL contents.
+  - Or perhaps sliding STIL in from the right by clicking a general static button always available?
 
 - Use the new image credit field - hover on composer image to slide up a small "Source:" row.
   - If set to "UNKNOWN" then nothing is sliding up (i.e. as before).
@@ -318,8 +306,6 @@ PROBABLY NOT?
 - CSDb Music Competitions:
   - Thought about a better inside "path" box info where year and country is also visible, but it's not
     really needed after the event profile page was added. It's shows the same information.
-  - Known bug: Disqus always loads the root. I have no plans to fix this since Disqus is used so rarely
-    by users anyway. The SID files exist in other folders; they can go comment on them there instead.
 
 - Web site widget box:
   - Someone on Facebook suggested support for a box on other web sites showing a particular tune or

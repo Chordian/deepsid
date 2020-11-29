@@ -33,10 +33,8 @@ $tips = array(
 	"For a full list of URL parameters, see the bottom of the <b>FAQ</b> tab.",
 
 	"<p>You have to be <b>logged in</b> to rate, tag, upload files and create playlists.</p>".
-	"<p>The user name and password box in top are also used when registering. Just type any user name ".
-	"and if it's available, type a password for it.</p>".
-	"<b>Disqus</b> has its own user management system and you will have to register for that separately ".
-	"if you want to write a comment in that tab.",
+	"The user name and password box in top are also used when registering. Just type any user name ".
+	"and if it's available, type a password for it.",
 
 	"<p>You can choose another <b>SID handler</b> in the top left drop-down box.</p>".
 	"<p>The top <i>WebSid</i> JS emulator emulates cycle-by-cycle but requires a fast computer. The other ".

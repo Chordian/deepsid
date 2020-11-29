@@ -19,7 +19,6 @@ var tabPrevScrollPos = {
 	player:		{ pos: 0, reset: false },
 	stil:		{ pos: 0, reset: false },
 	visuals:	{ pos: 0, reset: false },
-	disqus:		{ pos: 0, reset: false },
 	debug:		{ pos: 0, reset: false },
 	settings:	{ pos: 0, reset: false },
 	changes:	{ pos: 0, reset: false },
@@ -247,7 +246,7 @@ $(function() { // DOM ready
 					$("#folder-back").addClass("disabled");
 
 					// Disable tabs useless to the temporary testing
-					$("#tab-csdb,#tab-gb64,#tab-remix,#tab-stil,#tab-disqus").removeClass("disabled").addClass("disabled");
+					$("#tab-csdb,#tab-gb64,#tab-remix,#tab-stil").removeClass("disabled").addClass("disabled");
 
 					// Sort the list of files first
 					data.files.sort(function(obj1, obj2) {
@@ -626,10 +625,6 @@ $(function() { // DOM ready
 		// Change the brand image too (if available)
 		$("#brand-"+(colorTheme ? "light" : "dark")).hide();
 		$("#brand-"+(colorTheme ? "dark" : "light")).show();
-		// Disqus was implemented before the main folder for HVSC was so it doesn't know it exists
-		/*browser.reloadDisqus((typeof browser.songPos != "undefined"
-				? browser.playlist[browser.songPos].fullname.replace("/_High Voltage SID Collection", "")
-				: ""), "");*/
 		localStorage.setItem("theme", colorTheme);
 	});
 
@@ -665,9 +660,6 @@ $(function() { // DOM ready
 			(topic == "profile" && browser.path == "" && (!browser.isSearching || $("#topic-profile table.root").length)) ||
 			(topic == "profile" && $("#topic-profile table.rec-all").length))
 				$("#page").addClass("big-logo");
-
-		// If 'Disqus' tab is selected then hide the notification on it
-		// if (topic === "disqus") $("#note-disqus").hide();
 
 		// If 'CSDb' tab is selected
 		if (topic === "csdb") {
@@ -805,24 +797,6 @@ $(function() { // DOM ready
 			});
 		}
 	});
-
-	/**
-	 * When the check box for turning Disqus ON or OFF is clicked.
-	 * 
-	 * This check box is only visible in the 'Disqus' tab.
-	 */
-	/*$("#disqus-toggle").click(function() {
-		if ($(this).is(":checked")) {
-			// Turn Disqus ON
-			$("#disqus-title,#disqus_thread").show();
-			// Disqus was implemented before the main folder for HVSC was so it doesn't know it exists
-			browser.reloadDisqus(browser.playlist[browser.songPos].fullname.replace("/_High Voltage SID Collection", ""));
-			browser.updateDisqusCounts();
-		} else {
-			// Turn Disqus OFF
-			$("#disqus-title,#disqus_thread").hide();
-		}
-	});*/
 
 	/**
 	 * When clicking a thumbnail/title in a CSDb release row to open it internally.
@@ -1567,44 +1541,41 @@ function PerformSearchQuery(searchQuery) {
  * @param {string} topic	If specified, the tab topic.
  */
 function ShowDexterScrollbar(topic) {
-	// The 'Disqus' tab needs to use the default scrollbar to make sure the mouse wheel works
-	if ($("#tabs .selected").attr("data-topic") !== "disqus") {
-		$("#page").mCustomScrollbar({
-			axis: "y",
-			theme: (parseInt(colorTheme) ? "light-3" : "dark-3"),
-			autoHideScrollbar: typeof topic !== "undefined"
-				&& topic === "visuals" && $("#sticky-visuals .icon-piano").hasClass("button-on"), // Hide on piano
-			scrollButtons:{
-				enable: true,
-				scrollAmount: 6,
+	$("#page").mCustomScrollbar({
+		axis: "y",
+		theme: (parseInt(colorTheme) ? "light-3" : "dark-3"),
+		autoHideScrollbar: typeof topic !== "undefined"
+			&& topic === "visuals" && $("#sticky-visuals .icon-piano").hasClass("button-on"), // Hide on piano
+		scrollButtons:{
+			enable: true,
+			scrollAmount: 6,
+		},
+		mouseWheel:{
+			scrollAmount: 150,
+		},
+		setTop: tabPrevScrollPos[topic].pos+"px",
+		callbacks: {
+			onCreate: function() {
+				// Adjust scrollbar height to fit the up/down arrows perfectly
+				$("#page .mCSB_scrollTools").css("height", $("#page").height() + 13);
+				// Also trigger a resize to be sure it fits
+				setTimeout(function() {
+					$(window).trigger("resize");
+				}, 1);
+				tabScrollPos = 0;
 			},
-			mouseWheel:{
-				scrollAmount: 150,
+			onOverflowY: function() {
+				// Enable the arrow button in the bottom of CSDb pages (for scrolling back to the top)
+				var topic = $("#tabs .selected").attr("data-topic");
+				if (topic === "csdb" || topic === "profile" || topic === "player" || browser.isCompoFolder)
+					$("#topic-"+topic+" button.to-top").show();
 			},
-			setTop: tabPrevScrollPos[topic].pos+"px",
-			callbacks: {
-				onCreate: function() {
-					// Adjust scrollbar height to fit the up/down arrows perfectly
-					$("#page .mCSB_scrollTools").css("height", $("#page").height() + 13);
-					// Also trigger a resize to be sure it fits
-					setTimeout(function() {
-						$(window).trigger("resize");
-					}, 1);
-					tabScrollPos = 0;
-				},
-				onOverflowY: function() {
-					// Enable the arrow button in the bottom of CSDb pages (for scrolling back to the top)
-					var topic = $("#tabs .selected").attr("data-topic");
-					if (topic === "csdb" || topic === "profile" || topic === "player" || browser.isCompoFolder)
-						$("#topic-"+topic+" button.to-top").show();
-				},
-				whileScrolling: function() {
-					tabScrollPos = this.mcs.top;
-					tabPrevScrollPos[topic].reset = false;
-				},
+			whileScrolling: function() {
+				tabScrollPos = this.mcs.top;
+				tabPrevScrollPos[topic].reset = false;
 			},
-		});
-	}
+		},
+	});
 }
 
 /**

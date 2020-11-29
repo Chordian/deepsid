@@ -485,7 +485,6 @@
 					<div class="tab unselectable" data-topic="player" id="tab-player">Player<div id="note-player" class="notification playercolor"></div></div>
 					<div class="tab unselectable" data-topic="stil" id="tab-stil">STIL</div>
 					<div class="tab unselectable" data-topic="visuals" id="tab-visuals">Visuals</div>
-					<!--<div class="tab unselectable" data-topic="disqus" id="tab-disqus">Disqus<div id="note-disqus" class="notification"></div></div>-->
 					<?php if (isset($_GET['debug'])) : ?>				
 						<div class="tab unselectable" data-topic="debug" id="tab-debug" style="color:#f66;">Debug</div>
 					<?php endif ?>
@@ -679,8 +678,6 @@
 							</div>
 						</div>
 					</div>
-
-					<!-- DIV with ID "topic-disqus" has been cut out and placed in disqus.txt -->
 
 					<div id="topic-profile" class="topic ext" style="display:none;"></div>
 
@@ -1002,11 +999,19 @@
 							but I finally decided that the quality of the SOASC implementation was inadequate for DeepSID.
 						</p>
 
+						<h3>Where did the Disqus tab go?</h3>
+						<p>
+							It was removed in late November 2020 together with all of its script code. It affected the performance
+							of DeepSID, especially when triggering new SID tunes. Because this comment system was already rarely
+							used by users, I decided to remove it altogether. The comments are still stored on their side and can
+							be exported.
+						</p>
+
 						<h3>How do I make my own playlists?</h3>
 						<p>
 							You need to be using a mouse to create and manage playlists. This cannot be done on a mobile
 							device (although you can enjoy your existing playlists there). Also, you must of course be
-							logged in (in the top, not Disqus).</p>
+							logged in.</p>
 						<ol>
 							<li>Start finding awesome SID tunes in the HVSC or CGSC folders.</li>
 							<li>When you find one you like, right-click it. A context menu appears. Choose to add it to a new
@@ -1174,8 +1179,8 @@
 							</tr>
 							<tr>
 								<td>tab</td><td>Set to <code>csdb</code>, <code>gb64</code>, <code>remix</code>, <code>stil</code>, <code>visuals</code>,
-									<code>disqus</code>, <code>about</code>, <code>faq</code>, <code>changes</code> or <code>settings</code>
-									(the gear icon) to select that page tab</td>
+									<code>about</code>, <code>faq</code>, <code>changes</code> or <code>settings</code> (the gear icon)
+									to select that page tab</td>
 							</tr>
 							<tr>
 								<td>sundry</td><td>Set to <code>stil</code> (or <code>lyrics</code>) or <code>scope</code> (or <code>osc</code>) to select that sundry box tab</td>
@@ -1212,6 +1217,13 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>November 29, 2020</h3>
+						<ul>
+							<li>The Disqus tab and all of its scripts have now been permanently removed. It affected the performance
+							of DeepSID, especially when triggering new SID tunes. Because this comment system was already rarely
+							used by users, I decided to remove it altogether.</li>
+						</ul>
 
 						<h3>November 28, 2020</h3>
 						<ul>
@@ -2069,8 +2081,6 @@
 
 				</div>
 			</div>
-
-			<!--<script id="dsq-count-scr" src="//deepsid.disqus.com/count.js" async></script>--> <!-- DISQUS -->
 
 		<?php endif ?>
 

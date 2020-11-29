@@ -480,15 +480,4 @@ Update various minor stuff:
   o  Update the top corner link in the profile page to point at the latest CSDb page.
   o  Update "HVSC_VERSION" in browser.js.
 
-SKIPPED
-¯¯¯¯¯¯¯
-Updating Disqus paths.
-
-I need a solid way of detecting now orphan Disqus threads but as far as I can see, their admin panel
-doesn't offer this option. I deem finding them manually to be way too much work. It's possible to
-upload a URL map, but devising a list would require substantial changes to the upgrade script which
-I'm not keen on doing considering how little Disqus is actually used by visitors.
-
-So for now, Disqus comment threads going missing will be ignored.
-
 --------------------------------

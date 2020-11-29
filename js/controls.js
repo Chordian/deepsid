@@ -260,7 +260,6 @@ Controls.prototype = {
 					browser.getGB64();
 					browser.getRemix();
 					browser.getPlayerInfo({player: browser.playlist[browser.songPos].player});
-					//browser.reloadDisqus(browser.playlist[browser.songPos].fullname);
 					UpdateURL();
 				}
 

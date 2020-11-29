@@ -534,7 +534,6 @@ Browser.prototype = {
 						this.getGB64();
 						this.getRemix();
 						this.getPlayerInfo({player: this.playlist[this.songPos].player});
-						//this.reloadDisqus(this.playlist[this.songPos].fullname);
 
 						UpdateURL();
 						this.chips = 1;
@@ -882,12 +881,11 @@ Browser.prototype = {
 						'<div class="entry name file'+(this.isSearching || this.isCompoFolder || this.path.substr(0, 2) === "/$" ? ' search' : '')+'" data-name="'+encodeURIComponent(file.filename)+'" data-type="'+file.type+'" data-symid="'+file.symid+'">'+adaptedName+'</div></div></div><br />'+
 						'<span class="info">'+file.copyright.substr(0, 4)+file.infosec+'<div class="tags-line"'+(showTags ? '' : ' style="display:none"')+'>'+file.tags+'</div></span></td>'+
 						'<td class="stars filestars"><span class="rating">'+this.buildStars(file.rating)+'</span>'+
-						'<span class="disqus-comment-count'+(typeof file.uploaded != "undefined" ? ' disqus-sh' : '')+'" data-disqus-url="http://deepsid.chordian.net/#!'+this.path.replace("/_High Voltage SID Collection", "")+"/"+file.filename.replace("/_High Voltage SID Collection", "")+'"></span>'+(typeof file.uploaded != "undefined" ? '<span class="uploaded-time">'+file.uploaded.substr(0, 10)+'</span>' : '')+
+						'<span class="disqus-comment-count"></span>'+(typeof file.uploaded != "undefined" ? '<span class="uploaded-time">'+file.uploaded.substr(0, 10)+'</span>' : '')+
 						'</td>'+
 					'</tr>';
 			}.bind(this));
 			$("#songs table").append(this.folders+files);
-			//this.updateDisqusCounts();
 			DisableIncompatibleRows();
 		} else if (this.isBigCompoFolder()) {
 			// Rebuild the big CSDb music competitions folder
@@ -1278,7 +1276,7 @@ Browser.prototype = {
 								'<div class="entry name file'+(this.isSearching || this.isCompoFolder || this.path.substr(0, 2) === "/$" ? ' search' : '')+'" data-name="'+encodeURIComponent(file.filename)+'" data-type="'+file.type+'" data-symid="'+file.symid+'">'+adaptedName+'</div></div></div><br />'+
 								'<span class="info">'+file.copyright.substr(0, 4)+infoSecondary+'<div class="tags-line"'+(showTags ? '' : ' style="display:none"')+'>'+list_of_tags+'</div></span></td>'+
 								'<td class="stars filestars"><span class="rating">'+this.buildStars(file.rating)+'</span>'+
-								'<span class="disqus-comment-count'+(typeof file.uploaded != "undefined" ? ' disqus-sh' : '')+'" data-disqus-url="http://deepsid.chordian.net/#!'+rootFile.replace("/_High Voltage SID Collection", "")+'"></span>'+(typeof file.uploaded != "undefined" ? '<span class="uploaded-time">'+file.uploaded.substr(0, 10)+'</span>' : '')+
+								'<span class="disqus-comment-count"></span>'+(typeof file.uploaded != "undefined" ? '<span class="uploaded-time">'+file.uploaded.substr(0, 10)+'</span>' : '')+
 								'</td>'+
 							'</tr>'; // &#9642; is the dot character if needed
 
@@ -1319,7 +1317,6 @@ Browser.prototype = {
 					/*var pos = this.folders.lastIndexOf('<tr>');
 					this.folders = this.folders.slice(0, pos) + this.folders.slice(pos).replace('<tr>', '<tr class="last">');*/
 					$("#songs table").append(this.folders+files);
-					//this.updateDisqusCounts();
 
 					if (this.path == "/CSDb Music Competitions" || this.path == "/_Compute's Gazette SID Collection") {
 						// Cache this big folder for fast back-browsing
@@ -1485,51 +1482,6 @@ Browser.prototype = {
 		$("#songs td.stars span").show();
 		$("#spinner").remove();
 	},
-
-	/**
-	 * Let Disqus know that it's time to load comments for a different SID file.
-	 * 
-	 * @param {string} file		SID fullname string.
-	 */
-	/*reloadDisqus: function(file) {
-		if (this.isMobile) return;
-		if ($("#topic-disqus").length && $("#disqus-toggle").is(":checked") && typeof DISQUS !== "undefined") {
-			// Disqus was implemented before the main folder for HVSC was so it doesn't know it exists
-			var rootFile = file.replace("hvsc", "").replace("/_High Voltage SID Collection", "");
-			DISQUS.reset({
-				reload: true,
-				config: function() {  
-					this.page.url = "http://deepsid.chordian.net/#!"+rootFile;
-					this.page.identifier = "http://deepsid.chordian.net/#!"+rootFile;
-					this.page.title = rootFile;
-					$("#disqus-title").empty().append("File: "+rootFile);
-				}
-			});
-		}
-		this.rowDisqusCount();
-	},*/
-
-	/**
-	 * If there are any Disqus comments then show a notification number on the 'Disqus' tab (if not in focus).
-	 */
-	/*rowDisqusCount: function() {
-		if (this.isMobile) return;
-		var count = $("#folders tr").eq(this.subFolders + this.songPos).find(".disqus-comment-count")
-			.text().trim().split(" ")[0];
-		if (count !== "" && $("#tabs .selected").attr("data-topic") !== "disqus")
-			$("#note-disqus").empty().append(count).show();
-		else
-			$("#note-disqus").hide();
-	},*/
-
-	/**
-	 * Show number of Disqus comments for each SID file (if any).
-	 */
-	/*updateDisqusCounts: function() {
-		if (this.isMobile) return;
-		if ($("#topic-disqus").length && $("#disqus-toggle").is(":checked") && typeof DISQUSWIDGETS !== "undefined")
-			DISQUSWIDGETS.getCount({reset: true});
-	},*/
 
 	/**
 	 * Show the composer page in the 'Profile' tab.
