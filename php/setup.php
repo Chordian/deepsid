@@ -102,9 +102,12 @@ function GetAvatar($id, $name, $hvsc_folder) {
                         $avatar = '/deepsid/images/composers/musicians_'.$parts[1][0].'_'.$parts[1].'_'.$parts[0].'.jpg';
                         if (!file_exists($_SERVER['DOCUMENT_ROOT'].$avatar))
                             $avatar = $undefined_image;
+                        else if ($_SERVER['HTTP_HOST'] != LOCALHOST)
+                            $avatar = substr($avatar, 8);
                     } else
                         $avatar = $undefined_image;
-                }
+                } else if ($_SERVER['HTTP_HOST'] != LOCALHOST)
+                    $avatar = substr($avatar, 8);
             }
         }
     }

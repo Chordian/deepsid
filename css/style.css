@@ -4945,6 +4945,13 @@ input[type=range]::-ms-track {
 	top: -7px;
 }
 
+/* ---- Chartist.js --------------------------------------------------------- */
+
+#ct-years .ct-horizontal {
+	cursor: pointer;
+	text-decoration: underline;
+}
+
 /* ---- Custom Dialog Box --------------------------------------------------- */
 
 #dialog-cover {

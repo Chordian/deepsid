@@ -95,6 +95,16 @@ Browser.prototype = {
 				$("#search-button").prop("enabled", false).addClass("disabled");
 		});
 
+		// Turn "82 83 84..." years in composer chart into search links
+		$("#topic-profile").on("click", "#ct-years .ct-horizontal", function(event) {
+			var year = event.currentTarget.innerHTML;
+			year = year.substr(0, 1) == "8" || year.substr(0, 1) == "9" ? "19"+year : "20"+year;
+			$("#dropdown-search").val("copyright");
+			$("#search-box").val(year);
+			$("#search-here").prop("checked", true);
+			$("#search-button").prop("disabled", false).trigger("click");
+		});
+
 		$("#get-all-tags").click(function() {
 			this.showFolderTags(this.cache.folderTags);
 		}.bind(this));

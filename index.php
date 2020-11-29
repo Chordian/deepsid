@@ -1223,6 +1223,8 @@
 							<li>The Disqus tab and all of its scripts have now been permanently removed. It affected the performance
 							of DeepSID, especially when triggering new SID tunes. Because this comment system was already rarely
 							used by users, I decided to remove it altogether.</li>
+							<li>You can now click the small two-digit year labels in a chart for active years to temporarily
+								search that folder for SID tunes that were released that particular year.</li>
 						</ul>
 
 						<h3>November 28, 2020</h3>

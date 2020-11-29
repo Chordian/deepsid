@@ -3,13 +3,7 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- BUG: What is happening to rodney's avatar picture here?
-  http://deepsid.chordian.net/?tab=csdb&csdbtype=release&csdbid=108379
-
 - See Sebastian Sprenger's e-mail for a few good ideas.
-
-- Solarex in lemon64: "I thought it could be great if the nodes on the curve could serve as a
-  search. From a mouse click. Simply present that composer that year on the selection on the left."
 
 
 CONSIDER THIS
