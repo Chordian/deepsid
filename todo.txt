@@ -3,7 +3,7 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- See Sebastian Sprenger's e-mail for a few good ideas.
+- Done for now.
 
 
 CONSIDER THIS
@@ -59,6 +59,10 @@ CONSIDER THIS
 - I'm beginning to suspect that the piano view sound chugging is not a memory leak in WebSid after
   all, but in the piano view code itself. Might be worth looking into it? Maybe you need to add
   some plugs to prevent stuff from being created more than the one time the tab is first shown.
+
+- Turn off chartist year search in playlists, exotic folder, and SH folder.
+  - Not sure I want this. Yes, the results wouldn't match the chart there, but wouldn't it be nice
+    to have that search option anyway?
 
 - MEMO, player block: A tall rectangle with a zoom box showing where we are in C64 RAM.
   - Maybe it would be best if it always shows the entire span of the C64's RAM?
@@ -147,6 +151,15 @@ CONSIDER THIS
   - New shared tab in sundry box for both of the above - the folder text is replaced for songs.
   - Or could replace STIL text UNLESS there are no notes, then STIL text is still displayed.
   - If new tab, what should it be called? About? Notes?
+
+- Sebastian Sprenger: "In both Piano and Graph, the filter cutoff is shown as a bar from left to right. What
+  do you think about adjusting the bar's style (direction/position) to the filter type? Something like:
+  - LOW PASS: Bar from left to right as usual.
+  - HIGH PASS: Bar from right to left ($7FF = bar is (almost?) empty, $400 = bar from right to middle,
+    0 = bar full).
+  - BAND PASS: A yellow "cursor", always same width (maybe 10 pixels), but its *position* is adjusted to
+    cutoff.
+  - BAND REJECT: Same as band pass, but inverted (black cursor on yellow bar)."
 
 - SOLID "SHOULD BE DONE" CANDIDATE:
 -
