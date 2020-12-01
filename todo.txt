@@ -3,7 +3,9 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- Done for now.
+- End of year 2020: Move contents of SH into a "2020" sub folder.
+  - Make it so old external links can still find their tunes. Either detect and adapt in own
+    JS/PHP code, or use .htaccess to handle this.
 
 
 CONSIDER THIS

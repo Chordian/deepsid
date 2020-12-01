@@ -1218,6 +1218,12 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>December 1, 2020</h3>
+						<ul>
+							<li>Upgraded the WebSid (HQ) emulator. Replaced Hermit's anti-aliasing with more a faster and more
+								precise implementation.</li>
+						</ul>
+
 						<h3>November 29, 2020</h3>
 						<ul>
 							<li>The Disqus tab and all of its scripts have now been permanently removed. It affected the performance
