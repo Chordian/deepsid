@@ -7,7 +7,7 @@
 
 	this.ROOT_HVSC = 'hvsc';
 	this.HVSC_VERSION = 73;
-	this.CGSC_VERSION = 139;
+	this.CGSC_VERSION = 140;
 
 	this.path = "";
 	this.search = "";

@@ -904,7 +904,7 @@
 							<a href="https://www.hvsc.c64.org/">https://www.hvsc.c64.org/</a>
 						</p>
 						<p>
-							Compute's Gazette SID Collection #139<br />
+							Compute's Gazette SID Collection #140<br />
 							<a href="http://www.c64music.co.uk/">http://www.c64music.co.uk/</a>
 						</p>
 						<?php /* <p>
@@ -1218,10 +1218,15 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>December 6, 2020</h3>
+						<ul>
+							<li>DeepSID's copy of <a href="http://www.c64music.co.uk/">Compute's Gazette SID Collection</a> has now been upgraded to version 1.40.</li>
+						</ul>
+
 						<h3>December 1, 2020</h3>
 						<ul>
-							<li>Upgraded the WebSid (HQ) emulator. Replaced Hermit's anti-aliasing with more a faster and more
-								precise implementation.</li>
+							<li>Upgraded the WebSid (HQ) emulator. Replaced the anti-aliasing from Hermit's emulator with a
+								faster and more precise implementation.</li>
 						</ul>
 
 						<h3>November 29, 2020</h3>

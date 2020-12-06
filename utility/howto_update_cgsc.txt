@@ -62,6 +62,10 @@ For "REN" folders:
 
 For "MOVE" files with ".mus" extensions:
 
+  NOTE: I HAVE MADE A PROTOTYPE SCRIPT FOR UPDATING MOVE LINES AUTOMATICALLY. IT'S "UPDATE_CGSC_DB.PHP"
+  AND NEEDS A "MOVE.TXT" FILE WITH MOVE LINES ONLY (NO MKDIR, NO OTHER COMMANDS). CONSIDER EXPANDING THIS
+  SCRIPT INTO A PROPER UPDATE SCRIPT IN THE FUTURE.
+
   1. Copy the "before" filename (including ".mus" extension) and in the "hvsc_files" table in each
      database tab, search "fullname" for %[filename]. You should get *ONE* hit in each tab. If you have
      to include a folder because the filename is too generic, change "\" to "/" when pasting.
@@ -142,7 +146,8 @@ Make sure the latest version ### is also added in the "New" column for the new f
 
 VERSIONS
 ¯¯¯¯¯¯¯¯
-Increase the version number to the latest ### in the browser.js, index.php and readme.md files.
+Increase the version number to the latest ### in the browser.js and index.php. Don't update it in README.md
+as that version is tied to the database files currently linked there.
 
 DELETING TEXT FILES
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
