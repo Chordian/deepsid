@@ -900,7 +900,7 @@
 
 						<h3>Libraries of SID tunes</h3>
 						<p>
-							High Voltage SID Collection #73<br />
+							High Voltage SID Collection #74<br />
 							<a href="https://www.hvsc.c64.org/">https://www.hvsc.c64.org/</a>
 						</p>
 						<p>
@@ -1217,6 +1217,23 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>December 28, 2020</h3>
+						<ul>
+							<li>The 8 new 2SID files in HVSC #74 (i.e. that uses 6 voices) has now been added as
+								<a href="http://deepsid.chordian.net/?file=/_Exotic%20SID%20Tunes%20Collection/Stereo%202SID&here=1&search=74&type=new&tab=csdb">exotic stereo files</a>.</li>
+							<li>All the SID files uploaded to the SH folder this year has now been moved into a <a href="//deepsid.chordian.net?file=/SID Happens/2020/">2020</a> sub folder.</li>
+						</ul>
+
+						<h3>December 23, 2020</h3>
+						<ul>
+							<li>Added composer profiles for the new folders in HVSC #74.</li>
+						</ul>
+
+						<h3>December 21, 2020</h3>
+						<ul>
+							<li>The <a href="https://www.hvsc.c64.org/">High Voltage SID Collection</a> has been upgraded to the latest version #74.</li>
+						</ul>
 
 						<h3>December 6, 2020</h3>
 						<ul>

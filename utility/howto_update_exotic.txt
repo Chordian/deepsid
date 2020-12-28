@@ -18,8 +18,8 @@ The entire "fullname" fields should now be shown.
      it's new if not there, especially if the file has been merged from several parts. So, to be sure:
   2. Open DeepSID in a web browser tab.
   3. Search for just the filename of the SID tune (excluding the end like e.g. "_2SID").
-  4. If the tune appears in the exotic folder too (it may be shortened to ESTC) go back to step 1.
-  5. If there are no exotic folder hits, right-click and download it. Go back to step 1.
+  4. If the tune appears in the exotic folder too (it may be shortened to ESTC) go back to step 3.
+  5. If there are no exotic folder hits, right-click and download it. Go back to step 3.
 
 Don't close the search results yet when done downloading the files.
 
@@ -29,8 +29,8 @@ Don't close the search results yet when done downloading the files.
 
 Now to create the new database entries for the exotic versions.
 
-  1. In DeepSID, enter the "Exotic SID Tunes Collection" and its "Stereo 2SID" folder. [Uh, do you mean DB?]
-  2. Click the "Copy" link for a new file in the search results that you have downloaded. [Downloaded!?]
+  1. Go back to the search results in PhpMyAdmin.
+  2. For each row there, click the "Copy" link.
   3. Adapt the "fullname" field, but first check DeepSID to see if the composer has a sub folder. If
      not (a composer that has less than three files) just replace everything up to the beginning of the
      SID file. For example:
@@ -50,12 +50,15 @@ Now to create the new database entries for the exotic versions.
        o  Create a row for it in the "hvsc_folders" table (just copy and change the original folder).
        o  Add an entry in the "composer_exotic.php" file and upload it.
 
-  4. Change the "version" field to read "v4E" and "dataoffset" to "126". Clear the "hash" field.
+  4. Change the "version" field to read "v4E" and "dataoffset" to "126". Clear the "hash" field. Go.
 
   5. Now open an FTP client and upload the file to that folder.
   6. Check if it plays properly in DeepSID. While you're listening, search for the original to see what
      tags it has (if any) then apply those to the exotic version as well (remember "Stereo" tag too).
   7. Remember to delete that file in the conversion folder.
-  8. Go back to step 2 and process the next file.
+  8. Go back to step 1 and process the next file.
+
+If you're doing this before Perff updated CSDb for the new version of HVSC, you may want to add the
+ID numbers in the "csdbid" field for their release pages. (Remember "release" in "csdbtype" too.)
 
 Remember to also update folder counts in the "hvsc_folders" table (including the parent folders).

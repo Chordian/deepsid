@@ -3,9 +3,14 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- End of year 2020: Move contents of SH into a "2020" sub folder.
-  - Make it so old external links can still find their tunes. Either detect and adapt in own
-    JS/PHP code, or use .htaccess to handle this.
+- SH year folder: Consider making it so old external links can still find their tunes. Either
+  detect and adapt in own JS/PHP code, or use .htaccess to handle this.
+
+- Number of visitors in parse.php script.
+
+- No CSDb info should not invoke the blue notification corner icon on the tab.
+
+- Hide the waveform tags.
 
 
 CONSIDER THIS
@@ -81,6 +86,9 @@ CONSIDER THIS
   - Settings option: "+" button ON/OFF. Probably ON by default.
   - Write the "Undo" admin script.
   - Write a "delete tag" script and remove all those real song genres.
+
+- JW recommended using some extra code to improve the "Click to Play" overlay to not always show up.
+  - See the e-mail thread from 29 November 2020 for more information.
 
 - Recommendation boxes:
   - If from HVSC, add the brand image in the bottom left corner (there's room for it).

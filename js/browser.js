@@ -6,7 +6,7 @@
  function Browser() {
 
 	this.ROOT_HVSC = 'hvsc';
-	this.HVSC_VERSION = 73;
+	this.HVSC_VERSION = 74;
 	this.CGSC_VERSION = 140;
 
 	this.path = "";
@@ -1096,7 +1096,7 @@ Browser.prototype = {
 						$("#path").css("top", "0.5px");
 						pathText = '<span class="playlist">'+this.path.replace("/CSDb Music Competitions/", '')+'</span><br />'+
 							'<span class="maintainer">'+data.owner+'</span>'; // Competition type
-					} else if (this.isUploadFolder()) {
+					} else if (this.path == "/"+PATH_UPLOADS) {
 						pathText = '<button id="upload-wizard">Upload New SID File</button>';
 					}
 					$("#path").empty().append(pathText);
@@ -1936,7 +1936,7 @@ Browser.prototype = {
 				'<div class="line'+(this.isSearching || this.isCompoFolder || isPersonalSymlist || isPublicSymlist ? " disabled" : "")+'" data-action="copy-link">Copy Link</div>';
 
 			if (typeof this.playlist[thisRow].uploaded != "undefined") {
-				// It's a SID row from the 'Sid Happens' folder and thus can be edited
+				// It's a SID row from the 'SID Happens' folder and thus can be edited
 				contents += '<div class="divider"></div>'+
 					'<div class="line" data-action="edit-upload">Edit Uploaded File</div>';
 			}
@@ -2352,7 +2352,7 @@ Browser.prototype = {
 	 * @return {boolean}
 	 */
 	isUploadFolder: function() {
-		return this.path == "/"+PATH_UPLOADS;
+		return this.path.indexOf("/"+PATH_UPLOADS) !== -1;
 	},
 
 	/**

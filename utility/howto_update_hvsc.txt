@@ -13,6 +13,23 @@ Requirements
 
 NOTE: The "http://chordian/deepsid/" URL just refers to a LOCALHOST version of DeepSID.
 
+Social media
+¯¯¯¯¯¯¯¯¯¯¯¯
+First things first - post on Facebook and Twitter (remember #deepsid tag for the latter).
+
+Use the following text and append the link to the CGSC release page:
+
+"The next High Voltage SID Collection update has arrived. DeepSID will be updated within a
+day or two. Stay tuned."
+
+If you don't do this first, you can be sure someone is going to post about it to "remind"
+you that the update has arrived (because obviously you are not aware of it).
+
+Backup
+¯¯¯¯¯¯
+Delete all leftover backup and import tables and backup the entire DeepSID database (both
+the local and the online version).
+
 TABLE: hvsc_files
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
 First time importing fullname list from HVSC:
@@ -36,29 +53,31 @@ First time importing fullname list from HVSC:
 For the next HVSC version:
 
   1. Download the full HVSC version and extract.
-  2. Just delete the old LOCALHOST "_HVSC..." folder and move in the new one.
+  2. Just delete the old LOCALHOST "_High Voltage..." folder and move in the new one.
+
   3. For ONLINE, first delete any previous HVSC_## version folders that might still be
-     lingering, then copy the "_HVSC..." folder into the root.
-  4. When the time comes to activate it below, rename the old "_HVSC..." folder in /hvsc/
-     out to the root and instead move the new one in there.
+     lingering, then copy the "_High Voltage..." folder into the root.
+  4. When the time comes to activate it below, rename the old "_High Voltage..." folder
+     in /hvsc/ out to the root and instead move the new one in there.
 
    - For LOCALHOST, just backup the tables as you go and then update the original tables.
+
    - For ONLINE, first set the index.php flag that says the site is in maintenance mode,
      then again, just backup the tables as you go and then update the original tables with
-     the CSV files you generated during the LOCALHOST session. After all is done, do step
-     4 above and then check out stuff in ONLINE DeepSID. If good, leave maintenance mode
-     and announce the update to the world.
+     the CSV/SQL files you generated during the LOCALHOST session. After all is done, do
+     step above and then check out stuff in ONLINE DeepSID. If good, leave maintenance
+     mode and announce the update to the world.
 
 First, do steps 1 to 7 above as you will need the big file later.
 
   1. On the local machine, you should already have deleted the old HVSC folder tree and
-     copied in the new one. If you haven't yet, do it now.
-  2. Edit the HVSC_VERSION constant in the "hvsc_update_db.php" script.
+     copied in the new one. If you haven't done that yet, do it now.
+  2. Edit the HVSC_VERSION constant in the "update_hvsc_db.php" script.
   3. Copy the new "Update##.hvs" file to the ./deepsid/php/hvsc_update/ folder.
   4. Edit the file and check the "Cleaning Up" section. If a real file is deleted
      there (e.g. something in DOCUMENTS) then delete that line and save. This goes for
-     the sections below "Cleaning Up" as well. If you forget it doesn't matter much. You
-     will just get a red error line in the bottom of the PHP script below, but at that
+     the sections below "Cleaning Up" as well. If you forget it, it doesn't matter much.
+     You will just get a red error line in the bottom of the PHP script below, but at that
      point it should have done its job.
   5. Run the script now like this: http://chordian/deepsid/php/update_hvsc_db.php
   6. Look through the output and compare stuff in database to see if things went well.
@@ -68,6 +87,8 @@ First, do steps 1 to 7 above as you will need the big file later.
      these steps online in a minute, edit the big one once and for all first. (Also, to
      be absolutely honest, you really should update the PHP script to handle that!)
   8. Make a security backup of the "hvsc_files" and "hvsc_folders" tables.
+
+  REMEMBER TO ALSO DO THE ABOVE FOR THE ONLINE VERSION!
 
   The upgrade process may have moved or deleted folders that the script didn't take care
   of. For example, in HVSC #70 the contents of a lot of sub folders for old tunes were
@@ -82,7 +103,7 @@ First, do steps 1 to 7 above as you will need the big file later.
        SELECT fullname FROM hvsc_folders GROUP BY fullname HAVING count(*) > 1
      ) ORDER BY fullname
 
-     This will list all duplicate folders.
+     This will list all duplicate folders. (Don't bother with playlist folders.)
 
   2. Tick check boxes for all duplicate folders with the highest ID numbers, making sure
      to only leave ONE folder unticked - the one with the lowest ID number. Careful now!
@@ -121,7 +142,7 @@ Import general SIDId player data:
   4. Click "Go" to create it.
 
   1. Enter the new "hvsc_files_import" table and click "Import".
-  2. Click "Browse" and click the first CSV file of three.
+  2. Click "Browse" and click the first CSV file.
   3. Change "Format" to "CSV".
   4. Write "fullname,player" in the "Column names" edit box.
   5. Click "Go".
@@ -147,13 +168,14 @@ Import specific SIDId player data:
   4. Edit it with Notepad++.
   5. Delete the first two lines (info line and empty line).
   6. Go to bottom and scroll up to the last MUSICIANS line. Delete everything up to it.
-  7. Go to top, Ctrl+H, "Replace All" backslashes to forward slashes instead.
+  7. Go to top, Ctrl+H, "Replace All" backslashes to forward slashes instead. (Remember to use "Normal" search
+     instead of "Regular expression" again.)
 
   1. Copy the "_specific.csv" file to the "python/specific/" folder.
   2. Open a command box there and run the python files one by one.
-  3. Edit each resulting CSV file in Notepad++.
+  3. Edit all resulting CSV file in Notepad++ in a ton of tabs.
   4. Find weird lines with no fullname and delete them. (They are mostly the result of multiple detections.)
-  5. Save the CSV file and go back to step 3, if there are more of them.
+  5. Save and close the CSV file and process the next tab, if there are more of them.
 
   1. Run the "_combine.bat" file to link all the CSV files into one big one.
   2. Open the resulting "_import.csv" file and page down in it, making sure there are no odd lines.
@@ -231,16 +253,17 @@ Import data from the SID files themselves:
  14. Stop recording and repeat the macro until end of file. (The bottom should be okay.)
  15. Newer versions of SIDInfo.exe now escape commas, but they also add a double backslash to the path.
      Search and replace "\\" with "/" and check that number of occurrences match number of lines.
- 16. Home to top, hit Ctrl+F then tick the "Regular expression" radio button.
- 17. Ctrl+F and find "PSID,3", then "RSID,3", then "PSID,4", then "RSID,4", doing step 18 for each. (The
-     one for "RSID,4" have been non-existent for previous HVSC version so far.)
+ 16. Home to top and hit Ctrl+F.
+ 17. Find "PSID,3", then "RSID,3", then "PSID,4", then "RSID,4", doing step 18 for each. (The one for
+     "RSID,4" have been non-existent for previous HVSC versions so far.)
  18. For tunes with a 3.0 header, there may be two extra values you have to delete, for 4.0, four extra
      values. They are after the two sub tunes values. Usually the first one is -1.
- 19. Repeat this until all the PSID situations have been dealt with.
- 20. You can also find all "..," occurrences and expand titles that were cut off ( > 32 characters).
-     Look at the SID filename to see what the title should read in full.
- 21. If the file is not already UTF-8, choose menu Encoding > Convert to UTF8. Now save it.
- 22. Split "sidinfo.csv" into six CSV files of max 10000 lines using FileSplitter, which is present in
+ 19. Repeat this until all the PSID/RSID situations have been dealt with.
+ 20. Search for "-1,5" just to be sure. Sometimes that can reveal a few you missed.
+ 21. OPTIONAL: You can also find all "..," occurrences and expand titles that were cut off ( > 32
+     characters). Look at the SID filename to see what the title should read in full.
+ 22. If the file is not already UTF-8, choose menu Encoding > Convert to UTF8. Now save it.
+ 23. Split "sidinfo.csv" into six CSV files of max 10000 lines using FileSplitter, which is present in
      the utility folder. (PhpMyAdmin can't handle it all).
 
   1. Repeat the same DB import procedure as for players earlier, except:
@@ -337,6 +360,9 @@ Fixing HVSC update discrepancies:
      you have set aside so far.
   4. When done, test the SID file in DeepSID to see if it now plays correctly and have data.
   5. Repeat step 2 to 4 for the other problem rows.
+  6. When you have done this for the LOCAL version, export the rows to a patch SQL file.
+  7. Edit the SQL file and remove the ID column.
+  8. When importing it for ONLINE later, find and delete the old problem rows in it.
 
 TABLE: hvsc_folders
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
@@ -357,7 +383,7 @@ First time importing fullname list from HVSC:
   4. Write "fullname" in the "Column names" edit box.
   5. Click "Go".
 
-  Don't do the above for next HVSC version, the "hvsc_update_db.php" script should handle that.
+  Don't do the above for next HVSC version, the "update_hvsc_db.php" script should handle that.
   See earlier about how to deal with the next HVSC version.
 
 Import count of files in folders:
@@ -400,7 +426,7 @@ it. Now you can follow the procedure above.
 
 Update count of letter folders in 'MUSICIANS' for HVSC:
 
-NOTE: I'm not 100% sure if this is deprecated because of the next part. (I skipped it for HVSC #71.)
+NOTE: I'm not 100% sure if this is deprecated because of the next part. (I skipped it for HVSC #71+.)
 
   1. Enter a letter folder in File Explorer and open a command box there.
   2. Type: dir
@@ -438,10 +464,11 @@ After a HVSC update, do this:
   2. Empty (truncate) it.
   3. Edit PHP.ini through the WampServer context menu.
   4. Set 'max_execution_time' to 800 and restart the WampServer services.
-  5. Run this: http://chordian/deepsid/php/update_songlengths.php
-  6. Wait a few minutes until the script is done.
-  7. Set 'max_execution_time' back to 120 in PHP.ini and restart the WampServer services again.
-  8. Check the top 20 table with the longest tunes.
+  5. Edit ./deepsid/php/update_songlengths.php and uncomment the INSERT line.
+  6. Run this: http://chordian/deepsid/php/update_songlengths.php
+  7. Wait a few minutes until the script is done.
+  8. Set 'max_execution_time' back to 120 in PHP.ini and restart the WampServer services again.
+  9. Check the top 20 table with the longest tunes.
 
 Don't try to run the PHP script ONLINE as the One.com server won't allow it to finish. Besides, the
 following alternative method is easy enough to do instead:
@@ -475,9 +502,9 @@ LINKS AND VERSION
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
 Update various minor stuff:
 
-  o  The version number in the 'About' tab.
-  o  The "notable" (yellow line) link in the profile page.
-  o  Update the top corner link in the profile page to point at the latest CSDb page.
+  o  The version number in the 'About' tab (index.php).
+  o  The "notable" (yellow line) link in the profile page (composer table).
+  o  Update the top corner link in the profile page to point at the latest CSDb page (same table).
   o  Update "HVSC_VERSION" in browser.js.
 
 --------------------------------

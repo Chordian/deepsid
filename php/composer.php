@@ -320,7 +320,7 @@ if (!empty($files) && !in_array($fullname, Array(
 	'_From JCH\'s Special Collection',		// Deprecated
 ))) {
 	// Use 'fullname' parameter to figure out the name of the thumbnail (if it exists)
-	if ($fullname == $uploadFolder) {
+	if (strpos($fullname, $uploadFolder) !== false) {
 		$thumbnail = 'images/composers/_sh.png';
 	} else {
 		$fn = str_replace('_High Voltage SID Collection/', '', $fullname);
@@ -330,6 +330,8 @@ if (!empty($files) && !in_array($fullname, Array(
 		$thumbnail = 'images/composers/'.$fn.'.jpg';
 	}
 	if (!file_exists('../'.$thumbnail)) $thumbnail = 'images/composer.png';
+} else if (strpos($fullname, $uploadFolder) !== false) {
+	$thumbnail = 'images/composers/_sh.png';
 } else {
 	// Folder with folders
 	$thumbnail = 'images/folder.png';
