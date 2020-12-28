@@ -6,6 +6,9 @@ SHOULD BE DONE
 - SH year folder: Consider making it so old external links can still find their tunes. Either
   detect and adapt in own JS/PHP code, or use .htaccess to handle this.
 
+- Inside a SH year folder: Place year on avatar floppy disk label with CSS, so it automatically
+  works year after year. =)
+
 - Number of visitors in parse.php script.
 
 - No CSDb info should not invoke the blue notification corner icon on the tab.

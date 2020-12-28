@@ -1223,6 +1223,7 @@
 							<li>The 8 new 2SID files in HVSC #74 (i.e. that uses 6 voices) has now been added as
 								<a href="http://deepsid.chordian.net/?file=/_Exotic%20SID%20Tunes%20Collection/Stereo%202SID&here=1&search=74&type=new&tab=csdb">exotic stereo files</a>.</li>
 							<li>All the SID files uploaded to the SH folder this year has now been moved into a <a href="//deepsid.chordian.net?file=/SID Happens/2020/">2020</a> sub folder.</li>
+							<li>External links pointing to the root SH folder now redirects to the new year folder.</li>
 						</ul>
 
 						<h3>December 23, 2020</h3>

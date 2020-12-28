@@ -1380,7 +1380,7 @@ $(function() { // DOM ready
 		playerID = GetParam("player"),
 		typeCSDb = GetParam("csdbtype"),
 		idCSDb = GetParam("csdbid");
-		// Let mobile devices use their own touch scrolling stuff
+	// Let mobile devices use their own touch scrolling stuff
 	if (browser.isMobile) {
 		// Hack to make sure the bottom search bar sits in the correct bottom of the viewport
 		$(window).trigger("resize");
@@ -1407,6 +1407,22 @@ $(function() { // DOM ready
 		var isFolder = fileParam.indexOf(".sid") === -1 && fileParam.indexOf(".mus") === -1,
 			isSymlist = fileParam.substr(0, 2) == "/!" || fileParam.substr(0, 2) == "/$",
 			isCompoFolder = fileParam.indexOf("/CSDb Music Competitions/") !== -1;
+
+		// @todo When year 2021 arrives a loop may be warranted for the 'SID Happens' year folders
+		var shYear = "2020/";
+		if (fileParam.indexOf("SID Happens/") !== -1 && fileParam.indexOf(shYear) === -1) {
+			// Year not specified; if not in root SH folder then look in a year folder
+			$.ajax({
+				url:		"php/file_exists.php",
+				type:		"get",
+				async:		false,
+				data:		{ file: browser.ROOT_HVSC+fileParam.replace("/SID Happens/", "/_SID Happens/") }
+			}).done(function(exists) {
+				// Try adding a year folder if the file doesn't exist
+				if (!exists) fileParam = fileParam.replace("SID Happens/", "SID Happens/"+shYear);
+			});
+		}
+
 		browser.path = isFolder ? fileParam : fileParam.substr(0, fileParam.lastIndexOf("/"));
 		if (browser.path.substr(0, 7).toLowerCase() != "/demos/" && browser.path.substr(0, 7).toLowerCase() != "/games/" && browser.path.substr(0, 11).toLowerCase() != "/musicians/" && browser.path.substr(0, 2) != "/!" && browser.path.substr(0, 2) != "/$")
 			browser.path = "/_"+browser.path.substr(1); // It's an "extra" folder
