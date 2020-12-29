@@ -1218,6 +1218,12 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>December 29, 2020</h3>
+						<ul>
+							<li>Upgraded the WebSid (HQ) emulator. Rolled back the anti-aliasing introduced by the December 1
+								upgrade. Fixed an issue with non-BASIC songs that still use BASIC.</li>
+						</ul>
+
 						<h3>December 28, 2020</h3>
 						<ul>
 							<li>The 8 new 2SID files in HVSC #74 (i.e. that uses 6 voices) has now been added as
@@ -1243,8 +1249,8 @@
 
 						<h3>December 1, 2020</h3>
 						<ul>
-							<li>Upgraded the WebSid (HQ) emulator. Replaced the anti-aliasing from Hermit's emulator with a
-								faster and more precise implementation.</li>
+							<li><del>Upgraded the WebSid (HQ) emulator. Replaced the anti-aliasing from Hermit's emulator with a
+								faster and more precise implementation.</del></li>
 						</ul>
 
 						<h3>November 29, 2020</h3>
