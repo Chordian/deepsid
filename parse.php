@@ -23,6 +23,20 @@ $now = strtotime(date('Y-m-d H:i:s', strtotime(TIME_ADJUST)));
 
 $styling = '
 	<style>
+		body {
+			margin: 0;
+		}
+		.counts {
+			font-family: arial, sans-serif;
+			padding: 6px 11px 6px;
+			margin-bottom: 6px;
+			border-bottom: 1px solid #aaa;
+			background: #eee;
+		}
+			.counts span {
+				color: #999;
+				margin-left: 32px;
+			}
 		.tracking {
 			border: 1px solid #000;
 			margin-bottom: 10px;
@@ -39,10 +53,13 @@ $styling = '
 		.user { background: #ffffe6; }
 		.jch { background: #efe; }
 		.fb { background: #eee; }
-		table td {
-			vertical-align: top;
-			padding-right: 6px;
+		table {
+			margin-left: 8px;
 		}
+			table td {
+				vertical-align: top;
+				padding-right: 6px;
+			}
 	</style>';
 
 $stacked = array(
@@ -52,6 +69,15 @@ $stacked = array(
 	'jch'		=> '',
 	'fb'		=> '',
 	'other'		=> '',
+);
+
+$count = array(
+	'other'		=> 0,
+	'bot'		=> 0,
+	'mobile'	=> 0,
+	'jch' 		=> 0,
+	'user' 		=> 0,
+	'fb' 		=> 0,
 );
 
 if (($handle = fopen(TRACKFILE, 'r')) != false) {
@@ -76,6 +102,7 @@ if (($handle = fopen(TRACKFILE, 'r')) != false) {
 			$type = ' user';
 		elseif (strpos($line[1], 'www.facebook.com'))
 			$type = ' fb';
+		$count[trim($type)]++;
 		$box = '
 			<div class="tracking'.$type.'">
 				'.(!empty($line[2]) ? '<b>'.$line[2].'</b> ('.$line[0].')' : $line[0]).'<br />
@@ -88,7 +115,17 @@ if (($handle = fopen(TRACKFILE, 'r')) != false) {
 }
 fclose($handle);
 
-echo $styling.
+$counts = '
+	<div class="counts"><b>DeepSID</b>
+		<span><b>Users:</b> '.$count['user'].'</span>
+		<span><b>Mobile:</b> '.$count['mobile'].'</span>
+		<span><b>Other:</b> '.$count['other'].'</span>
+		<span><b>Bots:</b> '.$count['bot'].'</span>
+		<span><b>Facebook:</b> '.$count['fb'].'</span>
+		<span style="color:#000;"><b>Visitors:</b> '.($count['other'] + $count['mobile'] + $count['user'] + $count['fb']).'</span>
+	</div>';
+
+echo $styling.$counts.
 	'<table>
 		<tr>
 			<td>'.$stacked['jch'].$stacked['user'].$stacked['mobile'].'</td><td>'.$stacked['other'].'</td><td>'.$stacked['bot'].$stacked['fb'].'</td>

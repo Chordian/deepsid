@@ -1671,7 +1671,7 @@ Browser.prototype = {
 				$("#dropdown-sort-csdb").trigger("change");
 
 				// If there are any entries then show a notification number on the 'CSDb' tab (if not in focus)
-				if (data.count != 0 && $("#tabs .selected").attr("data-topic") !== "csdb" && !this.isCGSC())
+				if (typeof data.count != "undefined" && data.count != 0 && $("#tabs .selected").attr("data-topic") !== "csdb" && !this.isCGSC())
 					// If it's a release page then show a special character instead of a count
 					$("#note-csdb").empty().append(data.count > 0 ? data.count : "&#9679;").show(); // 8901, 9679
 				else

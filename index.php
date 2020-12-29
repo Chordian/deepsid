@@ -1222,6 +1222,9 @@
 						<ul>
 							<li>Upgraded the WebSid (HQ) emulator. Rolled back the anti-aliasing introduced by the December 1
 								upgrade. Fixed an issue with non-BASIC songs that still use BASIC.</li>
+							<li>Added the CSDb music competitions related to HVSC #74.</li>
+							<li>All new files in HVSC #74 are now connected to CSDb entries.</li>
+							<li>Fixed a bug where the unselected CSDb tab showed a notification dot when no entry was available.</li>
 						</ul>
 
 						<h3>December 28, 2020</h3>

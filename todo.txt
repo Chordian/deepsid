@@ -6,10 +6,6 @@ SHOULD BE DONE
 - Inside a SH year folder: Place year on avatar floppy disk label with CSS, so it automatically
   works year after year. =)
 
-- Number of visitors in parse.php script.
-
-- No CSDb info should not invoke the blue notification corner icon on the tab.
-
 - Hide the waveform tags.
 
 
