@@ -6,8 +6,6 @@ SHOULD BE DONE
 - Inside a SH year folder: Place year on avatar floppy disk label with CSS, so it automatically
   works year after year. =)
 
-- Hide the waveform tags.
-
 
 CONSIDER THIS
 ¯¯¯¯¯¯¯¯¯¯¯¯¯

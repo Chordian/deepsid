@@ -1464,7 +1464,8 @@ Browser.prototype = {
 				list_of_tags += '<div class="tag tag-warning">'+tag+'</div>';
 			else
 				// NOTE: Don't change the order of tags or the collector for a folder will break!
-				list_of_tags += '<div class="tag tag-'+types[i]+'">'+tag+'</div>';
+				hideTag = tag == "$31" || tag == "$61" || tag == "$71" ? ' style="display:none;"' : '';
+				list_of_tags += '<div class="tag tag-'+types[i]+'"'+hideTag+'>'+tag+'</div>';
 		});
 		list_of_tags += '<div class="edit-tags" title="Edit tags">&nbsp;</div>';
 

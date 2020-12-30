@@ -1218,6 +1218,14 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>December 30, 2020</h3>
+						<ul>
+							<li>The tags for unique waveforms (<b>$31</b>, <b>$61</b> and <b>$71</b>) are now hidden as they
+								added too much clutter to songs. However, it's still possible to add or remove them, and you
+								can also still search for them. Nevertheless they are now partly deprecated and thus I will
+								personally not add them to new songs anymore.</li>
+						</ul>
+
 						<h3>December 29, 2020</h3>
 						<ul>
 							<li>Upgraded the WebSid (HQ) emulator. Rolled back the anti-aliasing introduced by the December 1
