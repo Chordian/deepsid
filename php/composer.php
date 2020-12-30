@@ -338,6 +338,14 @@ if (!empty($files) && !in_array($fullname, Array(
 	$csdbid = 0;
 }
 
+$sh_year = '';
+if (strpos($fullname, $uploadFolder) !== false) {
+	// Get the year if inside a year folder inside 'SID Happens'
+	$parts = explode("/", $fullname);
+	if (array_key_exists(1, $parts) && strlen($parts[1]) == 4 && is_numeric($parts[1]))
+		$sh_year = $parts[1];
+}
+
 $active_years = !empty($years) ? ($years[0] == end($years) ? $years[0] : $years[0].'-'.end($years)) : '';
 
 if (isset($row)) {
@@ -393,7 +401,8 @@ $exoticFolder = '_Exotic SID Tunes Collection';
 
 // Top part with thumbnail, birthday, country, etc.
 $html = '<table style="border:none;margin-bottom:0;"><tr>'.
-			'<td style="padding:0;border:none;width:184px;">'.
+			'<td style="position:relative;padding:0;border:none;width:184px;">'.
+				(!empty($sh_year) ? '<div style="position:absolute;top:23px;left:22px;color:#33c;font:normal 15px &quot;Commodore 64&quot;, sans-serif"><b>'.$sh_year.'</b></div>' : '').
 				'<img class="composer'.($fullname == $uploadFolder ? ' nobg' : '').'" src="'.$thumbnail.'" alt="" />'.
 			'</td>'.
 			'<td style="position:relative;vertical-align:top;">'.
