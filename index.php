@@ -1224,6 +1224,8 @@
 								added too much clutter to songs. However, it's still possible to add or remove them, and you
 								can also still search for them. Nevertheless they are now partly deprecated and thus I will
 								personally not add them to new songs anymore.</li>
+							<li>You can now right-click any playlist folder and download it from the context menu. You can do
+								this to all playlists, even those you don't own. The playlist will be downloaded as a ZIP file.</li>
 						</ul>
 
 						<h3>December 29, 2020</h3>

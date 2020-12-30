@@ -3,7 +3,9 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- N/A
+- Right-click playlist folder and download. Contents should be zipped.
+
+- No profile in SH should show empty profile, not SH page.
 
 
 CONSIDER THIS

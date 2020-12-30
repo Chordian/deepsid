@@ -1943,22 +1943,23 @@ Browser.prototype = {
 			}
 
 		} else if ($target.hasClass("folder") && (this.contextSID.substr(0, 1) == "!" || this.contextSID.substr(0, 1) == "$")) {
-			var ifAlreadyPublic = "";
+			var ifAlreadyPublic = notYourPublicPlaylist = "";
 
 			if (this.contextSID.substr(0, 1) == "$") {
 				var result = $.grep(this.symlistFolders, function(entry) {
 					return entry.fullname == this.contextSID;
 				}.bind(this));
-				if (result.length === 0) return; // Not your public symlist
+				if (result.length === 0) notYourPublicPlaylist = " disabled";
 				ifAlreadyPublic = " disabled";
 			}
 
 			contents = // Symlist folder in root
-				'<div class="line" data-action="symentry-rename">Rename Playlist</div>'+
-				'<div class="line" data-action="symlist-delete">Delete Playlist</div>'+
+				'<div class="line'+notYourPublicPlaylist+'" data-action="symentry-rename">Rename Playlist</div>'+
+				'<div class="line'+notYourPublicPlaylist+'" data-action="symlist-delete">Delete Playlist</div>'+
 				(ifAlreadyPublic
-					? '<div class="line" data-action="symlist-unpublish">Unpublish Playlist</div>'
-					:'<div class="line" data-action="symlist-publish">Publish Playlist</div>');
+					? '<div class="line'+notYourPublicPlaylist+'" data-action="symlist-unpublish">Unpublish Playlist</div>'
+					:'<div class="line'+notYourPublicPlaylist+'" data-action="symlist-publish">Publish Playlist</div>')+
+				'<div class="line" data-action="symlist-download">Download Playlist</div>';
 		} else
 			return;
 
@@ -2121,6 +2122,15 @@ Browser.prototype = {
 				}, function(data) {
 					this.validateData(data, function() {
 						this.getFolder();
+					});
+				}.bind(this));
+				break;
+			case "symlist-download":
+				$.post("php/symlist_download.php", {
+					symlist:	this.contextSID
+				}, function(data) {
+					this.validateData(data, function(data) {
+						window.location.href = data.file;
 					});
 				}.bind(this));
 				break;
