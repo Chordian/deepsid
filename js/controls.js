@@ -251,10 +251,13 @@ Controls.prototype = {
 
 					browser.getCSDb();
 					if (typeof browser.playlist[browser.songPos].profile != "undefined")
-						browser.getComposer((browser.playlist[browser.songPos].profile != ""
-							? browser.playlist[browser.songPos].profile
-							: "_SID Happens" // If composers_id = 0 then just show the upload folder profile
-						), true);
+						if (browser.playlist[browser.songPos].profile != "") {
+							browser.getComposer(browser.playlist[browser.songPos].profile, true);
+						} else {
+							// If composers_id = 0 then do this
+							$("#topic-profile").empty().append('<i>No profile available.</i>');
+							browser.previousOverridePath = "_SID Happens";
+						}
 					else if (browser.isSearching || browser.path.substr(0, 2) === "/$" || browser.path.substr(0, 2) === "/!")
 						browser.getComposer(browser.playlist[browser.songPos].fullname);
 					browser.getGB64();

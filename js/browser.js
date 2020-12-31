@@ -533,10 +533,13 @@ Browser.prototype = {
 						if (typeof paramSkipCSDb === "undefined" || !paramSkipCSDb) {
 							this.getCSDb();
 							if (typeof this.playlist[this.songPos].profile != "undefined")
-								this.getComposer((this.playlist[this.songPos].profile != ""
-									? this.playlist[this.songPos].profile
-									: "_SID Happens" // If composers_id = 0 then just show the upload folder profile
-								), true);
+								if (this.playlist[this.songPos].profile != "") {
+									this.getComposer(this.playlist[this.songPos].profile, true);
+								} else {
+									// If composers_id = 0 then do this
+									$("#topic-profile").empty().append('<i>No profile available.</i>');
+									this.previousOverridePath = "_SID Happens";
+								}
 							else if (this.isSearching || this.path.substr(0, 2) === "/$" || this.path.substr(0, 2) === "/!")
 								this.getComposer(this.playlist[this.songPos].fullname);
 						} else
@@ -1464,7 +1467,7 @@ Browser.prototype = {
 				list_of_tags += '<div class="tag tag-warning">'+tag+'</div>';
 			else
 				// NOTE: Don't change the order of tags or the collector for a folder will break!
-				hideTag = tag == "$31" || tag == "$61" || tag == "$71" ? ' style="display:none;"' : '';
+				var hideTag = tag == "$31" || tag == "$61" || tag == "$71" ? ' style="display:none;"' : '';
 				list_of_tags += '<div class="tag tag-'+types[i]+'"'+hideTag+'>'+tag+'</div>';
 		});
 		list_of_tags += '<div class="edit-tags" title="Edit tags">&nbsp;</div>';

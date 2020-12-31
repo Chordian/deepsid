@@ -1773,6 +1773,11 @@ small.u2 { margin-left: 2px; }
 		top: 13px;
 	}
 
+	#subtune-plus,
+	#subtune-minus {
+		outline: none;
+	}
+
 	#subtune-minus {
 		position: absolute;
 		left: 0;
