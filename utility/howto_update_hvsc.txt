@@ -386,6 +386,13 @@ First time importing fullname list from HVSC:
   Don't do the above for next HVSC version, the "update_hvsc_db.php" script should handle that.
   See earlier about how to deal with the next HVSC version.
 
+  HVSC allows for folders to be renamed which is something you should check up on. For example, in
+  update #74, "Deazipan" was renamed to "Dex-D" instead. If you spot this again, do this:
+
+  1. Go to the 'composers' table and edit the 'fullname' field to use the new name.
+  2. Enter the folder with composer images and rename the avatar file there. Make sure you remember
+     to do this in both LOCALHOST and ONLINE folders.
+
 Import count of files in folders:
 
   1. Edit the "python/count/count_files_in_folders.py" script and make sure the path line is correct.
