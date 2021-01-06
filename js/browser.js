@@ -1459,16 +1459,17 @@ Browser.prototype = {
 	buildTags: function(tags, types) {
 		var list_of_tags = remix64 = '';
 		$.each(tags, function(i, tag) {
-			if (tag == "Remix64")
+			if (tag == "Remix64") {
 				// A special look for the "Remix 64" tag
 				remix64 = '<div class="tag tag-remix64">&nbsp;&nbsp;</div>';
-			else if (tag == "Doubling" || tag == "Hack" || tag == "Mock")
+			} else if (tag == "Doubling" || tag == "Hack" || tag == "Mock") {
 				// A unique color for tags that serves as a warning
 				list_of_tags += '<div class="tag tag-warning">'+tag+'</div>';
-			else
+			} else {
 				// NOTE: Don't change the order of tags or the collector for a folder will break!
 				var hideTag = tag == "$31" || tag == "$61" || tag == "$71" ? ' style="display:none;"' : '';
 				list_of_tags += '<div class="tag tag-'+types[i]+'"'+hideTag+'>'+tag+'</div>';
+			}
 		});
 		list_of_tags += '<div class="edit-tags" title="Edit tags">&nbsp;</div>';
 

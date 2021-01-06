@@ -888,8 +888,7 @@
 							<a href="https://github.com/wothke/webaudio-player">https://github.com/wothke/webaudio-player</a>
 						</p>
 						<p>
-							jsSID by Mihály Horváth (<a href="https://csdb.dk/scener/?id=18806">Hermit</a>)<br />
-							<a href="http://hermit.uw.hu/index.php">http://hermit.uw.hu/index.php</a>
+							jsSID by Mihály Horváth (<a href="https://csdb.dk/scener/?id=18806">Hermit</a>)
 						</p>
 
 						<?php /* <h3>Audio API library for SOASC</h3>
@@ -1036,9 +1035,7 @@
 
 						<h3>What are those options in the top left drop-down box?</h3>
 						<p>
-							It's where you choose a handler for the SID files. Some are JavaScript emulators, some are
-							real C64 recordings played with a normal audio player, and one can use your favorite offline
-							player.
+							It's where you choose a handler for the SID files.
 						</p>
 						<table style="font-size:14px;">
 							<tr>
@@ -1106,7 +1103,7 @@
 							Yes. Use keys <code>1</code>, <code>2</code>, <code>3</code>
 							and <code>4</code> or alternatively <code>q</code>, <code>w</code>, <code>e</code> and
 							<code>r</code>. The first three are for the normal SID voices and the fourth is for toggling any
-							digi stuff (WebSid emulator only).
+							digi stuff (WebSid (Legacy) emulator only).
 						</p>
 						<p>If you want to "solo" a voice, hold down <code>Shift</code> while pressing the hotkey.</p>
 						<p>In the piano view, you can also click the green number buttons.</p>
@@ -1217,6 +1214,11 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>January 6, 2021</h3>
+						<ul>
+							<li>Upgraded the WebSid (HQ) emulator. Fixed a pulse initialization bug that affected PollyTracker songs.</li>
+						</ul>
 
 						<h3>December 30, 2020</h3>
 						<ul>
