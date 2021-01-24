@@ -49,6 +49,9 @@ try {
 	$select->execute(array(':fullname' => $info['fullname']));
 	$select->setFetchMode(PDO::FETCH_OBJ);
 
+	// Spaces are not allowed in the filename
+	$info['newname'] = str_replace(' ', '_', $info['newname']);
+
 	// Make sure the extension is there and is lower case
 	$info['newname'] = pathinfo($info['newname'])['filename'].'.sid';
 

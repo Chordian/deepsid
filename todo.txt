@@ -3,8 +3,6 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- When renaming a SH tune, convert spaces to underscores.
-
 - Is it possible to only handle events for visible SID rows? It would save a lot of CPU time!
   - https://stackoverflow.com/questions/1462138/event-listener-for-when-element-becomes-visible
   - https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API
