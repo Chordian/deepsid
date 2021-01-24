@@ -1215,6 +1215,11 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>January 24, 2021</h3>
+						<ul>
+							<li>Fixed a bug that caused the WebSid (HQ) emulator to report using CIA when in fact it was using VBI.</li>
+						</ul>
+
 						<h3>January 6, 2021</h3>
 						<ul>
 							<li>Upgraded the WebSid (HQ) emulator. Fixed a pulse initialization bug that affected PollyTracker songs.</li>

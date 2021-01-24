@@ -995,6 +995,10 @@ SIDPlayer.prototype = {
 	getPace: function() {
 		switch (this.emulator) {
 			case "websid":
+				var cia = SIDBackend.getRAM(0xDC04) + SIDBackend.getRAM(0xDC05) * 256;
+				if (cia == 16421) cia = 0;
+				// 19654 relates to 1x; lower values speed up the tune
+				return cia ? Math.round(19654 / cia) : 0;
 			case "legacy":
 				var cia = SIDBackend.getRAM(0xDC04) + SIDBackend.getRAM(0xDC05) * 256;
 				// 19654 relates to 1x; lower values speed up the tune

@@ -44,7 +44,7 @@ try {
 		$author = str_replace('Narciso Quintana Varo (Narcisound)', 'Narciso Quintana Varo', $author);
 		$author = str_replace('Michael Philip Bridgewater', 'Michael P. Bridgewater', $author);
 		$author = str_replace('Thomas Egeskov Petersen', 'Thomas E. Petersen', $author);
-		$author = str_replace('Figge Wulff Wasberger', 'Figge Wasberger', $author);
+		$author = str_replace('Benjamin Dibbert', 'Ben Dibbert', $author);
 
 		$all_profiles[] = array(
 			'fullname'	=> str_replace('_High Voltage SID Collection', 'HVSC', $row->fullname),
