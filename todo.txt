@@ -3,10 +3,7 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- Is it possible to only handle events for visible SID rows? It would save a lot of CPU time!
-  - https://stackoverflow.com/questions/1462138/event-listener-for-when-element-becomes-visible
-  - https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API
-  - https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver
+- Taking a break.
 
 
 CONSIDER THIS
@@ -62,6 +59,11 @@ CONSIDER THIS
 - I'm beginning to suspect that the piano view sound chugging is not a memory leak in WebSid after
   all, but in the piano view code itself. Might be worth looking into it? Maybe you need to add
   some plugs to prevent stuff from being created more than the one time the tab is first shown.
+   V V V
+- Is it possible to only handle events for visible SID rows? It would save a lot of CPU time!
+  - https://stackoverflow.com/questions/1462138/event-listener-for-when-element-becomes-visible
+  - https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API
+  - https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver
 
 - Turn off chartist year search in playlists, exotic folder, and SH folder.
   - Not sure I want this. Yes, the results wouldn't match the chart there, but wouldn't it be nice
