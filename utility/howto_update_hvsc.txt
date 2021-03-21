@@ -505,6 +505,15 @@ http://deepsid.chordian.net/?file=/DEMOS/G-L/Kinetix_Blasting_Power_Mix.sid  (pl
 http://deepsid.chordian.net/?file=/DEMOS/S-Z/Wize_Mixes.sid  (player)
 http://deepsid.chordian.net/?file=/MUSICIANS/N/Nebula&here=1&search=mixer&type=player  (8 rows found)
 
+LAST CHECKS
+¯¯¯¯¯¯¯¯¯¯¯
+Double-check these files both in the folder and in the database:
+
+  MUSICIANS/A/Acrouzet/Puzzled-Background_Music_IV.sid
+  GAMES/A-F/Desert_Decision.sid
+
+They must match each other and play correctly.
+
 LINKS AND VERSION
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
 Update various minor stuff:

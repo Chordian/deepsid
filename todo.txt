@@ -3,7 +3,15 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- Taking a break.
+- Symlists, next version: (Text editing requested by LaLa in February 2021)
+  - First version is text only with no editing (so admin privilege to begin with). Editing later.
+  - Unique "STIL" text for folder upon entering.
+  - And of course for each song too.
+  - New shared tab in sundry box for both of the above - the folder text is replaced for songs.
+  - Or could replace STIL text UNLESS there are no notes, then STIL text is still displayed.
+  - If new tab, what should it be called? About? Notes?
+
+- Search options for NTSC, and for CIA timer.
 
 
 CONSIDER THIS
@@ -151,14 +159,6 @@ CONSIDER THIS
   - Reduce long SID path to just the filename, and instead prepend a composer name link.
     The reason for this is that multiple SID or not found means the composer name cannot be seen!
   - [GH] Bug: Too wide SID path link here: http://chordian/deepsid/?tab=csdb&csdbtype=release&csdbid=129004
-
-- Symlists, next version:
-  - First version is text only with no editing (so admin privilege to begin with). Editing later.
-  - Unique "STIL" text for folder upon entering.
-  - And of course for each song too.
-  - New shared tab in sundry box for both of the above - the folder text is replaced for songs.
-  - Or could replace STIL text UNLESS there are no notes, then STIL text is still displayed.
-  - If new tab, what should it be called? About? Notes?
 
 - Sebastian Sprenger: "In both Piano and Graph, the filter cutoff is shown as a bar from left to right. What
   do you think about adjusting the bar's style (direction/position) to the filter type? Something like:

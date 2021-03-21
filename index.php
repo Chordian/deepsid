@@ -1215,6 +1215,12 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>January 26, 2021</h3>
+						<ul>
+							<li>Fixed database errors for <a href="//deepsid.chordian.net/?file=/MUSICIANS/A/Acrouzet/Puzzled-Background_Music_IV.sid">Puzzled-Background_Music_IV.sid</a>
+							and <a href="//deepsid.chordian.net/?file=/GAMES/A-F/Desert_Decision.sid">Desert_Decision.sid</a>.</li>
+						</ul>
+
 						<h3>January 24, 2021</h3>
 						<ul>
 							<li>Fixed a bug that caused the WebSid (HQ) emulator to report using CIA when in fact it was using VBI.</li>
