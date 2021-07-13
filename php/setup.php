@@ -138,7 +138,7 @@ function GetUserColor($name) {
 		case 'e_g':
 		case 'count_zero':
 		case 'bugjam':
-		case 'ian_coog':
+        case 'theryk':
 			$color = ' class="forum-user-moderator" title="Moderator"';     // Color for site moderators
 			break;
 
@@ -148,8 +148,10 @@ function GetUserColor($name) {
 		case 'mace':
 		case 'wacek':
 		case 'a3':
-		case 'jch':
+        case 'ian_coog':
+        case 'jch':
 		case 'acidchild':
+        case 'scooby':
 			$color = ' class="forum-user-trusted" title="Trusted User"';    // Color for trusted users
 			break;
 

@@ -899,7 +899,7 @@
 
 						<h3>Libraries of SID tunes</h3>
 						<p>
-							High Voltage SID Collection #74<br />
+							High Voltage SID Collection #75<br />
 							<a href="https://www.hvsc.c64.org/">https://www.hvsc.c64.org/</a>
 						</p>
 						<p>
@@ -1214,6 +1214,35 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>July 13, 2020</h3>
+						<ul>
+							<li>The 4 new 2SID files in HVSC #75 (i.e. that uses 6 voices) has now been added as
+								<a href="http://deepsid.chordian.net/?file=/_Exotic%20SID%20Tunes%20Collection/Stereo%202SID&here=1&search=75&type=new&tab=csdb">exotic stereo files</a>.</li>
+						</ul>
+
+						<h3>July 12, 2021</h3>
+						<ul>
+							<li>The <a href="https://www.hvsc.c64.org/">High Voltage SID Collection</a> has been upgraded to the latest version #75.</li>
+							<li>Added composer profiles for the new folders in HVSC #75.</li>
+						</ul>
+
+						<h3>June 26, 2021</h3>
+						<ul>
+							<li>Upgraded the WebSid (HQ) emulator. Updated noise-WF implementation (with combined-WF handling)
+								and floating-WF handling. Check <a href="//deepsid.chordian.net/?file=/MUSICIANS/M/Mixer/Soundcheck.sid">Soundcheck.sid</a>
+								and <a href="//deepsid.chordian.net/?file=/SID%20Happens/Cubase64.sid">Cubase64.sid</a> to hear these improvements.</li>
+						</ul>
+
+						<h3>May 13, 2021</h3>
+						<ul>
+							<li>The GB64 tab is now available in the SH folder as I may add links there to new game soundtracks.</li>
+						</ul>
+
+						<h3>May 2, 2021</h3>
+						<ul>
+							<li>Imported the new GameBase64 collection v17 with new game entries and screenshots.</li>
+						</ul>
 
 						<h3>January 26, 2021</h3>
 						<ul>

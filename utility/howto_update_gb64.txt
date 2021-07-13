@@ -26,7 +26,7 @@ Database:
   6. After a few seconds you should have a GBC_v## sheet tab with cyan/white rows.
   7. Save it in "../deepsid/temp/" as "gamebase##_00_original.xlsx" now.
 
-  8. Delete all rows except the "GA_id", "Name" and "SidFilename" columns.
+  8. Delete all columns except the "GA_id", "Name" and "SidFilename" columns.
   9. Cut the "SidFilename" column and insert it as the first column instead.
  10. Optionally save it as "gamebase##_01_adapted.xlsx" now.
 

@@ -17,7 +17,7 @@ Social media
 ¯¯¯¯¯¯¯¯¯¯¯¯
 First things first - post on Facebook and Twitter (remember #deepsid tag for the latter).
 
-Use the following text and append the link to the CGSC release page:
+Use the following text:
 
 "The next High Voltage SID Collection update has arrived. DeepSID will be updated within a
 day or two. Stay tuned."
@@ -65,7 +65,7 @@ For the next HVSC version:
    - For ONLINE, first set the index.php flag that says the site is in maintenance mode,
      then again, just backup the tables as you go and then update the original tables with
      the CSV/SQL files you generated during the LOCALHOST session. After all is done, do
-     step above and then check out stuff in ONLINE DeepSID. If good, leave maintenance
+     step 4 above and then check out stuff in ONLINE DeepSID. If good, leave maintenance
      mode and announce the update to the world.
 
 First, do steps 1 to 7 above as you will need the big file later.
@@ -258,6 +258,9 @@ Import data from the SID files themselves:
      "RSID,4" have been non-existent for previous HVSC versions so far.)
  18. For tunes with a 3.0 header, there may be two extra values you have to delete, for 4.0, four extra
      values. They are after the two sub tunes values. Usually the first one is -1.
+
+	@todo Make a regex replace with nothing for -1,-1,5xxxx,5xxx and then for -1,5xxxx alone.     
+
  19. Repeat this until all the PSID/RSID situations have been dealt with.
  20. Search for "-1,5" just to be sure. Sometimes that can reveal a few you missed.
  21. OPTIONAL: You can also find all "..," occurrences and expand titles that were cut off ( > 32
@@ -309,6 +312,10 @@ Update CSDb data:
 
 Note that this requires that CSDb.dk has been updated to match the new update of HVSC. Sometimes
 this is done a bit later than the HVSC release itself. It's okay to postpone this process.
+
+To test whether CSDb.dk is updated, load the "Update##.hvs" and go down to the "NEW FILES section.
+Find a new tune with a really unique name and search for it in CSDb. If a SID info page is not
+shown for it, CSDb is not updated yet. In that case I recommend bookmarking the search.
 
   1. Go to the "python/csdb/" folder and edit "csdb.py" in Notepad++.
   2. Set both the "open(" line and the "range(" line to 00001-19999 each.

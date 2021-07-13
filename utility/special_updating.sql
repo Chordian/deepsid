@@ -53,3 +53,5 @@ UPDATE hvsc_files SET player = "Padua's Music Mixer" WHERE id = 32609						-- _H
 
 /* Lengths */
 UPDATE hvsc_files SET lengths = "1:47" WHERE id = 68061										-- _High Voltage SID Collection/MUSICIANS/P/Proton/Mellow_Bite.sid
+UPDATE hvsc_files SET lengths = "12:08" WHERE id = 39135									-- _High Voltage SID Collection/MUSICIANS/S/Scarzix/Singularity_2SID.sid
+UPDATE hvsc_files SET lengths = "12:08" WHERE id = 67664									-- _Exotic SID Tunes Collection/Stereo 2SID/Scarzix/Singularity_2SID.sid

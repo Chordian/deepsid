@@ -3,6 +3,18 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+- Also add the "C64" file format download alternative for PRG files that was used in CShellDB.
+
+- Remove mentions of SOASC in the tips.
+
+- Consider adding a red attract link somewhere, pointing to the front page showing any red or
+  green message. I've learned that some users never see the front page.
+  UPDATE: How about in the far right side, in the empty void? Maybe so it times out and vanishes.
+          Test: Open DeepSID on work PC (1920x1080) to see how much space is common there.
+
+- Inside root HVSC (DEMOS, GAMES, MUSICIANS) below the dashed lines, there could be "folders" for
+  various topics like "What's new in update #75" and "What folders have new updates" etc.
+
 - Symlists, next version: (Text editing requested by LaLa in February 2021)
   - First version is text only with no editing (so admin privilege to begin with). Editing later.
   - Unique "STIL" text for folder upon entering.
@@ -11,7 +23,11 @@ SHOULD BE DONE
   - Or could replace STIL text UNLESS there are no notes, then STIL text is still displayed.
   - If new tab, what should it be called? About? Notes?
 
-- Search options for NTSC, and for CIA timer.
+- More on intro page for symlists:
+  - Profile tab on folder entry; overwritten with other profiles when clicking tunes.
+  - Tab is called "Intro" until clicking tunes, then it reverts to "Profile" again.
+  - On folder entry there is an EDIT button that opens a custom dialog box. Accepts HTML code.
+  - Create new "symlists_intro" database table for JOIN use.
 
 
 CONSIDER THIS
@@ -98,6 +114,8 @@ CONSIDER THIS
 
 - Recommendation boxes:
   - If from HVSC, add the brand image in the bottom left corner (there's room for it).
+
+- Search options for NTSC, and for CIA timer.
 
 - Bug: Backing out of a playlist folder renamed to include a "/" character is problematic.
 - Bug: Country flag appears in the middle of the country name here:

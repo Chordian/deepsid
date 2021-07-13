@@ -19,8 +19,7 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH
 $decent_box_shown = false;
 
 // $important = 'The database connections sometimes act up at the moment. If it persists I will consult the web hotel provider.';
-$important = '<p style="margin-top:0;">The newest update of the Blink browser engine (as used by e.g. Chrome 89 and Edge 89) is choppy in all emulators, even at the highest buffer size. I recommend using Firefox for the time being.</p>'.
-	'<b>UPDATE:</b> The Chromium guys are <a href="https://bugs.chromium.org/p/chromium/issues/detail?id=1187016" target="_blank">working on a fix</a>. ETA is unknown.';
+$important = 'The audio bug seems to be fixed in version 91 of Chrome and Edge. Make sure you have updated to this version.';
 
 $available_lists = ['maxfiles', 'longest', 'mostgames', 'countries', 'startaddr', 'maxtime'];
 $dropdown_options =
@@ -159,7 +158,7 @@ try {
 
 $html =
 	'<div style="height:149px;"></div>'.
-	'<div class="root-wide bad-news">'.$important.'</div>'.
+	'<div class="root-wide good-news">'.$important.'</div>'.
 	// Recommendations
 	'<table class="root rec"><tr>'.
 		'<td style="max-width:10px;">'.

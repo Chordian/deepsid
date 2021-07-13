@@ -6,7 +6,7 @@
  function Browser() {
 
 	this.ROOT_HVSC = 'hvsc';
-	this.HVSC_VERSION = 74;
+	this.HVSC_VERSION = 75;
 	this.CGSC_VERSION = 140;
 
 	this.path = "";
@@ -1116,11 +1116,12 @@ Browser.prototype = {
 						if ($selected.attr("data-topic") === "csdb" || $selected.attr("data-topic") === "gb64" || $selected.attr("data-topic") === "remix")
 							$("#tab-profile").trigger("click");
 					} else if (this.isUploadFolder()) {
-						// The 'GB64' and 'Remix' tabs are useless to 'SID Happens'
-						$("#tab-gb64,#tab-remix").addClass("disabled");
-						$("#note-gb64,#note-remix").hide();
+						// The 'Remix' tab are useless to 'SID Happens'
+						// NOTE: I whitelisted 'GB64' because sometimes I add a link to GameBase64 in the database.
+						$("#tab-remix").addClass("disabled");
+						$("#note-remix").hide();
 						var $selected = $("#tabs .selected");
-						if ($selected.attr("data-topic") === "gb64" || $selected.attr("data-topic") === "remix")
+						if ($selected.attr("data-topic") === "remix")
 							$("#tab-profile").trigger("click");
 						this.previousOverridePath = "_SID Happens";
 					}
