@@ -15,6 +15,7 @@ Download the GitHub tree above as well as the following files:
 * [DeepSID_Images_Brands.zip](https://chordian.net/files/deepsid/DeepSID_Images_Brands.zip)
 * [DeepSID_Images_Composers.zip](https://chordian.net/files/deepsid/DeepSID_Images_Composers.zip)
 * [DeepSID_Images_Countries.zip](https://chordian.net/files/deepsid/DeepSID_Images_Countries.zip)
+* [DeepSID_Images_CSDb.zip](https://chordian.net/files/deepsid/DeepSID_Images_CSDb.zip)
 * [DeepSID_Images_GB64.zip](https://chordian.net/files/deepsid/DeepSID_Images_GB64.zip)
 * [DeepSID_Images_Players.zip](https://chordian.net/files/deepsid/DeepSID_Images_Players.zip)
 
@@ -25,8 +26,9 @@ Download the GitHub tree above as well as the following files:
 5. Create the `/deepsid/images/brands/` sub folder and unpack **DeepSID_Images_Brands.zip** into it.
 6. Create the `/deepsid/images/composers/` sub folder and unpack **DeepSID_Images_Composers.zip** into it.
 7. Create the `/deepsid/images/countries/` sub folder and unpack **DeepSID_Images_Countries.zip** into it.
-8. Create the `/deepsid/images/gb64/` sub folder and unpack **DeepSID_Images_GB64.zip** into it.
-9. Create the `/deepsid/images/players/` sub folder and unpack **DeepSID_Images_Players.zip** into it.
+8. Create the `/deepsid/images/csdb/` sub folder and unpack **DeepSID_Images_CSDb.zip** into it.
+9. Create the `/deepsid/images/gb64/` sub folder and unpack **DeepSID_Images_GB64.zip** into it.
+10. Create the `/deepsid/images/players/` sub folder and unpack **DeepSID_Images_Players.zip** into it.
 
 Download the following SID collections that will work with the database supplied below:
 
