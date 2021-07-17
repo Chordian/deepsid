@@ -15,6 +15,7 @@ Download the GitHub tree above as well as the following files:
 * [DeepSID_Images_Brands.zip](https://chordian.net/files/deepsid/DeepSID_Images_Brands.zip)
 * [DeepSID_Images_Composers.zip](https://chordian.net/files/deepsid/DeepSID_Images_Composers.zip)
 * [DeepSID_Images_Countries.zip](https://chordian.net/files/deepsid/DeepSID_Images_Countries.zip)
+* [DeepSID_Images_CSDb.zip](https://chordian.net/files/deepsid/DeepSID_Images_CSDb.zip)
 * [DeepSID_Images_GB64.zip](https://chordian.net/files/deepsid/DeepSID_Images_GB64.zip)
 * [DeepSID_Images_Players.zip](https://chordian.net/files/deepsid/DeepSID_Images_Players.zip)
 
@@ -25,13 +26,14 @@ Download the GitHub tree above as well as the following files:
 5. Create the `/deepsid/images/brands/` sub folder and unpack **DeepSID_Images_Brands.zip** into it.
 6. Create the `/deepsid/images/composers/` sub folder and unpack **DeepSID_Images_Composers.zip** into it.
 7. Create the `/deepsid/images/countries/` sub folder and unpack **DeepSID_Images_Countries.zip** into it.
-8. Create the `/deepsid/images/gb64/` sub folder and unpack **DeepSID_Images_GB64.zip** into it.
-9. Create the `/deepsid/images/players/` sub folder and unpack **DeepSID_Images_Players.zip** into it.
+8. Create the `/deepsid/images/csdb/` sub folder and unpack **DeepSID_Images_CSDb.zip** into it.
+9. Create the `/deepsid/images/gb64/` sub folder and unpack **DeepSID_Images_GB64.zip** into it.
+10. Create the `/deepsid/images/players/` sub folder and unpack **DeepSID_Images_Players.zip** into it.
 
 Download the following SID collections that will work with the database supplied below:
 
-* [High Voltage SID Collection #72](http://www.prg.dtu.dk/HVSC/HVSC_72-all-of-them.7z)
-* [Compute's Gazette SID Collection v1.39](http://www.c64music.co.uk/CGSC_v139.7z)
+* [High Voltage SID Collection #75](http://www.prg.dtu.dk/HVSC/HVSC_75-all-of-them.7z)
+* [Compute's Gazette SID Collection v1.40](http://www.c64music.co.uk/CGSC_v140.7z)
 
 1. Create the `/deepsid/hvsc/` sub folder.
 2. Unpack the HVSC archive into the `/deepsid/hvsc/` folder. This should create a `/C64Music/` sub folder.
