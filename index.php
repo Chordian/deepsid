@@ -431,7 +431,7 @@
 						<option value="new">Version</option>
 						<option value="gb64">Game</option>
 					</select>
-					<form onsubmit="return false;" autocomplete="off"><input type="text" name="search-box" id="search-box" maxlength="64" /></form>
+					<form onsubmit="return false;" autocomplete="off"><input type="text" name="search-box" id="search-box" maxlength="64" placeholder="Search" /></form>
 					<div id="search-here-container">
 						<input type="checkbox" id="search-here" name="shtoggle" class="unselectable" unchecked />
 						<label for="search-here" class="unselectable">Here</label>

@@ -5,11 +5,7 @@ SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
 - Also add the "C64" file format download alternative for PRG files that was used in CShellDB.
 
-- Remove mentions of SOASC in the tips.
-
-- Add search for tags by simple clicking one, instead of playing the SID row.
-
-- Add placeholder "Search for..." in bottom search box.
+- Add search for tags by simply clicking one, instead of playing the SID row.
 
 - Consider adding a red attract link somewhere, pointing to the front page showing any red or
   green message. I've learned that some users never see the front page.

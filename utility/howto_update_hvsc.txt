@@ -253,16 +253,12 @@ Import data from the SID files themselves:
  14. Stop recording and repeat the macro until end of file. (The bottom should be okay.)
  15. Newer versions of SIDInfo.exe now escape commas, but they also add a double backslash to the path.
      Search and replace "\\" with "/" and check that number of occurrences match number of lines.
- 16. Home to top and hit Ctrl+F.
- 17. Find "PSID,3", then "RSID,3", then "PSID,4", then "RSID,4", doing step 18 for each. (The one for
-     "RSID,4" have been non-existent for previous HVSC versions so far.)
- 18. For tunes with a 3.0 header, there may be two extra values you have to delete, for 4.0, four extra
-     values. They are after the two sub tunes values. Usually the first one is -1.
-
-	@todo Make a regex replace with nothing for -1,-1,5xxxx,5xxx and then for -1,5xxxx alone.     
-
- 19. Repeat this until all the PSID/RSID situations have been dealt with.
- 20. Search for "-1,5" just to be sure. Sometimes that can reveal a few you missed.
+ 16. To fix multi-SID tunes, home to top and press Ctrl+H then tick the "Regular expression" radio button.
+ 17. In "Replace with", type: -1,-1,5\d\d\d\d,5\d\d\d\d,
+ 18. Click "Replace All".
+ 19. Replace all again for this: -1,5\d\d\d\d,
+ 20. Set the search mode back to "Normal" and search for "-1,5" just to be sure. Sometimes that can reveal
+     a few you missed, especially if there are even more advanced multi-SID tunes.
  21. OPTIONAL: You can also find all "..," occurrences and expand titles that were cut off ( > 32
      characters). Look at the SID filename to see what the title should read in full.
  22. If the file is not already UTF-8, choose menu Encoding > Convert to UTF8. Now save it.

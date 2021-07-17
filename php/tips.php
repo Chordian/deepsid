@@ -37,10 +37,10 @@ $tips = array(
 	"and if it's available, type a password for it.",
 
 	"<p>You can choose another <b>SID handler</b> in the top left drop-down box.</p>".
-	"<p>The top <i>WebSid</i> JS emulator emulates cycle-by-cycle but requires a fast computer. The other ".
-	"emulator options are faster but also less accurate.</p>".
-	"The <i>SOASC</i> options are FLAC/MP3 recordings from a real C64. R2 is the 6581 chip ".
-	"with a bright filter, R4 with a deep, and R5 is the 8580 chip.",
+	"The top <i>WebSid</i> JS emulator emulates cycle-by-cycle but requires a fast computer. The other ".
+	"emulator options are faster but also less accurate.",
+	/*"The <i>SOASC</i> options are FLAC/MP3 recordings from a real C64. R2 is the 6581 chip ".
+	"with a bright filter, R4 with a deep, and R5 is the 8580 chip."*/
 
 	"<p>You can <b>search</b> for any SID file or folder in the text box in the bottom.</p>".
 	"<p>The drop-down box decides what you want to search for. Select e.g. <i>Player</i> ".

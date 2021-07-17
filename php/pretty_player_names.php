@@ -45,6 +45,7 @@ $prettyPlayerNames = array(
 	'ChristopherJam' =>			'ChristopherJam\'s player',
 	'Colin_Davies' =>			'Colin Davies\' player',
 	'Colin_Porch' =>			'Colin Porch\'s player',
+	'Dan_Liverani' =>			'Danielle Liverani\'s player',
 	'David_Green' =>			'David Green\'s player',
 	'David_Whittaker' =>		'David Whittaker\'s player',
 	'Dave_Kelly' =>				'Dave Kelly\'s player',
