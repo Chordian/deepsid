@@ -1,13 +1,14 @@
 //jsSID by Hermit (Mihaly Horvath) : a javascript SID emulator and player for the Web Audio API
 //(Year 2016) http://hermit.sidrip.com
 
-//This version 0.9.1 modified .7 by JCH for DeepSID
+//This version 0.9.1 modified .8 by JCH for DeepSID
 // - Added multiplier for fast forward (VBI and CIA timing)
 // - Return 16-bit CIA timer value
 // - Read any SID register
 // - Added a buffer callback
 // - Voice mask for toggling voices ON or OFF (includes 2SID and 3SID)
 // - Read SID chip address
+// - Now handles suspend/resume
 
 function playSID(sidurl,subtune) { //convenience function to create default-named jsSID object and play in one call, easily includable as inline JS function call in HTML
  if (typeof SIDplayer === 'undefined') SIDplayer = new jsSID(16384,0.0005); //create the object if doesn't exist yet
@@ -62,7 +63,7 @@ function jsSID (bufferlen, background_noise)
  } 
 
  this.start = function(subt) { init(subt); if (startcallback!==null) startcallback(); this.playcont(); }
- this.playcont = function() { jsSID_scriptNode.connect(jsSID_audioCtx.destination); }
+ this.playcont = function() { jsSID_scriptNode.connect(jsSID_audioCtx.destination); if(jsSID_audioCtx.state=="suspended") jsSID_audioCtx.resume(); /* Added by JCH */ }
  this.pause = function() { if (loaded && initialized) jsSID_scriptNode.disconnect(jsSID_audioCtx.destination); } 
  //(Checking state before disconnecting is a workaround for Opera: gave error when code tried disconnecting what is not connected. 
  //Checking inner state variables here, but maybe audioContext status info could be more reliable. I just didn't want to rely too many Audio API function.)
@@ -87,6 +88,7 @@ function jsSID (bufferlen, background_noise)
  this.setendcallback = function(fname,seconds) { endcallback=fname; playlength=seconds; }
  this.setbuffercallback = function(fname) { buffercallback=fname; } // Added by JCH
  this.setSpeedMultiplier = function(multiplier) { speed(multiplier); } // Added by JCH
+ this.issuspended = function() { return jsSID_audioCtx.state=="suspended"; } // Added by JCH
 
  var //emulated machine constants
  C64_PAL_CPUCLK = 985248, //Hz

@@ -1465,8 +1465,11 @@ $(function() { // DOM ready
 					$("#folders").scrollTop(rowPos > halfway ? rowPos - halfway : 0);
 				else
 					$("#folders").mCustomScrollbar("scrollTo", rowPos > halfway ? rowPos - halfway : "top");
-				// Before we play the user needs to click a overlay question to satisfy browser auto-play prevention
-				$("#dialog-cover,#click-to-play-cover").show();
+				// The user may have to click a overlay question to satisfy browser auto-play prevention
+				if (SID.isSuspended())
+					$("#dialog-cover,#click-to-play-cover").show();
+				else
+					PlayFromURL(); // Don't need to show the click-to-play cover - play it now
 
 			} else if (GetParam("here") == "1") {
 				setTimeout(function() {
@@ -1487,11 +1490,7 @@ $(function() { // DOM ready
 	 */
 	$("#click-to-play-cover").click(function() {
 		$("#dialog-cover,#click-to-play-cover").hide();
-		var paramSubtune = GetParam("subtune");
-		if (paramSubtune == "")
-			$trAutoPlay.children("td.sid").trigger("click");
-		else
-			$trAutoPlay.children("td.sid").trigger("click", paramSubtune == 0 ? 0 : paramSubtune - 1);
+		PlayFromURL();
 	});
 
 	// Select and show a "dexter" page tab	
@@ -1549,6 +1548,17 @@ function PerformSearchQuery(searchQuery) {
 	$("#search-here").prop('checked', GetParam("here") == "1");
 	$("#search-box").val(searchQuery).trigger("keyup");
 	$("#search-button").trigger("click");
+}
+
+/**
+ * Play the tune that was specified in the URL.
+ */
+function PlayFromURL() {
+	var paramSubtune = GetParam("subtune");
+	if (paramSubtune == "")
+		$trAutoPlay.children("td.sid").trigger("click");
+	else
+		$trAutoPlay.children("td.sid").trigger("click", paramSubtune == 0 ? 0 : paramSubtune - 1);
 }
 
 /**

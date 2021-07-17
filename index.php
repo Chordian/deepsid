@@ -1215,6 +1215,11 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>July 17, 2020</h3>
+						<ul>
+							<li>The cover overlay for autoplaying a tune is no longer shown if not necessary.</li>
+						</ul>
+
 						<h3>July 13, 2020</h3>
 						<ul>
 							<li>The 4 new 2SID files in HVSC #75 (i.e. that uses 6 voices) has now been added as

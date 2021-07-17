@@ -575,6 +575,33 @@ SIDPlayer.prototype = {
 	},
 
 	/**
+	 * Is web browser auto play currently suspended?
+	 * 
+	 * @return {boolean}	TRUE if suspended.
+	 */
+	 isSuspended: function() {
+		var suspended;
+		switch (this.emulator) {
+			case "websid":
+			case "legacy":
+				var audioCtx = ScriptNodePlayer.getInstance().getAudioContext();
+				suspended = audioCtx.state == "suspended";
+				break;
+			case "jssid":
+				// @todo
+				suspended = this.jsSID.issuspended();
+				break;
+			case "soasc":
+				// @todo
+				break;
+			case "download":
+				// Unknown
+				break;
+		}
+		return suspended;
+	},
+
+	/**
 	 * Pause the SID tune.
 	 */
 	pause: function() {

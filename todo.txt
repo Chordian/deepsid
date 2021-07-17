@@ -7,6 +7,10 @@ SHOULD BE DONE
 
 - Remove mentions of SOASC in the tips.
 
+- Add search for tags by simple clicking one, instead of playing the SID row.
+
+- Add placeholder "Search for..." in bottom search box.
+
 - Consider adding a red attract link somewhere, pointing to the front page showing any red or
   green message. I've learned that some users never see the front page.
   UPDATE: How about in the far right side, in the empty void? Maybe so it times out and vanishes.
