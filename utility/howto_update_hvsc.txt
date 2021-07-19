@@ -59,14 +59,16 @@ For the next HVSC version:
      lingering, then copy the "_High Voltage..." folder into the root.
   4. When the time comes to activate it below, rename the old "_High Voltage..." folder
      in /hvsc/ out to the root and instead move the new one in there.
+  5. Finally edit the HVSC_VERSION constant in the "setup.php" script. It's a good idea to
+     just edit the file directly online, to avoid messing with the database credentials.
 
    - For LOCALHOST, just backup the tables as you go and then update the original tables.
 
    - For ONLINE, first set the index.php flag that says the site is in maintenance mode,
      then again, just backup the tables as you go and then update the original tables with
      the CSV/SQL files you generated during the LOCALHOST session. After all is done, do
-     step 4 above and then check out stuff in ONLINE DeepSID. If good, leave maintenance
-     mode and announce the update to the world.
+     step 4 and 5 above and then check out stuff in ONLINE DeepSID. If good, leave
+     maintenance mode and announce the update to the world.
 
 First, do steps 1 to 7 above as you will need the big file later.
 

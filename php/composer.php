@@ -17,16 +17,24 @@ require_once("csdb_comments.php");
 require_once("composer_exotic.php");
 require_once("countries.php");
 
+die(json_encode(array('status' => 'ok', 'html' => ''))); //////////////////////////////////////////////////////////////////////////
+
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest')
 	die("Direct access not permitted.");
 
 $html = '';
 $rating = 0;
 $fullname = $_GET['fullname'];
+
 if (isset($fullname)) {
 
 	if (empty($fullname))
 		die(json_encode(array('status' => 'ok', 'html' => ''))); // Don't do root
+
+	// Annex folder (like e.g. new stuff in latest HVSC update)
+	if (strpos($fullname, '/^') != false)
+		// @todo A special profile could show statistics for the new stuff only
+		$fullname = '_High Voltage SID Collection';
 
 	if (substr($fullname, 0, 23) == 'CSDb Music Competitions' && strlen($fullname) > 24) {
 

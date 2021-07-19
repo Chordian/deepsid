@@ -323,7 +323,7 @@ Browser.prototype = {
 				// Get the unmodified name of this entry
 				// NOTE: Elsewhere, "extra" folders have their prefixed "_" removed for displaying.
 				var name = decodeURIComponent($tr.find(".name").attr("data-name"));
-				var thisFullname = ((this.isSearching || this.isSymlist || this.isCompoFolder ? "/" : this.path+"/")+name).substr(1);
+				var thisFullname = ((this.isSearching || this.isSymlist || this.isCompoFolder || this.isAnnex ? "/" : this.path+"/")+name).substr(1);
 
 				if (event.target.className === "edit-tags") {
 					// Clicked the "+" icon button to edit tags for a SID file
@@ -445,6 +445,11 @@ Browser.prototype = {
 						this.path = "/"+name; // Search folders already have the full path
 					else
 						this.path += "/"+name;
+
+					if (this.isAnnex)
+						// This only removes the first copy but it's okay since the PHP needs the second one
+						this.path = this.path.replace("/_High Voltage SID Collection", "");
+
 					ctrls.state("prev/next", "disabled");
 					ctrls.state("subtunes", "disabled");
 					ctrls.state("loop", "disabled");
@@ -540,7 +545,7 @@ Browser.prototype = {
 									$("#topic-profile").empty().append('<i>No profile available.</i>');
 									this.previousOverridePath = "_SID Happens";
 								}
-							else if (this.isSearching || this.path.substr(0, 2) === "/$" || this.path.substr(0, 2) === "/!")
+							else if (this.isSearching || this.path.substr(0, 2) === "/$" || this.path.substr(0, 2) === "/!"|| this.isAnnex)
 								this.getComposer(this.playlist[this.songPos].fullname);
 						} else
 							this.getComposer();
@@ -945,6 +950,7 @@ Browser.prototype = {
 		$("#songs table").empty();
 		this.isSearching = typeof searchQuery !== "undefined";
 		this.isSymlist = this.path.substr(0, 2) === "/!" || this.path.substr(0, 2) === "/$";
+		this.isAnnex = this.path.indexOf("/^") !== -1;
 
 		if (isDebug) {
 			_(_SECTION, "browser.js: getFolder()");
@@ -1080,7 +1086,8 @@ Browser.prototype = {
 						.replace(/^\/_/, '/')
 						.replace("/Compute's Gazette SID Collection", '<span class="dim">CGSC</span>')
 						.replace("/High Voltage SID Collection", '<span class="dim">HVSC</span>')
-						.replace("/Exotic SID Tunes Collection", '<span class="dim">ESTC</span>');
+						.replace("/Exotic SID Tunes Collection", '<span class="dim">ESTC</span>')
+						.replace("/^New in HVSC update "+this.HVSC_VERSION, '<span class="dim"> #'+this.HVSC_VERSION+'</span>');
 					if (this.isSearching) {
 						var searchType = $("#dropdown-search").val(),
 							searchHere = $("#search-here").is(":checked") ? "file="+this.path+"&here=1&" : "",
@@ -1132,7 +1139,7 @@ Browser.prototype = {
 					data.folders.sort(function(obj1, obj2) {
 						o1 = obj1.prefix != null && obj1.prefix != "" ? obj1.prefix : obj1.foldername;
 						o2 = obj2.prefix != null && obj2.prefix != "" ? obj2.prefix : obj2.foldername;
-						return o1.replace(/^(\_|\!|\$)/, '').toLowerCase() > o2.replace(/^(\_|\!|\$)/, '').toLowerCase() ? 1 : -1;
+						return o1.replace(/^(\_|\!|\$|\^)/, '').toLowerCase() > o2.replace(/^(\_|\!|\$|\^)/, '').toLowerCase() ? 1 : -1;
 					});
 
 					var filter = this.setupSortBox();
@@ -1187,7 +1194,7 @@ Browser.prototype = {
 								}.bind(this));
 								if (result.length) myPublic = true;
 							}
-							var adaptedName = folder.foldername.replace(/^(\_|\!|\$)/, '');
+							var adaptedName = folder.foldername.replace(/^(\_|\!|\$|\^)/, '');
 							adaptedName = this.adaptBrowserName(adaptedName);
 							var folderEntry =
 								'<tr'+(folder.incompatible.indexOf(SID.emulator) !== -1 || isMobileDenied ? ' class="disabled"' : '')+'>'+
@@ -1277,7 +1284,7 @@ Browser.prototype = {
 					$.each(data.files, function(i, file) {
 						// Player: Replace "_" with space + "V" with "v" for versions
 						var player = file.player.replace(/_/g, " ").replace(/(V)(\d)/g, "v$2"),
-							rootFile = (this.isSearching || this.isSymlist || this.isCompoFolder ? "" : this.path) + "/" + file.filename,
+							rootFile = (this.isSearching || this.isSymlist || this.isCompoFolder || this.isAnnex ? "" : this.path) + "/" + file.filename,
 							isNew = file.hvsc == this.HVSC_VERSION || file.hvsc == this.CGSC_VERSION ||
 								(typeof file.uploaded != "undefined" && file.uploaded.substr(0, 10) == this.today.substr(0, 10));
 						var adaptedName = file.substname == "" ? file.filename.replace(/^\_/, '') : file.substname;

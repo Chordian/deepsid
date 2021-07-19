@@ -24,6 +24,7 @@ $user_id = $account->CheckLogin() ? $account->UserID() : 0;
 $isSearching = isset($_GET['searchQuery']) && !empty($_GET['searchQuery']);
 $isPersonalSymlist = substr($_GET['folder'], 0, 2) == '/!';
 $isPublicSymlist = substr($_GET['folder'], 0, 2) == '/$';
+$isAnnexFolder = stripos($_GET['folder'], '/^') !== false;
 // NOTE: A comparison of the 'COMPO' type is performed below that may also set these variables.
 $isCSDbFolder = substr($_GET['folder'], 0, 24) == '/CSDb Music Competitions';
 $isCSDbCompo = $isCSDbFolder && !$isSearching;
@@ -361,6 +362,49 @@ try {
 		// If this is a public symlist we need to know who made it
 		if ($isPublicSymlist) $owner = PublicSymlistOwner();
 
+	} else if ($isAnnexFolder) {
+
+		// CONTENTS OF ANNEX FOLDER (e.g. new in latest HVSC update, etc.)
+
+		$files = array();
+
+			if (substr_count($_GET['folder'], '/') <= 2) {
+
+				// ROOT OF ANNEX FOLDER
+
+				// Files
+				$include = 'new LIKE "%'.HVSC_VERSION.'%"';
+				$select_new = $db->query('SELECT fullname FROM hvsc_files WHERE '.$include.' LIMIT 1000');
+				$select_new->setFetchMode(PDO::FETCH_OBJ);
+
+				$found = $select_new->rowCount();
+
+				foreach ($select_new as $row)
+					$files[] = $row->fullname;
+
+				// Folders
+				$select_new = $db->query('SELECT fullname FROM hvsc_folders WHERE '.$include.' LIMIT 1000');
+				$select_new->setFetchMode(PDO::FETCH_OBJ);
+					
+				$found += $select_new->rowCount();
+					
+				foreach ($select_new as $row)
+					$files[] = $row->fullname;
+
+			} else {
+
+				// SUB FOLDER IN ANNEX FOLDER
+
+				$hvsc_folder = substr($_GET['folder'], stripos($_GET['folder'], '/', 1));
+				$_GET['folder'] = $hvsc_folder;
+				$files = array_values(array_diff(scandir(ROOT_HVSC.$hvsc_folder), [
+					'.',
+					'..',
+				]));
+
+				$isAnnexFolder = false;
+			}
+
 	} else if ($isCSDbCompo) {
 
 		// CONTENTS OF 'CSDb Music Competitions' FOLDER
@@ -547,6 +591,10 @@ try {
 				foreach($select as $row)
 					$files[] = $row->fullname;
 			}
+		} else if ($_GET['folder'] == '/_High Voltage SID Collection') {
+			// The first HVSC fork; append fake folders for checking out stuff in a new HVSC update
+			$files[] = HVSC_FOLDER_NEW.HVSC_VERSION;
+			// Fiddle with this later: $files[] = 'Folders affected by HVSC update #'.HVSC_VERSION;
 		}
 
 		// The root is also home to 'SID Happens' which needs a count of files uploaded today
@@ -671,7 +719,7 @@ try {
 			// FILE
 
 			$select = $db->prepare('SELECT * FROM hvsc_files WHERE fullname = :fullname LIMIT 1');
-			$select->execute(array(':fullname'=>($isSearching || $isPublicSymlist || $isPersonalSymlist || $isCSDbCompo ? '' : $folder).$file));
+			$select->execute(array(':fullname'=>($isSearching || $isPublicSymlist || $isPersonalSymlist || $isCSDbCompo || $isAnnexFolder ? '' : $folder).$file));
 			$select->setFetchMode(PDO::FETCH_OBJ);
 
 			$player = $lengths = $type = $version = $playertype = $playercompat = $clockspeed = $sidmodel = $name = $author = $copyright = $hash = $stil = '';
