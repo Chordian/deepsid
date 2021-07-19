@@ -5,6 +5,8 @@ SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
 - Also add the "C64" file format download alternative for PRG files that was used in CShellDB.
 
+- Search shortcuts should show a folder icon with a small magnifying glass inside of it.
+
 - Add search for tags by simply clicking one, instead of playing the SID row.
 
 - Consider adding a red attract link somewhere, pointing to the front page showing any red or

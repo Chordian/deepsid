@@ -148,7 +148,7 @@ Browser.prototype = {
 			});
 
 		$(document).on("click", function(event) {
-			$target = $(event.target);
+			var $target = $(event.target);
 			if (!$target.hasClass("line") || ($target.hasClass("line") && !$target.hasClass("disabled"))) {
 				$("#contextmenu,#contextsubmenu").remove();
 				if (typeof this.contextTR !== "undefined")
@@ -323,7 +323,7 @@ Browser.prototype = {
 				// Get the unmodified name of this entry
 				// NOTE: Elsewhere, "extra" folders have their prefixed "_" removed for displaying.
 				var name = decodeURIComponent($tr.find(".name").attr("data-name"));
-				var thisFullname = ((this.isSearching || this.isSymlist || this.isCompoFolder || this.isAnnex ? "/" : this.path+"/")+name).substr(1);
+				var thisFullname = ((this.isSearching || this.isSymlist || this.isCompoFolder ? "/" : this.path+"/")+name).substr(1);
 
 				if (event.target.className === "edit-tags") {
 					// Clicked the "+" icon button to edit tags for a SID file
@@ -441,27 +441,46 @@ Browser.prototype = {
 
 					// ENTER FOLDER
 
-					if ($(event.target).find(".entry").hasClass("search"))
-						this.path = "/"+name; // Search folders already have the full path
-					else
-						this.path += "/"+name;
+					var $target = $(event.target).find(".entry");
+					var searchType = $target.attr("data-search-type");
 
-					if (this.isAnnex)
-						// This only removes the first copy but it's okay since the PHP needs the second one
-						this.path = this.path.replace("/_High Voltage SID Collection", "");
+					if (typeof searchType != "undefined") {
 
-					ctrls.state("prev/next", "disabled");
-					ctrls.state("subtunes", "disabled");
-					ctrls.state("loop", "disabled");
+						// SEARCH SHORTCUT
 
-					this.scrollPositions.push(this.currentScrollPos); // Remember where we parked
-					this.currentScrollPos = 0;
-					this.getFolder(0, undefined, undefined, function() {
-						this.cache.folderTags = this.showFolderTags();
-					});
-					this.getComposer();
+						$("#dropdown-search").val(searchType);
+						$("#search-box").val($target.attr("data-search-query"));
 
-					UpdateURL();
+						var $searchButton = $("#search-button");
+						$searchButton.removeClass("disabled");
+						if ($("#search-box").val() !== "")
+							$searchButton.prop("disabled", false);
+						else
+							$searchButton.prop("enabled", false).addClass("disabled");
+						$searchButton.trigger("click"); // Perform the search now
+
+					} else {
+
+						// OTHER FOLDERS
+
+						if ($target.hasClass("search"))
+							this.path = "/"+name; // Search folders already have the full path
+						else
+							this.path += "/"+name;
+
+						ctrls.state("prev/next", "disabled");
+						ctrls.state("subtunes", "disabled");
+						ctrls.state("loop", "disabled");
+
+						this.scrollPositions.push(this.currentScrollPos); // Remember where we parked
+						this.currentScrollPos = 0;
+						this.getFolder(0, undefined, undefined, function() {
+							this.cache.folderTags = this.showFolderTags();
+						});
+						this.getComposer();
+
+						UpdateURL();
+					}
 
 				} else {
 
@@ -545,7 +564,7 @@ Browser.prototype = {
 									$("#topic-profile").empty().append('<i>No profile available.</i>');
 									this.previousOverridePath = "_SID Happens";
 								}
-							else if (this.isSearching || this.path.substr(0, 2) === "/$" || this.path.substr(0, 2) === "/!"|| this.isAnnex)
+							else if (this.isSearching || this.path.substr(0, 2) === "/$" || this.path.substr(0, 2) === "/!")
 								this.getComposer(this.playlist[this.songPos].fullname);
 						} else
 							this.getComposer();
@@ -950,7 +969,6 @@ Browser.prototype = {
 		$("#songs table").empty();
 		this.isSearching = typeof searchQuery !== "undefined";
 		this.isSymlist = this.path.substr(0, 2) === "/!" || this.path.substr(0, 2) === "/$";
-		this.isAnnex = this.path.indexOf("/^") !== -1;
 
 		if (isDebug) {
 			_(_SECTION, "browser.js: getFolder()");
@@ -1071,7 +1089,7 @@ Browser.prototype = {
 					$("#loading").hide();
 					ctrls.state("root/back", "enabled");
 					if (!this.isMobile) $("#folders").mCustomScrollbar("destroy");
-					this.folders = this.extra = this.symlists = "";
+					this.folders = this.extra = this.symlists = this.searchShortcut = "";
 					var files = "";
 
 					// Disable emulators/handlers in the drop-down according to parent folder attributes
@@ -1086,8 +1104,7 @@ Browser.prototype = {
 						.replace(/^\/_/, '/')
 						.replace("/Compute's Gazette SID Collection", '<span class="dim">CGSC</span>')
 						.replace("/High Voltage SID Collection", '<span class="dim">HVSC</span>')
-						.replace("/Exotic SID Tunes Collection", '<span class="dim">ESTC</span>')
-						.replace("/^New in HVSC update "+this.HVSC_VERSION, '<span class="dim"> #'+this.HVSC_VERSION+'</span>');
+						.replace("/Exotic SID Tunes Collection", '<span class="dim">ESTC</span>');
 					if (this.isSearching) {
 						var searchType = $("#dropdown-search").val(),
 							searchHere = $("#search-here").is(":checked") ? "file="+this.path+"&here=1&" : "",
@@ -1187,6 +1204,7 @@ Browser.prototype = {
 
 							var isPersonalSymlist = folder.foldername.substr(0, 1) == "!",
 								isPublicSymlist = folder.foldername.substr(0, 1) == "$",
+								isSearchShortcut = folder.ss_type != "",
 								myPublic = false;
 							if (isPublicSymlist) {
 								var result = $.grep(this.symlistFolders, function(entry) {
@@ -1196,6 +1214,9 @@ Browser.prototype = {
 							}
 							var adaptedName = folder.foldername.replace(/^(\_|\!|\$|\^)/, '');
 							adaptedName = this.adaptBrowserName(adaptedName);
+							var search_shortcut = isSearchShortcut
+								? ' data-search-type="'+folder.ss_type+'" data-search-query="'+folder.ss_query+'"'
+								: '';
 							var folderEntry =
 								'<tr'+(folder.incompatible.indexOf(SID.emulator) !== -1 || isMobileDenied ? ' class="disabled"' : '')+'>'+
 									'<td class="folder '+
@@ -1206,7 +1227,7 @@ Browser.prototype = {
 										'"><div class="block-wrap"><div class="block">'+
 									(folder.filescount > 0 ? '<div class="filescount">'+folder.filescount+'</div>' : '')+
 									(folder.foldername == "_SID Happens" ? '<div class="new-uploads'+(data.uploads.substr(0, 6) == "NO NEW" ? ' no-new' : '')+'">'+data.uploads+'</div>' : '')+
-									'<span class="name entry'+(this.isSearching ? ' search' : '')+'" data-name="'+encodeURIComponent(folder.foldername)+'" data-incompat="'+folder.incompatible+'">'+
+									'<span class="name entry'+(this.isSearching ? ' search' : '')+'" data-name="'+encodeURIComponent(folder.foldername)+'" data-incompat="'+folder.incompatible+'"'+search_shortcut+'>'+
 									adaptedName+'</span></div></div></td>'+
 									'<td class="stars"><span class="rating">'+this.buildStars(folder.rating)+'</span></td>'+
 								'</tr>';
@@ -1226,6 +1247,8 @@ Browser.prototype = {
 								this.extra += folderEntry;
 							else if (isPersonalSymlist)											// Personal symlist folder?
 								this.symlists += folderEntry;
+							else if (isSearchShortcut)											// Search shortcut folder?
+								this.searchShortcut += folderEntry;
 							else
 								this.folders += folderEntry;									// Normal folder
 						}
@@ -1251,6 +1274,9 @@ Browser.prototype = {
 						this.folders = '<tr class="disabled"><td class="spacer" colspan="2"></td></tr>'+this.folders;
 						this.folders += '<tr class="disabled"><td class="divider" colspan="2"></td></tr>'+this.extra;
 						this.folders += this.symlists;
+						if (this.searchShortcut !== "")
+							this.folders += '<tr class="disabled"><td class="spacer" colspan="2"></td></tr>'+this.searchShortcut+
+								'<tr class="disabled"><td class="divider" colspan="2"></td></tr>';
 						this.subFolders += 2;
 					}
 
@@ -1284,7 +1310,7 @@ Browser.prototype = {
 					$.each(data.files, function(i, file) {
 						// Player: Replace "_" with space + "V" with "v" for versions
 						var player = file.player.replace(/_/g, " ").replace(/(V)(\d)/g, "v$2"),
-							rootFile = (this.isSearching || this.isSymlist || this.isCompoFolder || this.isAnnex ? "" : this.path) + "/" + file.filename,
+							rootFile = (this.isSearching || this.isSymlist || this.isCompoFolder ? "" : this.path) + "/" + file.filename,
 							isNew = file.hvsc == this.HVSC_VERSION || file.hvsc == this.CGSC_VERSION ||
 								(typeof file.uploaded != "undefined" && file.uploaded.substr(0, 10) == this.today.substr(0, 10));
 						var adaptedName = file.substname == "" ? file.filename.replace(/^\_/, '') : file.substname;

@@ -1408,10 +1408,6 @@ $(function() { // DOM ready
 			isSymlist = fileParam.substr(0, 2) == "/!" || fileParam.substr(0, 2) == "/$",
 			isCompoFolder = fileParam.indexOf("/CSDb Music Competitions/") !== -1;
 
-		// Replace annex folder name with the HVSC folder instead
-		/*if (fileParam.substr(0, 2) == "/^") LET'S TRY DOING THIS IN HVSC.PHP INSTEAD...
-			fileParam = fileParam.replace(/\/\^([^\/]+)\//, "/High Voltage SID Collection/");*/
-
 		// @todo When year 2021 arrives a loop may be warranted for the 'SID Happens' year folders
 		var shYear = "2020/";
 		if (fileParam.indexOf("SID Happens/") !== -1 && fileParam.indexOf(shYear) === -1) {
@@ -1754,8 +1750,8 @@ function UpdateURL(skipFileCheck) {
 		} catch(e) { /* Type error means no SID file clicked */ }
 	}
 
-	if (browser.isSearching || browser.isCompoFolder || browser.isAnnex)
-		urlFile = urlFile.replace("High Voltage SID Collection"+(browser.isAnnex ? "/" : ""), "");
+	if (browser.isSearching || browser.isCompoFolder)
+		urlFile = urlFile.replace("High Voltage SID Collection", "");
 
 	// ?subtune=
 	var urlSubtune = ctrls.subtuneCurrent ? "&subtune="+(ctrls.subtuneCurrent + 1) : "";
