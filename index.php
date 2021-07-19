@@ -429,6 +429,7 @@
 						<option value="rating">Rating</option>
 						<option value="country">Country</option>
 						<option value="new">Version</option>
+						<option value="updated">Updated</option>
 						<option value="gb64">Game</option>
 					</select>
 					<form onsubmit="return false;" autocomplete="off"><input type="text" name="search-box" id="search-box" maxlength="64" placeholder="Search" /></form>

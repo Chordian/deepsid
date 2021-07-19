@@ -1156,7 +1156,7 @@ Browser.prototype = {
 					data.folders.sort(function(obj1, obj2) {
 						o1 = obj1.prefix != null && obj1.prefix != "" ? obj1.prefix : obj1.foldername;
 						o2 = obj2.prefix != null && obj2.prefix != "" ? obj2.prefix : obj2.foldername;
-						return o1.replace(/^(\_|\!|\$|\^)/, '').toLowerCase() > o2.replace(/^(\_|\!|\$|\^)/, '').toLowerCase() ? 1 : -1;
+						return o1.replace(/^(\_|\!|\$)/, '').toLowerCase() > o2.replace(/^(\_|\!|\$)/, '').toLowerCase() ? 1 : -1;
 					});
 
 					var filter = this.setupSortBox();
@@ -1212,7 +1212,7 @@ Browser.prototype = {
 								}.bind(this));
 								if (result.length) myPublic = true;
 							}
-							var adaptedName = folder.foldername.replace(/^(\_|\!|\$|\^)/, '');
+							var adaptedName = folder.foldername.replace(/^(\_|\!|\$|\^...)/, '');
 							adaptedName = this.adaptBrowserName(adaptedName);
 							var search_shortcut = isSearchShortcut
 								? ' data-search-type="'+folder.ss_type+'" data-search-query="'+folder.ss_query+'"'

@@ -126,6 +126,9 @@ try {
 				else if (substr($datasize, 0, 2) == '0x')
 					$datasize = hexdec(substr($datasize, 2));
 				$select->execute(array(':datasize'=>$datasize));
+			} else if ($_GET['searchType'] == 'updated') {
+				// Don't find any files for this one
+				$select = false;
 			} else if ($_GET['searchType'] != 'country') {
 				// Normal type search (handles any position of words and excluding with "-" prepended)
 				// NOTE: This would have been easier with 'Full-Text' search but I'm not using the MyISAM engine.
@@ -187,6 +190,27 @@ try {
 				$select = $db->prepare('SELECT fullname FROM composers WHERE '.$searchContext.' AND country LIKE :query LIMIT 1000');
 				$query = strtolower($_GET['searchQuery']) == 'holland' ? 'netherlands' : $_GET['searchQuery'];
 				$select->execute(array(':query'=>'%'.$query.'%'));
+			} else if ($_GET['searchType'] == 'updated') {
+				// Search for folders affected by the specified 'new' version
+
+
+
+
+				/* Bold idea (not sure it's possible):
+
+					1. Make a new search type for author, where only his songs from latest HVSC update are returned.
+					2. After *this* search for 'Updated' a mode flag is set.
+					3. Clicking a folder in the search list ignores default behavior (because mode flag == true) and
+					   instead performs the new search type, showing only new files. The click also clears the flag.
+				*/
+
+
+
+
+				$select = $db->prepare('SELECT DISTINCT hvsc_folders.fullname FROM hvsc_folders'.
+					' JOIN hvsc_files ON INSTR(hvsc_files.fullname, hvsc_folders.fullname) > 0'.
+					' WHERE hvsc_files.new = :query AND LENGTH(hvsc_folders.fullname) - LENGTH(REPLACE(hvsc_folders.fullname, "/", "")) > 2');
+				$select->execute(array(':query'=>$_GET['searchQuery']));
 			} else if ($_GET['searchType'] == '#all#' || $_GET['searchType'] == 'fullname' || $_GET['searchType'] == 'author' || $_GET['searchType'] == 'new') {
 				// Normal type search
 				if ($_GET['searchType'] == 'author') {
@@ -550,13 +574,17 @@ try {
 		// The first HVSC fork; append "shortcut" folders for checking out stuff in a new HVSC update
 		} else if ($_GET['folder'] == '/_High Voltage SID Collection') {
 
-			$search_shorcut = array();
+			$search_shorcut_type = array();
+			$search_shorcut_query = array();
 
-			$ss_name = HVSC_FOLDER_NEW.HVSC_VERSION;
-		
-			$files[] = $ss_name;
-			$search_shortcut_type[$ss_name] = 'new';
-			$search_shortcut_query[$ss_name] = HVSC_VERSION;
+			// Add search shortcuts for the latest 5 versions of HVSC updates
+			// NOTE: The three digits between ^ and name is used for sorting differently than the name implies.
+			for ($i = 0; $i < 5; $i++) {
+				$ss_name = '^00'.$i.HVSC_FOLDER_NEW.(HVSC_VERSION - $i);
+				$files[] = $ss_name;
+				$search_shortcut_type[$ss_name] = 'new';
+				$search_shortcut_query[$ss_name] = HVSC_VERSION - $i;
+			}
 
 
 
