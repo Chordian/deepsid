@@ -29,6 +29,9 @@ $isCSDbFolder = substr($_GET['folder'], 0, 24) == '/CSDb Music Competitions';
 $isCSDbCompo = $isCSDbFolder && !$isSearching;
 $compoName = $isCSDbCompo && strlen($_GET['folder']) > 25 ? explode('/', $_GET['folder'])[2] : '';
 
+$search_shortcut_type = array();
+$search_shortcut_query = array();
+
 // In current folder or everything?
 $searchContext = '1';
 if ($_GET['searchHere'])
@@ -126,7 +129,18 @@ try {
 				else if (substr($datasize, 0, 2) == '0x')
 					$datasize = hexdec(substr($datasize, 2));
 				$select->execute(array(':datasize'=>$datasize));
-			} else if ($_GET['searchType'] == 'updated') {
+			} else if ($_GET['searchType'] == 'latest') {
+				$words = explode(',', $_GET['searchQuery']);
+				if (count($words) == 1) {
+					$query = $words[0];
+					$version = HVSC_VERSION;	// For queries like "laxity/"
+				} else {
+					$query = $words[0];
+					$version = $words[1];		// For queries like "laxity/,74"
+				}
+				$select = $db->query('SELECT fullname from hvsc_files'.
+					' WHERE new = "'.$version.'" AND (fullname LIKE "%'.$query.'%" OR author LIKE "%'.$query.'%") LIMIT 1000');
+			} else if ($_GET['searchType'] == 'folders') {
 				// Don't find any files for this one
 				$select = false;
 			} else if ($_GET['searchType'] != 'country') {
@@ -190,27 +204,16 @@ try {
 				$select = $db->prepare('SELECT fullname FROM composers WHERE '.$searchContext.' AND country LIKE :query LIMIT 1000');
 				$query = strtolower($_GET['searchQuery']) == 'holland' ? 'netherlands' : $_GET['searchQuery'];
 				$select->execute(array(':query'=>'%'.$query.'%'));
-			} else if ($_GET['searchType'] == 'updated') {
+			} else if ($_GET['searchType'] == 'latest') {
+				// Don't find any folders for this one
+				$select = false;
+			} else if ($_GET['searchType'] == 'folders') {
 				// Search for folders affected by the specified 'new' version
-
-
-
-
-				/* Bold idea (not sure it's possible):
-
-					1. Make a new search type for author, where only his songs from latest HVSC update are returned.
-					2. After *this* search for 'Updated' a mode flag is set.
-					3. Clicking a folder in the search list ignores default behavior (because mode flag == true) and
-					   instead performs the new search type, showing only new files. The click also clears the flag.
-				*/
-
-
-
-
 				$select = $db->prepare('SELECT DISTINCT hvsc_folders.fullname FROM hvsc_folders'.
-					' JOIN hvsc_files ON INSTR(hvsc_files.fullname, hvsc_folders.fullname) > 0'.
-					' WHERE hvsc_files.new = :query AND LENGTH(hvsc_folders.fullname) - LENGTH(REPLACE(hvsc_folders.fullname, "/", "")) > 2');
-				$select->execute(array(':query'=>$_GET['searchQuery']));
+					' INNER JOIN hvsc_files ON hvsc_files.fullname LIKE CONCAT("%", hvsc_folders.fullname ,"/%")'.
+					' WHERE hvsc_files.new = :version AND LENGTH(hvsc_folders.fullname) - LENGTH(REPLACE(hvsc_folders.fullname, "/", "")) > 2');
+				$folders_version = $_GET['searchQuery'];
+				$select->execute(array(':version'=>$folders_version));
 			} else if ($_GET['searchType'] == '#all#' || $_GET['searchType'] == 'fullname' || $_GET['searchType'] == 'author' || $_GET['searchType'] == 'new') {
 				// Normal type search
 				if ($_GET['searchType'] == 'author') {
@@ -229,8 +232,15 @@ try {
 
 				$found += $select->rowCount();
 
-				foreach ($select as $row)
+				foreach ($select as $row) {
 					$files[] = $row->fullname;
+					if ($_GET['searchType'] == 'folders') {
+						// This will turn the folders in the result list into search shortcuts
+						$search_shortcut_type[$row->fullname] = 'latest';
+						$parts = explode("/", $row->fullname);
+						$search_shortcut_query[$row->fullname] = end($parts).'/,'.$folders_version; // "Laxity/,72"
+					}
+				}
 			}
 
 		} else {
@@ -574,9 +584,6 @@ try {
 		// The first HVSC fork; append "shortcut" folders for checking out stuff in a new HVSC update
 		} else if ($_GET['folder'] == '/_High Voltage SID Collection') {
 
-			$search_shorcut_type = array();
-			$search_shorcut_query = array();
-
 			// Add search shortcuts for the latest 5 versions of HVSC updates
 			// NOTE: The three digits between ^ and name is used for sorting differently than the name implies.
 			for ($i = 0; $i < 5; $i++) {
@@ -586,16 +593,11 @@ try {
 				$search_shortcut_query[$ss_name] = HVSC_VERSION - $i;
 			}
 
-
-
-
-			// Fiddle with this later: $files[] = 'Folders affected by HVSC update #'.HVSC_VERSION;
-
-
-
-
-
-
+			// Add search shortcut for showing MUSICIANS folders with new songs (according to latest HVSC update)
+			$ss_name = '^010Folders with new files';
+			$files[] = $ss_name;
+			$search_shortcut_type[$ss_name] = 'folders';
+			$search_shortcut_query[$ss_name] = HVSC_VERSION;
 		}
 
 		// The root is also home to 'SID Happens' which needs a count of files uploaded today
@@ -675,6 +677,14 @@ try {
 						$rating = $select_rating->rowCount() ? $select_rating->fetch()->rating : 0;
 					}
 				}
+			}
+
+			if ($_GET['searchType'] == 'folders') {
+				// Replace total file count with number of new files in the specified HVSC update instead
+				$select_latest = $db->query('SELECT count(1) as cnt from hvsc_files'.
+					' WHERE new = "'.$folders_version.'" AND fullname LIKE "%'.$fullname.'/%"');
+				$select_latest->setFetchMode(PDO::FETCH_OBJ);
+				$filescount = $select_latest->rowCount() ? $select_latest->fetch()->cnt : 0;
 			}
 
 			// If a competition folder pops up in search results

@@ -429,7 +429,8 @@
 						<option value="rating">Rating</option>
 						<option value="country">Country</option>
 						<option value="new">Version</option>
-						<option value="updated">Updated</option>
+						<option value="latest">Latest</option>
+						<option value="folders" style="display:none;">Folders</option>
 						<option value="gb64">Game</option>
 					</select>
 					<form onsubmit="return false;" autocomplete="off"><input type="text" name="search-box" id="search-box" maxlength="64" placeholder="Search" /></form>
@@ -1216,12 +1217,20 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
-						<h3>July 17, 2020</h3>
+						<h3>July .., 2020</h3>
+						<ul>
+							<li>You can now also search for the files added in the latest HVSC update by someone. Choose
+								<code>Latest</code> and then type the name to do this. If you want to be certain that only a
+								specific composer is matched, add a slash in the end. For example, "tomas/" will only show
+								hits for Danko. Append e.g. ",72" for that HVSC version.
+						</ul>
+
+						<h3>July 17, 2021</h3>
 						<ul>
 							<li>The cover overlay for autoplaying a tune is no longer shown if not necessary.</li>
 						</ul>
 
-						<h3>July 13, 2020</h3>
+						<h3>July 13, 2021</h3>
 						<ul>
 							<li>The 4 new 2SID files in HVSC #75 (i.e. that uses 6 voices) has now been added as
 								<a href="http://deepsid.chordian.net/?file=/_Exotic%20SID%20Tunes%20Collection/Stereo%202SID&here=1&search=75&type=new&tab=csdb">exotic stereo files</a>.</li>
