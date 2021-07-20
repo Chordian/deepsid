@@ -1217,12 +1217,19 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
-						<h3>July .., 2020</h3>
+						<h3>July 20, 2021</h3>
 						<ul>
 							<li>You can now also search for the files added in the latest HVSC update by someone. Choose
 								<code>Latest</code> and then type the name to do this. If you want to be certain that only a
 								specific composer is matched, add a slash in the end. For example, "tomas/" will only show
-								hits for Danko. Append e.g. ",72" for that HVSC version.
+								hits for Danko. Append e.g. ",72" for that HVSC version.</li>
+							<li>A new type of folder item called a <i>search shortcut</i> has been added to DeepSID. This
+								has been used inside the first level folder of HVSC to search for new stuff in the latest
+								five HVSC updates.</li>
+							<li>The second search shortcut for folders is a special search that lists folders in HVSC (mostly by composers)
+								that contains files added in the latest HVSC update. Each folder shown in the search results
+								are actually new search shortcuts. Clicking one shows only those new files.
+							</li>
 						</ul>
 
 						<h3>July 17, 2021</h3>

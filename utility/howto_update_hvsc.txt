@@ -527,5 +527,7 @@ Update various minor stuff:
   o  The "notable" (yellow line) link in the profile page (composer table).
   o  Update the top corner link in the profile page to point at the latest CSDb page (same table).
   o  Update "HVSC_VERSION" in browser.js.
+  o  Remember to also update "HVSC_VERSION" in setup.php if you haven't already done so.
+  o  Add two entries in the "hvsc_folders" table for searching new stuff in the latest HVSC update.
 
 --------------------------------

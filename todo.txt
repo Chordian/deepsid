@@ -14,9 +14,6 @@ SHOULD BE DONE
   UPDATE: How about in the far right side, in the empty void? Maybe so it times out and vanishes.
           Test: Open DeepSID on work PC (1920x1080) to see how much space is common there.
 
-- Inside root HVSC (DEMOS, GAMES, MUSICIANS) below the dashed lines, there could be "folders" for
-  various topics like "What's new in update #75" and "What folders have new updates" etc.
-
 - Symlists, next version: (Text editing requested by LaLa in February 2021)
   - First version is text only with no editing (so admin privilege to begin with). Editing later.
   - Unique "STIL" text for folder upon entering.

@@ -29,6 +29,7 @@ $isCSDbFolder = substr($_GET['folder'], 0, 24) == '/CSDb Music Competitions';
 $isCSDbCompo = $isCSDbFolder && !$isSearching;
 $compoName = $isCSDbCompo && strlen($_GET['folder']) > 25 ? explode('/', $_GET['folder'])[2] : '';
 
+$folders_version = HVSC_VERSION;
 $search_shortcut_type = array();
 $search_shortcut_query = array();
 
@@ -587,17 +588,19 @@ try {
 			// Add search shortcuts for the latest 5 versions of HVSC updates
 			// NOTE: The three digits between ^ and name is used for sorting differently than the name implies.
 			for ($i = 0; $i < 5; $i++) {
-				$ss_name = '^00'.$i.HVSC_FOLDER_NEW.(HVSC_VERSION - $i);
+				$ss_name = '^00'.$i.'New in HVSC update #'.(HVSC_VERSION - $i);
 				$files[] = $ss_name;
 				$search_shortcut_type[$ss_name] = 'new';
 				$search_shortcut_query[$ss_name] = HVSC_VERSION - $i;
 			}
 
-			// Add search shortcut for showing MUSICIANS folders with new songs (according to latest HVSC update)
-			$ss_name = '^010Folders with new files';
-			$files[] = $ss_name;
-			$search_shortcut_type[$ss_name] = 'folders';
-			$search_shortcut_query[$ss_name] = HVSC_VERSION;
+			// Search shortcuts for showing MUSICIANS folders with new songs (according to latest HVSC update)
+			for ($i = 0; $i < 5; $i++) {
+				$ss_name = '^01'.$i.'Folders in HVSC update #'.(HVSC_VERSION - $i);
+				$files[] = $ss_name;
+				$search_shortcut_type[$ss_name] = 'folders';
+				$search_shortcut_query[$ss_name] = HVSC_VERSION - $i;
+			}
 		}
 
 		// The root is also home to 'SID Happens' which needs a count of files uploaded today
