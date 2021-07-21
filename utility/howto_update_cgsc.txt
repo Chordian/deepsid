@@ -160,15 +160,14 @@ Go inside the CGSC folder on your local machine, open a command box, then do the
      folder, there may also be a capital letter file with no extension in all of the sub folders where a .txt
      file was also found. Make sure you delete those too.
 
-ADDING YEARS
-¯¯¯¯¯¯¯¯¯¯¯¯
-Search for the new version in DeepSID and click the "Lyrics" tab. Now click each new tune while keeping an
-eye on the info in the top box as well as in the tab. If there's a composing year to be seen, hit the "*"
-hotkey on the NUMPAD and enter the year in COPYRIGHT edit box.
+TESTING LOCAL WHILE ADDING YEARS
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+Search for the new version in DeepSID and click the "Lyrics" tab.
+
+Refer to the changes in the two CGSC update text files and try clicking the same tunes in DeepSID. You should
+not get errors for changed files/folders and you should not be able to search for deleted files.
+
+While clicking each new tune, keep an eye on the info in the top box as well as in the tab. If there's a
+composing year to be seen, hit the "*" hotkey on the NUMPAD and enter the year in COPYRIGHT edit box.
 
 You have to search again each time you enter a year, so it's usually a good idea to remember the spot.
-
-TESTING LOCAL
-¯¯¯¯¯¯¯¯¯¯¯¯¯
-Refer to the changes in the two CGSC update text files and try clicking the same tunes in DeepSID. You
-should not get errors for changed files/folders and you should not be able to search for deleted files.
