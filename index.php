@@ -1234,7 +1234,7 @@
 
 						<h3>July 17, 2021</h3>
 						<ul>
-							<li>The cover overlay for autoplaying a tune is no longer shown if not necessary.</li>
+							<li>The cover overlay for auto-playing a tune is no longer shown if not necessary.</li>
 						</ul>
 
 						<h3>July 13, 2021</h3>
@@ -1866,8 +1866,8 @@
 							<li>Fixed a memo view bug where the beginning of C64 memory was shown for MUS files in CGSC.</li>
 							<li>The WebSid emulator now changes its drop-down box text depending on the device. Desktop computers
 								will continue to use <code>WebSid emulator</code> for the latest cycle-by-cycle version. Most
-								mobile devices will use <code>WebSid (Legacy)</code> which is older but faster. And finally, iOS
-								will use <code>WebSid (iOS)</code> to ensure continuous play.</li>
+								mobile devices will use <code>WebSid (Legacy)</code> which is older but faster. <del>And finally, iOS
+								will use <code>WebSid (iOS)</code> to ensure continuous play.</del></li>
 						</ul>
 
 						<h3>September 13, 2019</h3>
