@@ -432,6 +432,7 @@
 						<option value="latest">Latest</option>
 						<option value="folders" style="display:none;">Folders</option>
 						<option value="gb64">Game</option>
+						<option value="special" style="display:none;">Special</option>
 					</select>
 					<form onsubmit="return false;" autocomplete="off"><input type="text" name="search-box" id="search-box" maxlength="64" placeholder="Search" /></form>
 					<div id="search-here-container">
@@ -1217,6 +1218,17 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>July 31, 2021</h3>
+						<ul>
+							<li>Added three search shortcuts in the first level of the HVSC folder:
+								<ul>
+							<li>A search shortcut for multispeed finds all tags with "Multispeed" or "2x" and up to "16x" speeds.</li>
+							<li>A search shortcut for multisid finds all "2SID", "3SID", "4SID", "8SID" and "10SID" tunes.</li>
+							<li>A search shortcut for game composers finds all soundtracks from popular game composers.</li>
+						</ul>
+							</li>
+						</ul>
+
 						<h3>July 20, 2021</h3>
 						<ul>
 							<li>You can now also search for the files added in the latest HVSC update by someone. Choose
@@ -1228,8 +1240,7 @@
 								five HVSC updates.</li>
 							<li>The second search shortcut for folders is a special search that lists folders in HVSC (mostly by composers)
 								that contains files added in the latest HVSC update. Each folder shown in the search results
-								are actually new search shortcuts. Clicking one shows only those new files.
-							</li>
+								are actually new search shortcuts. Clicking one shows only those new files.</li>
 						</ul>
 
 						<h3>July 17, 2021</h3>

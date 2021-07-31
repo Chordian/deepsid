@@ -3,6 +3,9 @@
  * DeepSID / Browser
  */
 
+const TR_SPACER 	= '<tr class="disabled"><td class="spacer" colspan="2"></td></tr>';
+const TR_DIVIDER	= '<tr class="disabled"><td class="divider" colspan="2"></td></tr>';
+
  function Browser() {
 
 	this.ROOT_HVSC = 'hvsc';
@@ -768,8 +771,7 @@ Browser.prototype = {
 								if (data.results[$this.find(".name").text()] > stars)
 									filterFolders += '<tr>'+$this.html()+'</tr>';
 							}.bind(this));
-							filterFolders = '<tr class="disabled"><td class="spacer" colspan="2"></tr>'+
-								filterFolders+'<tr class="disabled"><td class="divider" colspan="2"></tr>';
+							filterFolders = TR_SPACER+filterFolders+TR_DIVIDER;
 							$("#songs table").append(filterFolders);
 							localStorage.setItem("letter", event.target.value);
 						} else {
@@ -940,8 +942,7 @@ Browser.prototype = {
 						'<td class="stars"><span class="rating">'+this.buildStars(folder.rating)+'</span><br /></td>'+
 					'</tr>';
 			}.bind(this));
-			folders = '<tr class="disabled"><td class="spacer" colspan="2"></tr>'+
-				folders+'<tr class="disabled"><td class="divider" colspan="2"></tr>';
+			folders = TR_SPACER+folders+TR_DIVIDER;
 			$("#songs table").append(folders);
 			this.cache.folder = folders;
 			this.cache.compolist = this.compolist;
@@ -1089,7 +1090,7 @@ Browser.prototype = {
 					$("#loading").hide();
 					ctrls.state("root/back", "enabled");
 					if (!this.isMobile) $("#folders").mCustomScrollbar("destroy");
-					this.folders = this.extra = this.symlists = this.searchShortcut = "";
+					this.folders = this.extra = this.symlists = this.searchShortcutNew = this.searchShortcutOther = "";
 					var files = "";
 
 					// Disable emulators/handlers in the drop-down according to parent folder attributes
@@ -1239,17 +1240,21 @@ Browser.prototype = {
 							else if (folder.foldername == '_Exotic SID Tunes Collection')
 								exoticCollection = folderEntry;
 							else if (folder.foldername == PATH_UPLOADS)
-								publicUploadFolder = folderEntry+'<tr class="disabled"><td class="divider" colspan="2"></td></tr>'+
-									'<tr class="disabled"><td class="spacer" colspan="2"></td></tr>';
+								publicUploadFolder = folderEntry+TR_DIVIDER+TR_SPACER;
 							else if ((folder.foldername.substr(0, 1) == "_" || isPublicSymlist) &&
 								(!onlyShowPersonal || (onlyShowPersonal && myPublic)) &&
 								(!onlyShowCommon || (onlyShowCommon && folder.flags & 0x1)))	// Public symlist or custom?
 								this.extra += folderEntry;
 							else if (isPersonalSymlist)											// Personal symlist folder?
 								this.symlists += folderEntry;
-							else if (isSearchShortcut)											// Search shortcut folder?
-								this.searchShortcut += folderEntry;
-							else
+							else if (isSearchShortcut) {										// Search shortcut folder?
+								if (folder.foldername.substr(0, 3) == "^00" || folder.foldername.substr(0, 3) == "^01")
+									// The "new in HVSC update" stuff
+									this.searchShortcutNew += folderEntry;
+								else
+									// Other types of search shortcuts
+									this.searchShortcutOther += folderEntry;
+							} else
 								this.folders += folderEntry;									// Normal folder
 						}
 						this.subFolders++;
@@ -1258,25 +1263,24 @@ Browser.prototype = {
 
 					if (this.subFolders) {
 						if (this.extra !== "") {
-							this.extra = '<tr class="disabled"><td class="spacer" colspan="2"></td></tr>'+this.extra+
-								'<tr class="disabled"><td class="divider" colspan="2"></td></tr>';
+							this.extra = TR_SPACER+this.extra+TR_DIVIDER;
 							this.subFolders += 2;
 						}
 						if (this.symlists !== "") {
-							this.symlists = '<tr class="disabled"><td class="spacer" colspan="2"></td></tr>'+this.symlists+
-								'<tr class="disabled"><td class="divider" colspan="2"></td></tr>';
+							this.symlists = TR_SPACER+this.symlists+TR_DIVIDER;
 							this.subFolders += 2;
 						}
 						if (collections.length)
 							this.folders = publicUploadFolder+collections[1]+collections[0]; // HVSC should be before CGSC
 						this.folders += csdbCompoEntry;
 						this.folders += exoticCollection;
-						this.folders = '<tr class="disabled"><td class="spacer" colspan="2"></td></tr>'+this.folders;
-						this.folders += '<tr class="disabled"><td class="divider" colspan="2"></td></tr>'+this.extra;
+						this.folders = TR_SPACER+this.folders;
+						this.folders += TR_DIVIDER+this.extra;
 						this.folders += this.symlists;
-						if (this.searchShortcut !== "")
-							this.folders += '<tr class="disabled"><td class="spacer" colspan="2"></td></tr>'+this.searchShortcut+
-								'<tr class="disabled"><td class="divider" colspan="2"></td></tr>';
+						if (this.searchShortcutNew !== "")
+							this.folders += TR_SPACER+this.searchShortcutNew+TR_DIVIDER;
+						if (this.searchShortcutOther !== "")
+							this.folders += TR_SPACER+this.searchShortcutOther+TR_DIVIDER;
 						this.subFolders += 2;
 					}
 

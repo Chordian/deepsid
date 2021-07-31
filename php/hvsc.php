@@ -41,6 +41,7 @@ if ($_GET['searchHere'])
 		: 'fullname LIKE "'.substr($_GET['folder'], 1).'%"';
 
 try {
+
 	if ($_SERVER['HTTP_HOST'] == LOCALHOST)
 		$db = new PDO(PDO_LOCALHOST, USER_LOCALHOST, PWD_LOCALHOST);
 	else
@@ -69,6 +70,7 @@ try {
 	}
 
 	function ParseQuery($query) {
+
 		// Replace spaces ('_') inside quoted queries with '%' and remove the quotes themselves
 		// NOTE: This is actually a weird shortcut and sometimes produce unexpected results.
 		preg_match_all('/"[^"]+"/', $query, $quoted);
@@ -84,6 +86,7 @@ try {
 
 		// This tricky logic disallows symlists unless searching for everything
 		if ((!$isPublicSymlist && !$isPersonalSymlist) ||
+
 			(!$_GET['searchHere'] && ($isPublicSymlist || $isPersonalSymlist))) {
 
 			// SEARCH PHYSICAL FILES AND FOLDERS
@@ -91,6 +94,7 @@ try {
 			// Perform a search query and fill the array with the results of fullnames
 			$select = null;
 			if ($_GET['searchType'] == 'rating') {
+
 				// Search for a specific user rating (1-5) or a range (e.g. -3 or 3-)
 				$operators = substr($_GET['searchQuery'], 0, 1) == '-' ? '<='
 					: (substr($_GET['searchQuery'], -1) == '-' ? '>=' : '=');
@@ -98,7 +102,9 @@ try {
 					' INNER JOIN ratings ON hvsc_files.id = ratings.table_id'.
 					' WHERE '.$searchContext.' AND ratings.user_id = '.$user_id.' AND ratings.rating '.$operators.' :rating AND ratings.type = "FILE" LIMIT 1000');
 				$select->execute(array(':rating'=>str_replace('-', '', $_GET['searchQuery'])));
+
 			} else if ($_GET['searchType'] == 'tag') {
+
 				// Search for one or more tags
 				$tag_list = '';
 				$search_tags = ParseQuery($_GET['searchQuery']);
@@ -112,7 +118,9 @@ try {
 					' AND ('.substr($tag_list, 4).')'.
 					' GROUP BY tags_lookup.files_id'.
 					' HAVING COUNT(*) = '.count($search_tags).' LIMIT 1000');
+
 			} else if ($_GET['searchType'] == 'location') {
+
 				$select = $db->prepare('SELECT fullname FROM hvsc_files'.
 					' WHERE '.$searchContext.' AND loadaddr = :loadaddr LIMIT 1000');
 				$location = $_GET['searchQuery'];
@@ -121,7 +129,9 @@ try {
 				else if (substr($location, 0, 2) == '0x')
 					$location = hexdec(substr($location, 2));
 				$select->execute(array(':loadaddr'=>$location));
+
 			} else if ($_GET['searchType'] == 'maximum') {
+
 				$select = $db->prepare('SELECT fullname FROM hvsc_files'.
 					' WHERE '.$searchContext.' AND datasize <= :datasize AND fullname LIKE "_High Voltage SID Collection%" LIMIT 1000');
 				$datasize = $_GET['searchQuery'];
@@ -130,7 +140,9 @@ try {
 				else if (substr($datasize, 0, 2) == '0x')
 					$datasize = hexdec(substr($datasize, 2));
 				$select->execute(array(':datasize'=>$datasize));
+
 			} else if ($_GET['searchType'] == 'latest') {
+
 				$words = explode(',', $_GET['searchQuery']);
 				if (count($words) == 1) {
 					$query = $words[0];
@@ -141,10 +153,49 @@ try {
 				}
 				$select = $db->query('SELECT fullname from hvsc_files'.
 					' WHERE new = "'.$version.'" AND (fullname LIKE "%'.$query.'%" OR author LIKE "%'.$query.'%") LIMIT 1000');
+
 			} else if ($_GET['searchType'] == 'folders') {
+
 				// Don't find any files for this one
-				$select = false;
-			} else if ($_GET['searchType'] != 'country') {
+
+			} else if ($_GET['searchType'] == 'special') {
+
+				switch(strtolower($_GET['searchQuery'])) {
+
+					case 'multispeed':
+
+						// Search for all multispeed types (2x, 3x, 4x, etc.)
+						$select = $db->query('SELECT fullname FROM hvsc_files'.
+							' LEFT JOIN tags_lookup ON hvsc_files.id = tags_lookup.files_id'.
+							' LEFT JOIN tags_info ON tags_info.id = tags_lookup.tags_id'.
+							' WHERE tags_info.name IN ("multispeed", "2x", "3x", "4x", "5x", "6x", "7x", "8x", "9x", "10x", "11x", "12x", "13x", "14x", "15x", "16x")'.
+							' GROUP BY tags_lookup.files_id LIMIT 1000');
+						break;
+
+					case 'multisid':
+
+						// Search for all multisid types (2SID, 3SID, etc.)
+						$select = $db->query('SELECT fullname FROM hvsc_files'.
+							' WHERE fullname REGEXP "2SID.sid|3SID.sid|4SID.sid|8SID.sid|10SID.sid" LIMIT 1000');
+						break;
+
+					case 'gamecomposers':
+
+						// Search for most popular game composers in one big list
+						$select = $db->query('SELECT fullname FROM hvsc_files'.
+							' LEFT JOIN tags_lookup ON hvsc_files.id = tags_lookup.files_id'.
+							' LEFT JOIN tags_info ON tags_info.id = tags_lookup.tags_id'.
+							' WHERE author REGEXP "Rob Hubbard|Martin Galway|Fred Gray|Wally Beben|Neil Brennan|Ben Daglish|Charles Deenen|Tim Follin|Geoff Follin|Matt Gray|Chris Hülsbeck|Richard Joseph|Russell Lieblich|Reyn Ouwehand|Jeroen Tel|Steve Turner|Martin Walker|Johannes Bjerregaard|David Dunn|Egeskov|Yip"'.
+							' AND tags_info.name LIKE "%Game" LIMIT 1000');
+						break;
+
+					default:
+
+						// Don't find anything if not a recognized special search
+				}
+
+			} else if ($_GET['searchType'] != 'country') { // ALL OTHER SEARCH TYPES
+
 				// Normal type search (handles any position of words and excluding with "-" prepended)
 				// NOTE: This would have been easier with 'Full-Text' search but I'm not using the MyISAM engine.
 				$exclude = '';
@@ -182,6 +233,7 @@ try {
 				}
 				$select = $db->query('SELECT fullname FROM hvsc_files WHERE '.$searchContext.' AND '.$include.$exclude.' LIMIT 1000');
 			}
+
 			$files = array();
 			if ($select) {
 				$select->setFetchMode(PDO::FETCH_OBJ);
@@ -196,26 +248,30 @@ try {
 			// NOTE: Notice the extra "NOT LIKE" to avoid finding personal playlists by other users.
 			$select = null;
 			if ($_GET['searchType'] == 'rating') {
+
 				$select = $db->prepare('SELECT fullname FROM hvsc_folders'.
 					' INNER JOIN ratings ON hvsc_folders.id = ratings.table_id'.
 					' WHERE '.$searchContext.' AND ratings.user_id = '.$user_id.' AND ratings.rating '.$operators.' :rating AND ratings.type = "FOLDER" AND (fullname NOT LIKE "!%") LIMIT 1000');
 				$select->execute(array(':rating'=>str_replace('-', '', $_GET['searchQuery'])));
+
 			} else if ($_GET['searchType'] == 'country') {
+
 				// Search for country in composer profiles
 				$select = $db->prepare('SELECT fullname FROM composers WHERE '.$searchContext.' AND country LIKE :query LIMIT 1000');
 				$query = strtolower($_GET['searchQuery']) == 'holland' ? 'netherlands' : $_GET['searchQuery'];
 				$select->execute(array(':query'=>'%'.$query.'%'));
-			} else if ($_GET['searchType'] == 'latest') {
-				// Don't find any folders for this one
-				$select = false;
+
 			} else if ($_GET['searchType'] == 'folders') {
+
 				// Search for folders affected by the specified 'new' version
 				$select = $db->prepare('SELECT DISTINCT hvsc_folders.fullname FROM hvsc_folders'.
 					' INNER JOIN hvsc_files ON hvsc_files.fullname LIKE CONCAT("%", hvsc_folders.fullname ,"/%")'.
 					' WHERE hvsc_files.new = :version AND LENGTH(hvsc_folders.fullname) - LENGTH(REPLACE(hvsc_folders.fullname, "/", "")) > 2');
 				$folders_version = $_GET['searchQuery'];
 				$select->execute(array(':version'=>$folders_version));
+
 			} else if ($_GET['searchType'] == '#all#' || $_GET['searchType'] == 'fullname' || $_GET['searchType'] == 'author' || $_GET['searchType'] == 'new') {
+
 				// Normal type search
 				if ($_GET['searchType'] == 'author') {
 					// Let 'author' also find folders using 'fullname' as replacement type
@@ -228,6 +284,7 @@ try {
 				}
 				$select = $db->query('SELECT fullname FROM hvsc_folders WHERE '.$searchContext.' AND '.$include.$exclude.' AND (fullname NOT LIKE "!%") LIMIT 1000');
 			}
+
 			if ($select) {
 				$select->setFetchMode(PDO::FETCH_OBJ);
 
@@ -256,8 +313,10 @@ try {
 			$select_folder->setFetchMode(PDO::FETCH_OBJ);
 
 			if ($select_folder->rowCount()) {
+
 				$symlist_folder_id = $select_folder->fetch()->id;
 				if ($_GET['searchType'] == 'rating') {
+
 					// Search for a specific user rating (1-5) or a range (e.g. -3 or 3-)
 					$operators = substr($_GET['searchQuery'], 0, 1) == '-' ? '<='
 						: (substr($_GET['searchQuery'], -1) == '-' ? '>=' : '=');
@@ -266,7 +325,9 @@ try {
 						' INNER JOIN ratings ON symlists.file_id = ratings.table_id'.
 						' WHERE ratings.user_id = '.$user_id.' AND ratings.rating '.$operators.' :rating AND ratings.type = "FILE" AND symlists.folder_id = '.$symlist_folder_id);
 					$select_files->execute(array(':rating'=>str_replace('-', '', $_GET['searchQuery'])));
+
 				} else if ($_GET['searchType'] == 'tag') {
+
 					// Search for one or more tags
 					$tag_list = '';
 					$search_tags = ParseQuery($_GET['searchQuery']);
@@ -281,7 +342,9 @@ try {
 						' AND ('.substr($tag_list, 4).')'.
 						' GROUP BY tags_lookup.files_id'.
 						' HAVING COUNT(*) = '.count($search_tags).' LIMIT 1000');
+
 				} else if ($_GET['searchType'] == 'location') {
+
 					$select_files = $db->prepare('SELECT h.fullname FROM hvsc_files h'.
 						' INNER JOIN symlists ON h.id = symlists.file_id'.
 						' WHERE symlists.folder_id = '.$symlist_folder_id.' AND loadaddr = :loadaddr LIMIT 1000');
@@ -291,7 +354,9 @@ try {
 					else if (substr($location, 0, 2) == '0x')
 						$location = hexdec(substr($location, 2));
 					$select_files->execute(array(':loadaddr'=>$location));
+
 				} else if ($_GET['searchType'] == 'maximum') {
+
 					$select_files = $db->prepare('SELECT h.fullname FROM hvsc_files h'.
 						' INNER JOIN symlists ON h.id = symlists.file_id'.
 						' WHERE symlists.folder_id = '.$symlist_folder_id.' AND datasize <= :datasize AND fullname LIKE "_High Voltage SID Collection%" LIMIT 1000');
@@ -301,7 +366,9 @@ try {
 					else if (substr($datasize, 0, 2) == '0x')
 						$datasize = hexdec(substr($datasize, 2));
 					$select_files->execute(array(':datasize'=>$datasize));
+
 				} else if ($_GET['searchType'] == 'country') {
+
 					// Search for country in composer profiles
 					$select_files = $db->prepare('SELECT h.fullname FROM hvsc_files h'.
 						' INNER JOIN symlists ON h.id = symlists.file_id'.
@@ -309,7 +376,9 @@ try {
 						' WHERE c.country LIKE :query AND symlists.folder_id = '.$symlist_folder_id);
 					$query = strtolower($_GET['searchQuery']) == 'holland' ? 'netherlands' : $_GET['searchQuery'];
 					$select_files->execute(array(':query'=>'%'.$query.'%'));
+
 				} else {
+
 					// Normal type search (handles any position of words and excluding with "-" prepended)
 					// NOTE: This would have been easier with 'Full-Text' search but I'm not using the MyISAM engine.
 					$exclude = '';
@@ -355,10 +424,12 @@ try {
 							$exclude = str_replace('#all#', 'CONCAT('.$columns.')', $exclude);
 						}
 					}	
+
 					$select_files = $db->query('SELECT fullname FROM hvsc_files'.
 						' INNER JOIN symlists ON hvsc_files.id = symlists.file_id'.
 						' WHERE '.$include.$exclude.' AND symlists.folder_id = '.$symlist_folder_id);
 				}
+
 				$select_files->setFetchMode(PDO::FETCH_OBJ);
 
 				$found = $select_files->rowCount();
@@ -601,6 +672,22 @@ try {
 				$search_shortcut_type[$ss_name] = 'folders';
 				$search_shortcut_query[$ss_name] = HVSC_VERSION - $i;
 			}
+
+			// Search shortcuts for "all" of e.g. specific types of songs
+			$ss_name = '^030All multispeed tunes';
+			$files[] = $ss_name;
+			$search_shortcut_type[$ss_name] = 'special';
+			$search_shortcut_query[$ss_name] = 'multispeed';
+
+			$ss_name = '^035All multisid tunes';
+			$files[] = $ss_name;
+			$search_shortcut_type[$ss_name] = 'special';
+			$search_shortcut_query[$ss_name] = 'multisid';
+
+			$ss_name = '^040Popular game composers';
+			$files[] = $ss_name;
+			$search_shortcut_type[$ss_name] = 'special';
+			$search_shortcut_query[$ss_name] = 'gamecomposers';
 		}
 
 		// The root is also home to 'SID Happens' which needs a count of files uploaded today
