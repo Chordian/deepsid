@@ -1221,6 +1221,7 @@
 						<h3>August 1, 2021</h3>
 						<ul>
 							<li>Fixed a bug where the table cell with star ratings was sometimes pushed too small.</li>
+							<li>Improved the handling of pretty player names which fixed a few odd adaptations of the tiny ones.</li>
 						</ul>
 
 						<h3>July 31, 2021</h3>

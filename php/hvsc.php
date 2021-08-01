@@ -935,6 +935,12 @@ try {
 			$type_of_tags = array();
 			GetTagsAndTypes($row->id, $list_of_tags, $type_of_tags);
 
+			// Some player names have to be fetched specifically or there may be undesired changes elsewhere
+			if ($player == 'Jeff') $player = 'Jeff\'s player';
+			if ($player == 'Mixer') $player = 'Mixer\'s player';
+			if ($player == 'SoedeSoft') $player = 'SoedeSoft\'s player';
+			if ($player == 'Zardax') $player = 'Zardax\'s player';
+
 			array_push($files_ext, array(
 				'filename' =>		$file,
 				'substname' =>		$substname,

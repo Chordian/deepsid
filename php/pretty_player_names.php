@@ -7,7 +7,7 @@
 
 $prettyPlayerNames = array(
 	'20CC' =>					'20CC\'s player',
-	'4-Mat' =>					'4-Mat\'s player',
+	// '4-Mat' =>					'4-Mat\'s player', // Perhaps it looks better without
 	'4753_Softcopy' =>			'$4753 Softcopy\'s Digi player',
 	'Achim_Schulz' =>			'Achim Schulz\'s player',
 	'Adam_Gilmore' =>			'Adam Gilmore\'s player',
@@ -76,7 +76,8 @@ $prettyPlayerNames = array(
 	'Jason_Briggs' =>			'Jason Briggs\' player',
 	'Jason_Brooke' =>			'Jason Brooke\'s player',
 	'Jason_Page' =>				'Jason Page\'s player',
-	'Jeff' =>					'Jeff\'s player',
+	// Jeff's player is handled in 'hvsc.php' itself
+	'Jeff_Minter' =>			'Jeff Minter\'s player',
 	'Jeremy_Hall' =>			'Jeremy Hall\'s player',
 	'Jeroen_Kimmel' =>			'Jeroen Kimmel\'s player',
 	'Jim_Cuomo' =>				'Jim Cuomo\'s player',
@@ -116,8 +117,8 @@ $prettyPlayerNames = array(
 	'Maurizio_Feletto' =>		'Maurizio Feletto\'s player',
 	'Michael_Delaney' =>		'Michael Delaney\'s player',
 	'Michael_Winterberg' =>		'Michael Winterberg\'s player',
-	// Don't add for 'Mixer' here
-	'MoN/FutureComposer/Deenen_Digi' => 'MoN/FC/Deenen_Digi', // Avoids rating stars being pushed out
+	// Mixer's player is handled in 'hvsc.php' itself
+	'MoN/FutureComposer/Deenen_Digi' => 'MoN/FC/Deenen_Digi', // Avoids rating stars being pushed out (later fixed)
 	'Neil_Baldwin' =>			'Neil Baldwin\'s player',
 	'Neil_Brennan' =>			'Neil Brennan\'s player',
 	'Neil_Crossley' =>			'Neil Crossley\'s player',
@@ -154,7 +155,7 @@ $prettyPlayerNames = array(
 	'Silas_Warner' =>			'Silas Warner\'s player',
 	'Shaun_Southern' =>			'Shaun Southern\'s player',
 	'Slaygon' =>				'Slaygon\'s player',
-	// Don't add for 'SoedeSoft' here
+	// Soedesoft's player is handled in 'hvsc.php' itself
 	'Sonic_Graffiti' =>			'Sonic Graffiti\'s player',
 	'SounDemon' =>				'SounDemon\'s player',
 	'Spinnaker' =>				'Spinnaker Software\'s player',
@@ -178,7 +179,7 @@ $prettyPlayerNames = array(
 	'Urs_Heckmann' =>			'Urs Heckmann\'s player',
 	'Vibrants/JO' =>			'JO\'s player',
 	'X-Byte' =>					'X-Byte\'s player',
-	'Zardax' =>					'Zardax\'s player',
+	// Zardax's player is handled in 'hvsc.php' itself
 	'Zoltan_Mohos' =>			'Zoltan Mohos\' player',
 	'Zyborg' =>					'Zyborg\'s player',
 );
