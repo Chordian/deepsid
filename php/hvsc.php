@@ -185,7 +185,7 @@ try {
 						$select = $db->query('SELECT fullname FROM hvsc_files'.
 							' LEFT JOIN tags_lookup ON hvsc_files.id = tags_lookup.files_id'.
 							' LEFT JOIN tags_info ON tags_info.id = tags_lookup.tags_id'.
-							' WHERE author REGEXP "Rob Hubbard|Martin Galway|Fred Gray|Wally Beben|Neil Brennan|Ben Daglish|Charles Deenen|Tim Follin|Geoff Follin|Matt Gray|Chris Hülsbeck|Richard Joseph|Russell Lieblich|Reyn Ouwehand|Jeroen Tel|Steve Turner|Martin Walker|Johannes Bjerregaard|David Dunn|Egeskov|Yip"'.
+							' WHERE author REGEXP "Rob Hubbard|Martin Galway|Fred Gray|Wally Beben|Neil Brennan|Ben Daglish|Charles Deenen|Tim Follin|Geoff Follin|Matt Gray|Chris Hülsbeck|Richard Joseph|Russell Lieblich|Reyn Ouwehand|Jeroen Tel|Steve Turner|Martin Walker|Johannes Bjerregaard|David Dunn|Laxity|Yip"'.
 							' AND tags_info.name LIKE "%Game" LIMIT 1000');
 						break;
 

@@ -1218,6 +1218,11 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>August 1, 2021</h3>
+						<ul>
+							<li>Fixed a bug where the table cell with star ratings was sometimes pushed too small.</li>
+						</ul>
+
 						<h3>July 31, 2021</h3>
 						<ul>
 							<li>Added three search shortcuts in the first level of the HVSC folder:

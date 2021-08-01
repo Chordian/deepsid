@@ -2806,6 +2806,7 @@ input[type=range]::-ms-track {
 
 		#songs td.sid {
 			position: relative;
+			max-width: 311px; /* This fix prevents the left TD from pushing the TD with star ratings */
 		}
 
 		/* Alloyrun.sid (file) */
