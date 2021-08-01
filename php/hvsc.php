@@ -296,7 +296,7 @@ try {
 						// This will turn the folders in the result list into search shortcuts
 						$search_shortcut_type[$row->fullname] = 'latest';
 						$parts = explode("/", $row->fullname);
-						$search_shortcut_query[$row->fullname] = end($parts).'/,'.$folders_version; // "Laxity/,72"
+						$search_shortcut_query[$row->fullname] = '/'.end($parts).'/,'.$folders_version; // "/Foo/,72"
 					}
 				}
 			}
@@ -772,7 +772,7 @@ try {
 			if ($_GET['searchType'] == 'folders') {
 				// Replace total file count with number of new files in the specified HVSC update instead
 				$select_latest = $db->query('SELECT count(1) as cnt from hvsc_files'.
-					' WHERE new = "'.$folders_version.'" AND fullname LIKE "%'.$fullname.'/%"');
+					' WHERE new = "'.$folders_version.'" AND fullname LIKE "%/'.$fullname.'/%"');
 				$select_latest->setFetchMode(PDO::FETCH_OBJ);
 				$filescount = $select_latest->rowCount() ? $select_latest->fetch()->cnt : 0;
 			}

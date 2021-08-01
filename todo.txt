@@ -3,8 +3,6 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- The "Folders" search shortcuts should probably do "/Name/,75", not just "Name/,75".
-
 - Update copyright alterer in upload to change Erik Dobek's date format.
 
 - Search shortcuts should show a folder icon with a small magnifying glass inside of it.
