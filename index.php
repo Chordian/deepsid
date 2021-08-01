@@ -1223,6 +1223,10 @@
 							<li>Fixed a bug where the table cell with star ratings was sometimes pushed too small.</li>
 							<li>Improved the handling of pretty player names which fixed a few odd adaptations of the tiny ones.</li>
 							<li>The pretty player names for JCH's NewPlayer series now also show if the tune is unpacked.</li>
+							<li>On CSDb release pages, all download links for PRG files now also offer an alternative C64 link.
+								The file is exactly the same, only the extension is different. The advantage is that you can
+								associate it with an offline emulator such as VICE and run it directly from your web browser.
+								This is not always possible with PRG files.</li>
 						</ul>
 
 						<h3>July 31, 2021</h3>

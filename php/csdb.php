@@ -497,7 +497,8 @@ if ($csdb_type == 'sid') {
 			// $link = urldecode($dlink->Link);					// <- Doesn't work with Kleimeyer's "Fuer Elise"
 			$link = to_utf8(urldecode($dlink->Link));			// <- Uses a custom UTF8 converter function
 			$download_links .= '<br /><a href="'.$dlink->CounterLink.'">'.$link.'</a>'.
-				'<span class="count">'.$dlink->Downloads.'</span>';
+				'<span class="count">'.(!empty($dlink->Downloads) ? $dlink->Downloads : '0').'</span>'.
+				(stripos($link, '.prg') !== false ? '<span class="count"><a href="'.str_replace('.prg', '.c64', $link).'">C64</a></span>' : '');
 		}
 		$download_links = '<p><b>Download:</b>'.$download_links.'</p>';
 	}

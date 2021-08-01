@@ -3,8 +3,6 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- Also add the "C64" file format download alternative for PRG files that was used in CShellDB.
-
 - The "Folders" search shortcuts should probably do "/Name/,75", not just "Name/,75".
 
 - Update copyright alterer in upload to change Erik Dobek's date format.
@@ -14,10 +12,6 @@ SHOULD BE DONE
 - Idea: A ~2px left edge color border on those rows with a specific player. Maybe so it fades
   into transparent during the next 5-10px towards the right.
   - GT2: Gray, SF2: Blue, NP+LP: Green
-
-- Bad hit of " (unpacked)" player text:
-  http://chordian/deepsid/?file=/MUSICIANS/M/Mitch_and_Dane/Dane/Altitude.sid
-  It can be fixed by checking for $A9 at $0F00 memory location.
 
 - Add search for tags by simply clicking one, instead of playing the SID row. However, it might
   be wise to have a toggle in settings for turning it off. (Should it even be off as default?)
