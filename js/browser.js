@@ -799,7 +799,7 @@ Browser.prototype = {
 				break;
 			case "player":
 				// Sort playlist according to music player
-				// NOTE: This is not available in 'SID Happens' because all players are undetermined there.
+				// NOTE: This is not available in 'SID Happens' because players are not visible in the rows.
 				this.playlist.sort(function(obj1, obj2) {
 					return obj1.player.toLowerCase() > obj2.player.toLowerCase() ? 1 : -1;
 				});
@@ -2644,7 +2644,15 @@ Browser.prototype = {
 						var parts = copyright.split(" ");
 						var endWord = parts[parts.length - 1];
 						if (!isNaN(endWord) && endWord.length == 4 && (endWord.substr(0, 2) == "19" || endWord.substr(0, 2) == "20"))
-							copyright = parts[parts.length - 1]+" "+parts.slice(0, -1); // Swap places
+							// Year is in the end; move it to the beginning
+							copyright = endWord+" "+parts.slice(0, -1).join(" ");
+						else if ((parts[0].match(/-/g) || []).length == 2) {
+							var numbers = parts[0].split("-");
+							endWord = numbers[numbers.length - 1];
+							if (!isNaN(endWord) && endWord.length == 4 && (endWord.substr(0, 2) == "19" || endWord.substr(0, 2) == "20"))
+								// It starts with the MM-DD-YYYY format (Eric Dobek); move the year to the beginning
+								copyright = endWord+"-"+numbers[0]+"-"+numbers[1]+" "+parts.slice(1).join(" ");
+						}
 						$("#upload-file-copyright-input").val(copyright);
 					}
 					browser.uploadWizard(2, data);

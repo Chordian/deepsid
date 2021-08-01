@@ -1227,6 +1227,8 @@
 								The file is exactly the same, only the extension is different. The advantage is that you can
 								associate it with an offline emulator such as VICE and run it directly from your web browser.
 								This is not always possible with PRG files.</li>
+							<li>Fixed a bug that sometimes added commas in the copyright field when uploading tunes.</li>
+							<li>Improved the handling of copyright year when uploading tunes.</li>
 						</ul>
 
 						<h3>July 31, 2021</h3>

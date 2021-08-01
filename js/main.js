@@ -1408,7 +1408,7 @@ $(function() { // DOM ready
 			isSymlist = fileParam.substr(0, 2) == "/!" || fileParam.substr(0, 2) == "/$",
 			isCompoFolder = fileParam.indexOf("/CSDb Music Competitions/") !== -1;
 
-		// @todo When year 2021 arrives a loop may be warranted for the 'SID Happens' year folders
+		// @todo When year 2022 arrives a loop may be warranted for the 'SID Happens' year folders
 		var shYear = "2020/";
 		if (fileParam.indexOf("SID Happens/") !== -1 && fileParam.indexOf(shYear) === -1) {
 			// Year not specified; if not in root SH folder then look in a year folder
