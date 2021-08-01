@@ -885,9 +885,6 @@ try {
 			else if ($player == 'MoN/Bjerregaard')
 				$player = 'Bjerregaard';
 
-			// Remove the player and length texts for JCH's tunes (info can be seen elsewhere in DeepSID)
-			$stil = preg_replace('/COMMENT. Composed in.+JCH player.+\./', '', $stil);			
-
 			$stil = str_replace('<br />',	' ',						$stil);
 
 			$stil = str_replace('<?>', '<small class="u1">?</small>?<small class="u2">?</small>', $stil);
@@ -902,9 +899,6 @@ try {
 
 			// Make references to other HVSC tunes into redirect links (i.e. won't refresh the web page)
 			$stil = preg_replace('/(\/DEMO[^\s].+\.sid|\/GAMES[^\s]+\.sid|\/MUSICIANS[^\s]+\.sid)/', '<a class="redirect" href="#">$1</a>', $stil);
-
-			// Remove the player and length texts for JCH's tunes (info can be seen elsewhere in DeepSID)
-			//$stil = preg_replace('/\sComposed in.+JCH player.+\./', '', $stil);			
 
 			$symid = $symid_pos = 0;
 			$substname = '';
@@ -948,9 +942,12 @@ try {
 			if ($player == 'Zardax') $player = 'Zardax\'s player';
 
 			// If it's an *unpacked* JCH NewPlayer tune, add that info about it
-			// WARNING: Just checking the specific load address may only be 99% watertight!
-			// @todo Check if first byte is either A9, or *not* 4C.
-			if (stripos($player, 'jch_newplayer') !== false && $loadaddr == '3840')
+			// NOTE: Just checking the specific load address is not entirely watertight, but to be 100%
+			// sure I need to get the file contents to test for bytes, and I fear that's too expensive to
+			// do at this point. Instead, I'll hack my way around with exceptions.
+			if (stripos(strtolower($player), 'jch_newplayer') !== false && $loadaddr == '3840' &&
+				stripos($file, 'Altitude.sid') === false &&		// Altitude.sid by Dane
+				stripos($file, 'Quadtron.sid') === false)		// Quadtron.sid by Cosowi
 				$player .= ' (unpacked)';
 
 			array_push($files_ext, array(

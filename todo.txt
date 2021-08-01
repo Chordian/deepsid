@@ -15,6 +15,10 @@ SHOULD BE DONE
   into transparent during the next 5-10px towards the right.
   - GT2: Gray, SF2: Blue, NP+LP: Green
 
+- Bad hit of " (unpacked)" player text:
+  http://chordian/deepsid/?file=/MUSICIANS/M/Mitch_and_Dane/Dane/Altitude.sid
+  It can be fixed by checking for $A9 at $0F00 memory location.
+
 - Add search for tags by simply clicking one, instead of playing the SID row. However, it might
   be wise to have a toggle in settings for turning it off. (Should it even be off as default?)
 
@@ -342,6 +346,11 @@ PROBABLY NOT?
   screws up the chart statistics.
   - I looked at various examples in the STIL text file, but the expressions are all over the
     place. It may not be possible to write a solid regex to catch enough of them to be viable.
+
+- Relevant to the above, regex to remove the player and length info from JCH's tunes. However, I tried
+  a few regex lines in August 2021 and while it's easy to cover most of them, it's difficult to make it
+  100% watertight. And that's where it transitions into it not being worth the trouble.
+  UPDATE: I've now sent a request to the HVSC team about removing those text bits.
 
 - CSDb Music Competitions:
   - Thought about a better inside "path" box info where year and country is also visible, but it's not
