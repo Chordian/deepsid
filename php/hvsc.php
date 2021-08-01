@@ -941,6 +941,11 @@ try {
 			if ($player == 'SoedeSoft') $player = 'SoedeSoft\'s player';
 			if ($player == 'Zardax') $player = 'Zardax\'s player';
 
+			// If it's an *unpacked* JCH NewPlayer tune, add that info about it
+			// WARNING: Just checking the specific load address may only be 99% watertight!
+			if (stripos($player, 'jch_newplayer') !== -1 && $loadaddr == '3840')
+				$player .= ' (unpacked)';
+
 			array_push($files_ext, array(
 				'filename' =>		$file,
 				'substname' =>		$substname,

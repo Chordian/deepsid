@@ -1222,6 +1222,7 @@
 						<ul>
 							<li>Fixed a bug where the table cell with star ratings was sometimes pushed too small.</li>
 							<li>Improved the handling of pretty player names which fixed a few odd adaptations of the tiny ones.</li>
+							<li>The pretty player names for JCH's NewPlayer series now also show if the tune is unpacked.</li>
 						</ul>
 
 						<h3>July 31, 2021</h3>

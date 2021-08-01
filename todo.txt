@@ -240,7 +240,6 @@ PROBABLY NOT?
 - Drag-and-drop support. Maybe somehow tagged onto the existing emulator testing upload feature.
 - Consider using storage to remember the main volume setting between sessions.
 - To avoid stutter when stuff is loading, can the emulators be placed in a web worker?
-- Is it possible to detect unpacked JCH NewPlayer tunes and prepend " (unpacked)" to them?
 - A slider for altering the filtering of the emulators (requested by Matty Seito).
 - Replace ".." with a back arrow SVG instead? (I think people have gotten used to the ".." by now.)
 - A filter sort option in letter folders that show the crap only (one stars).
