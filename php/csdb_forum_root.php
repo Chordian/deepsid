@@ -28,7 +28,7 @@ $html = '<h3 style="margin-top:10px;">Forum threads from CSDb</h3>
 	<h3 style="margin-top:1em;">Other forums</h3>
 	<p>For individual SID tunes you can comment in the CSDb tab, but DeepSID itself doesn\'t have its own forum.
 		Alternatives are the <a href="https://www.facebook.com/groups/deepsid/" target="_blank">Facebook group</a>,
-		a specific <a href="https://csdb.dk/forums/?roomid=14&topicid=129712" target="_blank">forum thread at CSDb</a>,
+		a specific <a href="http://csdb.chordian.net/?type=forums&roomid=14&topicid=129712" target="_blank">forum thread at CSDb</a>,
 		or my <a href="https://twitter.com/chordian" target="_blank">Twitter account</a>.</p>';
 
 $sticky = '<h2 style="margin-top:0;">Forums</h2>';

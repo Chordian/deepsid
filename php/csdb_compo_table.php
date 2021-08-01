@@ -61,7 +61,7 @@ foreach($compos as $compo) {
 					'</td>'.
 					'<td class="compo-name">'.
 						($id
-							? '<a class="participant ellipsis" href="https://csdb.dk/release/?id='.$id.'" target="_blank">'.$name.'</a>'
+							? '<a class="participant ellipsis" href="http://csdb.chordian.net/?type=release&id='.$id.'" target="_blank">'.$name.'</a>'
 							: '<span class="participant ellipsis">'.$name.'</span>'
 						).
 					'</td>'.
@@ -96,7 +96,7 @@ foreach($compos as $compo) {
 $sticky = '<h2 style="display:inline-block;margin-top:0;">'.$csdb->Event->Name.'</h2>'.
 	'<button id="go-back" class="compo">Back</button>'.
 	'<div class="corner-icons">'.
-		'<a href="https://csdb.dk/event/?id='.$csdb->Event->ID.'" title="See this at CSDb" target="_blank"><svg class="outlink" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg></a>'.
+		'<a href="http://csdb.chordian.net/?type=event&id='.$csdb->Event->ID.'" title="See this at CSDb" target="_blank"><svg class="outlink" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg></a>'.
 	'</div>';
 
 // And now the body HTML for the '#page' DIV

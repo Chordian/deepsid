@@ -157,7 +157,7 @@ if ($row->csdbtype == 'scener') {
 								'<td>'.
 									//'<span class="up icon-before icon-arrowright" title="Joined...">'.
 									'<span class="up icon-before '.($founder ? 'icon-founder" title="Founded...">' : 'icon-arrowright" title="Joined...">').
-									'<a class="group ellipsis" href="https://csdb.dk/group/?id='.$id.'" target="_blank">'.($status == 'ex' ? '<del>'.$name.'</del>' : $name).'</a></span>'.
+									'<a class="group ellipsis" href="http://csdb.chordian.net/?type=group&id='.$id.'" target="_blank">'.($status == 'ex' ? '<del>'.$name.'</del>' : $name).'</a></span>'.
 								'</td>'.
 								'<td>'.
 									(empty($dateStart) ? '<span class="filler">0000-00-00</span>' : $dateStart).
@@ -264,7 +264,7 @@ if ($row->csdbtype == 'scener') {
 						'<td>'.
 							//'<span class="up icon-before icon-arrowright" title="Joined...">'.
 							'<span class="up icon-before '.($founder ? 'icon-founder" title="Founder">' : 'icon-arrowright" title="Member">').
-							'<a class="group ellipsis" href="https://csdb.dk/scener/?id='.$id.'" target="_blank">'.($status == 'ex' ? '<del>'.$name.'</del>' : $name).'</a></span>'.
+							'<a class="group ellipsis" href="http://csdb.chordian.net/?type=scener&id='.$id.'" target="_blank">'.($status == 'ex' ? '<del>'.$name.'</del>' : $name).'</a></span>'.
 						'</td>'.
 						'<td>'.
 							$dateStart.

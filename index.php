@@ -476,7 +476,7 @@
 						<span>&#9642</span>-->
 					<a href="https://twitter.com/chordian">Twitter</a>
 						<span>&#9642</span>
-					<a href="https://csdb.dk/forums/?roomid=14&topicid=129712">CSDb</a>
+					<a href="http://csdb.chordian.net/?type=forums&roomid=14&topicid=129712">CSDb</a>
 						<span>&#9642</span>
 					<a href="https://github.com/Chordian/deepsid">GitHub</a>
 					</div>
@@ -891,7 +891,7 @@
 							<a href="https://github.com/wothke/webaudio-player">https://github.com/wothke/webaudio-player</a>
 						</p>
 						<p>
-							jsSID by Mihály Horváth (<a href="https://csdb.dk/scener/?id=18806">Hermit</a>)
+							jsSID by Mihály Horváth (<a href="http://csdb.chordian.net/?type=scener&id=18806">Hermit</a>)
 						</p>
 
 						<?php /* <h3>Audio API library for SOASC</h3>
@@ -948,11 +948,11 @@
 						<h3>Other resources used</h3>
 						<p>
 							SIDId by Lasse Öörni (<a href="https://cadaver.github.io/">Cadaver</a>)<br />
-							<a href="http://csdb.dk/release/?id=112201">http://csdb.dk/release/?id=112201</a>
+							<a href="http://csdb.chordian.net/?type=release&id=112201">http://csdb.dk/release/?id=112201</a>
 						</p>
 						<p>
 							SIDInfo by Matti Hämäläinen (ccr)<br />
-							<a href="https://csdb.dk/release/?id=164751">https://csdb.dk/release/?id=164751</a><br />
+							<a href="http://csdb.chordian.net/?type=release&id=164751">https://csdb.dk/release/?id=164751</a><br />
 							<a href="https://tnsp.org/hg/sidinfo/">https://tnsp.org/hg/sidinfo/</a>
 						</p>
 						<p>
@@ -1386,7 +1386,7 @@
 						<h3>November 22, 2020</h3>
 						<ul>
 							<li>The upload process for adding a new SID file in the SH folder now automatically detects the player used.
-								This makes use of the same configuration file that the offline <a href="https://csdb.dk/release/?id=112201">SIDId</a> tool also uses.</li>
+								This makes use of the same configuration file that the offline <a href="http://csdb.chordian.net/?type=release&id=112201">SIDId</a> tool also uses.</li>
 						</ul>
 	
 						<h3>November 15, 2020</h3>

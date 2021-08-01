@@ -158,7 +158,7 @@ try {
 
 $html =
 	'<div style="height:149px;"></div>'.
-	'<div class="root-wide good-news">'.$important.'</div>'.
+	// '<div class="root-wide good-news">'.$important.'</div>'.
 	// Recommendations
 	'<table class="root rec"><tr>'.
 		'<td style="max-width:10px;">'.

@@ -194,8 +194,8 @@ if ($csdb_type == 'sid') {
 						? ' class="emphasize"'
 						: '';
 					$released_by .= (!empty($scener)
-						? ', <a href="https://csdb.dk/scener/?id='.$id.'" target="_blank"'.$yellow.'>'.$scener.'</a>'
-						: ', [<a href="https://csdb.dk/scener/?id='.$id.'" target="_blank">Scener:'.$id.'</a>]'
+						? ', <a href="http://csdb.chordian.net/?type=scener&id='.$id.'" target="_blank"'.$yellow.'>'.$scener.'</a>'
+						: ', [<a href="http://csdb.chordian.net/?type=scener&id='.$id.'" target="_blank">Scener:'.$id.'</a>]'
 					);
 					if (!$amount) {
 						$released_by .= ' [...]';
@@ -220,8 +220,8 @@ if ($csdb_type == 'sid') {
 						? ' class="emphasize"'
 						: '';
 					$released_by .= (!empty($grp)
-						? ', <a href="https://csdb.dk/group/?id='.$id.'" target="_blank"'.$yellow.'>'.$grp.'</a>'
-						: ', [<a href="https://csdb.dk/group/?id='.$id.'" target="_blank">Group:'.$id.'</a>]'
+						? ', <a href="http://csdb.chordian.net/?type=group&id='.$id.'" target="_blank"'.$yellow.'>'.$grp.'</a>'
+						: ', [<a href="http://csdb.chordian.net/?type=group&id='.$id.'" target="_blank">Group:'.$id.'</a>]'
 					);
 					if (!$amount) {
 						$released_by .= ' [...]';
@@ -267,11 +267,11 @@ if ($csdb_type == 'sid') {
 				'<tr>'.
 					'<td class="thumbnail">'.
 						(isset($release->ScreenShot)
-							? '<a '.($can_show_internally ? 'class="internal" ' : '').'href="https://csdb.dk/release/?id='.$release->ID.'" data-id="'.$release->ID.'" target="_blank"><img src="'.$release->ScreenShot.'" alt="'.$release->Name.'" /></a>'
-							: '<a '.($can_show_internally ? 'class="internal" ' : '').'href="https://csdb.dk/release/?id='.$release->ID.'" data-id="'.$release->ID.'" target="_blank"><img src="images/noscreenshot.gif" alt="'.$release->Name.'" /></a>').
+							? '<a '.($can_show_internally ? 'class="internal" ' : '').'href="http://csdb.chordian.net/?type=release&id='.$release->ID.'" data-id="'.$release->ID.'" target="_blank"><img src="'.$release->ScreenShot.'" alt="'.$release->Name.'" /></a>'
+							: '<a '.($can_show_internally ? 'class="internal" ' : '').'href="http://csdb.chordian.net/?type=release&id='.$release->ID.'" data-id="'.$release->ID.'" target="_blank"><img src="images/noscreenshot.gif" alt="'.$release->Name.'" /></a>').
 					'</td>'.
 					'<td class="info">'.
-						'<a class="'.($can_show_internally ? 'internal ' : '').'name" href="https://csdb.dk/release/?id='.$release->ID.'" data-id="'.$release->ID.'" target="_blank">'.$adapted_name.'</a><br />'.
+						'<a class="'.($can_show_internally ? 'internal ' : '').'name" href="http://csdb.chordian.net/?type=release&id='.$release->ID.'" data-id="'.$release->ID.'" target="_blank">'.$adapted_name.'</a><br />'.
 						$type_and_released_by.
 						$release_date.
 						$download_link.
@@ -354,7 +354,7 @@ if ($csdb_type == 'sid') {
 		$handles = $csdb->Release->ReleasedBy->Handle; 
 		if (isset($handles)) {
 			foreach($handles as $handle) {
-				$released_by .= ', <a href="https://csdb.dk/scener/?id='.$handle->ID.'" target="_blank">'.$handle->Handle.'</a>';
+				$released_by .= ', <a href="http://csdb.chordian.net/?type=scener&id='.$handle->ID.'" target="_blank">'.$handle->Handle.'</a>';
 				if (!array_key_exists((string)$handle->ID, $sceners))
 					// Save the handle in case the ID is repeated in 'Credits' further below
 					$sceners[(string)$handle->ID] = $handle->Handle;
@@ -363,7 +363,7 @@ if ($csdb_type == 'sid') {
 		$groups = $csdb->Release->ReleasedBy->Group;
 		if (isset($groups)) {
 			foreach($groups as $group) {
-				$released_by .= ', <a href="https://csdb.dk/group/?id='.$group->ID.'" target="_blank">'.$group->Name.'</a>';
+				$released_by .= ', <a href="http://csdb.chordian.net/?type=group&id='.$group->ID.'" target="_blank">'.$group->Name.'</a>';
 			}
 		}
 		$released_by = '<p><b>Released by:</b><br />'.substr($released_by, 2).'</p>';
@@ -392,7 +392,7 @@ if ($csdb_type == 'sid') {
 	// Released at - OR - Achievement
 	$released_at_or_achievement = '';
 	if (isset($csdb->Release->ReleasedAt->Event)) {
-		$link = '<a href="https://csdb.dk/event/?id='.$csdb->Release->ReleasedAt->Event->ID.'" target="_blank">'.$csdb->Release->ReleasedAt->Event->Name.'</a>';
+		$link = '<a href="http://csdb.chordian.net/?type=event&id='.$csdb->Release->ReleasedAt->Event->ID.'" target="_blank">'.$csdb->Release->ReleasedAt->Event->Name.'</a>';
 		if (isset($csdb->Release->Achievement)) {
 			$released_at_or_achievement = '<p><b>Achievement:</b><br />'.
 				$csdb->Release->Achievement->Compo.' Competition at '.$link.':<span class="count">'.
@@ -442,10 +442,10 @@ if ($csdb_type == 'sid') {
 				if (strpos($member, ',')) {
 					$parts = explode(',', $member);
 					// ID and handle
-					$m = '<a href="https://csdb.dk/scener/?id='.$parts[1].'" target="_blank">'.$parts[0].'</a>';
+					$m = '<a href="http://csdb.chordian.net/?type=scener&id='.$parts[1].'" target="_blank">'.$parts[0].'</a>';
 				} else {
 					// [Scener:1234]
-					$m = '[<a href="https://csdb.dk/scener/?id='.$member.'" target="_blank">Scener:'.$member.'</a>]';
+					$m = '[<a href="http://csdb.chordian.net/?type=scener&id='.$member.'" target="_blank">Scener:'.$member.'</a>]';
 				}
 				$list .= ', '.$m;
 				if (!$amount) {
@@ -534,7 +534,7 @@ if ($csdb_type == 'sid') {
 	$sticky = '<h2 style="display:inline-block;margin-top:0;">'.$csdb->Release->Name.'</h2>'.$go_back.
 		'<a href="//deepsid.chordian.net?tab=csdb&csdbtype=release&csdbid='.$csdb->Release->ID.'" title="Permalink">'.$svg_permalink.'</a>'.
 		'<div class="corner-icons">'.
-			'<a href="https://csdb.dk/release/?id='.$csdb->Release->ID.'" title="See this at CSDb" target="_blank"><svg class="outlink" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg></a>'.
+			'<a href="http://csdb.chordian.net/?type=release&id='.$csdb->Release->ID.'" title="See this at CSDb" target="_blank"><svg class="outlink" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg></a>'.
 		'</div>';		
 
 	// And now the body HTML for the '#page' DIV

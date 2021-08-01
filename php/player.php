@@ -72,14 +72,14 @@ try {
 			$thumbnails .= '<img class="thumbnail-player" src="'.substr($filename, 3).'" alt="" />';
 		}
 
-		$cputime = str_replace('[SD]', '<sup><a href="http://csdb.dk/release/?id=152422" title="Measured with SIDDump">SD</a></sup>', $row->cputime);
+		$cputime = str_replace('[SD]', '<sup><a href="http://csdb.chordian.net/?type=release&id=152422" title="Measured with SIDDump">SD</a></sup>', $row->cputime);
 
 		$download = '';
 		$label = '<span style="float:right;margin-right:2px;"><b style="margin-right:7px;">Download:</b>';
 		if (!empty($row->site))
 			$download .= $label.'<a href="'.$row->site.'">Site</a>';
 		if ($row->csdbid)
-			$download .= (!empty($download) ? '<span class="download-dot">&#9642;</span>' : $label).'<a href="https://csdb.dk/release/?id='.$row->csdbid.'">CSDb</a>';
+			$download .= (!empty($download) ? '<span class="download-dot">&#9642;</span>' : $label).'<a href="http://csdb.chordian.net/?type=release&id='.$row->csdbid.'">CSDb</a>';
 		if (!empty($download))
 			$download .= '</span>';
 

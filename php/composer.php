@@ -98,10 +98,10 @@ if (isset($fullname)) {
 						if (strpos($handle, ',')) {
 							$parts = explode(',', $handle);
 							// ID and handle
-							$m = '<a href="https://csdb.dk/scener/?id='.$parts[1].'" target="_blank">'.$parts[0].'</a>';
+							$m = '<a href="http://csdb.chordian.net/?type=scener&id='.$parts[1].'" target="_blank">'.$parts[0].'</a>';
 						} else {
 							// [Scener:1234]
-							$m = '[<a href="https://csdb.dk/scener/?id='.$handle.'" target="_blank">Scener:'.$handle.'</a>]';
+							$m = '[<a href="http://csdb.chordian.net/?type=scener&id='.$handle.'" target="_blank">Scener:'.$handle.'</a>]';
 						}
 						$organizers .= $comma.$m;
 						if (!$amount) {
@@ -131,10 +131,10 @@ if (isset($fullname)) {
 						if (strpos($group, ',')) {
 							$parts = explode(',', $group);
 							// ID and group
-							$m = '<a href="https://csdb.dk/group/?id='.$parts[1].'" target="_blank">'.$parts[0].'</a>';
+							$m = '<a href="http://csdb.chordian.net/?type=group&id='.$parts[1].'" target="_blank">'.$parts[0].'</a>';
 						} else {
 							// [Group:1234]
-							$m = '[<a href="https://csdb.dk/group/?id='.$group.'" target="_blank">Group:'.$group.'</a>]';
+							$m = '[<a href="http://csdb.chordian.net/?type=group&id='.$group.'" target="_blank">Group:'.$group.'</a>]';
 						}
 						$org_groups .= $comma.$m;
 						if (!$amount) {
@@ -150,7 +150,7 @@ if (isset($fullname)) {
 				// Build the page HTML
 				$html = '<div id="compo-profile"><h2 style="display:inline-block;margin:0;">'.$csdb->Event->Name.'</h2>'.
 					'<div class="corner-icons">'.
-						'<a href="https://csdb.dk/event/?id='.$event_id.'" title="See this at CSDb" target="_blank"><svg class="outlink" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg></a>'.
+						'<a href="http://csdb.chordian.net/?type=event&id='.$event_id.'" title="See this at CSDb" target="_blank"><svg class="outlink" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg></a>'.
 					'</div>'.
 					$aka.
 					'<p'.(!empty($aka) ? ' style="position:relative;top:-8px;margin:0 0 4px;"' : '').'>'.$type_date_country.'</p>'.
@@ -437,7 +437,7 @@ $html = '<table style="border:none;margin-bottom:0;"><tr>'.
 			'</table>' : '').
 		'<div class="corner-icons">'.
 			'<div id="profilechange" style="'.($csdbid ? 'left:-153' : 'right:-3').'px;"></div>'.
-			($csdbid ? '<a href="https://csdb.dk/'.$csdbtype.'/?id='.$csdbid.'" title="See this at CSDb" target="_blank"><svg class="outlink" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg></a>' : '').
+			($csdbid ? '<a href="http://csdb.chordian.net/?type='.$csdbtype.'&id='.$csdbid.'" title="See this at CSDb" target="_blank"><svg class="outlink" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg></a>' : '').
 		'</div>';
 
 // Chartist - @link https://gionkunz.github.io/chartist-js/index.html
