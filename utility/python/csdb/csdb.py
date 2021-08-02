@@ -17,10 +17,10 @@ from xml.etree import ElementTree
 
 if __name__ == '__main__':
 
-	with open('csdb_35000-58800.csv', 'wb') as csvfile:
+	with open('csdb_20000-34999.csv', 'wb') as csvfile:
 		writer = csv.writer(csvfile, delimiter=',')
 
-		for sidId in range(35000, 58800):
+		for sidId in range(20000, 34999):
 			response = requests.get('https://csdb.dk/webservice/?type=sid&id=%s' % sidId)
 			if response.status_code == 200:
 				try:

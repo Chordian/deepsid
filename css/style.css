@@ -3979,14 +3979,25 @@ input[type=range]::-ms-track {
 
 		table.quicklinks {
 			margin-bottom: 2em !important;
-			padding: 8px 12px 10px !important;
+			padding: 8px 12px 10px 0 !important;
 		}
 
 			table.quicklinks th {
-				padding: 0 0 6px 0 !important;
+				padding: 0 0 6px 10px !important;
 				width: 25%;
 				font: normal 17px "Montserrat", sans-serif;
+				border-right: 1px solid var(--color-table-border) !important;
 			}
+
+			table.quicklinks td {
+				padding-left: 10px !important;
+				border-right: 1px solid var(--color-table-border) !important;
+			}
+
+				table.quicklinks th:last-child,
+				table.quicklinks td:last-child {
+					border-right: 0 !important;
+				}
 
 		/* Container for group name in table list to have ellipsis on it */
 		#page .ext .group,
