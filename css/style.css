@@ -3977,6 +3977,17 @@ input[type=range]::-ms-track {
 				float: right;
 			}
 
+		table.quicklinks {
+			margin-bottom: 2em !important;
+			padding: 8px 12px 10px !important;
+		}
+
+			table.quicklinks th {
+				padding: 0 0 6px 0 !important;
+				width: 25%;
+				font: normal 17px "Montserrat", sans-serif;
+			}
+
 		/* Container for group name in table list to have ellipsis on it */
 		#page .ext .group,
 		#page .ext .participant {

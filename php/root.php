@@ -156,11 +156,144 @@ try {
 	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 }
 
+$composers_game = array(
+	['name' => '',			'file' => '?file='],
+	['name' => 'Ben Daglish',			'file' => '?file=/MUSICIANS/D/Daglish_Ben/'],
+	['name' => 'Charles Deenen',		'file' => '?file=/MUSICIANS/D/Deenen_Charles/'],
+	['name' => 'Chris Cox',				'file' => '?file=/MUSICIANS/C/Cox_Chris/'],
+	['name' => 'Chris Hülsbeck',		'file' => '?file=/MUSICIANS/H/Huelsbeck_Chris/'],
+	['name' => 'Clever Music',			'file' => '?file=/MUSICIANS/C/Clever_Music/'],
+	['name' => 'David Dunn',			'file' => '?file=/MUSICIANS/D/Dunn_David/'],
+	['name' => 'David Whittaker',		'file' => '?file=/MUSICIANS/D/Whittaker_David/'],
+	['name' => 'Ed Bogas',				'file' => '?file=/MUSICIANS/B/Bogas_Ed/'],
+	['name' => 'Fred Gray',				'file' => '?file=/MUSICIANS/G/Gray_Fred/'],
+	['name' => 'Geoff Follin',			'file' => '?file=/MUSICIANS/F/Follin_Geoff/'],
+	['name' => 'Jason Brooke',			'file' => '?file=/MUSICIANS/B/Brooke_Jason/'],
+	['name' => 'Jay Derrett',			'file' => '?file=/MUSICIANS/D/Derrett_Jay/'],
+	['name' => 'Jeroen Tel',			'file' => '?file=/MUSICIANS/T/Tel_Jeroen/'],
+	['name' => 'Mark Cooksey',			'file' => '?file=/MUSICIANS/C/Cooksey_Mark/'],
+	['name' => 'Martin Galway',			'file' => '?file=/MUSICIANS/G/Galway_Martin/'],
+	['name' => 'Martin Walker',			'file' => '?file=/MUSICIANS/W/Walker_Martin/'],
+	['name' => 'Matt Gray',				'file' => '?file=/MUSICIANS/G/Gray_Matt/'],
+	['name' => 'Matthew Cannon',		'file' => '?file=/MUSICIANS/C/Cannon_Matthew/'],
+	['name' => 'Neil Brennan',			'file' => '?file=/MUSICIANS/B/Brennan_Neil/'],
+	['name' => 'Peter Clarke',			'file' => '?file=/MUSICIANS/C/Clarke_Peter/'],
+	['name' => 'Reyn Ouwehand',			'file' => '?file=/MUSICIANS/O/Ouwehand_Reyn/'],
+	['name' => 'Richard Joseph',		'file' => '?file=/MUSICIANS/J/Joseph_Richard/'],
+	['name' => 'Rob Hubbard',			'file' => '?file=/MUSICIANS/H/Hubbard_Rob/'],
+	['name' => 'Russell Lieblich',		'file' => '?file=/MUSICIANS/L/Lieblich_Russell/'],
+	['name' => 'Steve Barrett',			'file' => '?file=/MUSICIANS/B/Barrett_Steve/'],
+	['name' => 'Steve Turner',			'file' => '?file=/MUSICIANS/T/Turner_Steve/'],
+	['name' => 'Tim Follin',			'file' => '?file=/MUSICIANS/F/Follin_Tim/'],
+	['name' => 'Wally Beben',			'file' => '?file=/MUSICIANS/B/Beben_Wally/'],
+);
+
+$composer_active = array(
+	['name' => '4-Mat',					'file' => '?file=/MUSICIANS/0-9/4-Mat/'],
+	['name' => 'Abaddon',				'file' => '?file=/MUSICIANS/A/Abaddon/'],
+	['name' => 'Acrouzet',				'file' => '?file=/MUSICIANS/A/Acrouzet/'],
+	['name' => 'Agemixer',				'file' => '?file=/MUSICIANS/A/Agemixer'],
+	['name' => 'Ajitek',				'file' => '?file=/MUSICIANS/A/Ajitek/'],
+	['name' => 'Aldo Chiummo',			'file' => '?file=/MUSICIANS/C/Chiummo_Aldo/'],
+	['name' => 'BOGG',					'file' => '?file=/MUSICIANS/B/BOGG/'],
+	['name' => 'Booker',				'file' => '?file=/MUSICIANS/B/Booker'],
+	['name' => 'Britelite',				'file' => '?file=/MUSICIANS/B/Britelite/'],
+	['name' => 'Buddha',				'file' => '?file=/MUSICIANS/B/Buddha/'],
+	['name' => 'Båtsman',				'file' => '?file=/MUSICIANS/B/Batsman/'],
+	['name' => 'c0zmo',					'file' => '?file=/MUSICIANS/C/C0zmo/'],
+	['name' => 'Cadaver',				'file' => '?file=/MUSICIANS/C/Cadaver/'],
+	['name' => 'Chabee',				'file' => '?file=/MUSICIANS/C/Chabee/'],
+	['name' => 'CreaMD',				'file' => '?file=/MUSICIANS/C/CreaMD/'],
+	['name' => 'DaFunk',				'file' => '?file=/MUSICIANS/D/DaFunk/'],
+	['name' => 'dalezy',				'file' => '?file=/MUSICIANS/D/Dalezy/'],
+	['name' => 'Danko',					'file' => '?file=/MUSICIANS/D/Danko_Tomas/'],
+	['name' => 'Deetsay',				'file' => '?file=/MUSICIANS/D/Deetsay/'],
+	['name' => 'Devilock',				'file' => '?file=/MUSICIANS/D/Devilock/'],
+	['name' => 'Divertigo',				'file' => '?file=/MUSICIANS/D/Divertigo/'],
+	['name' => 'dLx',					'file' => '?file=/MUSICIANS/D/Dlx'],
+	['name' => '',				'file' => '?file='],
+	['name' => '',				'file' => '?file='],
+	['name' => '',				'file' => '?file='],
+	['name' => '',				'file' => '?file='],
+	['name' => '',				'file' => '?file='],
+	['name' => '',				'file' => '?file='],
+	['name' => '',				'file' => '?file='],
+	['name' => 'Sean Connolly',			'file' => '?file=/MUSICIANS/C/Connolly_Sean/'],
+	['name' => 'Saul Cross',			'file' => '?file=/MUSICIANS/C/Cross_Saul/'],
+	['name' => 'Gaetano Chiummo',		'file' => '?file=/MUSICIANS/C/Chiummo_Gaetano/'],
+	['name' => 'Glen Rune Gallefoss',	'file' => '?file=/MUSICIANS/B/Blues_Muz/Gallefoss_Glenn/'],
+	['name' => 'Eric Dobek',			'file' => '?file=/MUSICIANS/D/Dobek_Eric/'],
+	['name' => 'Owen Crowley',			'file' => '?file=/MUSICIANS/C/Crowley_Owen'],
+	['name' => 'Jammer',				'file' => '?file=/MUSICIANS/J/Jammer/'],
+	['name' => 'Laxity',				'file' => '?file=/MUSICIANS/L/Laxity/'],
+	['name' => 'Richard Bayliss',		'file' => '?file=/MUSICIANS/B/Bayliss_Richard/'],
+);
+
+$composer_retired = array(
+	['name' => '20CC',					'file' => '?file=/MUSICIANS/0-9/20CC/'],
+	['name' => 'A-Man',					'file' => '?file=/MUSICIANS/A/A-Man/'],
+	['name' => 'AMJ',					'file' => '?file=/MUSICIANS/A/AMJ/'],
+	['name' => 'Arman Behdad',			'file' => '?file=/MUSICIANS/B/Behdad_Arman/'],
+	['name' => 'ATOO',					'file' => '?file=/MUSICIANS/A/ATOO/'],
+	['name' => 'Audial Arts',			'file' => '?file=/MUSICIANS/A/Audial_Arts/'],
+	['name' => 'Avalon',				'file' => '?file=/MUSICIANS/A/Avalon/'],
+	['name' => 'Dwayne Bakewell',		'file' => '?file=/MUSICIANS/B/Bakewell_Dwayne/'],
+	['name' => 'Boogaloo',				'file' => '?file=/MUSICIANS/B/Boogaloo/'],
+	['name' => 'Brandon Walsh',			'file' => '?file=/MUSICIANS/B/Brandon_Walsh/'],
+	['name' => 'Brian of Graffity',		'file' => '?file=/MUSICIANS/B/Brian/'],
+	['name' => 'Bzyk',					'file' => '?file=/MUSICIANS/B/Bzyk/'],
+	['name' => 'Carlos of Breeze',		'file' => '?file=/MUSICIANS/C/Carlos_Breeze/'],
+	['name' => 'Cerror',				'file' => '?file=/MUSICIANS/C/Cerror/'],
+	['name' => 'Chotaire',				'file' => '?file=/MUSICIANS/C/Chotaire/'],
+	['name' => 'Compod',				'file' => '?file=/MUSICIANS/C/Compod/'],
+	['name' => 'Cycleburner',			'file' => '?file=/MUSICIANS/C/Cycleburner/'],
+	['name' => 'Daf',					'file' => '?file=/MUSICIANS/D/Daf/'],
+	['name' => 'Dalton',				'file' => '?file=/MUSICIANS/D/Dalton/'],
+	['name' => 'Deek',					'file' => '?file=/MUSICIANS/D/Deek'],
+	['name' => '',				'file' => '?file='],
+	['name' => '',				'file' => '?file='],
+	['name' => '',				'file' => '?file='],
+	['name' => '',				'file' => '?file='],
+	['name' => '',				'file' => '?file='],
+	['name' => '',				'file' => '?file='],
+	['name' => 'Johannes Bjerregaard',	'file' => '?file=/MUSICIANS/B/Bjerregaard_Johannes/'],
+	['name' => 'Thomas Detert',			'file' => '?file=/MUSICIANS/D/Detert_Thomas/'],
+	['name' => 'Stello Doussis',		'file' => '?file=/MUSICIANS/D/Doussis_Stello/'],
+	['name' => 'Jens Blidon',			'file' => '?file=/MUSICIANS/B/Blidon_Jens/'],
+	['name' => 'Kjell Nordbø',			'file' => '?file=/MUSICIANS/B/Blues_Muz/Nordboe_Kjell/'],
+	['name' => 'Xayne',					'file' => '?file=/MUSICIANS/B/Beat_Machine/Xayne/'],
+);
+
+$composer_cgsc = array(
+	// ['name' => '',			'file' => '?file=/MUSICIANS///'],
+	['name' => 'Brian Copeland',		'file' => '?file=/Compute\'s%20Gazette%20SID%20Collection/Brian_L_Copeland/'],
+);
+
+$i = 0;
+$quick_shortcuts = '';
+while (true) {
+	$author_game = count($composers_game) > $i ? $composers_game[$i] : '';
+	$author_active = count($composer_active) > $i ? $composer_active[$i] : '';
+	$author_retired = count($composer_retired) > $i ? $composer_retired[$i] : '';
+	$author_cgsc = count($composer_cgsc) > $i ? $composer_cgsc[$i] : '';
+
+	if (empty($author_game) && empty($author_active)) break;
+
+	$quick_shortcuts .=	
+		'<tr>'.
+			'<td>'.(!empty($author_game) ? '<a href="'.$author_game['file'].'">'.$author_game['name'].'</a>' : '').'</td>'.
+			'<td>'.(!empty($author_active) ? '<a href="'.$author_active['file'].'">'.$author_active['name'].'</a>' : '').'</td>'.
+			'<td>'.(!empty($author_retired) ? '<a href="'.$author_retired['file'].'">'.$author_retired['name'].'</a>' : '').'</td>'.
+			'<td>'.(!empty($author_cgsc) ? '<a href="'.$author_cgsc['file'].'">'.$author_cgsc['name'].'</a>' : '').'</td>'.
+		'</tr>';
+	$i++;
+};
+
 $html =
 	'<div style="height:149px;"></div>'.
 	// '<div class="root-wide good-news">'.$important.'</div>'.
 	// Recommendations
-	'<table class="root rec"><tr>'.
+	'<table class="root rec" style="margin-bottom:10px;"><tr>'.
 		'<td style="max-width:10px;">'.
 			CreateRecBox($random_id_1).
 		'</td>'.
@@ -172,6 +305,16 @@ $html =
 		'<td style="max-width:10px;">'.
 			CreateRecBox($random_id_3).
 		'</td>'.
+	'</tr></table>'.
+	// Quick shortcuts
+	'<table class="root compo rec quicklinks">'.
+		'<tr>'.
+			'<th>Game Legends</th>'.
+			'<th>Active Sceners</th>'.
+			'<th>Retired Sceners</th>'.
+			'<th>Compute\'s Gazette</th>'.
+		'</tr>'.
+		$quick_shortcuts.
 	'</table>'.
 	// Top lists
 	'<table class="root"><tr>'.
