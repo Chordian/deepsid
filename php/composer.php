@@ -347,8 +347,6 @@ if (strpos($fullname, $uploadFolder) !== false) {
 		$sh_year = $parts[1];
 }
 
-$active_years = !empty($years) ? ($years[0] == end($years) ? $years[0] : $years[0].'-'.end($years)) : '';
-
 if (isset($row)) {
 	// We have extended info from the 'composers' database table
 	$name			= $row->name;
@@ -356,7 +354,6 @@ if (isset($row)) {
 	$born			= $row->born; 
 	$died			= substr($row->died, 0, 4);
 	$cause			= (!empty($row->cause) ? '('.$row->cause.')' : '');
-	$onsid			= (!empty($row->onsid) ? $row->onsid : $active_years); // Often the generated one will suffice
 	$notable		= str_replace('[#]', '<img class="inline-icon icon-editor" src="images/composer_editor.svg" title="Music editor" alt="">', $row->notable);
 	$country		= $row->country;
 	$csdbtype		= $row->csdbtype;
@@ -381,7 +378,6 @@ if (isset($row)) {
 	$born			= '0000-00-00';
 	$died			= '0000';
 	$cause			= '';
-	$onsid			= $active_years;
 	$notable		= '';
 	$country		= '';
 	$csdbid			= 0;

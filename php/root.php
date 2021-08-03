@@ -16,6 +16,78 @@ require_once("root_generate.php");
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest')
 	die("Direct access not permitted.");
 
+/**
+ * Creates an associative array from the latest database query.
+ * 
+ * @param		object		rows from database (by reference)
+ * @param		array		composers (by reference)
+ */
+function CreateComposersArray(&$select_rec, &$composers) {
+
+	global $db;
+
+	foreach($select_rec as $row_rec) {
+
+		$fullname = $row_rec->fullname;
+		$hvsc_path = str_replace('_High Voltage SID Collection/', '', $fullname);
+
+		// Get composer data via the fullname
+		$select = $db->query('SELECT name, shortname, handles, shorthandle FROM composers WHERE fullname = "'.$fullname.'"');
+		$select->setFetchMode(PDO::FETCH_OBJ);
+		$row = $select->fetch();
+
+		$name = empty($row->shortname) ? $row->name : $row->shortname;
+		if ($name == '?') $name = '<small class="u1">?</small>?<small class="u2">?</small>';
+		$parts = explode(',', $row->handles);
+		$handle = empty($row->shorthandle) ? end($parts) : $row->shorthandle;
+		// if (stripos($handle, "<del>") !== false) $handle = $name;
+
+		// Use 'fullname' parameter to figure out the name of the thumbnail (if it exists)
+		$fn = strtolower(str_replace('/', '_', $hvsc_path));
+		$thumbnail = 'images/composers/'.$fn.'.jpg';
+		if (!file_exists('../'.$thumbnail)) $thumbnail = 'images/composer.png';
+
+		$composers[] = array(
+			'avatar'	=> $thumbnail,
+			'file'		=> $hvsc_path,
+			'name'		=> $name,
+			'handle'	=> $handle,
+		);
+	}
+}
+
+/**
+ * Returns the HTML for one 'quick box' table cell.
+ *
+ * @param		array		authors (by reference)
+ *
+ * @return		string		the HTML for one TD cell
+ */
+function QuickShortcutRow(&$author) {
+
+	if (isset($author['file']))
+		$return_row =
+			'<td>'.
+				'<table class="tight recommended quickbox" data-folder="'.$author['file'].'">'.
+					'<tr>'.
+						'<td class="quickline" colspan="2"></td>'.
+					'</tr>'.
+					'<tr>'.
+						'<td style="width:42px;padding:0 !important;">'.
+							'<img class="composer quick-thumbnail" src="'.$author['avatar'].'" alt="" />'.
+						'</td>'.
+						'<td style="padding-top:2px;">'.
+							'<h4>'.$author['name'].'</h4>'.
+							'<h5>'.$author['handle'].'</h5>'.
+						'</td>'.
+					'</tr>'.
+				'</table>'.
+			'</td>';
+	else
+		$return_row = '<td></td>';
+	return $return_row;
+}
+
 $decent_box_shown = false;
 
 // $important = 'The database connections sometimes act up at the moment. If it persists I will consult the web hotel provider.';
@@ -86,14 +158,17 @@ try {
 				$select_decent = $db->query('SELECT fullname FROM hvsc_folders WHERE id = '.$random_decent);
 				$select_decent->setFetchMode(PDO::FETCH_OBJ);
 
-				return '<table class="tight compo recommended decent" data-folder="'.$select_decent->fetch()->fullname.'" style="padding-bottom:0;"><tr><td style="height:123px;">'.
-					'<div class="random-container">'.
-						'<span>Click here</span><br />'.
-						'to visit a random<br />'.
-						'composer folder of a<br />'.
-						'decent quality or better<br />'.
-					'</div>'.
-				'</td></tr></table>';
+				$return_html = $select_decent->rowCount()
+					? '<table class="tight compo recommended decent" data-folder="'.$select_decent->fetch()->fullname.'" style="padding-bottom:0;"><tr><td style="height:123px;">'.
+							'<div class="random-container">'.
+								'<span>Click here</span><br />'.
+								'to visit a random<br />'.
+								'composer folder of a<br />'.
+								'decent quality or better<br />'.
+							'</div>'.
+						'</td></tr></table>'
+					: '<table class="tight compo recommended" style="border:none;"></table>';
+				return $return_html;
 			} else
 				// Just shown empty space there
 				return '<table class="tight compo recommended" style="border:none;"></table>';
@@ -103,7 +178,10 @@ try {
 		$parts = explode(',', $row->handles);
 		$handle = empty($row->shorthandle) ? end($parts) : $row->shorthandle;
 
-		// Use 'fullname' parameter to figure out the name of the thumbnail (if it exists)
+		if ($name == '?')
+			$name = '<small class="u1">?</small>?<small class="u2">?</small>';
+
+			// Use 'fullname' parameter to figure out the name of the thumbnail (if it exists)
 		$fn = str_replace('_High Voltage SID Collection/', '', $fullname);
 		$fn = str_replace("_Compute's Gazette SID Collection/", "cgsc_", $fn);
 		$fn = strtolower(str_replace('/', '_', $fn));
@@ -155,69 +233,61 @@ try {
 	/*
 		Idea:
 
-		Don't add thumbnails (too small) - but country flags might work!
+		Composers table: Next up is page 21 (Eclipse)
 
+		Need to sort the $composers_active array diffently!
 	*/
 
 	// QUICK SHORTCUTS
 
 	$composers_active = array();
 	$composers_snoozing = array();
-	$composers_retired = array();
+	$composers_game = array();
 
-	// Get all the folder ID belonging to composers JCH have given 3 stars or more
-	///$select_rec = $db->query('SELECT table_id FROM ratings WHERE user_id = '.JCH.' AND rating >= 3 AND type = "FOLDER"');
-	$select_rec = $db->query('SELECT id as table_id, fullname FROM hvsc_folders'.
+	$query_year = 'SELECT id as table_id, fullname FROM hvsc_folders'.
 		' WHERE LENGTH(fullname) - LENGTH(REPLACE(fullname, "/", "")) > 2'.
 		' AND type = "SINGLE"'.
 		' AND "Normal built-in" IN ('. // This value is 100% the same in all HVSC file rows
 			'SELECT playertype FROM hvsc_files'.
-			' WHERE LEFT(fullname, LENGTH(hvsc_folders.fullname)) = hvsc_folders.fullname'.
-			' AND LEFT(copyright, 5) = "2021 ")'
-		);
+			' WHERE LEFT(fullname, LENGTH(hvsc_folders.fullname)) = hvsc_folders.fullname';
+
+	// Get all the folder ID for composer that have composers songs this year
+	$select_rec = $db->query($query_year.' AND LEFT(copyright, 5) = "2021 ")');
 	$select_rec->setFetchMode(PDO::FETCH_OBJ);
 	$row_rec = $select->fetch();
 
-	foreach($select_rec as $row_rec) {
+	CreateComposersArray($select_rec, $composers_active);
 
-		$fullname = $row_rec->fullname;
+	// Get all the folder ID for composer that have composers songs 1-3 years ago
+	$select_rec = $db->query($query_year.
+		' AND (LEFT(copyright, 5) = "2020 " OR LEFT(copyright, 5) = "2019 " OR LEFT(copyright, 5) = "2018 ")'.
+		' AND "Normal built-in" NOT IN (SELECT DISTINCT playertype FROM hvsc_files'.
+			' WHERE LEFT(fullname, LENGTH(hvsc_folders.fullname)) = hvsc_folders.fullname'.
+			' AND LEFT(copyright, 5) = "2021 ")'.
+		')');
+	$select_rec->setFetchMode(PDO::FETCH_OBJ);
+	$row_rec = $select->fetch();
 
-		// Get composer data via the fullname
-		$select = $db->query('SELECT name, shortname, handles, shorthandle FROM composers WHERE fullname = "'.$fullname.'"');
-		$select->setFetchMode(PDO::FETCH_OBJ);
-		$row = $select->fetch();
-
-		$name = empty($row->shortname) ? $row->name : $row->shortname;
-		$parts = explode(',', $row->handles);
-		$handle = empty($row->shorthandle) ? end($parts) : $row->shorthandle;
-		if (stripos($handle, "<del>") !== false)$handle = $name;
-
-		$composers_active[] = array(
-			'file'	=> str_replace('_High Voltage SID Collection/', '', $fullname),
-			'name'	=> $handle,
-		);
-	}
+	CreateComposersArray($select_rec, $composers_snoozing);
 
 
 
-	// Now I need for snoozing (2020 to... 2017?) and retired (earlier than that)
-
-
+	
 
 	$i = 0;
 	$quick_shortcuts = '';
 	while (true) {
 		$author_active = count($composers_active) > $i ? $composers_active[$i] : '';
 		$author_snoozing = count($composers_snoozing) > $i ? $composers_snoozing[$i] : '';
-		$author_retired = count($composers_retired) > $i ? $composers_retired[$i] : '';
+		$author_game = count($composers_game) > $i ? $composers_game[$i] : '';
 
-		if (empty($author_game) && empty($author_active)) break;
+		if (empty($author_active) && empty($author_snoozing) &&  empty($author_game)) break;
 
-		$quick_shortcuts .=	
+		$quick_shortcuts .=
 			'<tr>'.
-				'<td>'.(!empty($author_active) ? '<a href="?file='.$author_active['file'].'">'.$author_active['name'].'</a>' : '').'</td>'.
-				'<td>'.(!empty($author_snoozing) ? '<a href="?file='.$author_snoozing['file'].'">'.$author_snoozing['name'].'</a>' : '').'</td>'.
-				'<td>'.(!empty($author_retired) ? '<a href="?file='.$author_retired['file'].'">'.$author_retired['name'].'</a>' : '').'</td>'.
+			QuickShortcutRow($author_active).
+			QuickShortcutRow($author_snoozing).
+'<td></td>'.
 			'</tr>';
 		$i++;
 	}
@@ -276,8 +346,8 @@ $html =
 	'<table class="root compo rec quicklinks">'.
 		'<tr>'.
 			'<th>Active Sceners</th>'.
-			'<th>Snoozing Sceners</th>'.
-			'<th>Retired Sceners</th>'.
+			'<th>Procrastinators</th>'.
+			'<th>Game Composers</th>'.
 		'</tr>'.
 		$quick_shortcuts.
 	'</table>'.

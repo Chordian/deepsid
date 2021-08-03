@@ -32,6 +32,7 @@ $prettyPlayerNames = array(
 	'Basic_Program' =>			'a Basic Program',
 	'Basic/Jim_Butterfield' =>	'Jim Butterfield\'s Basic player',
 	'Ben_Daglish' =>			'Ben Daglish\'s player',
+	'Burgstaller_B' =>			'Bernhard Burgstaller\'s player',
 	'Bjerregaard' =>			'Bjerregaard\'s player',
 	'Bo_Mellberg' =>			'Bo Mellberg\'s player',
 	'Charles_Callet' =>			'Charles Callet\'s player',

@@ -3,6 +3,9 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+- Wait to see if the latest JS changes makes it to Eric Dobek's computer. If nothing changes:
+  Add another tweak that also handles his date format in the PHP just before adding to database.
+
 - Search shortcuts should show a folder icon with a small magnifying glass inside of it.
 
 - Idea: A ~2px left edge color border on those rows with a specific player. Maybe so it fades

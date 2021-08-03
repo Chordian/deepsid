@@ -3983,14 +3983,16 @@ input[type=range]::-ms-track {
 		}
 
 			table.quicklinks th {
-				padding: 0 0 6px 10px !important;
+				padding: 0 0 6px 12px !important;
 				width: 25%;
-				font: normal 17px "Montserrat", sans-serif;
+				font: normal 19px "Montserrat", sans-serif;
 				border-right: 1px solid var(--color-table-border) !important;
+				vertical-align: top;
 			}
 
 			table.quicklinks td {
-				padding-left: 10px !important;
+				padding-left: 12px !important;
+				padding-right: 12px !important;
 				border-right: 1px solid var(--color-table-border) !important;
 			}
 
@@ -3998,6 +4000,42 @@ input[type=range]::-ms-track {
 				table.quicklinks td:last-child {
 					border-right: 0 !important;
 				}
+
+		table.quickbox {
+			min-width: 100%;
+			margin: 0 10px 6px 0 !important;
+			padding: 0 !important;
+			/*border: 1px solid var(--color-table-border) !important;*/
+		}
+
+			table.quickbox td {
+				border-right: 0 !important;
+			}
+
+				table.quickbox td:last-child {
+					padding-left: 4px !important;
+				}
+
+			table.quickbox h4 {
+				font-size: 17px !important;
+			}
+
+			table.quickbox h5 {
+				font-size: 14px !important;
+			}
+
+			td.quickline {
+				height: 6px;
+				background: var(--color-bg-box);
+				border-top: 1px dashed var(--color-table-border) !important;
+			}
+
+		#page .ext .quick-thumbnail {
+			float: left;
+			background: var(--color-avatar-bg) !important;
+			width: 40px !important;
+			height: 40px !important;
+		}
 
 		/* Container for group name in table list to have ellipsis on it */
 		#page .ext .group,
