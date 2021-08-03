@@ -492,6 +492,18 @@ following alternative method is easy enough to do instead:
 When done, compare the top 20 table with the longest tunes across LOCALHOST and ONLINE. They should
 be exactly the same now.
 
+LATEST ACTIVITY
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+Now the "composers" table need to be updated with the years each one were last active.
+
+  1. Run this: http://chordian/deepsid/php/update_activity.php
+  2. Wait a few minutes until the script is done.
+
+When done, check the lists of active and snoozing composers in the root page.
+
+@todo For HVSC #76, it will be interesting to see if the online version times out. If it does, you
+have to export the local column to an SQL file, import, and then run a query. The usual stuff.
+
 SPECIAL DB UPDATING
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
 The 'special_updating.sql' (located in the same folder as this text file) is not actually a real SQL
