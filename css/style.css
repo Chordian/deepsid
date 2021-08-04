@@ -4030,6 +4030,15 @@ input[type=range]::-ms-track {
 				border-top: 1px dashed var(--color-table-border) !important;
 			}
 
+		.quickyear {
+			float: right;
+			position: relative;
+			top: 4px;
+			margin-right: 10px;
+			font: normal 13px "Open Sans", helvetica, sans-serif;
+			color: var(--color-text-minor);
+		}
+
 		#page .ext .quick-thumbnail {
 			float: left;
 			background: var(--color-avatar-bg) !important;

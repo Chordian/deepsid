@@ -492,18 +492,6 @@ following alternative method is easy enough to do instead:
 When done, compare the top 20 table with the longest tunes across LOCALHOST and ONLINE. They should
 be exactly the same now.
 
-LATEST ACTIVITY
-¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-Now the "composers" table need to be updated with the years each one were last active.
-
-  1. Run this: http://chordian/deepsid/php/update_activity.php
-  2. Wait a few minutes until the script is done.
-
-When done, check the lists of active and snoozing composers in the root page.
-
-@todo For HVSC #76, it will be interesting to see if the online version times out. If it does, you
-have to export the local column to an SQL file, import, and then run a query. The usual stuff.
-
 SPECIAL DB UPDATING
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
 The 'special_updating.sql' (located in the same folder as this text file) is not actually a real SQL
@@ -521,6 +509,22 @@ To test that things went well, here are some links you can check out:
 http://deepsid.chordian.net/?file=/DEMOS/G-L/Kinetix_Blasting_Power_Mix.sid  (player)
 http://deepsid.chordian.net/?file=/DEMOS/S-Z/Wize_Mixes.sid  (player)
 http://deepsid.chordian.net/?file=/MUSICIANS/N/Nebula&here=1&search=mixer&type=player  (8 rows found)
+
+LATEST ACTIVITY
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+Now the "composers" table need to be updated with the years each one were last active.
+
+IT'S IMPORTANT THAT THE ABOVE SPECIAL DB SCRIPT HAS RUN PRIOR TO DOING THIS. The reason is that it
+amends a few years here and there to work better with the statistics in DeepSID.
+
+  1. Run this: http://chordian/deepsid/php/update_activity.php
+  2. Wait a few minutes until the script is done.
+
+You should also be able to do this online, but it won't be any faster. Check that it gets through
+all of it and doesn't time out. If it does, you have to do the import trick instead.
+
+When done, check the lists of active and snoozing composers in the root page. You should not see
+composers like e.g. Johannes Bjerregaard or Ben Daglish in the lists of snoozing composers.
 
 LAST CHECKS
 ¯¯¯¯¯¯¯¯¯¯¯

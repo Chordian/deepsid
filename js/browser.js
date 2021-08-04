@@ -1579,12 +1579,20 @@ Browser.prototype = {
 			// Welcome page for the root
 			if ($("#tabs .selected").attr("data-topic") === "profile")
 				$("#page").addClass("big-logo");
+
 			this.composer = $.get("php/root.php", function(data) {
 				this.validateData(data, function(data) {
 
 					clearTimeout(loadingComposer);
 					if (parseInt(colorTheme)) data.html = data.html.replace(/composer\.png/g, "composer_dark.png");
-					$("#topic-profile").empty().append(data.html);
+					$("#topic-profile")
+						.css("visibility", "hidden")
+						.empty()
+						.append(data.html)
+						.ready(function() {
+							// This avoids the "bump" normally seen when the custom scrollbar appears
+							$("#topic-profile").css("visibility", "visible");
+						});
 
 					$("#page .dropdown-top-list").styledSelect("toplist");
 					$("#page .dropdown-top-list-left").styledSetValue(data.left);

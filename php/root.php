@@ -8,6 +8,7 @@
  *  - Random "descent" box
  *  - Important message (good or bad)
  *  - Left and right boxes for top lists
+ *  - Active, snoozing and game composers
  */
 
 require_once("class.account.php"); // Includes setup
@@ -17,43 +18,144 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH
 	die("Direct access not permitted.");
 
 /**
+ * Returns the HTML for a recommendation box.
+ *
+ * @param		int			a random ID for a HVSC composer
+ *
+ * @return		string		the HTML for one recommendation box
+ */
+function CreateRecBox($random_id) {
+
+	global $db, $decent_box_shown;
+
+	// Get the fullname
+	$select = $db->query('SELECT fullname FROM hvsc_folders WHERE id = '.$random_id);
+	$select->setFetchMode(PDO::FETCH_OBJ);
+	$fullname = $select->rowCount() ? $select->fetch()->fullname : '';
+
+	// Get composer data via the fullname
+	$select = $db->query('SELECT name, shortname, handles, shorthandle FROM composers WHERE fullname = "'.$fullname.'"');
+	$select->setFetchMode(PDO::FETCH_OBJ);
+	$row = $select->fetch();
+
+	// Error or irrelevant (such as big parent folders in HVSC)
+	if ($select->rowCount() == 0) {
+		if (!$decent_box_shown) {
+
+			// Show a "decent" randomizer box ("CLICK HERE")
+			$decent_box_shown = true;
+			$decent_composers = [];
+
+			// Get an array of all the folder ID belonging to composers JCH have given 2 stars or more
+			$select_decent = $db->query('SELECT table_id FROM ratings WHERE user_id = '.JCH.' AND rating >= 2 AND type = "FOLDER"');
+			$select_decent->setFetchMode(PDO::FETCH_OBJ);
+			foreach($select_decent as $row_decent)
+				array_push($decent_composers, $row_decent->table_id);
+
+			// Pick a random "decent" folder
+			$random_decent = $decent_composers[array_rand($decent_composers)];
+
+			// Get the fullname of it
+			$select_decent = $db->query('SELECT fullname FROM hvsc_folders WHERE id = '.$random_decent);
+			$select_decent->setFetchMode(PDO::FETCH_OBJ);
+
+			$return_html = $select_decent->rowCount()
+				? '<table class="tight compo recommended decent" data-folder="'.$select_decent->fetch()->fullname.'" style="padding-bottom:0;"><tr><td style="height:123px;">'.
+						'<div class="random-container">'.
+							'<span>Click here</span><br />'.
+							'to visit a random<br />'.
+							'composer folder of a<br />'.
+							'decent quality or better<br />'.
+						'</div>'.
+					'</td></tr></table>'
+				: '<table class="tight compo recommended" style="border:none;"></table>';
+			return $return_html;
+		} else
+			// Just shown empty space there
+			return '<table class="tight compo recommended" style="border:none;"></table>';
+	}
+
+	$name = empty($row->shortname) ? $row->name : $row->shortname;
+	$parts = explode(',', $row->handles);
+	$handle = empty($row->shorthandle) ? end($parts) : $row->shorthandle;
+
+	if ($name == '?')
+		$name = '<small class="u1">?</small>?<small class="u2">?</small>';
+
+		// Use 'fullname' parameter to figure out the name of the thumbnail (if it exists)
+	$fn = str_replace('_High Voltage SID Collection/', '', $fullname);
+	$fn = str_replace("_Compute's Gazette SID Collection/", "cgsc_", $fn);
+	$fn = strtolower(str_replace('/', '_', $fn));
+	$thumbnail = 'images/composers/'.$fn.'.jpg';
+	if (!file_exists('../'.$thumbnail)) $thumbnail = 'images/composer.png';
+	
+	// Get type and file count
+	$select = $db->query('SELECT type, files FROM hvsc_folders WHERE fullname = "'.$fullname.'"');
+	$select->setFetchMode(PDO::FETCH_OBJ);
+	$row = $select->fetch();
+	$type = $row->type == 'GROUP' ? 'group' : 'single';
+	$songs = $row->files;
+
+	// Create the HTML table for the box
+
+	return
+		'<table class="tight compo recommended" data-folder="'.$fullname.'">'.
+			'<tr>'.
+				'<td colspan="2"><img class="folder" src="images/if_folder_'.$type.'.svg" alt="" /><h3>Recommended Folder</h3></td>'.
+			'</tr>'.
+			'<tr>'.
+				'<td style="width:88px;padding-right:8px;">'.
+					'<img class="composer root-thumbnail" src="'.$thumbnail.'" alt="" />'.
+				'</td>'.
+				'<td style="padding-top:1px;">'.
+					'<h4>'.$name.'</h4>'.
+					'<h5>'.$handle.'</h5>'.
+					'<div style="position:absolute;bottom:8px;"><img class="icon doublenote" src="images/composer_doublenote.svg" title="Country" alt="" />'.$songs.' songs</div>'.
+				'</td>'.
+			'</tr>'.
+		'</table>';
+}
+
+/**
  * Creates an associative array from the latest database query.
  * 
  * @param		object		rows from database (by reference)
  * @param		array		composers (by reference)
  */
-function CreateComposersArray(&$select_rec, &$composers) {
+function CreateComposersArray(&$select, &$composers, $pro = false) {
 
 	global $db;
 
-	foreach($select_rec as $row_rec) {
+	foreach($select as $row) {
 
-		$fullname = $row_rec->fullname;
-		$hvsc_path = str_replace('_High Voltage SID Collection/', '', $fullname);
-
-		// Get composer data via the fullname
-		$select = $db->query('SELECT name, shortname, handles, shorthandle FROM composers WHERE fullname = "'.$fullname.'"');
-		$select->setFetchMode(PDO::FETCH_OBJ);
-		$row = $select->fetch();
-
-		$name = empty($row->shortname) ? $row->name : $row->shortname;
+		$name = $raw_name = empty($row->shortname) ? $row->name : $row->shortname;
 		if ($name == '?') $name = '<small class="u1">?</small>?<small class="u2">?</small>';
 		$parts = explode(',', $row->handles);
-		$handle = empty($row->shorthandle) ? end($parts) : $row->shorthandle;
-		// if (stripos($handle, "<del>") !== false) $handle = $name;
+		$handle = trim(empty($row->shorthandle) ? end($parts) : $row->shorthandle);
 
 		// Use 'fullname' parameter to figure out the name of the thumbnail (if it exists)
+		$hvsc_path = str_replace('_High Voltage SID Collection/', '', $row->fullname);
 		$fn = strtolower(str_replace('/', '_', $hvsc_path));
 		$thumbnail = 'images/composers/'.$fn.'.jpg';
 		if (!file_exists('../'.$thumbnail)) $thumbnail = 'images/composer.png';
 
+		$sort_name = $pro
+		 	// Professional game composers don't use handles
+			? strtolower($raw_name)
+			// Sort by handle (unless it's missing or abandoned then sort by real name instead)
+			: strtolower(empty($handle) || stripos($handle, '<del>') !== false ? $raw_name : $handle);
+
 		$composers[] = array(
+			'sort'		=> $sort_name,
 			'avatar'	=> $thumbnail,
 			'file'		=> $hvsc_path,
 			'name'		=> $name,
-			'handle'	=> $handle,
+			'handle'	=> ($pro ? $row->affiliation : $handle),
 		);
 	}
+
+	$sort_by = array_column($composers, 'sort');
+	array_multisort($sort_by, SORT_ASC, $composers);	
 }
 
 /**
@@ -87,6 +189,8 @@ function QuickShortcutRow(&$author) {
 		$return_row = '<td></td>';
 	return $return_row;
 }
+
+/* BEGIN CODE */
 
 $decent_box_shown = false;
 
@@ -123,98 +227,6 @@ try {
 	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	$db->exec("SET NAMES UTF8");
 
-	function CreateRecBox($random_id) {
-
-		global $db, $decent_box_shown;
-
-		// Get the fullname
-		$select = $db->query('SELECT fullname FROM hvsc_folders WHERE id = '.$random_id);
-		$select->setFetchMode(PDO::FETCH_OBJ);
-		$fullname = $select->rowCount() ? $select->fetch()->fullname : '';
-
-		// Get composer data via the fullname
-		$select = $db->query('SELECT name, shortname, handles, shorthandle FROM composers WHERE fullname = "'.$fullname.'"');
-		$select->setFetchMode(PDO::FETCH_OBJ);
-		$row = $select->fetch();
-
-		// Error or irrelevant (such as big parent folders in HVSC)
-		if ($select->rowCount() == 0) {
-			if (!$decent_box_shown) {
-
-				// Show a "decent" randomizer box ("CLICK HERE")
-				$decent_box_shown = true;
-				$decent_composers = [];
-
-				// Get an array of all the folder ID belonging to composers JCH have given 2 stars or more
-				$select_decent = $db->query('SELECT table_id FROM ratings WHERE user_id = '.JCH.' AND rating >= 2 AND type = "FOLDER"');
-				$select_decent->setFetchMode(PDO::FETCH_OBJ);
-				foreach($select_decent as $row_decent)
-					array_push($decent_composers, $row_decent->table_id);
-
-				// Pick a random "decent" folder
-				$random_decent = $decent_composers[array_rand($decent_composers)];
-
-				// Get the fullname of it
-				$select_decent = $db->query('SELECT fullname FROM hvsc_folders WHERE id = '.$random_decent);
-				$select_decent->setFetchMode(PDO::FETCH_OBJ);
-
-				$return_html = $select_decent->rowCount()
-					? '<table class="tight compo recommended decent" data-folder="'.$select_decent->fetch()->fullname.'" style="padding-bottom:0;"><tr><td style="height:123px;">'.
-							'<div class="random-container">'.
-								'<span>Click here</span><br />'.
-								'to visit a random<br />'.
-								'composer folder of a<br />'.
-								'decent quality or better<br />'.
-							'</div>'.
-						'</td></tr></table>'
-					: '<table class="tight compo recommended" style="border:none;"></table>';
-				return $return_html;
-			} else
-				// Just shown empty space there
-				return '<table class="tight compo recommended" style="border:none;"></table>';
-		}
-
-		$name = empty($row->shortname) ? $row->name : $row->shortname;
-		$parts = explode(',', $row->handles);
-		$handle = empty($row->shorthandle) ? end($parts) : $row->shorthandle;
-
-		if ($name == '?')
-			$name = '<small class="u1">?</small>?<small class="u2">?</small>';
-
-			// Use 'fullname' parameter to figure out the name of the thumbnail (if it exists)
-		$fn = str_replace('_High Voltage SID Collection/', '', $fullname);
-		$fn = str_replace("_Compute's Gazette SID Collection/", "cgsc_", $fn);
-		$fn = strtolower(str_replace('/', '_', $fn));
-		$thumbnail = 'images/composers/'.$fn.'.jpg';
-		if (!file_exists('../'.$thumbnail)) $thumbnail = 'images/composer.png';
-		
-		// Get type and file count
-		$select = $db->query('SELECT type, files FROM hvsc_folders WHERE fullname = "'.$fullname.'"');
-		$select->setFetchMode(PDO::FETCH_OBJ);
-		$row = $select->fetch();
-		$type = $row->type == 'GROUP' ? 'group' : 'single';
-		$songs = $row->files;
-
-		// Create the HTML table for the box
-
-		return
-			'<table class="tight compo recommended" data-folder="'.$fullname.'">'.
-				'<tr>'.
-					'<td colspan="2"><img class="folder" src="images/if_folder_'.$type.'.svg" alt="" /><h3>Recommended Folder</h3></td>'.
-				'</tr>'.
-				'<tr>'.
-					'<td style="width:88px;padding-right:8px;">'.
-						'<img class="composer root-thumbnail" src="'.$thumbnail.'" alt="" />'.
-					'</td>'.
-					'<td style="padding-top:1px;">'.
-						'<h4>'.$name.'</h4>'.
-						'<h5>'.$handle.'</h5>'.
-						'<div style="position:absolute;bottom:8px;"><img class="icon doublenote" src="images/composer_doublenote.svg" title="Country" alt="" />'.$songs.' songs</div>'.
-					'</td>'.
-				'</tr>'.
-			'</table>';
-	}
-
 	$good_composers = [];
 
 	// Get an array of all the folder ID belonging to composers JCH have given 3 stars or more
@@ -231,11 +243,11 @@ try {
 
 
 	/*
-		Idea:
+		- Composers table: Next up is page 21 (Eclipse)
+		
+		- Update 'special' script with year changes to "made in 1989, released in 2020" cases
+		  while also changing 'active' year in composer table (both local and online)
 
-		Composers table: Next up is page 21 (Eclipse)
-
-		Need to sort the $composers_active array diffently!
 	*/
 
 	// QUICK SHORTCUTS
@@ -244,35 +256,31 @@ try {
 	$composers_snoozing = array();
 	$composers_game = array();
 
-	$query_year = 'SELECT id as table_id, fullname FROM hvsc_folders'.
-		' WHERE LENGTH(fullname) - LENGTH(REPLACE(fullname, "/", "")) > 2'.
-		' AND type = "SINGLE"'.
-		' AND "Normal built-in" IN ('. // This value is 100% the same in all HVSC file rows
-			'SELECT playertype FROM hvsc_files'.
-			' WHERE LEFT(fullname, LENGTH(hvsc_folders.fullname)) = hvsc_folders.fullname';
+	// Get composers that were active this year (and are still alive)
+	$select = $db->query('
+		SELECT fullname, name, shortname, handles, shorthandle FROM composers
+		WHERE active = "'.date("Y").'"
+		AND died = "0000-00-00"
+	');
+	$select->setFetchMode(PDO::FETCH_OBJ);
+	CreateComposersArray($select, $composers_active);
 
-	// Get all the folder ID for composer that have composers songs this year
-	$select_rec = $db->query($query_year.' AND LEFT(copyright, 5) = "2021 ")');
-	$select_rec->setFetchMode(PDO::FETCH_OBJ);
-	$row_rec = $select->fetch();
+	// Get composers that were active last year (and are still alive)
+	$select = $db->query('
+		SELECT fullname, name, shortname, handles, shorthandle FROM composers
+		WHERE active = "'.(date("Y") - 1).'"
+		AND died = "0000-00-00"
+	');
+	$select->setFetchMode(PDO::FETCH_OBJ);
+	CreateComposersArray($select, $composers_snoozing);
 
-	CreateComposersArray($select_rec, $composers_active);
-
-	// Get all the folder ID for composer that have composers songs 1-3 years ago
-	$select_rec = $db->query($query_year.
-		' AND (LEFT(copyright, 5) = "2020 " OR LEFT(copyright, 5) = "2019 " OR LEFT(copyright, 5) = "2018 ")'.
-		' AND "Normal built-in" NOT IN (SELECT DISTINCT playertype FROM hvsc_files'.
-			' WHERE LEFT(fullname, LENGTH(hvsc_folders.fullname)) = hvsc_folders.fullname'.
-			' AND LEFT(copyright, 5) = "2021 ")'.
-		')');
-	$select_rec->setFetchMode(PDO::FETCH_OBJ);
-	$row_rec = $select->fetch();
-
-	CreateComposersArray($select_rec, $composers_snoozing);
-
-
-
-	
+	// Get composers that made for games professionally (magazines don't count)
+	$select = $db->query('
+		SELECT fullname, name, shortname, handles, shorthandle, affiliation FROM composers
+		WHERE (focus = "PRO" OR focus = "BOTH")
+	');
+	$select->setFetchMode(PDO::FETCH_OBJ);
+	CreateComposersArray($select, $composers_game, true);
 
 	$i = 0;
 	$quick_shortcuts = '';
@@ -285,9 +293,9 @@ try {
 
 		$quick_shortcuts .=
 			'<tr>'.
-			QuickShortcutRow($author_active).
-			QuickShortcutRow($author_snoozing).
-'<td></td>'.
+				QuickShortcutRow($author_active).
+				QuickShortcutRow($author_snoozing).
+				QuickShortcutRow($author_game).
 			'</tr>';
 		$i++;
 	}
@@ -345,9 +353,9 @@ $html =
 	// Quick shortcuts
 	'<table class="root compo rec quicklinks">'.
 		'<tr>'.
-			'<th>Active Sceners</th>'.
-			'<th>Procrastinators</th>'.
-			'<th>Game Composers</th>'.
+			'<th>Active Composers <span class="quickyear">'.date("Y").'</span></th>'.
+			'<th>Procrastinators <span class="quickyear">'.(date("Y") - 1).'</span></th>'.
+			'<th>Game Composers <span class="quickyear" style="margin:0;">1982&ndash;</span></th>'.
 		'</tr>'.
 		$quick_shortcuts.
 	'</table>'.
