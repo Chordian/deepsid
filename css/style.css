@@ -3998,6 +3998,7 @@ input[type=range]::-ms-track {
 
 				table.quicklinks th:last-child,
 				table.quicklinks td:last-child {
+					padding-right: 0 !important;
 					border-right: 0 !important;
 				}
 

@@ -1218,6 +1218,15 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>August 5, 2021</h3>
+						<ul>
+							<li>The root page now shows three big lists in the bottom &ndash; one for active composers
+								(that made music this year), procrastinators (made music last year) and all professional
+								game composers. The two first lists for this and last year may have a few "noise" entries
+								in them because of the way HVSC adds old tunes as new releases. I'll see what I can do
+								to iron these out over time.</li>
+						</ul>
+
 						<h3>August 2, 2021</h3>
 						<ul>
 							<li>All new files in HVSC #75 are now connected to CSDb entries.</li>

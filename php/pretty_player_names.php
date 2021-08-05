@@ -58,6 +58,7 @@ $prettyPlayerNames = array(
 	'Electronic_Speech_Sys' =>	'Electronic Speech Systems',
 	'Emmanuel_Lavall' =>		'Emmanuel Lavall\'s player',
 	'FAME' =>					'FAME\'s player',
+	'Frank_Brodersen' =>		'Frank Brodersen\'s player',
 	'Frank_Tout' =>				'Frank Tout\'s player',
 	'Fred_Gray' =>				'Fred Gray\'s player',
 	'Frederic_Thiesse' =>		'Frederic Thiesse\'s player',

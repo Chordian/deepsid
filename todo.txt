@@ -6,7 +6,13 @@ SHOULD BE DONE
 - Wait to see if the latest JS changes makes it to Eric Dobek's computer. If nothing changes:
   Add another tweak that also handles his date format in the PHP just before adding to database.
 
+- Update 'special' script with year changes to "made in 1989, released in 2020" cases while
+  also changing 'active' year in composer table (both local and online).
+
 - Search shortcuts should show a folder icon with a small magnifying glass inside of it.
+
+- Tony Kelly's HVSC folder is empty. If this is correct you should remove it completely.
+  NOTE: His folder only appears when searching.
 
 - Idea: A ~2px left edge color border on those rows with a specific player. Maybe so it fades
   into transparent during the next 5-10px towards the right.

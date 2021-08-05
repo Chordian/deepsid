@@ -940,6 +940,8 @@ try {
 			if ($player == 'Mixer') $player = 'Mixer\'s player';
 			if ($player == 'SoedeSoft') $player = 'SoedeSoft\'s player';
 			if ($player == 'Zardax') $player = 'Zardax\'s player';
+			if ($player == 'Daryll_Reynolds') $player = 'Daryll Reynolds\' player';
+			if ($player == 'Daryll_Reynolds_Digi') $player = 'Daryll Reynolds\' digi player';
 
 			// If it's an *unpacked* JCH NewPlayer tune, add that info about it
 			// NOTE: Just checking the specific load address is not entirely watertight, but to be 100%

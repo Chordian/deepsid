@@ -241,15 +241,6 @@ try {
 	$random_id_2 = $good_composers[$choices[1]];
 	$random_id_3 = $good_composers[$choices[2]];
 
-
-	/*
-		- Composers table: Next up is page 21 (Eclipse)
-		
-		- Update 'special' script with year changes to "made in 1989, released in 2020" cases
-		  while also changing 'active' year in composer table (both local and online)
-
-	*/
-
 	// QUICK SHORTCUTS
 
 	$composers_active = array();
