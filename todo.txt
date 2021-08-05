@@ -6,6 +6,8 @@ SHOULD BE DONE
 - Wait to see if the latest JS changes makes it to Eric Dobek's computer. If nothing changes:
   Add another tweak that also handles his date format in the PHP just before adding to database.
 
+- Remove the 'game composers' search shortcut in HVSC first level folder.
+
 - Update 'special' script with year changes to "made in 1989, released in 2020" cases while
   also changing 'active' year in composer table (both local and online).
 
@@ -17,6 +19,8 @@ SHOULD BE DONE
 - Idea: A ~2px left edge color border on those rows with a specific player. Maybe so it fades
   into transparent during the next 5-10px towards the right.
   - GT2: Gray, SF2: Blue, NP+LP: Green
+
+- Search in the compo folder seems to completely miss the target. Did something break?
 
 - Consider adding a red attract link somewhere, pointing to the front page showing any red or
   green message. I've learned that some users never see the front page.

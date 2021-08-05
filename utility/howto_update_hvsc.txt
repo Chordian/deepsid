@@ -545,5 +545,7 @@ Update various minor stuff:
   o  Update "HVSC_VERSION" in browser.js.
   o  Remember to also update "HVSC_VERSION" in setup.php if you haven't already done so.
   o  Add two entries in the "hvsc_folders" table for searching new stuff in the latest HVSC update.
+  o  Check new folders for setting the 'focus' column in 'composers' to PRO, SCENER or BOTH.
+  o  If you set a 'focus' column to PRO or BOTH, also update the 'affiliation' column in that row.
 
 --------------------------------

@@ -1,0 +1,71 @@
+How to update the CSDb competition folders in DeepSID after a HVSC update.
+
+Requirements
+¯¯¯¯¯¯¯¯¯¯¯¯
+  o  Access to MySQL databases (LOCALHOST and/or ONLINE) through PhpMyAdmin.
+  o  That CSDb.dk has updated its HVSC links and DeepSID along with it.
+
+Waiting for the right moment
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+The first and most important requirement is that (as stated above) that the CSDb web site
+has updated its links and that DeepSID has been synchronized with it. Look in the "Update
+CSDb data" section in the "howto_update_hvsc.txt" files for more information about how
+to check and perform these things.
+
+When the above is ready, don't start going through the events from the past half year
+just yet. I used to do that and added the HVSC path links in CSDb.dk myself, but it's a
+lot of work and it's completely unnecessary. You have people to do that for you! Just
+wait a week or so and the maintainers of CSDb.dk have added all those HVSC paths.
+
+After waiting a few days:
+
+  1. Go to https://csdb.dk and click the 'Advanced' search link in the right side.
+  2. Click the 'Event(s)' radio button.
+  3. Ctrl+End to the bottom. C
+  4. Change the start date to match when the previous HVSC update was released. It is
+     usually about half a year ago.
+  5. Change the end date to match when the current HVSC update was released.
+  6. Set 'Results shown pr. page' to 100 and there's a good chance you can see all of it.
+  7. Click 'Perform Search' and you should now see a list of blue links.
+
+Updating the database:
+
+  1. Open the database as the first web browser tab and click the 'competitions' table.
+  2. In the second web browser tab with the list of CSDb events, start clicking each event
+     link with middle mouse button to open in a third browser tab.
+  3. In the third browser tab, check that there are music competitions. If not, close the
+     third web browser tab and go back to step 2.
+  4. If there are one or more C64 relevant music competitions, try searching the database
+     to see if it is part of a series. Most events typically are. Make sure you search
+     in the 'competition' field and not in the 'prefix' field. Use a "LIKE %... %" search.
+  5. Find typically the last entry in the series and copy from it. If it is not a series,
+     see if you can find something similar. For example, if it's an online CSDb event,
+     there are other CSDb events to copy from.
+  6. Columns in the copy page:
+
+       o  prefix:       Use this if you want the event to show up in a different spot.
+                        Check various event series to see how it is used.
+       o  competition:  Copy the big title in top on the CSDb event page.
+       o  year:         Change to current year.
+       o  country:      E.g. "Germany" or "_CSDb.dk" - use underscore for web sites.
+       o  type:         Check the CSDb event page to see what type of event it is.
+       o  name:         Match the music competition name exactly in the event page.
+       o  event_id:     Copy the ID from the web browser address bar of the event page.
+
+  7. Click 'Go' - if you made a search for a series, the new entry should be there now. If
+     it's not part of the series, go to the end of the database table to check it out.
+  8. Open a fourth browser tab with the DeepSID site and enter the competitions folder. If
+     you already have this open from a previous loop, refresh it to show the update.
+  9. Scroll down to where the new competition entry is and determine if it is located in a
+     nice spot, series or not. (Update the 'prefix' column if it needs relocating.)
+ 10. Enter the new entry folder. Upon entering, all the relevant files should automatically
+     be looked up and shown (a cache is updated internally). Compare the list with the
+     list in the CSDb event page to see if all entries are there.
+ 11. If one or more files are missing, you can try to find them in CSDb and manually add
+     the proper HVSC path, then hit 'C' back in the entry folder to update the cache.
+ 12. If all file entries are present, check that each one has a "Compo" tag, and that the
+     top #1 spot also has the "Winner" tag. If not, add these now. (Note that not all
+     competitions have a #1 spot - it could e.g. be shared with other computer formats.)
+ 13. Browse back to the main competitions folder in DeepSID and go back to step 2.
+
+--------------------------------
