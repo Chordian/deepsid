@@ -3,6 +3,8 @@
  * DeepSID
  *
  * Get an array with the personal and public symlist folders the user currently have.
+ * 
+ * @used-by		browser.js
  */
 
 require_once("class.account.php"); // Includes setup

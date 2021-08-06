@@ -8,6 +8,8 @@
  * 
  * @uses		$_POST['fullname']
  * @uses		$_POST['tag']
+ * 
+ * @used-by		browser.js
  */
 
 require_once("class.account.php"); // Includes setup

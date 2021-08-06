@@ -9,6 +9,8 @@
  * padded number to each of such files.
  * 
  * @uses		$_POST['symlist']
+ * 
+ * @used-by		browser.js
  */
 
 require_once("setup.php");

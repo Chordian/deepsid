@@ -3,6 +3,8 @@
  * DeepSID
  *
  * Build an HTML page with all recommended boxes.
+ * 
+ * @used-by		main.js
  */
 
 require_once("class.account.php"); // Includes setup

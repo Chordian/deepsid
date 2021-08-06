@@ -9,7 +9,9 @@
  * the 'soasc_status.php' and I wanted to make sure this was solid, including
  * the use of daylight saving time.
  * 
- * @uses		$_GET['timestamp']		time in 'YYYY-MM-DD HH:MM:SS' format
+ * @uses		$_GET['timestamp']			time in 'YYYY-MM-DD HH:MM:SS' format
+ * 
+ * @used-by		N/A
  */
 
 require_once("class.account.php"); // Includes setup

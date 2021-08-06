@@ -4,6 +4,9 @@
  *
  * Shared functions for generating a CSDb competition page. Included by other
  * CSDb PHP scripts.
+ * 
+ * @used-by		composer.php
+ * @used-by		csdb_compo_table.php
  */
 
 require_once("setup.php");

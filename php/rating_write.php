@@ -9,6 +9,9 @@
  * 
  * @uses		$_POST['fullname']
  * @uses		$_POST['rating']
+ * 
+ * @used-by		main.js
+ * @used-by		browser.js
  */
 
 require_once("class.account.php"); // Includes setup

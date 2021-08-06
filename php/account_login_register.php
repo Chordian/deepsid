@@ -7,7 +7,7 @@
  * @uses		$_POST['submitted']
  * @uses		$_GET['register']
  *
- * @output		json
+ * @used-by		main.js
  */
 
 require_once("class.account.php"); // Includes setup

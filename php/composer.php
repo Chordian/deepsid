@@ -7,7 +7,9 @@
  * 
  * The group/work tables have been moved to the 'groups.php' file instead.
  * 
- * @uses		$_GET['fullname'] (to folder)
+ * @uses		$_GET['fullname']			to folder
+ * 
+ * @used-by		browser.js
  */
 
 require_once("class.account.php"); // Includes setup

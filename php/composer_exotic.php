@@ -1,14 +1,20 @@
 <?php
 /**
  * DeepSID
- *
+ * 
+ * @used-by		composer.php
+ * @used-by		groups.php
+ */
+
+/**
  * If a specific end path is inside the exotic folders, replace it with the
  * corresponding HVSC path to get the proper profile data.
  * 
- * @uses		$_GET['fullname'] (to folder)
+ * @param		string		$fullname
+ * 
+ * @return		string		$fullname
  */
-
- function ProxyExotic($fullname) {
+function ProxyExotic($fullname) {
 
 	if (substr($fullname, 0, 28) == '_Exotic SID Tunes Collection' && substr_count($fullname, '/') > 1) {
 

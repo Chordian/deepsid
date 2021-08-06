@@ -7,7 +7,7 @@
  * @uses		$_POST['oldpwd']
  * @uses		$_POST['newpwd']
  *
- * @output		json
+ * @used-by		main.js
  */
 
 require_once("class.account.php"); // Includes setup

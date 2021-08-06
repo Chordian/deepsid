@@ -3,6 +3,8 @@
  * DeepSID
  *
  * Build a list of a few specific forum topics.
+ * 
+ * @used-by		main.js
  */
 
 require_once("setup.php");

@@ -8,6 +8,8 @@
  * This is used to filter folders according to a "quality" drop-down option.
  * 
  * @uses		$_GET['folder']
+ * 
+ * @used-by		browser.js
  */
 
 require_once("class.account.php"); // Includes setup

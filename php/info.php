@@ -5,6 +5,8 @@
  * Get information about a specific SID file.
  * 
  * @uses		$_GET['fullname']
+ * 
+ * @used-by		player.js
  */
 
 require_once("class.account.php"); // Includes setup

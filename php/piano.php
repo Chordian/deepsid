@@ -1,3 +1,10 @@
+<?php
+/**
+ * DeepSID
+ *
+ * @used-by		index.php
+ */
+?>
 <?php for($voice = 0; $voice <= 2; $voice++) : ?>
 	<div class="piano-top-panel ptp<?php echo $voice; ?>">
 		<div class="pv-wrap"><button class="piano-voice pv<?php echo $voice; // Don't move these classes around ?> voice-on"><?php echo $voice + 1; ?></button></div>

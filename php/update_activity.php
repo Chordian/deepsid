@@ -13,6 +13,8 @@
  * script for the root page, but alas they were way too slow.
  * 
  * This script should be run again after a HVSC update.
+ * 
+ * @used-by		N/A
  */
 
 require_once("class.account.php"); // Includes setup

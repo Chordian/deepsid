@@ -3,6 +3,11 @@
  * DeepSID
  *
  * Countries and their codes.
+ * 
+ * @used-by		composers.php
+ * @used-by		csdb_compo.php
+ * @used-by		csdb_compo_table.php
+ * @used-by		root_generate.php
  */
 
 $countryCodes = array(

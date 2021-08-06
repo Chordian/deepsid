@@ -3,6 +3,8 @@
  * DeepSID / Account
  *
  * Just logout (no error handling).
+ * 
+ * @used-by		main.js
  */
 
 require_once("class.account.php"); // Includes setup

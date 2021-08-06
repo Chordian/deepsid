@@ -7,8 +7,10 @@
  * 
  * @uses		$_GET['folder']
  * @uses		$_GET['searchType']
- * @uses		$_GET['searchQuery']	overrides 'folder' if used
- * @uses		$_GET['searchHere']		1 = in current folder, 0 = in everything
+ * @uses		$_GET['searchQuery']		overrides 'folder' if used
+ * @uses		$_GET['searchHere']			1 = in current folder, 0 = in everything
+ * 
+ * @used-by		browser.js
  */
 
 require_once("class.account.php"); // Includes setup
@@ -20,8 +22,10 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH
 
 /**
  * Determine who owns a public symlist specified in the GET variable.
+ * 
+ * @global		object		$db					database connection
  *
- * @return		string		the user name of the owner
+ * @return		string		$owner 				user name
  */
 function PublicSymlistOwner() {
 
@@ -46,9 +50,9 @@ function PublicSymlistOwner() {
 /**
  * Adapt the search query and create an array of words.
  *
- * @param		string		the search query (from a GET variable)
+ * @param		string		$query				search query from a GET variable
  *
- * @return		array		the individual search words
+ * @return		array							array with individual search words
  */
 function ParseQuery($query) {
 
@@ -63,7 +67,7 @@ function ParseQuery($query) {
 	return explode('_', str_replace('"', '', $query));
 }
 
-/****************/
+/***** START *****/
 
 $found = $symlist_folder_id = 0;
 $debug = $incompatible = $owner = $new_uploads = '';

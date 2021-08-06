@@ -8,6 +8,8 @@
  * When a new HVSC version arrives, the entire file tree is manually replaced
  * on the server. This script does NOT modify any of these files. It only
  * updates the database to match the file changes in the new tree.
+ * 
+ * @used-by		N/A
  */
 
 require_once("class.account.php"); // Includes setup

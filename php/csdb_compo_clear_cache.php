@@ -6,6 +6,8 @@
  * be refreshed from the original CSDb release pages.
  * 
  * @uses		$_POST['competition']
+ * 
+ * @used-by		main.js
  */
 
 require_once("class.account.php"); // Includes setup

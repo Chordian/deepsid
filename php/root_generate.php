@@ -2,12 +2,24 @@
 /**
  * DeepSID
  *
- * A procedure for returning the inside contents of a top list.
+ * Procedures for returning the inside contents of a top list.
+ * 
+ * @used-by		root.php
+ * @used-by		root_get.php
  */
 
 require_once("class.account.php"); // Includes setup
 require_once("countries.php"); // Used by the 'countries' list type
 
+/**
+ * Abbreviate certain texts in the 'fullname' value and wrap them in <FONT>
+ * tags to look better.
+ *
+ * @param		string		$fullname
+ * @param		string		$link				link for a HREF (default empty) 
+ *
+ * @return		string		$adapted_fullname
+ */
 function AdaptBrowserName($fullname, $link = '') {
 	$adapted_fullname = str_replace('_High Voltage SID Collection', '<font class="dim">HVSC</font>', $fullname);
 	$adapted_fullname = str_replace('HVSC</font>/DEMOS', 'HVSC/D</font>', $adapted_fullname);
@@ -19,6 +31,16 @@ function AdaptBrowserName($fullname, $link = '') {
 	return $adapted_fullname;
 }
 
+/**
+ * Generate a top list and return its HTML.
+ *
+ * @global		array		$countryCodes		array with abbreviations
+ * 
+ * @param		int			$rows				number of rows
+ * @param		string		$type				type of top list
+ *
+ * @return		string		$contents			HTML
+ */
 function GenerateList($rows, $type) {
 
 	global $countryCodes;

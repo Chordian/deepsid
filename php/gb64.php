@@ -5,11 +5,13 @@
  * Builds an HTML page with links to GameBase64 entries (the links are all
  * contained in the database) or a specific entry sub page.
  * 
- * @uses		$_GET['fullname']	for a page with links to sub pages
+ * @uses		$_GET['fullname']			for a page with links to sub pages
  * 
  * 	- OR -
  * 
- * @uses		$_GET['id']			for a sub page with a specific entry
+ * @uses		$_GET['id']					for a sub page with a specific entry
+ * 
+ * @used-by		browser.js
  */
 
 require_once("class.account.php"); // Includes setup
@@ -17,12 +19,29 @@ require_once("class.account.php"); // Includes setup
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest')
 	die("Direct access not permitted.");
 
-// Have to set this up to catch an error from unserialize() as a proper exception
+/**
+ * Have to set this up to catch an error from unserialize() as a proper
+ * exception.
+ *
+ * @param		string		$errno				error number
+ * @param		string		$errstr				error string
+ * @param		string		$errfile			error file
+ * @param		string		$errline			error line
+ * 
+ * @throws		ErrorException					cast by handler
+ */
 function exception_error_handler($errno, $errstr, $errfile, $errline ) {
 	throw new ErrorException($errstr, $errno, 0, $errfile, $errline);
 }
 set_error_handler('exception_error_handler');
 
+/**
+ * Return an array with information from a GameBase64 page.
+ *
+ * @param		int			$id					id of page entry
+ *
+ * @return		array							array with information
+ */
 function ReadRawGB64($id) {
 
 	$find_scr	= ':showscreenshot';

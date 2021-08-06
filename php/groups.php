@@ -4,7 +4,9 @@
  *
  * Build an HTML page with details about groups/work for a composer.
  * 
- * @uses		$_GET['fullname'] (to folder)
+ * @uses		$_GET['fullname']			to folder
+ * 
+ * @used-by		browser.js
  */
 
 require_once("class.account.php"); // Includes setup

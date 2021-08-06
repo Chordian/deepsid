@@ -3,6 +3,8 @@
  * DeepSID
  *
  * Build the HTML page for listing all players/editors in the 'Players' tab.
+ * 
+ * @used-by		main.js
  */
 
 require_once("class.account.php"); // Includes setup

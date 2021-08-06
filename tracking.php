@@ -7,6 +7,9 @@
  * 
  * The resulting file, 'visitors.txt', can then be examined and its data output
  * to e.g. another web page to keep track of visitors to the site.
+ * 
+ * @used-by		index.php
+ * @used-by		main.js
  */
 
 require_once("php/class.account.php"); // Includes setup

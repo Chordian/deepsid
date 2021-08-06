@@ -6,7 +6,9 @@
  * 
  * @uses		$_POST['fullname']
  * @uses		$_POST['symlist']
- * @uses		$_POST['symid']			if > 0 then use this as reference instead
+ * @uses		$_POST['symid']				if > 0 then use this as reference instead
+ * 
+ * @used-by		browser.js
  */
 
 require_once("class.account.php"); // Includes setup

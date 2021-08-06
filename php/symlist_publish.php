@@ -6,8 +6,10 @@
  * everyone while unpublishing takes it back to only being visible to the user
  * again. Technically it just swaps the prepended '!' with a '$' characters.
  * 
- * @uses		$_POST['publish']		1 to publish, 0 to unpublish
- * @uses		$_POST['symlist']		existing symlist folder
+ * @uses		$_POST['publish']			1 to publish, 0 to unpublish
+ * @uses		$_POST['symlist']			existing symlist folder
+ * 
+ * @used-by		browser.js (twice)
  */
 
 require_once("class.account.php"); // Includes setup

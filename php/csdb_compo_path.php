@@ -9,6 +9,8 @@
  * in the table with competition results from CSDb.
  * 
  * @uses		$_GET['id']
+ * 
+ * @used-by		browser.js
  */
 
 require_once("setup.php");

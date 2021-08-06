@@ -32,6 +32,8 @@
  * values such as size, memory location and start address. It may not be worth
  * the trouble adding this, however, since manual work will probably always be
  * needed due to how files and attributes can be overhauled by the HVSC team.
+ * 
+ * @used-by		N/A
  */
 
 require_once("class.account.php"); // Includes setup

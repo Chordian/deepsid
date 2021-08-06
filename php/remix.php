@@ -4,7 +4,9 @@
  *
  * Builds an HTML page with links to Remix64 entries or a specific entry.
  * 
- * @uses		$_GET['fullname']	for a page with links to sub pages
+ * @uses		$_GET['fullname']			for a page with links to sub pages
+ * 
+ * @used-by		browser.js
  */
 
 require_once("class.account.php"); // Includes setup

@@ -3,10 +3,19 @@
  * DeepSID
  *
  * Export ratings to a CSV file.
+ * 
+ * @used-by		main.js
  */
 
 require_once("php/class.account.php"); // Includes setup
 
+/**
+ * Adapt the 'fullname' column value.
+ *
+ * @param	string		the text from 'fullname' column
+ *
+ * @return	string		name adapted to make more sense
+ */
 function AdaptName($name) {
 	if (substr($name, 0, 1) == '!')
 		$name = '_DeepSID personal playlist: "'.substr($name, 1).'"';
@@ -16,6 +25,8 @@ function AdaptName($name) {
 	$name = str_replace('_Compute\'s Gazette SID Collection/', 'CGSC/', $name);
 	return $name;
 }
+
+/***** START *****/
 
 if ($account->CheckLogin()) {
 

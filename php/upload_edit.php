@@ -8,6 +8,8 @@
  * displays the information in a few steps.
  * 
  * @uses		$_GET['fullname']
+ * 
+ * @used-by		browser.js
  */
 
 require_once("class.account.php"); // Includes setup

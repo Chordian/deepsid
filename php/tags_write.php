@@ -9,9 +9,11 @@
  * 
  * It is currently not possible to delete entries in the pool of all tags.
  * 
- * @uses		$_POST['fileID']	file ID of the song being affected.
- * @uses		$_POST['allTags']	may contain new tags with ID 60000 and up.
- * @uses		$_POST['fileTags']	list of ID's after adding and removing.
+ * @uses		$_POST['fileID']			file ID of the song being affected
+ * @uses		$_POST['allTags']			may contain new tags with ID 60000 and up
+ * @uses		$_POST['fileTags']			list of ID's after adding and removing
+ * 
+ * @used-by		browser.js
  */
 
 require_once("class.account.php"); // Includes setup
@@ -29,9 +31,14 @@ if (!isset($_POST['fileID']) || !isset($_POST['allTags']))
  * It is written in the CSV format so it can be used by another PHP script, in
  * case actions by a user with malicious intentions need to be undone.
  * 
- * Fields:		time, ip address, user id, user name, file id, fullname, action, tag id, tag name
+ * Fields:	time, ip address, user id, user name, file id, fullname, action,
+ * 			tag id, tag name
+ * 
+ * @uses		$_POST['fileID']			file ID of the song being affected
  *
- * @param		string		text to be logged
+ * @param		string		$action
+ * @param		string		$tag_id
+ * @param		string		$tag_name
  */
 function LogTagActivity($action, $tag_id, $tag_name) {
 	global $user_id, $user_name, $fullname;
@@ -47,6 +54,8 @@ function LogTagActivity($action, $tag_id, $tag_name) {
 			$tag_name.
 		PHP_EOL, FILE_APPEND);
 }
+
+/***** START *****/
 
 $file_tags = isset($_POST['fileTags']) ? $_POST['fileTags'] : array();
 

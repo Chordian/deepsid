@@ -21,7 +21,9 @@
  * new file to a temporary location and gather information about the profile,
  * CSDb ID, song lengths and custom STIL text.
  * 
- * @uses		$_POST['info']		the updated info array
+ * @uses		$_POST['info']				the updated info array
+ * 
+ * @used-by		browser.js
  */
 
 require_once("class.account.php"); // Includes setup

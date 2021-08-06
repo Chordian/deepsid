@@ -33,7 +33,14 @@ define('DB_ERROR',          'A database error has been written to a log regularl
 
 define('TIME_ADJUST',		'+1 hours');				// Added to all use of Date() to match correct time
 
-// Use this instead of 'file_get_contents' as that sometimes returns empty strings from CSDb
+/**
+ * Use this instead of 'file_get_contents' as that sometimes returns empty
+ * strings from CSDb.
+ *
+ * @param	    string		$url                URL to obtain data from
+ *
+ * @return	    string		$data               data from the URL
+ */
 function curl($url) {
 
     $ch = curl_init();
@@ -51,7 +58,13 @@ function curl($url) {
     return $data;
 }
 
-// Convert a CSDb user name to a more file friendly format
+/**
+ * Convert a CSDb user name to a more file friendly format.
+ *
+ * @param	    string		$name               CSDb user name
+ *
+ * @return	    string		$fn                 file friendly user name
+ */
 function GetFriendlyName($name) {
 
 	$fn = preg_replace('/[^a-z0-9]+/i', ' ', $name);
@@ -62,7 +75,15 @@ function GetFriendlyName($name) {
 	return $fn;
 }
 
-// Return the avatar image path for the user, if one exists
+/**
+ * Return the avatar image path for the user, if one exists.
+ *
+ * @param	    int 		$id                 ID for a CSDb scener (can be 0)
+ * @param	    string		$name               name of scener/composer
+ * @param	    string		$hvsc_folder        the scener's HVSC folder (can be empty)
+ *
+ * @return	    string		$avatar             image path for avatar
+ */
 function GetAvatar($id, $name, $hvsc_folder) {
 
     if (!empty($hvsc_folder)) {
@@ -117,7 +138,13 @@ function GetAvatar($id, $name, $hvsc_folder) {
 	return $avatar;
 }
 
-// Return the correct color code for the CSDb user
+/**
+ * Return the correct color code for the CSDb user.
+ *
+ * @param	    string		$name               CSDb scener handle
+ *
+ * @return	    string		$color              a HTML snippet
+ */
 function GetUserColor($name) {
 
 	$fn = GetFriendlyName($name);

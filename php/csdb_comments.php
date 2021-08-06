@@ -9,9 +9,9 @@
  * $scener_handle = array();
  * $scener_id = array();
  * 
- * Example of use:
- * 
- * CommentsTable('Trivia', $csdb->Release->Comments->Trivia, $scener_handle, $scener_id);
+ * @used-by		csdb.php
+ * @used-by		csdb_compo_table.php
+ * @used-by		composer.php
  */
 
 require_once("setup.php");
@@ -20,6 +20,21 @@ require_once("jbbcode/Parser.php");
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest')
 	die("Direct access not permitted.");
 
+/**
+ * Return the HTML for a table with several comments.
+ *
+ * Example of use:
+ * 
+ * CommentsTable('Trivia', $csdb->Release->Comments->Trivia, $scener_handle, $scener_id);
+ * 
+ * @param		string		$title				title of the commments thread
+ * @param		object		$comments			comments from a CSDb web service call
+ * @param		array		&$scener_handle		reference to array with scener handles
+ * @param		array		&$scener_id			reference array with scener ID's
+ * @param		boolean		$backwards			true (default) to reverse list of comments
+ *
+ * @return		string							HTML
+ */
 function CommentsTable($title, $comments, &$scener_handle, &$scener_id, $backwards = true) {
 
 	$parser = new JBBCode\Parser();

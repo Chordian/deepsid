@@ -12,7 +12,9 @@
  * 
  * @uses		$_GET['type']
  * @uses		$_GET['id']
- * @uses		$_GET['back'] - 1 to show a BACK button
+ * @uses		$_GET['back']				1 to show a BACK button
+ * 
+ * @used-by		browser.js
  */
 
 require_once("class.account.php"); // Includes setup
@@ -33,11 +35,11 @@ $svg_permalink = '<svg class="permalink" style="enable-background:new 0 0 80 80;
  * 
  * Used instead of utf8_decode() when errors occur (e.g. download links).
  * 
- * @link https://www.php.net/manual/en/function.urldecode.php
+ * @link 		https://www.php.net/manual/en/function.urldecode.php
  * 
- * @param		string		URL decoded string
+ * @param		string		$string				URL decoded string
  * 
- * @return		string		converted string
+ * @return		string							converted string
  */
 function to_utf8($string) {
 	// From http://w3.org/International/questions/qa-forms-utf-8.html
@@ -55,6 +57,8 @@ function to_utf8($string) {
 	else
 		return iconv('CP1252', 'UTF-8', $string);
 }
+
+/***** START *****/
 
 if (isset($_GET['fullname'])) {
 	// Get the CSDb 'type' and 'id' from the database row

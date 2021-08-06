@@ -12,6 +12,8 @@
  * If the file is not a SID file or the filename exists, it is denied.
  * 
  * @uses		$_FILES
+ * 
+ * @used-by		browser.js
  */
 
 require_once("class.account.php"); // Includes setup

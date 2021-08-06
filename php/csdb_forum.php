@@ -4,8 +4,10 @@
  *
  * Call the web service at CSDb and build a forum thread.
  * 
- * @uses		$_GET['room']	- ID; e.g. 14 for "C64 Composing"
- * @uses		$_GET['topic']	- also an ID number
+ * @uses		$_GET['room']				ID; e.g. 14 for "C64 Composing"
+ * @uses		$_GET['topic']				also an ID number
+ * 
+ * @used-by		main.js
  */
 
 require_once("setup.php");

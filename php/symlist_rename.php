@@ -4,11 +4,13 @@
  *
  * Remame a symlist folder or one of its entries.
  * 
- * @uses		$_POST['symlist']		existing symlist folder
- * @uses		$_POST['fullname']		if not set then a symlist is renamed
- * @uses		$_POST['symid']			if > 0 then use this as reference instead
+ * @uses		$_POST['symlist']			existing symlist folder
+ * @uses		$_POST['fullname']			if not set then a symlist is renamed
+ * @uses		$_POST['symid']				if > 0 then use this as reference instead
  * 
- * @uses		$_POST['new']			the new name
+ * @uses		$_POST['new']				the new name
+ * 
+ * @used-by		browser.js
  */
 
 require_once("class.account.php"); // Includes setup

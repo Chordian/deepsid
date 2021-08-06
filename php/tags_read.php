@@ -1,10 +1,21 @@
 <?php
 /**
  * DeepSID
- *
- * A procedure for returning the current list of tags and types for a file.
+ * 
+ * @used-by		hvsc.php
+ * @used-by		tags_write.php
+ * @used-by		tags_write_single.php
  */
 
+ /**
+ * Update the current lists of tags and types for a file.
+ * 
+ * @global		object		$db					database connection
+ *
+ * @param		int			$file_id
+ * @param		array		&$list_of_tags		reference to array with list of tags
+ * @param		array		&$type_of_tags		reference to array with types of tags
+ */
 function GetTagsAndTypes($file_id, &$list_of_tags, &$type_of_tags) {
 
 	global $db;

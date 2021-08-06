@@ -9,10 +9,10 @@
  * 
  * For now, only the following fields are updated:
  * 
- *  name
- * 	player
- * 	author
- * 	copyright
+ *		name
+ *		player
+ *		author
+ *		copyright
  * 
  * Please be aware that an HVSC update may later overwrite fields in the file
  * row too. It makes more sense to use the script for other collections such
@@ -23,6 +23,8 @@
  * @uses		$_POST['player']
  * @uses		$_POST['author']
  * @uses		$_POST['copyright']
+ * 
+ * @used-by		main.js
  */
 
 require_once("class.account.php"); // Includes setup

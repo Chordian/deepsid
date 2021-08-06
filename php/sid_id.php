@@ -9,6 +9,8 @@
  * 
  * Many things have been simplified for the PHP version. It doesn't handle the
  * many command-line options, and it also doesn't handle multiple files.
+ * 
+ * @used-by		upload_new.php
  */
 
 define('T_END',	-1);
@@ -16,6 +18,13 @@ define('T_ANY',	-2);
 define('T_AND',	-3);
 define('T_NAME',-4);
 
+/**
+ * Try to identify the player used by this SID file.
+ *
+ * @param		string		$fullname			fullname of SID file
+ *
+ * @return		string							name of player (empty if not identified)
+ */
 function IdentifyPlayer($fullname) {
 
 	$sid = file_get_contents($fullname);
@@ -64,8 +73,15 @@ function IdentifyPlayer($fullname) {
 
 	fclose($cfg);
 
-	/***** PARSE SID FILE *****/
-
+	/**
+	 * Parse SID file.
+	 *
+	 * @param		array		&$chars				reference to chars array
+	 * @param		array		&$signature			reference to signature array
+	 * @param		int			&$sid_size			reference to size of SID file
+	 *
+	 * @return		bool							true if identified
+	 */
 	function IdentifyBytes(&$chars, &$signature, &$sid_size) {
 
 		$c = 1;

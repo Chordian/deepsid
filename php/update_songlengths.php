@@ -11,6 +11,8 @@
  * require access not granted by my web hotel.
  * 
  * The table should be emptied and this script run again after a HVSC update.
+ * 
+ * @used-by		N/A
  */
 
 require_once("class.account.php"); // Includes setup

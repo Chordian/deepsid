@@ -20,9 +20,11 @@
  * http://ftp.acc.umu.se/mirror/media/Oakvalley/soasc/
  * http://teamarchive1.fnf.archive.org/OAKVALLEY/soasc/
  * 
- * @uses		$_GET['file']			fullname path to SID file
- * @uses		$_GET['sidModel']		a key in $soasc_models, or 'auto'
- * @uses		$_GET['subtune']		subtune number
+ * @uses		$_GET['file']				fullname path to SID file
+ * @uses		$_GET['sidModel']			a key in $soasc_models, or 'auto'
+ * @uses		$_GET['subtune']			subtune number
+ * 
+ * @used-by		players.js
  */
 
 require_once("class.account.php"); // Includes setup
@@ -49,6 +51,14 @@ $model = $soasc_models[$_GET['sidModel']];
 
 // http://www.se2a1.net/dl.php?url=1&d=soasc/hvsc/070/FLAC/MUSICIANS/J/JCH/Yoko_Tsuno_T001.sid_MOS6581R2.flac
 // http://se2a1.iiiii.info:40000/files/soasc/hvsc/068/FLAC/DEMOS/0-9/8-bit_Panda-Ending_Theme_T001.sid_CSG8580R5.flac
+
+/**
+ * Try to get file data from a file on an SOASC server.
+ *
+ * @param		string		$path				file path to be appended
+ *
+ * @return		string		$data				data is empty if failed
+ */
 function RequestURL($path) {
 
 	/*

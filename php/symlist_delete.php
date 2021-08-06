@@ -5,6 +5,8 @@
  * Delete a symlist folder and all of its contents.
  * 
  * @uses		$_POST['symlist']
+ * 
+ * @used-by		browser.js
  */
 
 require_once("class.account.php"); // Includes setup

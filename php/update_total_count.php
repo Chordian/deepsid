@@ -9,6 +9,8 @@
  * This must be done after having imported the count of files for a new HVSC
  * version, created by a simple python script. (So, why not just let this
  * python script also do that? You know, that's a very good question.)
+ * 
+ * @used-by		N/A
  */
 
 require_once("class.account.php"); // Includes setup

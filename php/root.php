@@ -9,6 +9,8 @@
  *  - Important message (good or bad)
  *  - Left and right boxes for top lists
  *  - Active, snoozing and game composers
+ * 
+ * @used-by		browser.js
  */
 
 require_once("class.account.php"); // Includes setup
@@ -20,9 +22,12 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH
 /**
  * Return the HTML for a recommendation box.
  *
- * @param		int			a random ID for a HVSC composer
+ * @global		object		$db					database connection
+ * @global		bool		$decent_box_shown
+ * 
+ * @param		int			$random_id			random ID for a HVSC composer
  *
- * @return		string		the HTML for one recommendation box
+ * @return		string							HTML
  */
 function CreateRecBox($random_id) {
 
@@ -119,8 +124,11 @@ function CreateRecBox($random_id) {
 /**
  * Create an associative array from the latest database query.
  * 
- * @param		object		rows from database (by reference)
- * @param		array		composers (by reference)
+ * @global		object		$db					database connection
+ * 
+ * @param		object		&$select			reference to rows from database
+ * @param		array		&$composers			reference to array of composers
+ * @param		boolean		$pro				false (default) if not a game composer
  */
 function CreateComposersArray(&$select, &$composers, $pro = false) {
 
@@ -161,9 +169,9 @@ function CreateComposersArray(&$select, &$composers, $pro = false) {
 /**
  * Return the HTML for one 'quick box' table cell.
  *
- * @param		array		authors (by reference)
+ * @param		array		&$author			reference to author array
  *
- * @return		string		the HTML for one TD cell
+ * @return		string							HTML for one TD cell
  */
 function QuickShortcutRow(&$author) {
 
@@ -190,7 +198,7 @@ function QuickShortcutRow(&$author) {
 	return $return_row;
 }
 
-/****************/
+/***** START *****/
 
 $decent_box_shown = false;
 

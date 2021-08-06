@@ -4,6 +4,8 @@
  *
  * Add a specific tag to all files in HVSC according to evidence that reveals
  * when it should have it. A file is ignored if the tag is already present.
+ * 
+ * @used-by		N/A
  */
 
 require_once("class.account.php"); // Includes setup
@@ -19,6 +21,15 @@ define('MODE_LYRICS',	'Lyrics');	// CGSC only
 
 define('MODE', MODE_LYRICS); // <---- SET THE TAG PARSING MODE HERE!
 
+/**
+ * Get the ID of a tag by looking up its name.
+ *
+ * @global		object		$db					database connection
+ * 
+ * @param		string		$name				tag name
+ *
+ * @return		int								tag id
+ */
 function GetTagID($name) {
 
 	global $db;
@@ -28,6 +39,11 @@ function GetTagID($name) {
 	return $tag->fetch()->id;
 }
 
+/**
+ * Add the tag unless it already exists.
+ *
+ * @param		int			$tagid				tag id
+ */
 function AddTag($tagid) {
 
 	global $db, $row;
@@ -42,6 +58,8 @@ function AddTag($tagid) {
 		echo '<tr><td>Tag added to</td><td>'.$row->id.'</td><td>'.$row->fullname.'</td></tr>';
 	}
 }
+
+/***** START *****/
 
 try {
 	if ($_SERVER['HTTP_HOST'] == LOCALHOST)

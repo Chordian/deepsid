@@ -3,6 +3,9 @@
  * DeepSID
  *
  * Pretty player names.
+ * 
+ * @used-by		hvsc.php
+ * @used-by		composer.php
  */
 
 $prettyPlayerNames = array(

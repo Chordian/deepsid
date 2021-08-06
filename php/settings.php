@@ -9,12 +9,14 @@
  * 
  * Settings that can be specified for saving:
  * 
- * @uses		$_POST['firstsubtune']	0 or 1
- * @uses		$_POST['skiptune']		0 or 1
- * @uses		$_POST['marktune']		0 or 1
- * @uses		$_POST['skipbad']		0 or 1
- * @uses		$_POST['skiplong']		0 or 1
- * @uses		$_POST['skipshort']		0 or 1
+ * @uses		$_POST['firstsubtune']		0 or 1
+ * @uses		$_POST['skiptune']			0 or 1
+ * @uses		$_POST['marktune']			0 or 1
+ * @uses		$_POST['skipbad']			0 or 1
+ * @uses		$_POST['skiplong']			0 or 1
+ * @uses		$_POST['skipshort']			0 or 1
+ * 
+ * @used-by		main.js (twice)
  */
 
 require_once("class.account.php"); // Includes setup

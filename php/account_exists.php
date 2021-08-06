@@ -5,8 +5,8 @@
  * Check if a username exists.
  *
  * @uses		$_POST['username']
- *
- * @output		json
+ * 
+ * @used-by		main.js
  */
 
 require_once("class.account.php"); // Includes setup

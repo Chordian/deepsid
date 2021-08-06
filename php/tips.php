@@ -3,6 +3,8 @@
  * DeepSID
  *
  * Returns a randomly chosen block of text for the tips box.
+ * 
+ * @used-by		main.js
  */
 
 $tips = array(

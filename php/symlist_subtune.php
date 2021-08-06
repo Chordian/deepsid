@@ -6,9 +6,11 @@
  * 
  * @uses		$_POST['symlist']
  * @uses		$_POST['fullname']
- * @uses		$_POST['symid']			if > 0 then use this as reference instead
+ * @uses		$_POST['symid']				if > 0 then use this as reference instead
  * 
- * @uses		$_POST['subtune']		the new default
+ * @uses		$_POST['subtune']			the new default
+ * 
+ * @used-by		browser.js
  */
 
 require_once("class.account.php"); // Includes setup

@@ -7,7 +7,9 @@
  * 
  * @uses		$_GET['compo']
  * @uses		$_GET['id']
- * @uses		$_GET['mark'] - the ID of the release page to mark on the list
+ * @uses		$_GET['mark']				ID of the release page to mark on list
+ * 
+ * @used-by		browser.js
  */
 
 require_once("setup.php");

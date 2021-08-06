@@ -7,6 +7,8 @@
  * version number for a specific song player instead of just v1.x.
  * 
  * This script is referred to in a 'howto_update' text file.
+ * 
+ * @used-by		N/A
  */
 
 require_once("setup.php");

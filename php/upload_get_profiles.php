@@ -3,6 +3,8 @@
  * DeepSID
  *
  * Get a list of composer profiles for a drop-down box in the upload wizard.
+ * 
+ * @used-by		browser.js
  */
 
 require_once("setup.php");

@@ -4,11 +4,13 @@
  *
  * Build the HTML page for the 'Players' tab.
  * 
- * @uses		$_GET['player'] - e.g. "GoatTracker v2.x"
+ * @uses		$_GET['player']				e.g. "GoatTracker v2.x"
  * 
  * 	- OR -
  * 
  * @uses		$_GET['id']
+ * 
+ * @used-by		browser.js
  */
 
 require_once("setup.php");

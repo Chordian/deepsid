@@ -4,6 +4,8 @@
  *
  * Loads the 'visitors.txt' produced by the 'tracking.php' script, parses it,
  * and returns pretty HTML for displaying.
+ * 
+ * @used-by		(external)
  */
 
 require_once("php/setup.php");

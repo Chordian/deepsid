@@ -11,8 +11,10 @@
  * more than one SID file. The jQuery code can then use the name returned to
  * instead make the link look a little prettier (still an improvement).
  * 
- * @uses		$_GET['type'] - can be 'release' or 'sid'
+ * @uses		$_GET['type']				can be "release" or "sid"
  * @uses		$_GET['id']
+ * 
+ * @used-by		main.js
  */
 
 require_once("setup.php");

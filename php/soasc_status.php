@@ -29,10 +29,19 @@
  * http://se2a1.iiiii.info:40000/files/index.php
  * http://anorien.csc.warwick.ac.uk/mirrors/oakvalley/soasc/
  * http://ftp.acc.umu.se/mirror/media/Oakvalley/soasc/
+ * 
+ * @used-by		(Cron Job)
  */
 
 require_once("setup.php");
 
+/**
+ * Try to get file data from a file on an SOASC server.
+ *
+ * @param		string		$path				file path to be appended
+ *
+ * @return		string		$data				data is empty if failed
+ */
 function RequestURL($path) {
 
 	/*

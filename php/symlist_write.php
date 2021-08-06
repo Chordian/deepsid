@@ -6,8 +6,10 @@
  * folder bearing a unique version of the specified SID file name.
  * 
  * @uses		$_POST['fullname']
- * @uses		$_POST['symlist']		if not set then create a new symlist
+ * @uses		$_POST['symlist']			if not set then create a new symlist
  * @uses		$_POST['subtune']
+ * 
+ * @used-by		browser.js
  */
 
 require_once("class.account.php"); // Includes setup

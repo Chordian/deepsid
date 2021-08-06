@@ -5,6 +5,8 @@
  * Get two arrays; one with all tags and one with tags for a specific file.
  * 
  * @uses		$_GET['fullname']
+ * 
+ * @used-by		browser.js
  */
 
 require_once("setup.php");

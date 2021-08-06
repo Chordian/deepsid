@@ -5,6 +5,8 @@
  * Accept uploading one or more SID files for testing in the JS emulators.
  * 
  * @uses		$_FILES[count]
+ * 
+ * @used-by		main.js
  */
 
 require_once("setup.php");
