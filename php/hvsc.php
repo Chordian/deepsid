@@ -18,6 +18,53 @@ require_once("tags_read.php");
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest')
 	die("Direct access not permitted.");
 
+/**
+ * Determine who owns a public symlist specified in the GET variable.
+ *
+ * @return		string		the user name of the owner
+ */
+function PublicSymlistOwner() {
+
+	global $db;
+
+	// First get its user ID
+	$select = $db->prepare('SELECT user_id FROM hvsc_folders WHERE fullname = :folder LIMIT 1');
+	$select->execute(array(':folder'=>substr($_GET['folder'], 1)));
+	$select->setFetchMode(PDO::FETCH_OBJ);
+
+	$owner = 'an unknown user';
+	if ($select->rowCount()) {
+		// Now get the name of the user ID
+		$select_user = $db->query('SELECT username FROM users WHERE id = '.$select->fetch()->user_id.' LIMIT 1');
+		$select_user->setFetchMode(PDO::FETCH_OBJ);
+		if ($select_user->rowCount())
+			$owner = $select_user->fetch()->username;
+	}
+	return $owner;
+}
+
+/**
+ * Adapt the search query and create an array of words.
+ *
+ * @param		string		the search query (from a GET variable)
+ *
+ * @return		array		the individual search words
+ */
+function ParseQuery($query) {
+
+	// Replace spaces ('_') inside quoted queries with '%' and remove the quotes themselves
+	// NOTE: This is actually a weird shortcut and sometimes produce unexpected results.
+	preg_match_all('/"[^"]+"/', $query, $quoted);
+	foreach($quoted[0] as $q) {
+		$adapted = trim(str_replace('_', '%', $q), '"');
+		$query = str_replace($q, $adapted, $query);
+	}
+	// Get rid of any lonely quote stragglers and return an array
+	return explode('_', str_replace('"', '', $query));
+}
+
+/****************/
+
 $found = $symlist_folder_id = 0;
 $debug = $incompatible = $owner = $new_uploads = '';
 $user_id = $account->CheckLogin() ? $account->UserID() : 0;
@@ -48,39 +95,6 @@ try {
 		$db = new PDO(PDO_ONLINE, USER_ONLINE, PWD_ONLINE);
 	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	$db->exec("SET NAMES UTF8");
-
-	function PublicSymlistOwner() {
-
-		global $db;
-	
-		// First get its user ID
-		$select = $db->prepare('SELECT user_id FROM hvsc_folders WHERE fullname = :folder LIMIT 1');
-		$select->execute(array(':folder'=>substr($_GET['folder'], 1)));
-		$select->setFetchMode(PDO::FETCH_OBJ);
-	
-		$owner = 'an unknown user';
-		if ($select->rowCount()) {
-			// Now get the name of the user ID
-			$select_user = $db->query('SELECT username FROM users WHERE id = '.$select->fetch()->user_id.' LIMIT 1');
-			$select_user->setFetchMode(PDO::FETCH_OBJ);
-			if ($select_user->rowCount())
-				$owner = $select_user->fetch()->username;
-		}
-		return $owner;
-	}
-
-	function ParseQuery($query) {
-
-		// Replace spaces ('_') inside quoted queries with '%' and remove the quotes themselves
-		// NOTE: This is actually a weird shortcut and sometimes produce unexpected results.
-		preg_match_all('/"[^"]+"/', $query, $quoted);
-		foreach($quoted[0] as $q) {
-			$adapted = trim(str_replace('_', '%', $q), '"');
-			$query = str_replace($q, $adapted, $query);
-		}
-		// Get rid of any lonely quote stragglers and return an array
-		return explode('_', str_replace('"', '', $query));
-	}
 
 	if ($isSearching) {
 

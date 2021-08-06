@@ -1218,6 +1218,11 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>August 6, 2021</h3>
+						<ul>
+							<li>Fixed search for competition folders showing incorrect results.</li>
+						</ul>
+
 						<h3>August 5, 2021</h3>
 						<ul>
 							<li>The root page now shows three big lists in the bottom &ndash; one for active composers
@@ -1225,6 +1230,7 @@
 								game composers. The two first lists for this and last year may have a few "noise" entries
 								in them because of the way HVSC adds old tunes as new releases. I'll see what I can do
 								to iron these out over time.</li>
+							<li>Added the CSDb music competitions related to HVSC #75.</li>
 						</ul>
 
 						<h3>August 2, 2021</h3>

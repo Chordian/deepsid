@@ -1173,9 +1173,9 @@ Browser.prototype = {
 
 							// COMPETITION FOLDERS
 
-							if (this.cache.compolist.length)
+							/*if (this.cache.compolist.length)
 								// The cache has the correct order if sorted recently
-								folder = this.cache.compolist[i];
+								folder = this.cache.compolist[i];*/
 
 							this.compolist.push({
 								incompatible:	folder.incompatible,
@@ -1369,7 +1369,7 @@ Browser.prototype = {
 					this.folders = this.folders.slice(0, pos) + this.folders.slice(pos).replace('<tr>', '<tr class="last">');*/
 					$("#songs table").append(this.folders+files);
 
-					if (this.path == "/CSDb Music Competitions" || this.path == "/_Compute's Gazette SID Collection") {
+					if ((this.path == "/CSDb Music Competitions" || this.path == "/_Compute's Gazette SID Collection") && !this.isSearching) {
 						// Cache this big folder for fast back-browsing
 						this.cache.folder = this.folders+files;
 						this.cache.incompatible = data.incompatible;

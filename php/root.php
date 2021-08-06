@@ -18,7 +18,7 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH
 	die("Direct access not permitted.");
 
 /**
- * Returns the HTML for a recommendation box.
+ * Return the HTML for a recommendation box.
  *
  * @param		int			a random ID for a HVSC composer
  *
@@ -117,7 +117,7 @@ function CreateRecBox($random_id) {
 }
 
 /**
- * Creates an associative array from the latest database query.
+ * Create an associative array from the latest database query.
  * 
  * @param		object		rows from database (by reference)
  * @param		array		composers (by reference)
@@ -159,7 +159,7 @@ function CreateComposersArray(&$select, &$composers, $pro = false) {
 }
 
 /**
- * Returns the HTML for one 'quick box' table cell.
+ * Return the HTML for one 'quick box' table cell.
  *
  * @param		array		authors (by reference)
  *
@@ -190,7 +190,7 @@ function QuickShortcutRow(&$author) {
 	return $return_row;
 }
 
-/* BEGIN CODE */
+/****************/
 
 $decent_box_shown = false;
 
