@@ -104,10 +104,9 @@ try {
 
 		// This tricky logic disallows symlists unless searching for everything
 		if ((!$isPublicSymlist && !$isPersonalSymlist) ||
-
 			(!$_GET['searchHere'] && ($isPublicSymlist || $isPersonalSymlist))) {
 
-			// SEARCH PHYSICAL FILES AND FOLDERS
+			// SEARCH PHYSICAL FILES
 
 			// Perform a search query and fill the array with the results of fullnames
 			$select = null;
@@ -262,6 +261,8 @@ try {
 					$files[] = $row->fullname;
 			}
 
+			// SEARCH PHYSICAL FOLDERS
+
 			// Repeat search query again but this time for folders
 			// NOTE: Notice the extra "NOT LIKE" to avoid finding personal playlists by other users.
 			$select = null;
@@ -300,7 +301,7 @@ try {
 					$include = str_replace('#all#', 'fullname', $include_folders);
 					$exclude = str_replace('#all#', 'fullname', $exclude_folders);
 				}
-				$select = $db->query('SELECT fullname FROM hvsc_folders WHERE '.$searchContext.' AND '.$include.$exclude.' AND (fullname NOT LIKE "!%") LIMIT 1000');
+				$select = $db->query('SELECT fullname FROM hvsc_folders WHERE '.$searchContext.' AND '.$include.$exclude.' AND (fullname NOT LIKE "!%") AND (fullname NOT LIKE "_High Voltage SID Collection/^%") LIMIT 1000');
 			}
 
 			if ($select) {
@@ -701,11 +702,6 @@ try {
 			$files[] = $ss_name;
 			$search_shortcut_type[$ss_name] = 'special';
 			$search_shortcut_query[$ss_name] = 'multisid';
-
-			$ss_name = '^040Popular game composers';
-			$files[] = $ss_name;
-			$search_shortcut_type[$ss_name] = 'special';
-			$search_shortcut_query[$ss_name] = 'gamecomposers';
 		}
 
 		// The root is also home to 'SID Happens' which needs a count of files uploaded today

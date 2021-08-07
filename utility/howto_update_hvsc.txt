@@ -149,8 +149,8 @@ Import general SIDId player data:
   4. Write "fullname,player" in the "Column names" edit box.
   5. Click "Go".
   6. Repeat the above steps again for the other CSV file parts.
-  7. Export the "hvsc_files_import" to an SQL file for later import online. This way you won't
-     have to import the parts above, just that SQL file.
+  7. Export the "hvsc_files_import" to an SQL file for later import online. This way you won't have to
+     import the parts above, just that SQL file.
 
   1. Enter the "hvsc_files" table and click "SQL" (empty the box).
   2. Run the following:
@@ -160,7 +160,7 @@ Import general SIDId player data:
        SET hvsc_files.player = hvsc_files_import.player
 
   3. Enter the "hvsc_files_import" table and click "Operations".
-  4. Drop the table (or truncate it if you need more updating).
+  4. Truncate the table so it is ready for more updating.
 
 Import specific SIDId player data:
 
@@ -183,18 +183,13 @@ Import specific SIDId player data:
   2. Open the resulting "_import.csv" file and page down in it, making sure there are no odd lines.
   3. There are probably a weird "SUB" in the bottom, delete to leave an empty line as last.
 
-  1. Enter the "hvsc_files" and click "Operations".
-  2. In "Copy table to (database.table):" select "Structure only"
-  3. Enter "hvsc_files_import" as the destination name.
-  4. Click "Go" to create it.
-
-  1. Enter the new "hvsc_files_import" table and click "Import".
-  2. Click "Browse" and select the "_import.csv" file.
+  1. Enter the empty "hvsc_files_import" table again and click "Import".
+  2. Click "Browse" and select the CSV file.
   3. Change "Format" to "CSV".
   4. Write "fullname,player" in the "Column names" edit box.
   5. Click "Go".
-  6. Export the "hvsc_files_import" to an SQL file for later import online. This way you won't
-     have to import the above, just that SQL file.
+  6. Export the "hvsc_files_import" to an SQL file for later import online. This way you won't have to
+     import the above, just that SQL file.
 
   1. Enter the "hvsc_files" table and click "SQL" (empty the box).
   2. Run the following:
@@ -204,7 +199,7 @@ Import specific SIDId player data:
        SET hvsc_files.player = hvsc_files_import.player
 
   3. Enter the "hvsc_files_import" table and click "Operations".
-  4. Drop the table (or truncate it if you need more updating).
+  4. Truncate the table so it is ready for more updating.
 
 Import HVSC song lengths:
 
@@ -225,9 +220,24 @@ Import HVSC song lengths:
   7. Split the file into four CSV files of max 15000 lines using FileSplitter, which is present in the
      utility folder. (PhpMyAdmin can't handle it all).
 
-  1. Repeat the same DB import procedure as for players earlier, except:
-        1. Specify "fullname,lengths" instead in the "Column names" edit box.
-        2. Specify ".lengths" instead of ".player" in the third line of the SQL.
+  1. Enter the empty "hvsc_files_import" table and click "Import".
+  2. Click "Browse" and click the first CSV file.
+  3. Change "Format" to "CSV".
+  4. Write "fullname,lengths" in the "Column names" edit box.
+  5. Click "Go".
+  6. Repeat the above steps again for the other CSV file parts.
+  7. Export the "hvsc_files_import" to an SQL file for later import online. This way you won't have to
+     import the parts above, just that SQL file.
+
+  1. Enter the "hvsc_files" table and click "SQL" (empty the box).
+  2. Run the following:
+
+       UPDATE hvsc_files
+       INNER JOIN hvsc_files_import on hvsc_files_import.fullname = hvsc_files.fullname
+       SET hvsc_files.lengths = hvsc_files_import.lengths
+
+  3. Enter the "hvsc_files_import" table and click "Operations".
+  4. Truncate the table so it is ready for more updating.
 
 Import data from the SID files themselves:
 
@@ -267,34 +277,46 @@ Import data from the SID files themselves:
  23. Split "sidinfo.csv" into six CSV files of max 10000 lines using FileSplitter, which is present in
      the utility folder. (PhpMyAdmin can't handle it all).
 
-  1. Repeat the same DB import procedure as for players earlier, except:
-        1. In "Columns enclosed with" delete the quote character there, leaving the edit box empty.
-        2. In "Columns escaped with" type a backslash character instead.
-        3. Specify: fullname,type,version,playertype,playercompat,clockspeed,sidmodel,dataoffset,
-           datasize,loadaddr,initaddr,playaddr,subtunes,startsubtune,name,author,copyright,hash
-        4. If you missed something, you'll get red import errors. The good news is that the error reports
-           the line you have to edit.
-        5. When all of the CSV files have been succesfully imported, run the following SQL:
+  1. Enter the empty "hvsc_files_import" table and click "Import".
+  2. Click "Browse" and click the first CSV file.
+  3. Change "Format" to "CSV".
+  4. In "Columns enclosed with" delete the quote character there, leaving the edit box empty.
+  5. In "Columns escaped with" type a backslash character instead.
+  6. Specify: fullname,type,version,playertype,playercompat,clockspeed,sidmodel,dataoffset,
+              datasize,loadaddr,initaddr,playaddr,subtunes,startsubtune,name,author,copyright,hash
+  7. Click "Go".
+  8. If you missed something in the CSV files, you'll get red import errors. The good news is that the
+     error reports the line you have to edit.
+  9. Repeat the above steps again for the other CSV file parts.
+ 10. Export the "hvsc_files_import" to an SQL file for later import online. This way you won't have to
+     import the parts above, just that SQL file.
 
-             UPDATE hvsc_files
-             INNER JOIN hvsc_files_import on hvsc_files_import.fullname = hvsc_files.fullname
-             SET hvsc_files.type = hvsc_files_import.type,
-                 hvsc_files.version = hvsc_files_import.version,
-                 hvsc_files.playertype = hvsc_files_import.playertype,
-                 hvsc_files.playercompat = hvsc_files_import.playercompat,
-                 hvsc_files.clockspeed = hvsc_files_import.clockspeed,
-                 hvsc_files.sidmodel = hvsc_files_import.sidmodel,
-                 hvsc_files.dataoffset = hvsc_files_import.dataoffset,
-                 hvsc_files.datasize = hvsc_files_import.datasize,
-                 hvsc_files.loadaddr = hvsc_files_import.loadaddr,
-                 hvsc_files.initaddr = hvsc_files_import.initaddr,
-                 hvsc_files.playaddr = hvsc_files_import.playaddr,
-                 hvsc_files.subtunes = hvsc_files_import.subtunes,
-                 hvsc_files.startsubtune = hvsc_files_import.startsubtune,
-                 hvsc_files.name = hvsc_files_import.name,
-                 hvsc_files.author = hvsc_files_import.author,
-                 hvsc_files.copyright = hvsc_files_import.copyright,
-                 hvsc_files.hash = hvsc_files_import.hash
+  1. When all of the CSV files have been succesfully imported, enter the "hvsc_files" table and
+     click "SQL" (empty the box).
+  2. Run the following:
+
+       UPDATE hvsc_files
+       INNER JOIN hvsc_files_import on hvsc_files_import.fullname = hvsc_files.fullname
+       SET hvsc_files.type = hvsc_files_import.type,
+           hvsc_files.version = hvsc_files_import.version,
+           hvsc_files.playertype = hvsc_files_import.playertype,
+           hvsc_files.playercompat = hvsc_files_import.playercompat,
+           hvsc_files.clockspeed = hvsc_files_import.clockspeed,
+           hvsc_files.sidmodel = hvsc_files_import.sidmodel,
+           hvsc_files.dataoffset = hvsc_files_import.dataoffset,
+           hvsc_files.datasize = hvsc_files_import.datasize,
+           hvsc_files.loadaddr = hvsc_files_import.loadaddr,
+           hvsc_files.initaddr = hvsc_files_import.initaddr,
+           hvsc_files.playaddr = hvsc_files_import.playaddr,
+           hvsc_files.subtunes = hvsc_files_import.subtunes,
+           hvsc_files.startsubtune = hvsc_files_import.startsubtune,
+           hvsc_files.name = hvsc_files_import.name,
+           hvsc_files.author = hvsc_files_import.author,
+           hvsc_files.copyright = hvsc_files_import.copyright,
+           hvsc_files.hash = hvsc_files_import.hash
+
+  3. Enter the "hvsc_files_import" table and click "Operations".
+  4. Truncate the table so it is ready for more updating.
 
 Import STIL entries:
 
@@ -302,9 +324,23 @@ Import STIL entries:
   2. Open a command box there and run: python stil.py
   3. Edit the resulting "stil.csv" in Notepad++, choose menu Encoding > Convert to UTF8, then save.
 
-  1. Repeat the same DB import procedure as for players earlier, except:
-        1. Specify "fullname,stil" instead in the "Column names" edit box.
-        2. Specify ".stil" instead of ".player" in the third line of the SQL.
+  1. Enter the empty "hvsc_files_import" table again and click "Import".
+  2. Click "Browse" and select the CSV file.
+  3. Change "Format" to "CSV".
+  4. Write "fullname,stil" in the "Column names" edit box.
+  5. Click "Go".
+  6. Export the "hvsc_files_import" to an SQL file for later import online. This way you won't have to
+     import the above, just that SQL file.
+
+  1. Enter the "hvsc_files" table and click "SQL" (empty the box).
+  2. Run the following:
+
+       UPDATE hvsc_files
+       INNER JOIN hvsc_files_import on hvsc_files_import.fullname = hvsc_files.fullname
+       SET hvsc_files.stil = hvsc_files_import.stil
+
+  3. Enter the "hvsc_files_import" table and click "Operations".
+  4. Truncate the table so it is ready for more updating.
 
 Update CSDb data:
 
@@ -324,12 +360,7 @@ shown for it, CSDb is not updated yet. In that case I recommend bookmarking the 
   7. Repeat step 2 and 3 for 35000-[The value you rounded up to]. (It doesn't matter if it walks
      too far, the script will just ignore it.)
 
-  1. Enter the "hvsc_files" and click "Operations".
-  2. In "Copy table to (database.table):" select "Structure only"
-  3. Enter "hvsc_files_import" as the destination name.
-  4. Click "Go" to create it.
-
-  1. Enter the new "hvsc_files_import" table and click "Import".
+  1. Enter the empty "hvsc_files_import" table and click "Import".
   2. Click "Browse" and select a CSV file.
   3. Change "Format" to "CSV".
   4. Write "fullname,csdbtype,csdbid" in the "Column names" edit box.
@@ -345,7 +376,7 @@ shown for it, CSDb is not updated yet. In that case I recommend bookmarking the 
            hvsc_files.csdbid = hvsc_files_import.csdbid
 
   3. Enter the "hvsc_files_import" table and click "Operations".
-  4. Drop the table.
+  4. Drop the table (or truncate it for the next HVSC update).
 
 Fixing HVSC update discrepancies:
 
@@ -355,7 +386,7 @@ Fixing HVSC update discrepancies:
 
   1. To see if you have any of these, go to the SQL box for the "hvsc_files" table and execute:
 
-     SELECT * FROM hvsc_files WHERE fullname LIKE "%high voltage%" AND datasize = 0
+         SELECT * FROM hvsc_files WHERE fullname LIKE "%high voltage%" AND datasize = 0
 
      This will list the problem rows.
 
@@ -431,14 +462,11 @@ Import count of files in folders:
        SET hvsc_folders.files = hvsc_folders_import.files
 
   3. Enter the "hvsc_folders_import" table and click "Operations".
-  4. Drop the table (or truncate it if you need more updating).
-
-For CGSC, copy the folder to the root, then "del /s *.str", "del /s *.wds" and "del /s *.txt" inside
-it. Now you can follow the procedure above.
+  4. Drop the table (or truncate it for the next HVSC update).
 
 Update count of letter folders in 'MUSICIANS' for HVSC:
 
-NOTE: I'm not 100% sure if this is deprecated because of the next part. (I skipped it for HVSC #71+.)
+NOTE: I'm not 100% sure if this is deprecated because of the next part (I skipped it for HVSC #71+).
 
   1. Enter a letter folder in File Explorer and open a command box there.
   2. Type: dir
@@ -512,7 +540,7 @@ http://deepsid.chordian.net/?file=/MUSICIANS/N/Nebula&here=1&search=mixer&type=p
 
 LATEST ACTIVITY
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-Now the "composers" table need to be updated with the years each one were last active.
+Now the "composers" table need to be updated with the years that each one were last active.
 
 IT'S IMPORTANT THAT THE ABOVE SPECIAL DB SCRIPT HAS RUN PRIOR TO DOING THIS. The reason is that it
 amends a few years here and there to work better with the statistics in DeepSID.

@@ -3,18 +3,10 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- Wait to see if the latest JS changes makes it to Eric Dobek's computer. If nothing changes:
-  Add another tweak that also handles his date format in the PHP just before adding to database.
-
-- Remove the 'game composers' search shortcut in HVSC first level folder.
-
 - Update 'special' script with year changes to "made in 1989, released in 2020" cases while
   also changing 'active' year in composer table (both local and online).
 
 - Search shortcuts should show a folder icon with a small magnifying glass inside of it.
-
-- Tony Kelly's HVSC folder is empty. If this is correct you should remove it completely.
-  NOTE: His folder only appears when searching.
 
 - Idea: A ~2px left edge color border on those rows with a specific player. Maybe so it fades
   into transparent during the next 5-10px towards the right.
@@ -38,6 +30,9 @@ SHOULD BE DONE
   - Tab is called "Intro" until clicking tunes, then it reverts to "Profile" again.
   - On folder entry there is an EDIT button that opens a custom dialog box. Accepts HTML code.
   - Create new "symlists_intro" database table for JOIN use.
+
+- Wait to see if the latest JS changes makes it to Eric Dobek's computer. If nothing changes:
+  Add another tweak that also handles his date format in the PHP just before adding to database.
 
 
 CONSIDER THIS

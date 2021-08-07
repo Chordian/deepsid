@@ -1221,6 +1221,10 @@
 						<h3>August 6, 2021</h3>
 						<ul>
 							<li>Fixed search for competition folders showing incorrect results.</li>
+							<li>Removed the search shortcut for game composers. Apart from not being able to show all
+								tunes in one big list before hitting the search cap, the new big list in the root page
+								also makes the search shortcut redundant.</li>
+							<li>It is no longer possible to search for search shortcuts.</li>
 						</ul>
 
 						<h3>August 5, 2021</h3>
@@ -1257,7 +1261,7 @@
 								<ul>
 							<li>A search shortcut for multispeed finds all tags with "Multispeed" or "2x" and up to "16x" speeds.</li>
 							<li>A search shortcut for multisid finds all "2SID", "3SID", "4SID", "8SID" and "10SID" tunes.</li>
-							<li>A search shortcut for game composers finds all soundtracks from popular game composers.</li>
+							<li><del>A search shortcut for game composers finds all soundtracks from popular game composers.</del></li>
 						</ul>
 							</li>
 						</ul>
