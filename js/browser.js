@@ -33,6 +33,8 @@ const TR_DIVIDER	= '<tr class="disabled"><td class="divider" colspan="2"></td></
 	this.secondsLength = 0;
 	this.chips = 1;
 
+	this.slideTags = false;
+
 	this.isMobile = $("body").attr("data-mobile") !== "0";
 
 	this.init();
@@ -63,7 +65,7 @@ Browser.prototype = {
 		$("#songs")
 			.on("click", "button,tr", this.onClick.bind(this))
 			.on("mouseover", "tr", this.onMouseOver.bind(this))
-			.on("mouseleave", "tr", this.onMouseLeave.bind(this))
+			.on("mouseleave", "tr", this.onMouseLeave.bind(this));
 		$("#dialog-tags").on("click", "button", this.onClickDialogBox.bind(this));
 		$("#dropdown-sort").change(this.onChange.bind(this));
 		$("#topic-csdb").on("change", "#dropdown-sort-csdb", this.onChangeCSDb.bind(this));
@@ -77,7 +79,7 @@ Browser.prototype = {
 			.on("mouseleave", "#contextmenu .submenu,#contextsubmenu", function() {
 				if (!$("#contextsubmenu").is(":hover"))
 					$("#contextsubmenu").remove();
-			})
+			});
 
 		setInterval(function() {
 			// Update clock
@@ -230,6 +232,7 @@ Browser.prototype = {
 						.animate({
 							left: "-"+($tagsLine[0].offsetLeft + 6)+"px",
 						}, 600, "easeOutQuint");
+					this.slideTags = true;
 				}
 			}
 		}
@@ -247,9 +250,12 @@ Browser.prototype = {
 	 */
 	onMouseLeave: function() {
 		// Slide previously moved tag lines back to their default spot
-		$("#songs .tags-line").animate({
-				left: "0",
-			}, 600, "easeOutQuint").data("left", 0);
+		if (this.slideTags) {
+			$("#songs .tags-line").animate({
+					left: "0",
+				}, 600, "easeOutQuint").data("left", 0);
+			this.slideTags = false;
+		}
 		// Hide all edit tag "+" buttons
 		$("#songs .edit-tags").hide();
 	},

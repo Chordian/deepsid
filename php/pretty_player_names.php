@@ -69,7 +69,7 @@ $prettyPlayerNames = array(
 	'Gavin_Raeburn' =>			'Gavin Raeburn\'s player',
 	'Georg_Brandt' =>			'Georg Brandt\'s player',
 	'Gilles_Soulet' =>			'Gilles Soulet\'s player',
-	// Don't add for standalone 'Glover' here
+	// Glover's player is handled in 'hvsc.php' itself
 	'Golem' =>					'Golem\'s player',
 	'Guy_Shavitt' =>			'Guy Shavitt\'s player',
 	'Hans_Siemons' =>			'Hans Siemons\' player',

@@ -101,9 +101,9 @@ First, do steps 1 to 7 above as you will need the big file later.
 
   1. Go to the SQL box for the "hvsc_folders" table and execute this:
 
-     SELECT id, fullname FROM hvsc_folders WHERE fullname IN (
-       SELECT fullname FROM hvsc_folders GROUP BY fullname HAVING count(*) > 1
-     ) ORDER BY fullname
+       SELECT id, fullname FROM hvsc_folders WHERE fullname IN (
+         SELECT fullname FROM hvsc_folders GROUP BY fullname HAVING count(*) > 1
+       ) ORDER BY fullname
 
      This will list all duplicate folders. (Don't bother with playlist folders.)
 
@@ -386,7 +386,7 @@ Fixing HVSC update discrepancies:
 
   1. To see if you have any of these, go to the SQL box for the "hvsc_files" table and execute:
 
-         SELECT * FROM hvsc_files WHERE fullname LIKE "%high voltage%" AND datasize = 0
+       SELECT * FROM hvsc_files WHERE fullname LIKE "%high voltage%" AND datasize = 0
 
      This will list the problem rows.
 
