@@ -3,8 +3,9 @@
  * DeepSID / Browser
  */
 
-const TR_SPACER 	= '<tr class="disabled"><td class="spacer" colspan="2"></td></tr>';
-const TR_DIVIDER	= '<tr class="disabled"><td class="divider" colspan="2"></td></tr>';
+const TR_SPACER 		= '<tr class="disabled"><td class="spacer" colspan="2"></td></tr>';
+const TR_DIVIDER		= '<tr class="disabled"><td class="divider" colspan="2"></td></tr>';
+const CUSTOM_SCROLLBAR	= false;
 
  function Browser() {
 
@@ -304,7 +305,7 @@ Browser.prototype = {
 				ctrls.state("subtunes", "disabled");
 				ctrls.state("loop", "disabled");
 
-				this.scrollPositions.push(this.currentScrollPos); // Remember where we parked
+				this.scrollPositions.push($("#folders").scrollTop()); // Remember where we parked
 				this.getFolder(0, $("#search-box").val().replace(/\s/g, "_"));
 				break;
 			case "search-cancel":
@@ -481,7 +482,7 @@ Browser.prototype = {
 						ctrls.state("subtunes", "disabled");
 						ctrls.state("loop", "disabled");
 
-						this.scrollPositions.push(this.currentScrollPos); // Remember where we parked
+						this.scrollPositions.push($("#folders").scrollTop()); // Remember where we parked
 						this.currentScrollPos = 0;
 						this.getFolder(0, undefined, undefined, function() {
 							this.cache.folderTags = this.showFolderTags();
@@ -954,7 +955,7 @@ Browser.prototype = {
 			this.cache.compolist = this.compolist;
 		}
 
-		if (this.isMobile)
+		if (this.isMobile || !CUSTOM_SCROLLBAR)
 			$("#folders").scrollTop(0);
 		else
 			$("#folders").mCustomScrollbar("scrollTo", "top");
@@ -990,7 +991,7 @@ Browser.prototype = {
 			// LOAD FROM CACHE
 
 			ctrls.state("root/back", "enabled");
-			if (!this.isMobile) $("#folders").mCustomScrollbar("destroy");
+			if (!this.isMobile && CUSTOM_SCROLLBAR) $("#folders").mCustomScrollbar("destroy");
 
 			// Disable emulators/handlers in the drop-down according to parent folder attributes
 			$("#dropdown-emulator").styledOptionState("websid legacy jssid soasc_auto soasc_r2 soasc_r4 soasc_r5 download", "enabled");
@@ -1016,9 +1017,13 @@ Browser.prototype = {
 				this.compolist = this.cache.compolist;
 
 				// Let mobile devices use their own touch scrolling stuff
-				if (this.isMobile) {
+				if (this.isMobile || !CUSTOM_SCROLLBAR) {
 					// Hack to make sure the bottom search bar sits in the correct bottom of the viewport
 					$(window).trigger("resize");
+					$("#folders")
+						.css("scroll-behavior", "auto")
+						.scrollTop(scrollPos)
+						.css("scroll-behavior", "smooth");
 				} else {
 					// Ugly hack to make custom scroll bar respect flexbox height
 					$("#folders").height($("#folders").height())
@@ -1095,7 +1100,7 @@ Browser.prototype = {
 					clearTimeout(loading);
 					$("#loading").hide();
 					ctrls.state("root/back", "enabled");
-					if (!this.isMobile) $("#folders").mCustomScrollbar("destroy");
+					if (!this.isMobile && CUSTOM_SCROLLBAR) $("#folders").mCustomScrollbar("destroy");
 					this.folders = this.extra = this.symlists = this.searchShortcutNew = this.searchShortcutOther = "";
 					var files = "";
 
@@ -1383,9 +1388,13 @@ Browser.prototype = {
 					}
 
 					// Let mobile devices use their own touch scrolling stuff
-					if (this.isMobile) {
+					if (this.isMobile || !CUSTOM_SCROLLBAR) {
 						// Hack to make sure the bottom search bar sits in the correct bottom of the viewport
 						$(window).trigger("resize");
+						$("#folders")
+							.css("scroll-behavior", "auto")
+							.scrollTop(scrollPos)
+							.css("scroll-behavior", "smooth");
 					} else {
 						// Ugly hack to make custom scroll bar respect flexbox height
 						$("#folders").height($("#folders").height())

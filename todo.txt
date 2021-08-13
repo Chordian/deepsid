@@ -3,9 +3,6 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- Update 'special' script with year changes to "made in 1989, released in 2020" cases while
-  also changing 'active' year in composer table (both local and online).
-
 - http://deepsid.chordian.net/?file=/MUSICIANS/G/Gas_On/
   Where are the statistics from 1994-96 coming from here?
 

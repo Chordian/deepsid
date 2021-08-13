@@ -234,7 +234,7 @@ $(function() { // DOM ready
 					data = $.parseJSON(data);
 
 					ctrls.state("root/back", "enabled");
-					if (!browser.isMobile) $("#folders").mCustomScrollbar("destroy");
+					if (!browser.isMobile && CUSTOM_SCROLLBAR) $("#folders").mCustomScrollbar("destroy");
 
 					$("#dropdown-emulator").styledOptionState("websid legacy jssid", "enabled");
 					$("#dropdown-emulator").styledOptionState("soasc_auto soasc_r2 soasc_r4 soasc_r5", "disabled");
@@ -292,9 +292,13 @@ $(function() { // DOM ready
 					$("#songs table").empty().append(files);
 
 					// Let mobile devices use their own touch scrolling stuff
-					if (browser.isMobile) {
+					if (browser.isMobile || !CUSTOM_SCROLLBAR) {
 						// Hack to make sure the bottom search bar sits in the correct bottom of the viewport
 						$(window).trigger("resize");
+						$("#folders")
+							.css("scroll-behavior", "auto")
+							.scrollTop(scrollPos)
+							.css("scroll-behavior", "smooth");
 					} else {
 						// Ugly hack to make custom scroll bar respect flexbox height
 						$("#folders").height($("#folders").height())
@@ -1355,7 +1359,7 @@ $(function() { // DOM ready
 			// Scroll the row into the middle of the list
 			var rowPos = $trPlay[0].offsetTop,
 				halfway = $("#folders").height() / 2 - 26; // Last value is half of SID file row height
-			if (browser.isMobile)
+			if (browser.isMobile || !CUSTOM_SCROLLBAR)
 				$("#folders").scrollTop(rowPos > halfway ? rowPos - halfway : 0);
 			else
 				$("#folders").mCustomScrollbar("scrollTo", rowPos > halfway ? rowPos - halfway : "top");
@@ -1381,7 +1385,7 @@ $(function() { // DOM ready
 		typeCSDb = GetParam("csdbtype"),
 		idCSDb = GetParam("csdbid");
 	// Let mobile devices use their own touch scrolling stuff
-	if (browser.isMobile) {
+	if (browser.isMobile || !CUSTOM_SCROLLBAR) {
 		// Hack to make sure the bottom search bar sits in the correct bottom of the viewport
 		$(window).trigger("resize");
 	} else {
@@ -1461,7 +1465,7 @@ $(function() { // DOM ready
 				// Scroll the row into the middle of the list
 				var rowPos = $trAutoPlay[0].offsetTop;
 				var halfway = $("#folders").height() / 2 - 26; // Last value is half of SID file row height
-				if (browser.isMobile)
+				if (browser.isMobile || !CUSTOM_SCROLLBAR)
 					$("#folders").scrollTop(rowPos > halfway ? rowPos - halfway : 0);
 				else
 					$("#folders").mCustomScrollbar("scrollTo", rowPos > halfway ? rowPos - halfway : "top");

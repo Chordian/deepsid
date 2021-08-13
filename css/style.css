@@ -127,6 +127,11 @@
 	--color-bg-ffi:					var(--color-top);
 	--color-text-ffi:				#181818;
 
+	--color-scrollbar-thumb:		#ccccbe;
+	--color-scrollbar-thumb-hover:	#a5a59a;
+	--color-scrollbar-thumb-active:	#606059;
+	--color-scrollbar-track:		#ecece6;
+
 	--color-settings-cog-icon:		var(--color-button-hover);
 	--color-settings-bold:			var(--color-bottom);
 
@@ -485,6 +490,11 @@
 
 	--color-bg-ffi:					var(--color-bg);
 	--color-text-ffi:				var(--color-text-body);
+
+	--color-scrollbar-thumb:		#555;
+	--color-scrollbar-thumb-hover:	#6a6a6a;
+	--color-scrollbar-thumb-active:	#b7b7b7;
+	--color-scrollbar-track:		#1c1c1c;
 
 	--color-settings-cog-icon:		#6a6c68;
 	--color-settings-bold:			var(--color-top);
@@ -2641,11 +2651,35 @@ input[type=range]::-ms-track {
 
 	/* Scrollable box with folders and SID files */
 	#folders {
-		overflow: auto;
+		overflow-y: auto;
+		overflow-x: hidden;
+		scrollbar-width: thin;
+		scroll-behavior: smooth;
+		scrollbar-color: var(--color-scrollbar-thumb) var(--color-scrollbar-track);
 		height: calc(100% - 100px); /* Minus the height of #songs-buttons and #search */
 		border-top: 1px solid var(--color-border-box);
 		border-bottom: 1px solid var(--color-border-box);
 	}
+
+	::-webkit-scrollbar {
+		width: 8px;
+	}
+	
+	::-webkit-scrollbar-track {
+		background: var(--color-scrollbar-track);
+	}
+	
+	::-webkit-scrollbar-thumb {
+		background-color: var(--color-scrollbar-thumb);
+	}
+	
+		::-webkit-scrollbar-thumb:hover {
+			background-color: var(--color-scrollbar-thumb-hover);
+		}
+	
+		::-webkit-scrollbar-thumb:active {
+			background-color: var(--color-scrollbar-thumb-active);
+		}
 
 	/* A clicked SID file for playing */
 	#songs .selected {
@@ -2679,7 +2713,7 @@ input[type=range]::-ms-track {
 		}
 
 		#songs td.stars {
-			width: 118px;
+			width: 101px;
 			padding: 0;
 		}
 
@@ -2762,7 +2796,7 @@ input[type=range]::-ms-track {
 		#page .block-wrap {
 			position: relative;
 			display: inline-block;
-			max-width: 294px; /* Width before right end turns in to "..." ellipsis */
+			max-width: 300px; /* Width before right end turns in to "..." ellipsis */
 		}
 
 		#page .block-wrap {
@@ -2806,7 +2840,7 @@ input[type=range]::-ms-track {
 
 		#songs td.sid {
 			position: relative;
-			max-width: 311px; /* This fix prevents the left TD from pushing the TD with star ratings */
+			max-width: 325px; /* This fix prevents the left TD from pushing the TD with star ratings */
 		}
 
 		/* Alloyrun.sid (file) */

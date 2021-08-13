@@ -1218,6 +1218,12 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>August 13, 2021</h3>
+						<ul>
+							<li>The browser pane with folders and files now uses a thin version of the default web
+								browser scrollbar instead of the custom scrollbar jQuery plugin.</li>
+						</ul>
+
 						<h3>August 6, 2021</h3>
 						<ul>
 							<li>Fixed search for competition folders showing incorrect results.</li>
