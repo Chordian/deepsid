@@ -6,6 +6,9 @@ SHOULD BE DONE
 - http://deepsid.chordian.net/?file=/MUSICIANS/G/Gas_On/
   Where are the statistics from 1994-96 coming from here?
 
+- BUG: Click tag sundry box. Play tune. Click FOLDERS button. It disappears. But then click any
+  of the other two sundry tabs and then back again. Now the FOLDERS button is back!?
+
 - Search shortcuts should show a folder icon with a small magnifying glass inside of it.
 
 - Idea: A ~2px left edge color border on those rows with a specific player. Maybe so it fades
@@ -34,6 +37,10 @@ SHOULD BE DONE
 - Wait to see if the latest JS changes makes it to Eric Dobek's computer. If nothing changes:
   Add another tweak that also handles his date format in the PHP just before adding to database.
 
+- Consider moving all JCH's ratings to a unique account that is used for determining the quality
+  settings, etc. Getting tired of not being able to rate certain folders.
+  - Perhaps a selective copy - only the stuff needed. Would ratings for folders suffice?
+
 
 CONSIDER THIS
 ¯¯¯¯¯¯¯¯¯¯¯¯¯
@@ -45,10 +52,8 @@ CONSIDER THIS
 
 - Buttons 'Attach' and 'Detach' for CSDb release pages (maybe only for me to begin with).
 - Maybe use .duration method for Howler instead of database length?
-- CGSC: For SOASC, get file lengths and overwrite 5:00 with them. (Change 5:00 to 0:00?)
 - Need an extra URL parameter for file request to set loop on, e.g. "&loop=true".
 - Place an external link icon in the bottom right corner of the new CGSC iframe page.
-- Can you let the custom scrollbar catch Home/End/PageUp/PageDn keys?
 - Tilt the years in the activity chart on the composer profiles, so you can have full four digits.
 - Hover on profile images to slide up a transparent bottom panel with image credits.
 - The player text lines by the Chartist bars could be filter links.
@@ -105,18 +110,12 @@ CONSIDER THIS
 - MEMO, player block: A tall rectangle with a zoom box showing where we are in C64 RAM.
   - Maybe it would be best if it always shows the entire span of the C64's RAM?
 
-- Need new settings option: When SOASC fails playing a SID row, set ON to stop there instead
-  of just proceeding to the next row.
-
 - Statistics on player/editor page, listing composers using it (with most hits in top spot).
   - With tabs to toggle between the info table or this.
   - Might not be worth the trouble? Most editors have few users and you can get a perfectly
     good overview just by looking and the browser list yourself.
 
-- Tags:
-  - Settings option: "+" button ON/OFF. Probably ON by default.
-  - Write the "Undo" admin script.
-  - Write a "delete tag" script and remove all those real song genres.
+- Write the "Undo" admin script for tags.
 
 - JW recommended using some extra code to improve the "Click to Play" overlay to not always show up.
   - See the e-mail thread from 29 November 2020 for more information.
@@ -139,10 +138,6 @@ CONSIDER THIS
 - Bug: CSDb: Also a similar problem when opening a release page to already playing "redirect" tune.
 - BUG: Searching for the specific word "data" just returns a compo error.
 - BUG: Swapping color themes fiddles with at least a gray C64font color (maybe more).
-
-- NOT A BUG: SOASC tunes won't play in Firefox from an external link. Although the emulators do,
-  it's still not a bug - it's the anti-auto-play setting in Firefox. Turn it off and it works.
-  - @todo Is this still a problem after adding "click-to-play" in December 2019? (It shouldn't be.)
 
 - See also:
   - A list of similar SID tunes, for example found by comparing STIL artists.
@@ -237,7 +232,6 @@ CONSIDER THIS
 PROBABLY NOT?
 ¯¯¯¯¯¯¯¯¯¯¯¯¯
 - Replace the drop-down boxes in the browser panel with the styled one.
-- Fade out in the last 1-2 seconds of Howler (SOASC) time.
 - Drag-and-drop support. Maybe somehow tagged onto the existing emulator testing upload feature.
 - Consider using storage to remember the main volume setting between sessions.
 - To avoid stutter when stuff is loading, can the emulators be placed in a web worker?
@@ -308,12 +302,6 @@ PROBABLY NOT?
     better too. And the tunes they have problems with, this emulator also have problems with. And just
     like Hermit's emulator, it can't do digi tunes at all.
 
-- If SOASC new method continues to be slow, here's an idea: First request via new method, then
-  immediately try to play using the old direct mirror method. If that works, play and ignore request.
-  If it fails, see if the request gets it right, and if it does, play that. Otherwise go red error row
-  at that point. Maybe show dots moving below ratings when direct mirror fails and request is examined.
-  But only do this if the new abort() system for "soasc.php" is not enough; it's probably not nice.
-
 - In Settings, make buffer size available for users NOT logged in. Then write below that you
   can edit more settings if you log in.
   - The reason I put this in this section is that the "require" message in the oscilloscope tab about the
@@ -333,7 +321,7 @@ PROBABLY NOT?
   
 - Symlists, next version:
   - A fourth option could be "Make a copy for myself only" to be used on a public folder.
-  - A big list of symlists must use a custom scrollbar on the sub context menu.
+  - A big list of symlists must use a scrollbar on the sub context menu.
   - A unique profile tab page that the user can edit and which supports headers, etc. (Maybe find a
     great JS plugin that allows for advanced editing?) - Counter argument: I predict that too many users
     would create a badly formatted page with typos and the like. Also, it would rarely be utilized.

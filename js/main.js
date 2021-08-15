@@ -6,7 +6,7 @@
 var $=jQuery.noConflict();
 
 var cacheCSDb = cacheSticky = cacheStickyBeforeCompo = cacheCSDbProfile = cacheBeforeCompo = cachePlayer = cacheGB64 = cacheRemix = prevFile = sundryTab = reportSTIL = "";
-var cacheTabScrollPos = cachePlayerTabScrollPos = cacheGB64TabScrollPos = cacheRemixTabScrollPos = tabScrollPos = cachePosBeforeCompo = cacheDDCSDbSort = peekCounter = sundryHeight = 0;
+var cacheTabScrollPos = cachePlayerTabScrollPos = cacheGB64TabScrollPos = cacheRemixTabScrollPos = cachePosBeforeCompo = cacheDDCSDbSort = peekCounter = sundryHeight = 0;
 var sundryToggle = true, recommended = forum = players = $trAutoPlay = null, isDebug, showTags;
 
 var isLegacyWebSid = $("script[src='js/handlers/backend_tinyrsid_legacy.js']").length;
@@ -51,7 +51,7 @@ $(function() { // DOM ready
 			storedEmulator = "websid";	// The best WebSid for desktop computers
 	}
 
-	// Don't show tags on mobile devices as the non-custom scroll there might give way to sideways dragging
+	// Don't show tags on mobile devices as the dragging there might give way to sideways scrolling
 	showTags = $("body").attr("data-mobile") == "0";
 
 	// However, a URL switch may TEMPORARILY override the stored emulator
@@ -201,6 +201,13 @@ $(function() { // DOM ready
 	});
 
 	/**
+	 * When scrolling up or down in a dexter page.
+	 */
+	$("#page").on("scroll", function() {
+		tabPrevScrollPos[$("#tabs .selected").attr("data-topic")].reset = false;
+	});
+
+	/**
 	 * Upload the external SID file(s) for temporary emulator testing.
 	 */
 	$("#upload-test").change(function() {
@@ -234,7 +241,6 @@ $(function() { // DOM ready
 					data = $.parseJSON(data);
 
 					ctrls.state("root/back", "enabled");
-					if (!browser.isMobile && CUSTOM_SCROLLBAR) $("#folders").mCustomScrollbar("destroy");
 
 					$("#dropdown-emulator").styledOptionState("websid legacy jssid", "enabled");
 					$("#dropdown-emulator").styledOptionState("soasc_auto soasc_r2 soasc_r4 soasc_r5", "disabled");
@@ -291,35 +297,9 @@ $(function() { // DOM ready
 					});
 					$("#songs table").empty().append(files);
 
-					// Let mobile devices use their own touch scrolling stuff
-					if (browser.isMobile || !CUSTOM_SCROLLBAR) {
-						// Hack to make sure the bottom search bar sits in the correct bottom of the viewport
-						$(window).trigger("resize");
-						$("#folders")
-							.css("scroll-behavior", "auto")
-							.scrollTop(scrollPos)
-							.css("scroll-behavior", "smooth");
-					} else {
-						// Ugly hack to make custom scroll bar respect flexbox height
-						$("#folders").height($("#folders").height())
-							.mCustomScrollbar({
-								axis: "y",
-								theme: (parseInt(colorTheme) ? "light-3" : "dark-3"),
-								setTop: (typeof scrollPos !== "undefined" ? scrollPos+"px" : "0"),
-								scrollButtons:{
-									enable: true,
-									scrollAmount: 6,
-								},
-								mouseWheel:{
-									scrollAmount: 150,
-								},
-								callbacks: {
-									whileScrolling: function() {
-										browser.currentScrollPos = this.mcs.top;
-									}
-								}
-							});
-					}
+					// Hack to make sure the bottom search bar sits in the correct bottom of the viewport
+					$(window).trigger("resize");
+					SetScrollTopInstantly("#folders", scrollPos);
 					DisableIncompatibleRows();
 				});
 			}
@@ -395,8 +375,6 @@ $(function() { // DOM ready
 		// Make sure the browser box always take up all screen height upon resizing the window
 		$("#folders").height(0).height($("#songs").height() - 100);
 		if (!browser.isMobile) {
-			// Also make sure the scrollbar for dexter has the correct height
-			$("#page .mCSB_scrollTools").css("height", $("#page").height() + 13);
 			// Recalculate height for graph area too
 			viz.initGraph(browser.chips);
 			// And that the web site iframe has the correct height too
@@ -607,28 +585,30 @@ $(function() { // DOM ready
 	/**
 	 * When the color theme toggle button is clicked.
 	 * 
-	 * A data attribute is set in the BODY element, and the theme class is toggled
-	 * for all of the currently existing custom scrollbars.
+	 * A data attribute is set in the BODY element. Profile avatars and brand images
+	 * are also changed.
 	 */
 	$("#theme-selector").click(function() {
 		colorTheme ^= 1;
+
 		$("#topic-profile").find("img.composer").each(function() {
 			var $this = $(this);
 			if ($this.attr("src") == "images/composer"+(colorTheme ? "" : "_dark")+".png")
 				$this.attr("src", "images/composer"+(colorTheme ? "_dark" : "")+".png");
 		});
+
 		$("#dexter table.comments").find("img.avatar").each(function() {
 			var $this = $(this);
 			if ($this.attr("src") == "images/composer"+(colorTheme ? "" : "_dark")+".png")
 				$this.attr("src", "images/composer"+(colorTheme ? "_dark" : "")+".png");
 		});
+
 		$("body").attr("data-theme", colorTheme ? "dark" : "")
-			.find(colorTheme ? ".mCS-dark-3" : ".mCS-light-3")
-			.removeClass(colorTheme ? "mCS-dark-3" : ".mCS-light-3")
-			.addClass(colorTheme ? "mCS-light-3" : "mCS-dark-3");
+
 		// Change the brand image too (if available)
 		$("#brand-"+(colorTheme ? "light" : "dark")).hide();
 		$("#brand-"+(colorTheme ? "dark" : "light")).show();
+
 		localStorage.setItem("theme", colorTheme);
 	});
 
@@ -639,14 +619,14 @@ $(function() { // DOM ready
 		var $this = $(this);
 		if ($this.hasClass("selected") || $this.hasClass("disabled")) return false;
 
-		// Store the custom scroll bar position as it is now for the tab we're about to leave
+		// Store the scroll bar position as it is now for the tab we're about to leave
 		var oldTopic = $("#tabs .selected").attr("data-topic");
 		if (typeof oldTopic != "undefined") {
-			tabPrevScrollPos[oldTopic].pos = tabPrevScrollPos[oldTopic].reset ? 0 : tabScrollPos;
+			tabPrevScrollPos[oldTopic].pos = tabPrevScrollPos[oldTopic].reset ? 0 : $("#page").scrollTop();
 			tabPrevScrollPos[oldTopic].reset = false;
 		}
 
-		$("#page").mCustomScrollbar("destroy").removeClass("big-logo");
+		$("#page").removeClass("big-logo");
 
 		var topic = $this.attr("data-topic");
 
@@ -657,12 +637,18 @@ $(function() { // DOM ready
 		// Show the selected topic
 		$("#page .topic,#sticky-csdb,#sticky-visuals").hide();
 		$("#topic-"+topic).show();
-		ShowDexterScrollbar(topic);
+
+		SetScrollTopInstantly("#page", tabPrevScrollPos[topic].pos);
+
+		// Show the 'To Top' button in the bottom on pages where this is nice to have
+		// NOTE: Turned off for now - not sure it's needed anymore now the default scrollbar is in use.
+		/*if (topic === "csdb" || topic === "profile" || topic === "player" || browser.isCompoFolder)
+			$("#topic-"+topic+" button.to-top").show();*/
 
 		// Show the big logo for the informational tabs only
 		if (["about", "faq", "changes"].includes(topic) ||
-			(topic == "profile" && browser.path == "" && (!browser.isSearching || $("#topic-profile table.root").length)) ||
-			(topic == "profile" && $("#topic-profile table.rec-all").length))
+			(topic === "profile" && browser.path == "" && (!browser.isSearching || $("#topic-profile table.root").length)) ||
+			(topic === "profile" && $("#topic-profile table.rec-all").length))
 				$("#page").addClass("big-logo");
 
 		// If 'CSDb' tab is selected
@@ -689,11 +675,7 @@ $(function() { // DOM ready
 
 		// Always go to the bottom of the 'Debug' tab to show the latest stuff
 		if (topic === "debug")
-			$("#page").mCustomScrollbar("scrollTo", "bottom", { scrollInertia: 0 });
-
-		// If 'Piano' view is selected then make the custom scroll bar transparent
-		// NOTE: Must be hidden in other tabs or scrolling may become erratic.
-		$("#dexter .mCSB_container").css("overflow", topic === "visuals" && $("#sticky-visuals .icon-piano").hasClass("button-on") ? "visible" : "hidden");
+			$("#page").scrollTop($("#page")[0].scrollHeight);
 
 		// If 'Profile' tab is selected then refresh the charts if present
 		// NOTE: If this is not done the charts will appear "flattened" towards the left side.
@@ -756,19 +738,11 @@ $(function() { // DOM ready
 				break;
 		}
 
-		$("#stopic-stil .mCSB_scrollTools,#stopic-tags .mCSB_scrollTools")
-			.css("height", $("#stopic-"+prevTopic).height() + 7);
 		$("#folders").height(0).height($("#songs").height() - 100);
 
 		// Show the selected topic
 		$("#sundry .stopic").hide();
-		$("#stopic-"+stopic)
-			.css("visibility", "hidden")
-			.show();
-		setTimeout(function() {
-			// This small delay hides the "hiccup" that happens when the custom scrollbar is re-applied
-			$("#stopic-"+stopic).css("visibility", "visible");
-		}, 125);
+		$("#stopic-"+stopic).show();
 	});
 
 	/**
@@ -809,7 +783,7 @@ $(function() { // DOM ready
 		// First cache the list of releases in case we return to it
 		cacheCSDb = $("#topic-csdb").html();
 		cacheSticky = $("#sticky-csdb").html();
-		cacheTabScrollPos = tabScrollPos;
+		cacheTabScrollPos = $("#page").scrollTop();
 		cacheDDCSDbSort = $("#dropdown-sort-csdb").val();
 		// Now load the new content
 		browser.getCSDb("release", $(this).attr("data-id"));
@@ -827,18 +801,13 @@ $(function() { // DOM ready
 		}
 		$this = $(this);
 		// Load the cache again (much faster than calling browser.getCSDb() to regenerate it)
-		$("#topic-csdb").css("visibility", "hidden").empty()
+		$("#topic-csdb")/*.css("visibility", "hidden")*/.empty()
 			.append($this.hasClass("compo") ? cacheBeforeCompo : cacheCSDb);
 		$("#sticky-csdb").empty().append($this.hasClass("compo") ? cacheStickyBeforeCompo : cacheSticky);
 		// Adjust drop-down box to the sort setting
 		$("#dropdown-sort-csdb").val(cacheDDCSDbSort);
 		// Also set scroll position to where we clicked last time
-		$("#page").mCustomScrollbar("scrollTo",
-			($this.hasClass("compo") ? cachePosBeforeCompo : cacheTabScrollPos), { scrollInertia: 0 });
-		// The 'onScroll' callback is not good enough and this is actually more safe
-		setTimeout(function() {
-			$("#topic-csdb").css("visibility", "visible");
-		}, 150);
+		SetScrollTopInstantly("#page", $this.hasClass("compo") ? cachePosBeforeCompo : cacheTabScrollPos);
 	});
 
 	/**
@@ -860,13 +829,9 @@ $(function() { // DOM ready
 		} else {
 			$this = $(this);
 			// Load the cache again
-			$("#topic-player").css("visibility", "hidden").empty().append(cachePlayer);
+			$("#topic-player")/*.css("visibility", "hidden")*/.empty().append(cachePlayer);
 			// Also set scroll position to where we clicked last time
-			$("#page").mCustomScrollbar("scrollTo", cachePlayerTabScrollPos, { scrollInertia: 0 });
-			// The 'onScroll' callback is not good enough and this is actually more safe
-			setTimeout(function() {
-				$("#topic-player").css("visibility", "visible");
-			}, 150);
+			SetScrollTopInstantly("#page", cachePlayerTabScrollPos);
 		}
 	}),
 
@@ -875,13 +840,9 @@ $(function() { // DOM ready
 	 */
 	$("#topic-gb64").on("click", "#go-back-gb64", function() {
 		// Load the cache again
-		$("#topic-gb64").css("visibility", "hidden").empty().append(cacheGB64);
+		$("#topic-gb64")/*.css("visibility", "hidden")*/.empty().append(cacheGB64);
 		// Also set scroll position to where we clicked last time
-		$("#page").mCustomScrollbar("scrollTo", cacheGB64TabScrollPos, { scrollInertia: 0 });
-		// The 'onScroll' callback is not good enough and this is actually more safe
-		setTimeout(function() {
-			$("#topic-gb64").css("visibility", "visible");
-		}, 150);
+		SetScrollTopInstantly("#page", cacheGB64TabScrollPos);
 	}),
 
 	/**
@@ -889,13 +850,9 @@ $(function() { // DOM ready
 	 */
 	$("#topic-remix").on("click", "#go-back-remix", function() {
 		// Load the cache again
-		$("#topic-remix").css("visibility", "hidden").empty().append(cacheRemix);
+		$("#topic-remix")/*.css("visibility", "hidden")*/.empty().append(cacheRemix);
 		// Also set scroll position to where we clicked last time
-		$("#page").mCustomScrollbar("scrollTo", cacheRemixTabScrollPos, { scrollInertia: 0 });
-		// The 'onScroll' callback is not good enough and this is actually more safe
-		setTimeout(function() {
-			$("#topic-remix").css("visibility", "visible");
-		}, 150);
+		SetScrollTopInstantly("#page", cacheRemixTabScrollPos);
 	}),
 
 	/**
@@ -904,7 +861,7 @@ $(function() { // DOM ready
 	$("#topic-csdb").on("click", "#show-compo", function() {
 		cacheBeforeCompo = $("#topic-csdb").html();
 		cacheStickyBeforeCompo = $("#sticky-csdb").html();
-		cachePosBeforeCompo = tabScrollPos;
+		cachePosBeforeCompo = $("#page").scrollTop();
 		$this = $(this);
 		browser.getCompoResults($this.attr("data-compo"), $this.attr("data-id"), $this.attr("data-mark"));
 	});
@@ -913,7 +870,7 @@ $(function() { // DOM ready
 	 * When clicking the arrow up button in the bottom of CSDb pages to scroll back to the top.
 	 */
 	$("#topic-profile,#topic-csdb,#topic-player").on("click", "button.to-top", function() {
-		$("#page").mCustomScrollbar("scrollTo", "top");
+		$("#page").scrollTop(0);
 	});
 
 	/**
@@ -1193,7 +1150,7 @@ $(function() { // DOM ready
 		$this = $(this);
 		// First cache the list of releases in case we return to it
 		cachePlayer = $("#topic-player").html();
-		cachePlayerTabScrollPos = tabScrollPos;
+		cachePlayerTabScrollPos = $("#page").scrollTop();
 		// Show the page
 		browser.getPlayerInfo({id: $this.attr("data-id")});
 		// Also search for the related players
@@ -1209,7 +1166,7 @@ $(function() { // DOM ready
 	$("#topic-gb64").on("click", ".gb64-list-entry", function() {
 		// First cache the list of releases in case we return to it
 		cacheGB64 = $("#topic-gb64").html();
-		cacheGB64TabScrollPos = tabScrollPos;
+		cacheGB64TabScrollPos = $("#page").scrollTop();
 		// Show the page
 		browser.getGB64($(this).attr("data-id"));
 		return false;
@@ -1221,7 +1178,7 @@ $(function() { // DOM ready
 	$("#topic-remix").on("click", ".remix-list-entry", function() {
 		// First cache the list of releases in case we return to it
 		cacheRemix = $("#topic-remix").html();
-		cacheRemixTabScrollPos = tabScrollPos;
+		cacheRemixTabScrollPos = $("#page").scrollTop();
 		// Show the page
 		browser.getRemix($(this).attr("data-id"));
 		return false;
@@ -1359,10 +1316,7 @@ $(function() { // DOM ready
 			// Scroll the row into the middle of the list
 			var rowPos = $trPlay[0].offsetTop,
 				halfway = $("#folders").height() / 2 - 26; // Last value is half of SID file row height
-			if (browser.isMobile || !CUSTOM_SCROLLBAR)
-				$("#folders").scrollTop(rowPos > halfway ? rowPos - halfway : 0);
-			else
-				$("#folders").mCustomScrollbar("scrollTo", rowPos > halfway ? rowPos - halfway : "top");
+			$("#folders").scrollTop(rowPos > halfway ? rowPos - halfway : 0);
 			return true;
 		} else {
 			// No; just stop playing
@@ -1384,25 +1338,8 @@ $(function() { // DOM ready
 		playerID = GetParam("player"),
 		typeCSDb = GetParam("csdbtype"),
 		idCSDb = GetParam("csdbid");
-	// Let mobile devices use their own touch scrolling stuff
-	if (browser.isMobile || !CUSTOM_SCROLLBAR) {
-		// Hack to make sure the bottom search bar sits in the correct bottom of the viewport
-		$(window).trigger("resize");
-	} else {
-		// Hack to make custom scroll bar respect flexbox height
-		$("#folders").height($("#folders").height())
-			.mCustomScrollbar({
-				axis: "y",
-				theme: (parseInt(colorTheme) ? "light-3" : "dark-3"),
-				scrollButtons:{
-					enable: true,
-					scrollAmount: 6,
-				},
-				mouseWheel:{
-					scrollAmount: 150,
-				}
-			});
-	}
+	// Hack to make sure the bottom search bar sits in the correct bottom of the viewport
+	$(window).trigger("resize");
 	if (fileParam !== "" && fileParam.indexOf("\\") === -1) {
 		// A HVSC folder or file was specified
 		fileParam = fileParam.charAt(0) === "/" ? fileParam : "/"+fileParam;
@@ -1465,10 +1402,7 @@ $(function() { // DOM ready
 				// Scroll the row into the middle of the list
 				var rowPos = $trAutoPlay[0].offsetTop;
 				var halfway = $("#folders").height() / 2 - 26; // Last value is half of SID file row height
-				if (browser.isMobile || !CUSTOM_SCROLLBAR)
-					$("#folders").scrollTop(rowPos > halfway ? rowPos - halfway : 0);
-				else
-					$("#folders").mCustomScrollbar("scrollTo", rowPos > halfway ? rowPos - halfway : "top");
+				$("#folders").scrollTop(rowPos > halfway ? rowPos - halfway : 0);
 				// The user may have to click a overlay question to satisfy browser auto-play prevention
 				if (SID.isSuspended())
 					$("#dialog-cover,#click-to-play-cover").show();
@@ -1563,49 +1497,6 @@ function PlayFromURL() {
 		$trAutoPlay.children("td.sid").trigger("click");
 	else
 		$trAutoPlay.children("td.sid").trigger("click", paramSubtune == 0 ? 0 : paramSubtune - 1);
-}
-
-/**
- * Show the custom scrollbar in a "dexter" page.
- * 
- * @param {string} topic	If specified, the tab topic.
- */
-function ShowDexterScrollbar(topic) {
-	$("#page").mCustomScrollbar({
-		axis: "y",
-		theme: (parseInt(colorTheme) ? "light-3" : "dark-3"),
-		autoHideScrollbar: typeof topic !== "undefined"
-			&& topic === "visuals" && $("#sticky-visuals .icon-piano").hasClass("button-on"), // Hide on piano
-		scrollButtons:{
-			enable: true,
-			scrollAmount: 6,
-		},
-		mouseWheel:{
-			scrollAmount: 150,
-		},
-		setTop: tabPrevScrollPos[topic].pos+"px",
-		callbacks: {
-			onCreate: function() {
-				// Adjust scrollbar height to fit the up/down arrows perfectly
-				$("#page .mCSB_scrollTools").css("height", $("#page").height() + 13);
-				// Also trigger a resize to be sure it fits
-				setTimeout(function() {
-					$(window).trigger("resize");
-				}, 1);
-				tabScrollPos = 0;
-			},
-			onOverflowY: function() {
-				// Enable the arrow button in the bottom of CSDb pages (for scrolling back to the top)
-				var topic = $("#tabs .selected").attr("data-topic");
-				if (topic === "csdb" || topic === "profile" || topic === "player" || browser.isCompoFolder)
-					$("#topic-"+topic+" button.to-top").show();
-			},
-			whileScrolling: function() {
-				tabScrollPos = this.mcs.top;
-				tabPrevScrollPos[topic].reset = false;
-			},
-		},
-	});
 }
 
 /**
@@ -1791,6 +1682,19 @@ function UpdateRedirectPlayIcons() {
 }
 
 /**
+ * Set the scrollbar position instantly without animating a scrolling to it.
+ * 
+ * @param {object} element			The element to set the scrollbar position for.
+ * @param {number} pos				The scrollbar position.
+ */
+function SetScrollTopInstantly(element, pos) {
+	$(element)
+		.css("scroll-behavior", "auto")
+		.scrollTop(pos)
+		.css("scroll-behavior", "smooth");
+}
+
+/**
  * Small plugin that centers an element in the middle of the entire window.
  */
 $.fn.center = function () {
@@ -1899,7 +1803,7 @@ function _(format, text, value) {
 		default:
 	}
 	$("#topic-debug table").append(text);
-	$("#page").mCustomScrollbar("scrollTo", "bottom", { scrollInertia: 300 });
+	$("#page").scrollTop($("#page")[0].scrollHeight);
 }
 
 /**

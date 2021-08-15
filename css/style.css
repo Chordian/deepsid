@@ -1294,7 +1294,7 @@ small.u2 { margin-left: 2px; }
 		display: none;
 		position: absolute;
 		top: 16px;
-		left: 704px; /* Don't use 'right' here or it will be pushed by the custom scrollbar */
+		left: 704px; /* Don't use 'right' here or it might be pushed by the scrollbar */
 	}
 
 	.viz-warning {
@@ -2427,7 +2427,8 @@ input[type=range]::-ms-track {
 	}
 
 #sundry {
-	overflow: hidden;
+	/* KCS overflow: hidden;*/
+	overflow: auto;
 	flex: 0 0 119px;
 	padding: 6px 10px;
 	border-top: 1px solid var(--color-border-box);
@@ -2441,9 +2442,8 @@ input[type=range]::-ms-track {
 	z-index: 2;
 }
 
-	/* Note that the custom scrollbar height is adjusted both on creation and when moving the slider bar */
 	#sundry .stopic {
-		overflow: none; /* Must be none for no scrollbar on tips; changed to auto by the custom scrollbar */
+		overflow: none; /* Scrollbar appears in #sundry instead to make sure it glues to the side of the box */
 		height: 100%;
 	}
 
@@ -2651,14 +2651,22 @@ input[type=range]::-ms-track {
 
 	/* Scrollable box with folders and SID files */
 	#folders {
-		overflow-y: auto;
-		overflow-x: hidden;
-		scrollbar-width: thin;
-		scroll-behavior: smooth;
-		scrollbar-color: var(--color-scrollbar-thumb) var(--color-scrollbar-track);
 		height: calc(100% - 100px); /* Minus the height of #songs-buttons and #search */
 		border-top: 1px solid var(--color-border-box);
 		border-bottom: 1px solid var(--color-border-box);
+	}
+
+	#folders,
+	#sundry,
+	#page,
+	#dialog-all-tags,
+	#dialog-song-tags,
+	#upload-stil-text {
+		overflow-y: auto;
+		overflow-x: hidden !important;
+		scrollbar-width: thin;
+		scroll-behavior: smooth;
+		scrollbar-color: var(--color-scrollbar-thumb) var(--color-scrollbar-track);
 	}
 
 	::-webkit-scrollbar {
@@ -3470,6 +3478,7 @@ input[type=range]::-ms-track {
 
 	/* Where the contents of a dexter tab is shown */
 	#page {
+		position: relative;
 		flex: 1 1 auto;
 		flex: 1; /* Chrome hack */
 		overflow: auto;
@@ -4200,8 +4209,8 @@ input[type=range]::-ms-track {
 
 		.corner-icons {
 			position: absolute;
-			top: 2px;
-			right: 4px;
+			top: 12px;
+			right: 14px;
 			height: 24px;
 			text-align: right;
 		}
@@ -5028,32 +5037,6 @@ input[type=range]::-ms-track {
 		font-weight: bold;
 		border-right: 0.5px solid var(--color-timebar-border);
 	}
-
-/* ---- Overriding Custom Scrollbar Styling --------------------------------- */
-
-.mCSB_inside > .mCSB_container {
-	margin-right: 17px;	/* Changed from 30px; drags content closer to scrollbar */
-}
-
-.mCSB_scrollTools {
-	height: 103%; 		/* Changed from auto */
-	top: -3px;			/* Changed from 0	 */
-	right: -3px;		/* Changed from 0	 */
-}
-
-#folders .mCSB_inside > .mCSB_container {
-	margin-right: 0;
-}
-
-#folders .mCSB_scrollTools {
-	height: 99%;		/* Changed from auto */
-	top: 2px;
-	right: 7px;
-}
-
-#page .mCSB_scrollTools {
-	top: -7px;
-}
 
 /* ---- Chartist.js --------------------------------------------------------- */
 

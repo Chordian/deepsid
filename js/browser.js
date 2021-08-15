@@ -5,7 +5,6 @@
 
 const TR_SPACER 		= '<tr class="disabled"><td class="spacer" colspan="2"></td></tr>';
 const TR_DIVIDER		= '<tr class="disabled"><td class="divider" colspan="2"></td></tr>';
-const CUSTOM_SCROLLBAR	= false;
 
  function Browser() {
 
@@ -955,10 +954,7 @@ Browser.prototype = {
 			this.cache.compolist = this.compolist;
 		}
 
-		if (this.isMobile || !CUSTOM_SCROLLBAR)
-			$("#folders").scrollTop(0);
-		else
-			$("#folders").mCustomScrollbar("scrollTo", "top");
+		$("#folders").scrollTop(0);
 	},
 
 	/**
@@ -991,7 +987,6 @@ Browser.prototype = {
 			// LOAD FROM CACHE
 
 			ctrls.state("root/back", "enabled");
-			if (!this.isMobile && CUSTOM_SCROLLBAR) $("#folders").mCustomScrollbar("destroy");
 
 			// Disable emulators/handlers in the drop-down according to parent folder attributes
 			$("#dropdown-emulator").styledOptionState("websid legacy jssid soasc_auto soasc_r2 soasc_r4 soasc_r5 download", "enabled");
@@ -1016,35 +1011,9 @@ Browser.prototype = {
 				$("#songs table").append(this.cache.folder);
 				this.compolist = this.cache.compolist;
 
-				// Let mobile devices use their own touch scrolling stuff
-				if (this.isMobile || !CUSTOM_SCROLLBAR) {
-					// Hack to make sure the bottom search bar sits in the correct bottom of the viewport
-					$(window).trigger("resize");
-					$("#folders")
-						.css("scroll-behavior", "auto")
-						.scrollTop(scrollPos)
-						.css("scroll-behavior", "smooth");
-				} else {
-					// Ugly hack to make custom scroll bar respect flexbox height
-					$("#folders").height($("#folders").height())
-						.mCustomScrollbar({
-							axis: "y",
-							theme: (parseInt(colorTheme) ? "light-3" : "dark-3"),
-							setTop: (typeof scrollPos !== "undefined" ? scrollPos+"px" : "0"),
-							scrollButtons:{
-								enable: true,
-								scrollAmount: 6,
-							},
-							mouseWheel:{
-								scrollAmount: 150,
-							},
-							callbacks: {
-								whileScrolling: function() {
-									browser.currentScrollPos = this.mcs.top;
-								}
-							}
-						});
-				}
+				// Hack to make sure the bottom search bar sits in the correct bottom of the viewport
+				$(window).trigger("resize");
+				SetScrollTopInstantly("#folders", scrollPos);
 				DisableIncompatibleRows();
 				if (this.isBigCompoFolder()) $("#dropdown-sort").prop("disabled", false);
 			}.bind(this), 1);
@@ -1100,7 +1069,6 @@ Browser.prototype = {
 					clearTimeout(loading);
 					$("#loading").hide();
 					ctrls.state("root/back", "enabled");
-					if (!this.isMobile && CUSTOM_SCROLLBAR) $("#folders").mCustomScrollbar("destroy");
 					this.folders = this.extra = this.symlists = this.searchShortcutNew = this.searchShortcutOther = "";
 					var files = "";
 
@@ -1387,35 +1355,9 @@ Browser.prototype = {
 						if (this.cache.compolist.length == 0) this.cache.compolist = this.compolist;
 					}
 
-					// Let mobile devices use their own touch scrolling stuff
-					if (this.isMobile || !CUSTOM_SCROLLBAR) {
-						// Hack to make sure the bottom search bar sits in the correct bottom of the viewport
-						$(window).trigger("resize");
-						$("#folders")
-							.css("scroll-behavior", "auto")
-							.scrollTop(scrollPos)
-							.css("scroll-behavior", "smooth");
-					} else {
-						// Ugly hack to make custom scroll bar respect flexbox height
-						$("#folders").height($("#folders").height())
-							.mCustomScrollbar({
-								axis: "y",
-								theme: (parseInt(colorTheme) ? "light-3" : "dark-3"),
-								setTop: (typeof scrollPos !== "undefined" ? scrollPos+"px" : "0"),
-								scrollButtons:{
-									enable: true,
-									scrollAmount: 6,
-								},
-								mouseWheel:{
-									scrollAmount: 150,
-								},
-								callbacks: {
-									whileScrolling: function() {
-										browser.currentScrollPos = this.mcs.top;
-									}
-								}
-							});
-					}
+					// Hack to make sure the bottom search bar sits in the correct bottom of the viewport
+					$(window).trigger("resize");
+					SetScrollTopInstantly("#folders", scrollPos);
 					if (typeof callback === "function") callback.call(this);
 				});
 				if (this.path == "")
@@ -1469,7 +1411,7 @@ Browser.prototype = {
 		$("#sid-model,#clockspeed,#hvsc-version").remove();
 		$("#memory-chunk").css({left: "0", width: "0"});
 		$("#info-text").empty();
-		$("#stopic-stil,#stopic-tags").mCustomScrollbar("destroy").empty();
+		$("#stopic-stil,#stopic-tags").empty();
 
 		ctrls.state("play/stop", "disabled");
 		ctrls.state("prev/next", "enabled"); // Still need to skip it
@@ -1600,14 +1542,7 @@ Browser.prototype = {
 
 					clearTimeout(loadingComposer);
 					if (parseInt(colorTheme)) data.html = data.html.replace(/composer\.png/g, "composer_dark.png");
-					$("#topic-profile")
-						.css("visibility", "hidden")
-						.empty()
-						.append(data.html)
-						.ready(function() {
-							// This avoids the "bump" normally seen when the custom scrollbar appears
-							$("#topic-profile").css("visibility", "visible");
-						});
+					$("#topic-profile").empty().append(data.html);
 
 					$("#page .dropdown-top-list").styledSelect("toplist");
 					$("#page .dropdown-top-list-left").styledSetValue(data.left);

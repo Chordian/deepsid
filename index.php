@@ -45,7 +45,6 @@
 		<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Asap+Condensed" />
 		<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Kanit" />
 		<link rel="stylesheet" type="text/css" href="//blog.chordian.net/wordpress/wp-content/themes/olivi/style.css" />
-		<link rel="stylesheet" type="text/css" href="//chordian.net/deepsid/css/jquery.mCustomScrollbar.min.css" />
 		<link rel="stylesheet" type="text/css" href="css/chartist.css" />
 		<link rel="stylesheet" type="text/css" href="css/style.css" />
 		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -64,7 +63,6 @@
 
 		<script type="text/javascript" src="js/handlers/jsSID-modified.js"></script>
 		<script type="text/javascript" src="js/handlers/howler.core.js"></script>
-		<script type="text/javascript" src="js/jquery.mCustomScrollbar.concat.min.js"></script>
 		<script type="text/javascript" src="js/chartist.min.js"></script>
 		<?php // @link https://github.com/madmurphy/cookies.js ?>
 		<script type="text/javascript" src="js/cookies.min.js"></script>
@@ -959,10 +957,6 @@
 							Chartist.js by Gion Kunz (<a href="https://github.com/gionkunz">GitHub</a>)<br />
 							<a href="https://gionkunz.github.io/chartist-js/">https://gionkunz.github.io/chartist-js/</a>
 						</p>
-						<p>
-							jQuery custom scrollbar by Manolis Malihutsakis (<a href="http://manos.malihu.gr/">malihu</a>)<br />
-							<a href="http://manos.malihu.gr/jquery-custom-content-scroller/">http://manos.malihu.gr/jquery-custom-content-scroller/</a>
-						</p>
 					</div>
 
 					<div id="topic-faq" class="topic" style="display:none;">
@@ -1217,6 +1211,14 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>August 15, 2021</h3>
+						<ul>
+							<li>All scrollable areas now use the default web browser scrollbar. The custom scrollbar
+								jQuery plugin has been removed completely. Thanks
+								<a href="http://manos.malihu.gr/jquery-custom-content-scroller/">malihu</a>
+								for years of service back when the default scrollbars were crude.</li>
+						</ul>
 
 						<h3>August 13, 2021</h3>
 						<ul>

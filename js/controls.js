@@ -280,10 +280,7 @@ Controls.prototype = {
 				if (!isAutoProgress || GetSettingValue("mark-tune")) {
 					var rowPos = $("tr").eq($("tr.selected").index())[0].offsetTop;
 					var halfway = $("#folders").height() / 2 - 26; // Last value is half of SID file row height
-					if (browser.isMobile || !CUSTOM_SCROLLBAR)
-						$("#folders").scrollTop(rowPos > halfway ? rowPos - halfway : 0);
-					else
-						$("#folders").mCustomScrollbar("scrollTo", rowPos > halfway ? rowPos - halfway : "top");
+					$("#folders").scrollTop(rowPos > halfway ? rowPos - halfway : 0);
 				}
 
 				if (error) browser.errorRow();
@@ -730,7 +727,6 @@ Controls.prototype = {
 	 */
 	updateSundry: function() {
 		$("#topic-stil,#stopic-stil")
-			.mCustomScrollbar("destroy")
 			.empty()
 			.removeClass("c64font");
 
@@ -860,7 +856,7 @@ Controls.prototype = {
 								i++;
 							}
 							out += "</span>";
-							ctrls.stilDexterScrollbar('<div class="c64blackbg">'+out+'</div>');
+							$("#topic-stil,#stopic-stil").empty().append('<div class="c64blackbg">'+out+'</div>');
 						}
 						reader.readAsBinaryString(blob);
 					});
@@ -880,7 +876,7 @@ Controls.prototype = {
 					.append('<div id="tips" class="no-info">No STIL information</div>');
 				$("#topic-stil").empty().append("<i>No STIL information available for this SID file.</i>");
 			} else {
-				this.stilDexterScrollbar(stil);
+				$("#topic-stil,#stopic-stil").empty().append(stil);
 			}
 		}
 
@@ -889,73 +885,17 @@ Controls.prototype = {
 	},
 
 	/**
-	 * Update the sundry and tab with STIL text and adjust the custom scrollbar.
-	 * 
-	 * @param {string} stil		The STIL or lyrics string.
-	 */
-	stilDexterScrollbar: function(stil) {
-		$("#stopic-stil")
-			.css("overflow", "auto")
-			.append(stil)
-			.mCustomScrollbar({
-				axis: "y",
-				theme: (parseInt(colorTheme) ? "light-3" : "dark-3"),
-				scrollButtons:{
-					enable: true,
-				},
-				callbacks: {
-					onCreate: function() {
-						// Adjust scrollbar height to fit the up/down arrows perfectly
-						// NOTE: This is also set when moving the slider bar (see main.js).
-						$("#stopic-stil .mCSB_scrollTools").css("height", $("#stopic-stil").height() + 7);
-					},
-				},
-			});
-		$("#topic-stil").empty().append(stil);
-	},
-
-	/**
 	 * Update the sundry box with tags.
 	 * 
 	 * @param {string} tags		An HTML list of the tags.
 	 */
 	updateSundryTags: function(tags) {
-		var $sundryTags = $("#stopic-tags");
-		$sundryTags
-			.mCustomScrollbar("destroy")
-			.empty();
-
-		if (tags === "" || tags === "0" || $(tags).html() === "&nbsp;") {
-			$sundryTags
-				.css("overflow", "none")
-				.append('<div class="sundryMsg no-info">No tags found</div>');
-		} else {
-			$sundryTags
-				.css("overflow", "auto")
-				.append(tags)
-				.mCustomScrollbar({
-					axis: "y",
-					theme: (parseInt(colorTheme) ? "light-3" : "dark-3"),
-					scrollButtons:{
-						enable: true,
-					},
-					callbacks: {
-						onCreate: function() {
-							// Adjust scrollbar height to fit the up/down arrows perfectly
-							// NOTE: This is also set when moving the slider bar (see main.js).
-							$("#stopic-tags .mCSB_scrollTools").css("height", $("#stopic-tags").height() + 7);
-						},
-						onOverflowY: function() {
-							// Move slider button slightly to the left when a scrollbar appears
-							$("#slider-button").css("right", "30px");
-						},
-						onOverflowYNone: function() {
-							// Move slider button back to the right when the scrollbar disappears
-							$("#slider-button").css("right", "10px");
-						},
-					},
-				});
-		}
+		$("#stopic-tags")
+			.empty()
+			.append(tags === "" || tags === "0" || $(tags).html() === "&nbsp;"
+				? '<div class="sundryMsg no-info">No tags found</div>'
+				: tags
+			);
 	},
 
 	/**
