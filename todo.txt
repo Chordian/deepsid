@@ -3,11 +3,27 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+- New handler for YouTube.
+  - Video replaces top box.
+  - Use IFrame API to control video with DeepSID's controls.
+  - Tabs in top video box for choice of video for the song.
+  - Right corner could be a link for visiting the channel on YouTube itself.
+  - Separate table for ID joining to files table, with multiple rows possible for one song.
+
+- UI for YouTube handler for adding a link to a song. Automatically searches YouTube too?
+
 - http://deepsid.chordian.net/?file=/MUSICIANS/G/Gas_On/
   Where are the statistics from 1994-96 coming from here?
 
+- Make file sorting sticky (not dependent on logged in).
+
+- Turn off selecting in folders.
+
 - BUG: Click tag sundry box. Play tune. Click FOLDERS button. It disappears. But then click any
   of the other two sundry tabs and then back again. Now the FOLDERS button is back!?
+
+- BUG: The SH folder upload dates are now skewed. Align them towards the right side.
+  - And also a few pixel downwards while you're at it.
 
 - Search shortcuts should show a folder icon with a small magnifying glass inside of it.
 

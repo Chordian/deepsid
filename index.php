@@ -62,7 +62,6 @@
 		<?php endif ?>
 
 		<script type="text/javascript" src="js/handlers/jsSID-modified.js"></script>
-		<script type="text/javascript" src="js/handlers/howler.core.js"></script>
 		<script type="text/javascript" src="js/chartist.min.js"></script>
 		<?php // @link https://github.com/madmurphy/cookies.js ?>
 		<script type="text/javascript" src="js/cookies.min.js"></script>
@@ -279,10 +278,7 @@
 					<option value="websid">WebSid emulator</option>
 					<option value="legacy">WebSid (Legacy)</option>
 					<option value="jssid">Hermit's emulator</option>
-					<?php /* <option value="soasc_auto">SOASC Automatic</option>
-					<option value="soasc_r2">SOASC 6581 R2</option>
-					<option value="soasc_r4">SOASC 6581 R4</option>
-					<option value="soasc_r5">SOASC 8580 R5</option> */ ?>
+					<option value="youtube">YouTube video</option>
 					<option value="download">Download SID file</option>
 				</select>
 
@@ -326,6 +322,10 @@
 						more. It plays music created for the <a href="https://en.wikipedia.org/wiki/Commodore_64">Commodore 64</a> home computer.</span><br />
 						<span style="position:relative;top:8px;">Click any of the folder items below to start browsing the collection.</span>
 					</div>
+				</div>
+				<div id="youtube">
+					<div id="youtube-loading">Loading YouTube...</div>
+					<div id="youtube-player"></div>
 				</div>
 				<div id="memory-bar"><div id="memory-lid"></div><div id="memory-chunk"></div></div>
 			</div>
@@ -432,7 +432,7 @@
 						<option value="gb64">Game</option>
 						<option value="special" style="display:none;">Special</option>
 					</select>
-					<form onsubmit="return false;" autocomplete="off"><input type="text" name="search-box" id="search-box" maxlength="64" placeholder="Search" /></form>
+					<form onsubmit="return false;" autocomplete="off"><input type="text" name="search-box" id="search-box" maxlength="64" placeholder="Search..." /></form>
 					<div id="search-here-container">
 						<input type="checkbox" id="search-here" name="shtoggle" class="unselectable" unchecked />
 						<label for="search-here" class="unselectable">Here</label>
@@ -461,10 +461,6 @@
 								echo 'Check out <a href="http://csdb.chordian.net/">CShellDB</a> &ndash; a modern interface for <b>CSDb</b>';
 						?></span>
 					</div>
-
-					<?php /* <span class="soasc-status">
-						SOASC Status <div id="soasc-status-led"></div><span id="soasc-status-word">?</span>
-					</span> */ ?>
 
 					<!--<a href="https://blog.chordian.net/2018/05/12/deepsid/">Blog Post</a>
 						<span>&#9642</span>-->
@@ -892,12 +888,6 @@
 							jsSID by Mihály Horváth (<a href="http://csdb.chordian.net/?type=scener&id=18806">Hermit</a>)
 						</p>
 
-						<?php /* <h3>Audio API library for SOASC</h3>
-						<p>
-							Howler by James Simpson (<a href="https://goldfirestudios.com/">GoldFire Studios</a>)<br />
-							<a href="https://github.com/goldfire/howler.js">https://github.com/goldfire/howler.js</a>
-						</p> */ ?>
-
 						<h3>Libraries of SID tunes</h3>
 						<p>
 							High Voltage SID Collection #75<br />
@@ -907,10 +897,6 @@
 							Compute's Gazette SID Collection #140<br />
 							<a href="http://www.c64music.co.uk/">http://www.c64music.co.uk/</a>
 						</p>
-						<?php /* <p>
-							Stone Oakvalley's Authentic SID Collection<br />
-							<a href="http://www.6581-8580.com/">http://www.6581-8580.com/</a>
-						</p> */ ?>
 
 						<h3>Remixes of SID tunes</h3>
 						<p>
@@ -1055,25 +1041,12 @@
 								play standard SID as well as 2SID and 3SID. Unfortunately it can't do digi tunes, but it
 								makes up for that by being a steadfast emulator.</td>
 							</tr>
-							<?php /* <tr>
-								<td>SOASC R2, R4, R5</td><td>These are real C64 recordings streamed from
-								<a href="http://www.6581-8580.com/">Stone Oakvalley's Authentic SID Collection</a>. R2 is
-								bright filter, R4 is deep filter (think drowning radio) and R5 is 8580 with its improved
-								filter.</td>
-							</tr>
-							<tr>
-								<td>SOASC Automatic</td><td>This option automatically chooses the recording type that is
-								correct for the SID tune. R2 is chosen for 6581 tunes and R5 is chosen for 8580 tunes.</td>
-							</tr> */ ?>
 							<tr>
 								<td>Download SID file</td><td>This makes the browser download the tunes. This is especially
 								useful if an offline player has been associated with automatically playing it. Then it's like
 								having an extra play option.</td>
 							</tr>
 						</table>
-						<?php /* <p>Note that for the SOASC options, playing SID tunes may be delayed 1-3 seconds due to handshaking
-							with a download script on Stone Oakvalley's server. Also, none of the emulators can play BASIC
-							tunes as that requires ROM code.</p> */ ?>
 
 						<h3>Why can't I see the right text area on mobile devices?</h3>
 						<p>
@@ -1155,8 +1128,7 @@
 								<td>subtune</td><td>The subtune to play; must be used together with <code>file</code></td>
 							</tr>
 							<tr>
-								<td>emulator</td><td>Set to <code>websid</code>, <code>legacy</code>, <code>jssid</code><?php /* ,
-									<code>soasc_auto</code>, <code>soasc_r2</code>,<code>soasc_r4</code>, <code>soasc_r5</code> */ ?>
+								<td>emulator</td><td>Set to <code>websid</code>, <code>legacy</code>, <code>jssid</code>
 									or <code>download</code> to temporarily override the SID handler (reloading the web site
 									returns to the previous SID handler)</td>
 							</tr>

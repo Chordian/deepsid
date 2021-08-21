@@ -60,12 +60,11 @@ $(function() { // DOM ready
 		"websid",
 		"legacy",
 		"jssid",
-		// "soasc_auto",
-		// "soasc_r2",
-		// "soasc_r4",
-		// "soasc_r5",
+		"youtube",
 		"download",
 	]) === -1) emulator = storedEmulator;
+
+	HandleTopBox(emulator);
 
 	// Lower buffer size values may freeze DeepSID
 	scope = isLegacyWebSid ? new SidTracer(16384) : new Tracer(16384, 40);
@@ -242,8 +241,9 @@ $(function() { // DOM ready
 
 					ctrls.state("root/back", "enabled");
 
-					$("#dropdown-emulator").styledOptionState("websid legacy jssid", "enabled");
-					$("#dropdown-emulator").styledOptionState("soasc_auto soasc_r2 soasc_r4 soasc_r5", "disabled");
+					$("#dropdown-emulator")
+						.styledOptionState("websid legacy jssid", "enabled")
+						.styledOptionState("youtube", "disabled");
 					$("#path").css("top", "5px").empty().append("Temporary emulator testing");
 					$("#stab-stil,#tab-stil").empty().append("STIL");
 
@@ -504,7 +504,7 @@ $(function() { // DOM ready
 	$("div.styledSelect").change(function() {
 		switch ($(this).prev("select").attr("name")) {
 			case "select-emulator":
-				// Selecting a different SID handler (emulator or SOASC)
+				// Selecting a different SID handler (emulator, etc.)
 				var $selected = $("#folders tr.selected");
 				var isRowSelected = $selected.length,
 					wasPlaying = ctrls.isPlaying(),
@@ -529,8 +529,10 @@ $(function() { // DOM ready
 				SID.mainVol = mainVol;
 				SID.setVolume(1);
 
+				HandleTopBox(emulator);
+
 				// The color of the time bar should be unique for the chosen SID handler
-				$("#time-bar").removeClass("websid legacy jssid soasc_auto soasc_r2 soasc_r4 soasc_r5").addClass(emulator)
+				$("#time-bar").removeClass("websid legacy jssid youtube").addClass(emulator)
 					.css("cursor", SID.emulatorFlags.supportSeeking ? "pointer" : "default");
 
 				$("#faster").removeClass("disabled");
@@ -1574,6 +1576,19 @@ function ToggleSundry(shrink) {
 		sundryToggle = false;
 		$("#sundry-tabs .tab").removeClass("selected"); // No tab selected anymore
 		$("#sundry-ctrls").hide();
+	}
+}
+
+/**
+ * Show video box in top instead of info box if "YouTube" is the SID handler.
+ */
+function HandleTopBox(emulator) {
+	if (emulator == "youtube") {
+		$("#info-text").hide();
+		$("#youtube").show();
+	} else {
+		$("#info-text").show();
+		$("#youtube").hide();
 	}
 }
 

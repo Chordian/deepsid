@@ -925,7 +925,7 @@ small.u2 { margin-left: 2px; }
 		#click-to-play-cover .center {
 			display: inline-block;
 			position: relative;
-			top: 50%; /* These three lines centers the DIV in the sundry box */
+			top: 50%; /* These three lines centers the DIV in the cover */
 			transform: translateY(-50%);
 			z-index: 9999;
 		}
@@ -2001,12 +2001,31 @@ input[type=range]::-ms-track {
 	font-size: 14px;
 }
 
+	/* The '#info-text' and '#youtube' boxes are mutually exclusive */
 	#info-text {
+		display: none;
 		overflow: hidden;
 		padding: 6px 10px;
 		height: 70px;
 		hyphens: auto;
 	}
+
+	/* The '#info-text' and '#youtube' boxes are mutually exclusive */
+	#youtube {
+		position: relative;
+		display: none;
+		height: 240px;
+	}
+
+		#youtube-loading {
+			display: inline-block;
+			position: absolute;
+			top: 50%; /* These three lines centers the DIV in the cover */
+			transform: translateY(-50%);
+			text-align: center;
+			font-size: 17px;
+			width: 430px;
+		}
 
 	/* Black box for the MUS info text */
 	.c64blackbg {

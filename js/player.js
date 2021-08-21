@@ -6,9 +6,9 @@
 function SIDPlayer(emulator) {
 
 	this.paused = false;
+	this.ytReady = false;
 
 	this.emulator = emulator.toLowerCase();
-	this.chip = "";
 	this.voiceMask = [0xF, 0xF, 0xF];
 	this.mainVol = 1;
 	
@@ -26,8 +26,6 @@ function SIDPlayer(emulator) {
 		returnCIA:			true,	// True if the handler can return the 16-bit CIA value
 		offline:			true,	// True if only the skip buttons should be accessible
 	}
-
-	this.modelSOASC = "MOS6581R2";
 
 	switch (this.emulator) {
 
@@ -49,7 +47,7 @@ function SIDPlayer(emulator) {
 			var CHAR_ROM	= "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ZjwOAHxmZnx4bGYAPGZgPAZmPAB+GBgYGBgYAGZmZmZmZjwAZmZmZmY8GABjY2Nrf3djAGZmPBg8ZmYAZmZmPBgYGAB+BgwYMGB+ABgYGP//GBgYwMAwMMDAMDAYGBgYGBgYGDMzzMwzM8zMM5nMZjOZzGYAAAAAAAAAAPDw8PDw8PDwAAAAAP//////AAAAAAAAAAAAAAAAAAD/wMDAwMDAwMDMzDMzzMwzMwMDAwMDAwMDAAAAAMzMMzPMmTNmzJkzZgMDAwMDAwMDGBgYHx8YGBgAAAAADw8PDxgYGB8fAAAAAAAA+PgYGBgAAAAAAAD//wAAAB8fGBgYGBgY//8AAAAAAAD//xgYGBgYGPj4GBgYwMDAwMDAwMDg4ODg4ODg4AcHBwcHBwcH//8AAAAAAAD///8AAAAAAAAAAAAA////AQMGbHhwYAAAAAAA8PDw8A8PDw8AAAAAGBgY+PgAAADw8PDwAAAAAPDw8PAPDw8Pw5mRkZ+Zw////8P5wZnB//+fn4OZmYP////Dn5+fw///+fnBmZnB////w5mBn8P///Hnwefn5////8GZmcH5g/+fn4OZmZn//+f/x+fnw///+f/5+fn5w/+fn5OHk5n//8fn5+fnw////5mAgJSc////g5mZmZn////DmZmZw////4OZmYOfn///wZmZwfn5//+DmZ+fn////8Gfw/mD///ngefn5/H///+ZmZmZwf///5mZmcPn////nJSAwcn///+Zw+fDmf///5mZmcHzh///gfPnz4H/w8/Pz8/Pw//z7c+Dz50D/8Pz8/Pz88P//+fDgefn5+f/78+AgM/v////////////5+fn5///5/+ZmZn//////5mZAJkAmZn/58Gfw/mD5/+dmfPnz5m5/8OZw8eYmcD/+fPn///////z58/Pz+fz/8/n8/Pz58///5nDAMOZ////5+eB5+f/////////5+fP////gf///////////+fn///8+fPnz5//w5mRiZmZw//n58fn5+eB/8OZ+fPPn4H/w5n54/mZw//58eGZgPn5/4Gfg/n5mcP/w5mfg5mZw/+BmfPn5+fn/8OZmcOZmcP/w5mZwfmZw////+f//+f/////5///5+fP8efPn8/n8f///4H/gf///4/n8/nz54//w5n58+f/5/////8AAP///+fDmYGZmZn/g5mZg5mZg//DmZ+fn5nD/4eTmZmZk4f/gZ+fh5+fgf+Bn5+Hn5+f/8OZn5GZmcP/mZmZgZmZmf/D5+fn5+fD/+Hz8/Pzk8f/mZOHj4eTmf+fn5+fn5+B/5yIgJScnJz/mYmBgZGZmf/DmZmZmZnD/4OZmYOfn5//w5mZmZnD8f+DmZmDh5OZ/8OZn8P5mcP/gefn5+fn5/+ZmZmZmZnD/5mZmZmZw+f/nJyclICInP+ZmcPnw5mZ/5mZmcPn5+f/gfnz58+fgf/n5+cAAOfn5z8/z88/P8/P5+fn5+fn5+fMzDMzzMwzM8xmM5nMZjOZ//////////8PDw8PDw8PD/////8AAAAAAP//////////////////AD8/Pz8/Pz8/MzPMzDMzzMz8/Pz8/Pz8/P////8zM8zMM2bMmTNmzJn8/Pz8/Pz8/Ofn5+Dg5+fn//////Dw8PDn5+fg4P///////wcH5+fn////////AAD////g4Ofn5+fn5wAA////////AADn5+fn5+cHB+fn5z8/Pz8/Pz8/Hx8fHx8fHx/4+Pj4+Pj4+AAA////////AAAA/////////////wAAAP78+ZOHj5///////w8PDw/w8PDw/////+fn5wcH////Dw8PD/////8PDw8P8PDw8A==";
 
 			if (typeof SIDBackend === "undefined") SIDBackend = new SIDBackendAdapter(BASIC_ROM, CHAR_ROM, KERNAL_ROM);
-		
+
 		case "legacy":
 
 			/**
@@ -123,34 +121,51 @@ function SIDPlayer(emulator) {
 			this.emulatorFlags.offline			= false;
 			break;
 
-		case "soasc_r2":
-		case "soasc_r4":
-		case "soasc_r5":
-		case "soasc_auto":
+		case "youtube":
 
 			/**
-			 * Howler by James Simpson (Goldfire Studios)
+			 * YouTube videos
 			 * 
-			 * + Can play anything; used for SOASC only
-			 * + For SOASC, both MP3 and FLAC are played
-			 * + Multiplier (only to 4.0 but still)
-			 * 
-			 * Stone Oakvalley's Authentic SID Collection
-			 * 
-			 * + MP3/FLAC recordings from real C64!
-			 * + SID chip revisions R2, R4 and R5
-			 * + All kinds of SID tunes are supported
-			 * - Except 2SID, 3SID and STR tunes
-			 * - Depends on external FTP mirror sites
-			 * - SOASC files are slower starters
+			 * + Videos usually play real C64 recording
+			 * + Sometimes have effects like oscillators
+			 * - Visual effects in DeepSID not available
 			 */
-			this.chip = this.emulator.substr(6);
-			this.emulator = "soasc";
+
+			// @link https://developers.google.com/youtube/iframe_api_reference
+			$.ajax({
+				async:		true,
+				url:		"//www.youtube.com/iframe_api",
+				dataType:	"script"
+				}).done(function() {
+					window.onYouTubeIframeAPIReady = function() {
+						this.YouTube = new YT.Player("youtube-player", {
+							height: "240",
+							width: "430",
+							videoId: "M7lc1UVf-VE",
+							playerVars: {
+								"playsinline": 1
+							},
+							events: {
+								// Event for when the video player is ready
+								"onReady": function(event) {
+									this.ytReady = true;
+									$("#youtube-loading").hide();
+								}.bind(this),
+								// Event for when the state in the video player changes
+								"onStateChange": function(event) {
+									/*if (event.data == YT.PlayerState.PLAYING) {
+										// Do something here when playing
+									}*/
+								}
+							}
+						});
+					}.bind(this);
+				}.bind(this));
 
 			this.emulatorFlags.supportFaster	= true;
 			this.emulatorFlags.supportEncoding	= false;
 			this.emulatorFlags.supportSeeking	= true;
-			this.emulatorFlags.forceModel		= false;
+			this.emulatorFlags.forceModel		= true;
 			this.emulatorFlags.forcePlay		= true;
 			this.emulatorFlags.hasFlags			= false;
 			this.emulatorFlags.slowLoading		= true;
@@ -344,137 +359,15 @@ SIDPlayer.prototype = {
 				}
 				break;
 
-			case "soasc":
-				if (this.howler) this.howler.stop();	// Prevents the time bar from going crazy
-				if (this.soasc) this.soasc.abort();		// Allows for premature row off-clicks
+			case "youtube":
 
-				if (this.howler) this.howler.unload();
+				if (this.ytReady) {
 
-				if ($("body").attr("data-mobile") !== "0") {
-					// NOTE: The AJAX and the Howler code is in this short timeout function to give the loading
-					// spinner time to be displayed first. Without the timeout, the synchronous AJAX call would
-					// block most web browsers from executing the spinner display until it is moot.
-					setTimeout(function() {
-						// AJAX is called synchronously to avoid iOS muting the audio upon row click
-						this.soasc = $.ajax({
-							url:		"php/soasc.php",
-							type:		"get",
-							async:		false,
-							data:		{
-								file: 		file,
-								sidModel:	this.chip,
-								subtune:	subtune,
-							}
-						}).done(function(data) {
-							try {
-								data = $.parseJSON(data);
-							} catch(e) {
-								if (document.location.hostname == "chordian")
-									$("body").empty().append(data);
-								else
-									alert("An error occurred. If it keeps popping up please tell me about it: chordian@gmail.com");
-								return false;
-							}
-							if (data.status == "error") {
-								alert(data.message);
-								return false;
-							}
-							this.url = data.url;
-							this.modelSOASC = data.model;
-						}.bind(this));
+					this.YouTube.loadVideoById("uVoM89cOQPA");
+					this.setVolume(1);
 
-						this.howler = new Howl({
-							src:	[this.url],
-							loop:	$("#loop").hasClass("button-on"),
-							html5:	true, // Must use this or files won't play immediately on row click on iOS devices
-							onload:	function() {
-								// Reset volume in case the "Faster" button-slip trick was used
-								this.setVolume(1);
-								if (typeof callback === "function")
-									callback.call(this);
-							}.bind(this),
-							onloaderror: function() {
-								// ERROR: File not found
-								if (typeof callback === "function")
-									callback.call(this, true);
-								setTimeout(function() {
-									// After half a second just go to the next row
-									if (typeof this.callbackTrackEnd === "function")
-										this.callbackTrackEnd();
-								}.bind(this), 500);
-							}.bind(this),
-							onend: function() {
-								// When the song has ended
-								if (typeof this.callbackTrackEnd === "function")
-									this.callbackTrackEnd();
-							}.bind(this),
-						});
-					}.bind(this), 20);
-				} else {
-					// NOTE: Not playing on a mobile device makes for a lot more flexibility. The timeout is
-					// not necessary anymore and the PHP script can be called asynchronously.
-					if (isDebug) {
-						_(_HEADER, "GET soasc.php");
-						_(_PARAM, "file", file);
-						_(_PARAM, "sidModel", this.chip);
-						_(_PARAM, "subtune", subtune);
-					}
-					this.soasc = $.get("php/soasc.php", {
-						file: 		file,
-						sidModel:	this.chip,
-						subtune:	subtune,
-					}, function(data) {
-						try {
-							data = $.parseJSON(data);
-						} catch(e) {
-							if (document.location.hostname == "chordian")
-								$("body").empty().append(data);
-							else
-								alert("An error occurred. If it keeps popping up please tell me about it: chordian@gmail.com");
-							return false;
-						}
-						if (data.status == "error") {
-							alert(data.message);
-							return false;
-						}
-						if (isDebug) {
-							_(_RESULTS);
-							_(_DATA, "status", data.status);
-							if (data.status != "ok") {
-								_(_DATA, "message", data.message);
-							} else {
-								_(_DATA, "request (debug)", '<a href="'+data.request.replace("url=1", "dbg=1")+'" target="_blank">'+data.request+'</a>');
-								_(_DATA, "url (to play)", data.url.indexOf("ERROR: File not found") == -1 ? '<a href="'+data.url+'" target="_blank">'+data.url+'</a>' : data.url);
-								_(_DATA, "model", data.model);
-							}
-						}
-						this.modelSOASC = data.model;
-						this.howler = new Howl({
-							src:	[data.url],
-							loop:	$("#loop").hasClass("button-on"),
-							onload:	function() {
-								// Reset volume in case the "Faster" button-slip trick was used
-								this.setVolume(1);
-								if (typeof callback === "function")
-									callback.call(this);
-							}.bind(this),
-							onloaderror: function() {
-								// ERROR: File not found
-								if (typeof callback === "function")
-									callback.call(this, true);
-								setTimeout(function() {
-									// After half a second just go to the next row
-									if (typeof this.callbackTrackEnd === "function")
-										this.callbackTrackEnd();
-								}.bind(this), 500);
-							}.bind(this),
-							onend: function() {
-								// When the song has ended
-								if (typeof this.callbackTrackEnd === "function")
-									this.callbackTrackEnd();
-							}.bind(this),
-						});
-					}.bind(this));
+					if (typeof callback === "function")
+						callback.call(this, error);
 				}
 				break;
 
@@ -495,11 +388,9 @@ SIDPlayer.prototype = {
 			case "websid":
 			case "legacy":
 			case "jssid":
+			case "youtube":
 				// At least stop the tune
 				this.stop();
-				break;
-			case "soasc":
-				if (this.howler) this.howler.unload();
 				break;
 			case "download":
 				break;
@@ -534,8 +425,8 @@ SIDPlayer.prototype = {
 					this.paused = false;
 				}
 				break;
-			case "soasc":
-				if (this.howler) this.howler.play();
+			case "youtube":
+				if (this.ytReady) this.YouTube.playVideo();
 				break;
 			case "download":
 				break;
@@ -564,8 +455,9 @@ SIDPlayer.prototype = {
 			case "jssid":
 				// @todo
 				break;
-			case "soasc":
-				// @todo
+			case "youtube":
+				if (this.ytReady)
+					playing = this.YouTube.getPlayerState() === YT.PlayerState.PLAYING;
 				break;
 			case "download":
 				// Unknown
@@ -591,7 +483,7 @@ SIDPlayer.prototype = {
 				// @todo
 				suspended = this.jsSID.issuspended();
 				break;
-			case "soasc":
+			case "youtube":
 				// @todo
 				break;
 			case "download":
@@ -615,8 +507,8 @@ SIDPlayer.prototype = {
 			case "jssid":
 				this.jsSID.pause();
 				break;
-			case "soasc":
-				if (this.howler) this.howler.pause();
+			case "youtube":
+				if (this.ytReady) this.YouTube.pauseVideo();
 				break;
 			case "download":
 				break;
@@ -641,8 +533,8 @@ SIDPlayer.prototype = {
 				this.jsSID.stop();
 				this.paused = false;
 				break;
-			case "soasc":
-				if (this.howler) this.howler.stop();
+			case "youtube":
+				if (this.ytReady) this.YouTube.stopVideo();
 				break;
 			case "download":
 				break;
@@ -667,8 +559,8 @@ SIDPlayer.prototype = {
 			case "jssid":
 				this.jsSID.setSpeedMultiplier(multiplier);
 				break;
-			case "soasc":
-				if (this.howler) this.howler.rate(multiplier !== 1 ? 4.0 : 1.0);
+			case "youtube":
+				if (this.ytReady) this.YouTube.setPlaybackRate(multiplier);
 				break;
 			case "download":
 				break;
@@ -699,7 +591,7 @@ SIDPlayer.prototype = {
 				result.songName			= this.jsSID.gettitle();
 				result.songReleased		= this.jsSID.getinfo();
 				break;
-			case "soasc":
+			case "youtube":
 			case "download":
 			case "info":
 				// HVSC: We have to ask the server (look in database or parse the file)
@@ -749,8 +641,8 @@ SIDPlayer.prototype = {
 			case "jssid":
 				this.jsSID.setvolume(value);
 				break;
-			case "soasc":
-				if (this.howler) this.howler.volume(value);
+			case "youtube":
+				if (this.ytReady) this.YouTube.setVolume(value * 100);
 				break;
 			case "download":
 				break;
@@ -771,8 +663,8 @@ SIDPlayer.prototype = {
 			case "jssid":
 				this.jsSID.setvolume(value * this.mainVol);
 				break;
-			case "soasc":
-				if (this.howler) this.howler.volume(value * this.mainVol);
+			case "youtube":
+				if (this.ytReady) this.YouTube.setVolume((value * this.mainVol) * 100);
 				break;
 			case "download":
 				break;
@@ -794,9 +686,7 @@ SIDPlayer.prototype = {
 			case "jssid":
 				time = this.jsSID.getplaytime();
 				break;
-			case "soasc":
-				var seek = this.howler ? parseFloat(this.howler.seek()) || 0 : 0;
-				time = Math.round(seek);
+			case "youtube":
 				break;
 			case "download":
 				break;
@@ -807,10 +697,10 @@ SIDPlayer.prototype = {
 	/**
 	 * Return the currently active handler/emulator.
 	 * 
-	 * @return {string}		Handler in lower case, e.g. "soasc_r5".
+	 * @return {string}		Handler in lower case, e.g. "youtube".
 	 */
 	getHandler: function() {
-		return this.emulator === "soasc" ? this.emulator+"_"+this.chip : this.emulator;
+		return this.emulator;
 	},
 
 	/**
@@ -819,8 +709,9 @@ SIDPlayer.prototype = {
 	 * @param {number} seconds	Number of seconds to move the seek to.
 	 */
 	setSeek: function(seconds) {
-		if (this.emulator === "soasc" && this.howler)
-			this.howler.seek(seconds);
+		//if (this.emulator === "youtube")
+			// @todo
+		return false; // temp
 	},
 
 	/**
@@ -834,8 +725,7 @@ SIDPlayer.prototype = {
 				break;
 			case "jssid":
 				break;
-			case "soasc":
-				this.howler.loop(true);
+			case "youtube":
 				break;
 			case "download":
 				break;
@@ -855,8 +745,7 @@ SIDPlayer.prototype = {
 				break;
 			case "jssid":
 				break;
-			case "soasc":
-				this.howler.loop(false);
+			case "youtube":
 				break;
 			case "download":
 				break;
@@ -877,16 +766,7 @@ SIDPlayer.prototype = {
 			case "jssid":
 				this.jsSID.setmodel(model === "6581" ? 6581.0 : 8580.0);
 				break;
-			case "soasc":
-				if (this.chip == "auto") {
-					this.chip = model === "6581" ? "r2" : "r5";
-					this.load(undefined, undefined, undefined, function() {
-						browser.clearSpinner();
-						this.chip = "auto";
-						this.play();
-					}.bind(this));
-				}
-				break;
+			case "youtube":
 			case "download":
 				break;
 		}
@@ -904,8 +784,7 @@ SIDPlayer.prototype = {
 				return SIDBackend.isSID6581() ? "6581" : "8580";
 			case "jssid":
 				return this.jsSID.getmodel() === 6581.0 ? "6581" : "8580";
-			case "soasc":
-				return this.chip == "auto" ? this.modelSOASC.substr(3, 4) : false;
+			case "youtube":
 			case "download":
 				return false;
 		}
@@ -926,9 +805,7 @@ SIDPlayer.prototype = {
 				// jsSID doesn't support this
 				// @todo Try changing: this.jsSID.C64_PAL_CPUCLK + this.jsSID.PAL_FRAMERATE
 				break;
-			case "soasc":
-				// Not possible
-				break;
+			case "youtube":
 			case "download":
 				break;
 		}
@@ -947,7 +824,7 @@ SIDPlayer.prototype = {
 			case "jssid":
 				// jsSID always defaults to PAL
 				return "PAL";
-			case "soasc":
+			case "youtube":
 			case "download":
 				return false;
 		}
@@ -979,7 +856,7 @@ SIDPlayer.prototype = {
 					jsMask += (this.voiceMask[jsChip] & 7) << (3 * jsChip);
 				this.jsSID.enableVoices(jsMask);
 				break;
-			case "soasc":
+			case "youtube":
 			case "download":
 				// Not possible
 				break;
@@ -1006,7 +883,7 @@ SIDPlayer.prototype = {
 			case "jssid":
 				this.jsSID.enableVoices(0x1FF);
 				break;
-			case "soasc":
+			case "youtube":
 			case "download":
 				// Not possible
 				break;
@@ -1033,7 +910,7 @@ SIDPlayer.prototype = {
 			case "jssid":
 				var cia = this.jsSID.getcia();
 				return cia ? Math.round(19654 / cia) : 0;
-			case "soasc":
+			case "youtube":
 			case "download":
 				return false;
 		}
@@ -1050,7 +927,7 @@ SIDPlayer.prototype = {
 			case "legacy":
 				return SIDBackend.getDigiTypeDesc();
 			case "jssid":
-			case "soasc":
+			case "youtube":
 			case "download":
 				return "";
 		}
@@ -1068,7 +945,7 @@ SIDPlayer.prototype = {
 			case "legacy":
 				return SIDBackend.getDigiRate();
 			case "jssid":
-			case "soasc":
+			case "youtube":
 			case "download":
 				return 0;
 		}
@@ -1096,7 +973,7 @@ SIDPlayer.prototype = {
 				return address;
 			case "jssid":
 				return this.jsSID.getSIDAddress(chip - 1);
-			case "soasc":
+			case "youtube":
 			case "download":
 				// Not possible
 				return false;
@@ -1125,7 +1002,7 @@ SIDPlayer.prototype = {
 				return SIDBackend.getRegisterSID(register);
 			case "jssid":
 				return this.jsSID.readregister(register + this.jsSID.getSIDAddress(chip));
-			case "soasc":
+			case "youtube":
 			case "download":
 				// Not possible
 				return false;
@@ -1146,7 +1023,7 @@ SIDPlayer.prototype = {
 				return SIDBackend.getRAM(address);
 			case "jssid":
 				return this.jsSID.readregister(address);
-			case "soasc":
+			case "youtube":
 			case "download":
 				// Not possible
 				return 0;
