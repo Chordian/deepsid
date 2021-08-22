@@ -1378,19 +1378,36 @@ Browser.prototype = {
 	 * @return {number}				The total number of seconds.
 	 */
 	getLength: function(subtune, noReset) {
-		// Example of a DB length string for four subtunes: "4:03 0:07 0:03 1:41"
-		var length = this.playlist[this.songPos].length.split(" ")[subtune];
-		if (typeof length === "undefined") length = "0:00";
 
-		this.secondsLength = length.split(":");
-		this.secondsLength = parseInt(this.secondsLength[0]) * 60 + parseInt(this.secondsLength[1]);
+		if (SID.emulator == "youtube") {
+			// Get the raw length from the YouTube IFrame API when it is actually playing
+			// NOTE: Not resetting 'this.secondsLength' to 0 fixed seeking.
+			var i = 0;
+			var waitForYTPlaying = setInterval(function() {
+				if (++i == 20 || (SID.ytReady && SID.isPlaying())) {
+					clearInterval(waitForYTPlaying);
+					this.secondsLength = SID.YouTube.getDuration(); // Only set correctly when it is playing
+					$("#time-current").empty().append("0:00");	
+					$("#time-length").empty().append(~~((this.secondsLength % 3600) / 60) + ":" + ~~this.secondsLength % 60);
+				}
+			}.bind(this), 500);
 
-		if (typeof noReset === "undefined") {
-			$("#time-current").empty().append("0:00");
-			var msInLength = length.indexOf(".") != -1;
-			$("#time-length").empty().append(length.split(".")[0] + (msInLength ? '<div>&#9642;</div>' : ''))
-				.attr("title", msInLength ? length : "");
-			return $("#loop").hasClass("button-on") ? 0 : this.secondsLength;
+		} else {
+
+			// Example of a DB length string for four subtunes: "4:03 0:07 0:03 1:41"
+			var length = this.playlist[this.songPos].length.split(" ")[subtune];
+			if (typeof length === "undefined") length = "0:00";
+
+			this.secondsLength = length.split(":");
+			this.secondsLength = parseInt(this.secondsLength[0]) * 60 + parseInt(this.secondsLength[1]);
+
+			if (typeof noReset === "undefined") {
+				$("#time-current").empty().append("0:00");
+				var msInLength = length.indexOf(".") != -1;
+				$("#time-length").empty().append(length.split(".")[0] + (msInLength ? '<div>&#9642;</div>' : ''))
+					.attr("title", msInLength ? length : "");
+				return $("#loop").hasClass("button-on") ? 0 : this.secondsLength;
+			}
 		}
 		return this.secondsLength;
 	},

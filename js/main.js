@@ -1406,7 +1406,8 @@ $(function() { // DOM ready
 				var halfway = $("#folders").height() / 2 - 26; // Last value is half of SID file row height
 				$("#folders").scrollTop(rowPos > halfway ? rowPos - halfway : 0);
 				// The user may have to click a overlay question to satisfy browser auto-play prevention
-				if (SID.isSuspended())
+				// NOTE: Always shown for the YouTube handler. YouTube seems to do their own checking.
+				if (SID.isSuspended() || SID.emulator == "youtube")
 					$("#dialog-cover,#click-to-play-cover").show();
 				else
 					PlayFromURL(); // Don't need to show the click-to-play cover - play it now
@@ -1494,6 +1495,23 @@ function PerformSearchQuery(searchQuery) {
  * Play the tune that was specified in the URL.
  */
 function PlayFromURL() {
+	if (SID.emulator == "youtube") {
+		// Patience; the YouTube IFrame video player can take a while to load
+		var i = 0;
+		var waitForYouTube = setInterval(function() {
+			if (SID.ytReady || ++i == 20) {
+				clearInterval(waitForYouTube);
+				PlayFromURLNow();
+			}
+		}, 500);
+	} else
+		PlayFromURLNow();
+}
+
+/**
+ * Called by PlayFromURL() above.
+ */
+function PlayFromURLNow() {
 	var paramSubtune = GetParam("subtune");
 	if (paramSubtune == "")
 		$trAutoPlay.children("td.sid").trigger("click");
@@ -1584,12 +1602,15 @@ function ToggleSundry(shrink) {
  */
 function HandleTopBox(emulator) {
 	if (emulator == "youtube") {
-		$("#info-text").hide();
+		$("#info-text,#memory-lid").hide();
 		$("#youtube").show();
+		$("#memory-chunk").css("top", "0");
 	} else {
-		$("#info-text").show();
+		$("#info-text,#memory-lid").show();
 		$("#youtube").hide();
+		$("#memory-chunk").css("top", "-2px");
 	}
+	$(window).trigger("resize"); // Keeps bottom search box in place
 }
 
 /**

@@ -141,9 +141,11 @@ function SIDPlayer(emulator) {
 						this.YouTube = new YT.Player("youtube-player", {
 							height: "240",
 							width: "430",
-							videoId: "M7lc1UVf-VE",
+							videoId: "8tPnX7OPo0Q", // 10 minutes of blank video
 							playerVars: {
-								"playsinline": 1
+								"origin":		"deepsid.chordian.net",
+								"playsinline":	1,
+								"controls":		0,
 							},
 							events: {
 								// Event for when the video player is ready
@@ -153,10 +155,26 @@ function SIDPlayer(emulator) {
 								}.bind(this),
 								// Event for when the state in the video player changes
 								"onStateChange": function(event) {
-									/*if (event.data == YT.PlayerState.PLAYING) {
-										// Do something here when playing
-									}*/
-								}
+									switch (event.data) {
+										case YT.PlayerState.ENDED:
+											// Skip to next subtune or song when the video ends
+											if (typeof this.callbackTrackEnd === "function")
+												this.callbackTrackEnd();
+											break;
+										case YT.PlayerState.PLAYING:
+											break;
+										case YT.PlayerState.PAUSED:
+											break;
+										case YT.PlayerState.BUFFERING:
+											break;
+										case YT.PlayerState.CUED:
+											break;
+									}
+								}.bind(this),
+								// Event for errors (e.g. if the video no longer exists)
+								"onError": function(event) {
+									browser.errorRow();
+								}.bind(this),
 							}
 						});
 					}.bind(this);
@@ -366,8 +384,9 @@ SIDPlayer.prototype = {
 					this.YouTube.loadVideoById("uVoM89cOQPA");
 					this.setVolume(1);
 
-					if (typeof callback === "function")
+					if (typeof callback === "function") {
 						callback.call(this, error);
+					}
 				}
 				break;
 
@@ -687,6 +706,8 @@ SIDPlayer.prototype = {
 				time = this.jsSID.getplaytime();
 				break;
 			case "youtube":
+				if (this.ytReady)
+					time = this.YouTube.getCurrentTime();
 				break;
 			case "download":
 				break;
@@ -709,9 +730,8 @@ SIDPlayer.prototype = {
 	 * @param {number} seconds	Number of seconds to move the seek to.
 	 */
 	setSeek: function(seconds) {
-		//if (this.emulator === "youtube")
-			// @todo
-		return false; // temp
+		if (this.emulator == "youtube" && this.ytReady)
+			this.YouTube.seekTo(seconds, true);
 	},
 
 	/**
@@ -726,6 +746,8 @@ SIDPlayer.prototype = {
 			case "jssid":
 				break;
 			case "youtube":
+				// Unfortunately this only seems to work with YouTube playlists
+				if (this.ytReady) this.YouTube.setLoop(true);
 				break;
 			case "download":
 				break;
@@ -746,6 +768,8 @@ SIDPlayer.prototype = {
 			case "jssid":
 				break;
 			case "youtube":
+				// Unfortunately this only seems to work with YouTube playlists
+				if (this.ytReady) this.YouTube.setLoop(false);
 				break;
 			case "download":
 				break;

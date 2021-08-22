@@ -288,10 +288,7 @@
 	--color-timebar-border:			#c4c5b3;			/* Color for border of e.g. time bar, permalinks, etc. */
 	--color-timebar-websid:			var(--color-memory-border-top);
 	--color-timebar-jssid:			rgb(38, 99, 41);
-	--color-timebar-soasc-auto:		rgb(104, 44, 116);
-	--color-timebar-soasc-r2:		#a44;
-	--color-timebar-soasc-r4:		rgb(116, 87, 47);
-	--color-timebar-soasc-r5:		#444;				/* This and above are time bar colors for various SID handlers */
+	--color-timebar-youtube:		#a44;				/* This and above are time bar colors for various SID handlers */
 
 	--color-slider-track:			#7e8260;			/* Color of the rail track of the volume slider */
 
@@ -626,10 +623,7 @@
 	--color-timebar-border:			#555;
 	--color-timebar-websid:			linear-gradient(to bottom, #616fbb 20%,#44529d 100%); 	/* #44529d */
 	--color-timebar-jssid:			linear-gradient(to bottom, #368e39 20%,#266329 100%); 	/* #266329 */
-	--color-timebar-soasc-auto:		linear-gradient(to bottom, #a651bd 20%,#843a98 100%); 	/* #682c74 */
-	--color-timebar-soasc-r2:		linear-gradient(to bottom, #bd5b5b 20%,#9d3f3f 100%); 	/* #a44; */
-	--color-timebar-soasc-r4:		linear-gradient(to bottom, #9e7740 20%,#74572f 100%); 	/* #74572f */
-	--color-timebar-soasc-r5:		linear-gradient(to bottom, #777 20%,#484848 100%);		/* #444; */
+	--color-timebar-youtube:		linear-gradient(to bottom, #bd5b5b 20%,#9d3f3f 100%); 	/* #a44; */
 	--color-slider-track:			#4a4a4a;
 
 	/* CSDb music competition folder icons */
@@ -1973,10 +1967,7 @@ input[type=range]::-ms-track {
 		#time .websid div,
 		#time .legacy div		{ background: var(--color-timebar-websid); }
 		#time .jssid div		{ background: var(--color-timebar-jssid); }
-		#time .soasc_auto div	{ background: var(--color-timebar-soasc-auto); }
-		#time .soasc_r2 div		{ background: var(--color-timebar-soasc-r2); }
-		#time .soasc_r4 div		{ background: var(--color-timebar-soasc-r4); }
-		#time .soasc_r5 div		{ background: var(--color-timebar-soasc-r5); }
+		#time .youtube div		{ background: var(--color-timebar-youtube); }
 
 /* Small dot that indicates this time length has millseconds too */
 #time-length div {

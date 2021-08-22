@@ -4,10 +4,8 @@ ToDo
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
 - New handler for YouTube.
-  - Video replaces top box.
-  - Use IFrame API to control video with DeepSID's controls.
   - Tabs in top video box for choice of video for the song.
-  - Right corner could be a link for visiting the channel on YouTube itself.
+  - Right corner could be a link for visiting the channel on YouTube itself. "Channel" ?
   - Separate table for ID joining to files table, with multiple rows possible for one song.
 
 - UI for YouTube handler for adding a link to a song. Automatically searches YouTube too?
