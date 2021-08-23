@@ -7,6 +7,7 @@ SHOULD BE DONE
   - Tabs in top video box for choice of video for the song.
   - Right corner could be a link for visiting the channel on YouTube itself. "Channel" ?
   - Separate table for ID joining to files table, with multiple rows possible for one song.
+  - Put "youtube" as disabled on all CGSC folders and files in the table with folders.
 
 - UI for YouTube handler for adding a link to a song. Automatically searches YouTube too?
 

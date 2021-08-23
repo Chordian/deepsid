@@ -1388,8 +1388,11 @@ Browser.prototype = {
 				if (++i == 20 || (SID.ytReady && SID.isPlaying())) {
 					clearInterval(waitForYTPlaying);
 					this.secondsLength = SID.YouTube.getDuration(); // Only set correctly when it is playing
-					$("#time-current").empty().append("0:00");	
-					$("#time-length").empty().append(~~((this.secondsLength % 3600) / 60) + ":" + ~~this.secondsLength % 60);
+					$("#time-current").empty().append("0:00");
+					var minutes = ~~((this.secondsLength % 3600) / 60),
+						seconds = ~~this.secondsLength % 60;
+					if (seconds < 10) seconds = "0"+seconds;
+					$("#time-length").empty().append(minutes+":"+seconds);
 				}
 			}.bind(this), 500);
 

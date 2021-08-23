@@ -974,8 +974,8 @@ $(function() { // DOM ready
 					var $folders = $(browser.cache.folder),
 						endName = homePath.indexOf("/") == -1 ? homePath : homePath.split("/").slice(-1)[0];
 					$($folders).find('.name[data-name="'+encodeURIComponent(endName)+'"]')
-					.parents("td").next().find(".rating")
-					.empty().append(stars);
+						.parents("td").next().find(".rating")
+						.empty().append(stars);
 					// Has to be wrapped to get everything back
 					browser.cache.folder = $("<div>").append($folders.clone()).html();
 				}
@@ -1670,6 +1670,24 @@ function DisableIncompatibleRows() {
 			SID.emulator == "jssid"
 				? $tr.addClass("disabled")
 				: $tr.removeClass("disabled");
+		}
+		
+		// For the 'YouTube' handler, disable all songs that doesn't have video(s) associated with them
+		if (isSIDFile && SID.emulator == "youtube" && SID.ytReady) {
+			if (this.youTubeDisable) this.youTubeDisable.abort();
+
+			var name = decodeURIComponent($tr.find(".name").attr("data-name"));
+			var thisFullname = ((browser.isSearching || browser.isSymlist || browser.isCompoFolder ? "/" : browser.path+"/")+name).substr(1);
+
+			this.youTubeDisable = $.get("php/youtube.php", {
+				fullname:		thisFullname,
+				subtune:		0, // @todo Maybe -1 to disregard including subtunes in SQL query?
+			}, function(data) {
+				browser.validateData(data, function(data) {
+					if (data.count == 0)
+						$tr.addClass("disabled");
+				}.bind(this));
+			}.bind(this));
 		}
 	});
 }

@@ -406,12 +406,13 @@ SIDPlayer.prototype = {
 							if (typeof callback === "function") {
 								callback.call(this, error);
 							}
-					}.bind(this));
+						}.bind(this));
 					}.bind(this));
 				}
 				break;
 
 			case "download":
+
 				// Force the browser to download it using an invisible <iframe>
 				$("#download").prop("src", file);
 				if (typeof callback === "function")
