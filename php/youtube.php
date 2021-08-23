@@ -8,10 +8,10 @@
  * @uses		$_GET['fullname']
  * @uses		$_GET['subtune']
  * 
- * @used-by		browser.js (??????????)
+ * @used-by		player.js
  */
 
-require_once("setup.php");
+require_once("class.account.php"); // Includes setup
 
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest')
 	die("Direct access not permitted.");
@@ -31,24 +31,26 @@ try {
 	$select->setFetchMode(PDO::FETCH_OBJ);
 
 	// Now get the YouTube info
-	$select_youtube = $db->prepare('
-		SELECT channel, video_id, order FROM youtube
-		WHERE file_id = '.$select->fetch()->id.'
-		AND subtune = :subtune
-	');
-	$select_youtube->execute(array(':subtune'=>$_GET['subtune']));
-	$select_youtube->setFetchMode(PDO::FETCH_OBJ);
-	$count = $select_youtube->rowCount();
+	$count = 0;
+	if ($select->rowCount()) {
+		$select_youtube = $db->prepare('
+			SELECT channel, video_id, tab_order FROM youtube
+			WHERE file_id = '.$select->fetch()->id.'
+			AND subtune = :subtune
+		');
+		$select_youtube->execute(array(':subtune'=>$_GET['subtune']));
+		$select_youtube->setFetchMode(PDO::FETCH_OBJ);
+		$count = $select_youtube->rowCount();
+	}
 
 	if ($count == 0)
 		die(json_encode(array('status' => 'ok', 'count' => 0))); // No videos found for that file
 
 	$videos = array();
 	foreach($select_youtube as $row) {
-		$videos[] = array(
+		$videos[$row->tab_order] = array(
 			'channel'	=> $row->channel,
 			'video_id'	=> $row->video_id,
-			'order'		=> $row->order,
 		);
 	}
 

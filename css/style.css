@@ -2005,7 +2005,7 @@ input[type=range]::-ms-track {
 	#youtube {
 		position: relative;
 		display: none;
-		height: 240px;
+		height: 248px;
 	}
 
 		#youtube-loading {
@@ -3393,8 +3393,15 @@ input[type=range]::-ms-track {
 		width: 860px;
 	}
 
+	#youtube-tabs {
+		display: none;
+		flex: 0 0 13px;
+		position: relative;
+	}
+
 		#tabs .tab,
-		#sundry-tabs .tab {
+		#sundry-tabs .tab,
+		#youtube-tabs .tab {
 			float: left;
 			position: relative;
 			top: 30.5px;
@@ -3420,8 +3427,17 @@ input[type=range]::-ms-track {
 				/*width: 54px;*/
 			}
 
+			#youtube-tabs .tab {
+				top: 0;
+				width: auto;
+				padding-left: 8px;
+				padding-right: 8px;
+				font-family: "Asap Condensed", sans-serif;
+			}
+
 		#tabs .selected,
-		#sundry-tabs .selected {
+		#sundry-tabs .selected,
+		#youtube-tabs .selected {
 			border-top: 1px solid var(--color-tab-border);
 			border-left: 1px solid var(--color-tab-border);
 			border-right: 1px solid var(--color-tab-border);
@@ -3432,7 +3448,8 @@ input[type=range]::-ms-track {
 		}
 
 		#tabs .disabled,
-		#sundry-tabs .disabled {
+		#sundry-tabs .disabled,
+		#youtube-tabs .disabled {
 			border-top: 1px solid var(--color-tab-border-disabled);
 			border-left: 1px solid var(--color-tab-border-disabled);
 			border-right: 1px solid var(--color-tab-border-disabled);
@@ -3442,13 +3459,15 @@ input[type=range]::-ms-track {
 		}
 
 		#tabs .tab:not(.selected):hover.tab:not(.disabled):hover,
-		#sundry-tabs .tab:not(.selected):hover.tab:not(.disabled):hover {
+		#sundry-tabs .tab:not(.selected):hover.tab:not(.disabled):hover,
+		#youtube-tabs .tab:not(.selected):hover.tab:not(.disabled):hover {
 			color: var(--color-tab-hover-text);
 			background: var(--color-tab-hover-bg);
 		}
 
 		#tabs .right,
-		#sundry-tabs .right {
+		#sundry-tabs .right,
+		#youtube-tabs .right {
 			float: right;
 			margin-left: 3px;
 			margin-right: 0;

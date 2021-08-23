@@ -688,6 +688,27 @@ $(function() { // DOM ready
 	});
 
 	/**
+	 * When one of the YouTube channel tabs are clicked.
+	 */
+	$("#youtube-tabs").on("click", ".tab", function() {
+		var $this = $(this);
+		if ($this.hasClass("selected") || $this.hasClass("disabled")) return false;
+
+		// Select the new tab
+		$("#youtube-tabs .tab").removeClass("selected");
+		$this.addClass("selected");
+
+		if (SID.ytReady) {
+			$("#stop").trigger("mouseup");
+			$("#time-length").empty().append('<img src="images/loading_threedots.svg" alt="..." style="position:relative;top:-1px;width:28px;">');
+			SID.YouTube.loadVideoById($this.attr("data-video"));
+			SID.setVolume(1);
+			$("#play-pause").trigger("mouseup");
+			browser.getLength(0);
+		}
+	});
+
+	/**
 	 * When one of the "sundry" box tabs are clicked.
 	 */
 	$("#sundry-tabs .tab").click(function() {
@@ -699,8 +720,6 @@ $(function() { // DOM ready
 
 		$("#sundry-ctrls").empty(); // Clear corner controls
 		$("#slider-button").hide();
-
-		var prevTopic = $("#sundry-tabs .selected").attr("data-topic");
 
 		// Select the new tab
 		$("#sundry-tabs .tab").removeClass("selected");
@@ -1603,11 +1622,11 @@ function ToggleSundry(shrink) {
 function HandleTopBox(emulator) {
 	if (emulator == "youtube") {
 		$("#info-text,#memory-lid").hide();
-		$("#youtube").show();
+		$("#youtube,#youtube-tabs").show();
 		$("#memory-chunk").css("top", "0");
 	} else {
 		$("#info-text,#memory-lid").show();
-		$("#youtube").hide();
+		$("#youtube,#youtube-tabs").hide();
 		$("#memory-chunk").css("top", "-2px");
 	}
 	$(window).trigger("resize"); // Keeps bottom search box in place

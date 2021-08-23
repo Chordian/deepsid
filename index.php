@@ -315,6 +315,9 @@
 				<?php endif; ?>
 			</div>
 
+			<div id="youtube-tabs">
+				<div class="tab unselectable selected">DeepSID</div>
+			</div>
 			<div id="info">
 				<div id="info-text">
 					<div style="text-align:center;font-size:12px;">

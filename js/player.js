@@ -3,6 +3,8 @@
  * DeepSID / SIDPlayer
  */
 
+const YOUTUBE_BLANK = "8tPnX7OPo0Q"; // 10 minutes of blank video
+
 function SIDPlayer(emulator) {
 
 	this.paused = false;
@@ -141,7 +143,7 @@ function SIDPlayer(emulator) {
 						this.YouTube = new YT.Player("youtube-player", {
 							height: "240",
 							width: "430",
-							videoId: "8tPnX7OPo0Q", // 10 minutes of blank video
+							videoId: YOUTUBE_BLANK,
 							playerVars: {
 								"origin":		"deepsid.chordian.net",
 								"playsinline":	1,
@@ -381,12 +383,31 @@ SIDPlayer.prototype = {
 
 				if (this.ytReady) {
 
-					this.YouTube.loadVideoById("uVoM89cOQPA");
-					this.setVolume(1);
+					if (this.youTubeScript) this.youTubeScript.abort();
 
-					if (typeof callback === "function") {
-						callback.call(this, error);
-					}
+					this.youTubeScript = $.get("php/youtube.php", {
+						fullname:		file.replace(browser.ROOT_HVSC+"/", ""),
+						subtune:		subtune,
+					}, function(data) {
+						browser.validateData(data, function(data) {
+							var $ytTabs = $("#youtube-tabs");
+							$ytTabs.empty();
+
+							if (data.count) {
+								$.each(data.videos, function(i, video) {
+									$ytTabs.append('<div class="tab unselectable'+(i == 0 ? ' selected' : '')+'" data-video="'+video.video_id+'">'+video.channel+'</div>');
+								});
+								this.YouTube.loadVideoById(data.videos[0].video_id);
+								this.setVolume(1);
+							} else {
+								$ytTabs.append('<div class="tab unselectable selected">DeepSID</div>');
+								this.YouTube.loadVideoById(YOUTUBE_BLANK);
+							}
+							if (typeof callback === "function") {
+								callback.call(this, error);
+							}
+					}.bind(this));
+					}.bind(this));
 				}
 				break;
 

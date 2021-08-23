@@ -23,6 +23,9 @@ SHOULD BE DONE
 - BUG: The SH folder upload dates are now skewed. Align them towards the right side.
   - And also a few pixel downwards while you're at it.
 
+- BUG: JW found a bug where the profile gets out of sync when searching. See e-mail about it
+  dated 22 August 2021.
+
 - Search shortcuts should show a folder icon with a small magnifying glass inside of it.
 
 - Idea: A ~2px left edge color border on those rows with a specific player. Maybe so it fades

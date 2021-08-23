@@ -1383,6 +1383,7 @@ Browser.prototype = {
 			// Get the raw length from the YouTube IFrame API when it is actually playing
 			// NOTE: Not resetting 'this.secondsLength' to 0 fixed seeking.
 			var i = 0;
+			$("#time-length").empty().append('<img src="images/loading_threedots.svg" alt="..." style="position:relative;top:-1px;width:28px;">');
 			var waitForYTPlaying = setInterval(function() {
 				if (++i == 20 || (SID.ytReady && SID.isPlaying())) {
 					clearInterval(waitForYTPlaying);
