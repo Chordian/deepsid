@@ -841,7 +841,7 @@ try {
 			$select->setFetchMode(PDO::FETCH_OBJ);
 
 			$player = $lengths = $type = $version = $playertype = $playercompat = $clockspeed = $sidmodel = $name = $author = $copyright = $hash = $stil = '';
-			$rating = $dataoffset = $datasize = $loadaddr = $initaddr = $playaddr = $subtunes = $startsubtune = $hvsc = 0;
+			$rating = $dataoffset = $datasize = $loadaddr = $initaddr = $playaddr = $subtunes = $startsubtune = $hvsc = $videos = 0;
 
 			if ($select->rowCount()) {
 				$row = $select->fetch();
@@ -883,6 +883,11 @@ try {
 						$rating = $select_rating->rowCount() ? $select_rating->fetch()->rating : 0;
 					}
 				}
+
+				// Are there any YouTube video(s) associated with this file?
+				$select_youtube = $db->query('SELECT COUNT(1) as c FROM youtube WHERE file_id = '.$row->id);
+				$select_youtube->setFetchMode(PDO::FETCH_OBJ);
+				$videos = $select_youtube->fetch()->c;
 			}
 
 			if ($sidmodel != 'MOS8580') $sidmodel = 'MOS6581'; // Always default to 6581 if not specifically 8580
@@ -996,6 +1001,7 @@ try {
 				'rating' =>			$rating,
 				'hvsc' =>			$hvsc,
 				'symid' =>			$symid,
+				'videos' =>			$videos,
 			));
 
 			// Add extra values for uploaded SID files too if available

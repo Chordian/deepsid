@@ -187,6 +187,10 @@ Controls.prototype = {
 								return false;
 							}
 						}	
+						if (SID.emulator == "youtube") {
+							SID.setSeek(0);
+							$("#time-length").empty().append("0:00");
+						}
 						break;
 					}
 				} while ($("#songs tr").eq(browser.songPos + browser.subFolders).hasClass("disabled") || 
@@ -198,6 +202,10 @@ Controls.prototype = {
 					if (browser.songPos == 0) {
 						// At the beginning of the list
 						$("#skip-prev").addClass("disabled");
+						if (SID.emulator == "youtube") {
+							SID.setSeek(0);
+							$("#time-length").empty().append("0:00");
+						}
 						break;
 					}
 				} while ($("#songs tr").eq(browser.songPos + browser.subFolders).hasClass("disabled"));

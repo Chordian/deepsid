@@ -1637,6 +1637,9 @@ function HandleTopBox(emulator) {
  * that emulators can't handle (such as BASIC tunes) will also be disabled.
  */
 function DisableIncompatibleRows() {
+	// The 'YouTube' handler has its own checks in 'hvsc.php'
+	if (SID.emulator == "youtube") return;
+	
 	$("#songs table").children().each(function() {
 		var $tr = $(this);
 		var isSIDFile = $tr.find("td.sid").length;
@@ -1670,24 +1673,6 @@ function DisableIncompatibleRows() {
 			SID.emulator == "jssid"
 				? $tr.addClass("disabled")
 				: $tr.removeClass("disabled");
-		}
-		
-		// For the 'YouTube' handler, disable all songs that doesn't have video(s) associated with them
-		if (isSIDFile && SID.emulator == "youtube" && SID.ytReady) {
-			if (this.youTubeDisable) this.youTubeDisable.abort();
-
-			var name = decodeURIComponent($tr.find(".name").attr("data-name"));
-			var thisFullname = ((browser.isSearching || browser.isSymlist || browser.isCompoFolder ? "/" : browser.path+"/")+name).substr(1);
-
-			this.youTubeDisable = $.get("php/youtube.php", {
-				fullname:		thisFullname,
-				subtune:		0, // @todo Maybe -1 to disregard including subtunes in SQL query?
-			}, function(data) {
-				browser.validateData(data, function(data) {
-					if (data.count == 0)
-						$tr.addClass("disabled");
-				}.bind(this));
-			}.bind(this));
 		}
 	});
 }

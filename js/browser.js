@@ -1294,6 +1294,7 @@ Browser.prototype = {
 						// Player: Replace "_" with space + "V" with "v" for versions
 						var player = file.player.replace(/_/g, " ").replace(/(V)(\d)/g, "v$2"),
 							rootFile = (this.isSearching || this.isSymlist || this.isCompoFolder ? "" : this.path) + "/" + file.filename,
+							countVideos = file.videos,
 							isNew = file.hvsc == this.HVSC_VERSION || file.hvsc == this.CGSC_VERSION ||
 								(typeof file.uploaded != "undefined" && file.uploaded.substr(0, 10) == this.today.substr(0, 10));
 						var adaptedName = file.substname == "" ? file.filename.replace(/^\_/, '') : file.substname;
@@ -1301,7 +1302,7 @@ Browser.prototype = {
 						var list_of_tags = this.buildTags(file.tags, file.tagtypes),
 							infoSecondary = typeof file.uploaded != "undefined" ? ' by '+file.author : ' in '+player;
 						files +=
-							'<tr>'+
+							'<tr'+(SID.emulator == "youtube" && countVideos == 0 ? ' class="disabled"' : '')+'>'+
 								'<td class="sid unselectable"><div class="block-wrap"><div class="block">'+(file.subtunes > 1 ? '<div class="subtunes'+(this.isSymlist ? ' specific' : '')+(isNew ? ' newst' : '')+'">'+(this.isSymlist ? file.startsubtune : file.subtunes)+'</div>' : (isNew ? '<div class="newsid"></div>' : ''))+
 								'<div class="entry name file'+(this.isSearching || this.isCompoFolder || this.path.substr(0, 2) === "/$" ? ' search' : '')+'" data-name="'+encodeURIComponent(file.filename)+'" data-type="'+file.type+'" data-symid="'+file.symid+'">'+adaptedName+'</div></div></div><br />'+
 								'<span class="info">'+file.copyright.substr(0, 4)+infoSecondary+'<div class="tags-line"'+(showTags ? '' : ' style="display:none"')+'>'+list_of_tags+'</div></span></td>'+
