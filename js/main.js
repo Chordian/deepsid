@@ -120,7 +120,7 @@ $(function() { // DOM ready
 				$("#faster").trigger("mousedown");
 		}
 	}).on("keyup", function(event) {
-		if (!$("#search-box,#username,#password,#old-password,#new-password,#sym-rename,#sym-specify-subtune,#new-tag,#dialog-all-tags,#dialog-song-tags,#upload-csdb-id,#upload-lengths-list,#upload-stil-text,#form-edit-file input,#form-upload-file input").is(":focus")) {
+		if (!$("#search-box,#username,#password,#old-password,#new-password,#sym-rename,#sym-specify-subtune,#new-tag,#dialog-all-tags,#dialog-song-tags,#upload-csdb-id,#upload-lengths-list,#upload-stil-text,#form-edit-file input,#form-upload-file input,#dialog-edit-videos input").is(":focus")) {
 			if (event.keyCode == 220) {									// Keyup key below 'Escape'
 				// Fast forward
 				$("#faster").trigger("mouseup");
@@ -530,6 +530,15 @@ $(function() { // DOM ready
 				SID.setVolume(1);
 
 				HandleTopBox(emulator);
+
+				if (emulator == "youtube" || emulator == "download") {
+					// It doesn't make sense to make the 'Visuals' tab available here
+					$("#tab-visuals").addClass("disabled");
+					if ($("#tabs .selected").attr("data-topic") === "visuals")
+						$("#tab-profile").trigger("click");
+				}
+				else
+					$("#tab-visuals").removeClass("disabled");
 
 				// The color of the time bar should be unique for the chosen SID handler
 				$("#time-bar").removeClass("websid legacy jssid youtube").addClass(emulator)
@@ -1453,6 +1462,14 @@ $(function() { // DOM ready
 		PlayFromURL();
 	});
 
+	/**
+	 * When clicking the 'Edit' link for change the YouTube tabs for a song.
+	 */
+	$("#youtube-tabs").on("click", "#edityttabs a", function(event) {
+		browser.editYouTubeLinks($(event.target).attr("data-name"));
+		return false;
+	});
+
 	// Select and show a "dexter" page tab	
 	selectTab = selectTab !== "" ? selectTab : "profile";
 	var selectView = "";
@@ -1786,10 +1803,10 @@ function CustomDialog(data, callbackYes, callbackNo) {
 
 	$(data.id).css({ width: width, height: height }).center();
 	$(data.id+" .dialog-text").empty().append(data.text);
-	if (typeof data.wizard == "undefined" || !data.wizard)
-		$dialog.fadeIn("fast");
-	else
+	if (typeof data.wizard !== "undefined" && data.wizard)
 		$dialog.show();
+	else
+		$dialog.fadeIn("fast");
 
 	$(data.id).on("click", ".dialog-button-yes", function() {
 		$dialog.hide();

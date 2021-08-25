@@ -210,6 +210,53 @@
 			<div class="dialog-buttons" style="width:136px;"><button class="dialog-button-yes dialog-auto" style="float:left;margin:0;">OK</button><button class="dialog-button-no dialog-auto" style="float:right;margin:0;">Cancel</button></div>
 		</div>
 
+		<div id="dialog-edit-videos" class="dialog-box">
+			<div class="dialog-text"></div>
+			<fieldset style="height:200px;"><legend>Song</legend>
+				<div class="ev-tabs">
+					<span>Tab</span>
+					<span><input type="checkbox" id="ev-cb-1" /></span>
+					<span><input type="checkbox" id="ev-cb-2" /></span>
+					<span><input type="checkbox" id="ev-cb-3" /></span>
+					<span><input type="checkbox" id="ev-cb-4" /></span>
+					<span><input type="checkbox" id="ev-cb-5" /></span>
+				</div>
+				<div class="ev-default">
+					<span>Default</span>
+					<span><input type="radio" name="ev-rb" id="ev-rb-1" checked /></span>
+					<span><input type="radio" name="ev-rb" id="ev-rb-2" /></span>
+					<span><input type="radio" name="ev-rb" id="ev-rb-3" /></span>
+					<span><input type="radio" name="ev-rb" id="ev-rb-4" /></span>
+					<span><input type="radio" name="ev-rb" id="ev-rb-5" /></span>
+				</div>
+				<div class="ev-channel">
+					<span>Channel name</span>
+					<span><input type="text" id="ev-tb-cn-1" maxlength="32" /> <button id="ev-se-1">S</button></span>
+					<span><input type="text" id="ev-tb-cn-2" maxlength="32" /> <button id="ev-se-2">S</button></span>
+					<span><input type="text" id="ev-tb-cn-3" maxlength="32" /> <button id="ev-se-3">S</button></span>
+					<span><input type="text" id="ev-tb-cn-4" maxlength="32" /> <button id="ev-se-4">S</button></span>
+					<span><input type="text" id="ev-tb-cn-5" maxlength="32" /> <button id="ev-se-5">S</button></span>
+				</div>
+				<div class="ev-video">
+					<span>Video ID</span>
+					<span><input type="text" id="ev-tb-vi-1" maxlength="16" /></span>
+					<span><input type="text" id="ev-tb-vi-2" maxlength="16" /></span>
+					<span><input type="text" id="ev-tb-vi-3" maxlength="16" /></span>
+					<span><input type="text" id="ev-tb-vi-4" maxlength="16" /></span>
+					<span><input type="text" id="ev-tb-vi-5" maxlength="16" /></span>
+				</div>
+				<div class="ev-position">
+					<span>Position</span>
+					<span><button id="ev-up-1" class="disabled">Up</button> <button id="ev-dn-1">Dn</button></span>
+					<span><button id="ev-up-2">Up</button> <button id="ev-dn-2">Dn</button></span>
+					<span><button id="ev-up-3">Up</button> <button id="ev-dn-3">Dn</button></span>
+					<span><button id="ev-up-4">Up</button> <button id="ev-dn-4">Dn</button></span>
+					<span><button id="ev-up-5">Up</button> <button id="ev-dn-5" class="disabled">Dn</button></span>
+				</div>
+			</fieldset>
+			<div class="dialog-buttons"><a href="#" class="dialog-cancel">Cancel</a><button class="dialog-button-yes dialog-auto">Save</button></div>
+		</div>
+
 		<div id="dialog-edit-file" class="dialog-box">
 			<div class="dialog-text"></div>
 			<form id="form-edit-file" onsubmit="return false;" autocomplete="off">
@@ -327,7 +374,7 @@
 					</div>
 				</div>
 				<div id="youtube">
-					<div id="youtube-loading">Loading YouTube...</div>
+					<div id="youtube-loading">Initializing YouTube...</div>
 					<div id="youtube-player"></div>
 				</div>
 				<div id="memory-bar"><div id="memory-lid"></div><div id="memory-chunk"></div></div>

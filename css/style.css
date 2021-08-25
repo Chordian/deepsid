@@ -3399,6 +3399,14 @@ input[type=range]::-ms-track {
 		position: relative;
 	}
 
+		#edityttabs {
+			position: absolute;
+			top: 2px;
+			right: 1px;
+			font-size: 11px;
+			text-align: right;
+		}
+
 		#tabs .tab,
 		#sundry-tabs .tab,
 		#youtube-tabs .tab {
@@ -5289,6 +5297,80 @@ input[type=range]::-ms-track {
 			color: var(--color-text-fine);
 			margin: 5px 4px 5px 0;
 		}
+
+		#dialog-edit-videos fieldset {
+			padding: 10px 0 20px 10px;
+			font: normal 13px "Montserrat", sans-serif;
+		}
+
+			#dialog-edit-videos fieldset div {
+				float: left;
+				/*background: #faa;*/
+				height: 100%;
+				margin-left: 12px;
+			}
+
+				#dialog-edit-videos div.ev-tabs {
+				}
+
+				#dialog-edit-videos div.ev-default {
+				}
+
+				#dialog-edit-videos div.ev-channel {
+					width: 200px;
+				}
+
+				#dialog-edit-videos div.ev-video {
+					width: 120px;
+				}
+
+				#dialog-edit-videos div.ev-position {
+				}
+
+			#dialog-edit-videos fieldset span {
+				display: block;
+				height: 24px;
+				margin-bottom: 2px;
+				/*background: #aaf;*/
+			}
+
+				#dialog-edit-videos div.ev-tabs span,
+				#dialog-edit-videos div.ev-default span {
+					padding-top: 2px;
+					padding-left: 4px;
+					text-align: center;
+				}
+
+				#dialog-edit-videos div.ev-tabs span:first-child,
+				#dialog-edit-videos div.ev-default span:first-child {
+					padding-top: 0;
+					padding-left: 0;
+				}
+
+				#dialog-edit-videos div.ev-channel input {
+					height: 21px;
+					width: 165px;
+					font-size: 14px;
+				}
+
+				#dialog-edit-videos div.ev-video input {
+					height: 21px;
+					width: 100%;
+					font-size: 14px;
+				}
+
+			#dialog-edit-videos div.ev-channel button,
+			#dialog-edit-videos div.ev-position button {
+				height: 21px;
+				width: 30px;
+				padding: 1px 0 0 0;
+				line-height: 11px;
+				font-size: 12px;
+			}
+
+			#dialog-edit-videos div.ev-channel button {
+				width: 24px;
+			}
 
 /* ---- Styled Select ------------------------------------------------------- */
 

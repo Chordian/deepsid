@@ -3,7 +3,8 @@
  * DeepSID / SIDPlayer
  */
 
-const YOUTUBE_BLANK = "8tPnX7OPo0Q"; // 10 minutes of blank video
+// const YOUTUBE_BLANK = "8tPnX7OPo0Q"; // 10 minutes of blank video
+const YOUTUBE_BLANK = "ENmZnF2M41A"; // Animated DeepSID logo
 
 function SIDPlayer(emulator) {
 
@@ -128,8 +129,10 @@ function SIDPlayer(emulator) {
 			/**
 			 * YouTube videos
 			 * 
-			 * + Videos usually play real C64 recording
-			 * + Sometimes have effects like oscillators
+			 * + Videos usually play a real C64 recording
+			 * + Sometimes have nifty video effects
+			 * + Can be accessed with DeepSID's own controls
+			 * + DeepSID support multiple videos for a song
 			 * - Visual effects in DeepSID not available
 			 */
 
@@ -385,8 +388,10 @@ SIDPlayer.prototype = {
 
 					if (this.youTubeScript) this.youTubeScript.abort();
 
+					var fullname = file.replace(browser.ROOT_HVSC+"/", "");
+
 					this.youTubeScript = $.get("php/youtube.php", {
-						fullname:		file.replace(browser.ROOT_HVSC+"/", ""),
+						fullname:		fullname,
 						subtune:		subtune,
 					}, function(data) {
 						browser.validateData(data, function(data) {
@@ -394,12 +399,17 @@ SIDPlayer.prototype = {
 							$ytTabs.empty();
 
 							if (data.count) {
+								// Create the list of tabs representing each YouTube channel link
 								$.each(data.videos, function(i, video) {
 									$ytTabs.append('<div class="tab unselectable'+(i == 0 ? ' selected' : '')+'" data-video="'+video.video_id+'">'+video.channel+'</div>');
 								});
+								// The 'Edit' corner link
+								$ytTabs.append('<div id="edityttabs"><a href="#" title="Edit YouTube links" data-name="'+fullname+'">Edit</a></div>');
+								// Load YouTube video ID and reset volume
 								this.YouTube.loadVideoById(data.videos[0].video_id);
 								this.setVolume(1);
 							} else {
+								// There were no YouTube links set up for this song (yet)
 								$ytTabs.append('<div class="tab unselectable selected">DeepSID</div>');
 								this.YouTube.loadVideoById(YOUTUBE_BLANK);
 							}

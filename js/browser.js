@@ -1112,11 +1112,11 @@ Browser.prototype = {
 					$("#tab-stil").empty().append(this.isCGSC() ? "Lyrics" : "STIL");
 
 					$("#tabs .tab").removeClass("disabled");
+					var $selected = $("#tabs .selected");
 					if (this.isCGSC()) {
 						// The 'CSDb', 'GB64' and 'Remix' tabs are useless to CGSC
 						$("#tab-csdb,#tab-gb64,#tab-remix").addClass("disabled");
 						$("#note-csdb,#note-gb64,#note-remix").hide();
-						var $selected = $("#tabs .selected");
 						if ($selected.attr("data-topic") === "csdb" || $selected.attr("data-topic") === "gb64" || $selected.attr("data-topic") === "remix")
 							$("#tab-profile").trigger("click");
 					} else if (this.isUploadFolder()) {
@@ -1124,10 +1124,14 @@ Browser.prototype = {
 						// NOTE: I whitelisted 'GB64' because sometimes I add a link to GameBase64 in the database.
 						$("#tab-remix").addClass("disabled");
 						$("#note-remix").hide();
-						var $selected = $("#tabs .selected");
 						if ($selected.attr("data-topic") === "remix")
 							$("#tab-profile").trigger("click");
 						this.previousOverridePath = "_SID Happens";
+					} else if (SID.emulator == "youtube" || SID.emulator == "download") {
+						// The 'Visuals' tab is useless to the 'YouTube' and 'Download' SID handlers
+						$("#tab-visuals").addClass("disabled");
+						if ($selected.attr("data-topic") === "visuals")
+							$("#tab-profile").trigger("click");
 					}
 
 					// FOLDERS
@@ -1958,10 +1962,18 @@ Browser.prototype = {
 				'<div class="line" data-action="edit-tags">Edit Tags</div>'+
 				'<div class="line'+(this.isSearching || this.isCompoFolder || isPersonalSymlist || isPublicSymlist ? " disabled" : "")+'" data-action="copy-link">Copy Link</div>';
 
+			var dividerForYouTube = '<div class="divider"></div>';
 			if (typeof this.playlist[thisRow].uploaded != "undefined") {
 				// It's a SID row from the 'SID Happens' folder and thus can be edited
 				contents += '<div class="divider"></div>'+
 					'<div class="line" data-action="edit-upload">Edit Uploaded File</div>';
+				dividerForYouTube = '';
+			}
+
+			if (SID.emulator == "youtube") {
+				// A YouTube video link can be added to this SID row
+				contents += dividerForYouTube+
+					'<div class="line" data-action="edit-videos">Edit YouTube Links</div>';
 			}
 
 		} else if ($target.hasClass("folder") && (this.contextSID.substr(0, 1) == "!" || this.contextSID.substr(0, 1) == "$")) {
@@ -2112,6 +2124,9 @@ Browser.prototype = {
 					});
 				}.bind(this));
 				break;
+			case 'edit-videos':
+				this.editYouTubeLinks(this.contextSID);
+				break;
 			case "symlist-add":
 			case "symlist-new":
 				// Add the SID file to a symlist (existing or creating with unique version of SID file name)
@@ -2224,6 +2239,28 @@ Browser.prototype = {
 			default:
 				break;
 		}
+	},
+
+	/**
+	 * Show the custom dialog box for editing YouTube video links.
+	 * 
+	 * @param {string} fullname		The SID filename including folders.
+	 */
+	editYouTubeLinks: function(fullname) {
+		CustomDialog({
+			id: '#dialog-edit-videos',
+			text: '<h3>Edit video links</h3><p>'+fullname.split("/").slice(-1)[0]+'</p>',
+			width: 600,
+			height: 362,
+		}, function() {
+			// OK was clicked; make all the video link changes
+			/*$.post("php/?????.php", {
+				abc:		def,
+			}, function(data) {
+				browser.validateData(data, function(data) {
+				});
+			}.bind(this));*/
+		});
 	},
 
 	/**
@@ -2606,7 +2643,7 @@ Browser.prototype = {
 						'</table>'+
 						'<p>If you wish to edit the SID file itself, cancel and use a SID tool to do so, then upload again.</p>',
 					height: 378,
-					wizard: true,
+					wizard: this.wizardContinued,
 				}, function() {
 					if (!this.wizardContinued) {
 						// First time continuing to next wizard step so set these things up
