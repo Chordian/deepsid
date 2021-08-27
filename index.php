@@ -240,11 +240,11 @@
 				</div>
 				<div class="ev-channel">
 					<span>Channel name</span>
-					<span><input type="text" id="ev-tb-cn-1" maxlength="32" /> <button id="ev-se-1"><img id="ev-sb-1" src="images/search.svg" alt="" /></button></span>
-					<span><input type="text" id="ev-tb-cn-2" maxlength="32" disabled /> <button id="ev-se-2" class="disabled"><img id="ev-sb-2" src="images/search.svg" alt="" /></button></span>
-					<span><input type="text" id="ev-tb-cn-3" maxlength="32" disabled /> <button id="ev-se-3" class="disabled"><img id="ev-sb-3" src="images/search.svg" alt="" /></button></span>
-					<span><input type="text" id="ev-tb-cn-4" maxlength="32" disabled /> <button id="ev-se-4" class="disabled"><img id="ev-sb-4" src="images/search.svg" alt="" /></button></span>
-					<span><input type="text" id="ev-tb-cn-5" maxlength="32" disabled /> <button id="ev-se-5" class="disabled"><img id="ev-sb-5" src="images/search.svg" alt="" /></button></span>
+					<span><input type="text" id="ev-tb-cn-1" maxlength="32" /> <button id="ev-se-1" type="button"><img src="images/search.svg" alt="" /></button></span>
+					<span><input type="text" id="ev-tb-cn-2" maxlength="32" disabled /> <button id="ev-se-2" type="button" class="disabled"><img src="images/search.svg" alt="" /></button></span>
+					<span><input type="text" id="ev-tb-cn-3" maxlength="32" disabled /> <button id="ev-se-3" type="button" class="disabled"><img src="images/search.svg" alt="" /></button></span>
+					<span><input type="text" id="ev-tb-cn-4" maxlength="32" disabled /> <button id="ev-se-4" type="button" class="disabled"><img src="images/search.svg" alt="" /></button></span>
+					<span><input type="text" id="ev-tb-cn-5" maxlength="32" disabled /> <button id="ev-se-5" type="button" class="disabled"><img src="images/search.svg" alt="" /></button></span>
 				</div>
 				<div class="ev-video">
 					<span>Video ID</span>

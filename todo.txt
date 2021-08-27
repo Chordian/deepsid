@@ -9,8 +9,7 @@ SHOULD BE DONE
   - Remember to add logging for when users add a YouTube link to a song.
 
 - IFrame project for Lemon:
-  - DeepSID needs to run in HTTPS protocol. Some links in the root page doesn't work then.
-    I wonder if it's possible to force all HTTP links into doing HTTPS with some jQuery?
+  - Fix links in top 10 lists in the root page.
 
 - UI for YouTube handler for adding a link to a song. Automatically searches YouTube too?
 

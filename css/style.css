@@ -5363,6 +5363,10 @@ input[type=range]::-ms-track {
 				width: 24px;
 			}
 
+			#dialog-edit-videos img {
+				pointer-events: none;
+			}
+
 /* ---- Styled Select ------------------------------------------------------- */
 
 /* Used to make the original select hidden but still functional */

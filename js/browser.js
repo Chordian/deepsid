@@ -2251,7 +2251,7 @@ Browser.prototype = {
 	editYouTubeLinks: function(fullname) {
 		CustomDialog({
 			id: '#dialog-edit-videos',
-			text: '<h3>Edit video links</h3><p>'+fullname.split("/").slice(-1)[0]+'</p>',
+			text: '<h3>Edit video links</h3><p id="ev-sid">'+fullname.split("/").slice(-1)[0]+'</p>',
 			width: 600,
 			height: 362,
 		}, function() {
@@ -2270,9 +2270,6 @@ Browser.prototype = {
 /*
 
 	@todo
-
-		- Disable row med rb on: parse row from top to bottom. Set rb on for the
-		  first enabled row. If all are disabled, don't set it on at all.
 
 
 */
@@ -2297,10 +2294,21 @@ Browser.prototype = {
 					// Switch the row of controls ON
 					$("#ev-rb-"+rowIndex+",#ev-tb-cn-"+rowIndex+",#ev-tb-vi-"+rowIndex).prop("disabled", false);
 					$("#ev-se-"+rowIndex+",#ev-up-"+rowIndex+",#ev-dn-"+rowIndex).removeClass("disabled");
+					// Check the radio button if it was orphaned
+					if (!$("#ev-rb-1").is(":checked") && !$("#ev-rb-2").is(":checked") && !$("#ev-rb-3").is(":checked") && !$("#ev-rb-4").is(":checked") && !$("#ev-rb-5").is(":checked"))
+						$("#ev-rb-"+rowIndex).prop("checked", true);
 				} else {
 					// Switch the row of controls OFF
 					$("#ev-rb-"+rowIndex+",#ev-tb-cn-"+rowIndex+",#ev-tb-vi-"+rowIndex).prop("disabled", true);
 					$("#ev-se-"+rowIndex+",#ev-up-"+rowIndex+",#ev-dn-"+rowIndex).addClass("disabled");
+					// Find a new home for the radio button if it was checked there
+					$("#ev-rb-"+rowIndex).prop("checked", false);
+					for (var r = 1; r <= 5; r++) {
+						if (!$("#ev-rb-"+r).is(":disabled")) {
+							$("#ev-rb-"+r).prop("checked", true);
+							break;
+						}
+					}
 				}
 				break;
 			case "button":
@@ -2314,6 +2322,10 @@ Browser.prototype = {
 						// Move the row DOWN
 						if (rowIndex == 5) break;
 						this.moveVideoLinkRow(rowIndex, rowIndex + 1);
+						break;
+					case "ev-se":
+						// Search for both channel and SID name in YouTube (in a new browser tab)
+						window.open("https://www.youtube.com/results?search_query="+encodeURIComponent($("#ev-tb-cn-"+rowIndex).val()+" "+$("#ev-sid").text().replace(/[_.]/g, " ")), "_blank");
 						break;
 					default:
 						break;
