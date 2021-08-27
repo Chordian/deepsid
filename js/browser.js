@@ -81,6 +81,8 @@ Browser.prototype = {
 					$("#contextsubmenu").remove();
 			});
 
+		$("#dialog-edit-videos").click(this.onYouTubeLinksClick.bind(this));
+
 		setInterval(function() {
 			// Update clock
 			var secondsCurrent = SID.getCurrentPlaytime();
@@ -2261,6 +2263,94 @@ Browser.prototype = {
 				});
 			}.bind(this));*/
 		});
+	},
+
+
+
+/*
+
+	@todo
+
+		- Disable row med rb on: parse row from top to bottom. Set rb on for the
+		  first enabled row. If all are disabled, don't set it on at all.
+
+
+*/
+
+
+
+	/**
+	 * When clicking an item in the dialog box for editing YouTube video links.
+	 * 
+	 * @param {*} event 
+	 */
+	 onYouTubeLinksClick: function(event) {
+		var $target = $(event.target);
+		if ($target.hasClass("disabled")) return;
+
+		// Last character of all ID names is always the row index
+		var rowIndex = parseInt(event.target.id.substr(-1));
+
+		switch (event.target.type) {
+			case "checkbox":
+				if ($target.is(":checked")) {
+					// Switch the row of controls ON
+					$("#ev-rb-"+rowIndex+",#ev-tb-cn-"+rowIndex+",#ev-tb-vi-"+rowIndex).prop("disabled", false);
+					$("#ev-se-"+rowIndex+",#ev-up-"+rowIndex+",#ev-dn-"+rowIndex).removeClass("disabled");
+				} else {
+					// Switch the row of controls OFF
+					$("#ev-rb-"+rowIndex+",#ev-tb-cn-"+rowIndex+",#ev-tb-vi-"+rowIndex).prop("disabled", true);
+					$("#ev-se-"+rowIndex+",#ev-up-"+rowIndex+",#ev-dn-"+rowIndex).addClass("disabled");
+				}
+				break;
+			case "button":
+				switch (event.target.id.substr(0, 5)) {
+					case "ev-up":
+						// Move the row UP
+						if (rowIndex == 1) break;
+						this.moveVideoLinkRow(rowIndex, rowIndex - 1);
+						break;
+					case "ev-dn":
+						// Move the row DOWN
+						if (rowIndex == 5) break;
+						this.moveVideoLinkRow(rowIndex, rowIndex + 1);
+						break;
+					default:
+						break;
+				}
+				break;
+			default:
+				break;
+		}
+	 },
+
+	/**
+	 * Move the video link row in the dialog box up or down.
+	 * 
+	 * @param {number} indexSource
+	 * @param {number} indexDest
+	 */
+	moveVideoLinkRow: function(indexSource, indexDest) {
+		var cbChecked = $("#ev-cb-"+indexSource).is(":checked"),
+			rbChecked = $("#ev-rb-"+indexSource).is(":checked"),
+			cnText = $("#ev-tb-cn-"+indexSource).val(),
+			viText = $("#ev-tb-vi-"+indexSource).val();
+
+		$("#ev-cb-"+indexSource).prop("checked", $("#ev-cb-"+indexDest).is(":checked"));
+		$("#ev-rb-"+indexSource).prop("checked", $("#ev-rb-"+indexDest).is(":checked"))
+			.prop("disabled", $("#ev-rb-"+indexDest).is(":disabled"));
+		$("#ev-tb-cn-"+indexSource).val($("#ev-tb-cn-"+indexDest).val())
+			.prop("disabled", $("#ev-tb-cn-"+indexDest).is(":disabled"));
+		$("#ev-tb-vi-"+indexSource).val($("#ev-tb-vi-"+indexDest).val())
+			.prop("disabled", $("#ev-tb-vi-"+indexDest).is(":disabled"));
+		if ($("#ev-se-"+indexDest).hasClass("disabled"))
+			$("#ev-se-"+indexSource+",#ev-up-"+indexSource+",#ev-dn-"+indexSource).addClass("disabled");
+
+		$("#ev-cb-"+indexDest).prop("checked", cbChecked);
+		$("#ev-rb-"+indexDest).prop("checked", rbChecked).prop("disabled", false);
+		$("#ev-tb-cn-"+indexDest).val(cnText).prop("disabled", false);
+		$("#ev-tb-vi-"+indexDest).val(viText).prop("disabled", false);
+		$("#ev-se-"+indexDest+",#ev-up-"+indexDest+",#ev-dn-"+indexDest).removeClass("disabled");
 	},
 
 	/**

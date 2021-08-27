@@ -6,6 +6,9 @@
 
 	require_once("tracking.php"); // Also called every 5 minutes by 'main.js'
 
+	// @link https://stackoverflow.com/a/60199374/2242348
+	$inside_iframe = isset($_SERVER['HTTP_SEC_FETCH_DEST']) && $_SERVER['HTTP_SEC_FETCH_DEST'] == 'iframe';
+
 	// Detect and block if the URL contains unwanted characters
 	// Example: http://deepsid.chordian.net/?file=%22%3E%3Ch1%3Efoobarbaz
 	$special_chars = array('[', ']', '<', '>', ';', ',', '"', '*');
@@ -47,6 +50,9 @@
 		<link rel="stylesheet" type="text/css" href="//blog.chordian.net/wordpress/wp-content/themes/olivi/style.css" />
 		<link rel="stylesheet" type="text/css" href="css/chartist.css" />
 		<link rel="stylesheet" type="text/css" href="css/style.css" />
+		<?php if ($inside_iframe): ?>
+			<link rel="stylesheet" type="text/css" href="https://www.lemonamiga.localhost/assets/external/deepsid/style.css" />
+		<?php endif ?>
 		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
 		<?php if (isset($_GET['websiddebug'])): ?>
@@ -76,6 +82,9 @@
 		<?php endif ?>
 		<script type="text/javascript" src="js/viz.js"></script>
 		<script type="text/javascript" src="js/main.js"></script>
+		<?php if ($inside_iframe): ?>
+			<script type="text/javascript" src="https://www.lemonamiga.localhost/assets/external/deepsid/main.js"></script>
+		<?php endif ?>
 		<script type="text/javascript">
 			var colorTheme = 0;
 			function setTheme() {
@@ -215,7 +224,7 @@
 			<fieldset style="height:200px;"><legend>Song</legend>
 				<div class="ev-tabs">
 					<span>Tab</span>
-					<span><input type="checkbox" id="ev-cb-1" /></span>
+					<span><input type="checkbox" id="ev-cb-1" checked /></span>
 					<span><input type="checkbox" id="ev-cb-2" /></span>
 					<span><input type="checkbox" id="ev-cb-3" /></span>
 					<span><input type="checkbox" id="ev-cb-4" /></span>
@@ -224,34 +233,34 @@
 				<div class="ev-default">
 					<span>Default</span>
 					<span><input type="radio" name="ev-rb" id="ev-rb-1" checked /></span>
-					<span><input type="radio" name="ev-rb" id="ev-rb-2" /></span>
-					<span><input type="radio" name="ev-rb" id="ev-rb-3" /></span>
-					<span><input type="radio" name="ev-rb" id="ev-rb-4" /></span>
-					<span><input type="radio" name="ev-rb" id="ev-rb-5" /></span>
+					<span><input type="radio" name="ev-rb" id="ev-rb-2" disabled /></span>
+					<span><input type="radio" name="ev-rb" id="ev-rb-3" disabled /></span>
+					<span><input type="radio" name="ev-rb" id="ev-rb-4" disabled /></span>
+					<span><input type="radio" name="ev-rb" id="ev-rb-5" disabled /></span>
 				</div>
 				<div class="ev-channel">
 					<span>Channel name</span>
-					<span><input type="text" id="ev-tb-cn-1" maxlength="32" /> <button id="ev-se-1">S</button></span>
-					<span><input type="text" id="ev-tb-cn-2" maxlength="32" /> <button id="ev-se-2">S</button></span>
-					<span><input type="text" id="ev-tb-cn-3" maxlength="32" /> <button id="ev-se-3">S</button></span>
-					<span><input type="text" id="ev-tb-cn-4" maxlength="32" /> <button id="ev-se-4">S</button></span>
-					<span><input type="text" id="ev-tb-cn-5" maxlength="32" /> <button id="ev-se-5">S</button></span>
+					<span><input type="text" id="ev-tb-cn-1" maxlength="32" /> <button id="ev-se-1"><img id="ev-sb-1" src="images/search.svg" alt="" /></button></span>
+					<span><input type="text" id="ev-tb-cn-2" maxlength="32" disabled /> <button id="ev-se-2" class="disabled"><img id="ev-sb-2" src="images/search.svg" alt="" /></button></span>
+					<span><input type="text" id="ev-tb-cn-3" maxlength="32" disabled /> <button id="ev-se-3" class="disabled"><img id="ev-sb-3" src="images/search.svg" alt="" /></button></span>
+					<span><input type="text" id="ev-tb-cn-4" maxlength="32" disabled /> <button id="ev-se-4" class="disabled"><img id="ev-sb-4" src="images/search.svg" alt="" /></button></span>
+					<span><input type="text" id="ev-tb-cn-5" maxlength="32" disabled /> <button id="ev-se-5" class="disabled"><img id="ev-sb-5" src="images/search.svg" alt="" /></button></span>
 				</div>
 				<div class="ev-video">
 					<span>Video ID</span>
 					<span><input type="text" id="ev-tb-vi-1" maxlength="16" /></span>
-					<span><input type="text" id="ev-tb-vi-2" maxlength="16" /></span>
-					<span><input type="text" id="ev-tb-vi-3" maxlength="16" /></span>
-					<span><input type="text" id="ev-tb-vi-4" maxlength="16" /></span>
-					<span><input type="text" id="ev-tb-vi-5" maxlength="16" /></span>
+					<span><input type="text" id="ev-tb-vi-2" maxlength="16" disabled /></span>
+					<span><input type="text" id="ev-tb-vi-3" maxlength="16" disabled /></span>
+					<span><input type="text" id="ev-tb-vi-4" maxlength="16" disabled /></span>
+					<span><input type="text" id="ev-tb-vi-5" maxlength="16" disabled /></span>
 				</div>
 				<div class="ev-position">
 					<span>Position</span>
-					<span><button id="ev-up-1" class="disabled">Up</button> <button id="ev-dn-1">Dn</button></span>
-					<span><button id="ev-up-2">Up</button> <button id="ev-dn-2">Dn</button></span>
-					<span><button id="ev-up-3">Up</button> <button id="ev-dn-3">Dn</button></span>
-					<span><button id="ev-up-4">Up</button> <button id="ev-dn-4">Dn</button></span>
-					<span><button id="ev-up-5">Up</button> <button id="ev-dn-5" class="disabled">Dn</button></span>
+					<span><button id="ev-up-1" type="button">Up</button> <button id="ev-dn-1" type="button">Dn</button></span>
+					<span><button id="ev-up-2" type="button" class="disabled">Up</button> <button id="ev-dn-2" type="button" class="disabled">Dn</button></span>
+					<span><button id="ev-up-3" type="button" class="disabled">Up</button> <button id="ev-dn-3" type="button" class="disabled">Dn</button></span>
+					<span><button id="ev-up-4" type="button" class="disabled">Up</button> <button id="ev-dn-4" type="button" class="disabled">Dn</button></span>
+					<span><button id="ev-up-5" type="button" class="disabled">Up</button> <button id="ev-dn-5" type="button" class="disabled">Dn</button></span>
 				</div>
 			</fieldset>
 			<div class="dialog-buttons"><a href="#" class="dialog-cancel">Cancel</a><button class="dialog-button-yes dialog-auto">Save</button></div>
@@ -369,7 +378,7 @@
 				<div id="info-text">
 					<div style="text-align:center;font-size:12px;">
 						<span style="position:relative;top:2px;">DeepSID is an online SID player for the High Voltage SID Collection and<br />
-						more. It plays music created for the <a href="https://en.wikipedia.org/wiki/Commodore_64">Commodore 64</a> home computer.</span><br />
+						more. It plays music created for the <a href="https://en.wikipedia.org/wiki/Commodore_64" target="_top">Commodore 64</a> home computer.</span><br />
 						<span style="position:relative;top:8px;">Click any of the folder items below to start browsing the collection.</span>
 					</div>
 				</div>
@@ -497,7 +506,7 @@
 			<div id="dexter">
 				<div id="sites">
 					<div style="float:left;margin-left:1px;text-align:left;">
-						<a href="<?php echo HOST; ?>">Home</a>
+						<a href="<?php echo HOST; ?>" target="_top">Home</a>
 							<span>&#9642</span>
 						<a id="recommended" href="#">Recommended</a>
 							<span>&#9642</span>
@@ -506,23 +515,23 @@
 						<a id="forum" href="#">Forum</a>
 						<span class="msg"><?php
 							if (mt_rand(0, 1))
-								echo 'Visit <a href="http://www.wothke.ch/playmod/">PlayMOD</a> for <b>ModLand</b> and <b>VGMRips</b> in this UI';
+								echo 'Visit <a href="http://www.wothke.ch/playmod/" target="_blank">PlayMOD</a> for <b>ModLand</b> and <b>VGMRips</b> in this UI';
 							else
-								echo 'Check out <a href="http://csdb.chordian.net/">CShellDB</a> &ndash; a modern interface for <b>CSDb</b>';
+								echo 'Check out <a href="http://csdb.chordian.net/" target="_blank">CShellDB</a> &ndash; a modern interface for <b>CSDb</b>';
 						?></span>
 					</div>
 
-					<!--<a href="https://blog.chordian.net/2018/05/12/deepsid/">Blog Post</a>
+					<!--<a href="https://blog.chordian.net/2018/05/12/deepsid/" target="_blank">Blog Post</a>
 						<span>&#9642</span>-->
-					<a href="https://www.facebook.com/groups/deepsid/">Facebook</a>
+					<a href="https://www.facebook.com/groups/deepsid/" target="_blank">Facebook</a>
 						<span>&#9642</span>
-					<!--<a href="https://www.lemon64.com/forum/viewtopic.php?t=68056">Lemon64</a>
+					<!--<a href="https://www.lemon64.com/forum/viewtopic.php?t=68056" target="_blank">Lemon64</a>
 						<span>&#9642</span>-->
-					<a href="https://twitter.com/chordian">Twitter</a>
+					<a href="https://twitter.com/chordian" target="_blank">Twitter</a>
 						<span>&#9642</span>
-					<a href="http://csdb.chordian.net/?type=forums&roomid=14&topicid=129712">CSDb</a>
+					<a href="http://csdb.chordian.net/?type=forums&roomid=14&topicid=129712" target="_blank">CSDb</a>
 						<span>&#9642</span>
-					<a href="https://github.com/Chordian/deepsid">GitHub</a>
+					<a href="https://github.com/Chordian/deepsid" target="_blank">GitHub</a>
 					</div>
 				<div id="tabs">
 					<div class="tab unselectable" data-topic="profile" id="tab-profile">Profile</div>
@@ -781,7 +790,7 @@
 							is limited to factual data and does not try to provide an encyclopedia about every original artist.
 						</p>
 						<p>
-							For more information about STIL, please refer to <a href="https://www.hvsc.c64.org/download/C64Music/DOCUMENTS/STIL.faq">this FAQ</a>.
+							For more information about STIL, please refer to <a href="https://www.hvsc.c64.org/download/C64Music/DOCUMENTS/STIL.faq" target="_blank">this FAQ</a>.
 						</p>
 
 						<h3>Lyrics</h3>
@@ -905,9 +914,9 @@
 						<h2>About</h2>
 						<p>
 							DeepSID is an online SID player that can play music originally composed for the
-							<a href="https://en.wikipedia.org/wiki/Commodore_64">Commodore 64</a>, a home computer
+							<a href="https://en.wikipedia.org/wiki/Commodore_64" target="_top">Commodore 64</a>, a home computer
 							that was very popular back in the 80's and 90's. This computer had an amazing sound chip
-							called <a href="https://en.wikipedia.org/wiki/MOS_Technology_SID">SID</a>.
+							called <a href="https://en.wikipedia.org/wiki/MOS_Technology_SID" target="_top">SID</a>.
 						</p>
 
 						<img src="images/6581.jpg" alt="6581" />
@@ -923,39 +932,39 @@
 
 						<h3>UI design and programming</h3>
 						<p>
-							Jens-Christian Huus (<a href="//chordian.net/">Chordian</a>)<br />
-							<a href="//chordian.net/2018/05/12/deepsid/">http://chordian.net/2018/05/12/deepsid/</a>
+							Jens-Christian Huus (<a href="//chordian.net/" target="_top">Chordian</a>)<br />
+							<a href="//chordian.net/2018/05/12/deepsid/" target="_top">http://chordian.net/2018/05/12/deepsid/</a>
 						</p>
 
 						<h3>SID emulators for JavaScript</h3>
 						<p>
-							WebSid by Jürgen Wothke (<a href="http://www.wothke.ch/tinyrsid/index.php">Tiny'R'Sid</a>)<br />
-							<a href="http://www.wothke.ch/websid/">http://www.wothke.ch/websid/</a><br />
-							<a href="https://github.com/wothke/websid">https://github.com/wothke/websid</a><br />
-							<a href="https://github.com/wothke/webaudio-player">https://github.com/wothke/webaudio-player</a>
+							WebSid by Jürgen Wothke (<a href="http://www.wothke.ch/tinyrsid/index.php" target="_top">Tiny'R'Sid</a>)<br />
+							<a href="http://www.wothke.ch/websid/" target="_top">http://www.wothke.ch/websid/</a><br />
+							<a href="https://github.com/wothke/websid" target="_top">https://github.com/wothke/websid</a><br />
+							<a href="https://github.com/wothke/webaudio-player" target="_top">https://github.com/wothke/webaudio-player</a>
 						</p>
 						<p>
-							jsSID by Mihály Horváth (<a href="http://csdb.chordian.net/?type=scener&id=18806">Hermit</a>)
+							jsSID by Mihály Horváth (<a href="http://csdb.chordian.net/?type=scener&id=18806" target="_top">Hermit</a>)
 						</p>
 
 						<h3>Libraries of SID tunes</h3>
 						<p>
 							High Voltage SID Collection #75<br />
-							<a href="https://www.hvsc.c64.org/">https://www.hvsc.c64.org/</a>
+							<a href="https://www.hvsc.c64.org/" target="_top">https://www.hvsc.c64.org/</a>
 						</p>
 						<p>
 							Compute's Gazette SID Collection #140<br />
-							<a href="http://www.c64music.co.uk/">http://www.c64music.co.uk/</a>
+							<a href="http://www.c64music.co.uk/" target="_top">http://www.c64music.co.uk/</a>
 						</p>
 
 						<h3>Remixes of SID tunes</h3>
 						<p>
-							Remix64 API by Markus Klein (<a href="https://markus-klein-artwork.de/music/">LMan</a>)<br />
-							<a href="https://www.remix64.com/">https://www.remix64.com/</a>
+							Remix64 API by Markus Klein (<a href="https://markus-klein-artwork.de/music/" target="_top">LMan</a>)<br />
+							<a href="https://www.remix64.com/" target="_top">https://www.remix64.com/</a>
 						</p>
 						<p>
 							Hosting by Jan Lund Thomsen (QED)<br />
-							<a href="http://remix.kwed.org/">http://remix.kwed.org/</a>
+							<a href="http://remix.kwed.org/" target="_top">http://remix.kwed.org/</a>
 						</p>
 
 
@@ -967,10 +976,10 @@
 						</p>
 						<ul>
 							<li>Most are publically available profile images from Facebook or LinkedIn.</li>
-							<li>A lot of older retro images (typically lo-res) are from the musicians photos download at <a href="http://www.gamebase64.com/downloads.php">GameBase64</a>.</li>
-							<li>Some were originally taken by Andreas Wallström (<a href="http://www.c64.com/">C64.com</a>).</li>
-							<li>A few were taken from the <a href="http://www.vgmpf.com/Wiki/index.php">Video Game Music Preservation Foundation</a> wikipedia.</li>
-							<li>Some from the <a href="https://8bitlegends.com/">8BitLegends.com</a> web site.</li>
+							<li>A lot of older retro images (typically lo-res) are from the musicians photos download at <a href="http://www.gamebase64.com/downloads.php" target="_top">GameBase64</a>.</li>
+							<li>Some were originally taken by Andreas Wallström (<a href="http://www.c64.com/" target="_top">C64.com</a>).</li>
+							<li>A few were taken from the <a href="http://www.vgmpf.com/Wiki/index.php" target="_top">Video Game Music Preservation Foundation</a> wikipedia.</li>
+							<li>Some from the <a href="https://8bitlegends.com/" target="_top">8BitLegends.com</a> web site.</li>
 							<li>And several other places I can't remember anymore.</li>
 						</ul>
 						<p>
@@ -981,17 +990,17 @@
 
 						<h3>Other resources used</h3>
 						<p>
-							SIDId by Lasse Öörni (<a href="https://cadaver.github.io/">Cadaver</a>)<br />
-							<a href="http://csdb.chordian.net/?type=release&id=112201">http://csdb.dk/release/?id=112201</a>
+							SIDId by Lasse Öörni (<a href="https://cadaver.github.io/" target="_top">Cadaver</a>)<br />
+							<a href="http://csdb.chordian.net/?type=release&id=112201" target="_top">http://csdb.dk/release/?id=112201</a>
 						</p>
 						<p>
 							SIDInfo by Matti Hämäläinen (ccr)<br />
-							<a href="http://csdb.chordian.net/?type=release&id=164751">https://csdb.dk/release/?id=164751</a><br />
-							<a href="https://tnsp.org/hg/sidinfo/">https://tnsp.org/hg/sidinfo/</a>
+							<a href="http://csdb.chordian.net/?type=release&id=164751" target="_top">https://csdb.dk/release/?id=164751</a><br />
+							<a href="https://tnsp.org/hg/sidinfo/" target="_top">https://tnsp.org/hg/sidinfo/</a>
 						</p>
 						<p>
-							Chartist.js by Gion Kunz (<a href="https://github.com/gionkunz">GitHub</a>)<br />
-							<a href="https://gionkunz.github.io/chartist-js/">https://gionkunz.github.io/chartist-js/</a>
+							Chartist.js by Gion Kunz (<a href="https://github.com/gionkunz" target="_top">GitHub</a>)<br />
+							<a href="https://gionkunz.github.io/chartist-js/" target="_top">https://gionkunz.github.io/chartist-js/</a>
 						</p>
 					</div>
 
@@ -1076,7 +1085,7 @@
 							</tr>
 							<tr>
 								<td>WebSid emulator</td><td>This is the JS emulator originally used by the
-								<a href="http://www.wothke.ch/tinyrsid/index.php">Tiny'R'Sid</a> web site. It emulates standard
+								<a href="http://www.wothke.ch/tinyrsid/index.php" target="_top">Tiny'R'Sid</a> web site. It emulates standard
 								SID as well as digi tunes, 2SID and 3SID, and even MUS files in Compute's Gazette SID
 								Collection. This is the best quality version of WebSid with cycle-by-cycle processing.</td>
 							</tr>
@@ -1146,7 +1155,7 @@
 						<h3>Why doesn't this work in Internet Explorer?</h3>
 						<p>
 							The audio handlers all use an API called <i>Web Audio</i> which is
-							<a href="https://caniuse.com/#search=web%20audio">not supported by Internet Explorer</a>.
+							<a href="https://caniuse.com/#search=web%20audio" target="_top">not supported by Internet Explorer</a>.
 							You need a modern web browser to use this site.
 						</p>
 
@@ -1218,15 +1227,15 @@
 						</table>
 						<p>
 							An example to show a specific folder:<br />
-							<a href="//deepsid.chordian.net?file=/MUSICIANS/J/JCH/">http://deepsid.chordian.net?file=/MUSICIANS/J/JCH/</a>
+							<a href="//deepsid.chordian.net?file=/MUSICIANS/J/JCH/">//deepsid.chordian.net?file=/MUSICIANS/J/JCH/</a>
 						</p>
 						<p>
 							An example to play a SID tune:<br />
-							<a href="//deepsid.chordian.net?file=/MUSICIANS/H/Hubbard_Rob/Commando.sid&emulator=jssid&subtune=2">http://deepsid.chordian.net?file=/MUSICIANS/H/Hubbard_Rob/Commando.sid&emulator=jssid&subtune=2</a>
+							<a href="//deepsid.chordian.net?file=/MUSICIANS/H/Hubbard_Rob/Commando.sid&emulator=jssid&subtune=2">//deepsid.chordian.net?file=/MUSICIANS/H/Hubbard_Rob/Commando.sid&emulator=jssid&subtune=2</a>
 						</p>
 						<p>
 							An example to show a CSDb entry:<br />
-							<a href="//deepsid.chordian.net?tab=csdb&csdbtype=release&csdbid=153519">http://deepsid.chordian.net?tab=csdb&csdbtype=release&csdbid=153519</a>
+							<a href="//deepsid.chordian.net?tab=csdb&csdbtype=release&csdbid=153519">//deepsid.chordian.net?tab=csdb&csdbtype=release&csdbid=153519</a>
 						</p>
 
 					</div>
@@ -1238,7 +1247,7 @@
 						<ul>
 							<li>All scrollable areas now use the default web browser scrollbar. The custom scrollbar
 								jQuery plugin has been removed completely. Thanks
-								<a href="http://manos.malihu.gr/jquery-custom-content-scroller/">malihu</a>
+								<a href="http://manos.malihu.gr/jquery-custom-content-scroller/" target="_top">malihu</a>
 								for years of service back when the default scrollbars were crude.</li>
 						</ul>
 
@@ -1318,12 +1327,12 @@
 						<h3>July 13, 2021</h3>
 						<ul>
 							<li>The 4 new 2SID files in HVSC #75 (i.e. that uses 6 voices) has now been added as
-								<a href="http://deepsid.chordian.net/?file=/_Exotic%20SID%20Tunes%20Collection/Stereo%202SID&here=1&search=75&type=new&tab=csdb">exotic stereo files</a>.</li>
+								<a href="//deepsid.chordian.net/?file=/_Exotic%20SID%20Tunes%20Collection/Stereo%202SID&here=1&search=75&type=new&tab=csdb">exotic stereo files</a>.</li>
 						</ul>
 
 						<h3>July 12, 2021</h3>
 						<ul>
-							<li>The <a href="https://www.hvsc.c64.org/">High Voltage SID Collection</a> has been upgraded to the latest version #75.</li>
+							<li>The <a href="https://www.hvsc.c64.org/" target="_top">High Voltage SID Collection</a> has been upgraded to the latest version #75.</li>
 							<li>Added composer profiles for the new folders in HVSC #75.</li>
 						</ul>
 
@@ -1382,7 +1391,7 @@
 						<h3>December 28, 2020</h3>
 						<ul>
 							<li>The 8 new 2SID files in HVSC #74 (i.e. that uses 6 voices) has now been added as
-								<a href="http://deepsid.chordian.net/?file=/_Exotic%20SID%20Tunes%20Collection/Stereo%202SID&here=1&search=74&type=new&tab=csdb">exotic stereo files</a>.</li>
+								<a href="//deepsid.chordian.net/?file=/_Exotic%20SID%20Tunes%20Collection/Stereo%202SID&here=1&search=74&type=new&tab=csdb">exotic stereo files</a>.</li>
 							<li>All the SID files uploaded to the SH folder this year has now been moved into a <a href="//deepsid.chordian.net?file=/SID Happens/2020/">2020</a> sub folder.</li>
 							<li>External links pointing to the root SH folder now redirects to the new year folder.</li>
 						</ul>
@@ -1394,12 +1403,12 @@
 
 						<h3>December 21, 2020</h3>
 						<ul>
-							<li>The <a href="https://www.hvsc.c64.org/">High Voltage SID Collection</a> has been upgraded to the latest version #74.</li>
+							<li>The <a href="https://www.hvsc.c64.org/" target="_top">High Voltage SID Collection</a> has been upgraded to the latest version #74.</li>
 						</ul>
 
 						<h3>December 6, 2020</h3>
 						<ul>
-							<li>DeepSID's copy of <a href="http://www.c64music.co.uk/">Compute's Gazette SID Collection</a> has now been upgraded to version 1.40.</li>
+							<li>DeepSID's copy of <a href="http://www.c64music.co.uk/" target="_top">Compute's Gazette SID Collection</a> has now been upgraded to version 1.40.</li>
 						</ul>
 
 						<h3>December 1, 2020</h3>
@@ -1440,7 +1449,7 @@
 						<h3>November 22, 2020</h3>
 						<ul>
 							<li>The upload process for adding a new SID file in the SH folder now automatically detects the player used.
-								This makes use of the same configuration file that the offline <a href="http://csdb.chordian.net/?type=release&id=112201">SIDId</a> tool also uses.</li>
+								This makes use of the same configuration file that the offline <a href="http://csdb.chordian.net/?type=release&id=112201" target="_top">SIDId</a> tool also uses.</li>
 						</ul>
 	
 						<h3>November 15, 2020</h3>
@@ -1490,10 +1499,10 @@
 
 						<h3>September 20, 2020</h3>
 						<ul>
-							<li>Added a link to <a href="http://www.wothke.ch/playmod/">PlayMOD</a> in the top of the screen. This is a
+							<li>Added a link to <a href="http://www.wothke.ch/playmod/" target="_top">PlayMOD</a> in the top of the screen. This is a
 								spin-off of the UI used by DeepSID combined with the enormous libraries of
-								<a href="http://ftp.modland.com/pub/modules/">ModLand</a> and
-								<a href="https://vgmrips.net/packs/">VGMRips</a>.
+								<a href="http://ftp.modland.com/pub/modules/" target="_top">ModLand</a> and
+								<a href="https://vgmrips.net/packs/" target="_top">VGMRips</a>.
 								It was created by Jürgen Wothke &ndash; the creator of the WebSid emulator used by DeepSID &ndash;
 								back in February 2019.</li>
 						</ul>
@@ -1539,7 +1548,7 @@
 
 						<h3>June 27, 2020</h3>
 						<ul>
-							<li>The <a href="https://www.hvsc.c64.org/">High Voltage SID Collection</a> has been upgraded to the latest version #73.</li>
+							<li>The <a href="https://www.hvsc.c64.org/" target="_top">High Voltage SID Collection</a> has been upgraded to the latest version #73.</li>
 							<li>Added composer profiles for the new folders in HVSC #73.</li>
 						</ul>
 
@@ -1555,7 +1564,7 @@
 
 						<h3>June 2, 2020</h3>
 						<ul>
-							<li>DeepSID's copy of <a href="http://www.c64music.co.uk/">Compute's Gazette SID Collection</a> has now been upgraded to version 1.39.</li>
+							<li>DeepSID's copy of <a href="http://www.c64music.co.uk/" target="_top">Compute's Gazette SID Collection</a> has now been upgraded to version 1.39.</li>
 						</ul>
 
 						<h3>May 8, 2020</h3>
@@ -1591,7 +1600,7 @@
 
 						<h3>April 13, 2020</h3>
 						<ul>
-							<li>DeepSID's copy of <a href="http://www.c64music.co.uk/">Compute's Gazette SID Collection</a> has now been upgraded to version 1.38.</li>
+							<li>DeepSID's copy of <a href="http://www.c64music.co.uk/" target="_top">Compute's Gazette SID Collection</a> has now been upgraded to version 1.38.</li>
 						</ul>
 
 						<h3>March 28, 2020</h3>
@@ -1620,7 +1629,7 @@
 
 						<h3>February 2, 2020</h3>
 						<ul>
-							<li>DeepSID's copy of <a href="http://www.c64music.co.uk/">Compute's Gazette SID Collection</a> has now been upgraded to version 1.37.</li>
+							<li>DeepSID's copy of <a href="http://www.c64music.co.uk/" target="_top">Compute's Gazette SID Collection</a> has now been upgraded to version 1.37.</li>
 						</ul>
 
 						<h3>February 1, 2020</h3>
@@ -1729,7 +1738,7 @@
 
 						<h3>December 22, 2019</h3>
 						<ul>
-							<li>The <a href="https://www.hvsc.c64.org/">High Voltage SID Collection</a> has been upgraded to the latest version #72.</li>
+							<li>The <a href="https://www.hvsc.c64.org/" target="_top">High Voltage SID Collection</a> has been upgraded to the latest version #72.</li>
 							<li>Added composer profiles for the new folders in HVSC #72.</li>
 						</ul>
 
@@ -2092,8 +2101,8 @@
 						<h3>August 10, 2019</h3>
 						<ul>
 							<li>Added a new tab for listing and playing remixes of SID songs. The list is built using an
-								API for <a href="https://www.remix64.com/">Remix64.com</a> and may play audio from
-								<a href="http://remix.kwed.org/">Remix.Kwed.Org</a>. Both sites have given DeepSID
+								API for <a href="https://www.remix64.com/" target="_top">Remix64.com</a> and may play audio from
+								<a href="http://remix.kwed.org/" target="_top">Remix.Kwed.Org</a>. Both sites have given DeepSID
 								permission to access their resources.
 							</li>
 						</ul>
@@ -2161,7 +2170,7 @@
 						<h3>July 23, 2019</h3>
 						<ul>
 							<li>Upgraded the WebSid emulator. Fixed a PSID timer issue with Fred Gray's
-								<a href="http://deepsid.chordian.net/?file=/MUSICIANS/G/Gray_Fred/Madballs.sid">Madballs</a>.</li>
+								<a href="//deepsid.chordian.net/?file=/MUSICIANS/G/Gray_Fred/Madballs.sid">Madballs</a>.</li>
 							<li>Removed the zoom option in the graph view and instead added a choice between row or column layouts.</li>
 							<li>Fixed a bug where the graph view was updated twice as fast as it needed to be.</li>
 						</ul>
@@ -2212,7 +2221,7 @@
 
 						<h3>June 30, 2019</h3>
 						<ul>
-							<li>The <a href="https://www.hvsc.c64.org/">High Voltage SID Collection</a> has been upgraded to the latest version #71.</li>
+							<li>The <a href="https://www.hvsc.c64.org/" target="_top">High Voltage SID Collection</a> has been upgraded to the latest version #71.</li>
 							<li>The maximum song length at the end of the time bar now cuts off the milliseconds shown.</li>
 							<li>Fixed a bug where some STIL entries had letters cut off in the end of the text. This was a bug in a Python
 								script used for importing them. My apologies to the HVSC crew for being accused by users for causing this.</li>
@@ -2267,7 +2276,7 @@
 						</ul>
 
 						<hr />
-						<i>Click <a href="changes.htm">here</a> to see archived changes going back to the launch of DeepSID.</i>
+						<i>Click <a href="changes.htm" target="_top">here</a> to see archived changes going back to the launch of DeepSID.</i>
 
 					</div>
 

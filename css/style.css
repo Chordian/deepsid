@@ -650,19 +650,19 @@
 	background: var(--color-styled-select-bg);
 }
 
-[data-theme="dark"] select {
-	/* Can't use background color here as that automatically changes the design of the drop-down box in Firefox */
-	opacity: 0.93; /* Try to get close to --color-styled-select-bg */
-}
-
-[data-theme="dark"] select option {
+/*[data-theme="dark"] select option {
 	background: var(--color-styled-select-bg);
-}
+}*/
 
 [data-theme="dark"] input:disabled,
 [data-theme="dark"] select:disabled,
 [data-theme="dark"] textarea:disabled {
 	color: var(--color-text-distinct);
+}
+
+[data-theme="dark"] [type="text"]:disabled {
+	border-color: var(--color-disabled);
+	background: var(--color-bg-sid-selected);
 }
 
 [data-theme="dark"] h2 { color: #fff; }
@@ -5310,21 +5310,12 @@ input[type=range]::-ms-track {
 				margin-left: 12px;
 			}
 
-				#dialog-edit-videos div.ev-tabs {
-				}
-
-				#dialog-edit-videos div.ev-default {
-				}
-
 				#dialog-edit-videos div.ev-channel {
 					width: 200px;
 				}
 
 				#dialog-edit-videos div.ev-video {
 					width: 120px;
-				}
-
-				#dialog-edit-videos div.ev-position {
 				}
 
 			#dialog-edit-videos fieldset span {

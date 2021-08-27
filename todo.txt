@@ -8,12 +8,19 @@ SHOULD BE DONE
   - Enabled rows when selecting other handlers than YouTube - and vice versa.
   - Remember to add logging for when users add a YouTube link to a song.
 
+- IFrame project for Lemon:
+  - DeepSID needs to run in HTTPS protocol. Some links in the root page doesn't work then.
+    I wonder if it's possible to force all HTTP links into doing HTTPS with some jQuery?
+
 - UI for YouTube handler for adding a link to a song. Automatically searches YouTube too?
 
 - http://deepsid.chordian.net/?file=/MUSICIANS/G/Gas_On/
   Where are the statistics from 1994-96 coming from here?
 
 - Make file sorting sticky (not dependent on logged in).
+
+- Replace drop-down boxes with styled versions (browser and search) - I don't like how Firefox
+  and Chrome changes its design on a whim.
 
 - Turn off selecting in folders.
 
