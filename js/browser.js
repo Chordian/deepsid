@@ -2127,7 +2127,7 @@ Browser.prototype = {
 				}.bind(this));
 				break;
 			case 'edit-videos':
-				this.editYouTubeLinks(this.contextSID);
+				this.editYouTubeLinks(this.isSearching || this.isCompoFolder || this.path.substr(1, 1) == "$" ? this.contextSID : this.path.substr(1)+"/"+this.contextSID);
 				break;
 			case "symlist-add":
 			case "symlist-new":
@@ -2249,32 +2249,73 @@ Browser.prototype = {
 	 * @param {string} fullname		The SID filename including folders.
 	 */
 	editYouTubeLinks: function(fullname) {
+
+		// First clean up after the last party
+		$("#dialog-edit-videos input:checkbox,#dialog-edit-videos input:radio").prop("checked", false);
+		$("#dialog-edit-videos input:radio,#dialog-edit-videos input:text").prop("disabled", true);
+		$("#dialog-edit-videos input:text").val("");
+		$("#dialog-edit-videos fieldset button").removeClass("disabled").addClass("disabled");
+
+		if (this.youTubeGetInfo) this.youTubeGetInfo.abort();
+
+		this.youTubeGetInfo = $.get("php/youtube.php", {
+			fullname:	fullname,
+			subtune:	0, // @todo Maybe according to currently selected subtune in controls?
+		}, function(data) {
+			browser.validateData(data, function(data) {
+				if (data.count) {
+					// Apply the existing data in the rows
+					$.each(data.videos, function(i, video) {
+						var row = parseInt(i) + 1;
+						$("#ev-rb-"+row+",#ev-tb-cn-"+row+",#ev-tb-vi-"+row).prop("disabled", false);
+						$("#ev-se-"+row+",#ev-up-"+row+",#ev-dn-"+row).removeClass("disabled");
+
+						$("#ev-cb-"+row).prop("checked", true);
+						if (video.tab_default == 1) $("#ev-rb-"+row).prop("checked", true);
+
+						$("#ev-tb-cn-"+row).val(video.channel);
+						$("#ev-tb-vi-"+row).val(video.video_id);
+					});
+				} else {
+					// Starting afresh; enable the first row
+					$("#ev-cb-1,#ev-rb-1").prop("checked", true);
+					$("#ev-rb-1,#ev-tb-cn-1,#ev-tb-vi-1").prop("disabled", false);
+					$("#ev-se-1,#ev-up-1,#ev-dn-1").removeClass("disabled");
+					$("#ev-tb-cn-1").focus();
+				}
+			}.bind(this));
+		}.bind(this));
+
 		CustomDialog({
 			id: '#dialog-edit-videos',
 			text: '<h3>Edit video links</h3><p id="ev-sid">'+fullname.split("/").slice(-1)[0]+'</p>',
 			width: 600,
 			height: 362,
 		}, function() {
-			// OK was clicked; make all the video link changes
-			/*$.post("php/?????.php", {
-				abc:		def,
+			// SAVE was clicked; make all the video link changes
+			// @todo May have to be put in a function as I need subtune saving later too.
+
+			arrayYouTube = [];
+			for (var row = 1; row <= 5; row++) {
+				if ($("#ev-cb-"+row).is(":checked")) {
+					// This is an enabled row so append its data to the array
+					arrayYouTube.push({
+						channel:		$("#ev-tb-cn-"+row).val(),
+						video_id:		$("#ev-tb-vi-"+row).val(),
+						tab_default:	($("#ev-rb-"+row).is(":checked") ? 1 : 0),
+					});
+				}
+			}
+			$.post("php/youtube_write.php", {
+				fullname:	fullname,
+				subtune:	0, // @todo Get drop-down box value if present.
+				videos:		(arrayYouTube.length ? arrayYouTube : 0),
 			}, function(data) {
 				browser.validateData(data, function(data) {
 				});
-			}.bind(this));*/
+			}.bind(this));
 		});
 	},
-
-
-
-/*
-
-	@todo
-
-
-*/
-
-
 
 	/**
 	 * When clicking an item in the dialog box for editing YouTube video links.

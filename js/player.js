@@ -395,18 +395,18 @@ SIDPlayer.prototype = {
 						subtune:		subtune,
 					}, function(data) {
 						browser.validateData(data, function(data) {
-							var $ytTabs = $("#youtube-tabs");
+							var $ytTabs = $("#youtube-tabs"), defaultTab = 0;
 							$ytTabs.empty();
-
 							if (data.count) {
 								// Create the list of tabs representing each YouTube channel link
 								$.each(data.videos, function(i, video) {
-									$ytTabs.append('<div class="tab unselectable'+(i == 0 ? ' selected' : '')+'" data-video="'+video.video_id+'">'+video.channel+'</div>');
+									$ytTabs.append('<div class="tab unselectable'+(video.tab_default == 1 ? ' selected' : '')+'" data-video="'+video.video_id+'">'+video.channel+'</div>');
+									if (video.tab_default == 1) defaultTab = i;
 								});
 								// The 'Edit' corner link
 								$ytTabs.append('<div id="edityttabs"><a href="#" title="Edit YouTube links" data-name="'+fullname+'">Edit</a></div>');
 								// Load YouTube video ID and reset volume
-								this.YouTube.loadVideoById(data.videos[0].video_id);
+								this.YouTube.loadVideoById(data.videos[defaultTab].video_id);
 								this.setVolume(1);
 							} else {
 								// There were no YouTube links set up for this song (yet)

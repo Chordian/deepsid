@@ -224,7 +224,7 @@
 			<fieldset style="height:200px;"><legend>Song</legend>
 				<div class="ev-tabs">
 					<span>Tab</span>
-					<span><input type="checkbox" id="ev-cb-1" checked /></span>
+					<span><input type="checkbox" id="ev-cb-1" /></span>
 					<span><input type="checkbox" id="ev-cb-2" /></span>
 					<span><input type="checkbox" id="ev-cb-3" /></span>
 					<span><input type="checkbox" id="ev-cb-4" /></span>
@@ -232,7 +232,7 @@
 				</div>
 				<div class="ev-default">
 					<span>Default</span>
-					<span><input type="radio" name="ev-rb" id="ev-rb-1" checked /></span>
+					<span><input type="radio" name="ev-rb" id="ev-rb-1" disabled /></span>
 					<span><input type="radio" name="ev-rb" id="ev-rb-2" disabled /></span>
 					<span><input type="radio" name="ev-rb" id="ev-rb-3" disabled /></span>
 					<span><input type="radio" name="ev-rb" id="ev-rb-4" disabled /></span>
@@ -240,7 +240,7 @@
 				</div>
 				<div class="ev-channel">
 					<span>Channel name</span>
-					<span><input type="text" id="ev-tb-cn-1" maxlength="32" /> <button id="ev-se-1" type="button"><img src="images/search.svg" alt="" /></button></span>
+					<span><input type="text" id="ev-tb-cn-1" maxlength="32" disabled /> <button id="ev-se-1" type="button" class="disabled"><img src="images/search.svg" alt="" /></button></span>
 					<span><input type="text" id="ev-tb-cn-2" maxlength="32" disabled /> <button id="ev-se-2" type="button" class="disabled"><img src="images/search.svg" alt="" /></button></span>
 					<span><input type="text" id="ev-tb-cn-3" maxlength="32" disabled /> <button id="ev-se-3" type="button" class="disabled"><img src="images/search.svg" alt="" /></button></span>
 					<span><input type="text" id="ev-tb-cn-4" maxlength="32" disabled /> <button id="ev-se-4" type="button" class="disabled"><img src="images/search.svg" alt="" /></button></span>
@@ -248,15 +248,17 @@
 				</div>
 				<div class="ev-video">
 					<span>Video ID</span>
-					<span><input type="text" id="ev-tb-vi-1" maxlength="16" /></span>
-					<span><input type="text" id="ev-tb-vi-2" maxlength="16" disabled /></span>
-					<span><input type="text" id="ev-tb-vi-3" maxlength="16" disabled /></span>
-					<span><input type="text" id="ev-tb-vi-4" maxlength="16" disabled /></span>
-					<span><input type="text" id="ev-tb-vi-5" maxlength="16" disabled /></span>
+					<form onsubmit="return false;" autocomplete="off">
+						<span><input type="text" id="ev-tb-vi-1" maxlength="16" disabled /></span>
+						<span><input type="text" id="ev-tb-vi-2" maxlength="16" disabled /></span>
+						<span><input type="text" id="ev-tb-vi-3" maxlength="16" disabled /></span>
+						<span><input type="text" id="ev-tb-vi-4" maxlength="16" disabled /></span>
+						<span><input type="text" id="ev-tb-vi-5" maxlength="16" disabled /></span>
+					</form>
 				</div>
 				<div class="ev-position">
 					<span>Position</span>
-					<span><button id="ev-up-1" type="button">Up</button> <button id="ev-dn-1" type="button">Dn</button></span>
+					<span><button id="ev-up-1" type="button" class="disabled">Up</button> <button id="ev-dn-1" type="button" class="disabled">Dn</button></span>
 					<span><button id="ev-up-2" type="button" class="disabled">Up</button> <button id="ev-dn-2" type="button" class="disabled">Dn</button></span>
 					<span><button id="ev-up-3" type="button" class="disabled">Up</button> <button id="ev-dn-3" type="button" class="disabled">Dn</button></span>
 					<span><button id="ev-up-4" type="button" class="disabled">Up</button> <button id="ev-dn-4" type="button" class="disabled">Dn</button></span>

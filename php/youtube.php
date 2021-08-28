@@ -3,12 +3,13 @@
  * DeepSID
  *
  * Look up the specified SID file in the database and return the information
- * for playing a YouTube video, such as e.g. the channel, video ID, etc.
+ * for YouTube video(s), such as e.g. the channel, video ID, etc.
  * 
  * @uses		$_GET['fullname']
  * @uses		$_GET['subtune']
  * 
  * @used-by		player.js
+ * @used-by		browser.js
  */
 
 require_once("class.account.php"); // Includes setup
@@ -34,7 +35,7 @@ try {
 	$count = 0;
 	if ($select->rowCount()) {
 		$select_youtube = $db->prepare('
-			SELECT channel, video_id, tab_order FROM youtube
+			SELECT channel, video_id, tab_order, tab_default FROM youtube
 			WHERE file_id = '.$select->fetch()->id.'
 			AND subtune = :subtune
 		');
@@ -49,8 +50,9 @@ try {
 	$videos = array();
 	foreach($select_youtube as $row) {
 		$videos[$row->tab_order] = array(
-			'channel'	=> $row->channel,
-			'video_id'	=> $row->video_id,
+			'channel'		=> $row->channel,
+			'video_id'		=> $row->video_id,
+			'tab_default'	=> $row->tab_default,
 		);
 	}
 
