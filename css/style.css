@@ -5223,6 +5223,11 @@ input[type=range]::-ms-track {
 			padding: 2px 6px;
 		}
 
+	/* The drop-down box in choose subtune dialog box */
+	#ev-dd-subtune {
+		font-size: 13px;
+	}
+
 	/* The drop-down box in upload wizard */
 	#dropdown-upload-profile {
 		width: 100%;

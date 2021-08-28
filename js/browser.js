@@ -1975,7 +1975,7 @@ Browser.prototype = {
 			if (SID.emulator == "youtube") {
 				// A YouTube video link can be added to this SID row
 				contents += dividerForYouTube+
-					'<div class="line" data-action="edit-videos">Edit YouTube Links</div>';
+					'<div class="line" data-action="edit-videos" data-subtunes="'+this.playlist[thisRow].subtunes+'">Edit YouTube Links</div>';
 			}
 
 		} else if ($target.hasClass("folder") && (this.contextSID.substr(0, 1) == "!" || this.contextSID.substr(0, 1) == "$")) {
@@ -2127,7 +2127,10 @@ Browser.prototype = {
 				}.bind(this));
 				break;
 			case 'edit-videos':
-				this.editYouTubeLinks(this.isSearching || this.isCompoFolder || this.path.substr(1, 1) == "$" ? this.contextSID : this.path.substr(1)+"/"+this.contextSID);
+				this.editYouTubeLinks((this.isSearching || this.isCompoFolder || this.path.substr(1, 1) == "$"
+					? this.contextSID
+					: this.path.substr(1)+"/"+this.contextSID),
+					$target.attr("data-subtunes"));
 				break;
 			case "symlist-add":
 			case "symlist-new":
@@ -2244,11 +2247,46 @@ Browser.prototype = {
 	},
 
 	/**
-	 * Show the custom dialog box for editing YouTube video links.
+	 * Edit the YouTube video links for a SID file. If there are multiple
+	 * subtunes, a small dialog box first asks for which one.
 	 * 
 	 * @param {string} fullname		The SID filename including folders.
+	 * @param {number} subtunes		Maximum number of subtunes.
 	 */
-	editYouTubeLinks: function(fullname) {
+	editYouTubeLinks: function(fullname, subtunes) {
+
+		// If there are multiple subtunes then ask which one
+		if (subtunes > 1) {
+
+			// Populate the drop-down box with subtune choices
+			var $dd = $("#ev-dd-subtune");
+			$dd.empty();
+			for (var subtune = 1; subtune <= subtunes; subtune++)
+				$dd.append('<option value="'+(subtune - 1)+'">'+subtune+'</option>');
+
+			CustomDialog({
+				id: '#dialog-ev-subtunes',
+				text: 'There are multiple subtunes in this file. Which one are you going to edit video links for now?',
+				height: 150,
+			}, function() {
+				var subtune = parseInt($("#ev-dd-subtune").val());
+				$("#dialog-edit-videos legend").empty().append("Subtune "+(subtune + 1)+" / "+subtunes);
+				this.mainEditYouTube(fullname, subtune, true);
+			}.bind(this));
+		} else {
+			$("#dialog-edit-videos legend").empty().append("Song");
+			this.mainEditYouTube(fullname, 0, false); // No subtunes
+		}
+	},
+
+	/**
+	 * Show the main dialog box for editing YouTube video links.
+	 * 
+	 * @param {string} fullname		The SID filename including folders.
+	 * @param {number} subtune		The subtune involved.
+	 * @param {boolean} Fade		If true, the dialog cover will not be faded.
+	 */ 
+	mainEditYouTube: function(fullname, subtune, fade) {
 
 		// First clean up after the last party
 		$("#dialog-edit-videos input:checkbox,#dialog-edit-videos input:radio").prop("checked", false);
@@ -2260,7 +2298,7 @@ Browser.prototype = {
 
 		this.youTubeGetInfo = $.get("php/youtube.php", {
 			fullname:	fullname,
-			subtune:	0, // @todo Maybe according to currently selected subtune in controls?
+			subtune:	subtune,
 		}, function(data) {
 			browser.validateData(data, function(data) {
 				if (data.count) {
@@ -2291,10 +2329,9 @@ Browser.prototype = {
 			text: '<h3>Edit video links</h3><p id="ev-sid">'+fullname.split("/").slice(-1)[0]+'</p>',
 			width: 600,
 			height: 362,
+			wizard: fade,
 		}, function() {
 			// SAVE was clicked; make all the video link changes
-			// @todo May have to be put in a function as I need subtune saving later too.
-
 			arrayYouTube = [];
 			for (var row = 1; row <= 5; row++) {
 				if ($("#ev-cb-"+row).is(":checked")) {
@@ -2308,10 +2345,11 @@ Browser.prototype = {
 			}
 			$.post("php/youtube_write.php", {
 				fullname:	fullname,
-				subtune:	0, // @todo Get drop-down box value if present.
+				subtune:	subtune,
 				videos:		(arrayYouTube.length ? arrayYouTube : 0),
 			}, function(data) {
 				browser.validateData(data, function(data) {
+					this.getFolder();
 				});
 			}.bind(this));
 		});

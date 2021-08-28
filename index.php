@@ -219,6 +219,15 @@
 			<div class="dialog-buttons" style="width:136px;"><button class="dialog-button-yes dialog-auto" style="float:left;margin:0;">OK</button><button class="dialog-button-no dialog-auto" style="float:right;margin:0;">Cancel</button></div>
 		</div>
 
+		<div id="dialog-ev-subtunes" class="dialog-box dialog-wizard">
+			<div class="dialog-text"></div>
+			<div style="margin-top:16px;">
+				<label for="dd-subtune">Subtune&nbsp;&nbsp;</label>
+				<select id="ev-dd-subtune" name="dd-subtune"></select>
+			</div>
+			<div class="dialog-buttons"><a href="#" class="dialog-cancel">Cancel</a><button class="dialog-button-yes dialog-auto">Next</button></div>
+		</div>
+
 		<div id="dialog-edit-videos" class="dialog-box">
 			<div class="dialog-text"></div>
 			<fieldset style="height:200px;"><legend>Song</legend>
