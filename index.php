@@ -345,7 +345,7 @@
 					<option value="websid">WebSid emulator</option>
 					<option value="legacy">WebSid (Legacy)</option>
 					<option value="jssid">Hermit's emulator</option>
-					<option value="youtube">YouTube video</option>
+					<option value="youtube">YouTube videos</option>
 					<option value="download">Download SID file</option>
 				</select>
 
@@ -1253,6 +1253,20 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>August 29, 2021</h3>
+						<ul>
+							<li>A new SID handler for <b>YouTube videos</b> has been added. You can select it in the top left
+								drop-down box. Note that only SID rows that have video links are enabled. Since this is a new
+								feature in DeepSID, there are of course an abundance of disabled rows for now. More video
+								links will be added over time.</li>
+							<li>Most of the the standard DeepSID controls will control a YouTube video. You can even
+								click somewhere in the time progress bar to jump to another spot in the video.</li>
+							<li>A dialog box has been added for editing video links. To open it, right-click a SID row
+								(disabled or not) and choose <b>Edit YouTube Links</b>. You can add up to five tabs with
+								YouTube video links for the same song or subtune, and you can also choose which one should
+								be the default tab when a SID row is clicked.</li>
+						</ul>
 
 						<h3>August 15, 2021</h3>
 						<ul>

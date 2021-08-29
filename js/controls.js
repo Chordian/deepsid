@@ -606,7 +606,7 @@ Controls.prototype = {
 		}
 		// Version of HVSC/CGSC
 		var version = browser.playlist[browser.songPos].hvsc;
-		if (version >= 50)
+		if (version >= 50 && SID.emulator != "youtube")
 			$("#info").append('<span id="hvsc-version">'+
 				(isCGSC ? 'CGSC v'+version.substr(0, 1)+'.'+version.substr(1) : 'HVSC #'+version)+'</span>');
 	},

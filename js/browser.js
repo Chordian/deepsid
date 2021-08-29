@@ -545,7 +545,10 @@ Browser.prototype = {
 							if (subtune < ctrls.subtuneMax && !SID.emulatorFlags.offline) $("#subtune-plus").removeClass("disabled");
 							if (subtune > 0 && !SID.emulatorFlags.offline) $("#subtune-minus").removeClass("disabled");
 							ctrls.state("prev/next", "enabled");
-							if (!SID.emulatorFlags.offline) ctrls.state("loop", "enabled");
+							ctrls.state("loop", !SID.emulatorFlags.offline && SID.emulatorFlags.supportLoop
+								? "enabled"
+								: "disabled"
+							);
 
 							ctrls.updateInfo();
 							ctrls.updateSundry();
@@ -1345,6 +1348,7 @@ Browser.prototype = {
 							rating:			file.rating,
 							hvsc:			file.hvsc,
 							symid:			file.symid,
+							videos:			file.videos,
 							profile:		file.profile,	// Only files from 'SID Happens'
 							uploaded:		file.uploaded,	// Only files from 'SID Happens'
 						});
@@ -1394,7 +1398,9 @@ Browser.prototype = {
 			var waitForYTPlaying = setInterval(function() {
 				if (++i == 20 || (SID.ytReady && SID.isPlaying())) {
 					clearInterval(waitForYTPlaying);
-					this.secondsLength = SID.YouTube.getDuration(); // Only set correctly when it is playing
+					this.secondsLength = SID.ytReady
+						? SID.YouTube.getDuration() // Only set correctly when it is playing
+						: 0;
 					$("#time-current").empty().append("0:00");
 					var minutes = ~~((this.secondsLength % 3600) / 60),
 						seconds = ~~this.secondsLength % 60;
@@ -2284,9 +2290,9 @@ Browser.prototype = {
 	 * 
 	 * @param {string} fullname		The SID filename including folders.
 	 * @param {number} subtune		The subtune involved.
-	 * @param {boolean} Fade		If true, the dialog cover will not be faded.
+	 * @param {boolean} noFade		If true, the dialog cover will not be faded.
 	 */ 
-	mainEditYouTube: function(fullname, subtune, fade) {
+	mainEditYouTube: function(fullname, subtune, noFade) {
 
 		// First clean up after the last party
 		$("#dialog-edit-videos input:checkbox,#dialog-edit-videos input:radio").prop("checked", false);
@@ -2329,7 +2335,7 @@ Browser.prototype = {
 			text: '<h3>Edit video links</h3><p id="ev-sid">'+fullname.split("/").slice(-1)[0]+'</p>',
 			width: 600,
 			height: 362,
-			wizard: fade,
+			wizard: noFade,
 		}, function() {
 			// SAVE was clicked; make all the video link changes
 			arrayYouTube = [];
@@ -2349,7 +2355,15 @@ Browser.prototype = {
 				videos:		(arrayYouTube.length ? arrayYouTube : 0),
 			}, function(data) {
 				browser.validateData(data, function(data) {
-					this.getFolder();
+					// Assume all video links were deleted to begin with
+					this.contextTR.removeClass("selected disabled").addClass("disabled");
+					for (var r = 1; r <= 5; r++) {
+						if ($("#ev-cb-"+r).is(":checked")) {
+							// Something was applied in the dialog box so enable the SID row
+							this.contextTR.removeClass("disabled").addClass("selected");
+							break;
+						}
+					}
 				});
 			}.bind(this));
 		});

@@ -3,15 +3,11 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- New handler for YouTube.
-  - Right corner could be a link for visiting the channel on YouTube itself. "Channel" ?
-  - Enabled rows when selecting other handlers than YouTube - and vice versa.
-  - Remember to add logging for when users add a YouTube link to a song.
-
 - IFrame project for Lemon:
   - Fix links in top 10 lists in the root page.
 
-- UI for YouTube handler for adding a link to a song. Automatically searches YouTube too?
+- Known YouTube handler bugs:
+  - The 'Visuals' tab is still visible in the SH folder.
 
 - http://deepsid.chordian.net/?file=/MUSICIANS/G/Gas_On/
   Where are the statistics from 1994-96 coming from here?
@@ -21,7 +17,7 @@ SHOULD BE DONE
 - Replace drop-down boxes with styled versions (browser and search) - I don't like how Firefox
   and Chrome changes its design on a whim.
 
-- Turn off selecting in folders.
+- Turn off selecting in folders too?
 
 - BUG: Click tag sundry box. Play tune. Click FOLDERS button. It disappears. But then click any
   of the other two sundry tabs and then back again. Now the FOLDERS button is back!?
@@ -56,9 +52,6 @@ SHOULD BE DONE
   - Tab is called "Intro" until clicking tunes, then it reverts to "Profile" again.
   - On folder entry there is an EDIT button that opens a custom dialog box. Accepts HTML code.
   - Create new "symlists_intro" database table for JOIN use.
-
-- Wait to see if the latest JS changes makes it to Eric Dobek's computer. If nothing changes:
-  Add another tweak that also handles his date format in the PHP just before adding to database.
 
 - Consider moving all JCH's ratings to a unique account that is used for determining the quality
   settings, etc. Getting tired of not being able to rate certain folders.

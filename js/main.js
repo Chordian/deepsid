@@ -508,7 +508,8 @@ $(function() { // DOM ready
 				var $selected = $("#folders tr.selected");
 				var isRowSelected = $selected.length,
 					wasPlaying = ctrls.isPlaying(),
-					mainVol = SID.mainVol;
+					mainVol = SID.mainVol,
+					prevEmulator = SID.emulator;
 				SID.unload();
 				ctrls.selectButton($("#stop"));
 				viz.allEmuButtonsOff();
@@ -518,7 +519,8 @@ $(function() { // DOM ready
 				viz.setEmuButton(emulator);
 
 				// If a different version of WebSid was used last then we need to refresh the browser
-				if ((emulator == "websid" && isLegacyWebSid) || (emulator == "legacy") && !isLegacyWebSid) {
+				// YouTube is also required to refresh for 100% stability (and because of autoplay policy)
+				if ((emulator == "websid" && isLegacyWebSid) || (emulator == "legacy" && !isLegacyWebSid) || emulator == "youtube") {
 					window.location.reload();
 					return false;
 				}
@@ -553,6 +555,25 @@ $(function() { // DOM ready
 				$tr.find("span.info").css("color", "");
 				$tr.css("background", "");
 
+				if (prevEmulator == "youtube")
+					// If the 'YouTube' handler was selected last then there may have been a lot of disabled rows
+					$tr.removeClass("disabled");
+				else if (emulator == "youtube") {
+					// But if 'YouTube' is chosen now then apply those disabled rows
+					// NOTE: This works but is turned off because choosing the 'YouTube' handler refreshes the
+					// site for the time being. There were too many problems making it 100% stable.
+					/*var sidRow = 0;
+					$tr.each(function(i) {
+						var $this = $(this);
+						$this.removeClass("disabled");
+						if ($this.find("td.sid").length) {
+							if (browser.playlist[sidRow].videos == 0)
+								$this.addClass("disabled");
+							sidRow++;
+						}
+					});*/
+				}
+
 				DisableIncompatibleRows();
 
 				if ($selected.hasClass("disabled")) {
@@ -560,6 +581,8 @@ $(function() { // DOM ready
 					isRowSelected = wasPlaying = false;
 					$selected.removeClass("selected");
 				}
+
+				ctrls.state("loop", SID.emulatorFlags.supportLoop ? "enabled" : "disabled");
 
 				if (SID.emulatorFlags.offline) {
 					// Using the player buttons doesn't make sense for the "download" option
