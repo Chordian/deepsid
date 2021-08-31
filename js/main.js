@@ -1571,11 +1571,13 @@ function PlayFromURL() {
  * Called by PlayFromURL() above.
  */
 function PlayFromURLNow() {
-	var paramSubtune = GetParam("subtune");
+	var paramSubtune = GetParam("subtune"),
+		paramWait = GetParam("wait");
+
 	if (paramSubtune == "")
-		$trAutoPlay.children("td.sid").trigger("click");
+		$trAutoPlay.children("td.sid").trigger("click", [undefined, undefined, undefined, paramWait]);
 	else
-		$trAutoPlay.children("td.sid").trigger("click", paramSubtune == 0 ? 0 : paramSubtune - 1);
+		$trAutoPlay.children("td.sid").trigger("click", [(paramSubtune == 0 ? 0 : paramSubtune - 1), undefined, undefined, paramWait]);
 }
 
 /**

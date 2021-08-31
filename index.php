@@ -1235,6 +1235,9 @@
 							<tr>
 								<td>mobile</td><td>Set it to <code>0</code> on a mobile device to use desktop view, or <code>1</code> on a desktop computer to use mobile view</td>
 							</tr>
+							<tr>
+								<td>wait</td><td>Set it to <code>1</code> for only selecting the song but not actually play it yet</td>
+							</tr>
 						</table>
 						<p>
 							An example to show a specific folder:<br />
@@ -1253,6 +1256,11 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>August 31, 2021</h3>
+						<ul>
+							<li>Added a new <code>?wait=1</code> URL switch for selecting a specific song but not play it yet.</li>
+						</ul>
 
 						<h3>August 29, 2021</h3>
 						<ul>

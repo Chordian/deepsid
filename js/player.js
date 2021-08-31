@@ -141,55 +141,53 @@ function SIDPlayer(emulator) {
 			 */
 
 			// @link https://developers.google.com/youtube/iframe_api_reference
-			//if (!this.ytReady) {
-				$.ajax({
-					async:		true,
-					url:		"//www.youtube.com/iframe_api",
-					dataType:	"script"
-					}).done(function() {
-						window.onYouTubeIframeAPIReady = function() {
-							this.YouTube = new YT.Player("youtube-player", {
-								height: "240",
-								width: "430",
-								videoId: YOUTUBE_BLANK,
-								playerVars: {
-									"origin":		"deepsid.chordian.net",
-									"playsinline":	1,
-									"controls":		0,
-								},
-								events: {
-									// Event for when the video player is ready
-									"onReady": function(event) {
-										this.ytReady = true;
-										$("#youtube-loading").hide();
-									}.bind(this),
-									// Event for when the state in the video player changes
-									"onStateChange": function(event) {
-										switch (event.data) {
-											case YT.PlayerState.ENDED:
-												// Skip to next subtune or song when the video ends
-												if (typeof this.callbackTrackEnd === "function")
-													this.callbackTrackEnd();
-												break;
-											case YT.PlayerState.PLAYING:
-												break;
-											case YT.PlayerState.PAUSED:
-												break;
-											case YT.PlayerState.BUFFERING:
-												break;
-											case YT.PlayerState.CUED:
-												break;
-										}
-									}.bind(this),
-									// Event for errors (e.g. if the video no longer exists)
-									"onError": function(event) {
-										browser.errorRow();
-									}.bind(this),
-								}
-							});
-						}.bind(this);
-					}.bind(this));
-			//}
+			$.ajax({
+				async:		true,
+				url:		"//www.youtube.com/iframe_api",
+				dataType:	"script"
+				}).done(function() {
+					window.onYouTubeIframeAPIReady = function() {
+						this.YouTube = new YT.Player("youtube-player", {
+							height: "240",
+							width: "430",
+							videoId: YOUTUBE_BLANK,
+							playerVars: {
+								"origin":		"deepsid.chordian.net",
+								"playsinline":	1,
+								"controls":		0,
+							},
+							events: {
+								// Event for when the video player is ready
+								"onReady": function(event) {
+									this.ytReady = true;
+									$("#youtube-loading").hide();
+								}.bind(this),
+								// Event for when the state in the video player changes
+								"onStateChange": function(event) {
+									switch (event.data) {
+										case YT.PlayerState.ENDED:
+											// Skip to next subtune or song when the video ends
+											if (typeof this.callbackTrackEnd === "function")
+												this.callbackTrackEnd();
+											break;
+										case YT.PlayerState.PLAYING:
+											break;
+										case YT.PlayerState.PAUSED:
+											break;
+										case YT.PlayerState.BUFFERING:
+											break;
+										case YT.PlayerState.CUED:
+											break;
+									}
+								}.bind(this),
+								// Event for errors (e.g. if the video no longer exists)
+								"onError": function(event) {
+									browser.errorRow();
+								}.bind(this),
+							}
+						});
+					}.bind(this);
+				}.bind(this));
 
 			this.emulatorFlags.supportFaster	= true;
 			this.emulatorFlags.supportEncoding	= false;

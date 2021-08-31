@@ -34,6 +34,7 @@ const TR_DIVIDER		= '<tr class="disabled"><td class="divider" colspan="2"></td><
 	this.chips = 1;
 
 	this.slideTags = false;
+	this.noPlayingYet = false;
 
 	this.isMobile = $("body").attr("data-mobile") !== "0";
 
@@ -269,8 +270,9 @@ Browser.prototype = {
 	 * @param {number} paramSubtune		If specified, override subtune number with a URL parameter.
 	 * @param {boolean} paramSkipCSDb	If specified and TRUE, skip generating the 'CSDb' tab contents.
 	 * @param {boolean} paramSolitary	If specified and TRUE, just stop the tune when it's done.
+	 * @param {boolean} paramWait		If specified and TRUE, mark the tune but don't play it yet.
 	 */
-	onClick: function(event, paramSubtune, paramSkipCSDb, paramSolitary) {
+	onClick: function(event, paramSubtune, paramSkipCSDb, paramSolitary, paramWait) {
 		this.clearSpinner();
 
 		switch (event.target.id) {
@@ -556,8 +558,10 @@ Browser.prototype = {
 							if ($("#sundry-tabs .selected").attr("data-topic") == "tags")
 								$("#slider-button").show();
 
-							SID.play(true);
-							setTimeout(ctrls.setButtonPlay, 75); // For nice pause-to-play delay animation
+							if (!paramWait) {
+								SID.play(true);
+								setTimeout(ctrls.setButtonPlay, 75); // For nice pause-to-play delay animation
+							}
 						}
 
 						// Disable PREV or NEXT if at list boundaries, or if it's a solitary playing
@@ -595,6 +599,18 @@ Browser.prototype = {
 
 						// Tab 'STIL' is called 'Lyrics' in CGSC
 						$("#tab-stil").empty().append(this.isCGSC() ? "Lyrics" : "STIL");
+
+						// Stop the tune if a "?wait=1" URL parameter was specified
+						// NOTE: A bit of a nasty hack. Because of the way the SID.load() function ties into
+						// playing immediately, the alternative would have cost a lot more code and effort.
+						if (paramWait) {
+							SID.setVolume(0);
+							setTimeout(function() {
+								$("#stop").trigger("mouseup");
+								SID.stop();
+								SID.setVolume(1);
+							}, 100);
+						}
 
 					}.bind(this));
 
