@@ -34,7 +34,6 @@ const TR_DIVIDER		= '<tr class="disabled"><td class="divider" colspan="2"></td><
 	this.chips = 1;
 
 	this.slideTags = false;
-	this.noPlayingYet = false;
 
 	this.isMobile = $("body").attr("data-mobile") !== "0";
 
@@ -2337,18 +2336,25 @@ Browser.prototype = {
 						$("#ev-tb-vi-"+row).val(video.video_id);
 					});
 				} else {
-					// Starting afresh; enable the first row
-					$("#ev-cb-1,#ev-rb-1").prop("checked", true);
-					$("#ev-rb-1,#ev-tb-cn-1,#ev-tb-vi-1").prop("disabled", false);
-					$("#ev-se-1,#ev-up-1,#ev-dn-1").removeClass("disabled");
-					$("#ev-tb-cn-1").focus();
+					// Starting afresh; enable three rows with common suggestions
+					$("#ev-cb-1,#ev-rb-1,#ev-cb-2,#ev-cb-3").prop("checked", true);
+					$("#ev-rb-1,#ev-tb-cn-1,#ev-tb-vi-1,#ev-rb-2,#ev-tb-cn-2,#ev-tb-vi-2,#ev-rb-3,#ev-tb-cn-3,#ev-tb-vi-3").prop("disabled", false);
+					$("#ev-se-1,#ev-up-1,#ev-dn-1,#ev-se-2,#ev-up-2,#ev-dn-2,#ev-se-3,#ev-up-3,#ev-dn-3").removeClass("disabled");
+					$("#ev-tb-cn-1").val("Unepic").focus();
+					$("#ev-tb-cn-2").val("Oscilloscope");
+					$("#ev-tb-cn-3").val("EverythingSid");
 				}
 			}.bind(this));
 		}.bind(this));
 
+		// Get the author folder name if present
+		var author = fullname.indexOf("/MUSICIANS/") !== -1
+			? this.path.split("/").slice(-1)[0]
+			: "";
+
 		CustomDialog({
 			id: '#dialog-edit-videos',
-			text: '<h3>Edit video links</h3><p id="ev-sid">'+fullname.split("/").slice(-1)[0]+'</p>',
+			text: '<h3>Edit video links</h3><p id="ev-sid" data-author="'+author+'">'+fullname.split("/").slice(-1)[0]+'</p>',
 			width: 600,
 			height: 362,
 			wizard: noFade,
@@ -2433,8 +2439,12 @@ Browser.prototype = {
 						this.moveVideoLinkRow(rowIndex, rowIndex + 1);
 						break;
 					case "ev-se":
-						// Search for both channel and SID name in YouTube (in a new browser tab)
-						window.open("https://www.youtube.com/results?search_query="+encodeURIComponent($("#ev-tb-cn-"+rowIndex).val()+" "+$("#ev-sid").text().replace(/[_.]/g, " ")), "_blank");
+						// Search for both channel, SID author, and SID name in YouTube (in a new browser tab)
+						var $evSid = $("#ev-sid");
+						var author = $evSid.attr("data-author").replace(/[_.]/g, " "),
+							channel = $("#ev-tb-cn-"+rowIndex).val(),
+							name = $evSid.text().replace(/[_.]/g, " ");
+						window.open("https://www.youtube.com/results?search_query="+encodeURIComponent(author+" "+name+" "+channel), "_blank");
 						break;
 					default:
 						break;

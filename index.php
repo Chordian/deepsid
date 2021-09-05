@@ -1257,6 +1257,19 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>September 5, 2021</h3>
+						<ul>
+							<li>The video ID in the dialog box for editing video links now accept the time offset parameter.
+								For example, typing <code>Gro7n1oqHUo?t=63</code> will start the video 63 seconds later.</li>
+						</ul>
+
+						<h3>September 3, 2021</h3>
+						<ul>
+							<li>Searching for YouTube videos now also include the name of the author.</li>
+							<li>Opening the dialog box for editing video links now always offer three commonly used
+								channel options.</li>
+						</ul>
+
 						<h3>August 31, 2021</h3>
 						<ul>
 							<li>Added a new <code>?wait=1</code> URL switch for selecting a specific song but not play it yet.</li>

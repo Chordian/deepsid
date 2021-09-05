@@ -9,6 +9,10 @@ SHOULD BE DONE
 - YouTube post-project updates:
   - BUG: The 'Visuals' tab is still visible in the SH folder.
   - Let middle mouse button click on search button add the text "Unepic" in edit box first.
+  - FAQ page, in "What are those options in the top left drop-down box?", add "YouTube videos".
+  - Support time switch in "wz36JWHTk-A?t=797" - if not by itself, then by API seek command?
+
+- JT in Robs: Made in 1987!
 
 - http://deepsid.chordian.net/?file=/MUSICIANS/G/Gas_On/
   Where are the statistics from 1994-96 coming from here?

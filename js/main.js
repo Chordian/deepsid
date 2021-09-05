@@ -733,7 +733,15 @@ $(function() { // DOM ready
 		if (SID.ytReady) {
 			$("#stop").trigger("mouseup");
 			$("#time-length").empty().append('<img src="images/loading_threedots.svg" alt="..." style="position:relative;top:-1px;width:28px;">');
-			SID.YouTube.loadVideoById($this.attr("data-video"));
+			// Handle optional time offset parameter if present
+			var video_id = $this.attr("data-video"),
+				offset = 0;
+			if (video_id.indexOf("?") != -1) {
+				var parts = video_id.split("?");
+				video_id = parts[0];
+				offset = parts[1].substr(2);
+			}
+			SID.YouTube.loadVideoById(video_id, offset);
 			SID.setVolume(1);
 			$("#play-pause").trigger("mouseup");
 			browser.getLength(0);

@@ -411,8 +411,16 @@ SIDPlayer.prototype = {
 								});
 								// The 'Edit' corner link
 								$ytTabs.append('<div id="edityttabs"><a href="#" title="Edit YouTube links" data-name="'+fullname+'">Edit</a></div>');
+								// Handle optional time offset parameter if present
+								var video_id = data.videos[defaultTab].video_id,
+									offset = 0;
+								if (video_id.indexOf("?") != -1) {
+									var parts = video_id.split("?");
+									video_id = parts[0];
+									offset = parts[1].substr(2);
+								}
 								// Load YouTube video ID and reset volume
-								this.YouTube.loadVideoById(data.videos[defaultTab].video_id);
+								this.YouTube.loadVideoById(video_id, offset);
 								this.setVolume(1);
 							} else {
 								// There were no YouTube links set up for this song (yet)
