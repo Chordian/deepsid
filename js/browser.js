@@ -2337,11 +2337,11 @@ Browser.prototype = {
 					});
 				} else {
 					// Starting afresh; enable three rows with common suggestions
-					$("#ev-cb-1,#ev-rb-1,#ev-cb-2,#ev-cb-3").prop("checked", true);
+					$("#ev-cb-1,#ev-rb-2,#ev-cb-2,#ev-cb-3").prop("checked", true);
 					$("#ev-rb-1,#ev-tb-cn-1,#ev-tb-vi-1,#ev-rb-2,#ev-tb-cn-2,#ev-tb-vi-2,#ev-rb-3,#ev-tb-cn-3,#ev-tb-vi-3").prop("disabled", false);
 					$("#ev-se-1,#ev-up-1,#ev-dn-1,#ev-se-2,#ev-up-2,#ev-dn-2,#ev-se-3,#ev-up-3,#ev-dn-3").removeClass("disabled");
 					$("#ev-tb-cn-1").val("Unepic").focus();
-					$("#ev-tb-cn-2").val("Oscilloscope");
+					$("#ev-tb-cn-2").val("acrouzet");
 					$("#ev-tb-cn-3").val("EverythingSid");
 				}
 			}.bind(this));
@@ -2360,16 +2360,22 @@ Browser.prototype = {
 			wizard: noFade,
 		}, function() {
 			// SAVE was clicked; make all the video link changes
+			var rbVisible = false;
 			arrayYouTube = [];
 			for (var row = 1; row <= 5; row++) {
-				if ($("#ev-cb-"+row).is(":checked")) {
+				if ($("#ev-cb-"+row).is(":checked") && $("#ev-tb-vi-"+row).val() != "") {
 					// This is an enabled row so append its data to the array
+					var rbOn = $("#ev-rb-"+row).is(":checked");
+					if (rbOn) rbVisible = true;
 					arrayYouTube.push({
 						channel:		$("#ev-tb-cn-"+row).val(),
 						video_id:		$("#ev-tb-vi-"+row).val(),
-						tab_default:	($("#ev-rb-"+row).is(":checked") ? 1 : 0),
+						tab_default:	(rbOn ? 1 : 0),
 					});
 				}
+				// If the radio button is missing at this point just put on the first one
+				if (!rbVisible && arrayYouTube.length > 0)
+					arrayYouTube[0]["tab_default"] = 1;
 			}
 			$.post("php/youtube_write.php", {
 				fullname:	fullname,
@@ -2380,7 +2386,7 @@ Browser.prototype = {
 					// Assume all video links were deleted to begin with
 					this.contextTR.removeClass("selected disabled").addClass("disabled");
 					for (var r = 1; r <= 5; r++) {
-						if ($("#ev-cb-"+r).is(":checked")) {
+						if ($("#ev-cb-"+r).is(":checked") && $("#ev-tb-vi-"+r).val() != "") {
 							// Something was applied in the dialog box so enable the SID row
 							this.contextTR.removeClass("disabled").addClass("selected");
 							break;

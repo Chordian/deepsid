@@ -10,7 +10,6 @@ SHOULD BE DONE
   - BUG: The 'Visuals' tab is still visible in the SH folder.
   - Let middle mouse button click on search button add the text "Unepic" in edit box first.
   - FAQ page, in "What are those options in the top left drop-down box?", add "YouTube videos".
-  - Support time switch in "wz36JWHTk-A?t=797" - if not by itself, then by API seek command?
 
 - JT in Robs: Made in 1987!
 
@@ -18,6 +17,9 @@ SHOULD BE DONE
   Where are the statistics from 1994-96 coming from here?
 
 - Make file sorting sticky (not dependent on logged in).
+
+- Somehow indicate in a SID row when there's STIL text for the song. Digger suggested using
+  tags, but they're already getting busy everywhere. Maybe there's another way?
 
 - Replace drop-down boxes with styled versions (browser and search) - I don't like how Firefox
   and Chrome changes its design on a whim.

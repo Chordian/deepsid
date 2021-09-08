@@ -258,11 +258,11 @@
 				<div class="ev-video">
 					<span>Video ID</span>
 					<form onsubmit="return false;" autocomplete="off">
-						<span><input type="text" id="ev-tb-vi-1" maxlength="16" disabled /></span>
-						<span><input type="text" id="ev-tb-vi-2" maxlength="16" disabled /></span>
-						<span><input type="text" id="ev-tb-vi-3" maxlength="16" disabled /></span>
-						<span><input type="text" id="ev-tb-vi-4" maxlength="16" disabled /></span>
-						<span><input type="text" id="ev-tb-vi-5" maxlength="16" disabled /></span>
+						<span><input type="text" id="ev-tb-vi-1" maxlength="20" disabled /></span>
+						<span><input type="text" id="ev-tb-vi-2" maxlength="20" disabled /></span>
+						<span><input type="text" id="ev-tb-vi-3" maxlength="20" disabled /></span>
+						<span><input type="text" id="ev-tb-vi-4" maxlength="20" disabled /></span>
+						<span><input type="text" id="ev-tb-vi-5" maxlength="20" disabled /></span>
 					</form>
 				</div>
 				<div class="ev-position">
@@ -1256,6 +1256,11 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>September 8, 2021</h3>
+						<ul>
+							<li>The dialog box for editing video links now discard rows with an empty video ID.</li>
+						</ul>
 
 						<h3>September 5, 2021</h3>
 						<ul>
