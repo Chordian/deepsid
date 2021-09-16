@@ -1113,6 +1113,12 @@
 								makes up for that by being a steadfast emulator.</td>
 							</tr>
 							<tr>
+								<td>YouTube videos</td><td>The top info box is replaced with a YouTube IFrame box. When you
+								click enabled SID rows, a video with the song then plays. In many cases there are alternative
+								videos available as tabs shown on top of the YouTube IFrame box. Some even demonstrate a
+								game or play the original cover song.</td>
+							</tr>
+							<tr>
 								<td>Download SID file</td><td>This makes the browser download the tunes. This is especially
 								useful if an offline player has been associated with automatically playing it. Then it's like
 								having an extra play option.</td>
