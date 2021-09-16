@@ -1421,6 +1421,15 @@ Browser.prototype = {
 						seconds = ~~this.secondsLength % 60;
 					if (seconds < 10) seconds = "0"+seconds;
 					$("#time-length").empty().append(minutes+":"+seconds);
+
+					// If the channel tab's video timed out then try the next channel tab
+					if (i == 20 && $("#play").css("display") == "none") {
+						var $ytTabs = $("#youtube-tabs");
+						var $ytChain = $ytTabs.find("div.tab"),
+							thisTab = $ytTabs.children("div.selected").index();
+						var newTab = thisTab < $ytChain.length - 1 ? ++thisTab : 0;
+						$ytChain.eq(newTab).trigger("click");
+					}
 				}
 			}.bind(this), 500);
 

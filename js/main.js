@@ -558,21 +558,6 @@ $(function() { // DOM ready
 				if (prevEmulator == "youtube")
 					// If the 'YouTube' handler was selected last then there may have been a lot of disabled rows
 					$tr.removeClass("disabled");
-				else if (emulator == "youtube") {
-					// But if 'YouTube' is chosen now then apply those disabled rows
-					// NOTE: This works but is turned off because choosing the 'YouTube' handler refreshes the
-					// site for the time being. There were too many problems making it 100% stable.
-					/*var sidRow = 0;
-					$tr.each(function(i) {
-						var $this = $(this);
-						$this.removeClass("disabled");
-						if ($this.find("td.sid").length) {
-							if (browser.playlist[sidRow].videos == 0)
-								$this.addClass("disabled");
-							sidRow++;
-						}
-					});*/
-				}
 
 				DisableIncompatibleRows();
 

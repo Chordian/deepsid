@@ -1266,7 +1266,11 @@
 
 						<h3>September 16, 2021</h3>
 						<ul>
-							<li>Changed the <code>?wait=X</code> URL switch to now wait <code>X</code> number of milliseconds before stopping.</li>
+							<li>Changed the <code>?wait=X</code> URL switch to now wait <code>X</code> number of milliseconds
+								before stopping.</li>
+							<li>DeepSID now waits up to 10 seconds for a YouTube channel tab to start playing its video. If it
+								doesn't and there are more channel tabs, it will try the next one instead. (If it was the last tab,
+								it will try the first one.)</li>
 						</ul>
 
 						<h3>September 12, 2021</h3>

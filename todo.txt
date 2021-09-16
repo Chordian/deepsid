@@ -8,7 +8,6 @@ SHOULD BE DONE
 
 - YouTube post-project updates:
   - BUG: The 'Visuals' tab is still visible in the SH folder.
-  - When the 10 seconds for a video times out, select the next channel tab (if available).
 
 - JT in Robs: Made in 1987!
 
