@@ -269,7 +269,7 @@ Browser.prototype = {
 	 * @param {number} paramSubtune		If specified, override subtune number with a URL parameter.
 	 * @param {boolean} paramSkipCSDb	If specified and TRUE, skip generating the 'CSDb' tab contents.
 	 * @param {boolean} paramSolitary	If specified and TRUE, just stop the tune when it's done.
-	 * @param {boolean} paramWait		If specified and TRUE, mark the tune but don't play it yet.
+	 * @param {boolean} paramWait		If specified, mark/play the tune then stop after X millseconds.
 	 */
 	onClick: function(event, paramSubtune, paramSkipCSDb, paramSolitary, paramWait) {
 		this.clearSpinner();
@@ -599,7 +599,7 @@ Browser.prototype = {
 						// Tab 'STIL' is called 'Lyrics' in CGSC
 						$("#tab-stil").empty().append(this.isCGSC() ? "Lyrics" : "STIL");
 
-						// Stop the tune if a "?wait=1" URL parameter was specified
+						// Stop the tune after X milliseconds if a "?wait=X" URL parameter is specified
 						// NOTE: A bit of a nasty hack. Because of the way the SID.load() function ties into
 						// playing immediately, the alternative would have cost a lot more code and effort.
 						if (paramWait) {
@@ -608,7 +608,7 @@ Browser.prototype = {
 								$("#stop").trigger("mouseup");
 								SID.stop();
 								SID.setVolume(1);
-							}, 100);
+							}, paramWait);
 						}
 
 					}.bind(this));
@@ -2336,13 +2336,14 @@ Browser.prototype = {
 						$("#ev-tb-vi-"+row).val(video.video_id);
 					});
 				} else {
-					// Starting afresh; enable three rows with common suggestions
-					$("#ev-cb-1,#ev-rb-2,#ev-cb-2,#ev-cb-3").prop("checked", true);
-					$("#ev-rb-1,#ev-tb-cn-1,#ev-tb-vi-1,#ev-rb-2,#ev-tb-cn-2,#ev-tb-vi-2,#ev-rb-3,#ev-tb-cn-3,#ev-tb-vi-3").prop("disabled", false);
-					$("#ev-se-1,#ev-up-1,#ev-dn-1,#ev-se-2,#ev-up-2,#ev-dn-2,#ev-se-3,#ev-up-3,#ev-dn-3").removeClass("disabled");
+					// Starting afresh; enable four rows with common suggestions
+					$("#ev-cb-1,#ev-rb-1,#ev-cb-2,#ev-cb-3,#ev-cb-4").prop("checked", true);
+					$("#ev-rb-1,#ev-tb-cn-1,#ev-tb-vi-1,#ev-rb-2,#ev-tb-cn-2,#ev-tb-vi-2,#ev-rb-3,#ev-tb-cn-3,#ev-tb-vi-3,#ev-rb-4,#ev-tb-cn-4,#ev-tb-vi-4").prop("disabled", false);
+					$("#ev-se-1,#ev-up-1,#ev-dn-1,#ev-se-2,#ev-up-2,#ev-dn-2,#ev-se-3,#ev-up-3,#ev-dn-3,#ev-se-4,#ev-up-4,#ev-dn-4").removeClass("disabled");
 					$("#ev-tb-cn-1").val("Unepic").focus();
-					$("#ev-tb-cn-2").val("acrouzet");
-					$("#ev-tb-cn-3").val("EverythingSid");
+					$("#ev-tb-cn-2").val("demoscenes");
+					$("#ev-tb-cn-3").val("acrouzet");
+					$("#ev-tb-cn-4").val("EverythingSid");
 				}
 			}.bind(this));
 		}.bind(this));
@@ -2373,10 +2374,12 @@ Browser.prototype = {
 						tab_default:	(rbOn ? 1 : 0),
 					});
 				}
-				// If the radio button is missing at this point just put on the first one
-				if (!rbVisible && arrayYouTube.length > 0)
-					arrayYouTube[0]["tab_default"] = 1;
 			}
+
+			// If the radio button is missing at this point just put it on the first one
+			if (!rbVisible && arrayYouTube.length > 0)
+				arrayYouTube[0]["tab_default"] = 1;
+
 			$.post("php/youtube_write.php", {
 				fullname:	fullname,
 				subtune:	subtune,
@@ -2405,6 +2408,21 @@ Browser.prototype = {
 	 onYouTubeLinksClick: function(event) {
 		var $target = $(event.target);
 		if ($target.hasClass("disabled")) return;
+
+		// Information needed for search buttons and links
+		var $evSid = $("#ev-sid");
+		var author = $evSid.attr("data-author").replace(/[_.]/g, " "),
+			name = $evSid.text().replace(/[_.]/g, " ");
+
+		if (event.target.id == "ev-corner-link") {
+			// Open multiple web browser tabs
+			window.open("https://www.youtube.com/results?search_query="+encodeURIComponent(author+" "+name.substr(0, name.length - 4), "_blank"));
+			window.open("https://www.youtube.com/results?search_query="+encodeURIComponent(author+" "+name+" everythingsid", "_blank"));
+			window.open("https://www.youtube.com/results?search_query="+encodeURIComponent(author+" "+name+" acrouzet", "_blank"));
+			window.open("https://www.youtube.com/results?search_query="+encodeURIComponent(author+" "+name+" demoscenes", "_blank"));
+			window.open("https://www.youtube.com/results?search_query="+encodeURIComponent(author+" "+name+" unepic", "_blank"));
+			return false;
+		}
 
 		// Last character of all ID names is always the row index
 		var rowIndex = parseInt(event.target.id.substr(-1));
@@ -2445,11 +2463,8 @@ Browser.prototype = {
 						this.moveVideoLinkRow(rowIndex, rowIndex + 1);
 						break;
 					case "ev-se":
+						var channel = $("#ev-tb-cn-"+rowIndex).val();
 						// Search for both channel, SID author, and SID name in YouTube (in a new browser tab)
-						var $evSid = $("#ev-sid");
-						var author = $evSid.attr("data-author").replace(/[_.]/g, " "),
-							channel = $("#ev-tb-cn-"+rowIndex).val(),
-							name = $evSid.text().replace(/[_.]/g, " ");
 						window.open("https://www.youtube.com/results?search_query="+encodeURIComponent(author+" "+name+" "+channel), "_blank");
 						break;
 					default:

@@ -8,8 +8,8 @@ SHOULD BE DONE
 
 - YouTube post-project updates:
   - BUG: The 'Visuals' tab is still visible in the SH folder.
-  - Let middle mouse button click on search button add the text "Unepic" in edit box first.
   - FAQ page, in "What are those options in the top left drop-down box?", add "YouTube videos".
+  - When the 10 seconds for a video times out, select the next channel tab (if available).
 
 - JT in Robs: Made in 1987!
 
@@ -23,6 +23,8 @@ SHOULD BE DONE
 
 - Replace drop-down boxes with styled versions (browser and search) - I don't like how Firefox
   and Chrome changes its design on a whim.
+
+- Put the new root page lists in delayed Ajax calls. The loading of the site has bogged down.
 
 - Turn off selecting in folders too?
 

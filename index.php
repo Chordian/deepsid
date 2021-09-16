@@ -229,6 +229,7 @@
 		</div>
 
 		<div id="dialog-edit-videos" class="dialog-box">
+			<a id="ev-corner-link" href="#" target="_blank" style="position:absolute;top:24px;right:24px;font-size:13px;">Open Tabs</a>
 			<div class="dialog-text"></div>
 			<fieldset style="height:200px;"><legend>Song</legend>
 				<div class="ev-tabs">
@@ -1256,6 +1257,16 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>September 16, 2021</h3>
+						<ul>
+							<li>Changed the <code>?wait=X</code> URL switch to now wait <code>X</code> number of milliseconds before stopping.</li>
+						</ul>
+
+						<h3>September 12, 2021</h3>
+						<ul>
+							<li>Added a corner link in the video links dialog box for opening multiple search tabs at once.</li>
+						</ul>
 
 						<h3>September 8, 2021</h3>
 						<ul>
