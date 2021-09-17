@@ -1243,7 +1243,8 @@
 								<td>mobile</td><td>Set it to <code>0</code> on a mobile device to use desktop view, or <code>1</code> on a desktop computer to use mobile view</td>
 							</tr>
 							<tr>
-								<td>wait</td><td>Set it to <code>1</code> for only selecting the song but not actually play it yet</td>
+								<td>cover</td><td>Set it to <code>1</code> to force showing the auto-play cover overlay upon refresh.</i>
+								</td>
 							</tr>
 						</table>
 						<p>
@@ -1263,6 +1264,11 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>September 17, 2021</h3>
+						<ul>
+							<li>Added a new <code>?cover=1</code> URL switch to force showing the auto-play cover overlay upon refresh.</li>
+						</ul>
 
 						<h3>September 16, 2021</h3>
 						<ul>

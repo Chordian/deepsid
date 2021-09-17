@@ -162,6 +162,12 @@ CONSIDER THIS
 - BUG: Searching for the specific word "data" just returns a compo error.
 - BUG: Swapping color themes fiddles with at least a gray C64font color (maybe more).
 
+- BUG: While in YouTube SID handler, click a SID row. If "Unepic" refuses to start it sometimes bump
+  to the next channel tab, then bumps twice as if several timers are messing around. This might be
+  happening less often if the "Unepic" tab is manually clicked first, not sure. UPDATE: I only
+  spotted this once the day before and the day after I couldn't provoke the bug again. I'm putting
+  this aside for but and will keep an eye on it whenever videos time out.
+
 - See also:
   - A list of similar SID tunes, for example found by comparing STIL artists.
   - I was thinking a new tab at first, but there are already a lot of those. Alternatives?

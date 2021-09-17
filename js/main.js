@@ -1383,7 +1383,8 @@ $(function() { // DOM ready
 		selectSundryTab = GetParam("sundry"),
 		playerID = GetParam("player"),
 		typeCSDb = GetParam("csdbtype"),
-		idCSDb = GetParam("csdbid");
+		idCSDb = GetParam("csdbid"),
+		forceCover = GetParam("cover");
 	// Hack to make sure the bottom search bar sits in the correct bottom of the viewport
 	$(window).trigger("resize");
 	if (fileParam !== "" && fileParam.indexOf("\\") === -1) {
@@ -1451,7 +1452,7 @@ $(function() { // DOM ready
 				$("#folders").scrollTop(rowPos > halfway ? rowPos - halfway : 0);
 				// The user may have to click a overlay question to satisfy browser auto-play prevention
 				// NOTE: Always shown for the YouTube handler. YouTube seems to do their own checking.
-				if (SID.isSuspended() || SID.emulator == "youtube")
+				if (forceCover || SID.isSuspended() || SID.emulator == "youtube")
 					$("#dialog-cover,#click-to-play-cover").show();
 				else
 					PlayFromURL(); // Don't need to show the click-to-play cover - play it now
