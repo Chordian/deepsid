@@ -1265,9 +1265,17 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>September 18, 2021</h3>
+						<ul>
+							<li>Removed the avatar images from the three big lists in the bottom of the root page, as the loading
+								of these images bogged down the site too much. With more space available, the full names of the
+								composers are now shown instead of the slightly shortened versions.</li>
+						</ul>
+
 						<h3>September 17, 2021</h3>
 						<ul>
 							<li>Added a new <code>?cover=1</code> URL switch to force showing the auto-play cover overlay upon refresh.</li>
+							<li>The <code>?wait=X</code> switch is now sticky when specified in the URL.</li>
 						</ul>
 
 						<h3>September 16, 2021</h3>

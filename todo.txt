@@ -22,8 +22,6 @@ SHOULD BE DONE
 - Replace drop-down boxes with styled versions (browser and search) - I don't like how Firefox
   and Chrome changes its design on a whim.
 
-- Put the new root page lists in delayed Ajax calls. The loading of the site has bogged down.
-
 - Turn off selecting in folders too?
 
 - BUG: Click tag sundry box. Play tune. Click FOLDERS button. It disappears. But then click any

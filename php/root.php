@@ -136,7 +136,8 @@ function CreateComposersArray(&$select, &$composers, $pro = false) {
 
 	foreach($select as $row) {
 
-		$name = $raw_name = empty($row->shortname) ? $row->name : $row->shortname;
+		// $name = $raw_name = empty($row->shortname) ? $row->name : $row->shortname;
+		$name = $raw_name = $row->name; // NoAvatar: With no avatars there is more room for long names
 		if ($name == '?') $name = '<small class="u1">?</small>?<small class="u2">?</small>';
 		$parts = explode(',', $row->handles);
 		$handle = trim(empty($row->shorthandle) ? end($parts) : $row->shorthandle);
@@ -183,10 +184,12 @@ function QuickShortcutRow(&$author) {
 						'<td class="quickline" colspan="2"></td>'.
 					'</tr>'.
 					'<tr>'.
-						'<td style="width:42px;padding:0 !important;">'.
+						// Search for 'NoAvatar' if you plan to enable avatar images again
+						// Just be aware that avatar images really bogs down the loading of the site
+						/*'<td style="width:42px;padding:0 !important;">'.
 							'<img class="composer quick-thumbnail" src="'.$author['avatar'].'" alt="" />'.
-						'</td>'.
-						'<td style="padding-top:2px;">'.
+						'</td>'.*/                  // NoAvatar: PL and PB added below
+						'<td style="padding-top:2px;padding-left:0 !important;padding-bottom:2px;">'.
 							'<h4>'.$author['name'].'</h4>'.
 							'<h5>'.$author['handle'].'</h5>'.
 						'</td>'.

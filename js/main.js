@@ -1747,6 +1747,10 @@ function UpdateURL(skipFileCheck) {
 
 	var link = (urlFile+urlSubtune).replace(/&/, "?"); // Replace first occurrence only
 
+	// The "?wait=" switch must be sticky or the effect will be lost in a refreshed IFrame
+	var wait = GetParam("wait");
+	if (wait) link += "&wait="+wait;
+
 	if (urlFile != prevFile) {
 		prevFile = urlFile; // Need a new file clicked before we proceed in the browser history
 		history.pushState({}, document.title, link);
