@@ -19,8 +19,6 @@ SHOULD BE DONE
 - Replace drop-down boxes with styled versions (browser and search) - I don't like how Firefox
   and Chrome changes its design like the wind blows.
 
-- Turn off selecting in folders too? UPDATE: And on context menu too.
-
 - BUG: Click tag sundry box. Play tune. Click FOLDERS button. It disappears. But then click any
   of the other two sundry tabs and then back again. Now the FOLDERS button is back!?
 

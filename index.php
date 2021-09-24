@@ -1269,6 +1269,8 @@
 						<ul>
 							<li>Fixed a bug that in rare cases mixed data from multiple composers when showing both the
 								chart with active years and the bars with players used.</li>
+							<li>It is no longer possible to mark and select folders as well as context menu options.
+								If you want to copy a folder name, enter it and copy it from the URL box instead.</li>
 						</ul>
 
 						<h3>September 18, 2021</h3>

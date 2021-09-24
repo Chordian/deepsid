@@ -959,7 +959,7 @@ Browser.prototype = {
 				var isMobileDenied = folder.incompatible.indexOf("mobile") !== -1 && this.isMobile;
 				folders +=
 					'<tr'+(folder.incompatible.indexOf(SID.emulator) !== -1 || isMobileDenied ? ' class="disabled"' : '')+'>'+
-						'<td class="folder compo"><div class="block-wrap"><div class="block slimfont">'+
+						'<td class="folder compo unselectable"><div class="block-wrap"><div class="block slimfont">'+
 							(folder.filescount > 0 ? '<div class="filescount">'+folder.filescount+'</div>' : '')+
 						'<span class="name entry compo'+(this.isSearching ? ' search' : '')+'" data-name="'+(this.isSearching ? 'CSDb Music Competitions%2F' : '')+encodeURIComponent(folder.foldername)+'" data-incompat="'+folder.incompatible+'">'+
 						folder.foldername+'</span></div></div><br />'+
@@ -1192,7 +1192,7 @@ Browser.prototype = {
 
 							var folderEntry =
 								'<tr'+(folder.incompatible.indexOf(SID.emulator) !== -1 || isMobileDenied ? ' class="disabled"' : '')+'>'+
-									'<td class="folder compo"><div class="block-wrap"><div class="block slimfont">'+
+									'<td class="folder compo unselectable"><div class="block-wrap"><div class="block slimfont">'+
 										(folder.filescount > 0 ? '<div class="filescount">'+folder.filescount+'</div>' : '')+
 									'<span class="name entry compo'+(this.isSearching ? ' search' : '')+'" data-name="'+(this.isSearching ? 'CSDb Music Competitions%2F' : '')+encodeURIComponent(folder.foldername)+'" data-incompat="'+folder.incompatible+'">'+
 									folder.foldername+'</span></div></div><br />'+
@@ -1223,7 +1223,7 @@ Browser.prototype = {
 								: '';
 							var folderEntry =
 								'<tr'+(folder.incompatible.indexOf(SID.emulator) !== -1 || isMobileDenied ? ' class="disabled"' : '')+'>'+
-									'<td class="folder '+
+									'<td class="folder unselectable '+
 										(isPersonalSymlist || (isPublicSymlist && myPublic)
 											? 'playlist'
 											: folder.foldertype.toLowerCase()+(folder.hasphoto ? '-photo' : ''))+
@@ -2030,7 +2030,7 @@ Browser.prototype = {
 			return;
 
 		// Create the hidden menu and assume coordinates for going downwards
-		$panel.prepend('<div id="contextmenu" class="context">'+contents+'</div>');
+		$panel.prepend('<div id="contextmenu" class="context unselectable">'+contents+'</div>');
 		var $contextMenu = $("#contextmenu");
 		$contextMenu
 			.css("top", event.pageY - 2)
