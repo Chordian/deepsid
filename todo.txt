@@ -9,20 +9,17 @@ SHOULD BE DONE
 - YouTube post-project updates:
   - BUG: The 'Visuals' tab is still visible in the SH folder.
 
-- JT in Robs: Made in 1987!
-
-- http://deepsid.chordian.net/?file=/MUSICIANS/G/Gas_On/
-  Where are the statistics from 1994-96 coming from here?
-
 - Make file sorting sticky (not dependent on logged in).
+
+- Make sure the tracking activity ignores repeated IP addresses.
 
 - Somehow indicate in a SID row when there's STIL text for the song. Digger suggested using
   tags, but they're already getting busy everywhere. Maybe there's another way?
 
 - Replace drop-down boxes with styled versions (browser and search) - I don't like how Firefox
-  and Chrome changes its design on a whim.
+  and Chrome changes its design like the wind blows.
 
-- Turn off selecting in folders too?
+- Turn off selecting in folders too? UPDATE: And on context menu too.
 
 - BUG: Click tag sundry box. Play tune. Click FOLDERS button. It disappears. But then click any
   of the other two sundry tabs and then back again. Now the FOLDERS button is back!?
@@ -60,7 +57,8 @@ SHOULD BE DONE
 
 - Consider moving all JCH's ratings to a unique account that is used for determining the quality
   settings, etc. Getting tired of not being able to rate certain folders.
-  - Perhaps a selective copy - only the stuff needed. Would ratings for folders suffice?
+  - Perhaps a selective copy - only the stuff needed. Would ratings for folders suffice? (On the
+    other hand, if JCH plans to +1 revise all ratings, it might be cool to have a 100% backup.)
 
 
 CONSIDER THIS

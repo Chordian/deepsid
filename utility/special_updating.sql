@@ -16,6 +16,10 @@ UPDATE hvsc_files SET player = "JammicroV0" WHERE id = 67946								-- _High Vol
 UPDATE hvsc_files SET player = "JO's player + THCM" WHERE id = 22304						-- _High Voltage SID Collection/MUSICIANS/H/HJE/Megademo_part_2.sid
 UPDATE hvsc_files SET player = "Vibrants/JO" WHERE id = 22322								-- _High Voltage SID Collection/MUSICIANS/H/HJE/Woody_the_Worm.sid
 
+UPDATE hvsc_files SET player = "Steve_Turner" WHERE id = 45979								-- _High Voltage SID Collection/MUSICIANS/T/Turner_Steve/Bushido.sid
+UPDATE hvsc_files SET player = "Steve_Turner" WHERE id = 45981								-- _High Voltage SID Collection/MUSICIANS/T/Turner_Steve/Intensity.sid
+UPDATE hvsc_files SET player = "Steve_Turner" WHERE id = 45984								-- _High Voltage SID Collection/MUSICIANS/T/Turner_Steve/Soldier_of_Fortune.sid
+
 /* Tags */
 DELETE FROM tags_lookup WHERE files_id = 66429 AND tags_id = 9								-- Tag ID 9 = "Coop" + _High Voltage SID Collection/DEMOS/M-R/Mr_Brightside.sid
 DELETE FROM tags_lookup WHERE files_id = 2429 AND tags_id = 9								-- Tag ID 9 = "Coop" + _High Voltage SID Collection/GAMES/A-F/Athanor.sid
@@ -156,6 +160,7 @@ UPDATE hvsc_files SET copyright = "1987" WHERE fullname LIKE "%/MUSICIANS/S/Stor
 UPDATE hvsc_files SET copyright = "1987" WHERE fullname LIKE "%/MUSICIANS/S/Stormont_John/Smurf_Party.sid"
 UPDATE hvsc_files SET copyright = "1987" WHERE fullname LIKE "%/MUSICIANS/S/Stormont_John/Strangled_Electrosound.sid"
 UPDATE hvsc_files SET copyright = "2011" WHERE fullname LIKE "%/MUSICIANS/T/Taxim/Heroes_and_Cowards_Extro.sid"
+UPDATE hvsc_files SET copyright = "1987" WHERE fullname LIKE "%/MUSICIANS/T/Tel_Jeroen/JT_in_Robs.sid"
 UPDATE hvsc_files SET copyright = "1996" WHERE fullname LIKE "%/MUSICIANS/T/The_Blue_Ninja/Imploder.sid"
 UPDATE hvsc_files SET copyright = "1996" WHERE fullname LIKE "%/MUSICIANS/T/The_Blue_Ninja/Imploder_Save_Jingle.sid"
 UPDATE hvsc_files SET copyright = "199?" WHERE fullname LIKE "%/MUSICIANS/T/The_Flying_Dutchman/Quix_preview.sid"

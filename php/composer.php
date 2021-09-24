@@ -25,6 +25,7 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH
 $html = '';
 $rating = 0;
 $fullname = $_GET['fullname'];
+$escaped_fullname = str_replace('_', '\_', $fullname);
 
 if (isset($fullname)) {
 
@@ -215,7 +216,7 @@ if (isset($fullname)) {
 
 			// Get data about players for the charts
 			$select = $db->prepare('SELECT player, count(player) AS count FROM hvsc_files WHERE fullname LIKE :fullname GROUP BY player');
-			$select->execute(array(':fullname'=>$fullname.'/%'));
+			$select->execute(array(':fullname'=>$escaped_fullname.'/%'));
 			$select->setFetchMode(PDO::FETCH_OBJ);
 
 			$player_labels = Array();
@@ -246,7 +247,7 @@ if (isset($fullname)) {
 
 			// Get data about active years
 			$select = $db->prepare('SELECT copyright FROM hvsc_files WHERE fullname LIKE :fullname');
-			$select->execute(array(':fullname'=>$fullname.'/%'));
+			$select->execute(array(':fullname'=>$escaped_fullname.'/%'));
 			$select->setFetchMode(PDO::FETCH_OBJ);
 
 			$years = Array();

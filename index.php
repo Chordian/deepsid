@@ -1265,6 +1265,12 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>September 24, 2021</h3>
+						<ul>
+							<li>Fixed a bug that in rare cases mixed data from multiple composers when showing both the
+								chart with active years and the bars with players used.</li>
+						</ul>
+
 						<h3>September 18, 2021</h3>
 						<ul>
 							<li>Removed the avatar images from the three big lists in the bottom of the root page, as the loading
