@@ -307,6 +307,14 @@
 
 	--shadow-compo:					1px 1.5px 3px var(--color-text-dim);
 
+	/* Player type strips */
+
+	--color-strip-pl-a:				#c0c0c0;
+	--color-strip-pl-b:				#7b7;
+	--color-strip-pl-c:				#7bb;
+	--color-strip-pl-d:				#99b;
+	--color-strip-pl-e:				#bb7;
+
 	/* Styled select colors */	
 
 	--color-styled-select-text:		var(--color-button);
@@ -629,6 +637,14 @@
 	/* CSDb music competition folder icons */
 
 	--shadow-compo:					0 0 4px #f5f5f1;
+
+	/* Player type strips */
+
+	--color-strip-pl-a:				#606060;
+	--color-strip-pl-b:				#373;
+	--color-strip-pl-c:				#377;
+	--color-strip-pl-d:				#555590;
+	--color-strip-pl-e:				#773;
 
 	/* Styled select colors */	
 
@@ -2860,6 +2876,21 @@ input[type=range]::-ms-track {
 			position: relative;
 			max-width: 325px; /* This fix prevents the left TD from pushing the TD with star ratings */
 		}
+
+			#songs .pl-strip {
+				position: absolute;
+				top: 4px;		/* 2px 4px */
+				left: 0;
+				width: 3px;
+				height: 45px;	/* 49px 45px */
+				border-radius: 1px;
+			}
+
+				#songs .pl-a { background: var(--color-strip-pl-a); }
+				#songs .pl-b { background: var(--color-strip-pl-b); }
+				#songs .pl-c { background: var(--color-strip-pl-c); }
+				#songs .pl-d { background: var(--color-strip-pl-d); }
+				#songs .pl-e { background: var(--color-strip-pl-e); }
 
 		/* Alloyrun.sid (file) */
 		#songs .file {

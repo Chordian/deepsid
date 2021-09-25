@@ -1269,6 +1269,9 @@
 						<ul>
 							<li>In the video links dialog box, the corner link for opening multiple search tabs now
 								search directly in the four specific channels. This should yield more precise results.</li>
+							<li>Small color strips can now be seen in the beginning of SID rows for certain specific player
+								types. GoatTracker is gray, NewPlayer is green, Sid-Wizard is cyan, SID Factory II is blue,
+								and DMC is yellow.</li>
 						</ul>
 
 						<h3>September 24, 2021</h3>

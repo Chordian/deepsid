@@ -6,7 +6,30 @@
 const TR_SPACER 		= '<tr class="disabled"><td class="spacer" colspan="2"></td></tr>';
 const TR_DIVIDER		= '<tr class="disabled"><td class="divider" colspan="2"></td></tr>';
 
- function Browser() {
+const playerStrips = [
+	{
+		type:	"GoatTracker",
+		class:	"pl-a",
+	},
+	{
+		type:	"NewPlayer",
+		class:	"pl-b",
+	},
+	{
+		type:	"SidWizard",
+		class:	"pl-c",
+	},
+	{
+		type:	"SidFactory_II",
+		class:	"pl-d",
+	},
+	{
+		type:	"DMC",
+		class:	"pl-e",
+	},
+];
+
+function Browser() {
 
 	this.ROOT_HVSC = 'hvsc';
 	this.HVSC_VERSION = 75;
@@ -935,14 +958,22 @@ Browser.prototype = {
 			DisableIncompatibleRows();
 		} else if (!filterFolders && !this.isBigCompoFolder()) {
 			// Rebuild the reordered table list (files only; the folders in top are just preserved)
-			var files = adaptedName = "";
+			var files = adaptedName = playerType = "";
 			$.each(this.playlist, function(i, file) {
 				var isNew = file.hvsc == this.HVSC_VERSION || file.hvsc == this.CGSC_VERSION ||
 					(typeof file.uploaded != "undefined" && file.uploaded.substr(0, 10) == this.today.substr(0, 10));
 				adaptedName = file.substname == "" ? file.filename.replace(/^\_/, '') : file.substname;
 				adaptedName = this.adaptBrowserName(adaptedName);
+				$.each(playerStrips, function(i, strip) {
+					if (file.player.indexOf(strip.type) != -1) {
+						playerType = " "+strip.class;
+						return false;
+					}
+				});
 				files += '<tr>'+
-						'<td class="sid unselectable"><div class="block-wrap"><div class="block">'+(file.subtunes > 1 ? '<div class="subtunes'+(this.isSymlist ? ' specific' : '')+(isNew ? ' newst' : '')+'">'+(this.isSymlist ? file.startsubtune + 1 : file.subtunes)+'</div>' : (isNew ? '<div class="newsid"></div>' : ''))+
+						'<td class="sid unselectable">'+
+						'<div class="pl-strip'+playerType+'"></div>'+
+						'<div class="block-wrap"><div class="block">'+(file.subtunes > 1 ? '<div class="subtunes'+(this.isSymlist ? ' specific' : '')+(isNew ? ' newst' : '')+'">'+(this.isSymlist ? file.startsubtune + 1 : file.subtunes)+'</div>' : (isNew ? '<div class="newsid"></div>' : ''))+
 						'<div class="entry name file'+(this.isSearching || this.isCompoFolder || this.path.substr(0, 2) === "/$" ? ' search' : '')+'" data-name="'+encodeURIComponent(file.filename)+'" data-type="'+file.type+'" data-symid="'+file.symid+'">'+adaptedName+'</div></div></div><br />'+
 						'<span class="info">'+file.copyright.substr(0, 4)+file.infosec+'<div class="tags-line"'+(showTags ? '' : ' style="display:none"')+'>'+file.tags+'</div></span></td>'+
 						'<td class="stars filestars"><span class="rating">'+this.buildStars(file.rating)+'</span>'+
@@ -1318,16 +1349,24 @@ Browser.prototype = {
 						// Player: Replace "_" with space + "V" with "v" for versions
 						var player = file.player.replace(/_/g, " ").replace(/(V)(\d)/g, "v$2"),
 							rootFile = (this.isSearching || this.isSymlist || this.isCompoFolder ? "" : this.path) + "/" + file.filename,
-							countVideos = file.videos,
+							countVideos = file.videos, playerType = "",
 							isNew = file.hvsc == this.HVSC_VERSION || file.hvsc == this.CGSC_VERSION ||
 								(typeof file.uploaded != "undefined" && file.uploaded.substr(0, 10) == this.today.substr(0, 10));
 						var adaptedName = file.substname == "" ? file.filename.replace(/^\_/, '') : file.substname;
 						adaptedName = this.adaptBrowserName(adaptedName);
 						var list_of_tags = this.buildTags(file.tags, file.tagtypes),
 							infoSecondary = typeof file.uploaded != "undefined" ? ' by '+file.author : ' in '+player;
+						$.each(playerStrips, function(i, strip) {
+							if (file.player.indexOf(strip.type) != -1) {
+								playerType = " "+strip.class;
+								return false;
+							}
+						});
 						files +=
 							'<tr'+(SID.emulator == "youtube" && countVideos == 0 ? ' class="disabled"' : '')+'>'+
-								'<td class="sid unselectable"><div class="block-wrap"><div class="block">'+(file.subtunes > 1 ? '<div class="subtunes'+(this.isSymlist ? ' specific' : '')+(isNew ? ' newst' : '')+'">'+(this.isSymlist ? file.startsubtune : file.subtunes)+'</div>' : (isNew ? '<div class="newsid"></div>' : ''))+
+								'<td class="sid unselectable">'+
+								'<div class="pl-strip'+playerType+'"></div>'+
+								'<div class="block-wrap"><div class="block">'+(file.subtunes > 1 ? '<div class="subtunes'+(this.isSymlist ? ' specific' : '')+(isNew ? ' newst' : '')+'">'+(this.isSymlist ? file.startsubtune : file.subtunes)+'</div>' : (isNew ? '<div class="newsid"></div>' : ''))+
 								'<div class="entry name file'+(this.isSearching || this.isCompoFolder || this.path.substr(0, 2) === "/$" ? ' search' : '')+'" data-name="'+encodeURIComponent(file.filename)+'" data-type="'+file.type+'" data-symid="'+file.symid+'">'+adaptedName+'</div></div></div><br />'+
 								'<span class="info">'+file.copyright.substr(0, 4)+infoSecondary+'<div class="tags-line"'+(showTags ? '' : ' style="display:none"')+'>'+list_of_tags+'</div></span></td>'+
 								'<td class="stars filestars"><span class="rating">'+this.buildStars(file.rating)+'</span>'+

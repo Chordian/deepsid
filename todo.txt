@@ -11,10 +11,6 @@ SHOULD BE DONE
 
 - Make file sorting sticky (not dependent on logged in).
 
-- Make sure the tracking activity ignores repeated IP addresses.
-  UPDATE: The code now states in the visitors file if an IP address is a duplicate. Leave it
-  like this for the time being to monitor it a bit before actually removing duplicates.
-
 - Somehow indicate in a SID row when there's STIL text for the song. Digger suggested using
   tags, but they're already getting busy everywhere. Maybe there's another way?
 
@@ -31,10 +27,6 @@ SHOULD BE DONE
   dated 22 August 2021.
 
 - Search shortcuts should show a folder icon with a small magnifying glass inside of it.
-
-- Idea: A ~2px left edge color border on those rows with a specific player. Maybe so it fades
-  into transparent during the next 5-10px towards the right.
-  - GT2: Gray, SF2: Blue, NP+LP: Green
 
 - Consider adding a red attract link somewhere, pointing to the front page showing any red or
   green message. I've learned that some users never see the front page.
@@ -63,6 +55,10 @@ SHOULD BE DONE
 
 CONSIDER THIS
 ¯¯¯¯¯¯¯¯¯¯¯¯¯
+- Make sure the tracking activity ignores repeated IP addresses.
+  UPDATE: The code now states in the visitors file if an IP address is a duplicate. Leave it
+  like this for the time being to monitor it a bit before actually removing duplicates.
+
 - HVSC versions: Update with later changes, e.g. "Better Late Than Never" renaming. But how?
 
 - CSDb: If possible, convert ID cross-references in comments into the pertinent links.
