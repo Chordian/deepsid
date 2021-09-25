@@ -2422,14 +2422,15 @@ Browser.prototype = {
 		var $evSid = $("#ev-sid");
 		var author = $evSid.attr("data-author").replace(/[_.]/g, " "),
 			name = $evSid.text().replace(/[_.]/g, " ");
+		var nameNoSid = name.substr(0, name.length - 4);
 
 		if (event.target.id == "ev-corner-link") {
 			// Open multiple web browser tabs
 			window.open("https://www.youtube.com/results?search_query="+encodeURIComponent(author+" "+name.substr(0, name.length - 4), "_blank"));
-			window.open("https://www.youtube.com/results?search_query="+encodeURIComponent(author+" "+name+" everythingsid", "_blank"));
-			window.open("https://www.youtube.com/results?search_query="+encodeURIComponent(author+" "+name+" acrouzet", "_blank"));
-			window.open("https://www.youtube.com/results?search_query="+encodeURIComponent(author+" "+name+" demoscenes", "_blank"));
-			window.open("https://www.youtube.com/results?search_query="+encodeURIComponent(author+" "+name+" unepic", "_blank"));
+			window.open("https://www.youtube.com/channel/UCDbAWy2ArsTKso-A0sFv_hA/search?query="+encodeURIComponent(author+" "+nameNoSid, "_blank"));
+			window.open("https://www.youtube.com/c/acrouzet/search?query="+encodeURIComponent(author+" "+nameNoSid, "_blank"));
+			window.open("https://www.youtube.com/user/demoscenes/search?query="+encodeURIComponent(author+" "+nameNoSid, "_blank"));
+			window.open("https://www.youtube.com/c/UnepicStonedHighSIDCollection/search?query="+encodeURIComponent(author+" "+nameNoSid, "_blank"));
 			return false;
 		}
 

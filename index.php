@@ -1265,6 +1265,12 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>September 25, 2021</h3>
+						<ul>
+							<li>In the video links dialog box, the corner link for opening multiple search tabs now
+								search directly in the four specific channels. This should yield more precise results.</li>
+						</ul>
+
 						<h3>September 24, 2021</h3>
 						<ul>
 							<li>Fixed a bug that in rare cases mixed data from multiple composers when showing both the

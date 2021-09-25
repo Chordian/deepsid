@@ -62,6 +62,7 @@ $styling = '
 				vertical-align: top;
 				padding-right: 6px;
 			}
+		.duplicate { color: #d00; }
 	</style>';
 
 $stacked = array(
@@ -105,9 +106,10 @@ if (($handle = fopen(TRACKFILE, 'r')) != false) {
 		elseif (strpos($line[1], 'www.facebook.com'))
 			$type = ' fb';
 		$count[trim($type)]++;
+		$ip = str_replace('DUPLICATE IP ADDRESS', '<span class="duplicate">DUPLICATE IP ADDRESS</span>', $line[0]);
 		$box = '
 			<div class="tracking'.$type.'">
-				'.(!empty($line[2]) ? '<b>'.$line[2].'</b> ('.$line[0].')' : $line[0]).'<br />
+				'.(!empty($line[2]) ? '<b>'.$line[2].'</b> ('.$ip.')' : $ip).'<br />
 				'.date('H:i', $line[3]).' ('.($duration > 2 ? ($hours ? '<b>'.$hours.'</b> hours ' : '').'<b>'.$minutes.'</b> minutes ago' : '<b>just now</b>').')
 				- last updated '.($last > 2 ? '<b>'.$last.'</b> minutes ago' : '<b>just now</b>').'<br />
 				'.($parser->fullname != 'unknown' ? $parser->fullname : $line[1]).'
