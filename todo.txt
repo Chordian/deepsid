@@ -3,8 +3,6 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- Move all changes from 2020 and older to archive page.
-
 - IFrame project for Lemon:
   - Fix links in top 10 lists in the root page.
 
