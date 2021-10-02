@@ -2892,6 +2892,19 @@ input[type=range]::-ms-track {
 				#songs .pl-d { background: var(--color-strip-pl-d); }
 				#songs .pl-e { background: var(--color-strip-pl-e); }
 
+			#songs .has-stil {
+				position: absolute;
+				top: 10px;
+				left: 5px;
+				width: 3.5px;
+			}
+
+				#songs .has-stil div {
+					height: 1px;
+					margin-bottom: 1px;
+					border-top: 1px solid var(--color-text-body);
+				}
+
 		/* Alloyrun.sid (file) */
 		#songs .file {
 			padding-top: 6px;

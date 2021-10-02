@@ -1268,6 +1268,7 @@
 						<h3>October 2, 2021</h3>
 						<ul>
 							<li>DeepSID's copy of <a href="http://www.c64music.co.uk/" target="_top">Compute's Gazette SID Collection</a> has now been upgraded to version 1.41.</li>
+							<li>SID names are now prefixed with a tiny icon (with three horizontal lines) whenever there's a STIL text entry.</li>
 						</ul>
 
 						<h3>September 25, 2021</h3>

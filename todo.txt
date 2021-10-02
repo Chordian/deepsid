@@ -8,11 +8,9 @@ SHOULD BE DONE
 
 - YouTube post-project updates:
   - BUG: The 'Visuals' tab is still visible in the SH folder.
+  - Subtune selector in main dialog, for quick shortcut to subtune + 1.
 
 - Make file sorting sticky (not dependent on logged in).
-
-- Somehow indicate in a SID row when there's STIL text for the song. Digger suggested using
-  tags, but they're already getting busy everywhere. Maybe there's another way?
 
 - Replace drop-down boxes with styled versions (browser and search) - I don't like how Firefox
   and Chrome change their design like the wind blows.

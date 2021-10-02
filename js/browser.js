@@ -968,7 +968,8 @@ Browser.prototype = {
 					(typeof file.uploaded != "undefined" && file.uploaded.substr(0, 10) == this.today.substr(0, 10));
 				adaptedName = file.substname == "" ? file.filename.replace(/^\_/, '') : file.substname;
 				adaptedName = this.adaptBrowserName(adaptedName);
-				var playerType = "";
+				var playerType = "",
+					hasStil = file.stil != "" ? "<div></div><div></div><div></div>" : "";
 				$.each(playerStrips, function(i, strip) {
 					if (file.player.indexOf(strip.type) != -1) {
 						playerType = " "+strip.class;
@@ -977,7 +978,7 @@ Browser.prototype = {
 				});
 				files += '<tr>'+
 						'<td class="sid unselectable">'+
-						'<div class="pl-strip'+playerType+'"></div>'+
+						'<div class="pl-strip'+playerType+'"><div class="has-stil">'+hasStil+'</div></div>'+
 						'<div class="block-wrap"><div class="block">'+(file.subtunes > 1 ? '<div class="subtunes'+(this.isSymlist ? ' specific' : '')+(isNew ? ' newst' : '')+'">'+(this.isSymlist ? file.startsubtune + 1 : file.subtunes)+'</div>' : (isNew ? '<div class="newsid"></div>' : ''))+
 						'<div class="entry name file'+(this.isSearching || this.isCompoFolder || this.path.substr(0, 2) === "/$" ? ' search' : '')+'" data-name="'+encodeURIComponent(file.filename)+'" data-type="'+file.type+'" data-symid="'+file.symid+'">'+adaptedName+'</div></div></div><br />'+
 						'<span class="info">'+file.copyright.substr(0, 4)+file.infosec+'<div class="tags-line"'+(showTags ? '' : ' style="display:none"')+'>'+file.tags+'</div></span></td>'+
@@ -1361,6 +1362,8 @@ Browser.prototype = {
 						adaptedName = this.adaptBrowserName(adaptedName);
 						var list_of_tags = this.buildTags(file.tags, file.tagtypes),
 							infoSecondary = typeof file.uploaded != "undefined" ? ' by '+file.author : ' in '+player;
+						var stil = file.stil;
+						var hasStil = stil != "" ? "<div></div><div></div><div></div>" : "";
 						$.each(playerStrips, function(i, strip) {
 							if (file.player.indexOf(strip.type) != -1) {
 								playerType = " "+strip.class;
@@ -1370,7 +1373,7 @@ Browser.prototype = {
 						files +=
 							'<tr'+(SID.emulator == "youtube" && countVideos == 0 ? ' class="disabled"' : '')+'>'+
 								'<td class="sid unselectable">'+
-								'<div class="pl-strip'+playerType+'"></div>'+
+								'<div class="pl-strip'+playerType+'"><div class="has-stil">'+hasStil+'</div></div>'+
 								'<div class="block-wrap"><div class="block">'+(file.subtunes > 1 ? '<div class="subtunes'+(this.isSymlist ? ' specific' : '')+(isNew ? ' newst' : '')+'">'+(this.isSymlist ? file.startsubtune : file.subtunes)+'</div>' : (isNew ? '<div class="newsid"></div>' : ''))+
 								'<div class="entry name file'+(this.isSearching || this.isCompoFolder || this.path.substr(0, 2) === "/$" ? ' search' : '')+'" data-name="'+encodeURIComponent(file.filename)+'" data-type="'+file.type+'" data-symid="'+file.symid+'">'+adaptedName+'</div></div></div><br />'+
 								'<span class="info">'+file.copyright.substr(0, 4)+infoSecondary+'<div class="tags-line"'+(showTags ? '' : ' style="display:none"')+'>'+list_of_tags+'</div></span></td>'+
@@ -1380,7 +1383,6 @@ Browser.prototype = {
 							'</tr>'; // &#9642; is the dot character if needed
 
 						// If the STIL text starts with a <BR> newline or a <HR> line, get rid of it
-						var stil = file.stil;
 						if (stil.substr(2, 4) == "r />") stil = stil.substr(6);
 
 						this.playlist.push({
