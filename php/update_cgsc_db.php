@@ -7,13 +7,16 @@
  * 
  * WARNING: THIS IS A PROTOTYPE SCRIPT THAT FOR NOW ONLY PERFORMS A SUBSET. IT
  * ONLY PARSES THE MOVE LINES FOR .MUS FILES FROM AN ADAPTED TEXT FILE.
+ *
+ * REMEMBER TO REPLACE "\" INTO "/" INSTEAD, AND LEAVE THE "MOVE" COMMAND IN
+ * PLACE IN THE BEGINNING OF EACH LINE IN THE TEXT FILE.
  * 
  * @used-by		N/A
  */
 
 require_once("class.account.php"); // Includes setup
 
-define('CGSC_VERSION', '140'); // Remember to update this
+define('CGSC_VERSION', '141'); // Remember to update this
 define('CGSC_PATH', "_Compute's Gazette SID Collection/");
 
 try {

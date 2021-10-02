@@ -965,7 +965,7 @@
 							<a href="https://www.hvsc.c64.org/" target="_top">https://www.hvsc.c64.org/</a>
 						</p>
 						<p>
-							Compute's Gazette SID Collection #140<br />
+							Compute's Gazette SID Collection #141<br />
 							<a href="http://www.c64music.co.uk/" target="_top">http://www.c64music.co.uk/</a>
 						</p>
 
@@ -1264,6 +1264,11 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>October 2, 2021</h3>
+						<ul>
+							<li>DeepSID's copy of <a href="http://www.c64music.co.uk/" target="_top">Compute's Gazette SID Collection</a> has now been upgraded to version 1.41.</li>
+						</ul>
 
 						<h3>September 25, 2021</h3>
 						<ul>

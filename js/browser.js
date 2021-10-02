@@ -24,6 +24,10 @@ const playerStrips = [
 		class:	"pl-d",
 	},
 	{
+		type:	"SidFactory II",
+		class:	"pl-d",
+	},
+	{
 		type:	"DMC",
 		class:	"pl-e",
 	},
@@ -33,7 +37,7 @@ function Browser() {
 
 	this.ROOT_HVSC = 'hvsc';
 	this.HVSC_VERSION = 75;
-	this.CGSC_VERSION = 140;
+	this.CGSC_VERSION = 141;
 
 	this.path = "";
 	this.search = "";
@@ -958,12 +962,13 @@ Browser.prototype = {
 			DisableIncompatibleRows();
 		} else if (!filterFolders && !this.isBigCompoFolder()) {
 			// Rebuild the reordered table list (files only; the folders in top are just preserved)
-			var files = adaptedName = playerType = "";
+			var files = adaptedName = "";
 			$.each(this.playlist, function(i, file) {
 				var isNew = file.hvsc == this.HVSC_VERSION || file.hvsc == this.CGSC_VERSION ||
 					(typeof file.uploaded != "undefined" && file.uploaded.substr(0, 10) == this.today.substr(0, 10));
 				adaptedName = file.substname == "" ? file.filename.replace(/^\_/, '') : file.substname;
 				adaptedName = this.adaptBrowserName(adaptedName);
+				var playerType = "";
 				$.each(playerStrips, function(i, strip) {
 					if (file.player.indexOf(strip.type) != -1) {
 						playerType = " "+strip.class;

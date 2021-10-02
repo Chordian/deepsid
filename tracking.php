@@ -55,16 +55,12 @@ foreach($lines as $index => $visitor) {
 	}
 }
 
-if (!$exists && strpos($_SERVER['HTTP_USER_AGENT'], 'www.facebook.com') == false) {
-	// Add new visitor to array (except external hits from Facebook as they can be spammy)
-
-	// Detecting repeated IP addresses
-	$ip = array_search($_SERVER['REMOTE_ADDR'], array_column($lines, 'ip_address')) === false
-		? $_SERVER['REMOTE_ADDR']
-		: 'DUPLICATE IP ADDRESS';
-
+// Add new visitor to array (except external hits from Facebook as they can be spammy)
+// Also skip repeated IP addresses
+if (!$exists && strpos($_SERVER['HTTP_USER_AGENT'], 'www.facebook.com') == false &&
+		array_search($_SERVER['REMOTE_ADDR'], array_column($lines, 'ip_address')) === false) {
 	array_push($lines, array(
-		'ip_address'	=> $ip,
+		'ip_address'	=> $_SERVER['REMOTE_ADDR'],
 		'user_agent'	=> $_SERVER['HTTP_USER_AGENT'],
 		'user_name'		=> $user_name,
 		'time_created'	=> $now,

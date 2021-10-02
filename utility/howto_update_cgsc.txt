@@ -66,6 +66,9 @@ For "MOVE" files with ".mus" extensions:
   AND NEEDS A "MOVE.TXT" FILE WITH MOVE LINES ONLY (NO MKDIR, NO OTHER COMMANDS). CONSIDER EXPANDING THIS
   SCRIPT INTO A PROPER UPDATE SCRIPT IN THE FUTURE.
 
+  REMEMBER TO REPLACE ALL "\" TO "/" AND DON'T REMOVE THE "MOVE" COMMANDS IN THE "MOVE.TXT" FILE. IT IS
+  RECOMMENDED THAT YOU USE THE BELOW LIST TO CHECK UP ON ONE OR TWO OF THEM AFTERWARDS.
+
   1. Copy the "before" filename (including ".mus" extension) and in the "hvsc_files" table in each
      database tab, search "fullname" for %[filename]. You should get *ONE* hit in each tab. If you have
      to include a folder because the filename is too generic, change "\" to "/" when pasting.
@@ -76,6 +79,8 @@ For "MOVE" files with ".mus" extensions:
 
 Check that the destination folders the files were moved to exists in the "hvsc_folders" table. You can
 copy an existing one and rename it of necessary (remember to also specify the correct count of files).
+
+You may also have to update the count value for folders where files were moved out of them.
 
 SKIP
 ¯¯¯¯

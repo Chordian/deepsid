@@ -3,6 +3,8 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+- Move all changes from 2020 and older to archive page.
+
 - IFrame project for Lemon:
   - Fix links in top 10 lists in the root page.
 
@@ -16,6 +18,9 @@ SHOULD BE DONE
 
 - Replace drop-down boxes with styled versions (browser and search) - I don't like how Firefox
   and Chrome change their design like the wind blows.
+
+- BUG: The 'Folders in..." shortcut links have broken. Some PHP error now occurs.
+  I have disabled them for the time being so they don't appear.
 
 - BUG: Click tag sundry box. Play tune. Click FOLDERS button. It disappears. But then click any
   of the other two sundry tabs and then back again. Now the FOLDERS button is back!?
@@ -55,10 +60,6 @@ SHOULD BE DONE
 
 CONSIDER THIS
 ¯¯¯¯¯¯¯¯¯¯¯¯¯
-- Make sure the tracking activity ignores repeated IP addresses.
-  UPDATE: The code now states in the visitors file if an IP address is a duplicate. Leave it
-  like this for the time being to monitor it a bit before actually removing duplicates.
-
 - HVSC versions: Update with later changes, e.g. "Better Late Than Never" renaming. But how?
 
 - CSDb: If possible, convert ID cross-references in comments into the pertinent links.

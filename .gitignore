@@ -5,6 +5,7 @@ images
 logs/*.txt
 js/_jssid/*
 js/_websid/*
+php/move.txt
 php/_master/*
 php/hvsc_update/*
 temp/*

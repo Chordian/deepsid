@@ -685,12 +685,13 @@ try {
 			}
 
 			// Search shortcuts for showing MUSICIANS folders with new songs (according to latest HVSC update)
-			for ($i = 0; $i < 5; $i++) {
+			// DISABLED FOR NOW SINCE PHP NOW REPORTS AN ERROR (LOOK INTO IT LATER)
+			/*for ($i = 0; $i < 5; $i++) {
 				$ss_name = '^01'.$i.'Folders in HVSC update #'.(HVSC_VERSION - $i);
 				$files[] = $ss_name;
 				$search_shortcut_type[$ss_name] = 'folders';
 				$search_shortcut_query[$ss_name] = HVSC_VERSION - $i;
-			}
+			}*/
 
 			// Search shortcuts for "all" of e.g. specific types of songs
 			$ss_name = '^030All multispeed tunes';
