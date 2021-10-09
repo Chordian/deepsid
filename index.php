@@ -230,6 +230,7 @@
 
 		<div id="dialog-edit-videos" class="dialog-box">
 			<a id="ev-corner-link" href="#" target="_blank" style="position:absolute;top:24px;right:24px;font-size:13px;">Open Tabs</a>
+			<small>Use <b>Firefox</b> for this</small>
 			<div class="dialog-text"></div>
 			<fieldset style="height:200px;"><legend>Song</legend>
 				<div class="ev-tabs">
@@ -250,11 +251,13 @@
 				</div>
 				<div class="ev-channel">
 					<span>Channel name</span>
-					<span><input type="text" id="ev-tb-cn-1" maxlength="32" disabled /> <button id="ev-se-1" type="button" class="disabled"><img src="images/search.svg" alt="" /></button></span>
-					<span><input type="text" id="ev-tb-cn-2" maxlength="32" disabled /> <button id="ev-se-2" type="button" class="disabled"><img src="images/search.svg" alt="" /></button></span>
-					<span><input type="text" id="ev-tb-cn-3" maxlength="32" disabled /> <button id="ev-se-3" type="button" class="disabled"><img src="images/search.svg" alt="" /></button></span>
-					<span><input type="text" id="ev-tb-cn-4" maxlength="32" disabled /> <button id="ev-se-4" type="button" class="disabled"><img src="images/search.svg" alt="" /></button></span>
-					<span><input type="text" id="ev-tb-cn-5" maxlength="32" disabled /> <button id="ev-se-5" type="button" class="disabled"><img src="images/search.svg" alt="" /></button></span>
+					<form onsubmit="return false;" autocomplete="off">
+						<span><input type="text" id="ev-tb-cn-1" maxlength="32" disabled /> <button id="ev-se-1" type="button" class="disabled"><img src="images/search.svg" alt="" /></button></span>
+						<span><input type="text" id="ev-tb-cn-2" maxlength="32" disabled /> <button id="ev-se-2" type="button" class="disabled"><img src="images/search.svg" alt="" /></button></span>
+						<span><input type="text" id="ev-tb-cn-3" maxlength="32" disabled /> <button id="ev-se-3" type="button" class="disabled"><img src="images/search.svg" alt="" /></button></span>
+						<span><input type="text" id="ev-tb-cn-4" maxlength="32" disabled /> <button id="ev-se-4" type="button" class="disabled"><img src="images/search.svg" alt="" /></button></span>
+						<span><input type="text" id="ev-tb-cn-5" maxlength="32" disabled /> <button id="ev-se-5" type="button" class="disabled"><img src="images/search.svg" alt="" /></button></span>
+					</form>
 				</div>
 				<div class="ev-video">
 					<span>Video ID</span>
@@ -273,6 +276,12 @@
 					<span><button id="ev-up-3" type="button" class="disabled">Up</button> <button id="ev-dn-3" type="button" class="disabled">Dn</button></span>
 					<span><button id="ev-up-4" type="button" class="disabled">Up</button> <button id="ev-dn-4" type="button" class="disabled">Dn</button></span>
 					<span><button id="ev-up-5" type="button" class="disabled">Up</button> <button id="ev-dn-5" type="button" class="disabled">Dn</button></span>
+				</div>
+				<div id="ev-dd2">
+					<input type="checkbox" id="ev-dd2-checkbox" />
+					<label for="ev-dd2-checkbox" class="disabled">Edit subtune&nbsp;</label>
+					<select id="ev-dd2-subtune" class="disabled" disabled></select>
+					<label for="ev-dd2-checkbox" class="disabled">&nbsp;next</label>
 				</div>
 			</fieldset>
 			<div class="dialog-buttons"><a href="#" class="dialog-cancel">Cancel</a><button class="dialog-button-yes dialog-auto">Save</button></div>
@@ -1264,6 +1273,12 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>October 9, 2021</h3>
+						<ul>
+							<li>It is now possible to proceed to the next subtune after saving video links. Just mark the checkbox
+								(and optionally adjust the subtune number in the drop-down box) in the bottom left corner of the dialog box .</li>
+						</ul>
 
 						<h3>October 2, 2021</h3>
 						<ul>

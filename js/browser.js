@@ -59,6 +59,7 @@ function Browser() {
 
 	this.secondsLength = 0;
 	this.chips = 1;
+	this.subtunes = 0;
 
 	this.slideTags = false;
 
@@ -2331,11 +2332,18 @@ Browser.prototype = {
 	 */
 	editYouTubeLinks: function(fullname, subtunes) {
 
+		this.subtunes = subtunes;
+
+		// Turn off drop-down box for editing the next subtune
+		$("#ev-dd2-checkbox").prop("checked", false);
+		$("#ev-dd2-subtune").prop("disabled", true).addClass("disabled");
+		$("#ev-dd2 label").addClass("disabled");
+
 		// If there are multiple subtunes then ask which one
 		if (subtunes > 1) {
 
-			// Populate the drop-down box with subtune choices
-			var $dd = $("#ev-dd-subtune");
+			// Populate the drop-down boxes with subtune choices
+			var $dd = $("#ev-dd-subtune,#ev-dd2-subtune");
 			$dd.empty();
 			for (var subtune = 1; subtune <= subtunes; subtune++)
 				$dd.append('<option value="'+(subtune - 1)+'">'+subtune+'</option>');
@@ -2347,10 +2355,13 @@ Browser.prototype = {
 			}, function() {
 				var subtune = parseInt($("#ev-dd-subtune").val());
 				$("#dialog-edit-videos legend").empty().append("Subtune "+(subtune + 1)+" / "+subtunes);
+				$("#ev-dd2-subtune").val(subtune + 1 < subtunes ? subtune + 1 : 0);
+				$("#ev-dd2-checkbox").prop("disabled", false);
 				this.mainEditYouTube(fullname, subtune, true);
 			}.bind(this));
 		} else {
 			$("#dialog-edit-videos legend").empty().append("Song");
+			$("#ev-dd2-checkbox").prop("disabled", true);
 			this.mainEditYouTube(fullname, 0, false); // No subtunes
 		}
 	},
@@ -2450,6 +2461,15 @@ Browser.prototype = {
 							break;
 						}
 					}
+
+					// Do the next subtune if requested in the bottom of the dialog box
+					if ($("#ev-dd2-checkbox").is(":checked")) {
+						var subtune = parseInt($("#ev-dd2-subtune").val());
+						$("#dialog-edit-videos legend").empty().append("Subtune "+(subtune + 1)+" / "+this.subtunes);
+						$("#ev-dd2-subtune").val(subtune + 1 < this.subtunes ? subtune + 1 : 0);
+						$("#ev-dd2-checkbox").prop("disabled", false);
+						this.mainEditYouTube(fullname, subtune, true);
+					}
 				});
 			}.bind(this));
 		});
@@ -2478,6 +2498,16 @@ Browser.prototype = {
 			window.open("https://www.youtube.com/user/demoscenes/search?query="+encodeURIComponent(author+" "+nameNoSid, "_blank"));
 			window.open("https://www.youtube.com/c/UnepicStonedHighSIDCollection/search?query="+encodeURIComponent(author+" "+nameNoSid, "_blank"));
 			return false;
+		} else if (event.target.id == "ev-dd2-checkbox") {
+			if ($target.is(":checked")) {
+				// Turn on drop-down box for editing the next subtune
+				$("#ev-dd2-subtune").prop("disabled", false).removeClass("disabled");
+				$("#ev-dd2 label").removeClass("disabled");
+			} else {
+				// Turn off drop-down box for editing the next subtune
+				$("#ev-dd2-subtune").prop("disabled", true).addClass("disabled");
+				$("#ev-dd2 label").addClass("disabled");
+			}
 		}
 
 		// Last character of all ID names is always the row index

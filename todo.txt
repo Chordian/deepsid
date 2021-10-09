@@ -8,7 +8,6 @@ SHOULD BE DONE
 
 - YouTube post-project updates:
   - BUG: The 'Visuals' tab is still visible in the SH folder.
-  - Subtune selector in main dialog, for quick shortcut to subtune + 1.
 
 - Make file sorting sticky (not dependent on logged in).
 

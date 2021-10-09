@@ -2892,6 +2892,12 @@ input[type=range]::-ms-track {
 				#songs .pl-d { background: var(--color-strip-pl-d); }
 				#songs .pl-e { background: var(--color-strip-pl-e); }
 
+				#songs tr.disabled .pl-a,
+				#songs tr.disabled .pl-b,
+				#songs tr.disabled .pl-c,
+				#songs tr.disabled .pl-d,
+				#songs tr.disabled .pl-e { background: var(--color-disabled); }
+
 			#songs .has-stil {
 				position: absolute;
 				top: 10px;
@@ -2903,6 +2909,10 @@ input[type=range]::-ms-track {
 					height: 1px;
 					margin-bottom: 1px;
 					border-top: 1px solid var(--color-text-body);
+				}
+
+				#songs tr.disabled .has-stil div {
+					border-top-color: var(--color-disabled);
 				}
 
 		/* Alloyrun.sid (file) */
@@ -3286,7 +3296,8 @@ input[type=range]::-ms-track {
 					font: normal 13px/0 "Montserrat", sans-serif;
 				}
 
-				#search-here-container label.disabled {
+				#search-here-container label.disabled,
+				#ev-dd2 label.disabled {
 					color: var(--color-text-label-disabled);
 				}
 
@@ -5267,8 +5278,9 @@ input[type=range]::-ms-track {
 			padding: 2px 6px;
 		}
 
-	/* The drop-down box in choose subtune dialog box */
-	#ev-dd-subtune {
+	/* The drop-down box in choose subtune dialog boxes */
+	#ev-dd-subtune,
+	#ev-dd2-subtune {
 		font-size: 13px;
 	}
 
@@ -5347,6 +5359,14 @@ input[type=range]::-ms-track {
 			margin: 5px 4px 5px 0;
 		}
 
+		#dialog-edit-videos small {
+			position: absolute;
+			top: 43px;
+			right: 24px;
+			font-size: 10px;
+			color: var(--color-text-minor);
+		}
+
 		#dialog-edit-videos fieldset {
 			padding: 10px 0 20px 10px;
 			font: normal 13px "Montserrat", sans-serif;
@@ -5414,6 +5434,18 @@ input[type=range]::-ms-track {
 
 			#dialog-edit-videos img {
 				pointer-events: none;
+			}
+
+		#ev-dd2 {
+			position: relative;
+			left: 5px;
+			margin-top: 45px;
+		}
+
+			#ev-dd2 select.disabled {
+				color: var(--color-disabled);
+				border-color: var(--color-disabled);
+				background: transparent;
 			}
 
 /* ---- Styled Select ------------------------------------------------------- */
