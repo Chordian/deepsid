@@ -2816,9 +2816,10 @@ input[type=range]::-ms-track {
 		#songs .uploaded-time {
 			float: right;
 			position: relative;
-			top: -1px;
-			right: 30px;
+			top: 2px;
+			right: 13px;
 			font-size: 11px;
+			line-height: 11px;
 			color: var(--color-text-minor);
 		}
 

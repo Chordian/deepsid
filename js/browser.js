@@ -849,6 +849,7 @@ Browser.prototype = {
 						var o2 = obj2.substname !== "" ? obj2.substname : this.adaptBrowserName(obj2.filename, true);
 						return o1.toLowerCase() > o2.toLowerCase() ? 1 : -1;
 					}.bind(this));
+					localStorage.setItem("sort", "name");
 				}
 				break;
 			case "player":
@@ -857,6 +858,7 @@ Browser.prototype = {
 				this.playlist.sort(function(obj1, obj2) {
 					return obj1.player.toLowerCase() > obj2.player.toLowerCase() ? 1 : -1;
 				});
+				localStorage.setItem("sort", "player");
 				break;
 			case "rating":
 				if (this.isBigCompoFolder()) {
@@ -870,6 +872,7 @@ Browser.prototype = {
 					this.playlist.sort(function(obj1, obj2) {
 						return obj2.rating - obj1.rating;
 					});
+					localStorage.setItem("sort", "rating");
 				}
 				break;
 			case "oldest":
@@ -889,6 +892,7 @@ Browser.prototype = {
 					this.playlist.sort(function(obj1, obj2) {
 						return obj1.copyright > obj2.copyright ? 1 : -1;
 					});
+					localStorage.setItem("sort", "oldest");
 				}
 				break;
 			case "newest":
@@ -908,6 +912,7 @@ Browser.prototype = {
 					this.playlist.sort(function(obj1, obj2) {
 						return obj1.copyright < obj2.copyright ? 1 : -1;
 					});
+					localStorage.setItem("sort", "newest");
 				}
 				break;
 			case "shuffle":
@@ -919,6 +924,7 @@ Browser.prototype = {
 				this.playlist.sort(function(obj1, obj2) {
 					return obj1.shuffle > obj2.shuffle ? 1 : -1;
 				});
+				localStorage.setItem("sort", "shuffle");
 				break;
 			case "type":
 				if (this.isBigCompoFolder()) {
@@ -2884,7 +2890,6 @@ Browser.prototype = {
 				'<option value="shuffle">Shuffle</option>'
 			).val("newest");
 		} else {
-			// Sort box for everything else
 			$("#dropdown-sort").empty().append(
 				'<option value="name">Name</option>'+
 				'<option value="player">Player</option>'+
@@ -2893,6 +2898,12 @@ Browser.prototype = {
 				'<option value="newest">Newest</option>'+
 				'<option value="shuffle">Shuffle</option>'
 			).val("name");
+			// Sort box for everything else
+			stickyMode = localStorage.getItem("sort");
+			if (stickyMode != null && stickyMode != "name")
+				setTimeout(function() {
+					$("#dropdown-sort").val(stickyMode).trigger("change");
+				}, 1);
 		}
 		return stickyMode;
 	},

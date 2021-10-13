@@ -11,17 +11,11 @@ SHOULD BE DONE
 
 - Make file sorting sticky (not dependent on logged in).
 
-- Replace drop-down boxes with styled versions (browser and search) - I don't like how Firefox
-  and Chrome change their design like the wind blows.
-
 - BUG: The 'Folders in..." shortcut links have broken. Some PHP error now occurs.
   I have disabled them for the time being so they don't appear.
 
 - BUG: Click tag sundry box. Play tune. Click FOLDERS button. It disappears. But then click any
   of the other two sundry tabs and then back again. Now the FOLDERS button is back!?
-
-- BUG: The SH folder upload dates are now skewed. Align them towards the right side.
-  - And also a few pixel downwards while you're at it.
 
 - BUG: JW found a bug where the profile gets out of sync when searching. See e-mail about it
   dated 22 August 2021.
@@ -104,6 +98,9 @@ CONSIDER THIS
 - Up/Down cursor keys to change sub tune, Left/Right cursor keys to skip previous/next.
 - For redirect links, add a BACK button in both STIL tabs (to complement the 'b' hotkey).
 - Front page top 10 list: Add most common birth years, now that you have the data for it.
+
+- Replace drop-down boxes with styled versions (browser and search) - I don't like how e.g. Firefox
+  and Chrome change their design like the wind blows.
 
 - I'm beginning to suspect that the piano view sound chugging is not a memory leak in WebSid after
   all, but in the piano view code itself. Might be worth looking into it? Maybe you need to add

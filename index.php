@@ -1274,10 +1274,15 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>October 13, 2021</h3>
+						<ul>
+							<li>Sorting a folder with SID files is now sticky.</li>
+						</ul>
+
 						<h3>October 9, 2021</h3>
 						<ul>
 							<li>It is now possible to proceed to the next subtune after saving video links. Just mark the checkbox
-								(and optionally adjust the subtune number in the drop-down box) in the bottom left corner of the dialog box .</li>
+								(and optionally adjust the subtune number in the drop-down box) in the bottom left corner of the dialog box.</li>
 						</ul>
 
 						<h3>October 2, 2021</h3>
