@@ -1276,7 +1276,8 @@
 
 						<h3>October 13, 2021</h3>
 						<ul>
-							<li>Sorting a folder with SID files is now sticky.</li>
+							<li>Sorting a folder with SID files (other than the SH folder) is now sticky.</li>
+							<li>Fixed a bug that made the sort options in the SH folder sticky for other folders.</li>
 						</ul>
 
 						<h3>October 9, 2021</h3>

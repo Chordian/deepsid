@@ -849,7 +849,8 @@ Browser.prototype = {
 						var o2 = obj2.substname !== "" ? obj2.substname : this.adaptBrowserName(obj2.filename, true);
 						return o1.toLowerCase() > o2.toLowerCase() ? 1 : -1;
 					}.bind(this));
-					localStorage.setItem("sort", "name");
+					if (!this.isUploadFolder())
+						localStorage.setItem("sort", "name");
 				}
 				break;
 			case "player":
@@ -858,7 +859,8 @@ Browser.prototype = {
 				this.playlist.sort(function(obj1, obj2) {
 					return obj1.player.toLowerCase() > obj2.player.toLowerCase() ? 1 : -1;
 				});
-				localStorage.setItem("sort", "player");
+				if (!this.isUploadFolder())
+					localStorage.setItem("sort", "player");
 				break;
 			case "rating":
 				if (this.isBigCompoFolder()) {
@@ -872,7 +874,8 @@ Browser.prototype = {
 					this.playlist.sort(function(obj1, obj2) {
 						return obj2.rating - obj1.rating;
 					});
-					localStorage.setItem("sort", "rating");
+					if (!this.isUploadFolder())
+						localStorage.setItem("sort", "rating");
 				}
 				break;
 			case "oldest":
@@ -924,7 +927,8 @@ Browser.prototype = {
 				this.playlist.sort(function(obj1, obj2) {
 					return obj1.shuffle > obj2.shuffle ? 1 : -1;
 				});
-				localStorage.setItem("sort", "shuffle");
+				if (!this.isUploadFolder())
+					localStorage.setItem("sort", "shuffle");
 				break;
 			case "type":
 				if (this.isBigCompoFolder()) {
