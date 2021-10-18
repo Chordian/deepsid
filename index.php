@@ -1274,6 +1274,13 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>October 18, 2021</h3>
+						<ul>
+							<li>Songs with more than one subtune now always maintain the relevant switch in the URL, regardless
+								of what number it is. This should fix the issue where the first subtune can't be played from an
+								external link.</li>
+						</ul>
+
 						<h3>October 13, 2021</h3>
 						<ul>
 							<li>Sorting a folder with SID files (other than the SH folder) is now sticky.</li>

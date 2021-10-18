@@ -1743,7 +1743,7 @@ function UpdateURL(skipFileCheck) {
 		urlFile = urlFile.replace("High Voltage SID Collection", "");
 
 	// ?subtune=
-	var urlSubtune = ctrls.subtuneCurrent ? "&subtune="+(ctrls.subtuneCurrent + 1) : "";
+	var urlSubtune = ctrls.subtuneMax ? "&subtune="+(ctrls.subtuneCurrent + 1) : "";
 
 	var link = (urlFile+urlSubtune).replace(/&/, "?"); // Replace first occurrence only
 
