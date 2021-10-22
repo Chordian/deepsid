@@ -165,7 +165,52 @@
 				else
 					echo 'http://chordian.net/deepsid/images/composer.png';
 			} else if (isset($_GET['file']) && (strtolower(substr($_GET['file'], 0, 12))) == '/sid happens') {
-				echo 'http://chordian.net/deepsid/images/composers/_sh.png';
+				$image = '';
+				try {
+					if ($_SERVER['HTTP_HOST'] == LOCALHOST)
+						$db = new PDO(PDO_LOCALHOST, USER_LOCALHOST, PWD_LOCALHOST);
+					else
+						$db = new PDO(PDO_ONLINE, USER_ONLINE, PWD_ONLINE);
+					$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+					$db->exec("SET NAMES UTF8");
+
+					// Get the ID of the SH file
+					$select = $db->prepare('SELECT id FROM hvsc_files WHERE fullname = :fullname LIMIT 1');
+					$select->execute(array(':fullname'=>str_replace('/SID', '_SID', $_GET['file'])));
+					$select->setFetchMode(PDO::FETCH_OBJ);
+
+					if ($select->rowCount()) {
+
+						// Get the ID of the composer profile
+						$select_upload = $db->query('SELECT composers_id FROM uploads WHERE files_id = '.$select->fetch()->id.' LIMIT 1');
+						$select_upload->setFetchMode(PDO::FETCH_OBJ);
+
+						if ($select_upload->rowCount()) {
+
+							// Get the full path to the real composer profile
+							$select_comp = $db->query('SELECT fullname FROM composers WHERE id = '.$select_upload->fetch()->composers_id.' LIMIT 1');
+							$select_comp->setFetchMode(PDO::FETCH_OBJ);
+
+							if ($select_comp->rowCount()) {
+
+								// Figure out the name of the thumbnail (if it exists)
+								$fullname = str_replace('_High Voltage SID Collection/', '', $select_comp->fetch()->fullname);
+								$fullname = str_replace("_Compute's Gazette SID Collection/", "cgsc_", $fullname);
+								$fullname = strtolower(str_replace('/', '_', $fullname));
+								$image = 'images/composers/'.$fullname.'.jpg';
+							}
+						}
+					}
+				} catch(PDOException $e) {
+					// Never mind then
+				}
+
+				if (!empty($image) && file_exists($image))
+					echo 'http://chordian.net/deepsid/'.$image;
+				else if (substr($_GET['file'], -4) == '.sid')
+					echo 'http://chordian.net/deepsid/images/example_play.png';
+				else
+					echo 'http://chordian.net/deepsid/images/composers/_sh.png';
 			} else 
 				echo 'http://chordian.net/deepsid/images/example.png';
 		?>" />
@@ -1284,7 +1329,7 @@
 						<h3>October 22, 2021</h3>
 						<ul>
 							<li>If the composer of a SID file specified in an external link has an avatar image, this will now be
-								displayed instead of the default play image.</li>
+								displayed instead of the default play image. This also works in the SH folder.</li>
 						</ul>
 
 						<h3>October 18, 2021</h3>
