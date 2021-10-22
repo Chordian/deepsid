@@ -153,12 +153,19 @@
 		?>" />
 		<meta property="og:type" content="website" />
 		<meta property="og:image" content="<?php
-			if (isset($_GET['file']) && (substr($_GET['file'], -4) == '.sid' || substr($_GET['file'], -4) == '.mus'))
-				echo 'http://chordian.net/deepsid/images/example_play.png';
-			else if (isset($_GET['file']) && (strtolower(substr($_GET['file'], 0, 10))) == '/musicians') {
-				$image = 'images/composers/'.strtolower(str_replace('/', '_', trim($_GET['file'], '/'))).'.jpg';
-				if (!file_exists($image)) $image = 'images/composer.png';
-				echo 'http://chordian.net/deepsid/'.$image;
+			if (isset($_GET['file']) && (strtolower(substr($_GET['file'], 0, 10))) == '/musicians') {
+				$file = substr($_GET['file'], -4) == '.sid'
+					? substr($_GET['file'], 0, strrpos($_GET['file'], '/'))
+					: $_GET['file'];
+				$image = 'images/composers/'.strtolower(str_replace('/', '_', trim($file, '/'))).'.jpg';
+				if (file_exists($image))
+					echo 'http://chordian.net/deepsid/'.$image;
+				else if (substr($_GET['file'], -4) == '.sid')
+					echo 'http://chordian.net/deepsid/images/example_play.png';
+				else
+					echo 'http://chordian.net/deepsid/images/composer.png';
+			} else if (isset($_GET['file']) && (strtolower(substr($_GET['file'], 0, 12))) == '/sid happens') {
+				echo 'http://chordian.net/deepsid/images/composers/_sh.png';
 			} else 
 				echo 'http://chordian.net/deepsid/images/example.png';
 		?>" />
@@ -1273,6 +1280,12 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>October 22, 2021</h3>
+						<ul>
+							<li>If the composer of a SID file specified in an external link has an avatar image, this will now be
+								displayed instead of the default play image.</li>
+						</ul>
 
 						<h3>October 18, 2021</h3>
 						<ul>
