@@ -106,6 +106,8 @@
 			} else {
 				if (substr($file, 0, 6) == '/DEMOS' || substr($file, 0, 6) == '/GAMES' || substr($file, 0, 10) == '/MUSICIANS')
 					$file = '_High Voltage SID Collection'.$file;
+				else if (substr($file, 0, 12) == '/SID Happens')
+					$file = str_replace('/SID', '_SID', $file);
 
 				try {
 					if ($_SERVER['HTTP_HOST'] == LOCALHOST)
@@ -1325,6 +1327,12 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>October 22, 2021</h3>
+						<ul>
+							<li>The <a href="http://ogp.me/">Open Graph</a> title for a SID file in the SH folder should now
+								show the proper composer name (or handle) and title, instead of just the filename.</li>
+						</ul>
 
 						<h3>October 22, 2021</h3>
 						<ul>
