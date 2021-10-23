@@ -155,13 +155,34 @@
 		?>" />
 		<meta property="og:type" content="website" />
 		<meta property="og:image" content="<?php
+
+			function MergeImage($image) {
+
+				// @link https://stackoverflow.com/a/2269459/2242348
+				$png = imagecreatefrompng('images/og_overlay.png');
+				$jpeg = imagecreatefromjpeg('images/composers/'.$image);
+				
+				list($width, $height) = getimagesize('images/composers/'.$image);
+				list($newwidth, $newheight) = getimagesize('images/og_overlay.png');
+				$out = imagecreatetruecolor($newwidth, $newheight);
+				imagecopyresampled($out, $jpeg, 0, 0, 0, 0, $newwidth, $newheight, $width, $height);
+				imagecopyresampled($out, $png, 0, 0, 0, 0, $newwidth, $newheight, $newwidth, $newheight);
+
+				// 100 is best quality
+				imagejpeg($out, $_SERVER['DOCUMENT_ROOT'].'/deepsid/images/composers/play/'.$image, 100);
+				echo HOST.'images/composers/play/'.$image;
+			}
+
 			if (isset($_GET['file']) && (strtolower(substr($_GET['file'], 0, 10))) == '/musicians') {
 				$file = substr($_GET['file'], -4) == '.sid'
 					? substr($_GET['file'], 0, strrpos($_GET['file'], '/'))
 					: $_GET['file'];
-				$image = 'images/composers/'.strtolower(str_replace('/', '_', trim($file, '/'))).'.jpg';
-				if (file_exists($image))
-					echo 'http://chordian.net/deepsid/'.$image;
+				$image = strtolower(str_replace('/', '_', trim($file, '/'))).'.jpg';
+				if (file_exists('images/composers/'.$image))
+					if (substr($_GET['file'], -4) == '.sid' || substr($_GET['file'], -4) == '.mus')
+						MergeImage($image);
+					else
+						echo 'http://chordian.net/deepsid/images/composers/'.$image;
 				else if (substr($_GET['file'], -4) == '.sid')
 					echo 'http://chordian.net/deepsid/images/example_play.png';
 				else
@@ -199,7 +220,7 @@
 								$fullname = str_replace('_High Voltage SID Collection/', '', $select_comp->fetch()->fullname);
 								$fullname = str_replace("_Compute's Gazette SID Collection/", "cgsc_", $fullname);
 								$fullname = strtolower(str_replace('/', '_', $fullname));
-								$image = 'images/composers/'.$fullname.'.jpg';
+								$image = $fullname.'.jpg';
 							}
 						}
 					}
@@ -207,8 +228,8 @@
 					// Never mind then
 				}
 
-				if (!empty($image) && file_exists($image))
-					echo 'http://chordian.net/deepsid/'.$image;
+				if (!empty($image) && file_exists('images/composers/'.$image))
+					MergeImage($image);
 				else if (substr($_GET['file'], -4) == '.sid')
 					echo 'http://chordian.net/deepsid/images/example_play.png';
 				else
@@ -1328,10 +1349,12 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
-						<h3>October 22, 2021</h3>
+						<h3>October 23, 2021</h3>
 						<ul>
 							<li>The <a href="http://ogp.me/">Open Graph</a> title for a SID file in the SH folder should now
 								show the proper composer name (or handle) and title, instead of just the filename.</li>
+							<li>External links to a SID file that shows an avatar image now also add a small play icon in the
+								bottom right corner of this image, to make it clear that clicking the link will play it.</li>
 						</ul>
 
 						<h3>October 22, 2021</h3>
