@@ -1344,12 +1344,50 @@ Browser.prototype = {
 							return obj1.uploaded < obj2.uploaded ? 1 : -1;
 						}.bind(this));
 					} else {
-						// All other folders sort files by name to begin with
-						data.files.sort(function(obj1, obj2) {
-							var o1 = obj1.substname !== "" ? obj1.substname : this.adaptBrowserName(obj1.filename, true);
-							var o2 = obj2.substname !== "" ? obj2.substname : this.adaptBrowserName(obj2.filename, true);
-							return o1.toLowerCase() > o2.toLowerCase() ? 1 : -1;
-						}.bind(this));
+						// All other folders should...
+						switch (filter) {
+							case "player":
+								// Sort playlist according to music player
+								data.files.sort(function(obj1, obj2) {
+									return obj1.player.toLowerCase() > obj2.player.toLowerCase() ? 1 : -1;
+								});
+								break;
+							case "rating":
+								// Sort playlist according to rating
+								data.files.sort(function(obj1, obj2) {
+									return obj2.rating - obj1.rating;
+								});
+								break;
+							case "oldest":
+								// Sort playlist according to the 'copyright' string (the year in start is used)
+								data.files.sort(function(obj1, obj2) {
+									return obj1.copyright > obj2.copyright ? 1 : -1;
+								});
+								break;
+							case "newest":
+								// Sort playlist according to the 'copyright' string (the year in start is used)
+								data.files.sort(function(obj1, obj2) {
+									return obj1.copyright < obj2.copyright ? 1 : -1;
+								});
+								break;
+							case "shuffle":
+								// Sort playlist in a random manner (randomize)
+								for (var i = 0; i < data.files.length; i++) {
+									data.files[i].shuffle = Math.random();
+								}
+								data.files.sort(function(obj1, obj2) {
+									return obj1.shuffle > obj2.shuffle ? 1 : -1;
+								});
+								break;
+							default:
+								// Sort playlist according to the SID filename ("name")
+								data.files.sort(function(obj1, obj2) {
+									var o1 = obj1.substname !== "" ? obj1.substname : this.adaptBrowserName(obj1.filename, true);
+									var o2 = obj2.substname !== "" ? obj2.substname : this.adaptBrowserName(obj2.filename, true);
+									return o1.toLowerCase() > o2.toLowerCase() ? 1 : -1;
+								}.bind(this));
+						}
+						$("#dropdown-sort").val(filter);
 					}
 
 					this.isCompoFolder = data.compo;
@@ -2894,6 +2932,7 @@ Browser.prototype = {
 				'<option value="shuffle">Shuffle</option>'
 			).val("newest");
 		} else {
+			// The option is set by 'getFolder()' after doing its own sorting of files
 			$("#dropdown-sort").empty().append(
 				'<option value="name">Name</option>'+
 				'<option value="player">Player</option>'+
@@ -2901,13 +2940,9 @@ Browser.prototype = {
 				'<option value="oldest">Oldest</option>'+
 				'<option value="newest">Newest</option>'+
 				'<option value="shuffle">Shuffle</option>'
-			).val("name");
+			);
 			// Sort box for everything else
 			stickyMode = localStorage.getItem("sort");
-			if (stickyMode != null && stickyMode != "name")
-				setTimeout(function() {
-					$("#dropdown-sort").val(stickyMode).trigger("change");
-				}, 1);
 		}
 		return stickyMode;
 	},

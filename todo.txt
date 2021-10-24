@@ -9,8 +9,6 @@ SHOULD BE DONE
 - YouTube post-project updates:
   - BUG: The 'Visuals' tab is still visible in the SH folder.
 
-- BUG: If a folder with songs is sorted differently, external linking cannot mark the row.
-
 - BUG: The 'Folders in..." shortcut links have broken. Some PHP error now occurs.
   I have disabled them for the time being so they don't appear.
 
