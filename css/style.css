@@ -64,6 +64,8 @@
 	--color-text-tag-warning:		var(--color-text-tag);
 	--color-bg-tag-warning:			#c33;
 
+	--color-bg-cshelldb:			#d5dde9;
+
 	--color-border:					#ced0c0;			/* For borders and text labels where its container is disabled */
 	--color-border-box:				#c8c8b9;			/* For borders around various boxes and input fields */
 	--color-border-info:			#7a88c8;			/* Bottom border color for top info box */
@@ -435,6 +437,8 @@
 	--color-bg-tag-remix64:			linear-gradient(to right, var(--color-bg-tag-r64start) 25%,#465692 100%);
 	--color-text-tag-warning:		var(--color-text-tag);
 	--color-bg-tag-warning:			#f88;
+
+	--color-bg-cshelldb:			#1b2433;
 
 	--color-border:					#0c0c0c;			/* For borders and text labels where its container is disabled */
 	--color-border-box:				#2c2c2c;			/* For borders around various boxes and input fields */
@@ -3983,7 +3987,7 @@ input[type=range]::-ms-track {
 			border: none;
 		}
 
-			#page table.decent:before {
+			#page table.pseudo:before {
 				content: "";
 				position: absolute;
 				top: 0;
@@ -3991,10 +3995,20 @@ input[type=range]::-ms-track {
 				width: 100%;
 				height: 100%;
 				z-index: -1;
+			}
+
+			#page table.decent:before {
 				background: var(--url-roulette) -30px -10px no-repeat;
 				background-size: 70%;
-				opacity: 0.6;
-				transition: all .07s linear;
+				opacity: 0.7;
+				transition: all .1s linear;
+			}
+
+			#page table.cshelldb:before {
+				background: var(--color-bg-cshelldb) url(../images/cshelldb.png) -70px -28px no-repeat;
+				background-size: 140%;
+				opacity: 0.8;
+				transition: all .1s linear;
 			}
 
 			#page table.root div {
@@ -4019,7 +4033,7 @@ input[type=range]::-ms-track {
 				background: var(--color-root-bg-rec);
 			}
 
-				#page table.rec table.decent .random-container {
+				#page table.rec table.pseudo .random-container {
 					position: absolute;
 					top: 10px;
 					right: 10px;
@@ -4030,17 +4044,22 @@ input[type=range]::-ms-track {
 					text-shadow: 0 0 9px var(--color-root-random-shadow);
 				}
 
+					#page table.rec table.cshelldb .random-container {
+						left: 0;
+						text-align: left;
+					}
+
 					#page table.rec .random-container span {
 						font-size: 36px;
 						color: var(--color-root-random-bigfont);
 						line-height: 0;
 					}
 
-				#page table.rec table.decent:hover {
+				#page table.rec table.pseudo:hover {
 					background: none;
 				}
 
-				#page table.rec table.decent:hover:before {
+				#page table.rec table.pseudo:hover:before {
 					background-color: var(--color-root-bg-random);
 					/*background: linear-gradient(to right, var(--color-bg-box), --color-root-bg-rec);*/
 					opacity: 1.0;

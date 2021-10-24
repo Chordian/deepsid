@@ -1353,6 +1353,8 @@
 						<ul>
 							<li>Overhauled how sticky sorting of SID files is handled. This also fixed a bug where a SID row
 								was not marked by an external link if sorting by anything other than name.</li>
+							<li>A recommended box in the root page now sometimes advertise for my other site,
+								<a href="http://csdb.chordian.net/">CShellDB</a>.</li>
 						</ul>
 
 						<h3>October 23, 2021</h3>

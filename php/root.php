@@ -31,7 +31,7 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH
  */
 function CreateRecBox($random_id) {
 
-	global $db, $decent_box_shown;
+	global $db, $decent_box_shown, $cshelldb_shown;
 
 	// Get the fullname
 	$select = $db->query('SELECT fullname FROM hvsc_folders WHERE id = '.$random_id);
@@ -45,7 +45,10 @@ function CreateRecBox($random_id) {
 
 	// Error or irrelevant (such as big parent folders in HVSC)
 	if ($select->rowCount() == 0) {
-		if (!$decent_box_shown) {
+
+		$random = mt_rand(0, 1);
+
+		if ($random == 0 && !$decent_box_shown) {
 
 			// Show a "decent" randomizer box ("CLICK HERE")
 			$decent_box_shown = true;
@@ -65,16 +68,38 @@ function CreateRecBox($random_id) {
 			$select_decent->setFetchMode(PDO::FETCH_OBJ);
 
 			$return_html = $select_decent->rowCount()
-				? '<table class="tight compo recommended decent" data-folder="'.$select_decent->fetch()->fullname.'" style="padding-bottom:0;"><tr><td style="height:123px;">'.
-						'<div class="random-container">'.
-							'<span>Click here</span><br />'.
-							'to visit a random<br />'.
-							'composer folder of a<br />'.
-							'decent quality or better<br />'.
-						'</div>'.
-					'</td></tr></table>'
+				? '
+					<table class="tight compo recommended pseudo decent" data-folder="'.$select_decent->fetch()->fullname.'" style="padding-bottom:0;">
+						<tr>
+							<td style="height:123px;">
+								<div class="random-container">
+									<span>Click here</span><br />
+									to visit a random<br />
+									composer folder of a<br />
+									decent quality or better<br />
+								</div>
+							</td>
+						</tr>
+					</table>'
 				: '<table class="tight compo recommended" style="border:none;"></table>';
 			return $return_html;
+		} else if ($random == 1 && !$cshelldb_shown) {
+
+			// Show an "ad" for my other site CShellDB
+			$cshelldb_shown = true;
+			return '
+				<table class="tight compo recommended pseudo cshelldb" data-folder="cshelldb" style="padding-bottom:0;">
+					<tr>
+						<td style="height:123px;">
+							<div class="random-container">
+								<span>Visit</span><br />
+								a modern<br />
+								interface<br />
+								for CSDb<br />
+							</div>
+						</td>
+					</tr>
+				</table>';
 		} else
 			// Just shown empty space there
 			return '<table class="tight compo recommended" style="border:none;"></table>';
@@ -203,7 +228,7 @@ function QuickShortcutRow(&$author) {
 
 /***** START *****/
 
-$decent_box_shown = false;
+$decent_box_shown = $cshelldb_shown = false;
 
 // $important = 'The database connections sometimes act up at the moment. If it persists I will consult the web hotel provider.';
 $important = 'The audio bug seems to be fixed in version 91 of Chrome and Edge. Make sure you have updated to this version.';
