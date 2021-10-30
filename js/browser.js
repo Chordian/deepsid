@@ -2924,6 +2924,7 @@ Browser.prototype = {
 				'<option value="country">Country</option>'+
 				'<option value="amount">Amount</option>'
 			).val(this.cache.composort);
+			stickyMode = this.cache.composort;
 		} else if (!this.isSearching && this.isUploadFolder()) {
 			// Sort box for 'SID Happens' folder
 			$("#dropdown-sort").empty().append(
