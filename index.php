@@ -1352,6 +1352,7 @@
 								YouTube SID handler.</li>
 							<li>Fixed empty drop-down box when entering the competitions folder.</li>
 							<li>Added a magenta color strip for SidTracker64 tunes.</li>
+							<li>Search shortcuts now show a small magnifying glass inside of their folder icons.</li>
 						</ul>
 
 						<h3>October 24, 2021</h3>

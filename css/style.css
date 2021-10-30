@@ -3116,6 +3116,10 @@ input[type=range]::-ms-track {
 				background: url(../images/if_folder_star.svg) 0 0 / 26px 26px no-repeat;
 			}
 
+			#songs .search-shortcut span:before {
+				background: url(../images/if_folder_search.svg) 0 0 / 26px 26px no-repeat;
+			}
+
 			#songs span.q {
 				margin-left: 1px;
 				color: var(--color-dot);

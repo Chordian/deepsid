@@ -1275,13 +1275,16 @@ Browser.prototype = {
 							var search_shortcut = isSearchShortcut
 								? ' data-search-type="'+folder.ss_type+'" data-search-query="'+folder.ss_query+'"'
 								: '';
+							// Assume one of the standard folder type icons to begin with
+							var folderIcon = folder.foldertype.toLowerCase()+(folder.hasphoto ? '-photo' : '');
+							if (isPersonalSymlist || (isPublicSymlist && myPublic))
+								folderIcon = 'playlist';
+							else if (isSearchShortcut)
+								folderIcon = 'search-shortcut';
 							var folderEntry =
 								'<tr'+(folder.incompatible.indexOf(SID.emulator) !== -1 || isMobileDenied ? ' class="disabled"' : '')+'>'+
-									'<td class="folder unselectable '+
-										(isPersonalSymlist || (isPublicSymlist && myPublic)
-											? 'playlist'
-											: folder.foldertype.toLowerCase()+(folder.hasphoto ? '-photo' : ''))+
-											(folder.hvsc == this.HVSC_VERSION || folder.hvsc == this.CGSC_VERSION ? ' new' : '')+
+									'<td class="folder unselectable '+folderIcon+
+										(folder.hvsc == this.HVSC_VERSION || folder.hvsc == this.CGSC_VERSION ? ' new' : '')+
 										'"><div class="block-wrap"><div class="block">'+
 									(folder.filescount > 0 ? '<div class="filescount">'+folder.filescount+'</div>' : '')+
 									(folder.foldername == "_SID Happens" ? '<div class="new-uploads'+(data.uploads.substr(0, 6) == "NO NEW" ? ' no-new' : '')+'">'+data.uploads+'</div>' : '')+

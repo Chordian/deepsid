@@ -6,6 +6,8 @@ SHOULD BE DONE
 - IFrame project for Lemon:
   - Fix links in top 10 lists in the root page.
 
+- Remove all the debug stuff - it's almost never used and takes up unnecessary space.
+
 - BUG: The 'Folders in..." shortcut links have broken. Some PHP error now occurs.
   I have disabled them for the time being so they don't appear.
 
@@ -14,8 +16,6 @@ SHOULD BE DONE
 
 - BUG: JW found a bug where the profile gets out of sync when searching. See e-mail about it
   dated 22 August 2021.
-
-- Search shortcuts should show a folder icon with a small magnifying glass inside of it.
 
 - Consider adding a red attract link somewhere, pointing to the front page showing any red or
   green message. I've learned that some users never see the front page.
