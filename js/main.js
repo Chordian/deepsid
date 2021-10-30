@@ -1052,7 +1052,7 @@ $(function() { // DOM ready
 	});
 
 	/**
-	 * When clicking recommendation box in the root.
+	 * When clicking a recommendation box in the root.
 	 */
 	$("#topic-profile").on("mousedown", "table.recommended", function() { return false; });
 	$("#topic-profile").on("mouseup", "table.recommended", function(event) {
@@ -1064,6 +1064,13 @@ $(function() { // DOM ready
 			else
 				// Open in same browser tab
 				window.location.href = "http://csdb.chordian.net/";
+		/*} else if (folder == "playmod") {
+			if (event.which == 2 && event.button == 1)
+				// Middle mouse button for opening it in a new browser tab
+				window.open("http://www.wothke.ch/playmod/");
+			else
+				// Open in same browser tab
+				window.location.href = "http://www.wothke.ch/playmod/";*/
 		} else {
 			var link = "//deepsid.chordian.net/?file=/"+folder.replace("_High Voltage SID Collection/", "")+"/";
 			if (event.which == 2 && event.button == 1)

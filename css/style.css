@@ -903,25 +903,6 @@ small.u2 { margin-left: 2px; }
 		color: var(--color-link-hover);
 	}
 
-	#sites .msg {
-		position: relative;
-		top: -0.5px;
-		margin-left: 53px;
-		color: var(--color-text-fine);
-		text-transform: none;
-		letter-spacing: 0.3px;
-	}
-
-		#sites .msg a {
-			color: var(--color-anchor);
-			font-weight: bold;
-			text-decoration: underline;
-		}
-
-			#sites .msg a:hover {
-				color: var(--color-anchor-hover);
-			}
-
 	#click-to-play-cover {
 		display: none;
 		position: fixed;
@@ -4010,6 +3991,13 @@ input[type=range]::-ms-track {
 				opacity: 0.8;
 				transition: all .1s linear;
 			}
+
+			/*#page table.playmod:before {
+				background: url(../images/cshelldb.png) 0 0 no-repeat;
+				background-size: 140%;
+				opacity: 0.8;
+				transition: all .1s linear;
+			}*/
 
 			#page table.root div {
 				pointer-events: auto;

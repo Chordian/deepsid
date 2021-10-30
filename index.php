@@ -609,12 +609,6 @@
 						<a id="players" href="#">Players</a>
 							<span>&#9642</span>
 						<a id="forum" href="#">Forum</a>
-						<span class="msg"><?php
-							if (mt_rand(0, 1))
-								echo 'Visit <a href="http://www.wothke.ch/playmod/" target="_blank">PlayMOD</a> for <b>ModLand</b> and <b>VGMRips</b> in this UI';
-							else
-								echo 'Check out <a href="http://csdb.chordian.net/" target="_blank">CShellDB</a> &ndash; a modern interface for <b>CSDb</b>';
-						?></span>
 					</div>
 
 					<!--<a href="https://blog.chordian.net/2018/05/12/deepsid/" target="_blank">Blog Post</a>
@@ -624,6 +618,8 @@
 					<!--<a href="https://www.lemon64.com/forum/viewtopic.php?t=68056" target="_blank">Lemon64</a>
 						<span>&#9642</span>-->
 					<a href="https://twitter.com/chordian" target="_blank">Twitter</a>
+						<span>&#9642</span>
+					<a href="https://discord.gg/n5w85GMbVu" target="_blank">Discord</a>
 						<span>&#9642</span>
 					<a href="http://csdb.chordian.net/?type=forums&roomid=14&topicid=129712" target="_blank">CSDb</a>
 						<span>&#9642</span>
@@ -1348,6 +1344,11 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>October 30, 2021</h3>
+						<ul>
+							<li>Removed the top line for CShellDB and PlayMOD, and instead added an invite link for Discord.</li>
+						</ul>
 
 						<h3>October 24, 2021</h3>
 						<ul>

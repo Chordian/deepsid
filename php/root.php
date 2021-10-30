@@ -31,7 +31,7 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH
  */
 function CreateRecBox($random_id) {
 
-	global $db, $decent_box_shown, $cshelldb_shown;
+	global $db, $decent_box_shown, $cshelldb_shown, $playmod_shown;
 
 	// Get the fullname
 	$select = $db->query('SELECT fullname FROM hvsc_folders WHERE id = '.$random_id);
@@ -76,7 +76,7 @@ function CreateRecBox($random_id) {
 									<span>Click here</span><br />
 									to visit a random<br />
 									composer folder of a<br />
-									decent quality or better<br />
+									decent quality or better
 								</div>
 							</td>
 						</tr>
@@ -95,11 +95,28 @@ function CreateRecBox($random_id) {
 								<span>Visit</span><br />
 								a modern<br />
 								interface<br />
-								for CSDb<br />
+								for CSDb
 							</div>
 						</td>
 					</tr>
 				</table>';
+		/*} else if ($random == 2 && !$playmod_shown) {
+
+			// Show an "ad" for Jürgen Wothke's site PlayMOD
+			$playmod_shown = true;
+			return '
+				<table class="tight compo recommended pseudo playmod" data-folder="playmod" style="padding-bottom:0;">
+					<tr>
+						<td style="height:123px;">
+							<div class="random-container">
+								<span>PlayMOD</span><br />
+								just like DeepSID<br />
+								but for modules<br />
+								and chiptunes
+							</div>
+						</td>
+					</tr>
+				</table>';*/
 		} else
 			// Just shown empty space there
 			return '<table class="tight compo recommended" style="border:none;"></table>';
@@ -228,7 +245,7 @@ function QuickShortcutRow(&$author) {
 
 /***** START *****/
 
-$decent_box_shown = $cshelldb_shown = false;
+$decent_box_shown = $cshelldb_shown = $playmod_shown = false;
 
 // $important = 'The database connections sometimes act up at the moment. If it persists I will consult the web hotel provider.';
 $important = 'The audio bug seems to be fixed in version 91 of Chrome and Edge. Make sure you have updated to this version.';

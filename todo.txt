@@ -3,9 +3,6 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- Make an ad boxes for PlayMOD too.
-  - When the top line is empty in the middle, add a link to the Discord channel.
-
 - IFrame project for Lemon:
   - Fix links in top 10 lists in the root page.
 
