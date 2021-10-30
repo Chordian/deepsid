@@ -31,6 +31,10 @@ const playerStrips = [
 		type:	"DMC",
 		class:	"pl-e",
 	},
+	{
+		type:	"SidTracker64",
+		class:	"pl-f",
+	},
 ];
 
 function Browser() {

@@ -316,6 +316,7 @@
 	--color-strip-pl-c:				#7bb;
 	--color-strip-pl-d:				#99b;
 	--color-strip-pl-e:				#bb7;
+	--color-strip-pl-f:				#b7b;
 
 	/* Styled select colors */	
 
@@ -649,6 +650,7 @@
 	--color-strip-pl-c:				#377;
 	--color-strip-pl-d:				#555590;
 	--color-strip-pl-e:				#773;
+	--color-strip-pl-f:				#884888;
 
 	/* Styled select colors */	
 
@@ -2877,12 +2879,14 @@ input[type=range]::-ms-track {
 				#songs .pl-c { background: var(--color-strip-pl-c); }
 				#songs .pl-d { background: var(--color-strip-pl-d); }
 				#songs .pl-e { background: var(--color-strip-pl-e); }
+				#songs .pl-f { background: var(--color-strip-pl-f); }
 
 				#songs tr.disabled .pl-a,
 				#songs tr.disabled .pl-b,
 				#songs tr.disabled .pl-c,
 				#songs tr.disabled .pl-d,
-				#songs tr.disabled .pl-e { background: var(--color-disabled); }
+				#songs tr.disabled .pl-e,
+				#songs tr.disabled .pl-f { background: var(--color-disabled); }
 
 			#songs .has-stil {
 				position: absolute;

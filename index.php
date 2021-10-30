@@ -1351,6 +1351,7 @@
 							<li>Fixed a bug that enabled the visuals tab when entering the SH folder while using the
 								YouTube SID handler.</li>
 							<li>Fixed empty drop-down box when entering the competitions folder.</li>
+							<li>Added a magenta color strip for SidTracker64 tunes.</li>
 						</ul>
 
 						<h3>October 24, 2021</h3>
