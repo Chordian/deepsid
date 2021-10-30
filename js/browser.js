@@ -1195,7 +1195,9 @@ Browser.prototype = {
 						if ($selected.attr("data-topic") === "remix")
 							$("#tab-profile").trigger("click");
 						this.previousOverridePath = "_SID Happens";
-					} else if (SID.emulator == "youtube" || SID.emulator == "download") {
+					}
+
+					if (SID.emulator == "youtube" || SID.emulator == "download") {
 						// The 'Visuals' tab is useless to the 'YouTube' and 'Download' SID handlers
 						$("#tab-visuals").addClass("disabled");
 						if ($selected.attr("data-topic") === "visuals")

@@ -1348,6 +1348,8 @@
 						<h3>October 30, 2021</h3>
 						<ul>
 							<li>Removed the top line for CShellDB and PlayMOD, and instead added an invite link for Discord.</li>
+							<li>Fixed a bug that enabled the visuals tab when entering the SH folder while using the
+								YouTube SID handler.</li>
 						</ul>
 
 						<h3>October 24, 2021</h3>

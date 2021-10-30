@@ -6,9 +6,6 @@ SHOULD BE DONE
 - IFrame project for Lemon:
   - Fix links in top 10 lists in the root page.
 
-- YouTube post-project updates:
-  - BUG: The 'Visuals' tab is still visible in the SH folder.
-
 - BUG: The 'Folders in..." shortcut links have broken. Some PHP error now occurs.
   I have disabled them for the time being so they don't appear.
 
