@@ -8,14 +8,19 @@ SHOULD BE DONE
 
 - Remove all the debug stuff - it's almost never used and takes up unnecessary space.
 
+- Idea for folders in MUSICIANS folder: Faded flat color icons just before the star ratings,
+  for indicating a scener, a professional, a compunetter. Can be one, two or all three.
+  - Also a fourth (blue icon) for whether there's a CSDb profile or not.
+
 - BUG: The 'Folders in..." shortcut links have broken. Some PHP error now occurs.
   I have disabled them for the time being so they don't appear.
 
-- BUG: Click tag sundry box. Play tune. Click FOLDERS button. It disappears. But then click any
-  of the other two sundry tabs and then back again. Now the FOLDERS button is back!?
-
-- BUG: JW found a bug where the profile gets out of sync when searching. See e-mail about it
-  dated 22 August 2021.
+- BUG: JW found a bug where the profile gets out of sync when searching. From his e-mail about
+  it, dated 22 August 2021: "For some reason the information in the "Profile" tab sometimes seems
+  to get out of sync with what is actually played. I can reproduce the effect by playing song in
+  some composer's folder and then search for some other composer's song. When clicking one of the
+  search results the respective song is played but the "Profile" tab is not updated."
+  UPDATE: I tried to reproduce it today (2021-11-07) but couldn't. Asking JW about it.
 
 - Consider adding a red attract link somewhere, pointing to the front page showing any red or
   green message. I've learned that some users never see the front page.
@@ -84,7 +89,7 @@ CONSIDER THIS
 
 - Add search for tags by simply clicking one, instead of playing the SID row. However, it might
   be wise to have a toggle in settings for turning it off. (Should it even be off as default?)
-  UPDATE: I fear it will be more annoying than helpful. When I click a row, I usually want it to play.
+  UPDATE: Fear it will be more annoying than helpful. When I click a row, I usually want it to play.
 
 - SOLID "SHOULD BE DONE" CANDIDATES:
 -

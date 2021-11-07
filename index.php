@@ -1345,6 +1345,11 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>November 7, 2021</h3>
+						<ul>
+							<li>Fixed a bug that showed the folder button in the tags sundry box when it wasn't supposed to be.</li>
+						</ul>
+
 						<h3>October 30, 2021</h3>
 						<ul>
 							<li>Removed the top line for CShellDB and PlayMOD, and instead added an invite link for Discord.</li>

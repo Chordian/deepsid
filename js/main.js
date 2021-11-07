@@ -763,7 +763,7 @@ $(function() { // DOM ready
 					'<input type="checkbox" id="showtags" name="showtagstoggle" class="unselectable"'+(showTags ? '' : 'un')+'checked />'+
 					'<label for="showtags" class="unselectable" style="position:relative;top:-2px;">Show tags in SID rows</label>'
 				);
-				if ($("#songs tr.selected").length > 0)
+				if (browser.sliderButton)
 					$("#slider-button").show();
 				break;
 			case "osc":

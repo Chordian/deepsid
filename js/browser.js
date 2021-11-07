@@ -60,6 +60,7 @@ function Browser() {
 
 	this.currentScrollPos = 0;
 	this.scrollPositions = [];
+	this.sliderButton = false;
 
 	this.secondsLength = 0;
 	this.chips = 1;
@@ -586,8 +587,10 @@ Browser.prototype = {
 							ctrls.updateInfo();
 							ctrls.updateSundry();
 
-							if ($("#sundry-tabs .selected").attr("data-topic") == "tags")
+							this.sliderButton = true;
+							if ($("#sundry-tabs .selected").attr("data-topic") == "tags") {
 								$("#slider-button").show();
+							}
 
 							if (!paramWait) {
 								SID.play(true);
@@ -2722,6 +2725,7 @@ Browser.prototype = {
 	showFolderTags: function(tags) {
 		var allTags = tags;
 		$("#slider-button").hide();
+		this.sliderButton = false;
 		if (typeof tags == "undefined" || this.cache.folderTags == "0") {
 			var tagType = {
 				production:	"",
