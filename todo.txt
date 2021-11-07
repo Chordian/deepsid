@@ -3,12 +3,14 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- IFrame project for Lemon:
-  - Fix links in top 10 lists in the root page.
+- Copy all JCH's ratings to a unique account that is used for determining the quality settings,
+  etc. JCH is getting tired of not being able to rate certain folders.
+  - Because JCH might +1 revise all his ratings later, it should be a 100% copy.
+  - Rename the 'Dummy' user (same ID both locally and online) and use it for this purpose.
 
 - Idea for folders in MUSICIANS folder: Faded flat color icons just before the star ratings,
-  for indicating a scener, a professional, a compunetter. Can be one, two or all three.
-  - Also a fourth (blue icon) for whether there's a CSDb profile or not.
+  for indicating a professional, a scener, or both. Two icons side-by-side. You have the info
+  ready in the 'composers' table, in a new 'focus' column.
 
 - BUG: JW found a bug where the profile gets out of sync when searching. From his e-mail about
   it, dated 22 August 2021: "For some reason the information in the "Profile" tab sometimes seems
@@ -17,34 +19,27 @@ SHOULD BE DONE
   search results the respective song is played but the "Profile" tab is not updated."
   UPDATE: I tried to reproduce it today (2021-11-07) but couldn't. Asking JW about it. [...]
 
-- Consider adding a red attract link somewhere, pointing to the front page showing any red or
-  green message. I've learned that some users never see the front page.
-  UPDATE: How about in the far right side, in the empty void? Maybe so it times out and vanishes.
-          Test: Open DeepSID on work PC (1920x1080) to see how much space is common there.
+- Add a red attract link in the far right side, in the empty void. Maybe even so it times out and
+  vanishes. I have a suspicion that the root message was rarely seen by everyone - this has a much
+  better chance of that, at least for desktop users which are most common.
+  - When added, remove the root page message HTML code that will no longer be used.
 
-- Symlists, next version: (Text editing requested by LaLa in February 2021)
-  - First version is text only with no editing (so admin privilege to begin with). Editing later.
-  - Unique "STIL" text for folder upon entering.
-  - And of course for each song too.
-  - New shared tab in sundry box for both of the above - the folder text is replaced for songs.
-  - Or could replace STIL text UNLESS there are no notes, then STIL text is still displayed.
-  - If new tab, what should it be called? About? Notes?
-
-- More on intro page for symlists:
-  - Profile tab on folder entry; overwritten with other profiles when clicking tunes.
-  - Tab is called "Intro" until clicking tunes, then it reverts to "Profile" again.
-  - On folder entry there is an EDIT button that opens a custom dialog box. Accepts HTML code.
-  - Create new "symlists_intro" database table for JOIN use.
-
-- Consider moving all JCH's ratings to a unique account that is used for determining the quality
-  settings, etc. Getting tired of not being able to rate certain folders.
-  - Perhaps a selective copy - only the stuff needed. Would ratings for folders suffice? (On the
-    other hand, if JCH plans to +1 revise all ratings, it might be cool to have a 100% backup.)
+- DO THE FOLLOWING IN THE BEGINNING OF A WEEKEND OR A VACATION AS IT MIGHT BLOW UP!
+  You have to be damn sure everything still works afterwards - a lot of testing afterwards...
+  - The 'hvsc' folder in root should be called 'music' instead.
+  - Likewise, the 'hvsc.php' file should be called 'browse.php' or something instead. Some
+    other naming ideas: content, results, data, cluster, gather, music, collect
+    Also consider prefixing with "_" to always make it appear in top of the list.
+  - There is an array called 'playlist' from the beginning of when DeepSID was made, that has
+    nothing to do with symlists. Rename it to something else to avoid confusion.
+  - Maybe 'csdb.php' should also have an extended name, to make it more clear what it does.
+  - Go through all other files and see if anything else ought to be renamed.
 
 
 CONSIDER THIS
 ¯¯¯¯¯¯¯¯¯¯¯¯¯
 - HVSC versions: Update with later changes, e.g. "Better Late Than Never" renaming. But how?
+  - Wasn't this an SOASC issue?
 
 - CSDb: If possible, convert ID cross-references in comments into the pertinent links.
   - Maybe with separate post-AJAX scripts to avoid slowing the CSDb tab down? (Because the
@@ -152,7 +147,7 @@ CONSIDER THIS
   MAX_JOIN_SIZE. It can be fixed with 'SET SQL_BIG_SELECTS = 1' or 'SET MAX_JOIN_SIZE = #', but
   I'm pretty sure this is not allowed at my web hotel - One.com. The code for creating the search
   shortcuts in 'hvsc.php' has been commented out. (I was actually never that fond of them myself;
-  it was something that JW commissioned. The SQL queries were awfully slow.)
+  it was something that JW commissioned. The SQL query was awfully slow.)
 
 - See also:
   - A list of similar SID tunes, for example found by comparing STIL artists.
@@ -234,6 +229,20 @@ CONSIDER THIS
   - Tone.js: https://github.com/Tonejs/Tone.js (allows setting audio context too but is quite messy)
   - Howler effect-chain: https://github.com/alexanderwallin/howler-plugin-effect-chain
   - See "temp/tuna_attempt.txt" for the piece of code I tested in player.js/load() functions.
+
+- Symlists, next version: (Text editing requested by LaLa in February 2021)
+  - First version is text only with no editing (so admin privilege to begin with). Editing later.
+  - Unique "STIL" text for folder upon entering.
+  - And of course for each song too.
+  - New shared tab in sundry box for both of the above - the folder text is replaced for songs.
+  - Or could replace STIL text UNLESS there are no notes, then STIL text is still displayed.
+  - If new tab, what should it be called? About? Notes?
+
+- More on intro page for symlists:
+  - Profile tab on folder entry; overwritten with other profiles when clicking tunes.
+  - Tab is called "Intro" until clicking tunes, then it reverts to "Profile" again.
+  - On folder entry there is an EDIT button that opens a custom dialog box. Accepts HTML code.
+  - Create new "symlists_intro" database table for JOIN use.
 
 - Settings tab page:
   - The user should be able to change the username (but only if the new one is not already taken).
@@ -346,6 +355,7 @@ PROBABLY NOT?
   screws up the chart statistics.
   - I looked at various examples in the STIL text file, but the expressions are all over the
     place. It may not be possible to write a solid regex to catch enough of them to be viable.
+  UPDATE: I later covered the most egregious ones through the special updating SQL list.
 
 - Relevant to the above, regex to remove the player and length info from JCH's tunes. However, I tried
   a few regex lines in August 2021 and while it's easy to cover most of them, it's difficult to make it
