@@ -6,21 +6,16 @@ SHOULD BE DONE
 - IFrame project for Lemon:
   - Fix links in top 10 lists in the root page.
 
-- Remove all the debug stuff - it's almost never used and takes up unnecessary space.
-
 - Idea for folders in MUSICIANS folder: Faded flat color icons just before the star ratings,
   for indicating a scener, a professional, a compunetter. Can be one, two or all three.
   - Also a fourth (blue icon) for whether there's a CSDb profile or not.
-
-- BUG: The 'Folders in..." shortcut links have broken. Some PHP error now occurs.
-  I have disabled them for the time being so they don't appear.
 
 - BUG: JW found a bug where the profile gets out of sync when searching. From his e-mail about
   it, dated 22 August 2021: "For some reason the information in the "Profile" tab sometimes seems
   to get out of sync with what is actually played. I can reproduce the effect by playing song in
   some composer's folder and then search for some other composer's song. When clicking one of the
   search results the respective song is played but the "Profile" tab is not updated."
-  UPDATE: I tried to reproduce it today (2021-11-07) but couldn't. Asking JW about it.
+  UPDATE: I tried to reproduce it today (2021-11-07) but couldn't. Asking JW about it. [...]
 
 - Consider adding a red attract link somewhere, pointing to the front page showing any red or
   green message. I've learned that some users never see the front page.
@@ -152,6 +147,12 @@ CONSIDER THIS
   happening less often if the "Unepic" tab is manually clicked first, not sure. UPDATE: I only
   spotted this once the day before and the day after I couldn't provoke the bug again. I'm putting
   this aside for but and will keep an eye on it whenever videos time out.
+
+- BUG: The 'Folders in..." search shortcuts broke online. A PHP error occurs about exceeding the
+  MAX_JOIN_SIZE. It can be fixed with 'SET SQL_BIG_SELECTS = 1' or 'SET MAX_JOIN_SIZE = #', but
+  I'm pretty sure this is not allowed at my web hotel - One.com. The code for creating the search
+  shortcuts in 'hvsc.php' has been commented out. (I was actually never that fond of them myself;
+  it was something that JW commissioned. The SQL queries were awfully slow.)
 
 - See also:
   - A list of similar SID tunes, for example found by comparing STIL artists.

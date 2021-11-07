@@ -7,7 +7,7 @@ var $=jQuery.noConflict();
 
 var cacheCSDb = cacheSticky = cacheStickyBeforeCompo = cacheCSDbProfile = cacheBeforeCompo = cachePlayer = cacheGB64 = cacheRemix = prevFile = sundryTab = reportSTIL = "";
 var cacheTabScrollPos = cachePlayerTabScrollPos = cacheGB64TabScrollPos = cacheRemixTabScrollPos = cachePosBeforeCompo = cacheDDCSDbSort = peekCounter = sundryHeight = 0;
-var sundryToggle = true, recommended = forum = players = $trAutoPlay = null, isDebug, showTags;
+var sundryToggle = true, recommended = forum = players = $trAutoPlay = null, showTags;
 
 var isLegacyWebSid = $("script[src='js/handlers/backend_tinyrsid_legacy.js']").length;
 
@@ -19,7 +19,6 @@ var tabPrevScrollPos = {
 	player:		{ pos: 0, reset: false },
 	stil:		{ pos: 0, reset: false },
 	visuals:	{ pos: 0, reset: false },
-	debug:		{ pos: 0, reset: false },
 	settings:	{ pos: 0, reset: false },
 	changes:	{ pos: 0, reset: false },
 	faq:		{ pos: 0, reset: false },
@@ -39,7 +38,6 @@ const _RESULTS	= 7;
 $(function() { // DOM ready
 
 	var userExists = false;
-	isDebug = $("#tab-debug").length;
 
 	// Get the emulator last used by the visitor
 	var storedEmulator = docCookies.getItem("emulator");
@@ -691,10 +689,6 @@ $(function() { // DOM ready
 
 		// If 'Player' tab is selected then hide the notification on it
 		if (topic === "player") $("#note-player").hide();
-
-		// Always go to the bottom of the 'Debug' tab to show the latest stuff
-		if (topic === "debug")
-			$("#page").scrollTop($("#page")[0].scrollHeight);
 
 		// If 'Profile' tab is selected then refresh the charts if present
 		// NOTE: If this is not done the charts will appear "flattened" towards the left side.
@@ -1879,58 +1873,6 @@ function CustomDialog(data, callbackYes, callbackNo) {
  */
 function GetCSSVar(cssVar) {
 	return $(parseInt(colorTheme) ? "[data-theme='dark']" : ":root").css(cssVar);
-}
-
-/**
- * Display some text in the debug tab.
- * 
- * @param {number} format	Format constant (defined in the top of this file).
- * @param {string} text		String to display.
- * @param {*} value			If specified, value associated with text.
- */
-function _(format, text, value) {
-	if (!isDebug) return;
-
-	switch (format) {
-		case _SECTION:
-			text = ($("#topic-debug tr").length ? '<tr><td colspan="20" class="top1"></td></tr><tr><td colspan="20" class="top2"></td></tr>': '')+
-				'<tr><th colspan="20">'+text+'</th></tr>';
-			break;
-		case _HEADER:
-			text = '<tr><th>&nbsp;&nbsp;&nbsp;</th><th colspan="19">'+text+'</th></tr>';
-			break;
-		case _RESULTS:
-			if (typeof text == "undefined") text = "Data";
-			text = '<tr><th>&nbsp;&nbsp;&nbsp;</th><th colspan="19">&#11206; '+text+'</th></tr>';
-			break;
-		case _PARAM:
-			text = _Value("param", text, value);
-			break;
-		case _PLAYLIST:
-			text = _Value("playlist", text, value);
-			break;
-		case _OBJECT:
-			text = '<tr><td>&nbsp;&nbsp;&nbsp;</td><td class="first">object '+text+'</td><td class="second">'+JSON.stringify(value)+'</td></tr>';
-			break;
-		case _DATA:
-			text = _Value("data", text, value);
-			break;
-		default:
-	}
-	$("#topic-debug table").append(text);
-	$("#page").scrollTop($("#page")[0].scrollHeight);
-}
-
-/**
- * Return the most typical piece of HTML used for displaying debug info.
- * 
- * @param {string} type		Type of variable.
- * @param {string} text		Text to expand on type.
- * @param {string} value	The value of the variable.
- */
-function _Value(type, text, value) {
-	if (value === "") value = '<span class="dim">empty</span>';
-	return '<tr><td>&nbsp;&nbsp;&nbsp;</td><td class="first">'+type+'.'+text+'</td><td class="second">'+value+'</td></tr>';
 }
 
 /**

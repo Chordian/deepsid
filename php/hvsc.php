@@ -685,7 +685,7 @@ try {
 			}
 
 			// Search shortcuts for showing MUSICIANS folders with new songs (according to latest HVSC update)
-			// DISABLED FOR NOW SINCE PHP NOW REPORTS AN ERROR (LOOK INTO IT LATER)
+			// DISABLED SINCE PHP STARTED REPORTING A 'MAX_JOIN_SIZE' ERROR ONLINE
 			/*for ($i = 0; $i < 5; $i++) {
 				$ss_name = '^01'.$i.'Folders in HVSC update #'.(HVSC_VERSION - $i);
 				$files[] = $ss_name;
