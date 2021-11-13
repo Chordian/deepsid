@@ -1614,10 +1614,38 @@
 			</div>
 
 			<div id="annex">
-				<div class="annex-container">
+				<!--<div class="annex-container">
 					<div class="annex-tabs"><div class="annex-tab selected">Something</div></div>
-					<div class="annex-box">
-						Sovs
+					<div class="annex-box"><div class="annex-close"></div>
+						<h3>Blah blah</h3>
+						Blah blah
+					</div>
+				</div>-->
+				<div class="annex-container">
+					<div class="annex-tabs"><div class="annex-tab selected">Tips</div></div>
+					<div class="annex-box"><div class="annex-close"></div>
+						<h3>Playlists</h3>
+						<h4>How to start a new playlist:</h4>
+						<ol>
+							<li>Right-click any SID row.</li>
+							<li>Click <b>Add to New Playlist</b>.</li>
+							<li>Browse back to root.</li>
+							<li>Right-click your playlist.</li>
+							<li>Click <b>Rename Playlist</b>.</li>
+							<li>Type a great name for it.</li>
+						</ol>
+						<h4>How to add more tunes to it:</h4>
+						<ol>
+							<li>Right-click any SID row.</li>
+							<li>Hover on <b>Add to Playlist</b>.</li>
+							<li>Click it in the context list.</li>
+						</ol>
+						<h4>Renaming playlist tunes:</h4>
+						<ol>
+							<li>Enter your playlist in root.</li>
+							<li>Right-click any SID row.</li>
+							<li>Click <b>Rename</b> and type it.</li>
+						</ol>
 					</div>
 				</div>
 			</div>

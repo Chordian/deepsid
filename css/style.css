@@ -192,6 +192,8 @@
 	--svg-filter-icon-visuals:		var(--svg-filter-button);
 	--svg-filter-icon-sticky:		var(--svg-filter-icon-editor);
 	--svg-filter-edit-tags:			var(--svg-filter-white);
+	--svg-filter-close:				var(--svg-filter-text-player);
+	--svg-filter-close-hover:		var(--svg-filter-button-hover);
 
 	--svg-bg-star-orange:			url(../images/if_star_orange.svg) 0 0 / 18px 18px no-repeat;
 	--svg-bg-star-empty-voted:		url(../images/if_star_empty_voted.svg) 0 0 / 18px 18px no-repeat;
@@ -551,6 +553,8 @@
 	--svg-filter-icon-visuals:		invert(25%) sepia(10%) saturate(629%) hue-rotate(52deg) brightness(96%) contrast(87%);
 	--svg-filter-icon-sticky:		var(--svg-filter-viz-msg-buffer);
 	--svg-filter-edit-tags:			none;
+	--svg-filter-close:				var(--svg-filter-icon-time);
+	--svg-filter-close-hover:		var(--svg-filter-icon-time);
 
 	--svg-bg-star-orange:			url(../images/if_star_orange_dark.svg) 0 0 / 18px 18px no-repeat;
 	--svg-bg-star-empty-voted:		url(../images/if_star_empty_voted_dark.svg) 0 0 / 18px 18px no-repeat;
@@ -5456,11 +5460,66 @@ input[type=range]::-ms-track {
 		position: relative;
 		top: -1px;
 		padding: 10px;
+		margin-bottom: 10px;
+		font-size: 14px;
+		line-height: 1.35em;
 		border: 1px solid var(--color-border-box);
 		border-radius: 1px;
 		background: var(--color-bg-box);
 		z-index: 2;
 	}
+
+		.annex-box b {
+			font-family: "Asap Condensed", sans-serif;
+		}
+
+		.annex-box h1,
+		.annex-box h2,
+		.annex-box h3,
+		.annex-box h4 {
+			position: relative;
+			left: -1px;
+			margin-top: 0;
+			margin-bottom: 0.5em;
+		}
+
+		.annex-box h4 {
+			font-size: 17px;
+		}
+
+		.annex-box p {
+			margin-top: 0.6em;
+			margin-bottom: 0.6em;
+		}
+
+		.annex-box ul,
+		.annex-box ol {
+			margin-top: 0.8em;
+			margin-bottom: 0.8em;
+			padding: 0 6px 0 30px;
+		}
+
+			.annex-box ul > li,
+			.annex-box ol > li {
+				line-height: 1.2em;
+			}
+
+		.annex-close {
+			position: absolute;
+			top: 8px;
+			right: 8px;
+			width: 16px;
+			height: 16px;
+			background: url(../images/close.svg) 0 0 / 16px 16px no-repeat;
+			filter: var(--svg-filter-close);
+			opacity: 0.75;
+			cursor: pointer;
+			z-index: 2;
+		}
+
+			.annex-close:hover {
+				opacity: 1;
+			}
 
 /* ---- Styled Select ------------------------------------------------------- */
 

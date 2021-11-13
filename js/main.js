@@ -1498,6 +1498,13 @@ $(function() { // DOM ready
 		return false;
 	});
 
+	/**
+	 * When clicking the 'X' corner icon for closing an annex box.
+	 */
+	$("#annex").on("click", ".annex-close", function() {
+		$(this).parents(".annex-container").remove();
+	});
+
 	// Select and show a "dexter" page tab	
 	selectTab = selectTab !== "" ? selectTab : "profile";
 	var selectView = "";
