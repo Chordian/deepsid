@@ -8,16 +8,16 @@ SHOULD BE DONE
   - Because JCH might +1 revise all his ratings later, it should be a 100% copy.
   - Rename the 'Dummy' user (same ID both locally and online) and use it for this purpose.
 
+- GLITCH: Make the bottom of the dashed lines invisible between composers in the bottom three
+  lists. It is noticable when scrolling them up on top of the big logo.
+
 - Idea for folders in MUSICIANS folder: Faded flat color icons just before the star ratings,
   for indicating a professional, a scener, or both. Two icons side-by-side. You have the info
   ready in the 'composers' table, in a new 'focus' column.
 
-- BUG: JW found a bug where the profile gets out of sync when searching. From his e-mail about
-  it, dated 22 August 2021: "For some reason the information in the "Profile" tab sometimes seems
-  to get out of sync with what is actually played. I can reproduce the effect by playing song in
-  some composer's folder and then search for some other composer's song. When clicking one of the
-  search results the respective song is played but the "Profile" tab is not updated."
-  UPDATE: I tried to reproduce it today (2021-11-07) but couldn't. Asking JW about it. [...]
+- Maybe add avatar images back for the bottom three lists, but this time so they are loaded a bit
+  delayed in a way that doesn't bog down the site.
+  - If done, make sure to also revert back to the slightly shorter names.
 
 - Add a red attract link in the far right side, in the empty void. Maybe even so it times out and
   vanishes. I have a suspicion that the root message was rarely seen by everyone - this has a much
@@ -263,6 +263,13 @@ PROBABLY NOT?
 - Replace ".." with a back arrow SVG instead? (I think people have gotten used to the ".." by now.)
 - A filter sort option in letter folders that show the crap only (one stars).
 - A filter sort option in letter folders for undecided (awaits evalution) for HVSC updates.
+
+- BUG: JW found a bug where the profile gets out of sync when searching. From his e-mail about
+  it, dated 22 August 2021: 'For some reason the information in the "Profile" tab sometimes seems
+  to get out of sync with what is actually played. I can reproduce the effect by playing song in
+  some composer's folder and then search for some other composer's song. When clicking one of the
+  search results the respective song is played but the "Profile" tab is not updated.'
+  UPDATE: I tried to reproduce it today (2021-11-07) but couldn't. Archived until further notice.
 
 - Link icons next to birth and death icons. E.g. #SoundCloud, etc.
   - Two problems: 1. Composers that don't want this? 2. Keeping up with links that changes over time.

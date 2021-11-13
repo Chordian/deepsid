@@ -1613,6 +1613,15 @@
 				</div>
 			</div>
 
+			<div id="annex">
+				<div class="annex-container">
+					<div class="annex-tabs"><div class="annex-tab selected">Something</div></div>
+					<div class="annex-box">
+						Sovs
+					</div>
+				</div>
+			</div>
+
 		<?php endif ?>
 
 	</body>

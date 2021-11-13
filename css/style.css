@@ -3405,11 +3405,11 @@ input[type=range]::-ms-track {
 		width: 860px;
 	}
 
-	#youtube-tabs {
-		display: none;
-		flex: 0 0 13px;
-		position: relative;
-	}
+		#youtube-tabs {
+			display: none;
+			flex: 0 0 13px;
+			position: relative;
+		}
 
 		#edityttabs {
 			position: absolute;
@@ -3421,7 +3421,8 @@ input[type=range]::-ms-track {
 
 		#tabs .tab,
 		#sundry-tabs .tab,
-		#youtube-tabs .tab {
+		#youtube-tabs .tab,
+		#annex .annex-tab {
 			float: left;
 			position: relative;
 			top: 30.5px;
@@ -3455,9 +3456,17 @@ input[type=range]::-ms-track {
 				font-family: "Asap Condensed", sans-serif;
 			}
 
+			#annex .annex-tab {
+				top: 0;
+				width: auto;
+				padding-left: 10px;
+				padding-right: 10px;
+			}
+
 		#tabs .selected,
 		#sundry-tabs .selected,
-		#youtube-tabs .selected {
+		#youtube-tabs .selected,
+		#annex .selected {
 			border-top: 1px solid var(--color-tab-border);
 			border-left: 1px solid var(--color-tab-border);
 			border-right: 1px solid var(--color-tab-border);
@@ -5426,6 +5435,32 @@ input[type=range]::-ms-track {
 				border-color: var(--color-disabled);
 				background: transparent;
 			}
+
+/* ---- Annex Area  --------------------------------------------------------- */
+
+#annex {
+	position: absolute;
+	top: 36.5px;
+	left: 1320px;
+	width: 250px;
+	max-height: calc(100% - 10px);
+}
+
+	.annex-tabs {
+		width: 100%;
+	}
+
+	.annex-box {
+		clear: left;
+		overflow: auto;
+		position: relative;
+		top: -1px;
+		padding: 10px;
+		border: 1px solid var(--color-border-box);
+		border-radius: 1px;
+		background: var(--color-bg-box);
+		z-index: 2;
+	}
 
 /* ---- Styled Select ------------------------------------------------------- */
 
