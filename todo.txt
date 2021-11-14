@@ -19,10 +19,11 @@ SHOULD BE DONE
   delayed in a way that doesn't bog down the site.
   - If done, make sure to also revert back to the slightly shorter names.
 
-- Add a red attract link in the far right side, in the empty void. Maybe even so it times out and
-  vanishes. I have a suspicion that the root message was rarely seen by everyone - this has a much
-  better chance of that, at least for desktop users which are most common.
-  - When added, remove the root page message HTML code that will no longer be used.
+- Add an annex box in the far right side, in the empty void.
+  - Add all tips (randomized one at at time) and remove them from the STIL box too.
+  - Add a refresh icon or button for tips. (Maybe even a drop-down selector later?)
+  - The message that was previously in the root page red/green spot should instead appear in the
+    STIL box, where tips were previously put. (When added, delete the root page message HTML.)
 
 - DO THE FOLLOWING IN THE BEGINNING OF A WEEKEND OR A VACATION AS IT MIGHT BLOW UP!
   You have to be damn sure everything still works afterwards - a lot of testing afterwards...

@@ -5446,7 +5446,7 @@ input[type=range]::-ms-track {
 	position: absolute;
 	top: 36.5px;
 	left: 1320px;
-	width: 250px;
+	width: 240px;
 	max-height: calc(100% - 10px);
 }
 
@@ -5485,6 +5485,11 @@ input[type=range]::-ms-track {
 
 		.annex-box h4 {
 			font-size: 17px;
+			margin-top: 1.1em;
+		}
+
+		.annex-box h3 + h4 {
+			margin-top: 0.8em;
 		}
 
 		.annex-box p {
@@ -5503,6 +5508,11 @@ input[type=range]::-ms-track {
 			.annex-box ol > li {
 				line-height: 1.2em;
 			}
+
+		.annex-box img {
+			border: 1px solid var(--color-border-info);
+			margin-bottom: 4px;
+		}
 
 		.annex-close {
 			position: absolute;

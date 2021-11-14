@@ -305,7 +305,7 @@ SIDPlayer.prototype = {
 				// The three callbacks here: onCompletion, onFail, onProgress
 				this.WebSid.loadMusicFromURL(file, options, (function(){}), (function(){}), (function(){}));
 
-				if (error) {
+				if (error || timeout == 0) {
 					setTimeout(function() {
 						// After half a second just go to the next row
 						if (typeof this.callbackTrackEnd === "function")
@@ -337,7 +337,7 @@ SIDPlayer.prototype = {
 				this.jsSID.playcont(); // Added as a hack to avoid a nasty console error
 				this.jsSID.loadinit(file, subtune);
 
-				if (error) {
+				if (error || timeout == 0) {
 					setTimeout(function() {
 						// After half a second just go to the next row
 						if (typeof this.callbackTrackEnd === "function")

@@ -485,7 +485,7 @@
 				<div id="memory-bar"><div id="memory-lid"></div><div id="memory-chunk"></div></div>
 			</div>
 			<div id="sundry-tabs">
-				<div class="tab unselectable selected" data-topic="stil" id="stab-stil">Tips</div>
+				<div class="tab unselectable selected" data-topic="stil" id="stab-stil">Info</div>
 				<div class="tab unselectable" data-topic="tags" id="stab-tags">Tags</div>
 				<div class="tab unselectable" data-topic="osc" id="stab-osc">Scope</div>
 				<div id="sundry-ctrls"></div>
@@ -1335,6 +1335,14 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>November 14, 2021</h3>
+						<ul>
+							<li>Fixed a bug that stopped autoplaying if the subtune was shorter than one second.
+								Thank you for spotting that one, Andreas Wallström. Try Jason Brooke's
+								<a href="//deepsid.chordian.net/?file=/MUSICIANS/B/Brooke_Jason/Out_Run.sid&subtune=4">Out Run</a>
+								or David Whittaker's <a href="//deepsid.chordian.net/?file=/MUSICIANS/W/Whittaker_David/Paddle_Mania.sid&subtune=18">Paddle Mania</a> as examples.</li>
+						</ul>
+
 						<h3>November 7, 2021</h3>
 						<ul>
 							<li>Fixed a bug that showed the folder button in the tags sundry box when it wasn't supposed to be.</li>
@@ -1624,28 +1632,11 @@
 				<div class="annex-container">
 					<div class="annex-tabs"><div class="annex-tab selected">Tips</div></div>
 					<div class="annex-box"><div class="annex-close"></div>
-						<h3>Playlists</h3>
-						<h4>How to start a new playlist:</h4>
-						<ol>
-							<li>Right-click any SID row.</li>
-							<li>Click <b>Add to New Playlist</b>.</li>
-							<li>Browse back to root.</li>
-							<li>Right-click your playlist.</li>
-							<li>Click <b>Rename Playlist</b>.</li>
-							<li>Type a great name for it.</li>
-						</ol>
-						<h4>How to add more tunes to it:</h4>
-						<ol>
-							<li>Right-click any SID row.</li>
-							<li>Hover on <b>Add to Playlist</b>.</li>
-							<li>Click it in the context list.</li>
-						</ol>
-						<h4>Renaming playlist tunes:</h4>
-						<ol>
-							<li>Enter your playlist in root.</li>
-							<li>Right-click any SID row.</li>
-							<li>Click <b>Rename</b> and type it.</li>
-						</ol>
+						<div id="annex-tips">
+							<div style="padding:6px 0;text-align:center;">
+								<img src="images/loading_threedots.svg" style="margin:0;border:none;" alt="Loading" />
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
