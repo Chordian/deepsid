@@ -485,7 +485,7 @@
 				<div id="memory-bar"><div id="memory-lid"></div><div id="memory-chunk"></div></div>
 			</div>
 			<div id="sundry-tabs">
-				<div class="tab unselectable selected" data-topic="stil" id="stab-stil">Info</div>
+				<div class="tab unselectable selected" data-topic="stil" id="stab-stil">STIL</div>
 				<div class="tab unselectable" data-topic="tags" id="stab-tags">Tags</div>
 				<div class="tab unselectable" data-topic="osc" id="stab-osc">Scope</div>
 				<div id="sundry-ctrls"></div>
@@ -1334,6 +1334,12 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>November 16, 2021</h3>
+						<ul>
+							<li>Created an annex box in the void area to the right where random tips can now be seen. The tips in the STIL
+								box are no longer shown. Click the corner icon for a list of the annex tips you can choose from.</li>
+						</ul>
 
 						<h3>November 14, 2021</h3>
 						<ul>

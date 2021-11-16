@@ -182,35 +182,55 @@
 
 	'	<h3>Color strips</h3>
 		<p>Sometimes you can see a vertical color strip in a SID row. These indicate a common player.</p>
-		<div class="annex-strip annex-a"> = <b>GoatTracker</b></div><span class="annex-strip-tab"><a href="//deepsid.chordian.net/?player=19&type=player&search=goattracker_v1.x"><b>v1.x</b></a> or <a href="//deepsid.chordian.net/?player=1&type=player&search=goattracker_v2.x"><b>v2.x</b></a></span>
-		<div class="annex-strip annex-b"> = <b>NewPlayer</b></div><span class="annex-strip-tab">JCH\'s <a href="//deepsid.chordian.net/?player=2&type=player&search=newplayer_-v18_-v19_-v20_-v21"><b>v2</b></a> / <a href="//deepsid.chordian.net/?player=3&type=player&search=newplayer_v20"><b>v3</b></a>, etc.</span>
-		<div class="annex-strip annex-c"> = <b>SID-Wizard</b></div><span class="annex-strip-tab"><a href="//deepsid.chordian.net/?player=5&type=player&search=sidwizard_v1.x"><b>v1.x</b></a></span>
-		<div class="annex-strip annex-d"> = <b>SID Factory II</b></div><span class="annex-strip-tab"><a href="//deepsid.chordian.net/?player=122&type=player&search=sidfactory_ii"><b>BETA</b></a></span>
-		<div class="annex-strip annex-e"> = <b>DMC</b></div><span class="annex-strip-tab"><a href="//deepsid.chordian.net/?player=18&type=player&search=dmc_v4.x"><b>v4.x</b></a>, <a href="//deepsid.chordian.net/?player=12&type=player&search=dmc_v5.x"><b>v5.x</b></a>, etc.</span>
-		<div class="annex-strip annex-f"> = <b>SidTracker 64</b></div><span class="annex-strip-tab"><a href="http://deepsid.chordian.net/?player=13&type=player&search=sidtracker64"><b>iPad</b></a></span>
+		<div class="annex-strip annex-a"> = <b>GoatTracker</b></div><span class="annex-tiny"><a href="//deepsid.chordian.net/?player=19&type=player&search=goattracker_v1.x"><b>v1.x</b></a> or <a href="//deepsid.chordian.net/?player=1&type=player&search=goattracker_v2.x"><b>v2.x</b></a></span>
+		<div class="annex-strip annex-b"> = <b>NewPlayer</b></div><span class="annex-tiny">JCH\'s <a href="//deepsid.chordian.net/?player=2&type=player&search=newplayer_-v18_-v19_-v20_-v21"><b>v2</b></a> / <a href="//deepsid.chordian.net/?player=3&type=player&search=newplayer_v20"><b>v3</b></a>, etc.</span>
+		<div class="annex-strip annex-c"> = <b>SID-Wizard</b></div><span class="annex-tiny"><a href="//deepsid.chordian.net/?player=5&type=player&search=sidwizard_v1.x"><b>v1.x</b></a></span>
+		<div class="annex-strip annex-d"> = <b>SID Factory II</b></div><span class="annex-tiny"><a href="//deepsid.chordian.net/?player=122&type=player&search=sidfactory_ii"><b>BETA</b></a></span>
+		<div class="annex-strip annex-e"> = <b>DMC</b></div><span class="annex-tiny"><a href="//deepsid.chordian.net/?player=18&type=player&search=dmc_v4.x"><b>v4.x</b></a>, <a href="//deepsid.chordian.net/?player=12&type=player&search=dmc_v5.x"><b>v5.x</b></a>, etc.</span>
+		<div class="annex-strip annex-f"> = <b>SidTracker 64</b></div><span class="annex-tiny"><a href="http://deepsid.chordian.net/?player=13&type=player&search=sidtracker64"><b>iPad</b></a></span>
 	',
 
-	'
-	
+	'	<h3>Hotkeys</h3>
+		
+		<h4>General hotkeys</h4>
+		<div class="annex-hotkey">Space</div><span class="annex-tiny">Pause/Play toggle</span>
+		<div class="annex-hotkey">[<i>Below</i>&nbsp;]&nbsp;Esc</div><span class="annex-tiny">Fast forward</span>
+		<div class="annex-hotkey">p</div><span class="annex-tiny">Pop-up tiny DeepSID</span>
+		<div class="annex-hotkey">s</div><span class="annex-tiny">Toggle sundry box</span>
+		<div class="annex-hotkey">l</div><span class="annex-tiny">Upload SID for testing</span>
+		<div class="annex-hotkey">b</div><span class="annex-tiny">Back from plink</span>
+		<p>Testing a SID is temporary and for you only. No one else can hear it.</p>
+		A "plink" is a link with a play icon in front of it, e.g. in the <b>CSDb</b> tab.
+		
+		<h4>Hotkeys for emulators only</h4>
+		<div class="annex-hotkey">1 / q</div><span class="annex-tiny">Toggle voice 1 on/off</span>
+		<div class="annex-hotkey">2 / w</div><span class="annex-tiny">Toggle voice 2 on/off</span>
+		<div class="annex-hotkey">3 / e</div><span class="annex-tiny">Toggle voice 3 on/off</span>
+		<div class="annex-hotkey">4 / r</div><span class="annex-tiny">Toggle digi on/off</span>
+		<div class="annex-hotkey">Shift&nbsp;&nbsp;&nbsp;1 / q</div><span class="annex-tiny">Toggle solo voice 1</span>
+		<div class="annex-hotkey">Shift&nbsp;&nbsp;&nbsp;2 / w</div><span class="annex-tiny">Toggle solo voice 2</span>
+		<div class="annex-hotkey">Shift&nbsp;&nbsp;&nbsp;3 / e</div><span class="annex-tiny">Toggle solo voice 3</span>
+		<div class="annex-hotkey">Shift&nbsp;&nbsp;&nbsp;4 / r</div><span class="annex-tiny">Toggle solo digi</span>
 	',
 );
 
-$id = isset($_GET['id']) ? $_GET['id'] : mt_rand(0, 5);
+$id = isset($_GET['id']) ? $_GET['id'] : mt_rand(0, count($tips) - 1);
 
 if ($id != -1)
 	echo $tips[$id];
 else
 	echo
 	'	<h3>List of annex tips:</h3>
-		<ul>
+		<ul style="margin-bottom:16px;">
 			<li><a href="6" class="topic">Color strips</a></li>
 			<li><a href="2" class="topic">External links</a></li>
+			<li><a href="7" class="topic">Hotkeys</a></li>
 			<li><a href="1" class="topic">Memory bar</a></li>
 			<li><a href="0" class="topic">Playlists</a></li>
 			<li><a href="3" class="topic">Registering</a></li>
 			<li><a href="5" class="topic">Searching</a></li>
 			<li><a href="4" class="topic">SID handlers</a></li>
-			<li></li>
-		<ul>
-	'
+		</ul>
+		More tips may be added later.
+	';
 ?>

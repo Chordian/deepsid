@@ -5470,7 +5470,7 @@ input[type=range]::-ms-track {
 	}
 
 	#annex-tips b,
-	.annex-strip-tab {
+	.annex-tiny {
 		font-family: "Asap Condensed", sans-serif;
 	}
 
@@ -5569,6 +5569,14 @@ input[type=range]::-ms-track {
 		.annex-d:before { background: var(--color-strip-pl-d); }
 		.annex-e:before { background: var(--color-strip-pl-e); }
 		.annex-f:before { background: var(--color-strip-pl-f); }
+
+	.annex-hotkey {
+		display: inline-block;
+		width: 85px;
+		font-weight: bold;
+		margin-left: 10px;
+		font-family: "Asap Condensed", sans-serif;
+	}
 
 /* ---- Styled Select ------------------------------------------------------- */
 
