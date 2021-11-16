@@ -192,8 +192,7 @@
 	--svg-filter-icon-visuals:		var(--svg-filter-button);
 	--svg-filter-icon-sticky:		var(--svg-filter-icon-editor);
 	--svg-filter-edit-tags:			var(--svg-filter-white);
-	--svg-filter-close:				var(--svg-filter-text-player);
-	--svg-filter-close-hover:		var(--svg-filter-button-hover);
+	--svg-filter-close:				var(--svg-filter-button);
 
 	--svg-bg-star-orange:			url(../images/if_star_orange.svg) 0 0 / 18px 18px no-repeat;
 	--svg-bg-star-empty-voted:		url(../images/if_star_empty_voted.svg) 0 0 / 18px 18px no-repeat;
@@ -553,8 +552,7 @@
 	--svg-filter-icon-visuals:		invert(25%) sepia(10%) saturate(629%) hue-rotate(52deg) brightness(96%) contrast(87%);
 	--svg-filter-icon-sticky:		var(--svg-filter-viz-msg-buffer);
 	--svg-filter-edit-tags:			none;
-	--svg-filter-close:				var(--svg-filter-icon-time);
-	--svg-filter-close-hover:		var(--svg-filter-icon-time);
+	--svg-filter-close:				var(--svg-filter-icon-bottom);
 
 	--svg-bg-star-orange:			url(../images/if_star_orange_dark.svg) 0 0 / 18px 18px no-repeat;
 	--svg-bg-star-empty-voted:		url(../images/if_star_empty_voted_dark.svg) 0 0 / 18px 18px no-repeat;
@@ -2641,7 +2639,8 @@ input[type=range]::-ms-track {
 	#page,
 	#dialog-all-tags,
 	#dialog-song-tags,
-	#upload-stil-text {
+	#upload-stil-text,
+	#annex-tips {
 		overflow-y: auto;
 		overflow-x: hidden !important;
 		scrollbar-width: thin;
@@ -3464,7 +3463,7 @@ input[type=range]::-ms-track {
 				top: 0;
 				width: auto;
 				padding-left: 10px;
-				padding-right: 10px;
+				padding-right: 24px;
 			}
 
 		#tabs .selected,
@@ -5442,25 +5441,38 @@ input[type=range]::-ms-track {
 
 /* ---- Annex Area  --------------------------------------------------------- */
 
+#dropdown-tips {
+	height: 1px !important;
+}
+
 #annex {
+	overflow: hidden;
 	position: absolute;
 	top: 36.5px;
 	left: 1320px;
-	width: 240px;
-	max-height: calc(100% - 10px);
+	width: 250px;
+	height: calc(100% - 48px);
 }
 
 	.annex-tabs {
 		width: 100%;
 	}
 
-	.annex-box {
+	#annex .options {
+		z-index: 3;
+	}
+
+	#annex .select {
+		float: right;
+	}
+
+	#annex-tips {
 		clear: left;
 		overflow: auto;
 		position: relative;
 		top: -1px;
 		padding: 10px;
-		margin-bottom: 10px;
+		max-height: calc(100% - 21px);
 		font-size: 14px;
 		line-height: 1.35em;
 		border: 1px solid var(--color-border-box);
@@ -5469,58 +5481,58 @@ input[type=range]::-ms-track {
 		z-index: 2;
 	}
 
-		.annex-box b {
+	#annex-tips b {
 			font-family: "Asap Condensed", sans-serif;
 		}
 
-		.annex-box h1,
-		.annex-box h2,
-		.annex-box h3,
-		.annex-box h4 {
+		#annex-tips h1,
+		#annex-tips h2,
+		#annex-tips h3,
+		#annex-tips h4 {
 			position: relative;
 			left: -1px;
 			margin-top: 0;
 			margin-bottom: 0.5em;
 		}
 
-		.annex-box h4 {
+		#annex-tips h4 {
 			font-size: 17px;
 			margin-top: 1.1em;
 		}
 
-		.annex-box h3 + h4 {
+		#annex-tips h3 + h4 {
 			margin-top: 0.8em;
 		}
 
-		.annex-box p {
+		#annex-tips p {
 			margin-top: 0.6em;
 			margin-bottom: 0.6em;
 		}
 
-		.annex-box ul,
-		.annex-box ol {
+		#annex-tips ul,
+		#annex-tips ol {
 			margin-top: 0.8em;
 			margin-bottom: 0.8em;
 			padding: 0 6px 0 30px;
 		}
 
-			.annex-box ul > li,
-			.annex-box ol > li {
+			#annex-tips ul > li,
+			#annex-tips ol > li {
 				line-height: 1.2em;
 			}
 
-		.annex-box img {
+		#annex-tips img {
 			border: 1px solid var(--color-border-info);
 			margin-bottom: 4px;
 		}
 
 		.annex-close {
 			position: absolute;
-			top: 8px;
-			right: 8px;
-			width: 16px;
-			height: 16px;
-			background: url(../images/close.svg) 0 0 / 16px 16px no-repeat;
+			top: 5.5px;
+			right: 4px;
+			width: 10px;
+			height: 10px;
+			background: url(../images/close.svg) 0 0 / 10px 10px no-repeat;
 			filter: var(--svg-filter-close);
 			opacity: 0.75;
 			cursor: pointer;

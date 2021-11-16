@@ -94,6 +94,9 @@ $(function() { // DOM ready
 	// Show a random tip in an annex box
 	$.post("php/annex_tips.php", function(tips) {
 		$("#annex-tips").empty().append(tips);
+		$("#dropdown-tips")
+			.styledSelect("tips")
+			.styledSetValue("searching");
 	});
 
 	$("#time-bar").addClass(emulator)
@@ -1502,7 +1505,7 @@ $(function() { // DOM ready
 	 * When clicking the 'X' corner icon for closing an annex box.
 	 */
 	$("#annex").on("click", ".annex-close", function() {
-		$(this).parents(".annex-container").remove();
+		$("#annex").remove();
 	});
 
 	// Select and show a "dexter" page tab	

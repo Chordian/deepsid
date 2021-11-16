@@ -130,7 +130,7 @@
 	'	<h3>Searching</h3>
 		<p>Type something in the text box in the left side then hit <b>SEARCH</b>.</p>
 		<p>If you tick <b>Here</b> too, then only the current folder will be searched.</p>
-		The drop-down box can narrow down your search:
+		<b>The options in the drop-down box:</b>
 
 		<h4>All</h4>
 		Searches in (almost) everything. Filenames, STIL, author, etc.
@@ -148,7 +148,34 @@
 		Expects raw <b>SIDId</b> player names, not the prettified ones.
 
 		<h4>Location</h4>
+		Searches for a start location, e.g. 16384, 0x4000, or $4000.
 
+		<h4>Maximum</h4>
+		Searches for a maximum size, e.g. 4095, 0x0FFF, or $0FFF.
+
+		<h4>Tags</h4>
+		<p>Searches for one or more tags.</p>
+		Enclose in quotes to search a tag with spaces between words.
+
+		<h4>STIL</h4>
+		Searches in <a href="https://www.hvsc.c64.org/download/C64Music/DOCUMENTS/STIL.faq" target="_blank">STIL</a> texts.
+
+		<h4>Rating</h4>
+		<p>Searches for your ratings. Use 1 to 5, optionally with minus.</p>
+		For example, typing <a href="//deepsid.chordian.net/?search=3-&type=rating">3-</a> searches for tunes rated 3 stars or more.
+
+		<h4>Country</h4>
+		Searches for composers from a specific country. Only a list of folders is returned here.
+
+		<h4>Version</h4>
+		<p>Searches for all files and folders included in a specific update version of <a href="//deepsid.chordian.net/?file=/High%20Voltage%20SID%20Collection/">HVSC</a> or
+		<a href="//deepsid.chordian.net/?file=/Compute\'s%20Gazette%20SID%20Collection/">CGSC</a>.</p>
+
+
+		<h4>Latest</h4>
+
+
+		<h4>Game</h4>
 
 	',
 

@@ -20,7 +20,8 @@ SHOULD BE DONE
   - If done, make sure to also revert back to the slightly shorter names.
 
 - Add an annex box in the far right side, in the empty void.
-  - Add all tips (randomized one at at time) and remove them from the STIL box too.
+  - Need max height and a scroll bar to pop up if met.
+  - Add all tips (randomized one at a time) and remove them from the STIL box too.
   - Add a refresh icon or button for tips. (Maybe even a drop-down selector later?)
   - The message that was previously in the root page red/green spot should instead appear in the
     STIL box, where tips were previously put. (When added, delete the root page message HTML.)

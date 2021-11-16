@@ -1622,21 +1622,18 @@
 			</div>
 
 			<div id="annex">
-				<!--<div class="annex-container">
-					<div class="annex-tabs"><div class="annex-tab selected">Something</div></div>
-					<div class="annex-box"><div class="annex-close"></div>
-						<h3>Blah blah</h3>
-						Blah blah
-					</div>
-				</div>-->
-				<div class="annex-container">
-					<div class="annex-tabs"><div class="annex-tab selected">Tips</div></div>
-					<div class="annex-box"><div class="annex-close"></div>
-						<div id="annex-tips">
-							<div style="padding:6px 0;text-align:center;">
-								<img src="images/loading_threedots.svg" style="margin:0;border:none;" alt="Loading" />
-							</div>
-						</div>
+				<div class="annex-tabs"><div class="annex-tab selected">Tips<div class="annex-close"></div></div></div>
+				<select id="dropdown-tips" name="select-tip" style="float:right;visibility:hidden;">
+					<option value="playlists">Playlists</option>
+					<option value="memory">Memory bar</option>
+					<option value="links">External links</option>
+					<option value="registering">Registering</option>
+					<option value="handlers">SID handlers</option>
+					<option value="searching">Searching</option>
+				</select>
+				<div id="annex-tips">
+					<div style="padding:6px 0;text-align:center;">
+						<img src="images/loading_threedots.svg" style="margin:0;border:none;" alt="Loading" />
 					</div>
 				</div>
 			</div>
