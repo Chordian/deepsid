@@ -5441,10 +5441,6 @@ input[type=range]::-ms-track {
 
 /* ---- Annex Area  --------------------------------------------------------- */
 
-#dropdown-tips {
-	height: 1px !important;
-}
-
 #annex {
 	overflow: hidden;
 	position: absolute;
@@ -5456,14 +5452,6 @@ input[type=range]::-ms-track {
 
 	.annex-tabs {
 		width: 100%;
-	}
-
-	#annex .options {
-		z-index: 3;
-	}
-
-	#annex .select {
-		float: right;
 	}
 
 	#annex-tips {
@@ -5481,9 +5469,10 @@ input[type=range]::-ms-track {
 		z-index: 2;
 	}
 
-	#annex-tips b {
-			font-family: "Asap Condensed", sans-serif;
-		}
+	#annex-tips b,
+	.annex-strip-tab {
+		font-family: "Asap Condensed", sans-serif;
+	}
 
 		#annex-tips h1,
 		#annex-tips h2,
@@ -5526,22 +5515,60 @@ input[type=range]::-ms-track {
 			margin-bottom: 4px;
 		}
 
-		.annex-close {
+		.annex-close,
+		.annex-topics {
 			position: absolute;
-			top: 5.5px;
-			right: 4px;
-			width: 10px;
-			height: 10px;
-			background: url(../images/close.svg) 0 0 / 10px 10px no-repeat;
 			filter: var(--svg-filter-close);
 			opacity: 0.75;
 			cursor: pointer;
-			z-index: 2;
+			z-index: 3;
 		}
 
-			.annex-close:hover {
+			.annex-close:hover,
+			.annex-topics:hover {
 				opacity: 1;
 			}
+
+		.annex-close {
+			top: 5.5px;
+			right: 6px;
+			width: 10px;
+			height: 10px;
+			background: url(../images/close.svg) 0 0 / 10px 10px no-repeat;
+		}
+
+		.annex-topics {
+			display: none;
+			top: 36px;
+			right: 16px;
+			width: 20px;
+			height: 20px;
+			background: url(../images/topics.svg) 0 0 / 20px 20px no-repeat;
+		}
+
+	.annex-strip {
+		display: inline-block;
+		height: 20px;
+		width: 125px;
+		margin-bottom: 6px;
+	}
+
+		.annex-strip:before {
+			content: "";
+			clear: left;
+			float: left;
+			width: 3px;
+			height: 20px;
+			margin: 0 5px 0 10px;
+			border-radius: 1px;
+		}
+
+		.annex-a:before { background: var(--color-strip-pl-a); }
+		.annex-b:before { background: var(--color-strip-pl-b); }
+		.annex-c:before { background: var(--color-strip-pl-c); }
+		.annex-d:before { background: var(--color-strip-pl-d); }
+		.annex-e:before { background: var(--color-strip-pl-e); }
+		.annex-f:before { background: var(--color-strip-pl-f); }
 
 /* ---- Styled Select ------------------------------------------------------- */
 

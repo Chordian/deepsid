@@ -4,6 +4,8 @@
  *
  * Returns a randomly chosen block of HTML for the annex box with tips.
  * 
+ * @uses		$_GET['id']			optional
+ *
  * @used-by		main.js
  */
 
@@ -79,7 +81,7 @@
 		<h4>Consider if SID happens</h4>
 		<p>You can upload and edit SID files in the <b><a href="//deepsid.chordian.net/?file=/SID Happens/">SID Happens</a></b> folder.</p>
 		<h4>Manage your own playlists</h4>
-		<p>You can create a playlist and add SID files to it. See this for more.</p>
+		<p>You can create a playlist and add SID files to it. See <a href="0" class="topic">this</a> for more.</p>
 
 		<h4>Add or edit tags</h4>
 		<ol>
@@ -124,7 +126,6 @@
 		<p>Clicking a SID row will download it to your computer.</p>
 		Useful if you have associated the SID files to automatically
 		run an external program.
-
 	',
 
 	'	<h3>Searching</h3>
@@ -171,16 +172,22 @@
 		<p>Searches for all files and folders included in a specific update version of <a href="//deepsid.chordian.net/?file=/High%20Voltage%20SID%20Collection/">HVSC</a> or
 		<a href="//deepsid.chordian.net/?file=/Compute\'s%20Gazette%20SID%20Collection/">CGSC</a>.</p>
 
-
 		<h4>Latest</h4>
-
+		<p>Searches for the files added in the latest HVSC update by the specified composer.</p>
+		You can also append a different HVSC version, e.g. <b>danko,72</b>.
 
 		<h4>Game</h4>
-
+		Searches for songs made for the specified game.
 	',
 
-	'
-	
+	'	<h3>Color strips</h3>
+		<p>Sometimes you can see a vertical color strip in a SID row. These indicate a common player.</p>
+		<div class="annex-strip annex-a"> = <b>GoatTracker</b></div><span class="annex-strip-tab"><a href="//deepsid.chordian.net/?player=19&type=player&search=goattracker_v1.x"><b>v1.x</b></a> or <a href="//deepsid.chordian.net/?player=1&type=player&search=goattracker_v2.x"><b>v2.x</b></a></span>
+		<div class="annex-strip annex-b"> = <b>NewPlayer</b></div><span class="annex-strip-tab">JCH\'s <a href="//deepsid.chordian.net/?player=2&type=player&search=newplayer_-v18_-v19_-v20_-v21"><b>v2</b></a> / <a href="//deepsid.chordian.net/?player=3&type=player&search=newplayer_v20"><b>v3</b></a>, etc.</span>
+		<div class="annex-strip annex-c"> = <b>SID-Wizard</b></div><span class="annex-strip-tab"><a href="//deepsid.chordian.net/?player=5&type=player&search=sidwizard_v1.x"><b>v1.x</b></a></span>
+		<div class="annex-strip annex-d"> = <b>SID Factory II</b></div><span class="annex-strip-tab"><a href="//deepsid.chordian.net/?player=122&type=player&search=sidfactory_ii"><b>BETA</b></a></span>
+		<div class="annex-strip annex-e"> = <b>DMC</b></div><span class="annex-strip-tab"><a href="//deepsid.chordian.net/?player=18&type=player&search=dmc_v4.x"><b>v4.x</b></a>, <a href="//deepsid.chordian.net/?player=12&type=player&search=dmc_v5.x"><b>v5.x</b></a>, etc.</span>
+		<div class="annex-strip annex-f"> = <b>SidTracker 64</b></div><span class="annex-strip-tab"><a href="http://deepsid.chordian.net/?player=13&type=player&search=sidtracker64"><b>iPad</b></a></span>
 	',
 
 	'
@@ -188,6 +195,22 @@
 	',
 );
 
-//////////echo $tips[mt_rand(0, 5)];
-echo $tips[5];
+$id = isset($_GET['id']) ? $_GET['id'] : mt_rand(0, 5);
+
+if ($id != -1)
+	echo $tips[$id];
+else
+	echo
+	'	<h3>List of annex tips:</h3>
+		<ul>
+			<li><a href="6" class="topic">Color strips</a></li>
+			<li><a href="2" class="topic">External links</a></li>
+			<li><a href="1" class="topic">Memory bar</a></li>
+			<li><a href="0" class="topic">Playlists</a></li>
+			<li><a href="3" class="topic">Registering</a></li>
+			<li><a href="5" class="topic">Searching</a></li>
+			<li><a href="4" class="topic">SID handlers</a></li>
+			<li></li>
+		<ul>
+	'
 ?>

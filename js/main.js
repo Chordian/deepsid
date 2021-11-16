@@ -92,11 +92,9 @@ $(function() { // DOM ready
 	$("#visuals-piano .piano-filter1,#visuals-piano .piano-filter2").hide();
 
 	// Show a random tip in an annex box
-	$.post("php/annex_tips.php", function(tips) {
+	$.get("php/annex_tips.php", { id: 6 }, function(tips) {
 		$("#annex-tips").empty().append(tips);
-		$("#dropdown-tips")
-			.styledSelect("tips")
-			.styledSetValue("searching");
+		$(".annex-topics").show();
 	});
 
 	$("#time-bar").addClass(emulator)
@@ -1506,6 +1504,27 @@ $(function() { // DOM ready
 	 */
 	$("#annex").on("click", ".annex-close", function() {
 		$("#annex").remove();
+	});
+
+	/**
+	 * When clicking the annex corner icon for showing the topics.
+	 */
+	$("#annex").on("click", ".annex-topics", function() {
+		$.get("php/annex_tips.php", { id: -1 }, function(topics) {
+			$("#annex-tips").empty().append(topics);
+			$(".annex-topics").hide();
+		});
+	});
+
+	/**
+	 * When clicking a topic link in the annex box.
+	 */
+	$("#annex").on("click", ".topic", function() {
+		$.get("php/annex_tips.php", { id: $(this).attr("href") }, function(tips) {
+			$("#annex-tips").empty().append(tips);
+			$(".annex-topics").show();
+		});
+		return false;
 	});
 
 	// Select and show a "dexter" page tab	
