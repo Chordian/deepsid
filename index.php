@@ -1335,6 +1335,12 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>November 18, 2021</h3>
+						<ul>
+							<li>Upgraded the WebSid (HQ) emulator. It has a new filter implementation for the 6581 version, and the
+								centering of the scopes has been fixed.</li>
+						</ul>
+
 						<h3>November 16, 2021</h3>
 						<ul>
 							<li>Created an annex box in the void area to the right where random tips can now be seen. The tips in the STIL

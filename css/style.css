@@ -5578,6 +5578,28 @@ input[type=range]::-ms-track {
 		font-family: "Asap Condensed", sans-serif;
 	}
 
+	.annex-table {
+		font-family: "Asap Condensed", sans-serif;
+	}
+
+		.annex-table td:first-child {
+			font-weight: bold;
+			vertical-align: top;
+		}
+
+		.annex-table td {
+			padding: 2px 6px;
+		}
+
+		.annex-table ul {
+			margin: 0.6em !important;
+			padding-left: 12px !important;
+		}
+
+			.annex-table li {
+				margin: 0.2em;
+			}
+
 /* ---- Styled Select ------------------------------------------------------- */
 
 /* Used to make the original select hidden but still functional */

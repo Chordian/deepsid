@@ -92,7 +92,7 @@ $(function() { // DOM ready
 	$("#visuals-piano .piano-filter1,#visuals-piano .piano-filter2").hide();
 
 	// Show a random tip in an annex box
-	$.get("php/annex_tips.php", function(tips) {
+	$.get("php/annex_tips.php", /*{ id: 8 },*/ function(tips) {
 		$("#annex-tips").empty().append(tips);
 		$(".annex-topics").show();
 	});

@@ -211,6 +211,104 @@
 		<div class="annex-hotkey">Shift&nbsp;&nbsp;&nbsp;2 / w</div><span class="annex-tiny">Toggle solo voice 2</span>
 		<div class="annex-hotkey">Shift&nbsp;&nbsp;&nbsp;3 / e</div><span class="annex-tiny">Toggle solo voice 3</span>
 		<div class="annex-hotkey">Shift&nbsp;&nbsp;&nbsp;4 / r</div><span class="annex-tiny">Toggle solo digi</span>
+		<p>The digi hotkeys only work for the legacy version of WebSid.</p>
+	',
+
+	'	<h3>URL parameters</h3>
+		<p>Here are the URL parameters you can use for external links:</p>
+		<table class="annex-table">
+			<tr>
+				<td>file</td><td>File to play; folder to show.</td>
+			</tr>
+			<tr>
+				<td>subtune</td><td>Use with <b>file</b>.</td>
+			</tr>
+			<tr>
+				<td>emulator</td><td>Temporarily override the emulator.&nbsp;&nbsp;Options:
+					<ul>
+						<li><b>websid</b></li>
+						<li><b>legacy</b></li>
+						<li><b>jssid</b>&nbsp;&nbsp;(Hermit\'s)</li>
+						<li><b>youtube</b></li>
+						<li><b>download</b></li>
+					</ul>
+				</td>
+			</tr>
+			<tr>
+				<td>search</td><td>A search query.</td>
+			</tr>
+			<tr>
+				<td>type</td><td>Use with <b>search</b>.&nbsp;&nbsp;Options:
+					<ul>
+						<li><b>fullname</b>&nbsp;&nbsp;(title)</li>
+						<li><b>author</b></li>
+						<li><b>copyright</b></li>
+						<li><b>player</b></li>
+						<li><b>location</b>&nbsp;&nbsp;(start)</li>
+						<li><b>maximum</b>&nbsp;&nbsp;(size)</li>
+						<li><b>tag</b></li>
+						<li><b>stil</b></li>
+						<li><b>rating</b></li>
+						<li><b>country</b></li>
+						<li><b>new</b>&nbsp;&nbsp;(version)</li>
+						<li><b>latest</b></li>
+						<li><b>gb64</b>&nbsp;&nbsp;(game)</li>
+					</ul>
+				</td>
+			</tr>
+			<tr>
+				<td>here</td><td><b>1</b> to search in the current folder.&nbsp;&nbsp;Use with <b>search</b>.</td>
+			</tr>
+			<tr>
+				<td>tab</td><td>Select a page tab.&nbsp;&nbsp;Options:
+					<ul>
+						<li><b>csdb</b></li>
+						<li><b>gb64</b></li>
+						<li><b>remix</b></li>
+						<li><b>player</b></li>
+						<li><b>stil</b></li>
+						<li><b>visuals</b></li>
+						<li><b>about</b></li>
+						<li><b>faq</b></li>
+						<li><b>changes</b></li>
+						<li><b>settings</b></li>
+					</ul>
+				</td>
+			</tr>
+			<tr>
+				<td>sundry</td><td>Select sundry tab.&nbsp;&nbsp;Options:
+					<ul>
+						<li><b>stil</b>&nbsp;&nbsp;(or <b>lyrics</b>)</li>
+						<li><b>tags</b></li>
+						<li><b>scope</b>&nbsp;&nbsp;(or <b>osc</b>)</li>
+					</ul>
+				</td>
+			</tr>
+			<tr>
+				<td>player</td><td>Use ID of player page.&nbsp;&nbsp;See a permalink to get it right.</td>
+			</tr>
+			<tr>
+				<td>csdbtype</td><td>Show <b>CSDb</b> entry.&nbsp;&nbsp;Use with <b>csdbid</b> below.&nbsp;&nbsp;Options:
+					<ul>
+						<li><b>release</b></li>
+						<li><b>sid</b></li>
+					</ul>
+				</td>
+			</tr>
+			<tr>
+				<td>csdbid</td><td>Show <b>CSDb</b> entry.&nbsp;&nbsp;Use with <b>csdbtype</b> above.</td>
+			</tr>
+			<tr>
+				<td>mobile</td><td><b>0</b> to force desktop view; <b>1</b> to force mobile view.</td>
+			</tr>
+			<tr>
+				<td>cover</td><td><b>1</b> to force showing an auto-play cover overlay.</td>
+			</tr>
+			<tr>
+				<td>wait</td><td>Select but do not play the song.&nbsp;&nbsp;Value is <b>ms</b> before pausing.&nbsp;&nbsp;<b>100</b> works well.</td>
+			</tr>
+		</table>
+
 	',
 );
 
@@ -230,6 +328,7 @@ else
 			<li><a href="3" class="topic">Registering</a></li>
 			<li><a href="5" class="topic">Searching</a></li>
 			<li><a href="4" class="topic">SID handlers</a></li>
+			<li><a href="8" class="topic">URL parameters</a></li>
 		</ul>
 		More tips may be added later.
 	';
