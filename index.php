@@ -1339,6 +1339,7 @@
 						<ul>
 							<li>Upgraded the WebSid (HQ) emulator. It has a new filter implementation for the 6581 version, and the
 								centering of the scopes has been fixed.</li>
+							<li>Added a new <code>?notips=1</code> URL switch to avoid showing the annex box with tips.</li>
 						</ul>
 
 						<h3>November 16, 2021</h3>
@@ -1633,19 +1634,21 @@
 				</div>
 			</div>
 
-			<div id="annex">
-				<div class="annex-tabs">
-					<div class="annex-tab selected">Tips
-						<div class="annex-close"></div>
+			<?php if (!isset($_GET['notips'])): ?>
+				<div id="annex">
+					<div class="annex-tabs">
+						<div class="annex-tab selected">Tips
+							<div class="annex-close"></div>
+						</div>
+						<div class="annex-topics" title="Topics"></div>
 					</div>
-					<div class="annex-topics" title="Topics"></div>
-				</div>
-				<div id="annex-tips">
-					<div style="padding:6px 0;text-align:center;">
-						<img src="images/loading_threedots.svg" style="margin:0;border:none;" alt="Loading" />
+					<div id="annex-tips">
+						<div style="padding:6px 0;text-align:center;">
+							<img src="images/loading_threedots.svg" style="margin:0;border:none;" alt="Loading" />
+						</div>
 					</div>
 				</div>
-			</div>
+			<?php endif ?>
 
 		<?php endif ?>
 

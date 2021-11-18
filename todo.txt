@@ -10,8 +10,6 @@ SHOULD BE DONE
 
 - The 'p' pop-up tiny window should use the mobile view. Force it with the URL switch.
 
-- Consider a new URL parameter to avoid showing the annex box. Might be useful in iframes.
-
 - GLITCH: Make the bottom of the dashed lines invisible between composers in the bottom three
   lists. It is noticable when scrolling them up on top of the big logo.
 
