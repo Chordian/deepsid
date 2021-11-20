@@ -1342,6 +1342,8 @@
 						<h3>November 20, 2021</h3>
 						<ul>
 							<li>The default 6581 filter for WebSid (HQ) has now been set to R2, which is much brighter than the previous R4.</li>
+							<li>The vertical scrollbar should no longer appear in some web browsers, such as e.g. Firefox.</li>
+							<li>Hitting <code>p</code> to pop-up a tiny DeepSID now opens it in mobile mode, although it's still using WebSid (HQ).</li>
 						</ul>
 
 						<h3>November 18, 2021</h3>

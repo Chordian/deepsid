@@ -811,6 +811,7 @@ input[type="search"]:focus {
 /* ---- DeepSID -------------------------------------------------------------- */
 
 body, html {
+	overflow-y: hidden;
 	height: 100%;
 	margin: 0;
 	background: var(--color-bg);
@@ -4139,7 +4140,6 @@ input[type=range]::-ms-track {
 
 			td.quickline {
 				height: 6px;
-				background: var(--color-bg-box);
 				border-top: 1px dashed var(--color-table-border) !important;
 			}
 

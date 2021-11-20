@@ -129,8 +129,8 @@ $(function() { // DOM ready
 				$("#play-pause").trigger("mouseup");
 			} else if (event.keyCode == 80) {							// Keyup 'p' (pop-up window)
 				// Open a pop-up window with only the width of the #panel area
-				window.open("//deepsid.chordian.net/", "_blank",
-					"left=0,top=0,width=450,height="+(screen.height-150)+",scrollbars=no");
+				window.open("//deepsid.chordian.net/?mobile=1&emulator=websid", "_blank",
+					"'left=0,top=0,width=450,height="+(screen.height-150)+",scrollbars=no'");
 			} else if (event.keyCode == 67 && browser.isCompoFolder) {	// Keyup 'c'
 				// Refresh the competition cache if inside a single competition folder
 				// NOTE: This is undocumented to the public but if you are reading this and wondering about it,
