@@ -1099,6 +1099,9 @@
 							just type the user name you want. If it is available (a status message tells you) then type a
 							password and hit the button.
 						</p>
+						<p>
+							The annex box also has information about what you can do when logged in: <a class="annex-link" href="3">Registering</a>
+						</p>
 
 						<h3>Can you please make an app or an offline version?</h3>
 						<p>
@@ -1138,23 +1141,11 @@
 						<p>
 							You need to be using a mouse to create and manage playlists. This cannot be done on a mobile
 							device (although you can enjoy your existing playlists there). Also, you must of course be
-							logged in.</p>
-						<ol>
-							<li>Start finding awesome SID tunes in the HVSC or CGSC folders.</li>
-							<li>When you find one you like, right-click it. A context menu appears. Choose to add it to a new
-								playlist.</li>
-							<li>Browse to the root. Your new playlist should now be there in the bottom with the SID file
-								name.</li>
-							<li>Right-click your playlist folder and choose to rename it.</li>
-							<li>Continue with other awesome SID tunes, only this time choose to add them to your existing
-								playlist.</li>
-							<li>Inside your playlist, you can right-click SID files to rename or
-								remove them, or set a different default sub tune.</li>
-							<li>If you later want to share your playlist, you can right-click the playlist folder and choose
-								to publish it.</li>
-							<li>Or, if you later hate your playlist, you can right-click the playlist folder and choose to
-								delete it.</li>
-						</ol>
+							logged in.
+						</p>
+						<p>
+							The annex box has the basic instructions: <a class="annex-link" href="0">Playlists</a>
+						</p>
 						<p>
 							Published playlists appear further up in the root and can be seen by everyone (even those that
 							are not logged in) but you're still the only one that may edit it. When you enter a public
@@ -1163,41 +1154,8 @@
 
 						<h3>What are those options in the top left drop-down box?</h3>
 						<p>
-							It's where you choose a handler for the SID files.
+							The annex box has a complete list: <a class="annex-link" href="4">SID handlers</a>
 						</p>
-						<table style="font-size:14px;">
-							<tr>
-								<th style="width:150px;">Handler</th><th>Description</th>
-							</tr>
-							<tr>
-								<td>WebSid emulator</td><td>This is the JS emulator originally used by the
-								<a href="http://www.wothke.ch/tinyrsid/index.php" target="_top">Tiny'R'Sid</a> web site. It emulates standard
-								SID as well as digi tunes, 2SID and 3SID, and even MUS files in Compute's Gazette SID
-								Collection. This is the best quality version of WebSid with cycle-by-cycle processing.</td>
-							</tr>
-							<tr>
-								<td>WebSid (Legacy)</td><td>This is an older version of WebSid from before it was
-								overhauled to cycle-by-cycle processing. It's faster and has clearer digi sound, but it
-								doesn't emulate quite as faithfully. If your computer has trouble keeping up with the
-								above WebSid version, try this one instead.</td>
-							</tr>
-							<tr>
-								<td>Hermit's emulator</td><td>Hermit's jsSID emulator is extremely compact and can
-								play standard SID as well as 2SID and 3SID. Unfortunately it can't do digi tunes, but it
-								makes up for that by being a steadfast emulator.</td>
-							</tr>
-							<tr>
-								<td>YouTube videos</td><td>The top info box is replaced with a YouTube IFrame box. When you
-								click enabled SID rows, a video with the song then plays. In many cases there are alternative
-								videos available as tabs shown on top of the YouTube IFrame box. Some even demonstrate a
-								game or play the original cover song.</td>
-							</tr>
-							<tr>
-								<td>Download SID file</td><td>This makes the browser download the tunes. This is especially
-								useful if an offline player has been associated with automatically playing it. Then it's like
-								having an extra play option.</td>
-							</tr>
-						</table>
 
 						<h3>Why can't I see the right text area on mobile devices?</h3>
 						<p>
@@ -1218,6 +1176,9 @@
 							SID tunes and folders you have rated three stars or more. If you type <code>1-</code>, you will
 							see <i>all</i> of your ratings.
 						</p>
+						<p>
+							The annex box can show you a list of all the search options: <a class="annex-link" href="5">Searching</a>
+						</p>
 
 						<h3>Can I turn voices on and off?</h3>
 						<p>
@@ -1231,13 +1192,7 @@
 
 						<h3>Any other hotkeys worth knowing about?</h3>
 						<p>
-							Hit <code>p</code> in desktop web browsers to pop up a tiny version of the player.
-						</p>
-						<p>
-							Hit <code>s</code> to toggle minimizing or restoring the sundry box.
-						</p>
-						<p>
-							You can hold down the key just below the <code>ESC</code> key to fast forward.
+							The annex box can show you a complete list: <a class="annex-link" href="7">Hotkeys</a>
 						</p>
 						<p>
 							If you hold down <code>Shift</code> while clicking rating stars, you will clear them. (However,
@@ -1253,74 +1208,13 @@
 
 						<h3>Why can't I see the load/end addresses and size of the SID tune?</h3>
 						<p>
-							See that blue bar just below the top box with the title, author and copyright lines? It's the C64
-							memory, from $0000 to $FFFF. The dark blue blob that appears there is the SID tune as it takes up
-							space. If you hover your mouse pointer on it, the tooltip will tell you the memory boundaries in
-							hex and the size in bytes.
-						</p>
-						<p>
-							If you want a box with this information and more, click the <b>Visuals</b> tab and then the
-							<b>MEMO</b> button. And nifty shortcut to this is to just click the dark blue blob in that blue
-							bar mentioned before.
+							Actually, you can. The annex box has the answer: <a class="annex-link" href="1">Memory bar</a>
 						</p>
 
 						<h3>What URL parameters are available?</h3>
 						<p>
-							The following URL parameters currently work:
+							The annex box can show you a complete list: <a class="annex-link" href="8">URL parameters</a>
 						</p>
-						<table style="font-size:14px;">
-							<tr>
-								<th style="width:85px;">Parameter</th><th>Description</th>
-							</tr>
-							<tr>
-								<td>file</td><td>A file to play or a folder to show (use full root paths for both)</td>
-							</tr>
-							<tr>
-								<td>subtune</td><td>The subtune to play; must be used together with <code>file</code></td>
-							</tr>
-							<tr>
-								<td>emulator</td><td>Set to <code>websid</code>, <code>legacy</code>, <code>jssid</code>
-									or <code>download</code> to temporarily override the SID handler (reloading the web site
-									returns to the previous SID handler)</td>
-							</tr>
-							<tr>
-								<td>search</td><td>A search query (just like when typed in the bottom)</td>
-							</tr>
-
-							<tr>
-								<td>type</td><td>Search type; <code>fullname</code> (title), <code>author</code>,
-									<code>copyright</code>, <code>player</code>, <code>location</code> (in RAM &ndash; e.g. <code>16384</code>
-									or <code>0x4000</code>), <code>maximum</code> (as size &ndash; e.g. <code>16384</code> or <code>0x4000</code>),
-									<code>tag</code>, <code>stil</code>, <code>rating</code>, <code>country</code>, <code>new</code>
-									(HVSC or CGSC version number) or <code>gb64</code> (game)</td>
-							</tr>
-							<tr>
-								<td>tab</td><td>Set to <code>csdb</code>, <code>gb64</code>, <code>remix</code>, <code>stil</code>, <code>visuals</code>,
-									<code>about</code>, <code>faq</code>, <code>changes</code> or <code>settings</code> (the gear icon)
-									to select that page tab</td>
-							</tr>
-							<tr>
-								<td>sundry</td><td>Set to <code>stil</code> (or <code>lyrics</code>) or <code>scope</code> (or <code>osc</code>) to select that sundry box tab</td>
-							</tr>
-							<tr>
-								<td>player</td><td>Set to the ID of the player/editor page. Use a permalink from one to get it right.</td>
-							</tr>
-							<tr>
-								<td>csdbtype</td><td>Set to <code>sid</code> or <code>release</code> to show a CSDb entry;
-									must be used together with <code>csdbid</code></td>
-							</tr>
-							<tr>
-								<td>csdbid</td><td>Set to an ID value to show a CSDb entry;
-									must be used together with <code>csdbtype</code></td>
-							</tr>
-							<tr>
-								<td>mobile</td><td>Set it to <code>0</code> on a mobile device to use desktop view, or <code>1</code> on a desktop computer to use mobile view</td>
-							</tr>
-							<tr>
-								<td>cover</td><td>Set it to <code>1</code> to force showing the auto-play cover overlay upon refresh.</i>
-								</td>
-							</tr>
-						</table>
 						<p>
 							An example to show a specific folder:<br />
 							<a href="//deepsid.chordian.net?file=/MUSICIANS/J/JCH/">//deepsid.chordian.net?file=/MUSICIANS/J/JCH/</a>
@@ -1344,6 +1238,7 @@
 							<li>The default 6581 filter for WebSid (HQ) has now been set to R2, which is much brighter than the previous R4.</li>
 							<li>The vertical scrollbar should no longer appear in some web browsers, such as e.g. Firefox.</li>
 							<li>Hitting <code>p</code> to pop-up a tiny DeepSID now opens it in mobile mode, although it's still using WebSid (HQ).</li>
+							<li>Overhauled the FAQ page with links to tips in the annex box, to avoid duplicate information.</li>
 						</ul>
 
 						<h3>November 18, 2021</h3>
@@ -1645,21 +1540,19 @@
 				</div>
 			</div>
 
-			<?php if (!isset($_GET['notips'])): ?>
-				<div id="annex">
-					<div class="annex-tabs">
-						<div class="annex-tab selected">Tips
-							<div class="annex-close"></div>
-						</div>
-						<div class="annex-topics" title="Topics"></div>
+			<div id="annex"<?php if (isset($_GET['notips'])) echo ' style="display:none;"'; ?>>
+				<div class="annex-tabs">
+					<div class="annex-tab selected">Tips
+						<div class="annex-close"></div>
 					</div>
-					<div id="annex-tips">
-						<div style="padding:6px 0;text-align:center;">
-							<img src="images/loading_threedots.svg" style="margin:0;border:none;" alt="Loading" />
-						</div>
+					<div class="annex-topics" title="Topics"></div>
+				</div>
+				<div id="annex-tips">
+					<div style="padding:6px 0;text-align:center;">
+						<img src="images/loading_threedots.svg" style="margin:0;border:none;" alt="Loading" />
 					</div>
 				</div>
-			<?php endif ?>
+			</div>
 
 		<?php endif ?>
 

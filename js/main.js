@@ -1505,7 +1505,7 @@ $(function() { // DOM ready
 	 * When clicking the 'X' corner icon for closing an annex box.
 	 */
 	$("#annex").on("click", ".annex-close", function() {
-		$("#annex").remove();
+		$("#annex").hide();
 	});
 
 	/**
@@ -1522,12 +1522,29 @@ $(function() { // DOM ready
 	 * When clicking a topic link in the annex box.
 	 */
 	$("#annex").on("click", ".topic", function() {
-		$.get("php/annex_tips.php", { id: $(this).attr("href") }, function(tips) {
+		ClickAnnexLink($(this).attr("href"));
+		return false;
+	});
+
+	/**
+	 * When clicking link for showing a topic in the annex box. Since the annex box
+	 * could have been closed earlier, it is made visible again.
+	 */
+	 $("#page").on("click", "a.annex-link", function() {
+		$("#annex").show();
+		ClickAnnexLink($(this).attr("href"));
+		return false;
+	});
+
+	/**
+	 * Used by the above two event clicks.
+	 */
+	function ClickAnnexLink(topic) {
+		$.get("php/annex_tips.php", { id: topic }, function(tips) {
 			$("#annex-tips").empty().append(tips);
 			$(".annex-topics").show();
 		});
-		return false;
-	});
+	}
 
 	// Select and show a "dexter" page tab	
 	selectTab = selectTab !== "" ? selectTab : "profile";

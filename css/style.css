@@ -5586,6 +5586,17 @@ input[type=range]::-ms-track {
 				margin: 0.2em;
 			}
 
+	.annex-link:after {
+		content: "";
+		position: relative;
+		top: 2px;
+		left: 2px;
+		padding-right: 18px;
+		background: url(../images/composer_arrowright.svg) 0 0 / 18px 18px no-repeat;
+		filter: var(--svg-filter-icon-bottom);
+		margin-right: 2px;
+	}
+
 /* ---- Styled Select ------------------------------------------------------- */
 
 /* Used to make the original select hidden but still functional */
