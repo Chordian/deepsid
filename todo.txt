@@ -21,9 +21,6 @@ SHOULD BE DONE
   delayed in a way that doesn't bog down the site.
   - If done, make sure to also revert back to the slightly shorter names.
 
-- Move the message that was previously in the root page red/green spot to instead appear in the
-  STIL box, where tips were previously put. (When added, delete the root page message HTML.)
-
 - DO THE FOLLOWING IN THE BEGINNING OF A WEEKEND OR A VACATION AS IT MIGHT BLOW UP!
   You have to be damn sure everything still works afterwards - a lot of testing to be done...
   - The 'hvsc' folder in root should be called 'music' instead.

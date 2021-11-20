@@ -2420,6 +2420,21 @@ input[type=range]::-ms-track {
 	z-index: 2;
 }
 
+	#sundry-news {
+		display: table;
+		height: 100%;
+		width: 96%;
+		text-align: center;
+		margin: 0 auto;
+		font-size: 17px;
+	}
+
+		#sundry-news span {
+			display: table-cell;
+			vertical-align: middle;
+			font-weight: bold;
+		}
+
 	#sundry .stopic {
 		overflow: none; /* Scrollbar appears in #sundry instead to make sure it glues to the side of the box */
 		height: 100%;
@@ -3916,35 +3931,6 @@ input[type=range]::-ms-track {
 			width: 140px;
 			font-size: 11px;
 		}
-
-		/* An arbitrary page-wide info box on root welcome page */
-		#page .root-wide {
-			padding: 10px;
-			margin-bottom: 24px;
-			border-radius: 3px;
-		}
-
-			#page .good-news {
-				border: 1px solid var(--color-root-good-border);
-				background: var(--color-root-good-bg);
-				color: var(--color-root-good-text);
-			}
-
-			#page .bad-news {
-				border: 1px solid var(--color-root-bad-border);
-				background: var(--color-root-bad-bg);
-				color: var(--color-root-bad-news-text);
-			}
-
-				#page .root-wide .good {
-					font-weight: bold;
-					color: var(--color-root-good-text);
-				}
-				
-				#page .root-wide .bad {
-					font-weight: bold;
-					color: var(--color-root-bad-text);
-				}
 
 		/* Container table in root welcome page for the two side-by-side tables */
 		#page table.root {

@@ -485,13 +485,17 @@
 				<div id="memory-bar"><div id="memory-lid"></div><div id="memory-chunk"></div></div>
 			</div>
 			<div id="sundry-tabs">
-				<div class="tab unselectable selected" data-topic="stil" id="stab-stil">STIL</div>
+				<div class="tab unselectable selected" data-topic="stil" id="stab-stil">News</div>
 				<div class="tab unselectable" data-topic="tags" id="stab-tags">Tags</div>
 				<div class="tab unselectable" data-topic="osc" id="stab-osc">Scope</div>
 				<div id="sundry-ctrls"></div>
 			</div>
 			<div id="sundry">
-				<div id="stopic-stil" class="stopic"></div>
+				<div id="stopic-stil" class="stopic">
+					<div id="sundry-news">
+						<span>The default 6581 filter for WebSid (HQ) has now been set to R2, which is much brighter than the previous R4 filter type.</span>
+					</div>
+				</div>
 				<div id="stopic-tags" class="stopic" style="display:none;"></div>
 				<div id="stopic-osc" class="stopic" style="display:none;"></div>
 				<a id="redirect-back" class="redirect continue" href="#" style="display:none"></a>

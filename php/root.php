@@ -5,10 +5,9 @@
  * Build an HTML welcome page for the root.
  * 
  *  - Three recommendation boxes
- *  - Random "descent" box
- *  - Important message (good or bad)
+ *  - Random "decent" box
  *  - Left and right boxes for top lists
- *  - Active, snoozing and game composers
+ *  - Active, procrastinating and game composers
  * 
  * @used-by		browser.js
  */
@@ -247,9 +246,6 @@ function QuickShortcutRow(&$author) {
 
 $decent_box_shown = $cshelldb_shown = $playmod_shown = false;
 
-// $important = 'The database connections sometimes act up at the moment. If it persists I will consult the web hotel provider.';
-$important = 'The audio bug seems to be fixed in version 91 of Chrome and Edge. Make sure you have updated to this version.';
-
 $available_lists = ['maxfiles', 'longest', 'mostgames', 'countries', 'startaddr', 'maxtime'];
 $dropdown_options =
 	'<option value="'.$available_lists[0].'">Most SID tunes produced</option>'.
@@ -351,7 +347,6 @@ try {
 
 $html =
 	'<div style="height:149px;"></div>'.
-	// '<div class="root-wide good-news">'.$important.'</div>'.
 	// Recommendations
 	'<table class="root rec"><tr>'.
 		'<td style="max-width:10px;">'.
