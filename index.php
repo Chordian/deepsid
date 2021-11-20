@@ -1335,6 +1335,11 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>November 20, 2021</h3>
+						<ul>
+							<li>The default 6581 filter for WebSid (HQ) has now been set to R2, which is much brighter than the previous R4.</li>
+						</ul>
+
 						<h3>November 18, 2021</h3>
 						<ul>
 							<li>Upgraded the WebSid (HQ) emulator. It has a new filter implementation for the 6581 version, and the

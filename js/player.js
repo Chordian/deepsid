@@ -284,6 +284,19 @@ SIDPlayer.prototype = {
 				options.timeout = timeout;
 				options.traceSID = true;	// Needed for the oscilloscope sundry box view
 
+				// Set filter to 6581 SID chip type "R2"
+				SIDBackend.setFilterConfig6581(
+					0.02387,	// base
+					0.92,		// max
+					360,		// steepness
+					957,		// x_offset
+					9.36,		// distort
+					118400,		// distortOffset
+					66.1125,	// distortScale
+					974,		// distortThreshold
+					325			// kink
+				);
+
 				// Since 'onCompletion' and 'onProgress' (below) are only utilized when loading
 				// the file for the first time, 'onTrackReadyToPlay' is used instead for callback.
 				this.setCallbackTrackReadyToPlay(function() {
