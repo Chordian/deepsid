@@ -17,6 +17,18 @@ function SIDPlayer(emulator) {
 	
 	this.file = "";
 
+	this.filterWebSid = {
+		base:				0.02387,	// 6581 filter settings for R2 type
+		max:				0.92,
+		steepness:			360,
+		x_offset:			957,
+		distort:			9.36,
+		distortOffset:		118400,
+		distortScale:		66.1125,
+		distortThreshold:	974,
+		kink:				325,
+	}
+
 	this.emulatorFlags = {
 		supportFaster:		true,	// True if the handler supports the "Faster" button
 		supportEncoding:	true,	// True if the handler supports toggling between PAL and NTSC
@@ -284,18 +296,21 @@ SIDPlayer.prototype = {
 				options.timeout = timeout;
 				options.traceSID = true;	// Needed for the oscilloscope sundry box view
 
-				// Set filter to 6581 SID chip type "R2"
+				// Preset filter for 6581
 				SIDBackend.setFilterConfig6581(
-					0.02387,	// base
-					0.92,		// max
-					360,		// steepness
-					957,		// x_offset
-					9.36,		// distort
-					118400,		// distortOffset
-					66.1125,	// distortScale
-					974,		// distortThreshold
-					325			// kink
+					this.filterWebSid.base,
+					this.filterWebSid.max,
+					this.filterWebSid.steepness,
+					this.filterWebSid.x_offset,
+					this.filterWebSid.distort,
+					this.filterWebSid.distortOffset,
+					this.filterWebSid.distortScale,
+					this.filterWebSid.distortThreshold,
+					this.filterWebSid.kink,
 				);
+
+				// Also apply the values in the filter controls of the sundry box
+				$("#filter-min-edit,#filter-min-slider").val(this.filterWebSid.base);
 
 				// Since 'onCompletion' and 'onProgress' (below) are only utilized when loading
 				// the file for the first time, 'onTrackReadyToPlay' is used instead for callback.
@@ -746,6 +761,57 @@ SIDPlayer.prototype = {
 	setSeek: function(seconds) {
 		if (this.emulator == "youtube" && this.ytReady)
 			this.YouTube.seekTo(seconds, true);
+	},
+
+	/**
+	 * Adjust filter parameters for 6581. WebSid (HQ) only.
+	 * 
+	 * @param {string} property		Set to "base", "max", etc.
+	 * @param {number} value		The value to apply to the property.
+	 */
+	setFilter: function(property, value) {
+		if (this.emulator == "websid") {
+			switch (property.toLowerCase()) {
+				case "base":
+					this.filterWebSid.base = value;
+					break;	
+				case "max":
+					this.filterWebSid.max = value;
+					break;	
+				case "steepness":
+					this.filterWebSid.steepness = value;
+					break;	
+				case "x_offset":
+					this.filterWebSid.x_offset = value;
+					break;	
+				case "distort":
+					this.filterWebSid.distort = value;
+					break;	
+				case "distortoffset":
+					this.filterWebSid.distortOffset = value;
+					break;	
+				case "distortscale":
+					this.filterWebSid.distortScale = value;
+					break;	
+				case "distortthreshold":
+					this.filterWebSid.distortThreshold = value;
+					break;	
+				case "kink":
+					this.filterWebSid.kink = value;
+					break;	
+			}
+			SIDBackend.setFilterConfig6581(
+				this.filterWebSid.base,
+				this.filterWebSid.max,
+				this.filterWebSid.steepness,
+				this.filterWebSid.x_offset,
+				this.filterWebSid.distort,
+				this.filterWebSid.distortOffset,
+				this.filterWebSid.distortScale,
+				this.filterWebSid.distortThreshold,
+				this.filterWebSid.kink,
+			);
+		}
 	},
 
 	/**

@@ -488,6 +488,7 @@
 				<div class="tab unselectable selected" data-topic="stil" id="stab-stil">News</div>
 				<div class="tab unselectable" data-topic="tags" id="stab-tags">Tags</div>
 				<div class="tab unselectable" data-topic="osc" id="stab-osc">Scope</div>
+				<div class="tab unselectable" data-topic="filter" id="stab-filter">Filter</div>
 				<div id="sundry-ctrls"></div>
 			</div>
 			<div id="sundry">
@@ -498,6 +499,59 @@
 				</div>
 				<div id="stopic-tags" class="stopic" style="display:none;"></div>
 				<div id="stopic-osc" class="stopic" style="display:none;"></div>
+				<div id="stopic-filter" class="stopic" style="display:none;">
+					<form onsubmit="return false;" autocomplete="off">
+						<div style="float:left;width:48%;padding-bottom:2px;">
+							<div class="sundry-control">
+								<label class="unselectable">Minimum</label>
+								<input id="filter-base-edit" type="text" maxlength="12" onkeypress="NumericInput(event)" />
+								<input id="filter-base-slider" type="range" min="0" max="0.3" value="0" step="0.0012" />
+							</div>
+							<div class="sundry-control">
+								<label class="unselectable">Maximum</label>
+								<input id="filter-max-edit" type="text" maxlength="12" onkeypress="NumericInput(event)" />
+								<input id="filter-max-slider" type="range" min="0" max="1" value="0" step="0.004" />
+							</div>
+							<div class="sundry-control">
+								<label class="unselectable">Steepness</label>
+								<input id="filter-steepness-edit" type="text" maxlength="12" onkeypress="NumericInput(event)" />
+								<input id="filter-steepness-slider" type="range" min="1" max="1000" value="1" step="3.996" />
+							</div>
+							<div class="sundry-control">
+								<label class="unselectable">X-Offset</label>
+								<input id="filter-x_offset-edit" type="text" maxlength="12" onkeypress="NumericInput(event)" />
+								<input id="filter-x_offset-slider" type="range" min="0" max="3000" value="0" step="12" />
+							</div>
+							<div class="sundry-control">
+								<label class="unselectable">Kink</label>
+								<input id="filter-kink-edit" type="text" maxlength="12" onkeypress="NumericInput(event)" />
+								<input id="filter-kink-slider" type="range" min="0" max="2000" value="0" step="8" />
+							</div>
+						</div>
+						<div style="float:right;width:48%;">
+							<div class="sundry-control">
+								<label class="unselectable">Distortion</label>
+								<input id="filter-distort-edit" type="text" maxlength="12" onkeypress="NumericInput(event)" />
+								<input id="filter-distort-slider" type="range" min="0" max="20" value="0" step="0.08" />
+							</div>
+							<div class="sundry-control">
+								<label class="unselectable">Dist. Offset</label>
+								<input id="filter-distortOffset-edit" type="text" maxlength="12" onkeypress="NumericInput(event)" />
+								<input id="filter-distortOffset-slider" type="range" min="0" max="200000" value="0" step="800" />
+							</div>
+							<div class="sundry-control">
+								<label class="unselectable">Dist. Scale</label>
+								<input id="filter-distortScale-edit" type="text" maxlength="12" onkeypress="NumericInput(event)" />
+								<input id="filter-distortScale-slider" type="range" min="0" max="300" value="0" step="0.16" />
+							</div>
+							<div class="sundry-control">
+								<label class="unselectable">Dist. Threshold</label>
+								<input id="filter-distortThreshold-edit" type="text" maxlength="12" onkeypress="NumericInput(event)" />
+								<input id="filter-distortThreshold-slider" type="range" min="0" max="4000" value="0" step="16" />
+							</div>
+						</div>
+					</form>
+				</div>
 				<a id="redirect-back" class="redirect continue" href="#" style="display:none"></a>
 			</div>
 			<div id="slider">

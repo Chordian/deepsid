@@ -770,14 +770,31 @@ $(function() { // DOM ready
 					$sundry.css("flex-basis", 232);
 				// Add corner controls
 				$("#sundry-ctrls").append(
-					'<label for"osc-zoom" class="unselectable">Min</label>'+
+					'<label class="unselectable">Min</label>'+
 					'<input id="osc-zoom" type="range" min="1" max="5" value="'+viz.scopeZoom+'" step="1" />'+
-					'<label for"osc-zoom" class="unselectable">Max</label>'+
+					'<label class="unselectable">Max</label>'+
 					'<div style="display:inline-block;vertical-align:top;margin-left:13px;">'+
 						'<input type="checkbox" id="sidwiz" name="sidwiztoggle" class="unselectable" '+(viz.scopeMode ? '' : 'un')+'checked />'+
 					'</div>'+
 					'<label for="sidwiz" class="unselectable">SidWiz</label>'
 				);
+				break;
+
+
+			/*
+					ToDo:
+
+					- if not websid (hq) show enabler button
+					- if flag is 8580, gray controls
+			
+			*/
+
+			case "filter":
+				// The filter view requires a minimum amount of vertical space
+				var $sundry = $("#sundry");
+				if ($sundry.css("flex-basis").replace("px", "") < 205)
+					$sundry.css("flex-basis", 205);
+				$("#sundry-ctrls").append('<span style="position:relative;top:-1px;right:1px;font-size:11px;">This is for <b>6581</b> mode only</span>');
 				break;
 		}
 
@@ -789,7 +806,35 @@ $(function() { // DOM ready
 	});
 
 	/**
+	 * When a 6581 filter slider is dragged in the sundry box.
+	 * 
+	 * @param {*} event 
+	 */
+	$("#stopic-filter").on("input", "input[type='range']", function(event) {
+		// Show the slider value in the edit box
+		$("#"+event.target.id.replace("-slider", "-edit")).val(event.target.value);
+		// Apply this single filter property now
+		SID.setFilter(event.target.id.split("-")[1], event.target.value);
+	});
+
+	/**
+	 * When entering a value in a 6581 filter edit box.
+	 * 
+	 * @param {*} event 
+	 */
+	$("#stopic-filter").on("keyup", "input[type='text']", function(event) {
+		if (event.keyCode == 13) {
+			var $this = $(this);
+			// Adjust the slider to reflect the entered value in the edit box
+			$("#"+event.target.id.replace("-edit", "-slider")).val($this.val());
+			$this.blur();
+		}
+	});
+
+	/**
 	 * When one of the ON/OFF toggle buttons are clicked in the settings page.
+	 * 
+	 * @param {*} event 
 	 */
 	$("#topic-settings .button-toggle").click(function(event) {
 		var $this = $(event.target);
@@ -1849,6 +1894,30 @@ function SetScrollTopInstantly(element, pos) {
 		.css("scroll-behavior", "auto")
 		.scrollTop(pos)
 		.css("scroll-behavior", "smooth");
+}
+
+/**
+ * Allow numeric input only (0-9 and dots) for edit boxes.
+ * 
+ * Add 'onkeypress="NumericInput(event)"' in '<input type="text">' lines.
+ * 
+ * @link https://stackoverflow.com/a/469419/2242348
+ * 
+ * @param {*} event 
+ */
+function NumericInput(event) {
+	var key;
+	if (event.type === "paste") {
+		key = event.clipboardData.getData("text/plain");
+	} else {
+		key = event.keyCode || event.which;
+		key = String.fromCharCode(key);
+	}
+	var regex = /[0-9]|\./;
+	if(!regex.test(key)) {
+		event.returnValue = false;
+		if (event.preventDefault) event.preventDefault();
+	}
 }
 
 /**
