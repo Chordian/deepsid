@@ -15,8 +15,7 @@ SHOULD BE DONE
 - Replace the casino image in the recommendation box in the root. Kim "Lemon" claimed it looks
   too much like a real casino ad, and he's right. It does! ><
 
-- A new sundry tab for editing the 6581 filter in WebSid.
-  - If possible, consider duplicating JW's controls including the visual representation.
+- Make the CSDb tab merge better onto its page.
 
 - Maybe add avatar images back for the bottom three lists, but this time so they are loaded a bit
   delayed in a way that doesn't bog down the site.

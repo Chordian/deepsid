@@ -704,7 +704,7 @@ Viz.prototype = {
 		if (SID.emulator !== "websid" && SID.emulator !== "legacy") {
 			if (this.tabOscMode !== "NOTWEBSID") {
 				$("#scope1,#scope2,#scope3,#scope4").hide(); // Don't use 'canvas' or '.scope' here
-				$("#stopic-osc .sundryMsg").empty().append('This view requires the <button id="set-websid">WebSid</button> emulator.').show();
+				$("#stopic-osc .sundryMsg").empty().append('This tab requires the <button class="set-websid">WebSid</button> emulator.').show();
 				this.tabOscMode = "NOTWEBSID";
 			}
 			return;

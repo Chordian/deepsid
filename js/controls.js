@@ -30,7 +30,7 @@ Controls.prototype = {
 		$("#info").on("click", "#sid-model,#clockspeed", this.onClick.bind(this));
 		$("#sundry,#topic-stil").on("click", ".subtune", this.onClick.bind(this));
 		$("#sundry").on("click", "canvas,.tag", this.onClick.bind(this));
-		$("#stopic-osc").on("click", "button", this.onClick.bind(this));
+		$("#stopic-osc,#stopic-filter").on("click", "button", this.onClick.bind(this));
 		$("#sundry-ctrls").on("click", "#sidwiz,#showtags", this.onClick.bind(this));
 
 		$("#volume,#sundry-ctrls").on("input", this.onInput.bind(this));
@@ -365,6 +365,7 @@ Controls.prototype = {
 					$("#info").append('<div id="sid-model" class="MOS6581" title="SID chip model set to MOS 6581">6581</div>');
 					SID.setModel("6581");
 				}
+				ShowSundryFilterContents();
 				break;
 			case "clockspeed":
 				// Toggle between PAL or NTSC
@@ -406,11 +407,6 @@ Controls.prototype = {
 				e.shiftKey = event.shiftKey;
 				$(window).trigger(e);
 				break;
-			case "set-websid":
-				// Button in scope sundry box for forcing WebSid emulator
-				$("#dropdown-emulator").styledSetValue(isLegacyWebSid ? "legacy" : "websid")
-					.next("div.styledSelect").trigger("change");
-				break;
 			case "set-16k":
 				// Button in scope sundry box for forcing a buffer size of 16384
 				$("#visuals-piano .dropdown-buffer").val("16384").trigger("change");
@@ -425,6 +421,12 @@ Controls.prototype = {
 				// Toggle tags shown in SID rows ON or OFF
 				showTags = $("#showtags").is(":checked");
 				showTags ? $("#songs .tags-line").show() : $("#songs .tags-line").hide();
+				break;
+			case "filter-r2":
+			case "filter-r3":
+			case "filter-r4":
+				// Set 6581 filter settings to R2, R3, or R4
+				SID.setRevision(event.target.id.split("-")[1]);
 				break;
 			default:
 				if (event.target.className == "subtune") {
@@ -446,6 +448,14 @@ Controls.prototype = {
 					$("#search-here").prop('checked', true);
 					$("#search-box").val('"'+tag+'"').trigger("keyup");
 					$("#search-button").trigger("click");
+				} else if (event.target.className == "set-websid") {
+					var emulator = isLegacyWebSid ? "legacy" : "websid";
+					if ($("#sundry-tabs .selected").attr("data-topic") === "filter")
+						emulator = "websid"; // Filter tab needs the HQ version only
+					// Button in a sundry box for forcing WebSid emulator
+					$("#dropdown-emulator").styledSetValue(emulator).next("div.styledSelect").trigger("change");
+				} else if (event.target.className == "set-6581") {
+					$("#sid-model").trigger("click");
 				}
 		}
 	},
@@ -609,6 +619,8 @@ Controls.prototype = {
 		if (version >= 50 && SID.emulator != "youtube")
 			$("#info").append('<span id="hvsc-version">'+
 				(isCGSC ? 'CGSC v'+version.substr(0, 1)+'.'+version.substr(1) : 'HVSC #'+version)+'</span>');
+
+		ShowSundryFilterContents();
 	},
 	
 	/**
@@ -904,6 +916,21 @@ Controls.prototype = {
 				? '<div class="sundryMsg no-info">No tags found</div>'
 				: tags
 			);
+	},
+
+	/**
+	 * Update the filter controls in the sundry box.
+	 */
+	updateFilterControls: function() {
+		$("#filter-base-edit,#filter-base-slider").val(SID.filterWebSid.base);
+		$("#filter-max-edit,#filter-max-slider").val(SID.filterWebSid.max);
+		$("#filter-steepness-edit,#filter-steepness-slider").val(SID.filterWebSid.steepness);
+		$("#filter-x_offset-edit,#filter-x_offset-slider").val(SID.filterWebSid.x_offset);
+		$("#filter-distort-edit,#filter-distort-slider").val(SID.filterWebSid.distort);
+		$("#filter-distortOffset-edit,#filter-distortOffset-slider").val(SID.filterWebSid.distortOffset);
+		$("#filter-distortScale-edit,#filter-distortScale-slider").val(SID.filterWebSid.distortScale);
+		$("#filter-distortThreshold-edit,#filter-distortThreshold-slider").val(SID.filterWebSid.distortThreshold);
+		$("#filter-kink-edit,#filter-kink-slider").val(SID.filterWebSid.kink);
 	},
 
 	/**

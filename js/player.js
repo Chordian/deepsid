@@ -297,20 +297,22 @@ SIDPlayer.prototype = {
 				options.traceSID = true;	// Needed for the oscilloscope sundry box view
 
 				// Preset filter for 6581
-				SIDBackend.setFilterConfig6581(
-					this.filterWebSid.base,
-					this.filterWebSid.max,
-					this.filterWebSid.steepness,
-					this.filterWebSid.x_offset,
-					this.filterWebSid.distort,
-					this.filterWebSid.distortOffset,
-					this.filterWebSid.distortScale,
-					this.filterWebSid.distortThreshold,
-					this.filterWebSid.kink,
-				);
+				if (this.emulator != "legacy") {
+					SIDBackend.setFilterConfig6581(
+						this.filterWebSid.base,
+						this.filterWebSid.max,
+						this.filterWebSid.steepness,
+						this.filterWebSid.x_offset,
+						this.filterWebSid.distort,
+						this.filterWebSid.distortOffset,
+						this.filterWebSid.distortScale,
+						this.filterWebSid.distortThreshold,
+						this.filterWebSid.kink,
+					);
+				}
 
 				// Also apply the values in the filter controls of the sundry box
-				$("#filter-min-edit,#filter-min-slider").val(this.filterWebSid.base);
+				ctrls.updateFilterControls();
 
 				// Since 'onCompletion' and 'onProgress' (below) are only utilized when loading
 				// the file for the first time, 'onTrackReadyToPlay' is used instead for callback.
@@ -811,6 +813,71 @@ SIDPlayer.prototype = {
 				this.filterWebSid.distortThreshold,
 				this.filterWebSid.kink,
 			);
+		}
+	},
+
+	/**
+	 * Set filter chip revision that affects 6581 filter. WebSid (HQ) only.
+	 * 
+	 * @param {string} property		Set to "r2", "r3", or "r4".
+	 */
+	setRevision: function(revision) {
+		if (this.emulator == "websid") {
+			switch (revision.toLowerCase()) {
+				case "r2":
+					this.filterWebSid = {
+						base:				0.02387,
+						max:				0.92,
+						steepness:			360,
+						x_offset:			957,
+						distort:			9.36,
+						distortOffset:		118400,
+						distortScale:		66.1125,
+						distortThreshold:	974,
+						kink:				325,
+					}
+					break;
+				case "r3":
+					this.filterWebSid = {
+						base:				0.02387,
+						max:				0.92,
+						steepness:			236,
+						x_offset:			1149.75,
+						distort:			9.36,
+						distortOffset:		118400,
+						distortScale:		66.1125,
+						distortThreshold:	974,
+						kink:				325,
+					}
+					break;
+				case "r4":
+					this.filterWebSid = {
+						base:				0.036,
+						max:				0.892,
+						steepness:			144.856,
+						x_offset:			1473.75,
+						distort:			9.76,
+						distortOffset:		87200,
+						distortScale:		99.7875,
+						distortThreshold:	1134,
+						kink:				325,
+					}
+					break;
+			}
+			// Apply the new settings in the emulator
+			SIDBackend.setFilterConfig6581(
+				this.filterWebSid.base,
+				this.filterWebSid.max,
+				this.filterWebSid.steepness,
+				this.filterWebSid.x_offset,
+				this.filterWebSid.distort,
+				this.filterWebSid.distortOffset,
+				this.filterWebSid.distortScale,
+				this.filterWebSid.distortThreshold,
+				this.filterWebSid.kink,
+			);
+			// Also apply the values in the filter controls of the sundry box
+			ctrls.updateFilterControls();
 		}
 	},
 

@@ -405,8 +405,6 @@ $(function() { // DOM ready
 				$("#sundry-tabs").find(".tab[data-topic='"+sundryTab+"']").addClass("selected");
 				$("#sundry-ctrls").show();
 			}
-			$("#stopic-stil .mCSB_scrollTools").css("height", $("#stopic-stil").height() + 7);
-			$("#stopic-tags .mCSB_scrollTools").css("height", $("#stopic-tags").height() + 7);
 			$("#folders").height(0).height($("#songs").height() - 100);
 		});
 	});
@@ -598,6 +596,7 @@ $(function() { // DOM ready
 				UpdateURL();
 				viz.animateBufferEnded();
 				viz.startBufferEndedEffects();
+				ShowSundryFilterContents();
 				break;
 		}
 	});
@@ -779,16 +778,6 @@ $(function() { // DOM ready
 					'<label for="sidwiz" class="unselectable">SidWiz</label>'
 				);
 				break;
-
-
-			/*
-					ToDo:
-
-					- if not websid (hq) show enabler button
-					- if flag is 8580, gray controls
-			
-			*/
-
 			case "filter":
 				// The filter view requires a minimum amount of vertical space
 				var $sundry = $("#sundry");
@@ -1635,6 +1624,21 @@ $(window).on("load", function() {
 		$("#username,#password").trigger("keydown");
 	}, 350);
 });
+
+/**
+ * Show enable button or sliders in the sundry box for 6581 filter.
+ * 
+ * NOTE: Don't call this too early or 'SID.getModel()' fails.
+ */
+function ShowSundryFilterContents() {
+	$("#stopic-filter form,#filter-websid,#filter-6581").hide();
+	if (SID.emulator == "websid" && SID.getModel() == "6581")
+		$("#stopic-filter form").show();	// Show filter controls
+	else if (SID.emulator == "websid")
+		$("#filter-6581").show();			// Show "6581" button
+	else
+		$("#filter-websid").show();			// Show "WebSid" button
+}
 
 /**
  * Perform a search query, optionally with a type too.

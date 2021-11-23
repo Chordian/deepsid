@@ -281,6 +281,7 @@
 						<li><b>stil</b>&nbsp;&nbsp;(or <b>lyrics</b>)</li>
 						<li><b>tags</b></li>
 						<li><b>scope</b>&nbsp;&nbsp;(or <b>osc</b>)</li>
+						<li><b>filter</b></li>
 					</ul>
 				</td>
 			</tr>

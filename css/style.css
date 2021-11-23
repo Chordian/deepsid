@@ -2491,6 +2491,16 @@ input[type=range]::-ms-track {
 			height: 20px;
 		}
 
+		#stopic-filter {
+			position: relative;
+		}
+
+			#filter-revisions {
+				position: absolute;
+				top: 165px;
+				right: 0;
+			}
+
 	/* The STIL box is used for random tips upon page load */
 	/* NOTE: This is also used for centered lines such as "No STIL information" or "No lyrics" etc. */
 	#tips,

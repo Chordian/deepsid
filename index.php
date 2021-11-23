@@ -494,13 +494,14 @@
 			<div id="sundry">
 				<div id="stopic-stil" class="stopic">
 					<div id="sundry-news">
-						<span>The default 6581 filter for WebSid (HQ) has now been set to R2, which is much brighter than the previous R4 filter type.</span>
+						<span>Various filter settings can now be adjusted in a new filter tab in this box. You need
+								to be using the WebSid (HQ) emulator for this, and the file needs to be in 6581 chip mode.</span>
 					</div>
 				</div>
 				<div id="stopic-tags" class="stopic" style="display:none;"></div>
 				<div id="stopic-osc" class="stopic" style="display:none;"></div>
 				<div id="stopic-filter" class="stopic" style="display:none;">
-					<form onsubmit="return false;" autocomplete="off">
+					<form onsubmit="return false;" autocomplete="off" style="display:none;">
 						<div style="float:left;width:48%;padding-bottom:2px;">
 							<div class="sundry-control">
 								<label class="unselectable">Minimum</label>
@@ -550,7 +551,14 @@
 								<input id="filter-distortThreshold-slider" type="range" min="0" max="4000" value="0" step="16" />
 							</div>
 						</div>
+						<div id="filter-revisions">
+							<button id="filter-r2">R2</button>
+							<button id="filter-r3">R3</button>
+							<button id="filter-r4">R4</button>
+						</div>
 					</form>
+					<div id="filter-websid" class="sundryMsg" style="display:none;">This tab requires the <button class="set-websid">WebSid</button> emulator.</div>
+					<div id="filter-6581" class="sundryMsg" style="display:none;">The file needs to be in <button class="set-6581">6581</button> chip mode.</div>
 				</div>
 				<a id="redirect-back" class="redirect continue" href="#" style="display:none"></a>
 			</div>
@@ -1286,6 +1294,13 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>November 23, 2021</h3>
+						<ul>
+							<li>Fixed not being able to alternate between WebSid (HQ) and WebSid (Legacy) properly.</li>
+							<li>Various filter settings can now be adjusted in a new filter tab in the sundry box. You need
+								to be using the WebSid (HQ) emulator for this, and the file needs to be in 6581 chip mode.</li>
+						</ul>
 
 						<h3>November 20, 2021</h3>
 						<ul>
