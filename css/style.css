@@ -118,6 +118,7 @@
 	--color-text-c64font:			#555743;			/* Used for the C64 font in the CGSC folder */
 	--color-text-label-disabled:	var(--color-border);
 	--color-text-time:				#c6c6c6;
+	--color-text-sundry-disabled:	#b2b3ad;
 
 	--color-border-subtune:			#888;				/* Border for round sub tune indicators in playlists */
 	--color-text-subtune:			#222;				/* Text color for sub tune indicators in playlists */
@@ -492,6 +493,7 @@
 	--color-text-c64font:			#a8a8a8;
 	--color-text-label-disabled:	#555;
 	--color-text-time:				#484848;
+	--color-text-sundry-disabled:	#4a4a4a;
 
 	--color-border-subtune:			#000;
 	--color-bg-subtune:				#d4d4d4;
@@ -1130,7 +1132,9 @@ small.u2 { margin-left: 2px; }
 	.dialog-new button.disabled,
 	#sticky-right-buttons button.disabled,
 	.block-info button.disabled,
-	.dialog-box button.disabled {
+	.dialog-box button.disabled,
+	#filter-revisions button.disabled,
+	#filter-6581 button.disabled {
 		cursor: default;
 		background: var(--color-button-disabled);
 		border-color: var(--color-button-disabled);
@@ -2458,7 +2462,6 @@ input[type=range]::-ms-track {
 			position: relative;
 			width: 100%;
 			height: 38px;
-			/*background: #ddd;*/
 		}
 
 		#sundry label {
@@ -2467,6 +2470,10 @@ input[type=range]::-ms-track {
 			font: normal 13px/0 "Montserrat", sans-serif;
 			color: var(--color-text-fine);
 		}
+
+			#sundry label.disabled {
+				color: var(--color-text-label-disabled);				
+			}
 
 		#sundry input[type="text"] {
 			position: absolute;
@@ -2479,6 +2486,10 @@ input[type=range]::-ms-track {
 			border: 1px solid var(--color-border-box);
 			border-radius: 1px;
 		}
+
+			#sundry input[type="text"].disabled {
+				color: var(--color-text-label-disabled);
+			}
 	
 			#stopic-filter input[type="text"] {
 				text-align: right;
@@ -2500,10 +2511,31 @@ input[type=range]::-ms-track {
 				top: 165px;
 				right: 0;
 			}
+		
+		#filter-6581 {
+			position: relative;
+			top: -2px;
+			right: 1px;
+			font-size:11px;
+		}
 
-	/* The STIL box is used for random tips upon page load */
+			#sundry-ctrls .disable-6581 {
+				color: var(--color-text-sundry-disabled);
+			}
+		
+			#filter-6581 button,
+			#filter-6581 button:disabled {
+				height: 17px;
+				width: 33px;
+				padding: 0 5px;
+				font-size: 10px;
+				border: none;
+				line-height: 0.3em;
+				margin: 0 1px;
+			}
+
 	/* NOTE: This is also used for centered lines such as "No STIL information" or "No lyrics" etc. */
-	#tips,
+	#tips,			/* Deprecated ID from back when the STIL box was used for tips */
 	.sundryMsg {
 		position: relative;
 		top: 50%; /* These three lines centers the DIV in the sundry box */

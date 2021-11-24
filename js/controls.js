@@ -31,7 +31,7 @@ Controls.prototype = {
 		$("#sundry,#topic-stil").on("click", ".subtune", this.onClick.bind(this));
 		$("#sundry").on("click", "canvas,.tag", this.onClick.bind(this));
 		$("#stopic-osc,#stopic-filter").on("click", "button", this.onClick.bind(this));
-		$("#sundry-ctrls").on("click", "#sidwiz,#showtags", this.onClick.bind(this));
+		$("#sundry-ctrls").on("click", "#sidwiz,#showtags,#filter-6581", this.onClick.bind(this));
 
 		$("#volume,#sundry-ctrls").on("input", this.onInput.bind(this));
 

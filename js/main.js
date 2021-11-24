@@ -783,7 +783,7 @@ $(function() { // DOM ready
 				var $sundry = $("#sundry");
 				if ($sundry.css("flex-basis").replace("px", "") < 205)
 					$sundry.css("flex-basis", 205);
-				$("#sundry-ctrls").append('<span style="position:relative;top:-1px;right:1px;font-size:11px;">This is for <b>6581</b> mode only</span>');
+				$("#sundry-ctrls").append('<span id="filter-6581" class="disable-6581">This requires <button class="set-6581 disabled" disabled="disabled">6581</button> chip mode</span>');
 				break;
 		}
 
@@ -1626,18 +1626,30 @@ $(window).on("load", function() {
 });
 
 /**
- * Show enable button or sliders in the sundry box for 6581 filter.
+ * Enable or disable buttons and sliders in the sundry box for 6581 filter.
  * 
  * NOTE: Don't call this too early or 'SID.getModel()' fails.
  */
 function ShowSundryFilterContents() {
-	$("#stopic-filter form,#filter-websid,#filter-6581").hide();
-	if (SID.emulator == "websid" && SID.getModel() == "6581")
-		$("#stopic-filter form").show();	// Show filter controls
-	else if (SID.emulator == "websid")
-		$("#filter-6581").show();			// Show "6581" button
-	else
-		$("#filter-websid").show();			// Show "WebSid" button
+	$("#filter-websid").hide();
+	$("#stopic-filter form").show();
+	if (SID.emulator == "websid" && SID.getModel() == "6581") {
+		// Enable filter controls
+		$("#stopic-filter form label,#stopic-filter form input,#filter-revisions button")
+			.prop("disabled", false).removeClass("disabled");
+		$("#filter-6581").addClass("disable-6581");
+		$("#filter-6581 button").prop("disabled", true).addClass("disabled");
+	} else if (SID.emulator == "websid") {
+		// Disable filter controls (since 6581 chip mode is not active)
+		$("#stopic-filter form label,#stopic-filter form input,#filter-revisions button")
+			.prop("disabled", true).addClass("disabled");
+		$("#filter-6581").removeClass("disable-6581");
+		$("#filter-6581 button").prop("disabled", false).removeClass("disabled");
+	} else {
+		// Show "WebSid" button (the HQ version is required for these controls)
+		$("#filter-websid").show();
+		$("#stopic-filter form").hide();
+	}
 }
 
 /**

@@ -17,6 +17,8 @@ SHOULD BE DONE
 
 - Make the CSDb tab merge better onto its page.
 
+- Make the top menu names unselectable too.
+
 - Maybe add avatar images back for the bottom three lists, but this time so they are loaded a bit
   delayed in a way that doesn't bog down the site.
   - If done, make sure to also revert back to the slightly shorter names.
