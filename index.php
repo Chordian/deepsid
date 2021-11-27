@@ -1294,6 +1294,12 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>November 27, 2021</h3>
+						<ul>
+							<li>Improved the handling of how the STIL tab is named, depending on the context.</li>
+							<li>The STIL tab is now called <code>Text</code> whenever a file from the SH folder is played.</li>
+						</ul>
+
 						<h3>November 24, 2021</h3>
 						<ul>
 							<li>Changed the logic of showing the filter settings depending on 6581 chip mode. The controls are

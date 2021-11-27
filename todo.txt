@@ -11,8 +11,6 @@ SHOULD BE DONE
 
 - Make the top menu names unselectable too.
 
-- In the SH folder, the STIL sundry tab should perhaps be called something else.
-
 - Idea: Download SID with the PSID header automatically removed, ready to be used in e.g. a demo.
 
 - Maybe add avatar images back for the bottom three lists, but this time so they are loaded a bit
