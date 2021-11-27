@@ -15,13 +15,35 @@ SHOULD BE DONE
 - Replace the casino image in the recommendation box in the root. Kim "Lemon" claimed it looks
   too much like a real casino ad, and he's right. It does! ><
 
+- Annex tip: List of social links for DeepSID (the top line might not be enough).
+
 - Make the CSDb tab merge better onto its page.
 
 - Make the top menu names unselectable too.
 
+- In the SH folder, the STIL sundry tab should perhaps be called something else.
+
+- Idea: Download SID with the PSID header automatically removed, ready to be used in e.g. a demo.
+
 - Maybe add avatar images back for the bottom three lists, but this time so they are loaded a bit
   delayed in a way that doesn't bog down the site.
   - If done, make sure to also revert back to the slightly shorter names.
+
+- I have a good idea for a new comments system to take over from Disqus. When activated, the area
+  with comments appears below SID rows but above the search. It has a drag slider in top. It's
+  quite large initially, which means that info and sundry above both go invisible. The only thing
+  left up there are the memory bar and the controls. The comment toggle button is in the top of
+  the draggable comments area. When off, you only see the top of the comments are in the bottom
+  just above the search, so that only the comment button in it is visible at that point. When it
+  is clicked, it slides the area up. The button always remain in top and now change wording, so
+  it is obvious that clicking it now slides the area back down.
+  - Button: SHOW COMMENTS - and when up - HIDE COMMENTS.
+  - User names will be the registered DeepSID names. Probably without avatars to begin with.
+  - Perhaps also showing comments from CSDb below or above DeepSID's own?
+  - Consider importing everything from Disqus. Either with wrappers, or in its own section like
+    comments from CSDb probably would be too.
+  - Since the toggle button requires little room, the space next to it could be used to show e.g.
+    how many comments the selected SID row has (maybe even DeepSID: / CSDb: / Disqus:).
 
 - DO THE FOLLOWING IN THE BEGINNING OF A WEEKEND OR A VACATION AS IT MIGHT BLOW UP!
   You have to be damn sure everything still works afterwards - a lot of testing to be done...
@@ -87,6 +109,9 @@ CONSIDER THIS
 - Up/Down cursor keys to change sub tune, Left/Right cursor keys to skip previous/next.
 - For redirect links, add a BACK button in both STIL tabs (to complement the 'b' hotkey).
 - Front page top 10 list: Add most common birth years, now that you have the data for it.
+
+- A drop-down box for selecting 6581 filter settings. User can even save their own to the list,
+  with the name of the filter settings plus the user's name e.g. appended in the end.
 
 - Replace drop-down boxes with styled versions (browser and search) - I don't like how e.g. Firefox
   and Chrome change their design like the wind blows.

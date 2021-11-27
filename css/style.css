@@ -255,8 +255,6 @@
 	--color-root-random-bigfont:	#333;
 	--color-root-random-shadow:		var(--color-bg-box);
 
-	--url-roulette:					url(../images/roulette.png);
-
 	/* Corner flags in info box */
 
 	--color-pal:					#669;				/* Color for PAL corner flag box */
@@ -606,8 +604,6 @@
 	--color-root-random-text:		#f5f5f1;
 	--color-root-random-bigfont:	#e0d68a;
 	--color-root-random-shadow:		#000;
-
-	--url-roulette:					url(../images/roulette_dark.png);
 
 	/* Corner flags in info box */
 
@@ -4028,8 +4024,8 @@ input[type=range]::-ms-track {
 			}
 
 			#page table.decent:before {
-				background: var(--url-roulette) -30px -10px no-repeat;
-				background-size: 70%;
+				background: url(../images/decent.png) -68px 4px no-repeat;
+				background-size: 54%;
 				opacity: 0.7;
 				transition: all .1s linear;
 			}
