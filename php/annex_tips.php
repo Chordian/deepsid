@@ -314,6 +314,34 @@
 		</table>
 
 	',
+
+	'	<h3>Social links</h3>
+
+		<h4><a href="https://www.facebook.com/groups/deepsid/">Facebook</a></h4>
+		A group with requests or bugs from other users as well as news about everything SID-related.
+
+		<h4><a href="https://twitter.com/chordian">Twitter</a></h4>
+		Chordian\'s Twitter account and where all news and changes about DeepSID are always posted.
+
+		<h4><a href="https://discord.gg/n5w85GMbVu">Discord</a></h4>
+		Discusses changes, bugs, features, etc. Much younger than the other options. Need more members.
+		
+		<h4><a href="http://csdb.chordian.net/?type=forums&roomid=14&topicid=129712">CSDb</a></h4>
+		A forum thread at CSDb that was created when DeepSID was born, but it\'s a ghost town today.
+
+		<h4><a href="https://www.lemon64.com/forum/viewtopic.php?t=68056">Lemon64</a></h4>
+		Probably the most popular forum for C64 and so of course there had to be a forum thread here too.
+
+		<h4><a href="https://chipmusic.org/forums/topic/20510/deepsid-a-new-online-sid-player/">ChipMusic.org</a></h4>
+		Although this is a nice forum for chipmusic in general, the forum thread here never took off.
+
+		<h4><a href="https://blog.chordian.net/2018/05/12/deepsid/">Chordian.net</a></h4>
+		This is the blog post where I announced when DeepSID was launched, in May 2018.
+
+		<h4><a href="https://github.com/Chordian/deepsid">GitHub</a></h4>
+		If you want have a go at setting up your own DeepSID, or just want to look at the source code.
+
+	',
 );
 
 $id = isset($_GET['id']) ? $_GET['id'] : mt_rand(0, count($tips) - 1);
@@ -332,6 +360,7 @@ else
 			<li><a href="3" class="topic">Registering</a></li>
 			<li><a href="5" class="topic">Searching</a></li>
 			<li><a href="4" class="topic">SID handlers</a></li>
+			<li><a href="9" class="topic">Social links</a></li>
 			<li><a href="8" class="topic">URL parameters</a></li>
 		</ul>
 		More tips may be added later.

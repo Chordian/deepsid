@@ -12,11 +12,6 @@ SHOULD BE DONE
   for indicating a professional, a scener, or both. Two icons side-by-side. You have the info
   ready in the 'composers' table, in a new 'focus' column.
 
-- Replace the casino image in the recommendation box in the root. Kim "Lemon" claimed it looks
-  too much like a real casino ad, and he's right. It does! ><
-
-- Annex tip: List of social links for DeepSID (the top line might not be enough).
-
 - Make the CSDb tab merge better onto its page.
 
 - Make the top menu names unselectable too.
