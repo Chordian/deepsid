@@ -631,8 +631,7 @@ Browser.prototype = {
 						viz.initGraph(this.chips);
 						viz.startBufferEndedEffects();
 
-						// Tab 'STIL' is called 'Lyrics' in CGSC
-						$("#tab-stil").empty().append(this.isCGSC() ? "Lyrics" : "STIL");
+						// this.setSTILTabName();
 
 						// Stop the tune after X milliseconds if a "?wait=X" URL parameter is specified
 						// NOTE: A bit of a nasty hack. Because of the way the SID.load() function ties into
@@ -1149,8 +1148,7 @@ Browser.prototype = {
 					}
 					$("#path").empty().append(pathText);
 
-					// Tab 'STIL' is called 'Lyrics' in CGSC
-					$("#tab-stil").empty().append(this.isCGSC() ? "Lyrics" : "STIL");
+					// this.setSTILTabName();
 
 					$("#tabs .tab").removeClass("disabled");
 					var $selected = $("#tabs .selected");
@@ -2781,6 +2779,17 @@ Browser.prototype = {
 	},
 
 	/**
+	 * Are we inside the 'SID Happens' upload folder, or at least playing a file there?
+	 * 
+	 * @return {boolean}
+	 */
+	isUploadFolderOrFile: function() {
+		return (!this.isSearching && this.isUploadFolder()) ||
+			(typeof this.playlist[this.songPos] !== "undefined" &&
+				this.playlist[this.songPos].fullname.indexOf("/"+PATH_UPLOADS) !== -1);
+	},
+	
+	/**
 	 * Is this a temporary test SID file thus is has no entries in the database?
 	 * 
 	 * @return {boolean}
@@ -2798,6 +2807,19 @@ Browser.prototype = {
 	 */
 	isTempFolder: function() {
 		return $("#songs td.temp").length;
+	},
+
+	/**
+	 * Set the name of the 'STIL' tab depending on the context.
+	 * 
+	 * This affects both the sundry and dexter tabs.
+	 */
+	setSTILTabName: function() {
+		var tabName = "STIL";
+		if (this.isCGSC()) tabName = "Lyrics";
+		else if (this.isUploadFolderOrFile()) tabName = "Text";
+
+		$("#tab-stil").empty().append(tabName);
 	},
 
 	/**

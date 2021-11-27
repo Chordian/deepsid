@@ -3,11 +3,6 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- Copy all JCH's ratings to a unique account that is used for determining the quality settings,
-  etc. JCH is getting tired of not being able to rate certain folders.
-  - Because JCH might +1 revise all his ratings later, it should be a 100% copy.
-  - Rename the 'Dummy' user (same ID both locally and online) and use it for this purpose.
-
 - Idea for folders in MUSICIANS folder: Faded flat color icons just before the star ratings,
   for indicating a professional, a scener, or both. Two icons side-by-side. You have the info
   ready in the 'composers' table, in a new 'focus' column.
@@ -24,6 +19,8 @@ SHOULD BE DONE
   delayed in a way that doesn't bog down the site.
   - If done, make sure to also revert back to the slightly shorter names.
 
+¯¯¯¯¯¯¯¯¯¯¯¯¯  
+
 - I have a good idea for a new comments system to take over from Disqus. When activated, the area
   with comments appears below SID rows but above the search. It has a drag slider in top. It's
   quite large initially, which means that info and sundry above both go invisible. The only thing
@@ -39,6 +36,11 @@ SHOULD BE DONE
     comments from CSDb probably would be too.
   - Since the toggle button requires little room, the space next to it could be used to show e.g.
     how many comments the selected SID row has (maybe even DeepSID: / CSDb: / Disqus:).
+
+- Copy all JCH's ratings to a unique account that is used for determining the quality settings,
+  etc. JCH is getting tired of not being able to rate certain folders.
+  - Because JCH might +1 revise all his ratings later, it should be a 100% copy.
+  - Rename the 'Dummy' user (same ID both locally and online) and use it for this purpose.
 
 - DO THE FOLLOWING IN THE BEGINNING OF A WEEKEND OR A VACATION AS IT MIGHT BLOW UP!
   You have to be damn sure everything still works afterwards - a lot of testing to be done...

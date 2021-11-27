@@ -750,12 +750,16 @@ Controls.prototype = {
 			.empty()
 			.removeClass("c64font");
 
-		// Tab 'STIL' is called 'Lyrics' in CGSC
-		$("#stab-stil").empty().append(browser.isCGSC() ? "Lyrics" : "STIL");
-
 		var file = browser.playlist[browser.songPos].filename,
 			stil = browser.playlist[browser.songPos].stil,
 			isCGSC = browser.playlist[browser.songPos].fullname.substr(-4) == ".mus";
+
+		var tabName = "STIL";
+		if (isCGSC)
+			tabName = "Lyrics";
+		else if (browser.playlist[browser.songPos].fullname.indexOf("/"+PATH_UPLOADS) !== -1)
+			tabName = "Text";
+		$("#tab-stil,#stab-stil").empty().append(tabName);
 
 		if (isCGSC) {
 			$("#topic-stil,#stopic-stil").addClass("c64font");
