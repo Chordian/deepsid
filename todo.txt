@@ -13,6 +13,13 @@ SHOULD BE DONE
 
 - Idea: Download SID with the PSID header automatically removed, ready to be used in e.g. a demo.
 
+- A second annex tab with history. Every click on a tune, maybe even every folder you enter, will
+  be listed here, so you can re-click it. Newest entry in top.
+  - In a later v2, these could be stored in the database. So when the user returns the site at a
+    late time, his history from the previous visit it still there.
+  - Along with the above v2, "X" icons for deleting individual entries, plus a general button for
+    clearing the entire history.
+
 - Maybe add avatar images back for the bottom three lists, but this time so they are loaded a bit
   delayed in a way that doesn't bog down the site.
   - If done, make sure to also revert back to the slightly shorter names.
@@ -34,6 +41,9 @@ SHOULD BE DONE
     comments from CSDb probably would be too.
   - Since the toggle button requires little room, the space next to it could be used to show e.g.
     how many comments the selected SID row has (maybe even DeepSID: / CSDb: / Disqus:).
+  - Not sure if CSDb needs to be there. Maybe there are too few comments to warrant it.
+  - It should also be possible to comment on a folder, i.e. inside of it but before selecting a
+    SID row. Then the comment would just apply to the entire folder, but would users get that?
 
 - Copy all JCH's ratings to a unique account that is used for determining the quality settings,
   etc. JCH is getting tired of not being able to rate certain folders.

@@ -758,7 +758,7 @@ Controls.prototype = {
 		if (isCGSC)
 			tabName = "Lyrics";
 		else if (browser.playlist[browser.songPos].fullname.indexOf("/"+PATH_UPLOADS) !== -1)
-			tabName = "Text";
+			tabName = "Notes";
 		$("#tab-stil,#stab-stil").empty().append(tabName); // Set for both sundry and dexter tabs
 
 		if (isCGSC) {

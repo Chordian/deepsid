@@ -85,6 +85,18 @@
 		<?php if ($inside_iframe): ?>
 			<script type="text/javascript" src="https://www.lemonamiga.localhost/assets/external/deepsid/main.js"></script>
 		<?php endif ?>
+		<!-- For Lemon64: START -->
+		<?php if (isset($_GET['lemonamiga'])): ?>
+			<link rel="stylesheet" type="text/css" href="https://www.lemonamiga.localhost/assets/external/deepsid/style.css" />
+			<script type="text/javascript" src="https://www.lemonamiga.localhost/assets/external/deepsid/main.js"></script>
+		<?php elseif (isset($_GET['lemon64com'])): ?>
+			<link rel="stylesheet" type="text/css" href="https://www.lemon64.com/assets/external/deepsid/style.css" />
+			<script type="text/javascript" src="https://www.lemon64.com/assets/external/deepsid/main.js"></script>
+		<?php elseif (isset($_GET['lemon64dev'])): ?>
+			<link rel="stylesheet" type="text/css" href="https://www.lemon64.dev/assets/external/deepsid/style.css" />
+			<script type="text/javascript" src="https://www.lemon64.dev/assets/external/deepsid/main.js"></script>
+		<?php endif ?>
+		<!-- For Lemon64: END -->
 		<script type="text/javascript">
 			var colorTheme = 0;
 			function setTheme() {
@@ -1297,7 +1309,7 @@
 						<h3>November 27, 2021</h3>
 						<ul>
 							<li>Improved the handling of how the STIL tab is named, depending on the context.</li>
-							<li>The STIL tab is now called <code>Text</code> whenever a file from the SH folder is played.</li>
+							<li>The STIL tab is now called <code>Notes</code> whenever a file from the SH folder is played.</li>
 						</ul>
 
 						<h3>November 24, 2021</h3>
