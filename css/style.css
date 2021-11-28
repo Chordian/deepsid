@@ -5639,6 +5639,21 @@ input[type=range]::-ms-track {
 		font-family: "Asap Condensed", sans-serif;
 	}
 
+	.annex-tags-list {
+		list-style-type: none;
+	}
+
+		.annex-tags-list .tag {
+			position: relative;
+			top: -2px;
+			margin-left: -20px;
+			margin-right: 6px;		
+		}
+
+		.annex-tags-list p {
+			font-size: 13px;
+		}
+
 	.annex-table {
 		font-family: "Asap Condensed", sans-serif;
 	}

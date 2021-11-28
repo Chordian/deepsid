@@ -342,6 +342,131 @@
 		If you want have a go at setting up your own DeepSID, or just want to look at the source code.
 
 	',
+
+	'	<h3>Handling tags</h3>
+
+		<h4>Viewing tags</h4>
+		<p>You can see tags in the second line inside most of the SID rows.</p>
+		<p>If you can\'t see them all, hover on them to scroll them into view.</p>
+		If you still can\'t see them all, select SID row then click the <b>Tags</b> tab.
+
+		<h4>Color codes</h4>
+		<p>The type of tags are divided up into groups that huddle together.</p>
+		<p>What the colors indicate:</p>
+		<div class="annex-hotkey"><div class="tag tag-production">Production</div></div><span class="annex-tiny">Demos, intros, etc.</span>
+		<div class="annex-hotkey"><div class="tag tag-origin">Origin</div></div><span class="annex-tiny">Cover, conversion, etc.</span>
+		<div class="annex-hotkey"><div class="tag tag-digi">Digi</div></div><span class="annex-tiny">Digi, what type, etc.</span>
+		<div class="annex-hotkey"><div class="tag tag-warning">Warning</div></div><span class="annex-tiny">Bugged, hacked, etc.</span>
+		<div class="annex-hotkey" style="position:relative;top:3.5px;"><div class="tag tag-remix64"></div></div><span class="annex-tiny">It has been remixed</span>
+		<p>If a SID has been remixed, click the <b>Remix</b> tab in top to check this out.</p>
+
+		<h4>Adding or editing tags</h4>
+		<ol>
+			<li>Hover on any SID row.</li>
+			<li>Click the small [+] icon.</li>
+			<li>Use the dialog box.</li>
+		</ol>
+
+		<h4>Searching for tags</h4>
+		<ol>
+			<li>Enter a folder.</li>
+			<li>Click the <b>Tags</b> tab.</li>
+			<li>Click a tag in the tab box.</li>
+		</ol>
+		<p>This should show the SID rows (in that folder) that has that tag.</p>
+		You can also search globally for tags in the bottom left corner:
+		<ol>
+			<li>Select <b>Tags</b> in drop-down.</li>
+			<li>Type one or more tags.</li>
+			<li>Click the <b>SEARCH</b> button.</li>
+		</ol>
+		Enclose a tag in quotes if there are spaces between its words.
+
+	',
+
+	'	<h3>Warning tags</h3>
+
+		<p>There are a few tags that indicate some kind of warning.</p>
+
+		<ul class="annex-tags-list">
+			<li><div class="tag tag-warning">Bug</div>= <b>One or more bugs</b>
+			<p>This is usually acknowledged by HVSC in a <a href="https://www.hvsc.c64.org/download/C64Music/DOCUMENTS/STIL.faq" target="_blank">STIL</a> comment.</p></li>
+		</ul>
+		<ul class="annex-tags-list">
+			<li><div class="tag tag-warning">Doubling</div>= <b>Clashing voices</b>
+			<p>One or more voices has been copied to play the exact same notes on top of each other. This is usually a lazy editing technique that just makes everything louder.</p></li>
+		</ul>
+		<ul class="annex-tags-list">
+			<li><div class="tag tag-warning">Hack</div>= <b>Been tampered with</b>
+			<p>The tune was originally made by someone else, then stolen and edited to change or add something. Like if someone merely added an extra digi track on top of a tune.</p></li>
+		</ul>
+		<ul class="annex-tags-list">
+			<li><div class="tag tag-warning">Mock</div>= <b>Intentionally bad</b>
+			<p>The composer deliberately wanted this SID to sound bad.</p></li>
+		</ul>
+		If you want to know more about handling tags, see <a href="10" class="topic">this</a> topic.
+
+	',
+
+	'	<h3>Digi tags</h3>
+
+		<p>There are a few tags that indicate various kinds of digi effects.</p>
+
+		<h4>Primary digi tags</h4>
+		<ul class="annex-tags-list">
+			<li><div class="tag tag-digi">Digi</div>= <b>Digi has been used</b>
+			<p>A "fits all" description of almost anything digi. If there are no other digi tags, it\'s just normal 4-bit $D418 used as one or more assisting channels.</p></li>
+		</ul>
+		<ul class="annex-tags-list">
+			<li><div class="tag tag-digi">Digi-Org</div>= <b>Digi-Organizer used</b>
+			<p>Another stand-alone tag. It indicates that <a href="//deepsid.chordian.net/?player=43&type=player&search=digi-organizer">Digi-Organizer</a> was used to add digi to a music player that normally doesn\'t support digi.</p></li>
+		</ul>
+
+		<h4>Supporting digi tags</h4>
+		These tags are usually only added together with the <b>Digi</b> tag.
+		<ul class="annex-tags-list">
+			<li><div class="tag tag-digi">Samples</div>= <b>Only digi has been used</b>
+			<p>The file is all digi only. The SID voices have not been used.</p></li>
+		</ul>
+		<ul class="annex-tags-list">
+			<li><div class="tag tag-digi">8bit</div>= <b>8-bit digi used</p></b>
+			<p>The file uses an advanced 8-bit technique. A commonly used tool for this is an exclusive add-on coded by <a href="http://csdb.chordian.net/?type=scener&id=9589">THCM</a>.</p></li>
+		</ul>
+		<ul class="annex-tags-list">
+			<li><div class="tag tag-digi">OSC</div>= <b>Oscillator digi</p></b>
+			<p>Uses the oscillator method as demonstrated by e.g. <a href="http://csdb.chordian.net/?type=release&id=131019">FRODIGI</a>. It\'s low on CPU usage but also sounds a bit murky. Uses fast-moving waveform $11 notes.</p></li>
+		</ul>
+		<ul class="annex-tags-list">
+			<li><div class="tag tag-digi">PWM</div>= <b>Pulse width modulation</p></b>
+			<p>Pulse widths for waveform $41 is doing the hard work here.</p></li>
+		</ul>
+
+		<h4>Exceptions to digi tags</h4>
+		<ul class="annex-tags-list">
+			<li><div class="tag">GT-Echo</div>= <b>SID with echo effects</b>
+			<p>Although this doesn\'t have a digi tag, the echo effect for one of the SID voices actually uses digi to accomplish this.</p></li>
+		</ul>
+		<ul class="annex-tags-list">
+			<li><div class="tag">Speech</div>= <b>Speech simulation</b>
+			<p>This tag is shown if normal SID effects were used to simulate speech. Frequency modulation is typically involved and thus it has nothing to do with digi.</p></li>
+		</ul>
+
+		If you want to know more about handling tags, see <a href="10" class="topic">this</a> topic.
+
+	',
+
+	/*'	<h3>List of general tags</h3>
+
+		<h4>This is an incomplete list</h4>
+		<p>There are a ton of tags in DeepSID and everyone can add more.</p>
+		<p>This list will focus on interesting tags, or tags that need explaining.</p>
+
+		<h4>Warning tags</h4>
+		<p>There are red tags that indicate a warning of some kind.</p>
+
+		<i>If you want to know more about handling tags, see <a href="10" class="topic">this</a> topic.</i>
+
+	',*/
 );
 
 $id = isset($_GET['id']) ? $_GET['id'] : mt_rand(0, count($tips) - 1);
@@ -353,7 +478,9 @@ else
 	'	<h3>List of annex tips:</h3>
 		<ul style="margin-bottom:16px;">
 			<li><a href="6" class="topic">Color strips</a></li>
+			<li><a href="12" class="topic">Digi tags</a></li>
 			<li><a href="2" class="topic">External links</a></li>
+			<li><a href="10" class="topic">Handling tags</a></li>
 			<li><a href="7" class="topic">Hotkeys</a></li>
 			<li><a href="1" class="topic">Memory bar</a></li>
 			<li><a href="0" class="topic">Playlists</a></li>
@@ -362,6 +489,7 @@ else
 			<li><a href="4" class="topic">SID handlers</a></li>
 			<li><a href="9" class="topic">Social links</a></li>
 			<li><a href="8" class="topic">URL parameters</a></li>
+			<li><a href="11" class="topic">Warning tags</a></li>
 		</ul>
 		More tips may be added later.
 	';
