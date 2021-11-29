@@ -1582,7 +1582,7 @@ Browser.prototype = {
 			if (tag == "Remix64") {
 				// A special look for the "Remix 64" tag
 				remix64 = '<div class="tag tag-remix64">&nbsp;&nbsp;</div>';
-			} else if (tag == "Doubling" || tag == "Hack" || tag == "Mock") {
+			} else if (tag == "Doubling" || tag == "Hack" || tag == "Mock" || tag == "Bug") {
 				// A unique color for tags that serves as a warning
 				list_of_tags += '<div class="tag tag-warning">'+tag+'</div>';
 			} else {

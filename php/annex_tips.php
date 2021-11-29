@@ -163,7 +163,7 @@
 
 		<h4>Rating</h4>
 		<p>Searches for your ratings. Use 1 to 5, optionally with minus.</p>
-		For example, typing <a href="//deepsid.chordian.net/?search=3-&type=rating">3-</a> searches for tunes rated 3 stars or more.
+		For example, typing <a href="3-" data-type="rating" class="search">3-</a> searches for tunes rated 3 stars or more.
 
 		<h4>Country</h4>
 		Searches for composers from a specific country. Only a list of folders is returned here.
@@ -182,12 +182,12 @@
 
 	'	<h3>Color strips</h3>
 		<p>Sometimes you can see a vertical color strip in a SID row. These indicate a common player.</p>
-		<div class="annex-strip annex-a"> = <b>GoatTracker</b></div><span class="annex-tiny"><a href="//deepsid.chordian.net/?player=19&type=player&search=goattracker_v1.x"><b>v1.x</b></a> or <a href="//deepsid.chordian.net/?player=1&type=player&search=goattracker_v2.x"><b>v2.x</b></a></span>
-		<div class="annex-strip annex-b"> = <b>NewPlayer</b></div><span class="annex-tiny">JCH\'s <a href="//deepsid.chordian.net/?player=2&type=player&search=newplayer_-v18_-v19_-v20_-v21"><b>v2</b></a> / <a href="//deepsid.chordian.net/?player=3&type=player&search=newplayer_v20"><b>v3</b></a>, etc.</span>
-		<div class="annex-strip annex-c"> = <b>SID-Wizard</b></div><span class="annex-tiny"><a href="//deepsid.chordian.net/?player=5&type=player&search=sidwizard_v1.x"><b>v1.x</b></a></span>
-		<div class="annex-strip annex-d"> = <b>SID Factory II</b></div><span class="annex-tiny"><a href="//deepsid.chordian.net/?player=122&type=player&search=sidfactory_ii"><b>BETA</b></a></span>
-		<div class="annex-strip annex-e"> = <b>DMC</b></div><span class="annex-tiny"><a href="//deepsid.chordian.net/?player=18&type=player&search=dmc_v4.x"><b>v4.x</b></a>, <a href="//deepsid.chordian.net/?player=12&type=player&search=dmc_v5.x"><b>v5.x</b></a>, etc.</span>
-		<div class="annex-strip annex-f"> = <b>SidTracker 64</b></div><span class="annex-tiny"><a href="http://deepsid.chordian.net/?player=13&type=player&search=sidtracker64"><b>iPad</b></a></span>
+		<div class="annex-strip annex-a"> = <b>GoatTracker</b></div><span class="annex-tiny"><a href="goattracker_v1.x" data-type="player" class="search"><b>v1.x</b></a> or <a href="goattracker_v2.x" data-type="player" class="search"><b>v2.x</b></a></span>
+		<div class="annex-strip annex-b"> = <b>NewPlayer</b></div><span class="annex-tiny">JCH\'s <a href="newplayer_-v18_-v19_-v20_-v21" data-type="player" class="search"><b>v2</b></a> / <a href="newplayer_v20" data-type="player" class="search"><b>v3</b></a>, etc.</span>
+		<div class="annex-strip annex-c"> = <b>SID-Wizard</b></div><span class="annex-tiny"><a href="sidwizard_v1.x" data-type="player" class="search"><b>v1.x</b></a></span>
+		<div class="annex-strip annex-d"> = <b>SID Factory II</b></div><span class="annex-tiny"><a href="sidfactory_ii" data-type="player" class="search"><b>BETA</b></a></span>
+		<div class="annex-strip annex-e"> = <b>DMC</b></div><span class="annex-tiny"><a href="dmc_v4.x" data-type="player" class="search"><b>v4.x</b></a>, <a href="dmc_v5.x" data-type="player" class="search"><b>v5.x</b></a>, etc.</span>
+		<div class="annex-strip annex-f"> = <b>SidTracker 64</b></div><span class="annex-tiny"><a href="sidtracker64" data-type="player" class="search"><b>iPad</b></a></span>
 	',
 
 	'	<h3>Hotkeys</h3>
@@ -355,9 +355,10 @@
 		<p>What the colors indicate:</p>
 		<div class="annex-hotkey"><div class="tag tag-production">Production</div></div><span class="annex-tiny">Demos, intros, etc.</span>
 		<div class="annex-hotkey"><div class="tag tag-origin">Origin</div></div><span class="annex-tiny">Cover, conversion, etc.</span>
-		<div class="annex-hotkey"><div class="tag tag-digi">Digi</div></div><span class="annex-tiny">Digi, what type, etc.</span>
-		<div class="annex-hotkey"><div class="tag tag-warning">Warning</div></div><span class="annex-tiny">Bugged, hacked, etc.</span>
-		<div class="annex-hotkey" style="position:relative;top:3.5px;"><div class="tag tag-remix64"></div></div><span class="annex-tiny">It has been remixed</span>
+		<div class="annex-hotkey"><a href="12" class="topic"><div class="tag tag-digi">Digi</div></a></div><span class="annex-tiny">Digi, what type, etc.</span>
+		<div class="annex-hotkey"><a href="11" class="topic"><div class="tag tag-warning">Warning</div></a></div><span class="annex-tiny">Bugged, hacked, etc.</span>
+		<div class="annex-hotkey" style="position:relative;top:3.5px;"><a href="remix64" class="search" data-type="tag"><div class="tag tag-remix64"></div></a></div><span class="annex-tiny">It has been remixed</span>
+		<div class="annex-hotkey"><div class="tag">Other</div></div><span class="annex-tiny">All other tags</span>
 		<p>If a SID has been remixed, click the <b>Remix</b> tab in top to check this out.</p>
 
 		<h4>Adding or editing tags</h4>
@@ -389,19 +390,19 @@
 		<p>There are a few tags that indicate some kind of warning.</p>
 
 		<ul class="annex-tags-list">
-			<li><div class="tag tag-warning">Bug</div>= <b>One or more bugs</b>
+			<li><a href="bug" class="search" data-type="tag"><div class="tag tag-warning">Bug</div></a>= <b>One or more bugs</b>
 			<p>This is usually acknowledged by HVSC in a <a href="https://www.hvsc.c64.org/download/C64Music/DOCUMENTS/STIL.faq" target="_blank">STIL</a> comment.</p></li>
 		</ul>
 		<ul class="annex-tags-list">
-			<li><div class="tag tag-warning">Doubling</div>= <b>Clashing voices</b>
+			<li><a href="doubling" class="search" data-type="tag"><div class="tag tag-warning">Doubling</div></a>= <b>Clashing voices</b>
 			<p>One or more voices has been copied to play the exact same notes on top of each other. This is usually a lazy editing technique that just makes everything louder.</p></li>
 		</ul>
 		<ul class="annex-tags-list">
-			<li><div class="tag tag-warning">Hack</div>= <b>Been tampered with</b>
+			<li><a href="hack" class="search" data-type="tag"><div class="tag tag-warning">Hack</div></a>= <b>Been tampered with</b>
 			<p>The tune was originally made by someone else, then stolen and edited to change or add something. Like if someone merely added an extra digi track on top of a tune.</p></li>
 		</ul>
 		<ul class="annex-tags-list">
-			<li><div class="tag tag-warning">Mock</div>= <b>Intentionally bad</b>
+			<li><a href="mock" class="search" data-type="tag"><div class="tag tag-warning">Mock</div></a>= <b>Intentionally bad</b>
 			<p>The composer deliberately wanted this SID to sound bad.</p></li>
 		</ul>
 		If you want to know more about handling tags, see <a href="10" class="topic">this</a> topic.
@@ -414,40 +415,40 @@
 
 		<h4>Primary digi tags</h4>
 		<ul class="annex-tags-list">
-			<li><div class="tag tag-digi">Digi</div>= <b>Digi has been used</b>
+			<li><a href="digi" class="search" data-type="tag"><div class="tag tag-digi">Digi</div></a>= <b>Digi has been used</b>
 			<p>A "fits all" description of almost anything digi. If there are no other digi tags, it\'s just normal 4-bit $D418 used as one or more assisting channels.</p></li>
 		</ul>
 		<ul class="annex-tags-list">
-			<li><div class="tag tag-digi">Digi-Org</div>= <b>Digi-Organizer used</b>
+			<li><a href="digi-org" class="search" data-type="tag"><div class="tag tag-digi">Digi-Org</div></a>= <b>Digi-Organizer used</b>
 			<p>Another stand-alone tag. It indicates that <a href="//deepsid.chordian.net/?player=43&type=player&search=digi-organizer">Digi-Organizer</a> was used to add digi to a music player that normally doesn\'t support digi.</p></li>
 		</ul>
 
 		<h4>Supporting digi tags</h4>
 		These tags are usually only added together with the <b>Digi</b> tag.
 		<ul class="annex-tags-list">
-			<li><div class="tag tag-digi">Samples</div>= <b>Only digi has been used</b>
+			<li><a href="samples" class="search" data-type="tag"><div class="tag tag-digi">Samples</div></a>= <b>Only digi has been used</b>
 			<p>The file is all digi only. The SID voices have not been used.</p></li>
 		</ul>
 		<ul class="annex-tags-list">
-			<li><div class="tag tag-digi">8bit</div>= <b>8-bit digi used</p></b>
+			<li><a href="8bit" class="search" data-type="tag"><div class="tag tag-digi">8bit</div></a>= <b>8-bit digi used</p></b>
 			<p>The file uses an advanced 8-bit technique. A commonly used tool for this is an exclusive add-on coded by <a href="http://csdb.chordian.net/?type=scener&id=9589">THCM</a>.</p></li>
 		</ul>
 		<ul class="annex-tags-list">
-			<li><div class="tag tag-digi">OSC</div>= <b>Oscillator digi</p></b>
+			<li><a href="osc" class="search" data-type="tag"><div class="tag tag-digi">OSC</div></a>= <b>Oscillator digi</p></b>
 			<p>Uses the oscillator method as demonstrated by e.g. <a href="http://csdb.chordian.net/?type=release&id=131019">FRODIGI</a>. It\'s low on CPU usage but also sounds a bit murky. Uses fast-moving waveform $11 notes.</p></li>
 		</ul>
 		<ul class="annex-tags-list">
-			<li><div class="tag tag-digi">PWM</div>= <b>Pulse width modulation</p></b>
+			<li><a href="pwm" class="search" data-type="tag"><div class="tag tag-digi">PWM</div></a>= <b>Pulse width modulation</p></b>
 			<p>Pulse widths for waveform $41 is doing the hard work here.</p></li>
+		</ul>
+		<ul class="annex-tags-list">
+			<li><a href="gt-echo" class="search" data-type="tag"><div class="tag tag-digi">GT-Echo</div></a>= <b>SID with echo effects</b>
+			<p>The echo effect for one of the SID voices actually uses digi to accomplish this.</p></li>
 		</ul>
 
 		<h4>Exceptions to digi tags</h4>
 		<ul class="annex-tags-list">
-			<li><div class="tag">GT-Echo</div>= <b>SID with echo effects</b>
-			<p>Although this doesn\'t have a digi tag, the echo effect for one of the SID voices actually uses digi to accomplish this.</p></li>
-		</ul>
-		<ul class="annex-tags-list">
-			<li><div class="tag">Speech</div>= <b>Speech simulation</b>
+			<li><a href="speech" class="search" data-type="tag"><div class="tag">Speech</div></a>= <b>Speech simulation</b>
 			<p>This tag is shown if normal SID effects were used to simulate speech. Frequency modulation is typically involved and thus it has nothing to do with digi.</p></li>
 		</ul>
 

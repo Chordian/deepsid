@@ -1083,6 +1083,17 @@ $(function() { // DOM ready
 	});
 
 	/**
+	 * When clicking a link for searching without refreshing the page.
+	 */
+	$("#annex").on("click", "a.search", function() {
+		var $this = $(this);
+		$("#dropdown-search").val($this.attr("data-type").toLowerCase());
+		$("#search-box").val($this.attr("href")).trigger("keyup");
+		$("#search-button").trigger("click");
+		return false;
+	});
+
+	/**
 	 * When clicking a recommendation box in the root.
 	 */
 	$("#topic-profile").on("mousedown", "table.recommended", function() { return false; });

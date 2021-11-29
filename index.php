@@ -1306,6 +1306,12 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>November 29, 2021</h3>
+						<ul>
+							<li>In the tips pages for the annex box, all search links are now performed without refreshing the site.
+								Also, a tag in the tips pages about these can now be clicked to search for it.</li>
+						</ul>
+
 						<h3>November 27, 2021</h3>
 						<ul>
 							<li>Improved the handling of how the STIL tab is named, depending on the context.</li>
