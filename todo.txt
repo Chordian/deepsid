@@ -29,21 +29,19 @@ SHOULD BE DONE
 - I have a good idea for a new comments system to take over from Disqus. When activated, the area
   with comments appears below SID rows but above the search. It has a drag slider in top. It's
   quite large initially, which means that info and sundry above both go invisible. The only thing
-  left up there are the memory bar and the controls. The comment toggle button is in the top of
-  the draggable comments area. When off, you only see the top of the comments are in the bottom
-  just above the search, so that only the comment button in it is visible at that point. When it
-  is clicked, it slides the area up. The button always remain in top and now change wording, so
-  it is obvious that clicking it now slides the area back down.
-  - Button: SHOW COMMENTS - and when up - HIDE COMMENTS.
+  left up there are the memory bar and the controls.
+  - Instead of a big SHOW or HIDE COMMENTS in a new bar in bottom, remove the SEARCH button and
+    place a square button in the end of the search edit box, with a magnifying glass icon. Where
+    the SEARCH button used to be you can place a toggle button for comments.
+  - Optionally move the "Here" checkbox in between the drop-down box and the edit box.
+  - Toggling will slide stuff. The comments pane slides up while info and sundry slides away.
   - User names will be the registered DeepSID names. Probably without avatars to begin with.
-  - Perhaps also showing comments from CSDb below or above DeepSID's own?
-  - Consider importing everything from Disqus. Either with wrappers, or in its own section like
-    comments from CSDb probably would be too.
-  - Since the toggle button requires little room, the space next to it could be used to show e.g.
-    how many comments the selected SID row has (maybe even DeepSID: / CSDb: / Disqus:).
-  - Not sure if CSDb needs to be there. Maybe there are too few comments to warrant it.
+  - Consider importing everything from Disqus. Either with wrappers, or in its own section.
+  - The toggle button could contain number of comments + comment cartoon bubble icon?
+  - Don't put CSDb SID page comments down there too - they are much too rare to warrant it. Users
+    must go to the CSDb tab as usual to see those.
   - It should also be possible to comment on a folder, i.e. inside of it but before selecting a
-    SID row. Then the comment would just apply to the entire folder, but would users get that?
+    SID row. Then the comment would just apply to the entire folder - but would users get that?
 
 - Copy all JCH's ratings to a unique account that is used for determining the quality settings,
   etc. JCH is getting tired of not being able to rate certain folders.

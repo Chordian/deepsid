@@ -505,9 +505,12 @@
 			</div>
 			<div id="sundry">
 				<div id="stopic-stil" class="stopic">
-					<div id="sundry-news">
-						<span>Various filter settings can now be adjusted in a new filter tab in this box. You need
-								to be using the WebSid (HQ) emulator for this, and the file needs to be in 6581 chip mode.</span>
+					<div id="sundry-news"><!--<span></span>-->
+						<a href="https://encore64.com/"><img src="images/encore64.jpg" style="float:left;width:100px;height:100px;position:relative;top:3px;margin-left:6px;" alt="encore64" /></a>
+						<div style="float:left;margin-left:12px;text-align:left;width:273px;font-size:12px;line-height:1.3em;">
+							<h3 style="margin-top:3px;margin-bottom:7px;">Encore64 Digital Album</h3>
+							Thirteen original remakes of legendary <a href="//deepsid.chordian.net/?file=/$Encore64/">C64 SID Songs</a>. Some reinterpreted by the original composer, others remixed by the most highly appreciated remix sceners today.
+						</div>
 					</div>
 				</div>
 				<div id="stopic-tags" class="stopic" style="display:none;"></div>
