@@ -7,10 +7,6 @@ SHOULD BE DONE
   for indicating a professional, a scener, or both. Two icons side-by-side. You have the info
   ready in the 'composers' table, in a new 'focus' column.
 
-- Make the CSDb tab merge better onto its page.
-
-- Make the top menu names unselectable too.
-
 - Idea: Download SID with the PSID header automatically removed, ready to be used in e.g. a demo.
 
 - A second annex tab with history. Every click on a tune, maybe even every folder you enter, will

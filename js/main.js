@@ -93,7 +93,7 @@ $(function() { // DOM ready
 
 	// Show a random tip in an annex box
 	if (GetParam("notips") === "") {
-		$.get("php/annex_tips.php", /*{ id: 12 },*/ function(tips) {
+		$.get("php/annex_tips.php", /*{ id: 13 },*/ function(tips) {
 			$("#annex-tips").empty().append(tips);
 			$(".annex-topics").show();
 		});

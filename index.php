@@ -680,7 +680,7 @@
 		<?php if (!isMobile()): ?>
 
 			<div id="dexter">
-				<div id="sites">
+				<div id="sites" class="unselectable">
 					<div style="float:left;margin-left:1px;text-align:left;">
 						<a href="<?php echo HOST; ?>" target="_top">Home</a>
 							<span>&#9642</span>
@@ -690,7 +690,6 @@
 							<span>&#9642</span>
 						<a id="forum" href="#">Forum</a>
 					</div>
-
 					<!--<a href="https://blog.chordian.net/2018/05/12/deepsid/" target="_blank">Blog Post</a>
 						<span>&#9642</span>-->
 					<a href="https://www.facebook.com/groups/deepsid/" target="_blank">Facebook</a>
@@ -704,7 +703,7 @@
 					<a href="http://csdb.chordian.net/?type=forums&roomid=14&topicid=129712" target="_blank">CSDb</a>
 						<span>&#9642</span>
 					<a href="https://github.com/Chordian/deepsid" target="_blank">GitHub</a>
-					</div>
+				</div>
 				<div id="tabs">
 					<div class="tab unselectable" data-topic="profile" id="tab-profile">Profile</div>
 					<div class="tab unselectable" data-topic="csdb" id="tab-csdb">CSDb<div id="note-csdb" class="notification csdbcolor"></div></div>

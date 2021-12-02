@@ -456,6 +456,41 @@
 
 	',
 
+	'	<h3>Origin tags</h3>
+
+		<p>Origin tags indicate if the SID was derived from somewhere else.</p>
+
+		<h4>Main origin tags</h4>
+		There are a few main origin tags that set the scene.
+		<ul class="annex-tags-list">
+			<li><a href="cover" class="search" data-type="tag"><div class="tag tag-origin">Cover</div></a>= <b>Cover of real music</b>
+			<p>If the SID tune is a cover of a real song or a soundtrack from e.g. TV, this tag is used.</p>
+			<p>Ensuing tags can be singers, bands, soundtrack, etc.</p></li>
+		</ul>
+		<ul class="annex-tags-list">
+			<li><a href="conversion" class="search" data-type="tag"><div class="tag tag-origin">Conversion</div></a>= <b>From other format</b>
+			<p>The SID tune has been converted from a different format or device, e.g. an arcade game, a console, or a different home computer.</p>
+			<p>Ensuing tags can be the file format, device name, etc.</p></li>
+		</ul>
+		<ul class="annex-tags-list">
+			<li><a href="remake" class="search" data-type="tag"><div class="tag tag-origin">Remake</div></a>= <b>Remake of a SID tune</b>
+			<p>This is a remake of another SID tune. Usually the tag demands that the remake follows the structure of the original. If not, a mixed tag should be used.</p></li>
+		</ul>
+
+		<h4>Mixed origin tags</h4>
+		These fade into a normal tag color to indicate their ambiguity.
+		<ul class="annex-tags-list">
+			<li><a href="remix" class="search" data-type="tag"><div class="tag tag-mixorigin">Remix</div></a>= <b>Remix of something</b>
+			<p>This can be used as both a main or a secondary tag. When used by itself, it means that it\'s a remix of another SID tune.</p></li>
+		</ul>
+		<ul class="annex-tags-list">
+			<li><a href="pastiche" class="search" data-type="tag"><div class="tag tag-mixorigin">Pastiche</div></a>= <b>Inspired by something</b>
+			<p>Also a main or a secondary tag. It indicates that the tune was inspired by something, e.g. it borrows notes, or the style of another composer.</p></li>
+		</ul>
+
+
+	',
+
 	/*'	<h3>List of general tags</h3>
 
 		<h4>This is an incomplete list</h4>
@@ -484,6 +519,7 @@ else
 			<li><a href="10" class="topic">Handling tags</a></li>
 			<li><a href="7" class="topic">Hotkeys</a></li>
 			<li><a href="1" class="topic">Memory bar</a></li>
+			<li><a href="13" class="topic">Origin tags</a></li>
 			<li><a href="0" class="topic">Playlists</a></li>
 			<li><a href="3" class="topic">Registering</a></li>
 			<li><a href="5" class="topic">Searching</a></li>
