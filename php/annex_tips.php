@@ -353,12 +353,12 @@
 		<h4>Color codes</h4>
 		<p>The type of tags are divided up into groups that huddle together.</p>
 		<p>What the colors indicate:</p>
-		<div class="annex-hotkey"><a href="14" class="topic"><div class="tag tag-production">Production</div></a></div><span class="annex-tiny">Demos, intros, etc.</span>
-		<div class="annex-hotkey"><a href="13" class="topic"><div class="tag tag-origin">Origin</div></a></div><span class="annex-tiny">Cover, conversion, etc.</span>
-		<div class="annex-hotkey"><a href="12" class="topic"><div class="tag tag-digi">Digi</div></a></div><span class="annex-tiny">Digi, what type, etc.</span>
-		<div class="annex-hotkey"><a href="11" class="topic"><div class="tag tag-warning">Warning</div></a></div><span class="annex-tiny">Bugged, hacked, etc.</span>
-		<div class="annex-hotkey" style="position:relative;top:3.5px;"><a href="remix64" class="search" data-type="tag"><div class="tag tag-remix64"></div></a></div><span class="annex-tiny">It has been remixed</span>
-		<div class="annex-hotkey"><div class="tag">Other</div></div><span class="annex-tiny">All other tags</span>
+		<div class="annex-hotkey"><a href="14" class="topic"><div class="tag tag-production">Production</div></a></div><span class="annex-tiny" style="position:relative;top:1px;">Demos, intros, etc.</span>
+		<div class="annex-hotkey"><a href="13" class="topic"><div class="tag tag-origin">Origin</div></a></div><span class="annex-tiny" style="position:relative;top:1px;">Cover, conversion, etc.</span>
+		<div class="annex-hotkey"><a href="12" class="topic"><div class="tag tag-digi">Digi</div></a></div><span class="annex-tiny" style="position:relative;top:1px;">Digi, what type, etc.</span>
+		<div class="annex-hotkey"><a href="11" class="topic"><div class="tag tag-warning">Warning</div></a></div><span class="annex-tiny" style="position:relative;top:1px;">Bugged, hacked, etc.</span>
+		<div class="annex-hotkey" style="position:relative;top:3.5px;"><a href="remix64" class="search" data-type="tag"><div class="tag tag-remix64"></div></a></div><span class="annex-tiny" style="position:relative;top:1px;">It has been remixed</span>
+		<div class="annex-hotkey"><a href="15" class="topic"><div class="tag">General</div></a></div><span class="annex-tiny" style="position:relative;top:1px;">All other tags</span>
 		<p>If a SID has been remixed, click the <b>Remix</b> tab in top to check this out.</p>
 
 		<h4>Adding or editing tags</h4>
@@ -561,8 +561,21 @@
 			<p>There are also tags for <a href="3x" class="search" data-type="tag">3x</a>, <a href="4x" class="search" data-type="tag">4x</a>, <a href="8x" class="search" data-type="tag">8x</a>, etc. Even one for <a href="25hz" class="search" data-type="tag">25hz</a>.</p></li>
 		</ul>
 		<ul class="annex-tags-list">
+			<li><a href="comeback" class="search" data-type="tag"><div class="tag">Comeback</div></a>= <b>I\'m back, baby!</b>
+			<p>The tune was made after the composer took a very long break of several years, maybe even decades.</p></li>
+		</ul>
+		<ul class="annex-tags-list">
+			<li><a href="edit" class="search" data-type="tag"><div class="tag">Edit</div></a>= <b>Updated and resubmitted</b>
+			<p>The tune has been edited to improve or change it.</p></li>
+		</ul>
+		<ul class="annex-tags-list">
 			<li><a href="first" class="search" data-type="tag"><div class="tag">First</div></a>= <b>First attempt ever</b>
 			<p>This is the first tune made (or released) by the composer.</p></li>
+		</ul>
+		<ul class="annex-tags-list">
+			<li><a href="flanging" class="search" data-type="tag"><div class="tag">Flanging</div></a>= <b>A rich detuning effect</b>
+			<p>The tune uses two identical notes where one has been slightly detuned to create a rich sound.</p>
+			<p>If the notes are not detuned, it\'s called <a href="doubling" class="search" data-type="tag">Doubling</a>.</p></li>
 		</ul>
 		<ul class="annex-tags-list">
 			<li><a href="fm" class="search" data-type="tag"><div class="tag">FM</div></a>= <b>Melodic use of freq mod</b>
@@ -573,6 +586,18 @@
 			<p>Part of a production where the tune could be changed in real time. (It is not interactive in DeepSID, however.)</p></li>
 		</ul>
 		<ul class="annex-tags-list">
+			<li><a href="nonstandard" class="search" data-type="tag"><div class="tag">Nonstandard</div></a>= <b>Does not use 4/4</b>
+			<p>The tune uses a nonstandard time signature other than 4/4.</p></li>
+		</ul>
+		<ul class="annex-tags-list">
+			<li><a href="pure" class="search" data-type="tag"><div class="tag">Pure</div></a>= <b>No effects, just notes</b>
+			<p>The tune uses a player that does not change SID registers in real time, e.g. vibrato, filter sweeping, etc. Just like in the very beginning.</p></li>
+		</ul>
+		<ul class="annex-tags-list">
+			<li><a href="reverb" class="search" data-type="tag"><div class="tag">Reverb</div></a>= <b>Reverb or echo effect</b>
+			<p>Notes slightly displaced across two or three voices to create a reverb/echo effect.</p></li>
+		</ul>
+		<ul class="annex-tags-list">
 			<li><a href="skydive" class="search" data-type="tag"><div class="tag">Skydive</div></a>= <b>Uses Hubbard\'s "skydive"</b>
 			<p>The tune uses an arpeggio effect that toggles between a note and a downwards slide originating at that note.</p></li>
 		</ul>
@@ -581,14 +606,13 @@
 			<p>The tune has a solo with a lead instrument.</p></li>
 		</ul>
 		<ul class="annex-tags-list">
+			<li><a href="tiny" class="search" data-type="tag"><div class="tag">Tiny</div></a>= <b>Less than 512 bytes total</b>
+			<p>But if you\'re looking for tiny tunes it may be a better idea to use <a href="512" class="search" data-type="maximum">this</a> search method.</p></li>
+		</ul>
+		<ul class="annex-tags-list">
 			<li><a href="?" class="search" data-type="tag"><div class="tag">?</div></a>= <b>In doubt about those tags</b>
 			<p>Means that one or more of the other tags applied to it is ambiguous or uncertain.</p></li>
 		</ul>
-
-
-
-
-
 
 		If you want to know more about handling tags, see <a href="10" class="topic">this</a> topic.
 
