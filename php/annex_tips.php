@@ -353,8 +353,8 @@
 		<h4>Color codes</h4>
 		<p>The type of tags are divided up into groups that huddle together.</p>
 		<p>What the colors indicate:</p>
-		<div class="annex-hotkey"><div class="tag tag-production">Production</div></div><span class="annex-tiny">Demos, intros, etc.</span>
-		<div class="annex-hotkey"><div class="tag tag-origin">Origin</div></div><span class="annex-tiny">Cover, conversion, etc.</span>
+		<div class="annex-hotkey"><a href="14" class="topic"><div class="tag tag-production">Production</div></a></div><span class="annex-tiny">Demos, intros, etc.</span>
+		<div class="annex-hotkey"><a href="13" class="topic"><div class="tag tag-origin">Origin</div></a></div><span class="annex-tiny">Cover, conversion, etc.</span>
 		<div class="annex-hotkey"><a href="12" class="topic"><div class="tag tag-digi">Digi</div></a></div><span class="annex-tiny">Digi, what type, etc.</span>
 		<div class="annex-hotkey"><a href="11" class="topic"><div class="tag tag-warning">Warning</div></a></div><span class="annex-tiny">Bugged, hacked, etc.</span>
 		<div class="annex-hotkey" style="position:relative;top:3.5px;"><a href="remix64" class="search" data-type="tag"><div class="tag tag-remix64"></div></a></div><span class="annex-tiny">It has been remixed</span>
@@ -488,7 +488,64 @@
 			<p>Also a main or a secondary tag. It indicates that the tune was inspired by something, e.g. it borrows notes, or the style of another composer.</p></li>
 		</ul>
 
+		If you want to know more about handling tags, see <a href="10" class="topic">this</a> topic.
 
+	',
+
+	'	<h3>Production tags</h3>
+
+		<p>Useful if the SID file was made for a specific production.</p>
+
+		<h4>List of all production tags</h4>
+		<ul class="annex-tags-list">
+			<li><a href="&quot;4k intro&quot;" class="search" data-type="tag"><div class="tag tag-production">4K Intro</div></a>= <b>Made for a 4K intro</b>
+			<p>Sort of a demo, only it cannot take up more than 4K of RAM. Often part of a competition.</p></li>
+		</ul>
+		<ul class="annex-tags-list">
+			<li><a href="collection" class="search" data-type="tag"><div class="tag tag-production">Collection</div></a>= <b>Added to a collection</b>
+			<p>Can sometimes be seen if the tune was added to a music collection. However, the tag has been used sparingly as it multiplies very easily.</p></li>
+		</ul>
+		<ul class="annex-tags-list">
+			<li><a href="&quot;crack intro&quot;" class="search" data-type="tag"><div class="tag tag-production">Crack Intro</div></a>= <b>Made for a crack intro</b>
+			<p>Mostly indicates it was made for a crack intro. Sometimes also applied if the tune was known for being used a lot in crack intros in general.</p></li>
+		</ul>
+		<ul class="annex-tags-list">
+			<li><a href="demo" class="search" data-type="tag"><div class="tag tag-production">Demo</div></a>= <b>Made for a demo</b>
+			<p>Applies to both one-part and multi-part demos.</p></li>
+		</ul>
+		<ul class="annex-tags-list">
+			<li><a href="diskmag" class="search" data-type="tag"><div class="tag tag-production">Diskmag</div></a>= <b>Made for a diskmag</b>
+			<p>Used in a diskmag with scene news, interviews, etc.</p></li>
+		</ul>
+		<ul class="annex-tags-list">
+			<li><a href="dtv" class="search" data-type="tag"><div class="tag tag-production">DTV</div></a>= <b>Made for C64 DTV</b>
+			<p><a href="https://www.c64-wiki.com/wiki/C64DTV">C64 Direct-to-TV</a> is single-chip implementation of the C64, contained in a joystick. DTV1 had 128K RAM, DMA transfer, and 256 possible colors.</p></li>
+		</ul>
+		<ul class="annex-tags-list">
+			<li><a href="game" class="search" data-type="tag"><div class="tag tag-production">Game</div></a>= <b>Made for a game</b>
+			<p>Made for a <i>released</i> game. Maybe the game can be seen in the <b>GB64</b> tab.</p></li>
+		</ul>
+		<ul class="annex-tags-list">
+			<li><a href="&quot;game prev&quot;" class="search" data-type="tag"><div class="tag tag-production">Game Prev</div></a>= <b>Made for a game</b>
+			<p>Made for a preview of a game which <i>may</i> never be finished. Maybe the game can be seen in the <b>GB64</b> tab.</p></li>
+		</ul>
+		<ul class="annex-tags-list">
+			<li><a href="gtw" class="search" data-type="tag"><div class="tag tag-production">GTW</div></a>= <b>For a <u>G</u>ame <u>T</u>hat <u>W</u>eren\'t</b>
+			<p>Related to the game preview, only this is sure to be a game that will <i>never</i> be finished. There\'s a web site dedicated to <a href="https://www.gamesthatwerent.com/gtw64/">Games That Weren\'t</a>.</p></li>
+		</ul>
+		<ul class="annex-tags-list">
+			<li><a href="intro" class="search" data-type="tag"><div class="tag tag-production">Intro</div></a>= <b>Made for a C64 intro</b>
+			<p>It can be an intro for e.g. a demo or a diskmag, or it can be stand-alone, in which case it\'s usually in a competition.</p></li>
+		</ul>
+		<ul class="annex-tags-list">
+			<li><a href="loader" class="search" data-type="tag"><div class="tag tag-production">Loader</div></a>= <b>Made for a loader</b>
+			<p>Loaders were typically seen when loading a game from a cassette tape.</li>
+		</ul>
+		<ul class="annex-tags-list">
+			<li><a href="seuck" class="search" data-type="tag"><div class="tag tag-production">SEUCK</div></a>= <b>Made for a SEUCK game</b>
+			<p>A secondary tag that typically accompanies the <b>Game</b> tag. It indicates that the game was made with the <a href="https://en.wikipedia.org/wiki/Shoot-%27Em-Up_Construction_Kit">Shoot-\'Em-Up Construction Kit</a>.</p></li>
+		</ul>
+	
 	',
 
 	/*'	<h3>List of general tags</h3>
@@ -521,6 +578,7 @@ else
 			<li><a href="1" class="topic">Memory bar</a></li>
 			<li><a href="13" class="topic">Origin tags</a></li>
 			<li><a href="0" class="topic">Playlists</a></li>
+			<li><a href="14" class="topic">Production tags</a></li>
 			<li><a href="3" class="topic">Registering</a></li>
 			<li><a href="5" class="topic">Searching</a></li>
 			<li><a href="4" class="topic">SID handlers</a></li>
