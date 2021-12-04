@@ -546,20 +546,53 @@
 			<p>A secondary tag that typically accompanies the <b>Game</b> tag. It indicates that the game was made with the <a href="https://en.wikipedia.org/wiki/Shoot-%27Em-Up_Construction_Kit">Shoot-\'Em-Up Construction Kit</a>.</p></li>
 		</ul>
 	
+		If you want to know more about handling tags, see <a href="10" class="topic">this</a> topic.
+
 	',
 
-	/*'	<h3>List of general tags</h3>
+	'	<h3>General tags</h3>
 
 		<h4>This is an incomplete list</h4>
-		<p>There are a ton of tags in DeepSID and everyone can add more.</p>
-		<p>This list will focus on interesting tags, or tags that need explaining.</p>
+		<p>It will focus on interesting tags, or tags that need explaining.</p>
 
-		<h4>Warning tags</h4>
-		<p>There are red tags that indicate a warning of some kind.</p>
+		<ul class="annex-tags-list">
+			<li><a href="2x" class="search" data-type="tag"><div class="tag">2x</div></a>= <b>2x multispeed tune</b>
+			<p>The most common update speed for a C64 player is 50 times a second, i.e. each time the C64 screen is refreshed. Sometimes SID tunes can call the player twice as fast (or more) which allows for some quite interesting sounds.</p>
+			<p>There are also tags for <a href="3x" class="search" data-type="tag">3x</a>, <a href="4x" class="search" data-type="tag">4x</a>, <a href="8x" class="search" data-type="tag">8x</a>, etc. Even one for <a href="25hz" class="search" data-type="tag">25hz</a>.</p></li>
+		</ul>
+		<ul class="annex-tags-list">
+			<li><a href="first" class="search" data-type="tag"><div class="tag">First</div></a>= <b>First attempt ever</b>
+			<p>This is the first tune made (or released) by the composer.</p></li>
+		</ul>
+		<ul class="annex-tags-list">
+			<li><a href="fm" class="search" data-type="tag"><div class="tag">FM</div></a>= <b>Melodic use of freq mod</b>
+			<p>The tune emulates a ring mod or hard sync relationship for several coherent notes.</p></li>
+		</ul>
+		<ul class="annex-tags-list">
+			<li><a href="interactive" class="search" data-type="tag"><div class="tag">Interactive</div></a>= <b>Originally interactive</b>
+			<p>Part of a production where the tune could be changed in real time. (It is not interactive in DeepSID, however.)</p></li>
+		</ul>
+		<ul class="annex-tags-list">
+			<li><a href="skydive" class="search" data-type="tag"><div class="tag">Skydive</div></a>= <b>Uses Hubbard\'s "skydive"</b>
+			<p>The tune uses an arpeggio effect that toggles between a note and a downwards slide originating at that note.</p></li>
+		</ul>
+		<ul class="annex-tags-list">
+			<li><a href="solo" class="search" data-type="tag"><div class="tag">Solo</div></a>= <b>There\'s a solo coming up</b>
+			<p>The tune has a solo with a lead instrument.</p></li>
+		</ul>
+		<ul class="annex-tags-list">
+			<li><a href="?" class="search" data-type="tag"><div class="tag">?</div></a>= <b>In doubt about those tags</b>
+			<p>Means that one or more of the other tags applied to it is ambiguous or uncertain.</p></li>
+		</ul>
 
-		<i>If you want to know more about handling tags, see <a href="10" class="topic">this</a> topic.</i>
 
-	',*/
+
+
+
+
+		If you want to know more about handling tags, see <a href="10" class="topic">this</a> topic.
+
+	',
 );
 
 $id = isset($_GET['id']) ? $_GET['id'] : mt_rand(0, count($tips) - 1);
@@ -573,6 +606,7 @@ else
 			<li><a href="6" class="topic">Color strips</a></li>
 			<li><a href="12" class="topic">Digi tags</a></li>
 			<li><a href="2" class="topic">External links</a></li>
+			<li><a href="15" class="topic">General tags</a></li>
 			<li><a href="10" class="topic">Handling tags</a></li>
 			<li><a href="7" class="topic">Hotkeys</a></li>
 			<li><a href="1" class="topic">Memory bar</a></li>
