@@ -399,6 +399,26 @@ if ($name == '?')
 $csdbCompoFolder = 'CSDb Music Competitions';
 $exoticFolder = '_Exotic SID Tunes Collection';
 
+$clink = '';
+if (isset($row)) {
+	$clink_name = empty($row->shortname) ? $row->name : $row->shortname;
+	if ($clink_name == '?') {
+		$clink_handle = '';
+		$clink_name = $row->shorthandle;
+		if (empty($clink_name)) {
+			$chandles = explode(',', $row->handles);
+			$clink_name = end($chandles);
+		}
+	} else {
+		$clink_handle = $row->shorthandle;
+		if (empty($clink_handle) || $clink_handle == '&nbsp;') {
+			$chandles = explode(',', $row->handles);
+			$clink_handle = end($chandles);
+		}
+	}
+	$clink = '<span class="line"><img class="icon clinks" src="images/composer_link.svg" title="Links" alt="" style="position:relative;top:2.5px;height:16px;" /><a href="#" class="clinks" data-id="'.$row->id.'" data-name="'.$clink_name.'" data-handle="'.$clink_handle.'">Links</a><img class="icon clinks" src="images/composer_arrowright.svg" alt="" style="position:relative;top:3px;height:15px;margin-left:3px;" alt="" /></span>';
+}
+
 // Top part with thumbnail, birthday, country, etc.
 $html = '<table style="border:none;margin-bottom:0;"><tr>'.
 			'<td style="position:relative;padding:0;border:none;width:184px;">'.
@@ -413,6 +433,7 @@ $html = '<table style="border:none;margin-bottom:0;"><tr>'.
 					substr($born, 0, 4).'</span>' : '').
 				($died != '0000' ? '<span class="line"><img class="icon stone" src="images/composer_stone.svg" title="Died" alt="" style="position:relative;top:3px;height:18px;margin-right:5px;" />'.
 					$died.' '.$cause.'</span>' : '').
+				$clink.
 				(!empty($notable) ? '<span class="notable">'.
 					'<img class="icon cstar" src="images/composer_star.svg" title="Notable" alt="" style="top:-1px;" /><b style="position:relative;top:-5px;">'.$notable.'&nbsp;</b></span>' : '').
 				(!empty($country) ? '<span style="position:absolute;left:10px;bottom:10px;">'.

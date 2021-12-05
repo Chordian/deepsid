@@ -1094,6 +1094,61 @@ $(function() { // DOM ready
 	});
 
 	/**
+	 * When clicking a "clink" for opening a composer's links in the annex box.
+	 */
+	$("#topic-profile").on("click", "a.clinks", function() {
+		var $this = $(this);
+		$("#annex .annex-tab").empty().append('Links<div class="annex-close"></div>');
+		$.get("php/annex_clinks.php", { id: $this.attr("data-id") }, function(data) {
+			browser.validateData(data, function(data) {
+				var handle = $this.attr("data-handle");
+				$("#annex-tips").empty().append(
+					'<h3 class="ellipsis" style="width:200px;'+(handle != "" ? 'margin-bottom:0;'  : '')+'">'+$this.attr("data-name")+'</h3>'+
+					'<h4 class="ellipsis" style="width:228px;margin-top:0;">'+handle+'</h4>'+
+					data.html+
+					'<button id="add-clink" style="height:auto;padding-left:10px;padding-right:10px;font-size:11px;line-height:24px;margin-top:10px;">Add Link</button>');
+				$(".annex-topics").show();
+				$("#annex").show();
+			});
+		});
+		return false;
+	});
+
+	/**
+	 * When clicking "ADD LINK" in the annex box.
+	 */
+	$("#annex").on("click", "#add-clink", function() {
+		if (!$("#logout").length) {
+			alert("Login or register and you will be able to add composer links.");
+			return false;
+		}
+		CustomDialog({
+			id: '#dialog-add-clink',
+			text: '<h3>Add a composer link</h3>'+
+				'<p>Note that if the link doesn\'t work or is irrelevant, it will be deleted. There is no editing yet.</p>',
+			width: 390,
+			height: 236,
+		}, function() {
+			// SAVE was clicked; add the composer link in the database
+			$.post("php/composers_clink_write.php", {
+				fullname:	browser.playlist[browser.songPos].fullname.replace(browser.ROOT_HVSC+"/", ""),
+				name:		$("#edit-clink-name-input").val(),
+				url:		$("#edit-clink-url-input").val(),
+			}, function(data) {
+				browser.validateData(data, function() {
+					// Refresh the annex box
+
+
+//////// Also need to write the above PHP script
+
+
+
+				});
+			});
+		});
+	});
+
+	/**
 	 * When clicking a recommendation box in the root.
 	 */
 	$("#topic-profile").on("mousedown", "table.recommended", function() { return false; });
@@ -1557,6 +1612,7 @@ $(function() { // DOM ready
 	 * When clicking the annex corner icon for showing the topics.
 	 */
 	$("#annex").on("click", ".annex-topics", function() {
+		$("#annex .annex-tab").empty().append('Tips<div class="annex-close"></div>');
 		$.get("php/annex_tips.php", { id: -1 }, function(topics) {
 			$("#annex-tips").empty().append(topics);
 			$(".annex-topics").hide();
@@ -1585,6 +1641,7 @@ $(function() { // DOM ready
 	 * Used by the above two event clicks.
 	 */
 	function ClickAnnexLink(topic) {
+		$("#annex .annex-tab").empty().append('Tips<div class="annex-close"></div>');
 		$.get("php/annex_tips.php", { id: topic }, function(tips) {
 			$("#annex-tips").empty().append(tips);
 			$(".annex-topics").show();

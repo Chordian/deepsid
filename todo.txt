@@ -16,10 +16,12 @@ SHOULD BE DONE
   - Along with the above v2, "X" icons for deleting individual entries, plus a general button for
     clearing the entire history.
 
+- When uploading, replace "-" in filenames with "_" instead.
+
 - A new "Links ->" tag link in name/country/brand-area of profiles. When clicked, the "Tips" tab
   name is replaced with "Links" in the top of the annex box, and a list of links for that composer
   is shown. Maybe later you can even put an "ADD NEW LINK" button in top for users to add more?
-  - Remember to set the tab name to "Tips" when clicking a tips link, including in annex box.
+  - Remember to set the tab name to "Tips" when clicking a tips link, including in the annex box.
 
 - Maybe add avatar images back for the bottom three lists, but this time so they are loaded a bit
   delayed in a way that doesn't bog down the site.

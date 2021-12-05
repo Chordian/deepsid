@@ -378,15 +378,26 @@
 			<div class="dialog-text"></div>
 			<form id="form-edit-file" onsubmit="return false;" autocomplete="off">
 				<label id="label-edit-file-name" for="edit-file-name" style="margin-bottom:15px;">Name</label>
-				<input type="text" name="edit-file-name" id="edit-file-name-input" maxlength="64"  style="margin-bottom:11px;" /><br />
+				<input type="text" name="edit-file-name" id="edit-file-name-input" maxlength="64" style="margin-bottom:11px;" /><br />
 				<label id="label-edit-file-player" for="edit-file-player" style="margin-bottom:15px;">Player</label>
-				<input type="text" name="edit-file-player" id="edit-file-player-input" maxlength="48"  style="margin-bottom:11px;" /><br />
+				<input type="text" name="edit-file-player" id="edit-file-player-input" maxlength="48" style="margin-bottom:11px;" /><br />
 				<label id="label-edit-file-author" for="edit-file-author">Author</label>
 				<input type="text" name="edit-file-author" id="edit-file-author-input" maxlength="128" /><br />
 				<label id="label-edit-file-copyright" for="edit-file-copyright">Copyright</label>
 				<input type="text" name="edit-file-copyright" id="edit-file-copyright-input" maxlength="128" />
 			</form>
 			<div class="dialog-buttons"><a href="#" class="dialog-cancel">Cancel</a><button class="dialog-button-yes dialog-auto">OK</button></div>
+		</div>
+
+		<div id="dialog-add-clink" class="dialog-box">
+			<div class="dialog-text"></div>
+			<form onsubmit="return false;" autocomplete="off">
+				<label id="label-clink-name" for="edit-clink-name">Name</label>
+				<input type="text" name="edit-clink-name" id="edit-clink-name-input" maxlength="128" /><br />
+				<label id="label-clink-url" for="edit-clink-url">URL</label>
+				<input type="text" name="edit-clink-url" id="edit-clink-url-input" maxlength="512" /><br />
+			</form>
+			<div class="dialog-buttons"><a href="#" class="dialog-cancel">Cancel</a><button class="dialog-button-yes dialog-auto">Save</button></div>
 		</div>
 
 		<input id="upload-new" type="file" accept=".sid" style="display:none;" />

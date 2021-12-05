@@ -3865,6 +3865,7 @@ input[type=range]::-ms-track {
 			#page .ext img.cake,
 			#page .ext img.earth,
 			#page .ext img.stone,
+			#page .ext img.clinks,
 			.doublenote {
 				filter: var(--svg-filter-icon-bottom);
 			}
@@ -5394,7 +5395,8 @@ input[type=range]::-ms-track {
 	}
 
 		/* Edit box for year in edit file dialog box */
-		#form-edit-file input {
+		#form-edit-file input,
+		#dialog-add-clink form input {
 			float: right;
 			position: relative;
 			top: 4px;
@@ -5403,7 +5405,8 @@ input[type=range]::-ms-track {
 			height: 24px;
 		}
 
-		#form-edit-file label {
+		#form-edit-file label,
+		#dialog-add-clink form label {
 			display: inline-block;
 			font: normal 15px "Montserrat", sans-serif;
 			width: 86px;
