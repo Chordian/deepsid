@@ -3870,7 +3870,7 @@ input[type=range]::-ms-track {
 				filter: var(--svg-filter-icon-bottom);
 			}
 
-			#annex ul.clink-list li {
+			#clink-list li {
 				position: relative;
 			}
 
@@ -5469,7 +5469,7 @@ input[type=range]::-ms-track {
 
 		#annex .clink-corner-link {
 			position: absolute;
-			top: 37px;
+			top: 37.5px;
 			right: 17px;
 			font-size: 11px;
 		}

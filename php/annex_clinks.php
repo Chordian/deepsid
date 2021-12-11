@@ -36,14 +36,17 @@ try {
 			</li>';
 	}
 
-	if (empty($html))
-		$html = '<p><i>There are no links yet.</i></p>';
-	else
-		$html = '<ul class="clink-list">'.$html.'</ul>';
+	if (empty($html)) {
+		$html = '<p><i id="clink-list" data-id="'.$_GET['id'].'">There are no links yet.</i></p>';
+		$content = 0;
+	 } else {
+		$html = '<ul id="clink-list" data-id="'.$_GET['id'].'">'.$html.'</ul>';
+		$content = -1;
+	 }
 
 } catch(PDOException $e) {
 	$account->LogActivityError('annex_clinks.php', $e->getMessage());
 	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 }
-die(json_encode(array('status' => 'ok', 'html' => $html)));
+die(json_encode(array('status' => 'ok', 'html' => $html, 'clinks' => $content)));
 ?>

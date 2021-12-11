@@ -115,13 +115,13 @@ $(function() { // DOM ready
 	 * @param {*} event 
 	 */
 	$(window).on("keydown", function(event) {
-		if (!$("#search-box,#username,#password,#old-password,#new-password,#sym-rename,#sym-specify-subtune,#new-tag,#dialog-all-tags,#dialog-song-tags,#upload-csdb-id,#upload-lengths-list,#upload-stil-text,#form-edit-file input,#form-upload-file input").is(":focus")) {
+		if (!$("#search-box,#username,#password,#old-password,#new-password,#sym-rename,#sym-specify-subtune,#new-tag,#dialog-all-tags,#dialog-song-tags,#upload-csdb-id,#upload-lengths-list,#upload-stil-text,#form-edit-file input,#form-upload-file input,div.dialog-box input").is(":focus")) {
 			if (event.keyCode == 220)									// Keydown key below 'Escape'
 				// Fast forward
 				$("#faster").trigger("mousedown");
 		}
 	}).on("keyup", function(event) {
-		if (!$("#search-box,#username,#password,#old-password,#new-password,#sym-rename,#sym-specify-subtune,#new-tag,#dialog-all-tags,#dialog-song-tags,#upload-csdb-id,#upload-lengths-list,#upload-stil-text,#form-edit-file input,#form-upload-file input,#dialog-edit-videos input").is(":focus")) {
+		if (!$("#search-box,#username,#password,#old-password,#new-password,#sym-rename,#sym-specify-subtune,#new-tag,#dialog-all-tags,#dialog-song-tags,#upload-csdb-id,#upload-lengths-list,#upload-stil-text,#form-edit-file input,#form-upload-file input,div.dialog-box input").is(":focus")) {
 			if (event.keyCode == 220) {									// Keyup key below 'Escape'
 				// Fast forward
 				$("#faster").trigger("mouseup");
@@ -1104,10 +1104,11 @@ $(function() { // DOM ready
 				var handle = $this.attr("data-handle");
 				$("#annex-tips").empty().append(
 					'<h3 class="ellipsis" style="width:200px;'+(handle != "" ? 'margin-bottom:0;'  : '')+'">'+$this.attr("data-name")+'</h3>'+
-					'<h4 class="ellipsis" style="width:158px;margin-top:0;">'+handle+'</h4>'+
+					'<h4 class="ellipsis" style="width:170px;margin-top:0;">'+handle+'</h4>'+
 					data.html+
-					'<a href="" id="edit-add-clink" class="clink-corner-link" style="right:44px;">Add</a>'+
-					'<a href="" id="edit-cancel-clink" class="clink-corner-link"">Edit</a>');
+					'<a href="" id="edit-add-clink" class="clink-corner-link" style="right:'+(data.clinks ? '44' : '17')+'px;">Add</a>'+
+					(data.clinks ? '<a href="" id="edit-cancel-clink" class="clink-corner-link"">Edit</a>' : '')
+				);
 				$(".annex-topics,#annex").show();
 			});
 		});
@@ -1156,18 +1157,14 @@ $(function() { // DOM ready
 			height: 236,
 		}, function() {
 			// SAVE was clicked; add the composer link in the database
-			$.post("php/composer_clink_write.php", {
-				fullname:	browser.playlist[browser.songPos].fullname.replace(browser.ROOT_HVSC+"/", ""),
+			$.post("php/composer_clink_add.php", {
+				cid:		$("#clink-list").attr("data-id"),
 				name:		$("#edit-clink-name-input").val(),
 				url:		$("#edit-clink-url-input").val(),
 			}, function(data) {
 				browser.validateData(data, function() {
 					// Refresh the annex box
-
-
-					//////// Also need to write the above PHP script
-
-
+					$("#topic-profile a.clinks").trigger("click");
 				});
 			});
 		});
@@ -1192,20 +1189,14 @@ $(function() { // DOM ready
 		}, function() {
 			// SAVE was clicked; edit the composer link in the database
 			$.post("php/composer_clink_edit.php", {
-				fullname:	browser.playlist[browser.songPos].fullname.replace(browser.ROOT_HVSC+"/", ""),
+				cid:		$("#clink-list").attr("data-id"),
 				id:			$clink.attr("data-id"),
 				name:		$("#edit-clink-name-input").val(),
 				url:		$("#edit-clink-url-input").val(),
 			}, function(data) {
 				browser.validateData(data, function() {
 					// Refresh the annex box
-
-
-					//////// Also need to write the above PHP script
-
-
-					// Turn off edit link and restore full width of clinks
-					$("#edit-cancel-clink").trigger("click");
+					$("#topic-profile a.clinks").trigger("click");
 				});
 			});
 		});
@@ -1228,11 +1219,17 @@ $(function() { // DOM ready
 			width: 500,
 			height: 196,
 		}, function() {
-
-
-			///////// Delete
-
-
+			$.post("php/composer_clink_delete.php", {
+				cid:		$("#clink-list").attr("data-id"),
+				id:			$clink.attr("data-id"),
+				name:		$("#clink-name-delete").text(),
+				url:		$("#clink-url-delete").text(),
+			}, function(data) {
+				browser.validateData(data, function() {
+					// Refresh the annex box
+					$("#topic-profile a.clinks").trigger("click");
+				});
+			});
 		});
 	});
 

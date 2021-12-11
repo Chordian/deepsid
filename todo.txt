@@ -26,12 +26,6 @@ SHOULD BE DONE
 
 - Move show() for annex box when using FAQ links (after having turned the box off). Flickering.
 
-- A new "Links ->" tag link in name/country/brand-area of profiles. When clicked, the "Tips" tab
-  name is replaced with "Links" in the top of the annex box, and a list of links for that composer
-  is shown. Maybe later you can even put an "EDIT" link in top for users to add more?
-  - Remember to add about this in the tips about what you get out of registering a user.
-  - Also remember to log whenever someone adds, edits or deletes a clink.
-
 - Maybe add avatar images back for the bottom three lists, but this time so they are loaded a bit
   delayed in a way that doesn't bog down the site.
   - If done, make sure to also revert back to the slightly shorter names.

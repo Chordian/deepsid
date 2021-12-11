@@ -523,12 +523,9 @@
 			</div>
 			<div id="sundry">
 				<div id="stopic-stil" class="stopic">
-					<div id="sundry-news"><!--<span></span>-->
-						<a href="https://encore64.com/"><img src="images/encore64.jpg" style="float:left;width:100px;height:100px;position:relative;top:3px;margin-left:6px;" alt="encore64" /></a>
-						<div style="float:left;margin-left:12px;text-align:left;width:273px;font-size:12px;line-height:1.3em;">
-							<h3 style="margin-top:3px;margin-bottom:7px;">Encore64 Digital Album</h3>
-							Thirteen original remakes of legendary <a href="//deepsid.chordian.net/?file=/$Encore64/">C64 SID Songs</a>. Some reinterpreted by the original composer, others remixed by the most highly appreciated remix sceners today.
-						</div>
+					<div id="sundry-news">
+						<span>A composer profile can now show a list of external links. Click the new link in the profile page to
+								open these in the annex box. If you're logged in, you too can edit these links.</span>
 					</div>
 				</div>
 				<div id="stopic-tags" class="stopic" style="display:none;"></div>
@@ -1325,6 +1322,12 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>December 11, 2021</h3>
+						<ul>
+							<li>You can now add external links to a composer profile. Click the new link in the line with the star ratings to
+								open these in the annex box. All users logged in are free to add, edit and delete these links.</li>
+						</ul>
 
 						<h3>November 29, 2021</h3>
 						<ul>

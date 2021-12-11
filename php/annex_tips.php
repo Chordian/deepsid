@@ -99,6 +99,10 @@
 			<li>Use the dialog box.</li>
 		</ol>
 
+		<h4>Add or edit composer links</h4>
+		<p>When you see a profile page for a composer, click <b>Links</b>.</p>
+		<p>This annex box then updates, and you can edit these links too.</p>
+
 		<h4>Adjust your preferences</h4>
 		<p>Click the cogwheel tab right next to the top of this box.</p>
 		This will show your settings.
