@@ -18,10 +18,19 @@ SHOULD BE DONE
 
 - When uploading, replace "-" in filenames with "_" instead.
 
+- Tips idea: Jargon. All kinds of abbreviations and technical expressions explained - including
+  DeepSID jargon such as "plinks" and "clinks".
+
+- Idea: To honor those that have left us, all persons that are dead will have their avatar images
+  made black-and-white (if they have one).
+
+- Move show() for annex box when using FAQ links (after having turned the box off). Flickering.
+
 - A new "Links ->" tag link in name/country/brand-area of profiles. When clicked, the "Tips" tab
   name is replaced with "Links" in the top of the annex box, and a list of links for that composer
-  is shown. Maybe later you can even put an "ADD NEW LINK" button in top for users to add more?
-  - Remember to set the tab name to "Tips" when clicking a tips link, including in the annex box.
+  is shown. Maybe later you can even put an "EDIT" link in top for users to add more?
+  - Remember to add about this in the tips about what you get out of registering a user.
+  - Also remember to log whenever someone adds, edits or deletes a clink.
 
 - Maybe add avatar images back for the bottom three lists, but this time so they are loaded a bit
   delayed in a way that doesn't bog down the site.

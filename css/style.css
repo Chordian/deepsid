@@ -3870,6 +3870,45 @@ input[type=range]::-ms-track {
 				filter: var(--svg-filter-icon-bottom);
 			}
 
+			#annex ul.clink-list li {
+				position: relative;
+			}
+
+			/* A composer link in a bullet list of links for a composer (annex box) */
+			#annex a.clink {
+				display: inline-block;
+				width: 170px; /* Also adjusted in main.js */
+				font-family: "Asap Condensed", sans-serif;
+				vertical-align: bottom;
+			}
+
+			/* And edit icon in the right side of a composer link */
+			#annex .clink-icon {
+				display: none;
+				position: absolute;
+				top: 0;
+				right: -1px;
+				height: 20px;
+				width: 20px;
+				background: #ccc;
+				filter: var(--svg-filter-icon-bottom);
+				cursor: pointer;
+				opacity: 0.6;
+			}
+
+				#annex .clink-icon:hover {
+					opacity: 1;
+				}
+
+				#annex .clink-edit {
+					right: 19px;
+					background: url(../images/edit.svg) 0 0 / 18px 18px no-repeat;
+				}
+
+				#annex .clink-delete {
+					background: url(../images/close.svg) 0 0 / 18px 18px no-repeat;
+				}
+
 			/*.icon-editor {
 				filter: var(--svg-filter-icon-editor);
 			}*/
@@ -5405,6 +5444,10 @@ input[type=range]::-ms-track {
 			height: 24px;
 		}
 
+			#dialog-add-clink form input {
+				width: 285px;
+			}
+
 		#form-edit-file label,
 		#dialog-add-clink form label {
 			display: inline-block;
@@ -5412,6 +5455,23 @@ input[type=range]::-ms-track {
 			width: 86px;
 			color: var(--color-text-fine);
 			margin: 5px 4px 5px 0;
+		}
+
+			#dialog-add-clink form label {
+				width: 56px;
+			}
+
+		#dialog-delete-clink .clink-text {
+			width: 460px;
+			font-size: 13px;
+			color: var(--color-text-resp-bad);
+		}
+
+		#annex .clink-corner-link {
+			position: absolute;
+			top: 37px;
+			right: 17px;
+			font-size: 11px;
 		}
 
 		#dialog-edit-videos small {

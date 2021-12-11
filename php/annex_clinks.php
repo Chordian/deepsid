@@ -21,20 +21,25 @@ try {
 	$db->exec("SET NAMES UTF8");
 
 	// Get the list of links for this composer
-	$select = $db->prepare('SELECT name, url FROM composers_links WHERE composers_id = :id');
+	$select = $db->prepare('SELECT id, name, url FROM composers_links WHERE composers_id = :id');
 	$select->execute(array(':id'=>$_GET['id']));
 	$select->setFetchMode(PDO::FETCH_OBJ);
 
 	// Build the HTML block with the entire list
 	$html = '';
 	foreach ($select as $row) {
-		$html .= '<li><a href="'.$row->url.'" target="_blank">'.$row->name.'</a></li>';
+		$html .= '
+			<li>
+				<a href="'.$row->url.'" target="_blank" class="clink ellipsis" data-id="'.$row->id.'">'.$row->name.'</a>
+				<div class="clink-icon clink-edit" title="Edit"></div>
+				<div class="clink-icon clink-delete" title="Delete"></div>
+			</li>';
 	}
 
 	if (empty($html))
 		$html = '<p><i>There are no links yet.</i></p>';
 	else
-		$html = '<ul>'.$html.'</ul>';
+		$html = '<ul class="clink-list">'.$html.'</ul>';
 
 } catch(PDOException $e) {
 	$account->LogActivityError('annex_clinks.php', $e->getMessage());

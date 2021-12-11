@@ -1104,33 +1104,59 @@ $(function() { // DOM ready
 				var handle = $this.attr("data-handle");
 				$("#annex-tips").empty().append(
 					'<h3 class="ellipsis" style="width:200px;'+(handle != "" ? 'margin-bottom:0;'  : '')+'">'+$this.attr("data-name")+'</h3>'+
-					'<h4 class="ellipsis" style="width:228px;margin-top:0;">'+handle+'</h4>'+
+					'<h4 class="ellipsis" style="width:158px;margin-top:0;">'+handle+'</h4>'+
 					data.html+
-					'<button id="add-clink" style="height:auto;padding-left:10px;padding-right:10px;font-size:11px;line-height:24px;margin-top:10px;">Add Link</button>');
-				$(".annex-topics").show();
-				$("#annex").show();
+					'<a href="" id="edit-add-clink" class="clink-corner-link" style="right:44px;">Add</a>'+
+					'<a href="" id="edit-cancel-clink" class="clink-corner-link"">Edit</a>');
+				$(".annex-topics,#annex").show();
 			});
 		});
 		return false;
 	});
 
 	/**
-	 * When clicking "ADD LINK" in the annex box.
+	 * When clicking the "Edit" or "Cancel" link for the composer's links.
 	 */
-	$("#annex").on("click", "#add-clink", function() {
+	$("#annex").on("click", "#edit-cancel-clink", function() {
+		if (!$("#logout").length) {
+			alert("Login or register and you will be able to edit composer links.");
+			return false;
+		}
+		if ($("#annex .clink-icon").is(":visible")) {
+			// Turn off edit link and restore full width of clinks
+			$("#annex .clink-icon").hide();
+			$("#annex .clink").css("width", "170px");
+			$("#edit-add-clink").show();
+			$("#edit-cancel-clink").empty().append("Edit");
+		} else {
+			// Turn on edit link and reduce the width of clinks to make room
+			$("#annex .clink").css("width", "150px");
+			$("#annex .clink-icon").fadeIn("fast");
+			$("#edit-add-clink").hide();
+			$("#edit-cancel-clink").empty().append("Cancel");
+		}
+		return false;
+	});
+
+	/**
+	 * When clicking the add link for a new "clink" in the annex box.
+	 */
+	$("#annex").on("click", "#edit-add-clink", function() {
 		if (!$("#logout").length) {
 			alert("Login or register and you will be able to add composer links.");
 			return false;
 		}
+		$("#edit-clink-name-input,#edit-clink-url-input").val("");
+
 		CustomDialog({
 			id: '#dialog-add-clink',
-			text: '<h3>Add a composer link</h3>'+
-				'<p>Note that if the link doesn\'t work or is irrelevant, it will be deleted. There is no editing yet.</p>',
+			text: '<h3>Add a new composer link</h3>'+
+				'<p>Note that if the link doesn\'t work or is irrelevant, it will be deleted. All changes are logged.</p>',
 			width: 390,
 			height: 236,
 		}, function() {
 			// SAVE was clicked; add the composer link in the database
-			$.post("php/composers_clink_write.php", {
+			$.post("php/composer_clink_write.php", {
 				fullname:	browser.playlist[browser.songPos].fullname.replace(browser.ROOT_HVSC+"/", ""),
 				name:		$("#edit-clink-name-input").val(),
 				url:		$("#edit-clink-url-input").val(),
@@ -1139,12 +1165,74 @@ $(function() { // DOM ready
 					// Refresh the annex box
 
 
-//////// Also need to write the above PHP script
-
+					//////// Also need to write the above PHP script
 
 
 				});
 			});
+		});
+		return false;
+	});
+	
+	/**
+	 * When clicking an edit icon for a specific "clink" in the annex box.
+	 */
+	$("#annex").on("click", "div.clink-edit", function() {
+
+		$clink = $(this).prev();
+		$("#edit-clink-name-input").val($clink.text());
+		$("#edit-clink-url-input").val($clink.attr("href"));
+
+		CustomDialog({
+			id: '#dialog-add-clink',
+			text: '<h3>Edit a composer link</h3>'+
+				'<p>Note that if the link doesn\'t work or is irrelevant, it will be deleted. All changes are logged.</p>',
+			width: 390,
+			height: 236,
+		}, function() {
+			// SAVE was clicked; edit the composer link in the database
+			$.post("php/composer_clink_edit.php", {
+				fullname:	browser.playlist[browser.songPos].fullname.replace(browser.ROOT_HVSC+"/", ""),
+				id:			$clink.attr("data-id"),
+				name:		$("#edit-clink-name-input").val(),
+				url:		$("#edit-clink-url-input").val(),
+			}, function(data) {
+				browser.validateData(data, function() {
+					// Refresh the annex box
+
+
+					//////// Also need to write the above PHP script
+
+
+					// Turn off edit link and restore full width of clinks
+					$("#edit-cancel-clink").trigger("click");
+				});
+			});
+		});
+	});
+
+	/**
+	 * When clicking a delete icon for a specific "clink" in the annex box.
+	 */
+	$("#annex").on("click", "div.clink-delete", function() {
+
+		$clink = $(this).prev().prev();
+		$("#clink-name-delete").empty().append('<b>'+$clink.text()+'</b>');
+		$("#clink-url-delete").empty().append('<a href="'+$clink.attr("href")+'" target="_blank">'+$clink.attr("href")+'</a>');
+
+		// Show a dialog confirmation box first
+		CustomDialog({
+			id: '#dialog-delete-clink',
+			text: '<h3>Delete a composer link</h3>'+
+				'<p>Are you sure you want to delete this composer link?</p>',
+			width: 500,
+			height: 196,
+		}, function() {
+
+
+			///////// Delete
+
+
 		});
 	});
 

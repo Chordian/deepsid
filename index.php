@@ -400,6 +400,13 @@
 			<div class="dialog-buttons"><a href="#" class="dialog-cancel">Cancel</a><button class="dialog-button-yes dialog-auto">Save</button></div>
 		</div>
 
+		<div id="dialog-delete-clink" class="dialog-box">
+			<div class="dialog-text"></div>
+			<div id="clink-name-delete" class="clink-text ellipsis"></div>
+			<div id="clink-url-delete" class="clink-text ellipsis"></div>
+			<div class="dialog-buttons"><button class="dialog-button-yes">Yes</button><button class="dialog-button-no">No</button></div>
+		</div>
+
 		<input id="upload-new" type="file" accept=".sid" style="display:none;" />
 		<div id="dialog-upload-wiz2" class="dialog-box dialog-wizard">
 			<div class="dialog-text"></div>
