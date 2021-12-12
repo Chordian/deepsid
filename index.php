@@ -1323,6 +1323,12 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>December 12, 2021</h3>
+						<ul>
+							<li>If the annex box is showing external composer links, it is now automatically refreshed when
+								another composer profile page is shown.</li>
+						</ul>
+
 						<h3>December 11, 2021</h3>
 						<ul>
 							<li>You can now add external links to a composer profile. Click the new link in the line with the star ratings to

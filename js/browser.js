@@ -1716,6 +1716,10 @@ Browser.prototype = {
 					// Enable the brand image (if available) for the correct color theme
 					$("#brand-"+(parseInt(colorTheme) ? "dark" : "light")).show();
 
+					// If the "Links" tab in the annex box is present then refresh the box
+					if ($("#annex .annex-tabs").text().indexOf("Links") != -1)
+						$("#topic-profile a.clinks").trigger("click");
+
 					this.groupsFullname = overridePath == "" ? this.path.substr(1) : overridePath;
 					this.getGroups(this.groupsFullname);
 				});
