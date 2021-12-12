@@ -1327,6 +1327,7 @@
 						<ul>
 							<li>If the annex box is showing external composer links, it is now automatically refreshed when
 								another composer profile page is shown.</li>
+							<li>The list of external links for a composer is now sorted alphabetically.</li>
 						</ul>
 
 						<h3>December 11, 2021</h3>

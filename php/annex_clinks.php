@@ -21,7 +21,7 @@ try {
 	$db->exec("SET NAMES UTF8");
 
 	// Get the list of links for this composer
-	$select = $db->prepare('SELECT id, name, url FROM composers_links WHERE composers_id = :id');
+	$select = $db->prepare('SELECT id, name, url FROM composers_links WHERE composers_id = :id ORDER BY name');
 	$select->execute(array(':id'=>$_GET['id']));
 	$select->setFetchMode(PDO::FETCH_OBJ);
 

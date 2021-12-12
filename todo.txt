@@ -18,9 +18,6 @@ SHOULD BE DONE
 
 - When uploading, replace "-" in filenames with "_" instead.
 
-- More on clinks:
-  - Sort the list alphabetically before showing it?
-
 - Tips idea: Jargon. All kinds of abbreviations and technical expressions explained - including
   DeepSID jargon such as "plinks" and "clinks".
 
