@@ -406,6 +406,10 @@ $(function() { // DOM ready
 				$("#sundry-ctrls").show();
 			}
 			$("#folders").height(0).height($("#songs").height() - 100);
+
+			// Remove the FOLDERS button for the 'Tags' tab if the sundry box is too small
+			if (browser.sliderButton && $("#sundry-tabs .selected").attr("data-topic") == "tags")
+				sundryHeight < 37 ? $("#slider-button").hide() : $("#slider-button").show();
 		});
 	});
 	$("body").on("mouseup touchend", function() {
@@ -1912,6 +1916,8 @@ function ToggleSundry(shrink) {
 		sundryToggle = true;
 		$("#sundry-tabs").find(".tab[data-topic='"+sundryTab+"']").addClass("selected");
 		$("#sundry-ctrls").show();
+		if (parseInt(sundryHeight) > 37 && browser.sliderButton && $("#sundry-tabs .selected").attr("data-topic") == "tags")
+			$("#slider-button").show();
 	} else {
 		sundryHeight = $("#sundry").css("flex-basis");
 		sundryTab = $("#sundry-tabs .selected").attr("data-topic");
@@ -1921,7 +1927,7 @@ function ToggleSundry(shrink) {
 		});
 		sundryToggle = false;
 		$("#sundry-tabs .tab").removeClass("selected"); // No tab selected anymore
-		$("#sundry-ctrls").hide();
+		$("#sundry-ctrls,#slider-button").hide();
 	}
 }
 

@@ -1608,14 +1608,14 @@ small.u2 { margin-left: 2px; }
 		z-index: 2;
 	}
 
-	#slider-button button.rect {
-		height: auto !important;
-		padding-left: 6px;
-		padding-right: 6px;
-		border-radius: 0;
-		font-size: 9px;
-		line-height: 18px;
-	}
+		#slider-button button.rect {
+			height: auto !important;
+			padding-left: 6px;
+			padding-right: 6px;
+			border-radius: 0;
+			font-size: 9px;
+			line-height: 18px;
+		}
 
 	/* Radio-button style buttons where the text needs to stay the same and only one button may be active */
 	.button-radio {

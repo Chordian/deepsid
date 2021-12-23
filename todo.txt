@@ -9,6 +9,10 @@ SHOULD BE DONE
 
 - Idea: Download SID with the PSID header automatically removed, ready to be used in e.g. a demo.
 
+- Idea: A folder with groups, e.g. Vibrants. Inside are search shortcuts to HVSC profiles.
+
+- Make ENTER in edit box accept a new/edited external link.
+
 - A second annex tab with history. Every click on a tune, maybe even every folder you enter, will
   be listed here, so you can re-click it. Newest entry in top.
   - In a later v2, these could be stored in the database. So when the user returns the site at a
@@ -17,6 +21,12 @@ SHOULD BE DONE
     clearing the entire history.
 
 - When uploading, replace "-" in filenames with "_" instead.
+
+- Improve search so e.g. "max hall" suggest the Max_F3H folder.
+
+- When returning to the root, always remove all excess URL switches.
+
+- The "Report a STIL change" link should never appear in the SH folder.
 
 - Tips idea: Jargon. All kinds of abbreviations and technical expressions explained - including
   DeepSID jargon such as "plinks" and "clinks".
@@ -31,23 +41,6 @@ SHOULD BE DONE
   - If done, make sure to also revert back to the slightly shorter names.
 
 ¯¯¯¯¯¯¯¯¯¯¯¯¯  
-
-- I have a good idea for a new comments system to take over from Disqus. When activated, the area
-  with comments appears below SID rows but above the search. It has a drag slider in top. It's
-  quite large initially, which means that info and sundry above both go invisible. The only thing
-  left up there are the memory bar and the controls.
-  - Instead of a big SHOW or HIDE COMMENTS in a new bar in bottom, remove the SEARCH button and
-    place a square button in the end of the search edit box, with a magnifying glass icon. Where
-    the SEARCH button used to be you can place a toggle button for comments.
-  - Optionally move the "Here" checkbox in between the drop-down box and the edit box.
-  - Toggling will slide stuff. The comments pane slides up while info and sundry slides away.
-  - User names will be the registered DeepSID names. Probably without avatars to begin with.
-  - Consider importing everything from Disqus. Either with wrappers, or in its own section.
-  - The toggle button could contain number of comments + comment cartoon bubble icon?
-  - Don't put CSDb SID page comments down there too - they are much too rare to warrant it. Users
-    must go to the CSDb tab as usual to see those.
-  - It should also be possible to comment on a folder, i.e. inside of it but before selecting a
-    SID row. Then the comment would just apply to the entire folder - but would users get that?
 
 - Copy all JCH's ratings to a unique account that is used for determining the quality settings,
   etc. JCH is getting tired of not being able to rate certain folders.
@@ -137,6 +130,8 @@ CONSIDER THIS
 - Turn off chartist year search in playlists, exotic folder, and SH folder.
   - Not sure I want this. Yes, the results wouldn't match the chart there, but wouldn't it be nice
     to have that search option anyway?
+
+- Composers with multiple handles, like Randall, should have the same folder shortcut in threads.
 
 - MEMO, player block: A tall rectangle with a zoom box showing where we are in C64 RAM.
   - Maybe it would be best if it always shows the entire span of the C64's RAM?
@@ -276,6 +271,24 @@ CONSIDER THIS
   - Tab is called "Intro" until clicking tunes, then it reverts to "Profile" again.
   - On folder entry there is an EDIT button that opens a custom dialog box. Accepts HTML code.
   - Create new "symlists_intro" database table for JOIN use.
+
+- I HAVE DECIDED TO BOYCOT THE FOLLOWING FEATURE BASED ON NO ONE ADDING EXTERNAL COMPOSER LINKS:
+  I have a good idea for a new comments system to take over from Disqus. When activated, the area
+  with comments appears below SID rows but above the search. It has a drag slider in top. It's
+  quite large initially, which means that info and sundry above both go invisible. The only thing
+  left up there are the memory bar and the controls.
+  - Instead of a big SHOW or HIDE COMMENTS in a new bar in bottom, remove the SEARCH button and
+    place a square button in the end of the search edit box, with a magnifying glass icon. Where
+    the SEARCH button used to be you can place a toggle button for comments.
+  - Optionally move the "Here" checkbox in between the drop-down box and the edit box.
+  - Toggling will slide stuff. The comments pane slides up while info and sundry slides away.
+  - User names will be the registered DeepSID names. Probably without avatars to begin with.
+  - Consider importing everything from Disqus. Either with wrappers, or in its own section.
+  - The toggle button could contain number of comments + comment cartoon bubble icon?
+  - Don't put CSDb SID page comments down there too - they are much too rare to warrant it. Users
+    must go to the CSDb tab as usual to see those.
+  - It should also be possible to comment on a folder, i.e. inside of it but before selecting a
+    SID row. Then the comment would just apply to the entire folder - but would users get that?
 
 - Settings tab page:
   - The user should be able to change the username (but only if the new one is not already taken).

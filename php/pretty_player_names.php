@@ -71,6 +71,7 @@ $prettyPlayerNames = array(
 	'Gilles_Soulet' =>			'Gilles Soulet\'s player',
 	// Glover's player is handled in 'hvsc.php' itself
 	'Golem' =>					'Golem\'s player',
+	'Gregor_Larson' =>			'Gregor Larson\'s player',
 	'Guy_Shavitt' =>			'Guy Shavitt\'s player',
 	'Hans_Siemons' =>			'Hans Siemons\' player',
 	'Harald_Rosenfeldt' =>		'Harald Rosenfeldt\'s player',

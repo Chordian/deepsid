@@ -588,7 +588,7 @@ Browser.prototype = {
 							ctrls.updateSundry();
 
 							this.sliderButton = true;
-							if ($("#sundry-tabs .selected").attr("data-topic") == "tags") {
+							if ($("#sundry-tabs .selected").attr("data-topic") == "tags" && $("#sundry").css("flex-basis").replace("px", "") > 37) {
 								$("#slider-button").show();
 							}
 

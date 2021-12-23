@@ -1323,6 +1323,11 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>December 23, 2021</h3>
+						<ul>
+							<li>Improved when the folder button for tags in the sundry box is actually supposed to be visible.</li>
+						</ul>
+
 						<h3>December 12, 2021</h3>
 						<ul>
 							<li>If the annex box is showing external composer links, it is now automatically refreshed when
