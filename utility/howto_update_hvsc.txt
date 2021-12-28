@@ -74,7 +74,7 @@ First, do steps 1 to 7 above as you will need the big file later.
 
   1. On the local machine, you should already have deleted the old HVSC folder tree and
      copied in the new one. If you haven't done that yet, do it now.
-  2. Edit the HVSC_VERSION constant in the "update_hvsc_db.php" script.
+  2. Edit the HVSC_NEW_VERSION constant in the "update_hvsc_db.php" script.
   3. Copy the new "Update##.hvs" file to the ./deepsid/php/hvsc_update/ folder.
   4. Edit the file and check the "Cleaning Up" section. If a real file is deleted
      there (e.g. something in DOCUMENTS) then delete that line and save. This goes for
@@ -88,7 +88,11 @@ First, do steps 1 to 7 above as you will need the big file later.
      then run the script in step 5 again. That should patch it. If you intend to run
      these steps online in a minute, edit the big one once and for all first. (Also, to
      be absolutely honest, you really should update the PHP script to handle that!)
-  8. Make a security backup of the "hvsc_files" and "hvsc_folders" tables.
+  8. If the scripts starts renaming folders illogically and perhaps ends in an "integrity
+     constraint violation" database error, someone forgot to add a start slash before a
+     MUSICIANS line just above the error spot. Fix it, drop the local database, import to
+     recreate from fresh, then run the script again.
+  9. Make a security backup of the "hvsc_files" and "hvsc_folders" tables.
 
   REMEMBER TO ALSO DO THE ABOVE FOR THE ONLINE VERSION!
 
@@ -266,7 +270,7 @@ Import data from the SID files themselves:
  15. Newer versions of SIDInfo.exe now escape commas, but they also add a double backslash to the path.
      Search and replace "\\" with "/" and check that number of occurrences match number of lines.
  16. To fix multi-SID tunes, home to top and press Ctrl+H then tick the "Regular expression" radio button.
- 17. In "Replace with", type: -1,-1,5\d\d\d\d,5\d\d\d\d,
+ 17. In "Find what", type: -1,-1,5\d\d\d\d,5\d\d\d\d,
  18. Click "Replace All".
  19. Replace all again for this: -1,5\d\d\d\d,
  20. Set the search mode back to "Normal" and search for "-1,5" just to be sure. Sometimes that can reveal
@@ -398,7 +402,7 @@ Fixing HVSC update discrepancies:
   5. Repeat step 2 to 4 for the other problem rows.
   6. When you have done this for the LOCAL version, export the rows to a patch SQL file.
   7. Edit the SQL file and remove the ID column.
-  8. When importing it for ONLINE later, find and delete the old problem rows in it.
+  8. When importing it for ONLINE later, find and delete the old problem rows in it too.
 
 TABLE: hvsc_folders
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
@@ -561,7 +565,7 @@ Double-check these files both in the folder and in the database:
   MUSICIANS/A/Acrouzet/Puzzled-Background_Music_IV.sid
   GAMES/A-F/Desert_Decision.sid
 
-They must match each other and play correctly.
+They must match each other and play correctly. (NOTE: They probably work online but not locally.)
 
 LINKS AND VERSION
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯

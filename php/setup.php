@@ -11,7 +11,7 @@ define('ROOT_HVSC',			$_SERVER['HTTP_HOST'] == LOCALHOST ? '/Users/jchuu/Music/H
 define('HOST',              $_SERVER['HTTP_HOST'] == LOCALHOST ? 'http://chordian/deepsid/' : '//deepsid.chordian.net/');
 define('COOKIE_HOST',       $_SERVER['HTTP_HOST'] == LOCALHOST ? 'localhost_deepsid' : 'deepsid.chordian.net');
 
-define('HVSC_VERSION',      '75');
+define('HVSC_VERSION',      '76');
 
 define('JCH',               2);                         // Same user ID on both localhost and online
 

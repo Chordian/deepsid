@@ -14,7 +14,7 @@
 
 require_once("class.account.php"); // Includes setup
 
-define('HVSC_VERSION', '75');
+define('HVSC_NEW_VERSION', '76');
 define('HVSC_PATH', '_High Voltage SID Collection/');
 
 try {
@@ -117,7 +117,7 @@ try {
 
 	$mode = $source = '';
 	$sid_files = [];
-	foreach (file('hvsc_update/Update'.HVSC_VERSION.'.hvs') as $line) {
+	foreach (file('hvsc_update/Update'.HVSC_NEW_VERSION.'.hvs') as $line) {
 
 		// Remove newlines and stuff
 		$line = preg_replace('/\s+/', ' ', trim($line));
@@ -170,7 +170,7 @@ try {
 							echo '&nbsp;&nbsp;&nbsp;&nbsp;- '.$destination.$sid.'<br />';
 
 							$db->query('INSERT INTO hvsc_files (fullname, new)'.
-								' VALUES("'.HVSC_PATH.$destination.$sid.'", '.HVSC_VERSION.')');
+								' VALUES("'.HVSC_PATH.$destination.$sid.'", '.HVSC_NEW_VERSION.')');
 
 							// Better see if its folder already exists
 							$folder = substr($destination, 0, -1);
@@ -185,7 +185,7 @@ try {
 						// A SID file is merely renamed
 						echo '&nbsp;&nbsp;Renaming one file: '.$source.'&nbsp;&nbsp;=>&nbsp;&nbsp;'.$destination.'<br />';
 
-						$db->query('UPDATE hvsc_files SET fullname = "'.HVSC_PATH.$destination.'", updated = '.HVSC_VERSION.
+						$db->query('UPDATE hvsc_files SET fullname = "'.HVSC_PATH.$destination.'", updated = '.HVSC_NEW_VERSION.
 							' WHERE fullname = "'.HVSC_PATH.$source.'" LIMIT 1');
 
 					} else if (substr($source, -4) == '.sid' && substr($destination, -1) == '/') {
@@ -194,7 +194,7 @@ try {
 						$file = substr($source, strrpos($source, '/') + 1);
 						echo '&nbsp;&nbsp;One file to folder: '.$source.'&nbsp;&nbsp;=>&nbsp;&nbsp;'.$destination.$file.'<br />';
 
-						$db->query('UPDATE hvsc_files SET fullname = "'.HVSC_PATH.$destination.$file.'", updated = '.HVSC_VERSION.
+						$db->query('UPDATE hvsc_files SET fullname = "'.HVSC_PATH.$destination.$file.'", updated = '.HVSC_NEW_VERSION.
 							' WHERE fullname = "'.HVSC_PATH.$source.'" LIMIT 1');
 						
 						// But does that destination folder exist in the database?
@@ -217,7 +217,7 @@ try {
 							foreach($select as $row) {
 								// Now update every single one with the new destination folder
 								$file = substr($row->fullname, strrpos($row->fullname, '/') + 1);
-								$db->query('UPDATE hvsc_files SET fullname = "'.HVSC_PATH.$destination.$file.'", updated = '.HVSC_VERSION.
+								$db->query('UPDATE hvsc_files SET fullname = "'.HVSC_PATH.$destination.$file.'", updated = '.HVSC_NEW_VERSION.
 									' WHERE fullname = "'.$row->fullname.'"');
 							}
 						}

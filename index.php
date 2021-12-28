@@ -524,8 +524,7 @@
 			<div id="sundry">
 				<div id="stopic-stil" class="stopic">
 					<div id="sundry-news">
-						<span>A composer profile can now show a list of external links. Click the new link in the profile page to
-								open these in the annex box. If you're logged in, you too can edit these links.</span>
+						<span>The High Voltage SID Collection has been upgraded to the latest version #76.</span>
 					</div>
 				</div>
 				<div id="stopic-tags" class="stopic" style="display:none;"></div>
@@ -1125,7 +1124,7 @@
 
 						<h3>Libraries of SID tunes</h3>
 						<p>
-							High Voltage SID Collection #75<br />
+							High Voltage SID Collection #76<br />
 							<a href="https://www.hvsc.c64.org/" target="_top">https://www.hvsc.c64.org/</a>
 						</p>
 						<p>
@@ -1322,6 +1321,24 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>December 28, 2021</h3>
+						<ul>
+							<li>The 8 new 2SID files in HVSC #76 (i.e. that uses 6 voices) has now been added as
+								<a href="//deepsid.chordian.net/?file=/_Exotic%20SID%20Tunes%20Collection/Stereo%202SID&here=1&search=76&type=new&tab=csdb">exotic stereo files</a>.</li>
+							<li>Upgraded the WebSid (HQ) emulator. A hack (not a real fix) has been implemented that allows it to play
+								Adam Morton's problematic <a href="//deepsid.chordian.net/?file=/MUSICIANS/M/Morton_Adam/Synthmeld.sid">Synthmeld.sid</a> song.</li>
+						</ul>
+
+						<h3>December 25, 2021</h3>
+						<ul>
+							<li>Added composer profiles for the new folders in HVSC #76.</li>
+						</ul>
+
+						<h3>December 24, 2021</h3>
+						<ul>
+							<li>The <a href="https://www.hvsc.c64.org/" target="_top">High Voltage SID Collection</a> has been upgraded to the latest version #76.</li>
+						</ul>
 
 						<h3>December 23, 2021</h3>
 						<ul>

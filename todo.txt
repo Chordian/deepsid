@@ -11,6 +11,9 @@ SHOULD BE DONE
 
 - Idea: A folder with groups, e.g. Vibrants. Inside are search shortcuts to HVSC profiles.
 
+- Idea for a new visuals mode button: STATS. It adds/ticks stuff detected to be used by the tune.
+  Waveforms, pulsating, voices, etc.
+
 - Make ENTER in edit box accept a new/edited external link.
 
 - A second annex tab with history. Every click on a tune, maybe even every folder you enter, will
@@ -22,7 +25,7 @@ SHOULD BE DONE
 
 - When uploading, replace "-" in filenames with "_" instead.
 
-- Improve search so e.g. "max hall" suggest the Max_F3H folder.
+- Improve search so e.g. "max hall" suggests the Max_F3H folder.
 
 - When returning to the root, always remove all excess URL switches.
 
@@ -30,9 +33,6 @@ SHOULD BE DONE
 
 - Tips idea: Jargon. All kinds of abbreviations and technical expressions explained - including
   DeepSID jargon such as "plinks" and "clinks".
-
-- Idea: To honor those that have left us, all persons that are dead will have their avatar images
-  made black-and-white (if they have one).
 
 - Move show() for annex box when using FAQ links (after having turned the box off). Flickering.
 
