@@ -14,8 +14,6 @@ SHOULD BE DONE
 - Idea for a new visuals mode button: STATS. It adds/ticks stuff detected to be used by the tune.
   Waveforms, pulsating, voices, etc.
 
-- Make ENTER in edit box accept a new/edited external link.
-
 - A second annex tab with history. Every click on a tune, maybe even every folder you enter, will
   be listed here, so you can re-click it. Newest entry in top.
   - In a later v2, these could be stored in the database. So when the user returns the site at a

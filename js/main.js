@@ -1160,7 +1160,6 @@ $(function() { // DOM ready
 			width: 390,
 			height: 236,
 		}, function() {
-			// SAVE was clicked; add the composer link in the database
 			$.post("php/composer_clink_add.php", {
 				cid:		$("#clink-list").attr("data-id"),
 				name:		$("#edit-clink-name-input").val(),
@@ -1172,9 +1171,18 @@ $(function() { // DOM ready
 				});
 			});
 		});
+		$("#edit-clink-name-input").focus();
 		return false;
 	});
-	
+
+	/**
+	 * When ENTER key is hit in the dialog box above.
+	 */
+	$("#edit-clink-name-input,#edit-clink-url-input").keydown(function(event) {
+		if (event.keyCode == 13)
+			$("#dialog-add-clink .dialog-button-yes").trigger("click");
+	});
+
 	/**
 	 * When clicking an edit icon for a specific "clink" in the annex box.
 	 */
@@ -1204,6 +1212,7 @@ $(function() { // DOM ready
 				});
 			});
 		});
+		$("#edit-clink-name-input").focus();
 	});
 
 	/**
