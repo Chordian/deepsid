@@ -1328,6 +1328,7 @@
 								<a href="//deepsid.chordian.net/?file=/_Exotic%20SID%20Tunes%20Collection/Stereo%202SID&here=1&search=76&type=new&tab=csdb">exotic stereo files</a>.</li>
 							<li>Upgraded the WebSid (HQ) emulator. A hack (not a real fix) has been implemented that allows it to play
 								Adam Morton's problematic <a href="//deepsid.chordian.net/?file=/MUSICIANS/M/Morton_Adam/Synthmeld.sid">Synthmeld.sid</a> song.</li>
+							<li>The STIL report link now only appears inside the HVSC folder structure.</li>
 						</ul>
 
 						<h3>December 25, 2021</h3>

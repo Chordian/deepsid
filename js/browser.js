@@ -2740,6 +2740,15 @@ Browser.prototype = {
 	},
 
 	/**
+	 * Are we inside the High Voltage SID Collection?
+	 * 
+	 * @return {boolean}
+	 */
+	isHVSC: function() {
+		return this.path.indexOf("_High Voltage SID Collection") !== -1;
+	},
+	
+	/**
 	 * Are we located in a CGSC folder, or at least playing a MUS file?
 	 * 
 	 * @return {boolean}

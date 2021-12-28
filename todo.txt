@@ -27,12 +27,8 @@ SHOULD BE DONE
 
 - When returning to the root, always remove all excess URL switches.
 
-- The "Report a STIL change" link should never appear in the SH folder.
-
 - Tips idea: Jargon. All kinds of abbreviations and technical expressions explained - including
   DeepSID jargon such as "plinks" and "clinks".
-
-- Move show() for annex box when using FAQ links (after having turned the box off). Flickering.
 
 - Maybe add avatar images back for the bottom three lists, but this time so they are loaded a bit
   delayed in a way that doesn't bog down the site.

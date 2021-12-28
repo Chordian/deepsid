@@ -756,7 +756,8 @@ $(function() { // DOM ready
 		switch (stopic) {
 			case "stil":
 				// See the 'UpdateURL()' function below
-				if (!browser.isCGSC() && !browser.isTempTestFile()) $("#sundry-ctrls").append(reportSTIL);
+				if (browser.isHVSC())
+					$("#sundry-ctrls").append(reportSTIL);
 				break;
 			case "tags":
 				$("#sundry-ctrls").append(
@@ -1730,8 +1731,10 @@ $(function() { // DOM ready
 	 * could have been closed earlier, it is made visible again.
 	 */
 	 $("#page").on("click", "a.annex-link", function() {
-		$("#annex").show();
 		ClickAnnexLink($(this).attr("href"));
+		setTimeout(function() {
+			$("#annex").show();
+		}, 100);
 		return false;
 	});
 
@@ -1788,6 +1791,7 @@ $(window).on("load", function() {
 	// Just in case the web browser prefilled the username and password fields
 	setTimeout(function() {
 		$("#username,#password").trigger("keydown");
+		STILChangeReportLink();
 	}, 350);
 });
 
@@ -1861,7 +1865,7 @@ function PlayFromURLNow() {
 }
 
 /**
- * Reset the custom scrollbar in a "dexter" page to the top.
+ * Reset the scrollbar in a "dexter" page to the top.
  */
 function ResetDexterScrollBar(topic) {
 	tabPrevScrollPos[topic].pos = 0;
@@ -2045,13 +2049,7 @@ function UpdateURL(skipFileCheck) {
 	} else
 		history.replaceState({}, document.title, link);
 
-	// Update STIL change report link
-	reportSTIL = '<a href="mailto:hvsc@c64.org?subject=STIL%20change&body=I%20have%20a%20STIL%20change%20request%20for:%0D%0A'+window.location.href+'%0D%0A%0D%0A" style="position:relative;top:-3px;font-size:11px;">Report a STIL change</a>';
-	if ($("#sundry-tabs .selected").attr("data-topic") === "stil") {
-		var $ctrls = $("#sundry-ctrls");
-		$ctrls.empty();
-		if (!browser.isCGSC()) $ctrls.append(reportSTIL);
-	}
+	STILChangeReportLink();
 }
 
 /**
@@ -2065,6 +2063,18 @@ function UpdateRedirectPlayIcons() {
 		if ($this.html() == browser.playlist[browser.songPos].fullname.replace(browser.ROOT_HVSC+"/_High Voltage SID Collection", ""))
 			$this.removeClass("playing").addClass("playing");
 	});
+}
+
+/**
+ * Show the STIL change report link, but only if relevant for the current folder.
+ */
+function STILChangeReportLink() {
+	var reportSTIL = '<a href="mailto:hvsc@c64.org?subject=STIL%20change&body=I%20have%20a%20STIL%20change%20request%20for:%0D%0A'+window.location.href+'%0D%0A%0D%0A" style="position:relative;top:-3px;font-size:11px;">Report a STIL change</a>';
+	if ($("#sundry-tabs .selected").attr("data-topic") === "stil") {
+		$("#sundry-ctrls").empty();
+		if (browser.isHVSC())
+			$("#sundry-ctrls").append(reportSTIL);
+	}
 }
 
 /**
