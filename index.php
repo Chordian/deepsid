@@ -696,7 +696,7 @@
 			<div id="dexter">
 				<div id="sites" class="unselectable">
 					<div style="float:left;margin-left:1px;text-align:left;">
-						<a href="<?php echo HOST; ?>" target="_top">Home</a>
+						<a id="home" href="<?php echo HOST; ?>" target="_top">Home</a>
 							<span>&#9642</span>
 						<a id="recommended" href="#">Recommended</a>
 							<span>&#9642</span>
@@ -1329,6 +1329,7 @@
 							<li>Upgraded the WebSid (HQ) emulator. A hack (not a real fix) has been implemented that allows it to play
 								Adam Morton's problematic <a href="//deepsid.chordian.net/?file=/MUSICIANS/M/Morton_Adam/Synthmeld.sid">Synthmeld.sid</a> song.</li>
 							<li>The STIL report link now only appears inside the HVSC folder structure.</li>
+							<li>Superfluous URL switches are now discarded when going back one folder, to the root, or changing folder.</li>
 						</ul>
 
 						<h3>December 25, 2021</h3>

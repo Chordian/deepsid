@@ -7,25 +7,17 @@ SHOULD BE DONE
   for indicating a professional, a scener, or both. Two icons side-by-side. You have the info
   ready in the 'composers' table, in a new 'focus' column.
 
-- Idea: Download SID with the PSID header automatically removed, ready to be used in e.g. a demo.
-
 - Idea: A folder with groups, e.g. Vibrants. Inside are search shortcuts to HVSC profiles.
 
 - Idea for a new visuals mode button: STATS. It adds/ticks stuff detected to be used by the tune.
   Waveforms, pulsating, voices, etc.
 
-- A second annex tab with history. Every click on a tune, maybe even every folder you enter, will
-  be listed here, so you can re-click it. Newest entry in top.
-  - In a later v2, these could be stored in the database. So when the user returns the site at a
-    late time, his history from the previous visit it still there.
-  - Along with the above v2, "X" icons for deleting individual entries, plus a general button for
-    clearing the entire history.
+- JW suggested rewriting the tips for digi tags a bit to make use of the information from here:
+  https://bitbucket.org/wothke/websid/src/master/docs/digi-samples.txt
 
 - When uploading, replace "-" in filenames with "_" instead.
 
 - Improve search so e.g. "max hall" suggests the Max_F3H folder.
-
-- When returning to the root, always remove all excess URL switches.
 
 - Tips idea: Jargon. All kinds of abbreviations and technical expressions explained - including
   DeepSID jargon such as "plinks" and "clinks".
@@ -90,6 +82,7 @@ CONSIDER THIS
 - Change isMobile() to also check for tablet width. PHP can't do this so you have to be tricky.
 - Digger and Mordi have requested keys fading out in piano view, for easier arpeggio reading.
 - Is it possible to have individual ratings for multiple sub tune clones in a playlist?
+- Download SID with the PSID header automatically removed, ready to be used in e.g. a demo.
 
 - In a profile page, make the small handles in group table into links and remove the corner external
   link icon. Then users can choose what handle to open in CSDb themselves.
@@ -105,6 +98,13 @@ CONSIDER THIS
 - Up/Down cursor keys to change sub tune, Left/Right cursor keys to skip previous/next.
 - For redirect links, add a BACK button in both STIL tabs (to complement the 'b' hotkey).
 - Front page top 10 list: Add most common birth years, now that you have the data for it.
+
+- A second annex tab with history. Every click on a tune, maybe even every folder you enter, will
+  be listed here, so you can re-click it. Newest entry in top.
+  - In a later v2, these could be stored in the database. So when the user returns the site at a
+    late time, his history from the previous visit it still there.
+  - Along with the above v2, "X" icons for deleting individual entries, plus a general button for
+    clearing the entire history.
 
 - A drop-down box for selecting 6581 filter settings. User can even save their own to the list,
   with the name of the filter settings plus the user's name e.g. appended in the end.

@@ -317,7 +317,9 @@ Browser.prototype = {
 					this.getFolder(this.scrollPositions[0]);
 					this.scrollPositions = [this.scrollPositions[0]];
 					this.getComposer();
-					UpdateURL();
+					// Go to home URL and clear subtune switch
+					ctrls.subtuneCurrent = ctrls.subtuneMax = 0;
+					history.replaceState({}, document.title, $("#home").attr("href"));
 				}
 				break;
 			case "folder-back":
@@ -330,6 +332,7 @@ Browser.prototype = {
 						(this.path === "/CSDb Music Competitions" || this.path === "/_Compute's Gazette SID Collection")
 							&& this.cache.folder !== "" /* <- Boolean parameter */ );
 					this.getComposer();
+					ctrls.subtuneCurrent = ctrls.subtuneMax = 0; // Clear subtune switch
 					UpdateURL(true);
 				}
 				break;
@@ -488,6 +491,8 @@ Browser.prototype = {
 
 					var $target = $(event.target).find(".entry");
 					var searchType = $target.attr("data-search-type");
+
+					ctrls.subtuneCurrent = ctrls.subtuneMax = 0; // Clear subtune switch
 
 					if (typeof searchType != "undefined") {
 
