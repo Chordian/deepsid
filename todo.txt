@@ -15,10 +15,6 @@ SHOULD BE DONE
 - JW suggested rewriting the tips for digi tags a bit to make use of the information from here:
   https://bitbucket.org/wothke/websid/src/master/docs/digi-samples.txt
 
-- When uploading, replace "-" in filenames with "_" instead.
-
-- Improve search so e.g. "max hall" suggests the Max_F3H folder.
-
 - Tips idea: Jargon. All kinds of abbreviations and technical expressions explained - including
   DeepSID jargon such as "plinks" and "clinks".
 

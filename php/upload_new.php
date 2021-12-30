@@ -54,8 +54,8 @@ try {
 	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	$db->exec("SET NAMES UTF8");
 
-	// Make sure the filename uses the HVSC standard (e.g. 'laurel and hardy.sid' = 'Laurel_and_Hardy.sid')
-	$filename = ucwords(str_replace('_', ' ', $sid['name']));
+	// Make sure the filename uses the HVSC standard (e.g. 'laurel and hardy-2.sid' = 'Laurel_and_Hardy_2.sid')
+	$filename = ucwords(str_replace('_', ' ', str_replace('-', ' ', $sid['name'])));
 	$excluded = [' a ', ' n ', ' an ', ' the ', ' in ', ' for ', ' and ', ' nor ', ' but ', ' or ', ' yet ', ' so ', ' such ', ' as ', ' at ', ' around ', ' by ', ' after ', ' along ', ' for ', ' from ', ' of ', ' on ', ' to ', ' with ', ' without '];
 	foreach($excluded as $no_cap)
 		$filename = str_replace(ucwords($no_cap), strtolower($no_cap), $filename);

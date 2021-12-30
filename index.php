@@ -1322,6 +1322,12 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>December 30, 2021</h3>
+						<ul>
+							<li>Improved the default search query to also look for the real names of composers. For example, a
+								search for <a href="http://deepsid.chordian.net/?search=thomas">Thomas</a> will now also return folders such as those for DRAX, Laxity, etc.</li>
+						</ul>
+
 						<h3>December 28, 2021</h3>
 						<ul>
 							<li>The 8 new 2SID files in HVSC #76 (i.e. that uses 6 voices) has now been added as

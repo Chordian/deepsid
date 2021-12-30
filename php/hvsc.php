@@ -293,15 +293,29 @@ try {
 
 				// Normal type search
 				if ($_GET['searchType'] == 'author') {
+
 					// Let 'author' also find folders using 'fullname' as replacement type
 					$exclude = str_replace('author NOT LIKE "%', 'fullname NOT LIKE "%', $exclude);
 					$include = str_replace('author LIKE "%', 'fullname LIKE "%', $include);
+
 				} else if ($_GET['searchType'] == '#all#') {
+
+					// Search the 'composers' table to see if the query matches the real name
+					// This makes it possible to search for e.g. "Max Hall" and see his "../Max_F3H" folder.
+					$composers = $db->query('SELECT fullname FROM composers WHERE '.str_replace('#all#', 'name', $include_folders).' LIMIT 1000');
+					$composers->setFetchMode(PDO::FETCH_OBJ);
+
+					$fullnames = '';
+					foreach($composers as $composer_row)
+						$fullnames .= 'OR fullname = "'.$composer_row->fullname.'" ';
+
 					// Just search 'fullname' - none of the other columns exist in this table
 					$include = str_replace('#all#', 'fullname', $include_folders);
 					$exclude = str_replace('#all#', 'fullname', $exclude_folders);
 				}
-				$select = $db->query('SELECT fullname FROM hvsc_folders WHERE '.$searchContext.' AND '.$include.$exclude.' AND (fullname NOT LIKE "!%") AND (fullname NOT LIKE "_High Voltage SID Collection/^%") LIMIT 1000');
+				$query = 'SELECT fullname FROM hvsc_folders WHERE '.$searchContext.' AND '.$include.$exclude.' AND (fullname NOT LIKE "!%") AND (fullname NOT LIKE "_High Voltage SID Collection/^%") '.$fullnames.' LIMIT 1000';
+				$select = $db->query($query);
+				//die($query);
 			}
 
 			if ($select) {
