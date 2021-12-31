@@ -1609,19 +1609,19 @@ $(function() { // DOM ready
 			isSymlist = fileParam.substr(0, 2) == "/!" || fileParam.substr(0, 2) == "/$",
 			isCompoFolder = fileParam.indexOf("/CSDb Music Competitions/") !== -1;
 
-		// @todo When year 2022 arrives a loop may be warranted for the 'SID Happens' year folders
-		var shYear = "2020/";
-		if (fileParam.indexOf("SID Happens/") !== -1 && fileParam.indexOf(shYear) === -1) {
-			// Year not specified; if not in root SH folder then look in a year folder
-			$.ajax({
-				url:		"php/file_exists.php",
-				type:		"get",
-				async:		false,
-				data:		{ file: browser.ROOT_HVSC+fileParam.replace("/SID Happens/", "/_SID Happens/") }
-			}).done(function(exists) {
-				// Try adding a year folder if the file doesn't exist
-				if (!exists) fileParam = fileParam.replace("SID Happens/", "SID Happens/"+shYear);
-			});
+		// Is a year subfolder specified for the SH folder?
+		if (fileParam.indexOf("SID Happens/") !== -1 && (fileParam.match(/\//g) || []).length < 3) {
+			// No, does the file exist in the root SH folder, i.e. the current year?
+			if (!SidHappensFileExists(fileParam)) {
+				// No, figure out if it exists in one of the year subfolders then (backwards from latest)
+				for (var shYear = 2021; shYear >= 2020; shYear--) {
+					var yearFolder = fileParam.replace("SID Happens/", "SID Happens/"+shYear+"/");
+					if (SidHappensFileExists(yearFolder)) {
+						fileParam = yearFolder;
+						break;
+					}
+				}
+			}
 		}
 
 		browser.path = isFolder ? fileParam : fileParam.substr(0, fileParam.lastIndexOf("/"));
@@ -1862,6 +1862,26 @@ function PlayFromURLNow() {
 		$trAutoPlay.children("td.sid").trigger("click", [undefined, undefined, undefined, paramWait]);
 	else
 		$trAutoPlay.children("td.sid").trigger("click", [(paramSubtune == 0 ? 0 : paramSubtune - 1), undefined, undefined, paramWait]);
+}
+
+/**
+ * Check if a file exists in the "SID Happens" folder.
+ * 
+ * @param {string} filename		Must be full path.
+ * 
+ * @return {boolean}			TRUE if the file exists.
+ */
+function SidHappensFileExists(filename) {
+	var exists;
+	$.ajax({
+		url:		"php/file_exists.php",
+		type:		"get",
+		async:		false,
+		data:		{ file: browser.ROOT_HVSC+filename.replace("/SID Happens/", "/_SID Happens/") }
+	}).done(function(result) {
+		exists = result;
+	});
+	return exists == 1;
 }
 
 /**

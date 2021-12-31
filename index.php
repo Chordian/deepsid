@@ -1322,6 +1322,12 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>December 31, 2021</h3>
+						<ul>
+							<li>All the SID files uploaded to the SH folder this year has now been moved into a <a href="//deepsid.chordian.net?file=/SID Happens/2021/">2021</a> sub folder.</li>
+							<li>External links pointing to the root SH folder now redirects to the new year folder.</li>
+						</ul>
+
 						<h3>December 30, 2021</h3>
 						<ul>
 							<li>Improved the default search query to also look for the real names of composers. For example, a
