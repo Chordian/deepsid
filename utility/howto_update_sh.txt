@@ -1,0 +1,48 @@
+How to move root files in the "SID Happens" folder to a new year subfolder.
+
+This should be done either on the last day of the year or the first day of the new year.
+
+The #### refers to the new year.
+
+Requirements
+¯¯¯¯¯¯¯¯¯¯¯¯
+  o  Access to MySQL databases (LOCALHOST and/or ONLINE) through PhpMyAdmin.
+  o  Access to the DeepSID files (ONLINE only via FTP).
+  o  Access to the source Javascript files.
+
+FILES
+¯¯¯¯¯
+  1. Enter the SH folder in the online DeepSID via FTP.
+  2. Create a new #### year folder.
+  3. Mark all files in the root, top to bottom, and move them into the new year folder. (Be careful
+     not to mark any of the folders along with them.)
+  4. Take notice of how many files are in the new year folder. You'll need this number below.
+
+DATABASE
+¯¯¯¯¯¯¯¯
+  1. Enter the "hvsc_files" table in the online database and export a backup of it first.
+  2. Click "SQL" (empty the box) and run the following after updating #### to the new year:
+
+       UPDATE hvsc_files
+       SET fullname = REPLACE(fullname,'_SID Happens/','_SID Happens/####/')
+       WHERE fullname LIKE "_SID Happens%" AND fullname NOT LIKE "_SID Happens/202_/%"
+
+  3. Go to the "hvsc_folders" and search for this: %happens/2020%
+  4. Perform a copy of the single row you get and change the year in the 'fullname' field.
+  5. Also change the count in 'files' to the number you took notice of above.
+
+JAVASCRIPT
+¯¯¯¯¯¯¯¯¯¯
+  1. Edit the "main.js" file.
+  2. Search for "shYear" and you should find a line with a FOR loop.
+  3. Change the year assigned to the variable.
+  4. Save and upload the updated file to the online DeepSID.
+
+TEST
+¯¯¯¯
+  1. Make sure the files in all of the year subfolders play without problems, not just by clicking
+     them directly but also when refreshing the web browser.
+  2. Try clicking a link somewhere (e.g. in Facebook) that used to refer to a file in the root of
+     the SH folder. It should now automatically redirect to the new year subfolder.
+
+--------------------------------
