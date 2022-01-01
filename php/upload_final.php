@@ -213,6 +213,10 @@ try {
 		if ($insert->rowCount() == 0)
 			die(json_encode(array('status' => 'error', 'message' => 'Could not create the special database entry for the "'.$info['newname'].'" file.')));
 
+		// Acknowledge that the composer is now active (this will be reflected in the root page)
+		if ($composers_id)
+			$db->query('UPDATE composers SET active = "'.date("Y").'" WHERE id = '.$composers_id.' LIMIT 1');
+
 		// Finally log it
 		$account->LogActivity('User "'.$account->UserName().'" uploaded the "'.$info['newname'].'" file');
 	}
