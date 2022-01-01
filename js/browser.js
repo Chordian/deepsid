@@ -1695,6 +1695,20 @@ Browser.prototype = {
 							});
 						}
 					});
+
+					// Update avatar images of the three quick shortcut columns
+					setTimeout(function() {
+						var $qs = $("#topic-profile img.quick-thumbnail"), i = 0;
+						var qsTimer = setInterval(function() {
+							if (i >= $qs.length) {
+								clearInterval(qsTimer);
+								return;
+							}
+							var element = $qs.eq(i++)[0];
+							element.setAttribute("src", element.dataset.src);
+						}, 1);
+					}, 1);
+
 				});
 			}.bind(this));
 		} else {

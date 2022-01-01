@@ -1,5 +1,8 @@
 ToDo
 ¯¯¯¯
+IMPORTANT: If you have uploaded songs to the SH folder, remember to update their 'active' year in
+their 'composers' table rows, so it's reflected in the list of active composers in the root page.
+
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
@@ -17,10 +20,6 @@ SHOULD BE DONE
 
 - Tips idea: Jargon. All kinds of abbreviations and technical expressions explained - including
   DeepSID jargon such as "plinks" and "clinks".
-
-- Maybe add avatar images back for the bottom three lists, but this time so they are loaded a bit
-  delayed in a way that doesn't bog down the site.
-  - If done, make sure to also revert back to the slightly shorter names.
 
 ¯¯¯¯¯¯¯¯¯¯¯¯¯  
 

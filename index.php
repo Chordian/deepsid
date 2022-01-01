@@ -1322,6 +1322,12 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>Janurary 1, 2022</h3>
+						<ul>
+							<li>The avatar images for the three big lists in the bottom of the root page are back. They are now
+								loaded in a deferred manner to avoid bogging down the site.</li>
+						</ul>
+
 						<h3>December 31, 2021</h3>
 						<ul>
 							<li>All the SID files uploaded to the SH folder this year has now been moved into a <a href="//deepsid.chordian.net?file=/SID Happens/2021/">2021</a> sub folder.</li>
@@ -1508,9 +1514,9 @@
 
 						<h3>September 18, 2021</h3>
 						<ul>
-							<li>Removed the avatar images from the three big lists in the bottom of the root page, as the loading
+							<li><del>Removed the avatar images from the three big lists in the bottom of the root page, as the loading
 								of these images bogged down the site too much. With more space available, the full names of the
-								composers are now shown instead of the slightly shortened versions.</li>
+								composers are now shown instead of the slightly shortened versions.</del></li>
 						</ul>
 
 						<h3>September 17, 2021</h3>

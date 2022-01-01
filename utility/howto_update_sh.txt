@@ -1,6 +1,7 @@
 How to move root files in the "SID Happens" folder to a new year subfolder.
 
-This should be done either on the last day of the year or the first day of the new year.
+This should be done on the first day of the new year. I have seen SID tunes being uploaded to CSDb
+on the last day of the year, and then you would have to move those to the new subfolder too.
 
 The #### refers to the new year.
 
@@ -27,9 +28,11 @@ DATABASE
        SET fullname = REPLACE(fullname,'_SID Happens/','_SID Happens/####/')
        WHERE fullname LIKE "_SID Happens%" AND fullname NOT LIKE "_SID Happens/202_/%"
 
-  3. Go to the "hvsc_folders" and search for this: %happens/2020%
+  3. Go to the "hvsc_folders" table and search for this: %happens/2020%
   4. Perform a copy of the single row you get and change the year in the 'fullname' field.
-  5. Also change the count in 'files' to the number you took notice of above.
+  5. Also change the count in 'files' to the number you took notice of above. Go.
+  6. Go to the "composers" table and search for this: %/2020
+  7. Perform a copy of the single row you get and update all the years you find. Go.
 
 JAVASCRIPT
 ¯¯¯¯¯¯¯¯¯¯
@@ -44,5 +47,6 @@ TEST
      them directly but also when refreshing the web browser.
   2. Try clicking a link somewhere (e.g. in Facebook) that used to refer to a file in the root of
      the SH folder. It should now automatically redirect to the new year subfolder.
+  3. Check that the profile in the new year subfolder has the same style as for the other years.
 
 --------------------------------
