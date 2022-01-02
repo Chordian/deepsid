@@ -1603,7 +1603,7 @@ $(function() { // DOM ready
 	if (fileParam !== "" && fileParam.indexOf("\\") === -1) {
 		// A HVSC folder or file was specified
 		fileParam = fileParam.charAt(0) === "/" ? fileParam : "/"+fileParam;
-		if (fileParam.substr(0, 6) == "/DEMOS" || fileParam.substr(0, 6) == "/GAMES" || fileParam.substr(0, 10) == "/MUSICIANS")
+		if (fileParam.substr(0, 6) == "/DEMOS" || fileParam.substr(0, 6) == "/GAMES" || fileParam.substr(0, 10) == "/MUSICIANS" || fileParam.substr(0, 7) == "/GROUPS")
 			fileParam = "/High Voltage SID Collection"+fileParam;
 		var isFolder = fileParam.indexOf(".sid") === -1 && fileParam.indexOf(".mus") === -1,
 			isSymlist = fileParam.substr(0, 2) == "/!" || fileParam.substr(0, 2) == "/$",
@@ -1625,7 +1625,7 @@ $(function() { // DOM ready
 		}
 
 		browser.path = isFolder ? fileParam : fileParam.substr(0, fileParam.lastIndexOf("/"));
-		if (browser.path.substr(0, 7).toLowerCase() != "/demos/" && browser.path.substr(0, 7).toLowerCase() != "/games/" && browser.path.substr(0, 11).toLowerCase() != "/musicians/" && browser.path.substr(0, 2) != "/!" && browser.path.substr(0, 2) != "/$")
+		if (browser.path.substr(0, 7).toLowerCase() != "/demos/" && browser.path.substr(0, 7).toLowerCase() != "/games/" && browser.path.substr(0, 11).toLowerCase() != "/musicians/"  && browser.path.substr(0, 8).toLowerCase() != "/groups/" && browser.path.substr(0, 2) != "/!" && browser.path.substr(0, 2) != "/$")
 			browser.path = "/_"+browser.path.substr(1); // It's an "extra" folder
 		if (browser.path.substr(-1) === "/") browser.path = browser.path.slice(0, -1); // Remove "/" at end of folder
 		if (isSymlist) browser.path = "/"+browser.path.split("/")[1]; // Symlist SID names could be using "/" chars

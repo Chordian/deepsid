@@ -83,6 +83,7 @@ $compoName = $isCSDbCompo && strlen($_GET['folder']) > 25 ? explode('/', $_GET['
 $folders_version = HVSC_VERSION;
 $search_shortcut_type = array();
 $search_shortcut_query = array();
+$redirect_folder = array();
 
 // In current folder or everything?
 $searchContext = '1';
@@ -289,7 +290,28 @@ try {
 				$folders_version = $_GET['searchQuery'];
 				$select->execute(array(':version'=>$folders_version));
 
+			/*} else if ($_GET['searchType'] == 'special') { // NOT USED
+
+				switch(strtolower($_GET['searchQuery'])) {
+
+					case 'mon':
+
+						$select = $db->query('SELECT fullname FROM hvsc_folders WHERE id = 437 OR id = 841 OR id = 1458 OR id = 390 OR id = 903 OR id = 192 OR id = 1511 OR id = 865 OR id = 657 OR id = 733 OR id = 1078');
+						break;
+
+					case 'vibrants':
+
+						$select = $db->query('SELECT fullname FROM hvsc_folders WHERE id = 389 OR id = 437 OR id = 731 OR id = 746 OR id = 841 OR id = 857 OR id = 954');
+						break;
+
+					default:
+
+						// Don't find anything if not a recognized special search
+				}*/
+
 			} else if ($_GET['searchType'] == '#all#' || $_GET['searchType'] == 'fullname' || $_GET['searchType'] == 'author' || $_GET['searchType'] == 'new') {
+
+				$fullnames = '';
 
 				// Normal type search
 				if ($_GET['searchType'] == 'author') {
@@ -305,7 +327,6 @@ try {
 					$composers = $db->query('SELECT fullname FROM composers WHERE '.str_replace('#all#', 'name', $include_folders).' LIMIT 1000');
 					$composers->setFetchMode(PDO::FETCH_OBJ);
 
-					$fullnames = '';
 					foreach($composers as $composer_row)
 						$fullnames .= 'OR fullname = "'.$composer_row->fullname.'" ';
 
@@ -686,6 +707,7 @@ try {
 				foreach($select as $row)
 					$files[] = $row->fullname;
 			}
+
 		// The first HVSC fork; append "shortcut" folders for checking out stuff in a new HVSC update
 		} else if ($_GET['folder'] == '/_High Voltage SID Collection') {
 
@@ -717,6 +739,42 @@ try {
 			$files[] = $ss_name;
 			$search_shortcut_type[$ss_name] = 'special';
 			$search_shortcut_query[$ss_name] = 'multisid';
+
+		// GROUP: Redirect folders for members of 'Vibrants'
+		} else if ($_GET['folder'] == '/_High Voltage SID Collection/GROUPS/Vibrants') {
+
+			$rf_name = 'Richard Rinn (Deek)';
+			$files[] = $rf_name;
+			$redirect_folder[$rf_name] = '_High Voltage SID Collection/MUSICIANS/D/Deek';
+
+			$rf_name = 'Thomas Mogensen (DRAX)';
+			$files[] = $rf_name;
+			$redirect_folder[$rf_name] = '_High Voltage SID Collection/MUSICIANS/D/DRAX';
+
+			$rf_name = 'Jens-Christian Huus (JCH)';
+			$files[] = $rf_name;
+			$redirect_folder[$rf_name] = '_High Voltage SID Collection/MUSICIANS/J/JCH';
+
+			$rf_name = 'Jesper Olsen (JO)';
+			$files[] = $rf_name;
+			$redirect_folder[$rf_name] = '_High Voltage SID Collection/MUSICIANS/J/JO';
+
+			$rf_name = 'Thomas E. Petersen (Laxity)';
+			$files[] = $rf_name;
+			$redirect_folder[$rf_name] = '_High Voltage SID Collection/MUSICIANS/L/Laxity';
+
+			$rf_name = 'Klaus Grøngaard (Link)';
+			$files[] = $rf_name;
+			$redirect_folder[$rf_name] = '_High Voltage SID Collection/MUSICIANS/L/Link';
+
+			$rf_name = 'Torben Hansen (Metal)';
+			$files[] = $rf_name;
+			$redirect_folder[$rf_name] = '_High Voltage SID Collection/MUSICIANS/M/Metal';
+
+			$rf_name = 'Morten Sigaard (MSK)';
+			$files[] = $rf_name;
+			$redirect_folder[$rf_name] = '_High Voltage SID Collection/MUSICIANS/M/MSK';
+
 		}
 
 		// The root is also home to 'SID Happens' which needs a count of files uploaded today
@@ -845,6 +903,8 @@ try {
 
 				'ss_type'		=> (isset($search_shortcut_type[$file]) ? $search_shortcut_type[$file] : ''),		// new
 				'ss_query'		=> (isset($search_shortcut_query[$file]) ? $search_shortcut_query[$file] : ''),		// 75
+
+				'rf_path'		=> (isset($redirect_folder[$file]) ? $redirect_folder[$file] : ''),
 			));
 
 		} else {

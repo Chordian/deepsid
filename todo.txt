@@ -13,9 +13,6 @@ SHOULD BE DONE
 - Idea for a new visuals mode button: STATS. It adds/ticks stuff detected to be used by the tune.
   Waveforms, pulsating, voices, etc.
 
-- JW suggested rewriting the tips for digi tags a bit to make use of the information from here:
-  https://bitbucket.org/wothke/websid/src/master/docs/digi-samples.txt
-
 - Tips idea: Jargon. All kinds of abbreviations and technical expressions explained - including
   DeepSID jargon such as "plinks" and "clinks".
 

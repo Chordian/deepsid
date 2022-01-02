@@ -420,7 +420,7 @@
 		<h4>Primary digi tags</h4>
 		<ul class="annex-tags-list">
 			<li><a href="digi" class="search" data-type="tag"><div class="tag tag-digi">Digi</div></a>= <b>Digi has been used</b>
-			<p>A "fits all" description of almost anything digi. If there are no other digi tags, it\'s just normal 4-bit $D418 used as one or more assisting channels.</p></li>
+			<p>A "fits all" description of almost anything digi. If there are no other digi tags, it\'s just normal 4-bit $D418 digi.</p></li>
 		</ul>
 		<ul class="annex-tags-list">
 			<li><a href="digi-org" class="search" data-type="tag"><div class="tag tag-digi">Digi-Org</div></a>= <b>Digi-Organizer used</b>
@@ -434,16 +434,20 @@
 			<p>The file is all digi only. The SID voices have not been used.</p></li>
 		</ul>
 		<ul class="annex-tags-list">
-			<li><a href="8bit" class="search" data-type="tag"><div class="tag tag-digi">8bit</div></a>= <b>8-bit digi used</p></b>
-			<p>The file uses an advanced 8-bit technique. A commonly used tool for this is an exclusive add-on coded by <a href="http://csdb.chordian.net/?type=scener&id=9589">THCM</a>.</p></li>
+			<li><a href="m418" class="search" data-type="tag"><div class="tag tag-digi">M418</div></a>= <b>Mahoney\'s "8-bit" samples</p></b>
+			<p>Both volume and filter are affected, both controlled by $D418. This can produce more than 4-bits, although typically no more than 6-7 bits. The three SID voices cannot be used here.</p></li>
 		</ul>
 		<ul class="annex-tags-list">
-			<li><a href="osc" class="search" data-type="tag"><div class="tag tag-digi">OSC</div></a>= <b>Oscillator digi</p></b>
-			<p>Uses the oscillator method as demonstrated by e.g. <a href="http://csdb.chordian.net/?type=release&id=131019">FRODIGI</a>. It\'s low on CPU usage but also sounds a bit murky. Uses fast-moving waveform $11 notes.</p></li>
+			<li><a href="8bit" class="search" data-type="tag"><div class="tag tag-digi">8bit</div></a>= <b>8-bit "FM" digi used</p></b>
+			<p>This uses an "FM" technique that produces genuine 8-bit samples. This requires one of the three SID channels, but it can be filtered. Also, the two remaining SID channels can be used normally.</p><p>A commonly used tool for this technique is an exclusive add-on coded by <a href="http://csdb.chordian.net/?type=scener&id=9589">THCM</a>.</p></li>
 		</ul>
 		<ul class="annex-tags-list">
 			<li><a href="pwm" class="search" data-type="tag"><div class="tag tag-digi">PWM</div></a>= <b>Pulse width modulation</p></b>
-			<p>Pulse widths for waveform $41 is doing the hard work here.</p></li>
+			<p>Uses a high-frequency $41 pulse waveform and then manipulates both the pulse widths and the test-bit. The result can be routed through the filter afterwards.</p></li>
+		</ul>
+		<ul class="annex-tags-list">
+			<li><a href="osc" class="search" data-type="tag"><div class="tag tag-digi">OSC</div></a>= <b>Oscillator digi</p></b>
+			<p>This uses the oscillator method as demonstrated by e.g. <a href="http://csdb.chordian.net/?type=release&id=131019">FRODIGI</a>. It\'s low on CPU usage but also sounds a bit murky. Uses fast-moving waveform $11 notes.</p></li>
 		</ul>
 		<ul class="annex-tags-list">
 			<li><a href="gt-echo" class="search" data-type="tag"><div class="tag tag-digi">GT-Echo</div></a>= <b>SID with echo effects</b>

@@ -491,6 +491,7 @@ Browser.prototype = {
 
 					var $target = $(event.target).find(".entry");
 					var searchType = $target.attr("data-search-type");
+					var redirectFolder = $target.attr("data-redirect-folder");
 
 					ctrls.subtuneCurrent = ctrls.subtuneMax = 0; // Clear subtune switch
 
@@ -513,7 +514,9 @@ Browser.prototype = {
 
 						// OTHER FOLDERS
 
-						if ($target.hasClass("search"))
+						if (typeof redirectFolder != "undefined")
+							this.path = "/"+redirectFolder // Go to this folder instead
+						else if ($target.hasClass("search"))
 							this.path = "/"+name; // Search folders already have the full path
 						else
 							this.path += "/"+name;
@@ -1231,6 +1234,7 @@ Browser.prototype = {
 							var isPersonalSymlist = folder.foldername.substr(0, 1) == "!",
 								isPublicSymlist = folder.foldername.substr(0, 1) == "$",
 								isSearchShortcut = folder.ss_type != "",
+								isRedirectFolder = folder.rf_path != "",
 								myPublic = false;
 							if (isPublicSymlist) {
 								var result = $.grep(this.symlistFolders, function(entry) {
@@ -1240,9 +1244,11 @@ Browser.prototype = {
 							}
 							var adaptedName = folder.foldername.replace(/^(\_|\!|\$|\^...)/, '');
 							adaptedName = this.adaptBrowserName(adaptedName);
-							var search_shortcut = isSearchShortcut
+							var search_shortcut_or_redirect_folder = isSearchShortcut
 								? ' data-search-type="'+folder.ss_type+'" data-search-query="'+folder.ss_query+'"'
-								: '';
+								: (isRedirectFolder
+									? ' data-redirect-folder="'+folder.rf_path+'"'
+									: '');
 							// Assume one of the standard folder type icons to begin with
 							var folderIcon = folder.foldertype.toLowerCase()+(folder.hasphoto ? '-photo' : '');
 							if (isPersonalSymlist || (isPublicSymlist && myPublic))
@@ -1256,7 +1262,7 @@ Browser.prototype = {
 										'"><div class="block-wrap"><div class="block">'+
 									(folder.filescount > 0 ? '<div class="filescount">'+folder.filescount+'</div>' : '')+
 									(folder.foldername == "_SID Happens" ? '<div class="new-uploads'+(data.uploads.substr(0, 6) == "NO NEW" ? ' no-new' : '')+'">'+data.uploads+'</div>' : '')+
-									'<span class="name entry'+(this.isSearching ? ' search' : '')+'" data-name="'+encodeURIComponent(folder.foldername)+'" data-incompat="'+folder.incompatible+'"'+search_shortcut+'>'+
+									'<span class="name entry'+(this.isSearching ? ' search' : '')+'" data-name="'+encodeURIComponent(folder.foldername)+'" data-incompat="'+folder.incompatible+'"'+search_shortcut_or_redirect_folder+'>'+
 									adaptedName+'</span></div></div></td>'+
 									'<td class="stars"><span class="rating">'+this.buildStars(folder.rating)+'</span></td>'+
 								'</tr>';
@@ -2663,6 +2669,7 @@ Browser.prototype = {
 			.replace("HVSC</font>/DEMOS", "HVSC/D</font>")
 			.replace("HVSC</font>/GAMES", "HVSC/G</font>")
 			.replace("HVSC</font>/MUSICIANS", "HVSC/M</font>")
+			.replace("HVSC</font>/GROUPS", "HVSC/G</font>")
 			.replace(underscore+"Compute's Gazette SID Collection", '<font class="dim">CGSC</font>')
 			.replace(underscore+"Exotic SID Tunes Collection", '<font class="dim">ESTC</font>');
 	},

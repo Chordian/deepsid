@@ -542,6 +542,24 @@ http://deepsid.chordian.net/?file=/DEMOS/G-L/Kinetix_Blasting_Power_Mix.sid  (pl
 http://deepsid.chordian.net/?file=/DEMOS/S-Z/Wize_Mixes.sid  (player)
 http://deepsid.chordian.net/?file=/MUSICIANS/N/Nebula&here=1&search=mixer&type=player  (8 rows found)
 
+GROUPS
+¯¯¯¯¯¯
+Create a GROUPS folder in the root of the HVSC folder, i.e. next to DEMOS, GAMES and MUSICIAN. Enter
+it and create the following empty folders in it:
+
+  o  Maniacs of Noise
+  o  Vibrants
+
+Remember to also do this online.
+
+  1. Now enter the 'hvsc_folders' table.
+  2. Search for this: %/GROUPS/%
+  3. For each folder, search for the corresponding MUSICIANS folder.
+  4. Copy the number of files to the same field in the GROUPS row. If there are subfolders (typically
+     for worktunes) then add the numbers together for the GROUPS row.
+
+(WIP)
+
 LATEST ACTIVITY
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
 Now the "composers" table need to be updated with the years that each one were last active.
