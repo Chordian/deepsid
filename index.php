@@ -524,7 +524,7 @@
 			<div id="sundry">
 				<div id="stopic-stil" class="stopic">
 					<div id="sundry-news">
-						<span>The High Voltage SID Collection has been upgraded to the latest version #76.</span>
+						<span>An unofficial GROUPS folder has now been added in the root of the HVSC folder.</span>
 					</div>
 				</div>
 				<div id="stopic-tags" class="stopic" style="display:none;"></div>
@@ -1322,7 +1322,21 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
-						<h3>Janurary 1, 2022</h3>
+						<h3>January 8, 2022</h3>
+						<ul>
+							<li>Improved the detection of 2SID and 3SID tunes for the PIANO view.</li>
+							<li>An unofficial <a href="//deepsid.chordian.net/?file=/GROUPS/">GROUPS</a> folder has now been added in the root of the HVSC folder. Each group folder in it
+								has a collection of member folders. These folders actually redirect to a MUSICIANS folder, and if you
+								browse back one folder from there, you will automatically be brought back to the original GROUPS subfolder again.</li>
+							<li>The first two groups available in the new GROUPS folder are <a href="//deepsid.chordian.net/?file=/GROUPS/Vibrants/">Vibrants</a> and <a href="//deepsid.chordian.net/?file=/GROUPS/Maniacs of Noise/">Maniacs of Noise</a>.</li>
+						</ul>
+
+						<h3>January 6, 2022</h3>
+						<ul>
+							<li>All new files in HVSC #76 are now connected to CSDb entries.</li>
+						</ul>
+
+						<h3>January 1, 2022</h3>
 						<ul>
 							<li>The avatar images for the three big lists in the bottom of the root page are back. They are now
 								loaded in a deferred manner to avoid bogging down the site.</li>
@@ -1337,7 +1351,7 @@
 						<h3>December 30, 2021</h3>
 						<ul>
 							<li>Improved the default search query to also look for the real names of composers. For example, a
-								search for <a href="http://deepsid.chordian.net/?search=thomas">Thomas</a> will now also return folders such as those for DRAX, Laxity, etc.</li>
+								search for <a href="//deepsid.chordian.net/?search=thomas">Thomas</a> will now also return folders such as those for DRAX, Laxity, etc.</li>
 						</ul>
 
 						<h3>December 28, 2021</h3>

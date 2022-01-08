@@ -370,6 +370,8 @@ shown for it, CSDb is not updated yet. In that case I recommend bookmarking the 
   4. Write "fullname,csdbtype,csdbid" in the "Column names" edit box.
   5. Click "Go".
   6. Repeat for the other CSV files until all three have been imported.
+  7. Export the "hvsc_files_import" to an SQL file for later import online. This way you won't have to
+     import the parts above, just that SQL file.
 
   1. Enter the "hvsc_files" table and click "SQL" (empty the box).
   2. Run the following:

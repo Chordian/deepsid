@@ -194,7 +194,7 @@ try {
 
 						// Search for all multisid types (2SID, 3SID, etc.)
 						$select = $db->query('SELECT fullname FROM hvsc_files'.
-							' WHERE fullname REGEXP "2SID.sid|3SID.sid|4SID.sid|8SID.sid|10SID.sid" LIMIT 1000');
+							' WHERE fullname REGEXP "_2SID|_3SID|_4SID|_8SID|_10SID" LIMIT 1000');
 						break;
 
 					case 'gamecomposers':
@@ -346,11 +346,26 @@ try {
 
 				foreach ($select as $row) {
 					$files[] = $row->fullname;
+
 					if ($_GET['searchType'] == 'folders') {
+
 						// This will turn the folders in the result list into search shortcuts
 						$search_shortcut_type[$row->fullname] = 'latest';
 						$parts = explode("/", $row->fullname);
 						$search_shortcut_query[$row->fullname] = '/'.end($parts).'/,'.$folders_version; // "/Foo/,72"
+
+					} else if (strpos($row->fullname, '/GROUPS/') !== false) {
+
+						// Include where the group member folder will redirect to
+						$group = explode('/', $row->fullname)[2];
+
+						$select_groups = $db->query('SELECT folder, redirect FROM groups WHERE name = "'.$group.'"');
+						$select_groups->setFetchMode(PDO::FETCH_OBJ);
+
+						foreach($select_groups as $member) {
+							if (strtolower(substr($row->fullname, 36)) == strtolower($group.'/'.$member->folder))
+								$redirect_folder[$row->fullname] = $member->redirect;
+						}
 					}
 				}
 			}
@@ -740,41 +755,18 @@ try {
 			$search_shortcut_type[$ss_name] = 'special';
 			$search_shortcut_query[$ss_name] = 'multisid';
 
-		// GROUP: Redirect folders for members of 'Vibrants'
-		} else if ($_GET['folder'] == '/_High Voltage SID Collection/GROUPS/Vibrants') {
+		// Redirect folders for members of a specific group (e.g. "Maniacs of Noise")
+		} else if (substr($_GET['folder'], 0, 37) == '/_High Voltage SID Collection/GROUPS/') {
 
-			$rf_name = 'Richard Rinn (Deek)';
-			$files[] = $rf_name;
-			$redirect_folder[$rf_name] = '_High Voltage SID Collection/MUSICIANS/D/Deek';
+			$group = explode('/', $_GET['folder'])[3];
 
-			$rf_name = 'Thomas Mogensen (DRAX)';
-			$files[] = $rf_name;
-			$redirect_folder[$rf_name] = '_High Voltage SID Collection/MUSICIANS/D/DRAX';
+			$select_groups = $db->query('SELECT folder, redirect FROM groups WHERE name = "'.$group.'"');
+			$select_groups->setFetchMode(PDO::FETCH_OBJ);
 
-			$rf_name = 'Jens-Christian Huus (JCH)';
-			$files[] = $rf_name;
-			$redirect_folder[$rf_name] = '_High Voltage SID Collection/MUSICIANS/J/JCH';
-
-			$rf_name = 'Jesper Olsen (JO)';
-			$files[] = $rf_name;
-			$redirect_folder[$rf_name] = '_High Voltage SID Collection/MUSICIANS/J/JO';
-
-			$rf_name = 'Thomas E. Petersen (Laxity)';
-			$files[] = $rf_name;
-			$redirect_folder[$rf_name] = '_High Voltage SID Collection/MUSICIANS/L/Laxity';
-
-			$rf_name = 'Klaus Grøngaard (Link)';
-			$files[] = $rf_name;
-			$redirect_folder[$rf_name] = '_High Voltage SID Collection/MUSICIANS/L/Link';
-
-			$rf_name = 'Torben Hansen (Metal)';
-			$files[] = $rf_name;
-			$redirect_folder[$rf_name] = '_High Voltage SID Collection/MUSICIANS/M/Metal';
-
-			$rf_name = 'Morten Sigaard (MSK)';
-			$files[] = $rf_name;
-			$redirect_folder[$rf_name] = '_High Voltage SID Collection/MUSICIANS/M/MSK';
-
+			foreach($select_groups as $member) {
+				$files[] = $member->folder;									// Name of the group member
+				$redirect_folder[$member->folder] = $member->redirect;		// Which folder to redirect to
+			}
 		}
 
 		// The root is also home to 'SID Happens' which needs a count of files uploaded today

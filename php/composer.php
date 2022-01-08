@@ -477,7 +477,7 @@ if ($fullname == $cgsc) {
 	$info = file_get_contents('../upload.txt');
 	$html .= '<pre class="fixed-font-info">'.$info.'</pre>';
 	
-} else if (substr($fullname, 0, strlen($cgsc)) != $cgsc && $fullname != $csdbCompoFolder) {
+} else if (substr($fullname, 0, strlen($cgsc)) != $cgsc && $fullname != $csdbCompoFolder && strpos($fullname, '/GROUPS') === false) {
 	// Charts for HVSC sub folders as well as custom "_" folders
 	$html .= '<h3 style="margin-top:21px;">Active years<div class="legend">X = year (1982-)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Y = number of SID files</div></h3>
 		<div id="ct-years"></div>

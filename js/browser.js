@@ -66,6 +66,8 @@ function Browser() {
 	this.chips = 1;
 	this.subtunes = 0;
 
+	this.redirectFolder = "";
+
 	this.slideTags = false;
 
 	this.isMobile = $("body").attr("data-mobile") !== "0";
@@ -320,12 +322,19 @@ Browser.prototype = {
 					// Go to home URL and clear subtune switch
 					ctrls.subtuneCurrent = ctrls.subtuneMax = 0;
 					history.replaceState({}, document.title, $("#home").attr("href"));
+					this.redirectFolder = "";
 				}
 				break;
 			case "folder-back":
 				if (!$("#folder-back").hasClass("disabled")) {
-					// Go back one folder in the HVSC tree
-					this.path = this.path.substr(0, this.path.lastIndexOf("/"));
+					if (this.redirectFolder == "") {
+						// Go back one folder in the HVSC tree
+						this.path = this.path.substr(0, this.path.lastIndexOf("/"));
+					} else {
+						// Jump back to origin
+						this.path = this.redirectFolder;
+						this.redirectFolder = "";
+					}
 					ctrls.state("prev/next", "disabled");
 					ctrls.state("subtunes", "disabled");
 					this.getFolder(this.scrollPositions.pop(), undefined,
@@ -514,9 +523,17 @@ Browser.prototype = {
 
 						// OTHER FOLDERS
 
-						if (typeof redirectFolder != "undefined")
-							this.path = "/"+redirectFolder // Go to this folder instead
-						else if ($target.hasClass("search"))
+						this.redirectFolder = "";
+						if (typeof redirectFolder != "undefined") {
+							if (this.isSearching)
+								// Origin path is a group parent folder
+								this.redirectFolder = "/"+name.substr(0, name.lastIndexOf("/"));
+							else
+								// Remember origin path
+								this.redirectFolder = this.path;
+							this.groupMember = name;
+							this.path = "/"+redirectFolder 		// Folder to jump to instead
+						} else if ($target.hasClass("search"))
 							this.path = "/"+name; // Search folders already have the full path
 						else
 							this.path += "/"+name;
@@ -634,8 +651,8 @@ Browser.prototype = {
 
 						UpdateURL();
 						this.chips = 1;
-						if (this.playlist[this.songPos].fullname.indexOf("2SID.sid") != -1) this.chips = 2;
-						else if (this.playlist[this.songPos].fullname.indexOf("3SID.sid") != -1) this.chips = 3;
+						if (this.playlist[this.songPos].fullname.indexOf("_2SID") != -1) this.chips = 2;
+						else if (this.playlist[this.songPos].fullname.indexOf("_3SID") != -1) this.chips = 3;
 						viz.initGraph(this.chips);
 						viz.startBufferEndedEffects();
 
@@ -1151,6 +1168,10 @@ Browser.prototype = {
 							'<span class="maintainer">'+data.owner+'</span>'; // Competition type
 					} else if (this.path == "/"+PATH_UPLOADS) {
 						pathText = '<button id="upload-wizard">Upload New SID File</button>';
+					} else if (this.redirectFolder != "") {
+						pathText = this.groupMember.indexOf("/") === false
+							? this.groupMember
+							: this.groupMember.split("/").slice(-1)[0];
 					}
 					$("#path").empty().append(pathText);
 
@@ -1259,7 +1280,7 @@ Browser.prototype = {
 								'<tr'+(folder.incompatible.indexOf(SID.emulator) !== -1 || isMobileDenied ? ' class="disabled"' : '')+'>'+
 									'<td class="folder unselectable '+folderIcon+
 										(folder.hvsc == this.HVSC_VERSION || folder.hvsc == this.CGSC_VERSION ? ' new' : '')+
-										'"><div class="block-wrap"><div class="block">'+
+										'"><div class="block-wrap"><div class="block'+(isRedirectFolder ? " slimfont" : "")+'">'+
 									(folder.filescount > 0 ? '<div class="filescount">'+folder.filescount+'</div>' : '')+
 									(folder.foldername == "_SID Happens" ? '<div class="new-uploads'+(data.uploads.substr(0, 6) == "NO NEW" ? ' no-new' : '')+'">'+data.uploads+'</div>' : '')+
 									'<span class="name entry'+(this.isSearching ? ' search' : '')+'" data-name="'+encodeURIComponent(folder.foldername)+'" data-incompat="'+folder.incompatible+'"'+search_shortcut_or_redirect_folder+'>'+

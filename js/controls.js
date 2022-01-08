@@ -144,8 +144,8 @@ Controls.prototype = {
 				if (SID.emulatorFlags.forcePlay) SID.play();
 				UpdateURL();
 				browser.chips = 1;
-				if (browser.playlist[browser.songPos].fullname.indexOf("2SID.sid") != -1) browser.chips = 2;
-				else if (browser.playlist[browser.songPos].fullname.indexOf("3SID.sid") != -1) browser.chips = 3;
+				if (browser.playlist[browser.songPos].fullname.indexOf("_2SID") != -1) browser.chips = 2;
+				else if (browser.playlist[browser.songPos].fullname.indexOf("_3SID") != -1) browser.chips = 3;
 				viz.initGraph(browser.chips);
 				viz.enableAllPianoVoices();
 			});
@@ -275,8 +275,8 @@ Controls.prototype = {
 				}
 
 				browser.chips = 1;
-				if (browser.playlist[browser.songPos].fullname.indexOf("2SID.sid") != -1) browser.chips = 2;
-				else if (browser.playlist[browser.songPos].fullname.indexOf("3SID.sid") != -1) browser.chips = 3;
+				if (browser.playlist[browser.songPos].fullname.indexOf("_2SID") != -1) browser.chips = 2;
+				else if (browser.playlist[browser.songPos].fullname.indexOf("_3SID") != -1) browser.chips = 3;
 				viz.initGraph(browser.chips);
 				viz.startBufferEndedEffects();
 
