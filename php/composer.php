@@ -336,6 +336,14 @@ if (!empty($files) && !in_array($fullname, Array(
 	if (!file_exists('../'.$thumbnail)) $thumbnail = 'images/composer.png';
 } else if (strpos($fullname, $uploadFolder) !== false) {
 	$thumbnail = 'images/composers/_sh.png';
+} else if (strpos($fullname, '/GROUPS/') !== false) {
+	// The unofficial folder with groups
+	$fn = str_replace('_High Voltage SID Collection/', '', $fullname);
+	$fn = str_replace(' ', '_', $fn);
+	$fn = strtolower(str_replace('/', '_', $fn));
+	$thumbnail = 'images/composers/'.$fn.'.jpg';
+	if (!file_exists('../'.$thumbnail)) $thumbnail = 'images/folder.png';
+	$csdbid = 0;
 } else {
 	// Folder with folders
 	$thumbnail = 'images/folder.png';

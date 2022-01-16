@@ -131,6 +131,7 @@ function CreateRecBox($random_id) {
 	// Use 'fullname' parameter to figure out the name of the thumbnail (if it exists)
 	$fn = str_replace('_High Voltage SID Collection/', '', $fullname);
 	$fn = str_replace("_Compute's Gazette SID Collection/", "cgsc_", $fn);
+	$fn = str_replace(' ', '_', $fn);
 	$fn = strtolower(str_replace('/', '_', $fn));
 	$thumbnail = 'images/composers/'.$fn.'.jpg';
 	if (!file_exists('../'.$thumbnail)) $thumbnail = 'images/composer.png';
@@ -184,7 +185,8 @@ function CreateComposersArray(&$select, &$composers, $pro = false) {
 
 		// Use 'fullname' parameter to figure out the name of the thumbnail (if it exists)
 		$hvsc_path = str_replace('_High Voltage SID Collection/', '', $row->fullname);
-		$fn = strtolower(str_replace('/', '_', $hvsc_path));
+		$fn = str_replace(' ', '_', $hvsc_path);
+		$fn = strtolower(str_replace('/', '_', $fn));
 		$thumbnail = 'images/composers/'.$fn.'.jpg';
 		if (!file_exists('../'.$thumbnail)) $thumbnail = 'images/composer.png';
 

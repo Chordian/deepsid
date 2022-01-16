@@ -62,7 +62,7 @@ function GenerateList($rows, $type) {
 				$entry = "Composer";
 				$value = 'Count';
 
-				$select = $db->query('SELECT fullname, files FROM hvsc_folders WHERE type = "SINGLE" AND fullname NOT LIKE "%Worktunes" ORDER BY files DESC LIMIT '.$rows);
+				$select = $db->query('SELECT fullname, files FROM hvsc_folders WHERE type = "SINGLE" AND fullname NOT LIKE "%Worktunes" AND fullname NOT LIKE "%/GROUPS/%" ORDER BY files DESC LIMIT '.$rows);
 				$select->setFetchMode(PDO::FETCH_OBJ);
 				if ($select->rowCount()) {
 					foreach($select as $row) {

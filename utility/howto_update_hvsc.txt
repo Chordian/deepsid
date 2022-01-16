@@ -546,21 +546,18 @@ http://deepsid.chordian.net/?file=/MUSICIANS/N/Nebula&here=1&search=mixer&type=p
 
 GROUPS
 ¯¯¯¯¯¯
-Create a GROUPS folder in the root of the HVSC folder, i.e. next to DEMOS, GAMES and MUSICIAN. Enter
-it and create the following empty folders in it:
-
-  o  Maniacs of Noise
-  o  Vibrants
+Back out of the HVSC version folder and copy the GROUPS folder there. Paste it into the root of the
+HVSC folder, i.e. next to DEMOS, GAMES and MUSICIANS.
 
 Remember to also do this online.
+
+NOTE: Make sure this source folder is up-to-date as more groups are added in DeepSID.
 
   1. Now enter the 'hvsc_folders' table.
   2. Search for this: %/GROUPS/%
   3. For each folder, search for the corresponding MUSICIANS folder.
   4. Copy the number of files to the same field in the GROUPS row. If there are subfolders (typically
      for worktunes) then add the numbers together for the GROUPS row.
-
-(WIP)
 
 LATEST ACTIVITY
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯

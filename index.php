@@ -524,7 +524,7 @@
 			<div id="sundry">
 				<div id="stopic-stil" class="stopic">
 					<div id="sundry-news">
-						<span>An unofficial GROUPS folder has now been added in the root of the HVSC folder.</span>
+						<span>An unofficial <a href="//deepsid.chordian.net/?file=/GROUPS/">GROUPS</a> folder has now been added in the root of the HVSC folder.</span>
 					</div>
 				</div>
 				<div id="stopic-tags" class="stopic" style="display:none;"></div>
@@ -1321,6 +1321,24 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>January 16, 2022</h3>
+						<ul>
+							<li>More <a href="//deepsid.chordian.net/?file=/GROUPS/">GROUPS</a> have been added the past few days, for a total of 54 groups.</li>
+							<li>Groups can now have avatar images. The avatar images for groups in MUSICIANS have been added.</li>
+						</ul>
+
+						<h3>January 13, 2022</h3>
+						<ul>
+							<li>Added the CSDb music competitions related to HVSC #76.</li>
+						</ul>
+
+						<h3>January 9, 2022</h3>
+						<ul>
+							<li>Fixed folders in GROUPS not being able to load directly or refresh.</li>
+							<li>Fixed a bug that caused GROUPS folders to be shown in one of the top 10 lists.</li>
+							<li>Added a ton of GROUPS entries, for a total of 18 groups.</li>
+						</ul>
 
 						<h3>January 8, 2022</h3>
 						<ul>

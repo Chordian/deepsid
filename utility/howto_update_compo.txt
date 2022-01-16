@@ -21,7 +21,7 @@ After waiting a few days:
 
   1. Go to https://csdb.dk and click the 'Advanced' search link in the right side.
   2. Click the 'Event(s)' radio button.
-  3. Ctrl+End to the bottom. C
+  3. Ctrl+End to the bottom.
   4. Change the start date to match when the previous HVSC update was released. It is
      usually about half a year ago.
   5. Change the end date to match when the current HVSC update was released.
