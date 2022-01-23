@@ -317,7 +317,7 @@ try {
 	// Get composers that made for games professionally (magazines don't count)
 	$select = $db->query('
 		SELECT fullname, name, shortname, handles, shorthandle, affiliation FROM composers
-		WHERE (focus = "PRO" OR focus = "BOTH")
+		WHERE (focus = "PRO" OR focus = "BOTH") AND fullname NOT LIKE "%/GROUPS/%"
 	');
 	$select->setFetchMode(PDO::FETCH_OBJ);
 	CreateComposersArray($select, $composers_game, true);

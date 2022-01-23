@@ -8,6 +8,8 @@ SHOULD BE DONE
   for indicating a professional, a scener, or both. Two icons side-by-side. You have the info
   ready in the 'composers' table, in a new 'focus' column.
 
+- BUG: Make the groups disappear from the recommendations page.
+
 - Idea for a new visuals mode button: STATS. It adds/ticks stuff detected to be used by the tune.
   Waveforms, pulsating, voices, etc.
 
@@ -26,12 +28,7 @@ SHOULD BE DONE
 - Tips idea: Jargon. All kinds of abbreviations and technical expressions explained - including
   DeepSID jargon such as "plinks" and "clinks".
 
-- Annex box: If loading root or other non-specific page, show annex tips. If loading a profile or
-  a song directly, show links.
-
 - I've had a request for REST API access. Can you find a nice PHP framework for that?
-
-- Add new avatar images in GROUPS folders.
 
 - The site crashed with an internal server error 500 recently. Tracking.php was confused by the
   way the visitors file look like - specifically a "round()" line. See e-mail 2022-01-11 for the
@@ -185,6 +182,11 @@ CONSIDER THIS
   I'm pretty sure this is not allowed at my web hotel - One.com. The code for creating the search
   shortcuts in 'hvsc.php' has been commented out. (I was actually never that fond of them myself;
   it was something that JW commissioned. The SQL query was awfully slow.)
+
+- BUG: Loading annex links instead of tips is not solid. Sometimes tips are shown, period.
+  - I believe this is because LOADING A TUNE from the URL calls the annex code twice, and this can
+    result in either links or tips depending on the timing. However, this actually works in my
+    favor. It adds a nice element of randomization to whether links or tips are shown.
 
 - See also:
   - A list of similar SID tunes, for example found by comparing STIL artists.

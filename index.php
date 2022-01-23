@@ -1322,6 +1322,18 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>January 23, 2022</h3>
+						<ul>
+							<li>Rewrote the way the annex box appears contextually upon page reload. If the URL is not for a playlist
+								but has a profile that may show composer links, there is a good chance that these may be shown instead
+								of tips.</li>
+						</ul>
+
+						<h3>January 22, 2022</h3>
+						<ul>
+							<li>Groups no longer appear in the list of game composers in the bottom of the root page.</li>
+						</ul>
+
 						<h3>January 16, 2022</h3>
 						<ul>
 							<li>More <a href="//deepsid.chordian.net/?file=/GROUPS/">GROUPS</a> have been added the past few days, for a total of 54 groups.</li>
@@ -1742,7 +1754,7 @@
 				</div>
 			</div>
 
-			<div id="annex"<?php if (isset($_GET['notips'])) echo ' style="display:none;"'; ?>>
+			<div id="annex" style="display:none;">
 				<div class="annex-tabs">
 					<div class="annex-tab selected">Tips
 						<div class="annex-close"></div>

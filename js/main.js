@@ -91,14 +91,6 @@ $(function() { // DOM ready
 	// Assume 1SID (most common) thus hide the extra filter sections on the pianos
 	$("#visuals-piano .piano-filter1,#visuals-piano .piano-filter2").hide();
 
-	// Show a random tip in an annex box
-	if (GetParam("notips") === "") {
-		$.get("php/annex_tips.php", /*{ id: 15 },*/ function(tips) {
-			$("#annex-tips").empty().append(tips);
-			$(".annex-topics").show();
-		});
-	}
-
 	$("#time-bar").addClass(emulator)
 		.css("cursor", SID.emulatorFlags.supportSeeking ? "pointer" : "default");
 
@@ -1100,8 +1092,11 @@ $(function() { // DOM ready
 
 	/**
 	 * When clicking a "clink" for opening a composer's links in the annex box.
+	 * 
+	 * @param {*} event 
+	 * @param {boolean} internal	If specified and TRUE, it wasn't clicked by a human.
 	 */
-	$("#topic-profile").on("click", "a.clinks", function() {
+	$("#topic-profile").on("click", "a.clinks", function(event, internal) {
 		var $this = $(this);
 		$("#annex .annex-tab").empty().append('Links<div class="annex-close"></div>');
 		$.get("php/annex_clinks.php", { id: $this.attr("data-id") }, function(data) {
@@ -1114,7 +1109,9 @@ $(function() { // DOM ready
 					'<a href="" id="edit-add-clink" class="clink-corner-link" style="right:'+(data.clinks ? '44' : '17')+'px;">Add</a>'+
 					(data.clinks ? '<a href="" id="edit-cancel-clink" class="clink-corner-link"">Edit</a>' : '')
 				);
-				$(".annex-topics,#annex").show();
+				$(".annex-topics").show();
+				if (typeof internal == "undefined")
+					$("#annex").show(); // It was clicked by a human so better make sure the annex box is visible
 			});
 		});
 		return false;
@@ -1168,7 +1165,7 @@ $(function() { // DOM ready
 			}, function(data) {
 				browser.validateData(data, function() {
 					// Refresh the annex box
-					$("#topic-profile a.clinks").trigger("click");
+					$("#topic-profile a.clinks").trigger("click", true);
 				});
 			});
 		});
@@ -1209,7 +1206,7 @@ $(function() { // DOM ready
 			}, function(data) {
 				browser.validateData(data, function() {
 					// Refresh the annex box
-					$("#topic-profile a.clinks").trigger("click");
+					$("#topic-profile a.clinks").trigger("click", true);
 				});
 			});
 		});
@@ -1241,7 +1238,7 @@ $(function() { // DOM ready
 			}, function(data) {
 				browser.validateData(data, function() {
 					// Refresh the annex box
-					$("#topic-profile a.clinks").trigger("click");
+					$("#topic-profile a.clinks").trigger("click", true);
 				});
 			});
 		});
@@ -1633,7 +1630,7 @@ $(function() { // DOM ready
 		ctrls.state("root/back", "enabled");
 
 		browser.getFolder(0, undefined, undefined, function() {
-
+			
 			if (!isFolder) {
 
 				// Isolate the SID name, e.g. "music.sid"
@@ -1677,9 +1674,9 @@ $(function() { // DOM ready
 				}, 200);
 			}
 			if (isFolder) browser.showFolderTags();
-			browser.getComposer();
-
+			browser.getComposer()
 		});
+
 	} else if (searchQuery !== "")
 		PerformSearchQuery(searchQuery);
 
@@ -1704,6 +1701,7 @@ $(function() { // DOM ready
 	 * When clicking the 'X' corner icon for closing an annex box.
 	 */
 	$("#annex").on("click", ".annex-close", function() {
+		browser.annexNotWanted = true;
 		$("#annex").hide();
 	});
 
@@ -1731,6 +1729,7 @@ $(function() { // DOM ready
 	 * could have been closed earlier, it is made visible again.
 	 */
 	 $("#page").on("click", "a.annex-link", function() {
+		browser.annexNotWanted = false;
 		ClickAnnexLink($(this).attr("href"));
 		setTimeout(function() {
 			$("#annex").show();

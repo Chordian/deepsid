@@ -61,6 +61,7 @@ function Browser() {
 	this.currentScrollPos = 0;
 	this.scrollPositions = [];
 	this.sliderButton = false;
+	this.annexNotWanted = GetParam("notips") !== ""
 
 	this.secondsLength = 0;
 	this.chips = 1;
@@ -1651,6 +1652,24 @@ Browser.prototype = {
 	},
 
 	/**
+	 * If the annex box is not visible, show it with links or tips.
+	 */
+	 showAnnexBox: function() {
+		if (!$("#annex").is(":visible") && !this.annexNotWanted) {
+			if ($("#topic-profile a.clinks").length) {
+				// Show links in the annex box for the currently shown profile
+				$("#topic-profile a.clinks").trigger("click");
+			} else {
+				// Show a random tip in an annex box
+				$.get("php/annex_tips.php", /*{ id: 15 },*/ function(tips) {
+					$("#annex-tips").empty().append(tips);
+					$(".annex-topics,#annex").show();
+				});
+			}
+		}
+	},
+
+	/**
 	 * Show the composer page in the 'Profile' tab.
 	 * 
 	 * @param {string} overridePath		If specified, fullname for profile (including file).
@@ -1677,6 +1696,7 @@ Browser.prototype = {
 		if (overridePath == "" && (this.path.substr(0, 2) == "/!" || this.path.substr(0, 2) == "/$")) {
 			// Symlists won't get a composer page (for now at least)
 			$("#topic-profile").empty();
+			this.showAnnexBox();
 			return;
 		}
 
@@ -1723,6 +1743,8 @@ Browser.prototype = {
 						}
 					});
 
+					this.showAnnexBox();
+
 					// Update avatar images of the three quick shortcut columns
 					setTimeout(function() {
 						var $qs = $("#topic-profile img.quick-thumbnail"), i = 0;
@@ -1762,9 +1784,11 @@ Browser.prototype = {
 					// Enable the brand image (if available) for the correct color theme
 					$("#brand-"+(parseInt(colorTheme) ? "dark" : "light")).show();
 
+					this.showAnnexBox();
+
 					// If the "Links" tab in the annex box is present then refresh the box
 					if ($("#annex .annex-tabs").text().indexOf("Links") != -1)
-						$("#topic-profile a.clinks").trigger("click");
+						$("#topic-profile a.clinks").trigger("click", true);					
 
 					this.groupsFullname = overridePath == "" ? this.path.substr(1) : overridePath;
 					this.getGroups(this.groupsFullname);
