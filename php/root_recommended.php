@@ -34,6 +34,9 @@ try {
 		$select->setFetchMode(PDO::FETCH_OBJ);
 		$fullname = $select->rowCount() ? $select->fetch()->fullname : '';
 
+		// Skip it if it's a group entry
+		if (strpos($fullname, '/GROUPS/') !== false) continue;
+
 		// Get composer data via the fullname
 		$select = $db->query('SELECT name, shortname, handles, shorthandle FROM composers WHERE fullname = "'.$fullname.'"');
 		$select->setFetchMode(PDO::FETCH_OBJ);

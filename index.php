@@ -1325,8 +1325,9 @@
 						<h3>January 23, 2022</h3>
 						<ul>
 							<li>Rewrote the way the annex box appears contextually upon page reload. If the URL is not for a playlist
-								but has a profile that may show composer links, there is a good chance that these may be shown instead
-								of tips.</li>
+								but has a profile that may show composer links, there is a good chance these may be shown instead of tips.</li>
+							<li>Groups no longer appear in the page with recommended folders.</li>
+							<li>The CSDb tab now shows a release page if it's the only release for that song anyway.</li>
 						</ul>
 
 						<h3>January 22, 2022</h3>

@@ -94,8 +94,22 @@ if (isset($_GET['fullname'])) {
 
 	$go_back = '';
 
+	if ($csdb_type == 'sid') {
+		// Get the XML from the CSDb web service with a list of releases on this 'sid' page (default depth)
+		$xml = curl('https://csdb.dk/webservice/?type=sid&id='.$csdb_id);
+		if (strpos($xml, '<CSDbData>') !== false) {
+			$csdb = simplexml_load_string(utf8_decode($xml));
+
+			if (isset($csdb->SID->UsedIn) && count($csdb->SID->UsedIn->Release) == 1) {
+				// There is just *ONE* release for this SID so show that instead of the 'sid' page
+				$csdb_type = 'release';
+				$csdb_id = $csdb->SID->UsedIn->Release->ID;
+			}
+		}
+	}
+
 } else if (isset($_GET['type']) && isset($_GET['id'])) {
-	// The 'type' and 'id' was directly specified
+	// The 'type' and 'id' was directly specified (permalink)
 	$csdb_type = $_GET['type'];
 	$csdb_id = $_GET['id'];
 	$copyright = '';

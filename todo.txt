@@ -8,8 +8,6 @@ SHOULD BE DONE
   for indicating a professional, a scener, or both. Two icons side-by-side. You have the info
   ready in the 'composers' table, in a new 'focus' column.
 
-- BUG: Make the groups disappear from the recommendations page.
-
 - Idea for a new visuals mode button: STATS. It adds/ticks stuff detected to be used by the tune.
   Waveforms, pulsating, voices, etc.
 
@@ -21,9 +19,8 @@ SHOULD BE DONE
 
 - Why does the hash cross-rating system work so badly? See if you can figure out what's up.
 
-- If a SID page at CSDb for a song has just one entry, immediately show its release page instead
-  of staying on the SID page.
-  - Idea: Maybe even disable the BACK button if it's the only release.
+- Change the release/sid harvest Python script to not do "music page" exceptions anymore. The
+  new "show release if it is the only one" change is sufficient.
 
 - Tips idea: Jargon. All kinds of abbreviations and technical expressions explained - including
   DeepSID jargon such as "plinks" and "clinks".
