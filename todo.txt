@@ -3,16 +3,6 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-
-- Idea for folders in MUSICIANS folder: Faded flat color icons just before the star ratings,
-  for indicating a professional, a scener, or both. Two icons side-by-side. You have the info
-  ready in the 'composers' table, in a new 'focus' column.
-
-- Idea for a new visuals mode button: STATS. It adds/ticks stuff detected to be used by the tune.
-  Waveforms, pulsating, voices, etc.
-
-- Slightly darker blue areas on blue bar for BASIC and KERNEL ROMs.
-
 - BUG: CSDb entries in the exotic folder often have no header title. Why is that?
   - It appears to affect the advanced tunes in the root of that folder.
 
@@ -22,16 +12,26 @@ SHOULD BE DONE
 
 - Why does the hash cross-rating system work so badly? See if you can figure out what's up.
 
-- Change the release/sid harvest Python script to not do "music page" exceptions anymore. The
-  new "show release if it is the only one" change is sufficient.
-
 - Tips idea: Jargon. All kinds of abbreviations and technical expressions explained - including
   DeepSID jargon such as "plinks" and "clinks".
 
 - I've had a request for REST API access. Can you find a nice PHP framework for that?
 
-¯¯¯¯¯¯¯¯¯¯¯¯¯  
 
+IN THE MOOD FOR NEW FEATURES
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+- Idea for folders in MUSICIANS folder: Faded flat color icons just before the star ratings,
+  for indicating a professional, a scener, or both. Two icons side-by-side. You have the info
+  ready in the 'composers' table, in a new 'focus' column.
+
+- Idea for a new visuals mode button: STATS. It adds/ticks stuff detected to be used by the tune.
+  Waveforms, pulsating, voices, etc.
+
+- Slightly darker blue areas on blue bar for BASIC and KERNEL ROMs.
+
+
+WHEN THE TIME IS RIGHT
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
 - Copy all JCH's ratings to a unique account that is used for determining the quality settings,
   etc. JCH is getting tired of not being able to rate certain folders.
   - Because JCH might +1 revise all his ratings later, it should be a 100% copy.

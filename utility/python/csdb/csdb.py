@@ -17,10 +17,10 @@ from xml.etree import ElementTree
 
 if __name__ == '__main__':
 
-	with open('csdb_35000-60150.csv', 'wb') as csvfile:
+	with open('csdb_00001-1999.csv', 'wb') as csvfile:
 		writer = csv.writer(csvfile, delimiter=',')
 
-		for sidId in range(35000, 60150):
+		for sidId in range(00001, 1999):
 			response = requests.get('https://csdb.dk/webservice/?type=sid&id=%s' % sidId)
 			if response.status_code == 200:
 				try:
@@ -31,27 +31,31 @@ if __name__ == '__main__':
 
 				sid = tree.find('SID')
 				fullname = sid.find('HVSCPath').text[1:]
-				name = sid.find('Name').text.lower()
+				#name = sid.find('Name').text.lower()
 
 				type = 'sid'
 				id = sid.find('ID').text
 
-				usedin = sid.find('UsedIn')
-				if usedin != None:
-					if len(list(usedin)) == 1:
-						# One release; if type is 'C64 Music' just get it
-						release = usedin.find('Release')
-						if release.find('Type').text == 'C64 Music':
-							type = 'release'
-							id = release.find('ID').text
-					else:
-						# Multiple releases; type 'C64 Music' much match name before we accept it
-						releases = usedin.findall('Release')
-						for release in releases:
-							if release.find('Type').text == 'C64 Music' and release.find('Name').text.lower() == name:
-								type = 'release'
-								id = release.find('ID').text
-								break
+				# The code for 'C64 Music' has been disabled as releases for this is no longer needed.
+				# The site has been changed to instead show the release immediately if it's the only one,
+				# regardless of what type it is. This works much better.
+
+				#usedin = sid.find('UsedIn')
+				#if usedin != None:
+				#	if len(list(usedin)) == 1:
+				#		# One release; if type is 'C64 Music' just get it
+				#		release = usedin.find('Release')
+				#		if release.find('Type').text == 'C64 Music':
+				#			type = 'release'
+				#			id = release.find('ID').text
+				#	else:
+				#		# Multiple releases; type 'C64 Music' much match name before we accept it
+				#		releases = usedin.findall('Release')
+				#		for release in releases:
+				#			if release.find('Type').text == 'C64 Music' and release.find('Name').text.lower() == name:
+				#				type = 'release'
+				#				id = release.find('ID').text
+				#				break
 
 				#print '\nHVSC path: %s' % fullname
 				#print 'Type: %s, ID: %s' % (type, id)
