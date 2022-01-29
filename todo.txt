@@ -13,6 +13,9 @@ SHOULD BE DONE
 
 - Slightly darker blue areas on blue bar for BASIC and KERNEL ROMs.
 
+- BUG: CSDb entries in the exotic folder often have no header title. Why is that?
+  - It appears to affect the advanced tunes in the root of that folder.
+
 - See if it’s possible to run an SQL query (or a small script) that takes all CSDb corner links
   and converts them to external links for all that has one. (Make sure the CShellDB link is
   translated to real CSDb.dk links in the process.)
@@ -26,11 +29,6 @@ SHOULD BE DONE
   DeepSID jargon such as "plinks" and "clinks".
 
 - I've had a request for REST API access. Can you find a nice PHP framework for that?
-
-- The site crashed with an internal server error 500 recently. Tracking.php was confused by the
-  way the visitors file look like - specifically a "round()" line. See e-mail 2022-01-11 for the
-  details. Can you add an exception handler block to Tracking.php to plug this hole?
-
 
 ¯¯¯¯¯¯¯¯¯¯¯¯¯  
 
