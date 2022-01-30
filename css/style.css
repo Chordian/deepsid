@@ -4386,6 +4386,11 @@ input[type=range]::-ms-track {
 					background: url(../images/visuals_memory.svg) 0 -2.4px / 14px 19px no-repeat;
 				}
 
+				/* @todo Replace with its own icon later */
+				#sticky-visuals .icon-stats:before {
+					background: url(../images/visuals_memory.svg) 0 -2.4px / 14px 19px no-repeat;
+				}
+
 		/* Container for buttons in the right side of the sticky white top header box */
 		#sticky-right-buttons {
 			width: 240px;
@@ -4746,6 +4751,27 @@ input[type=range]::-ms-track {
 					margin: 12px 0;
 					text-align: center;
 				}
+
+			#table-stats {
+				font-size: 13px;
+			}
+
+				#table-stats th {
+					width: 33%;
+				}
+
+				#table-stats div {
+					color: var(--color-text-faint);
+				}
+
+				#table-stats .stats-used {
+					color: var(--color-text-body);
+				}
+
+					#table-stats .stats-used:after {
+						content: "\2714";
+						float: right;
+					}
 
 			#topic-csdb .thumbnail,
 			#topic-player .thumbnail {

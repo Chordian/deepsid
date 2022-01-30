@@ -739,6 +739,7 @@
 						<button class="icon-piano button-off" data-visual="piano">Piano</button>
 						<button class="icon-graph button-on" data-visual="graph">Graph</button>
 						<button class="icon-memory button-on" data-visual="memory">Memo</button>
+						<button class="icon-stats button-on" data-visual="stats">Stats</button>
 					</div>
 					<img class="waveform-colors" src="images/waveform_colors.png" alt="Waveform Colors" />
 					<div id="sticky-right-buttons">
@@ -915,6 +916,52 @@
 								</table>
 							</div>
 						</div>
+
+						<div id="visuals-stats" class="visuals" style="display:none;">
+							<table id="table-stats">
+								<tr>
+									<th>Voice 1</th>
+									<th>Voice 2</th>
+									<th>Voice 3</th>
+								</tr>
+								<tr>
+									<td>
+										<!--<div>Frequency altered (i.e. voice used)</div><br />-->
+										<div id="stats-v1-4-1">Uses $1x waveform (triangle)</div>
+										<div id="stats-v1-4-2">Uses $2x waveform (sawtooth)</div>
+										<div id="stats-v1-4-3">Uses $3x waveform (tri+saw)</div>
+										<div id="stats-v1-4-4">Uses $4x waveform (pulse)</div>
+										<div id="stats-v1-4-5">Uses $5x waveform (tri+pulse)</div>
+										<div id="stats-v1-4-6">Uses $6x waveform (saw+pulse)</div>
+										<div id="stats-v1-4-7">Uses $7x waveform (tri+saw+pulse)</div>
+										<div id="stats-v1-4-8">Uses $8x waveform (noise)</div>
+									</td>
+									<td>
+										<div id="stats-v2-4-1">Uses $1x waveform (triangle)</div>
+										<div id="stats-v2-4-2">Uses $2x waveform (sawtooth)</div>
+										<div id="stats-v2-4-3">Uses $3x waveform (tri+saw)</div>
+										<div id="stats-v2-4-4">Uses $4x waveform (pulse)</div>
+										<div id="stats-v2-4-5">Uses $5x waveform (tri+pulse)</div>
+										<div id="stats-v2-4-6">Uses $6x waveform (saw+pulse)</div>
+										<div id="stats-v2-4-7">Uses $7x waveform (tri+saw+pulse)</div>
+										<div id="stats-v2-4-8">Uses $8x waveform (noise)</div>
+									</td>
+									<td>
+										<div id="stats-v3-4-1">Uses $1x waveform (triangle)</div>
+										<div id="stats-v3-4-2">Uses $2x waveform (sawtooth)</div>
+										<div id="stats-v3-4-3">Uses $3x waveform (tri+saw)</div>
+										<div id="stats-v3-4-4">Uses $4x waveform (pulse)</div>
+										<div id="stats-v3-4-5">Uses $5x waveform (tri+pulse)</div>
+										<div id="stats-v3-4-6">Uses $6x waveform (saw+pulse)</div>
+										<div id="stats-v3-4-7">Uses $7x waveform (tri+saw+pulse)</div>
+										<div id="stats-v3-4-8">Uses $8x waveform (noise)</div>
+									</td>
+								</tr>
+							</table>
+							@todo:<br />
+							- Also need general box for e.g. filter and volume
+						</div>
+
 					</div>
 
 					<div id="topic-profile" class="topic ext" style="display:none;"></div>
@@ -1325,6 +1372,7 @@
 						<h3>January 30, 2022</h3>
 						<ul>
 							<li>The screen, BASIC ROM and KERNEL ROM areas can now be vaguely seen in the memory bar.</li>
+							<li>Fixed competition folders not working properly.</li>
 						</ul>
 
 						<h3>January 29, 2022</h3>

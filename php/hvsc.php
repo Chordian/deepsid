@@ -818,9 +818,9 @@ try {
 			// Figure out the name of the thumbnail (if it exists)
 			$fullname = str_replace('_High Voltage SID Collection/', '', $fullname);
 			$fullname = str_replace("_Compute's Gazette SID Collection/", "cgsc_", $fullname);
-			$fullname = str_replace(' ', '_', $fullname);
 			$fullname = strtolower(str_replace('/', '_', $fullname));
-			$thumbnail = 'images/composers/'.$fullname.'.jpg';
+			$thumbnail = str_replace(' ', '_', $fullname);
+			$thumbnail = 'images/composers/'.$thumbnail.'.jpg';
 
 			if ($select->rowCount()) {
 				$row = $select->fetch();								// Example

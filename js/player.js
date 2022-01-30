@@ -1185,7 +1185,7 @@ SIDPlayer.prototype = {
 	 * 
 	 * @param {number} address		Address $0000 to $FFFF.
 	 * 
-	 * @return {*}					Byte value of the register, or FALSE.
+	 * @return {*}					Byte value of the register.
 	 */
 	readMemory: function(address) {
 		switch (this.emulator) {

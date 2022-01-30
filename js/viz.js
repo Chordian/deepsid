@@ -351,6 +351,8 @@ Viz.prototype = {
 			case "memory":
 				$("#memory-lc").show();
 				break;
+			case "stats":
+				break;
 		}
 	},
 
@@ -1209,6 +1211,32 @@ Viz.prototype = {
 	},
 
 	/**
+	 * Stats: Update the harvesting of statistics about the usage of SID.
+	 * 
+	 * This is called by SID.setCallbackBufferEnded().
+	 */
+	animateStats: function() {
+		for (var chip = 1; chip <= browser.chips; chip++) {
+			for (var voice = 0; voice <= 2; voice++) {
+				for (var register = 0; register <= 6; register++) {
+					if (chip == 1) {
+						var byte = SID.readRegister(0xD400 + register + (voice * 7), chip);
+						// Waveforms
+						if (register == 4)
+							$("#stats-v"+(voice + 1)+"-4-"+(byte >> 4)).removeClass("stats-used").addClass("stats-used");
+
+
+
+
+
+
+					}
+				}
+			}
+		}
+	},
+
+	/**
 	 * Start updating the views that use the SID.setCallbackBufferEnded() callback.
 	 */
 	startBufferEndedEffects: function() {
@@ -1235,6 +1263,7 @@ Viz.prototype = {
 		SID.setCallbackBufferEnded(function() {
 			this.animatePiano();
 			this.animateMemory();
+			this.animateStats();
 		}.bind(this));
 	},
 

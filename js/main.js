@@ -1752,7 +1752,8 @@ $(function() { // DOM ready
 	selectTab = selectTab !== "" ? selectTab : "profile";
 	var selectView = "";
 	if (selectTab === "flood") selectTab = "graph";
-	if (selectTab === "piano" || selectTab === "graph") {
+	if (selectTab === "memo") selectTab = "memory";
+	if (selectTab === "piano" || selectTab === "graph" || selectTab === "memory" || selectTab === "stats") {
 		selectView = selectTab.toLowerCase();
 		selectTab = "visuals";
 	}
