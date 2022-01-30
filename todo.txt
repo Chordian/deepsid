@@ -26,8 +26,12 @@ IN THE MOOD FOR NEW FEATURES
 
 - Idea for a new visuals mode button: STATS. It adds/ticks stuff detected to be used by the tune.
   Waveforms, pulsating, voices, etc.
+  - Add statistics to the database, done by all visitors. When visiting the song later, there
+    will already be statistics ready. Maybe add an "entire song has been parsed" green icon?
 
 - Slightly darker blue areas on blue bar for BASIC and KERNEL ROMs.
+  - Maybe overlayed partly transparent black boxes, so that both light and dark blue colors
+    below it are automatically made darker.
 
 
 WHEN THE TIME IS RIGHT

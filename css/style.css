@@ -280,6 +280,7 @@
 	--color-memory-border-lr:		rgba(68, 82, 157, 0.3);
 	--color-memory-lid-side:		rgba(68, 82, 157, 0);
 	--color-memory-lid-middle:		rgba(68, 82, 157, 1);
+	--color-memory-rom:				#cdd3eb;
 
 	--shadow-memory:				none;
 	--shadow-memory-chunk:			var(--shadow-memory);
@@ -1953,7 +1954,7 @@ input[type=range]::-ms-track {
 #info {
 	position: relative;
 	flex: 0 0 84px;
-	border: 1px solid var(--color-border-box);
+	border: 0.5px solid var(--color-border-box);
 	border-top-left-radius: 1px;
 	border-top-right-radius: 1px;
 	border-bottom-color: var(--color-border-info);
@@ -2365,6 +2366,26 @@ input[type=range]::-ms-track {
 			height: 2px;
 			width: 100%;
 			background-image: linear-gradient(90deg, var(--color-memory-lid-side), var(--color-memory-lid-middle), var(--color-memory-lid-side));
+			z-index: 4;
+		}
+
+		#memory-basic,
+		#memory-kernel {
+			position: absolute;
+			top: 1.5px;
+			left: 268.75px;
+			height: 4.5px;
+			width: 53.75px;
+			/*background: #e8e8e8;*/
+			background: linear-gradient(to bottom, #ffe 60%,#ff0 100%);
+			border: 1px solid #77d;
+			/*opacity: 0.8;*/
+			z-index: 3;
+			pointer-events: none;
+		}
+
+		#memory-kernel {
+			left: 376.25px;
 		}
 
 		/* Dark blue indicating the tune in memory */

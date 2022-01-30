@@ -512,7 +512,7 @@
 					<div id="youtube-loading">Initializing YouTube...</div>
 					<div id="youtube-player"></div>
 				</div>
-				<div id="memory-bar"><div id="memory-lid"></div><div id="memory-chunk"></div></div>
+				<div id="memory-bar"><div id="memory-lid"></div><div id="memory-chunk"></div><div id="memory-basic"></div><div id="memory-kernel"></div></div>
 			</div>
 			<div id="sundry-tabs">
 				<div class="tab unselectable selected" data-topic="stil" id="stab-stil">News</div>
@@ -1321,6 +1321,11 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>January 29, 2022</h3>
+						<ul>
+							<li>Removed the link for reporting a profile change. Nobody was using it and it clashed with long names.</li>
+						</ul>
 
 						<h3>January 23, 2022</h3>
 						<ul>
