@@ -2369,19 +2369,29 @@ input[type=range]::-ms-track {
 			z-index: 4;
 		}
 
+		#memory-screen,
 		#memory-basic,
 		#memory-kernel {
 			position: absolute;
-			top: 1.5px;
+			top: 0;
 			left: 268.75px;
-			height: 4.5px;
+			height: 100%;
 			width: 53.75px;
-			/*background: #e8e8e8;*/
-			background: linear-gradient(to bottom, #ffe 60%,#ff0 100%);
-			border: 1px solid #77d;
-			/*opacity: 0.8;*/
+			background: #005;
+			border-left: 1px solid #bbd;
+			border-right: 1px solid #bbd;
+			opacity: 0.25;
 			z-index: 3;
 			pointer-events: none;
+			font: normal 7px arial, sans-serif;
+			letter-spacing: 2px;
+			color: #fff;
+			text-align: center;
+		}
+
+		#memory-screen {
+			left: 6.71px;
+			width: 6.71px;
 		}
 
 		#memory-kernel {

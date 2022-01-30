@@ -512,7 +512,7 @@
 					<div id="youtube-loading">Initializing YouTube...</div>
 					<div id="youtube-player"></div>
 				</div>
-				<div id="memory-bar"><div id="memory-lid"></div><div id="memory-chunk"></div><div id="memory-basic"></div><div id="memory-kernel"></div></div>
+				<div id="memory-bar"><div id="memory-lid"></div><div id="memory-chunk"></div><div id="memory-screen"></div><div id="memory-basic">BASIC</div><div id="memory-kernel">KERNEL</div></div>
 			</div>
 			<div id="sundry-tabs">
 				<div class="tab unselectable selected" data-topic="stil" id="stab-stil">News</div>
@@ -1321,6 +1321,11 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>January 30, 2022</h3>
+						<ul>
+							<li>The screen, BASIC ROM and KERNEL ROM areas can now be vaguely seen in the memory bar.</li>
+						</ul>
 
 						<h3>January 29, 2022</h3>
 						<ul>
