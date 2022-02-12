@@ -21,6 +21,12 @@ function Viz(emulator) {
 	this.runningPiano = false;
 	this.runningMemory = false;
 
+	this.stat_fc = [];
+	this.stat_freq_ptr = [0, 0, 0];
+	this.stat_freq = [[], [], []];
+	this.stat_pw = [[], [], []];
+	this.stat_adsr = [[], [], []];
+
 	this.ctx_pw = [];
 	this.ctx_fc = [];
 	this.ctx_res = [];
@@ -30,6 +36,7 @@ function Viz(emulator) {
 	this.prevGoodWaveform 	= [0, 0, 0, 0, 0, 0, 0, 0, 0];
 	
 	this.prevClockspeed = "Unknown";
+	this.prevClockspeedStats = "Unknown";
 
 	this.scopeLineColor = [
 		"34, 35, 27",	// For bright color theme
@@ -1216,24 +1223,201 @@ Viz.prototype = {
 	 * This is called by SID.setCallbackBufferEnded().
 	 */
 	animateStats: function() {
+		var lowByte;
 		for (var chip = 1; chip <= browser.chips; chip++) {
 			for (var voice = 0; voice <= 2; voice++) {
 				for (var register = 0; register <= 6; register++) {
 					if (chip == 1) {
+
 						var byte = SID.readRegister(0xD400 + register + (voice * 7), chip);
-						// Waveforms
-						if (register == 4)
-							$("#stats-v"+(voice + 1)+"-4-"+(byte >> 4)).removeClass("stats-used").addClass("stats-used");
 
+						switch (register) {
+							case 0x00:
+								// Low byte of frequency (store for next loop)
+								lowByte = byte;
+								break;
+							case 0x01:
+								// High byte of frequency (so now we have both bytes)
+								var ptr = this.stat_freq_ptr[voice]++;
+								this.stat_freq[voice][ptr] = lowByte + (byte * 256);
 
+								if (ptr > 5) {
+									var subtleChanges = true;
+									this.stat_freq_ptr[voice] = 0;
 
+									for (var i = 0; i < 5; i++) {
 
+										// Get the clockspeed
+										var closest = null, indexMatch = 0, clockspeed;
+										try {
+											clockspeed = browser.playlist[browser.songPos].clockspeed;
+											this.prevClockspeedStats = clockspeed;
+										} catch(e) {
+											// Type error usually happens when leaving a folder while playing
+											clockspeed = this.prevClockspeedStats;
+										}
+										// Find the closest match in the array of note frequencies (PAL or NTSC table)
+										var sidFrequencies = clockspeed.substr(0, 4) === "NTSC" || browser.path.indexOf("Compute's Gazette SID Collection") !== -1 ? this.sidFrequenciesNTSC : this.sidFrequenciesPAL;
+										$.each(sidFrequencies, function(index) {
+											if (closest == null || Math.abs(this - viz.stat_freq[voice][i]) < Math.abs(closest - viz.stat_freq[voice][i])) {
+												closest = this;
+												indexMatch = index;
+											}
+										});
+	
+										// Calculate the gap between neighbour frequencies
+										var gap = indexMatch == 0
+											? sidFrequencies[indexMatch] - sidFrequencies[indexMatch + 1]
+											: sidFrequencies[indexMatch] - sidFrequencies[indexMatch - 1];
 
+										// The granularity of the distance between frequency changes
+										const allowedDistance = Math.abs(gap) / 3;
 
+										// How close are these two frequencies?
+										var realDistance = Math.abs(this.stat_freq[voice][i + 1] - this.stat_freq[voice][i]);
+
+										/*if (voice == 1) {
+											console.log(this.stat_freq[voice]);
+											console.log("gap = "+gap+"; realDistance = "+realDistance+"; allowedDistance = "+allowedDistance);
+										}*/
+
+										if (realDistance == 0 || realDistance > allowedDistance) {
+											subtleChanges = false;
+											break;
+										}
+									}
+
+									if (subtleChanges)
+										// The past frequencies have been close together - so, vibrato or slide?
+										this.mark(voice, register, "V");
+								}
+								break;
+							case 0x02:
+								// Low byte of pulse width (store for next loop)
+								lowByte = byte;
+								break;
+							case 0x03:
+								// High byte of pulse width (so now we have both bytes)
+								var pw = lowByte + (byte & 0xF) * 256;
+
+								if (this.stat_pw[voice].indexOf(pw) === -1)
+									// It's a new pulse width not used before
+									this.stat_pw[voice].push(pw);
+								
+								if (this.stat_pw[voice].length > 4)
+									// The pulse width has been changed repeatedly
+									this.mark(voice, register, "P")
+								break;
+							case 0x04:
+								// Waveforms
+								if (byte >> 4 < 9)
+									// Acceptable waveform [combination]
+									this.mark(voice, register, byte >> 4);
+								else
+									// Illegal waveform
+									this.mark(voice, register, "X");
+								if (byte & 0x08)
+									// Test bit
+									this.mark(voice, register, "T");
+								switch (byte & 0x06) {
+									case 0x02:
+										// Hard synchronization
+										this.mark(voice, register, "H");
+										break;
+									case 0x04:
+										// Ring modulation
+										this.mark(voice, register, "R");
+										break;
+									case 0x06:
+										// Both combined
+										this.mark(voice, register, "M");
+										break;
+									}
+								break;
+							case 0x05:
+								// Low byte of ADSR (store for next loop)
+								lowByte = byte;
+								break;
+							case 0x06:
+								// High byte of ADSR (so now we have both bytes)
+								var adsr = lowByte + (byte * 256);
+
+								if (this.stat_adsr[voice].indexOf(adsr) == -1)
+									// It's a new ADSR not used before
+									this.stat_adsr[voice].push(adsr);
+								
+								if (this.stat_adsr[voice].length > 4)
+									// The ADSR has been changed several times
+									this.mark(voice, register, "A")
+								break;
+						}
+					}
+				}
+
+				// Global SID registers
+				for (var register = 0x15; register <= 0x18; register++) {
+					if (chip == 1) {
+
+						var byte = SID.readRegister(0xD400 + register, chip);
+
+						switch (register) {
+							case 0x15:
+								// Low byte of filter cutoff frequency (store for next loop)
+								lowByte = byte & 0x7;
+								break;
+							case 0x16:
+								// High byte of filter cutoff frequency (so now we have both bytes)
+								var fc = byte << 3 | lowByte;
+
+								if (this.stat_fc.indexOf(fc) == -1)
+									// It's a new filter cutoff not used before
+									this.stat_fc.push(fc);
+
+								if (this.stat_fc.length > 4)
+									// The filter cutoff has been changed several times
+									$("#stats-global-C").removeClass("stats-used").addClass("stats-used");
+								break;
+							case 0x17:
+								// Filter resonance and routing
+
+								// @todo
+
+								break;
+							case 0x18:
+								// Main volume and filter mode (passbands)
+
+								// @todo
+								
+								break;
+							}
 					}
 				}
 			}
 		}
+	},
+
+	/**
+	 * Stats: Clear all markings in the table and reset variables.
+	 */
+	clearStats: function() {
+		$("#table-stats div,#table-global-stats div").removeClass("stats-used");
+		this.stat_fc = [];
+		this.stat_freq_ptr = [0, 0, 0];
+		this.stat_freq = [[], [], []];
+		this.stat_pw = [[], [], []];
+		this.stat_adsr = [[], [], []];
+		this.prevClockspeedStats = "Unknown";
+	},
+
+	/**
+	 * Stats: Mark a line in the table.
+	 * 
+ 	 * @param {number} voice		SID voice 0-2.
+ 	 * @param {number} register		SID root register 0-6, for $D400, $D401, etc. 
+ 	 * @param {*} item				Kind of a subject ID - can be e.g. a number of a letter.
+	 */
+	mark: function(voice, register, item) {
+		$("#stats-v"+(voice + 1)+"-"+register+"-"+item).removeClass("stats-used").addClass("stats-used");
 	},
 
 	/**

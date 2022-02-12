@@ -927,7 +927,10 @@
 								<tr>
 									<td>
 										<!--<div>Frequency altered (i.e. voice used)</div><br />-->
-										<div id="stats-v1-4-1">Uses $1x waveform (triangle)</div>
+										<div id="stats-v1-1-V">Probably uses vibrato or slide</div>
+										<div id="stats-v1-3-P">Repeatedly changes the pulse width</div>
+										
+										<div id="stats-v1-4-1" class="stats-space">Uses $1x waveform (triangle)</div>
 										<div id="stats-v1-4-2">Uses $2x waveform (sawtooth)</div>
 										<div id="stats-v1-4-3">Uses $3x waveform (tri+saw)</div>
 										<div id="stats-v1-4-4">Uses $4x waveform (pulse)</div>
@@ -935,9 +938,21 @@
 										<div id="stats-v1-4-6">Uses $6x waveform (saw+pulse)</div>
 										<div id="stats-v1-4-7">Uses $7x waveform (tri+saw+pulse)</div>
 										<div id="stats-v1-4-8">Uses $8x waveform (noise)</div>
+
+										<div id="stats-v1-4-T" class="stats-space">Uses the test bit</div>
+										<div id="stats-v1-4-X">Uses an illegal waveform</div>
+
+										<div id="stats-v1-4-H" class="stats-space">Uses hard synchronization</div>
+										<div id="stats-v1-4-R">Uses ring modulation</div>
+										<div id="stats-v1-4-M">Uses both modulations combined</div>
+
+										<div id="stats-v1-6-A" class="stats-space">Repeatedly changes the ADSR</div>
 									</td>
 									<td>
-										<div id="stats-v2-4-1">Uses $1x waveform (triangle)</div>
+										<div id="stats-v2-1-V">Probably uses vibrato or slide</div>
+										<div id="stats-v2-3-P">Repeatedly changes the pulse width</div>
+
+										<div id="stats-v2-4-1" class="stats-space">Uses $1x waveform (triangle)</div>
 										<div id="stats-v2-4-2">Uses $2x waveform (sawtooth)</div>
 										<div id="stats-v2-4-3">Uses $3x waveform (tri+saw)</div>
 										<div id="stats-v2-4-4">Uses $4x waveform (pulse)</div>
@@ -945,9 +960,21 @@
 										<div id="stats-v2-4-6">Uses $6x waveform (saw+pulse)</div>
 										<div id="stats-v2-4-7">Uses $7x waveform (tri+saw+pulse)</div>
 										<div id="stats-v2-4-8">Uses $8x waveform (noise)</div>
+
+										<div id="stats-v2-4-T" class="stats-space">Uses the test bit</div>
+										<div id="stats-v2-4-X">Uses an illegal waveform</div>
+
+										<div id="stats-v2-4-H" class="stats-space">Uses hard synchronization</div>
+										<div id="stats-v2-4-R">Uses ring modulation</div>
+										<div id="stats-v2-4-M">Uses both modulations combined</div>
+
+										<div id="stats-v2-6-A" class="stats-space">Repeatedly changes the ADSR</div>
 									</td>
 									<td>
-										<div id="stats-v3-4-1">Uses $1x waveform (triangle)</div>
+										<div id="stats-v3-1-V">Probably uses vibrato or slide</div>
+										<div id="stats-v3-3-P">Repeatedly changes the pulse width</div>
+
+										<div id="stats-v3-4-1" class="stats-space">Uses $1x waveform (triangle)</div>
 										<div id="stats-v3-4-2">Uses $2x waveform (sawtooth)</div>
 										<div id="stats-v3-4-3">Uses $3x waveform (tri+saw)</div>
 										<div id="stats-v3-4-4">Uses $4x waveform (pulse)</div>
@@ -955,11 +982,38 @@
 										<div id="stats-v3-4-6">Uses $6x waveform (saw+pulse)</div>
 										<div id="stats-v3-4-7">Uses $7x waveform (tri+saw+pulse)</div>
 										<div id="stats-v3-4-8">Uses $8x waveform (noise)</div>
+
+										<div id="stats-v3-4-T" class="stats-space">Uses the test bit</div>
+										<div id="stats-v1-4-X">Uses an illegal waveform</div>
+
+										<div id="stats-v3-4-H" class="stats-space">Uses hard synchronization</div>
+										<div id="stats-v3-4-R">Uses ring modulation</div>
+										<div id="stats-v3-4-M">Uses both modulations combined</div>
+
+										<div id="stats-v3-6-A" class="stats-space">Repeatedly changes the ADSR</div>
 									</td>
 								</tr>
 							</table>
+							<table id="table-global-stats">
+								<tr>
+									<th>Global</th>
+								</tr>
+								<tr>
+									<td>
+										<div id="stats-global-C">Repeatedly changes the filter cutoff</div>
+									</td>
+								</tr>
+							</table>
+
 							@todo:<br />
-							- Also need general box for e.g. filter and volume
+							- Also need general box for e.g. filter and volume<br />
+							- Also test other SID handlers (especially Hermit's)<br />
+							- Remember new button icon<br />
+							- Also need a mid-song clear button<br />
+							- Can you add action pulse bars in table headers?<br />
+							- Display hexadecimal words in certain rows?<br />
+							- Can hard restart be detected?<br />
+							- Filter activated in each voice - if yes, color that table part subtle brown<br />
 						</div>
 
 					</div>

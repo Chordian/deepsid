@@ -78,7 +78,7 @@ try {
 	}
 	fclose($handle);
 
-} catch(Exception $e) {
+} catch(Throwable $e) {
 	// Just delete the file in case of internal server error 500
 	unlink(TRACKFILE);
 }

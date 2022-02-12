@@ -10,10 +10,18 @@ SHOULD BE DONE
   and converts them to external links for all that has one. (Make sure the CShellDB link is
   translated to real CSDb.dk links in the process.)
 
+- Try making the actual song blob in the memory bar a darker blue.
+
+- Prevent voice toggling when typing STIL text for a new tune uploaded in the SH folder.
+
 - Why does the hash cross-rating system work so badly? See if you can figure out what's up.
 
 - Tips idea: Jargon. All kinds of abbreviations and technical expressions explained - including
   DeepSID jargon such as "plinks" and "clinks".
+
+- Improve "Tracking.php" (in both DeepSID and CShellDB) to not only delete "visitors.txt" upon
+  exception throw, but also recreate file with a "0" in its first line or something.
+  - Also, log "$e" exception text from the catch to the activity log.
 
 - I've had a request for REST API access. Can you find a nice PHP framework for that?
 

@@ -281,6 +281,8 @@ SIDPlayer.prototype = {
 		// Show the raw SID filename in the title
 		$(document).attr("title", "DeepSID | "+file.split("/").slice(-1)[0]);
 
+		viz.clearStats();
+
 		switch (this.emulator) {
 
 			case "legacy":
@@ -484,6 +486,7 @@ SIDPlayer.prototype = {
 				break;
 		}
 		UpdateRedirectPlayIcons();
+		viz.clearStats();
 		// Stop all the <AUDIO> elements in the 'Remix' tab
 		$("#topic-remix audio").each(function() {
 			var $sound = $(this)[0];

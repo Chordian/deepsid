@@ -4752,26 +4752,42 @@ input[type=range]::-ms-track {
 					text-align: center;
 				}
 
-			#table-stats {
+			#table-stats,
+			#table-global-stats {
 				font-size: 13px;
 			}
 
-				#table-stats th {
+			#table-global-stats {
+				float: right;
+				width: 33.6%;
+				margin-top: -9px;
+			}
+
+				#table-stats th,
+				#table-global-stats th {
 					width: 33%;
 				}
 
-				#table-stats div {
+				#table-stats div,
+				#table-global-stats div {
 					color: var(--color-text-faint);
 				}
 
-				#table-stats .stats-used {
+				#table-stats .stats-used,
+				#table-global-stats .stats-used {
 					color: var(--color-text-body);
 				}
 
-					#table-stats .stats-used:after {
+					#table-stats .stats-used:after,
+					#table-global-stats .stats-used:after {
 						content: "\2714";
 						float: right;
 					}
+				
+				#table-stats .stats-space,
+				#table-global-stats .stats-space {
+					margin-top: 8px;
+				}
 
 			#topic-csdb .thumbnail,
 			#topic-player .thumbnail {
