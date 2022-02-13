@@ -65,6 +65,7 @@
 	--color-bg-tag-warning:			#c33;
 
 	--color-bg-cshelldb:			#d5dde9;
+	--color-bg-stats-filterbg:		#f8f4e8;
 
 	--color-border:					#ced0c0;			/* For borders and text labels where its container is disabled */
 	--color-border-box:				#c8c8b9;			/* For borders around various boxes and input fields */
@@ -441,6 +442,7 @@
 	--color-bg-tag-warning:			#f88;
 
 	--color-bg-cshelldb:			#1b2433;
+	--color-bg-stats-filterbg:		#2e2724;
 
 	--color-border:					#0c0c0c;			/* For borders and text labels where its container is disabled */
 	--color-border-box:				#2c2c2c;			/* For borders around various boxes and input fields */
@@ -4755,6 +4757,7 @@ input[type=range]::-ms-track {
 			#table-stats,
 			#table-global-stats {
 				font-size: 13px;
+				font-family: "Asap Condensed", sans-serif;
 			}
 
 			#table-global-stats {
@@ -4765,11 +4768,13 @@ input[type=range]::-ms-track {
 
 				#table-stats th,
 				#table-global-stats th {
+					position: relative;
 					width: 33%;
 				}
 
 				#table-stats div,
 				#table-global-stats div {
+					position: relative;
 					color: var(--color-text-faint);
 				}
 
@@ -4783,7 +4788,56 @@ input[type=range]::-ms-track {
 						content: "\2714";
 						float: right;
 					}
-				
+
+				#table-stats span,
+				#table-global-stats span {
+					position: absolute;
+					top: 10px;
+					left: 190px;
+					font: normal 10px/0 "Commodore 64", sans-serif;
+				}
+
+				#table-stats font,
+				#table-global-stats font {
+					display: block;
+					position: relative;
+					left: 16px;
+					/*top: -5px;*/
+					top: 0;
+					height: 12px;
+					/*width: 12px;*/
+					animation: fadeOut linear 300ms; /* 600ms */
+					animation-fill-mode: forwards;
+					/*background: url(../images/loading_threedots.svg) 0 0 / 40px 10px no-repeat;*/
+					font: normal 13px/0 Arial, Helvetica, sans-serif;
+				}
+
+				#table-stats th font {
+					top: -19.5px; /* -19.5px -27.5px */
+					left: 12px;
+					color: var(--color-text-body);
+					font-weight: bold;
+					font-size: 20px;
+				}
+
+				#table-stats td font {
+					color: var(--color-sid-row-error-info);
+				}
+
+					@keyframes fadeOut {
+						from {
+							opacity: 1;
+						}
+
+						to {
+							opacity: 0;
+						}
+					}
+
+				#table-stats img {
+					width: 16px;
+				}
+
 				#table-stats .stats-space,
 				#table-global-stats .stats-space {
 					margin-top: 8px;

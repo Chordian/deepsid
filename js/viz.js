@@ -22,6 +22,7 @@ function Viz(emulator) {
 	this.runningMemory = false;
 
 	this.stat_fc = [];
+	this.stat_reso = [];
 	this.stat_freq_ptr = [0, 0, 0];
 	this.stat_freq = [[], [], []];
 	this.stat_pw = [[], [], []];
@@ -1240,6 +1241,7 @@ Viz.prototype = {
 								// High byte of frequency (so now we have both bytes)
 								var ptr = this.stat_freq_ptr[voice]++;
 								this.stat_freq[voice][ptr] = lowByte + (byte * 256);
+								this.showWord("#stats-v"+(voice + 1)+"-1-V", this.stat_freq[voice][ptr]);
 
 								if (ptr > 5) {
 									var subtleChanges = true;
@@ -1289,7 +1291,7 @@ Viz.prototype = {
 
 									if (subtleChanges)
 										// The past frequencies have been close together - so, vibrato or slide?
-										this.mark(voice, register, "V");
+										this.mark(voice, register, "V", true);
 								}
 								break;
 							case 0x02:
@@ -1299,6 +1301,7 @@ Viz.prototype = {
 							case 0x03:
 								// High byte of pulse width (so now we have both bytes)
 								var pw = lowByte + (byte & 0xF) * 256;
+								this.showWord("#stats-v"+(voice + 1)+"-3-P", pw);
 
 								if (this.stat_pw[voice].indexOf(pw) === -1)
 									// It's a new pulse width not used before
@@ -1306,19 +1309,26 @@ Viz.prototype = {
 								
 								if (this.stat_pw[voice].length > 4)
 									// The pulse width has been changed repeatedly
-									this.mark(voice, register, "P")
+									this.mark(voice, register, "P", true);
 								break;
 							case 0x04:
-								// Waveforms
+								var $headerSpan = $("#stats-h-"+(voice + 1)+" span")
+								$headerSpan.empty();
+								if (byte & 0x01)
+									// Gate ON
+									$headerSpan.append('<font>&#8628;</font>'); // &#128498;
+
 								if (byte >> 4 < 9)
 									// Acceptable waveform [combination]
 									this.mark(voice, register, byte >> 4);
 								else
 									// Illegal waveform
 									this.mark(voice, register, "X");
+
 								if (byte & 0x08)
 									// Test bit
 									this.mark(voice, register, "T");
+
 								switch (byte & 0x06) {
 									case 0x02:
 										// Hard synchronization
@@ -1341,6 +1351,7 @@ Viz.prototype = {
 							case 0x06:
 								// High byte of ADSR (so now we have both bytes)
 								var adsr = lowByte + (byte * 256);
+								this.showWord("#stats-v"+(voice + 1)+"-6-A", adsr);
 
 								if (this.stat_adsr[voice].indexOf(adsr) == -1)
 									// It's a new ADSR not used before
@@ -1348,60 +1359,87 @@ Viz.prototype = {
 								
 								if (this.stat_adsr[voice].length > 4)
 									// The ADSR has been changed several times
-									this.mark(voice, register, "A")
+									this.mark(voice, register, "A", true);
 								break;
 						}
 					}
 				}
+			}
 
-				// Global SID registers
-				for (var register = 0x15; register <= 0x18; register++) {
-					if (chip == 1) {
+			// Global SID registers
+			for (var register = 0x15; register <= 0x18; register++) {
+				if (chip == 1) {
 
-						var byte = SID.readRegister(0xD400 + register, chip);
+					var byte = SID.readRegister(0xD400 + register, chip);
 
-						switch (register) {
-							case 0x15:
-								// Low byte of filter cutoff frequency (store for next loop)
-								lowByte = byte & 0x7;
-								break;
-							case 0x16:
-								// High byte of filter cutoff frequency (so now we have both bytes)
-								var fc = byte << 3 | lowByte;
+					switch (register) {
+						case 0x15:
+							// Low byte of filter cutoff frequency (store for next loop)
+							lowByte = byte & 0x7;
+							break;
+						case 0x16:
+							// High byte of filter cutoff frequency (so now we have both bytes)
+							var fc = byte << 3 | lowByte;
+							this.showWord("#stats-global-C", fc);
 
-								if (this.stat_fc.indexOf(fc) == -1)
-									// It's a new filter cutoff not used before
-									this.stat_fc.push(fc);
+							if (this.stat_fc.indexOf(fc) == -1)
+								// It's a new filter cutoff not used before
+								this.stat_fc.push(fc);
 
-								if (this.stat_fc.length > 4)
-									// The filter cutoff has been changed several times
-									$("#stats-global-C").removeClass("stats-used").addClass("stats-used");
-								break;
-							case 0x17:
-								// Filter resonance and routing
-
-								// @todo
-
-								break;
-							case 0x18:
-								// Main volume and filter mode (passbands)
-
-								// @todo
-								
-								break;
+							if (this.stat_fc.length > 4)
+								// The filter cutoff has been changed several times
+								$("#stats-global-C").removeClass("stats-used").addClass("stats-used");
+							break;
+						case 0x17:
+							// Filter routing
+							for (var voice = 0; voice <= 2; voice++) {
+								if (byte & (1 << voice)) {
+									$("#stats-global-"+(voice + 1)).removeClass("stats-used").addClass("stats-used");
+									this.setVoiceColor(voice, true);
+								} else
+									this.setVoiceColor(voice, false);
 							}
-					}
+
+							// External input
+							if (byte & 0x08)
+								$("#stats-global-I").removeClass("stats-used").addClass("stats-used");
+							
+
+							// Filter resonance
+							var reso = byte >> 4;
+							$("#stats-global-R span").empty().append('<u style="visibility:hidden;">000</u>'+reso.toString(16).toUpperCase());
+
+							if (reso > 0x00 && reso < 0x0F)
+								$("#stats-global-O").removeClass("stats-used").addClass("stats-used");
+
+							if (this.stat_reso.indexOf(reso) == -1)
+								// It's a new filter resonance not used before
+								this.stat_reso.push(reso);
+
+							if (this.stat_reso.length > 2)
+								// The filter resonance has been changed several times
+								$("#stats-global-R").removeClass("stats-used").addClass("stats-used");
+							break;
+						case 0x18:
+							// Main volume and filter mode (passbands)
+
+							// @todo
+							
+							break;
+						}
 				}
 			}
 		}
 	},
 
 	/**
-	 * Stats: Clear all markings in the table and reset variables.
+	 * Stats: Clear all markings and colors in the table, and reset variables.
 	 */
 	clearStats: function() {
-		$("#table-stats div,#table-global-stats div").removeClass("stats-used");
+		$("#table-stats div,#table-global-stats div").removeClass("stats-used").find("span").empty();
+		$("#table-stats .stats-bg").css("background", "transparent");
 		this.stat_fc = [];
+		this.stat_reso = [];
 		this.stat_freq_ptr = [0, 0, 0];
 		this.stat_freq = [[], [], []];
 		this.stat_pw = [[], [], []];
@@ -1410,14 +1448,39 @@ Viz.prototype = {
 	},
 
 	/**
+	 * Stats: Set or clear the background color of a table column.
+	 * 
+ 	 * @param {number} voice		SID voice 0-2.
+	 * @param {boolean} set			TRUE to set color, otherwise remove it.
+	 */
+	setVoiceColor: function(voice, set) {
+		$("#table-stats .stats-"+(voice + 1)).css("background", (set ? GetCSSVar("--color-bg-stats-filterbg") : "transparent"));
+	},
+
+	/**
 	 * Stats: Mark a line in the table.
 	 * 
  	 * @param {number} voice		SID voice 0-2.
- 	 * @param {number} register		SID root register 0-6, for $D400, $D401, etc. 
+ 	 * @param {*} register			Typically SID root register 0-6, but can also be e.g. a letter.
  	 * @param {*} item				Kind of a subject ID - can be e.g. a number of a letter.
+	 * @param {boolean} bit			If specified, do not show the bit.
 	 */
-	mark: function(voice, register, item) {
-		$("#stats-v"+(voice + 1)+"-"+register+"-"+item).removeClass("stats-used").addClass("stats-used");
+	mark: function(voice, register, item, bit) {
+		var id = "#stats-v"+(voice + 1)+"-"+register+"-"+item;
+		$(id).removeClass("stats-used").addClass("stats-used");
+
+		if (typeof bit == "undefined")
+			$(id+" span").empty().append('<font>&#10022;</font>'); // &#10012; &#128498;
+	},
+
+	/**
+	 * Stats: Show a hexadecimal word value in a DIV row in the table.
+	 * 
+	 * @param {string} id			The ID of the DIV.
+	 * @param {number} word			The 16-bit value to be shown as hexadecimal.
+	 */
+	showWord: function(id, word) {
+		$(id+" span").empty().append(("000"+word.toString(16).toUpperCase()).slice(-4));
 	},
 
 	/**
