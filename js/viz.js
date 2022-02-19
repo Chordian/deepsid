@@ -6,6 +6,8 @@
 const PAGESIZE_PLAYER = 512;
 const NOT_APPLICABLE = '<span class="m">N/A</span>';
 
+const DOT_ACTIVITY = "&#9679;"; // &#8853; &#10012; &#10022; &#11052; &#128498;
+
 function Viz(emulator) {
 
 	this.emulator = emulator.toLowerCase();
@@ -23,6 +25,7 @@ function Viz(emulator) {
 
 	this.stat_fc = [];
 	this.stat_reso = [];
+	this.stat_vol = [];
 	this.stat_freq_ptr = [0, 0, 0];
 	this.stat_freq = [[], [], []];
 	this.stat_pw = [[], [], []];
@@ -1395,6 +1398,7 @@ Viz.prototype = {
 							for (var voice = 0; voice <= 2; voice++) {
 								if (byte & (1 << voice)) {
 									$("#stats-global-"+(voice + 1)).removeClass("stats-used").addClass("stats-used");
+									$("#stats-global-"+(voice + 1)+" span").empty().append('<font>'+DOT_ACTIVITY+'</font>');
 									this.setVoiceColor(voice, true);
 								} else
 									this.setVoiceColor(voice, false);
@@ -1403,7 +1407,6 @@ Viz.prototype = {
 							// External input
 							if (byte & 0x08)
 								$("#stats-global-I").removeClass("stats-used").addClass("stats-used");
-							
 
 							// Filter resonance
 							var reso = byte >> 4;
@@ -1421,10 +1424,26 @@ Viz.prototype = {
 								$("#stats-global-R").removeClass("stats-used").addClass("stats-used");
 							break;
 						case 0x18:
-							// Main volume and filter mode (passbands)
+							// Filter mode (passbands)
+							var $fmode = "#stats-fmode-"+((byte & 0x70) >> 4);
+							$($fmode).removeClass("stats-used").addClass("stats-used");
+							$($fmode+" span").empty().append('<font>'+DOT_ACTIVITY+'</font>');
 
-							// @todo
-							
+							// Mute voice 3
+							if (byte & 0x80)
+								$("#stats-global-M").removeClass("stats-used").addClass("stats-used");
+
+							// Main volume
+							var vol = byte & 0x0f;
+							$("#stats-global-V span").empty().append('<u style="visibility:hidden;">000</u>'+vol.toString(16).toUpperCase());
+
+							if (this.stat_vol.indexOf(vol) == -1)
+								// It's a new volume level not used before
+								this.stat_vol.push(vol);
+
+							if (this.stat_vol.length > 4)
+								// The volume level has been changed several times
+								$("#stats-global-V").removeClass("stats-used").addClass("stats-used");
 							break;
 						}
 				}
@@ -1440,6 +1459,7 @@ Viz.prototype = {
 		$("#table-stats .stats-bg").css("background", "transparent");
 		this.stat_fc = [];
 		this.stat_reso = [];
+		this.stat_vol = [];
 		this.stat_freq_ptr = [0, 0, 0];
 		this.stat_freq = [[], [], []];
 		this.stat_pw = [[], [], []];
@@ -1470,7 +1490,7 @@ Viz.prototype = {
 		$(id).removeClass("stats-used").addClass("stats-used");
 
 		if (typeof bit == "undefined")
-			$(id+" span").empty().append('<font>&#10022;</font>'); // &#10012; &#128498;
+			$(id+" span").empty().append('<font>'+DOT_ACTIVITY+'</font>');
 	},
 
 	/**

@@ -995,29 +995,42 @@
 							</table>
 							<table id="table-global-stats">
 								<tr>
-									<th>Global</th>
+									<th colspan="2">Global</th>
 								</tr>
 								<tr>
 									<td>
-										<div id="stats-global-1">Uses filtering in voice 1<span></span></div>
+										<div id="stats-global-C">Repeatedly changes filter cutoff<span></span></div>
+	
+										<div id="stats-global-1" class="stats-space">Uses filtering in voice 1<span></span></div>
 										<div id="stats-global-2">Uses filtering in voice 2<span></span></div>
 										<div id="stats-global-3">Uses filtering in voice 3<span></span></div>
-										<div id="stats-global-I" class="stats-space">Sets the external input bit<span></span></div>
+
 										<div id="stats-global-R" class="stats-space">Repeatedly changes filter resonance<span></span></div>
 										<div id="stats-global-O">Uses resonance values other than 0 or F<span></span></div>
-										<div id="stats-global-C" class="stats-space">Repeatedly changes filter cutoff<span></span></div>
+
+										<div id="stats-global-V" class="stats-space">Repeatedly changes volume<span></span></div>
+									</td>
+									<td>
+										<div id="stats-fmode-1">Uses $1x filter mode (LP)<span></span></div>
+										<div id="stats-fmode-2">Uses $2x filter mode (BP)<span></span></div>
+										<div id="stats-fmode-3">Uses $3x filter mode (LP+BP)<span></span></div>
+										<div id="stats-fmode-4">Uses $4x filter mode (HP)<span></span></div>
+										<div id="stats-fmode-5">Uses $5x filter mode (LP+HP)<span></span></div>
+										<div id="stats-fmode-6">Uses $6x filter mode (BP+HP)<span></span></div>
+										<div id="stats-fmode-7">Uses $7x filter mode (LP+BP+HP)<span></span></div>
+								
+										<div id="stats-global-M" class="stats-space">Mutes voice 3<span></span></div>
+										<div id="stats-global-I">Sets the external input bit<span></span></div>
 									</td>
 								</tr>
 							</table>
-
-							@todo:<br />
-							- Remember new button icon<br />
-							- Also need a mid-song clear button<br />
-							- Display hexadecimal words in certain rows?<br />
-							- Can hard restart be detected?<br />
-							- Filter activated in each voice - if yes, color that table part subtle brown<br />
-							- Change brown background to a CSS variable for both color schemes<br />
-							- Gate ON/OFF in table headers<br />
+							<div id="stats-notes">
+								<h3 style="display:inline-block;margin:0;">Notes</h3>
+								<p style="margin-top:10px;">Use the smallest buffer size (1024) for best effect. Especially the vibrato detector needs this.</p>
+								<p>Lines detecting repeated changes typically requires about four unique values to occur.</p>
+								<p>Using illegal waveform to lock noise, then unlock it with test bit, can be used to create unique sounds.</p>
+								<p>Only the first SID chip is examined.</p>
+							</div>
 						</div>
 
 					</div>
@@ -1426,6 +1439,12 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>Feburary 19, 2022</h3>
+						<ul>
+							<li>A new stats view button has been added in the visuals tab. This mode shows what is being used
+								in the SID chip, both in real-time (red dots) and in total over time (checkmarks).</li>
+						</ul>
 
 						<h3>January 30, 2022</h3>
 						<ul>

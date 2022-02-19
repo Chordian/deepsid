@@ -40,7 +40,7 @@ try {
 			$author = '';
 		
 		// Special treatment
-		$author = str_replace('Riku Kangas', 'Riku Ö', $author);
+		$author = str_replace('Riku <del>Kangas</del> Ö', 'Riku Ö', $author);
 		$author = str_replace('Wojciech Radziejewski', 'W. Radziejewski', $author);
 		$author = str_replace('Psycho8580 / psych858o', 'psych858o', $author);
 		$author = str_replace('Narciso Quintana Varo (Narcisound)', 'Narciso Quintana Varo', $author);
@@ -51,6 +51,7 @@ try {
 		$author = str_replace('Glenn Rune Gallefoss (6R6 / GRG)', 'Glenn Rune Gallefoss (6R6)', $author);
 		$author = str_replace('Tero Mäyränen (Deetsay / Pekka Pou)', 'Tero Mäyränen (Deetsay)', $author);
 		$author = str_replace('Figge Wulff Wasberger (Fegolhuzz)', 'Figge Wasberger (Fegolhuzz)', $author);
+		$author = str_replace('Hein Pieter Holt (Hein Design)', 'Hein Holt', $author);
 
 		$all_profiles[] = array(
 			'fullname'	=> str_replace('_High Voltage SID Collection', 'HVSC', $row->fullname),

@@ -4388,9 +4388,8 @@ input[type=range]::-ms-track {
 					background: url(../images/visuals_memory.svg) 0 -2.4px / 14px 19px no-repeat;
 				}
 
-				/* @todo Replace with its own icon later */
 				#sticky-visuals .icon-stats:before {
-					background: url(../images/visuals_memory.svg) 0 -2.4px / 14px 19px no-repeat;
+					background: url(../images/visuals_stats.svg) 0 -5px / 14.5px 24px no-repeat;
 				}
 
 		/* Container for buttons in the right side of the sticky white top header box */
@@ -4755,14 +4754,21 @@ input[type=range]::-ms-track {
 				}
 
 			#table-stats,
-			#table-global-stats {
+			#table-global-stats,
+			#stats-notes p {
 				font-size: 13px;
 				font-family: "Asap Condensed", sans-serif;
 			}
 
+			#stats-notes {
+				margin-left: 1px;
+				padding: 2px 10px;
+				width: 270px;
+			}
+	
 			#table-global-stats {
 				float: right;
-				width: 33.6%;
+				width: 66.7%;
 				margin-top: -9px;
 			}
 
@@ -4770,6 +4776,11 @@ input[type=range]::-ms-track {
 				#table-global-stats th {
 					position: relative;
 					width: 33%;
+				}
+
+				#table-global-stats td {
+					width: 33%;
+					vertical-align: top;
 				}
 
 				#table-stats div,
@@ -4801,27 +4812,23 @@ input[type=range]::-ms-track {
 				#table-global-stats font {
 					display: block;
 					position: relative;
-					left: 16px;
-					/*top: -5px;*/
-					top: 0;
+					left: 30px; /* 16px */
+					top: -1px;
 					height: 12px;
 					/*width: 12px;*/
 					animation: fadeOut linear 300ms; /* 600ms */
 					animation-fill-mode: forwards;
 					/*background: url(../images/loading_threedots.svg) 0 0 / 40px 10px no-repeat;*/
 					font: normal 13px/0 Arial, Helvetica, sans-serif;
+					color: var(--color-text-block-changed);
 				}
 
 				#table-stats th font {
 					top: -19.5px; /* -19.5px -27.5px */
-					left: 12px;
+					left: 22.5px;
 					color: var(--color-text-body);
 					font-weight: bold;
 					font-size: 20px;
-				}
-
-				#table-stats td font {
-					color: var(--color-sid-row-error-info);
 				}
 
 					@keyframes fadeOut {
@@ -4830,7 +4837,8 @@ input[type=range]::-ms-track {
 						}
 
 						to {
-							opacity: 0;
+							color: var(--color-text-body);
+							opacity: 0.15;
 						}
 					}
 

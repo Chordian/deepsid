@@ -10,7 +10,11 @@ SHOULD BE DONE
   and converts them to external links for all that has one. (Make sure the CShellDB link is
   translated to real CSDb.dk links in the process.)
 
-- Try making the actual song blob in the memory bar a darker blue.
+- Stats: Add a mid-song CLEAR button.
+
+- Change "No STIL information available..." to "No notes..." in the SH folder.
+
+- Try making the actual song blob in the memory bar a slightly darker blue.
 
 - Prevent voice toggling when typing STIL text for a new tune uploaded in the SH folder.
 
