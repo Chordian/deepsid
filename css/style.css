@@ -386,6 +386,11 @@
 	--color-piano-pb-off-lg1:		#333;
 	--color-piano-pb-off-lg2:		#1e1e1e;
 	--color-piano-pb-off-border:	#111;
+
+	/* Solo button */
+
+	--height-button-solo:			17px;
+	--top-button-solo:				1px;
 }
 
 /* ---- Custom color variables (dark theme) ---------------------------------- */
@@ -662,6 +667,12 @@
 	--color-styled-arrow:			var(--color-styled-select-text);
 	--color-styled-shadow:			#000;
 	--color-styled-item-disabled:	#bababa;
+
+	/* Solo button */
+
+	--height-button-solo:			16px;
+	--top-button-solo:				1.5px;
+
 }
 
 [data-theme="dark"] input,
@@ -733,7 +744,8 @@
 	top: 13px;
 }
 
-[data-theme="dark"] #sticky-visuals .visuals-buttons > button {
+[data-theme="dark"] #sticky-visuals .visuals-buttons > button,
+[data-theme="dark"] #visuals-stats button.stats-solo {
 	height: 25px;
 	border: none;
 }
@@ -4764,6 +4776,17 @@ input[type=range]::-ms-track {
 				margin-left: 1px;
 				padding: 2px 10px;
 				width: 270px;
+			}
+
+			#table-stats button.stats-solo {
+				position: relative;
+				top: var(--top-button-solo);
+				margin-left: 10px;
+				width: 50px;
+				height: var(--height-button-solo) !important;
+				font-size: 10px !important;
+				line-height: 10px !important;
+				border-radius: 5px;
 			}
 	
 			#table-global-stats {

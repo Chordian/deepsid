@@ -12,6 +12,13 @@ SHOULD BE DONE
 
 - Stats: Add a mid-song CLEAR button.
 
+- Stats: Expand LP, BP and HP words when on their own in the table.
+
+- Stats: Repeat change for ADSR: Only 2 hits?
+
+- When you hover on many tags to slide them to the left, show a tooltip with all of them as
+  soon as the sliding animation has reached the left side - if it's possible, that is.
+
 - Change "No STIL information available..." to "No notes..." in the SH folder.
 
 - Try making the actual song blob in the memory bar a slightly darker blue.
@@ -35,11 +42,6 @@ IN THE MOOD FOR NEW FEATURES
 - Idea for folders in MUSICIANS folder: Faded flat color icons just before the star ratings,
   for indicating a professional, a scener, or both. Two icons side-by-side. You have the info
   ready in the 'composers' table, in a new 'focus' column.
-
-- Idea for a new visuals mode button: STATS. It adds/ticks stuff detected to be used by the tune.
-  Waveforms, pulsating, voices, etc.
-  - Add statistics to the database, done by all visitors. When visiting the song later, there
-    will already be statistics ready. Maybe add an "entire song has been parsed" green icon?
 
 
 WHEN THE TIME IS RIGHT
@@ -127,6 +129,9 @@ CONSIDER THIS
 
 - A drop-down box for selecting 6581 filter settings. User can even save their own to the list,
   with the name of the filter settings plus the user's name e.g. appended in the end.
+
+- Stats: Add statistics to the database, done by all visitors. When visiting the song later,
+  there will already be statistics ready. Maybe add an "entire song has been parsed" green icon?
 
 - Replace drop-down boxes with styled versions (browser and search) - I don't like how e.g. Firefox
   and Chrome change their design like the wind blows.

@@ -920,9 +920,9 @@
 						<div id="visuals-stats" class="visuals" style="display:none;">
 							<table id="table-stats">
 								<tr>
-									<th class="stats-bg stats-1">Voice 1<div id="stats-h-1"><span></span></div></th>
-									<th class="stats-bg stats-2">Voice 2<div id="stats-h-2"><span></span></div></th>
-									<th class="stats-bg stats-3">Voice 3<div id="stats-h-3"><span></span></div></th>
+									<th class="stats-bg stats-1">Voice 1<button id="stats-solo-1" class="stats-solo button-edit button-toggle button-off">Solo</button><div id="stats-h-1"><span></span></div></th>
+									<th class="stats-bg stats-2">Voice 2<button id="stats-solo-2" class="stats-solo button-edit button-toggle button-off">Solo</button><div id="stats-h-2"><span></span></div></th>
+									<th class="stats-bg stats-3">Voice 3<button id="stats-solo-3" class="stats-solo button-edit button-toggle button-off">Solo</button><div id="stats-h-3"><span></span></div></th>
 								</tr>
 								<tr>
 									<td class="stats-bg stats-1">
@@ -1439,6 +1439,11 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>Feburary 20, 2022</h3>
+						<ul>
+							<li>Added solo buttons for each voice in the stats view.</li>
+						</ul>
 
 						<h3>Feburary 19, 2022</h3>
 						<ul>

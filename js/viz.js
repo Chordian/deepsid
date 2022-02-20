@@ -155,7 +155,7 @@ Viz.prototype = {
 	 */
 	addEvents: function() {
 		$(window).on("keyup", this.onKeyUp.bind(this));
-		$("#visuals-piano,#visuals-graph,#sticky-right-buttons").on("click", ".button-toggle,.button-radio,.button-icon", this.onToggleClick.bind(this));
+		$("#visuals-piano,#visuals-graph,#visuals-stats,#sticky-right-buttons").on("click", ".button-toggle,.button-radio,.button-icon", this.onToggleClick.bind(this));
 		$("#visuals-piano").on("click", ".piano-voice", this.onVoiceClick.bind(this));
 		$("#visuals-piano,#visuals-graph,#topic-settings .dropdown-buffer").on("change", this.onChangeBufferSize.bind(this));
 		$("#sticky-visuals").on("click", "button", this.onVisualsClick.bind(this));
@@ -169,53 +169,28 @@ Viz.prototype = {
 	 */
 	onKeyUp: function(event) {
 		if (!$("#search-box,#username,#password,#old-password,#new-password,#sym-rename,#sym-specify-subtune,#new-tag,#dialog-all-tags,#dialog-song-tags").is(":focus")) {
-			var voiceMask = [SID.voiceMask[0], SID.voiceMask[1], SID.voiceMask[2]];
+			if (!event.shiftKey && event.keyCode != 16)
+				// Normal voice toggle used to release all SOLO buttons in the STATS view
+				$("#visuals-stats .stats-solo").removeClass("button-off button-on").addClass("button-off");
 			if (event.keyCode == 49 || event.keyCode == 81) {			// Keyup '1' or 'q'
 				if (event.shiftKey) { // Reverse (solo)
-					this.enableAllPianoVoices();
-					if ((browser.chips == 1 && voiceMask[0] != 0x1) ||
-						(browser.chips > 1 && (voiceMask[1] && voiceMask[2]) ||
-						(browser.chips > 1 && voiceMask[0] != 0xF))) {
-						$("#page .pv1,#page .pv2").trigger("click");
-						if (browser.chips == 1) {
-							SID.toggleVoice(4);
-							$("#scope4").css("opacity", "0.3");
-						}
-					}
+					this.reverseVoice(1);
 				} else
 					// Toggle a SID voice 1 ON/OFF using the piano toggle buttons
 					$("#page .pv0").trigger("click");
 			} else if (event.keyCode == 50 || event.keyCode == 87) {	// Keyup '2' or 'w'
 				if (event.shiftKey) {
-					this.enableAllPianoVoices();
-					if ((browser.chips == 1 && voiceMask[0] != 0x2) ||
-						(browser.chips > 1 && (voiceMask[0] && voiceMask[2]) || voiceMask[1] != 0xF)) {
-						$("#page .pv0,#page .pv2").trigger("click");
-						if (browser.chips == 1) {
-							SID.toggleVoice(4);
-							$("#scope4").css("opacity", "0.3");
-						}
-					}
+					this.reverseVoice(2);
 				} else
 					$("#page .pv1").trigger("click");
 			} else if (event.keyCode == 51 || event.keyCode == 69) {	// Keyup '3' or 'e'
 				if (event.shiftKey) {
-					this.enableAllPianoVoices();
-					if ((browser.chips == 1 && voiceMask[0] != 0x4) ||
-						(browser.chips > 1 && (voiceMask[0] && voiceMask[1]) || voiceMask[2] != 0xF)) {
-						$("#page .pv0,#page .pv1").trigger("click");
-						if (browser.chips == 1) {
-							SID.toggleVoice(4);
-							$("#scope4").css("opacity", "0.3");
-						}
-					}
+					this.reverseVoice(3);
 				} else
 					$("#page .pv2").trigger("click");
 			} else if (event.keyCode == 52 || event.keyCode == 82) {	// Keyup '4' or 'r'
 				if (event.shiftKey) {
-					this.enableAllPianoVoices();
-					if (browser.chips == 1 && voiceMask[0] != 0x8)
-						$("#page .pv0,#page .pv1,#page .pv2").trigger("click");
+					this.reverseVoice(4);
 				} else {
 					// Using direct call (piano view doesn't support digi tunes)
 					SID.toggleVoice(4);
@@ -223,6 +198,58 @@ Viz.prototype = {
 				}
 			}
 		}
+	},
+
+	/**
+	 * Reverse (solo) a voice.
+	 * 
+	 * @param {number} voice 		Voice (1, 2, 3 or 4).
+	 */
+	reverseVoice: function(voice) {
+		var voiceMask = [SID.voiceMask[0], SID.voiceMask[1], SID.voiceMask[2]];
+		this.enableAllPianoVoices();
+		switch (parseInt(voice)) {
+			case 1:
+				if ((browser.chips == 1 && voiceMask[0] != 0x1) ||
+					(browser.chips > 1 && (voiceMask[1] && voiceMask[2]) ||
+					(browser.chips > 1 && voiceMask[0] != 0xF))) {
+					$("#page .pv1,#page .pv2").trigger("click");
+					if (browser.chips == 1) {
+						SID.toggleVoice(4);
+						$("#scope4").css("opacity", "0.3");
+					}
+				}
+				break;
+			case 2:
+				if ((browser.chips == 1 && voiceMask[0] != 0x2) ||
+					(browser.chips > 1 && (voiceMask[0] && voiceMask[2]) || voiceMask[1] != 0xF)) {
+					$("#page .pv0,#page .pv2").trigger("click");
+					if (browser.chips == 1) {
+						SID.toggleVoice(4);
+						$("#scope4").css("opacity", "0.3");
+					}
+				}
+				break;
+			case 3:
+				if ((browser.chips == 1 && voiceMask[0] != 0x4) ||
+					(browser.chips > 1 && (voiceMask[0] && voiceMask[1]) || voiceMask[2] != 0xF)) {
+					$("#page .pv0,#page .pv1").trigger("click");
+					if (browser.chips == 1) {
+						SID.toggleVoice(4);
+						$("#scope4").css("opacity", "0.3");
+					}
+				}
+				break;
+			case 4:
+				if (browser.chips == 1 && voiceMask[0] != 0x8)
+					$("#page .pv0,#page .pv1,#page .pv2").trigger("click");
+				break;
+		}
+		// SOLO buttons in the STATS view
+		var $stateVoice = $("#stats-solo-"+voice);
+		var state = $stateVoice.hasClass("button-off");
+		$("#visuals-stats .stats-solo").removeClass("button-off button-on").addClass("button-off");
+		$stateVoice.removeClass("button-off button-on").addClass("button-"+(state ? "on" : "off"))
 	},
 
 	/**
@@ -234,7 +261,12 @@ Viz.prototype = {
 		var $this = $(event.target);
 		if ($this.hasClass("button-toggle")) {
 			// Checkbox style toggle button
-			$this.empty().append($this.hasClass("button-off") ? "On" : "Off");
+			if ($this.hasClass("stats-solo")) {
+				// SOLO buttons are special as they're both radio and toggle buttons at the same time
+				this.reverseVoice(event.target.id.slice(-1));
+				return;
+			} else
+				$this.empty().append($this.hasClass("button-off") ? "On" : "Off");
 			if (event.target.id === "piano-slow") {
 				SID.speed($this.hasClass("button-off") ? this.slowSpeed : 1);
 			} else if (event.target.id === "graph-pw") {
@@ -298,6 +330,9 @@ Viz.prototype = {
 		var voice = parseInt(event.target.classList[1].substr(-1));
 		if (voice == 2 && browser.chips == 2) return; // Third keyboard is disabled for 2SID tunes
 		if (this.emulator == "legacy" && browser.chips > 1) return;
+
+		// Release all SOLO buttons in the STATS view
+		$("#visuals-stats .stats-solo").removeClass("button-off button-on").addClass("button-off");
 
 		var $this = $(event.target);
 		// Swap the class state of this button
@@ -1457,6 +1492,7 @@ Viz.prototype = {
 	clearStats: function() {
 		$("#table-stats div,#table-global-stats div").removeClass("stats-used").find("span").empty();
 		$("#table-stats .stats-bg").css("background", "transparent");
+		$("#visuals-stats .stats-solo").removeClass("button-off button-on").addClass("button-off");
 		this.stat_fc = [];
 		this.stat_reso = [];
 		this.stat_vol = [];
