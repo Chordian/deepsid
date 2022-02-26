@@ -1383,12 +1383,12 @@ Viz.prototype = {
 									}
 								break;
 							case 0x05:
-								// Low byte of ADSR (store for next loop)
-								lowByte = byte;
+								// High byte of ADSR (store for next loop)
+								hiByte = byte;
 								break;
 							case 0x06:
-								// High byte of ADSR (so now we have both bytes)
-								var adsr = lowByte + (byte * 256);
+								// Low byte of ADSR (so now we have both bytes)
+								var adsr = byte + (hiByte * 256);
 								this.showWord("#stats-v"+(voice + 1)+"-6-A", adsr);
 
 								if (this.stat_adsr[voice].indexOf(adsr) == -1)

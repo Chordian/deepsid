@@ -524,7 +524,7 @@
 			<div id="sundry">
 				<div id="stopic-stil" class="stopic">
 					<div id="sundry-news">
-						<span>An unofficial <a href="//deepsid.chordian.net/?file=/GROUPS/">GROUPS</a> folder has now been added in the root of the HVSC folder.</span>
+						<span>Check out the new <a href="//deepsid.chordian.net/?tab=stats">STATS</a> view in the tab with visuals. It shows what's used in the SID chip.</span>
 					</div>
 				</div>
 				<div id="stopic-tags" class="stopic" style="display:none;"></div>
@@ -1439,6 +1439,11 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>Feburary 26, 2022</h3>
+						<ul>
+							<li>Fixed ADSR values shown in the wrong order in the new stats view.</li>
+						</ul>
 
 						<h3>Feburary 20, 2022</h3>
 						<ul>

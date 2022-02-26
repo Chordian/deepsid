@@ -16,6 +16,8 @@ SHOULD BE DONE
 
 - Stats: Repeat change for ADSR: Only 2 hits?
 
+- Remove groups from the list of drop-down composers when uploading a tune to the SH folder.
+
 - When you hover on many tags to slide them to the left, show a tooltip with all of them as
   soon as the sliding animation has reached the left side - if it's possible, that is.
 
