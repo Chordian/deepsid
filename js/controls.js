@@ -752,12 +752,13 @@ Controls.prototype = {
 
 		var file = browser.playlist[browser.songPos].filename,
 			stil = browser.playlist[browser.songPos].stil,
-			isCGSC = browser.playlist[browser.songPos].fullname.substr(-4) == ".mus";
+			isCGSC = browser.playlist[browser.songPos].fullname.substr(-4) == ".mus",
+			isSidHappens = browser.playlist[browser.songPos].fullname.indexOf("/"+PATH_UPLOADS) !== -1;
 
 		var tabName = "STIL";
 		if (isCGSC)
 			tabName = "Lyrics";
-		else if (browser.playlist[browser.songPos].fullname.indexOf("/"+PATH_UPLOADS) !== -1)
+		else if (isSidHappens)
 			tabName = "Notes";
 		$("#tab-stil,#stab-stil").empty().append(tabName); // Set for both sundry and dexter tabs
 
@@ -897,8 +898,8 @@ Controls.prototype = {
 			if (stil === "") {
 				$("#stopic-stil")
 					.css("overflow", "none")
-					.append('<div id="tips" class="no-info">No STIL information</div>');
-				$("#topic-stil").empty().append("<i>No STIL information available for this SID file.</i>");
+					.append('<div id="tips" class="no-info">'+(isSidHappens ? 'No notes for this SID file' : 'No STIL information')+'</div>');
+				$("#topic-stil").empty().append("<i>"+(isSidHappens ? "No notes" : "No STIL information")+" available for this SID file.</i>");
 			} else {
 				$("#topic-stil,#stopic-stil").empty().append(stil);
 			}

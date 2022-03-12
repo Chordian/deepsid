@@ -3,26 +3,13 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- See if it’s possible to run an SQL query (or a small script) that takes all CSDb corner links
-  and converts them to external links for all that has one. (Make sure the CShellDB link is
-  translated to real CSDb.dk links in the process.)
-
-- Change "No STIL information available..." to "No notes..." in the SH folder.
-
 - Try making the actual song blob in the memory bar a slightly darker blue.
 
 - Prevent voice toggling when typing STIL text for a new tune uploaded in the SH folder.
 
-- Why does the hash cross-rating system work so badly? See if you can figure out what's up.
-
-- Tips idea: Jargon. All kinds of abbreviations and technical expressions explained - including
-  DeepSID jargon such as "plinks" and "clinks".
-
 - Improve "Tracking.php" (in both DeepSID and CShellDB) to not only delete "visitors.txt" upon
   exception throw, but also recreate file with a "0" in its first line or something.
   - Also, log "$e" exception text from the catch to the activity log.
-
-- I've had a request for REST API access. Can you find a nice PHP framework for that?
 
 
 IN THE MOOD FOR NEW FEATURES
@@ -79,7 +66,6 @@ CONSIDER THIS
 - Feature request by Digger: Sort playlist by date added to playlist.
 - Go full HTTPS? Test online first to make sure it works without bugs and slowdowns.
 - Go through the late 2019 batch of STIL updates and mail Wilfred about the neglected ones.
-- Ensure that the hash connection between SH and HVSC works instantaneously.
 - How about making the redirecting 'deepsid.com' domain into a URL shortener too?
 - Some way to see what playlists are including a specific song. Perhaps from the context menu?
 - Statistics for how many times a tune has been played. (But shown where?)
@@ -89,6 +75,9 @@ CONSIDER THIS
 - Digger and Mordi have requested keys fading out in piano view, for easier arpeggio reading.
 - Is it possible to have individual ratings for multiple sub tune clones in a playlist?
 - Download SID with the PSID header automatically removed, ready to be used in e.g. a demo.
+- Why does the hash cross-rating system work so badly? See if you can figure out what's up.
+- Ensure that the hash connection between SH and HVSC works instantaneously.
+- I've had a request for REST API access. Can you find a nice PHP framework for that?
 
 - In a profile page, make the small handles in group table into links and remove the corner external
   link icon. Then users can choose what handle to open in CSDb themselves.
@@ -123,6 +112,9 @@ CONSIDER THIS
 
 - Replace drop-down boxes with styled versions (browser and search) - I don't like how e.g. Firefox
   and Chrome change their design like the wind blows.
+
+- Tips idea: Jargon. All kinds of abbreviations and technical expressions explained - including
+  DeepSID jargon such as "plinks" and "clinks".
 
 - I'm beginning to suspect that the piano view sound chugging is not a memory leak in WebSid after
   all, but in the piano view code itself. Might be worth looking into it? Maybe you need to add
