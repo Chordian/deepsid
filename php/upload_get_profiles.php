@@ -22,7 +22,7 @@ try {
 
 	$all_profiles = array();
 
-	$select = $db->query('SELECT fullname, name, handles FROM composers WHERE fullname LIKE "_High Voltage SID Collection/%" ORDER BY fullname');
+	$select = $db->query('SELECT fullname, name, handles FROM composers WHERE fullname LIKE "_High Voltage SID Collection/%" AND fullname NOT LIKE "%/GROUPS/%" ORDER BY fullname');
 	$select->setFetchMode(PDO::FETCH_OBJ);
 
 	foreach($select as $row) {

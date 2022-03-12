@@ -3,23 +3,9 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- BUG: CSDb entries in the exotic folder often have no header title. Why is that?
-  - It appears to affect the advanced tunes in the root of that folder.
-
 - See if it’s possible to run an SQL query (or a small script) that takes all CSDb corner links
   and converts them to external links for all that has one. (Make sure the CShellDB link is
   translated to real CSDb.dk links in the process.)
-
-- Stats: Add a mid-song CLEAR button.
-
-- Stats: Expand LP, BP and HP words when on their own in the table.
-
-- Stats: Repeat change for ADSR: Only 2 hits?
-
-- Remove groups from the list of drop-down composers when uploading a tune to the SH folder.
-
-- When you hover on many tags to slide them to the left, show a tooltip with all of them as
-  soon as the sliding animation has reached the left side - if it's possible, that is.
 
 - Change "No STIL information available..." to "No notes..." in the SH folder.
 

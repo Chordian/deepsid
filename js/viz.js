@@ -1395,7 +1395,7 @@ Viz.prototype = {
 									// It's a new ADSR not used before
 									this.stat_adsr[voice].push(adsr);
 								
-								if (this.stat_adsr[voice].length > 4)
+								if (this.stat_adsr[voice].length > 3)
 									// The ADSR has been changed several times
 									this.mark(voice, register, "A", true);
 								break;

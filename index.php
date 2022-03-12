@@ -51,7 +51,9 @@
 		<link rel="stylesheet" type="text/css" href="css/chartist.css" />
 		<link rel="stylesheet" type="text/css" href="css/style.css" />
 		<?php if ($inside_iframe): ?>
-			<link rel="stylesheet" type="text/css" href="https://www.lemonamiga.localhost/assets/external/deepsid/style.css" />
+			<!-- For Lemon64: START -->
+			<link rel="stylesheet" type="text/css" href="https://www.lemon64.com/assets/external/deepsid/style.css" />
+			<!-- For Lemon64: END -->
 		<?php endif ?>
 		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
@@ -83,20 +85,10 @@
 		<script type="text/javascript" src="js/viz.js"></script>
 		<script type="text/javascript" src="js/main.js"></script>
 		<?php if ($inside_iframe): ?>
-			<script type="text/javascript" src="https://www.lemonamiga.localhost/assets/external/deepsid/main.js"></script>
-		<?php endif ?>
-		<!-- For Lemon64: START -->
-		<?php if (isset($_GET['lemonamiga'])): ?>
-			<link rel="stylesheet" type="text/css" href="https://www.lemonamiga.localhost/assets/external/deepsid/style.css" />
-			<script type="text/javascript" src="https://www.lemonamiga.localhost/assets/external/deepsid/main.js"></script>
-		<?php elseif (isset($_GET['lemon64com'])): ?>
-			<link rel="stylesheet" type="text/css" href="https://www.lemon64.com/assets/external/deepsid/style.css" />
+			<!-- For Lemon64: START -->
 			<script type="text/javascript" src="https://www.lemon64.com/assets/external/deepsid/main.js"></script>
-		<?php elseif (isset($_GET['lemon64dev'])): ?>
-			<link rel="stylesheet" type="text/css" href="https://www.lemon64.dev/assets/external/deepsid/style.css" />
-			<script type="text/javascript" src="https://www.lemon64.dev/assets/external/deepsid/main.js"></script>
+			<!-- For Lemon64: END -->
 		<?php endif ?>
-		<!-- For Lemon64: END -->
 		<script type="text/javascript">
 			var colorTheme = 0;
 			function setTheme() {
@@ -1011,10 +1003,10 @@
 										<div id="stats-global-V" class="stats-space">Repeatedly changes volume<span></span></div>
 									</td>
 									<td>
-										<div id="stats-fmode-1">Uses $1x filter mode (LP)<span></span></div>
-										<div id="stats-fmode-2">Uses $2x filter mode (BP)<span></span></div>
+										<div id="stats-fmode-1">Uses $1x filter mode (Low-Pass)<span></span></div>
+										<div id="stats-fmode-2">Uses $2x filter mode (Band-Pass)<span></span></div>
 										<div id="stats-fmode-3">Uses $3x filter mode (LP+BP)<span></span></div>
-										<div id="stats-fmode-4">Uses $4x filter mode (HP)<span></span></div>
+										<div id="stats-fmode-4">Uses $4x filter mode (High-Pass)<span></span></div>
 										<div id="stats-fmode-5">Uses $5x filter mode (LP+HP)<span></span></div>
 										<div id="stats-fmode-6">Uses $6x filter mode (BP+HP)<span></span></div>
 										<div id="stats-fmode-7">Uses $7x filter mode (LP+BP+HP)<span></span></div>
@@ -1440,17 +1432,34 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
-						<h3>Feburary 26, 2022</h3>
+						<h3>March 12, 2022</h3>
+						<ul>
+							<li>Fixed a bug where group folders were also a profile choice when uploading to the SH folder.</li>
+							<li>Changed how tags slide to the left when hovering on them. Instead of just sliding the line of tags
+								to the left edge, the line now slides far enough for the plus button to be visible.</li>
+						</ul>
+
+						<h3>March 8, 2022</h3>
+						<ul>
+							<li>Upgraded the WebSid (HQ) emulator. Added a hack for Wacek's version of <a href="//deepsid.chordian.net/?file=/MUSICIANS/W/Wacek/4_Non_Blondes-Whats_Up_Remix.sid">4 Non Blondes</a>.</li>
+						</ul>
+
+						<h3>February 27, 2022</h3>
+						<ul>
+							<li>Upgraded the WebSid (HQ) emulator. Added specific handling of Mahoney digi and fixed 6581/8580 toggle bug.</li>
+						</ul>
+
+						<h3>February 26, 2022</h3>
 						<ul>
 							<li>Fixed ADSR values shown in the wrong order in the new stats view.</li>
 						</ul>
 
-						<h3>Feburary 20, 2022</h3>
+						<h3>February 20, 2022</h3>
 						<ul>
 							<li>Added solo buttons for each voice in the stats view.</li>
 						</ul>
 
-						<h3>Feburary 19, 2022</h3>
+						<h3>February 19, 2022</h3>
 						<ul>
 							<li>A new stats view button has been added in the visuals tab. This mode shows what is being used
 								in the SID chip, both in real-time (red dots) and in total over time (checkmarks).</li>
