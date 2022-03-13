@@ -630,7 +630,7 @@
 
 	--color-memory-bg:				#8b97cf;
 	--color-memory-border-top:		#000;
-	--color-memory-chunk:			linear-gradient(to bottom, #616fbb 5%,#44529d 95%);
+	--color-memory-chunk:			linear-gradient(to bottom, #5766b7 5%,#424f98 95%); /* #616fbb to #44529d */
 	--color-memory-border-lr:		#303a70;
 	--color-memory-lid-side:		transparent;
 	--color-memory-lid-middle:		transparent;

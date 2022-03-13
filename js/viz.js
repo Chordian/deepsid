@@ -168,7 +168,7 @@ Viz.prototype = {
 	 * @param {*} event 
 	 */
 	onKeyUp: function(event) {
-		if (!$("#search-box,#username,#password,#old-password,#new-password,#sym-rename,#sym-specify-subtune,#new-tag,#dialog-all-tags,#dialog-song-tags").is(":focus")) {
+		if (!$("input[type=text],input[type=password],textarea").is(":focus")) {
 			if (!event.shiftKey && event.keyCode != 16)
 				// Normal voice toggle used to release all SOLO buttons in the STATS view
 				$("#visuals-stats .stats-solo").removeClass("button-off button-on").addClass("button-off");

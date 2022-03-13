@@ -3,10 +3,6 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- Try making the actual song blob in the memory bar a slightly darker blue.
-
-- Prevent voice toggling when typing STIL text for a new tune uploaded in the SH folder.
-
 - Improve "Tracking.php" (in both DeepSID and CShellDB) to not only delete "visitors.txt" upon
   exception throw, but also recreate file with a "0" in its first line or something.
   - Also, log "$e" exception text from the catch to the activity log.

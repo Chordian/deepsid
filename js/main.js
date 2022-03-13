@@ -107,13 +107,13 @@ $(function() { // DOM ready
 	 * @param {*} event 
 	 */
 	$(window).on("keydown", function(event) {
-		if (!$("#search-box,#username,#password,#old-password,#new-password,#sym-rename,#sym-specify-subtune,#new-tag,#dialog-all-tags,#dialog-song-tags,#upload-csdb-id,#upload-lengths-list,#upload-stil-text,#form-edit-file input,#form-upload-file input,div.dialog-box input").is(":focus")) {
+		if (!$("input[type=text],input[type=password],textarea").is(":focus")) {
 			if (event.keyCode == 220)									// Keydown key below 'Escape'
 				// Fast forward
 				$("#faster").trigger("mousedown");
 		}
 	}).on("keyup", function(event) {
-		if (!$("#search-box,#username,#password,#old-password,#new-password,#sym-rename,#sym-specify-subtune,#new-tag,#dialog-all-tags,#dialog-song-tags,#upload-csdb-id,#upload-lengths-list,#upload-stil-text,#form-edit-file input,#form-upload-file input,div.dialog-box input").is(":focus")) {
+		if (!$("input[type=text],input[type=password],textarea").is(":focus")) {
 			if (event.keyCode == 220) {									// Keyup key below 'Escape'
 				// Fast forward
 				$("#faster").trigger("mouseup");

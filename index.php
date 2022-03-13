@@ -1432,12 +1432,18 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>March 13, 2022</h3>
+						<ul>
+							<li>The dark blue chunk in the memory bar is now slightly darker in the dark color scheme.</li>
+							<li>Improved how hotkeys are ignored when using all kinds of text input controls.</li>
+						</ul>
+
 						<h3>March 12, 2022</h3>
 						<ul>
 							<li>Fixed a bug where group folders were also a profile choice when uploading to the SH folder.</li>
 							<li>Changed how tags slide to the left when hovering on them. Instead of just sliding the line of tags
 								to the left edge, the line now slides far enough for the plus button to be visible.</li>
-							<li>All composers profiles with a CSDb page now have a composer link that goes to that page.</li>
+							<li>All composer profiles with a CSDb page now have a composer link that goes to that page.</li>
 						</ul>
 
 						<h3>March 8, 2022</h3>
