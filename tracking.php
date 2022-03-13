@@ -79,7 +79,10 @@ try {
 	fclose($handle);
 
 } catch(Throwable $e) {
+	$account->LogActivityError('tracking.php', $e->getMessage());
 	// Just delete the file in case of internal server error 500
 	unlink(TRACKFILE);
+	// Recreate it with a placeholder line in it
+	file_put_contents(TRACKFILE, '0');
 }
 ?>

@@ -3,16 +3,7 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- Improve "Tracking.php" (in both DeepSID and CShellDB) to not only delete "visitors.txt" upon
-  exception throw, but also recreate file with a "0" in its first line or something.
-  - Also, log "$e" exception text from the catch to the activity log.
-
-
-IN THE MOOD FOR NEW FEATURES
-¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- Idea for folders in MUSICIANS folder: Faded flat color icons just before the star ratings,
-  for indicating a professional, a scener, or both. Two icons side-by-side. You have the info
-  ready in the 'composers' table, in a new 'focus' column.
+- Nothing.
 
 
 WHEN THE TIME IS RIGHT
@@ -96,6 +87,10 @@ CONSIDER THIS
     late time, his history from the previous visit it still there.
   - Along with the above v2, "X" icons for deleting individual entries, plus a general button for
     clearing the entire history.
+
+- Idea for folders in MUSICIANS folder: Faded flat color icons just before the star ratings,
+  for indicating a professional, a scener, or both. Two icons side-by-side. You have the info
+  ready in the 'composers' table, in a new 'focus' column.
 
 - NoobTracker: Store the random seed used to shuffle a playlist in the URL so you can reload that
   page without messing up the order.
