@@ -844,7 +844,7 @@ Browser.prototype = {
 				break;
 			case "decent":
 			case "good":
-				// MUSICIANS: Show only decent or good folders (assessed by JCH) in the letter folder
+				// MUSICIANS: Show only decent or good folders (assessed by the 'Ratings' user) in the letter folder
 				filterFolders = true;
 				$.get("php/rating_quality.php", { folder: this.path }, function(data) {
 					this.validateData(data, function(data) {

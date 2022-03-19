@@ -2,8 +2,8 @@
 /**
  * DeepSID
  *
- * Get an array of JCH's ratings for all the folders in the specified letter
- * folder in the 'MUSICIANS' folder of HVSC.
+ * Get an array of ratings from the 'Ratings' user for all the folders in the
+ * specified letter folder in the 'MUSICIANS' folder of HVSC.
  * 
  * This is used to filter folders according to a "quality" drop-down option.
  * 
@@ -35,7 +35,7 @@ try {
 	foreach ($select as $row) {
 
 		// Get rating for this letter sub folder
-		$select_rating = $db->query('SELECT rating FROM ratings WHERE user_id = '.JCH.' AND table_id = '.$row->id.' AND type = "FOLDER"');
+		$select_rating = $db->query('SELECT rating FROM ratings WHERE user_id = '.USER_RATINGS.' AND table_id = '.$row->id.' AND type = "FOLDER"');
 		$select_rating->setFetchMode(PDO::FETCH_OBJ);
 		$rating = $select_rating->rowCount() ? $select_rating->fetch()->rating : 0;
 

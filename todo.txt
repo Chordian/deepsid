@@ -8,9 +8,6 @@ SHOULD BE DONE
 
 WHEN THE TIME IS RIGHT
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- Make sure the new 'Ratings' user takes over JCH's rating-feature-duties everywhere, freeing
-  up JCH's own ratings.
-
 - DO THE FOLLOWING IN THE BEGINNING OF A WEEKEND OR A VACATION AS IT MIGHT BLOW UP!
   You have to be damn sure everything still works afterwards - a lot of testing to be done...
   - The 'hvsc' folder in root should be called 'music' instead.
@@ -226,11 +223,11 @@ CONSIDER THIS
 - Infinity radio. Plays tunes of two stars rating and above forever. Each time it is supposed to
   auto-progress, it will jump to a random tune anywhere else in another folder.
   - Jump algorithm randomly selects one of two (maybe three) methods at first:
-    1. Play any tune inside a MUSICIANS letter folder that JCH have given two stars or more.
-    2. Play any tune in all collections that JCH have specifically given two stars or more.
+    1. Play any tune inside a MUSICIANS letter folder that the 'Ratings' user have given two stars or more.
+    2. Play any tune in all collections that the 'Ratings' user have specifically given two stars or more.
     3. How about as 2. but judging from average of all star ratings given by all users? (In
        that case you better go for three stars or more, not two.)
-    NOTE: Maybe not do step 2 at all? For individual tunes, JCH's ratings may be too biased.
+    NOTE: Maybe not do step 2 at all? For individual tunes, the 'Ratings' user's ratings may be too biased.
   - (Man, it feels weird referring to myself in the third person.)
   - Place the button for it in the white PATH box, which is ~empty anyway in the root.
   - Maybe make certain control buttons wine red (including the starter button) to show that this
@@ -406,6 +403,7 @@ PROBABLY NOT?
   a few regex lines in August 2021 and while it's easy to cover most of them, it's difficult to make it
   100% watertight. And that's where it transitions into it not being worth the trouble.
   UPDATE: I've now sent a request to the HVSC team about removing those text bits.
+  UPDATE: They've amended a lot of tunes now, but not all of them.
 
 - CSDb Music Competitions:
   - Thought about a better inside "path" box info where year and country is also visible, but it's not

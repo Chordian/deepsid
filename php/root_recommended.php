@@ -20,8 +20,8 @@ try {
 	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	$db->exec("SET NAMES UTF8");
 
-	// Get all the folder ID belonging to composers JCH have given 3 stars or more
-	$select_rec = $db->query('SELECT table_id FROM ratings WHERE user_id = '.JCH.' AND rating >= 3 AND type = "FOLDER"');
+	// Get all the folder ID belonging to composers the 'Ratings' user have given 3 stars or more
+	$select_rec = $db->query('SELECT table_id FROM ratings WHERE user_id = '.USER_RATINGS.' AND rating >= 3 AND type = "FOLDER"');
 	$select_rec->setFetchMode(PDO::FETCH_OBJ);
 
 	$boxes = '';

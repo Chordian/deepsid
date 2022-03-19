@@ -53,8 +53,8 @@ function CreateRecBox($random_id) {
 			$decent_box_shown = true;
 			$decent_composers = [];
 
-			// Get an array of all the folder ID belonging to composers JCH have given 2 stars or more
-			$select_decent = $db->query('SELECT table_id FROM ratings WHERE user_id = '.JCH.' AND rating >= 2 AND type = "FOLDER"');
+			// Get an array of all the folder ID belonging to composers the 'Ratings' user have given 2 stars or more
+			$select_decent = $db->query('SELECT table_id FROM ratings WHERE user_id = '.USER_RATINGS.' AND rating >= 2 AND type = "FOLDER"');
 			$select_decent->setFetchMode(PDO::FETCH_OBJ);
 			foreach($select_decent as $row_decent)
 				array_push($decent_composers, $row_decent->table_id);
@@ -278,8 +278,8 @@ try {
 
 	$good_composers = [];
 
-	// Get an array of all the folder ID belonging to composers JCH have given 3 stars or more
-	$select = $db->query('SELECT table_id FROM ratings WHERE user_id = '.JCH.' AND rating >= 3 AND type = "FOLDER"');
+	// Get an array of all the folder ID belonging to composers the 'Ratings' user have given 3 stars or more
+	$select = $db->query('SELECT table_id FROM ratings WHERE user_id = '.USER_RATINGS.' AND rating >= 3 AND type = "FOLDER"');
 	$select->setFetchMode(PDO::FETCH_OBJ);
 	foreach($select as $row)
 		array_push($good_composers, $row->table_id);

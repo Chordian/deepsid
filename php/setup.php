@@ -14,6 +14,7 @@ define('COOKIE_HOST',       $_SERVER['HTTP_HOST'] == LOCALHOST ? 'localhost_deep
 define('HVSC_VERSION',      '76');
 
 define('JCH',               2);                         // Same user ID on both localhost and online
+define('USER_RATINGS',      3);                         // Same user ID on both localhost and online
 
 define('DB_LOCALHOST',		'deepsid');				    // MySQL connection strings for localhost
 define('HOST_LOCALHOST',	'localhost');
