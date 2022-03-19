@@ -8,10 +8,8 @@ SHOULD BE DONE
 
 WHEN THE TIME IS RIGHT
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- Copy all JCH's ratings to a unique account that is used for determining the quality settings,
-  etc. JCH is getting tired of not being able to rate certain folders.
-  - Because JCH might +1 revise all his ratings later, it should be a 100% copy.
-  - Rename the 'Dummy' user (same ID both locally and online) and use it for this purpose.
+- Make sure the new 'Ratings' user takes over JCH's rating-feature-duties everywhere, freeing
+  up JCH's own ratings.
 
 - DO THE FOLLOWING IN THE BEGINNING OF A WEEKEND OR A VACATION AS IT MIGHT BLOW UP!
   You have to be damn sure everything still works afterwards - a lot of testing to be done...
