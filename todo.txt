@@ -3,7 +3,7 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- Nothing.
+- BUG: Play song with multiple subtunes. Search. Cancel search. Now the subtunes are disabled.
 
 
 WHEN THE TIME IS RIGHT
@@ -38,7 +38,6 @@ CONSIDER THIS
 - The player text lines by the Chartist bars could be filter links.
 - JW says browser.js loads stuff before the user settings in main.js have been loaded.
 - With nothing selected, play should start playing the tune in top of a browser list.
-- In the far left side, a "+" tab to add a another tab page for extremely wide browser windows.
 - How about user ratings for players/editors too?
 - Support for 2SID and 3SID in the scope tab as a mosaic of 2 x 3 (4) or 3 x 3 (4) boxes.
 - An adaptation list for CSDb forum HVSC paths that have since been moved/renamed in an update.
@@ -126,9 +125,6 @@ CONSIDER THIS
     good overview just by looking and the browser list yourself.
 
 - Write the "Undo" admin script for tags.
-
-- JW recommended using some extra code to improve the "Click to Play" overlay to not always show up.
-  - See the e-mail thread from 29 November 2020 for more information.
 
 - Recommendation boxes:
   - If from HVSC, add the brand image in the bottom left corner (there's room for it).

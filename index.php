@@ -1238,7 +1238,7 @@
 							<a href="https://www.hvsc.c64.org/" target="_top">https://www.hvsc.c64.org/</a>
 						</p>
 						<p>
-							Compute's Gazette SID Collection #141<br />
+							Compute's Gazette SID Collection #142<br />
 							<a href="http://www.c64music.co.uk/" target="_top">http://www.c64music.co.uk/</a>
 						</p>
 
@@ -1431,6 +1431,16 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>April 2, 2022</h3>
+						<ul>
+							<li>DeepSID's copy of <a href="http://www.c64music.co.uk/" target="_top">Compute's Gazette SID Collection</a> has now been upgraded to version 1.42.</li>
+						</ul>
+
+						<h3>March 26, 2022</h3>
+						<ul>
+							<li>Fixed an inversion problem in the ASCII graphics of certain CGSC songs.</li>
+						</ul>
 
 						<h3>March 13, 2022</h3>
 						<ul>

@@ -660,7 +660,7 @@ Controls.prototype = {
 					if (charin == 146)	{ revnow = 0; }
 					if (charin == 18)	{ revnow = 128; }
 					if (charin == 157)	{ /* todo CRSR-LEFT */ }
-					if (charin == 13)	{ charouttext = "<br>"; }
+					if (charin == 13)	{ charouttext = "<br>"; revnow = 0; }
 
 					if (charin == 29)	{ charouttext = "&nbsp;"; }   
 					if (charin == 32)	{ charouttext = "&nbsp;"; }   
@@ -824,7 +824,7 @@ Controls.prototype = {
 
 								if (charin == 146)	{ revnow = 0; }
 								if (charin == 18)	{ revnow = 128; }
-								if (charin == 13)	{ charouttext = "<br>"; }
+								if (charin == 13)	{ charouttext = "<br>"; revnow = 0; }
 			
 								if (charin == 29)	{ charouttext = "&nbsp;"; }   
 								if (charin == 32)	{ charouttext = "&nbsp;"; }   

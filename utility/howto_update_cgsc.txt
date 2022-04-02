@@ -107,7 +107,7 @@ ADDING NEW FILES
   1. Open the file "Whats_new_in_v###.txt" in Notepad, where ### is the new version number.
   2. In the first step of the file, copy all the lines with new files into a new Notepad++ file. (Ignore
      the other steps with updated and deleted files.)
-  3. Save the Notepad++ in e.g. TEMP. The filename is unimportant.
+  3. Save the Notepad++ file in e.g. TEMP. The filename is unimportant.
   4. Delete all the lines that does not end with the ".mus" extension.
   5. Copy this to the clipboard now: _Compute's Gazette SID Collection/
   6. Home on each line and insert the string. (If there are a lot of new files, record and repeat a macro.)
@@ -116,7 +116,7 @@ ADDING NEW FILES
   8. Ctrl+H, "Replace All" backslashes to forward slashes instead.
   9. Save the Notepad++ file and exit.
 
-Don't close "Whats_new_in_v###.txt" in Notepad just yet.
+Don't close "Whats_new_in_v###.txt" in Notepad++ just yet.
 
   1. In the LOCAL database tab, enter the "hvsc_files" table in phpMyAdmin and click "Import".
   2. Click "Browse" and click the Notepad++ file.

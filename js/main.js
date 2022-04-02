@@ -107,13 +107,13 @@ $(function() { // DOM ready
 	 * @param {*} event 
 	 */
 	$(window).on("keydown", function(event) {
-		if (!$("input[type=text],input[type=password],textarea").is(":focus")) {
+		if (!$("input[type=text],input[type=password],textarea,select").is(":focus")) {
 			if (event.keyCode == 220)									// Keydown key below 'Escape'
 				// Fast forward
 				$("#faster").trigger("mousedown");
 		}
 	}).on("keyup", function(event) {
-		if (!$("input[type=text],input[type=password],textarea").is(":focus")) {
+		if (!$("input[type=text],input[type=password],textarea,select").is(":focus")) {
 			if (event.keyCode == 220) {									// Keyup key below 'Escape'
 				// Fast forward
 				$("#faster").trigger("mouseup");
