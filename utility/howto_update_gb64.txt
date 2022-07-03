@@ -58,6 +58,9 @@ Adapting:
 
 Importing:
 
+Do the following for the local version only. A step will mention when it's time to do
+something for the online version.
+
   1. Enter the "hvsc_files" table and click "Operations".
   2. In "Copy table to (database.table):" select "Structure only"
   3. Enter "hvsc_files_import" as the destination name.
@@ -68,7 +71,7 @@ Importing:
   3. Change "Format" to "CSV".
   4. Change "Columns separated with" to ";".
   5. Write "fullname,application,gb64" in the "Column names" edit box.
-  6. There may be a few duplicate HVSC paths, so tick the "Do not about on INSERT
+  6. There may be a few duplicate HVSC paths, so tick the "Do not abort on INSERT
      error" check box too.
   7. Click "Go".
 

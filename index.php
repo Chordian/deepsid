@@ -77,10 +77,14 @@
 		<script type="text/javascript" src="js/player.js"></script>
 		<script type="text/javascript" src="js/controls.js"></script>
 		<script type="text/javascript" src="js/browser.js"></script>
-		<?php if (isLegacyWebSid()): ?>
-			<script type="text/javascript" src="js/scope_legacy.js"></script>
-		<?php else : ?>
-			<script type="text/javascript" src="js/scope.js"></script> <!-- <= JW's sid_tracer.js -->
+		<?php if (isset($_GET['websiddebug'])): ?>
+			<script type="text/javascript" src="http://www.wothke.ch/tmp/scope.js"></script>
+		<?php else: ?>
+			<?php if (isLegacyWebSid()): ?>
+				<script type="text/javascript" src="js/scope_legacy.js"></script>
+			<?php else : ?>
+				<script type="text/javascript" src="js/scope.js"></script> <!-- <= JW's sid_tracer.js -->
+			<?php endif ?>
 		<?php endif ?>
 		<script type="text/javascript" src="js/viz.js"></script>
 		<script type="text/javascript" src="js/main.js"></script>
@@ -516,7 +520,8 @@
 			<div id="sundry">
 				<div id="stopic-stil" class="stopic">
 					<div id="sundry-news">
-						<span>Check out the new <a href="//deepsid.chordian.net/?tab=stats">STATS</a> view in the tab with visuals. It shows what's used in the SID chip.</span>
+						<!--<span>The <a href="https://www.hvsc.c64.org/" target="_top">High Voltage SID Collection</a> has been upgraded to the latest version #77. Click <a href="http://deepsid.chordian.net/?search=77&type=new">here</a> to see what's new in this update.</span>-->
+						<span>All new files in <a href="http://deepsid.chordian.net/?search=77&type=new">HVSC update #77</a> are now connected to CSDb entries.</span>
 					</div>
 				</div>
 				<div id="stopic-tags" class="stopic" style="display:none;"></div>
@@ -705,6 +710,7 @@
 					<a href="https://twitter.com/chordian" target="_blank">Twitter</a>
 						<span>&#9642</span>
 					<a href="https://discord.gg/n5w85GMbVu" target="_blank">Discord</a>
+					<!--<a href="discord.htm" target="_blank">Discord</a>-->
 						<span>&#9642</span>
 					<a href="http://csdb.chordian.net/?type=forums&roomid=14&topicid=129712" target="_blank">CSDb</a>
 						<span>&#9642</span>
@@ -1234,11 +1240,11 @@
 
 						<h3>Libraries of SID tunes</h3>
 						<p>
-							High Voltage SID Collection #76<br />
+							High Voltage SID Collection #77<br />
 							<a href="https://www.hvsc.c64.org/" target="_top">https://www.hvsc.c64.org/</a>
 						</p>
 						<p>
-							Compute's Gazette SID Collection #142<br />
+							Compute's Gazette SID Collection #143<br />
 							<a href="http://www.c64music.co.uk/" target="_top">http://www.c64music.co.uk/</a>
 						</p>
 
@@ -1431,6 +1437,42 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>July 3, 2022</h3>
+						<ul>
+							<li>Wrote and ran a script to update the file counts of the GROUPS member folders.</li>
+						</ul>
+
+						<h3>July 2, 2022</h3>
+						<ul>
+							<li>Upgraded the WebSid (HQ) emulator. Added API for specific SID instance access, cleaned up digi-related scope handling, rolled back
+								flawed CIA performance optimization and flawed COUNTER_PERIOD improvement.</li>
+							<li>Note that the scopes now include digi output when a voice-specific digi technique is used. Normal $D418 digi is exclusively shown
+								in the fourth scope output. Remember to use a buffer size of 16384 to see the scopes.</li>
+							<li>Fixed a bug when displaying data from additional SID chips in the piano view.</li>
+							<li>All new files in HVSC #77 are now connected to CSDb entries.</li>
+						</ul>
+
+						<h3>June 25, 2022</h3>
+						<ul>
+							<li>The <a href="https://www.hvsc.c64.org/" target="_top">High Voltage SID Collection</a> has been upgraded to the latest version #77.</li>
+							<li>Added composer profiles for the new folders in HVSC #77.</li>
+						</ul>
+
+						<h3>May 28, 2022</h3>
+						<ul>
+							<li>DeepSID's copy of <a href="http://www.c64music.co.uk/" target="_top">Compute's Gazette SID Collection</a> has now been upgraded to version 1.43.</li>
+						</ul>
+
+						<h3>May 14, 2022</h3>
+						<ul>
+							<li>All 2SID tunes in the SH folder of 2022 have been turned "exotic" which means they now play in stereo.</li>
+						</ul>
+
+						<h3>April 23, 2022</h3>
+						<ul>
+							<li>Imported the new GameBase64 collection v18 with new game entries and screenshots.</li>
+						</ul>
 
 						<h3>April 2, 2022</h3>
 						<ul>

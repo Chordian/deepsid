@@ -710,7 +710,7 @@ Controls.prototype = {
 					i++;
 				}
 				out += "</span>";
-				$("#info-text").append('<div class="c64blackbg c64font">'+out+'</div>');
+				$("#info-text").append('<div class="c64blackbg c64font" style="white-space:nowrap">'+out+'</div>');
 			}
 			reader.readAsBinaryString(blob);
 		});

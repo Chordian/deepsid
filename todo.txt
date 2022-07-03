@@ -3,7 +3,24 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- BUG: Play song with multiple subtunes. Search. Cancel search. Now the subtunes are disabled.
+- Visuals STATS: In line "Using illegal waveform to lock noise, then unlock it with test bit,
+  can be used to create unique sounds." - make the "unique sounds" a link to my test bit noise
+  SID example file in the SH folder.
+
+- Bug: If you "decathlon" the search button, you can get repeated search results.
+
+- Bug: Search for "summer" produces a "folder.compo_type is null" error in the console. Why?
+
+- Put new production tag 'Other' on the annex tips list. (Used for e.g. graphics and tools.)
+  - Also production tag 'Vinyl' and explain it too.
+
+- Automatically turn 2SID files exotic when uploaded to the SH folder.
+  - I had a situation where a user wanted it to stay in mono, so add a confirmation "Would you
+    like to convert it to the exotic format so that it plays in stereo in DeepSID?" - if yes,
+    the "Exotic" tag is added to it, if no, the "Mono" tag is added to it instead.
+  - Use JW's conversion PHP script.
+  - Version is set to v4E and header size from 124 to 126 bytes. Keep everything else.
+  - Bonus: Add "_2SID.sid" too the filename if it doesn't already have it.
 
 
 WHEN THE TIME IS RIGHT
@@ -144,6 +161,7 @@ CONSIDER THIS
 - Bug: CSDb: Also a similar problem when opening a release page to already playing "redirect" tune.
 - BUG: Searching for the specific word "data" just returns a compo error.
 - BUG: Swapping color themes fiddles with at least a gray C64font color (maybe more).
+- BUG: Play song with multiple subtunes. Search. Cancel search. Now the subtunes are disabled.
 
 - BUG: While in YouTube SID handler, click a SID row. If "Unepic" refuses to start it sometimes bump
   to the next channel tab, then bumps twice as if several timers are messing around. This might be
@@ -317,6 +335,10 @@ PROBABLY NOT?
 
 - See here: https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-color-scheme
   With this you can preset to bright or dark color scheme the first time it is visited.
+
+- The SID tester (the "l" hotkey) should also be able to test MUS files.
+  - SID files can be detected, but it's not easy to detect a MUS file.
+  - It's not an easy fix and I doubt anyone is going to use it.
 
 - A "Recommended" random advertising box for Jürgen Wothke's PlayMOD, and another one for CShellDB.
   - I have decided to not to this as it smells too much of the kind of advertising an adblocker would

@@ -14,7 +14,7 @@
 
 require_once("class.account.php"); // Includes setup
 
-define('HVSC_NEW_VERSION', '76');
+define('HVSC_NEW_VERSION', '77');
 define('HVSC_PATH', '_High Voltage SID Collection/');
 
 try {

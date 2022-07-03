@@ -39,14 +39,15 @@ element:"anyfunc"}):Array(b);a.wasmTable=c.table}c.memoryBase||(c.memoryBase=a.S
 var ma=[function(){console.log("info cannot be retrieved  from corrupt .mus file")},function(){console.log("FATAL ERROR: This BASIC song requires emulator to be configured with optional KERNAL ROM and BASIC ROM")},function(){console.log("FATAL ERROR: no free memory for driver")},function(){console.log("ERROR: PSID INIT hangs")},function(b){console.log("JAM 0:  $"+b.toString(16))}];L=1024;M=L+2347296;ha.push({b:function(){na()}},{b:function(){ra()}});a.STATIC_BASE=L;a.STATIC_BUMP=2347296;M+=16;
 function sa(b){return Math.pow(2,b)}var ta=M;M=M+4+15&-16;R=ta;N=O=A(M);P=N+T;Q=A(P);K[R>>2]=Q;a.wasmTableSize=64;a.wasmMaxTableSize=64;a.c={};
 a.f={abort:x,enlargeMemory:function(){ea()},getTotalMemory:function(){return S},abortOnCannotGrowMemory:ea,___cxa_pure_virtual:function(){B=!0;throw"Pure virtual function called!";},___setErrNo:function(b){a.___errno_location&&(K[a.___errno_location()>>2]=b);return b},_emscripten_asm_const_i:function(b){return ma[b]()},_emscripten_asm_const_ii:function(b,c){return ma[b](c)},_emscripten_memcpy_big:function(b,c,e){G.set(G.subarray(c,c+e),b);return b},_llvm_exp2_f64:function(){return sa.apply(null,arguments)},
-_llvm_trap:function(){x("trap!")},DYNAMICTOP_PTR:R,STACKTOP:O};var ua=a.asm(a.c,a.f,buffer);a.asm=ua;var ra=a.__GLOBAL__sub_I_sid_cpp=function(){return a.asm.__GLOBAL__sub_I_sid_cpp.apply(null,arguments)},na=a.__GLOBAL__sub_I_wavegenerator_cpp=function(){return a.asm.__GLOBAL__sub_I_wavegenerator_cpp.apply(null,arguments)};a._computeAudioSamples=function(){return a.asm._computeAudioSamples.apply(null,arguments)};a._enableVoice=function(){return a.asm._enableVoice.apply(null,arguments)};
-a._enableVoices=function(){return a.asm._enableVoices.apply(null,arguments)};a._envIsNTSC=function(){return a.asm._envIsNTSC.apply(null,arguments)};a._envIsSID6581=function(){return a.asm._envIsSID6581.apply(null,arguments)};a._envSetNTSC=function(){return a.asm._envSetNTSC.apply(null,arguments)};a._envSetSID6581=function(){return a.asm._envSetSID6581.apply(null,arguments)};a._free=function(){return a.asm._free.apply(null,arguments)};
-a._getBufferVoice1=function(){return a.asm._getBufferVoice1.apply(null,arguments)};a._getBufferVoice2=function(){return a.asm._getBufferVoice2.apply(null,arguments)};a._getBufferVoice3=function(){return a.asm._getBufferVoice3.apply(null,arguments)};a._getBufferVoice4=function(){return a.asm._getBufferVoice4.apply(null,arguments)};a._getCutoff6581=function(){return a.asm._getCutoff6581.apply(null,arguments)};a._getDigiRate=function(){return a.asm._getDigiRate.apply(null,arguments)};
-a._getDigiType=function(){return a.asm._getDigiType.apply(null,arguments)};a._getDigiTypeDesc=function(){return a.asm._getDigiTypeDesc.apply(null,arguments)};a._getFilterConfig6581=function(){return a.asm._getFilterConfig6581.apply(null,arguments)};a._getGlobalDigiRate=function(){return a.asm._getGlobalDigiRate.apply(null,arguments)};a._getGlobalDigiType=function(){return a.asm._getGlobalDigiType.apply(null,arguments)};
-a._getGlobalDigiTypeDesc=function(){return a.asm._getGlobalDigiTypeDesc.apply(null,arguments)};a._getMusicInfo=function(){return a.asm._getMusicInfo.apply(null,arguments)};a._getNumberTraceStreams=function(){return a.asm._getNumberTraceStreams.apply(null,arguments)};a._getRAM=function(){return a.asm._getRAM.apply(null,arguments)};a._getRegisterSID=function(){return a.asm._getRegisterSID.apply(null,arguments)};a._getSampleRate=function(){return a.asm._getSampleRate.apply(null,arguments)};
-a._getSoundBuffer=function(){return a.asm._getSoundBuffer.apply(null,arguments)};a._getSoundBufferLen=function(){return a.asm._getSoundBufferLen.apply(null,arguments)};a._getTraceStreams=function(){return a.asm._getTraceStreams.apply(null,arguments)};a._loadSidFile=function(){return a.asm._loadSidFile.apply(null,arguments)};a._malloc=function(){return a.asm._malloc.apply(null,arguments)};a._playTune=function(){return a.asm._playTune.apply(null,arguments)};
-a._setFilterConfig6581=function(){return a.asm._setFilterConfig6581.apply(null,arguments)};a._setRAM=function(){return a.asm._setRAM.apply(null,arguments)};a._setRegisterSID=function(){return a.asm._setRegisterSID.apply(null,arguments)};var E=a.stackAlloc=function(){return a.asm.stackAlloc.apply(null,arguments)},D=a.stackRestore=function(){return a.asm.stackRestore.apply(null,arguments)},C=a.stackSave=function(){return a.asm.stackSave.apply(null,arguments)};
-a.dynCall_v=function(){return a.asm.dynCall_v.apply(null,arguments)};a.dynCall_vi=function(){return a.asm.dynCall_vi.apply(null,arguments)};a.asm=ua;a.ccall=function(b,c,e,d){var g=a["_"+b];assert(g,"Cannot call unknown function "+b+", make sure it is exported");var h=[];b=0;if(d)for(var f=0;f<d.length;f++){var k=ba[e[f]];k?(0===b&&(b=C()),h[f]=k(d[f])):h[f]=d[f]}e=g.apply(null,h);e="string"===c?ca(e):"boolean"===c?!!e:e;0!==b&&D(b);return e};X=function va(){a.calledRun||Z();a.calledRun||(X=va)};
+_llvm_trap:function(){x("trap!")},DYNAMICTOP_PTR:R,STACKTOP:O};var ua=a.asm(a.c,a.f,buffer);a.asm=ua;var ra=a.__GLOBAL__sub_I_sid_cpp=function(){return a.asm.__GLOBAL__sub_I_sid_cpp.apply(null,arguments)},na=a.__GLOBAL__sub_I_wavegenerator_cpp=function(){return a.asm.__GLOBAL__sub_I_wavegenerator_cpp.apply(null,arguments)};a._computeAudioSamples=function(){return a.asm._computeAudioSamples.apply(null,arguments)};a._countSIDs=function(){return a.asm._countSIDs.apply(null,arguments)};
+a._enableVoice=function(){return a.asm._enableVoice.apply(null,arguments)};a._enableVoices=function(){return a.asm._enableVoices.apply(null,arguments)};a._envIsNTSC=function(){return a.asm._envIsNTSC.apply(null,arguments)};a._envIsSID6581=function(){return a.asm._envIsSID6581.apply(null,arguments)};a._envSetNTSC=function(){return a.asm._envSetNTSC.apply(null,arguments)};a._envSetSID6581=function(){return a.asm._envSetSID6581.apply(null,arguments)};
+a._free=function(){return a.asm._free.apply(null,arguments)};a._getBufferVoice1=function(){return a.asm._getBufferVoice1.apply(null,arguments)};a._getBufferVoice2=function(){return a.asm._getBufferVoice2.apply(null,arguments)};a._getBufferVoice3=function(){return a.asm._getBufferVoice3.apply(null,arguments)};a._getBufferVoice4=function(){return a.asm._getBufferVoice4.apply(null,arguments)};a._getCutoff6581=function(){return a.asm._getCutoff6581.apply(null,arguments)};
+a._getDigiRate=function(){return a.asm._getDigiRate.apply(null,arguments)};a._getDigiType=function(){return a.asm._getDigiType.apply(null,arguments)};a._getDigiTypeDesc=function(){return a.asm._getDigiTypeDesc.apply(null,arguments)};a._getFilterConfig6581=function(){return a.asm._getFilterConfig6581.apply(null,arguments)};a._getGlobalDigiRate=function(){return a.asm._getGlobalDigiRate.apply(null,arguments)};a._getGlobalDigiType=function(){return a.asm._getGlobalDigiType.apply(null,arguments)};
+a._getGlobalDigiTypeDesc=function(){return a.asm._getGlobalDigiTypeDesc.apply(null,arguments)};a._getMusicInfo=function(){return a.asm._getMusicInfo.apply(null,arguments)};a._getNumberTraceStreams=function(){return a.asm._getNumberTraceStreams.apply(null,arguments)};a._getRAM=function(){return a.asm._getRAM.apply(null,arguments)};a._getRegisterSID=function(){return a.asm._getRegisterSID.apply(null,arguments)};a._getSIDBaseAddr=function(){return a.asm._getSIDBaseAddr.apply(null,arguments)};
+a._getSIDRegister=function(){return a.asm._getSIDRegister.apply(null,arguments)};a._getSampleRate=function(){return a.asm._getSampleRate.apply(null,arguments)};a._getSoundBuffer=function(){return a.asm._getSoundBuffer.apply(null,arguments)};a._getSoundBufferLen=function(){return a.asm._getSoundBufferLen.apply(null,arguments)};a._getTraceStreams=function(){return a.asm._getTraceStreams.apply(null,arguments)};a._loadSidFile=function(){return a.asm._loadSidFile.apply(null,arguments)};
+a._malloc=function(){return a.asm._malloc.apply(null,arguments)};a._playTune=function(){return a.asm._playTune.apply(null,arguments)};a._setFilterConfig6581=function(){return a.asm._setFilterConfig6581.apply(null,arguments)};a._setRAM=function(){return a.asm._setRAM.apply(null,arguments)};a._setRegisterSID=function(){return a.asm._setRegisterSID.apply(null,arguments)};a._setSIDRegister=function(){return a.asm._setSIDRegister.apply(null,arguments)};
+var E=a.stackAlloc=function(){return a.asm.stackAlloc.apply(null,arguments)},D=a.stackRestore=function(){return a.asm.stackRestore.apply(null,arguments)},C=a.stackSave=function(){return a.asm.stackSave.apply(null,arguments)};a.dynCall_v=function(){return a.asm.dynCall_v.apply(null,arguments)};a.dynCall_vi=function(){return a.asm.dynCall_vi.apply(null,arguments)};a.asm=ua;
+a.ccall=function(b,c,e,d){var g=a["_"+b];assert(g,"Cannot call unknown function "+b+", make sure it is exported");var h=[];b=0;if(d)for(var f=0;f<d.length;f++){var k=ba[e[f]];k?(0===b&&(b=C()),h[f]=k(d[f])):h[f]=d[f]}e=g.apply(null,h);e="string"===c?ca(e):"boolean"===c?!!e:e;0!==b&&D(b);return e};X=function va(){a.calledRun||Z();a.calledRun||(X=va)};
 function Z(){function b(){if(!a.calledRun&&(a.calledRun=!0,!B)){ka||(ka=!0,U(ha));U(ia);if(a.onRuntimeInitialized)a.onRuntimeInitialized();if(a.postRun)for("function"==typeof a.postRun&&(a.postRun=[a.postRun]);a.postRun.length;){var b=a.postRun.shift();ja.unshift(b)}U(ja)}}if(!(0<V)){if(a.preRun)for("function"==typeof a.preRun&&(a.preRun=[a.preRun]);a.preRun.length;)la();U(fa);0<V||a.calledRun||(a.setStatus?(a.setStatus("Running..."),setTimeout(function(){setTimeout(function(){a.setStatus("")},1);
 b()},1)):b())}}a.run=Z;function x(b){if(a.onAbort)a.onAbort(b);void 0!==b?(y(b),z(b),b=JSON.stringify(b)):b="";B=!0;throw"abort("+b+"). Build with -s ASSERTIONS=1 for more info.";}a.abort=x;if(a.preInit)for("function"==typeof a.preInit&&(a.preInit=[a.preInit]);0<a.preInit.length;)a.preInit.pop()();a.noExitRuntime=!0;Z();
   return {
@@ -153,8 +154,13 @@ SIDBackendAdapter = (function(){ var $this = function (basicROM, charROM, kernal
 					this._digiShownRate= Math.round(this._digiRate/this._digiBatches);
 					
 					const arr = Object.keys(this._digiTypes).sort();
+					var c = 0;
 					for (const key of arr) {
 						if (key.length && (key != "NONE"))
+							c++;
+					}
+					for (const key of arr) {
+						if (key.length && (key != "NONE")  && ((c == 1) || (key != "D418")))	// ignore combinations with D418
 							this._digiShownLabel+= (this._digiShownLabel.length ? "&"+key : key);
 					}
 				}
@@ -204,7 +210,6 @@ SIDBackendAdapter = (function(){ var $this = function (basicROM, charROM, kernal
 			return 0;	// FS not used in Tiny'R'Sid
 		},
 		loadMusicData: function(sampleRate, path, filename, data, options) {
-			this.sidFileHeader = data.slice(0, data[7]); // Added by JCH
 			var buf = this.Module._malloc(data.length);
 			this.Module.HEAPU8.set(data, buf);
 			
@@ -341,6 +346,29 @@ SIDBackendAdapter = (function(){ var $this = function (basicROM, charROM, kernal
 			this.Module.ccall('envSetNTSC', 'number', ['number'], [ntsc]);
 		},
 		
+		// access used SID chips meta information
+		countSIDs: function() {
+			return this.Module.ccall('countSIDs', 'number');
+		},
+		getSIDBaseAddr: function(sidIdx) {
+			return this.Module.ccall('getSIDBaseAddr', 'number', ['number'], [sidIdx]);
+		},
+
+		/**
+		* This just queries the *current* state of the emulator. It
+		* is less precisely correlated to the music that is currently playing (than the above
+		* buffers), i.e. it represents the state *after* the last emulator call (respective data
+		* may not yet have been fed to WebAudio or if it has already been fed then 
+		* WebAudio may not yet be playing it yet). The lag should normally not be very large 
+		* (<0.2s) and when using it for display purposes it would be hard to see a difference anyway.
+		*/
+		getSIDRegister: function(sidIdx, reg) {
+			return this.Module.ccall('getSIDRegister', 'number', ['number', 'number'], [sidIdx, reg]);
+		},
+		setSIDRegister: function(sidIdx, reg, value) {
+			return this.Module.ccall('setSIDRegister', 'number', ['number', 'number', 'number'], [sidIdx, reg, value]);
+		},
+		
 		// To activate the below output a song must be started with the "traceSID" option set to 1:
 		// At any given moment the below getters will then correspond to the output of getAudioBuffer
 		// and what has last been generated by computeAudioSamples. They expose some of the respective
@@ -361,11 +389,9 @@ SIDBackendAdapter = (function(){ var $this = function (basicROM, charROM, kernal
 			return result;
 		},
 
-		// XXX FIXME UNUSED?
 		readFloatTrace: function(buffer, idx) {
 			return (this.Module.HEAP16[buffer+idx])/0x8000;
 		},
-		// perf optimization: XXX FIXME UNUSED?
 		getCopiedScopeStream: function(input, len, output) {
 			for(var i= 0; i<len; i++){
 				output[i]=  this.Module.HEAP16[input+i]; // will be scaled later anyway.. avoid the extra division here /0x8000;
@@ -373,25 +399,11 @@ SIDBackendAdapter = (function(){ var $this = function (basicROM, charROM, kernal
 			return len;
 		},
 
-		/**
-		* This just queries the *current* state of the emulator. It
-		* is less precisely correlated to the music that is currently playing (than the above
-		* buffers), i.e. it represents the state *after* the last emulator call (respective data
-		* may not yet have been fed to WebAudio or if it has already been fed then 
-		* WebAudio may not yet be playing it yet). The lag should normally not be very large 
-		* (<0.2s) and when using it for display purposes it would be hard to see a difference anyway.
-		*/
-		getRegisterSID: function(offset) {
-			return this.Module.ccall('getRegisterSID', 'number', ['number'], [offset]);
-		},
 		getRAM: function(offset) {
 			return this.Module.ccall('getRAM', 'number', ['number'], [offset]);
 		},
 		setRAM: function(offset, value) {
 			this.Module.ccall('setRAM', 'number', ['number', 'number'], [offset, value]);
-		},
-		setRegisterSID: function(offset, value) {
-			this.Module.ccall('setRegisterSID', 'number', ['number', 'number'], [offset, value]);
 		},
 		/**
 		* Diagnostics digi-samples (if any).
@@ -410,6 +422,18 @@ SIDBackendAdapter = (function(){ var $this = function (basicROM, charROM, kernal
 		},
 
 		
+		/**
+		* @deprecated use getSIDRegister instead
+		*/
+		getRegisterSID: function(offset) {
+			return this.Module.ccall('getRegisterSID', 'number', ['number'], [offset]);
+		},
+		/**
+		* @deprecated use setSIDRegister instead
+		*/
+		setRegisterSID: function(offset, value) {
+			this.Module.ccall('setRegisterSID', 'number', ['number', 'number'], [offset, value]);
+		},
 		/*
 		* @deprecated APIs below - use getTraceStreams/getNumberTraceStreams instead
 		*/

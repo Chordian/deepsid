@@ -1136,6 +1136,7 @@ SIDPlayer.prototype = {
 		if (chip == 1) return 0xD400;
 		switch (this.emulator) {
 			case "websid":
+				return SIDBackend.getSIDBaseAddr(chip - 1);
 			case "legacy":
 				// Use the SID file header to figure out the SID chip address
 				// NOTE: A line must be inserted in 'backend_tinyrsid.js' for this to work!
@@ -1168,6 +1169,7 @@ SIDPlayer.prototype = {
 		if (typeof chip === "undefined") chip = 0; else chip -= 1;
 		switch (this.emulator) {
 			case "websid":
+				return SIDBackend.getSIDRegister(chip, register);
 			case "legacy":
 				if (chip && typeof SIDBackend.sidFileHeader != "undefined")
 					// Use the SID file header to figure out the SID chip address

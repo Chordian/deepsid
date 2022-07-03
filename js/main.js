@@ -177,7 +177,7 @@ $(function() { // DOM ready
 					});
 				}
 			} else if (event.keyCode == 84) {							// Keyup 't' (test something)
-				console.log(browser.playlist[browser.songPos].address);
+				console.log("test");
 			}
 		}
 	});

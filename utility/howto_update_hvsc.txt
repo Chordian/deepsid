@@ -27,8 +27,8 @@ you that the update has arrived (because obviously you are not aware of it).
 
 Backup
 ¯¯¯¯¯¯
-Delete all leftover backup and import tables and backup the entire DeepSID database (both
-the local and the online version).
+Delete all leftover backup tables and backup the entire DeepSID database (both the local
+and the online version).
 
 TABLE: hvsc_files
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
@@ -271,7 +271,7 @@ Import data from the SID files themselves:
      Search and replace "\\" with "/" and check that number of occurrences match number of lines.
  16. To fix multi-SID tunes, home to top and press Ctrl+H then tick the "Regular expression" radio button.
  17. In "Find what", type: -1,-1,5\d\d\d\d,5\d\d\d\d,
- 18. Click "Replace All".
+ 18. Set "Replace with" to empty and click "Replace All".
  19. Replace all again for this: -1,5\d\d\d\d,
  20. Set the search mode back to "Normal" and search for "-1,5" just to be sure. Sometimes that can reveal
      a few you missed, especially if there are even more advanced multi-SID tunes.
@@ -286,8 +286,8 @@ Import data from the SID files themselves:
   3. Change "Format" to "CSV".
   4. In "Columns enclosed with" delete the quote character there, leaving the edit box empty.
   5. In "Columns escaped with" type a backslash character instead.
-  6. Specify: fullname,type,version,playertype,playercompat,clockspeed,sidmodel,dataoffset,
-              datasize,loadaddr,initaddr,playaddr,subtunes,startsubtune,name,author,copyright,hash
+  6. Specify:
+     fullname,type,version,playertype,playercompat,clockspeed,sidmodel,dataoffset,datasize,loadaddr,initaddr,playaddr,subtunes,startsubtune,name,author,copyright,hash
   7. Click "Go".
   8. If you missed something in the CSV files, you'll get red import errors. The good news is that the
      error reports the line you have to edit.
@@ -546,18 +546,18 @@ http://deepsid.chordian.net/?file=/MUSICIANS/N/Nebula&here=1&search=mixer&type=p
 
 GROUPS
 ¯¯¯¯¯¯
-Back out of the HVSC version folder and copy the GROUPS folder there. Paste it into the root of the
-HVSC folder, i.e. next to DEMOS, GAMES and MUSICIANS.
+Back out of the HVSC version folder (i.e. in OneDrive documents) and copy the GROUPS folder there.
+Paste it into the root of the HVSC folder, i.e. next to DEMOS, GAMES and MUSICIANS.
 
 Remember to also do this online.
 
-NOTE: Make sure this source folder is up-to-date as more groups are added in DeepSID.
+Now a script must be run to update the file counts:
 
-  1. Now enter the 'hvsc_folders' table.
-  2. Search for this: %/GROUPS/%
-  3. For each folder, search for the corresponding MUSICIANS folder.
-  4. Copy the number of files to the same field in the GROUPS row. If there are subfolders (typically
-     for worktunes) then add the numbers together for the GROUPS row.
+  o  Run this: http://chordian/deepsid/php/update_groups.php
+
+And online too:
+
+  o  Run this: http://deepsid.chordian.net/php/update_groups.php
 
 LATEST ACTIVITY
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
@@ -593,7 +593,7 @@ Update various minor stuff:
   o  Update the top corner link in the profile page to point at the latest CSDb page (same table).
   o  Update "HVSC_VERSION" in browser.js.
   o  Remember to also update "HVSC_VERSION" in setup.php if you haven't already done so.
-  o  Add two entries in the "hvsc_folders" table for searching new stuff in the latest HVSC update.
+  o  Add a new entry in the "hvsc_folders" table for searching new stuff in the latest HVSC update.
   o  Check new folders for setting the 'focus' column in 'composers' to PRO, SCENER or BOTH.
   o  If you set a 'focus' column to PRO or BOTH, also update the 'affiliation' column in that row.
 
