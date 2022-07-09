@@ -9,10 +9,22 @@ SHOULD BE DONE
 
 - Bug: If you "decathlon" the search button, you can get repeated search results.
 
-- Bug: Search for "summer" produces a "folder.compo_type is null" error in the console. Why?
+- Make JW's web debug URL switch sticky.
+
+- Put a try/catch around the SID instantiation to avoid the TypeError in the web console.
+
+- Search filter for RSID and PSID? Better yet, see advanced search below.
 
 - Put new production tag 'Other' on the annex tips list. (Used for e.g. graphics and tools.)
   - Also production tag 'Vinyl' and explain it too.
+
+- Advanced search:
+  - Move search button to end of edit box and shrink to only show a magnifying glass. This
+    opens up for an "Advanced" link where the original search button used to be.
+  - In advanced search page, have only one search line and plus buttons below. Each click of a
+    new plus button will add another "AND" search line.
+  - Plus button, then drop-down for table ("files", "folders", etc.) then column, then an
+    input box for typing search query (always used LIKE %...% search). More?
 
 - Automatically turn 2SID files exotic when uploaded to the SH folder.
   - I had a situation where a user wanted it to stay in mono, so add a confirmation "Would you
@@ -21,6 +33,8 @@ SHOULD BE DONE
   - Use JW's conversion PHP script.
   - Version is set to v4E and header size from 124 to 126 bytes. Keep everything else.
   - Bonus: Add "_2SID.sid" too the filename if it doesn't already have it.
+  - ALTERNATIVE: Is there a way to toggle mono/stereo on a normal SID tune? Then I could just
+    add a toggle button instead.
 
 
 WHEN THE TIME IS RIGHT
@@ -28,8 +42,8 @@ WHEN THE TIME IS RIGHT
 - DO THE FOLLOWING IN THE BEGINNING OF A WEEKEND OR A VACATION AS IT MIGHT BLOW UP!
   You have to be damn sure everything still works afterwards - a lot of testing to be done...
   - The 'hvsc' folder in root should be called 'music' instead.
-  - Likewise, the 'hvsc.php' file should be called 'browse.php' or something instead. Some
-    other naming ideas: content, results, data, cluster, gather, music, collect
+  - Likewise, the 'hvsc.php' file should be called 'music.php' or something instead. Some
+    other naming ideas: content, results, data, cluster, gather, collect
     Also consider prefixing with "_" to always make it appear in top of the list.
   - There is an array called 'playlist' from the beginning of when DeepSID was made, that has
     nothing to do with symlists. Rename it to something else to avoid confusion.
@@ -40,7 +54,7 @@ WHEN THE TIME IS RIGHT
 CONSIDER THIS
 ¯¯¯¯¯¯¯¯¯¯¯¯¯
 - HVSC versions: Update with later changes, e.g. "Better Late Than Never" renaming. But how?
-  - Wasn't this an SOASC issue?
+  - Wasn't this an SOASC issue? (SOASC support was removed a long time ago.)
 
 - CSDb: If possible, convert ID cross-references in comments into the pertinent links.
   - Maybe with separate post-AJAX scripts to avoid slowing the CSDb tab down? (Because the

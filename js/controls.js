@@ -409,13 +409,15 @@ Controls.prototype = {
 				break;
 			case "set-16k":
 				// Button in scope sundry box for forcing a buffer size of 16384
+				// NOTE: This is now only used by the legacy WebSid handler.
 				$("#visuals-piano .dropdown-buffer").val("16384").trigger("change");
-				break;
+				break;				
 			case "sidwiz":
 				// Toggle 'SidWiz' mode ON or OFF for the oscilloscope voices
 				// NOTE: Don't add the DOM element check in 'animateScope()' as it needs to be fast.
 				viz.scopeMode = $("#sidwiz").is(":checked");
-				scope.setOutputSize(viz.scopeMode ? 16384 : 246 << viz.scopeZoom);
+				if (isLegacyWebSid)
+					scope.setOutputSize(viz.scopeMode ? 16384 : 246 << viz.scopeZoom);
 				break;
 			case "showtags":
 				// Toggle tags shown in SID rows ON or OFF
@@ -474,7 +476,8 @@ Controls.prototype = {
 			case "osc-zoom":
 				// Oscilloscope zoom; 1 (closest) to 5 (farthest)
 				viz.scopeZoom = event.target.value;
-				scope.setOutputSize(viz.scopeMode ? 16384 : 246 << viz.scopeZoom);
+				if (isLegacyWebSid)
+					scope.setOutputSize(viz.scopeMode ? 16384 : 246 << viz.scopeZoom);
 				break;
 		}
 	},

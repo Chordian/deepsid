@@ -16,6 +16,11 @@ UPDATE hvsc_files SET player = "JammicroV0" WHERE id = 67946								-- _High Vol
 UPDATE hvsc_files SET player = "JO's player + THCM" WHERE id = 22304						-- _High Voltage SID Collection/MUSICIANS/H/HJE/Megademo_part_2.sid
 UPDATE hvsc_files SET player = "Vibrants/JO" WHERE id = 22322								-- _High Voltage SID Collection/MUSICIANS/H/HJE/Woody_the_Worm.sid
 
+UPDATE hvsc_files SET player = "JammicroV1" WHERE id = 73319								-- _High Voltage SID Collection/MUSICIANS/J/Jammer/Ambience.sid
+UPDATE hvsc_files SET player = "JammicroV1" WHERE id = 73322								-- _High Voltage SID Collection/MUSICIANS/J/Jammer/Sneaky_Billy.sid
+UPDATE hvsc_files SET player = "JammicroV1" WHERE id = 73627								-- _High Voltage SID Collection/MUSICIANS/T/That8BitChiptuneGuy/1_Byte_Under_512.sid
+UPDATE hvsc_files SET player = "JammicroV1" WHERE id = 73575								-- _High Voltage SID Collection/MUSICIANS/S/Shogoon/512_Rap.sid
+
 UPDATE hvsc_files SET player = "Steve_Turner" WHERE id = 45979								-- _High Voltage SID Collection/MUSICIANS/T/Turner_Steve/Bushido.sid
 UPDATE hvsc_files SET player = "Steve_Turner" WHERE id = 45981								-- _High Voltage SID Collection/MUSICIANS/T/Turner_Steve/Intensity.sid
 UPDATE hvsc_files SET player = "Steve_Turner" WHERE id = 45984								-- _High Voltage SID Collection/MUSICIANS/T/Turner_Steve/Soldier_of_Fortune.sid

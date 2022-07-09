@@ -521,7 +521,7 @@
 				<div id="stopic-stil" class="stopic">
 					<div id="sundry-news">
 						<!--<span>The <a href="https://www.hvsc.c64.org/" target="_top">High Voltage SID Collection</a> has been upgraded to the latest version #77. Click <a href="http://deepsid.chordian.net/?search=77&type=new">here</a> to see what's new in this update.</span>-->
-						<span>All new files in <a href="http://deepsid.chordian.net/?search=77&type=new">HVSC update #77</a> are now connected to CSDb entries.</span>
+						<span>For WebSid, the piano view now always run at full speed and the scopes are always available, regardless of buffer size. Hats off to Jürgen Wothke for this awesome update.</span>
 					</div>
 				</div>
 				<div id="stopic-tags" class="stopic" style="display:none;"></div>
@@ -1150,7 +1150,6 @@
 								<p>Setting the buffer size affects WebSid or Hermit's emulator. If you like viewing the
 									<b>Visuals</b> tab, decrease the value towards 1024 for smoother
 									updating. If the playback is stuttering, increase it until it doesn't anymore.</p>
-								<p style="margin-top:-10px;">You need to leave it at 16384 for the <b>Scope</b> tab to work.</p>
 
 								<select id="dropdown-settings-buffer" class="dropdown-buffer">
 									<!--<option value="256">256</option>
@@ -1225,6 +1224,9 @@
 						<p>
 							Jens-Christian Huus (<a href="//chordian.net/" target="_top">Chordian</a>)<br />
 							<a href="//chordian.net/2018/05/12/deepsid/" target="_top">http://chordian.net/2018/05/12/deepsid/</a>
+						</p>
+						<p>
+							Scopes by Jürgen Wothke (<a href="http://www.wothke.ch/tinyrsid/index.php" target="_top">Tiny'R'Sid</a>)<br />
 						</p>
 
 						<h3>SID emulators for JavaScript</h3>
@@ -1438,9 +1440,21 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>July 9, 2022</h3>
+						<ul>
+							<li>Upgraded the WebSid (HQ) emulator. See below for what this version brings.</li>
+							<li>The piano view now always run at full speed in WebSid (HQ) mode regardless of the buffer size.</li>
+							<li>The scopes are now always available in WebSid (HQ) mode regardless of the buffer size.</li>
+							<li>Fixed MEMO and STATS views not working anymore. Both now also operate at 60 hz. Note that the MEMO view
+								doesn't really make use of it since Jürgen's update only covers the SID registers.</li>
+						</ul>
+
 						<h3>July 3, 2022</h3>
 						<ul>
 							<li>Wrote and ran a script to update the file counts of the GROUPS member folders.</li>
+							<li>The 13 new 2SID files in HVSC #77 (i.e. that uses 6 voices) has now been added as
+								<a href="//deepsid.chordian.net/?file=/_Exotic%20SID%20Tunes%20Collection/Stereo%202SID&here=1&search=77&type=new&tab=csdb">exotic stereo files</a>.</li>
+							<li>Fixed a bug that prevented the specific search query "summer" from returning any results.</li>
 						</ul>
 
 						<h3>July 2, 2022</h3>

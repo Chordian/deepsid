@@ -890,8 +890,10 @@ try {
 				'prefix'		=> $isCompoRoot ? $compo[$fullname]['prefix']	: '',	// Sort_Me_Differently
 
 				'compo_year'	=> $isCompoRoot ? $compo[$fullname]['year']		: 0,	// 1992
-				'compo_country'	=> $isCompoRoot ? $compo[$fullname]['country']	: '',	// Finland
-				'compo_type'	=> $isCompoRoot ? $compo[$fullname]['type']		: '',	// DEMO
+				'compo_country'	=> $isCompoRoot && !empty($compo[$fullname]['country'])
+												? $compo[$fullname]['country']	: '',	// Finland
+				'compo_type'	=> $isCompoRoot && !empty($compo[$fullname]['type'])
+												? $compo[$fullname]['type']		: '',	// DEMO
 				'compo_id'		=> $isCompoRoot ? $compo[$fullname]['event_id']	: 0,	// 117
 
 				'ss_type'		=> (isset($search_shortcut_type[$file]) ? $search_shortcut_type[$file] : ''),		// new

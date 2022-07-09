@@ -1,2 +1,0 @@
-loadMusicData: function(sampleRate, path, filename, data, options) {
-   -> THIS ONE!     this.sidFileHeader = data.slice(0, data[7]); // Added by JCH

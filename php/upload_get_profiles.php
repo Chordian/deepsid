@@ -53,6 +53,7 @@ try {
 		$author = str_replace('Figge Wulff Wasberger (Fegolhuzz)', 'Figge Wasberger (Fegolhuzz)', $author);
 		$author = str_replace('Hein Pieter Holt (Hein Design)', 'Hein Holt', $author);
 		$author = str_replace('4-Mat / 4mat', '4-Mat', $author);
+		$author = str_replace('MCH / Michu', 'MCH', $author);
 
 		$all_profiles[] = array(
 			'fullname'	=> str_replace('_High Voltage SID Collection', 'HVSC', $row->fullname),

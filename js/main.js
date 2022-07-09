@@ -64,8 +64,8 @@ $(function() { // DOM ready
 
 	HandleTopBox(emulator);
 
-	// Lower buffer size values may freeze DeepSID
-	scope = isLegacyWebSid ? new SidTracer(16384) : new Tracer(16384, 40);
+	// Lower buffer size values may freeze DeepSID (legacy only)
+	scope = isLegacyWebSid ? new SidTracer(16384) : new Tracer(40);
 
 	viz = new Viz(emulator);
 	SID = new SIDPlayer(emulator);
@@ -512,6 +512,7 @@ $(function() { // DOM ready
 				var emulator = $("#dropdown-emulator").styledGetValue();
 				docCookies.setItem("emulator", emulator, "Infinity", "/");
 				viz.setEmuButton(emulator);
+				viz.setBufferMessage(emulator);
 
 				// If a different version of WebSid was used last then we need to refresh the browser
 				// YouTube is also required to refresh for 100% stability (and because of autoplay policy)
@@ -590,7 +591,7 @@ $(function() { // DOM ready
 				}
 				ctrls.emulatorChanged = true;
 				UpdateURL();
-				viz.animateBufferEnded();
+				//viz.animateBufferEnded();
 				viz.startBufferEndedEffects();
 				ShowSundryFilterContents();
 				break;

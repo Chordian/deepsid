@@ -142,7 +142,7 @@ function Viz(emulator) {
 	this.initScope();
 	setTimeout(function() {
 		this.initGraph(browser.chips);
-		this.animateBufferEnded();
+		//this.animateBufferEnded();
 		this.animateFrames();
 	}.bind(this), 1);
 	this.addEvents();
@@ -372,7 +372,7 @@ Viz.prototype = {
 		// Re-trigger the same emulator again to set the buffer size
 		// NOTE: Doing it in a specific visuals view is deliberate (avoids multiple triggering).
 		$("#visuals-piano .viz-emu.button-on").trigger("click");
-		this.setBufferMessage();
+		this.setBufferMessage(this.emulator);
 	},
 
 	/**
@@ -449,15 +449,15 @@ Viz.prototype = {
 			$("#page .viz-msg-emu").hide();
 		} else
 			$("#page .viz-msg-emu").show();
-		this.setBufferMessage();
+		this.setBufferMessage(emulator);
 	},
 
 	/**
 	 * If buffer size is not at lowest value then show a message about it in both
-	 * of the visuals views.
+	 * of the visuals views, except in WebSid (HQ) mode.
 	 */
-	setBufferMessage: function() {
-		this.bufferSize > 1024 && $("#page .viz-msg-emu").css("display") == "none"
+	setBufferMessage: function(emulator) {
+		this.bufferSize > 1024 && $("#page .viz-msg-emu").css("display") == "none" && emulator != "websid"
 			? $("#page .viz-msg-buffer").show()
 			: $("#page .viz-msg-buffer").hide();
 	},
@@ -732,10 +732,15 @@ Viz.prototype = {
 			this.scopeVoice3 = new VoiceDisplay("scope3", function() { return scope.getDataVoice3(); }, false);
 			this.scopeVoice4 = new VoiceDisplay("scope4", function() { return scope.getDataVoice4(); }, true);		
 		} else {
-			this.scopeVoice1 = new VoiceDisplay("scope1", function() { return scope.getData(0); }, false);
-			this.scopeVoice2 = new VoiceDisplay("scope2", function() { return scope.getData(1); }, false);
-			this.scopeVoice3 = new VoiceDisplay("scope3", function() { return scope.getData(2); }, false);
-			this.scopeVoice4 = new VoiceDisplay("scope4", function() { return scope.getData(3); }, true);
+			this.scopeVoice1 = new VoiceDisplay("scope1", scope, function() { return scope.getData(0); }, false);
+			this.scopeVoice2 = new VoiceDisplay("scope2", scope, function() { return scope.getData(1); }, false);
+			this.scopeVoice3 = new VoiceDisplay("scope3", scope, function() { return scope.getData(2); }, false);
+			this.scopeVoice4 = new VoiceDisplay("scope4", scope, function() { return scope.getData(3); }, true);
+
+			this.scopeVoice1.setSize(512, 70);
+			this.scopeVoice2.setSize(512, 70);
+			this.scopeVoice3.setSize(512, 70);
+			this.scopeVoice4.setSize(512, 70);
 		}
 	},
 
@@ -756,7 +761,7 @@ Viz.prototype = {
 				this.tabOscMode = "NOTWEBSID";
 			}
 			return;
-		} else if (this.bufferSize < 16384) {
+		} else if (isLegacyWebSid && this.bufferSize < 16384) {
 			if (this.tabOscMode !== "NOT16K") {
 				$("#scope1,#scope2,#scope3,#scope4").hide();
 				$("#stopic-osc .sundryMsg").empty().append('A buffer size of <button id="set-16k" style="font-size:13px;line-height:13px;">16384</button> is required.').show();
@@ -765,16 +770,31 @@ Viz.prototype = {
 			return;
 		} else if (this.tabOscMode !== "OSC") {
 			// Okay to draw oscilloscope voices again now
-			scope.setOutputSize(this.scopeMode ? 16384 : 246 << this.scopeZoom);
+			if (isLegacyWebSid)
+				scope.setOutputSize(this.scopeMode ? 16384 : 246 << this.scopeZoom);
 			$("#stopic-osc .sundryMsg").hide();
 			$("#scope1,#scope2,#scope3,#scope4").show();
 			this.tabOscMode = "OSC";
 		}
 		if (SID.isPlaying()) {
-			this.scopeVoice1.redrawGraph(this.scopeMode, parseInt(this.scopeZoom));
-			this.scopeVoice2.redrawGraph(this.scopeMode, parseInt(this.scopeZoom));
-			this.scopeVoice3.redrawGraph(this.scopeMode, parseInt(this.scopeZoom));
-			this.scopeVoice4.redrawGraph(this.scopeMode, parseInt(this.scopeZoom));
+			if (isLegacyWebSid) {
+				this.scopeVoice1.redrawGraph(this.scopeMode, parseInt(this.scopeZoom));
+				this.scopeVoice2.redrawGraph(this.scopeMode, parseInt(this.scopeZoom));
+				this.scopeVoice3.redrawGraph(this.scopeMode, parseInt(this.scopeZoom));
+				this.scopeVoice4.redrawGraph(this.scopeMode, parseInt(this.scopeZoom));
+			} else {
+				scope.setMode(this.scopeMode, parseInt(this.scopeZoom));
+
+				this.scopeVoice1.redrawGraph();
+				this.scopeVoice2.redrawGraph();
+				this.scopeVoice3.redrawGraph();
+				this.scopeVoice4.redrawGraph();
+
+				this.scopeVoice1.setStrokeColor("rgba("+(this.scopeLineColor[colorTheme])+", 1.0)");
+				this.scopeVoice2.setStrokeColor("rgba("+(this.scopeLineColor[colorTheme])+", 1.0)");
+				this.scopeVoice3.setStrokeColor("rgba("+(this.scopeLineColor[colorTheme])+", 1.0)");
+				this.scopeVoice4.setStrokeColor("rgba("+(this.scopeLineColor[colorTheme])+", 1.0)");
+				}
 		}
 	},
 
@@ -1564,9 +1584,7 @@ Viz.prototype = {
 	animateBufferEnded: function() {
 		if ($("body").attr("data-mobile") !== "0") return;
 		SID.setCallbackBufferEnded(function() {
-			this.animatePiano();
-			this.animateMemory();
-			this.animateStats();
+			// All calls have been moved to 'animateFrames' instead
 		}.bind(this));
 	},
 
@@ -1575,7 +1593,10 @@ Viz.prototype = {
 	 */
 	animateFrames: function() {
 		requestAnimationFrame(this.animateFrames.bind(this));
+		this.animatePiano();
 		this.animateScope();
 		this.animateGraph();
-	},
+		this.animateMemory();
+		this.animateStats();
+},
 }

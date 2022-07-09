@@ -1,49 +1,95 @@
 /**
-* version 1.0.1
+* version 1.0.2
 *
-* 	Copyright (C) 2019 Juergen Wothke
-*	Version from PlayMOD site with streams
-*	Slightly modified by JCH for DeepSID
+* 	Copyright (C) 2022 Juergen Wothke
+*	enhanced version derived from the one used on my PlayMOD site
+*
+* note: This updated version relies on always caching 2*16384 samples per stream. If WebAudio
+* is using the maximum buffer size of 16384 then this results in a simple double buffering
+* scheme (like the one used in the old impl). But actually the implementation uses a circular 
+* buffer approach and smaller WebAudio buffers will cause more slots to be used in the circular
+* buffer (e.g. a buffer size of 8192 would use 4 slots). This improved approach ensures that
+* enough data is always available for the purpose of copying the "sliding window" data (the
+* old impl was fragile as the sliding window could actually be larger than what was available
+* in the double buffered source).
+*
+* See "changed API" comments below for instructions on how to migrate your existing code to
+* use this updated impl.
 *
 * Terms of Use: This file is free software. (Other licenses may apply to the remaining 
 * files used in this example.)
 */
 
 /**
+* changed API: bufferSize param was eliminated
+*
 * @param numberStreams maximum number of used streams (for initial memory allocation)
 */
-Tracer = (function(){ var $this = function(outputSize, numberStreams) { 
+Tracer = (function(){ var $this = function(numberStreams) {
 		$this.base.call(this);
 		
-		this._outputSize= outputSize;
-		this._numberStreams= numberStreams;
+		this.onStartCallback= function(){};
 		
+		this.setMode(true, 5);
+		
+		this._outputV= null;				// "sliding window" output arrays by voice
+		
+		this._numberStreams= numberStreams;
 	}; 
 	extend(AbstractTicker, $this, {
-	// ------------ APIs expected by the base infractructure - see doc in AbstractTicker parent class -----------------
-		
+	// ------------ APIs expected by the base infrastructure - see doc in AbstractTicker parent class -----------------
+		setOnStartCallback: function(onStartCallback) {
+			this.onStartCallback= typeof onStartCallback == 'undefined' ? function(){} : onStartCallback;
+		},
+		isSidWizMode: function() {
+			return this._useSidWiz;
+		},
+		getZoomLevel: function() {
+			return this._zoomLevel;
+		},
+		reset: function() {
+			
+			// clear scope streams			
+			if (typeof this._buffers != 'undefined') {
+				for (var j= 0; j<this._circularBufSlots; j++) {
+					for (var i= 0; i<this._numberStreams; i++) {
+						var buf= this._buffers[j][i];
+						
+						for (var k= 0; k<this._samplesPerBuffer; k++) {
+							buf[k]= 0;
+						}
+					}
+				}
+			}
+		},
 		/*
-		* Basic initialization: for each of the streams
-		*                       3  buffers are used during precessing (see "step" comments below)
+		* Basic initialization performed once on startup.
 		*/
 		init: function(samplesPerBuffer, tickerStepWidth) {
 			this._tickerStepWidth= tickerStepWidth;
 			this._samplesPerBuffer= samplesPerBuffer;
-			this._backendAdapter; 	// initialized later
-
-			// 1st step: make sure same resampling is used for "add-on data" (as is used for the audio data)
+			this._circularBufSlots = 2 * 16384 / samplesPerBuffer;
+			this._currentBufIdx = this._circularBufSlots-1;
+			
+			this._backendAdapter= null; 	// initialized later
+		
+			// for each of the streams 3 buffers are used during precessing (see "step" comments below)
+			
+			// 1st step: make sure same resampling is used for "add-on data" (as was used for the audio data:
+			//           the input scope streams use the same sample rate that the original audio generator is
+			//           using; that sample rate may be different from the one used by WebAudio and the same 
+			//           resampling that the ScriptNodePlayer applied to the audio data - before passing it
+			//           to WebAudio - is applied to the scope data)
 			this._resampleV= [];
 			for (var i= 0; i<this._numberStreams; i++) {
-				this._resampleV.push( new Float32Array(samplesPerBuffer) );					
+				this._resampleV.push( new Float32Array(samplesPerBuffer) );
 			}
 			
 			// 2nd step: "add-on" buffers in sync with the WebAudio audio buffer.
 			// 			 use double buffering to allow smooth transitions at buffer boundaries
-			//           (2 buffers are sufficient for the sliding window impl of a "past & present" view )
-			this._activeBufIdx = 0;
 			
 			this._buffers= [];			
-			for (var j= 0; j<2; j++) {	// double buffering
+			for (var j= 0; j<this._circularBufSlots; j++) {
 				var a= [];
 				for (var i= 0; i<this._numberStreams; i++) {
 					a.push( new Float32Array(samplesPerBuffer) );					
@@ -52,16 +98,19 @@ Tracer = (function(){ var $this = function(outputSize, numberStreams) {
 			}
 			
 			// 3rd step: use "sliding window" approach to fill the actual output buffers
-			// this.setOutputSize(this._outputSize);					
-			this.setOutputSize(16384); // Added by JCH as the output size needs to be 16384 for SidWiz mode
-		},	
+			// (respective buffers habe already been allocated via _setOutputSize() from the constructor)
+		},
+		stepCircularBuffer: function() {
+			this._currentBufIdx += 1;
+			if (this._currentBufIdx >= this._circularBufSlots) this._currentBufIdx = 0;
+		},
 		/**
-		* Marks the start of a new audio buffer, i.e. a new audio buffer is about to be generated.
+		* Called from genSamples() before a new audio buffer containung this._samplesPerBuffer samples is generated.
 		*/
 		start: function() {
-			// alternate used output buffers (as base for "sliding window" data access) 			
-			this._activeBufIdx = (this._activeBufIdx ? 0 : 1);	
-			Ticker.start(); // Added by JCH	for other visualizers in DeepSID
+			this.stepCircularBuffer();
+			
+			this.onStartCallback();
 		},
 		/**
 		* Corresponds to one emulator call - after which resampling of its output is required.
@@ -94,10 +143,13 @@ Tracer = (function(){ var $this = function(outputSize, numberStreams) {
 		},
 		/**
 		* Mirrors the transfer of the resampled audio data into WebAudio's audio buffer.
+		* fixme: avoid repeated checks/data access within loop..
 		*/
 		copyTickerData: function(outBufferIdx, inBufferIdx, backendAdapter) {
 			// the buffers filled here then are in sync with the respective audio data buffer used by WebAudio 
-			var buf= this._buffers[this._activeBufIdx];	
+			
+			// target slot was selected in "start"			
+			var buf= this._buffers[this._currentBufIdx];	
 
 			var nStreams= backendAdapter.getNumberTraceStreams();
 			for (var i= 0; i<nStreams; i++) {
@@ -108,21 +160,40 @@ Tracer = (function(){ var $this = function(outputSize, numberStreams) {
 	// ------------ API specifically provided by Tracer (invent whatever accessors you need here) -----------------
 
 		assertOutputV: function() {
-			if ((typeof this._outputV == 'undefined') || (this._outputV[0].length != this._outputSize)) {
-				if (typeof this._outputV == 'undefined') this._outputV= new Array(this._numberStreams);
+			if ((this._outputV == null) || (this._outputV[0].length != this._outputSize)) {
+				if (this._outputV == null) this._outputV= new Array(this._numberStreams);
 				
 				for (var i= 0; i<this._numberStreams; i++) {
 					this._outputV[i]= new Float32Array(this._outputSize);
 				}
 			}
 		},
-		/*
-		* Sets the size of the backward-view (in number of samples). Cannnot be larger than this._samplesPerBuffer
-		*/
+		// changed API: replaces respective manipulations that had to be done on the app side with the old version
+		setMode: function(useSidWiz, zoomLevel) {
+			if (zoomLevel < 1 || zoomLevel > 5) {
+				console.log("error: invalid zoom level " + zoomLevel + " (settings unchanged!)");
+			} else {
+				this._useSidWiz= useSidWiz;
+				this._zoomLevel= zoomLevel;
+
+				if (useSidWiz) {
+					this._setOutputSize(16384);	// always use max
+				} else {
+					this._setOutputSize(246 << zoomLevel);
+				}		
+			}
+		},
 		setOutputSize(s) {
-			if (s > this._samplesPerBuffer) {
-				// console.log("error: max output size is " + this._samplesPerBuffer);
-				s= this._samplesPerBuffer;
+			alert("changed API: setOutputSize() must no longer be used");
+			// the Tracker will automatically select a suitable size based on what is passed to setMode()
+		},
+		/*
+		* private helper: do not use in user side code
+		*/
+		_setOutputSize(s) {
+			if (s > 16384) {
+				console.log("error: max output size is " + 16384);
+				s= 16384;
 			}		
 			this._outputSize= s;
 			
@@ -139,7 +210,6 @@ Tracer = (function(){ var $this = function(outputSize, numberStreams) {
 		* give some feedback with "tick" related info - so that the caller may perform the
 		* respective calculations himself, etc. But for now I leave that as an exercise to the reader.
 		*/
-				
 		getData: function(voice) {
 			this.assertOutputV();			
 			this._copySlidingWindow(voice, this._outputV[voice]);
@@ -161,28 +231,52 @@ Tracer = (function(){ var $this = function(outputSize, numberStreams) {
 			return buf;
 		},
 		_copySlidingWindow: function(voiceId, destBuffer) {
-			var bufs= this._buffers[this._activeBufIdx];	
-			var prevBufs= this._buffers[this._activeBufIdx ? 0 : 1];	// previous buffers
+
+			var outputLen= destBuffer.length;	// end of the destination that still needs filling..
+					
+			var offset; // hack: to improve sync of sidWiz visuals			
+			switch (this._zoomLevel) {
+				case 1: 
+					offset= 3;
+					break
+				case 2: 
+				case 4: 
+				case 5: 
+					offset= 0;
+					break
+				default:
+					offset= 6;			
+			}
 			
-			var inputBuf= bufs[voiceId];
-			var prevInputBuf= prevBufs[voiceId];
-			
-			var outputLen= destBuffer.length;
-			
-			// this is the crucial bit that tells where in the data is *NOW* 			
+			var srcIdx= (ScriptNodePlayer.getInstance().getBufNum() + offset) % this._circularBufSlots;
+
+			var srcBufs= this._buffers[srcIdx];	
+			var srcBuf= srcBufs[voiceId];
+		
+			// this is the crucial bit that tells where in the current buffer data is *NOW*: 
+			// the tick measures the relative time *within* the buffer that WebAudio is currently playing.
 			var tick= ScriptNodePlayer.getInstance().getCurrentTick();	// e.g. 0..63 at 16384 buffer size			
-			
-			// (below is just an example of how that information might be used)
-			var endOffset= (tick+1)*this._tickerStepWidth;				// e.g. width 256 at  16384 buffer size
-			if (endOffset > outputLen) {
-				// no buffer boundary crossed (simple copy from the current buffer does the job)
-				this._arrayCopy(inputBuf, endOffset-outputLen, outputLen, destBuffer, 0);
-			} else {
-				// some data still must be fetched from the previous buffer
-				var sizePrevious= outputLen - endOffset;
-				this._arrayCopy(prevInputBuf, prevInputBuf.length-sizePrevious, sizePrevious, destBuffer, 0);
-				
-				this._arrayCopy(inputBuf, 0, endOffset, destBuffer, sizePrevious);
+			var endSrc= (tick + 1) * this._tickerStepWidth;	// _tickerStepWidth is usually 256
+		
+			while (outputLen > 0) {
+				if (endSrc >= outputLen) {
+					// enough data available in current slot
+					this._arrayCopy(srcBuf, endSrc-outputLen, outputLen, destBuffer, 0);	
+					break;
+				} else {
+					// need more data than available in the current slot: copy what is available then
+					// fetch remaining data from previous slot(s)
+
+					outputLen -= endSrc;	// fill destination from the end
+					this._arrayCopy(srcBuf, 0, endSrc, destBuffer, outputLen);
+					
+					// continue with previous slot in circular buffer
+					srcIdx = srcIdx ? srcIdx-1 : this._circularBufSlots-1;
+					endSrc = this._samplesPerBuffer; // previous buffer end
+
+					srcBufs= this._buffers[srcIdx];
+					srcBuf= srcBufs[voiceId];
+				}
 			}
 		},
 		// caution: does not check boundary violations - you better know what you are doing
@@ -209,10 +303,9 @@ Tracer = (function(){ var $this = function(outputSize, numberStreams) {
 * 
 * note: original implementation used 0-255 integer range sample data - while a -1 to 1 float range is used here.
 */
-SidWiz = function(width, height, altsync) {
+SidWiz = function(altsync) {
 	// graphics context to draw in:
-	this._resX= width;
-	this._resY= height;
+	this.setSize(100, 30);
 	
 	this._voiceData= null;	// new data is fed in for each frame
 	
@@ -223,6 +316,10 @@ SidWiz = function(width, height, altsync) {
 };
 
 SidWiz.prototype = {
+	setSize: function(width, height) {
+		this._resX= width;
+		this._resY= height;
+	},		
 	setHeight: function(height) {
 		this._resY= height;
 	},		
@@ -311,7 +408,6 @@ SidWiz.prototype = {
 				} else {
 					while ((this._voiceData[offset+qx] >= triggerLevel) && (qx < jac * 2)) qx++;
 				}
-				// if (qx === 800) break; // JCH: Enable this for debugging if it starts freezing
 
 				//add point to data
 				if (!isUp) {
@@ -392,44 +488,63 @@ SidWiz.prototype = {
 
 /*
 * Example for basic canvas rendering of streamed "add-on" data.
+*
+* changed API: added "tracer" param
 */
-VoiceDisplay = function(divId, getDataFunc, altsync) {
-	this.WIDTH= 512;
-	this.HEIGHT= 70;	// Changed by JCH (originally 80)
+VoiceDisplay = function(divId, tracer, getDataFunc, altsync) {
 
 	this.divId= divId;
+	this.tracer= tracer;
+	
 	this.getData= getDataFunc;
 	
-	this.canvas = document.getElementById(this.divId);
-	this.ctx = this.canvas.getContext('2d');
-	this.canvas.width = this.WIDTH;
-	this.canvas.height = this.HEIGHT;
+	this.canvas= document.getElementById(this.divId);
+	this.ctx= this.canvas.getContext('2d');
 
-	this.sidWiz= new SidWiz(this.WIDTH, this.HEIGHT, altsync);	
+	this.sidWiz= new SidWiz(altsync);
+
+	this.setSize(512, 80);
+	this.setStrokeColor("rgba(1, 0, 0, 1.0)");
 };
 
 VoiceDisplay.prototype = {
+	// changed API: new method allows to override default size
+	setSize: function(width, height) {
+		this.WIDTH= width;
+		this.HEIGHT= height;
+		
+		this.canvas.width = width;
+		this.canvas.height = height;
+		
+		this.sidWiz.setSize(width, height);
+	},
+	// changed API: new method allows to override used line color
+	// @JCH use display.setStrokeColor("rgba("+(viz.scopeLineColor[colorTheme])+", 1.0)")
+	setStrokeColor: function(color) {
+		this.strokeColor= color;
+	},
 	reqAnimationFrame: function() {
 		window.requestAnimationFrame(this.redraw.bind(this));
 	},
+		
 	redraw: function() {
 		this.redrawGraph();		
 		this.reqAnimationFrame();	
 	},
-	redrawGraph: function(osciloscopeMode, zoom) {
+	// changed API: original params are now stored in Tracer - see new  setMode()
+	redrawGraph: function() {
 		var data= this.getData();
-		if (osciloscopeMode && data.length < 16384) return; // Added by JCH to avoid freezing
-		
+
 		try {
 			// seems that dumbshit Safari (11.0.1 OS X) uses the fillStyle for "clearRect"!
 			this.ctx.fillStyle = "rgba(0, 0, 0, 0.0)";
 		} catch (err) {}
 		this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-				
-		this.ctx.strokeStyle = "rgba("+(viz.scopeLineColor[colorTheme])+", 1.0)"; // Color modified by JCH
+			
+		this.ctx.strokeStyle = this.strokeColor;			
 		this.ctx.save();
 
-		if (!osciloscopeMode) {
+		if (!this.tracer.isSidWizMode()) {
 			// zooming performed by changing abount of delivered data
 			var rescale= this.WIDTH/data.length;
 			this.ctx.scale(rescale, 1);	// fit all the data into the visible area
@@ -437,8 +552,8 @@ VoiceDisplay.prototype = {
 		
 		this.ctx.beginPath();
 				
-		if (osciloscopeMode) {
-			this.sidWiz.draw(data, 2+zoom, this.ctx, undefined);
+		if (this.tracer.isSidWizMode()) {
+			this.sidWiz.draw(data, 2+this.tracer.getZoomLevel(), this.ctx, undefined);
 		} else {
 			for (var i = 0; i < data.length; i++) {
 				var scale= (data[i]+1)/2;
