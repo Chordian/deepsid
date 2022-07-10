@@ -550,8 +550,16 @@
 			<p>Loaders were typically seen when loading a game from a cassette tape.</li>
 		</ul>
 		<ul class="annex-tags-list">
+			<li><a href="other" class="search" data-type="tag"><div class="tag tag-production">Other</div></a>= <b>Other productions</b>
+			<p>For less common productions such as graphics, tools, etc.</li>
+		</ul>
+		<ul class="annex-tags-list">
 			<li><a href="seuck" class="search" data-type="tag"><div class="tag tag-production">SEUCK</div></a>= <b>Made for a SEUCK game</b>
 			<p>A secondary tag that typically accompanies the <b>Game</b> tag. It indicates that the game was made with the <a href="https://en.wikipedia.org/wiki/Shoot-%27Em-Up_Construction_Kit">Shoot-\'Em-Up Construction Kit</a>.</p></li>
+		</ul>
+		<ul class="annex-tags-list">
+			<li><a href="vinyl" class="search" data-type="tag"><div class="tag tag-production">Vinyl</div></a>= <b>Made as a vinyl tribute</b>
+			<p>Made for a vinyl LP with a collection of SID tunes.</li>
 		</ul>
 	
 		If you want to know more about handling tags, see <a href="10" class="topic">this</a> topic.
@@ -606,7 +614,7 @@
 			<p>Notes slightly displaced across two or three voices to create a reverb/echo effect.</p></li>
 		</ul>
 		<ul class="annex-tags-list">
-			<li><a href="skydive" class="search" data-type="tag"><div class="tag">Skydive</div></a>= <b>Uses Hubbard\'s "skydive"</b>
+			<li><a href="skydive" class="search" data-type="tag"><div class="tag">Skydive</div></a>= <b>Hubbard\'s "skydive"</b>
 			<p>The tune uses an arpeggio effect that toggles between a note and a downwards slide originating at that note.</p></li>
 		</ul>
 		<ul class="annex-tags-list">

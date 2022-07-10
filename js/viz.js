@@ -38,6 +38,8 @@ function Viz(emulator) {
 	this.prevOctave 		= [0, 0, 0, 0, 0, 0, 0, 0, 0];
 	this.prevNote 			= [0, 0, 0, 0, 0, 0, 0, 0, 0];
 	this.prevGoodWaveform 	= [0, 0, 0, 0, 0, 0, 0, 0, 0];
+
+	this.biggestEnvelope 	= [-1, -1, -1, -1, -1, -1, -1, -1, -1];
 	
 	this.prevClockspeed = "Unknown";
 	this.prevClockspeedStats = "Unknown";
@@ -146,6 +148,21 @@ function Viz(emulator) {
 		this.animateFrames();
 	}.bind(this), 1);
 	this.addEvents();
+
+	// @link https://stackoverflow.com/a/29972322/2242348
+	/*var interval = 16; // 16 ms = 60 hz
+	var expected = Date.now() + interval;
+	setTimeout(step.bind(this), interval);
+	function step() {
+		var dt = Date.now() - expected; // The drift (positive for overshooting)
+		if (dt > interval) {
+			// Piano view is lagging
+		}
+		requestAnimationFrame(this.animateFrames.bind(this));
+	
+		expected += interval;
+		setTimeout(step.bind(this), Math.max(0, interval - dt)); // Take into account drift
+	}*/
 }
 
 Viz.prototype = {
@@ -493,6 +510,7 @@ Viz.prototype = {
 			this.prevOctave = [0, 0, 0, 0, 0, 0, 0, 0, 0],
 			this.prevNote = [0, 0, 0, 0, 0, 0, 0, 0, 0],
 			this.prevGoodWaveform = [0, 0, 0, 0, 0, 0, 0, 0, 0],
+			this.biggestEnvelope = [-1, -1, -1, -1, -1, -1, -1, -1, -1],
 			this.prevClockspeed = "Unknown";
 
 			this.runningPiano = true; // Start animating
@@ -585,15 +603,26 @@ Viz.prototype = {
 					$("#v"+keyboard+"_oct"+this.prevOctave[voice_and_chip]+"_"+this.prevNote[voice_and_chip]).css("transition", "none").attr("fill", this.pianoKeyColors[this.prevNote[voice_and_chip]]);
 					this.prevOctave[voice_and_chip] = octave;
 					this.prevNote[voice_and_chip] = note;
-				}
+				}				
 				if ((SID.readRegister(0xD404 + voice * 7, chip) & 1) || $("#piano-gate").hasClass("button-off")) {
 					// Gate ON
+					this.biggestEnvelope[voice_and_chip] = -1;
 					if ((waveform >= 1 && waveform <= 7) || (waveform == 8 && $("#piano-noise").hasClass("button-on")))
 						// The waveform is good so color the key on the piano
 						$("#v"+keyboard+"_oct"+octave+"_"+note).css("transition", "none").attr("fill", this.waveformColors[waveform]);
 				} else {
 					// Gate OFF
-					$("#v"+keyboard+"_oct"+octave+"_"+note).css("transition", "fill .05s linear").attr("fill", this.pianoKeyColors[note]);
+					var fillColor = this.pianoKeyColors[note];
+					if (SID.emulator == "websid") {
+						if (this.biggestEnvelope[voice_and_chip] == -1)
+							// Get the scale multiplier from the start value (before descending to ADSR silence)
+							this.biggestEnvelope[voice_and_chip] = 255 / SID.readLevel(voice + 1, chip);
+						var level = (SID.readLevel(voice + 1, chip) * this.biggestEnvelope[voice_and_chip]) ^ 0xFF;
+						// Waveform color brightness based on the current ADSR envelope level (HQ WebSid only)
+						var fillLevel = fillColor == "#000" ? -level : level;
+						fillColor = this.lightenDarkenColor(this.waveformColors[waveform], fillLevel / 1.8)
+					}
+					$("#v"+keyboard+"_oct"+octave+"_"+note).css("transition", "none").attr("fill", fillColor);
 				}
 
 				// Show the pulse width as a horizontal canvas bar
@@ -1589,7 +1618,10 @@ Viz.prototype = {
 	},
 
 	/**
-	 * Set up the continuous call of frames animated at 60 hz.
+	 * Set up the continuous call of frames animated at ~60 hz.
+	 * 
+	 * NOTE: The rate actually differs depending on resolution and monitor. My
+	 * 4K mode only runs at about 40 hz.
 	 */
 	animateFrames: function() {
 		requestAnimationFrame(this.animateFrames.bind(this));
@@ -1598,5 +1630,5 @@ Viz.prototype = {
 		this.animateGraph();
 		this.animateMemory();
 		this.animateStats();
-},
+	},
 }

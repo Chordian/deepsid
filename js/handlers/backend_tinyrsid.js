@@ -45,9 +45,9 @@ a._free=function(){return a.asm._free.apply(null,arguments)};a._getBufferVoice1=
 a._getDigiRate=function(){return a.asm._getDigiRate.apply(null,arguments)};a._getDigiType=function(){return a.asm._getDigiType.apply(null,arguments)};a._getDigiTypeDesc=function(){return a.asm._getDigiTypeDesc.apply(null,arguments)};a._getFilterConfig6581=function(){return a.asm._getFilterConfig6581.apply(null,arguments)};a._getGlobalDigiRate=function(){return a.asm._getGlobalDigiRate.apply(null,arguments)};a._getGlobalDigiType=function(){return a.asm._getGlobalDigiType.apply(null,arguments)};
 a._getGlobalDigiTypeDesc=function(){return a.asm._getGlobalDigiTypeDesc.apply(null,arguments)};a._getMusicInfo=function(){return a.asm._getMusicInfo.apply(null,arguments)};a._getNumberTraceStreams=function(){return a.asm._getNumberTraceStreams.apply(null,arguments)};a._getRAM=function(){return a.asm._getRAM.apply(null,arguments)};a._getRegisterSID=function(){return a.asm._getRegisterSID.apply(null,arguments)};a._getSIDBaseAddr=function(){return a.asm._getSIDBaseAddr.apply(null,arguments)};
 a._getSIDRegister=function(){return a.asm._getSIDRegister.apply(null,arguments)};a._getSIDRegister2=function(){return a.asm._getSIDRegister2.apply(null,arguments)};a._getSampleRate=function(){return a.asm._getSampleRate.apply(null,arguments)};a._getSoundBuffer=function(){return a.asm._getSoundBuffer.apply(null,arguments)};a._getSoundBufferLen=function(){return a.asm._getSoundBufferLen.apply(null,arguments)};a._getTraceStreams=function(){return a.asm._getTraceStreams.apply(null,arguments)};
-a._loadSidFile=function(){return a.asm._loadSidFile.apply(null,arguments)};a._malloc=function(){return a.asm._malloc.apply(null,arguments)};a._playTune=function(){return a.asm._playTune.apply(null,arguments)};a._setFilterConfig6581=function(){return a.asm._setFilterConfig6581.apply(null,arguments)};a._setRAM=function(){return a.asm._setRAM.apply(null,arguments)};a._setRegisterSID=function(){return a.asm._setRegisterSID.apply(null,arguments)};
-a._setSIDRegister=function(){return a.asm._setSIDRegister.apply(null,arguments)};var E=a.stackAlloc=function(){return a.asm.stackAlloc.apply(null,arguments)},D=a.stackRestore=function(){return a.asm.stackRestore.apply(null,arguments)},C=a.stackSave=function(){return a.asm.stackSave.apply(null,arguments)};a.dynCall_v=function(){return a.asm.dynCall_v.apply(null,arguments)};a.dynCall_vi=function(){return a.asm.dynCall_vi.apply(null,arguments)};a.asm=ua;
-a.ccall=function(b,c,e,d){var g=a["_"+b];assert(g,"Cannot call unknown function "+b+", make sure it is exported");var h=[];b=0;if(d)for(var f=0;f<d.length;f++){var k=ba[e[f]];k?(0===b&&(b=C()),h[f]=k(d[f])):h[f]=d[f]}e=g.apply(null,h);e="string"===c?ca(e):"boolean"===c?!!e:e;0!==b&&D(b);return e};X=function va(){a.calledRun||Z();a.calledRun||(X=va)};
+a._loadSidFile=function(){return a.asm._loadSidFile.apply(null,arguments)};a._malloc=function(){return a.asm._malloc.apply(null,arguments)};a._playTune=function(){return a.asm._playTune.apply(null,arguments)};a._readVoiceLevel=function(){return a.asm._readVoiceLevel.apply(null,arguments)};a._setFilterConfig6581=function(){return a.asm._setFilterConfig6581.apply(null,arguments)};a._setRAM=function(){return a.asm._setRAM.apply(null,arguments)};
+a._setRegisterSID=function(){return a.asm._setRegisterSID.apply(null,arguments)};a._setSIDRegister=function(){return a.asm._setSIDRegister.apply(null,arguments)};var E=a.stackAlloc=function(){return a.asm.stackAlloc.apply(null,arguments)},D=a.stackRestore=function(){return a.asm.stackRestore.apply(null,arguments)},C=a.stackSave=function(){return a.asm.stackSave.apply(null,arguments)};a.dynCall_v=function(){return a.asm.dynCall_v.apply(null,arguments)};
+a.dynCall_vi=function(){return a.asm.dynCall_vi.apply(null,arguments)};a.asm=ua;a.ccall=function(b,c,e,d){var g=a["_"+b];assert(g,"Cannot call unknown function "+b+", make sure it is exported");var h=[];b=0;if(d)for(var f=0;f<d.length;f++){var k=ba[e[f]];k?(0===b&&(b=C()),h[f]=k(d[f])):h[f]=d[f]}e=g.apply(null,h);e="string"===c?ca(e):"boolean"===c?!!e:e;0!==b&&D(b);return e};X=function va(){a.calledRun||Z();a.calledRun||(X=va)};
 function Z(){function b(){if(!a.calledRun&&(a.calledRun=!0,!B)){ka||(ka=!0,U(ha));U(ia);if(a.onRuntimeInitialized)a.onRuntimeInitialized();if(a.postRun)for("function"==typeof a.postRun&&(a.postRun=[a.postRun]);a.postRun.length;){var b=a.postRun.shift();ja.unshift(b)}U(ja)}}if(!(0<V)){if(a.preRun)for("function"==typeof a.preRun&&(a.preRun=[a.preRun]);a.preRun.length;)la();U(fa);0<V||a.calledRun||(a.setStatus?(a.setStatus("Running..."),setTimeout(function(){setTimeout(function(){a.setStatus("")},1);
 b()},1)):b())}}a.run=Z;function x(b){if(a.onAbort)a.onAbort(b);void 0!==b?(y(b),z(b),b=JSON.stringify(b)):b="";B=!0;throw"abort("+b+"). Build with -s ASSERTIONS=1 for more info.";}a.abort=x;if(a.preInit)for("function"==typeof a.preInit&&(a.preInit=[a.preInit]);0<a.preInit.length;)a.preInit.pop()();a.noExitRuntime=!0;Z();
   return {
@@ -368,6 +368,20 @@ SIDBackendAdapter = (function(){ var $this = function (basicROM, charROM, kernal
 			var tick= p.getCurrentTick(); // playback position in currently played WebAudio buffer (in 256-samples steps)
 			
 			return this.Module.ccall('getSIDRegister2', 'number', ['number', 'number', 'number', 'number'], [sidIdx, reg, bufIdx, tick]);
+		},
+		/**
+		* Gets a specific SID voice's output level (aka envelope) with about ~1 frame precison - using the actual position played
+		* by the WebAudio infrastructure.
+		*
+		* prerequisite: ScriptNodePlayer must be configured with an "external ticker" for precisely timed access.
+		*/
+		readVoiceLevel: function(sidIdx, voiceIdx) {
+			
+			var p= ScriptNodePlayer.getInstance();
+			var bufIdx= p.getTickToggle();
+			var tick= p.getCurrentTick(); // playback position in currently played WebAudio buffer (in 256-samples steps)
+			
+			return this.Module.ccall('readVoiceLevel', 'number', ['number', 'number', 'number', 'number'], [sidIdx, voiceIdx, bufIdx, tick]);
 		},
 		setSIDRegister: function(sidIdx, reg, value) {
 			return this.Module.ccall('setSIDRegister', 'number', ['number', 'number', 'number'], [sidIdx, reg, value]);

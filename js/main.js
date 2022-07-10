@@ -8,6 +8,7 @@ var $=jQuery.noConflict();
 var cacheCSDb = cacheSticky = cacheStickyBeforeCompo = cacheCSDbProfile = cacheBeforeCompo = cachePlayer = cacheGB64 = cacheRemix = prevFile = sundryTab = reportSTIL = "";
 var cacheTabScrollPos = cachePlayerTabScrollPos = cacheGB64TabScrollPos = cacheRemixTabScrollPos = cachePosBeforeCompo = cacheDDCSDbSort = peekCounter = sundryHeight = 0;
 var sundryToggle = true, recommended = forum = players = $trAutoPlay = null, showTags;
+var logCount = 999;
 
 var isLegacyWebSid = $("script[src='js/handlers/backend_tinyrsid_legacy.js']").length;
 
@@ -2064,6 +2065,9 @@ function UpdateURL(skipFileCheck) {
 	var wait = GetParam("wait");
 	if (wait) link += "&wait="+wait;
 
+	// Also make sure the "?websiddebug=" switch is sticky if used
+	if (GetParam("websiddebug")) link += "&websiddebug=1";
+	
 	if (urlFile != prevFile) {
 		prevFile = urlFile; // Need a new file clicked before we proceed in the browser history
 		history.pushState({}, document.title, link);
@@ -2233,4 +2237,11 @@ $.extend($.easing,{
  */
 function GetParam(name) {
 	return decodeURIComponent((RegExp(name + '=' + '(.+?)(&|$)').exec(location.search.replace(/\+/g, " "))||[,""])[1]);
+}
+
+/**
+ * Log a unique console line that doesn't huddle up.
+ */
+function Log(text) {
+	console.log((logCount++)+": "+text);
 }

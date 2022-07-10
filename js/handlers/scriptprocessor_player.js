@@ -1592,13 +1592,13 @@ var ScriptNodePlayer = (function () {
 						this._onTrackEnd();
 					}
 				}
-			}
-						
-			if (typeof this._externalTicker !== 'undefined') {
-				this._externalTicker.calcTickData(output1, output2);	// deprecated
 				
-				this._tickToggle= this._tickToggle ? 0 : 1;	// poor man's tracking of double buffering
-			}
+				if (typeof this._externalTicker !== 'undefined') {
+					this._externalTicker.calcTickData(output1, output2);	// deprecated
+					
+					this._tickToggle= this._tickToggle ? 0 : 1;	// poor man's tracking of double buffering
+				}
+			}						
 		},
 		detectSilence: function(s) {
 			if (this._silenceStarttime == 0) {	// i.e. song has been playing

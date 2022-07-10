@@ -1026,7 +1026,7 @@
 								<h3 style="display:inline-block;margin:0;">Notes</h3>
 								<p style="margin-top:10px;">Use the smallest buffer size (1024) for best effect. Especially the vibrato detector needs this.</p>
 								<p>Lines detecting repeated changes typically requires about four unique values to occur.</p>
-								<p>Using illegal waveform to lock noise, then unlock it with test bit, can be used to create unique sounds.</p>
+								<p>Using illegal waveform to lock noise, then unlock it with test bit, can be used to create <a href="//deepsid.chordian.net/?file=SID%20Happens/2020/Example_Test_Bit_Noise.sid">unique sounds</a>.</p>
 								<p>Only the first SID chip is examined.</p>
 							</div>
 						</div>
@@ -1439,6 +1439,12 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>July 10, 2022</h3>
+						<ul>
+							<li>Upgraded the WebSid (HQ) emulator. The piano view now makes use of a new feature in it to fade out its
+								keys depending on the ADSR envelope output of the voices.</li>
+						</ul>
 
 						<h3>July 9, 2022</h3>
 						<ul>

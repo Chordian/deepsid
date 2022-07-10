@@ -1169,7 +1169,10 @@ SIDPlayer.prototype = {
 		if (typeof chip === "undefined") chip = 0; else chip -= 1;
 		switch (this.emulator) {
 			case "websid":
-				return SIDBackend.getSIDRegister(chip, register);
+				try {
+					var value = SIDBackend.getSIDRegister(chip, register);
+				} catch(e) { /* Ignore type errors */ }
+				return value;
 			case "legacy":
 				if (chip && typeof SIDBackend.sidFileHeader != "undefined")
 					// Use the SID file header to figure out the SID chip address
@@ -1203,6 +1206,26 @@ SIDPlayer.prototype = {
 			case "download":
 				// Not possible
 				return 0;
+		}
+	},
+
+	/**
+	 * Return the current envelope level of a voice.
+	 * 
+	 * @param {number} voice	Voice to read (1-3).
+	 * @param {number} chip		SID chip number (default is 1).
+	 */
+	 readLevel: function(voice, chip) {
+		if (typeof chip === "undefined") chip = 0; else chip -= 1;
+		switch (this.emulator) {
+			case "websid":
+				return SIDBackend.readVoiceLevel(chip, voice - 1);
+			case "legacy":
+			case "jssid":
+			case "youtube":
+			case "download":
+				// Not supported
+				return false;
 		}
 	},
 }
