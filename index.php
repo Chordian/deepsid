@@ -1440,6 +1440,12 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>July 11, 2022</h3>
+						<ul>
+							<li>Added the CSDb music competitions related to HVSC #77.</li>
+							<li>In the piano view, the colors of the keys are now affected by the entire ADSR envelope output.</li>
+						</ul>
+
 						<h3>July 10, 2022</h3>
 						<ul>
 							<li>Upgraded the WebSid (HQ) emulator. The piano view now makes use of a new feature in it to fade out its

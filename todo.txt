@@ -5,6 +5,8 @@ SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
 - Bug: If you "decathlon" the search button, you can get repeated search results.
 
+- Piano view help: Add comment about "key flickering" on higher buffer sizes.
+
 - Advanced search:
   - Move search button to end of edit box and shrink to only show a magnifying glass. This
     opens up for an "Advanced" link where the original search button used to be.

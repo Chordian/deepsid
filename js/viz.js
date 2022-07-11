@@ -39,8 +39,6 @@ function Viz(emulator) {
 	this.prevNote 			= [0, 0, 0, 0, 0, 0, 0, 0, 0];
 	this.prevGoodWaveform 	= [0, 0, 0, 0, 0, 0, 0, 0, 0];
 
-	this.biggestEnvelope 	= [-1, -1, -1, -1, -1, -1, -1, -1, -1];
-	
 	this.prevClockspeed = "Unknown";
 	this.prevClockspeedStats = "Unknown";
 
@@ -510,7 +508,6 @@ Viz.prototype = {
 			this.prevOctave = [0, 0, 0, 0, 0, 0, 0, 0, 0],
 			this.prevNote = [0, 0, 0, 0, 0, 0, 0, 0, 0],
 			this.prevGoodWaveform = [0, 0, 0, 0, 0, 0, 0, 0, 0],
-			this.biggestEnvelope = [-1, -1, -1, -1, -1, -1, -1, -1, -1],
 			this.prevClockspeed = "Unknown";
 
 			this.runningPiano = true; // Start animating
@@ -593,35 +590,33 @@ Viz.prototype = {
 						indexMatch = index;
 					}
 				});
-				var octave = ~~(indexMatch / 12),
+				var fillColor,
+					octave = ~~(indexMatch / 12),
 					note = indexMatch % 12,
 					waveform = SID.readRegister(0xD404 + voice * 7, chip) >> 4,
-					voice_and_chip = ((chip * 3) + voice) - 3;
+					voice_and_chip = ((chip * 3) + voice) - 3,
+					pianoGateIsOff = $("#piano-gate").hasClass("button-off");
 				waveform = waveform ? this.prevGoodWaveform[voice_and_chip] = waveform : waveform = this.prevGoodWaveform[voice_and_chip];
 				if (octave !== this.prevOctave[voice_and_chip] || note !== this.prevNote[voice_and_chip]) {
 					// Clear the previous piano key
 					$("#v"+keyboard+"_oct"+this.prevOctave[voice_and_chip]+"_"+this.prevNote[voice_and_chip]).css("transition", "none").attr("fill", this.pianoKeyColors[this.prevNote[voice_and_chip]]);
 					this.prevOctave[voice_and_chip] = octave;
 					this.prevNote[voice_and_chip] = note;
-				}				
-				if ((SID.readRegister(0xD404 + voice * 7, chip) & 1) || $("#piano-gate").hasClass("button-off")) {
+				}
+				if ((SID.readRegister(0xD404 + voice * 7, chip) & 1) || pianoGateIsOff) {
 					// Gate ON
-					this.biggestEnvelope[voice_and_chip] = -1;
-					if ((waveform >= 1 && waveform <= 7) || (waveform == 8 && $("#piano-noise").hasClass("button-on")))
+					if ((waveform >= 1 && waveform <= 7) || (waveform == 8 && $("#piano-noise").hasClass("button-on"))) {
 						// The waveform is good so color the key on the piano
-						$("#v"+keyboard+"_oct"+octave+"_"+note).css("transition", "none").attr("fill", this.waveformColors[waveform]);
+						fillColor = SID.emulator == "websid" && !pianoGateIsOff
+							? this.getEnvelopeColor(voice, chip, this.waveformColors[waveform], waveform)
+							: this.waveformColors[waveform];
+						$("#v"+keyboard+"_oct"+octave+"_"+note).css("transition", "none").attr("fill", fillColor);
+					}
 				} else {
 					// Gate OFF
-					var fillColor = this.pianoKeyColors[note];
-					if (SID.emulator == "websid") {
-						if (this.biggestEnvelope[voice_and_chip] == -1)
-							// Get the scale multiplier from the start value (before descending to ADSR silence)
-							this.biggestEnvelope[voice_and_chip] = 255 / SID.readLevel(voice + 1, chip);
-						var level = (SID.readLevel(voice + 1, chip) * this.biggestEnvelope[voice_and_chip]) ^ 0xFF;
-						// Waveform color brightness based on the current ADSR envelope level (HQ WebSid only)
-						var fillLevel = fillColor == "#000" ? -level : level;
-						fillColor = this.lightenDarkenColor(this.waveformColors[waveform], fillLevel / 1.8)
-					}
+					fillColor = SID.emulator == "websid"
+						? this.getEnvelopeColor(voice, chip, this.pianoKeyColors[note], waveform)
+						: this.pianoKeyColors[note];
 					$("#v"+keyboard+"_oct"+octave+"_"+note).css("transition", "none").attr("fill", fillColor);
 				}
 
@@ -692,6 +687,23 @@ Viz.prototype = {
 				}
 			}
 		}
+	},
+
+	/**
+	 * Get the waveform color based on the current ADSR envelope level (HQ WebSid only).
+	 * 
+	 * @param {number} voice		Voice to read (1-3).
+	 * @param {number} chips		Number of SID chips (default is 1).
+	 * @param {string} key			Color of piano key (#000 or #FFF).
+	 * @param {number} waveform		Waveform (after >> 4).
+	 */
+	getEnvelopeColor: function(voice, chip, key, waveform) {
+		var level = SID.readLevel(voice + 1, chip) * 3;
+		if (level > 255) level = 255;
+		level ^= 0xFF;
+		// Black or white piano key?
+		var fillLevel = key == "#000" ? -level : level;
+		return this.lightenDarkenColor(this.waveformColors[waveform], fillLevel / 1.75);
 	},
 
 	/**
