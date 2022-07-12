@@ -45,6 +45,7 @@ function Browser() {
 
 	this.path = "";
 	this.search = "";
+	this.hvsc = null;
 	this.previousOverridePath = "";
 
 	this.cache = {
@@ -1066,6 +1067,9 @@ Browser.prototype = {
 	 * @param {function} callback 	If specified, the function to call after showing the contents.
 	 */
 	getFolder: function(scrollPos, searchQuery, readCache, callback) {
+
+		if (this.hvsc) this.hvsc.abort();
+
 		ctrls.state("root/back", "disabled");
 		$("#dropdown-sort").prop("disabled", true);
 		$("#search-here").prop("disabled", false);
@@ -1125,7 +1129,7 @@ Browser.prototype = {
 			this.path = this.path.replace("/_CSDb", "/CSDb");
 
 			// Call the AJAX PHP script that delivers the list of files and folders
-			$.get("php/hvsc.php", {
+			this.hvsc = $.get("php/hvsc.php", {
 					folder:			this.path,
 					searchType:		$("#dropdown-search").val(),
 					searchQuery:	this.isSearching ? searchQuery : "",

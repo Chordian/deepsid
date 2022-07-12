@@ -159,6 +159,12 @@ try {
 					$datasize = hexdec(substr($datasize, 2));
 				$select->execute(array(':datasize'=>$datasize));
 
+			} else if ($_GET['searchType'] == 'type') {
+
+				$select = $db->prepare('SELECT fullname FROM hvsc_files'.
+					' WHERE '.$searchContext.' AND type = :type LIMIT 1000');
+				$select->execute(array(':type'=>$_GET['searchQuery']));
+
 			} else if ($_GET['searchType'] == 'latest') {
 
 				$words = explode(',', $_GET['searchQuery']);

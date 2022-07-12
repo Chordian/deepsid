@@ -608,7 +608,7 @@ Viz.prototype = {
 					if ((waveform >= 1 && waveform <= 7) || (waveform == 8 && $("#piano-noise").hasClass("button-on"))) {
 						// The waveform is good so color the key on the piano
 						fillColor = SID.emulator == "websid" && !pianoGateIsOff
-							? this.getEnvelopeColor(voice, chip, this.waveformColors[waveform], waveform)
+							? this.getEnvelopeColor(voice, chip, this.pianoKeyColors[note], waveform)
 							: this.waveformColors[waveform];
 						$("#v"+keyboard+"_oct"+octave+"_"+note).css("transition", "none").attr("fill", fillColor);
 					}

@@ -3,18 +3,8 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- Bug: If you "decathlon" the search button, you can get repeated search results.
-
-- Piano view help: Add comment about "key flickering" on higher buffer sizes.
-
-- Advanced search:
-  - Move search button to end of edit box and shrink to only show a magnifying glass. This
-    opens up for an "Advanced" link where the original search button used to be.
-  - In advanced search page, have only one search line and plus buttons below. Each click of a
-    new plus button will add another "AND" search line.
-  - Make sure you can also search RSID and PSID as it has been requested.
-  - Plus button, then drop-down for table ("files", "folders", etc.) then column, then an
-    input box for typing search query (always used LIKE %...% search). More?
+- ADSR envelope handling: Consider using a table with offsets instead of just simple math
+  scaling. The colors do not always follow the note volume perfectly.
 
 - Automatically turn 2SID files exotic when uploaded to the SH folder.
   - I had a situation where a user wanted it to stay in mono, so add a confirmation "Would you
@@ -252,6 +242,14 @@ CONSIDER THIS
     will affect the infinity radio mode. For example, wine red STOP button = stop and turn off.
     You will stay in the current folder but everything has now returned to normal. If you want to
     restart the infinity radio, you have to return to the root and click the starter button again.
+
+- Advanced search:
+  - Move search button to end of edit box and shrink to only show a magnifying glass. This
+    opens up for an "Advanced" link where the original search button used to be.
+  - In advanced search page, have only one search line and plus buttons below. Each click of a
+    new plus button will add another "AND" search line.
+  - Plus button, then drop-down for table ("files", "folders", etc.) then column, then an
+    input box for typing search query (always used LIKE %...% search). More?
 
 - A tab with post effects, applied by the web audio synth library.
   - And maybe a setting toggle for applying this to the URL as a settings parameter string.

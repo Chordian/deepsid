@@ -521,7 +521,7 @@
 				<div id="stopic-stil" class="stopic">
 					<div id="sundry-news">
 						<!--<span>The <a href="https://www.hvsc.c64.org/" target="_top">High Voltage SID Collection</a> has been upgraded to the latest version #77. Click <a href="http://deepsid.chordian.net/?search=77&type=new">here</a> to see what's new in this update.</span>-->
-						<span>For WebSid, the piano view now always run at full speed and the scopes are always available, regardless of buffer size. Hats off to Jürgen Wothke for this awesome update.</span>
+						<span>For WebSid, the color strengths of the keys in the piano view are now based on the ADSR envelope levels of the notes playing.</span>
 					</div>
 				</div>
 				<div id="stopic-tags" class="stopic" style="display:none;"></div>
@@ -668,6 +668,7 @@
 						<option value="player">Player</option>
 						<option value="location">Location</option>
 						<option value="maximum">Maximum</option>
+						<option value="type">Type</option>
 						<option value="tag">Tags</option>
 						<option value="stil">STIL</option>
 						<option value="rating">Rating</option>
@@ -788,8 +789,11 @@
 							<div id="info-piano-text" style="display:none;">
 								<p>
 									If the playback is choppy, try increasing the buffer size. Smaller values mean faster and
-									smoother updating (default is 1024 which is the lowest possible) but also require a fast
-									computer with a nifty web browser.
+									smoother updating (1024 is the lowest possible) but also require a fast computer with a nifty web browser.
+								</p>
+								<p>
+									The piano is always updated as fast as possible when using the normal WebSid emulator, regardless of buffer
+									size. However, larger buffer sizes may introduce flickering notes. Decrease the buffer size to avoid this.
 								</p>
 								<p>
 									The top right waveform legend explains the colors of notes on the keyboards. Red is pulse,
@@ -821,7 +825,7 @@
 									Click the green buttons to toggle voices ON or OFF. You can also type
 									<code>1</code>, <code>2</code> and <code>3</code> or alternatively <code>q</code>, <code>w</code>
 									and <code>e</code>. (You can also use <code>4</code> and <code>r</code> for digi if you are using
-									WebSid, but it is not reflected on this page.)
+									legacy WebSid, but it is not reflected on this page.)
 								</p>
 								<p>
 									2SID and 3SID tunes are supported. Each keyboard will automatically combine
@@ -1440,10 +1444,16 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>July 12, 2022</h3>
+						<ul>
+							<li>You can now also search for the SID type. Choose <code>Type</code> and then type e.g. "rsid" then search.</li>
+						</ul>
+
 						<h3>July 11, 2022</h3>
 						<ul>
 							<li>Added the CSDb music competitions related to HVSC #77.</li>
 							<li>In the piano view, the colors of the keys are now affected by the entire ADSR envelope output.</li>
+							<li>Fixed a bug that showed the same search results multiple times if performed fast in rapid succession.</li>
 						</ul>
 
 						<h3>July 10, 2022</h3>

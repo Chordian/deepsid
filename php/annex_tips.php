@@ -158,6 +158,9 @@
 		<h4>Maximum</h4>
 		Searches for a maximum size, e.g. 4095, 0x0FFF, or $0FFF.
 
+		<h4>Type</h4>
+		Searches for a SID type, e.g. "rsid" for those types only.
+
 		<h4>Tags</h4>
 		<p>Searches for one or more tags.</p>
 		Enclose in quotes to search a tag with spaces between words.
