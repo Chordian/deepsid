@@ -3,9 +3,6 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- ADSR envelope handling: Consider using a table with offsets instead of just simple math
-  scaling. The colors do not always follow the note volume perfectly.
-
 - Automatically turn 2SID files exotic when uploaded to the SH folder.
   - I had a situation where a user wanted it to stay in mono, so add a confirmation "Would you
     like to convert it to the exotic format so that it plays in stereo in DeepSID?" - if yes,
@@ -111,6 +108,9 @@ CONSIDER THIS
 
 - Tips idea: Jargon. All kinds of abbreviations and technical expressions explained - including
   DeepSID jargon such as "plinks" and "clinks".
+
+- ADSR envelope handling: Consider using a table with offsets instead of just simple math
+  scaling. The colors do not always follow the note volume perfectly.
 
 - I'm beginning to suspect that the piano view sound chugging is not a memory leak in WebSid after
   all, but in the piano view code itself. Might be worth looking into it? Maybe you need to add

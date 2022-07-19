@@ -17,6 +17,12 @@
 		if (strpos($url, $char) !== false)
 			die("Malignant switch contents detected. Please fix the URL and try again.");
 
+	function MiniPlayer() {
+		return isset($_GET['mini'])
+			? $_GET['mini']
+			: 0;
+	}
+		
 	function isMobile() {
 		return isset($_GET['mobile'])
 			? $_GET['mobile']
@@ -263,7 +269,7 @@
 
 	</head>
 
-	<body class="entry-content" data-mobile="<?php echo isMobile(); ?>">
+	<body class="entry-content" data-mobile="<?php echo isMobile(); ?>" data-mini="<?php echo MiniPlayer(); ?>">
 		<script type="text/javascript">setTheme();</script>
 
 		<div id="dialog-cover"></div>
@@ -451,7 +457,9 @@
 
 		<div id="panel">
 			<div id="top">
-				<div id="logo" class="unselectable">D e e p S I D</div>
+				<div id="logo" class="unselectable">D e e p S I D
+					<?php if (MiniPlayer()) echo '<div style="position:absolute;top:24px;left:200px;white-space:nowrap;">mini-player</div>'; ?>
+				</div>
 				<select id="dropdown-emulator" name="select-emulator" style="visibility:hidden;">
 					<option value="websid">WebSid emulator</option>
 					<option value="legacy">WebSid (Legacy)</option>
@@ -459,38 +467,39 @@
 					<option value="youtube">YouTube videos</option>
 					<option value="download">Download SID file</option>
 				</select>
-
 				<div id="theme-selector" title="Click here to toggle the color theme"><div></div></div>
 
-				<?php if ($user_id) : ?>
-					<div id="logged-in">
-						<span id="logged-username"><?php echo $account->UserName(); ?></span>
-						<button id="logout" title="Log out">
-							<svg height="14" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M704 1440q0 4 1 20t.5 26.5-3 23.5-10 19.5-20.5 6.5h-320q-119 0-203.5-84.5t-84.5-203.5v-704q0-119 84.5-203.5t203.5-84.5h320q13 0 22.5 9.5t9.5 22.5q0 4 1 20t.5 26.5-3 23.5-10 19.5-20.5 6.5h-320q-66 0-113 47t-47 113v704q0 66 47 113t113 47h312l11.5 1 11.5 3 8 5.5 7 9 2 13.5zm928-544q0 26-19 45l-544 544q-19 19-45 19t-45-19-19-45v-288h-448q-26 0-45-19t-19-45v-384q0-26 19-45t45-19h448v-288q0-26 19-45t45-19 45 19l544 544q19 19 19 45z"/></svg>
-						</button>
-					</div>
-				<?php else : ?>
-					<form id="userform" action="<?php echo $account->Self(); ?>" method="post" accept-charset="UTF-8">
-						<fieldset>
-							<div id="response">Login or register to rate tunes</div>
-							<input type="hidden" name="submitted" value="1" />
-							<input type="text" class="spmhidip" name="<?php echo $account->SpamTrapName(); ?>" style="display:none;" />
+				<?php if (!MiniPlayer()): ?>
+					<?php if ($user_id) : ?>
+						<div id="logged-in">
+							<span id="logged-username"><?php echo $account->UserName(); ?></span>
+							<button id="logout" title="Log out">
+								<svg height="14" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M704 1440q0 4 1 20t.5 26.5-3 23.5-10 19.5-20.5 6.5h-320q-119 0-203.5-84.5t-84.5-203.5v-704q0-119 84.5-203.5t203.5-84.5h320q13 0 22.5 9.5t9.5 22.5q0 4 1 20t.5 26.5-3 23.5-10 19.5-20.5 6.5h-320q-66 0-113 47t-47 113v704q0 66 47 113t113 47h312l11.5 1 11.5 3 8 5.5 7 9 2 13.5zm928-544q0 26-19 45l-544 544q-19 19-45 19t-45-19-19-45v-288h-448q-26 0-45-19t-19-45v-384q0-26 19-45t45-19h448v-288q0-26 19-45t45-19 45 19l544 544q19 19 19 45z"/></svg>
+							</button>
+						</div>
+					<?php else : ?>
+						<form id="userform" action="<?php echo $account->Self(); ?>" method="post" accept-charset="UTF-8">
+							<fieldset>
+								<div id="response">Login or register to rate tunes</div>
+								<input type="hidden" name="submitted" value="1" />
+								<input type="text" class="spmhidip" name="<?php echo $account->SpamTrapName(); ?>" style="display:none;" />
 
-							<label for="username">User</label>
-							<input type="text" name="username" id="username" value="<?php echo $account->PostValue('username'); ?>" maxlength="64" />
+								<label for="username">User</label>
+								<input type="text" name="username" id="username" value="<?php echo $account->PostValue('username'); ?>" maxlength="64" />
 
-							<label for="password">Pw</label>
-							<input type="password" name="password" id="password" maxlength="32" />
+								<label for="password">Pw</label>
+								<input type="password" name="password" id="password" maxlength="32" />
 
-							<label>
-								<input type="submit" name="submit" value="Submit" style="display:none;" />
-								<button title="Log in or register">
-									<svg height="14" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1312 896q0 26-19 45l-544 544q-19 19-45 19t-45-19-19-45v-288h-448q-26 0-45-19t-19-45v-384q0-26 19-45t45-19h448v-288q0-26 19-45t45-19 45 19l544 544q19 19 19 45zm352-352v704q0 119-84.5 203.5t-203.5 84.5h-320q-13 0-22.5-9.5t-9.5-22.5q0-4-1-20t-.5-26.5 3-23.5 10-19.5 20.5-6.5h320q66 0 113-47t47-113v-704q0-66-47-113t-113-47h-312l-11.5-1-11.5-3-8-5.5-7-9-2-13.5q0-4-1-20t-.5-26.5 3-23.5 10-19.5 20.5-6.5h320q119 0 203.5 84.5t84.5 203.5z"/></svg>
-								</button>
-							</label>
-						</fieldset>
-					</form>
-				<?php endif; ?>
+								<label>
+									<input type="submit" name="submit" value="Submit" style="display:none;" />
+									<button title="Log in or register">
+										<svg height="14" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1312 896q0 26-19 45l-544 544q-19 19-45 19t-45-19-19-45v-288h-448q-26 0-45-19t-19-45v-384q0-26 19-45t45-19h448v-288q0-26 19-45t45-19 45 19l544 544q19 19 19 45zm352-352v704q0 119-84.5 203.5t-203.5 84.5h-320q-13 0-22.5-9.5t-9.5-22.5q0-4-1-20t-.5-26.5 3-23.5 10-19.5 20.5-6.5h320q66 0 113-47t47-113v-704q0-66-47-113t-113-47h-312l-11.5-1-11.5-3-8-5.5-7-9-2-13.5q0-4-1-20t-.5-26.5 3-23.5 10-19.5 20.5-6.5h320q119 0 203.5 84.5t84.5 203.5z"/></svg>
+									</button>
+								</label>
+							</fieldset>
+						</form>
+					<?php endif; ?>
+				<?php endif ?>
 			</div>
 
 			<div id="youtube-tabs">
@@ -498,11 +507,19 @@
 			</div>
 			<div id="info">
 				<div id="info-text">
-					<div style="text-align:center;font-size:12px;">
-						<span style="position:relative;top:2px;">DeepSID is an online SID player for the High Voltage SID Collection and<br />
-						more. It plays music created for the <a href="https://en.wikipedia.org/wiki/Commodore_64" target="_top">Commodore 64</a> home computer.</span><br />
-						<span style="position:relative;top:8px;">Click any of the folder items below to start browsing the collection.</span>
-					</div>
+					<?php if (MiniPlayer()): ?>
+						<div style="text-align:center;font-size:12px;">
+							<span style="position:relative;top:2px;">Please specify a tune to play with the <code style="font-size:12px;">?file=</code> URL parameter.<br />
+							Optionally add <code style="font-size:12px;">&wait=100</code> to prepare the tune but not play it yet.<br />
+							Optionally add <code style="font-size:12px;">&sundry=scope</code> to select the <b>Scope</b> tab as default.<br /></span>
+						</div>
+					<?php else : ?>
+						<div style="text-align:center;font-size:12px;">
+							<span style="position:relative;top:2px;">DeepSID is an online SID player for the High Voltage SID Collection and<br />
+							more. It plays music created for the <a href="https://en.wikipedia.org/wiki/Commodore_64" target="_top">Commodore 64</a> home computer.</span><br />
+							<span style="position:relative;top:8px;">Click any of the folder items below to start browsing the collection.</span>
+						</div>
+					<?php endif ?>
 				</div>
 				<div id="youtube">
 					<div id="youtube-loading">Initializing YouTube...</div>
@@ -512,17 +529,23 @@
 			</div>
 			<div id="sundry-tabs">
 				<div class="tab unselectable selected" data-topic="stil" id="stab-stil">News</div>
-				<div class="tab unselectable" data-topic="tags" id="stab-tags">Tags</div>
+				<?php if (!MiniPlayer()): ?>
+					<div class="tab unselectable" data-topic="tags" id="stab-tags">Tags</div>
+				<?php endif ?>
 				<div class="tab unselectable" data-topic="osc" id="stab-osc">Scope</div>
-				<div class="tab unselectable" data-topic="filter" id="stab-filter">Filter</div>
+				<?php if (!MiniPlayer()): ?>
+					<div class="tab unselectable" data-topic="filter" id="stab-filter">Filter</div>
+				<?php endif ?>
 				<div id="sundry-ctrls"></div>
 			</div>
 			<div id="sundry">
 				<div id="stopic-stil" class="stopic">
-					<div id="sundry-news">
-						<!--<span>The <a href="https://www.hvsc.c64.org/" target="_top">High Voltage SID Collection</a> has been upgraded to the latest version #77. Click <a href="http://deepsid.chordian.net/?search=77&type=new">here</a> to see what's new in this update.</span>-->
-						<span>For WebSid, the color strengths of the keys in the piano view are now based on the ADSR envelope levels of the notes playing.</span>
-					</div>
+					<?php if (!MiniPlayer()): ?>
+						<div id="sundry-news">
+							<!--<span>The <a href="https://www.hvsc.c64.org/" target="_top">High Voltage SID Collection</a> has been upgraded to the latest version #77. Click <a href="http://deepsid.chordian.net/?search=77&type=new">here</a> to see what's new in this update.</span>-->
+							<span>For WebSid, the color strengths of the keys in the piano view are now based on the ADSR envelope levels of the notes playing.</span>
+						</div>
+					<?php endif ?>
 				</div>
 				<div id="stopic-tags" class="stopic" style="display:none;"></div>
 				<div id="stopic-osc" class="stopic" style="display:none;"></div>
@@ -611,28 +634,45 @@
 						</button>
 					</div>
 					<div class="divider"></div>
-					<div class="button-area thinner">
-						<button id="subtune-plus" class="button-ctrls button-tiny button-idle disabled">
-							<svg height="20" viewBox="0 0 48 48"><path d="M14.83 30.83l9.17-9.17 9.17 9.17 2.83-2.83-12-12-12 12z"/><path d="M0 0h48v48h-48z" fill="none"/></svg>
-						</button>
-						<div id="subtune-value" class="button-counter disabled"></div>
-						<button id="subtune-minus" class="button-ctrls button-tiny button-idle disabled">
-							<svg height="20" viewBox="0 0 48 48"><path d="M14.83 16.42l9.17 9.17 9.17-9.17 2.83 2.83-12 12-12-12z"/><path d="M0-.75h48v48h-48z" fill="none"/></svg>
-						</button>
-					</div>
-					<div class="divider"></div>
-					<div class="button-area">
-						<div class="button-tag">Prev</div>
-						<button id="skip-prev" class="button-ctrls button-lady button-idle disabled">
-							<svg height="28" viewBox="0 0 48 48"><path d="M12 12h4v24h-4zm7 12l17 12V12z"/><path d="M0 0h48v48H0z" fill="none"/></svg>
-						</button>
-					</div>
-					<div class="button-area">
-						<div class="button-tag">Next</div>
-						<button id="skip-next" class="button-ctrls button-lady button-idle disabled">
-							<svg height="28" viewBox="0 0 48 48"><path d="M12 36l17-12-17-12v24zm20-24v24h4V12h-4z"/><path d="M0 0h48v48H0z" fill="none"/></svg>
-						</button>
-					</div>
+					<?php if (MiniPlayer() == 2): // Wider subtune buttons for Chris Abbott ?>
+						<div class="button-area">
+							<button id="subtune-minus" class="button-ctrls button-lady button-idle disabled">
+								<svg height="28" style="position:relative;top:-1px;left:-2px;transform:rotate(90deg);" viewBox="0 0 48 48"><path d="M14.83 16.42l9.17 9.17 9.17-9.17 2.83 2.83-12 12-12-12z"/><path d="M0-.75h48v48h-48z" fill="none"/></svg>
+							</button>
+						</div>
+						<div class="button-area">
+							<div class="button-tag" style="position:relative;left:-36px;white-space:nowrap;">&mdash;&mdash; Subtune &mdash;&mdash;</div>
+							<div id="subtune-value" class="button-counter disabled" style="position:relative;top:18px;font-size:14px;"></div>
+						</div>
+						<div class="button-area">
+							<button id="subtune-plus" class="button-ctrls button-lady button-idle disabled" style="position:absolute;bottom:0;">
+								<svg height="28"  style="position:relative;top:-1px;right:-2px;transform:rotate(90deg);" viewBox="0 0 48 48"><path d="M14.83 30.83l9.17-9.17 9.17 9.17 2.83-2.83-12-12-12 12z"/><path d="M0 0h48v48h-48z" fill="none"/></svg>
+							</button>
+						</div>
+					<?php else : // Normal subtune buttons and also Prev/Next buttons ?>
+						<div class="button-area thinner">
+							<button id="subtune-plus" class="button-ctrls button-tiny button-idle disabled">
+								<svg height="20" viewBox="0 0 48 48"><path d="M14.83 30.83l9.17-9.17 9.17 9.17 2.83-2.83-12-12-12 12z"/><path d="M0 0h48v48h-48z" fill="none"/></svg>
+							</button>
+							<div id="subtune-value" class="button-counter disabled"></div>
+							<button id="subtune-minus" class="button-ctrls button-tiny button-idle disabled">
+								<svg height="20" viewBox="0 0 48 48"><path d="M14.83 16.42l9.17 9.17 9.17-9.17 2.83 2.83-12 12-12-12z"/><path d="M0-.75h48v48h-48z" fill="none"/></svg>
+							</button>
+						</div>
+						<div class="divider"></div>
+						<div class="button-area">
+							<div class="button-tag">Prev</div>
+							<button id="skip-prev" class="button-ctrls button-lady button-idle disabled">
+								<svg height="28" viewBox="0 0 48 48"><path d="M12 12h4v24h-4zm7 12l17 12V12z"/><path d="M0 0h48v48H0z" fill="none"/></svg>
+							</button>
+						</div>
+						<div class="button-area">
+							<div class="button-tag">Next</div>
+							<button id="skip-next" class="button-ctrls button-lady button-idle disabled">
+								<svg height="28" viewBox="0 0 48 48"><path d="M12 36l17-12-17-12v24zm20-24v24h4V12h-4z"/><path d="M0 0h48v48H0z" fill="none"/></svg>
+							</button>
+						</div>
+					<?php endif ?>
 					<div class="divider"></div>
 					<div class="button-area">
 						<div class="button-tag">Loop</div>
@@ -645,7 +685,7 @@
 				<div id="time"><span id="time-current">0:00</span> <div id="time-bar"><div></div></div> <span id="time-length" style="position:relative;">0:00</span></div>
 			</div>
 
-			<div id="songs">
+			<div id="songs"<?php if (MiniPlayer()) echo ' style="visibility:hidden;"'; ?>>
 				<div id="songs-buttons">
 					<button id="folder-root" class="button-lady browser-ctrls">
 						<svg height="26" viewBox="0 0 48 48"><path d="M12 12h4v24h-4zm7 12l17 12V12z"/><path d="M0 0h48v48H0z" fill="none"/></svg>
@@ -689,7 +729,7 @@
 			</div>
 		</div>
 
-		<?php if (!isMobile()): ?>
+		<?php if (!isMobile() && !MiniPlayer()): ?>
 
 			<div id="dexter">
 				<div id="sites" class="unselectable">
@@ -1443,6 +1483,20 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>July 19, 2022</h3>
+						<ul>
+							<li>Added a URL switch for activating a mini-player mode. The browser, page, login and two of the sundry tabs
+								are not available in this mode. Use <code>&mini=1</code> for use in an "invisible" folder where the Prev/Next buttons
+								still work, or use <code>&mini=2</code> where only the specified tune can be played. To see what other URL switches
+								could be nice to use, just run the URL without specifying the <code>?file=</code> switch.
+							</li>
+						</ul>
+
+						<h3>July 17, 2022</h3>
+						<ul>
+							<li>Added the <a href="http://deepsid.chordian.net/?player=129&type=player&search=flexsid">FlexSID</a> editor to the list of players.</li>
+						</ul>
 
 						<h3>July 12, 2022</h3>
 						<ul>

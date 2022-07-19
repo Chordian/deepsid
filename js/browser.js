@@ -72,8 +72,6 @@ function Browser() {
 
 	this.slideTags = false;
 
-	this.isMobile = $("body").attr("data-mobile") !== "0";
-
 	this.init();
 }
 
@@ -1037,7 +1035,7 @@ Browser.prototype = {
 			// Rebuild the big CSDb music competitions folder
 			var folders = "";
 			$.each(this.compolist, function(i, folder) {
-				var isMobileDenied = folder.incompatible.indexOf("mobile") !== -1 && this.isMobile;
+				var isMobileDenied = folder.incompatible.indexOf("mobile") !== -1 && isMobile;
 				folders +=
 					'<tr'+(folder.incompatible.indexOf(SID.emulator) !== -1 || isMobileDenied ? ' class="disabled"' : '')+'>'+
 						'<td class="folder compo unselectable"><div class="block-wrap"><div class="block slimfont">'+
@@ -1223,7 +1221,7 @@ Browser.prototype = {
 
 					$.each(data.folders, function(i, folder) {
 
-						var isMobileDenied = folder.incompatible.indexOf("mobile") !== -1 && this.isMobile;
+						var isMobileDenied = folder.incompatible.indexOf("mobile") !== -1 && isMobile;
 
 						if (folder.foldertype == "COMPO") {
 
@@ -1682,7 +1680,7 @@ Browser.prototype = {
 	 * @param {boolean} rawPath			Unless, if specified, this is set to TRUE (path only).
 	 */
 	getComposer: function(overridePath, rawPath) {
-		if (this.isMobile) return;
+		if (miniPlayer || isMobile) return;
 		if (this.composer) this.composer.abort();
 		if (this.groups) this.groups.abort();
 
@@ -1810,6 +1808,7 @@ Browser.prototype = {
 	 * @param {string} fullname		The SID filename including folders.
 	 */
 	getGroups: function(fullname) {
+		if (miniPlayer) return;
 		clearTimeout(this.groupsTimer);
 		this.groups = $.get("php/groups.php", { fullname: fullname }, function(data) {
 			try {
@@ -1846,7 +1845,7 @@ Browser.prototype = {
 	 * @param {boolean} back	If specified and TRUE, show a 'BACK' button.
 	 */
 	getCSDb: function(type, id, back) {
-		if (this.isMobile || this.isTempTestFile()) return;
+		if (miniPlayer || isMobile || this.isTempTestFile()) return;
 		if (this.csdb) this.csdb.abort();
 		$("#topic-csdb").empty().append(this.loadingSpinner("csdb"));
 		$("#sticky-csdb").empty();
@@ -1897,7 +1896,7 @@ Browser.prototype = {
 	 * @param {array} params	player: {string} or id: {number}.
 	 */
 	getPlayerInfo: function(params) {
-		if (this.isMobile || JSON.stringify(params) == JSON.stringify(this.playerParams)) return;
+		if (miniPlayer || isMobile || JSON.stringify(params) == JSON.stringify(this.playerParams)) return;
 		if (this.playerInfo) this.playerInfo.abort();
 		$("#topic-player").empty().append(this.loadingSpinner("player"));
 
@@ -1934,7 +1933,7 @@ Browser.prototype = {
 	 * @param {number} mark		ID of the release page to mark on the competition results list.
 	 */
 	getCompoResults: function(compo, id, mark) {
-		if (this.isMobile) return;
+		if (miniPlayer || isMobile) return;
 		if (this.compo) this.compo.abort();
 		$("#topic-csdb").empty().append(this.loadingSpinner("csdb"));
 		$("#sticky-csdb").empty();
@@ -1979,7 +1978,7 @@ Browser.prototype = {
 	 * @param {number} optionalID		If specified, the ID to show a specific sub page.
 	 */
 	getGB64: function(optionalID) {
-		if (this.isMobile || this.isTempTestFile()) return;
+		if (miniPlayer || isMobile || this.isTempTestFile()) return;
 		if (this.gb64) this.gb64.abort();
 		$("#topic-gb64").empty().append(this.loadingSpinner("gb64"));
 
@@ -2019,7 +2018,7 @@ Browser.prototype = {
 	 * @param {number} optionalID		If specified, the ID to show a specific entry.
 	 */
 	getRemix: function(optionalID) {
-		if (this.isMobile || this.isTempTestFile()) return;
+		if (miniPlayer || isMobile || this.isTempTestFile()) return;
 		if (this.remix) this.remix.abort();
 		$("#topic-remix").empty().append(this.loadingSpinner("remix"));
 

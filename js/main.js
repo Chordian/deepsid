@@ -8,9 +8,11 @@ var $=jQuery.noConflict();
 var cacheCSDb = cacheSticky = cacheStickyBeforeCompo = cacheCSDbProfile = cacheBeforeCompo = cachePlayer = cacheGB64 = cacheRemix = prevFile = sundryTab = reportSTIL = "";
 var cacheTabScrollPos = cachePlayerTabScrollPos = cacheGB64TabScrollPos = cacheRemixTabScrollPos = cachePosBeforeCompo = cacheDDCSDbSort = peekCounter = sundryHeight = 0;
 var sundryToggle = true, recommended = forum = players = $trAutoPlay = null, showTags;
-var logCount = 999;
+var logCount = 1000, isMobile, miniPlayer;
 
 var isLegacyWebSid = $("script[src='js/handlers/backend_tinyrsid_legacy.js']").length;
+var isMobile = $("body").attr("data-mobile") !== "0";
+var miniPlayer = $("body").attr("data-mini");
 
 var tabPrevScrollPos = {
 	profile:	{ pos: 0, reset: false },
@@ -28,30 +30,25 @@ var tabPrevScrollPos = {
 
 const PATH_UPLOADS = "_SID Happens";
 
-const _SECTION	= 1;
-const _HEADER	= 2;
-const _PARAM	= 3;
-const _PLAYLIST	= 4;
-const _OBJECT	= 5;
-const _DATA		= 6;
-const _RESULTS	= 7;
-
 $(function() { // DOM ready
 
 	var userExists = false;
+
+	isMobile = $("body").attr("data-mobile") !== "0";
+	miniPlayer = parseInt($("body").attr("data-mini"));
 
 	// Get the emulator last used by the visitor
 	var storedEmulator = docCookies.getItem("emulator");
 	if (storedEmulator == null) {
 		// Set a default emulator
-		if ($("body").attr("data-mobile") !== "0")
+		if (isMobile)
 			storedEmulator = "legacy";	// Legacy WebSid for mobile devices
 		else
 			storedEmulator = "websid";	// The best WebSid for desktop computers
 	}
 
 	// Don't show tags on mobile devices as the dragging there might give way to sideways scrolling
-	showTags = $("body").attr("data-mobile") == "0";
+	showTags = !isMobile;
 
 	// However, a URL switch may TEMPORARILY override the stored emulator
 	var emulator = GetParam("emulator").toLowerCase();
@@ -178,7 +175,7 @@ $(function() { // DOM ready
 					});
 				}
 			} else if (event.keyCode == 84) {							// Keyup 't' (test something)
-				console.log("test");
+				Log("test");
 			}
 		}
 	});
@@ -368,7 +365,7 @@ $(function() { // DOM ready
 		}
 		// Make sure the browser box always take up all screen height upon resizing the window
 		$("#folders").height(0).height($("#songs").height() - 100);
-		if (!browser.isMobile) {
+		if (!miniPlayer && !isMobile) {
 			// Recalculate height for graph area too
 			viz.initGraph(browser.chips);
 			// And that the web site iframe has the correct height too
@@ -1998,7 +1995,7 @@ function DisableIncompatibleRows() {
 			$tr.removeClass("disabled");
 			var $span = $tr.find(".name");
 			if ($span.is("[data-incompat]") && ($span.attr("data-incompat").indexOf(SID.emulator) !== -1 ||
-			($span.attr("data-incompat").indexOf("mobile") !== -1 && browser.isMobile)))
+			($span.attr("data-incompat").indexOf("mobile") !== -1 && isMobile)))
 				$tr.addClass("disabled");
 		} else if (isSIDFile && $tr.find(".name").attr("data-name").indexOf("BASIC.sid") !== -1) {
 			// These emulators can't do tunes made in BASIC
@@ -2065,8 +2062,9 @@ function UpdateURL(skipFileCheck) {
 	var wait = GetParam("wait");
 	if (wait) link += "&wait="+wait;
 
-	// Also make sure the "?websiddebug=" switch is sticky if used
+	// Also make sure the following switches are sticky
 	if (GetParam("websiddebug")) link += "&websiddebug=1";
+	if (GetParam("mini")) link += "&mini="+miniPlayer;
 	
 	if (urlFile != prevFile) {
 		prevFile = urlFile; // Need a new file clicked before we proceed in the browser history
