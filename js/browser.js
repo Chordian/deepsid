@@ -3045,13 +3045,32 @@ Browser.prototype = {
 	getProfiles: function(data, value) {
 		$("#dropdown-upload-profile").empty();
 		this.profileValue = typeof value == "undefined" ? "unset" : value;
-		$.get("php/upload_get_profiles.php", function(data) {
+		var profiles = '<option value="unset">Not connected to a profile page yet</option>';
+
+		$.get("php/upload_get_profiles.php", {
+			active: 1
+		}, function(data) {
 			this.validateData(data, function(data) {
-				var profiles = '<option value="unset">Not connected to a profile page yet</option>';
+
+				profiles += '<optgroup label="Most common">';
 				for (var i = 0; i < data.profiles.length; i++)
 					profiles += '<option value="'+data.profiles[i]['fullname']+'" data-author="'+data.profiles[i]['author']+'">'+data.profiles[i]['fullname']+'</option>';
-				// NOTE: Don't use the styled drop-down box; it is too slow to handle a list this big.
-				$("#dropdown-upload-profile").append(profiles).val(this.profileValue);
+				profiles += '</optgroup>';
+
+				$.get("php/upload_get_profiles.php", {
+					active: 0
+				}, function(data) {
+					this.validateData(data, function(data) {
+						profiles += '<optgroup label="All musicians">';
+						for (var i = 0; i < data.profiles.length; i++)
+							profiles += '<option value="'+data.profiles[i]['fullname']+'" data-author="'+data.profiles[i]['author']+'">'+data.profiles[i]['fullname']+'</option>';
+						profiles += '</optgroup>';
+
+						// NOTE: Don't use the styled drop-down box; it is too slow to handle a list this big.
+						$("#dropdown-upload-profile").append(profiles).val(this.profileValue);
+					});
+				}.bind(this));
+
 			});
 		}.bind(this));
 	},

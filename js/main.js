@@ -850,6 +850,18 @@ $(function() { // DOM ready
 	});
 
 	/**
+	 * When clicking any link at all.
+	 */
+	/*$("body").on("click", "a", function(event) {
+		if (GetParam("lemon")) {
+			// Make the "&lemon=1" switch even more sticky
+			var link = event.currentTarget.href+"&lemon=1";
+			link.replace(/&/, "?"); // Replace first occurrence only
+			event.currentTarget.href = link;
+		}
+	});*/
+
+	/**
 	 * When clicking a thumbnail/title in a CSDb release row to open it internally.
 	 */
 	$("#topic-csdb").on("click", "a.internal", function() {
@@ -1265,6 +1277,7 @@ $(function() { // DOM ready
 				window.location.href = "http://www.wothke.ch/playmod/";*/
 		} else {
 			var link = "//deepsid.chordian.net/?file=/"+folder.replace("_High Voltage SID Collection/", "")+"/";
+			//if (GetParam("lemon")) link += "&lemon=1";
 			if (event.which == 2 && event.button == 1)
 				// Middle mouse button for opening it in a new browser tab
 				window.open(link);
@@ -2064,6 +2077,7 @@ function UpdateURL(skipFileCheck) {
 
 	// Also make sure the following switches are sticky
 	if (GetParam("websiddebug")) link += "&websiddebug=1";
+	//if (GetParam("lemon")) link += "&lemon=1";
 	if (GetParam("mini")) link += "&mini="+miniPlayer;
 	
 	if (urlFile != prevFile) {

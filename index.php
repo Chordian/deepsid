@@ -7,7 +7,7 @@
 	require_once("tracking.php"); // Also called every 5 minutes by 'main.js'
 
 	// @link https://stackoverflow.com/a/60199374/2242348
-	$inside_iframe = isset($_SERVER['HTTP_SEC_FETCH_DEST']) && $_SERVER['HTTP_SEC_FETCH_DEST'] == 'iframe';
+	// $inside_iframe = isset($_SERVER['HTTP_SEC_FETCH_DEST']) && $_SERVER['HTTP_SEC_FETCH_DEST'] == 'iframe';
 
 	// Detect and block if the URL contains unwanted characters
 	// Example: http://deepsid.chordian.net/?file=%22%3E%3Ch1%3Efoobarbaz
@@ -33,6 +33,22 @@
 		return (isset($_GET['emulator']) && strtolower($_GET['emulator']) == 'legacy') ||
 			(isset($_COOKIE['emulator']) && strtolower($_COOKIE['emulator']) == 'legacy');
 	}
+
+	function isLemon() {
+		$lemon = isset($_GET['lemon']) ? $_GET['lemon'] : 0;
+		if ($lemon) {
+			if (!isset($_SESSION)) session_start();
+			$_SESSION['lemon'] = true;
+			return true;
+		} else if (!isset($_GET['lemon']) && isset($_SESSION) && isset($_SESSION['lemon'])) {
+			return true;
+		} else {
+			if (!isset($_SESSION)) session_start();
+			$_SESSION['lemon'] = null;
+			unset($_SESSION['lemon']);
+			return false;
+		}
+	}
 ?>
 <!DOCTYPE html>
 <html lang="en-US" style="overflow:scroll-x;">
@@ -56,7 +72,7 @@
 		<link rel="stylesheet" type="text/css" href="//blog.chordian.net/wordpress/wp-content/themes/olivi/style.css" />
 		<link rel="stylesheet" type="text/css" href="css/chartist.css" />
 		<link rel="stylesheet" type="text/css" href="css/style.css" />
-		<?php if ($inside_iframe): ?>
+		<?php if (isLemon()): ?>
 			<!-- For Lemon64: START -->
 			<link rel="stylesheet" type="text/css" href="https://www.lemon64.com/assets/external/deepsid/style.css" />
 			<!-- For Lemon64: END -->
@@ -94,7 +110,7 @@
 		<?php endif ?>
 		<script type="text/javascript" src="js/viz.js"></script>
 		<script type="text/javascript" src="js/main.js"></script>
-		<?php if ($inside_iframe): ?>
+		<?php if (isLemon()): ?>
 			<!-- For Lemon64: START -->
 			<script type="text/javascript" src="https://www.lemon64.com/assets/external/deepsid/main.js"></script>
 			<!-- For Lemon64: END -->
@@ -1483,6 +1499,18 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>August 6, 2022</h3>
+						<ul>
+							<li>When uploading to the SH folder, the drop-down box with composers now contains two lists.
+								The first is active composers only and the second is everyone. This should make
+								it easier to select a common composer.</li>
+						</ul>
+
+						<h3>July 31, 2022</h3>
+						<ul>
+							<li>Fixed the remix tab not showing any entries at all.</li>
+						</ul>
 
 						<h3>July 19, 2022</h3>
 						<ul>

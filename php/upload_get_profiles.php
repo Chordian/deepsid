@@ -4,6 +4,8 @@
  *
  * Get a list of composer profiles for a drop-down box in the upload wizard.
  * 
+ * @uses		$_GET['active']			1 = active only, 0 = everyone
+ * 
  * @used-by		browser.js
  */
 
@@ -22,7 +24,9 @@ try {
 
 	$all_profiles = array();
 
-	$select = $db->query('SELECT fullname, name, handles FROM composers WHERE fullname LIKE "_High Voltage SID Collection/%" AND fullname NOT LIKE "%/GROUPS/%" ORDER BY fullname');
+	$active_only = $_GET['active'] ? ' AND active = "'.date("Y").'" AND died = "0000-00-00"' : '';
+
+	$select = $db->query('SELECT fullname, name, handles FROM composers WHERE fullname LIKE "_High Voltage SID Collection/%" AND fullname NOT LIKE "%/GROUPS/%"'.$active_only.' ORDER BY fullname');
 	$select->setFetchMode(PDO::FETCH_OBJ);
 
 	foreach($select as $row) {

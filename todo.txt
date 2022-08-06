@@ -3,6 +3,12 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+- The three boxes in top sometimes have an empty spot. Optimize it so a recommended box is put
+  there so that three boxes are always shown.
+
+- Run SQL queries to add +1 to all of JCH's own star ratings.
+  - Make sure folder 0-9 and its sub folders are not processed.
+
 - Automatically turn 2SID files exotic when uploaded to the SH folder.
   - I had a situation where a user wanted it to stay in mono, so add a confirmation "Would you
     like to convert it to the exotic format so that it plays in stereo in DeepSID?" - if yes,
