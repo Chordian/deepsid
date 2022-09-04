@@ -1,5 +1,5 @@
 /**
-* version 1.0.2
+* version 1.0.3
 *
 * 	Copyright (C) 2022 Juergen Wothke
 *	enhanced version derived from the one used on my PlayMOD site
@@ -60,6 +60,7 @@ Tracer = (function(){ var $this = function(numberStreams) {
 						}
 					}
 				}
+				this._currentBufIdx = this._circularBufSlots-1;				
 			}
 		},
 		/*
@@ -234,21 +235,7 @@ Tracer = (function(){ var $this = function(numberStreams) {
 
 			var outputLen= destBuffer.length;	// end of the destination that still needs filling..
 					
-			var offset; // hack: to improve sync of sidWiz visuals			
-			switch (this._zoomLevel) {
-				case 1: 
-					offset= 3;
-					break
-				case 2: 
-				case 4: 
-				case 5: 
-					offset= 0;
-					break
-				default:
-					offset= 6;			
-			}
-			
-			var srcIdx= (ScriptNodePlayer.getInstance().getBufNum() + offset) % this._circularBufSlots;
+			var srcIdx= (ScriptNodePlayer.getInstance().getBufNum()) % this._circularBufSlots;
 
 			var srcBufs= this._buffers[srcIdx];	
 			var srcBuf= srcBufs[voiceId];

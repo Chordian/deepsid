@@ -5,7 +5,7 @@
  * Build an HTML welcome page for the root.
  * 
  *  - Three recommendation boxes
- *  - Random "decent" box
+ *  - Random "decent" or CShellDB box
  *  - Left and right boxes for top lists
  *  - Active, procrastinating and game composers
  * 
@@ -23,6 +23,8 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH
  *
  * @global		object		$db					database connection
  * @global		bool		$decent_box_shown
+ * @global		bool		$cshelldb_shown
+ * @global		bool		$playmod_shown
  * 
  * @param		int			$random_id			random ID for a HVSC composer
  *
@@ -45,7 +47,7 @@ function CreateRecBox($random_id) {
 	// Error or irrelevant (such as big parent folders in HVSC)
 	if ($select->rowCount() == 0) {
 
-		$random = mt_rand(0, 1);
+		$random = mt_rand(0, 2);
 
 		if ($random == 0 && !$decent_box_shown) {
 
@@ -99,7 +101,7 @@ function CreateRecBox($random_id) {
 						</td>
 					</tr>
 				</table>';
-		/*} else if ($random == 2 && !$playmod_shown) {
+		} else if ($random == 2 && !$playmod_shown) {
 
 			// Show an "ad" for Jürgen Wothke's site PlayMOD
 			$playmod_shown = true;
@@ -115,7 +117,7 @@ function CreateRecBox($random_id) {
 							</div>
 						</td>
 					</tr>
-				</table>';*/
+				</table>';
 		} else
 			// Just shown empty space there
 			return '<table class="tight compo recommended" style="border:none;"></table>';

@@ -3054,7 +3054,7 @@ Browser.prototype = {
 
 				profiles += '<optgroup label="Most common">';
 				for (var i = 0; i < data.profiles.length; i++)
-					profiles += '<option value="'+data.profiles[i]['fullname']+'" data-author="'+data.profiles[i]['author']+'">'+data.profiles[i]['fullname']+'</option>';
+					profiles += '<option value="'+data.profiles[i]['fullname']+'" data-author="'+data.profiles[i]['author']+'">'+data.profiles[i]['fullname'].replace("HVSC/MUSICIANS/", "")+'</option>';
 				profiles += '</optgroup>';
 
 				$.get("php/upload_get_profiles.php", {
@@ -3063,7 +3063,7 @@ Browser.prototype = {
 					this.validateData(data, function(data) {
 						profiles += '<optgroup label="All musicians">';
 						for (var i = 0; i < data.profiles.length; i++)
-							profiles += '<option value="'+data.profiles[i]['fullname']+'" data-author="'+data.profiles[i]['author']+'">'+data.profiles[i]['fullname']+'</option>';
+							profiles += '<option value="'+data.profiles[i]['fullname']+'" data-author="'+data.profiles[i]['author']+'">'+data.profiles[i]['fullname'].replace("HVSC/MUSICIANS/", "")+'</option>';
 						profiles += '</optgroup>';
 
 						// NOTE: Don't use the styled drop-down box; it is too slow to handle a list this big.

@@ -80,10 +80,10 @@
 		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
 		<?php if (isset($_GET['websiddebug'])): ?>
-			<script type="text/javascript" src="http://www.wothke.ch/tmp/scriptprocessor_player.js"></script>
+			<script type="text/javascript" src="http://www.wothke.ch/tmp/scriptprocessor_player.min.js"></script>
 			<script type="text/javascript" src="http://www.wothke.ch/tmp/backend_tinyrsid.js"></script>
 		<?php else: ?>
-			<script type="text/javascript" src="js/handlers/scriptprocessor_player.js"></script>
+			<script type="text/javascript" src="js/handlers/scriptprocessor_player.min.js"></script>
 			<?php if (isLegacyWebSid()): ?>
 				<script type="text/javascript" src="js/handlers/backend_tinyrsid_legacy.js"></script>
 			<?php else: ?>
@@ -432,7 +432,7 @@
 		</div>
 		<div id="dialog-upload-wiz3" class="dialog-box dialog-wizard">
 			<div class="dialog-text"></div>
-			<label for="upload-profile">Connect <b>profile</b> page:</label>
+			<label for="upload-profile">Connect <b>profile</b> page from HVSC/MUSICIANS:</label>
 			<select id="dropdown-upload-profile" name="upload-profile"></select>
 			<label for="upload-csdb">Connect <b>CSDb</b> ID:</label><form onsubmit="return false;" autocomplete="off" style="float:right;"><span class="url">https://csdb.dk/release/?id<span style="margin:0 2px;">=</span></span><input type="text" name="upload-csdb" id="upload-csdb-id" onkeypress='return event.charCode >= 48 && event.charCode <= 57;' maxlength="6" value="0" /></form>
 			<label id="label-lengths" for="upload-lengths" style="white-space:nowrap;">Define <b>lengths</b> of tunes:</label><br />
@@ -544,7 +544,7 @@
 				<div id="memory-bar"><div id="memory-lid"></div><div id="memory-chunk"></div><div id="memory-screen"></div><div id="memory-basic">BASIC</div><div id="memory-kernel">KERNEL</div></div>
 			</div>
 			<div id="sundry-tabs">
-				<div class="tab unselectable selected" data-topic="stil" id="stab-stil">News</div>
+				<div class="tab unselectable" data-topic="stil" id="stab-stil">News</div>
 				<?php if (!MiniPlayer()): ?>
 					<div class="tab unselectable" data-topic="tags" id="stab-tags">Tags</div>
 				<?php endif ?>
@@ -552,6 +552,7 @@
 				<?php if (!MiniPlayer()): ?>
 					<div class="tab unselectable" data-topic="filter" id="stab-filter">Filter</div>
 				<?php endif ?>
+				<div class="tab unselectable" data-topic="stereo" id="stab-stereo">Stereo</div>
 				<div id="sundry-ctrls"></div>
 			</div>
 			<div id="sundry">
@@ -559,7 +560,7 @@
 					<?php if (!MiniPlayer()): ?>
 						<div id="sundry-news">
 							<!--<span>The <a href="https://www.hvsc.c64.org/" target="_top">High Voltage SID Collection</a> has been upgraded to the latest version #77. Click <a href="http://deepsid.chordian.net/?search=77&type=new">here</a> to see what's new in this update.</span>-->
-							<span>For WebSid, the color strengths of the keys in the piano view are now based on the ADSR envelope levels of the notes playing.</span>
+							<span>Have you always wanted to learn how to compose SID tunes? I've started a multi-part tutorial at my blog. Click <a href="https://blog.chordian.net/2022/08/27/composing-in-sid-factory-ii-part-1-introduction/">here</a> to start.</span>
 						</div>
 					<?php endif ?>
 				</div>
@@ -623,6 +624,45 @@
 						</div>
 					</form>
 					<div id="filter-websid" class="sundryMsg" style="display:none;">This tab requires the <button class="set-websid">WebSid</button> emulator.</div>
+				</div>
+				<div id="stopic-stereo" class="stopic" style="display:none;">
+					<table>
+						<tr>
+							<th>SID 1</th><th><span class="disabled">SID 2</span></th><th><span class="disabled">SID 3</span></th>
+						</tr>
+						<tr>
+							<td>
+								<div class="sundry-control">
+									<label class="voice unselectable">Voice 1</label><br />
+									<label class="stereo-letter left unselectable">L</label><input id="stereo-s1v1-slider" type="range" min="0" max="128" value="64" step="1" /><label class="stereo-letter right unselectable">R</label>
+									<label class="voice unselectable">Voice 2</label><br />
+									<label class="stereo-letter left unselectable">L</label><input id="stereo-s1v2-slider" type="range" min="0" max="128" value="64" step="1" /><label class="stereo-letter right unselectable">R</label>
+									<label class="voice unselectable">Voice 3</label><br />
+									<label class="stereo-letter left unselectable">L</label><input id="stereo-s1v3-slider" type="range" min="0" max="128" value="64" step="1" /><label class="stereo-letter right unselectable">R</label>
+								</div>
+							</td>
+							<td>
+								<div class="sundry-control">
+									<label class="disabled voice unselectable">Voice 1</label><br />
+									<label class="disabled stereo-letter left unselectable">L</label><input id="stereo-s2v1-slider" class="disabled" type="range" min="0" max="128" value="64" step="1" disabled="disabled" /><label class="disabled stereo-letter right unselectable">R</label>
+									<label class="disabled voice unselectable">Voice 2</label><br />
+									<label class="disabled stereo-letter left unselectable">L</label><input id="stereo-s2v2-slider" class="disabled" type="range" min="0" max="128" value="64" step="1" disabled="disabled" /><label class="disabled stereo-letter right unselectable">R</label>
+									<label class="disabled voice unselectable">Voice 3</label><br />
+									<label class="disabled stereo-letter left unselectable">L</label><input id="stereo-s2v3-slider" class="disabled" type="range" min="0" max="128" value="64" step="1" disabled="disabled" /><label class="disabled stereo-letter right unselectable">R</label>
+								</div>
+							</td>
+							<td>
+								<div class="sundry-control">
+									<label class="disabled voice unselectable">Voice 1</label><br />
+									<label class="disabled stereo-letter left unselectable">L</label><input id="stereo-s3v1-slider" class="disabled" type="range" min="0" max="128" value="64" step="1" disabled="disabled" /><label class="disabled stereo-letter right unselectable">R</label>
+									<label class="disabled voice unselectable">Voice 2</label><br />
+									<label class="disabled stereo-letter left unselectable">L</label><input id="stereo-s3v2-slider" class="disabled" type="range" min="0" max="128" value="64" step="1" disabled="disabled" /><label class="disabled stereo-letter right unselectable">R</label>
+									<label class="disabled voice unselectable">Voice 3</label><br />
+									<label class="disabled stereo-letter left unselectable">L</label><input id="stereo-s3v3-slider" class="disabled" type="range" min="0" max="128" value="64" step="1" disabled="disabled" /><label class="disabled stereo-letter right unselectable">R</label>
+								</div>
+							</td>
+						</tr>
+					</table>
 				</div>
 				<a id="redirect-back" class="redirect continue" href="#" style="display:none"></a>
 			</div>
@@ -1499,6 +1539,19 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>August 21, 2022</h3>
+						<ul>
+							<li>Clicking a sundry tab that is already active now collapses the box. This works no matter what device you're using,
+								but it's actually meant to give mobile devices a way to free up more vertical space.</li>
+							<li>The profile options for uploading to the SH folder are now without the "HVSC/MUSICIANS" part. This makes it possible
+								to find people faster, e.g. by typing the letter folder.</li>
+						</ul>
+
+						<h3>August 19, 2022</h3>
+						<ul>
+							<li>Upgraded script processor and scope scripts used by WebSid (HQ) emulator. This should fix scope issues.</li>
+						</ul>
 
 						<h3>August 6, 2022</h3>
 						<ul>

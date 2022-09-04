@@ -729,7 +729,14 @@ $(function() { // DOM ready
 	 */
 	$("#sundry-tabs .tab").click(function() {
 		var $this = $(this);
-		if ($this.hasClass("selected") || $this.hasClass("disabled")) return false;
+		if ($this.hasClass("disabled")) return false;
+
+		// If clicking the active tab, collapse the box
+		if ($this.hasClass("selected")) {
+			ToggleSundry(true);
+			$("#folders").height(0).height($("#songs").height() - 100);
+			return false;
+		}
 
 		// If the box was minimized, restore it first
 		if (!sundryToggle) ToggleSundry(false);
@@ -780,6 +787,12 @@ $(function() { // DOM ready
 				if ($sundry.css("flex-basis").replace("px", "") < 205)
 					$sundry.css("flex-basis", 205);
 				$("#sundry-ctrls").append('<span id="filter-6581" class="disable-6581">This requires <button class="set-6581 disabled" disabled="disabled">6581</button> chip mode</span>');
+				break;
+			case "stereo":
+				// The stereo view requires a minimum amount of vertical space
+				var $sundry = $("#sundry");
+				if ($sundry.css("flex-basis").replace("px", "") < 179)
+					$sundry.css("flex-basis", 179);
 				break;
 		}
 
@@ -1268,13 +1281,13 @@ $(function() { // DOM ready
 			else
 				// Open in same browser tab
 				window.location.href = "http://csdb.chordian.net/";
-		/*} else if (folder == "playmod") {
+		} else if (folder == "playmod") {
 			if (event.which == 2 && event.button == 1)
 				// Middle mouse button for opening it in a new browser tab
 				window.open("http://www.wothke.ch/playmod/");
 			else
 				// Open in same browser tab
-				window.location.href = "http://www.wothke.ch/playmod/";*/
+				window.location.href = "http://www.wothke.ch/playmod/";
 		} else {
 			var link = "//deepsid.chordian.net/?file=/"+folder.replace("_High Voltage SID Collection/", "")+"/";
 			//if (GetParam("lemon")) link += "&lemon=1";

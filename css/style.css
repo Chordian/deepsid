@@ -2505,15 +2505,17 @@ input[type=range]::-ms-track {
 			height: 38px;
 		}
 
-		#sundry label {
+		#sundry label,
+		#stopic-stereo .stereo-letter {
 			position: relative;
 			top: -2px;
 			font: normal 13px/0 "Montserrat", sans-serif;
 			color: var(--color-text-fine);
 		}
 
-			#sundry label.disabled {
-				color: var(--color-text-label-disabled);				
+			#sundry label.disabled,
+			#stopic-stereo th > .disabled {
+				color: var(--color-text-label-disabled);
 			}
 
 		#sundry input[type="text"] {
@@ -2574,6 +2576,52 @@ input[type=range]::-ms-track {
 				line-height: 0.3em;
 				margin: 0 1px;
 			}
+
+		#stopic-stereo table {
+			margin-bottom: 0;
+			border: none;
+		}
+
+			#stopic-stereo th {
+				text-align: center;
+				padding-top: 0;
+			}
+
+			#stopic-stereo td {
+				vertical-align: top;
+				width: 12%;
+				max-width: 12%;
+				height: 140px;
+				padding: 6px 0 0 0;
+			}
+
+			#stopic-stereo .voice {
+				display: inline-block;
+				width: 100%;
+				text-align: center;
+			}
+
+			#stopic-stereo input[type="range"] {
+				pointer-events: auto !important;
+				position: relative;
+				top: -4px;
+				width: 68%;
+				height: 20px;
+			}
+
+			#stopic-stereo .stereo-letter {
+				top: -10px;
+				font-weight: bold;
+			}
+
+				#stopic-stereo .left {
+					margin-left: 8px;
+					margin-right: 4px;
+				}
+
+				#stopic-stereo .right {
+					margin-left: 4px;
+				}
 
 	/* NOTE: This is also used for centered lines such as "No STIL information" or "No lyrics" etc. */
 	#tips,			/* Deprecated ID from back when the STIL box was used for tips */
@@ -3584,7 +3632,8 @@ input[type=range]::-ms-track {
 
 			#sundry-tabs .tab {
 				top: 7.5px;
-				width: 58px;
+				width: 45px;
+				font-family: "Asap Condensed", sans-serif;
 			}
 
 			#youtube-tabs .tab {
@@ -4122,12 +4171,12 @@ input[type=range]::-ms-track {
 				transition: all .1s linear;
 			}
 
-			/*#page table.playmod:before {
-				background: url(../images/cshelldb.png) 0 0 no-repeat;
+			#page table.playmod:before {
+				background: url(../images/soundtracker.png) -236px -100px no-repeat;
 				background-size: 140%;
 				opacity: 0.8;
 				transition: all .1s linear;
-			}*/
+			}
 
 			#page table.root div {
 				pointer-events: auto;

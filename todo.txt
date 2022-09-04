@@ -6,19 +6,6 @@ SHOULD BE DONE
 - The three boxes in top sometimes have an empty spot. Optimize it so a recommended box is put
   there so that three boxes are always shown.
 
-- Run SQL queries to add +1 to all of JCH's own star ratings.
-  - Make sure folder 0-9 and its sub folders are not processed.
-
-- Automatically turn 2SID files exotic when uploaded to the SH folder.
-  - I had a situation where a user wanted it to stay in mono, so add a confirmation "Would you
-    like to convert it to the exotic format so that it plays in stereo in DeepSID?" - if yes,
-    the "Exotic" tag is added to it, if no, the "Mono" tag is added to it instead.
-  - Use JW's conversion PHP script.
-  - Version is set to v4E and header size from 124 to 126 bytes. Keep everything else.
-  - Bonus: Add "_2SID.sid" too the filename if it doesn't already have it.
-  - ALTERNATIVE: Is there a way to toggle mono/stereo on a normal SID tune? Then I could just
-    add a toggle button instead.
-
 
 WHEN THE TIME IS RIGHT
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
@@ -56,7 +43,6 @@ CONSIDER THIS
 - Support for 2SID and 3SID in the scope tab as a mosaic of 2 x 3 (4) or 3 x 3 (4) boxes.
 - An adaptation list for CSDb forum HVSC paths that have since been moved/renamed in an update.
 - Far right side (outside of dexter) could have C64 link exchange ads.
-- Add WebSid's stereo panning as a slider somewhere.
 - Consider using specialized cookies to strengthen the uniqueness of visitors for tracking.
 - Feature request by Digger: Sort playlist by date added to playlist.
 - Go full HTTPS? Test online first to make sure it works without bugs and slowdowns.
@@ -347,10 +333,6 @@ PROBABLY NOT?
 - The SID tester (the "l" hotkey) should also be able to test MUS files.
   - SID files can be detected, but it's not easy to detect a MUS file.
   - It's not an easy fix and I doubt anyone is going to use it.
-
-- A "Recommended" random advertising box for Jürgen Wothke's PlayMOD, and another one for CShellDB.
-  - I have decided to not to this as it smells too much of the kind of advertising an adblocker would
-    want to eliminate. I have instead settled with randomly showing one of two top messages.
 
 - An "add entire folder as playlist" for a symbolically linked version with a unique folder.
   - I'm actually not hot on making this but it was a feature request from the Facebook group.
