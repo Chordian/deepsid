@@ -47,10 +47,10 @@ function CreateRecBox($random_id) {
 
 		// Choose random box then remove it as a choice next time
 		shuffle($alt_box);
-		switch (array_pop($alt_box)) {
+		///////////////switch (array_pop($alt_box)) {
 
-		/*$sovs = BOX_PLAYLIST;
-		switch ($sovs) { */
+		$sovs = BOX_PLAYLIST;
+		switch ($sovs) {
 
 			case BOX_DECENT:
 
@@ -113,14 +113,14 @@ function CreateRecBox($random_id) {
 				$handle = $select_user->fetch()->username;
 
 				return
-					'<table class="tight compo recommended" data-folder="'.$playlist->fullname.'">'.
+					'<table class="tight compo recommended pseudo spotlight" data-folder="'.$playlist->fullname.'">'.
 						'<tr>'.
 							'<td colspan="2" style="padding-right:10px;"><img class="folder" src="images/if_folder_star.svg" alt="" /><h3>Playlist spotlight</h3></td>'.
 						'</tr>'.
 						'<tr>'.
 							'<td style="height:85px;padding-top:1px;padding-right:10px;">'.
-								'<h5>'.substr($playlist->fullname, 1).'</h5>'.
-								'<div style="position:absolute;bottom:8px;"><img class="icon doublenote" src="images/composer_doublenote.svg" title="Songs" alt="" />'.$playlist->files.' song'.$plural.'<span style="font-family:Asap Condensed,sans-serif;margin-left:20px;"><img class="icon doublenote" src="images/select.svg" style="position:relative;top:4.5px;height:17.5px;" title="Songs" alt="" />'.$handle.'</span></div>'.
+								'<h5 class="spottext">'.substr($playlist->fullname, 1).'</h5>'.
+								'<div style="position:absolute;bottom:8px;"><img class="icon doublenote" src="images/composer_doublenote.svg" title="Songs" alt="" />'.$playlist->files.' song'.$plural.'<span class="spottext" style="font-family:Asap Condensed,sans-serif;margin-left:20px;"><img class="icon doublenote" src="images/select.svg" style="position:relative;top:4.5px;height:17.5px;" title="Curator" alt="" />'.$handle.'</span></div>'.
 							'</td>'.
 						'</tr>'.
 					'</table>';
