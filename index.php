@@ -1540,6 +1540,11 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>September 24, 2022</h3>
+						<ul>
+							<li>A recommended box can now sometimes be a playlist spotlight.</li>
+						</ul>
+
 						<h3>August 21, 2022</h3>
 						<ul>
 							<li>Clicking a sundry tab that is already active now collapses the box. This works no matter what device you're using,

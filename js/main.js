@@ -1280,14 +1280,16 @@ $(function() { // DOM ready
 				window.open("http://csdb.chordian.net/");
 			else
 				// Open in same browser tab
-				window.location.href = "http://csdb.chordian.net/";
+				window.open("http://csdb.chordian.net/", "_top");
+				// window.location.href = "http://csdb.chordian.net/";
 		} else if (folder == "playmod") {
 			if (event.which == 2 && event.button == 1)
 				// Middle mouse button for opening it in a new browser tab
 				window.open("http://www.wothke.ch/playmod/");
 			else
 				// Open in same browser tab
-				window.location.href = "http://www.wothke.ch/playmod/";
+				window.open("http://www.wothke.ch/playmod/", "_top");
+				// window.location.href = "http://www.wothke.ch/playmod/";
 		} else {
 			var link = "//deepsid.chordian.net/?file=/"+folder.replace("_High Voltage SID Collection/", "")+"/";
 			//if (GetParam("lemon")) link += "&lemon=1";

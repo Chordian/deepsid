@@ -3,8 +3,7 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- The three boxes in top sometimes have an empty spot. Optimize it so a recommended box is put
-  there so that three boxes are always shown.
+- Nothing at the moment.
 
 
 WHEN THE TIME IS RIGHT
@@ -420,6 +419,7 @@ PROBABLY NOT?
 - Web site widget box:
   - Someone on Facebook suggested support for a box on other web sites showing a particular tune or
     maybe even en entire playlist. I consider this narrow niche and thus probably not worth the trouble.
+  - UPDATE: A "miniplayer" was added some time later. Does it iron this one out?
 
 - MobyGames API support:
   - After two sessions of reconsideration, I have decided NOT to do this. The information retrieved

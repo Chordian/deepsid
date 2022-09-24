@@ -22,9 +22,7 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH
  * Return the HTML for a recommendation box.
  *
  * @global		object		$db					database connection
- * @global		bool		$decent_box_shown
- * @global		bool		$cshelldb_shown
- * @global		bool		$playmod_shown
+ * @global		bool		$alt_box			array of alternative boxes
  * 
  * @param		int			$random_id			random ID for a HVSC composer
  *
@@ -32,7 +30,7 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH
  */
 function CreateRecBox($random_id) {
 
-	global $db, $decent_box_shown, $cshelldb_shown, $playmod_shown;
+	global $db, $alt_box;
 
 	// Get the fullname
 	$select = $db->query('SELECT fullname FROM hvsc_folders WHERE id = '.$random_id);
@@ -47,80 +45,120 @@ function CreateRecBox($random_id) {
 	// Error or irrelevant (such as big parent folders in HVSC)
 	if ($select->rowCount() == 0) {
 
-		$random = mt_rand(0, 2);
+		// Choose random box then remove it as a choice next time
+		shuffle($alt_box);
+		switch (array_pop($alt_box)) {
 
-		if ($random == 0 && !$decent_box_shown) {
+		/*$sovs = BOX_PLAYLIST;
+		switch ($sovs) { */
 
-			// Show a "decent" randomizer box ("CLICK HERE")
-			$decent_box_shown = true;
-			$decent_composers = [];
+			case BOX_DECENT:
 
-			// Get an array of all the folder ID belonging to composers the 'Ratings' user have given 2 stars or more
-			$select_decent = $db->query('SELECT table_id FROM ratings WHERE user_id = '.USER_RATINGS.' AND rating >= 2 AND type = "FOLDER"');
-			$select_decent->setFetchMode(PDO::FETCH_OBJ);
-			foreach($select_decent as $row_decent)
-				array_push($decent_composers, $row_decent->table_id);
+				// Show a "decent" randomizer box ("CLICK HERE")
+				$decent_composers = [];
 
-			// Pick a random "decent" folder
-			$random_decent = $decent_composers[array_rand($decent_composers)];
+				// Get an array of all the folder ID belonging to composers the 'Ratings' user have given 2 stars or more
+				$select_decent = $db->query('SELECT table_id FROM ratings WHERE user_id = '.USER_RATINGS.' AND rating >= 2 AND type = "FOLDER"');
+				$select_decent->setFetchMode(PDO::FETCH_OBJ);
+				foreach($select_decent as $row_decent)
+					array_push($decent_composers, $row_decent->table_id);
 
-			// Get the fullname of it
-			$select_decent = $db->query('SELECT fullname FROM hvsc_folders WHERE id = '.$random_decent);
-			$select_decent->setFetchMode(PDO::FETCH_OBJ);
+				// Pick a random "decent" folder
+				$random_decent = $decent_composers[array_rand($decent_composers)];
 
-			$return_html = $select_decent->rowCount()
-				? '
-					<table class="tight compo recommended pseudo decent" data-folder="'.$select_decent->fetch()->fullname.'" style="padding-bottom:0;">
+				// Get the fullname of it
+				$select_decent = $db->query('SELECT fullname FROM hvsc_folders WHERE id = '.$random_decent);
+				$select_decent->setFetchMode(PDO::FETCH_OBJ);
+
+				$return_html = $select_decent->rowCount()
+					? '
+						<table class="tight compo recommended pseudo decent" data-folder="'.$select_decent->fetch()->fullname.'" style="padding-bottom:0;">
+							<tr>
+								<td style="height:123px;">
+									<div class="random-container">
+										<span>Click here</span><br />
+										to visit a random<br />
+										composer folder of a<br />
+										decent quality or better
+									</div>
+								</td>
+							</tr>
+						</table>'
+					: '<table class="tight compo recommended" style="border:none;"></table>';
+				return $return_html;
+
+			case BOX_PLAYLIST:
+
+				$playlist_folders = [];
+
+				// Get an array of all public playlists
+				$select_playlist = $db->query('SELECT id FROM hvsc_folders WHERE fullname LIKE "$%"');
+				$select_playlist->setFetchMode(PDO::FETCH_OBJ);
+				foreach($select_playlist as $row_playlist)
+					array_push($playlist_folders, $row_playlist->id);
+
+				// Pick a random public playlist folder
+				$random_playlist = $playlist_folders[array_rand($playlist_folders)];
+
+				// Get the needed information from this playlist entry
+				$select_playlist = $db->query('SELECT fullname, files, user_id FROM hvsc_folders WHERE id = '.$random_playlist.' LIMIT 1');
+				$select_playlist->setFetchMode(PDO::FETCH_OBJ);
+				$playlist = $select_playlist->fetch();
+
+				$plural = $playlist->files > 1 ? 's' : '';
+
+				// Get the handle of the playlist creator
+				$select_user = $db->query('SELECT username FROM users WHERE id = '.$playlist->user_id.' LIMIT 1');
+				$select_user->setFetchMode(PDO::FETCH_OBJ);
+				$handle = $select_user->fetch()->username;
+
+				return
+					'<table class="tight compo recommended" data-folder="'.$playlist->fullname.'">'.
+						'<tr>'.
+							'<td colspan="2" style="padding-right:10px;"><img class="folder" src="images/if_folder_star.svg" alt="" /><h3>Playlist spotlight</h3></td>'.
+						'</tr>'.
+						'<tr>'.
+							'<td style="height:85px;padding-top:1px;padding-right:10px;">'.
+								'<h5>'.substr($playlist->fullname, 1).'</h5>'.
+								'<div style="position:absolute;bottom:8px;"><img class="icon doublenote" src="images/composer_doublenote.svg" title="Songs" alt="" />'.$playlist->files.' song'.$plural.'<span style="font-family:Asap Condensed,sans-serif;margin-left:20px;"><img class="icon doublenote" src="images/select.svg" style="position:relative;top:4.5px;height:17.5px;" title="Songs" alt="" />'.$handle.'</span></div>'.
+							'</td>'.
+						'</tr>'.
+					'</table>';
+		
+			case BOX_CSHELLDB:
+
+				// Show an "ad" for my other site CShellDB
+				return '
+					<table class="tight compo recommended pseudo cshelldb" data-folder="cshelldb" style="padding-bottom:0;">
 						<tr>
 							<td style="height:123px;">
 								<div class="random-container">
-									<span>Click here</span><br />
-									to visit a random<br />
-									composer folder of a<br />
-									decent quality or better
+									<span>Visit</span><br />
+									a modern<br />
+									interface<br />
+									for CSDb
 								</div>
 							</td>
 						</tr>
-					</table>'
-				: '<table class="tight compo recommended" style="border:none;"></table>';
-			return $return_html;
-		} else if ($random == 1 && !$cshelldb_shown) {
+					</table>';
 
-			// Show an "ad" for my other site CShellDB
-			$cshelldb_shown = true;
-			return '
-				<table class="tight compo recommended pseudo cshelldb" data-folder="cshelldb" style="padding-bottom:0;">
-					<tr>
-						<td style="height:123px;">
-							<div class="random-container">
-								<span>Visit</span><br />
-								a modern<br />
-								interface<br />
-								for CSDb
-							</div>
-						</td>
-					</tr>
-				</table>';
-		} else if ($random == 2 && !$playmod_shown) {
+			case BOX_PLAYMOD:
 
-			// Show an "ad" for Jürgen Wothke's site PlayMOD
-			$playmod_shown = true;
-			return '
-				<table class="tight compo recommended pseudo playmod" data-folder="playmod" style="padding-bottom:0;">
-					<tr>
-						<td style="height:123px;">
-							<div class="random-container">
-								<span>PlayMOD</span><br />
-								just like DeepSID<br />
-								but for modules<br />
-								and chiptunes
-							</div>
-						</td>
-					</tr>
-				</table>';
-		} else
-			// Just shown empty space there
-			return '<table class="tight compo recommended" style="border:none;"></table>';
+				// Show an "ad" for Jürgen Wothke's site PlayMOD
+				return '
+					<table class="tight compo recommended pseudo playmod" data-folder="playmod" style="padding-bottom:0;">
+						<tr>
+							<td style="height:123px;">
+								<div class="random-container">
+									<span>PlayMOD</span><br />
+									just like DeepSID<br />
+									but for modules<br />
+									and chiptunes
+								</div>
+							</td>
+						</tr>
+					</table>';
+		}
 	}
 
 	$name = empty($row->shortname) ? $row->name : $row->shortname;
@@ -159,7 +197,7 @@ function CreateRecBox($random_id) {
 				'<td style="padding-top:1px;">'.
 					'<h4>'.$name.'</h4>'.
 					'<h5>'.$handle.'</h5>'.
-					'<div style="position:absolute;bottom:8px;"><img class="icon doublenote" src="images/composer_doublenote.svg" title="Country" alt="" />'.$songs.' songs</div>'.
+					'<div style="position:absolute;bottom:8px;"><img class="icon doublenote" src="images/composer_doublenote.svg" title="Songs" alt="" />'.$songs.' songs</div>'.
 				'</td>'.
 			'</tr>'.
 		'</table>';
@@ -246,7 +284,12 @@ function QuickShortcutRow(&$author) {
 
 /***** START *****/
 
-$decent_box_shown = $cshelldb_shown = $playmod_shown = false;
+const BOX_DECENT		= 0;
+const BOX_PLAYLIST		= 1;
+const BOX_CSHELLDB		= 2;
+const BOX_PLAYMOD		= 3;
+
+$alt_box = [BOX_DECENT, BOX_PLAYLIST, BOX_CSHELLDB, BOX_PLAYMOD];
 
 $available_lists = ['maxfiles', 'longest', 'mostgames', 'countries', 'startaddr', 'maxtime'];
 $dropdown_options =
