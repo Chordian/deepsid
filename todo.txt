@@ -3,7 +3,7 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- Nothing at the moment.
+- Stereo panning support.
 
 
 WHEN THE TIME IS RIGHT

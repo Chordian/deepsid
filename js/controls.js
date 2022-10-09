@@ -146,9 +146,10 @@ Controls.prototype = {
 				browser.chips = 1;
 				if (browser.playlist[browser.songPos].fullname.indexOf("_2SID") != -1) browser.chips = 2;
 				else if (browser.playlist[browser.songPos].fullname.indexOf("_3SID") != -1) browser.chips = 3;
+				this.resetStereoPanning();
 				viz.initGraph(browser.chips);
 				viz.enableAllPianoVoices();
-			});
+			}.bind(this));
 			this.updateSubtuneText();
 			$(id == "subtune-plus" && !SID.emulatorFlags.offline ? "#subtune-minus" : "#subtune-plus").removeClass("disabled");
 		}
@@ -277,6 +278,7 @@ Controls.prototype = {
 				browser.chips = 1;
 				if (browser.playlist[browser.songPos].fullname.indexOf("_2SID") != -1) browser.chips = 2;
 				else if (browser.playlist[browser.songPos].fullname.indexOf("_3SID") != -1) browser.chips = 3;
+				this.resetStereoPanning();
 				viz.initGraph(browser.chips);
 				viz.startBufferEndedEffects();
 
@@ -437,6 +439,7 @@ Controls.prototype = {
 					$("#subtune-plus,#subtune-minus").removeClass("disabled").addClass("disabled");
 					$("#time-bar").empty().append('<div></div>');
 					SID.load(this.subtuneCurrent, browser.getLength(this.subtuneCurrent), browser.playlist[browser.songPos].fullname, function(){
+						this.resetStereoPanning();
 						this.updateSubtuneText();
 						if (this.subtuneCurrent < this.subtuneMax && !SID.emulatorFlags.offline) $("#subtune-plus").removeClass("disabled");
 						if (this.subtuneCurrent > 0 && !SID.emulatorFlags.offline) $("#subtune-minus").removeClass("disabled");
@@ -939,6 +942,33 @@ Controls.prototype = {
 		$("#filter-distortScale-edit,#filter-distortScale-slider").val(SID.filterWebSid.distortScale);
 		$("#filter-distortThreshold-edit,#filter-distortThreshold-slider").val(SID.filterWebSid.distortThreshold);
 		$("#filter-kink-edit,#filter-kink-slider").val(SID.filterWebSid.kink);
+	},
+
+	/**
+	 * Reset all stereo panning to center and enable sliders for more chips.
+	 */
+	resetStereoPanning: function() {
+		for (var chip = 1; chip <= 3; chip++) {
+			for (var voice = 1; voice <= 3; voice++) {
+				SID.setStereo(voice, chip, 50);
+				$("#stereo-s"+chip+"v"+voice+"-slider").val(50);
+			}
+		}
+		// Assume one chip to begin with
+		$("#stereo-h2,#stereo-s2 label,#stereo-s2 input,#stereo-h3,#stereo-s3 label,#stereo-s3 input")
+			.removeClass("disabled").addClass("disabled");
+		$("#stereo-s2 input,#stereo-s3 input").prop("disabled", true);
+
+		if (browser.chips > 1) this.enableStereoChip(2);
+		if (browser.chips > 2) this.enableStereoChip(3);
+	},
+
+	/**
+	 * Enable stereo panning sliders for a specific chip.
+	 */
+	enableStereoChip: function(chip) {
+		$("#stereo-h"+chip+",#stereo-s"+chip+" label,#stereo-s"+chip+" input").removeClass("disabled");
+		$("#stereo-s"+chip+" input").prop("disabled", false);
 	},
 
 	/**

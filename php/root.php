@@ -47,10 +47,10 @@ function CreateRecBox($random_id) {
 
 		// Choose random box then remove it as a choice next time
 		shuffle($alt_box);
-		///////////////switch (array_pop($alt_box)) {
+		switch (array_pop($alt_box)) {
 
-		$sovs = BOX_PLAYLIST;
-		switch ($sovs) {
+		/*$sovs = BOX_PLAYLIST;
+		switch ($sovs) {*/
 
 			case BOX_DECENT:
 

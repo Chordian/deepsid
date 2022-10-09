@@ -298,7 +298,7 @@ SIDPlayer.prototype = {
 				options.timeout = timeout;
 				options.traceSID = true;	// Needed for the oscilloscope sundry box view
 
-				// Preset filter for 6581
+				// Preset filter for 6581 and stereo default
 				if (this.emulator != "legacy") {
 					SIDBackend.setFilterConfig6581(
 						this.filterWebSid.base,
@@ -311,6 +311,11 @@ SIDPlayer.prototype = {
 						this.filterWebSid.distortThreshold,
 						this.filterWebSid.kink,
 					);
+
+					// -1 = Stereo completely disabled (no panning)
+					//  0 = Stereo enhance disabled (only panning)
+					// >0 = Stereo enhance enabled: 16384 = Low, 24576 = Medium, 32767 = High
+					SIDBackend.setStereoLevel(32767);
 				}
 
 				// Also apply the values in the filter controls of the sundry box
@@ -1226,6 +1231,28 @@ SIDPlayer.prototype = {
 			case "download":
 				// Not supported
 				return false;
+		}
+	},
+
+	/**
+	 * Set the stereo panning level of a voice.
+	 * 
+	 * @param {number} voice	Voice to set (1-3).
+	 * @param {number} chip		SID chip number (default is 1).
+	 * @param {number} panning	Panning level (0-100).
+	 */
+	 setStereo: function(voice, chip, panning) {
+		if (typeof chip === "undefined") chip = 0; else chip -= 1;
+		switch (this.emulator) {
+			case "websid":
+				SIDBackend.setPanning(chip, voice - 1, panning / 100);
+				break;
+			case "legacy":
+			case "jssid":
+			case "youtube":
+			case "download":
+				// Not supported
+				break;
 		}
 	},
 }

@@ -655,8 +655,10 @@ Browser.prototype = {
 						this.chips = 1;
 						if (this.playlist[this.songPos].fullname.indexOf("_2SID") != -1) this.chips = 2;
 						else if (this.playlist[this.songPos].fullname.indexOf("_3SID") != -1) this.chips = 3;
+						ctrls.resetStereoPanning();
 						viz.initGraph(this.chips);
 						viz.startBufferEndedEffects();
+
 
 						// Stop the tune after X milliseconds if a "?wait=X" URL parameter is specified
 						// NOTE: A bit of a nasty hack. Because of the way the SID.load() function ties into

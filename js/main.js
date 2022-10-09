@@ -830,6 +830,19 @@ $(function() { // DOM ready
 	});
 
 	/**
+	 * When a stereo panning slider is dragged in the sundry box.
+	 * 
+	 * @param {*} event 
+	 */
+	$("#stopic-stereo").on("input", "input[type='range']", function(event) {
+		var chip_and_voice = event.target.id.split("-")[1];
+		var chip = chip_and_voice.substr(1, 1),
+			voice = chip_and_voice.substr(3, 1);
+		// Apply this single panning property now
+		SID.setStereo(voice, chip, event.target.value);
+	});
+
+	/**
 	 * When one of the ON/OFF toggle buttons are clicked in the settings page.
 	 * 
 	 * @param {*} event 
