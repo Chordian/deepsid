@@ -42,6 +42,8 @@ function Viz(emulator) {
 	this.prevClockspeed = "Unknown";
 	this.prevClockspeedStats = "Unknown";
 
+	this.scopeStereo = [[], [], []];
+
 	this.scopeLineColor = [
 		"34, 35, 27",	// For bright color theme
 		"255, 255, 255"	// For dark color theme
@@ -783,6 +785,35 @@ Viz.prototype = {
 			this.scopeVoice3.setSize(512, 70);
 			this.scopeVoice4.setSize(512, 70);
 		}
+
+		// ToDo!
+		/*
+			Get mode drop-down working with values
+			Add headphones check box
+			Add reverb slider
+
+			Skip everything LegacyWebSid as it doesn't have stereo panning
+		*/
+
+		// WIP STEREO
+		for (var chip = 1; chip < 4; chip++) {
+			for (var voice = 1; voice < 4; voice++)
+				$("#stereo-s"+chip+"v"+voice+"-scope").remove("canvas").append('<canvas class="scope" id="scope-s'+chip+'v'+voice+'"></canvas>');
+		}
+
+		if (!isLegacyWebSid) {
+			this.scopeStereo[0][0] = new VoiceDisplay("scope-s1v1", scope, function() { return scope.getData(0); }, false);
+			this.scopeStereo[0][1] = new VoiceDisplay("scope-s1v2", scope, function() { return scope.getData(1); }, false);
+			this.scopeStereo[0][2] = new VoiceDisplay("scope-s1v3", scope, function() { return scope.getData(2); }, false);
+
+			this.scopeStereo[1][0] = new VoiceDisplay("scope-s2v1", scope, function() { return scope.getData(4); }, false);
+			this.scopeStereo[1][1] = new VoiceDisplay("scope-s2v2", scope, function() { return scope.getData(5); }, false);
+			this.scopeStereo[1][2] = new VoiceDisplay("scope-s2v3", scope, function() { return scope.getData(6); }, false);
+
+			this.scopeStereo[2][0] = new VoiceDisplay("scope-s3v1", scope, function() { return scope.getData(8); }, false);
+			this.scopeStereo[2][1] = new VoiceDisplay("scope-s3v2", scope, function() { return scope.getData(9); }, false);
+			this.scopeStereo[2][2] = new VoiceDisplay("scope-s3v3", scope, function() { return scope.getData(10); }, false);
+		}
 	},
 
 	/**
@@ -794,6 +825,31 @@ Viz.prototype = {
 	 * was originally written by Jürgen Wothke for the Tiny'R'Sid web site.
 	 */
 	animateScope: function() {
+
+		// TAB: Stereo
+
+		if ($("#sundry-tabs .selected").attr("data-topic") == "stereo") {
+
+			// WIP STEREO
+			if (SID.isPlaying()) {
+				for (var chip = 0; chip < 3; chip++) {
+					for (var voice = 0; voice < 3; voice++) {
+						if (isLegacyWebSid) {
+							this.scopeStereo[chip][voice].redrawGraph(this.scopeMode, parseInt(this.scopeZoom));
+						} else {
+							scope.setMode(this.scopeMode, parseInt(this.scopeZoom));
+			
+							this.scopeStereo[chip][voice].redrawGraph();
+			
+							this.scopeStereo[chip][voice].setStrokeColor("rgba("+(this.scopeLineColor[colorTheme])+", 1.0)");
+						}
+					}
+				}
+			}
+		}
+
+		// TAB: Scope
+
 		if ($("#sundry-tabs .selected").attr("data-topic") !== "osc") return; // Tab not active
 		if (SID.emulator !== "websid" && SID.emulator !== "legacy") {
 			if (this.tabOscMode !== "NOTWEBSID") {
@@ -843,6 +899,9 @@ Viz.prototype = {
 	 * Scope: Show centered horizontal lines to indicate that the music has stopped.
 	 */
 	stopScope: function() {
+
+		// TAB: Stereo
+
 		for (var voice = 1; voice <= 4; voice++) {
 			var canvas = $("#scope"+voice)[0];
 			if (typeof canvas == "undefined") continue;
@@ -853,6 +912,18 @@ Viz.prototype = {
 			ctx.moveTo(0, 35);
 			ctx.lineTo(511, 35);
 			ctx.stroke();
+		}
+
+		// TAB: Scope
+
+		for (var chip = 0; chip <= 3; chip++) {			
+			for (var voice = 0; voice <= 3; voice++) {
+				// Just clear as the stereo slider has sort of its own center line
+				var canvas = $("#scope-s"+chip+"v"+voice)[0];
+				if (typeof canvas == "undefined") continue;
+				var ctx = canvas.getContext("2d");
+				ctx.clearRect(0, 0, 512, 70);
+			}
 		}
 	},
 

@@ -955,9 +955,9 @@ Controls.prototype = {
 			}
 		}
 		// Assume one chip to begin with
-		$("#stereo-h2,#stereo-s2 label,#stereo-s2 input,#stereo-h3,#stereo-s3 label,#stereo-s3 input")
+		$("#stereo-sh2,.stereo-s2 label,.stereo-s2 input,#stereo-sh3,.stereo-s3 label,.stereo-s3 input")
 			.removeClass("disabled").addClass("disabled");
-		$("#stereo-s2 input,#stereo-s3 input").prop("disabled", true);
+		$(".stereo-s2 input,.stereo-s3 input").prop("disabled", true);
 
 		if (browser.chips > 1) this.enableStereoChip(2);
 		if (browser.chips > 2) this.enableStereoChip(3);
@@ -967,8 +967,8 @@ Controls.prototype = {
 	 * Enable stereo panning sliders for a specific chip.
 	 */
 	enableStereoChip: function(chip) {
-		$("#stereo-h"+chip+",#stereo-s"+chip+" label,#stereo-s"+chip+" input").removeClass("disabled");
-		$("#stereo-s"+chip+" input").prop("disabled", false);
+		$("#stereo-sh"+chip+",.stereo-s"+chip+" label,.stereo-s"+chip+" input").removeClass("disabled");
+		$(".stereo-s"+chip+" input").prop("disabled", false);
 	},
 
 	/**

@@ -628,41 +628,67 @@
 				<div id="stopic-stereo" class="stopic" style="display:none;">
 					<table>
 						<tr>
-							<th>SID 1</th><th><span id="stereo-h2" class="disabled">SID 2</span></th><th><span id="stereo-h3" class="disabled">SID 3</span></th>
+							<td class="stereo-header">
+								<span id="stereo-sh1"><b>SID 1</b></span>
+							</td>
+							<td class="sundry-control stereo-s1">
+								<label class="voice unselectable">Voice 1</label><br />
+								<div id="stereo-s1v1-scope" class="stereo-scope"><label class="stereo-letter left unselectable">L</label><input id="stereo-s1v1-slider" type="range" min="0" max="100" value="50" step="1" /><label class="stereo-letter right unselectable">R</label></div>
+							</td>
+							<td class="stereo-s1">
+								<label class="voice unselectable">Voice 2</label><br />
+								<div id="stereo-s1v2-scope" class="stereo-scope"><label class="stereo-letter left unselectable">L</label><input id="stereo-s1v2-slider" type="range" min="0" max="100" value="50" step="1" /><label class="stereo-letter right unselectable">R</label></div>
+							</td>
+							<td class="stereo-s1">
+								<label class="voice unselectable">Voice 3</label><br />
+								<div id="stereo-s1v3-scope" class="stereo-scope"><label class="stereo-letter left unselectable">L</label><input id="stereo-s1v3-slider" type="range" min="0" max="100" value="50" step="1" /><label class="stereo-letter right unselectable">R</label></div>
+							</td>
 						</tr>
 						<tr>
-							<td>
-								<div class="sundry-control" id="stereo-s1">
-									<label class="voice unselectable">Voice 1</label><br />
-									<label class="stereo-letter left unselectable">L</label><input id="stereo-s1v1-slider" type="range" min="0" max="100" value="50" step="1" /><label class="stereo-letter right unselectable">R</label>
-									<label class="voice unselectable">Voice 2</label><br />
-									<label class="stereo-letter left unselectable">L</label><input id="stereo-s1v2-slider" type="range" min="0" max="100" value="50" step="1" /><label class="stereo-letter right unselectable">R</label>
-									<label class="voice unselectable">Voice 3</label><br />
-									<label class="stereo-letter left unselectable">L</label><input id="stereo-s1v3-slider" type="range" min="0" max="100" value="50" step="1" /><label class="stereo-letter right unselectable">R</label>
-								</div>
+							<td class="stereo-header">
+								<span id="stereo-sh2" class="disabled"><b>SID 2</b></span>
 							</td>
-							<td>
-								<div class="sundry-control" id="stereo-s2">
-									<label class="disabled voice unselectable">Voice 1</label><br />
-									<label class="disabled stereo-letter left unselectable">L</label><input id="stereo-s2v1-slider" class="disabled" type="range" min="0" max="100" value="50" step="1" disabled="disabled" /><label class="disabled stereo-letter right unselectable">R</label>
-									<label class="disabled voice unselectable">Voice 2</label><br />
-									<label class="disabled stereo-letter left unselectable">L</label><input id="stereo-s2v2-slider" class="disabled" type="range" min="0" max="100" value="50" step="1" disabled="disabled" /><label class="disabled stereo-letter right unselectable">R</label>
-									<label class="disabled voice unselectable">Voice 3</label><br />
-									<label class="disabled stereo-letter left unselectable">L</label><input id="stereo-s2v3-slider" class="disabled" type="range" min="0" max="100" value="50" step="1" disabled="disabled" /><label class="disabled stereo-letter right unselectable">R</label>
-								</div>
+							<td class="stereo-s2">
+								<label class="disabled voice unselectable">Voice 1</label><br />
+								<div id="stereo-s2v1-scope" class="stereo-scope"><label class="disabled stereo-letter left unselectable">L</label><input id="stereo-s2v1-slider" class="disabled" type="range" min="0" max="100" value="50" step="1" disabled="disabled" /><label class="disabled stereo-letter right unselectable">R</label></div>
 							</td>
-							<td>
-								<div class="sundry-control" id="stereo-s3">
-									<label class="disabled voice unselectable">Voice 1</label><br />
-									<label class="disabled stereo-letter left unselectable">L</label><input id="stereo-s3v1-slider" class="disabled" type="range" min="0" max="100" value="50" step="1" disabled="disabled" /><label class="disabled stereo-letter right unselectable">R</label>
-									<label class="disabled voice unselectable">Voice 2</label><br />
-									<label class="disabled stereo-letter left unselectable">L</label><input id="stereo-s3v2-slider" class="disabled" type="range" min="0" max="100" value="50" step="1" disabled="disabled" /><label class="disabled stereo-letter right unselectable">R</label>
-									<label class="disabled voice unselectable">Voice 3</label><br />
-									<label class="disabled stereo-letter left unselectable">L</label><input id="stereo-s3v3-slider" class="disabled" type="range" min="0" max="100" value="50" step="1" disabled="disabled" /><label class="disabled stereo-letter right unselectable">R</label>
-								</div>
+							<td class="stereo-s2">
+								<label class="disabled voice unselectable">Voice 2</label><br />
+								<div id="stereo-s2v2-scope" class="stereo-scope"><label class="disabled stereo-letter left unselectable">L</label><input id="stereo-s2v2-slider" class="disabled" type="range" min="0" max="100" value="50" step="1" disabled="disabled" /><label class="disabled stereo-letter right unselectable">R</label></div>
+							</td>
+							<td class="stereo-s2">
+								<label class="disabled voice unselectable">Voice 3</label><br />
+								<div id="stereo-s2v3-scope" class="stereo-scope"><label class="disabled stereo-letter left unselectable">L</label><input id="stereo-s2v3-slider" class="disabled" type="range" min="0" max="100" value="50" step="1" disabled="disabled" /><label class="disabled stereo-letter right unselectable">R</label></div>
+							</td>
+						</tr>
+						<tr>
+							<td class="stereo-header">
+								<span id="stereo-sh3" class="disabled"><b>SID 3</b></span>
+							</td>
+							<td class="stereo-s3">
+								<label class="disabled voice unselectable">Voice 1</label><br />
+								<div id="stereo-s3v1-scope" class="stereo-scope"><label class="disabled stereo-letter left unselectable">L</label><input id="stereo-s3v1-slider" class="disabled" type="range" min="0" max="100" value="50" step="1" disabled="disabled" /><label class="disabled stereo-letter right unselectable">R</label></div>
+							</td>
+							<td class="stereo-s3">
+								<label class="disabled voice unselectable">Voice 2</label><br />
+								<div id="stereo-s3v2-scope" class="stereo-scope"><label class="disabled stereo-letter left unselectable">L</label><input id="stereo-s3v2-slider" class="disabled" type="range" min="0" max="100" value="50" step="1" disabled="disabled" /><label class="disabled stereo-letter right unselectable">R</label></div>
+							</td>
+							<td class="stereo-s3">
+								<label class="disabled voice unselectable">Voice 3</label><br />
+								<div id="stereo-s3v3-scope" class="stereo-scope"><label class="disabled stereo-letter left unselectable">L</label><input id="stereo-s3v3-slider" class="disabled" type="range" min="0" max="100" value="50" step="1" disabled="disabled" /><label class="disabled stereo-letter right unselectable">R</label></div>
 							</td>
 						</tr>
 					</table>
+					<div class="edit" style="margin-top:6px;">
+						<label class="unselectable" style="position:relative;top:0;margin-right:4px;">Mode</label>
+						<select id="dropdown-stereo-mode" name="select-stereo-mode">
+							<option value="-1">No stereo</option>
+							<option value="0">Enhance off</option>
+							<option value="16384">Low enhance</option>
+							<option value="24576">Medium enhance</option>
+							<option value="32767" selected="selected">High enhance</option>
+						</select>
+					</div>
 				</div>
 				<a id="redirect-back" class="redirect continue" href="#" style="display:none"></a>
 			</div>

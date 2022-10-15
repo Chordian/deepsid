@@ -86,6 +86,9 @@ $(function() { // DOM ready
 		.styledSelect("emulator")
 		.styledSetValue(emulator);
 
+	/*$("#dropdown-stereo-mode")
+		.styledSelect("stereo-mode");*/
+
 	// Assume 1SID (most common) thus hide the extra filter sections on the pianos
 	$("#visuals-piano .piano-filter1,#visuals-piano .piano-filter2").hide();
 
@@ -770,16 +773,7 @@ $(function() { // DOM ready
 				var $sundry = $("#sundry");
 				if ($sundry.css("flex-basis").replace("px", "") < 232)
 					$sundry.css("flex-basis", 232);
-				// Add corner controls
-				$("#sundry-ctrls").append(
-					'<label class="unselectable">Min</label>'+
-					'<input id="osc-zoom" type="range" min="1" max="5" value="'+viz.scopeZoom+'" step="1" />'+
-					'<label class="unselectable">Max</label>'+
-					'<div style="display:inline-block;vertical-align:top;margin-left:13px;">'+
-						'<input type="checkbox" id="sidwiz" name="sidwiztoggle" class="unselectable" '+(viz.scopeMode ? '' : 'un')+'checked />'+
-					'</div>'+
-					'<label for="sidwiz" class="unselectable">SidWiz</label>'
-				);
+				AddScopeControls();
 				break;
 			case "filter":
 				// The filter view requires a minimum amount of vertical space
@@ -791,8 +785,9 @@ $(function() { // DOM ready
 			case "stereo":
 				// The stereo view requires a minimum amount of vertical space
 				var $sundry = $("#sundry");
-				if ($sundry.css("flex-basis").replace("px", "") < 179)
-					$sundry.css("flex-basis", 179);
+				if ($sundry.css("flex-basis").replace("px", "") < 160)
+					$sundry.css("flex-basis", 160);
+				AddScopeControls();
 				break;
 		}
 
@@ -802,6 +797,21 @@ $(function() { // DOM ready
 		$("#sundry .stopic").hide();
 		$("#stopic-"+stopic).show();
 	});
+
+	/**
+	 * Add sundry controls for scope and stereo tabs.
+	 */
+	function AddScopeControls() {
+		$("#sundry-ctrls").append(
+			'<label class="unselectable">Min</label>'+
+			'<input id="osc-zoom" type="range" min="1" max="5" value="'+viz.scopeZoom+'" step="1" />'+
+			'<label class="unselectable">Max</label>'+
+			'<div style="display:inline-block;vertical-align:top;margin-left:13px;">'+
+				'<input type="checkbox" id="sidwiz" name="sidwiztoggle" class="unselectable" '+(viz.scopeMode ? '' : 'un')+'checked />'+
+			'</div>'+
+			'<label for="sidwiz" class="unselectable">SidWiz</label>'
+		);
+	}
 
 	/**
 	 * When a 6581 filter slider is dragged in the sundry box.
