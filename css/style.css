@@ -850,7 +850,7 @@ td div,
 	user-select: none;
 }
 
-/* Move sundry checkboxes slightly upwards*/
+/* Move sundry checkboxes slightly upwards */
 #sundry input[type="checkbox"],
 #sundry-tabs input[type="checkbox"] {
 	position: relative;

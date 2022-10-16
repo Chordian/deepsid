@@ -560,7 +560,7 @@
 					<?php if (!MiniPlayer()): ?>
 						<div id="sundry-news">
 							<!--<span>The <a href="https://www.hvsc.c64.org/" target="_top">High Voltage SID Collection</a> has been upgraded to the latest version #77. Click <a href="http://deepsid.chordian.net/?search=77&type=new">here</a> to see what's new in this update.</span>-->
-							<span>Have you always wanted to learn how to compose SID tunes? I've started a multi-part tutorial at my blog. Click <a href="https://blog.chordian.net/2022/08/27/composing-in-sid-factory-ii-part-1-introduction/">here</a> to start.</span>
+							<span>A stereo tab has been added above that makes use of a new feature in the WebSid (HQ) emulator. See <a href="//deepsid.chordian.net?tab=changes">Changes</a> for more.</span>
 						</div>
 					<?php endif ?>
 				</div>
@@ -626,7 +626,7 @@
 					<div id="filter-websid" class="sundryMsg" style="display:none;">This tab requires the <button class="set-websid">WebSid</button> emulator.</div>
 				</div>
 				<div id="stopic-stereo" class="stopic" style="display:none;">
-					<table>
+					<table id="stereo-table">
 						<tr>
 							<td class="stereo-header">
 								<span id="stereo-sh1"><b>SID 1</b></span>
@@ -679,7 +679,7 @@
 							</td>
 						</tr>
 					</table>
-					<div class="edit" style="margin-top:6px;padding-right:0;">
+					<div id="stereo-controls" class="edit" style="margin-top:6px;padding-right:0;">
 						<label class="unselectable" style="position:relative;top:-1px;margin-right:4px;">Mode</label>
 						<select id="dropdown-stereo-mode" name="select-stereo-mode" style="position:relative;top:-1px;">
 							<option value="-1">No stereo</option>
@@ -693,6 +693,7 @@
 						</div>
 						<label class="unselectable" style="margin-right:8px;">Reverb</label><input id="stereo-reverb-slider" style="position:relative;top:3px;width:60px;" type="range" min="0" max="100" value="100" step="1" />
 					</div>
+					<div id="stereo-websid" class="sundryMsg" style="display:none;">This tab requires the <button class="set-websid">WebSid</button> emulator.</div>
 				</div>
 				<a id="redirect-back" class="redirect continue" href="#" style="display:none"></a>
 			</div>
@@ -1569,6 +1570,18 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>October 16, 2022</h3>
+						<ul>
+							<li>Upgraded the WebSid (HQ) emulator. Added pseudo-stereo support. The volume has been lowered to allow for this feature &ndash;
+								make sure you turn it up a bit.</li>
+							<li>A new sundry tab has been added which makes use of the stereo feature of the new WebSid (HQ) emulator.
+								There's a panning slider for each voice, for up to three SID chips. Each slider also show oscilloscope output,
+								which makes it easier to find the slider you want to tweak as the music plays.</li>
+							<li>If you drag the stereo tab bigger, there are a few controls for the entire stereo feature. To be absolutely
+								honest, I can't personally hear any difference when using the headphones checkbox nor the reverb slider. They came with
+								the Google library that the WebSid programmer used, and it's possible they do not affect SID at all.</li>
+						</ul>
 
 						<h3>September 24, 2022</h3>
 						<ul>

@@ -1312,5 +1312,4 @@ SIDPlayer.prototype = {
 				break;
 		}
 	},
-	
 }

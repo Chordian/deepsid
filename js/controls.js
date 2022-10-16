@@ -30,7 +30,7 @@ Controls.prototype = {
 		$("#info").on("click", "#sid-model,#clockspeed", this.onClick.bind(this));
 		$("#sundry,#topic-stil").on("click", ".subtune", this.onClick.bind(this));
 		$("#sundry").on("click", "canvas,.tag", this.onClick.bind(this));
-		$("#stopic-osc,#stopic-filter").on("click", "button", this.onClick.bind(this));
+		$("#stopic-osc,#stopic-filter,#stopic-stereo").on("click", "button", this.onClick.bind(this));
 		$("#sundry-ctrls").on("click", "#sidwiz,#showtags,#filter-6581", this.onClick.bind(this));
 
 		$("#volume,#sundry-ctrls").on("input", this.onInput.bind(this));
@@ -455,8 +455,9 @@ Controls.prototype = {
 					$("#search-button").trigger("click");
 				} else if (event.target.className == "set-websid") {
 					var emulator = isLegacyWebSid ? "legacy" : "websid";
-					if ($("#sundry-tabs .selected").attr("data-topic") === "filter")
-						emulator = "websid"; // Filter tab needs the HQ version only
+					var stopic = $("#sundry-tabs .selected").attr("data-topic");
+					if (stopic === "filter" || stopic === "stereo")
+						emulator = "websid"; // Filter and stereo tabs need the HQ version only
 					// Button in a sundry box for forcing WebSid emulator
 					$("#dropdown-emulator").styledSetValue(emulator).next("div.styledSelect").trigger("change");
 				} else if (event.target.className == "set-6581") {

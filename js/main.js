@@ -86,9 +86,6 @@ $(function() { // DOM ready
 		.styledSelect("emulator")
 		.styledSetValue(emulator);
 
-	/*$("#dropdown-stereo-mode")
-		.styledSelect("stereo-mode");*/
-
 	// Assume 1SID (most common) thus hide the extra filter sections on the pianos
 	$("#visuals-piano .piano-filter1,#visuals-piano .piano-filter2").hide();
 

@@ -752,7 +752,7 @@ Viz.prototype = {
 	},
 
 	/**
-	 * Scope: Initialize and draw the oscilloscope canvas boxes.
+	 * Scope/Stereo: Initialize and draw the oscilloscope canvas boxes.
 	 * 
 	 * This makes use of 'sid_tracer.js' (renamed to 'scope.js' in DeepSID) which
 	 * was originally written by Jürgen Wothke for the Tiny'R'Sid web site.
@@ -761,7 +761,7 @@ Viz.prototype = {
 		this.scopeMode = true;
 		this.scopeZoom = 5; // Use 1 (closest) to 5 (farthest)
 
-		this.tabOscMode = "";
+		this.tabOscMode = this.tabStereoMode = "";
 
 		// Draw the canvas areas for the oscilloscope voices, as well as the message handler
 		var canvas = '';
@@ -786,14 +786,6 @@ Viz.prototype = {
 			this.scopeVoice4.setSize(512, 70);
 		}
 
-		// ToDo!
-		/*
-			Skip everything LegacyWebSid as it doesn't have stereo panning
-
-			Add button for "Enable WebSid (HQ)" if handler is anything else
-		*/
-
-		// WIP STEREO
 		for (var chip = 1; chip < 4; chip++) {
 			for (var voice = 1; voice < 4; voice++)
 				$("#stereo-s"+chip+"v"+voice+"-scope").remove("canvas").append('<canvas class="scope" id="scope-s'+chip+'v'+voice+'"></canvas>');
@@ -815,7 +807,7 @@ Viz.prototype = {
 	},
 
 	/**
-	 * Scope: Animate the oscilloscope canvas boxes in the sundry box.
+	 * Scope/Stereo: Animate the oscilloscope canvas boxes in the sundry box.
 	 * 
 	 * Called by: requestAnimationFrame().
 	 * 
@@ -828,19 +820,25 @@ Viz.prototype = {
 
 		if ($("#sundry-tabs .selected").attr("data-topic") == "stereo") {
 
-			// WIP STEREO
-			if (SID.isPlaying()) {
+			if (SID.emulator !== "websid") {
+				if (this.tabStereoMode !== "NOTWEBSID") {
+					$("#stereo-table,#stereo-controls").hide();
+					$("#stereo-websid").show();
+					this.tabStereoMode = "NOTWEBSID";
+				}
+				return;
+			} else if (this.tabStereoMode !== "STEREO") {
+				// Okay to show stereo sliders again now
+				$("#stereo-websid").hide();
+				$("#stereo-table,#stereo-controls").show();
+				this.tabStereoMode = "STEREO";
+			}
+			if (!isLegacyWebSid && SID.isPlaying()) {
 				for (var chip = 0; chip < 3; chip++) {
 					for (var voice = 0; voice < 3; voice++) {
-						if (isLegacyWebSid) {
-							this.scopeStereo[chip][voice].redrawGraph(this.scopeMode, parseInt(this.scopeZoom));
-						} else {
-							scope.setMode(this.scopeMode, parseInt(this.scopeZoom));
-			
-							this.scopeStereo[chip][voice].redrawGraph();
-			
-							this.scopeStereo[chip][voice].setStrokeColor("rgba("+(this.scopeLineColor[colorTheme])+", 1.0)");
-						}
+						scope.setMode(this.scopeMode, parseInt(this.scopeZoom));
+						this.scopeStereo[chip][voice].redrawGraph();
+						this.scopeStereo[chip][voice].setStrokeColor("rgba("+(this.scopeLineColor[colorTheme])+", 1.0)");
 					}
 				}
 			}
@@ -894,11 +892,11 @@ Viz.prototype = {
 	},
 
 	/**
-	 * Scope: Show centered horizontal lines to indicate that the music has stopped.
+	 * Scope/Stereo: Show centered horizontal lines to indicate that the music has stopped.
 	 */
 	stopScope: function() {
 
-		// TAB: Stereo
+		// TAB: Scope
 
 		for (var voice = 1; voice <= 4; voice++) {
 			var canvas = $("#scope"+voice)[0];
@@ -912,11 +910,11 @@ Viz.prototype = {
 			ctx.stroke();
 		}
 
-		// TAB: Scope
+		// TAB: Stereo
 
 		for (var chip = 0; chip <= 3; chip++) {			
 			for (var voice = 0; voice <= 3; voice++) {
-				// Just clear as the stereo slider has sort of its own center line
+				// Just clear the box as the stereo slider has sort of its own center line
 				var canvas = $("#scope-s"+chip+"v"+voice)[0];
 				if (typeof canvas == "undefined") continue;
 				var ctx = canvas.getContext("2d");
