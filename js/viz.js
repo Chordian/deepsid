@@ -788,11 +788,9 @@ Viz.prototype = {
 
 		// ToDo!
 		/*
-			Get mode drop-down working with values
-			Add headphones check box
-			Add reverb slider
-
 			Skip everything LegacyWebSid as it doesn't have stereo panning
+
+			Add button for "Enable WebSid (HQ)" if handler is anything else
 		*/
 
 		// WIP STEREO

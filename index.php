@@ -679,15 +679,19 @@
 							</td>
 						</tr>
 					</table>
-					<div class="edit" style="margin-top:6px;">
-						<label class="unselectable" style="position:relative;top:0;margin-right:4px;">Mode</label>
-						<select id="dropdown-stereo-mode" name="select-stereo-mode">
+					<div class="edit" style="margin-top:6px;padding-right:0;">
+						<label class="unselectable" style="position:relative;top:-1px;margin-right:4px;">Mode</label>
+						<select id="dropdown-stereo-mode" name="select-stereo-mode" style="position:relative;top:-1px;">
 							<option value="-1">No stereo</option>
 							<option value="0">Enhance off</option>
 							<option value="16384">Low enhance</option>
 							<option value="24576">Medium enhance</option>
 							<option value="32767" selected="selected">High enhance</option>
 						</select>
+						<div style="display:inline-block;margin-left:20px;">
+							<input type="checkbox" id="stereo-headphones" name="hptoggle" class="unselectable" unchecked /><label for="stereo-headphones" class="unselectable" title="Headphones"><svg id="svg-headphones" height="16" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path d="M256 32C114.52 32 0 146.496 0 288v48a32 32 0 0 0 17.689 28.622l14.383 7.191C34.083 431.903 83.421 480 144 480h24c13.255 0 24-10.745 24-24V280c0-13.255-10.745-24-24-24h-24c-31.342 0-59.671 12.879-80 33.627V288c0-105.869 86.131-192 192-192s192 86.131 192 192v1.627C427.671 268.879 399.342 256 368 256h-24c-13.255 0-24 10.745-24 24v176c0 13.255 10.745 24 24 24h24c60.579 0 109.917-48.098 111.928-108.187l14.382-7.191A32 32 0 0 0 512 336v-48c0-141.479-114.496-256-256-256z"/></svg></label>
+						</div>
+						<label class="unselectable" style="margin-right:8px;">Reverb</label><input id="stereo-reverb-slider" style="position:relative;top:3px;width:60px;" type="range" min="0" max="100" value="100" step="1" />
 					</div>
 				</div>
 				<a id="redirect-back" class="redirect continue" href="#" style="display:none"></a>

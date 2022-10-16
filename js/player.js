@@ -1241,7 +1241,7 @@ SIDPlayer.prototype = {
 	 * @param {number} chip		SID chip number (default is 1).
 	 * @param {number} panning	Panning level (0-100).
 	 */
-	 setStereo: function(voice, chip, panning) {
+	 setStereoPanning: function(voice, chip, panning) {
 		if (typeof chip === "undefined") chip = 0; else chip -= 1;
 		switch (this.emulator) {
 			case "websid":
@@ -1255,4 +1255,62 @@ SIDPlayer.prototype = {
 				break;
 		}
 	},
+
+	/**
+	 * Set the stereo reverb level.
+	 * 
+	 * @param {number} reverb	Reverb level (0-100).
+	 */
+	 setStereoReverb: function(reverb) {
+		switch (this.emulator) {
+			case "websid":
+				SIDBackend.setReverbLevel(reverb);
+				break;
+			case "legacy":
+			case "jssid":
+			case "youtube":
+			case "download":
+				// Not supported
+				break;
+		}
+	},
+
+	/**
+	 * Set headphone mode for the stereo panning.
+	 * 
+	 * @param {number} mode		Enable (1) or disable (0).
+	 */
+	setStereoHeadphones: function(mode) {
+		switch (this.emulator) {
+			case "websid":
+				SIDBackend.setHeadphoneMode(mode);
+				break;
+			case "legacy":
+			case "jssid":
+			case "youtube":
+			case "download":
+				// Not supported
+				break;
+		}
+	},
+
+	/**
+	 * Set stereo enhance mode.
+	 * 
+	 * @param {number} mode		-1 (stereo off) or enhance level 0, 16384, 24576, 32767.
+	 */
+	setStereoMode: function(mode) {
+		switch (this.emulator) {
+			case "websid":
+				SIDBackend.setStereoLevel(mode);
+				break;
+			case "legacy":
+			case "jssid":
+			case "youtube":
+			case "download":
+				// Not supported
+				break;
+		}
+	},
+	
 }

@@ -12,7 +12,7 @@
 
 	--color-bg:						#e7e8e0;			/* Body background */
 	--color-bg-box:					#f7f8f5;			/* General background color for various boxes and pages */
-	--color-avatar-bg:				var(--color-top);	  /* Background color for all types of avatars */
+	--color-avatar-bg:				var(--color-top);	 /* Background color for all types of avatars */
 
 	--color-logo:					#d3d4c6;			/* Color for e.g. top left logo and disabled song rows */
 	--color-disabled:				var(--color-logo);
@@ -21,11 +21,11 @@
 	--color-bg-sid-hover:			#f1f1ed;			/* Background when hovering on a SID row in the browser */
 	--color-bg-edit-area:			rgb(71, 73, 55, 0.08);
 	--color-bg-scope:				var(--color-top);
-	--color-bg-slider:				var(--color-top);	  /* Color of the dragging bar for changing the sundry box size */
-	--color-bg-songs-buttons:		var(--color-top);	  /* The top container with the root/back buttons and path */
+	--color-bg-slider:				var(--color-top);	 /* Color of the dragging bar for changing the sundry box size */
+	--color-bg-songs-buttons:		var(--color-top);	 /* The top container with the root/back buttons and path */
 	--color-new-bg:					#ef0;				/* Color for small "NEW" labels on SID rows in the browser */
 	--color-new-shadow:				var(--color-bottom);
-	--color-bg-ptype:				var(--color-top);	  /* Color for the small "RSID" labels */
+	--color-bg-ptype:				var(--color-top);	 /* Color for the small "RSID" labels */
 	--color-code-bg:				#f4f3ee;			/* Colors for <CODE> element */
 	--color-code-border:			#ebeae1;
 	--color-anchor:					#5a6701;			/* Standard hyperlink */
@@ -49,7 +49,7 @@
 	--color-text-block-changed:		#c00;
 	--color-text-spottext:			var(--color-top);
 
-	--color-text-tag:				var(--color-top);	  /* Default tag colors */
+	--color-text-tag:				var(--color-top);	 /* Default tag colors */
 	--color-bg-tag:					#a8ad95;
 	--color-bg-tag-hover:			#b6b9a5;
 	--color-text-tag-prod:			var(--color-text-tag);
@@ -848,6 +848,29 @@ td div,
 	-webkit-user-select: none;
 	-ms-user-select: none;
 	user-select: none;
+}
+
+/* Move sundry checkboxes slightly upwards*/
+#sundry input[type="checkbox"],
+#sundry-tabs input[type="checkbox"] {
+	position: relative;
+	top: 0;
+}
+
+/* Hack for Firefox: Move the checkbox slightly upwards */
+@-moz-document url-prefix() {
+
+	#search input[type="checkbox"] {
+		position: relative;
+		top: -0.5px;
+	}
+
+	#sundry input[type="checkbox"],
+	#sundry-tabs input[type="checkbox"] {
+		position: relative;
+		top: -1.5px;
+	}
+
 }
 
 /* For the "? ? ?" unknown fields */
@@ -2500,6 +2523,12 @@ input[type=range]::-ms-track {
 		#dropdown-stereo-mode {
 			font-size: 13px;
 		}
+
+	#svg-headphones {
+		position: relative;
+		top: 3px;
+		fill: var(--color-text-c64font);
+	}		
 	
 	/* Canvas for an oscilloscope voice */
 	#sundry .scope {

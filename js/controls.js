@@ -950,7 +950,7 @@ Controls.prototype = {
 	resetStereoPanning: function() {
 		for (var chip = 1; chip <= 3; chip++) {
 			for (var voice = 1; voice <= 3; voice++) {
-				SID.setStereo(voice, chip, 50);
+				SID.setStereoPanning(voice, chip, 50);
 				$("#stereo-s"+chip+"v"+voice+"-slider").val(50);
 			}
 		}

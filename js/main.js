@@ -840,16 +840,35 @@ $(function() { // DOM ready
 	});
 
 	/**
-	 * When a stereo panning slider is dragged in the sundry box.
+	 * When a slider is dragged in the stereo sundry box.
 	 * 
 	 * @param {*} event 
 	 */
 	$("#stopic-stereo").on("input", "input[type='range']", function(event) {
-		var chip_and_voice = event.target.id.split("-")[1];
-		var chip = chip_and_voice.substr(1, 1),
-			voice = chip_and_voice.substr(3, 1);
-		// Apply this single panning property now
-		SID.setStereo(voice, chip, event.target.value);
+		if (event.target.id == "stereo-reverb-slider") {
+			// Reverb slider
+			SID.setStereoReverb(event.target.value);
+		} else {
+			// Stereo slider - for a specific chip and voice
+			var chip_and_voice = event.target.id.split("-")[1];
+			var chip = chip_and_voice.substr(1, 1),
+				voice = chip_and_voice.substr(3, 1);
+			SID.setStereoPanning(voice, chip, event.target.value);
+		}
+	});
+
+	/**
+	 * When clicking the 'Headphones' check box for stereo panning.
+	 */
+	$("#stereo-headphones").click(function(event) {
+		$("#stereo-headphones").is(":checked") ? SID.setStereoHeadphones(1) : SID.setStereoHeadphones(0);
+	});
+
+	/**
+	 * When changing the enhance stereo mode in its drop-down box.
+	 */
+	$("#dropdown-stereo-mode").change(function(event) {
+		SID.setStereoMode(event.target.value);
 	});
 
 	/**
@@ -2293,5 +2312,5 @@ function GetParam(name) {
  * Log a unique console line that doesn't huddle up.
  */
 function Log(text) {
-	console.log((logCount++)+": "+text);
+	console.log("DeepSID "+(logCount++)+": "+text);
 }
