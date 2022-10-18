@@ -1571,6 +1571,11 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>October 18, 2022</h3>
+						<ul>
+							<li>Upgraded the WebSid (HQ) emulator. Fixed a stereo initialization issue.</li>
+						</ul>
+
 						<h3>October 16, 2022</h3>
 						<ul>
 							<li>Upgraded the WebSid (HQ) emulator. Added pseudo-stereo support. The volume has been lowered to allow for this feature &ndash;
