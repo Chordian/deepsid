@@ -14,6 +14,8 @@ function SIDPlayer(emulator) {
 	this.emulator = emulator.toLowerCase();
 	this.voiceMask = [0xF, 0xF, 0xF];
 	this.mainVol = 1;
+
+	this.stereoLevel = -1;
 	
 	this.file = "";
 
@@ -315,7 +317,7 @@ SIDPlayer.prototype = {
 					// -1 = Stereo completely disabled (no panning)
 					//  0 = Stereo enhance disabled (only panning)
 					// >0 = Stereo enhance enabled: 16384 = Low, 24576 = Medium, 32767 = High
-					SIDBackend.setStereoLevel(0);
+					SIDBackend.setStereoLevel(this.stereoLevel);
 				}
 
 				// Also apply the values in the filter controls of the sundry box
@@ -1302,6 +1304,7 @@ SIDPlayer.prototype = {
 	setStereoMode: function(mode) {
 		switch (this.emulator) {
 			case "websid":
+				this.stereoLevel = mode;
 				SIDBackend.setStereoLevel(mode);
 				break;
 			case "legacy":

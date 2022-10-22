@@ -682,8 +682,8 @@
 					<div id="stereo-controls" class="edit" style="margin-top:6px;padding-right:0;">
 						<label class="unselectable" style="position:relative;top:-1px;margin-right:4px;">Mode</label>
 						<select id="dropdown-stereo-mode" name="select-stereo-mode" style="position:relative;top:-1px;">
-							<option value="-1">No stereo</option>
-							<option value="0" selected="selected">Enhance off</option>
+							<option value="-1" selected="selected">No stereo</option>
+							<option value="0">Enhance off</option>
 							<option value="16384">Low enhance</option>
 							<option value="24576">Medium enhance</option>
 							<option value="32767">High enhance</option>
@@ -1574,6 +1574,8 @@
 						<h3>October 22, 2022</h3>
 						<ul>
 							<li>The stereo settings are now retained across songs and subtunes.</li>
+							<li>Stereo is now also turned off per default to save on CPU time. As soon as you drag one of the stereo sliders,
+								it is automatically turned on in the "Enhance off" mode.</li>
 						</ul>
 
 						<h3>October 21, 2022</h3>

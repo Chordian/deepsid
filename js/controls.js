@@ -962,7 +962,7 @@ Controls.prototype = {
 			.removeClass("disabled").addClass("disabled");
 		$(".stereo-s2 input,.stereo-s3 input").prop("disabled", true);
 
-		// $("#dropdown-stereo-mode").val(0);
+		// $("#dropdown-stereo-mode").val(0).trigger("change");
 
 		if (browser.chips > 1) this.enableStereoChip(2);
 		if (browser.chips > 2) this.enableStereoChip(3);

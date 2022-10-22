@@ -852,6 +852,9 @@ $(function() { // DOM ready
 				voice = chip_and_voice.substr(3, 1);
 			SID.setStereoPanning(voice, chip, event.target.value);
 		}
+		 // Enable stereo when the sliders are used first time, or after turning it off
+		if (SID.stereoLevel == -1)
+			$("#dropdown-stereo-mode").val(0).trigger("change");
 	});
 
 	/**
