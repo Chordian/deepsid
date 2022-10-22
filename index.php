@@ -631,7 +631,7 @@
 							<td class="stereo-header">
 								<span id="stereo-sh1"><b>SID 1</b></span>
 							</td>
-							<td class="sundry-control stereo-s1">
+							<td class="stereo-s1">
 								<label class="voice unselectable">Voice 1</label><br />
 								<div id="stereo-s1v1-scope" class="stereo-scope"><label class="stereo-letter left unselectable">L</label><input id="stereo-s1v1-slider" type="range" min="0" max="100" value="50" step="1" /><label class="stereo-letter right unselectable">R</label></div>
 							</td>
@@ -1576,6 +1576,7 @@
 							<li>The stereo settings are now retained across songs and subtunes.</li>
 							<li>Stereo is now also turned off per default to save on CPU time. As soon as you drag one of the stereo sliders,
 								it is automatically turned on in the "Enhance off" mode.</li>
+							<li>Fixed a bug that messed up the layout of the stereo tab in certain web browsers, like Safari on Apple devices.</li>
 						</ul>
 
 						<h3>October 21, 2022</h3>

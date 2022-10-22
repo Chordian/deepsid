@@ -2652,7 +2652,6 @@ input[type=range]::-ms-track {
 			#stopic-stereo td {
 				position: relative;
 				width: 12%;
-				max-width: 12%;
 				height: 10px;
 				padding: 5px 0 0;
 				border-right: none;
