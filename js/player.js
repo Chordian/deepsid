@@ -315,7 +315,7 @@ SIDPlayer.prototype = {
 					// -1 = Stereo completely disabled (no panning)
 					//  0 = Stereo enhance disabled (only panning)
 					// >0 = Stereo enhance enabled: 16384 = Low, 24576 = Medium, 32767 = High
-					SIDBackend.setStereoLevel(32767);
+					SIDBackend.setStereoLevel(0);
 				}
 
 				// Also apply the values in the filter controls of the sundry box

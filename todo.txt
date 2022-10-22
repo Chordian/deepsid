@@ -3,7 +3,7 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- Nothing at the moment.
+- Stereo settings: Presets or load/save?
 
 
 WHEN THE TIME IS RIGHT

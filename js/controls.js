@@ -947,18 +947,22 @@ Controls.prototype = {
 
 	/**
 	 * Reset all stereo panning to center and enable sliders for more chips.
+	 * 
+	 * NOTE: On popular demand, some things are now disabled below to retain settings across songs.
 	 */
 	resetStereoPanning: function() {
-		for (var chip = 1; chip <= 3; chip++) {
+		/*for (var chip = 1; chip <= 3; chip++) {
 			for (var voice = 1; voice <= 3; voice++) {
 				SID.setStereoPanning(voice, chip, 50);
 				$("#stereo-s"+chip+"v"+voice+"-slider").val(50);
 			}
-		}
+		} */
 		// Assume one chip to begin with
 		$("#stereo-sh2,.stereo-s2 label,.stereo-s2 input,#stereo-sh3,.stereo-s3 label,.stereo-s3 input")
 			.removeClass("disabled").addClass("disabled");
 		$(".stereo-s2 input,.stereo-s3 input").prop("disabled", true);
+
+		// $("#dropdown-stereo-mode").val(0);
 
 		if (browser.chips > 1) this.enableStereoChip(2);
 		if (browser.chips > 2) this.enableStereoChip(3);
