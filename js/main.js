@@ -12,6 +12,7 @@ var logCount = 1000, isMobile, miniPlayer;
 
 var isLegacyWebSid = $("script[src='js/handlers/backend_tinyrsid_legacy.js']").length;
 var isMobile = $("body").attr("data-mobile") !== "0";
+var isNotips = $("body").attr("data-notips") !== "0";
 var miniPlayer = $("body").attr("data-mini");
 
 var tabPrevScrollPos = {
@@ -35,6 +36,7 @@ $(function() { // DOM ready
 	var userExists = false;
 
 	isMobile = $("body").attr("data-mobile") !== "0";
+	isNotips = $("body").attr("data-notips") !== "0";
 	miniPlayer = parseInt($("body").attr("data-mini"));
 
 	// Get the emulator last used by the visitor
@@ -69,6 +71,9 @@ $(function() { // DOM ready
 	SID = new SIDPlayer(emulator);
 	ctrls = new Controls();
 	browser = new Browser();
+
+	// Currently only influenced by the "?lemon=1" switch in index.php
+	if (isNotips) browser.annexNotWanted = true;
 
 	// Get the user's settings
 	$.post("php/settings.php", function(data) {
@@ -1759,7 +1764,7 @@ $(function() { // DOM ready
 	});
 
 	/**
-	 * When clicking the 'Edit' link for change the YouTube tabs for a song.
+	 * When clicking the 'Edit' link for changing the YouTube tabs for a song.
 	 */
 	$("#youtube-tabs").on("click", "#edityttabs a", function(event) {
 		browser.editYouTubeLinks($(event.target).attr("data-name"));

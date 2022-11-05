@@ -285,7 +285,7 @@
 
 	</head>
 
-	<body class="entry-content" data-mobile="<?php echo isMobile(); ?>" data-mini="<?php echo MiniPlayer(); ?>">
+	<body class="entry-content" data-mobile="<?php echo isMobile(); ?>" data-mini="<?php echo MiniPlayer(); ?>" data-notips="<?php echo isLemon() ? 1 : 0; ?>">
 		<script type="text/javascript">setTheme();</script>
 
 		<div id="dialog-cover"></div>
@@ -560,7 +560,7 @@
 					<?php if (!MiniPlayer()): ?>
 						<div id="sundry-news">
 							<!--<span>The <a href="https://www.hvsc.c64.org/" target="_top">High Voltage SID Collection</a> has been upgraded to the latest version #77. Click <a href="http://deepsid.chordian.net/?search=77&type=new">here</a> to see what's new in this update.</span>-->
-							<span>A stereo tab has been added above that makes use of a new feature in the WebSid (HQ) emulator. See <a href="//deepsid.chordian.net?tab=changes">Changes</a> for more.</span>
+							<span>I am sad to announce that the C64 legend <a href="//deepsid.chordian.net/?file=/MUSICIANS/B/Bjerregaard_Johannes/">Johannes Bjerregaard</a> died 2 Nov 2022 at the <a href="https://remix64.com/news/johannes-bjerregaard-passed-away-at-the-age-of-52.html">age of 52</a>, after a recurrence of cancer.</span>
 						</div>
 					<?php endif ?>
 				</div>
