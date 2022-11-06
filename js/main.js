@@ -873,6 +873,7 @@ $(function() { // DOM ready
 	 * When changing the enhance stereo mode in its drop-down box.
 	 */
 	$("#dropdown-stereo-mode").change(function(event) {
+		if (SID.stereoLevel == -1 || event.target.value == -1) SID.resetStereo();
 		SID.setStereoMode(event.target.value);
 	});
 

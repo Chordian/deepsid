@@ -1571,6 +1571,11 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>November 6, 2022</h3>
+						<ul>
+							<li>All stereo panning is now reset to center when selecting the WebSid (HQ) emulator.</li>
+						</ul>
+
 						<h3>October 22, 2022</h3>
 						<ul>
 							<li>The stereo settings are now retained across songs and subtunes.</li>
