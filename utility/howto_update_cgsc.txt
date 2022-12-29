@@ -69,6 +69,9 @@ For "MOVE" files with ".mus" extensions:
   REMEMBER TO REPLACE ALL "\" TO "/" AND DON'T REMOVE THE "MOVE" COMMANDS IN THE "MOVE.TXT" FILE. IT IS
   RECOMMENDED THAT YOU USE THE BELOW LIST TO CHECK UP ON ONE OR TWO OF THEM AFTERWARDS.
 
+  IF ANY OF THE MOVE LINES CONTAIN SUB-FOLDERS IN THE "MISC" FOLDER, IT'S POSSIBLE THAT THE "MISC" FOLDER
+  ITSELF IS MISSING IN FRONT. MAKE SURE THIS IS ADDED, BOTH TO SOURCE AND DESTINATION.
+
   1. Copy the "before" filename (including ".mus" extension) and in the "hvsc_files" table in each
      database tab, search "fullname" for %[filename]. You should get *ONE* hit in each tab. If you have
      to include a folder because the filename is too generic, change "\" to "/" when pasting.

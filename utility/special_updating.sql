@@ -174,3 +174,5 @@ UPDATE hvsc_files SET copyright = "2005" WHERE fullname LIKE "%/MUSICIANS/V/Vege
 UPDATE hvsc_files SET copyright = "1998" WHERE fullname LIKE "%/MUSICIANS/V/Vegeta/Kazik.sid"
 UPDATE hvsc_files SET copyright = "1989" WHERE fullname LIKE "%/MUSICIANS/W/Whittaker_David/Infection.sid"
 UPDATE hvsc_files SET copyright = "2001" WHERE fullname LIKE "%/MUSICIANS/Z/Zyron/Trapdoor_Part_2_remix.sid"
+UPDATE hvsc_files SET copyright = "2010" WHERE fullname LIKE "%/MUSICIANS/B/Blues_Muz/Gallefoss_Glenn/Enjoy_the_Silence.sid"
+UPDATE hvsc_files SET copyright = "1995" WHERE fullname LIKE "%/MUSICIANS/T/The_Magical_Garfield/TMG_26.sid"

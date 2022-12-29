@@ -1,5 +1,8 @@
 How to update the exotic folder in DeepSID with 2SID from e.g. a new HVSC update.
 
+DEPRECATED: THIS FILE IS NOT RELEVANT ANYMORE SINCE THE EXOTIC 2SID FOLDER WAS DELETED AFTER WEBSID
+ADDED SUPPORT FOR EDITING STEREO EFFECTS.
+
 Requirements
 ¯¯¯¯¯¯¯¯¯¯¯¯
   o  Access to MySQL databases (ONLINE only) through PhpMyAdmin.

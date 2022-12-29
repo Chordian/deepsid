@@ -559,8 +559,8 @@
 				<div id="stopic-stil" class="stopic">
 					<?php if (!MiniPlayer()): ?>
 						<div id="sundry-news">
-							<!--<span>The <a href="https://www.hvsc.c64.org/" target="_top">High Voltage SID Collection</a> has been upgraded to the latest version #77. Click <a href="http://deepsid.chordian.net/?search=77&type=new">here</a> to see what's new in this update.</span>-->
-							<span>I am sad to announce that the C64 legend <a href="//deepsid.chordian.net/?file=/MUSICIANS/B/Bjerregaard_Johannes/">Johannes Bjerregaard</a> died 2 Nov 2022 at the <a href="https://remix64.com/news/johannes-bjerregaard-passed-away-at-the-age-of-52.html">age of 52</a>, after a recurrence of cancer.</span>
+							<span>The <a href="https://www.hvsc.c64.org/" target="_top">High Voltage SID Collection</a> has been upgraded to the latest version #78. Click <a href="//deepsid.chordian.net/?search=78&type=new">here</a> to see what's new in this update.</span>
+							<!--<span><a href="http://www.c64music.co.uk/" target="_top">Compute's Gazette SID Collection</a> has been upgraded to the latest version #144. Click <a href="//deepsid.chordian.net/?search=144&type=new">here</a> to see what's new in this update.</span>-->
 						</div>
 					<?php endif ?>
 				</div>
@@ -835,6 +835,8 @@
 						<span>&#9642</span>
 					<!--<a href="https://www.lemon64.com/forum/viewtopic.php?t=68056" target="_blank">Lemon64</a>
 						<span>&#9642</span>-->
+					<a rel="me" href="https://c64.chat/@chordian" target="_blank">Mastodon</a>
+						<span>&#9642</span>
 					<a href="https://twitter.com/chordian" target="_blank">Twitter</a>
 						<span>&#9642</span>
 					<a href="https://discord.gg/n5w85GMbVu" target="_blank">Discord</a>
@@ -1373,11 +1375,11 @@
 
 						<h3>Libraries of SID tunes</h3>
 						<p>
-							High Voltage SID Collection #77<br />
+							High Voltage SID Collection #78<br />
 							<a href="https://www.hvsc.c64.org/" target="_top">https://www.hvsc.c64.org/</a>
 						</p>
 						<p>
-							Compute's Gazette SID Collection #143<br />
+							Compute's Gazette SID Collection #144<br />
 							<a href="http://www.c64music.co.uk/" target="_top">http://www.c64music.co.uk/</a>
 						</p>
 
@@ -1570,6 +1572,18 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>December 24, 2022</h3>
+						<ul>
+							<li>The <a href="https://www.hvsc.c64.org/" target="_top">High Voltage SID Collection</a> has been upgraded to the latest version #78.</li>
+							<li>Added composer profiles for the new folders in HVSC #78.</li>
+						</ul>
+
+						<h3>December 11, 2022</h3>
+						<ul>
+							<li>Deleted the exotic sub folder with duplicated 2SID tunes as you can adjust the stereo yourself in the sundry
+								tab added back in October. Deleting the folder means less maintenance on my part.</li>
+						</ul>
 
 						<h3>November 6, 2022</h3>
 						<ul>

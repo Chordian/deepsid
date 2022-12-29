@@ -16,7 +16,7 @@
 
 require_once("class.account.php"); // Includes setup
 
-define('CGSC_VERSION', '141'); // Remember to update this
+define('CGSC_VERSION', '144'); // Remember to update this
 define('CGSC_PATH', "_Compute's Gazette SID Collection/");
 
 try {

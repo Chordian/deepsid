@@ -5,6 +5,12 @@ SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
 - Store stereo settings for a song with a pin icon.
 
+- Commodore Banner Exchange appears to be dead. Comment it out, if not downright delete it.
+
+- Add "SidDivers" to GROUPS? Remember to also update the off-root folder on hard disk.
+
+- Skim through 'hvsc.php' and make sure all SQL queries are safe from injections.
+
 
 WHEN THE TIME IS RIGHT
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯

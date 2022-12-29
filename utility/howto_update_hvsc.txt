@@ -178,9 +178,12 @@ Import specific SIDId player data:
      instead of "Regular expression" again.)
 
   1. Copy the "_specific.csv" file to the "python/specific/" folder.
-  2. Open a command box there and run the python files one by one.
+  2. Run the "_process.bat" file to run Python scripts for various player types.
   3. Edit all resulting CSV file in Notepad++ in a ton of tabs.
   4. Find weird lines with no fullname and delete them. (They are mostly the result of multiple detections.)
+     To find them, hit Ctrl+F, tick the "Regular expression" radio button, then search for:
+        \  +   (<- TWO spaces between \ and +)
+     Remember to use the F3 key for repeating the search in the files.
   5. Save and close the CSV file and process the next tab, if there are more of them.
 
   1. Run the "_combine.bat" file to link all the CSV files into one big one.
@@ -547,7 +550,8 @@ http://deepsid.chordian.net/?file=/MUSICIANS/N/Nebula&here=1&search=mixer&type=p
 GROUPS
 ¯¯¯¯¯¯
 Back out of the HVSC version folder (i.e. in OneDrive documents) and copy the GROUPS folder there.
-Paste it into the root of the HVSC folder, i.e. next to DEMOS, GAMES and MUSICIANS.
+Paste it into the root of the HVSC folder, i.e. next to DEMOS, GAMES and MUSICIANS. Go into the
+folder and rename according to the notes in parenthesis added to a few of them.
 
 Remember to also do this online.
 
@@ -571,6 +575,9 @@ amends a few years here and there to work better with the statistics in DeepSID.
 
 You should also be able to do this online, but it won't be any faster. Check that it gets through
 all of it and doesn't time out. If it does, you have to do the import trick instead.
+
+Btw, it's recommended that you do this after the web site has been brought online again. It can do
+the job while users are enjoying the new files.
 
 When done, check the lists of active and snoozing composers in the root page. You should not see
 composers like e.g. Johannes Bjerregaard or Ben Daglish in the lists of snoozing composers.

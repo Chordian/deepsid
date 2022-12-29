@@ -1,0 +1,70 @@
+What to take care of after a new HVSC update has been added to DeepSID.
+
+Requirements
+¯¯¯¯¯¯¯¯¯¯¯¯
+  o  Access to MySQL databases (LOCALHOST and/or ONLINE) through PhpMyAdmin.
+  o  Access to the DeepSID files (LOCALHOST and/or ONLINE via FTP).
+  o  An image program like Paint Shop Pro or Adobe Photoshop.
+
+List
+¯¯¯¯
+  1. Delete the old HVSC tree with your FTP tool.
+
+       - If you don't do this soon, you may risk that users somehow manage to create
+         log errors about not being able to access it. I know it makes no sense (the
+         old folder is not mentioned in the database anymore) but it still happens.
+
+  2. Add profiles in the 'composers' table for the new folders.
+     
+       - It's a good idea to copy a row that has minimal information and then adapt.
+       - If a composer seems to be involved in games more than scene stuff, you should
+         consider changing the 'focus' field from SCENER to PRO or BOTH instead. Maybe
+         also add 'affiation' while you're at it.
+
+  3. Search for avatar images and add them.
+
+       - Go through the new folders that has a chance of finding a mugshot.
+       - Search Facebook, Linkedin - anything you can think of.
+       - The ideal size for a picture is 368x368 pixels. Also consider adding gamma.
+
+  4. Go through all new folders and files and add tags and star ratings.
+
+       - Open two DeepSID tabs, then drag one out of the browser to open a window by
+         itself. Drag that to the left side and make it no wider than the browse panel.
+         Drag the main window slightly to the right so both browse panels are visible.
+         Use the left DeepSID for searching 'SID Happens' and the right DeepSID for
+         going down the list of new folders and files. Search in left DeepSID with 'SID
+         Happens' to see if there are matches of composers or single files.
+       - When you have matches, duplicate the tags and star ratings in right DeepSID.
+       - For those with no matches, you're going to have to listen to it.
+       - You probably can't do the production tags yet, at least not perfectly. You may
+         skip those for now - they will be handled in another step below.
+
+  5. Add star ratings for folders using the 'Ratings' user.
+
+       - Log in with the 'Ratings' user and add star ratings that match your own. Note
+         that the 'Ratings' user may use the old star minus one ratings system!
+       - Remember to log back in with your own user when done.
+
+  6. Create a playlist "[...] Best of HVSC ##" where ## is the HVSC version.
+
+       - Add all the tunes you have rated 4-5 stars, then publish the playlist.
+
+  7. Do the steps in 'howto_update_hvsc.txt' about adding CSDb data.
+
+       - At one point, CSDb should finally have linked to the new HVSC update. You
+         should have a file bookmarked that you can check from time to time. When it
+         finally reveals that CSDb has been updated, perform the steps.
+
+  8. Add production tags to all new files.
+
+       - Go through all new files in the HVSC update in DeepSID and check CSDb pages in
+         its tab as you click them. Add production tags where it makes sense.
+
+  9. Wait a while then add competitions.
+
+       - After a while (a week or two) users on CSDb have made the connections between
+         the competitions and their SID files.
+       - When you think it's good to go, refer to "howto_update_compo.txt" for more.
+
+--------------------------------
