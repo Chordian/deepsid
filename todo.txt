@@ -9,7 +9,7 @@ SHOULD BE DONE
 
 - Add "SidDivers" to GROUPS? Remember to also update the off-root folder on hard disk.
 
-- Skim through 'hvsc.php' and make sure all SQL queries are safe from injections.
+- When the frontpage recommends a group, "4 songs" should read "4 members" instead.
 
 
 WHEN THE TIME IS RIGHT

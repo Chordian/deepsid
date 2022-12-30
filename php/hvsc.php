@@ -574,7 +574,8 @@ try {
 			// INSIDE ONE COMPETITION FOLDER
 
 			// Get CSDb event ID
-			$select_compo = $db->query('SELECT event_id, name FROM competitions WHERE competition = "'.$compoName.'" LIMIT 1');
+			$select_compo = $db->prepare('SELECT event_id, name FROM competitions WHERE competition = :componame LIMIT 1');
+			$select_compo->execute(array(':componame'=>$compoName));
 			$select_compo->setFetchMode(PDO::FETCH_OBJ);
 			$row = $select_compo->fetch();
 
@@ -661,7 +662,8 @@ try {
 				}
 
 				// Does the corresponding folder already exist?
-				$select_folder = $db->query('SELECT id FROM hvsc_folders WHERE fullname = "'.$compoName.'" LIMIT 1');
+				$select_folder = $db->prepare('SELECT id FROM hvsc_folders WHERE fullname = :componame LIMIT 1');
+				$select_folder->execute(array(':componame'=>$compoName));
 				$select_folder->setFetchMode(PDO::FETCH_OBJ);
 				if ($select_folder->rowCount()) {
 					// Yes; just update its files count then
@@ -669,8 +671,9 @@ try {
 					$db->query('UPDATE hvsc_folders SET files = '.$real_count.' WHERE id = '.$select_folder->fetch()->id);
 				} else {
 					// No; create the folder entry with the amount of viable files found
-					$db->query('INSERT INTO hvsc_folders (fullname, type, files, user_id)'.
-						' VALUES("'.$compoName.'", "COMPO", '.$real_count.', 0)');
+					$insert_folder = $db->prepare('INSERT INTO hvsc_folders (fullname, type, files, user_id)'.
+						' VALUES(:componame, "COMPO", '.$real_count.', 0)');
+					$insert_folder->execute(array(':componame'=>$compoName));						
 				}
 			}
 		}
