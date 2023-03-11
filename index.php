@@ -1601,6 +1601,11 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>March 11, 2023</h3>
+						<ul>
+							<li>A folder REST API call now also show all of its subfolders.</li>
+						</ul>
+
 						<h3>March 5, 2023</h3>
 						<ul>
 							<li>DeepSID's copy of <a href="http://www.c64music.co.uk/" target="_top">Compute's Gazette SID Collection</a> has now been upgraded to version 1.45.</li>

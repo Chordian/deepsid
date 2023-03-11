@@ -648,8 +648,8 @@
 		<h4>All files in a folder</h4>
 		<b><a href="//deepsid.chordian.net/api/v1/?file=/MUSICIANS/L/Laxity/" target="_blank">/api/v1/?file=<i>A folder</i></a></b>
 
-		<h4>Just the folder itself</h4>
-		<b><a href="//deepsid.chordian.net/api/v1/?folder=/MUSICIANS/L/Laxity/" target="_blank">/api/v1/?folder=<i>A folder</i></a></b>
+		<h4>A folder and its subfolders</h4>
+		<b><a href="//deepsid.chordian.net/api/v1/?folder=/DEMOS/" target="_blank">/api/v1/?folder=<i>A folder</i></a></b>
 
 		<h4>A composer profile</h4>
 		<b><a href="//deepsid.chordian.net/api/v1/?profile=/MUSICIANS/L/Laxity/" target="_blank">/api/v1/?profile=<i>A folder</i></a></b>

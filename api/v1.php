@@ -5,7 +5,7 @@
  * Simple REST API for use by external sources.
  * 
  * @uses		$_GET['file']				file or folder
- * @uses		$_GET['folder']				only folder itself
+ * @uses		$_GET['folder']				a folder and its folders
  * @uses		$_GET['profile']			composer
  * @uses		$_GET['players']			all players/editors
  * 
@@ -220,11 +220,30 @@ try {
 				$response['folder'] 		= $row_folder->fullname;
 				$response['type'] 			= $row_folder->type;
 				$response['files'] 			= $row_folder->files;
-				//$response['user_id'] 			= $row->user_id;
+				//$response['user_id'] 			= $row_folder->user_id;
 				$response['hash'] 			= $row_folder->hash;
 				$response['incompatible'] 	= $row_folder->incompatible;
 				$response['new'] 			= $row_folder->new;
 				$response['flags'] 			= $row_folder->flags;
+
+				// Get all subfolders too (if any)
+				$select_subfolder = $db->prepare('SELECT * FROM hvsc_folders WHERE fullname LIKE :fullname');
+				$select_subfolder->execute(array(':fullname'=>'%'.$fullname.'/%'));
+				$select_subfolder->setFetchMode(PDO::FETCH_OBJ);
+
+				$response['subfolders'] 	= $select_subfolder->rowCount();
+
+				foreach($select_subfolder as $i => $row_subfolder) {
+
+					$response[$i]['folder'] 		= $row_subfolder->fullname;
+					$response[$i]['type'] 			= $row_subfolder->type;
+					$response[$i]['files'] 			= $row_subfolder->files;
+					//$response[$i]['user_id'] 			= $row_subfolder->user_id;
+					$response[$i]['hash'] 			= $row_subfolder->hash;
+					$response[$i]['incompatible'] 	= $row_subfolder->incompatible;
+					$response[$i]['new'] 			= $row_subfolder->new;
+					$response[$i]['flags'] 			= $row_subfolder->flags;
+				}
 			}
 		}
 
