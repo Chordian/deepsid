@@ -111,6 +111,7 @@
 		<?php endif ?>
 
 		<script type="text/javascript" src="js/handlers/jsSID-modified.js"></script>
+		<script type="text/javascript" src="js/handlers/howler.min.js"></script>
 		<script type="text/javascript" src="js/chartist.min.js"></script>
 		<?php // @link https://github.com/madmurphy/cookies.js ?>
 		<script type="text/javascript" src="js/cookies.min.js"></script>
@@ -508,6 +509,7 @@
 					<option value="websid">WebSid emulator</option>
 					<option value="legacy">WebSid (Legacy)</option>
 					<option value="jssid">Hermit's emulator</option>
+					<option value="lemon">Lemon's MP3 files</option>
 					<option value="youtube">YouTube videos</option>
 					<option value="download">Download SID file</option>
 				</select>
@@ -588,7 +590,8 @@
 					<?php if (!MiniPlayer()): ?>
 						<div id="sundry-news">
 							<!--<span>The <a href="https://www.hvsc.c64.org/" target="_top">High Voltage SID Collection</a> has been upgraded to the latest version #78. Click <a href="//deepsid.chordian.net/?search=78&type=new">here</a> to see what's new in this update.</span>-->
-							<span><a href="http://www.c64music.co.uk/" target="_top">Compute's Gazette SID Collection</a> has been upgraded to the latest version #145. Click <a href="//deepsid.chordian.net/?search=145&type=new">here</a> to see what's new in this update.</span>
+							<!--<span><a href="http://www.c64music.co.uk/" target="_top">Compute's Gazette SID Collection</a> has been upgraded to the latest version #145. Click <a href="//deepsid.chordian.net/?search=145&type=new">here</a> to see what's new in this update.</span>-->
+							<span>New SID handler: <a class="set-lemon" href="#">Lemon's MP3 Files</a></br><div style="margin-top:10px;">Courtesy of Kim Lemon (<a href="https://www.lemon64.com/">Lemon64</a>). It plays MP3 files recorded from JSIDPlay2.</div></span>
 						</div>
 					<?php endif ?>
 				</div>
@@ -1384,7 +1387,8 @@
 						<h3>UI design and programming</h3>
 						<p>
 							Jens-Christian Huus (<a href="//chordian.net/" target="_top">Chordian</a>)<br />
-							<a href="//chordian.net/2018/05/12/deepsid/" target="_top">http://chordian.net/2018/05/12/deepsid/</a>
+							<a href="//blog.chordian.net/2018/05/12/deepsid/" target="_top">https://blog.chordian.net/2018/05/12/deepsid/</a><br />
+							<a href="//blog.chordian.net/2022/05/07/the-story-of-deepsid/" target="_top">https://blog.chordian.net/2022/05/07/the-story-of-deepsid/</a>
 						</p>
 						<p>
 							Scopes by Jürgen Wothke (<a href="http://www.wothke.ch/tinyrsid/index.php" target="_top">Tiny'R'Sid</a>)<br />
@@ -1401,6 +1405,12 @@
 							jsSID by Mihály Horváth (<a href="http://csdb.chordian.net/?type=scener&id=18806" target="_top">Hermit</a>)
 						</p>
 
+						<h3>Audio API library for MP3 files</h3>
+						<p>
+							Howler by James Simpson (<a href="https://goldfirestudios.com/">GoldFire Studios</a>)<br />
+							<a href="https://github.com/goldfire/howler.js">https://github.com/goldfire/howler.js</a>
+						</p>
+
 						<h3>Libraries of SID tunes</h3>
 						<p>
 							High Voltage SID Collection #78<br />
@@ -1409,6 +1419,11 @@
 						<p>
 							Compute's Gazette SID Collection #145<br />
 							<a href="http://www.c64music.co.uk/" target="_top">http://www.c64music.co.uk/</a>
+						</p>
+
+						<p>
+							Kim Lemon's MP3 files (JSIDPlay2)<br />
+							<a href="https://www.lemon64.com/" target="_top">https://www.lemon64.com/</a>
 						</p>
 
 						<h3>Remixes of SID tunes</h3>
@@ -1495,6 +1510,9 @@
 							I have repeatedly tried to fix the reaction times to no avail. It's a shame having to leave this
 							library behind as it would have been nice with real-time recordings to complement the emulations,
 							but I finally decided that the quality of the SOASC implementation was inadequate for DeepSID.
+						</p>
+						<p>
+							As an alternative, try the <a class="set-lemon" href="#">Lemon's MP3 Files</a> handler instead.
 						</p>
 
 						<h3>Where did the Disqus tab go?</h3>
@@ -1604,6 +1622,9 @@
 						<h3>March 11, 2023</h3>
 						<ul>
 							<li>A folder REST API call now also show all of its subfolders.</li>
+							<li>New SID handler "Lemon's MP3 files" has been added which plays MP3 files recorded from JSIDPlay2,
+								courtesy of Kim Lemon at the <a href="https://www.lemon64.com/">Lemon64</a> web site. Only tunes from
+								<a href="https://www.hvsc.c64.org/">High Voltage SID Collection</a> are supported for now.</li>
 						</ul>
 
 						<h3>March 5, 2023</h3>

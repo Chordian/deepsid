@@ -3,17 +3,6 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- Add SID handler for Kim Lemon's MP3 files.
-
-  "The mp3s are now online.
-
-  For sids with subsongs it goes like this:
-  https://lemon.ams3.cdn.digitaloceanspaces.com/c64/music/hvsc/mp3/GAMES/M-R/Nebulus-01.mp3
-  https://lemon.ams3.cdn.digitaloceanspaces.com/c64/music/hvsc/mp3/GAMES/M-R/Nebulus-02.mp3
-
-  Without subsongs, simply:
-  https://lemon.ams3.cdn.digitaloceanspaces.com/c64/music/hvsc/mp3/MUSICIANS/Y/Yip/Netherworld.mp3"
-
 - Store stereo settings for a song with a pin icon.
 
 - Add "SidDivers" to GROUPS? Remember to also update the off-root folder on hard disk.

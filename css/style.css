@@ -293,6 +293,7 @@
 	--color-timebar-border:			#c4c5b3;			/* Color for border of e.g. time bar, permalinks, etc. */
 	--color-timebar-websid:			var(--color-memory-border-top);
 	--color-timebar-jssid:			rgb(38, 99, 41);
+	--color-timebar-lemon:			rgb(104, 44, 116);
 	--color-timebar-youtube:		#a44;				/* This and above are time bar colors for various SID handlers */
 
 	--color-slider-track:			#7e8260;			/* Color of the rail track of the volume slider */
@@ -646,6 +647,7 @@
 	--color-timebar-border:			#555;
 	--color-timebar-websid:			linear-gradient(to bottom, #616fbb 20%,#44529d 100%); 	/* #44529d */
 	--color-timebar-jssid:			linear-gradient(to bottom, #368e39 20%,#266329 100%); 	/* #266329 */
+	--color-timebar-lemon:			linear-gradient(to bottom, #a651bd 20%,#843a98 100%); 	/* #682c74 */
 	--color-timebar-youtube:		linear-gradient(to bottom, #bd5b5b 20%,#9d3f3f 100%); 	/* #a44; */
 	--color-slider-track:			#4a4a4a;
 
@@ -1976,6 +1978,7 @@ input[type=range]::-ms-track {
 		#time .websid div,
 		#time .legacy div		{ background: var(--color-timebar-websid); }
 		#time .jssid div		{ background: var(--color-timebar-jssid); }
+		#time .lemon div		{ background: var(--color-timebar-lemon); }
 		#time .youtube div		{ background: var(--color-timebar-youtube); }
 
 /* Small dot that indicates this time length has millseconds too */
@@ -2947,7 +2950,7 @@ input[type=range]::-ms-track {
 		cursor: pointer;
 	}
 
-		/* Loading spinner shown for slow-loading handlers like SOASC */
+		/* Loading spinner shown for slow-loading handlers like Lemon */
 		#spinner {
 			float: right;
 			position: relative;

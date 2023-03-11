@@ -58,6 +58,7 @@ $(function() { // DOM ready
 		"websid",
 		"legacy",
 		"jssid",
+		"lemon",
 		"youtube",
 		"download",
 	]) === -1) emulator = storedEmulator;
@@ -239,7 +240,7 @@ $(function() { // DOM ready
 
 					$("#dropdown-emulator")
 						.styledOptionState("websid legacy jssid", "enabled")
-						.styledOptionState("youtube", "disabled");
+						.styledOptionState("lemon youtube", "disabled");
 					$("#path").css("top", "5px").empty().append("Temporary emulator testing");
 					$("#stab-stil,#tab-stil").empty().append("STIL");
 
@@ -542,7 +543,7 @@ $(function() { // DOM ready
 					$("#tab-visuals").removeClass("disabled");
 
 				// The color of the time bar should be unique for the chosen SID handler
-				$("#time-bar").removeClass("websid legacy jssid youtube").addClass(emulator)
+				$("#time-bar").removeClass("websid legacy jssid lemon youtube").addClass(emulator)
 					.css("cursor", SID.emulatorFlags.supportSeeking ? "pointer" : "default");
 
 				$("#faster").removeClass("disabled");
@@ -599,6 +600,14 @@ $(function() { // DOM ready
 				ShowSundryFilterContents();
 				break;
 		}
+	});
+
+	/**
+	 * When clicking a link for choosing "Lemon's MP3 Files" SID handler.
+	 */
+	$("a.set-lemon").click(function() {
+		var emulator = "lemon";
+		$("#dropdown-emulator").styledSetValue(emulator).next("div.styledSelect").trigger("change");
 	});
 
 	/**

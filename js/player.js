@@ -142,6 +142,37 @@ function SIDPlayer(emulator) {
 			this.emulatorFlags.offline			= false;
 			break;
 
+		case "lemon":
+
+			/**
+			 * Howler by James Simpson (Goldfire Studios)
+			 * 
+			 * + Can play anything; used for Lemon's MP3 files
+			 * + Multiplier (only to 4.0 but still)
+			 * 
+			 * Kim Lemon's MP3 files
+			 * 
+			 * + MP3 recordings (128 kbps) from JSIDPlay2
+			 * + SID chip automatically chosen by JSIDPlay2
+			 * + Falls back to 6581 if chip is undefined
+			 * + All kinds of SID tunes are supported
+			 * - Depends on external CDN web site
+			 */
+			this.chip = this.emulator.substr(6);
+			this.emulator = "lemon";
+
+			this.emulatorFlags.supportFaster	= true;
+			this.emulatorFlags.supportEncoding	= false;
+			this.emulatorFlags.supportSeeking	= true;
+			this.emulatorFlags.supportLoop		= true;
+			this.emulatorFlags.forceModel		= false;
+			this.emulatorFlags.forcePlay		= true;
+			this.emulatorFlags.hasFlags			= false;
+			this.emulatorFlags.slowLoading		= true;
+			this.emulatorFlags.returnCIA		= false;
+			this.emulatorFlags.offline			= false;
+			break;
+
 		case "youtube":
 
 			/**
@@ -387,6 +418,124 @@ SIDPlayer.prototype = {
 				}
 				break;
 
+			case "lemon":
+
+				if (this.howler) this.howler.stop();	// Prevents the time bar from going crazy
+				if (this.lemon) this.lemon.abort();		// Allows for premature row off-clicks
+
+				if (this.howler) this.howler.unload();
+
+				if ($("body").attr("data-mobile") !== "0") {
+					// NOTE: The AJAX and the Howler code is in this short timeout function to give the loading
+					// spinner time to be displayed first. Without the timeout, the synchronous AJAX call would
+					// block most web browsers from executing the spinner display until it is moot.
+					setTimeout(function() {
+						// AJAX is called synchronously to avoid iOS muting the audio upon row click
+						this.lemon = $.ajax({
+							url:		"php/lemon.php",
+							type:		"get",
+							async:		false,
+							data:		{
+								file: 		file,
+								subtune:	subtune,
+							}
+						}).done(function(data) {
+							try {
+								data = $.parseJSON(data);
+							} catch(e) {
+								if (document.location.hostname == "chordian")
+									$("body").empty().append(data);
+								else
+									alert("An error occurred. If it keeps popping up please tell me about it: chordian@gmail.com");
+								return false;
+							}
+							if (data.status == "error") {
+								alert(data.message);
+								return false;
+							}
+							this.url = data.url;
+							//this.modelLEMON = data.model;
+						}.bind(this));
+
+						this.howler = new Howl({
+							src:	[this.url],
+							loop:	$("#loop").hasClass("button-on"),
+							html5:	true, // Must use this or files won't play immediately on row click on iOS devices
+							onload:	function() {
+								// Reset volume in case the "Faster" button-slip trick was used
+								this.setVolume(1);
+								if (typeof callback === "function")
+									callback.call(this);
+							}.bind(this),
+							onloaderror: function() {
+								// ERROR: File not found
+								if (typeof callback === "function")
+									callback.call(this, true);
+								setTimeout(function() {
+									// After half a second just go to the next row
+									if (typeof this.callbackTrackEnd === "function")
+										this.callbackTrackEnd();
+								}.bind(this), 500);
+							}.bind(this),
+							onend: function() {
+								// When the song has ended
+								if (typeof this.callbackTrackEnd === "function")
+									this.callbackTrackEnd();
+							}.bind(this),
+						});
+					}.bind(this), 20);
+				} else {
+					// NOTE: Not playing on a mobile device makes for a lot more flexibility. The timeout is
+					// not necessary anymore and the PHP script can be called asynchronously.
+					this.lemon = $.get("php/lemon.php", {
+						file: 		file,
+						subtune:	subtune,
+					}, function(data) {
+						try {
+							data = $.parseJSON(data);
+						} catch(e) {
+							if (document.location.hostname == "chordian")
+								$("body").empty().append(data);
+							else
+								alert("An error occurred. If it keeps popping up please tell me about it: chordian@gmail.com");
+							return false;
+						}
+						if (data.status == "error") {
+							alert(data.message);
+							return false;
+						}
+
+						//this.modelLEMON = data.model;
+
+						this.howler = new Howl({
+							src:	[data.url],
+							loop:	$("#loop").hasClass("button-on"),
+							onload:	function() {
+								// Reset volume in case the "Faster" button-slip trick was used
+								this.setVolume(1);
+								if (typeof callback === "function")
+									callback.call(this);
+							}.bind(this),
+							onloaderror: function() {
+								// ERROR: File not found
+								if (typeof callback === "function")
+									callback.call(this, true);
+								setTimeout(function() {
+									// After half a second just go to the next row
+									if (typeof this.callbackTrackEnd === "function")
+										this.callbackTrackEnd();
+								}.bind(this), 500);
+							}.bind(this),
+							onend: function() {
+								// When the song has ended
+								if (typeof this.callbackTrackEnd === "function")
+									this.callbackTrackEnd();
+							}.bind(this),
+						});
+					}.bind(this));
+				}
+				break;
+
 			case "youtube":
 
 				if (this.ytReady) {
@@ -449,6 +598,9 @@ SIDPlayer.prototype = {
 	 */
 	unload: function() {
 		switch (this.emulator) {
+			case "lemon":
+				if (this.howler) this.howler.unload();
+				break;
 			case "websid":
 			case "legacy":
 			case "jssid":
@@ -488,6 +640,9 @@ SIDPlayer.prototype = {
 					this.paused = false;
 				}
 				break;
+			case "lemon":
+				if (this.howler) this.howler.play();
+				break;
 			case "youtube":
 				if (this.ytReady) this.YouTube.playVideo();
 				break;
@@ -519,6 +674,9 @@ SIDPlayer.prototype = {
 			case "jssid":
 				// @todo
 				break;
+			case "lemon":
+				// @todo
+				break;
 			case "youtube":
 				if (this.ytReady)
 					playing = this.YouTube.getPlayerState() === YT.PlayerState.PLAYING;
@@ -547,6 +705,9 @@ SIDPlayer.prototype = {
 				// @todo
 				suspended = this.jsSID.issuspended();
 				break;
+			case "lemon":
+				suspended = true; // Doesn't seem to work without
+				break;
 			case "youtube":
 				// @todo
 				break;
@@ -569,6 +730,9 @@ SIDPlayer.prototype = {
 				break;
 			case "jssid":
 				this.jsSID.pause();
+				break;
+			case "lemon":
+				if (this.howler) this.howler.pause();
 				break;
 			case "youtube":
 				if (this.ytReady) this.YouTube.pauseVideo();
@@ -595,6 +759,9 @@ SIDPlayer.prototype = {
 				this.jsSID.stop();
 				this.paused = false;
 				break;
+			case "lemon":
+				if (this.howler) this.howler.stop();
+				break;
 			case "youtube":
 				if (this.ytReady) this.YouTube.stopVideo();
 				break;
@@ -620,6 +787,9 @@ SIDPlayer.prototype = {
 				break;
 			case "jssid":
 				this.jsSID.setSpeedMultiplier(multiplier);
+				break;
+			case "lemon":
+				if (this.howler) this.howler.rate(multiplier !== 1 ? 4.0 : 1.0);
 				break;
 			case "youtube":
 				if (this.ytReady) this.YouTube.setPlaybackRate(multiplier);
@@ -653,6 +823,7 @@ SIDPlayer.prototype = {
 				result.songName			= this.jsSID.gettitle();
 				result.songReleased		= this.jsSID.getinfo();
 				break;
+			case "lemon":
 			case "youtube":
 			case "download":
 			case "info":
@@ -703,6 +874,9 @@ SIDPlayer.prototype = {
 			case "jssid":
 				this.jsSID.setvolume(value);
 				break;
+			case "lemon":
+				if (this.howler) this.howler.volume(value);
+				break;
 			case "youtube":
 				if (this.ytReady) this.YouTube.setVolume(value * 100);
 				break;
@@ -724,6 +898,9 @@ SIDPlayer.prototype = {
 				break;
 			case "jssid":
 				this.jsSID.setvolume(value * this.mainVol);
+				break;
+			case "lemon":
+				if (this.howler) this.howler.volume(value * this.mainVol);
 				break;
 			case "youtube":
 				if (this.ytReady) this.YouTube.setVolume((value * this.mainVol) * 100);
@@ -747,6 +924,10 @@ SIDPlayer.prototype = {
 				break;
 			case "jssid":
 				time = this.jsSID.getplaytime();
+				break;
+			case "lemon":
+				var seek = this.howler ? parseFloat(this.howler.seek()) || 0 : 0;
+				time = Math.round(seek);
 				break;
 			case "youtube":
 				if (this.ytReady)
@@ -775,6 +956,8 @@ SIDPlayer.prototype = {
 	setSeek: function(seconds) {
 		if (this.emulator == "youtube" && this.ytReady)
 			this.YouTube.seekTo(seconds, true);
+		else if (this.emulator === "lemon" && this.howler)
+			this.howler.seek(seconds);
 	},
 
 	/**
@@ -904,6 +1087,9 @@ SIDPlayer.prototype = {
 				break;
 			case "jssid":
 				break;
+			case "lemon":
+				this.howler.loop(true);
+				break;
 			case "youtube":
 				// Unfortunately this only seems to work with YouTube playlists
 				if (this.ytReady) this.YouTube.setLoop(true);
@@ -925,6 +1111,9 @@ SIDPlayer.prototype = {
 				this.WebSid._currentTimeout = length * this.WebSid._sampleRate;
 				break;
 			case "jssid":
+				break;
+			case "lemon":
+				this.howler.loop(false);
 				break;
 			case "youtube":
 				// Unfortunately this only seems to work with YouTube playlists
@@ -949,6 +1138,7 @@ SIDPlayer.prototype = {
 			case "jssid":
 				this.jsSID.setmodel(model === "6581" ? 6581.0 : 8580.0);
 				break;
+			case "lemon":
 			case "youtube":
 			case "download":
 				break;
@@ -967,6 +1157,8 @@ SIDPlayer.prototype = {
 				return SIDBackend.isSID6581() ? "6581" : "8580";
 			case "jssid":
 				return this.jsSID.getmodel() === 6581.0 ? "6581" : "8580";
+			case "lemon":
+				//return this.modelLEMON.substr(3, 4);
 			case "youtube":
 			case "download":
 				return false;
@@ -988,6 +1180,7 @@ SIDPlayer.prototype = {
 				// jsSID doesn't support this
 				// @todo Try changing: this.jsSID.C64_PAL_CPUCLK + this.jsSID.PAL_FRAMERATE
 				break;
+			case "lemon":
 			case "youtube":
 			case "download":
 				break;
@@ -1007,6 +1200,7 @@ SIDPlayer.prototype = {
 			case "jssid":
 				// jsSID always defaults to PAL
 				return "PAL";
+			case "lemon":
 			case "youtube":
 			case "download":
 				return false;
@@ -1039,6 +1233,7 @@ SIDPlayer.prototype = {
 					jsMask += (this.voiceMask[jsChip] & 7) << (3 * jsChip);
 				this.jsSID.enableVoices(jsMask);
 				break;
+			case "lemon":
 			case "youtube":
 			case "download":
 				// Not possible
@@ -1066,6 +1261,7 @@ SIDPlayer.prototype = {
 			case "jssid":
 				this.jsSID.enableVoices(0x1FF);
 				break;
+			case "lemon":
 			case "youtube":
 			case "download":
 				// Not possible
@@ -1093,6 +1289,7 @@ SIDPlayer.prototype = {
 			case "jssid":
 				var cia = this.jsSID.getcia();
 				return cia ? Math.round(19654 / cia) : 0;
+			case "lemon":
 			case "youtube":
 			case "download":
 				return false;
@@ -1110,6 +1307,7 @@ SIDPlayer.prototype = {
 			case "legacy":
 				return SIDBackend.getDigiTypeDesc();
 			case "jssid":
+			case "lemon":
 			case "youtube":
 			case "download":
 				return "";
@@ -1128,6 +1326,7 @@ SIDPlayer.prototype = {
 			case "legacy":
 				return SIDBackend.getDigiRate();
 			case "jssid":
+			case "lemon":
 			case "youtube":
 			case "download":
 				return 0;
@@ -1157,6 +1356,7 @@ SIDPlayer.prototype = {
 				return address;
 			case "jssid":
 				return this.jsSID.getSIDAddress(chip - 1);
+			case "lemon":
 			case "youtube":
 			case "download":
 				// Not possible
@@ -1190,6 +1390,7 @@ SIDPlayer.prototype = {
 				return SIDBackend.getRegisterSID(register);
 			case "jssid":
 				return this.jsSID.readregister(register + this.jsSID.getSIDAddress(chip));
+			case "lemon":
 			case "youtube":
 			case "download":
 				// Not possible
@@ -1211,6 +1412,7 @@ SIDPlayer.prototype = {
 				return SIDBackend.getRAM(address);
 			case "jssid":
 				return this.jsSID.readregister(address);
+			case "lemon":
 			case "youtube":
 			case "download":
 				// Not possible
@@ -1231,6 +1433,7 @@ SIDPlayer.prototype = {
 				return SIDBackend.readVoiceLevel(chip, voice - 1);
 			case "legacy":
 			case "jssid":
+			case "lemon":
 			case "youtube":
 			case "download":
 				// Not supported
@@ -1253,6 +1456,7 @@ SIDPlayer.prototype = {
 				break;
 			case "legacy":
 			case "jssid":
+			case "lemon":
 			case "youtube":
 			case "download":
 				// Not supported
@@ -1272,6 +1476,7 @@ SIDPlayer.prototype = {
 				break;
 			case "legacy":
 			case "jssid":
+			case "lemon":
 			case "youtube":
 			case "download":
 				// Not supported
@@ -1291,6 +1496,7 @@ SIDPlayer.prototype = {
 				break;
 			case "legacy":
 			case "jssid":
+			case "lemon":
 			case "youtube":
 			case "download":
 				// Not supported
@@ -1311,6 +1517,7 @@ SIDPlayer.prototype = {
 				break;
 			case "legacy":
 			case "jssid":
+			case "lemon":
 			case "youtube":
 			case "download":
 				// Not supported
