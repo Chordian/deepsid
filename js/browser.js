@@ -41,7 +41,7 @@ function Browser() {
 
 	this.ROOT_HVSC = 'hvsc';
 	this.HVSC_VERSION = 78;
-	this.CGSC_VERSION = 144;
+	this.CGSC_VERSION = 145;
 
 	this.path = "";
 	this.search = "";

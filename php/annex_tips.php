@@ -636,6 +636,29 @@
 		If you want to know more about handling tags, see <a href="10" class="topic">this</a> topic.
 
 	',
+
+	'	<h3>REST API</h3>
+
+		<p>You can call a REST API for adding info to your own web site. API key or authentication is not needed.</p>
+		<p>Click a link below for an example in a new web browser tab.</p>
+
+		<h4>One specific file</h4>
+		<b><a href="//deepsid.chordian.net/api/v1/?file=/MUSICIANS/L/Laxity/Alibi.sid" target="_blank">/api/v1/?file=<i>A specific SID file</i></a></b>
+
+		<h4>All files in a folder</h4>
+		<b><a href="//deepsid.chordian.net/api/v1/?file=/MUSICIANS/L/Laxity/" target="_blank">/api/v1/?file=<i>A folder</i></a></b>
+
+		<h4>Just the folder itself</h4>
+		<b><a href="//deepsid.chordian.net/api/v1/?folder=/MUSICIANS/L/Laxity/" target="_blank">/api/v1/?folder=<i>A folder</i></a></b>
+
+		<h4>A composer profile</h4>
+		<b><a href="//deepsid.chordian.net/api/v1/?profile=/MUSICIANS/L/Laxity/" target="_blank">/api/v1/?profile=<i>A folder</i></a></b>
+
+		<h4>All players/editors</h4>
+		<b><a href="//deepsid.chordian.net/api/v1/?players" target="_blank">/api/v1/?players</a></b>
+
+		<p style="margin-top:20px;">Slashes before or after paths are not needed &ndash; works both ways.</p>
+	',
 );
 
 $id = isset($_GET['id']) ? $_GET['id'] : mt_rand(0, count($tips) - 1);
@@ -657,6 +680,7 @@ else
 			<li><a href="0" class="topic">Playlists</a></li>
 			<li><a href="14" class="topic">Production tags</a></li>
 			<li><a href="3" class="topic">Registering</a></li>
+			<li><a href="16" class="topic">REST API</a></li>
 			<li><a href="5" class="topic">Searching</a></li>
 			<li><a href="4" class="topic">SID handlers</a></li>
 			<li><a href="9" class="topic">Social links</a></li>

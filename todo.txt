@@ -3,13 +3,34 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- Store stereo settings for a song with a pin icon.
+- Add SID handler for Kim Lemon's MP3 files.
 
-- Commodore Banner Exchange appears to be dead. Comment it out, if not downright delete it.
+  "The mp3s are now online.
+
+  For sids with subsongs it goes like this:
+  https://lemon.ams3.cdn.digitaloceanspaces.com/c64/music/hvsc/mp3/GAMES/M-R/Nebulus-01.mp3
+  https://lemon.ams3.cdn.digitaloceanspaces.com/c64/music/hvsc/mp3/GAMES/M-R/Nebulus-02.mp3
+
+  Without subsongs, simply:
+  https://lemon.ams3.cdn.digitaloceanspaces.com/c64/music/hvsc/mp3/MUSICIANS/Y/Yip/Netherworld.mp3"
+
+- Store stereo settings for a song with a pin icon.
 
 - Add "SidDivers" to GROUPS? Remember to also update the off-root folder on hard disk.
 
 - When the frontpage recommends a group, "4 songs" should read "4 members" instead.
+
+- Bug: Clicking a name link in the top box goes to the SH folder instead of HVSC.
+  Reported by Sagan. See e-mail from him for details about a "@narcisound" incident.
+
+- Bug: Unescaped control characters. See issue by tobozo at DeepSID GitHub.
+
+- Don't remove credits from music productions anymore.
+
+- When a recommended box shows a group, let the header read "Recommended Group" instead.
+
+- Automate CGSC update process. All REN, MOVE, etc. Create folders where they can't be found
+  in the filenames, count files in them, etc.
 
 
 WHEN THE TIME IS RIGHT
@@ -63,7 +84,6 @@ CONSIDER THIS
 - Download SID with the PSID header automatically removed, ready to be used in e.g. a demo.
 - Why does the hash cross-rating system work so badly? See if you can figure out what's up.
 - Ensure that the hash connection between SH and HVSC works instantaneously.
-- I've had a request for REST API access. Can you find a nice PHP framework for that?
 - Presets or load/save setup in the stereo sundry tab.
 
 - In a profile page, make the small handles in group table into links and remove the corner external

@@ -78,7 +78,26 @@
 			<!-- For Lemon64: END -->
 		<?php endif ?>
 		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-
+		<script type="text/javascript">
+			var supportsWASM = false;
+			try { // @link https://stackoverflow.com/a/47880734/2242348
+				if (typeof WebAssembly === "object"
+					&& typeof WebAssembly.instantiate === "function") {
+					const module = new WebAssembly.Module(Uint8Array.of(0x0, 0x61, 0x73, 0x6d, 0x01, 0x00, 0x00, 0x00));
+					if (module instanceof WebAssembly.Module)
+						supportsWASM = new WebAssembly.Instance(module) instanceof WebAssembly.Instance;
+				}
+			} catch (e) { /* Nothing */ }
+			if (!supportsWASM) {
+				document.write('\
+					<div style="padding-left:24px;">\
+						<h2>WebAssembly not detected</h2>\
+						<p>DeepSID needs WASM for its most advanced SID emulators.</p>\
+					</div>\
+				');
+				window.stop();
+			}
+		</script>
 		<?php if (isset($_GET['websiddebug'])): ?>
 			<script type="text/javascript" src="http://www.wothke.ch/tmp/scriptprocessor_player.min.js"></script>
 			<script type="text/javascript" src="http://www.wothke.ch/tmp/backend_tinyrsid.js"></script>
@@ -284,6 +303,15 @@
 		<meta name="twitter:card" content="summary" />
 
 	</head>
+
+	<!-- Google tag (gtag.js) -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-8WGW8WKDN4"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+		gtag('config', 'G-8WGW8WKDN4');
+	</script>
 
 	<body class="entry-content" data-mobile="<?php echo isMobile(); ?>" data-mini="<?php echo MiniPlayer(); ?>" data-notips="<?php echo isLemon() ? 1 : 0; ?>">
 		<script type="text/javascript">setTheme();</script>
@@ -559,8 +587,8 @@
 				<div id="stopic-stil" class="stopic">
 					<?php if (!MiniPlayer()): ?>
 						<div id="sundry-news">
-							<span>The <a href="https://www.hvsc.c64.org/" target="_top">High Voltage SID Collection</a> has been upgraded to the latest version #78. Click <a href="//deepsid.chordian.net/?search=78&type=new">here</a> to see what's new in this update.</span>
-							<!--<span><a href="http://www.c64music.co.uk/" target="_top">Compute's Gazette SID Collection</a> has been upgraded to the latest version #144. Click <a href="//deepsid.chordian.net/?search=144&type=new">here</a> to see what's new in this update.</span>-->
+							<!--<span>The <a href="https://www.hvsc.c64.org/" target="_top">High Voltage SID Collection</a> has been upgraded to the latest version #78. Click <a href="//deepsid.chordian.net/?search=78&type=new">here</a> to see what's new in this update.</span>-->
+							<span><a href="http://www.c64music.co.uk/" target="_top">Compute's Gazette SID Collection</a> has been upgraded to the latest version #145. Click <a href="//deepsid.chordian.net/?search=145&type=new">here</a> to see what's new in this update.</span>
 						</div>
 					<?php endif ?>
 				</div>
@@ -1379,7 +1407,7 @@
 							<a href="https://www.hvsc.c64.org/" target="_top">https://www.hvsc.c64.org/</a>
 						</p>
 						<p>
-							Compute's Gazette SID Collection #144<br />
+							Compute's Gazette SID Collection #145<br />
 							<a href="http://www.c64music.co.uk/" target="_top">http://www.c64music.co.uk/</a>
 						</p>
 
@@ -1572,6 +1600,48 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>March 5, 2023</h3>
+						<ul>
+							<li>DeepSID's copy of <a href="http://www.c64music.co.uk/" target="_top">Compute's Gazette SID Collection</a> has now been upgraded to version 1.45.</li>
+						</ul>
+
+						<h3>February 26, 2023</h3>
+						<ul>
+							<li>A composer profile REST API call now show full paths for all images.</li>
+							<li>Unknown URL parameter in REST API call now issues a bad request (400) error.</li>
+						</ul>
+
+						<h3>February 25, 2023</h3>
+						<ul>
+							<li>You can now call a REST API for adding info to your own web site.
+								See this annex box for more: <a class="annex-link" href="16">REST API</a></li>
+						</ul>
+
+						<h3>February 12, 2023</h3>
+						<ul>
+							<li>A message is now shown if WebAssembly is not enabled in your web browser.</li>
+						</ul>
+
+						<h3>February 4, 2023</h3>
+						<ul>
+							<li>Added the CSDb music competitions related to HVSC #78.</li>
+						</ul>
+
+						<h3>January 13, 2023</h3>
+						<ul>
+							<li>Upgraded the WebSid (HQ) emulator. Added a fix for <a href="//deepsid.chordian.net/?file=/MUSICIANS/H/Hubbard_Rob/Mr_Meaner.sid">Mr_Meaner</a>.</li>
+						</ul>
+
+						<h3>January 2, 2023</h3>
+						<ul>
+							<li>All new files in HVSC #78 are now connected to CSDb entries.</li>
+						</ul>
+
+						<h3>January 1, 2023</h3>
+						<ul>
+							<li>Fixed Jammer's <a href="//deepsid.chordian.net/?file=/MUSICIANS/J/Jammer/Pitstop.sid&subtune=1">Pitstop</a> that was lacking database information.</li>
+						</ul>
 
 						<h3>December 24, 2022</h3>
 						<ul>
