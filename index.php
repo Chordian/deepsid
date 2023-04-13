@@ -866,7 +866,7 @@
 						<span>&#9642</span>
 					<!--<a href="https://www.lemon64.com/forum/viewtopic.php?t=68056" target="_blank">Lemon64</a>
 						<span>&#9642</span>-->
-					<a rel="me" href="https://c64.chat/@chordian" target="_blank">Mastodon</a>
+					<a rel="me" href="https://mastodon.social/@chordian" target="_blank">Mastodon</a>
 						<span>&#9642</span>
 					<a href="https://twitter.com/chordian" target="_blank">Twitter</a>
 						<span>&#9642</span>
@@ -1619,10 +1619,21 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>April 13, 2023</h3>
+						<ul>
+							<li>Almost all groups now have profile images.</li>
+							<li>Added the group <a href="//deepsid.chordian.net/?file=/GROUPS/sidDivers/">sidDivers</a> along with a profile image for them as well.</li>
+						</ul>
+
+						<h3>April 12, 2023</h3>
+						<ul>
+							<li>A recommended box for a group now properly states it's a group with members, not a folder with songs.</li>
+						</ul>
+
 						<h3>March 11, 2023</h3>
 						<ul>
 							<li>A folder REST API call now also show all of its subfolders.</li>
-							<li>New SID handler "Lemon's MP3 files" has been added which plays MP3 files recorded from JSIDPlay2,
+							<li>New SID handler <a class="set-lemon" href="#">Lemon's MP3 Files</a> has been added which plays MP3 files recorded from JSIDPlay2,
 								courtesy of Kim Lemon at the <a href="https://www.lemon64.com/">Lemon64</a> web site. Only tunes from
 								<a href="https://www.hvsc.c64.org/">High Voltage SID Collection</a> are supported for now.</li>
 						</ul>

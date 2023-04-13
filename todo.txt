@@ -5,9 +5,7 @@ SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
 - Store stereo settings for a song with a pin icon.
 
-- Add "SidDivers" to GROUPS? Remember to also update the off-root folder on hard disk.
-
-- When the frontpage recommends a group, "4 songs" should read "4 members" instead.
+- The "WASM disabled" message should only be shown when WebSid (HQ and Legacy) is chosen.
 
 - Bug: Clicking a name link in the top box goes to the SH folder instead of HVSC.
   Reported by Sagan. See e-mail from him for details about a "@narcisound" incident.
@@ -15,8 +13,6 @@ SHOULD BE DONE
 - Bug: Unescaped control characters. See issue by tobozo at DeepSID GitHub.
 
 - Don't remove credits from music productions anymore.
-
-- When a recommended box shows a group, let the header read "Recommended Group" instead.
 
 - Automate CGSC update process. All REN, MOVE, etc. Create folders where they can't be found
   in the filenames, count files in them, etc.

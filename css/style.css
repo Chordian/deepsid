@@ -4027,6 +4027,13 @@ input[type=range]::-ms-track {
 				margin-right: 3px;
 			}
 
+			#page .ext img.iconbigger {
+				position: relative;
+				top: 6px;
+				height: 21px;
+				margin-right: 4px;
+			}
+
 			#page .ext img.arrow {
 				position: relative;
 				top: 4px;

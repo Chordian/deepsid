@@ -175,12 +175,20 @@ function CreateRecBox($random_id) {
 	$fn = strtolower(str_replace('/', '_', $fn));
 	$thumbnail = 'images/composers/'.$fn.'.jpg';
 	if (!file_exists('../'.$thumbnail)) $thumbnail = 'images/composer.png';
+
+	// A true group folder?
+	$is_group = strpos($fullname, '/GROUPS/') !== false;
 	
 	// Get type and file count
 	$select = $db->query('SELECT type, files FROM hvsc_folders WHERE fullname = "'.$fullname.'"');
 	$select->setFetchMode(PDO::FETCH_OBJ);
 	$row = $select->fetch();
 	$type = $row->type == 'GROUP' ? 'group' : 'single';
+	$rec = $is_group ? 'Group' : 'Folder';
+	$items = $is_group ? 'members' : 'songs';
+	$icss = $is_group ? 'bigger' : '';
+	$ifile = $is_group ? 'group' : 'composer_doublenote';
+	$ititle = $is_group ? 'Members' : 'Songs';
 	$songs = $row->files;
 
 	// Create the HTML table for the box
@@ -188,7 +196,7 @@ function CreateRecBox($random_id) {
 	return
 		'<table class="tight compo recommended" data-folder="'.$fullname.'">'.
 			'<tr>'.
-				'<td colspan="2"><img class="folder" src="images/if_folder_'.$type.'.svg" alt="" /><h3>Recommended Folder</h3></td>'.
+				'<td colspan="2"><img class="folder" src="images/if_folder_'.$type.'.svg" alt="" /><h3>Recommended '.$rec.'</h3></td>'.
 			'</tr>'.
 			'<tr>'.
 				'<td style="width:88px;padding-right:8px;">'.
@@ -197,7 +205,7 @@ function CreateRecBox($random_id) {
 				'<td style="padding-top:1px;">'.
 					'<h4>'.$name.'</h4>'.
 					'<h5>'.$handle.'</h5>'.
-					'<div style="position:absolute;bottom:8px;"><img class="icon doublenote" src="images/composer_doublenote.svg" title="Songs" alt="" />'.$songs.' songs</div>'.
+					'<div style="position:absolute;bottom:8px;"><img class="icon'.$icss.' doublenote" src="images/'.$ifile.'.svg" title="'.$ititle.'" alt="" />'.$songs.' '.$items.'</div>'.
 				'</td>'.
 			'</tr>'.
 		'</table>';
