@@ -3,16 +3,10 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- Store stereo settings for a song with a pin icon.
-
-- The "WASM disabled" message should only be shown when WebSid (HQ and Legacy) is chosen.
-
 - Bug: Clicking a name link in the top box goes to the SH folder instead of HVSC.
   Reported by Sagan. See e-mail from him for details about a "@narcisound" incident.
 
 - Bug: Unescaped control characters. See issue by tobozo at DeepSID GitHub.
-
-- Don't remove credits from music productions anymore.
 
 - Automate CGSC update process. All REN, MOVE, etc. Create folders where they can't be found
   in the filenames, count files in them, etc.
@@ -70,6 +64,8 @@ CONSIDER THIS
 - Why does the hash cross-rating system work so badly? See if you can figure out what's up.
 - Ensure that the hash connection between SH and HVSC works instantaneously.
 - Presets or load/save setup in the stereo sundry tab.
+- Store stereo settings for a song with a pin icon.
+- The "WASM disabled" message should only be shown when WebSid (HQ and Legacy) is chosen.
 
 - In a profile page, make the small handles in group table into links and remove the corner external
   link icon. Then users can choose what handle to open in CSDb themselves.

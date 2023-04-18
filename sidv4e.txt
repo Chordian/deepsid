@@ -93,7 +93,7 @@ Flags used for additional SID:
              00 = Unknown: defaults to respective main SID setting
 	
 - Bit  6     output channel (same position as respective flag for main SID - see +76) 
-- Bits 7-15  address of SID chip (same "2 center nibbles" format as used in original HVSC formats,
+- Bits 8-15  address of SID chip (same "2 center nibbles" format as used in original HVSC formats,
              e.g. "D420" would be represented as 0x42)
 
 

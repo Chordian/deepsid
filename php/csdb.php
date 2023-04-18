@@ -430,7 +430,7 @@ if ($csdb_type == 'sid') {
 	// NOTE: Handles for ID may already have been added to the '$sceners' array by 'Released by' above.
 	$credits = '';
 	$roles = array();
-	if ($csdb->Release->Credits && strtolower($csdb->Release->Type) != 'c64 music') {
+	if ($csdb->Release->Credits /*&& strtolower($csdb->Release->Type) != 'c64 music'*/) {
 		$credits = $csdb->Release->Credits->Credit;
 		// First gather an associative array of credit roles where each may contain a list of members
 		foreach($credits as $credit) {

@@ -1623,6 +1623,7 @@
 						<ul>
 							<li>Almost all groups now have profile images.</li>
 							<li>Added the group <a href="//deepsid.chordian.net/?file=/GROUPS/sidDivers/">sidDivers</a> along with a profile image for them as well.</li>
+							<li>Credits are no longer hidden for music releases in the CSDb tab.</li>
 						</ul>
 
 						<h3>April 12, 2023</h3>
