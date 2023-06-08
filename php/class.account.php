@@ -486,7 +486,7 @@ class Account {
 	/**
 	 * Returns the absolute URL to the web site including the 'http[s]://' part.
 	 *
-	 * @return		string		when online it's 'http://deepsid.chordian.net'
+	 * @return		string		when online it's 'https://deepsid.chordian.net'
 	 */
 	private function SiteURL() {
 		return (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on' ? 'https://' : 'http://').$_SERVER['HTTP_HOST'];

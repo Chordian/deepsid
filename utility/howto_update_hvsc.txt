@@ -1,7 +1,7 @@
 How to build/update a MySQL database with all HVSC/SID information.
 
 Requirements
-¯¯¯¯¯¯¯¯¯¯¯¯
+ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
   o  Access to MySQL databases (LOCALHOST and/or ONLINE) through PhpMyAdmin.
   o  Access to the DeepSID files (LOCALHOST and/or ONLINE via FTP).
   o  Being able to run PHP scripts in the DeepSID folder via your web browser.
@@ -14,7 +14,7 @@ Requirements
 NOTE: The "http://chordian/deepsid/" URL just refers to a LOCALHOST version of DeepSID.
 
 Social media
-¯¯¯¯¯¯¯¯¯¯¯¯
+ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 First things first - post on Facebook and Twitter (remember #deepsid tag for the latter).
 
 Use the following text:
@@ -26,12 +26,12 @@ If you don't do this first, you can be sure someone is going to post about it to
 you that the update has arrived (because obviously you are not aware of it).
 
 Backup
-¯¯¯¯¯¯
+ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 Delete all leftover backup tables and backup the entire DeepSID database (both the local
 and the online version).
 
 TABLE: hvsc_files
-¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 First time importing fullname list from HVSC:
 
   1. Go to (updated/newest) HVSC root and open a command box.
@@ -410,7 +410,7 @@ Fixing HVSC update discrepancies:
   8. When importing it for ONLINE later, find and delete the old problem rows in it too.
 
 TABLE: hvsc_folders
-¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 First time importing fullname list from HVSC:
 
   1. Go to (updated/newest) HVSC root and open a command box.
@@ -488,7 +488,7 @@ Update total count of individual letter folders (that have sub folders):
   1. Make a backup of the "hvsc_folders" folder.
   2. Run your FTP program for online files and there edit ./php/update_total_count.php
   3. Uncomment the "Now store" UPDATE line in the bottom. 
-  4. Now run the script like this: http://deepsid.chordian.net/php/update_total_count.php
+  4. Now run the script like this: https://deepsid.chordian.net/php/update_total_count.php
   5. Check the output and maybe compare with DeepSID itself in a few places.
   6. Put the comment back in and save it online. 
 
@@ -504,7 +504,7 @@ Set the type of new folders:
 Done.
 
 TABLE: hvsc_lengths
-¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 This table is used by the top lists on the front page of DeepSID.
 
 After a HVSC update, do this:
@@ -530,7 +530,7 @@ When done, compare the top 20 table with the longest tunes across LOCALHOST and 
 be exactly the same now.
 
 SPECIAL DB UPDATING
-¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 The 'special_updating.sql' (located in the same folder as this text file) is not actually a real SQL
 file and must be parsed by a PHP script for DeepSID as stated below.
 
@@ -539,16 +539,16 @@ file and must be parsed by a PHP script for DeepSID as stated below.
 Note that some of the fields doesn't hit correctly in the LOCALHOST database (such as deleting tags)
 but it doesn't matter (especially tags are just a test chaos there).
 
-  o  Run this: http://deepsid.chordian.net/php/update_special.php
+  o  Run this: https://deepsid.chordian.net/php/update_special.php
 
 To test that things went well, here are some links you can check out:
 
-http://deepsid.chordian.net/?file=/DEMOS/G-L/Kinetix_Blasting_Power_Mix.sid  (player)
-http://deepsid.chordian.net/?file=/DEMOS/S-Z/Wize_Mixes.sid  (player)
-http://deepsid.chordian.net/?file=/MUSICIANS/N/Nebula&here=1&search=mixer&type=player  (8 rows found)
+https://deepsid.chordian.net/?file=/DEMOS/G-L/Kinetix_Blasting_Power_Mix.sid  (player)
+https://deepsid.chordian.net/?file=/DEMOS/S-Z/Wize_Mixes.sid  (player)
+https://deepsid.chordian.net/?file=/MUSICIANS/N/Nebula&here=1&search=mixer&type=player  (8 rows found)
 
 GROUPS
-¯¯¯¯¯¯
+ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 Back out of the HVSC version folder (i.e. in OneDrive documents) and copy the GROUPS folder there.
 Paste it into the root of the HVSC folder, i.e. next to DEMOS, GAMES and MUSICIANS. Go into the
 folder and rename according to the notes in parenthesis added to a few of them.
@@ -561,10 +561,10 @@ Now a script must be run to update the file counts:
 
 And online too:
 
-  o  Run this: http://deepsid.chordian.net/php/update_groups.php
+  o  Run this: https://deepsid.chordian.net/php/update_groups.php
 
 LATEST ACTIVITY
-¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 Now the "composers" table need to be updated with the years that each one were last active.
 
 IT'S IMPORTANT THAT THE ABOVE SPECIAL DB SCRIPT HAS RUN PRIOR TO DOING THIS. The reason is that it
@@ -583,7 +583,7 @@ When done, check the lists of active and snoozing composers in the root page. Yo
 composers like e.g. Johannes Bjerregaard or Ben Daglish in the lists of snoozing composers.
 
 LAST CHECKS
-¯¯¯¯¯¯¯¯¯¯¯
+ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 Double-check these files both in the folder and in the database:
 
   MUSICIANS/A/Acrouzet/Puzzled-Background_Music_IV.sid
@@ -592,7 +592,7 @@ Double-check these files both in the folder and in the database:
 They must match each other and play correctly. (NOTE: They probably work online but not locally.)
 
 LINKS AND VERSION
-¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 Update various minor stuff:
 
   o  The version number in the 'About' tab (index.php).

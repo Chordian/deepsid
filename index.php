@@ -10,9 +10,9 @@
 	// $inside_iframe = isset($_SERVER['HTTP_SEC_FETCH_DEST']) && $_SERVER['HTTP_SEC_FETCH_DEST'] == 'iframe';
 
 	// Detect and block if the URL contains unwanted characters
-	// Example: http://deepsid.chordian.net/?file=%22%3E%3Ch1%3Efoobarbaz
+	// Example: https://deepsid.chordian.net/?file=%22%3E%3Ch1%3Efoobarbaz
 	$special_chars = array('[', ']', '<', '>', ';', ',', '"', '*');
-	$url = urldecode("http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]");
+	$url = urldecode("https://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]");
 	foreach ($special_chars as $char)
 		if (strpos($url, $char) !== false)
 			die("Malignant switch contents detected. Please fix the URL and try again.");
@@ -232,11 +232,11 @@
 					if (substr($_GET['file'], -4) == '.sid' || substr($_GET['file'], -4) == '.mus')
 						MergeImage($image);
 					else
-						echo 'http://chordian.net/deepsid/images/composers/'.$image;
+						echo 'https://chordian.net/deepsid/images/composers/'.$image;
 				else if (substr($_GET['file'], -4) == '.sid')
-					echo 'http://chordian.net/deepsid/images/example_play.png';
+					echo 'https://chordian.net/deepsid/images/example_play.png';
 				else
-					echo 'http://chordian.net/deepsid/images/composer.png';
+					echo 'https://chordian.net/deepsid/images/composer.png';
 			} else if (isset($_GET['file']) && (strtolower(substr($_GET['file'], 0, 12))) == '/sid happens') {
 				$image = '';
 				try {
@@ -281,11 +281,11 @@
 				if (!empty($image) && file_exists('images/composers/'.$image))
 					MergeImage($image);
 				else if (substr($_GET['file'], -4) == '.sid')
-					echo 'http://chordian.net/deepsid/images/example_play.png';
+					echo 'https://chordian.net/deepsid/images/example_play.png';
 				else
-					echo 'http://chordian.net/deepsid/images/composers/_sh.png';
+					echo 'https://chordian.net/deepsid/images/composers/_sh.png';
 			} else 
-				echo 'http://chordian.net/deepsid/images/example.png';
+				echo 'https://chordian.net/deepsid/images/example.png';
 		?>" />
 		<meta property="og:url" content="<?php echo (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]"; ?>" />
 		<meta property="og:description" content="<?php
@@ -1618,6 +1618,11 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>June 8, 2023</h3>
+						<ul>
+							<li>DeepSID now only uses HTTPS. HTTP will automatically be redirected to HTTPS.</li>
+						</ul>
+
 						<h3>April 18, 2023</h3>
 						<ul>
 							<li>The Discord server for DeepSID has been deleted. See this annex box for alternatives: <a class="annex-link" href="9">Social links</a></li>
@@ -1773,7 +1778,7 @@
 
 						<h3>July 17, 2022</h3>
 						<ul>
-							<li>Added the <a href="http://deepsid.chordian.net/?player=129&type=player&search=flexsid">FlexSID</a> editor to the list of players.</li>
+							<li>Added the <a href="https://deepsid.chordian.net/?player=129&type=player&search=flexsid">FlexSID</a> editor to the list of players.</li>
 						</ul>
 
 						<h3>July 12, 2022</h3>

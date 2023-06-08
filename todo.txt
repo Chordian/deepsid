@@ -3,15 +3,14 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- Add Lemon's sid handler to the tips list.
+- Add Lemon's SID handler to the tips list.
 
-- Go through GitHub issues, add comments and close where relevant.
-  Link: https://github.com/Chordian/deepsid/issues
+- Write a blog post showing most popular SID clicks according to Google Analytics.
 
 - Bug: Clicking a name link in the top box goes to the SH folder instead of HVSC.
   Reported by Sagan. See e-mail from him for details about a "@narcisound" incident.
 
-- Bug: Unescaped control characters. See issue by tobozo at DeepSID GitHub.
+- Bug: Unescaped control characters. See: https://github.com/Chordian/deepsid/issues/21
 
 - Bug: 6581 enable button for filter adjusting is disabled when activating the tab for a 8580
   tune playing. If the filter tab is already visible, clicking a new 8580 song enables it.
@@ -27,8 +26,11 @@ SHOULD BE DONE
   Rob Hubbard, Martin Galway, etc. I don't think it's necessary to have a header for it.
 
 - Consider ASID support. See this: https://github.com/Chordian/deepsid/issues/22
+  ASID uses MIDI. This can be used by web browsers: https://caniuse.com/?search=midi
+  Supposedly 75 hz is maximum MIDI rate, so digi and multispeed songs are not possible.
   I looked at the protocol description. Looks like I need a pseudo-emulator wrapper to make
-  it work. If that's the case then this is not going to happen.
+  it work. Perhaps it might be possible to adapt Hermit's player for this purpose? I also
+  need a software-only SID player that works the MIDI.
 
 
 WHEN THE TIME IS RIGHT
@@ -115,6 +117,12 @@ CONSIDER THIS
 - NoobTracker: Store the random seed used to shuffle a playlist in the URL so you can reload that
   page without messing up the order.
 
+- CINJ suggested a feature in: https://github.com/Chordian/deepsid/issues/17
+  Show how may times a song was played globally. Also show how may times a playlist was used, also
+  globally. Both to show how popular a song or playlist really is.
+  This is a feature that should have been there from the beginning. If added, it will only track
+  from that moment in time. Perhaps one to add 1 January some year?
+
 - A drop-down box for selecting 6581 filter settings. User can even save their own to the list,
   with the name of the filter settings plus the user's name e.g. appended in the end.
 
@@ -162,9 +170,9 @@ CONSIDER THIS
 
 - Bug: Backing out of a playlist folder renamed to include a "/" character is problematic.
 - Bug: Country flag appears in the middle of the country name here:
-  http://deepsid.chordian.net/?file=/MUSICIANS/M/Mega9man/
+  https://deepsid.chordian.net/?file=/MUSICIANS/M/Mega9man/
 - Bug: When a CSDb page title is too long:
-  http://deepsid.chordian.net/?file=/MUSICIANS/D/DRAX/Balance.sid&tab=csdb (click image then SHOW)
+  https://deepsid.chordian.net/?file=/MUSICIANS/D/DRAX/Balance.sid&tab=csdb (click image then SHOW)
 - Bug: Copy link using the context menu triggers a console error if not logged in.
 - Bug: Players: Show list. Enter entry. Back. Entering the same entry again is now impossible.
 - Bug: Groepaz's profile header text overlaps the "report a profile change" link.
@@ -347,7 +355,7 @@ PROBABLY NOT?
 - [GH] Bug: It's currently possible to specify an "?emulator="" that is incompatible with "?file=".
 
 - Bug: One of Ben Daglish's game tunes has a title long enough to erroneously expand the GB64 entry:
-  http://deepsid.chordian.net/?file=/MUSICIANS/D/Daglish_Ben/Challenge_of_the_Gobots_on_the_Moebius_Strip.sid
+  https://deepsid.chordian.net/?file=/MUSICIANS/D/Daglish_Ben/Challenge_of_the_Gobots_on_the_Moebius_Strip.sid
 
 - Let the time pass for "download" tunes so that automatic skip to next tune works in playlists.
   - Problem is subtunes. You can't advance to next subtune in the offline player.

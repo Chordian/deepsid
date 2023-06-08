@@ -473,7 +473,7 @@ $cgsc = "_Compute's Gazette SID Collection";
 
 if ($fullname == $cgsc) {
 	// Show an IFRAME with the CGSC web site
-	$html = '<iframe class="deepsid-iframe" src="//www.c64music.co.uk/" onload="ResizeIframe();"></iframe>';
+	$html = '<iframe class="deepsid-iframe" src="http://www.c64music.co.uk/" onload="ResizeIframe();"></iframe>';
 
 } else if ($fullname == $exoticFolder) {
 	// Show a box with technical information about the custom SID format
