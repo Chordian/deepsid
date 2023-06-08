@@ -866,12 +866,11 @@
 						<span>&#9642</span>
 					<!--<a href="https://www.lemon64.com/forum/viewtopic.php?t=68056" target="_blank">Lemon64</a>
 						<span>&#9642</span>-->
-					<a rel="me" href="https://mastodon.social/@chordian" target="_blank">Mastodon</a>
-						<span>&#9642</span>
+					<!--<a rel="me" href="https://mastodon.social/@chordian" target="_blank">Mastodon</a>
+						<span>&#9642</span>-->
 					<a href="https://twitter.com/chordian" target="_blank">Twitter</a>
 						<span>&#9642</span>
-					<a href="https://discord.gg/n5w85GMbVu" target="_blank">Discord</a>
-					<!--<a href="discord.htm" target="_blank">Discord</a>-->
+					<a href="discord.htm" target="_blank">Discord</a>
 						<span>&#9642</span>
 					<a href="http://csdb.chordian.net/?type=forums&roomid=14&topicid=129712" target="_blank">CSDb</a>
 						<span>&#9642</span>
@@ -1618,6 +1617,11 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>April 18, 2023</h3>
+						<ul>
+							<li>The Discord server for DeepSID has been deleted. See this annex box for alternatives: <a class="annex-link" href="9">Social links</a></li>
+						</ul>
 
 						<h3>April 13, 2023</h3>
 						<ul>

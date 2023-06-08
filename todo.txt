@@ -3,13 +3,32 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+- Add Lemon's sid handler to the tips list.
+
+- Go through GitHub issues, add comments and close where relevant.
+  Link: https://github.com/Chordian/deepsid/issues
+
 - Bug: Clicking a name link in the top box goes to the SH folder instead of HVSC.
   Reported by Sagan. See e-mail from him for details about a "@narcisound" incident.
 
 - Bug: Unescaped control characters. See issue by tobozo at DeepSID GitHub.
 
+- Bug: 6581 enable button for filter adjusting is disabled when activating the tab for a 8580
+  tune playing. If the filter tab is already visible, clicking a new 8580 song enables it.
+
+- It looks like the vibrato detector in STATS doesn't work anymore. Either fix it or change
+  the line to have a strikethrough on it, indicating to users that it doesn't work.
+
 - Automate CGSC update process. All REN, MOVE, etc. Create folders where they can't be found
   in the filenames, count files in them, etc.
+
+- In the list with game composer on the front page, have a "greatest hits" list in the top
+  before the rest is presented alphabetically below it. The list should have legends like e.g.
+  Rob Hubbard, Martin Galway, etc. I don't think it's necessary to have a header for it.
+
+- Consider ASID support. See this: https://github.com/Chordian/deepsid/issues/22
+  I looked at the protocol description. Looks like I need a pseudo-emulator wrapper to make
+  it work. If that's the case then this is not going to happen.
 
 
 WHEN THE TIME IS RIGHT

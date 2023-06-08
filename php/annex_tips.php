@@ -329,10 +329,7 @@
 
 		<h4><a href="https://twitter.com/chordian">Twitter</a></h4>
 		Chordian\'s Twitter account and where all news and changes about DeepSID are always posted.
-
-		<h4><a href="https://discord.gg/n5w85GMbVu">Discord</a></h4>
-		Discusses changes, bugs, features, etc. Much younger than the other options. Need more members.
-		
+	
 		<h4><a href="http://csdb.chordian.net/?type=forums&roomid=14&topicid=129712">CSDb</a></h4>
 		A forum thread at CSDb that was created when DeepSID was born, but it\'s a ghost town today.
 
