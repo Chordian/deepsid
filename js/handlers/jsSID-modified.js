@@ -10,20 +10,184 @@
 // - Read SID chip address
 // - Now handles suspend/resume
 
+// Also modified by Thomas Jansson for DeepSID
+// - Added ASID support, to playback on real SID hardware
+// - Note that it needs a Web MIDI capable browser (such as Chrome)
+
+/*
+ * ASID buffers and structures
+ */
+ASID_NUM_REGS = 28;
+var asidRegisterBuffer = new Uint8Array(ASID_NUM_REGS).fill(0);
+var asidRegisterUpdated = new Array(ASID_NUM_REGS).fill(true);
+var asidOutBuffer = new Uint8Array(ASID_NUM_REGS+12); // with added protocol overhead bytes
+var selectedMidiOutput = null;
+var midiAccessObj = null;
+const asidRegMap = [
+ 0x00, 0x01, 0x02, 0x03, 0x16, 0x04, 0x05,
+ 0x06, 0x07, 0x08, 0x09, 0x17, 0x0a, 0x0b,
+ 0x0c, 0x0d, 0x0e, 0x0f, 0x18, 0x10, 0x11,
+ 0x12, 0x13, 0x14, 0x15, 0x19, 0x1a, 0x1b
+];
+
+/*
+ * Write one SID register to buffer
+ */
+function asidWriteReg(sidRegister, data) {
+ if (sidRegister > 0x18) return;
+
+ // Get the ASID transformed register
+ var mappedAddr = asidRegMap[sidRegister];
+
+ // If a write occurs to a waveform register, check if first block is already allocated
+ if ((mappedAddr >= 0x16) && (mappedAddr <= 0x18) && asidRegisterUpdated[mappedAddr] ) {
+  // ...and if so instead use the second block
+  mappedAddr += 3;
+
+  // If second block is also updated, move it to the first to make sure to always keep the last one
+  if( asidRegisterUpdated[mappedAddr])
+   asidRegisterBuffer[mappedAddr-3] = asidRegisterBuffer[mappedAddr];
+ }
+
+ // If we're trying to update a control register that is already mapped, flush it directly
+ if( asidRegisterUpdated[mappedAddr]) {
+  if( mappedAddr >= 0x16 )
+   asidSend();
+ }
+
+ // Store the data
+ asidRegisterBuffer[mappedAddr] = data;
+ asidRegisterUpdated[mappedAddr] = true;
+}
+
+/*
+ * Send actual buffer over MIDI
+ */
+function asidSendBuffer(size) {
+ selectedMidiOutput.send(asidOutBuffer.slice(0, size));
+}
+
+// Build ASID structure if buffer updated, and if so send it
+function asidSend() {
+ // Update needed?
+ let update = false;
+ for (let i = 0; i < asidRegisterUpdated.length; i++) {
+  if (asidRegisterUpdated[i]) {
+   update = true;
+   break;
+  }
+ }
+ if (!update) return;
+
+ // Sysex start data for an ASID message
+ asidOutBuffer[0] = 0xf0;
+ asidOutBuffer[1] = 0x2d;
+ asidOutBuffer[2] = 0x4e;
+ let index = 3;
+
+ // Setup mask bytes (one bit per register)
+ for (let mask=0; mask<4; mask++) {
+  let reg = 0x00;
+  for (let regOffset=0; regOffset<7; regOffset++) {
+   if (asidRegisterUpdated[mask*7+regOffset]) {
+    reg |= (1<<regOffset);
+   }
+  }
+  asidOutBuffer[index++] = reg;
+ }
+
+ // Setup the MSB bits, one per register (since MIDI only allows for 7-bit data bytes)
+ for (let msb=0; msb<4; msb++) {
+  let reg = 0x00;
+  for (let regOffset=0; regOffset<7; regOffset++) {
+   if (asidRegisterBuffer[msb*7+regOffset] & 0x80) {
+    reg |= (1<<regOffset);
+   }
+  }
+  asidOutBuffer[index++] = reg;
+ }
+
+ // Add data for all updated registers (the 7 LSB bits)
+ for (let i=0; i<ASID_NUM_REGS; i++) {
+  if (asidRegisterUpdated[i]) {
+   asidOutBuffer[index++] = asidRegisterBuffer[i] & 0x7f;
+  }
+ }
+
+ // Sysex end marker
+ asidOutBuffer[index++] = 0xf7;
+
+ // Send the data on the MIDI port
+ asidSendBuffer(index);
+
+ // Prepare for next buffer
+ asidRegisterUpdated.fill(false);
+}
+
+/*
+ * MIDI available - setup output ports
+ */
+function onMIDISuccess(midiAccess) {
+ midiAccessObj = midiAccess;
+ const select = document.getElementById('midiOutputs');
+ const outputs = Array.from(midiAccessObj.outputs.values());
+
+ // Remove any previous ports from dropdown
+ while (select.options.length > 0) {
+  select.remove(0);
+ }
+
+ // Populate dropdown with available MIDI ports
+ outputs.forEach((output, index) => {
+  const option = document.createElement('option');
+  option.text = output.name;
+  option.value = index;
+  select.appendChild(option);
+ });
+
+ // Set a valid initial selected port
+ if (outputs.length) {
+  selectedMidiOutput = outputs[select.value];
+ }
+ else {
+  alert("No MIDI devices found");
+ }
+}
+
+/*
+ * MIDI not available
+ */
+function onMIDIFailure() {
+ alert("Browser supports MIDI, but could not access your devices");
+}
+
 function playSID(sidurl,subtune) { //convenience function to create default-named jsSID object and play in one call, easily includable as inline JS function call in HTML
  if (typeof SIDplayer === 'undefined') SIDplayer = new jsSID(16384,0.0005); //create the object if doesn't exist yet
  SIDplayer.loadstart(sidurl,subtune);
 }
 
 
-function jsSID (bufferlen, background_noise)
+function jsSID (bufferlen, background_noise, asid_enable = false)
 {
 
  this.author='Hermit'; this.sourcecode='http://hermit.uw.hu'; this.version='0.9.1.7'; this.year='2019';
  
+ // Initialize Web MIDI
+ if (asid_enable) {
+  bufferlen = 512;
+  if (navigator.requestMIDIAccess) {
+   navigator.requestMIDIAccess({ sysex: true })
+    .then(onMIDISuccess, onMIDIFailure);
+  } else {
+   alert("Your browser does not support MIDI");
+   asid_enable = false;
+  }
+ }
+ var asid_enabled = asid_enable;
  //create Web Audio context and scriptNode at jsSID object initialization (at the moment only mono output)
- if ( typeof AudioContext !== 'undefined') { var jsSID_audioCtx = new AudioContext(); }
- else { var jsSID_audioCtx = new webkitAudioContext(); }
+ // For ASID, we set a samplerate 50 times bigger than the buffer size - to get a steady 50Hz clock. No audio is output so actual rate doesn't matter
+ if ( typeof AudioContext !== 'undefined') { var jsSID_audioCtx = new AudioContext(asid_enabled ? {sampleRate: bufferlen*50} : {}); }
+ else { var jsSID_audioCtx = new webkitAudioContext(asid_enabled ? {sampleRate: bufferlen*50} : {}); }
  var samplerate = jsSID_audioCtx.sampleRate; 
  if (typeof jsSID_audioCtx.createJavaScriptNode === 'function') { var jsSID_scriptNode = jsSID_audioCtx.createJavaScriptNode(bufferlen,0,1); }
  else { var jsSID_scriptNode = jsSID_audioCtx.createScriptProcessor(bufferlen,0,1); }
@@ -63,8 +227,23 @@ function jsSID (bufferlen, background_noise)
  } 
 
  this.start = function(subt) { init(subt); if (startcallback!==null) startcallback(); this.playcont(); }
- this.playcont = function() { jsSID_scriptNode.connect(jsSID_audioCtx.destination); if(jsSID_audioCtx.state=="suspended") jsSID_audioCtx.resume(); /* Added by JCH */ }
- this.pause = function() { if (loaded && initialized) jsSID_scriptNode.disconnect(jsSID_audioCtx.destination); } 
+ this.playcont = function() {
+  if (asid_enabled) {
+   // Turn on volume (will later be sent upon first packet created)
+   asidRegisterBuffer[21] = asidRegisterBuffer[21] | 0x0f;
+   asidRegisterUpdated[21] = true;
+  }
+
+  jsSID_scriptNode.connect(jsSID_audioCtx.destination); if(jsSID_audioCtx.state=="suspended") jsSID_audioCtx.resume(); /* Added by JCH */ }
+ this.pause = function() {
+  if (asid_enabled) {
+   // Turn off volume and make sure it gets sent
+   asidRegisterBuffer[21] = asidRegisterBuffer[21] & 0xf0;
+   asidRegisterUpdated[21] = true;
+   asidSend();
+  }
+  if (loaded && initialized) jsSID_scriptNode.disconnect(jsSID_audioCtx.destination);
+ }
  //(Checking state before disconnecting is a workaround for Opera: gave error when code tried disconnecting what is not connected. 
  //Checking inner state variables here, but maybe audioContext status info could be more reliable. I just didn't want to rely too many Audio API function.)
  this.stop = function() { this.pause(); init(subtune); }
@@ -110,6 +289,24 @@ function jsSID (bufferlen, background_noise)
  var voiceMask=0x1FF; // Added by JCH
   
  function init(subt) { 
+  if (asid_enabled) {
+   const select = document.getElementById('midiOutputs');
+   const outputs = Array.from(midiAccessObj.outputs.values());
+   if (outputs.length) {
+    selectedMidiOutput = outputs[select.value];
+    // Initialize all registers
+    asidRegisterBuffer.fill(0);
+    asidRegisterUpdated.fill(true);
+    // Make sure volume is turned on
+    asidRegisterBuffer[21] = asidRegisterBuffer[21] | 0x0f;
+    //asidRegisterUpdated[21] = true;
+   }
+   else {
+    alert("No MIDI devices found");
+    return;
+   }
+  }
+
   if (loaded) { initialized=0; subtune = subt; voiceMask = 0x1FF; /* Added by JCH*/ initCPU(initaddr); initSID(); A=subtune; memory[1]=0x37; memory[0xDC05]=0;
    for(var timeout=100000;timeout>=0;timeout--) { if (CPU()) break; } 
    if (timermode[subtune] || memory[0xDC05]) { //&& playaddf {   //CIA timing
@@ -128,20 +325,22 @@ function jsSID (bufferlen, background_noise)
    if (finished==0) {
     while(CPUtime<=clk_ratio) { 
 	 pPC=PC;
-     if (CPU()>=0xFE) { finished=1; break; }  else CPUtime+=cycles;
+     if (CPU()>=0xFE) { finished=1;if (asid_enabled) asidSend(); break; }  else CPUtime+=cycles;
      if ( (memory[1]&3)>1 && pPC<0xE000 && (PC==0xEA31 || PC==0xEA81)) { finished=1; break; } //IRQ player ROM return handling
      if ( (addr==0xDC05 || addr==0xDC04) && (memory[1]&3) && timermode[subtune] ) frame_sampleperiod = (memory[0xDC04] + memory[0xDC05]*256) / clk_ratio; //Galway/Rubicon workaround
      if(storadd>=0xD420 && storadd<0xD800 && (memory[1]&3)) {  //CJ in the USA workaround (writing above $d420, except SID2/SID3)
       if ( !(SID_address[1]<=storadd && storadd<SID_address[1]+0x1F) && !(SID_address[2]<=storadd && storadd<SID_address[2]+0x1F) )
        memory[storadd&0xD41F]=memory[storadd]; }
      if(addr==0xD404 && !(memory[0xD404]&1)) ADSRstate[0]&=0x3E; if(addr==0xD40B && !(memory[0xD40B]&1)) ADSRstate[1]&=0x3E; if(addr==0xD412 && !(memory[0xD412]&1)) ADSRstate[2]&=0x3E; //Whittaker player workaround
+     // If a SID register on chip 1 was updated - add to ASID buffer
+     if (asid_enabled && (storadd >= 0xD400 && storadd <=0xD418)) asidWriteReg(storadd-0xD400, memory[storadd]);
     }  
     CPUtime-=clk_ratio;
    }
   } 
 
   if (playlength>0 && parseInt(playtime)==parseInt(playlength) && endcallback!==null && ended==0) {ended=1; endcallback();}
-  mix = SID(0,0xD400); if (SID_address[1]) mix += SID(1,SID_address[1]); if(SID_address[2]) mix += SID(2,SID_address[2]);
+  mix = asid_enabled ? 0 : SID(0,0xD400); if (SID_address[1]) mix += SID(1,SID_address[1]); if(SID_address[2]) mix += SID(2,SID_address[2]);
   
   return mix * volume * SIDamount_vol[SIDamount] + (Math.random()*background_noise-background_noise/2); 
  }

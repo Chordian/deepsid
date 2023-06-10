@@ -63,7 +63,7 @@
 			document.head.appendChild(viewport);
 		</script>
 		<meta name="description" content="A modern online SID player for the High Voltage and Compute's Gazette SID collections." /> <!-- Max 150 characters -->
-		<meta name="keywords" content="c64,commodore 64,sid,6581,8580,hvsc,high voltage,cgsc,compute's gazette,visualizer,stil,websid,jssid,hermit" />
+		<meta name="keywords" content="c64,commodore 64,sid,6581,8580,hvsc,high voltage,cgsc,compute's gazette,visualizer,stil,websid,jssid,asid,hermit" />
 		<meta name="author" content="Jens-Christian Huus" />
 		<title>DeepSID | Chordian.net</title>
 		<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans%3A400%2C700%2C400italic%2C700italic%7CQuestrial%7CMontserrat&#038;subset=latin%2Clatin-ext" />
@@ -509,6 +509,7 @@
 					<option value="websid">WebSid emulator</option>
 					<option value="legacy">WebSid (Legacy)</option>
 					<option value="jssid">Hermit's emulator</option>
+					<option value="asid">ASID (MIDI)</option>
 					<option value="lemon">Lemon's MP3 files</option>
 					<option value="youtube">YouTube videos</option>
 					<option value="download">Download SID file</option>
@@ -547,6 +548,7 @@
 					<?php endif; ?>
 				<?php endif ?>
 			</div>
+			<select id="midiOutputs"></select>
 
 			<div id="youtube-tabs">
 				<div class="tab unselectable selected">DeepSID</div>
