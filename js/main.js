@@ -792,6 +792,7 @@ $(function() { // DOM ready
 				if ($sundry.css("flex-basis").replace("px", "") < 205)
 					$sundry.css("flex-basis", 205);
 				$("#sundry-ctrls").append('<span id="filter-6581" class="disable-6581">This requires <button class="set-6581 disabled" disabled="disabled">6581</button> chip mode</span>');
+				ShowSundryFilterContents();
 				break;
 			case "stereo":
 				// The stereo view requires a minimum amount of vertical space

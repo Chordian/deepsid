@@ -471,11 +471,11 @@ $html = '<table style="border:none;margin-bottom:0;"><tr>'.
 // Chartist - @link https://gionkunz.github.io/chartist-js/index.html
 $cgsc = "_Compute's Gazette SID Collection";
 
-if ($fullname == $cgsc) {
+/*if ($fullname == $cgsc) {							// This doesn't work when DeepSID uses HTTPS
 	// Show an IFRAME with the CGSC web site
 	$html = '<iframe class="deepsid-iframe" src="http://www.c64music.co.uk/" onload="ResizeIframe();"></iframe>';
-
-} else if ($fullname == $exoticFolder) {
+*/
+if ($fullname == $exoticFolder) {
 	// Show a box with technical information about the custom SID format
 	$info = file_get_contents('../sidv4e.txt');
 	$html .= '<pre class="fixed-font-info">'.$info.'</pre>';
@@ -485,12 +485,14 @@ if ($fullname == $cgsc) {
 	$info = file_get_contents('../upload.txt');
 	$html .= '<pre class="fixed-font-info">'.$info.'</pre>';
 	
-} else if (substr($fullname, 0, strlen($cgsc)) != $cgsc && $fullname != $csdbCompoFolder && strpos($fullname, '/GROUPS') === false) {
+} else if ($fullname != $csdbCompoFolder && strpos($fullname, '/GROUPS') === false) {
 	// Charts for HVSC sub folders as well as custom "_" folders
 	$html .= '<h3 style="margin-top:21px;">Active years<div class="legend">X = year (1982-)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Y = number of SID files</div></h3>
-		<div id="ct-years"></div>
-		<h3 style="margin-top:0;">Players used</h3><div id="ct-players"></div>
-		<script type="text/javascript">'.
+		<div id="ct-years"></div>'.
+		(substr($fullname, 0, strlen($cgsc)) != $cgsc
+			? '<h3 style="margin-top:0;">Players used</h3><div id="ct-players"></div>'
+			: '').
+		'<script type="text/javascript">'.
 			/*'console.log("Labels: ", '.json_encode($player_labels).');
 			console.log("Series: ", '.json_encode($player_counts).');'.*/
 			'ctYears = new Chartist.Line("#ct-years",

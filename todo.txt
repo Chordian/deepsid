@@ -3,34 +3,15 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- Add Lemon's SID handler to the tips list.
-
-- Write a blog post showing most popular SID clicks according to Google Analytics.
-
-- Bug: Clicking a name link in the top box goes to the SH folder instead of HVSC.
-  Reported by Sagan. See e-mail from him for details about a "@narcisound" incident.
-
-- Bug: Unescaped control characters. See: https://github.com/Chordian/deepsid/issues/21
-
-- Bug: 6581 enable button for filter adjusting is disabled when activating the tab for a 8580
-  tune playing. If the filter tab is already visible, clicking a new 8580 song enables it.
-
-- It looks like the vibrato detector in STATS doesn't work anymore. Either fix it or change
-  the line to have a strikethrough on it, indicating to users that it doesn't work.
-
 - Automate CGSC update process. All REN, MOVE, etc. Create folders where they can't be found
   in the filenames, count files in them, etc.
-
-- In the list with game composer on the front page, have a "greatest hits" list in the top
-  before the rest is presented alphabetically below it. The list should have legends like e.g.
-  Rob Hubbard, Martin Galway, etc. I don't think it's necessary to have a header for it.
 
 - Consider ASID support. See this: https://github.com/Chordian/deepsid/issues/22
   ASID uses MIDI. This can be used by web browsers: https://caniuse.com/?search=midi
   Supposedly 75 hz is maximum MIDI rate, so digi and multispeed songs are not possible.
   I looked at the protocol description. Looks like I need a pseudo-emulator wrapper to make
   it work. Perhaps it might be possible to adapt Hermit's player for this purpose? I also
-  need a software-only SID player that works the MIDI.
+  need a software-only SID player that works with MIDI.
 
 
 WHEN THE TIME IS RIGHT
@@ -132,6 +113,10 @@ CONSIDER THIS
 - Replace drop-down boxes with styled versions (browser and search) - I don't like how e.g. Firefox
   and Chrome change their design like the wind blows.
 
+- In the list with game composer on the front page, have a "greatest hits" list in the top
+  before the rest is presented alphabetically below it. The list should have legends like e.g.
+  Rob Hubbard, Martin Galway, etc. I don't think it's necessary to have a header for it.
+
 - Tips idea: Jargon. All kinds of abbreviations and technical expressions explained - including
   DeepSID jargon such as "plinks" and "clinks".
 
@@ -203,6 +188,15 @@ CONSIDER THIS
 - See also:
   - A list of similar SID tunes, for example found by comparing STIL artists.
   - I was thinking a new tab at first, but there are already a lot of those. Alternatives?
+
+- BUG: Sagan reports that clicking a name link in the top box goes to the SH folder instead of
+  a composer folder in HVSC. See his e-mail from him for details about a "@narcisound" incident.
+  UPDATE: This is actually working as intended. If entering the SH folder directly, the top box
+  only has a name link if the composer has his own folder too. Clicking it then goes there. If
+  searching and finding a tune in the SH folder then clicking the name link in the top box, it
+  goes to the SH folder as it can't rely on the composer having his own folder. This behavior
+  could be expanded with additional code for checking if there is a composer folder, but I'm
+  not sure it's worth the trouble.
 
 - VBI detection can be handled better in WebSid. JW said in Facebook Messenger:
   "I have PSID specific APIs that might allow you to handle the PSID labels "more correctly", e.g.

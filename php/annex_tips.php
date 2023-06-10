@@ -122,6 +122,10 @@
 		<h4><a href="//deepsid.chordian.net?emulator=jssid">Hermit\'s emulator</a></h4>
 		<p>Even faster, but cannot emulate RSID tunes, nor SID with digi.</p>
 
+		<h4><a href="//deepsid.chordian.net?emulator=lemon">Lemon\'s MP3 files</a></h4>
+		<p>It plays MP3 files recorded from JSIDPlay2 (only
+		<a href="https://www.hvsc.c64.org/">HVSC</a> for now).</p>
+
 		<h4><a href="//deepsid.chordian.net?emulator=youtube">YouTube videos</a></h4>
 		<p>Plays a YouTube video where SID rows are enabled for clicking.</p>
 		One SID row can contain several videos, and you can add more.

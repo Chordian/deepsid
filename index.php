@@ -1618,9 +1618,16 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>June 10, 2023</h3>
+						<ul>
+							<li>Fixed the 6581 button not being clickable when selecting the filter sundry tab.</li>
+						</ul>
+
 						<h3>June 8, 2023</h3>
 						<ul>
 							<li>DeepSID now only uses HTTPS. HTTP will automatically be redirected to HTTPS.</li>
+							<li>The profile page for Compute's Gazette SID Collection now shows a standard page instead of the site itself.
+								This is better anyway since year data has been added to all songs in the collection.</li>
 						</ul>
 
 						<h3>April 18, 2023</h3>

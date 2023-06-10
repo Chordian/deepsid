@@ -1072,7 +1072,7 @@ try {
 				'playaddr' => 		$playaddr,
 				'subtunes' => 		$subtunes,
 				'startsubtune' => 	$startsubtune,
-				'name' => 			$name,
+				//'name' => 		$name,				// @link https://github.com/Chordian/deepsid/issues/21
 				'author' => 		$author,
 				'copyright' => 		$copyright,
 				//'hash' => 		$hash,
