@@ -142,6 +142,30 @@ function SIDPlayer(emulator) {
 			this.emulatorFlags.offline			= false;
 			break;
 
+		case "asid":
+
+			/**
+			 * ASID by Thomas Jansson - added by extending Hermit's driver
+			 *
+			 * Current status
+			 * # Uses a silent audio context to get 50Hz buffer
+			 * # Same features as Hermit's
+			 */
+			this.jsSID = new jsSID(0, 0, true);
+
+			this.emulatorFlags.supportFaster	= true;
+			this.emulatorFlags.supportEncoding	= false;
+			this.emulatorFlags.supportSeeking	= false;
+			this.emulatorFlags.supportLoop		= true;
+			this.emulatorFlags.forceModel		= true;
+			this.emulatorFlags.forcePlay		= false;
+			this.emulatorFlags.hasFlags			= true;
+			this.emulatorFlags.slowLoading		= false;
+			this.emulatorFlags.returnCIA		= true;
+			this.emulatorFlags.offline			= false;
+			break;
+
+
 		case "lemon":
 
 			/**
@@ -387,6 +411,7 @@ SIDPlayer.prototype = {
 				break;
 
 			case "jssid":
+			case "asid":
 
 				// @todo Maybe catch most digi/speech stuff via the 'player' field?
 				var error = file.indexOf("_BASIC.") !== -1;
@@ -417,6 +442,7 @@ SIDPlayer.prototype = {
 					}.bind(this), 500);
 				}
 				break;
+
 
 			case "lemon":
 
@@ -604,6 +630,7 @@ SIDPlayer.prototype = {
 			case "websid":
 			case "legacy":
 			case "jssid":
+			case "asid":
 			case "youtube":
 				// At least stop the tune
 				this.stop();
@@ -633,6 +660,7 @@ SIDPlayer.prototype = {
 					this.WebSid.isPaused() ? this.WebSid.resume() : this.WebSid.play();
 				break;
 			case "jssid":
+			case "asid":
 				if (typeof forcePlay !== "undefined")
 					this.jsSID.start(this.subtune);
 				else {
@@ -672,6 +700,7 @@ SIDPlayer.prototype = {
 				playing = !this.WebSid.isPaused();
 				break;
 			case "jssid":
+			case "asid":
 				// @todo
 				break;
 			case "lemon":
@@ -702,6 +731,7 @@ SIDPlayer.prototype = {
 				suspended = audioCtx.state == "suspended";
 				break;
 			case "jssid":
+			case "asid":
 				// @todo
 				suspended = this.jsSID.issuspended();
 				break;
@@ -729,6 +759,7 @@ SIDPlayer.prototype = {
 				this.WebSid.pause();
 				break;
 			case "jssid":
+			case "asid":
 				this.jsSID.pause();
 				break;
 			case "lemon":
@@ -755,6 +786,7 @@ SIDPlayer.prototype = {
 				this.WebSid.pause();
 				break;
 			case "jssid":
+			case "asid":
 				this.jsSID.playcont(); // Added as a hack to avoid a nasty console error
 				this.jsSID.stop();
 				this.paused = false;
@@ -786,6 +818,7 @@ SIDPlayer.prototype = {
 				this.WebSid.resetSampleRate(normalSampleRate / multiplier);
 				break;
 			case "jssid":
+			case "asid":
 				this.jsSID.setSpeedMultiplier(multiplier);
 				break;
 			case "lemon":
@@ -817,6 +850,7 @@ SIDPlayer.prototype = {
 				result.maxSubsong = isCGSC ? 0 : result.maxSubsong - 1;				
 				break;
 			case "jssid":
+			case "asid":
 				result.actualSubsong	= this.subtune;
 				result.maxSubsong		= isCGSC ? 0 : this.jsSID.getsubtunes() - 1;
 				result.songAuthor		= this.jsSID.getauthor();
@@ -872,6 +906,7 @@ SIDPlayer.prototype = {
 				this.WebSid.setVolume(value);
 				break;
 			case "jssid":
+			case "asid":
 				this.jsSID.setvolume(value);
 				break;
 			case "lemon":
@@ -897,6 +932,7 @@ SIDPlayer.prototype = {
 				this.WebSid.setVolume(value * this.mainVol);
 				break;
 			case "jssid":
+			case "asid":
 				this.jsSID.setvolume(value * this.mainVol);
 				break;
 			case "lemon":
@@ -923,6 +959,7 @@ SIDPlayer.prototype = {
 				time = this.WebSid.getCurrentPlaytime();
 				break;
 			case "jssid":
+			case "asid":
 				time = this.jsSID.getplaytime();
 				break;
 			case "lemon":
@@ -1086,6 +1123,7 @@ SIDPlayer.prototype = {
 				this.WebSid._currentTimeout = -1;
 				break;
 			case "jssid":
+			case "asid":
 				break;
 			case "lemon":
 				this.howler.loop(true);
@@ -1111,6 +1149,7 @@ SIDPlayer.prototype = {
 				this.WebSid._currentTimeout = length * this.WebSid._sampleRate;
 				break;
 			case "jssid":
+			case "asid":
 				break;
 			case "lemon":
 				this.howler.loop(false);
@@ -1136,6 +1175,7 @@ SIDPlayer.prototype = {
 				SIDBackend.setSID6581(model === "6581" ? 1 : 0);
 				break;
 			case "jssid":
+			case "asid":
 				this.jsSID.setmodel(model === "6581" ? 6581.0 : 8580.0);
 				break;
 			case "lemon":
@@ -1156,6 +1196,7 @@ SIDPlayer.prototype = {
 			case "legacy":
 				return SIDBackend.isSID6581() ? "6581" : "8580";
 			case "jssid":
+			case "asid":
 				return this.jsSID.getmodel() === 6581.0 ? "6581" : "8580";
 			case "lemon":
 				//return this.modelLEMON.substr(3, 4);
@@ -1177,6 +1218,7 @@ SIDPlayer.prototype = {
 				SIDBackend.setNTSC(encoding === "NTSC" ? 1 : 0);
 				break;
 			case "jssid":
+			case "asid":
 				// jsSID doesn't support this
 				// @todo Try changing: this.jsSID.C64_PAL_CPUCLK + this.jsSID.PAL_FRAMERATE
 				break;
@@ -1198,6 +1240,7 @@ SIDPlayer.prototype = {
 			case "legacy":
 				return SIDBackend.isNTSC() ? "NTSC" : "PAL";
 			case "jssid":
+			case "asid":
 				// jsSID always defaults to PAL
 				return "PAL";
 			case "lemon":
@@ -1227,6 +1270,7 @@ SIDPlayer.prototype = {
 				SIDBackend.enableVoices(this.voiceMask[0]); // Legacy only controls 1SID voices ON/OFF
 				break;
 			case "jssid":
+			case "asid":
 				// Stitch a mask together that works with jsSID (CCCBBBAAA)
 				var jsMask = 0;
 				for (var jsChip = 0; jsChip < 3; jsChip++)
@@ -1259,6 +1303,7 @@ SIDPlayer.prototype = {
 				SIDBackend.enableVoices(0xF);
 				break;				
 			case "jssid":
+			case "asid":
 				this.jsSID.enableVoices(0x1FF);
 				break;
 			case "lemon":
@@ -1287,6 +1332,7 @@ SIDPlayer.prototype = {
 				// 19654 relates to 1x; lower values speed up the tune
 				return cia ? Math.round(19654 / cia) : 0;
 			case "jssid":
+			case "asid":
 				var cia = this.jsSID.getcia();
 				return cia ? Math.round(19654 / cia) : 0;
 			case "lemon":
@@ -1307,6 +1353,7 @@ SIDPlayer.prototype = {
 			case "legacy":
 				return SIDBackend.getDigiTypeDesc();
 			case "jssid":
+			case "asid":
 			case "lemon":
 			case "youtube":
 			case "download":
@@ -1326,6 +1373,7 @@ SIDPlayer.prototype = {
 			case "legacy":
 				return SIDBackend.getDigiRate();
 			case "jssid":
+			case "asid":
 			case "lemon":
 			case "youtube":
 			case "download":
@@ -1355,6 +1403,7 @@ SIDPlayer.prototype = {
 				}
 				return address;
 			case "jssid":
+			case "asid":
 				return this.jsSID.getSIDAddress(chip - 1);
 			case "lemon":
 			case "youtube":
@@ -1389,6 +1438,7 @@ SIDPlayer.prototype = {
 					register += (SIDBackend.sidFileHeader[chip == 1 ? 0x7A : 0x7B] << 4) - 0x400;
 				return SIDBackend.getRegisterSID(register);
 			case "jssid":
+			case "asid":
 				return this.jsSID.readregister(register + this.jsSID.getSIDAddress(chip));
 			case "lemon":
 			case "youtube":
@@ -1411,6 +1461,7 @@ SIDPlayer.prototype = {
 			case "legacy":
 				return SIDBackend.getRAM(address);
 			case "jssid":
+			case "asid":
 				return this.jsSID.readregister(address);
 			case "lemon":
 			case "youtube":
@@ -1433,6 +1484,7 @@ SIDPlayer.prototype = {
 				return SIDBackend.readVoiceLevel(chip, voice - 1);
 			case "legacy":
 			case "jssid":
+			case "asid":
 			case "lemon":
 			case "youtube":
 			case "download":
@@ -1456,6 +1508,7 @@ SIDPlayer.prototype = {
 				break;
 			case "legacy":
 			case "jssid":
+			case "asid":
 			case "lemon":
 			case "youtube":
 			case "download":
@@ -1476,6 +1529,7 @@ SIDPlayer.prototype = {
 				break;
 			case "legacy":
 			case "jssid":
+			case "asid":
 			case "lemon":
 			case "youtube":
 			case "download":
@@ -1496,6 +1550,7 @@ SIDPlayer.prototype = {
 				break;
 			case "legacy":
 			case "jssid":
+			case "asid":
 			case "lemon":
 			case "youtube":
 			case "download":
@@ -1517,6 +1572,7 @@ SIDPlayer.prototype = {
 				break;
 			case "legacy":
 			case "jssid":
+			case "asid":
 			case "lemon":
 			case "youtube":
 			case "download":

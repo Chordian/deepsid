@@ -58,6 +58,7 @@ $(function() { // DOM ready
 		"websid",
 		"legacy",
 		"jssid",
+		"asid",
 		"lemon",
 		"youtube",
 		"download",
@@ -239,7 +240,7 @@ $(function() { // DOM ready
 					ctrls.state("root/back", "enabled");
 
 					$("#dropdown-emulator")
-						.styledOptionState("websid legacy jssid", "enabled")
+						.styledOptionState("websid legacy jssid asid", "enabled")
 						.styledOptionState("lemon youtube", "disabled");
 					$("#path").css("top", "5px").empty().append("Temporary emulator testing");
 					$("#stab-stil,#tab-stil").empty().append("STIL");
@@ -543,7 +544,7 @@ $(function() { // DOM ready
 					$("#tab-visuals").removeClass("disabled");
 
 				// The color of the time bar should be unique for the chosen SID handler
-				$("#time-bar").removeClass("websid legacy jssid lemon youtube").addClass(emulator)
+				$("#time-bar").removeClass("websid legacy jssid asid lemon youtube").addClass(emulator)
 					.css("cursor", SID.emulatorFlags.supportSeeking ? "pointer" : "default");
 
 				$("#faster").removeClass("disabled");
@@ -792,7 +793,6 @@ $(function() { // DOM ready
 				if ($sundry.css("flex-basis").replace("px", "") < 205)
 					$sundry.css("flex-basis", 205);
 				$("#sundry-ctrls").append('<span id="filter-6581" class="disable-6581">This requires <button class="set-6581 disabled" disabled="disabled">6581</button> chip mode</span>');
-				ShowSundryFilterContents();
 				break;
 			case "stereo":
 				// The stereo view requires a minimum amount of vertical space
@@ -2062,6 +2062,13 @@ function HandleTopBox(emulator) {
 		$("#youtube,#youtube-tabs").hide();
 		$("#memory-chunk").css("top", "-2px");
 	}
+	if (emulator == "asid") {
+		$("#midiOutputs").show();
+	}
+	else {
+		$("#midiOutputs").hide();
+	}
+
 	$(window).trigger("resize"); // Keeps bottom search box in place
 }
 
@@ -2085,7 +2092,7 @@ function DisableIncompatibleRows() {
 				$tr.addClass("disabled");
 		} else if (isSIDFile && $tr.find(".name").attr("data-name").indexOf("BASIC.sid") !== -1) {
 			// These emulators can't do tunes made in BASIC
-			SID.emulator == "legacy" || SID.emulator == "jssid"
+			SID.emulator == "legacy" || SID.emulator == "jssid" || SID.emulator == "asid"
 				? $tr.addClass("disabled")
 				: $tr.removeClass("disabled");
 		/*} else if (isSIDFile && (SID.emulator == "websid" || SID.emulator == "legacy") &&
@@ -2102,8 +2109,8 @@ function DisableIncompatibleRows() {
 				? $tr.addClass("disabled")
 				: $tr.removeClass("disabled");
 		} else if (isSIDFile && ($tr.find(".name").attr("data-type") === "RSID" || $tr.find(".name").attr("data-name").indexOf(".mus") !== -1)) {
-			// Hermit's emulator can't do neither any RSID tunes nor any MUS files
-			SID.emulator == "jssid"
+			// Hermit's emulator and ASID can't do neither any RSID tunes nor any MUS files
+			SID.emulator == "jssid" || SID.emulator == "asid"
 				? $tr.addClass("disabled")
 				: $tr.removeClass("disabled");
 		}

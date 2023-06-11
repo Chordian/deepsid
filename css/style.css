@@ -293,6 +293,7 @@
 	--color-timebar-border:			#c4c5b3;			/* Color for border of e.g. time bar, permalinks, etc. */
 	--color-timebar-websid:			var(--color-memory-border-top);
 	--color-timebar-jssid:			rgb(38, 99, 41);
+	--color-timebar-asid:			#000000;
 	--color-timebar-lemon:			rgb(104, 44, 116);
 	--color-timebar-youtube:		#a44;				/* This and above are time bar colors for various SID handlers */
 

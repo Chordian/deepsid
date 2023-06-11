@@ -461,7 +461,7 @@ Viz.prototype = {
 	 * @param {string} emulator 
 	 */
 	setEmuButton: function(emulator) {
-		if (emulator == "websid" || emulator == "legacy" || emulator == "jssid") {
+		if (emulator == "websid" || emulator == "legacy" || emulator == "jssid" || emulator == "asid") {
 			$("#page .viz-"+emulator).addClass("button-on"); 
 			$("#page .viz-msg-emu").hide();
 		} else
