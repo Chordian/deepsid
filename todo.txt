@@ -6,13 +6,6 @@ SHOULD BE DONE
 - Automate CGSC update process. All REN, MOVE, etc. Create folders where they can't be found
   in the filenames, count files in them, etc.
 
-- Consider ASID support. See this: https://github.com/Chordian/deepsid/issues/22
-  ASID uses MIDI. This can be used by web browsers: https://caniuse.com/?search=midi
-  Supposedly 75 hz is maximum MIDI rate, so digi and multispeed songs are not possible.
-  I looked at the protocol description. Looks like I need a pseudo-emulator wrapper to make
-  it work. Perhaps it might be possible to adapt Hermit's player for this purpose? I also
-  need a software-only SID player that works with MIDI.
-
 
 WHEN THE TIME IS RIGHT
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯

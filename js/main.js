@@ -93,6 +93,10 @@ $(function() { // DOM ready
 		.styledSelect("emulator")
 		.styledSetValue(emulator);
 
+	// Doesn't work correctly and I can't test it as I don't have a MIDI device
+	/*$("#asid-midi-outputs")
+		.styledSelect("midi-outputs");*/
+
 	// Assume 1SID (most common) thus hide the extra filter sections on the pianos
 	$("#visuals-piano .piano-filter1,#visuals-piano .piano-filter2").hide();
 
@@ -510,7 +514,9 @@ $(function() { // DOM ready
 					wasPlaying = ctrls.isPlaying(),
 					mainVol = SID.mainVol,
 					prevEmulator = SID.emulator;
-				SID.unload();
+				try {
+					SID.unload();
+				} catch (err) {}
 				ctrls.selectButton($("#stop"));
 				viz.allEmuButtonsOff();
 
@@ -2062,11 +2068,12 @@ function HandleTopBox(emulator) {
 		$("#youtube,#youtube-tabs").hide();
 		$("#memory-chunk").css("top", "-2px");
 	}
+
 	if (emulator == "asid") {
-		$("#midiOutputs").show();
+		$("#asid-midi").show();
 	}
 	else {
-		$("#midiOutputs").hide();
+		$("#asid-midi").hide();
 	}
 
 	$(window).trigger("resize"); // Keeps bottom search box in place

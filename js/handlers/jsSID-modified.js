@@ -64,7 +64,7 @@ function asidWriteReg(sidRegister, data) {
  * Send actual buffer over MIDI
  */
 function asidSendBuffer(size) {
- selectedMidiOutput.send(asidOutBuffer.slice(0, size));
+  selectedMidiOutput.send(asidOutBuffer.slice(0, size));
 }
 
 // Build ASID structure if buffer updated, and if so send it
@@ -129,9 +129,9 @@ function asidSend() {
  */
 function onMIDISuccess(midiAccess) {
  midiAccessObj = midiAccess;
- const select = document.getElementById('midiOutputs');
+ const select = document.getElementById('asid-midi-outputs');
  const outputs = Array.from(midiAccessObj.outputs.values());
-
+ 
  // Remove any previous ports from dropdown
  while (select.options.length > 0) {
   select.remove(0);
@@ -150,7 +150,7 @@ function onMIDISuccess(midiAccess) {
   selectedMidiOutput = outputs[select.value];
  }
  else {
-  alert("No MIDI devices found");
+  alert("No MIDI devices found.");
  }
 }
 
@@ -158,7 +158,7 @@ function onMIDISuccess(midiAccess) {
  * MIDI not available
  */
 function onMIDIFailure() {
- alert("Browser supports MIDI, but could not access your devices");
+ alert("Browser supports MIDI, but could not access your devices.");
 }
 
 function playSID(sidurl,subtune) { //convenience function to create default-named jsSID object and play in one call, easily includable as inline JS function call in HTML
@@ -179,8 +179,7 @@ function jsSID (bufferlen, background_noise, asid_enable = false)
    navigator.requestMIDIAccess({ sysex: true })
     .then(onMIDISuccess, onMIDIFailure);
   } else {
-   alert("Your browser does not support MIDI");
-   asid_enable = false;
+   alert("Your browser does not support MIDI.");
   }
  }
  var asid_enabled = asid_enable;
@@ -290,9 +289,9 @@ function jsSID (bufferlen, background_noise, asid_enable = false)
   
  function init(subt) { 
   if (asid_enabled) {
-   const select = document.getElementById('midiOutputs');
+   const select = document.getElementById('asid-midi-outputs');
    const outputs = Array.from(midiAccessObj.outputs.values());
-   if (outputs.length) {
+   if (typeof outputs !== 'undefined' && outputs.length) {
     selectedMidiOutput = outputs[select.value];
     // Initialize all registers
     asidRegisterBuffer.fill(0);
@@ -302,7 +301,8 @@ function jsSID (bufferlen, background_noise, asid_enable = false)
     //asidRegisterUpdated[21] = true;
    }
    else {
-    alert("No MIDI devices found");
+    alert("No MIDI devices found.");
+    asid_enabled = false;
     return;
    }
   }

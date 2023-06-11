@@ -548,7 +548,11 @@
 					<?php endif; ?>
 				<?php endif ?>
 			</div>
-			<select id="midiOutputs"></select>
+			<div id="asid-midi" style="display:none;">
+				<label for="select-midi-outputs">MIDI port for ASID</label>
+				<!--<select id="asid-midi-outputs" name="select-midi-outputs" style="visibility:hidden;"></select>-->
+				<select id="asid-midi-outputs" name="select-midi-outputs"></select>
+			</div>
 
 			<div id="youtube-tabs">
 				<div class="tab unselectable selected">DeepSID</div>
@@ -1395,15 +1399,20 @@
 							Scopes by Jürgen Wothke (<a href="http://www.wothke.ch/tinyrsid/index.php" target="_top">Tiny'R'Sid</a>)<br />
 						</p>
 
-						<h3>SID emulators for JavaScript</h3>
+						<h3>SID handlers</h3>
 						<p>
-							WebSid by Jürgen Wothke (<a href="http://www.wothke.ch/tinyrsid/index.php" target="_top">Tiny'R'Sid</a>)<br />
+							WebSid emulators by Jürgen Wothke (<a href="http://www.wothke.ch/tinyrsid/index.php" target="_top">Tiny'R'Sid</a>)<br />
 							<a href="http://www.wothke.ch/websid/" target="_top">http://www.wothke.ch/websid/</a><br />
 							<a href="https://github.com/wothke/websid" target="_top">https://github.com/wothke/websid</a><br />
 							<a href="https://github.com/wothke/webaudio-player" target="_top">https://github.com/wothke/webaudio-player</a>
 						</p>
 						<p>
-							jsSID by Mihály Horváth (<a href="http://csdb.chordian.net/?type=scener&id=18806" target="_top">Hermit</a>)
+							jsSID emulator by Mihály Horváth (<a href="http://csdb.chordian.net/?type=scener&id=18806" target="_top">Hermit</a>)
+						</p>
+						<p>
+							ASID (MIDI) implementation by Thomas Jansson<br />
+							<a href="https://github.com/thomasj" target="_top">https://github.com/thomasj</a><br />
+							<a href="https://www.youtube.com/@tubesockor" target="_top">https://www.youtube.com/@tubesockor</a><br />
 						</p>
 
 						<h3>Audio API library for MP3 files</h3>
@@ -1619,6 +1628,12 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>June 11, 2023</h3>
+						<ul>
+							<li>A new SID handler for ASID (MIDI) has been implemented by Thomas Jansson. You can use this handler to play SID music
+								on MIDI devices such as SidStation, TherapSID, Midibox SID and C64 (using Station64).</li>
+						</ul>
 
 						<h3>June 10, 2023</h3>
 						<ul>

@@ -240,6 +240,7 @@
 						<li><b>websid</b></li>
 						<li><b>legacy</b></li>
 						<li><b>jssid</b>&nbsp;&nbsp;(Hermit\'s)</li>
+						<li><b>lemon</b></li>
 						<li><b>youtube</b></li>
 						<li><b>download</b></li>
 					</ul>
@@ -293,6 +294,7 @@
 						<li><b>tags</b></li>
 						<li><b>scope</b>&nbsp;&nbsp;(or <b>osc</b>)</li>
 						<li><b>filter</b></li>
+						<li><b>stereo</b></li>
 					</ul>
 				</td>
 			</tr>
