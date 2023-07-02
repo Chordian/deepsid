@@ -3,8 +3,23 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+- BUG: https://deepsid.chordian.net/?file=/GAMES/S-Z/Santas_Workout_2.sid
+  Doesn't have database info. Why is this missing!?
+  UPDATE: This is still not working after applying the HVSC #79 update.
+
 - Automate CGSC update process. All REN, MOVE, etc. Create folders where they can't be found
   in the filenames, count files in them, etc.
+
+- Jan Joeli reports that password automation (e.g. built into the web browser) is so fast that
+  DeepSID doesn’t have time to check if the user is registered. It then suggests creating a new
+  account with a user name that is in fact already taken. See if there is something that can be
+  done to prevent this.
+
+- Jan Joeli suggested saving the main volume setting in a cookie/session and restoring it on
+  reload. It's an excellent idea and should definitely be done.
+
+- Consider a settings option for choosing WebSid HQ or WebSid Legacy as the default on mobile
+  devices. Alternative: Just let WebSid HQ be the default on mobile devices from now on.
 
 
 WHEN THE TIME IS RIGHT

@@ -595,9 +595,10 @@
 				<div id="stopic-stil" class="stopic">
 					<?php if (!MiniPlayer()): ?>
 						<div id="sundry-news">
-							<!--<span>The <a href="https://www.hvsc.c64.org/" target="_top">High Voltage SID Collection</a> has been upgraded to the latest version #78. Click <a href="//deepsid.chordian.net/?search=78&type=new">here</a> to see what's new in this update.</span>-->
+							<span>The <a href="https://www.hvsc.c64.org/" target="_top">High Voltage SID Collection</a> has been upgraded to the latest version #79. Click <a href="//deepsid.chordian.net/?search=79&type=new">here</a> to see what's new in this update.</span>
 							<!--<span><a href="http://www.c64music.co.uk/" target="_top">Compute's Gazette SID Collection</a> has been upgraded to the latest version #145. Click <a href="//deepsid.chordian.net/?search=145&type=new">here</a> to see what's new in this update.</span>-->
-							<span>New SID handler: <a class="set-lemon" href="#">Lemon's MP3 Files</a></br><div style="margin-top:10px;">Courtesy of Kim Lemon (<a href="https://www.lemon64.com/">Lemon64</a>). It plays MP3 files recorded from JSIDPlay2.</div></span>
+							<!--<span style="font-size:16px;">A new SID handler for ASID has been added. You can use this handler to play SID music
+								on MIDI devices such as SidStation, TherapSID, Midibox SID and C64 (using Station64).</span>-->
 						</div>
 					<?php endif ?>
 				</div>
@@ -1423,7 +1424,7 @@
 
 						<h3>Libraries of SID tunes</h3>
 						<p>
-							High Voltage SID Collection #78<br />
+							High Voltage SID Collection #79<br />
 							<a href="https://www.hvsc.c64.org/" target="_top">https://www.hvsc.c64.org/</a>
 						</p>
 						<p>
@@ -1628,6 +1629,12 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>July 1, 2023</h3>
+						<ul>
+							<li>The <a href="https://www.hvsc.c64.org/" target="_top">High Voltage SID Collection</a> has been upgraded to the latest version #79.</li>
+							<li>Added composer profiles for the new folders in HVSC #79.</li>
+						</ul>
 
 						<h3>June 11, 2023</h3>
 						<ul>

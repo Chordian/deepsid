@@ -122,6 +122,9 @@
 		<h4><a href="//deepsid.chordian.net?emulator=jssid">Hermit\'s emulator</a></h4>
 		<p>Even faster, but cannot emulate RSID tunes, nor SID with digi.</p>
 
+		<h4><a href="//deepsid.chordian.net?emulator=asid">ASID (MIDI)</a></h4>
+		<p>Use with MIDI devices such as e.g. SidStation, TherapSID, etc.</p>
+
 		<h4><a href="//deepsid.chordian.net?emulator=lemon">Lemon\'s MP3 files</a></h4>
 		<p>It plays MP3 files recorded from JSIDPlay2 (only
 		<a href="https://www.hvsc.c64.org/">HVSC</a> for now).</p>
@@ -240,6 +243,7 @@
 						<li><b>websid</b></li>
 						<li><b>legacy</b></li>
 						<li><b>jssid</b>&nbsp;&nbsp;(Hermit\'s)</li>
+						<li><b>asid</b>&nbsp;&nbsp;(MIDI)</li>
 						<li><b>lemon</b></li>
 						<li><b>youtube</b></li>
 						<li><b>download</b></li>

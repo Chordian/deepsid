@@ -1,7 +1,7 @@
 How to build/update a MySQL database with all HVSC/SID information.
 
 Requirements
-������������
+¯¯¯¯¯¯¯¯¯¯¯¯
   o  Access to MySQL databases (LOCALHOST and/or ONLINE) through PhpMyAdmin.
   o  Access to the DeepSID files (LOCALHOST and/or ONLINE via FTP).
   o  Being able to run PHP scripts in the DeepSID folder via your web browser.
@@ -14,7 +14,7 @@ Requirements
 NOTE: The "http://chordian/deepsid/" URL just refers to a LOCALHOST version of DeepSID.
 
 Social media
-������������
+¯¯¯¯¯¯¯¯¯¯¯¯
 First things first - post on Facebook and Twitter (remember #deepsid tag for the latter).
 
 Use the following text:
@@ -26,12 +26,12 @@ If you don't do this first, you can be sure someone is going to post about it to
 you that the update has arrived (because obviously you are not aware of it).
 
 Backup
-������
+¯¯¯¯¯¯
 Delete all leftover backup tables and backup the entire DeepSID database (both the local
 and the online version).
 
 TABLE: hvsc_files
-�����������������
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
 First time importing fullname list from HVSC:
 
   1. Go to (updated/newest) HVSC root and open a command box.
@@ -58,7 +58,7 @@ For the next HVSC version:
   3. For ONLINE, first delete any previous HVSC_## version folders that might still be
      lingering, then copy the "_High Voltage..." folder into the root.
   4. When the time comes to activate it below, rename the old "_High Voltage..." folder
-     in /hvsc/ out to the root and instead move the new one in there.
+     in /hvsc/ appending e.g. "OLD" and instead move the new one in there.
   5. Finally edit the HVSC_VERSION constant in the "setup.php" script. It's a good idea to
      just edit the file directly online, to avoid messing with the database credentials.
 
@@ -82,6 +82,7 @@ First, do steps 1 to 7 above as you will need the big file later.
      You will just get a red error line in the bottom of the PHP script below, but at that
      point it should have done its job.
   5. Run the script now like this: http://chordian/deepsid/php/update_hvsc_db.php
+     BE CAREFUL THIS IS ONLY DONE LOCALLY UNTIL IT'S TIME TO DO THE ONLINE VERSION!
   6. Look through the output and compare stuff in database to see if things went well.
   7. If there's a red move error, someone forgot to add end slashes to folders. Find
      the entries, add the backslashes, make a new tiny .hvs file with just those lines,
@@ -212,6 +213,7 @@ Import HVSC song lengths:
 
   1. Go to HSVC root, enter DOCUMENTS, then open "Songlengths.md5" in Notepad++.
      (MD5 is better than TXT as the latter uses attributes in parenthesis we don't need.)
+     Also, make sure Notepad++ is not in "Word Wrap" mode or the following will fail.
   2. Delete the first "[Database]" line.
   3. Copy this string now: _High Voltage SID Collection
   4. Home on first line with ";" and record a Notepad++ macro:
@@ -223,6 +225,7 @@ Import HVSC song lengths:
         6. Hit comma to replace that.
         7. Home + down to next line.
   5. Stop recording and repeat the macro until end of file. (The bottom should be okay.)
+     Don't copy something into the clipboard buffer until it's finished or you will bork it!
   6. Forward slashes in fullnames should already be used. Validate that this is still true.
   7. Split the file into four CSV files of max 15000 lines using FileSplitter, which is present in the
      utility folder. (PhpMyAdmin can't handle it all).
@@ -410,7 +413,7 @@ Fixing HVSC update discrepancies:
   8. When importing it for ONLINE later, find and delete the old problem rows in it too.
 
 TABLE: hvsc_folders
-�������������������
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
 First time importing fullname list from HVSC:
 
   1. Go to (updated/newest) HVSC root and open a command box.
@@ -504,7 +507,7 @@ Set the type of new folders:
 Done.
 
 TABLE: hvsc_lengths
-�������������������
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
 This table is used by the top lists on the front page of DeepSID.
 
 After a HVSC update, do this:
@@ -530,7 +533,7 @@ When done, compare the top 20 table with the longest tunes across LOCALHOST and 
 be exactly the same now.
 
 SPECIAL DB UPDATING
-�������������������
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
 The 'special_updating.sql' (located in the same folder as this text file) is not actually a real SQL
 file and must be parsed by a PHP script for DeepSID as stated below.
 
@@ -548,7 +551,7 @@ https://deepsid.chordian.net/?file=/DEMOS/S-Z/Wize_Mixes.sid  (player)
 https://deepsid.chordian.net/?file=/MUSICIANS/N/Nebula&here=1&search=mixer&type=player  (8 rows found)
 
 GROUPS
-������
+¯¯¯¯¯¯
 Back out of the HVSC version folder (i.e. in OneDrive documents) and copy the GROUPS folder there.
 Paste it into the root of the HVSC folder, i.e. next to DEMOS, GAMES and MUSICIANS. Go into the
 folder and rename according to the notes in parenthesis added to a few of them.
@@ -564,7 +567,7 @@ And online too:
   o  Run this: https://deepsid.chordian.net/php/update_groups.php
 
 LATEST ACTIVITY
-���������������
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
 Now the "composers" table need to be updated with the years that each one were last active.
 
 IT'S IMPORTANT THAT THE ABOVE SPECIAL DB SCRIPT HAS RUN PRIOR TO DOING THIS. The reason is that it
@@ -583,7 +586,7 @@ When done, check the lists of active and snoozing composers in the root page. Yo
 composers like e.g. Johannes Bjerregaard or Ben Daglish in the lists of snoozing composers.
 
 LAST CHECKS
-�����������
+¯¯¯¯¯¯¯¯¯¯¯
 Double-check these files both in the folder and in the database:
 
   MUSICIANS/A/Acrouzet/Puzzled-Background_Music_IV.sid
@@ -592,7 +595,7 @@ Double-check these files both in the folder and in the database:
 They must match each other and play correctly. (NOTE: They probably work online but not locally.)
 
 LINKS AND VERSION
-�����������������
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
 Update various minor stuff:
 
   o  The version number in the 'About' tab (index.php).
