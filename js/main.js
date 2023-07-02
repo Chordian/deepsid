@@ -475,7 +475,9 @@ $(function() { // DOM ready
 			$("#password").focus();
 		else {
 			// Throttle the reaction to the typing
-			setTimeout(function() {
+			// Commented out the throttle in July 2023 to prevent automatic password entering systems
+			// from overtaking it, thereby confusing DeepSID about whether the user name is already taken.
+			//setTimeout(function() {
 				// So does this username exist?
 				$.post("php/account_exists.php", { username: $("#username").val() }, function(data) {
 					browser.validateData(data, function(data) {
@@ -487,7 +489,7 @@ $(function() { // DOM ready
 
 					});
 				}.bind(this));
-			}, 350);
+			//}, 350);
 		}
 	}).on("input", function() {
 		// This event triggers if the field has been autocompleted

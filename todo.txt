@@ -3,13 +3,11 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- Jan Joeli reports that password automation (e.g. built into the web browser) is so fast that
-  DeepSID doesn’t have time to check if the user is registered. It then suggests creating a new
-  account with a user name that is in fact already taken. See if there is something that can be
-  done to prevent this.
-
-- Consider a settings option for choosing WebSid HQ or WebSid Legacy as the default on mobile
-  devices. Alternative: Just let WebSid HQ be the default on mobile devices from now on.
+- When adding a SID file to a new playlist created on the fly, open a dialog box asking: "Would
+  you like to rename this new playlist? - Yes, I'd like to call it [ edit box ] - You can always
+  rename a playlist later by right-clicking it in the root to open a context menu."
+  I've noticed that most users creating new playlists never rename them. I fear it's because
+  they haven't bothered to learn that it's actually possible to rename a playlist.
 
 - Automate CGSC update process. All REN, MOVE, etc. Create folders where they can't be found
   in the filenames, count files in them, etc.
@@ -72,6 +70,10 @@ CONSIDER THIS
 
 - In a profile page, make the small handles in group table into links and remove the corner external
   link icon. Then users can choose what handle to open in CSDb themselves.
+
+- Consider a settings option for choosing WebSid HQ or WebSid Legacy as the default on mobile
+  devices. Alternative: Just let WebSid HQ be the default on mobile devices from now on. However,
+  I doubt most DeepSID users all have fast mobile devices yet...
 
 - Add search for tags by simply clicking one, instead of playing the SID row. However, it might
   be wise to have a toggle in settings for turning it off. (Should it even be off as default?)

@@ -1633,6 +1633,8 @@
 						<h3>July 2, 2023</h3>
 						<ul>
 							<li>The main volume slider setting is now remembered between browser sessions.</li>
+							<li>Removed a typing throttle for checking if the user name already exists. Hopefully this prevents automatic login
+								mechanisms from submitting before this check has been performed by DeepSID.</li>
 						</ul>
 
 						<h3>July 1, 2023</h3>
