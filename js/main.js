@@ -74,6 +74,12 @@ $(function() { // DOM ready
 	ctrls = new Controls();
 	browser = new Browser();
 
+	// Set the main volume that was used the last time
+	var vol = localStorage.getItem("volume");
+	if (vol == null) vol = 1;
+	SID.setMainVolume(vol);
+	$("#volume").val(vol * 100);
+
 	// Currently only influenced by the "?lemon=1" switch in index.php
 	if (isNotips) browser.annexNotWanted = true;
 

@@ -475,7 +475,9 @@ Controls.prototype = {
 		switch (event.target.id) {
 			case "volume":
 				// Main volume; between 0 and 1
-				SID.setMainVolume(event.currentTarget.value / 100);
+				var vol = event.currentTarget.value / 100;
+				SID.setMainVolume(vol);
+				localStorage.setItem("volume", vol);
 				break;
 			case "osc-zoom":
 				// Oscilloscope zoom; 1 (closest) to 5 (farthest)

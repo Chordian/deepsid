@@ -1630,6 +1630,11 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>July 2, 2023</h3>
+						<ul>
+							<li>The main volume slider setting is now remembered between browser sessions.</li>
+						</ul>
+
 						<h3>July 1, 2023</h3>
 						<ul>
 							<li>The <a href="https://www.hvsc.c64.org/" target="_top">High Voltage SID Collection</a> has been upgraded to the latest version #79.</li>
