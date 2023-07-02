@@ -189,6 +189,17 @@ Browser.prototype = {
 				}
 			});
 
+		$("#pr-newplname").on("keydown", function(event) {
+			var $renameButton = $("#dialog-playlist-rename .dialog-button-yes");
+			if ($(this).val() == "")
+				$renameButton.prop("disabled", true).removeClass("disabled").addClass("disabled");
+			else {
+				$renameButton.prop("disabled", false).removeClass("disabled");
+				if (event.keyCode == 13)
+					 $renameButton.trigger("click");
+			}
+		});
+
 		$(document).on("click", function(event) {
 			var $target = $(event.target);
 			if (!$target.hasClass("line") || ($target.hasClass("line") && !$target.hasClass("disabled"))) {
@@ -2321,10 +2332,28 @@ Browser.prototype = {
 					symlist:	(action === "symlist-add" ? (event.target.textContent.indexOf(" [PUBLIC]") !== -1 ? "$" : "!")+event.target.textContent : ''),
 					subtune:	(ctrls.subtuneCurrent && this.contextSelected ? ctrls.subtuneCurrent + 1 : 0)
 				}, function(data) {
-					this.validateData(data);
+					this.validateData(data, function(data) {
+						this.writeName = data.name;
+					});
 				}.bind(this));
-				if (action === "symlist-new")
+				if (action === "symlist-new" && $("#logout").length) {
+					// Offer to let the user rename the new playlist on the fly
+					CustomDialog({
+						id: '#dialog-playlist-rename',
+						text: 'Would you like to rename your new playlist?',
+						height: 210,
+					}, function() {
+						$.post("php/symlist_rename.php", {
+							symlist:	this.writeName,
+							fullname:	'',
+							symid:		0,
+							new:		$("#pr-newplname").val(),
+						}, function(data) {
+							this.validateData(data);
+						}.bind(this));
+					}.bind(this));
 					this.getSymlists();
+				}
 				break;
 			case "symlist-delete":
 				// Delete the symlist and all of its entries

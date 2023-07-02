@@ -3,12 +3,6 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- When adding a SID file to a new playlist created on the fly, open a dialog box asking: "Would
-  you like to rename this new playlist? - Yes, I'd like to call it [ edit box ] - You can always
-  rename a playlist later by right-clicking it in the root to open a context menu."
-  I've noticed that most users creating new playlists never rename them. I fear it's because
-  they haven't bothered to learn that it's actually possible to rename a playlist.
-
 - Automate CGSC update process. All REN, MOVE, etc. Create folders where they can't be found
   in the filenames, count files in them, etc.
 

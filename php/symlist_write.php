@@ -108,5 +108,5 @@ try {
 	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 }
 
-echo json_encode(array('status' => 'ok'));
+echo json_encode(array('status' => 'ok', 'name' => $symlist_folder));
 ?>

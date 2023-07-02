@@ -362,6 +362,18 @@
 			<div class="dialog-buttons"><a href="#" class="dialog-cancel">Cancel</a><button class="dialog-button-yes dialog-auto">Next</button></div>
 		</div>
 
+		<div id="dialog-playlist-rename" class="dialog-box">
+			<div class="dialog-text"></div>
+			<form id="form-edit-file" onsubmit="return false;" autocomplete="off">
+				<div style="margin-top:16px;">
+					<label for="dd-newplname" style="width:100px;">New name&nbsp;&nbsp;</label>
+					<input type="text" name="dd-newplname" id="pr-newplname" maxlength="128" />
+				</div>
+			</form>
+			<div style="font-size:13px;margin-top:16px;">If you skip this, it will just have the filename. However, you can rename it later by right-clicking it in the root.</div>
+			<div class="dialog-buttons"><a href="#" class="dialog-cancel">Skip</a><button class="dialog-button-yes dialog-auto disabled" disabled="disabled">Rename</button></div>
+		</div>
+
 		<div id="dialog-edit-videos" class="dialog-box">
 			<a id="ev-corner-link" href="#" target="_blank" style="position:absolute;top:24px;right:24px;font-size:13px;">Open Tabs</a>
 			<small>Use <b>Firefox</b> for this</small>
@@ -1635,6 +1647,7 @@
 							<li>The main volume slider setting is now remembered between browser sessions.</li>
 							<li>Removed a typing throttle for checking if the user name already exists. Hopefully this prevents automatic login
 								mechanisms from submitting before this check has been performed by DeepSID.</li>
+							<li>Creating a new playlist will now show a dialog box where you can rename it on the fly.</li>
 						</ul>
 
 						<h3>July 1, 2023</h3>
