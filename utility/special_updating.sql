@@ -21,6 +21,18 @@ UPDATE hvsc_files SET player = "JammicroV1" WHERE id = 73322								-- _High Vol
 UPDATE hvsc_files SET player = "JammicroV1" WHERE id = 73627								-- _High Voltage SID Collection/MUSICIANS/T/That8BitChiptuneGuy/1_Byte_Under_512.sid
 UPDATE hvsc_files SET player = "JammicroV1" WHERE id = 73575								-- _High Voltage SID Collection/MUSICIANS/S/Shogoon/512_Rap.sid
 
+UPDATE hvsc_files SET player = "JammicroV1_1" WHERE id = 76342								-- _High Voltage SID Collection/MUSICIANS/J/Jammer/Anything_GEOS.sid
+UPDATE hvsc_files SET player = "JammicroV1_1" WHERE id = 76344								-- _High Voltage SID Collection/MUSICIANS/J/Jammer/Faithless_Insomnia.sid
+UPDATE hvsc_files SET player = "JammicroV1_1" WHERE id = 76345								-- _High Voltage SID Collection/MUSICIANS/J/Jammer/Finally_Asleep.sid
+UPDATE hvsc_files SET player = "JammicroV1_1" WHERE id = 76340								-- _High Voltage SID Collection/MUSICIANS/J/Jammer/Dark_Heart.sid
+UPDATE hvsc_files SET player = "JammicroV1_1" WHERE id = 76350								-- _High Voltage SID Collection/MUSICIANS/J/Jammer/HNO3.sid
+UPDATE hvsc_files SET player = "JammicroV1_1" WHERE id = 74834								-- _High Voltage SID Collection/MUSICIANS/J/Jammer/Higher_Math.sid
+
+UPDATE hvsc_files SET player = "MahoneyDigi/THCM" WHERE id = 76346							-- _High Voltage SID Collection/MUSICIANS/J/Jammer/Next_Level_of_Insomnia.sid
+UPDATE hvsc_files SET player = "MahoneyDigi/THCM" WHERE id = 76347							-- _High Voltage SID Collection/MUSICIANS/J/Jammer/Next_Level_of_Insomnia_short.sid
+UPDATE hvsc_files SET player = "MahoneyDigi/THCM" WHERE id = 76348							-- _High Voltage SID Collection/MUSICIANS/J/Jammer/Sky_Buster.sid
+UPDATE hvsc_files SET player = "MahoneyDigi/THCM" WHERE id = 66735							-- _High Voltage SID Collection/MUSICIANS/J/Jammer/Immigrant_Song.sid
+
 UPDATE hvsc_files SET player = "Steve_Turner" WHERE id = 45979								-- _High Voltage SID Collection/MUSICIANS/T/Turner_Steve/Bushido.sid
 UPDATE hvsc_files SET player = "Steve_Turner" WHERE id = 45981								-- _High Voltage SID Collection/MUSICIANS/T/Turner_Steve/Intensity.sid
 UPDATE hvsc_files SET player = "Steve_Turner" WHERE id = 45984								-- _High Voltage SID Collection/MUSICIANS/T/Turner_Steve/Soldier_of_Fortune.sid

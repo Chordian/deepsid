@@ -29,12 +29,12 @@ List
 
   4. Go through all new folders and files and add tags and star ratings.
 
-       - Open two DeepSID tabs, then drag one out of the browser to open a window by
-         itself. Drag that to the left side and make it no wider than the browse panel.
-         Drag the main window slightly to the right so both browse panels are visible.
-         Use the left DeepSID for searching 'SID Happens' and the right DeepSID for
-         going down the list of new folders and files. Search in left DeepSID with 'SID
-         Happens' to see if there are matches of composers or single files.
+       - Open DeepSID then hit 'p' to open a small version of it. Drag the small one
+         out to the left side. Drag the main window slightly to the right so both
+         browse panels are visible. Use the left DeepSID for searching 'SID Happens'
+         and the right DeepSID for going down the list of new folders and files. Search
+         in left DeepSID with 'SID Happens' to see if there are matches of composers
+         or single files.
        - When you have matches, duplicate the tags and star ratings in right DeepSID.
        - For those with no matches, you're going to have to listen to it.
        - You probably can't do the production tags yet, at least not perfectly. You may
@@ -42,8 +42,14 @@ List
 
   5. Add star ratings for folders using the 'Ratings' user.
 
-       - Log in with the 'Ratings' user and add star ratings that match your own. Note
-         that the 'Ratings' user may use the old star minus one ratings system!
+       - Open DeepSID while logged in with your own user and hit 'p' to open a small
+         version of it. Drag the small one out to the left side. Drag the main window
+         slightly to the right so both browse panels are visible. In both DeepSID,
+         search for the newest files and folders in the latest HVSC update. Move the
+         left DeepSID to match the exact height of the folders in the right DeepSID.
+       - Log in with the 'Ratings' user in the right DeepSID only and add star ratings
+         that match your own. Note that the 'Ratings' user may use the old star minus
+         one ratings system!
        - Remember to log back in with your own user when done.
 
   6. Create a playlist "[...] Best of HVSC ##" where ## is the HVSC version.

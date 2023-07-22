@@ -1642,6 +1642,16 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>July 22, 2023</h3>
+						<ul>
+							<li>Added the CSDb music competitions related to HVSC #79.</li>
+						</ul>
+
+						<h3>July 15, 2023</h3>
+						<ul>
+							<li>All new files in HVSC #79 are now connected to CSDb entries.</li>
+						</ul>
+
 						<h3>July 2, 2023</h3>
 						<ul>
 							<li>The main volume slider setting is now remembered between browser sessions.</li>

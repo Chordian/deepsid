@@ -6,6 +6,13 @@ SHOULD BE DONE
 - Automate CGSC update process. All REN, MOVE, etc. Create folders where they can't be found
   in the filenames, count files in them, etc.
 
+- I have started adding #1, #2, etc. tags for assisting compo tags. Can you make sure they are
+  always following the compo tag?
+
+- If one or more fields are empty in the top box, get the field(s) from the database instead.
+  Or, consider getting it all from the database instead. Or, maybe even better, add a toggle
+  button for showing info from the SID file itself versus from the database.
+
 
 WHEN THE TIME IS RIGHT
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
