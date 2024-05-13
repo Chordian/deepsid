@@ -17,6 +17,9 @@
 //   SID+FM songs (uses OPL regs according to SFX Sound expander and FM-YAM)
 // - To use multispeed or multiSID, a Turbo MIDI interface (like Elektron TM-1)
 //   is needed to utilize the higher than normal MIDI-bandwidth.
+//
+// - Added playback support for SFX Sound Expander (YM3526/OPL) & FM-YAM (YM3812/OPL2) songs
+// - These are regular SID files which also writes to the DF40/DF50 registers
 
 /*
  * ASID buffers and structures
@@ -44,6 +47,12 @@ var asidFMregisterBuffer = new Uint8Array(ASID_FM_NUM_REGS*2);
 var asidFMoutBuffer = new Uint8Array(ASID_FM_BUFFER_SIZE).fill(0);
 var asidFMcurrentAddress = 0x00;
 var asidFMregBufferSize = 0;
+
+/*
+ * OPL FM structures
+ */
+var oplFMcurrentAddress = 0x00;
+var isOplFMwritten = false;
 
 /*
  * ASID & regular emulator common data
@@ -94,6 +103,21 @@ function asidFMwriteReg(isDataValue, data) {
   if (asidFMregBufferSize == ASID_FM_NUM_REGS*2) {
    asidFMSend();
   }
+ }
+}
+
+/*
+ * Write one FM register to buffer (OPL FM chip emulator)
+ */
+function oplFMwriteReg(isDataValue, data, opl_obj) {
+ if (!isDataValue) {
+  oplFMcurrentAddress = data;
+ } else {
+  if (opl_obj !== undefined) {
+   //console.log(opl_obj);
+   opl_obj.write(oplFMcurrentAddress, data);
+  }
+  isOplFMwritten = true;
  }
 }
 
@@ -262,6 +286,8 @@ function jsSID (bufferlen, background_noise, asid_enable = false)
   if (typeof buffercallback!=="undefined") buffercallback(); // Added by JCH
  }
  
+ this.opl = null;
+ OPL.create(jsSID_audioCtx.sampleRate).then(opl1 => opl = opl1)
  
  //user functions callable from outside
  this.loadstart = function(sidurl,subt) { this.loadinit(sidurl,subt); if (startcallback!==null) startcallback(); this.playcont(); }
@@ -355,8 +381,11 @@ function jsSID (bufferlen, background_noise, asid_enable = false)
  var framecnt=1, volume=1.0, CPUtime=0, pPC;
  var SIDamount=1, mix=0;
  var voiceMask=0x1FF; // Added by JCH
+ var oplFMbuf = new Int16Array(2).fill(0);
+ var oplFMrefresh = true;
   
  function init(subt) { 
+  isOplFMwritten = false;
   if (asid_enabled) {
    const select = document.getElementById('asid-midi-outputs');
    const outputs = Array.from(midiAccessObj.outputs.values());
@@ -375,10 +404,14 @@ function jsSID (bufferlen, background_noise, asid_enable = false)
     if (CPU()) {
       break;
     } else {
-      // OPL FM-support
-      if (asid_enabled && ((storadd == 0xDF40) || (storadd == 0xDF50))) {
-        asidFMwriteReg(storadd == 0xDF50, memory[storadd]);
+     // OPL FM-support
+     if ((storadd == 0xDF40) || (storadd == 0xDF50)) {
+      if (asid_enabled) {
+       asidFMwriteReg(storadd == 0xDF50, memory[storadd]);
+      } else {
+       oplFMwriteReg(storadd == 0xDF50, memory[storadd], opl);
       }
+     }
 
     }
    }
@@ -424,10 +457,14 @@ function jsSID (bufferlen, background_noise, asid_enable = false)
         asidWriteReg(chip, storadd-SID_address[chip], memory[storadd]);
        }
       }
+     }
 
-      // OPL FM-support
-      if ((storadd == 0xDF40) || (storadd == 0xDF50)) {
-        asidFMwriteReg(storadd == 0xDF50, memory[storadd]);
+     // OPL FM-support
+     if ((storadd == 0xDF40) || (storadd == 0xDF50)) {
+      if (asid_enabled) {
+       asidFMwriteReg(storadd == 0xDF50, memory[storadd]);
+      } else {
+       oplFMwriteReg(storadd == 0xDF50, memory[storadd], opl);
       }
      }
     }  
@@ -440,6 +477,17 @@ function jsSID (bufferlen, background_noise, asid_enable = false)
     mix = 0;
   } else {
     mix = SID(0,0xD400); if (SID_address[1]) mix += SID(1,SID_address[1]); if(SID_address[2]) mix += SID(2,SID_address[2]);
+    // Add OPL FM sound, if available
+    if (isOplFMwritten && oplFMrefresh && opl !== undefined) {
+     oplFMbuf = opl.generate(2, Int16Array);
+     mix += oplFMbuf[0]/32768.0;
+     oplFMrefresh = false;
+     SIDamount = 2; // Force mix balance
+    } else {
+     mix += oplFMbuf[1]/32768.0;
+     oplFMrefresh = true;
+    }
+
   }
   
   return mix * volume * SIDamount_vol[SIDamount] + (Math.random()*background_noise-background_noise/2); 
