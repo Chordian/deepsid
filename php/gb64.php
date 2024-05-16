@@ -49,7 +49,7 @@ function ReadRawGB64($id) {
 
 	try {
 		// Read the raw HTML of that GameBase64 entry page
-		$page = curl('http://www.gamebase64.com/game.php?id='.$id);
+		$page = curl('https://gb64.com/game.php?id='.$id);
 	} catch(ErrorException $e) {
 		die(json_encode(array('status' => 'warning', 'html' => '<p style="margin:0;"><i>Uh... GameBase64? Are you there?</i></p><small>Come on, GB64, old buddy, don\'t let me down.</small>')));
 	}
@@ -235,7 +235,7 @@ if ($page_id) {
 	$html = '<h2 style="display:inline-block;margin-bottom:20px;">'.$data['title'].'</h2>'.
 	(isset($_GET['id']) ? '<button id="go-back-gb64">Back</button>' : '').
 	'<div class="corner-icons">'.
-		'<a href="http://www.gamebase64.com/game.php?id='.$page_id.'" title="See this at GameBase64" target="_blank"><svg class="outlink" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg></a>'.
+		'<a href="https://gb64.com/game.php?id='.$page_id.'" title="See this at GameBase64" target="_blank"><svg class="outlink" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg></a>'.
 	'</div>'.
 	'<table style="border:none;">
 		<tr>
@@ -279,12 +279,12 @@ if ($page_id) {
 
 		$line_of_thumbnails = '';
 		foreach($thumbnails as $thumbnail)
-			$line_of_thumbnails .= '<a class="gb64-list-entry" href="http://www.gamebase64.com/game.php?id='.$entry['id'].'" target="_blank" data-id="'.$entry['id'].'"><img class="gb64" src="images/gb64'.$thumbnail.'" alt="'.$thumbnail.'" /></a>';
+			$line_of_thumbnails .= '<a class="gb64-list-entry" href="https://gb64.com/game.php?id='.$entry['id'].'" target="_blank" data-id="'.$entry['id'].'"><img class="gb64" src="images/gb64'.$thumbnail.'" alt="'.$thumbnail.'" /></a>';
 
 		$rows .=
 			'<tr>'.
 				'<td class="info">'.
-					'<a class="name gb64-list-entry" href="http://www.gamebase64.com/game.php?id='.$entry['id'].'" target="_blank" data-id="'.$entry['id'].'">'.$entry['name'].'</a><br />'.
+					'<a class="name gb64-list-entry" href="https://gb64.com/game.php?id='.$entry['id'].'" target="_blank" data-id="'.$entry['id'].'">'.$entry['name'].'</a><br />'.
 					$data['year'].' '.$data['company'].'<br />'.
 					'<span class="language">'.$data['language'].'</span>'.
 				'</td>'.

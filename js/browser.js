@@ -40,8 +40,8 @@ const playerStrips = [
 function Browser() {
 
 	this.ROOT_HVSC = 'hvsc';
-	this.HVSC_VERSION = 79;
-	this.CGSC_VERSION = 145;
+	this.HVSC_VERSION = 80;
+	this.CGSC_VERSION = 146;
 
 	this.path = "";
 	this.search = "";
@@ -1993,6 +1993,10 @@ Browser.prototype = {
 	 * @param {number} optionalID		If specified, the ID to show a specific sub page.
 	 */
 	getGB64: function(optionalID) {
+
+		return false;	// Disabled since the web site move to https://gb64.com in autumn 2023 
+						// The new location seems to have stricter cross-domain policies
+
 		if (miniPlayer || isMobile || this.isTempTestFile()) return;
 		if (this.gb64) this.gb64.abort();
 		$("#topic-gb64").empty().append(this.loadingSpinner("gb64"));
@@ -2279,6 +2283,7 @@ Browser.prototype = {
 					? url.substr(0, url.lastIndexOf("/") + 1)
 					: (more ? url.substr(0, url.indexOf("&")): url);
 				url = path+this.contextSID+(more ? url.substr(url.indexOf("&")) : "");
+				url += "&tab=csdb";
 				// Copy it to the clipboard
 				// @link https://stackoverflow.com/a/30905277/2242348
 				var $temp = $("<input>");

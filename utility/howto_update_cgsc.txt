@@ -158,6 +158,8 @@ VERSIONS
 Increase the version number to the latest ### in the browser.js and index.php. Don't update it in README.md
 as that version is tied to the database files currently linked there.
 
+Remember to also increase version in the "notable" field for the CGSC profile in the composers table.
+
 DELETING TEXT FILES
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
 Go inside the CGSC folder on your local machine, open a command box, then do the following:

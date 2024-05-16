@@ -3,8 +3,28 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+- Update database files for GitHub. Also, check that "symlists" is in the tutorial.
+
+- BUG: https://deepsid.chordian.net/?file=/SID%20Happens/2023/Siggraph_Invitro_4SID.sid
+  has no database information!?
+
+- BUG: https://deepsid.chordian.net/?file=/DEMOS/M-R/Muso_64_BASIC.sid
+  This and the non-BASIC version erroneously refers to themselves in the STIL text.
+
 - Automate CGSC update process. All REN, MOVE, etc. Create folders where they can't be found
   in the filenames, count files in them, etc.
+
+- Go through all of Hermit's player pages and remove the dead link to his web site.
+
+- When creating a playlist and suggesting a name, let it suggest "My favorites" as default.
+
+- Add context menu option for downloading a tune as an MP3. I'm thinking, maybe I can grab one
+  of Lemon's MP3 files?
+
+- Investigate if it's possible to add support for logging in with e.g. Google or FB accounts.
+  UPDATE: Idea for design - instead of "User" and "Pw" boxes as default, show three buttons for
+  local, Facebook, Google logins. If "Local" is clicked, the three buttons are then replaced by
+  the "User" and "Pw" boxes that originally used to be there.
 
 - I have started adding #1, #2, etc. tags for assisting compo tags. Can you make sure they are
   always following the compo tag?
@@ -12,6 +32,9 @@ SHOULD BE DONE
 - If one or more fields are empty in the top box, get the field(s) from the database instead.
   Or, consider getting it all from the database instead. Or, maybe even better, add a toggle
   button for showing info from the SID file itself versus from the database.
+
+- The STIL entry for this tune is not parsed correctly - all links merge into one big link:
+  https://deepsid.chordian.net/?file=/MUSICIANS/B/Bulldog/E_X_I_S.sid&subtune=1
 
 
 WHEN THE TIME IS RIGHT
@@ -79,6 +102,10 @@ CONSIDER THIS
 - Add search for tags by simply clicking one, instead of playing the SID row. However, it might
   be wise to have a toggle in settings for turning it off. (Should it even be off as default?)
   UPDATE: Fear it will be more annoying than helpful. When I click a row, I usually want it to play.
+
+- Kim Lemon wants me to make DeepSID cookieless. I could easily make the emulator choice into
+  localstorage instead, but the PHP SESSION cookie belongs in a class I didn't write, and I
+  fear it's not easy to change that.
 
 - SOLID "SHOULD BE DONE" CANDIDATES:
 -
@@ -274,6 +301,7 @@ CONSIDER THIS
     new plus button will add another "AND" search line.
   - Plus button, then drop-down for table ("files", "folders", etc.) then column, then an
     input box for typing search query (always used LIKE %...% search). More?
+  - Could also have an in-between drop-down box with "is", "contains", "not", etc.
 
 - A tab with post effects, applied by the web audio synth library.
   - And maybe a setting toggle for applying this to the URL as a settings parameter string.
@@ -338,6 +366,7 @@ PROBABLY NOT?
 - Replace ".." with a back arrow SVG instead? (I think people have gotten used to the ".." by now.)
 - A filter sort option in letter folders that show the crap only (one stars).
 - A filter sort option in letter folders for undecided (awaits evalution) for HVSC updates.
+- JW has pointed out that there are SID.load() redundancy in controls.js versus browser.js.
 
 - BUG: JW found a bug where the profile gets out of sync when searching. From his e-mail about
   it, dated 22 August 2021: 'For some reason the information in the "Profile" tab sometimes seems

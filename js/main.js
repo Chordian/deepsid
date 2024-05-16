@@ -646,7 +646,7 @@ $(function() { // DOM ready
 				$this.attr("src", "images/composer"+(colorTheme ? "_dark" : "")+".png");
 		});
 
-		$("body").attr("data-theme", colorTheme ? "dark" : "")
+		$("body").attr("data-theme", colorTheme ? "dark" : "");
 
 		// Change the brand image too (if available)
 		$("#brand-"+(colorTheme ? "light" : "dark")).hide();
@@ -1008,12 +1008,12 @@ $(function() { // DOM ready
 	/**
 	 * When clicking the 'BACK' button on a GameBase64 page to show the list of them again.
 	 */
-	$("#topic-gb64").on("click", "#go-back-gb64", function() {
+//	$("#topic-gb64").on("click", "#go-back-gb64", function() {
 		// Load the cache again
-		$("#topic-gb64")/*.css("visibility", "hidden")*/.empty().append(cacheGB64);
+//		$("#topic-gb64")/*.css("visibility", "hidden")*/.empty().append(cacheGB64);
 		// Also set scroll position to where we clicked last time
-		SetScrollTopInstantly("#page", cacheGB64TabScrollPos);
-	}),
+//		SetScrollTopInstantly("#page", cacheGB64TabScrollPos);
+//	}),
 
 	/**
 	 * When clicking the 'BACK' button on a GameBase64 page to show the list of them again.
@@ -1518,14 +1518,14 @@ $(function() { // DOM ready
 	/**
 	 * When clicking a title or thumbnail in a list of GameBase64 entries.
 	 */
-	$("#topic-gb64").on("click", ".gb64-list-entry", function() {
+//	$("#topic-gb64").on("click", ".gb64-list-entry", function() {
 		// First cache the list of releases in case we return to it
-		cacheGB64 = $("#topic-gb64").html();
-		cacheGB64TabScrollPos = $("#page").scrollTop();
+//		cacheGB64 = $("#topic-gb64").html();
+//		cacheGB64TabScrollPos = $("#page").scrollTop();
 		// Show the page
-		browser.getGB64($(this).attr("data-id"));
-		return false;
-	});
+//		browser.getGB64($(this).attr("data-id"));
+//		return false;
+//	});
 
 	/**
 	 * When clicking a title or thumbnail in a list of remix entries.
@@ -1710,7 +1710,7 @@ $(function() { // DOM ready
 			// No, does the file exist in the root SH folder, i.e. the current year?
 			if (!SidHappensFileExists(fileParam)) {
 				// No, figure out if it exists in one of the year subfolders then (backwards from latest)
-				for (var shYear = 2022; shYear >= 2020; shYear--) {
+				for (var shYear = 2023; shYear >= 2020; shYear--) {
 					var yearFolder = fileParam.replace("SID Happens/", "SID Happens/"+shYear+"/");
 					if (SidHappensFileExists(yearFolder)) {
 						fileParam = yearFolder;

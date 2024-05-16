@@ -16,7 +16,7 @@
 
 require_once("class.account.php"); // Includes setup
 
-define('LEMON', 'https://lemon.ams3.cdn.digitaloceanspaces.com/c64/music/hvsc/mp3/');
+define('LEMON', 'https://lemon.ams3.cdn.digitaloceanspaces.com/c64/music/hvsc/mp3');
 
 if (!isset($_GET['file']) || !isset($_GET['subtune']))
 	die(json_encode(array('status' => 'error', 'message' => 'You must specify \'file\' and \'subtune\' as GET variables.')));

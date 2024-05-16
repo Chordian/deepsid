@@ -23,7 +23,8 @@ Use the following text:
 day or two. Stay tuned."
 
 If you don't do this first, you can be sure someone is going to post about it to "remind"
-you that the update has arrived (because obviously you are not aware of it).
+you that the update has arrived (because obviously you are not aware of it). UPDATE: People
+don't seem to do this anymore.
 
 Backup
 ¯¯¯¯¯¯
@@ -488,7 +489,7 @@ NOTE: I'm not 100% sure if this is deprecated because of the next part (I skippe
 
 Update total count of individual letter folders (that have sub folders):
 
-  1. Make a backup of the "hvsc_folders" folder.
+  1. Make a backup of the "hvsc_folders" table.
   2. Run your FTP program for online files and there edit ./php/update_total_count.php
   3. Uncomment the "Now store" UPDATE line in the bottom. 
   4. Now run the script like this: https://deepsid.chordian.net/php/update_total_count.php

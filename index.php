@@ -314,8 +314,10 @@
 		gtag('config', 'G-8WGW8WKDN4');
 	</script>
 
-	<body class="entry-content" data-mobile="<?php echo isMobile(); ?>" data-mini="<?php echo MiniPlayer(); ?>" data-notips="<?php echo isLemon() ? 1 : 0; ?>">
-		<script type="text/javascript">setTheme();</script>
+	<body class="entry-content" data-mobile="<?php echo isMobile(); ?>" data-theme="" data-mini="<?php echo MiniPlayer(); ?>" data-notips="<?php echo isLemon() ? 1 : 0; ?>">
+		<?php if (!isLemon()): ?>
+			<script type="text/javascript">setTheme();</script>
+		<?php endif ?>
 
 		<div id="dialog-cover"></div>
 		<div id="click-to-play-cover">
@@ -607,10 +609,9 @@
 				<div id="stopic-stil" class="stopic">
 					<?php if (!MiniPlayer()): ?>
 						<div id="sundry-news">
-							<span>The <a href="https://www.hvsc.c64.org/" target="_top">High Voltage SID Collection</a> has been upgraded to the latest version #79. Click <a href="//deepsid.chordian.net/?search=79&type=new">here</a> to see what's new in this update.</span>
-							<!--<span><a href="http://www.c64music.co.uk/" target="_top">Compute's Gazette SID Collection</a> has been upgraded to the latest version #145. Click <a href="//deepsid.chordian.net/?search=145&type=new">here</a> to see what's new in this update.</span>-->
-							<!--<span style="font-size:16px;">A new SID handler for ASID has been added. You can use this handler to play SID music
-								on MIDI devices such as SidStation, TherapSID, Midibox SID and C64 (using Station64).</span>-->
+							<!--<span>The <a href="https://www.hvsc.c64.org/" target="_top">High Voltage SID Collection</a> has been upgraded to the latest version #80. Click <a href="//deepsid.chordian.net/?search=80&type=new">here</a> to see what's new in this update.</span>-->
+							<!--<span><a href="http://www.c64music.co.uk/" target="_top">Compute's Gazette SID Collection</a> has been upgraded to the latest version #146. Click <a href="//deepsid.chordian.net/?search=146&type=new">here</a> to see what's new in this update.</span>-->
+							<!--<a href="https://xparty.net/"><img src="images/sundry_x2024.png" alt="X'2024" /></a>-->
 						</div>
 					<?php endif ?>
 				</div>
@@ -885,11 +886,9 @@
 						<span>&#9642</span>
 					<!--<a href="https://www.lemon64.com/forum/viewtopic.php?t=68056" target="_blank">Lemon64</a>
 						<span>&#9642</span>-->
-					<!--<a rel="me" href="https://mastodon.social/@chordian" target="_blank">Mastodon</a>
-						<span>&#9642</span>-->
 					<a href="https://twitter.com/chordian" target="_blank">Twitter</a>
 						<span>&#9642</span>
-					<a href="discord.htm" target="_blank">Discord</a>
+					<a rel="me" href="https://mastodon.social/@chordian" target="_blank">Mastodon</a>
 						<span>&#9642</span>
 					<a href="http://csdb.chordian.net/?type=forums&roomid=14&topicid=129712" target="_blank">CSDb</a>
 						<span>&#9642</span>
@@ -898,7 +897,7 @@
 				<div id="tabs">
 					<div class="tab unselectable" data-topic="profile" id="tab-profile">Profile</div>
 					<div class="tab unselectable" data-topic="csdb" id="tab-csdb">CSDb<div id="note-csdb" class="notification csdbcolor"></div></div>
-					<div class="tab unselectable" data-topic="gb64" id="tab-gb64">GB64<div id="note-gb64" class="notification gb64color"></div></div>
+					<!--<div class="tab unselectable" data-topic="gb64" id="tab-gb64">GB64<div id="note-gb64" class="notification gb64color"></div></div>-->
 					<div class="tab unselectable" data-topic="remix" id="tab-remix">Remix<div id="note-remix" class="notification remixcolor"></div></div>
 					<div class="tab unselectable" data-topic="player" id="tab-player">Player<div id="note-player" class="notification playercolor"></div></div>
 					<div class="tab unselectable" data-topic="stil" id="tab-stil">STIL</div>
@@ -1232,12 +1231,12 @@
 						</p>
 					</div>
 
-					<div id="topic-gb64" class="topic ext" style="display:none;">
+					<!--<div id="topic-gb64" class="topic ext" style="display:none;">
 						<h2>GameBase64</h2>
 						<p>This tab will show links to game entries in GameBase64 as you click SID files that were
 							used in at least one C64 game, released or unreleased (these are listed as a preview).</p>
 						<p>
-							<a href="http://www.gamebase64.com/" target="_blank">GameBase64</a> is a large database 
+							<a href="https://gb64.com/" target="_blank">GameBase64</a> is a large database 
 							for C64 games with credits, details and screenshots.
 						</p>
 						<br />
@@ -1245,7 +1244,7 @@
 							<i>This does not work in
 							<a href="http://www.c64music.co.uk/" target="_blank">Compute's Gazette SID Collection</a>.</i>
 						</p>
-					</div>
+					</div>-->
 
 					<div id="topic-player" class="topic ext" style="display:none;">
 						<h2>Player</h2>
@@ -1436,11 +1435,11 @@
 
 						<h3>Libraries of SID tunes</h3>
 						<p>
-							High Voltage SID Collection #79<br />
+							High Voltage SID Collection #80<br />
 							<a href="https://www.hvsc.c64.org/" target="_top">https://www.hvsc.c64.org/</a>
 						</p>
 						<p>
-							Compute's Gazette SID Collection #145<br />
+							Compute's Gazette SID Collection #146<br />
 							<a href="http://www.c64music.co.uk/" target="_top">http://www.c64music.co.uk/</a>
 						</p>
 
@@ -1468,7 +1467,7 @@
 						</p>
 						<ul>
 							<li>Most are publically available profile images from Facebook or LinkedIn.</li>
-							<li>A lot of older retro images (typically lo-res) are from the musicians photos download at <a href="http://www.gamebase64.com/downloads.php" target="_top">GameBase64</a>.</li>
+							<li>A lot of older retro images (typically lo-res) are from the musicians photos download at <a href="https://gb64.com/downloads.php" target="_top">GameBase64</a>.</li>
 							<li>Some were originally taken by Andreas Wallström (<a href="http://www.c64.com/" target="_top">C64.com</a>).</li>
 							<li>A few were taken from the <a href="http://www.vgmpf.com/Wiki/index.php" target="_top">Video Game Music Preservation Foundation</a> wikipedia.</li>
 							<li>Some from the <a href="https://8bitlegends.com/" target="_top">8BitLegends.com</a> web site.</li>
@@ -1641,6 +1640,43 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>January 6, 2024</h3>
+						<ul>
+							<li>Added the CSDb music competitions related to HVSC #80.</li>
+						</ul>
+
+						<h3>December 27, 2023</h3>
+						<ul>
+							<li>All new files in HVSC #80 are now connected to CSDb entries.</li>
+						</ul>
+
+						<h3>December 24, 2023</h3>
+						<ul>
+							<li>The <a href="https://www.hvsc.c64.org/" target="_top">High Voltage SID Collection</a> has been upgraded to the latest version #80.</li>
+							<li>Added composer profiles for the new folders in HVSC #80.</li>
+						</ul>
+
+						<h3>December 1, 2023</h3>
+						<ul>
+							<li>Thomas Jansson has extended the ASID support. It now supports up to 3 SID chips and multispeed,
+								as well as SID+FM songs (uses OPL registers according to SFX Sound Expander and FM-YAM). To use
+								multispeed or multiple SID, a Turbo MIDI interface (like Elektron TM-1) is needed
+								to utilize the higher than normal MIDI-bandwidth.</li>
+						</ul>
+
+						<h3>October 11, 2023</h3>
+						<ul>
+							<li>Fixed a blanking issue by removing the GB64 tab entirely. This tab previously received game information from
+								the GameBase64 web site. However, the web site was relocated lately due to the recent demise of the previous
+								web administrator, and the new web location caused DeepSID to show a blank page.</li>
+						</ul>
+
+						<h3>July 23, 2023</h3>
+						<ul>
+							<li>The <code>Copy Link</code> menu item on the right-click context menu now includes a URL parameter for
+								showing the CSDb tab instead of the default profile tab.</li>
+						</ul>
 
 						<h3>July 22, 2023</h3>
 						<ul>

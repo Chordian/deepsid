@@ -279,7 +279,6 @@
 				<td>tab</td><td>Select a page tab.&nbsp;&nbsp;Options:
 					<ul>
 						<li><b>csdb</b></li>
-						<li><b>gb64</b></li>
 						<li><b>remix</b></li>
 						<li><b>player</b></li>
 						<li><b>stil</b></li>
@@ -541,11 +540,11 @@
 		</ul>
 		<ul class="annex-tags-list">
 			<li><a href="game" class="search" data-type="tag"><div class="tag tag-production">Game</div></a>= <b>Made for a game</b>
-			<p>Made for a <i>released</i> game. Maybe the game can be seen in the <b>GB64</b> tab.</p></li>
+			<p>Made for a <i>released</i> game.</p></li>
 		</ul>
 		<ul class="annex-tags-list">
 			<li><a href="&quot;game prev&quot;" class="search" data-type="tag"><div class="tag tag-production">Game Prev</div></a>= <b>Made for a game</b>
-			<p>Made for a preview of a game which <i>may</i> never be finished. Maybe the game can be seen in the <b>GB64</b> tab.</p></li>
+			<p>Made for a preview of a game which <i>may</i> never be finished.</p></li>
 		</ul>
 		<ul class="annex-tags-list">
 			<li><a href="gtw" class="search" data-type="tag"><div class="tag tag-production">GTW</div></a>= <b>For a <u>G</u>ame <u>T</u>hat <u>W</u>eren\'t</b>
