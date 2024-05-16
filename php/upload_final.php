@@ -22,13 +22,12 @@
  * CSDb ID, song lengths and custom STIL text.
  * 
  * @uses		$_POST['info']				the updated info array
+ * @uses		$_POST['path']				where to upload the file
  * 
  * @used-by		browser.js
  */
 
 require_once("class.account.php"); // Includes setup
-
-define('PATH_UPLOADS', '_SID Happens/');
 
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest')
 	die("Direct access not permitted.");
@@ -37,6 +36,7 @@ if (!$account->CheckLogin())
 	die(json_encode(array('status' => 'error', 'message' => 'You must be logged in to edit/upload SID files.')));
 
 $info = $_POST['info'];
+$path = $_POST['path'].'/';
 
 try {
 	if ($_SERVER['HTTP_HOST'] == LOCALHOST)
@@ -113,7 +113,7 @@ try {
 		// UPLOAD
 
 		// Move the new SID file to the proper location
-		rename('../temp/upload/'.$info['filename'], ROOT_HVSC.'/'.PATH_UPLOADS.$info['newname']);
+		rename('../temp/upload/'.$info['filename'], ROOT_HVSC.'/'.$path.$info['newname']);
 
 		// Add a new general database row for the new SID file
 		$insert = $db->prepare('INSERT INTO hvsc_files(
@@ -165,7 +165,7 @@ try {
 			)');
 
 		$insert->execute(array(
-				':fullname'		=> PATH_UPLOADS.$info['newname'],		// Renamed by upload wizard
+				':fullname'		=> $path.$info['newname'],				// Renamed by upload wizard
 				':player'		=> $info['player'],						// Modified by upload wizard
 				':lengths'		=> $info['lengths'],					// Modified by upload wizard
 				':type'			=> $info['type'],
@@ -212,6 +212,9 @@ try {
 
 		if ($insert->rowCount() == 0)
 			die(json_encode(array('status' => 'error', 'message' => 'Could not create the special database entry for the "'.$info['newname'].'" file.')));
+
+		// If this is the 'SID+FM' subfolder then update its file count as well
+		$update = $db->query('UPDATE hvsc_folders SET files = files + 1 WHERE fullname = "_SID Happens/SID+FM" LIMIT 1');
 
 		// Acknowledge that the composer is now active (this will be reflected in the root page)
 		if ($composers_id)

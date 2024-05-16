@@ -1426,8 +1426,14 @@
 						</p>
 						<p>
 							ASID (MIDI) implementation by Thomas Jansson<br />
+							FM playback for Hermit's emulator by Thomas Jansson<br />
 							<a href="https://github.com/thomasj" target="_top">https://github.com/thomasj</a><br />
 							<a href="https://www.youtube.com/@tubesockor" target="_top">https://www.youtube.com/@tubesockor</a><br />
+						</p>
+
+						<p>
+							OPL3 emulator (FM playback) by Adam Nielsen<br />
+							<a href="https://github.com/Malvineous/opljs" target="_top">https://github.com/Malvineous/opljs</a><br />
 						</p>
 
 						<h3>Audio API library for MP3 files</h3>
@@ -1643,6 +1649,17 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>May 16, 2024</h3>
+						<ul>
+							<li>Hermit's emulator is now capable of playing back SID+FM files. These are SID files combined with 
+								FM emulation and have been accomplished by using either the <a href="https://www.c64-wiki.com/wiki/Commodore_Sound_Expander">SFX Sound Expander</a> or the <a href="https://c64.xentax.com/index.php/fm-yam">FM-YAM</a>
+								cartridge. Thank you to Thomas Jansson (tubesockor) for this update.</li>
+							<li>A new <a href="//deepsid.chordian.net/?file=/SID%20Happens/SID+FM/">SID+FM</a> subfolder has been created in the <a href="//deepsid.chordian.net/?file=/SID%20Happens/">SID Happens</a> folder.
+								You can only enter this subfolder when you have selected the <b>Hermit's (+FM)</b> SID handler in the top left drop-down box.
+								It's possible to upload new files to this subfolder, but they must of course be of the SID+FM type or they will be deleted.</li>
+						</ul>
+
 
 						<h3>January 6, 2024</h3>
 						<ul>

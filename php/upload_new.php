@@ -11,15 +11,14 @@
  * 
  * If the file is not a SID file or the filename exists, it is denied.
  * 
- * @uses		$_FILES
+ * @uses		$_FILES						object with file information
+ * @uses		$_REQUEST['path']			where to upload the file
  * 
  * @used-by		browser.js
  */
 
 require_once("class.account.php"); // Includes setup
 require_once("sid_id.php");
-
-define('PATH_UPLOADS', '_SID Happens/');
 
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest')
 	die("Direct access not permitted.");
@@ -36,6 +35,7 @@ foreach(glob('../temp/upload/*.sid') as $filename) {
 }
 
 $sid = $_FILES[0];
+$path = $_REQUEST['path'].'/';
 
 if (!isset($sid['error']) || is_array($sid['error']))
 	die(json_encode(array('status' => 'error', 'message' => 'Invalid parameters.')));
@@ -65,7 +65,7 @@ try {
 	$sid['name'] = substr($sid['name'], 0, -4).'.sid';
 
 	// Make sure a file of the same name doesn't already exist in the database
-	$exists = $db->query('SELECT 1 FROM hvsc_files WHERE fullname LIKE "'.PATH_UPLOADS.$sid['name'].'" LIMIT 1');
+	$exists = $db->query('SELECT 1 FROM hvsc_files WHERE fullname LIKE "'.$path.$sid['name'].'" LIMIT 1');
 	if ($exists->rowCount())
 		die(json_encode(array('status' => 'error', 'message' => 'There is already a SID file of that name here. Duplicate names are not allowed. Try renaming it first.')));
 
@@ -117,7 +117,7 @@ try {
 	}
 
 	$info = array(
-		'fullname' =>		PATH_UPLOADS.$sid['name'],
+		'fullname' =>		$path.$sid['name'],
 		'filename' =>		$sid['name'],
 		'player' =>			IdentifyPlayer($sid['tmp_name']),
 		'lengths' => 		rtrim(str_repeat('20:00 ', $subtunes)),

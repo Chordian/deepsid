@@ -30,6 +30,7 @@ var tabPrevScrollPos = {
 }
 
 const PATH_UPLOADS = "_SID Happens";
+const PATH_SID_FM = PATH_UPLOADS + "/SID+FM";
 
 $(function() { // DOM ready
 
@@ -1685,6 +1686,7 @@ $(function() { // DOM ready
 	 */
 	hashExcl = decodeURIComponent(location.hash); // Any Disqus link characters "#!" used?
 	fileParam = hashExcl !== "" ? hashExcl.substr(2) : GetParam("file");
+	fileParam = fileParam.replace("/SID FM/", "/SID+FM/");
 	if (fileParam.substr(0, 2) === "/_")
 		fileParam = "/"+fileParam.substr(2); // Lose custom folder "_" character
 	var searchQuery = GetParam("search"),

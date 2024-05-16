@@ -1186,7 +1186,7 @@ Browser.prototype = {
 						$("#path").css("top", "0.5px");
 						pathText = '<span class="playlist">'+this.path.replace("/CSDb Music Competitions/", '')+'</span><br />'+
 							'<span class="maintainer">'+data.owner+'</span>'; // Competition type
-					} else if (this.path == "/"+PATH_UPLOADS) {
+					} else if (this.path == "/"+PATH_UPLOADS || this.path == "/"+PATH_UPLOADS+"/SID+FM") {
 						pathText = '<button id="upload-wizard">Upload New SID File</button>';
 					} else if (this.redirectFolder != "") {
 						pathText = this.groupMember.indexOf("/") === false
@@ -1301,6 +1301,7 @@ Browser.prototype = {
 									'<td class="folder unselectable '+folderIcon+
 										(folder.hvsc == this.HVSC_VERSION || folder.hvsc == this.CGSC_VERSION ? ' new' : '')+
 										'"><div class="block-wrap"><div class="block'+(isRedirectFolder ? " slimfont" : "")+'">'+
+									(folder.foldername == "SID+FM" ? '<div class="sid_fm">Use Hermit\'s (+FM) emulator</div>' : '')+
 									(folder.filescount > 0 ? '<div class="filescount">'+folder.filescount+'</div>' : '')+
 									(folder.foldername == "_SID Happens" ? '<div class="new-uploads'+(data.uploads.substr(0, 6) == "NO NEW" ? ' no-new' : '')+'">'+data.uploads+'</div>' : '')+
 									'<span class="name entry'+(this.isSearching ? ' search' : '')+'" data-name="'+encodeURIComponent(folder.foldername)+'" data-incompat="'+folder.incompatible+'"'+search_shortcut_or_redirect_folder+'>'+
@@ -2301,7 +2302,8 @@ Browser.prototype = {
 				}
 				// Get a full array of the SID row
 				$.get("php/upload_edit.php", {
-					fullname:	(this.isSearching || this.path.substr(1, 1) == "!" ||  this.path.substr(1, 1) == "$" ? this.contextSID : this.path.substr(1)+"/"+this.contextSID)
+					fullname:	(this.isSearching || this.path.substr(1, 1) == "!" ||  this.path.substr(1, 1) == "$" ? this.contextSID : this.path.substr(1)+"/"+this.contextSID),
+					path:		(this.isSidFmFolder() ? PATH_SID_FM : PATH_UPLOADS)
 				}, function(data) {
 					this.validateData(data, function(data) {
 						// Going back to earlier wizard steps should not be allowed
@@ -2903,6 +2905,15 @@ Browser.prototype = {
 	},
 
 	/**
+	 * Are we inside the 'SID+FM' upload folder?
+	 * 
+	 * @return {boolean}
+	 */
+	isSidFmFolder: function() {
+		return this.path.indexOf("/"+PATH_UPLOADS+"/SID+FM") !== -1;
+	},
+	
+	/**
 	 * Is this a temporary test SID file thus is has no entries in the database?
 	 * 
 	 * @return {boolean}
@@ -3057,6 +3068,7 @@ Browser.prototype = {
 
 		this.sidFile = new FormData();
 		this.sidFile.append(0, $("#upload-new")[0].files[0]); // Only a single SID file at a time
+		this.sidFile.append("path", this.isSidFmFolder() ? PATH_SID_FM : PATH_UPLOADS);
 
 		$.ajax({
 			url:			"php/upload_new.php",
@@ -3269,7 +3281,10 @@ Browser.prototype = {
 					data.info.lengths	= $("#upload-lengths-list").val();
 					data.info.stil		= $("#upload-stil-text").val();
 					// The PHP script figures out on its own whether to edit or upload
-					$.post("php/upload_final.php", { info: data.info }, function(data) {
+					$.post("php/upload_final.php", {
+						info: data.info,
+						path: (this.isSidFmFolder() ? PATH_SID_FM : PATH_UPLOADS)
+					}, function(data) {
 						this.validateData(data, function() {
 							this.getFolder();
 						});

@@ -3459,6 +3459,21 @@ input[type=range]::-ms-track {
 				background: var(--color-disabled);
 			}
 
+		#songs .sid_fm {
+			float: right;
+			position: relative;
+			top: 9px;
+			margin-left: 12px;
+			height: 14px;
+			padding: 7.5px 3.5px 1.5px;
+			box-shadow: none;
+			color: var(--color-text-fine);
+			background: var(--color-disabled);
+			font: bold 9px/0 "Open Sans", sans-serif;
+			border-radius: 2px;
+			text-transform: uppercase;
+		}
+
 		/* Breathing room in top of folders */
 		#songs .spacer {
 			padding-bottom: 5px;

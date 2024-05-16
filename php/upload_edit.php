@@ -14,8 +14,6 @@
 
 require_once("class.account.php"); // Includes setup
 
-define('PATH_UPLOADS', '_SID Happens/');
-
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest')
 	die("Direct access not permitted.");
 
