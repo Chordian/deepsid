@@ -119,6 +119,9 @@
 		<script type="text/javascript" src="js/player.js"></script>
 		<script type="text/javascript" src="js/controls.js"></script>
 		<script type="text/javascript" src="js/browser.js"></script>
+		<script type="text/javascript" src="js/lib/opl.js"></script>
+		<script type="text/javascript" src="js/opljs-if.js"></script>
+
 		<?php if (isset($_GET['websiddebug'])): ?>
 			<script type="text/javascript" src="http://www.wothke.ch/tmp/scope.js"></script>
 		<?php else: ?>
@@ -522,7 +525,7 @@
 				<select id="dropdown-emulator" name="select-emulator" style="visibility:hidden;">
 					<option value="websid">WebSid emulator</option>
 					<option value="legacy">WebSid (Legacy)</option>
-					<option value="jssid">Hermit's emulator</option>
+					<option value="jssid">Hermit's (+FM)</option>
 					<option value="asid">ASID (MIDI)</option>
 					<option value="lemon">Lemon's MP3 files</option>
 					<option value="youtube">YouTube videos</option>
