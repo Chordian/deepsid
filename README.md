@@ -32,7 +32,7 @@ Download the GitHub tree above as well as the following files:
 
 Download the following SID collections that will work with the database supplied below:
 
-* [High Voltage SID Collection #80](http://www.prg.dtu.dk/HVSC/HVSC_80-all-of-them.7z)
+* [High Voltage SID Collection #80](https://hvsc.brona.dk/HVSC/HVSC_80-all-of-them.7z)
 * [Compute's Gazette SID Collection v1.46](http://www.c64music.co.uk/CGSC_v146.7z)
 
 1. Create the `/deepsid/hvsc/` sub folder.
