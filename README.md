@@ -27,13 +27,12 @@ Download the GitHub tree above as well as the following files:
 6. Create the `/deepsid/images/composers/` sub folder and unpack **DeepSID_Images_Composers.zip** into it.
 7. Create the `/deepsid/images/countries/` sub folder and unpack **DeepSID_Images_Countries.zip** into it.
 8. Create the `/deepsid/images/csdb/` sub folder and unpack **DeepSID_Images_CSDb.zip** into it.
-9. Create the `/deepsid/images/gb64/` sub folder and unpack **DeepSID_Images_GB64.zip** into it.
-10. Create the `/deepsid/images/players/` sub folder and unpack **DeepSID_Images_Players.zip** into it.
+9. Create the `/deepsid/images/players/` sub folder and unpack **DeepSID_Images_Players.zip** into it.
 
 Download the following SID collections that will work with the database supplied below:
 
-* [High Voltage SID Collection #75](http://www.prg.dtu.dk/HVSC/HVSC_75-all-of-them.7z)
-* [Compute's Gazette SID Collection v1.40](http://www.c64music.co.uk/CGSC_v140.7z)
+* [High Voltage SID Collection #80](https://hvsc.brona.dk/HVSC/HVSC_80-all-of-them.7z)
+* [Compute's Gazette SID Collection v1.46](http://www.c64music.co.uk/CGSC_v146.7z)
 
 1. Create the `/deepsid/hvsc/` sub folder.
 2. Unpack the HVSC archive into the `/deepsid/hvsc/` folder. This should create a `/C64Music/` sub folder.
