@@ -110,7 +110,11 @@
 
 	'	<h3>SID handlers</h3>
 		<p>If you click the drop-down box in the top left corner, another SID handler can be chosen.</p>
-		
+
+		<h4><a href="//deepsid.chordian.net?emulator=legacy">JSIDPlay2 (BETA)</a></h4>
+		<p>Uses the renowned reSID engine and offers excellent emulation.</p>
+		Requires a really fast CPU.
+
 		<h4><a href="//deepsid.chordian.net?emulator=websid">WebSid emulator</a></h4>
 		<p>The default for computers.</p>
 		It processes cycle-by-cycle, and it emulates almost everything.
@@ -119,8 +123,9 @@
 		<p>The default for mobile devices.</p>
 		Faster, but not as efficient. Use this if your computer is slow.
 
-		<h4><a href="//deepsid.chordian.net?emulator=jssid">Hermit\'s emulator</a></h4>
+		<h4><a href="//deepsid.chordian.net?emulator=jssid">Hermit\'s (+FM)</a></h4>
 		<p>Even faster, but cannot emulate RSID tunes, nor SID with digi.</p>
+		This can also play SID+FM tunes, i.e. with OPL synthesis added.
 
 		<h4><a href="//deepsid.chordian.net?emulator=asid">ASID (MIDI)</a></h4>
 		<p>Use with MIDI devices such as e.g. SidStation, TherapSID, etc.</p>

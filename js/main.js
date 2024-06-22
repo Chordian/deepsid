@@ -7,7 +7,7 @@ var $=jQuery.noConflict();
 
 var cacheCSDb = cacheSticky = cacheStickyBeforeCompo = cacheCSDbProfile = cacheBeforeCompo = cachePlayer = cacheGB64 = cacheRemix = prevFile = sundryTab = reportSTIL = "";
 var cacheTabScrollPos = cachePlayerTabScrollPos = cacheGB64TabScrollPos = cacheRemixTabScrollPos = cachePosBeforeCompo = cacheDDCSDbSort = peekCounter = sundryHeight = 0;
-var sundryToggle = true, recommended = forum = players = $trAutoPlay = null, showTags;
+var sundryToggle = true, recommended = forum = players = $trAutoPlay = null, showTags, fastForwarding = false;
 var logCount = 1000, isMobile, miniPlayer;
 
 var isLegacyWebSid = $("script[src='js/handlers/backend_tinyrsid_legacy.js']").length;
@@ -56,6 +56,7 @@ $(function() { // DOM ready
 	// However, a URL switch may TEMPORARILY override the stored emulator
 	var emulator = GetParam("emulator").toLowerCase();
 	if ($.inArray(emulator, [
+		"jsidplay2",
 		"websid",
 		"legacy",
 		"jssid",
@@ -74,6 +75,9 @@ $(function() { // DOM ready
 	SID = new SIDPlayer(emulator);
 	ctrls = new Controls();
 	browser = new Browser();
+
+	// JSIDPlay2 can't slow down while playing
+	viz.stateVisualsButton("#piano-slow", emulator == "jsidplay2" ? "disabled" : "enabled");
 
 	// Set the main volume that was used the last time
 	var vol = localStorage.getItem("volume");
@@ -124,15 +128,18 @@ $(function() { // DOM ready
 	 */
 	$(window).on("keydown", function(event) {
 		if (!$("input[type=text],input[type=password],textarea,select").is(":focus")) {
-			if (event.keyCode == 220)									// Keydown key below 'Escape'
-				// Fast forward
+			if (event.keyCode == 220 && ! fastForwarding) {				// Keydown key below 'Escape'
+				// Fast forward ON
 				$("#faster").trigger("mousedown");
+				fastForwarding = true;
+			}
 		}
 	}).on("keyup", function(event) {
 		if (!$("input[type=text],input[type=password],textarea,select").is(":focus")) {
 			if (event.keyCode == 220) {									// Keyup key below 'Escape'
-				// Fast forward
+				// Fast forward OFF
 				$("#faster").trigger("mouseup");
+				fastForwarding = false;
 			} else if (event.keyCode == 32)	{							// Keyup 'Space'
 				$("#play-pause").trigger("mouseup");
 			} else if (event.keyCode == 80) {							// Keyup 'p' (pop-up window)
@@ -251,7 +258,7 @@ $(function() { // DOM ready
 					ctrls.state("root/back", "enabled");
 
 					$("#dropdown-emulator")
-						.styledOptionState("websid legacy jssid asid", "enabled")
+						.styledOptionState("jsidplay2 websid legacy jssid asid", "enabled")
 						.styledOptionState("lemon youtube", "disabled");
 					$("#path").css("top", "5px").empty().append("Temporary emulator testing");
 					$("#stab-stil,#tab-stil").empty().append("STIL");
@@ -531,6 +538,8 @@ $(function() { // DOM ready
 
 				var emulator = $("#dropdown-emulator").styledGetValue();
 				docCookies.setItem("emulator", emulator, "Infinity", "/");
+				viz.emulator = emulator.toLowerCase();
+				viz.setBufferSize(emulator);
 				viz.setEmuButton(emulator);
 				viz.setBufferMessage(emulator);
 
@@ -558,8 +567,11 @@ $(function() { // DOM ready
 				else
 					$("#tab-visuals").removeClass("disabled");
 
+				// JSIDPlay2 can't slow down while playing
+				viz.stateVisualsButton("#piano-slow", emulator == "jsidplay2" ? "disabled" : "enabled");
+
 				// The color of the time bar should be unique for the chosen SID handler
-				$("#time-bar").removeClass("websid legacy jssid asid lemon youtube").addClass(emulator)
+				$("#time-bar").removeClass("jsidplay2 websid legacy jssid asid lemon youtube").addClass(emulator)
 					.css("cursor", SID.emulatorFlags.supportSeeking ? "pointer" : "default");
 
 				$("#faster").removeClass("disabled");
@@ -680,7 +692,8 @@ $(function() { // DOM ready
 
 		// Show the selected topic
 		$("#page .topic,#sticky-csdb,#sticky-visuals").hide();
-		$("#topic-"+topic).show();
+		if (topic != "visuals")
+			$("#topic-"+topic).show();
 
 		SetScrollTopInstantly("#page", tabPrevScrollPos[topic].pos);
 
@@ -704,8 +717,11 @@ $(function() { // DOM ready
 		// If 'Visuals' tab is selected show the sticky header
 		if (topic === "visuals") {
 			$("#sticky-visuals").show();
-			if (typeof viz.visuals == "undefined")
-				$("#sticky-visuals button.icon-piano").trigger("click");
+			if (viz.visualsEnabled) {
+				$("#topic-visuals").show();
+				if (typeof viz.visuals == "undefined")
+					$("#sticky-visuals button.icon-piano").trigger("click");
+			}
 		}
 
 		// If 'GB64' tab is selected then hide the notification on it
@@ -2130,6 +2146,11 @@ function DisableIncompatibleRows() {
 			SID.emulator == "jssid" || SID.emulator == "asid"
 				? $tr.addClass("disabled")
 				: $tr.removeClass("disabled");
+		} else if (isSIDFile && $tr.find(".name").attr("data-name").indexOf(".mus") !== -1) {
+			// JSIDPlay2 emulator can't do MUS files
+			SID.emulator == "jsidplay2"
+				? $tr.addClass("disabled")
+				: $tr.removeClass("disabled");
 		}
 	});
 }
@@ -2191,6 +2212,7 @@ function UpdateURL(skipFileCheck) {
  * small icon to a selected state if corresponding to any playing tune.
  */
 function UpdateRedirectPlayIcons() {
+	if (browser.playlist.length == 0) return;
 	// Set "active" icon on all plinks that has the same tune (HVSC only)
 	$("a.redirect").each(function() {
 		var $this = $(this);

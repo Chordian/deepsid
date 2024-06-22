@@ -9,6 +9,9 @@ const YOUTUBE_BLANK = "ENmZnF2M41A"; // Animated DeepSID logo
 function SIDPlayer(emulator) {
 
 	this.paused = false;
+	this.stopped = false;
+	this.fastForward = false;
+
 	this.ytReady = false;
 
 	this.emulator = emulator.toLowerCase();
@@ -18,6 +21,18 @@ function SIDPlayer(emulator) {
 	this.stereoLevel = -1;
 	
 	this.file = "";
+
+	this.jp2Loading = true;
+	this.jp2PlayTime = 0;
+	this.jp2SidModel = "8580";
+
+	this.jp2SidWrites = true;			// jp2Play()
+
+	this.jp2StereoMode = "AUTO";		// jp2SetStereo()
+	this.jp2SID2Base = 0xD420;			// jp2SetStereo()
+	this.jp2SID3Base = 0xD440;			// jp2SetStereo()
+	this.jp2FakeStereo = false;			// jp2SetStereo()
+	this.jp2SIDToRead = "FIRST_SID";	// jp2SetStereo()
 
 	this.filterWebSid = {
 		base:				0.02387,	// 6581 filter settings for R2 type
@@ -46,6 +61,41 @@ function SIDPlayer(emulator) {
 
 	switch (this.emulator) {
 
+		case "jsidplay2":
+
+			/**
+			 * JSIDPlay2 by Ken Händel, Antti S. Lankila and Wilfred Bos
+			 * 
+			 * + Uses the renowned reSID emulator
+			 * + Set SID model but not encoding
+			 * + Can play 2SID and 3SID tunes
+			 * + Emulation quality is excellent
+			 * + Can play BASIC program tunes
+			 * + Preset filter settings available
+			 * + Stereo panning up to 3 SID chips
+			 * + Fake stereo using several SID chips
+			 * - Very CPU demanding (slow in Firefox)
+			 * - Take 1-3 seconds to load a tune
+			 * - Logs stuff in the browser console
+			 */
+
+			this.jp2AudioContext = new AudioContext({
+				latencyHint: "interactive",
+				sampleRate: 48000,
+			});
+
+			this.emulatorFlags.supportFaster	= true;
+			this.emulatorFlags.supportEncoding	= true;
+			this.emulatorFlags.supportSeeking	= false;
+			this.emulatorFlags.supportLoop		= true;
+			this.emulatorFlags.forceModel		= false;
+			this.emulatorFlags.forcePlay		= false;
+			this.emulatorFlags.hasFlags			= true;
+			this.emulatorFlags.slowLoading		= true;		// Takes a second or two for a tune to start
+			this.emulatorFlags.returnCIA		= false;
+			this.emulatorFlags.offline			= false;
+			break;
+
 		case "websid":
 
 			/**
@@ -66,6 +116,8 @@ function SIDPlayer(emulator) {
 			var CHAR_ROM	= "PGZubmBiPAAYPGZ+ZmZmAHxmZnxmZnwAPGZgYGBmPAB4bGZmZmx4AH5gYHhgYH4AfmBgeGBgYAA8ZmBuZmY8AGZmZn5mZmYAPBgYGBgYPAAeDAwMDGw4AGZseHB4bGYAYGBgYGBgfgBjd39rY2NjAGZ2fn5uZmYAPGZmZmZmPAB8ZmZ8YGBgADxmZmZmPA4AfGZmfHhsZgA8ZmA8BmY8AH4YGBgYGBgAZmZmZmZmPABmZmZmZjwYAGNjY2t/d2MAZmY8GDxmZgBmZmY8GBgYAH4GDBgwYH4APDAwMDAwPAAMEjB8MGL8ADwMDAwMDDwAABg8fhgYGBgAEDB/fzAQAAAAAAAAAAAAGBgYGAAAGABmZmYAAAAAAGZm/2b/ZmYAGD5gPAZ8GABiZgwYMGZGADxmPDhnZj8ABgwYAAAAAAAMGDAwMBgMADAYDAwMGDAAAGY8/zxmAAAAGBh+GBgAAAAAAAAAGBgwAAAAfgAAAAAAAAAAABgYAAADBgwYMGAAPGZudmZmPAAYGDgYGBh+ADxmBgwwYH4APGYGHAZmPAAGDh5mfwYGAH5gfAYGZjwAPGZgfGZmPAB+ZgwYGBgYADxmZjxmZjwAPGZmPgZmPAAAABgAABgAAAAAGAAAGBgwDhgwYDAYDgAAAH4AfgAAAHAYDAYMGHAAPGYGDBgAGAAAAAD//wAAAAgcPn9/HD4AGBgYGBgYGBgAAAD//wAAAAAA//8AAAAAAP//AAAAAAAAAAAA//8AADAwMDAwMDAwDAwMDAwMDAwAAADg8DgYGBgYHA8HAAAAGBg48OAAAADAwMDAwMD//8DgcDgcDgcDAwcOHDhw4MD//8DAwMDAwP//AwMDAwMDADx+fn5+PAAAAAAAAP//ADZ/f38+HAgAYGBgYGBgYGAAAAAHDxwYGMPnfjw8fufDADx+ZmZ+PAAYGGZmGBg8AAYGBgYGBgYGCBw+fz4cCAAYGBj//xgYGMDAMDDAwDAwGBgYGBgYGBgAAAM+djY2AP9/Px8PBwMBAAAAAAAAAADw8PDw8PDw8AAAAAD//////wAAAAAAAAAAAAAAAAAA/8DAwMDAwMDAzMwzM8zMMzMDAwMDAwMDAwAAAADMzDMz//78+PDgwIADAwMDAwMDAxgYGB8fGBgYAAAAAA8PDw8YGBgfHwAAAAAAAPj4GBgYAAAAAAAA//8AAAAfHxgYGBgYGP//AAAAAAAA//8YGBgYGBj4+BgYGMDAwMDAwMDA4ODg4ODg4OAHBwcHBwcHB///AAAAAAAA////AAAAAAAAAAAAAP///wMDAwMDA///AAAAAPDw8PAPDw8PAAAAABgYGPj4AAAA8PDw8AAAAADw8PDwDw8PD8OZkZGfmcP/58OZgZmZmf+DmZmDmZmD/8OZn5+fmcP/h5OZmZmTh/+Bn5+Hn5+B/4Gfn4efn5//w5mfkZmZw/+ZmZmBmZmZ/8Pn5+fn58P/4fPz8/OTx/+Zk4ePh5OZ/5+fn5+fn4H/nIiAlJycnP+ZiYGBkZmZ/8OZmZmZmcP/g5mZg5+fn//DmZmZmcPx/4OZmYOHk5n/w5mfw/mZw/+B5+fn5+fn/5mZmZmZmcP/mZmZmZnD5/+cnJyUgIic/5mZw+fDmZn/mZmZw+fn5/+B+fPnz5+B/8PPz8/Pz8P/8+3Pg8+dA//D8/Pz8/PD///nw4Hn5+fn/+/PgIDP7////////////+fn5+f//+f/mZmZ//////+ZmQCZAJmZ/+fBn8P5g+f/nZnz58+Zuf/DmcPHmJnA//nz5///////8+fPz8/n8//P5/Pz8+fP//+ZwwDDmf///+fngefn/////////+fnz////4H////////////n5////Pnz58+f/8OZkYmZmcP/5+fH5+fngf/Dmfnzz5+B/8OZ+eP5mcP/+fHhmYD5+f+Bn4P5+ZnD/8OZn4OZmcP/gZnz5+fn5//DmZnDmZnD/8OZmcH5mcP////n///n/////+f//+fnz/Hnz5/P5/H///+B/4H///+P5/P58+eP/8OZ+fPn/+f/////AAD////348GAgOPB/+fn5+fn5+fn////AAD//////wAA//////8AAP///////////wAA///Pz8/Pz8/Pz/Pz8/Pz8/Pz////Hw/H5+fn5+Pw+P///+fnxw8f////Pz8/Pz8/AAA/H4/H4/H4/Pz48ePHjx8/AAA/Pz8/Pz8AAPz8/Pz8/P/DgYGBgcP///////8AAP/JgICAweP3/5+fn5+fn5+f////+PDj5+c8GIHDw4EYPP/DgZmZgcP/5+eZmefnw//5+fn5+fn5+ffjwYDB4/f/5+fnAADn5+c/P8/PPz/Pz+fn5+fn5+fn///8wYnJyf8AgMDg8Pj8/v//////////Dw8PDw8PDw//////AAAAAAD//////////////////wA/Pz8/Pz8/PzMzzMwzM8zM/Pz8/Pz8/Pz/////MzPMzAABAwcPHz9//Pz8/Pz8/Pzn5+fg4Ofn5//////w8PDw5+fn4OD///////8HB+fn5////////wAA////4ODn5+fn5+cAAP///////wAA5+fn5+fnBwfn5+c/Pz8/Pz8/Px8fHx8fHx8f+Pj4+Pj4+PgAAP///////wAAAP////////////8AAAD8/Pz8/PwAAP////8PDw8P8PDw8P/////n5+cHB////w8PDw//////Dw8PD/Dw8PA8Zm5uYGI8AAAAPAY+Zj4AAGBgfGZmfAAAADxgYGA8AAAGBj5mZj4AAAA8Zn5gPAAADhg+GBgYAAAAPmZmPgZ8AGBgfGZmZgAAGAA4GBg8AAAGAAYGBgY8AGBgbHhsZgAAOBgYGBg8AAAAZn9/a2MAAAB8ZmZmZgAAADxmZmY8AAAAfGZmfGBgAAA+ZmY+BgYAAHxmYGBgAAAAPmA8BnwAABh+GBgYDgAAAGZmZmY+AAAAZmZmPBgAAABja38+NgAAAGY8GDxmAAAAZmZmPgx4AAB+DBgwfgA8MDAwMDA8AAwSMHwwYvwAPAwMDAwMPAAAGDx+GBgYGAAQMH9/MBAAAAAAAAAAAAAYGBgYAAAYAGZmZgAAAAAAZmb/Zv9mZgAYPmA8BnwYAGJmDBgwZkYAPGY8OGdmPwAGDBgAAAAAAAwYMDAwGAwAMBgMDAwYMAAAZjz/PGYAAAAYGH4YGAAAAAAAAAAYGDAAAAB+AAAAAAAAAAAAGBgAAAMGDBgwYAA8Zm52ZmY8ABgYOBgYGH4APGYGDDBgfgA8ZgYcBmY8AAYOHmZ/BgYAfmB8BgZmPAA8ZmB8ZmY8AH5mDBgYGBgAPGZmPGZmPAA8ZmY+BmY8AAAAGAAAGAAAAAAYAAAYGDAOGDBgMBgOAAAAfgB+AAAAcBgMBgwYcAA8ZgYMGAAYAAAAAP//AAAAGDxmfmZmZgB8ZmZ8ZmZ8ADxmYGBgZjwAeGxmZmZseAB+YGB4YGB+AH5gYHhgYGAAPGZgbmZmPABmZmZ+ZmZmADwYGBgYGDwAHgwMDAxsOABmbHhweGxmAGBgYGBgYH4AY3d/a2NjYwBmdn5+bmZmADxmZmZmZjwAfGZmfGBgYAA8ZmZmZjwOAHxmZnx4bGYAPGZgPAZmPAB+GBgYGBgYAGZmZmZmZjwAZmZmZmY8GABjY2Nrf3djAGZmPBg8ZmYAZmZmPBgYGAB+BgwYMGB+ABgYGP//GBgYwMAwMMDAMDAYGBgYGBgYGDMzzMwzM8zMM5nMZjOZzGYAAAAAAAAAAPDw8PDw8PDwAAAAAP//////AAAAAAAAAAAAAAAAAAD/wMDAwMDAwMDMzDMzzMwzMwMDAwMDAwMDAAAAAMzMMzPMmTNmzJkzZgMDAwMDAwMDGBgYHx8YGBgAAAAADw8PDxgYGB8fAAAAAAAA+PgYGBgAAAAAAAD//wAAAB8fGBgYGBgY//8AAAAAAAD//xgYGBgYGPj4GBgYwMDAwMDAwMDg4ODg4ODg4AcHBwcHBwcH//8AAAAAAAD///8AAAAAAAAAAAAA////AQMGbHhwYAAAAAAA8PDw8A8PDw8AAAAAGBgY+PgAAADw8PDwAAAAAPDw8PAPDw8Pw5mRkZ+Zw////8P5wZnB//+fn4OZmYP////Dn5+fw///+fnBmZnB////w5mBn8P///Hnwefn5////8GZmcH5g/+fn4OZmZn//+f/x+fnw///+f/5+fn5w/+fn5OHk5n//8fn5+fnw////5mAgJSc////g5mZmZn////DmZmZw////4OZmYOfn///wZmZwfn5//+DmZ+fn////8Gfw/mD///ngefn5/H///+ZmZmZwf///5mZmcPn////nJSAwcn///+Zw+fDmf///5mZmcHzh///gfPnz4H/w8/Pz8/Pw//z7c+Dz50D/8Pz8/Pz88P//+fDgefn5+f/78+AgM/v////////////5+fn5///5/+ZmZn//////5mZAJkAmZn/58Gfw/mD5/+dmfPnz5m5/8OZw8eYmcD/+fPn///////z58/Pz+fz/8/n8/Pz58///5nDAMOZ////5+eB5+f/////////5+fP////gf///////////+fn///8+fPnz5//w5mRiZmZw//n58fn5+eB/8OZ+fPPn4H/w5n54/mZw//58eGZgPn5/4Gfg/n5mcP/w5mfg5mZw/+BmfPn5+fn/8OZmcOZmcP/w5mZwfmZw////+f//+f/////5///5+fP8efPn8/n8f///4H/gf///4/n8/nz54//w5n58+f/5/////8AAP///+fDmYGZmZn/g5mZg5mZg//DmZ+fn5nD/4eTmZmZk4f/gZ+fh5+fgf+Bn5+Hn5+f/8OZn5GZmcP/mZmZgZmZmf/D5+fn5+fD/+Hz8/Pzk8f/mZOHj4eTmf+fn5+fn5+B/5yIgJScnJz/mYmBgZGZmf/DmZmZmZnD/4OZmYOfn5//w5mZmZnD8f+DmZmDh5OZ/8OZn8P5mcP/gefn5+fn5/+ZmZmZmZnD/5mZmZmZw+f/nJyclICInP+ZmcPnw5mZ/5mZmcPn5+f/gfnz58+fgf/n5+cAAOfn5z8/z88/P8/P5+fn5+fn5+fMzDMzzMwzM8xmM5nMZjOZ//////////8PDw8PDw8PD/////8AAAAAAP//////////////////AD8/Pz8/Pz8/MzPMzDMzzMz8/Pz8/Pz8/P////8zM8zMM2bMmTNmzJn8/Pz8/Pz8/Ofn5+Dg5+fn//////Dw8PDn5+fg4P///////wcH5+fn////////AAD////g4Ofn5+fn5wAA////////AADn5+fn5+cHB+fn5z8/Pz8/Pz8/Hx8fHx8fHx/4+Pj4+Pj4+AAA////////AAAA/////////////wAAAP78+ZOHj5///////w8PDw/w8PDw/////+fn5wcH////Dw8PD/////8PDw8P8PDw8A==";
 
 			if (typeof SIDBackend === "undefined") SIDBackend = new SIDBackendAdapter(BASIC_ROM, CHAR_ROM, KERNAL_ROM);
+
+			// Continues to...
 
 		case "legacy":
 
@@ -98,7 +150,7 @@ function SIDPlayer(emulator) {
 				}
 			}
 			ScriptNodePlayer.createInstance(SIDBackend, '', [], false, this.onPlayerReady.bind(this), this.onTrackReadyToPlay.bind(this), this.onTrackEnd.bind(this), undefined, scope,
-				($("body").attr("data-mobile") !== "0" ? 16384 : viz.bufferSize));
+				($("body").attr("data-mobile") !== "0" ? 16384 : viz.bufferSize[this.emulator]));
 			this.WebSid = ScriptNodePlayer.getInstance();
 
 			this.WebSid.setSilenceTimeout(0); // Don't skip ahead when tunes are playing nothing
@@ -118,17 +170,17 @@ function SIDPlayer(emulator) {
 		case "jssid":
 
 			/**
-			 * jsSID by Hermit
+			 * jsSID by Hermit (with OPL synthesis extension)
 			 * 
 			 * + Very small and compact JS code
-			 * + Sometimes emulates better than WebSid
 			 * + Can play 2SID and 3SID tunes
+			 * + OPL synthesis for SID+FM playback
 			 * - Cannot play MUS files in CGSC
 			 * - No encoding options
 			 * - Cannot play BASIC and digi tunes (RSID)
 			 * - Some CIA tunes doesn't work either
 			 */
-			this.jsSID = new jsSID(($("body").attr("data-mobile") !== "0" ? 16384 : viz.bufferSize), 0.0005);
+			this.jsSID = new jsSID(($("body").attr("data-mobile") !== "0" ? 16384 : viz.bufferSize[this.emulator]), 0.0005);
 
 			this.emulatorFlags.supportFaster	= true;
 			this.emulatorFlags.supportEncoding	= false;
@@ -338,11 +390,170 @@ SIDPlayer.prototype = {
 		file = this.file = typeof file === "undefined" ? this.file : file;
 
 		// Show the raw SID filename in the title
-		$(document).attr("title", "DeepSID | "+file.split("/").slice(-1)[0]);
+		this.rawFilename = file.split("/").slice(-1)[0];
+		$(document).attr("title", "DeepSID | " + this.rawFilename);
 
 		viz.clearStats();
 
 		switch (this.emulator) {
+
+			case "jsidplay2":
+
+				// Terminate last emulation instance
+				if (this.jp2Worker) {
+					this.jp2Worker.terminate();
+					this.jp2Worker = undefined;
+				}
+
+				this.jp2AudioContext.resume();
+
+				// Create a new emulator
+				this.jp2Worker = new Worker("js/handlers/jsidplay2-js-worker.js", );
+
+				this.jp2PlayTime = 0;
+				this.jp2Loading = true;
+
+				// Used for delayed update of visuals
+				this.jp2RegisterCache = [
+					[], [], [], [], [], [], [], [], [], [], [], [], [], [],
+					[], [], [], [], [], [], [], [], [], [], [], [], [], [], [],
+
+					[], [], [], [], [], [], [], [], [], [], [], [], [], [],
+					[], [], [], [], [], [], [], [], [], [], [], [], [], [], [],
+
+					[], [], [], [], [], [], [], [], [], [], [], [], [], [],
+					[], [], [], [], [], [], [], [], [], [], [], [], [], [], [],
+				];
+
+				new Promise((resolve, reject) => {
+
+					var clockspeed = 50; // Assume PAL tune to begin with
+					if (browser.playlist[browser.songPos].clockspeed.substr(0, 4).toLowerCase() == "ntsc")
+						clockspeed = 60; // This is an NTSC tune
+
+					// Everything starts with INITIALISE where basic configuration is provided
+					this.jp2Worker.postMessage({
+						eventType: "INITIALISE",
+						eventData: {
+							palEmulation: true,				// PAL emulation on/off
+							bufferSize: 144000,				// How many clock ticks to advance per call (144000)
+							audioBufferSize: viz.bufferSize[this.emulator],	// Audio buffer fill level (max is 48000)
+							samplingRate: 48000,			// Sampling rate
+							samplingMethodResample: false,	// Resampling method DECIMATE (false) or RESAMPLE (true)
+							reverbBypass: true,				// Reverb on (false) or off (true)
+							defaultClockSpeed: clockspeed,	// PAL (50) or NTSC (60)
+							jiffyDosInstalled: false,		// Floppy speeder off/on
+						},
+					});
+		
+					// Now listen to events from the JSIDPlay2 worker
+					this.jp2Worker.addEventListener("message", function (event) {
+						var { eventType, eventData } = event.data;
+
+						if (eventType === "SAMPLES") {
+
+							// Clear loading spinner
+							this.jp2Loading = false;
+							browser.clearSpinner();
+
+							var sampleRate = this.jp2AudioContext.sampleRate;
+
+							// The worker has produced a chunk of sound data - create a stereo buffer and
+							// send it to the sound card
+							var buffer = this.jp2AudioContext.createBuffer(2, eventData.length, sampleRate);
+							buffer.getChannelData(0).set(eventData.left);
+							buffer.getChannelData(1).set(eventData.right);
+
+							var sourceNode = this.jp2AudioContext.createBufferSource();
+							sourceNode.buffer = buffer;
+							sourceNode.connect(this.jp2AudioContext.destination);
+
+							// Some magic to stay in sync, please experiment for yourself
+							if (this.jp2NextTime == 0) {
+								fix = screen ? 0.005 : 0; // @todo What is this 'screen' variable?
+								// Add 50ms latency to work well across systems
+								this.jp2NextTime = this.jp2AudioContext.currentTime + 0.05;
+							} else if (this.jp2NextTime < this.jp2AudioContext.currentTime) {
+								// If samples are not produced fast enough, add
+								// small hick-up and hope for better times
+								this.jp2NextTime = this.jp2AudioContext.currentTime + 0.005;
+							}
+							sourceNode.start(this.jp2NextTime);
+							this.jp2NextTime += eventData.length / sampleRate + fix;
+
+							// Tick playtime in seconds taking fast forward into account
+							// @todo This needs to be adapted for other buffer sizes to work
+							this.jp2PlayTime += 1 / ((eventData.length / sampleRate) / (this.fastForward ? 2 : 1));
+
+							// At the end of the tune?
+							if (this.jp2PlayTime > timeout) {
+								if (typeof this.callbackTrackEnd === "function")
+									this.callbackTrackEnd();
+							}
+
+						} else if (eventType === "SID_WRITE") {
+
+							// The worker notifies about a SID write to the SID chip. We can
+							// ignore/report or send it to another SID chip implementation.
+
+							// Store SID value in an cache array with all registers
+							var sidRegister = false, sidValue = eventData.value,
+								timestamp = this.jp2AudioContext.currentTime;
+							if (eventData.addr >= this.jp2SID3Base && eventData.addr <= this.jp2SID3Base + 28)
+								// SID chip #3
+								sidRegister = eventData.addr - this.jp2SID3Base + (29 * 2);
+							else if (eventData.addr >= this.jp2SID2Base && eventData.addr <= this.jp2SID2Base + 28)
+								// SID chip #2
+								sidRegister = eventData.addr - this.jp2SID2Base + 29;
+							else if (eventData.addr <= 0xD400 + 28)
+								// SID chip #1
+								sidRegister = eventData.addr - 0xD400;
+								// For some reason JSIDPlay2 loops registers all the way up to 255 to begin with
+							if (sidRegister)
+								this.jp2RegisterCache[sidRegister].push({ value: sidValue, timestamp });
+
+						} else if (eventType === "OPENED" || eventType === "CLOCKED") {
+
+							// Every time a tune gets opened, we start the clocking here.
+							// After clocking, we clock again and so on.
+							if (!this.paused && !this.stopped && this.jp2NextTime - this.jp2AudioContext.currentTime <= 1) {								
+								// Clock the emulator to produce more samples and frames
+								this.jp2Worker.postMessage({ eventType: "CLOCK" });
+							} else {
+								// Get on the brakes, do nothing
+								this.jp2Worker.postMessage({ eventType: "IDLE" });
+							}
+
+						} else if (eventType === "INITIALISED") {
+
+							// If the emulation instance is initialized, the tune can be opened to play. This
+							// is required before clocking. If you need additional configuration (set volume
+							// level, stereo mode, etc), this is the right place before the tune is opened.
+
+							// Load the SID file
+							var request = new XMLHttpRequest();
+							request.open("GET", file, true);
+							request.responseType = "arraybuffer";
+
+							request.onload = function() {
+								this.contents = new Uint8Array(request.response);
+								this.jp2Play();
+							}.bind(this);
+							request.send(null);
+
+							if (typeof callback === "function") {
+								callback.call(this, error);
+							}
+
+						}
+					}.bind(this));
+
+					this.jp2Worker.addEventListener("error", function (error) {
+						reject(error);
+					});
+
+				});
+				break;
 
 			case "legacy":
 
@@ -442,7 +653,6 @@ SIDPlayer.prototype = {
 					}.bind(this), 500);
 				}
 				break;
-
 
 			case "lemon":
 
@@ -624,6 +834,16 @@ SIDPlayer.prototype = {
 	 */
 	unload: function() {
 		switch (this.emulator) {
+			case "jsidplay2":
+				if (this.jp2Worker) {
+					this.jp2Worker.terminate();
+					this.jp2Worker = undefined;
+				}
+				if (this.jp2AudioContext) {
+					this.jp2AudioContext.close();
+					this.jp2AudioContext = undefined;
+				}
+				break;
 			case "lemon":
 				if (this.howler) this.howler.unload();
 				break;
@@ -652,6 +872,17 @@ SIDPlayer.prototype = {
 			viz.startBufferEndedEffects();
 		}
 		switch (this.emulator) {
+			case "jsidplay2":
+				if (this.paused) {
+					this.paused = false;
+					this.jp2AudioContext.resume();
+				} else if (!this.jp2Loading) {
+					browser.showSpinner($("#folders tr").eq(browser.subFolders + browser.songPos).find("td.sid"));
+					// This restarts the tune
+					this.jp2Play();
+				}
+				this.jp2Loading = false;
+				break;
 			case "websid":
 			case "legacy":
 				if (typeof forcePlay !== "undefined")
@@ -688,6 +919,39 @@ SIDPlayer.prototype = {
 	},
 
 	/**
+	 * Play in JSIDPlay2. Used by both 'load()' and 'play()' methods.
+	 */
+	jp2Play: function() {
+
+		// The SID model can only be set before starting the tune
+		this.jp2SidModel = browser.playlist[browser.songPos].sidmodel == "MOS6581" ? "6581" : "8580";
+		this.jp2Worker.postMessage({
+			eventType: "SET_DEFAULT_CHIP_MODEL",
+			eventData: {
+				chipModel: "MOS" + this.jp2SidModel
+			},
+		});
+
+		this.jp2SetStereo();
+		this.jp2Worker.postMessage({
+			eventType: "OPEN",
+			eventData: {
+				contents: this.contents,		// Tune data as Uint8Array
+				tuneName: this.rawFilename,		// Tune name with extension for type detection
+				startSong: this.subtune + 1,	// Specify the song to play here (1-based)
+				nthFrame: 0,					// 0 means no video frame output (only audio)
+				sidWrites: this.jp2SidWrites,	// Set it to true for SID writes to be captured
+				cartContents: null,				// Cartridge data as Uint8Array	(unused in DeepSID)
+				cartName: null,					// Cartridge name				(unused in DeepSID)
+				command: null,					// Command after C64 reset		(unused in DeepSID)
+			},
+		});
+
+		this.jp2NextTime = this.jp2PlayTime = 0;
+		this.paused = this.stopped = this.fastForward = false;
+	},
+
+	/**
 	 * Is a song currently playing?
 	 * 
 	 * @return {boolean}	TRUE if currently playing.
@@ -695,6 +959,9 @@ SIDPlayer.prototype = {
 	isPlaying: function() {
 		var playing;
 		switch (this.emulator) {
+			case "jsidplay2":
+				playing = !this.paused && !this.stopped;
+				break;
 			case "websid":
 			case "legacy":
 				playing = !this.WebSid.isPaused();
@@ -725,6 +992,9 @@ SIDPlayer.prototype = {
 	 isSuspended: function() {
 		var suspended;
 		switch (this.emulator) {
+			case "jsidplay2":
+				suspended = this.jp2AudioContext.state == "suspended";
+				break;
 			case "websid":
 			case "legacy":
 				var audioCtx = ScriptNodePlayer.getInstance().getAudioContext();
@@ -754,6 +1024,9 @@ SIDPlayer.prototype = {
 	pause: function() {
 		this.paused = true;
 		switch (this.emulator) {
+			case "jsidplay2":
+				this.jp2AudioContext.suspend();
+				break;
 			case "websid":
 			case "legacy":
 				this.WebSid.pause();
@@ -780,6 +1053,13 @@ SIDPlayer.prototype = {
 		this.paused = false;
 		viz.stopBufferEndedEffects();
 		switch (this.emulator) {
+			case "jsidplay2":
+				this.jp2PlayTime = 0;
+				this.jp2Loading = false;
+				browser.clearSpinner();
+				this.stopped = true;
+				this.paused = false;
+				break;
 			case "websid":
 			case "legacy":
 				this.load(); // Dirty hack to make sure the tune is restarted next time it is played
@@ -812,6 +1092,20 @@ SIDPlayer.prototype = {
 	 */
 	speed: function(multiplier) {
 		switch (this.emulator) {
+			case "jsidplay2":
+				if (multiplier > 1 && !this.fastForward) {
+					// This requires even more CPU time
+					this.jp2Worker.postMessage({
+						eventType: "FAST_FORWARD"
+					});
+					this.fastForward = true;
+				} else {
+					this.jp2Worker.postMessage({
+						eventType: "NORMAL_SPEED"
+					});
+					this.fastForward = false;
+				}
+				break;
 			case "websid":
 			case "legacy":
 				var normalSampleRate = this.WebSid.getDefaultSampleRate();
@@ -857,6 +1151,7 @@ SIDPlayer.prototype = {
 				result.songName			= this.jsSID.gettitle();
 				result.songReleased		= this.jsSID.getinfo();
 				break;
+			case "jsidplay2":
 			case "lemon":
 			case "youtube":
 			case "download":
@@ -901,6 +1196,9 @@ SIDPlayer.prototype = {
 	setMainVolume: function(value) {
 		this.mainVol = value;
 		switch (this.emulator) {
+			case "jsidplay2":
+				this.jp2Volume(value);
+				break;
 			case "websid":
 			case "legacy":
 				this.WebSid.setVolume(value);
@@ -927,6 +1225,9 @@ SIDPlayer.prototype = {
 	 */
 	setVolume: function(value) {
 		switch (this.emulator) {
+			case "jsidplay2":
+				this.jp2Volume(value * this.mainVol);
+				break;
 			case "websid":
 			case "legacy":
 				this.WebSid.setVolume(value * this.mainVol);
@@ -947,6 +1248,31 @@ SIDPlayer.prototype = {
 	},
 
 	/**
+	 * Set the volume of JSIDPlay2. Used by 'setMainVolume' and 'setVolume' methods.
+	 *
+	 * @param {float} value		Volume (0 to 1; e.g. half is 0.5).
+	 */
+	jp2Volume: function(value) {
+		if (this.jp2Worker) {
+			var volume = -6 + value * 6;		// Map 0 to 1 as -6 to 0 (boost is not used by DeepSID)
+			this.jp2Worker.postMessage({
+				eventType: "SET_VOLUME_LEVELS",
+				eventData: {
+					mainVolume:		volume,		// Volume goes from -6 (low) to 6 (boost) - 0 is normal
+					secondVolume:	volume,
+					thirdVolume:	volume,
+					mainBalance:	0.3,		// Stereo balance goes from 0 to 1 (in steps of 0.1)
+					secondBalance:	0.7,
+					thirdBalance:	0.5,
+					mainDelay:		10,			// Delay goes from 0 to 100 ms (in steps of 1)
+					secondDelay:	0,
+					thirdDelay:		0,
+				},
+			});
+		}
+	},
+
+	/**
 	 * Return the current play time of the SID tune being played.
 	 * 
 	 * @return {array}	Number of seconds passed so far.
@@ -954,6 +1280,9 @@ SIDPlayer.prototype = {
 	getCurrentPlaytime: function() {
 		var time = 0;
 		switch (this.emulator) {
+			case "jsidplay2":
+				time = this.jp2PlayTime;
+				break;
 			case "websid":
 			case "legacy":
 				time = this.WebSid.getCurrentPlaytime();
@@ -1118,6 +1447,8 @@ SIDPlayer.prototype = {
 	 */
 	disableTimeout: function() {
 		switch (this.emulator) {
+			case "jsidplay2":
+				break;
 			case "websid":
 			case "legacy":
 				this.WebSid._currentTimeout = -1;
@@ -1144,6 +1475,8 @@ SIDPlayer.prototype = {
 	 */
 	enableTimeout: function(length) {
 		switch (this.emulator) {
+			case "jsidplay2":
+				break;
 			case "websid":
 			case "legacy":
 				this.WebSid._currentTimeout = length * this.WebSid._sampleRate;
@@ -1170,6 +1503,9 @@ SIDPlayer.prototype = {
 	 */
 	setModel: function(model) {
 		switch (this.emulator) {
+			case "jsidplay2":
+				// The "SET_DEFAULT_CHIP_MODEL" event can only be used before the "OPEN" event
+				break;
 			case "websid":
 			case "legacy":
 				SIDBackend.setSID6581(model === "6581" ? 1 : 0);
@@ -1192,6 +1528,8 @@ SIDPlayer.prototype = {
 	 */
 	getModel: function() {
 		switch (this.emulator) {
+			case "jsidplay2":
+				return false;
 			case "websid":
 			case "legacy":
 				return SIDBackend.isSID6581() ? "6581" : "8580";
@@ -1213,6 +1551,9 @@ SIDPlayer.prototype = {
 	 */
 	setEncoding: function(encoding) {
 		switch (this.emulator) {
+			case "jsidplay2":
+				// @todo Check later if it's supported
+				break;
 			case "websid":
 			case "legacy":
 				SIDBackend.setNTSC(encoding === "NTSC" ? 1 : 0);
@@ -1236,6 +1577,9 @@ SIDPlayer.prototype = {
 	 */
 	getEncoding: function() {
 		switch (this.emulator) {
+			case "jsidplay2":
+				// @todo Check later if it's supported
+				return false;
 			case "websid":
 			case "legacy":
 				return SIDBackend.isNTSC() ? "NTSC" : "PAL";
@@ -1262,6 +1606,16 @@ SIDPlayer.prototype = {
 		if (typeof chip === "undefined") chip = 0; else chip -= 1;
 		this.voiceMask[chip] ^= 1 << (voice - 1); // Toggle a bit in the '1111' mask
 		switch (this.emulator) {
+			case "jsidplay2":
+				this.jp2Worker.postMessage({
+					eventType: "SET_MUTE",
+					eventData: {
+						sidNum: chip,
+						voice: voice - 1,
+						value: !(this.voiceMask[chip] & 1 << (voice - 1)),
+					},
+				});
+				break;
 			case "websid":
 				if ($("body").attr("data-mobile") === "0")
 					SIDBackend.enableVoice(chip, voice - 1, this.voiceMask[chip] & 1 << (voice - 1));
@@ -1291,6 +1645,22 @@ SIDPlayer.prototype = {
 	enableAllVoices: function() {
 		this.voiceMask = [0xF, 0xF, 0xF];
 		switch (this.emulator) {
+			case "jsidplay2":
+				if (this.jp2Worker) {
+					for (var chip = 0; chip < 3; chip++) {
+						for (var voice = 0; voice < 4; voice++) {
+							this.jp2Worker.postMessage({
+								eventType: "SET_MUTE",
+								eventData: {
+									sidNum: chip,
+									voice: voice,
+									value: false,
+								},
+							});
+						}
+					}
+				}
+				break;
 			case "websid":
 				if ($("body").attr("data-mobile") === "0") {
 					for (var chip = 0; chip < 3; chip++) {
@@ -1322,6 +1692,9 @@ SIDPlayer.prototype = {
 	 */
 	getPace: function() {
 		switch (this.emulator) {
+			case "jsidplay2":
+				// @todo Check later if it's supported
+				return false;
 			case "websid":
 				var cia = SIDBackend.getRAM(0xDC04) + SIDBackend.getRAM(0xDC05) * 256;
 				if (cia == 16421) cia = 0;
@@ -1352,6 +1725,7 @@ SIDPlayer.prototype = {
 			case "websid":
 			case "legacy":
 				return SIDBackend.getDigiTypeDesc();
+			case "jsidplay2":
 			case "jssid":
 			case "asid":
 			case "lemon":
@@ -1372,6 +1746,7 @@ SIDPlayer.prototype = {
 			case "websid":
 			case "legacy":
 				return SIDBackend.getDigiRate();
+			case "jsidplay2":
 			case "jssid":
 			case "asid":
 			case "lemon":
@@ -1391,6 +1766,12 @@ SIDPlayer.prototype = {
 	getSIDAddress: function(chip) {
 		if (chip == 1) return 0xD400;
 		switch (this.emulator) {
+			case "jsidplay2":
+				// SID base address is set by "SET_STEREO" event, so JSIDPlay2 decides this
+				if (chip == 2)
+					return this.jp2SID2Base;
+				else
+					return this.jp2SID3Base;
 			case "websid":
 				return SIDBackend.getSIDBaseAddr(chip - 1);
 			case "legacy":
@@ -1426,6 +1807,17 @@ SIDPlayer.prototype = {
 		register -= 0xD400;
 		if (typeof chip === "undefined") chip = 0; else chip -= 1;
 		switch (this.emulator) {
+			case "jsidplay2":
+				this.jp2Value = null;
+				if (!this.jp2Loading) {
+					const delay = 1;
+					this.jp2RegisterCache[register + (chip * 29)].filter(item => {
+						if (this.jp2AudioContext.currentTime - item.timestamp >= delay) {
+							this.jp2Value = item.value;
+						}
+					});
+				}
+				return this.jp2Value;
 			case "websid":
 				try {
 					var value = SIDBackend.getSIDRegister(chip, register);
@@ -1463,6 +1855,7 @@ SIDPlayer.prototype = {
 			case "jssid":
 			case "asid":
 				return this.jsSID.readregister(address);
+			case "jsidplay2":
 			case "lemon":
 			case "youtube":
 			case "download":
@@ -1483,6 +1876,7 @@ SIDPlayer.prototype = {
 			case "websid":
 				return SIDBackend.readVoiceLevel(chip, voice - 1);
 			case "legacy":
+			case "jsidplay2":
 			case "jssid":
 			case "asid":
 			case "lemon":
@@ -1503,6 +1897,9 @@ SIDPlayer.prototype = {
 	 setStereoPanning: function(voice, chip, panning) {
 		if (typeof chip === "undefined") chip = 0; else chip -= 1;
 		switch (this.emulator) {
+			case "jsidplay2":
+				// @todo Check later if it's supported
+				break;
 			case "websid":
 				SIDBackend.setPanning(chip, voice - 1, panning / 100);
 				break;
@@ -1528,6 +1925,7 @@ SIDPlayer.prototype = {
 				SIDBackend.setReverbLevel(reverb);
 				break;
 			case "legacy":
+			case "jsidplay2":
 			case "jssid":
 			case "asid":
 			case "lemon":
@@ -1549,6 +1947,7 @@ SIDPlayer.prototype = {
 				SIDBackend.setHeadphoneMode(mode);
 				break;
 			case "legacy":
+			case "jsidplay2":
 			case "jssid":
 			case "asid":
 			case "lemon":
@@ -1571,6 +1970,7 @@ SIDPlayer.prototype = {
 				SIDBackend.setStereoLevel(mode);
 				break;
 			case "legacy":
+			case "jsidplay2":
 			case "jssid":
 			case "asid":
 			case "lemon":
@@ -1595,5 +1995,21 @@ SIDPlayer.prototype = {
 				}
 			}
 		}
+	},
+
+	/**
+	 * Set stereo modes and addresses in JSIDPlay2.
+	 */
+	jp2SetStereo: function() {
+		this.jp2Worker.postMessage({
+			eventType: "SET_STEREO",
+			eventData: {
+				stereoMode: this.jp2StereoMode,		// AUTO, STEREO or THREE_SID
+				dualSidBase: this.jp2SID2Base,		// 0xD420, 0xD440, 0xD500, 0xDE00 or 0xDF00
+				thirdSIDBase: this.jp2SID3Base,		// 0xD420, 0xD440, 0xD500, 0xDE00 or 0xDF00
+				fakeStereo: this.jp2FakeStereo,		// true or false
+				sidToRead: this.jp2SIDToRead,		// Read FIRST_SID, SECOND_SID or THIRD_SID
+			},
+		});
 	},
 }

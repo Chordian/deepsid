@@ -27,22 +27,24 @@ DATABASE
      bigger ID number it originally read.
   7. Save the file and open "symlists.sql" in your text editor instead.
   8. Remove "INSERT INTO" and ALL of its lines, then save the now completely purged skeleton.
-  9. Save the file and open "users.sql" in your text editor instead.
- 10. Now purge ALL of the "INSERT INTO" sub lines then replace them with this one instead:
+  9. Further down, edit the one MODIFY line to read AUTO_INCREMENT=1; in the end instead of the
+     bigger ID number it originally read.
+ 10. Save the file and open "users.sql" in your text editor instead.
+ 11. Now purge ALL of the "INSERT INTO" sub lines then replace them with this one instead:
 
        (1, 'Test', '098f6bcd4621d373cade4e832627b4f6', '2018-10-03', '', '6ca7a8bcb9ad10061951723828eedef9', 0, '2018-10-03 09:11:19', '0.0.0.0');
 
- 11. Further down, edit the one MODIFY line to read AUTO_INCREMENT=2; in the end instead of the
+ 12. Further down, edit the one MODIFY line to read AUTO_INCREMENT=2; in the end instead of the
      bigger ID number it originally read.
- 12. Save the file. The other SQL files should be fine as is.
- 13. Update the two text files with the latest version numbers for HVSC and CGSC. (Note that
+ 13. Save the file. The other SQL files should be fine as they are.
+ 14. Update the two text files with the latest version numbers for HVSC and CGSC. (Note that
      there's also a version number inside the text files themselves.)
- 14. Zip the folder contents (no folder inside - just root files) as: DeepSID_Database.zip
- 15. Enter the DeepSID folder with your FTP program and replace the ZIP file here:
+ 15. Zip the folder contents (no folder inside - just root files) as: DeepSID_Database.zip
+ 16. Enter the DeepSID folder with your FTP program and replace the ZIP file here:
 
        <ROOT>/files/deepsid/DeepSID_Database.zip
 
- 15. Make sure the version numbers and file links in the README.md for GitHub are updated too.
+ 17. Make sure the version numbers and file links in the README.md for GitHub are updated too.
 
 FILES
 ¯¯¯¯¯

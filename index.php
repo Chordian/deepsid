@@ -110,6 +110,7 @@
 			<?php endif ?>
 		<?php endif ?>
 
+		<script type="text/javascript" src="js/handlers/jsidplay2.js"></script>
 		<script type="text/javascript" src="js/handlers/jsSID-modified.js"></script>
 		<script type="text/javascript" src="js/handlers/howler.min.js"></script>
 		<script type="text/javascript" src="js/chartist.min.js"></script>
@@ -523,6 +524,8 @@
 					<?php if (MiniPlayer()) echo '<div style="position:absolute;top:24px;left:200px;white-space:nowrap;">mini-player</div>'; ?>
 				</div>
 				<select id="dropdown-emulator" name="select-emulator" style="visibility:hidden;">
+				<option value="jsidplay2">JSIDPlay2 (BETA)</option>
+					<!--<option value="jsidplay2">JSIDPlay2 (reSID)</option>-->
 					<option value="websid">WebSid emulator</option>
 					<option value="legacy">WebSid (Legacy)</option>
 					<option value="jssid">Hermit's (+FM)</option>
@@ -615,6 +618,7 @@
 							<!--<span>The <a href="https://www.hvsc.c64.org/" target="_top">High Voltage SID Collection</a> has been upgraded to the latest version #80. Click <a href="//deepsid.chordian.net/?search=80&type=new">here</a> to see what's new in this update.</span>-->
 							<!--<span><a href="http://www.c64music.co.uk/" target="_top">Compute's Gazette SID Collection</a> has been upgraded to the latest version #146. Click <a href="//deepsid.chordian.net/?search=146&type=new">here</a> to see what's new in this update.</span>-->
 							<!--<a href="https://xparty.net/"><img src="images/sundry_x2024.png" alt="X'2024" /></a>-->
+							<span><a href="https://haendel.ddns.net:8443/static/teavm/c64jukebox.vue" target="_top">JSIDPlay2</a> is available. It uses reSID and has excellent emulation, but it's also demanding. Turn the 'Visuals' tab off for better playback.</span>
 						</div>
 					<?php endif ?>
 				</div>
@@ -914,14 +918,18 @@
 				</div>
 				<div id="sticky-csdb"><h2 style="margin-top:0;">CSDb</h2></div>
 				<div id="sticky-visuals"><h2 style="margin-top:0;">Visuals</h2>
-					<div class="visuals-buttons">
-						<button class="icon-piano button-off" data-visual="piano">Piano</button>
-						<button class="icon-graph button-on" data-visual="graph">Graph</button>
-						<button class="icon-memory button-on" data-visual="memory">Memo</button>
-						<button class="icon-stats button-on" data-visual="stats">Stats</button>
+					<div class="visuals-buttons" data-selected-visual="">
+						<button class="visuals-button icon-piano button-off" data-visual="piano">Piano</button>
+						<button class="visuals-button icon-graph button-on" data-visual="graph">Graph</button>
+						<button class="visuals-button icon-memory button-on" data-visual="memory">Memo</button>
+						<button class="visuals-button icon-stats button-on" data-visual="stats">Stats</button>
 					</div>
 					<img class="waveform-colors" src="images/waveform_colors.png" alt="Waveform Colors" />
 					<div id="sticky-right-buttons">
+						<span id="visuals-toggle">
+							<label for="tab-visuals-toggle" class="unselectable" style="margin-right:1px;">Enabled</label>
+							<button id="tab-visuals-toggle" class="button-edit button-toggle button-on">On</button>
+						</span>
 						<span id="memory-lc">
 							<label for="memory-lc-toggle" class="unselectable" style="margin-right:1px;">Lower case C64 font</label>
 							<button id="memory-lc-toggle" class="button-edit button-toggle button-on">On</button>
@@ -934,12 +942,14 @@
 						<div id="visuals-piano" class="visuals" style="display:none;">
 							<div class="edit" style="height:42px;width:683px;">
 								<label class="unselectable" style="margin-right:2px;">Emulator</label>
-								<button class="button-edit button-radio button-off viz-emu viz-websid viz-legacy" data-group="viz-emu" data-emu="websid">WebSid</button>
+								<button class="button-edit button-radio button-off viz-emu viz-jsidplay2" data-group="viz-emu" data-emu="jsidplay2">JSIDPl2</button>
+								<button class="button-edit button-radio button-off viz-emu viz-websid" data-group="viz-emu" data-emu="websid">WebSid</button>
+								<button class="button-edit button-radio button-off viz-emu viz-legacy" data-group="viz-emu" data-emu="legacy">Legacy</button>
 								<button class="button-edit button-radio button-off viz-emu viz-jssid" data-group="viz-emu" data-emu="jssid">Hermit</button>
-								<span class="viz-warning viz-msg-emu">You need to enable one of these emulators</span>
-								<span class="viz-warning viz-msg-buffer">Decrease this if too slow <img src="images/composer_arrowright.svg" style="position:relative;top:4px;height:18px;" alt="" /></span>
+								<span class="viz-warning viz-msg-emu" style="position:relative;top:-1px;"> <img src="images/composer_arrowleft.svg" style="position:relative;top:5px;height:18px;" alt="" /> You need one of these</span>
+								<span class="viz-warning viz-msg-buffer" style="position:relative;top:-1px;">Decrease if too slow <img src="images/composer_arrowright.svg" style="position:relative;top:4px;height:18px;" alt="" /></span>
 								<div class="viz-buffer">
-									<label for="dropdown-piano-buffer" class="unselectable">Buffer size</label>
+									<label for="dropdown-piano-buffer" class="dropdown-buffer-label unselectable">Buffer size</label>
 									<select id="dropdown-piano-buffer" class="dropdown-buffer">
 										<!--<option value="256">256</option>
 										<option value="512">512</option>-->
@@ -948,6 +958,10 @@
 										<option value="4096">4096</option>
 										<option value="8192">8192</option>
 										<option value="16384" selected="selected">16384</option>
+										<option class="jsidplay2" value="24000" style="display:none;">24000</option>
+										<option class="jsidplay2" value="32000" style="display:none;">32000</option>
+										<option class="jsidplay2" value="40000" style="display:none;">40000</option>
+										<option class="jsidplay2" value="48000" style="display:none;">48000</option>
 									</select>
 								</div>
 							</div>
@@ -1019,12 +1033,14 @@
 						<div id="visuals-graph" class="visuals" style="display:none;">
 							<div class="edit" style="height:42px;width:683px;">
 								<label class="unselectable" style="margin-right:2px;">Emulator</label>
-								<button class="button-edit button-radio button-off viz-emu viz-websid viz-legacy" data-group="viz-emu" data-emu="websid">WebSid</button>
+								<button class="button-edit button-radio button-off viz-emu viz-jsidplay2" data-group="viz-emu" data-emu="jsidplay2">JSIDPl2</button>
+								<button class="button-edit button-radio button-off viz-emu viz-websid" data-group="viz-emu" data-emu="websid">WebSid</button>
+								<button class="button-edit button-radio button-off viz-emu viz-legacy" data-group="viz-emu" data-emu="legacy">Legacy</button>
 								<button class="button-edit button-radio button-off viz-emu viz-jssid" data-group="viz-emu" data-emu="jssid">Hermit</button>
-								<span class="viz-warning viz-msg-emu">You need to enable one of these emulators</span>
-								<span class="viz-warning viz-msg-buffer">Decrease this if too slow <img src="images/composer_arrowright.svg" style="position:relative;top:4px;height:18px;" alt="" /></span>
+								<span class="viz-warning viz-msg-emu" style="position:relative;top:-1px;"> <img src="images/composer_arrowleft.svg" style="position:relative;top:5px;height:18px;" alt="" /> You need one of these</span>
+								<span class="viz-warning viz-msg-buffer" style="position:relative;top:-1px;">Decrease if too slow <img src="images/composer_arrowright.svg" style="position:relative;top:4px;height:18px;" alt="" /></span>
 								<div class="viz-buffer">
-									<label for="dropdown-graph-buffer" class="unselectable">Buffer size</label>
+									<label for="dropdown-graph-buffer" class="dropdown-buffer-label unselectable">Buffer size</label>
 									<select id="dropdown-graph-buffer" class="dropdown-buffer">
 										<!--<option value="256">256</option>
 										<option value="512">512</option>-->
@@ -1033,6 +1049,10 @@
 										<option value="4096">4096</option>
 										<option value="8192">8192</option>
 										<option value="16384" selected="selected">16384</option>
+										<option class="jsidplay2" value="24000" style="display:none;">24000</option>
+										<option class="jsidplay2" value="32000" style="display:none;">32000</option>
+										<option class="jsidplay2" value="40000" style="display:none;">40000</option>
+										<option class="jsidplay2" value="48000" style="display:none;">48000</option>
 									</select>
 								</div>
 							</div>
@@ -1331,9 +1351,10 @@
 								<div class="space splitline"></div>
 
 								<h3>Buffer size</h3>
-								<p>Setting the buffer size affects WebSid or Hermit's emulator. If you like viewing the
-									<b>Visuals</b> tab, decrease the value towards 1024 for smoother
-									updating. If the playback is stuttering, increase it until it doesn't anymore.</p>
+								<p>If the currently selected SID handler supports it, you can change its buffer size here.
+									Higher values can reduce stuttering or eliminate it entirely.
+									However, some emulators also update the <b>Visuals</b> tab slowly when using higher values.
+								</p>
 
 								<select id="dropdown-settings-buffer" class="dropdown-buffer">
 									<!--<option value="256">256</option>
@@ -1343,8 +1364,12 @@
 									<option value="4096">4096</option>
 									<option value="8192">8192</option>
 									<option value="16384" selected="selected">16384</option>
+									<option class="jsidplay2" value="24000" style="display:none;">24000</option>
+									<option class="jsidplay2" value="32000" style="display:none;">32000</option>
+									<option class="jsidplay2" value="40000" style="display:none;">40000</option>
+									<option class="jsidplay2" value="48000" style="display:none;">48000</option>
 								</select>
-								<label for="dropdown-settings-buffer" class="unselectable">Buffer size</label>
+								<label for="dropdown-settings-buffer" class="dropdown-buffer-label unselectable">Buffer size <span id="settings-emu-msg" style="display:none;">for <span id="settings-emu-type">?</span> emulator<span></label>
 
 								<div class="space splitline"></div>
 
@@ -1420,6 +1445,13 @@
 							<a href="http://www.wothke.ch/websid/" target="_top">http://www.wothke.ch/websid/</a><br />
 							<a href="https://github.com/wothke/websid" target="_top">https://github.com/wothke/websid</a><br />
 							<a href="https://github.com/wothke/webaudio-player" target="_top">https://github.com/wothke/webaudio-player</a>
+						</p>
+						<p>
+							JSIDPlay2 emulator by Ken Händel, Antti S. Lankila and Wilfred Bos<br />
+							with Distortion Simulation and 6581/8580 emulation by Antti S. Lankila<br />
+							and reSID engine and 6581/8580 emulation by Dag Lem<br />
+							<a href="https://sourceforge.net/projects/jsidplay2/" target="_top">https://sourceforge.net/projects/jsidplay2/</a><br />
+							<a href="https://haendel.ddns.net:8443/static/teavm/c64jukebox.vue" target="_top">https://haendel.ddns.net:8443/static/teavm/c64jukebox.vue</a><br />
 						</p>
 						<p>
 							jsSID emulator by Mihály Horváth (<a href="http://csdb.chordian.net/?type=scener&id=18806" target="_top">Hermit</a>)
@@ -1650,16 +1682,28 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>June 22, 2024</h3>
+						<ul>
+							<li>Added a SID handler for <a href="https://haendel.ddns.net:8443/static/teavm/c64jukebox.vue" target="_top">JSIDPlay2</a>.
+								This uses the renowned reSID engine and offers excellent emulation, but it's also considerably
+								more demanding. You need a powerful CPU to run this one. Only the playback and visuals are supported in this "BETA" update.
+								Support for stereo and filter presets are coming in a later update.</li>
+							<li>Because of the new SID handler, an ON/OFF toggle button has been added in the visuals tab. If your CPU is having trouble making the
+							    playback sound coherent, try turning the visuals off. This may especially be helpful with digi, 2SID and 3SID tunes. Turning the visuals
+								off not only saves time on having to update this, it also turns off SID register output in the JSIDPlay2 emulator. </li>
+							<li>Fixed tags not being removed too when a loading spinner is shown in a SID row.</li>
+							<li>Buffer size is now unique for each of the emulators supported by the visuals tab.</li>
+						</ul>
+
 						<h3>May 16, 2024</h3>
 						<ul>
 							<li>Hermit's emulator is now capable of playing back SID+FM files. These are SID files combined with 
-								FM emulation and have been accomplished by using either the <a href="https://www.c64-wiki.com/wiki/Commodore_Sound_Expander">SFX Sound Expander</a> or the <a href="https://c64.xentax.com/index.php/fm-yam">FM-YAM</a>
+								FM emulation and have been accomplished by using either the <a href="https://www.c64-wiki.com/wiki/Commodore_Sound_Expander" target="_top">SFX Sound Expander</a> or the <a href="https://c64.xentax.com/index.php/fm-yam" target="_top">FM-YAM</a>
 								cartridge. Thank you to Thomas Jansson (tubesockor) for this update.</li>
 							<li>A new <a href="//deepsid.chordian.net/?file=/SID%20Happens/SID+FM/">SID+FM</a> subfolder has been created in the <a href="//deepsid.chordian.net/?file=/SID%20Happens/">SID Happens</a> folder.
 								You can only enter this subfolder when you have selected the <b>Hermit's (+FM)</b> SID handler in the top left drop-down box.
 								It's possible to upload new files to this subfolder, but they must of course be of the SID+FM type or they will be deleted.</li>
 						</ul>
-
 
 						<h3>January 6, 2024</h3>
 						<ul>

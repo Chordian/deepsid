@@ -120,10 +120,12 @@ Browser.prototype = {
 
 		setInterval(function() {
 			// Update clock
-			var secondsCurrent = SID.getCurrentPlaytime();
-			$("#time-current").empty().append((Math.floor(secondsCurrent / 60)+":"+(secondsCurrent % 60 < 10 ? "0" : "")+(secondsCurrent % 60)).split(".")[0] /* No MS */ );
-			// Update time bar
-			$("#time-bar div").css("width", ((secondsCurrent / this.secondsLength) * 346)+"px");
+			if (typeof SID != "undefined") {
+				var secondsCurrent = SID.getCurrentPlaytime();
+				$("#time-current").empty().append((Math.floor(secondsCurrent / 60)+":"+(secondsCurrent % 60 < 10 ? "0" : "")+(secondsCurrent % 60)).split(".")[0] /* No MS */ );
+				// Update time bar
+				$("#time-bar div").css("width", ((secondsCurrent / this.secondsLength) * 346)+"px");
+			}
 		}.bind(this), 200);
 
 		$("#search-box").keydown(function(event) {
@@ -1096,9 +1098,10 @@ Browser.prototype = {
 			ctrls.state("root/back", "enabled");
 
 			// Disable emulators/handlers in the drop-down according to parent folder attributes
-			$("#dropdown-emulator").styledOptionState("websid legacy jssid asid lemon youtube download", "enabled");
+			$("#dropdown-emulator").styledOptionState("jsidplay2 websid legacy jssid asid lemon youtube download", "enabled");
 			$("#page .viz-emu").removeClass("disabled");
 			$("#dropdown-emulator").styledOptionState(this.cache.incompatible, "disabled");
+			if (this.cache.incompatible.indexOf("jsidplay2") !== -1) $("#page .viz-jsidplay2").addClass("disabled");
 			if (this.cache.incompatible.indexOf("websid") !== -1) $("#page .viz-websid").addClass("disabled");
 			if (this.cache.incompatible.indexOf("jssid") !== -1) $("#page .viz-jssid").addClass("disabled");
 			if (this.cache.incompatible.indexOf("asid") !== -1) $("#page .viz-asid").addClass("disabled");
@@ -1155,9 +1158,10 @@ Browser.prototype = {
 					var files = "";
 
 					// Disable emulators/handlers in the drop-down according to parent folder attributes
-					$("#dropdown-emulator").styledOptionState("websid legacy jssid asid lemon youtube download", "enabled");
+					$("#dropdown-emulator").styledOptionState("jsidplay2 websid legacy jssid asid lemon youtube download", "enabled");
 					$("#page .viz-emu").removeClass("disabled");
 					$("#dropdown-emulator").styledOptionState(data.incompatible, "disabled");
+					if (data.incompatible.indexOf("jsidplay2") !== -1) $("#page .viz-jsidplay2").addClass("disabled");
 					if (data.incompatible.indexOf("websid") !== -1) $("#page .viz-websid").addClass("disabled");
 					if (data.incompatible.indexOf("jssid") !== -1) $("#page .viz-jssid").addClass("disabled");
 					if (data.incompatible.indexOf("asid") !== -1) $("#page .viz-asid").addClass("disabled");
@@ -1656,7 +1660,8 @@ Browser.prototype = {
 	 */
 	showSpinner: function($td) {
 		if (SID.emulatorFlags.slowLoading) {
-			// Temporarily hide the rating stars and show a loading spinner instead
+			// Temporarily hide the rating stars and tags, show a loading spinner instead
+			$($td).children("span.info").children("div.tags-line").hide();
 			$stars = $($td).next("td.stars");
 			$stars.children("span").hide();
 			$stars.append('<span id="spinner"></span>');
@@ -1667,7 +1672,10 @@ Browser.prototype = {
 	 * Clear the SID tune loading spinner and show the ratings stars again.
 	 */
 	clearSpinner: function() {
+		if (SID.jp2Loading) return;
 		$("#songs td.stars span").show();
+		if ($("#showtags").is(":checked"))
+			$("#songs .tags-line").show();
 		$("#spinner").remove();
 	},
 

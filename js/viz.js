@@ -12,6 +12,8 @@ function Viz(emulator) {
 
 	this.emulator = emulator.toLowerCase();
 
+	this.visualsEnabled = true;
+
 	this.pianoBarBackground = "#111";
 	this.slowSpeed = 0.3;
 	this.maxVoices = 3;
@@ -82,7 +84,6 @@ function Viz(emulator) {
 		}
 	];
 
-	this.bufferSize;
 	this.visuals;
 
 	// @link http://codebase64.org/doku.php?id=base:pal_frequency_table
@@ -134,11 +135,22 @@ function Viz(emulator) {
 		"#000000",			// $F0
 	];
 
-	// Set buffer size as previously stored or default to 16384 bytes
-	this.bufferSize = localStorage.getItem("buffer");
-	if (this.bufferSize == null) this.bufferSize = 16384;
-	$("#page .dropdown-buffer").val(this.bufferSize);
+	this.bufferSize = {
+		jsidplay2:	48000,
+		websid:		0,
+		legacy:		0,
+		jssid:		0,
+	};
 
+	// Used for the buffer size label in the settings
+	this.bufferEmulator = {
+		jsidplay2:	"JSIDPlay2",
+		websid:		"the default WebSid",
+		legacy:		"the legacy WebSid",
+		jssid:		"Hermit's",
+	};
+
+	this.setBufferSize(this.emulator);
 	this.setEmuButton(this.emulator);
 
 	this.initScope();
@@ -211,7 +223,7 @@ Viz.prototype = {
 				} else {
 					// Using direct call (piano view doesn't support digi tunes)
 					SID.toggleVoice(4);
-					$("#scope4").css("opacity", (voiceMask[0] & 0x8 ? "0.3" : "1"));
+					$("#scope4").css("opacity", (SID.voiceMask[0] & 0x8 ? "0.3" : "1"));
 				}
 			}
 		}
@@ -284,7 +296,29 @@ Viz.prototype = {
 				return;
 			} else
 				$this.empty().append($this.hasClass("button-off") ? "On" : "Off");
-			if (event.target.id === "piano-slow") {
+			if (event.target.id === "tab-visuals-toggle") {
+				if ($this.hasClass("button-off")) {
+					// Turn the entire VISUALS tab ON
+					$("#topic-visuals").show();
+					var visual = $("#sticky-visuals .visuals-buttons").attr("data-selected-visual");
+					$("#no-visuals").remove();
+					if (visual == "memory")
+						$("#memory-lc").show();
+					else if (visual == "piano" || visual == "graph")
+						$("#sticky-visuals .waveform-colors").show();
+					this.visualsEnabled = SID.jp2SidWrites = true;
+				} else {
+					// Turn the entire VISUALS tab OFF
+					$("#topic-visuals,#memory-lc,#sticky-visuals .waveform-colors").hide();
+					$("#sticky-visuals .visuals-buttons").append('<div id="no-visuals"></div>');
+					this.visualsEnabled = SID.jp2SidWrites = false;
+				}
+				if (SID.emulator == "jsidplay2" && SID.jp2Worker) {
+					// Process whether the emulator should read the SID registers or not
+					SID.stop();
+					SID.play();
+				}
+			} else if (event.target.id === "piano-slow") {
 				SID.speed($this.hasClass("button-off") ? this.slowSpeed : 1);
 			} else if (event.target.id === "graph-pw") {
 				this.graphPW = $this.hasClass("button-off");
@@ -320,11 +354,7 @@ Viz.prototype = {
 			switch (groupClass) {
 				case 'viz-emu':
 					// Adjust the top left drop-down box with SID handlers
-					var emulator = $this.attr("data-emu");
-					if (emulator == "websid" || emulator == "legacy")
-						// Select the WebSid version that was last selected (avoids reloading the page)
-						emulator = isLegacyWebSid ? "legacy" : "websid";
-					$("#dropdown-emulator").styledSetValue(emulator)
+					$("#dropdown-emulator").styledSetValue($this.attr("data-emu"))
 						.next("div.styledSelect").trigger("change");
 					break;
 				case 'viz-layout':
@@ -382,14 +412,18 @@ Viz.prototype = {
 	 * @param {*} event 
 	 */
 	onChangeBufferSize: function(event) {
-		this.bufferSize = $(event.target).val();
-		localStorage.setItem("buffer", this.bufferSize);
+		var emulator = this.emulator == "asid" ? "jssid" : this.emulator;
+		this.bufferSize[emulator] = $(event.target).val();
+		localStorage.setItem("buffer_" + emulator, this.bufferSize[emulator]);
 		// Make sure all drop-down boxes of this kind agree on the new value
-		$("#page .dropdown-buffer").val(this.bufferSize);
+		$("#page .dropdown-buffer").val(this.bufferSize[emulator]);
 		// Re-trigger the same emulator again to set the buffer size
 		// NOTE: Doing it in a specific visuals view is deliberate (avoids multiple triggering).
-		$("#visuals-piano .viz-emu.button-on").trigger("click");
-		this.setBufferMessage(this.emulator);
+		if (this.emulator == "asid")
+			$("#dropdown-emulator").styledSetValue("asid").next("div.styledSelect").trigger("change");
+		else
+			$("#visuals-piano .viz-emu.button-on").trigger("click");
+		this.setBufferMessage(emulator);
 	},
 
 	/**
@@ -400,6 +434,7 @@ Viz.prototype = {
 	onVisualsClick: function(event) {
 		this.visuals = $(event.target).attr("data-visual");
 		if (typeof this.visuals == "undefined") return false;
+		$(event.target).parent().attr("data-selected-visual", this.visuals);
 		$("#topic-visuals .visuals,#sticky-visuals .waveform-colors,#memory-lc").hide();
 		$("#sticky-visuals .visuals-buttons .button-on").removeClass("button-on").addClass("button-off");
 		$("#sticky-visuals .icon-"+this.visuals).removeClass("button-off").addClass("button-on");
@@ -452,7 +487,8 @@ Viz.prototype = {
 	 * Pop all of the emulator radio buttons up for now.
 	 */
 	allEmuButtonsOff: function() {
-		$("#page .viz-emu").removeClass("button-off button-on").addClass("button-off");		
+		$("#page .viz-emu,#piano-slow").removeClass("button-off button-on").addClass("button-off");
+		$("#piano-slow").empty().html("Off");
 	},
 
 	/**
@@ -461,8 +497,9 @@ Viz.prototype = {
 	 * @param {string} emulator 
 	 */
 	setEmuButton: function(emulator) {
-		if (emulator == "websid" || emulator == "legacy" || emulator == "jssid" || emulator == "asid") {
-			$("#page .viz-"+emulator).addClass("button-on"); 
+		if (["jsidplay2", "websid", "legacy", "jssid", "asid"].includes(emulator)) {
+			if (emulator == "asid") emulator = "jssid";
+			$("#page .viz-" + emulator).addClass("button-on"); 
 			$("#page .viz-msg-emu").hide();
 		} else
 			$("#page .viz-msg-emu").show();
@@ -470,13 +507,78 @@ Viz.prototype = {
 	},
 
 	/**
+	 * Set buffer size as previously stored or set to a default.
+	 * 
+	 * @param {string} emulator 
+	 */
+	setBufferSize: function(emulator) {
+		// @todo JSIDPlay2 will have to wait until I can get the tune length calculation right
+		if (["disabled:jsidplay2", "websid", "legacy", "jssid", "asid"].includes(emulator)) {
+			if (emulator == "asid") emulator = "jssid";
+			$("#page .dropdown-buffer").prop("disabled", false);
+			$("#page .dropdown-buffer-label").removeClass("disabled");
+			$("#settings-emu-type").empty().append(this.bufferEmulator[emulator]);
+			$("#settings-emu-msg").show();
+			var bufferSize = localStorage.getItem("buffer_" + emulator);
+			if (bufferSize == null) {
+				switch (emulator) {
+					case 'jsidplay2':
+						this.bufferSize['jsidplay2'] = 48000;
+						break;
+					case 'websid':
+						this.bufferSize['websid'] = 16384;
+						break;
+					case 'legacy':
+						this.bufferSize['legacy'] = 1024;
+						break;
+					default:
+						this.bufferSize[emulator] = 1024;
+				}
+			} else
+				this.bufferSize[emulator] = bufferSize;
+			$("#page .dropdown-buffer").val(this.bufferSize[emulator]);
+		} else {
+			$("#page .dropdown-buffer").prop("disabled", true);
+			$("#page .dropdown-buffer-label").addClass("disabled");
+			$("#settings-emu-msg").hide();
+		}
+
+		if (emulator == "jsidplay2") {
+			$("#page .dropdown-buffer option.jsidplay2").show();
+			$("#page .dropdown-buffer").val(48000); // @todo <= Remove when JSIDPlay2 is allowed above
+		} else
+			$("#page .dropdown-buffer option.jsidplay2").hide();
+	},
+
+	/**
 	 * If buffer size is not at lowest value then show a message about it in both
 	 * of the visuals views, except in WebSid (HQ) mode.
 	 */
 	setBufferMessage: function(emulator) {
-		this.bufferSize > 1024 && $("#page .viz-msg-emu").css("display") == "none" && emulator != "websid"
+		this.bufferSize[emulator] > 1024 && $("#page .viz-msg-emu").css("display") == "none" && emulator != "jsidplay2" && emulator != "websid"
 			? $("#page .viz-msg-buffer").show()
 			: $("#page .viz-msg-buffer").hide();
+	},
+
+	/**
+	 * Enable or disable a visuals ON/OFF toggle button and its label.
+	 * 
+	 * @param {string} element 		E.g. "#piano-slow".
+	 * @param {string} state		Set to "disabled" or "enabled".
+	 */
+	stateVisualsButton: function(element, state) {
+		if (state == "disabled") {
+			$(element)
+				.prop("disabled", true)
+				.addClass("disabled")
+				.next()
+				.addClass("disabled");
+		} else
+			$(element)
+				.prop("disabled", false)
+				.removeClass("disabled")
+				.next()
+				.removeClass("disabled");
 	},
 
 	/**
@@ -551,7 +653,7 @@ Viz.prototype = {
 	 */
 	animatePiano: function() {
 		// Only if the tab and view are active
-		if (!this.runningPiano || $("#tabs .selected").attr("data-topic") !== "visuals" ||
+		if (!this.visualsEnabled || !this.runningPiano || $("#tabs .selected").attr("data-topic") !== "visuals" ||
 			!$("#sticky-visuals .icon-piano").hasClass("button-on")) return; 
 
 		var useOneKeyboard = $("#piano-combine").hasClass("button-on") || browser.chips > 1;
@@ -854,7 +956,7 @@ Viz.prototype = {
 				this.tabOscMode = "NOTWEBSID";
 			}
 			return;
-		} else if (isLegacyWebSid && this.bufferSize < 16384) {
+		} else if (isLegacyWebSid && this.bufferSize["legacy"] < 16384) {
 			if (this.tabOscMode !== "NOT16K") {
 				$("#scope1,#scope2,#scope3,#scope4").hide();
 				$("#stopic-osc .sundryMsg").empty().append('A buffer size of <button id="set-16k" style="font-size:13px;line-height:13px;">16384</button> is required.').show();
@@ -998,7 +1100,7 @@ Viz.prototype = {
 	 */
 	animateGraph: function() {
 		// Not available on mobile devices, and the 'Graph' view and its tab must both be visible
-		if (miniPlayer || $("body").attr("data-mobile") !== "0" || $("#tabs .selected").attr("data-topic") !== "visuals"
+		if (!this.visualsEnabled || miniPlayer || $("body").attr("data-mobile") !== "0" || $("#tabs .selected").attr("data-topic") !== "visuals"
 			|| !$("#sticky-visuals .icon-graph").hasClass("button-on")) return;
 		if (colorTheme == null) colorTheme = 0;
 
@@ -1218,7 +1320,6 @@ Viz.prototype = {
 	 * @return {array}			Array with strings for all types.
 	 */
 	convertByte: function(byte) {
-
 		var half = byte & 0x7F, pLC, pUC;
 
 		// Lower case PETSCII
@@ -1285,7 +1386,7 @@ Viz.prototype = {
 	 * @param {boolean} activate	TRUE to activate, FALSE to turn off.
 	 */
 	activateMemory: function(activate) {
-		if (miniPlayer || $("body").attr("data-mobile") !== "0") return;
+		if (browser.playlist.length == 0 || miniPlayer || $("body").attr("data-mobile") !== "0") return;
 
 		if (activate && typeof browser.songPos != "undefined") {
 
@@ -1321,7 +1422,7 @@ Viz.prototype = {
 	 */
 	animateMemory: function() {
 		// Only if the tab and view are active
-		if (!this.runningMemory || $("#tabs .selected").attr("data-topic") !== "visuals" ||
+		if (!this.visualsEnabled || !this.runningMemory || $("#tabs .selected").attr("data-topic") !== "visuals" ||
 			!$("#sticky-visuals .icon-memory").hasClass("button-on")) return;
 
 		this.patchMemoryBlock(0x0000, 0x00FF, this.blockZP);
@@ -1345,7 +1446,7 @@ Viz.prototype = {
 	 * Show details about the SID file just above the ZP and player table blocks.
 	 */
 	showSIDInfo: function() {
-		if (typeof browser.songPos != "undefined" && browser.playlist[browser.songPos].fullname.substr(-4) != ".mus") {
+		if (typeof browser.songPos != "undefined" && browser.playlist.length > 0 && browser.playlist[browser.songPos].fullname.substr(-4) != ".mus") {
 
 			var size = browser.playlist[browser.songPos].size - 3,
 				load = browser.playlist[browser.songPos].address,
@@ -1391,6 +1492,7 @@ Viz.prototype = {
 	 * This is called by SID.setCallbackBufferEnded().
 	 */
 	animateStats: function() {
+		if (!this.visualsEnabled || typeof SID == "undefined") return;
 		var lowByte;
 		for (var chip = 1; chip <= browser.chips; chip++) {
 			for (var voice = 0; voice <= 2; voice++) {

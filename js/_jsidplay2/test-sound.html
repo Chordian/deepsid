@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+  <head> </head>
+  <body>
+    <div>
+      <input id="file" type="file" />
+      <button type="button" onclick="startTune()">Play</button>
+      <button type="button" onclick="pauseTune()" id="pause">Pause</button>
+      <button type="button" onclick="stopTune()">Stop</button>
+    </div>
+    <div>
+      <button
+        type="button"
+        onclick="startTuneFromServer('/static/teavm/sid/Turrican_2-The_Final_Fight.sid', 'Turrican_2-The_Final_Fight.sid')"
+      >
+        HTTP-GET /static/teavm/sid/Turrican_2-The_Final_Fight.sid
+      </button>
+    </div>
+
+    <script>
+      var worker;
+      var AudioContext = window.AudioContext || window.webkitAudioContext;
+      var audioContext;
+      var nextTime, paused;
+
+      function jsidplay2Worker(contents, tuneName, cartContents, cartName, command) {
+        audioContext = new AudioContext({
+          latencyHint: "interactive",
+          sampleRate: 48000,
+        });
+
+        if (worker) {
+          worker.terminate();
+          worker = undefined;
+        }
+        worker = new Worker("js/jsidplay2-js-worker.js", );
+
+        return new Promise((resolve, reject) => {
+          worker.postMessage({
+            eventType: "INITIALISE",
+            eventData: {
+              palEmulation: true,
+              bufferSize: 144000,
+              audioBufferSize: 48000,
+              samplingRate: 48000,
+              samplingMethodResample: false,
+              reverbBypass: true,
+              defaultClockSpeed: 50,
+              jiffyDosInstalled: false,
+            },
+          });
+
+          worker.addEventListener("message", function (event) {
+            var { eventType, eventData } = event.data;
+
+            if (eventType === "SAMPLES") {
+              var buffer = audioContext.createBuffer(2, eventData.length, audioContext.sampleRate);
+              buffer.getChannelData(0).set(eventData.left);
+              buffer.getChannelData(1).set(eventData.right);
+
+              var sourceNode = audioContext.createBufferSource();
+              sourceNode.buffer = buffer;
+              sourceNode.connect(audioContext.destination);
+
+              if (nextTime == 0) {
+                nextTime = audioContext.currentTime + 0.05; // add 50ms latency to work well across systems
+              } else if (nextTime < audioContext.currentTime) {
+                nextTime = audioContext.currentTime + 0.005; // if samples are not produced fast enough
+              }
+              sourceNode.start(nextTime);
+              nextTime += eventData.length / audioContext.sampleRate;
+
+            } else if (eventType === "OPENED" || eventType === "CLOCKED") {
+                if (!paused && nextTime - audioContext.currentTime <= 1) {
+                    worker.postMessage({ eventType: "CLOCK" });
+                  } else {
+                    worker.postMessage({ eventType: "IDLE" });
+                  }
+            } else if (eventType === "INITIALISED") {
+              worker.postMessage({
+                eventType: "OPEN",
+                eventData: {
+                  contents: contents,
+                  tuneName: tuneName,
+                  startSong: 0,
+                  nthFrame: 0,
+                  sidWrites: false,
+                  cartContents: cartContents,
+                  cartName: cartName,
+                  command: command,
+                },
+              });
+
+              nextTime = 0;
+            }
+          });
+
+          worker.addEventListener("error", function (error) {
+            reject(error);
+          });
+        });
+      }
+
+      function startTune() {
+          stopTune();
+          var file = document.getElementById("file");
+          if (file.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function () {
+            	jsidplay2Worker(new Uint8Array(this.result), file.files[0].name);
+            };
+            reader.readAsArrayBuffer(file.files[0]);
+          }
+        }
+      function startTuneFromServer(url, name) {
+          stopTune();
+          let headers = new Headers();
+       // optional: headers.set("Authorization", "Basic " + window.btoa("username:password"));
+          fetch(url, { method: "GET", headers: headers })
+            .then((response) => response.blob())
+            .then((blob) => {
+              let fileToPlay = new File([blob], name, {
+                type: "application/octet-stream",
+              });
+              const dataTransfer = new DataTransfer();
+              dataTransfer.items.add(fileToPlay);
+              var file = document.getElementById("file");
+              file.files = dataTransfer.files;
+              startTune();
+            });
+        }
+      function stopTune() {
+        if (worker) {
+          worker.terminate();
+          worker = undefined;
+        }
+        if (audioContext) {
+          audioContext.close();
+          audioContext = undefined;
+        }
+        paused = false;
+        var pauseBtn = document.getElementById("pause");
+        pauseBtn.style.color = "black";
+      }
+      function pauseTune() {
+        paused = !paused;
+        var pauseBtn = document.getElementById("pause");
+        if (paused) {
+          audioContext.suspend();
+          pauseBtn.style.color = "red";
+        } else {
+          audioContext.resume();
+          pauseBtn.style.color = "black";
+        }
+      }
+    </script>
+  </body>
+</html>

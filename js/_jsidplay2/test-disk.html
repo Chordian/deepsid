@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+  <head> </head>
+  <body>
+    <span>Disk:</span>
+    <input id="diskfile" type="file" onchange="insertDisk()" />
+    <button type="button" onclick="reset()">Reset and Start</button>
+    <button type="button" onclick="pauseTune()" id="pause">Pause</button>
+    <button type="button" onclick="stopTune()">Stop</button>
+
+    <div style="width: 100%; margin: 0px auto">
+      <canvas
+        id="c64Screen"
+        style="border: 2px solid black; background-color: black; max-width: 100vw"
+        width="384"
+        height="285"
+      />
+    </div>
+
+    <script>
+      var size = 0;
+      function Queue() {
+        var head, tail;
+        return Object.freeze({
+          enqueue(value) {
+            const link = { value, next: undefined };
+            tail = head ? (tail.next = link) : (head = link);
+            size++;
+          },
+          dequeue() {
+            if (head) {
+              var value = head.value;
+              head = head.next;
+              size--;
+              return value;
+            }
+            return undefined;
+          },
+          peek() {
+            return head?.value;
+          },
+          clear() {
+            tail = head = undefined;
+            size = 0;
+          },
+          isNotEmpty() {
+            return head;
+          },
+        });
+      }
+      const maxWidth = 384;
+      const maxHeight = 312;
+
+      var worker;
+      var AudioContext = window.AudioContext || window.webkitAudioContext;
+      var audioContext;
+      var nextTime, paused;
+
+      var canvasContext;
+      var imageData, data;
+      var imageQueue = new Queue();
+      let msPrev;
+      let frames;
+      var framesCounter;
+      var defaultClockSpeed = 50;
+      var nthFrame = 2;
+
+      var playing;
+
+      var canvas = document.getElementById("c64Screen");
+      canvasContext = canvas.getContext("2d");
+      imageData = canvasContext.getImageData(0, 0, maxWidth, maxHeight);
+      data = imageData.data;
+
+      function jsidplay2Worker(contents, tuneName, cartContents, cartName, command) {
+        audioContext = new AudioContext({
+          latencyHint: "interactive",
+          sampleRate: 48000,
+        });
+
+        if (worker) {
+          worker.terminate();
+          worker = undefined;
+        }
+        worker = new Worker("js/jsidplay2-js-worker.js", );
+
+        return new Promise((resolve, reject) => {
+          worker.postMessage({
+            eventType: "INITIALISE",
+            eventData: {
+              palEmulation: true,
+              bufferSize: 144000,
+              audioBufferSize: 48000,
+              samplingRate: 48000,
+              samplingMethodResample: false,
+              reverbBypass: true,
+              defaultClockSpeed: defaultClockSpeed,
+              jiffyDosInstalled: true,
+            },
+          });
+
+          worker.addEventListener("message", function (event) {
+            var { eventType, eventData } = event.data;
+
+            if (eventType === "SAMPLES") {
+              var buffer = audioContext.createBuffer(2, eventData.length, audioContext.sampleRate);
+              buffer.getChannelData(0).set(eventData.left);
+              buffer.getChannelData(1).set(eventData.right);
+
+              var sourceNode = audioContext.createBufferSource();
+              sourceNode.buffer = buffer;
+              sourceNode.connect(audioContext.destination);
+
+              if (nextTime == 0) {
+                nextTime = audioContext.currentTime + 0.05; // add 50ms latency to work well across systems
+              } else if (nextTime < audioContext.currentTime) {
+                nextTime = audioContext.currentTime + 0.005; // if samples are not produced fast enough
+              }
+              sourceNode.start(nextTime);
+              nextTime += eventData.length / audioContext.sampleRate + 0.005;
+
+            } else if (eventType === "FRAME") {
+              imageQueue.enqueue({
+                image: eventData.image,
+              });
+
+            } else if (eventType === "OPENED" || eventType === "CLOCKED") {
+              if (eventType === "OPENED") {
+                insertDisk();
+              }
+              if (!paused && (lastTotalFrames != totalFrames) && (nextTime - audioContext.currentTime <= 1 || (framesCounter < (defaultClockSpeed / nthFrame)))) {
+                worker.postMessage({ eventType: "CLOCK" });
+              } else {
+                worker.postMessage({ eventType: "IDLE" });
+              }
+              lastTotalFrames = totalFrames;
+            } else if (eventType === "INITIALISED") {
+              worker.postMessage({
+                eventType: "OPEN",
+                eventData: {
+                  contents: contents,
+                  tuneName: tuneName,
+                  startSong: 0,
+                  nthFrame: nthFrame,
+                  sidWrites: false,
+                  cartContents: cartContents,
+                  cartName: cartName,
+                  command: command,
+                },
+              });
+
+            }
+          });
+
+          nextTime = 0;
+          imageQueue.clear();
+          framesCounter = defaultClockSpeed / nthFrame;
+          playing = true;
+          msPrev = window.performance.now()
+          frames = totalFrames = lastTotalFrames = actualFrames = 0;
+          animate();
+
+          worker.addEventListener("error", function (error) {
+            reject(error);
+          });
+        });
+      }
+
+      function stopTune() {
+        if (worker) {
+          worker.terminate();
+          worker = undefined;
+        }
+        if (audioContext) {
+          audioContext.close();
+          audioContext = undefined;
+        }
+        paused = false;
+        var pauseBtn = document.getElementById("pause");
+        pauseBtn.style.color = "black";
+        playing = false;
+      }
+      function pauseTune() {
+        paused = !paused;
+        var pauseBtn = document.getElementById("pause");
+        if (paused) {
+          audioContext.suspend();
+          pauseBtn.style.color = "red";
+        } else {
+          audioContext.resume();
+          pauseBtn.style.color = "black";
+        }
+      }
+      function animate() {
+          var msPerFrame = 1000 * nthFrame / defaultClockSpeed;
+          if (playing) {
+              window.requestAnimationFrame(animate)
+          }
+          const msNow = window.performance.now()
+          const msPassed = msNow - msPrev
+
+          if (msPassed < msPerFrame) return
+
+          const excessTime = msPassed % msPerFrame
+          msPrev = msNow - excessTime
+
+          if (!paused) {
+            var elem = imageQueue.dequeue();
+            if (elem) {
+              data.set(elem.image);
+              canvasContext.putImageData(imageData, 0, 0);
+            }
+          }
+          totalFrames++;
+          frames++
+        }
+      function insertDisk() {
+        var diskfile = document.getElementById("diskfile");
+        var reader = new FileReader();
+        reader.onload = function () {
+          if (worker) {
+            worker.postMessage({
+              eventType: "INSERT_DISK",
+              eventData: {
+                contents: new Uint8Array(this.result),
+                diskName: diskfile.files[0].name,
+              },
+            });
+          }
+          //app.msg = "Disk inserted: " + diskfile.files[0].name;
+        };
+        if (diskfile && diskfile.files[0]) {
+          reader.readAsArrayBuffer(diskfile.files[0]);
+        }
+      }
+      function reset() {
+        var diskfile = document.getElementById("diskfile");
+        if (diskfile && diskfile.files[0]) {
+          jsidplay2Worker(undefined, undefined, undefined, undefined, 'LOAD"*",8,1\rRUN\r');
+        } else {
+          jsidplay2Worker();
+        }
+      }
+    </script>
+  </body>
+</html>

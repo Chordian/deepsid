@@ -107,6 +107,7 @@ Controls.prototype = {
 
 		if (id.substr(0, 7) == "subtune") {
 			SID.setVolume(0);
+			SID.jp2Loading = false;
 			browser.clearSpinner();
 
 			// Pick a subtune
@@ -156,6 +157,7 @@ Controls.prototype = {
 
 		if (id.substr(0, 4) == "skip") {
 			SID.setVolume(0);
+			SID.jp2Loading = false;
 			browser.clearSpinner();
 	 		// Skip to previous or next tune
 			$("#time-bar").empty().append('<div></div>');

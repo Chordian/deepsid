@@ -3,13 +3,36 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- Update database files for GitHub. Also, check that "symlists" is in the tutorial.
+JSIDPlay2 UPDATE v2 TASKS:
+
+- For now, the time bar color of JSIDPlay2 is the same as for the WebSid handler. Consider
+  creating its own unique color for both bright and dark color schemes.
+
+- Stereo
+- Fake stereo
+- Filter settings
+- reverb on or off
+- Set emulation in settings (RESID or RESIDFP)
+- Set resample method (DECIMATE or RESAMPLE)
+- Buffer size change when I can get the tune length timer calculation right (48000 for now)
+
+- whoops: White overlay for visuals buttons OFF in dark color scheme. (Looks funny, LOL!)
+
+--------------
+
+- Annex text: Also, add "Mastodon" to the list of social links.
+
+- BUG: When uploading to SID Happens, the file counter for the SID+FM folder is also ticked
+  up. That should not happen. UPDATE: Should now be fixed. Check that the next upload to
+  the normal folder doesn't tick the counter for the SID+FM folder anymore.
 
 - BUG: https://deepsid.chordian.net/?file=/SID%20Happens/2023/Siggraph_Invitro_4SID.sid
-  has no database information!?
+  has no database information!? (Maybe it needs to be moved out of there?)
 
 - BUG: https://deepsid.chordian.net/?file=/DEMOS/M-R/Muso_64_BASIC.sid
   This and the non-BASIC version erroneously refers to themselves in the STIL text.
+
+- BUG: Why do many GT2 tunes now report 2x or 3x multispeed, when it's probably still 1x?
 
 - Automate CGSC update process. All REN, MOVE, etc. Create folders where they can't be found
   in the filenames, count files in them, etc.

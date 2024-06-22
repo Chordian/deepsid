@@ -214,7 +214,8 @@ try {
 			die(json_encode(array('status' => 'error', 'message' => 'Could not create the special database entry for the "'.$info['newname'].'" file.')));
 
 		// If this is the 'SID+FM' subfolder then update its file count as well
-		$update = $db->query('UPDATE hvsc_folders SET files = files + 1 WHERE fullname = "_SID Happens/SID+FM" LIMIT 1');
+		if (stripos($path, 'sid+fm'))
+			$update = $db->query('UPDATE hvsc_folders SET files = files + 1 WHERE fullname = "_SID Happens/SID+FM" LIMIT 1');
 
 		// Acknowledge that the composer is now active (this will be reflected in the root page)
 		if ($composers_id)
