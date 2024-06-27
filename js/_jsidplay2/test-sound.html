@@ -33,7 +33,7 @@
           worker.terminate();
           worker = undefined;
         }
-        worker = new Worker("js/jsidplay2-js-worker.js", );
+        worker = new Worker("js/jsidplay2-js-worker.js", { type: "classic" });
 
         return new Promise((resolve, reject) => {
           worker.postMessage({
@@ -69,13 +69,12 @@
               }
               sourceNode.start(nextTime);
               nextTime += eventData.length / audioContext.sampleRate;
-
             } else if (eventType === "OPENED" || eventType === "CLOCKED") {
-                if (!paused && nextTime - audioContext.currentTime <= 1) {
-                    worker.postMessage({ eventType: "CLOCK" });
-                  } else {
-                    worker.postMessage({ eventType: "IDLE" });
-                  }
+              if (!paused && nextTime - audioContext.currentTime <= 1) {
+                worker.postMessage({ eventType: "CLOCK" });
+              } else {
+                worker.postMessage({ eventType: "IDLE" });
+              }
             } else if (eventType === "INITIALISED") {
               worker.postMessage({
                 eventType: "OPEN",
@@ -102,33 +101,33 @@
       }
 
       function startTune() {
-          stopTune();
-          var file = document.getElementById("file");
-          if (file.files[0]) {
-            var reader = new FileReader();
-            reader.onload = function () {
-            	jsidplay2Worker(new Uint8Array(this.result), file.files[0].name);
-            };
-            reader.readAsArrayBuffer(file.files[0]);
-          }
+        stopTune();
+        var file = document.getElementById("file");
+        if (file.files[0]) {
+          var reader = new FileReader();
+          reader.onload = function () {
+            jsidplay2Worker(new Uint8Array(this.result), file.files[0].name);
+          };
+          reader.readAsArrayBuffer(file.files[0]);
         }
+      }
       function startTuneFromServer(url, name) {
-          stopTune();
-          let headers = new Headers();
-       // optional: headers.set("Authorization", "Basic " + window.btoa("username:password"));
-          fetch(url, { method: "GET", headers: headers })
-            .then((response) => response.blob())
-            .then((blob) => {
-              let fileToPlay = new File([blob], name, {
-                type: "application/octet-stream",
-              });
-              const dataTransfer = new DataTransfer();
-              dataTransfer.items.add(fileToPlay);
-              var file = document.getElementById("file");
-              file.files = dataTransfer.files;
-              startTune();
+        stopTune();
+        let headers = new Headers();
+        // optional: headers.set("Authorization", "Basic " + window.btoa("username:password"));
+        fetch(url, { method: "GET", headers: headers })
+          .then((response) => response.blob())
+          .then((blob) => {
+            let fileToPlay = new File([blob], name, {
+              type: "application/octet-stream",
             });
-        }
+            const dataTransfer = new DataTransfer();
+            dataTransfer.items.add(fileToPlay);
+            var file = document.getElementById("file");
+            file.files = dataTransfer.files;
+            startTune();
+          });
+      }
       function stopTune() {
         if (worker) {
           worker.terminate();

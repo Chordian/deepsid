@@ -15,6 +15,9 @@ JSIDPlay2 UPDATE v2 TASKS:
 - Set emulation in settings (RESID or RESIDFP)
 - Set resample method (DECIMATE or RESAMPLE)
 - Buffer size change when I can get the tune length timer calculation right (48000 for now)
+- When adding support for buffer size, two things to consider: tune length timer
+    calculation + register read delay amount
+- visuals must be off as default
 
 - whoops: White overlay for visuals buttons OFF in dark color scheme. (Looks funny, LOL!)
 
@@ -33,6 +36,8 @@ JSIDPlay2 UPDATE v2 TASKS:
   This and the non-BASIC version erroneously refers to themselves in the STIL text.
 
 - BUG: Why do many GT2 tunes now report 2x or 3x multispeed, when it's probably still 1x?
+
+- BUG: Lemon's MP3 now has sticky loading spinner on its SID rows.
 
 - Automate CGSC update process. All REN, MOVE, etc. Create folders where they can't be found
   in the filenames, count files in them, etc.

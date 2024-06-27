@@ -453,6 +453,7 @@ SIDPlayer.prototype = {
 						if (eventType === "SAMPLES") {
 
 							// Clear loading spinner
+							// NOTE: This is the only place where the spinner terminates correctly.
 							this.jp2Loading = false;
 							browser.clearSpinner();
 
@@ -469,27 +470,31 @@ SIDPlayer.prototype = {
 							sourceNode.connect(this.jp2AudioContext.destination);
 
 							// Some magic to stay in sync, please experiment for yourself
-							if (this.jp2NextTime == 0) {
-								fix = screen ? 0.005 : 0; // @todo What is this 'screen' variable?
-								// Add 50ms latency to work well across systems
-								this.jp2NextTime = this.jp2AudioContext.currentTime + 0.05;
-							} else if (this.jp2NextTime < this.jp2AudioContext.currentTime) {
+							if (this.jp2NextTime < this.jp2AudioContext.currentTime)
 								// If samples are not produced fast enough, add
 								// small hick-up and hope for better times
 								this.jp2NextTime = this.jp2AudioContext.currentTime + 0.005;
-							}
 							sourceNode.start(this.jp2NextTime);
-							this.jp2NextTime += eventData.length / sampleRate + fix;
+							this.jp2NextTime += eventData.length / sampleRate;
 
 							// Tick playtime in seconds taking fast forward into account
 							// @todo This needs to be adapted for other buffer sizes to work
 							this.jp2PlayTime += 1 / ((eventData.length / sampleRate) / (this.fastForward ? 2 : 1));
 
 							// At the end of the tune?
+							// NOTE: Restored here again since "TIMER_END" stopped working.
 							if (this.jp2PlayTime > timeout) {
 								if (typeof this.callbackTrackEnd === "function")
 									this.callbackTrackEnd();
 							}
+
+						} else if (eventType === "TIMER_END") {
+
+							// This event worked when I first implemented it, then
+							// it suddenly stopped working. I have no idea why.
+
+							/*if (typeof this.callbackTrackEnd === "function")
+								this.callbackTrackEnd();*/
 
 						} else if (eventType === "SID_WRITE") {
 
@@ -878,8 +883,7 @@ SIDPlayer.prototype = {
 					this.jp2AudioContext.resume();
 				} else if (!this.jp2Loading) {
 					browser.showSpinner($("#folders tr").eq(browser.subFolders + browser.songPos).find("td.sid"));
-					// This restarts the tune
-					this.jp2Play();
+					this.load(); // Restart the tune
 				}
 				this.jp2Loading = false;
 				break;
@@ -944,6 +948,14 @@ SIDPlayer.prototype = {
 				cartContents: null,				// Cartridge data as Uint8Array	(unused in DeepSID)
 				cartName: null,					// Cartridge name				(unused in DeepSID)
 				command: null,					// Command after C64 reset		(unused in DeepSID)
+			},
+		});
+
+		// Doesn't set the time length; it's always 0.0
+		this.jp2Worker.postMessage({
+			eventType: "SET_DEFAULT_PLAY_LENGTH",
+			eventData: {
+				timeInS: this.timeout
 			},
 		});
 
@@ -1058,7 +1070,10 @@ SIDPlayer.prototype = {
 				this.jp2Loading = false;
 				browser.clearSpinner();
 				this.stopped = true;
-				this.paused = false;
+				if (this.jp2Worker) {
+					this.jp2Worker.terminate();
+					this.jp2Worker = undefined;
+				}
 				break;
 			case "websid":
 			case "legacy":
@@ -1809,7 +1824,7 @@ SIDPlayer.prototype = {
 		switch (this.emulator) {
 			case "jsidplay2":
 				this.jp2Value = null;
-				if (!this.jp2Loading) {
+				if (!this.jp2Loading && !this.stopped) {
 					const delay = 1;
 					this.jp2RegisterCache[register + (chip * 29)].filter(item => {
 						if (this.jp2AudioContext.currentTime - item.timestamp >= delay) {

@@ -1682,6 +1682,12 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>June #####, 2024</h3>
+						<ul>
+							<li>Upgraded the JSIDPlay2 emulator. It now has tune length events.</del></li>
+							<li>Stopping a tune with JSIDPlay2 now kills the worker thread to save on mobile battery power.</li>
+						</ul>
+
 						<h3>June 22, 2024</h3>
 						<ul>
 							<li>Added a SID handler for <a href="https://haendel.ddns.net:8443/static/teavm/c64jukebox.vue" target="_top">JSIDPlay2</a>.

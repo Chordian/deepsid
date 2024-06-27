@@ -17,30 +17,42 @@
     </div>
 
     <script>
-      var size = 0;
       function Queue() {
         var head, tail;
         return Object.freeze({
           enqueue(value) {
             const link = { value, next: undefined };
             tail = head ? (tail.next = link) : (head = link);
-            size++;
+          },
+          enqueueAll(queue) {
+            if (head) {
+              tail.next = queue.head;
+            } else {
+              head = queue.head;
+            }
+            tail = queue.tail;
           },
           dequeue() {
             if (head) {
               var value = head.value;
               head = head.next;
-              size--;
               return value;
             }
             return undefined;
+          },
+          dequeueAll() {
+            var dequeued = {
+              head: head,
+              tail: tail,
+            };
+            tail = head = undefined;
+            return dequeued;
           },
           peek() {
             return head?.value;
           },
           clear() {
             tail = head = undefined;
-            size = 0;
           },
           isNotEmpty() {
             return head;
@@ -58,6 +70,7 @@
       var canvasContext;
       var imageData, data;
       var imageQueue = new Queue();
+      var internalImageQueue = new Queue();
       let msPrev;
       let frames;
       var framesCounter;
@@ -81,7 +94,7 @@
           worker.terminate();
           worker = undefined;
         }
-        worker = new Worker("js/jsidplay2-js-worker.js", );
+        worker = new Worker("js/jsidplay2-js-worker.js", { type: "classic" });
 
         return new Promise((resolve, reject) => {
           worker.postMessage({
@@ -116,15 +129,18 @@
                 nextTime = audioContext.currentTime + 0.005; // if samples are not produced fast enough
               }
               sourceNode.start(nextTime);
+              imageQueue.enqueueAll(internalImageQueue.dequeueAll());
               nextTime += eventData.length / audioContext.sampleRate + 0.005;
-
             } else if (eventType === "FRAME") {
-              imageQueue.enqueue({
+              internalImageQueue.enqueue({
                 image: eventData.image,
               });
-
             } else if (eventType === "OPENED" || eventType === "CLOCKED") {
-              if (!paused && (lastTotalFrames != totalFrames) && (nextTime - audioContext.currentTime <= 1 || (framesCounter < (defaultClockSpeed / nthFrame)))) {
+              if (
+                !paused &&
+                lastTotalFrames != totalFrames &&
+                (nextTime - audioContext.currentTime <= 1 || framesCounter < defaultClockSpeed / nthFrame)
+              ) {
                 worker.postMessage({ eventType: "CLOCK" });
               } else {
                 worker.postMessage({ eventType: "IDLE" });
@@ -149,31 +165,31 @@
 
           nextTime = 0;
           imageQueue.clear();
+          internalImageQueue.clear();
           framesCounter = defaultClockSpeed / nthFrame;
           playing = true;
-          msPrev = window.performance.now()
+          msPrev = window.performance.now();
           frames = totalFrames = lastTotalFrames = actualFrames = 0;
           animate();
 
           worker.addEventListener("error", function (error) {
             reject(error);
           });
-
         });
       }
 
       function animate() {
-        var msPerFrame = 1000 * nthFrame / defaultClockSpeed;
+        var msPerFrame = (1000 * nthFrame) / defaultClockSpeed;
         if (playing) {
-            window.requestAnimationFrame(animate)
+          window.requestAnimationFrame(animate);
         }
-        const msNow = window.performance.now()
-        const msPassed = msNow - msPrev
+        const msNow = window.performance.now();
+        const msPassed = msNow - msPrev;
 
-        if (msPassed < msPerFrame) return
+        if (msPassed < msPerFrame) return;
 
-        const excessTime = msPassed % msPerFrame
-        msPrev = msNow - excessTime
+        const excessTime = msPassed % msPerFrame;
+        msPrev = msNow - excessTime;
 
         if (!paused) {
           var elem = imageQueue.dequeue();
@@ -184,7 +200,7 @@
           }
         }
         totalFrames++;
-        frames++
+        frames++;
         if (frames * nthFrame >= defaultClockSpeed) {
           framesCounter = actualFrames;
           frames = 0;
@@ -197,7 +213,7 @@
         if (file.files[0]) {
           var reader = new FileReader();
           reader.onload = function () {
-        	  jsidplay2Worker(new Uint8Array(this.result), file.files[0].name);
+            jsidplay2Worker(new Uint8Array(this.result), file.files[0].name);
           };
           reader.readAsArrayBuffer(file.files[0]);
         }

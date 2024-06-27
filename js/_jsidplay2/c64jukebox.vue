@@ -274,7 +274,47 @@
                           />
                         </li>
                         <li>
-                          <a class="dropdown-item" href="#" @click="ejectCart()">{{ $t("ejectCart") }}</a>
+                          <a class="dropdown-item" href="#" v-on:click.stop="showREU = !showREU">REU&raquo; </a>
+                          <ul class="submenu dropdown-menu" :style="showREU ? 'display: block !important;' : ''">
+                            <li>
+                              <a class="dropdown-item" href="#" @click="$refs.formREUFileSm.click()">{{
+                                $t("insertREU")
+                              }}</a>
+                              <input
+                                ref="formREUFileSm"
+                                id="reuFile"
+                                type="file"
+                                @input="insertREUImage()"
+                                style="display: none"
+                              />
+                            </li>
+                            <li>
+                              <a class="dropdown-item" href="#" @click="insertREUSizeKb(128)"> REU 1700 (128Kb) </a>
+                            </li>
+                            <li>
+                              <a class="dropdown-item" href="#" @click="insertREUSizeKb(512)"> REU 1750 (512Kb) </a>
+                            </li>
+                            <li>
+                              <a class="dropdown-item" href="#" @click="insertREUSizeKb(256)"> REU 1764 (256Kb) </a>
+                            </li>
+                            <li>
+                              <a class="dropdown-item" href="#" @click="insertREUSizeKb(2048)"> REU 1750 XL (2Mb) </a>
+                            </li>
+                            <li>
+                              <a class="dropdown-item" href="#" @click="insertREUSizeKb(16384)"> REU (16Mb) </a>
+                            </li>
+                          </ul>
+                        </li>
+                        <li>
+                          <a
+                            class="dropdown-item"
+                            href="#"
+                            @click="
+                              ejectCart();
+                              reset();
+                            "
+                            >{{ $t("ejectCart") }}</a
+                          >
                         </li>
                         <li>
                           <a class="dropdown-item" href="#" @click="freezeCartridge()">{{ $t("freezeCartridge") }}</a>
@@ -303,7 +343,7 @@
                         href="#"
                         @click="
                           downloadAndStartTune(
-                            'Turrican Rise Of the Mashine',
+                            'Turrican Rise Of the Mashine.sid',
                             '/jsidplay2service/JSIDPlay2REST/download/turrican_rotm.sid?itemId=189430&categoryId=4'
                           )
                         "
@@ -316,7 +356,7 @@
                         href="#"
                         @click="
                           downloadAndStartTune(
-                            'Only 299.99',
+                            'Only 299.99.sid',
                             '/jsidplay2service/JSIDPlay2REST/download/Only_299_99.sid?itemId=3470375608&categoryId=18'
                           )
                         "
@@ -329,7 +369,7 @@
                         href="#"
                         @click="
                           downloadAndStartTune(
-                            'Banaanin Alle',
+                            'Banaanin Alle.sid',
                             '/jsidplay2service/JSIDPlay2REST/download/mutetus_banaaninalle.sid?itemId=209406&categoryId=4'
                           )
                         "
@@ -371,7 +411,7 @@
                         href="#"
                         @click="
                           downloadAndStartTune(
-                            'blindsided',
+                            'blindsided.sid',
                             '/jsidplay2service/JSIDPlay2REST/download/blindsided.sid?itemId=239345&categoryId=4'
                           )
                         "
@@ -631,7 +671,7 @@
                             @click="
                               stopTune();
                               downloadAndInsertDisk(
-                                '1337-a',
+                                '1337-a.d64',
                                 '/jsidplay2service/JSIDPlay2REST/download/fairlight-1337-58679b69-a.d64?itemId=242855&categoryId=1'
                               );
                             "
@@ -645,7 +685,7 @@
                             href="#"
                             @click="
                               downloadAndInsertDisk(
-                                '1337-a',
+                                '1337-a.d64',
                                 '/jsidplay2service/JSIDPlay2REST/download/fairlight-1337-58679b69-a.d64?itemId=242855&categoryId=1'
                               )
                             "
@@ -659,7 +699,7 @@
                             href="#"
                             @click="
                               downloadAndInsertDisk(
-                                '1337-b',
+                                '1337-b.d64',
                                 '/jsidplay2service/JSIDPlay2REST/download/fairlight-1337-58679b69-b.d64?itemId=242855&categoryId=1'
                               )
                             "
@@ -673,7 +713,7 @@
                             href="#"
                             @click="
                               downloadAndInsertDisk(
-                                '1337-c',
+                                '1337-c.d64',
                                 '/jsidplay2service/JSIDPlay2REST/download/fairlight-1337-58679b69-c.d64?itemId=242855&categoryId=1'
                               )
                             "
@@ -920,7 +960,7 @@
                             @click="
                               stopTune();
                               downloadAndInsertDisk(
-                                'ComaLight13Side1',
+                                'ComaLight13Side1.d64',
                                 '/jsidplay2service/JSIDPlay2REST/download/coma-light-13-by-oxyron/side1.d64?itemId=112378&categoryId=1'
                               );
                             "
@@ -934,7 +974,7 @@
                             href="#"
                             @click="
                               downloadAndInsertDisk(
-                                'ComaLight13Side1',
+                                'ComaLight13Side1.d64',
                                 '/jsidplay2service/JSIDPlay2REST/download/coma-light-13-by-oxyron/side1.d64?itemId=112378&categoryId=1'
                               )
                             "
@@ -948,7 +988,7 @@
                             href="#"
                             @click="
                               downloadAndInsertDisk(
-                                'ComaLight13Side2',
+                                'ComaLight13Side2.d64',
                                 '/jsidplay2service/JSIDPlay2REST/download/coma-light-13-by-oxyron/side2.d64?itemId=112378&categoryId=1'
                               )
                             "
@@ -1066,8 +1106,8 @@
                             href="#"
                             @click="
                               downloadAndInsertDisk(
-                                'Mojo_Side2.D64',
-                                '/jsidplay2service/JSIDPlay2REST/download/Mojo_Side2.D64?itemId=232966&categoryId=1'
+                                'ComalandImage2.d64',
+                                '/jsidplay2service/JSIDPlay2REST/download/image2.d64?itemId=139278&categoryId=1'
                               )
                             "
                           >
@@ -1080,8 +1120,8 @@
                             href="#"
                             @click="
                               downloadAndInsertDisk(
-                                'Mojo_Side3.D64',
-                                '/jsidplay2service/JSIDPlay2REST/download/Mojo_Side3.D64?itemId=232966&categoryId=1'
+                                'ComalandImage3.d64',
+                                '/jsidplay2service/JSIDPlay2REST/download/image3.d64?itemId=139278&categoryId=1'
                               )
                             "
                           >
@@ -1094,8 +1134,8 @@
                             href="#"
                             @click="
                               downloadAndInsertDisk(
-                                'Mojo_Side4.D64',
-                                '/jsidplay2service/JSIDPlay2REST/download/Mojo_Side4.D64?itemId=232966&categoryId=1'
+                                'ComalandImage4.d64',
+                                '/jsidplay2service/JSIDPlay2REST/download/image4.d64?itemId=139278&categoryId=1'
                               )
                             "
                           >
@@ -1506,6 +1546,14 @@
               <div class="tab-pane fade show active" id="video" role="tabpanel" aria-labelledby="video-tab">
                 <div class="row">
                   <div class="col screen-parent p-0">
+                    <span v-if="$refs.formREUFileSm && $refs.formREUFileSm.files[0]">
+                      <span class="ms-2 me-2">{{ $refs.formREUFileSm.files[0].name }}</span>
+                      <i class="bi bi-badge-8k-fill"></i>
+                    </span>
+                    <span v-if="sizeKb">
+                      <span class="ms-2 me-2">REU: {{ sizeKb }}Kb</span>
+                      <i class="bi bi-badge-8k-fill"></i>
+                    </span>
                     <span v-if="$refs.formCartFileSm && $refs.formCartFileSm.files[0]">
                       <span class="ms-2 me-2">{{ $refs.formCartFileSm.files[0].name }}</span>
                       <i class="bi bi-badge-8k-fill"></i>
@@ -1695,6 +1743,23 @@
                   <div class="tab-content card-body" style="position: relative">
                     <div class="tab-pane fade show active" id="audiocfg" role="tabpanel" aria-labelledby="audiocfg-tab">
                       <div class="form-check">
+                        <div class="settings-box">
+                          <span class="setting">
+                            <label for="defaultPlayLength">
+                              {{ $t("defaultPlayLength") }}
+                              <i class="bi bi-exclamation btn btn-sm btn-warning fw-bolder" style="float: left"></i>
+                              <input
+                                class="right"
+                                type="text"
+                                id="defaultPlayLength"
+                                class="form-control"
+                                min="0"
+                                max="10"
+                                v-model="defaultPlayLength"
+                              />
+                            </label>
+                          </span>
+                        </div>
                         <div class="settings-box">
                           <span class="setting">
                             <label for="mainVolume"
@@ -3139,30 +3204,42 @@
       </form>
     </div>
     <script>
-      var size = 0;
       function Queue() {
         var head, tail;
         return Object.freeze({
           enqueue(value) {
             const link = { value, next: undefined };
             tail = head ? (tail.next = link) : (head = link);
-            size++;
+          },
+          enqueueAll(queue) {
+            if (head) {
+              tail.next = queue.head;
+            } else {
+              head = queue.head;
+            }
+            tail = queue.tail;
           },
           dequeue() {
             if (head) {
               var value = head.value;
               head = head.next;
-              size--;
               return value;
             }
             return undefined;
+          },
+          dequeueAll() {
+            var dequeued = {
+              head: head,
+              tail: tail,
+            };
+            tail = head = undefined;
+            return dequeued;
           },
           peek() {
             return head?.value;
           },
           clear() {
             tail = head = undefined;
-            size = 0;
           },
           isNotEmpty() {
             return head;
@@ -3182,6 +3259,7 @@
       var canvasContext;
       var imageData, data;
       var imageQueue = new Queue();
+      var internalImageQueue = new Queue();
       let msPrev;
       let frames;
 
@@ -3333,7 +3411,7 @@
           worker.terminate();
           worker = undefined;
         }
-        worker = new Worker("js/jsidplay2-js-worker.js", );
+        worker = new Worker("js/jsidplay2-js-worker.js", { type: "classic" });
 
         return new Promise((resolve, reject) => {
           worker.postMessage({
@@ -3369,13 +3447,23 @@
                 nextTime = audioContext.currentTime + 0.005; // if samples are not produced fast enough
               }
               sourceNode.start(nextTime);
+              imageQueue.enqueueAll(internalImageQueue.dequeueAll());
               nextTime += eventData.length / audioContext.sampleRate + fix;
             } else if (eventType === "FRAME") {
-              imageQueue.enqueue({
+              internalImageQueue.enqueue({
                 image: eventData.image,
               });
             } else if (eventType === "SID_WRITE") {
-              console.log("relTime=" + eventData.relTime + ", addr=" + eventData.addr + ", value=" + eventData.value);
+              console.log(
+                "absTime=" +
+                  eventData.absTime +
+                  ", relTime=" +
+                  eventData.relTime +
+                  ", addr=" +
+                  eventData.addr +
+                  ", value=" +
+                  eventData.value
+              );
             } else if (eventType === "OPENED" || eventType === "CLOCKED") {
               if (eventType === "OPENED") {
                 if (app.screen) {
@@ -3384,8 +3472,14 @@
                 if (app.screen) {
                   app.insertTape();
                 }
+                app.insertREU();
               }
-              if (!app.paused && (!app.screen || lastTotalFrames != totalFrames) && (nextTime - audioContext.currentTime <= 1 || (app.screen && app.framesCounter < (app.defaultClockSpeed / app.nthFrame)))) {
+              if (
+                !app.paused &&
+                (!app.screen || lastTotalFrames != totalFrames) &&
+                (nextTime - audioContext.currentTime <= 1 ||
+                  (app.screen && app.framesCounter < app.defaultClockSpeed / app.nthFrame))
+              ) {
                 worker.postMessage({ eventType: "CLOCK" });
                 //document.body.style.backgroundColor = "red";
               } else {
@@ -3393,24 +3487,26 @@
                 //document.body.style.backgroundColor = "yellow";
               }
               lastTotalFrames = totalFrames;
+            } else if (eventType === "TIMER_END") {
+              app.stopTune();
             } else if (eventType === "INITIALISED") {
-
+              app.setDefaultPlayLength(app.defaultPlayLength);
               app.setStereo();
               app.setVolumeLevels();
               app.setDefaultEmulation(app.defaultEmulation);
               app.setDefaultSidModel(app.defaultSidModel);
-              app.setFilterName('RESID', 'MOS6581', 0, app.filter6581);
-              app.setFilterName('RESID', 'MOS6581', 1, app.stereoFilter6581);
-              app.setFilterName('RESID', 'MOS6581', 2, app.thirdSIDFilter6581);
-              app.setFilterName('RESID', 'MOS8580', 0, app.filter8580);
-              app.setFilterName('RESID', 'MOS8580', 1, app.stereoFilter8580);
-              app.setFilterName('RESID', 'MOS8580', 2, app.thirdSIDFilter8580);
-              app.setFilterName('RESIDFP', 'MOS6581', 0, app.reSIDfpFilter6581);
-              app.setFilterName('RESIDFP', 'MOS6581', 1, app.reSIDfpStereoFilter6581);
-              app.setFilterName('RESIDFP', 'MOS6581', 2, app.reSIDfpThirdSIDFilter6581);
-              app.setFilterName('RESIDFP', 'MOS8580', 0, app.reSIDfpFilter8580);
-              app.setFilterName('RESIDFP', 'MOS8580', 1, app.reSIDfpStereoFilter8580);
-              app.setFilterName('RESIDFP', 'MOS8580', 2, app.reSIDfpThirdSIDFilter8580);
+              app.setFilterName("RESID", "MOS6581", 0, app.filter6581);
+              app.setFilterName("RESID", "MOS6581", 1, app.stereoFilter6581);
+              app.setFilterName("RESID", "MOS6581", 2, app.thirdSIDFilter6581);
+              app.setFilterName("RESID", "MOS8580", 0, app.filter8580);
+              app.setFilterName("RESID", "MOS8580", 1, app.stereoFilter8580);
+              app.setFilterName("RESID", "MOS8580", 2, app.thirdSIDFilter8580);
+              app.setFilterName("RESIDFP", "MOS6581", 0, app.reSIDfpFilter6581);
+              app.setFilterName("RESIDFP", "MOS6581", 1, app.reSIDfpStereoFilter6581);
+              app.setFilterName("RESIDFP", "MOS6581", 2, app.reSIDfpThirdSIDFilter6581);
+              app.setFilterName("RESIDFP", "MOS8580", 0, app.reSIDfpFilter8580);
+              app.setFilterName("RESIDFP", "MOS8580", 1, app.reSIDfpStereoFilter8580);
+              app.setFilterName("RESIDFP", "MOS8580", 2, app.reSIDfpThirdSIDFilter8580);
               app.setMute(0, 0, app.muteVoice1);
               app.setMute(0, 1, app.muteVoice2);
               app.setMute(0, 2, app.muteVoice3);
@@ -3440,13 +3536,14 @@
 
               nextTime = 0;
               imageQueue.clear();
+              internalImageQueue.clear();
               app.framesCounter = app.defaultClockSpeed / app.nthFrame;
               app.playing = true;
               app.paused = false;
               app.clearScreen();
               frames = totalFrames = lastTotalFrames = actualFrames = 0;
               if (app.screen) {
-                msPrev = window.performance.now()
+                msPrev = window.performance.now();
                 app.animate();
               }
             }
@@ -3493,6 +3590,7 @@
             ejectTape: "Eject Tape",
             cart: "Cart",
             insertCart: "Insert Cartridge",
+            insertREU: "Insert REU",
             ejectCart: "Eject Cartridge",
             freezeCartridge: "Freeze Cartridge",
             loadDisk: "Load *,8,1",
@@ -3560,7 +3658,8 @@
             thirdSIDBase: "third SID adress",
             defaultClockSpeed: "Set default VIC clock speed PAL or NTSC (to be used, if UNKNOWN)",
             defaultEmulation: "Default Emulation (RESID, RESIDFP)",
-            sampling: "Sampling Method (DECIMATE=linear interpolation, RESAMPLE=more efficient SINC from chaining two other SINCs)",
+            sampling:
+              "Sampling Method (DECIMATE=linear interpolation, RESAMPLE=more efficient SINC from chaining two other SINCs)",
             defaultSidModel: "Default chip model MOS8580 or MOS6581 (to be used, if UNKNOWN)",
             fakeStereo: "Fake stereo",
             sidToRead: "Fake stereo: SID number to process READs",
@@ -3578,6 +3677,7 @@
             mainDelay: "Delay of SID in ms (0ms..50ms)",
             secondDelay: "Delay of Stereo SID in ms (0ms..50ms)",
             thirdDelay: "Delay of 3rd SID in ms (0ms..50ms)",
+            defaultPlayLength: "Set default play length in seconds (0 is endless)",
             confirmationTitle: "Confirmation Dialogue",
             setDefault: "Restore Defaults",
             setDefaultReally: "Do you really want to restore defaults?",
@@ -3610,6 +3710,7 @@
             ejectTape: "Kasette auswerfen",
             cart: "Modul",
             insertCart: "Modul einlegen",
+            insertREU: "Insert REU",
             ejectCart: "Modul auswerfen",
             freezeCartridge: "Modul einfrieren",
             loadDisk: "Load *,8,1",
@@ -3677,7 +3778,8 @@
             thirdSIDBase: "3. SID Adresse",
             defaultClockSpeed: "Default VIC Takt PAL oder NTSC, falls nicht aus der Musikdatei ermittelbar",
             defaultEmulation: "Default Emulation (RESID, RESIDFP)",
-            sampling: "Sampling Methode (DECIMATE=lineare Interpolation, RESAMPLE=effizienterer SINC durch Verkettung zwei anderer SINCs)",
+            sampling:
+              "Sampling Methode (DECIMATE=lineare Interpolation, RESAMPLE=effizienterer SINC durch Verkettung zwei anderer SINCs)",
             defaultSidModel: "Default SID Chip MOS8580 oder MOS6581, falls nicht aus der Musikdatei ermittelbar",
             fakeStereo: "Fake Stereo",
             sidToRead: "Fake stereo: SID der Lesezugriffe ausführt",
@@ -3695,6 +3797,7 @@
             mainDelay: "Verzögerung des SID in ms (0ms..50ms)",
             secondDelay: "Verzögerung des Stereo SID in ms (0ms..50ms)",
             thirdDelay: "Verzögerung des 3. SID in ms (0ms..50ms)",
+            defaultPlayLength: "Default Song Länge in Sekunden (0 bedeutet endlos)",
             confirmationTitle: "Sicherheitsabfrage",
             setDefault: "Standardeinstellungen wiederherstellen",
             setDefaultReally: "Wollen sie wirklich die Standardeinstellungen wiederherstellen?",
@@ -3733,6 +3836,8 @@
             showDemo8: false,
             showDemo9: false,
             showDemo10: false,
+            showREU: false,
+            sizeKb: undefined,
             showTape: false,
             showCart: false,
             wakeLockEnable: false,
@@ -3746,6 +3851,7 @@
             mainDelay: 10,
             secondDelay: 0,
             thirdDelay: 0,
+            defaultPlayLength: 500,
             stereoMode: "AUTO",
             dualSidBase: 54304,
             thirdSIDBase: 54336,
@@ -3756,23 +3862,54 @@
             sidToRead: "FIRST_SID",
             bufferSize: 3 * 48000,
             audioBufferSize: 48000,
-            filter6581: 'FilterAverage6581',
-            filter8580: 'FilterAverage8580',
-            stereoFilter6581: 'FilterAverage6581',
-            stereoFilter8580: 'FilterAverage8580',
-            thirdSIDFilter6581: 'FilterAverage6581',
-            thirdSIDFilter8580: 'FilterAverage8580',
-            reSIDfpFilter6581: 'FilterAlankila6581R4AR_3789',
-            reSIDfpFilter8580: 'FilterTrurl8580R5_3691',
-            reSIDfpStereoFilter6581: 'FilterAlankila6581R4AR_3789',
-            reSIDfpStereoFilter8580: 'FilterTrurl8580R5_3691',
-            reSIDfpThirdSIDFilter6581: 'FilterAlankila6581R4AR_3789',
-            reSIDfpThirdSIDFilter8580: 'FilterTrurl8580R5_3691',
-            reSIDFilters6581: ['FilterLightest6581','FilterLighter6581','FilterLight6581','FilterAverage6581','FilterDark6581','FilterDarker6581','FilterDarkest6581'],
-            reSIDFilters8580: ['FilterLight8580','FilterAverage8580','FilterDark8580'],
-            reSIDfpFilters6581: ['FilterReSID6581','FilterAlankila6581R4AR_3789','FilterAlankila6581R3_3984_1','FilterAlankila6581R3_3984_2','FilterLordNightmare6581R3_4285','FilterLordNightmare6581R3_4485','FilterLordNightmare6581R4_1986S','FilterZrX6581R3_0384','FilterZrX6581R3_1984','FilterZrx6581R3_3684','FilterZrx6581R3_3985','FilterZrx6581R4AR_2286','FilterTrurl6581R3_0784','FilterTrurl6581R3_0486S','FilterTrurl6581R3_3384','FilterTrurl6581R3_4885','FilterTrurl6581R4AR_3789','FilterTrurl6581R4AR_4486','FilterNata6581R3_2083','FilterGrue6581R4AR_3488',
-            'FilterKruLLo','FilterEnigma6581R3_4885','FilterEnigma6581R3_1585'],
-            reSIDfpFilters8580: ['FilterTrurl8580R5_1489','FilterTrurl8580R5_3691'],
+            filter6581: "FilterAverage6581",
+            filter8580: "FilterAverage8580",
+            stereoFilter6581: "FilterAverage6581",
+            stereoFilter8580: "FilterAverage8580",
+            thirdSIDFilter6581: "FilterAverage6581",
+            thirdSIDFilter8580: "FilterAverage8580",
+            reSIDfpFilter6581: "FilterAlankila6581R4AR_3789",
+            reSIDfpFilter8580: "FilterTrurl8580R5_3691",
+            reSIDfpStereoFilter6581: "FilterAlankila6581R4AR_3789",
+            reSIDfpStereoFilter8580: "FilterTrurl8580R5_3691",
+            reSIDfpThirdSIDFilter6581: "FilterAlankila6581R4AR_3789",
+            reSIDfpThirdSIDFilter8580: "FilterTrurl8580R5_3691",
+            reSIDFilters6581: [
+              "FilterLightest6581",
+              "FilterLighter6581",
+              "FilterLight6581",
+              "FilterAverage6581",
+              "FilterDark6581",
+              "FilterDarker6581",
+              "FilterDarkest6581",
+            ],
+            reSIDFilters8580: ["FilterLight8580", "FilterAverage8580", "FilterDark8580"],
+            reSIDfpFilters6581: [
+              "FilterReSID6581",
+              "FilterAlankila6581R4AR_3789",
+              "FilterAlankila6581R3_3984_1",
+              "FilterAlankila6581R3_3984_2",
+              "FilterLordNightmare6581R3_4285",
+              "FilterLordNightmare6581R3_4485",
+              "FilterLordNightmare6581R4_1986S",
+              "FilterZrX6581R3_0384",
+              "FilterZrX6581R3_1984",
+              "FilterZrx6581R3_3684",
+              "FilterZrx6581R3_3985",
+              "FilterZrx6581R4AR_2286",
+              "FilterTrurl6581R3_0784",
+              "FilterTrurl6581R3_0486S",
+              "FilterTrurl6581R3_3384",
+              "FilterTrurl6581R3_4885",
+              "FilterTrurl6581R4AR_3789",
+              "FilterTrurl6581R4AR_4486",
+              "FilterNata6581R3_2083",
+              "FilterGrue6581R4AR_3488",
+              "FilterKruLLo",
+              "FilterEnigma6581R3_4885",
+              "FilterEnigma6581R3_1585",
+            ],
+            reSIDfpFilters8580: ["FilterTrurl8580R5_1489", "FilterTrurl8580R5_3691"],
             muteVoice1: false,
             muteVoice2: false,
             muteVoice3: false,
@@ -3814,10 +3951,14 @@
             }
           },
           startTune(screen) {
-            if (screen) {
+            if (app.$refs.formREUFileSm && app.$refs.formREUFileSm.files[0]) {
+              app.screen = true;
+            } else {
+              app.screen = screen ? screen : false;
+            }
+            if (app.screen) {
               app.$refs.videoTab.click();
             }
-            app.screen = screen ? screen : false;
             app.stopTune();
             if (app.$refs.formFileSm.files[0]) {
               var reader = new FileReader();
@@ -3828,6 +3969,9 @@
             }
           },
           downloadAndStartTune(name, url, screen) {
+            app.ejectTape();
+            app.ejectDisk();
+            app.ejectCart();
             let headers = new Headers();
             headers.set("Authorization", "Basic " + window.btoa("jsidplay2:jsidplay2!"));
             fetch(url, { method: "GET", headers: headers })
@@ -3858,20 +4002,20 @@
             }
           },
           fastForward() {
-              if (worker) {
-                worker.postMessage({
-                  eventType: "FAST_FORWARD",
-                  eventData: { },
-                });
-              }
+            if (worker) {
+              worker.postMessage({
+                eventType: "FAST_FORWARD",
+                eventData: {},
+              });
+            }
           },
           normalSpeed() {
-              if (worker) {
-                worker.postMessage({
-                  eventType: "NORMAL_SPEED",
-                  eventData: { },
-                });
-              }
+            if (worker) {
+              worker.postMessage({
+                eventType: "NORMAL_SPEED",
+                eventData: {},
+              });
+            }
           },
           stopTune() {
             if (worker) {
@@ -3883,6 +4027,7 @@
               audioContext = undefined;
             }
             imageQueue.clear();
+            internalImageQueue.clear();
             app.playing = false;
             app.paused = false;
           },
@@ -3891,17 +4036,17 @@
             canvasContext.putImageData(imageData, 0, 0);
           },
           animate: function () {
-            var msPerFrame = 1000 * app.nthFrame / app.defaultClockSpeed;
+            var msPerFrame = (1000 * app.nthFrame) / app.defaultClockSpeed;
             if (app.playing) {
-                window.requestAnimationFrame(app.animate)
+              window.requestAnimationFrame(app.animate);
             }
-            const msNow = window.performance.now()
-            const msPassed = msNow - msPrev
+            const msNow = window.performance.now();
+            const msPassed = msNow - msPrev;
 
-            if (msPassed < msPerFrame) return
+            if (msPassed < msPerFrame) return;
 
-            const excessTime = msPassed % msPerFrame
-            msPrev = msNow - excessTime
+            const excessTime = msPassed % msPerFrame;
+            msPrev = msNow - excessTime;
 
             if (!app.paused) {
               var elem = imageQueue.dequeue();
@@ -3912,11 +4057,21 @@
               }
             }
             totalFrames++;
-            frames++
+            frames++;
             if (frames * app.nthFrame >= app.defaultClockSpeed) {
               app.framesCounter = actualFrames;
               frames = 0;
               actualFrames = 0;
+            }
+          },
+          setDefaultPlayLength(timeInS) {
+            if (worker) {
+              worker.postMessage({
+                eventType: "SET_DEFAULT_PLAY_LENGTH",
+                eventData: {
+                  timeInS: timeInS,
+                },
+              });
             }
           },
           insertDisk() {
@@ -3937,11 +4092,11 @@
             }
           },
           downloadAndStartProgram(name, url) {
-            app.ejectTape();
-            app.ejectDisk();
             app.downloadAndStartTune(name, url, true);
           },
           downloadAndInsertDisk(name, url) {
+            app.ejectTape();
+            app.ejectCart();
             let headers = new Headers();
             headers.set("Authorization", "Basic " + window.btoa("jsidplay2:jsidplay2!"));
             fetch(url, { method: "GET", headers: headers })
@@ -4001,6 +4156,32 @@
               });
             }
           },
+          insertREU() {
+            var reader = new FileReader();
+            reader.onload = function () {
+              if (worker) {
+                worker.postMessage({
+                  eventType: "INSERT_REU_FILE",
+                  eventData: {
+                    contents: new Uint8Array(this.result),
+                    reuName: app.$refs.formREUFileSm.files[0].name,
+                  },
+                });
+              }
+            };
+            if (app.$refs.formREUFileSm && app.$refs.formREUFileSm.files[0]) {
+              reader.readAsArrayBuffer(app.$refs.formREUFileSm.files[0]);
+            } else if (app.sizeKb) {
+              if (worker) {
+                worker.postMessage({
+                  eventType: "INSERT_REU",
+                  eventData: {
+                    sizeKb: app.sizeKb,
+                  },
+                });
+              }
+            }
+          },
           typeInCommand(command) {
             if (worker) {
               worker.postMessage({
@@ -4053,19 +4234,31 @@
             }
           },
           insertCart() {
+            app.$refs.formREUFileSm.value = "";
+            app.sizeKb = undefined;
             app.reset();
+          },
+          insertREUImage() {
+            app.$refs.formCartFileSm.value = "";
+            app.sizeKb = undefined;
+          },
+          insertREUSizeKb(sizeKb) {
+            app.$refs.formCartFileSm.value = "";
+            app.$refs.formREUFileSm.value = "";
+            app.sizeKb = sizeKb;
           },
           ejectCart() {
             app.$refs.formCartFileSm.value = "";
-            app.reset();
+            app.$refs.formREUFileSm.value = "";
+            app.sizeKb = undefined;
           },
           freezeCartridge() {
-              if (worker) {
-                worker.postMessage({
-                  eventType: "FREEZE_CARTRIDGE",
-                  eventData: { },
-                });
-              }
+            if (worker) {
+              worker.postMessage({
+                eventType: "FREEZE_CARTRIDGE",
+                eventData: {},
+              });
+            }
           },
           setDefaultEmulation(emulation) {
             if (worker) {
@@ -4171,18 +4364,18 @@
             this.sidToRead = "FIRST_SID";
             this.bufferSize = 3 * 48000;
             this.audioBufferSize = 48000;
-            this.filter6581 = 'FilterAverage6581';
-            this.filter8580 = 'FilterAverage8580';
-            this.stereoFilter6581 = 'FilterAverage6581';
-            this.stereoFilter8580 = 'FilterAverage8580';
-            this.thirdSIDFilter6581 = 'FilterAverage6581';
-            this.thirdSIDFilter8580 = 'FilterAverage8580';
-            this.reSIDfpFilter6581 = 'FilterAlankila6581R4AR_3789';
-            this.reSIDfpFilter8580 = 'FilterTrurl8580R5_3691';
-            this.reSIDfpStereoFilter6581 = 'FilterAlankila6581R4AR_3789';
-            this.reSIDfpStereoFilter8580 = 'FilterTrurl8580R5_3691';
-            this.reSIDfpThirdSIDFilter6581 = 'FilterAlankila6581R4AR_3789';
-            this.reSIDfpThirdSIDFilter8580 = 'FilterTrurl8580R5_3691';
+            this.filter6581 = "FilterAverage6581";
+            this.filter8580 = "FilterAverage8580";
+            this.stereoFilter6581 = "FilterAverage6581";
+            this.stereoFilter8580 = "FilterAverage8580";
+            this.thirdSIDFilter6581 = "FilterAverage6581";
+            this.thirdSIDFilter8580 = "FilterAverage8580";
+            this.reSIDfpFilter6581 = "FilterAlankila6581R4AR_3789";
+            this.reSIDfpFilter8580 = "FilterTrurl8580R5_3691";
+            this.reSIDfpStereoFilter6581 = "FilterAlankila6581R4AR_3789";
+            this.reSIDfpStereoFilter8580 = "FilterTrurl8580R5_3691";
+            this.reSIDfpThirdSIDFilter6581 = "FilterAlankila6581R4AR_3789";
+            this.reSIDfpThirdSIDFilter8580 = "FilterTrurl8580R5_3691";
             this.muteVoice1 = false;
             this.muteVoice2 = false;
             this.muteVoice3 = false;
@@ -4200,18 +4393,18 @@
             app.setVolumeLevels();
             app.setDefaultEmulation(app.defaultEmulation);
             app.setDefaultSidModel(app.defaultSidModel);
-            app.setFilterName('RESID', 'MOS6581', 0, app.filter6581);
-            app.setFilterName('RESID', 'MOS6581', 1, app.stereoFilter6581);
-            app.setFilterName('RESID', 'MOS6581', 2, app.thirdSIDFilter6581);
-            app.setFilterName('RESID', 'MOS8580', 0, app.filter8580);
-            app.setFilterName('RESID', 'MOS8580', 1, app.stereoFilter8580);
-            app.setFilterName('RESID', 'MOS8580', 2, app.thirdSIDFilter8580);
-            app.setFilterName('RESIDFP', 'MOS6581', 0, app.reSIDfpFilter6581);
-            app.setFilterName('RESIDFP', 'MOS6581', 1, app.reSIDfpStereoFilter6581);
-            app.setFilterName('RESIDFP', 'MOS6581', 2, app.reSIDfpThirdSIDFilter6581);
-            app.setFilterName('RESIDFP', 'MOS8580', 0, app.reSIDfpFilter8580);
-            app.setFilterName('RESIDFP', 'MOS8580', 1, app.reSIDfpStereoFilter8580);
-            app.setFilterName('RESIDFP', 'MOS8580', 2, app.reSIDfpThirdSIDFilter8580);
+            app.setFilterName("RESID", "MOS6581", 0, app.filter6581);
+            app.setFilterName("RESID", "MOS6581", 1, app.stereoFilter6581);
+            app.setFilterName("RESID", "MOS6581", 2, app.thirdSIDFilter6581);
+            app.setFilterName("RESID", "MOS8580", 0, app.filter8580);
+            app.setFilterName("RESID", "MOS8580", 1, app.stereoFilter8580);
+            app.setFilterName("RESID", "MOS8580", 2, app.thirdSIDFilter8580);
+            app.setFilterName("RESIDFP", "MOS6581", 0, app.reSIDfpFilter6581);
+            app.setFilterName("RESIDFP", "MOS6581", 1, app.reSIDfpStereoFilter6581);
+            app.setFilterName("RESIDFP", "MOS6581", 2, app.reSIDfpThirdSIDFilter6581);
+            app.setFilterName("RESIDFP", "MOS8580", 0, app.reSIDfpFilter8580);
+            app.setFilterName("RESIDFP", "MOS8580", 1, app.reSIDfpStereoFilter8580);
+            app.setFilterName("RESIDFP", "MOS8580", 2, app.reSIDfpThirdSIDFilter8580);
             app.setMute(0, 0, app.muteVoice1);
             app.setMute(0, 1, app.muteVoice2);
             app.setMute(0, 2, app.muteVoice3);
@@ -4224,7 +4417,7 @@
             app.setMute(2, 1, app.muteThirdSIDVoice2);
             app.setMute(2, 2, app.muteThirdSIDVoice3);
             app.setMute(2, 3, app.muteThirdSIDVoice4);
-          }
+          },
         },
         mounted: function () {
           if (localStorage.locale) {
@@ -4256,6 +4449,9 @@
           }
           if (localStorage.thirdDelay) {
             this.thirdDelay = JSON.parse(localStorage.thirdDelay);
+          }
+          if (localStorage.defaultPlayLength) {
+            this.defaultPlayLength = JSON.parse(localStorage.defaultPlayLength);
           }
           if (localStorage.stereoMode) {
             this.stereoMode = JSON.parse(localStorage.stereoMode);
@@ -4409,6 +4605,9 @@
           },
           thirdDelay(newValue, oldValue) {
             localStorage.thirdDelay = JSON.stringify(newValue);
+          },
+          defaultPlayLength(newValue, oldValue) {
+            localStorage.defaultPlayLength = JSON.stringify(newValue);
           },
           stereoMode(newValue, oldValue) {
             localStorage.stereoMode = JSON.stringify(newValue);

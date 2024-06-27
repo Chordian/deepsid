@@ -127,30 +127,42 @@ Some content needs a start command to load from disk or tape. Therefore you can 
 Code Snippet:
 ==================================================
       // image queue for video output, example implementation
-      var size = 0;
       function Queue() {
         var head, tail;
         return Object.freeze({
           enqueue(value) {
             const link = { value, next: undefined };
             tail = head ? (tail.next = link) : (head = link);
-            size++;
+          },
+          enqueueAll(queue) {
+            if (head) {
+              tail.next = queue.head;
+            } else {
+              head = queue.head;
+            }
+            tail = queue.tail;
           },
           dequeue() {
             if (head) {
               var value = head.value;
               head = head.next;
-              size--;
               return value;
             }
             return undefined;
+          },
+          dequeueAll() {
+            var dequeued = {
+              head: head,
+              tail: tail
+            };
+            tail = head = undefined;
+            return dequeued;
           },
           peek() {
             return head?.value;
           },
           clear() {
             tail = head = undefined;
-            size = 0;
           },
           isNotEmpty() {
             return head;
@@ -158,6 +170,7 @@ Code Snippet:
         });
       }
       var imageQueue = new Queue();
+      var internalImageQueue = new Queue();
 
       function jsidplay2Worker(contents, tuneName, cartContents, cartName, command) {
         audioContext = new AudioContext({
@@ -171,7 +184,7 @@ Code Snippet:
           worker = undefined;
         }
         // create a new emulator
-        worker = new Worker("js/jsidplay2-js-worker.js", );
+        worker = new Worker("js/jsidplay2-js-worker.js", { type: 'classic' });
 
         return new Promise((resolve, reject) => {
           // Everything starts with INITIALISE where basic configuration is provided
@@ -211,12 +224,13 @@ Code Snippet:
                 nextTime = audioContext.currentTime + 0.005; // if samples are not produced fast enough, add small hick-up and hope for better times
               }
               sourceNode.start(nextTime);
+              imageQueue.enqueueAll(internalImageQueue.dequeueAll());
               nextTime += eventData.length / audioContext.sampleRate + fix;
 
             } else if (eventType === "FRAME") {
               // the worker has produced a video frame to display. Since it does it 50 times per second,
               // we need a queue here and display one frame every 50 (PAL) or 60 (NTSC) per second
-              imageQueue.enqueue({
+              internalImageQueue.enqueue({
                 image: eventData.image,
               });
 
@@ -268,6 +282,7 @@ Code Snippet:
               
               // Only for video output:
               imageQueue.clear();
+              internalImageQueue.clear();
               playing = true;
               paused = false;
               clearScreen();
@@ -339,6 +354,7 @@ These events from the emulation web worker have no answer and are called during 
 "SAMPLES"              - the worker has produced a chunk of sound data (size of audioBufferSize). You can send it further to the JavaScript Audio API
 "FRAME"                - A video frame has been produced. Send it to a queue and pull it every 1/50s to a canvas for watching.
 "SID_WRITE"            - A SID write statement occurs, ignore it, print it or use it for a virtual SID device
+"TIMER_END"	           - The default play length has been reached (set with SET_DEFAULT_PLAY_LENGTH). Now you can stop the playback or switch to the next song or tune.
 That's the trick, easy eh?
 
 Immediately after a tune gets opened, you can optionally insert required media like disk/tape and such:
@@ -347,8 +363,11 @@ INSERT_TAPE            - Insert a tape into datasette
 PRESS_PLAY_ON_TAPE     - Press play button on datasette
 EJECT_DISK             - eject current disk  from floppy
 EJECT_TAPE             - eject tape from datasette
+INSERT_REU_FILE        - Insert RAM Expansion Unit(REU) image file
+INSERT_REU             - Insert RAM Expansion Unit(REU) of certain size in KB
 
 Immediately before call of OPEN, you can request further optional configuration:
+SET_DEFAULT_PLAY_LENGTH- Set the tune length in seconds to get notified, if a tune ends
 SET_DEFAULT_EMULATION  - choose default software emulation (RESID or RESIDFP)
 SET_DEFAULT_CHIP_MODEL - choose default chip model (MOS6581 or MOS8085)
 SET_FILTER_NAME        - choose a filter name to be used for the SID. All filters of JSIDPlay2 can be used.
