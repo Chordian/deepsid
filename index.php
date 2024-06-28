@@ -1682,10 +1682,12 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
-						<h3>June #####, 2024</h3>
+						<h3>June 28, 2024</h3>
 						<ul>
 							<li>Upgraded the JSIDPlay2 emulator. It now has tune length events.</del></li>
 							<li>Stopping a tune with JSIDPlay2 now kills the worker thread to save on mobile battery power.</li>
+							<li>Changed the logic for the loading spinner when using JSIDPlay2. It now clears earlier than before.</li>
+							<li>The visuals tab is now turned off as default for JSIDPlay2, to save on CPU time.</li>
 						</ul>
 
 						<h3>June 22, 2024</h3>

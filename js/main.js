@@ -558,6 +558,9 @@ $(function() { // DOM ready
 
 				HandleTopBox(emulator);
 
+				// Turn off visuals as default for JSIDPlay2 to save on CPU time
+				ToggleVisuals();
+
 				if (emulator == "youtube" || emulator == "download") {
 					// It doesn't make sense to make the 'Visuals' tab available here
 					$("#tab-visuals").addClass("disabled");
@@ -1899,6 +1902,9 @@ $(function() { // DOM ready
 		$("#sticky-csdb").show(); // Show sticky header
 	}
 
+	// Turn off visuals as default for JSIDPlay2 to save on CPU time
+	ToggleVisuals();
+	
 });
 
 /**
@@ -1937,6 +1943,19 @@ function ShowSundryFilterContents() {
 		$("#filter-websid").show();
 		$("#stopic-filter form").hide();
 	}
+}
+
+/**
+ * Make sure the visuals (and "SID_WRITE" event) are turned OFF as default for
+ * JSIDPlay2, otherwise ON for all other SID handlers. This is of course to
+ * save on CPU time for JSIDPlay2 as "SID_WRITE" is a very busy event.
+ */
+function ToggleVisuals() {
+	if (SID.emulator == "jsidplay2" && $("#tab-visuals-toggle").hasClass("button-on"))
+		// Piano button must be clicked first or the visuals buttons all act funny
+		$("#sticky-visuals .icon-piano,#tab-visuals-toggle").trigger("click");
+	else if ($("#tab-visuals-toggle").hasClass("button-off"))
+		$("#tab-visuals-toggle").trigger("click");
 }
 
 /**

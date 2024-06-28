@@ -452,11 +452,6 @@ SIDPlayer.prototype = {
 
 						if (eventType === "SAMPLES") {
 
-							// Clear loading spinner
-							// NOTE: This is the only place where the spinner terminates correctly.
-							this.jp2Loading = false;
-							browser.clearSpinner();
-
 							var sampleRate = this.jp2AudioContext.sampleRate;
 
 							// The worker has produced a chunk of sound data - create a stereo buffer and
@@ -479,7 +474,7 @@ SIDPlayer.prototype = {
 
 							// Tick playtime in seconds taking fast forward into account
 							// @todo This needs to be adapted for other buffer sizes to work
-							this.jp2PlayTime += 1 / ((eventData.length / sampleRate) / (this.fastForward ? 2 : 1));
+							this.jp2PlayTime += 1 / (eventData.length / sampleRate);
 
 							// At the end of the tune?
 							// NOTE: Restored here again since "TIMER_END" stopped working.
@@ -883,9 +878,10 @@ SIDPlayer.prototype = {
 					this.jp2AudioContext.resume();
 				} else if (!this.jp2Loading) {
 					browser.showSpinner($("#folders tr").eq(browser.subFolders + browser.songPos).find("td.sid"));
-					this.load(); // Restart the tune
+					this.load(undefined, undefined, undefined, function() {
+						browser.clearSpinner();
+					});				
 				}
-				this.jp2Loading = false;
 				break;
 			case "websid":
 			case "legacy":
@@ -960,7 +956,7 @@ SIDPlayer.prototype = {
 		});
 
 		this.jp2NextTime = this.jp2PlayTime = 0;
-		this.paused = this.stopped = this.fastForward = false;
+		this.paused = this.stopped = this.fastForward = this.jp2Loading = false;
 	},
 
 	/**
@@ -1067,7 +1063,6 @@ SIDPlayer.prototype = {
 		switch (this.emulator) {
 			case "jsidplay2":
 				this.jp2PlayTime = 0;
-				this.jp2Loading = false;
 				browser.clearSpinner();
 				this.stopped = true;
 				if (this.jp2Worker) {

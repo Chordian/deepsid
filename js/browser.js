@@ -1672,7 +1672,6 @@ Browser.prototype = {
 	 * Clear the SID tune loading spinner and show the ratings stars again.
 	 */
 	clearSpinner: function() {
-		if (SID.jp2Loading) return;
 		$("#songs td.stars span").show();
 		if ($("#showtags").is(":checked"))
 			$("#songs .tags-line").show();

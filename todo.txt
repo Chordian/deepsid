@@ -17,9 +17,16 @@ JSIDPlay2 UPDATE v2 TASKS:
 - Buffer size change when I can get the tune length timer calculation right (48000 for now)
 - When adding support for buffer size, two things to consider: tune length timer
     calculation + register read delay amount
-- visuals must be off as default
 
 - whoops: White overlay for visuals buttons OFF in dark color scheme. (Looks funny, LOL!)
+
+For Ken:
+
+- UI code moved out of SAMPLES
+- Removed "fix" code
+- Removed play time multiplication with 1 or 2 for fast forward
+- Visuals (and SID_WRITE) are now turned off as default
+- Worker thread is now killed when clicking STOP
 
 --------------
 
