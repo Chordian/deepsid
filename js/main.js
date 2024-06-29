@@ -1954,7 +1954,7 @@ function ToggleVisuals() {
 	if (SID.emulator == "jsidplay2" && $("#tab-visuals-toggle").hasClass("button-on"))
 		// Piano button must be clicked first or the visuals buttons all act funny
 		$("#sticky-visuals .icon-piano,#tab-visuals-toggle").trigger("click");
-	else if ($("#tab-visuals-toggle").hasClass("button-off"))
+	else if (SID.emulator != "jsidplay2" && $("#tab-visuals-toggle").hasClass("button-off"))
 		$("#tab-visuals-toggle").trigger("click");
 }
 

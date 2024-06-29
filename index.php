@@ -1681,6 +1681,11 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+						
+						<h3>June 29, 2024</h3>
+						<ul>
+							<li>Fixed a bug where the piano visuals would appear in the other tabs.</li>
+						</ul>
 
 						<h3>June 28, 2024</h3>
 						<ul>

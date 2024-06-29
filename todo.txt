@@ -20,14 +20,6 @@ JSIDPlay2 UPDATE v2 TASKS:
 
 - whoops: White overlay for visuals buttons OFF in dark color scheme. (Looks funny, LOL!)
 
-For Ken:
-
-- UI code moved out of SAMPLES
-- Removed "fix" code
-- Removed play time multiplication with 1 or 2 for fast forward
-- Visuals (and SID_WRITE) are now turned off as default
-- Worker thread is now killed when clicking STOP
-
 --------------
 
 - Annex text: Also, add "Mastodon" to the list of social links.

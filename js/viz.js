@@ -299,7 +299,8 @@ Viz.prototype = {
 			if (event.target.id === "tab-visuals-toggle") {
 				if ($this.hasClass("button-off")) {
 					// Turn the entire VISUALS tab ON
-					$("#topic-visuals").show();
+					if ($("#tabs .selected").attr("data-topic") === "visuals")
+						$("#topic-visuals").show();
 					var visual = $("#sticky-visuals .visuals-buttons").attr("data-selected-visual");
 					$("#no-visuals").remove();
 					if (visual == "memory")
