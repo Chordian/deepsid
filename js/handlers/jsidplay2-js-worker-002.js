@@ -7,7 +7,7 @@ addEventListener(
     var { eventType, eventData } = event.data;
 
     if (eventType === "CLOCK") {
-      clock();
+      js2clock();
 
       postMessage({
         eventType: "CLOCKED",
@@ -17,7 +17,7 @@ addEventListener(
         eventType: "CLOCKED",
       });
     } else if (eventType === "OPEN") {
-      open(
+      js2open(
         eventData.contents ?? null,
         eventData.tuneName ?? null,
         eventData.startSong,
@@ -32,109 +32,109 @@ addEventListener(
         eventType: "OPENED",
       });
     } else if (eventType === "SET_DEFAULT_PLAY_LENGTH") {
-      setDefaultPlayLength(eventData.timeInS);
+      js2setDefaultPlayLength(eventData.timeInS);
 
       postMessage({
         eventType: "DEFAULT_PLAY_LENGTH_SET",
       });
     } else if (eventType === "INSERT_DISK") {
-      insertDisk(eventData.contents ?? null, eventData.diskName ?? null);
+      js2insertDisk(eventData.contents ?? null, eventData.diskName ?? null);
 
       postMessage({
         eventType: "DISK_INSERTED",
       });
     } else if (eventType === "EJECT_DISK") {
-      ejectDisk();
+      js2ejectDisk();
 
       postMessage({
         eventType: "DISK_EJECTED",
       });
     } else if (eventType === "INSERT_TAPE") {
-      insertTape(eventData.contents ?? null, eventData.tapeName ?? null);
+      js2insertTape(eventData.contents ?? null, eventData.tapeName ?? null);
 
       postMessage({
         eventType: "TAPE_INSERTED",
       });
     } else if (eventType === "EJECT_TAPE") {
-      ejectTape();
+      js2ejectTape();
 
       postMessage({
         eventType: "TAPE_EJECTED",
       });
     } else if (eventType === "PRESS_PLAY_ON_TAPE") {
-      pressPlayOnTape();
+      js2pressPlayOnTape();
 
       postMessage({
         eventType: "PRESSED_PLAY_ON_TAPE",
       });
     } else if (eventType === "INSERT_REU_FILE") {
-      insertREUfile(eventData.contents ?? null, eventData.reuName ?? null);
+      js2insertREUfile(eventData.contents ?? null, eventData.reuName ?? null);
 
       postMessage({
         eventType: "REU_FILE_INSERTED",
       });
     } else if (eventType === "INSERT_REU") {
-      insertREU(eventData.sizeKb);
+      js2insertREU(eventData.sizeKb);
 
       postMessage({
         eventType: "REU_INSERTED",
       });
     } else if (eventType === "SET_COMMAND") {
-      typeInCommand(eventData.command ?? null);
+      js2typeInCommand(eventData.command ?? null);
 
       postMessage({
         eventType: "COMMAND_SET",
       });
     } else if (eventType === "TYPE_KEY") {
-      typeKey(eventData.key ?? null);
+      js2typeKey(eventData.key ?? null);
 
       postMessage({
         eventType: "KEY_TYPED",
       });
     } else if (eventType === "PRESS_KEY") {
-      pressKey(eventData.key ?? null);
+      js2pressKey(eventData.key ?? null);
 
       postMessage({
         eventType: "KEY_PRESSED",
       });
     } else if (eventType === "RELEASE_KEY") {
-      releaseKey(eventData.key ?? null);
+      js2releaseKey(eventData.key ?? null);
 
       postMessage({
         eventType: "KEY_RELEASED",
       });
     } else if (eventType === "PRESS_JOYSTICK") {
-      joystick(eventData.number, eventData.value);
+      js2joystick(eventData.number, eventData.value);
 
       postMessage({
         eventType: "JOYSTICK_PRESSED",
       });
     } else if (eventType === "SET_DEFAULT_EMULATION") {
-      defaultEmulation(eventData.emulation);
+      js2defaultEmulation(eventData.emulation);
 
       postMessage({
         eventType: "DEFAULT_EMULATION_SET",
       });
     } else if (eventType === "SET_DEFAULT_CHIP_MODEL") {
-      defaultChipModel(eventData.chipModel);
+      js2defaultChipModel(eventData.chipModel);
 
       postMessage({
         eventType: "DEFAULT_CHIP_MODEL_SET",
       });
     } else if (eventType === "SET_FILTER_NAME") {
-      filterName(eventData.emulation, eventData.chipModel, eventData.sidNum, eventData.filterName);
+      js2filterName(eventData.emulation, eventData.chipModel, eventData.sidNum, eventData.filterName);
 
       postMessage({
         eventType: "FILTER_NAME_SET",
       });
     } else if (eventType === "SET_MUTE") {
-      mute(eventData.sidNum, eventData.voice, eventData.value);
+      js2mute(eventData.sidNum, eventData.voice, eventData.value);
 
       postMessage({
         eventType: "MUTE_SET",
       });
     } else if (eventType === "SET_STEREO") {
-      stereo(
+      js2stereo(
         eventData.stereoMode,
         eventData.dualSidBase,
         eventData.thirdSIDBase,
@@ -146,7 +146,7 @@ addEventListener(
         eventType: "STEREO_SET",
       });
     } else if (eventType === "SET_VOLUME_LEVELS") {
-      volumeLevels(
+      js2volumeLevels(
         eventData.mainVolume,
         eventData.secondVolume,
         eventData.thirdVolume,
@@ -162,19 +162,19 @@ addEventListener(
         eventType: "VOLUME_LEVELS_SET",
       });
     } else if (eventType === "FAST_FORWARD") {
-      fastForward();
+      js2fastForward();
 
       postMessage({
         eventType: "FAST_FORWARD_SET",
       });
     } else if (eventType === "NORMAL_SPEED") {
-      normalSpeed();
+      js2normalSpeed();
 
       postMessage({
         eventType: "NORMAL_SPEED_SET",
       });
     } else if (eventType === "FREEZE_CARTRIDGE") {
-      freezeCartridge();
+      js2freezeCartridge();
 
       postMessage({
         eventType: "CARTRIDGE_FREEZED",

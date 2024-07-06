@@ -18,7 +18,9 @@ JSIDPlay2 UPDATE v2 TASKS:
 - When adding support for buffer size, two things to consider: tune length timer
     calculation + register read delay amount
 
-- whoops: White overlay for visuals buttons OFF in dark color scheme. (Looks funny, LOL!)
+- The SID register cache pauses regularly on a fast CPU.
+
+- Whoops: White overlay for visuals buttons OFF in dark color scheme. (Looks funny, LOL!)
 
 --------------
 

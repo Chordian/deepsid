@@ -407,8 +407,10 @@ SIDPlayer.prototype = {
 
 				this.jp2AudioContext.resume();
 
-				// Create a new emulator
-				this.jp2Worker = new Worker("js/handlers/jsidplay2-js-worker.js", );
+				// NOTE: Whenever there is a new version of this file, increase the number at
+				// the end of the filename. Otherwise some web browsers (especially Firefox)
+				// might refuse to see the new file - even when clearing the cache.
+				this.jp2Worker = new Worker("js/handlers/jsidplay2-js-worker-002.js", );
 
 				this.jp2PlayTime = 0;
 				this.jp2Loading = true;
@@ -474,7 +476,7 @@ SIDPlayer.prototype = {
 
 							// Tick playtime in seconds taking fast forward into account
 							// @todo This needs to be adapted for other buffer sizes to work
-							this.jp2PlayTime += 1 / (eventData.length / sampleRate);
+							this.jp2PlayTime += 1 / ((eventData.length / sampleRate) / (this.fastForward ? 2 : 1));
 
 							// At the end of the tune?
 							// NOTE: Restored here again since "TIMER_END" stopped working.

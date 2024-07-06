@@ -181,7 +181,7 @@ Import specific SIDId player data:
 
   1. Copy the "_specific.csv" file to the "python/specific/" folder.
   2. Run the "_process.bat" file to run Python scripts for various player types.
-  3. Edit all resulting CSV file in Notepad++ in a ton of tabs.
+  3. Edit all resulting CSV files in Notepad++ in a ton of tabs.
   4. Find weird lines with no fullname and delete them. (They are mostly the result of multiple detections.)
      To find them, hit Ctrl+F, tick the "Regular expression" radio button, then search for:
         \  +   (<- TWO spaces between \ and +)
@@ -604,7 +604,6 @@ Update various minor stuff:
   o  Update the top corner link in the profile page to point at the latest CSDb page (same table).
   o  Update "HVSC_VERSION" in browser.js.
   o  Remember to also update "HVSC_VERSION" in setup.php if you haven't already done so.
-  o  Add a new entry in the "hvsc_folders" table for searching new stuff in the latest HVSC update.
   o  Check new folders for setting the 'focus' column in 'composers' to PRO, SCENER or BOTH.
   o  If you set a 'focus' column to PRO or BOTH, also update the 'affiliation' column in that row.
 

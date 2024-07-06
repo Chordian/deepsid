@@ -40,7 +40,7 @@ const playerStrips = [
 function Browser() {
 
 	this.ROOT_HVSC = 'hvsc';
-	this.HVSC_VERSION = 80;
+	this.HVSC_VERSION = 81;
 	this.CGSC_VERSION = 146;
 
 	this.path = "";
@@ -1673,8 +1673,9 @@ Browser.prototype = {
 	 */
 	clearSpinner: function() {
 		$("#songs td.stars span").show();
-		if ($("#showtags").is(":checked"))
+		if (showTags) {
 			$("#songs .tags-line").show();
+		}
 		$("#spinner").remove();
 	},
 

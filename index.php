@@ -615,10 +615,9 @@
 				<div id="stopic-stil" class="stopic">
 					<?php if (!MiniPlayer()): ?>
 						<div id="sundry-news">
-							<!--<span>The <a href="https://www.hvsc.c64.org/" target="_top">High Voltage SID Collection</a> has been upgraded to the latest version #80. Click <a href="//deepsid.chordian.net/?search=80&type=new">here</a> to see what's new in this update.</span>-->
+							<span>The <a href="https://www.hvsc.c64.org/" target="_top">High Voltage SID Collection</a> has been upgraded to the latest version #81. Click <a href="//deepsid.chordian.net/?search=81&type=new">here</a> to see what's new in this update.</span>
 							<!--<span><a href="http://www.c64music.co.uk/" target="_top">Compute's Gazette SID Collection</a> has been upgraded to the latest version #146. Click <a href="//deepsid.chordian.net/?search=146&type=new">here</a> to see what's new in this update.</span>-->
 							<!--<a href="https://xparty.net/"><img src="images/sundry_x2024.png" alt="X'2024" /></a>-->
-							<span><a href="https://haendel.ddns.net:8443/static/teavm/c64jukebox.vue" target="_top">JSIDPlay2</a> is available. It uses reSID and has excellent emulation, but it's also demanding. Turn the 'Visuals' tab off for better playback.</span>
 						</div>
 					<?php endif ?>
 				</div>
@@ -1476,7 +1475,7 @@
 
 						<h3>Libraries of SID tunes</h3>
 						<p>
-							High Voltage SID Collection #80<br />
+							High Voltage SID Collection #81<br />
 							<a href="https://www.hvsc.c64.org/" target="_top">https://www.hvsc.c64.org/</a>
 						</p>
 						<p>
@@ -1681,7 +1680,21 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
-						
+
+						<h3>July 6, 2024</h3>
+						<ul>
+							<li>Upgraded the JSIDPlay2 emulator. An "open" method has been renamed to fix a bug in DeepSID that prevented
+								certain links to PlayMOD and CShellDB from working, as well as the "p" hotkey for opening a tiny DeepSID.</li>
+							<li>Fixed the tune timer not keeping up when using fast forward in JSIDPlay2.</li>
+							<li>Fixed when the tags line for a SID row was not reappearing after showing a loading spinner.</li>
+						</ul>
+
+						<h3>June 30, 2024</h3>
+						<ul>
+							<li>The <a href="https://www.hvsc.c64.org/" target="_top">High Voltage SID Collection</a> has been upgraded to the latest version #81.</li>
+							<li>Added composer profiles for the new folders in HVSC #81.</li>
+						</ul>
+
 						<h3>June 29, 2024</h3>
 						<ul>
 							<li>Fixed a bug where the piano visuals would appear in the other tabs.</li>
