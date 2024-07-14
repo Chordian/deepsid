@@ -194,6 +194,7 @@
 	--svg-filter-icon-to-top:		var(--svg-filter-white);
 	--svg-filter-icon-visuals:		var(--svg-filter-button);
 	--svg-filter-icon-sticky:		var(--svg-filter-icon-editor);
+	--svg-filter-icon-disabled:		var(--svg-filter-white);
 	--svg-filter-edit-tags:			var(--svg-filter-white);
 	--svg-filter-close:				var(--svg-filter-button);
 
@@ -291,6 +292,7 @@
 
 	--color-timebar-bg:				#fcfcfc;			/* Color of the inside of the time bar */
 	--color-timebar-border:			#c4c5b3;			/* Color for border of e.g. time bar, permalinks, etc. */
+	--color-timebar-resid:			#964;
 	--color-timebar-jsidplay2:		var(--color-memory-border-top);
 	--color-timebar-websid:			var(--color-memory-border-top);
 	--color-timebar-jssid:			rgb(38, 99, 41);
@@ -564,6 +566,7 @@
 	--svg-filter-icon-office:		var(--svg-filter-icon-flash);
 	--svg-filter-icon-visuals:		invert(25%) sepia(10%) saturate(629%) hue-rotate(52deg) brightness(96%) contrast(87%);
 	--svg-filter-icon-sticky:		var(--svg-filter-viz-msg-buffer);
+	--svg-filter-icon-disabled:		var(--svg-filter-icon-visuals);
 	--svg-filter-edit-tags:			none;
 	--svg-filter-close:				var(--svg-filter-icon-bottom);
 
@@ -647,6 +650,7 @@
 
 	--color-timebar-bg:				linear-gradient(to bottom, #1c1c1c 0%,#3a3a3a 75%);
 	--color-timebar-border:			#555;
+	--color-timebar-resid:			linear-gradient(to bottom, #b0705b 20%,#88503f 100%); 	/* #a64; */
 	--color-timebar-jsidplay2:		linear-gradient(to bottom, #616fbb 20%,#44529d 100%); 	/* #44529d */
 	--color-timebar-websid:			linear-gradient(to bottom, #616fbb 20%,#44529d 100%); 	/* #44529d */
 	--color-timebar-jssid:			linear-gradient(to bottom, #368e39 20%,#266329 100%); 	/* #266329 */
@@ -1199,7 +1203,8 @@ small.u2 { margin-left: 2px; }
 	.block-info button.disabled,
 	.dialog-box button.disabled,
 	#filter-revisions button.disabled,
-	#filter-6581 button.disabled {
+	#filter-6581 button.disabled,
+	#sticky-visuals button.disabled {
 		cursor: default;
 		background: var(--color-button-disabled);
 		border-color: var(--color-button-disabled);
@@ -1207,6 +1212,10 @@ small.u2 { margin-left: 2px; }
 		color: var(--color-button-disabled-text);
 		fill: var(--color-button-disabled-text);
 	}
+
+		#sticky-visuals button.disabled:before {
+			filter: var(--svg-filter-icon-disabled);
+		}	
 
 	#controls .divider,
 	.edit .divider {
@@ -1327,6 +1336,13 @@ small.u2 { margin-left: 2px; }
 		position: absolute;
 		top: 16px;
 		left: 704px; /* Don't use 'right' here or it might be pushed by the scrollbar */
+	}
+
+	/* Width of emulator button in visuals tab */
+	.viz-emu {
+		width: 55px !important;
+		font-family: "Asap Condensed", sans-serif;
+		font-size: 12px !important;
 	}
 
 	.viz-warning {
@@ -2003,6 +2019,7 @@ input[type=range]::-ms-track {
 			pointer-events: none;
 		}
 
+		#time .resid div		{ background: var(--color-timebar-resid); }
 		#time .jsidplay2 div	{ background: var(--color-timebar-jsidplay2); }
 		#time .websid div,
 		#time .legacy div		{ background: var(--color-timebar-websid); }
@@ -4555,6 +4572,8 @@ input[type=range]::-ms-track {
 			}
 
 				/* An overlay to disable all four buttons at once */
+				/* @todo Need an overlay to match the black color scheme too
+				         or remove if disabling buttons instead later */
 				#no-visuals {
 					position: absolute;
 					top: -4px;

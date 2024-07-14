@@ -418,8 +418,6 @@ Controls.prototype = {
 				// Toggle 'SidWiz' mode ON or OFF for the oscilloscope voices
 				// NOTE: Don't add the DOM element check in 'animateScope()' as it needs to be fast.
 				viz.scopeMode = $("#sidwiz").is(":checked");
-				if (isLegacyWebSid)
-					scope.setOutputSize(viz.scopeMode ? 16384 : 246 << viz.scopeZoom);
 				break;
 			case "showtags":
 				// Toggle tags shown in SID rows ON or OFF
@@ -482,8 +480,6 @@ Controls.prototype = {
 			case "osc-zoom":
 				// Oscilloscope zoom; 1 (closest) to 5 (farthest)
 				viz.scopeZoom = event.target.value;
-				if (isLegacyWebSid)
-					scope.setOutputSize(viz.scopeMode ? 16384 : 246 << viz.scopeZoom);
 				break;
 		}
 	},

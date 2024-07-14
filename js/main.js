@@ -10,7 +10,9 @@ var cacheTabScrollPos = cachePlayerTabScrollPos = cacheGB64TabScrollPos = cacheR
 var sundryToggle = true, recommended = forum = players = $trAutoPlay = null, showTags, fastForwarding = false;
 var logCount = 1000, isMobile, miniPlayer;
 
-var isLegacyWebSid = $("script[src='js/handlers/backend_tinyrsid_legacy.js']").length;
+var isReSid = $("script[src='js/handlers/backend_websidplay.js']").length;
+var isWebSid = $("script[src='js/handlers/backend_websid.js']").length;
+var isLegacyWebSid = $("script[src='js/handlers/backend_tinyrsid.js']").length;
 var isMobile = $("body").attr("data-mobile") !== "0";
 var isNotips = $("body").attr("data-notips") !== "0";
 var miniPlayer = $("body").attr("data-mini");
@@ -56,6 +58,7 @@ $(function() { // DOM ready
 	// However, a URL switch may TEMPORARILY override the stored emulator
 	var emulator = GetParam("emulator").toLowerCase();
 	if ($.inArray(emulator, [
+		"resid",
 		"jsidplay2",
 		"websid",
 		"legacy",
@@ -68,13 +71,10 @@ $(function() { // DOM ready
 
 	HandleTopBox(emulator);
 
-	// Lower buffer size values may freeze DeepSID (legacy only)
-	scope = isLegacyWebSid ? new SidTracer(16384) : new Tracer(40);
-
-	viz = new Viz(emulator);
 	SID = new SIDPlayer(emulator);
 	ctrls = new Controls();
 	browser = new Browser();
+	viz = new Viz(emulator);
 
 	// JSIDPlay2 can't slow down while playing
 	viz.stateVisualsButton("#piano-slow", emulator == "jsidplay2" ? "disabled" : "enabled");
@@ -103,6 +103,8 @@ $(function() { // DOM ready
 	$("#dropdown-emulator")
 		.styledSelect("emulator")
 		.styledSetValue(emulator);
+
+	viz.supportedViewButtons(emulator);
 
 	// Doesn't work correctly and I can't test it as I don't have a MIDI device
 	/*$("#asid-midi-outputs")
@@ -258,7 +260,7 @@ $(function() { // DOM ready
 					ctrls.state("root/back", "enabled");
 
 					$("#dropdown-emulator")
-						.styledOptionState("jsidplay2 websid legacy jssid asid", "enabled")
+						.styledOptionState("resid jsidplay2 websid legacy jssid asid", "enabled")
 						.styledOptionState("lemon youtube", "disabled");
 					$("#path").css("top", "5px").empty().append("Temporary emulator testing");
 					$("#stab-stil,#tab-stil").empty().append("STIL");
@@ -543,9 +545,9 @@ $(function() { // DOM ready
 				viz.setEmuButton(emulator);
 				viz.setBufferMessage(emulator);
 
-				// If a different version of WebSid was used last then we need to refresh the browser
+				// Jürgen's emulators has a hard time co-existing so refresh the browser to be sure it works
 				// YouTube is also required to refresh for 100% stability (and because of autoplay policy)
-				if ((emulator == "websid" && isLegacyWebSid) || (emulator == "legacy" && !isLegacyWebSid) || emulator == "youtube") {
+				if (["resid", "websid", "legacy", "youtube"].includes(emulator)) {
 					window.location.reload();
 					return false;
 				}
@@ -561,7 +563,7 @@ $(function() { // DOM ready
 				// Turn off visuals as default for JSIDPlay2 to save on CPU time
 				ToggleVisuals();
 
-				if (emulator == "youtube" || emulator == "download") {
+				if (["lemon", "youtube", "download"].includes(emulator)) {
 					// It doesn't make sense to make the 'Visuals' tab available here
 					$("#tab-visuals").addClass("disabled");
 					if ($("#tabs .selected").attr("data-topic") === "visuals")
@@ -570,11 +572,14 @@ $(function() { // DOM ready
 				else
 					$("#tab-visuals").removeClass("disabled");
 
+				// Turn off view buttons that are not supported by the SID handler
+				viz.supportedViewButtons(emulator);
+
 				// JSIDPlay2 can't slow down while playing
 				viz.stateVisualsButton("#piano-slow", emulator == "jsidplay2" ? "disabled" : "enabled");
 
 				// The color of the time bar should be unique for the chosen SID handler
-				$("#time-bar").removeClass("jsidplay2 websid legacy jssid asid lemon youtube").addClass(emulator)
+				$("#time-bar").removeClass("resid jsidplay2 websid legacy jssid asid lemon youtube").addClass(emulator)
 					.css("cursor", SID.emulatorFlags.supportSeeking ? "pointer" : "default");
 
 				$("#faster").removeClass("disabled");
@@ -855,7 +860,7 @@ $(function() { // DOM ready
 			'<div style="display:inline-block;vertical-align:top;margin-left:13px;">'+
 				'<input type="checkbox" id="sidwiz" name="sidwiztoggle" class="unselectable" '+(viz.scopeMode ? '' : 'un')+'checked />'+
 			'</div>'+
-			'<label for="sidwiz" class="unselectable">SidWiz</label>'
+			'<label for="sidwiz" class="unselectable">Sync</label>'
 		);
 	}
 
@@ -2166,7 +2171,7 @@ function DisableIncompatibleRows() {
 				? $tr.addClass("disabled")
 				: $tr.removeClass("disabled");
 		} else if (isSIDFile && $tr.find(".name").attr("data-name").indexOf(".mus") !== -1) {
-			// JSIDPlay2 emulator can't do MUS files
+			// JSIDPlay2 emulators can't do MUS files
 			SID.emulator == "jsidplay2"
 				? $tr.addClass("disabled")
 				: $tr.removeClass("disabled");

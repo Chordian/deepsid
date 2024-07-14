@@ -135,15 +135,9 @@ function Viz(emulator) {
 		"#000000",			// $F0
 	];
 
-	this.bufferSize = {
-		jsidplay2:	48000,
-		websid:		0,
-		legacy:		0,
-		jssid:		0,
-	};
-
 	// Used for the buffer size label in the settings
 	this.bufferEmulator = {
+		resid:		"reSID (WebSidPlay)",
 		jsidplay2:	"JSIDPlay2",
 		websid:		"the default WebSid",
 		legacy:		"the legacy WebSid",
@@ -414,10 +408,10 @@ Viz.prototype = {
 	 */
 	onChangeBufferSize: function(event) {
 		var emulator = this.emulator == "asid" ? "jssid" : this.emulator;
-		this.bufferSize[emulator] = $(event.target).val();
-		localStorage.setItem("buffer_" + emulator, this.bufferSize[emulator]);
+		SID.bufferSize[emulator] = $(event.target).val();
+		localStorage.setItem("buffer_" + emulator, SID.bufferSize[emulator]);
 		// Make sure all drop-down boxes of this kind agree on the new value
-		$("#page .dropdown-buffer").val(this.bufferSize[emulator]);
+		$("#page .dropdown-buffer").val(SID.bufferSize[emulator]);
 		// Re-trigger the same emulator again to set the buffer size
 		// NOTE: Doing it in a specific visuals view is deliberate (avoids multiple triggering).
 		if (this.emulator == "asid")
@@ -443,14 +437,22 @@ Viz.prototype = {
 		switch (this.visuals) {
 			case "piano":
 				$("#sticky-visuals .waveform-colors").show();
+				/*if (SID.emulator == "resid")
+					$("#sticky-visuals button.icon-memory").trigger("click");*/
 				break;
 			case "graph":
 				$("#sticky-visuals .waveform-colors").show();
+				/*if (SID.emulator == "resid")
+					$("#sticky-visuals button.icon-memory").trigger("click");*/
 				break;
 			case "memory":
 				$("#memory-lc").show();
+				if (SID.emulator == "jsidplay2")
+					$("#sticky-visuals button.icon-piano").trigger("click");
 				break;
 			case "stats":
+				/*if (SID.emulator == "resid")
+					$("#sticky-visuals button.icon-memory").trigger("click");*/
 				break;
 		}
 	},
@@ -498,7 +500,7 @@ Viz.prototype = {
 	 * @param {string} emulator 
 	 */
 	setEmuButton: function(emulator) {
-		if (["jsidplay2", "websid", "legacy", "jssid", "asid"].includes(emulator)) {
+		if (["resid", "jsidplay2", "websid", "legacy", "jssid", "asid"].includes(emulator)) {
 			if (emulator == "asid") emulator = "jssid";
 			$("#page .viz-" + emulator).addClass("button-on"); 
 			$("#page .viz-msg-emu").hide();
@@ -514,7 +516,7 @@ Viz.prototype = {
 	 */
 	setBufferSize: function(emulator) {
 		// @todo JSIDPlay2 will have to wait until I can get the tune length calculation right
-		if (["disabled:jsidplay2", "websid", "legacy", "jssid", "asid"].includes(emulator)) {
+		if (["resid", "disabled:jsidplay2", "websid", "legacy", "jssid", "asid"].includes(emulator)) {
 			if (emulator == "asid") emulator = "jssid";
 			$("#page .dropdown-buffer").prop("disabled", false);
 			$("#page .dropdown-buffer-label").removeClass("disabled");
@@ -523,21 +525,24 @@ Viz.prototype = {
 			var bufferSize = localStorage.getItem("buffer_" + emulator);
 			if (bufferSize == null) {
 				switch (emulator) {
-					case 'jsidplay2':
-						this.bufferSize['jsidplay2'] = 48000;
+					case "resid":
+						SID.bufferSize['resid'] = 16384;
 						break;
-					case 'websid':
-						this.bufferSize['websid'] = 16384;
+					case "jsidplay2":
+						SID.bufferSize['jsidplay2'] = 48000;
 						break;
-					case 'legacy':
-						this.bufferSize['legacy'] = 1024;
+					case "websid":
+						SID.bufferSize['websid'] = 16384;
+						break;
+					case "legacy":
+						SID.bufferSize['legacy'] = 1024;
 						break;
 					default:
-						this.bufferSize[emulator] = 1024;
+						SID.bufferSize[emulator] = 1024;
 				}
 			} else
-				this.bufferSize[emulator] = bufferSize;
-			$("#page .dropdown-buffer").val(this.bufferSize[emulator]);
+				SID.bufferSize[emulator] = bufferSize;
+			$("#page .dropdown-buffer").val(SID.bufferSize[emulator]);
 		} else {
 			$("#page .dropdown-buffer").prop("disabled", true);
 			$("#page .dropdown-buffer-label").addClass("disabled");
@@ -556,11 +561,61 @@ Viz.prototype = {
 	 * of the visuals views, except in WebSid (HQ) mode.
 	 */
 	setBufferMessage: function(emulator) {
-		this.bufferSize[emulator] > 1024 && $("#page .viz-msg-emu").css("display") == "none" && emulator != "jsidplay2" && emulator != "websid"
+		SID.bufferSize[emulator] > 1024 && $("#page .viz-msg-emu").css("display") == "none" && emulator != "jsidplay2" && emulator != "websid"
 			? $("#page .viz-msg-buffer").show()
 			: $("#page .viz-msg-buffer").hide();
 	},
 
+	/**
+	 * 
+	 */
+	supportedViewButtons: function(emulator) {
+		switch (emulator) {
+			/*case "resid":
+				// @resid Only MEMO view works for now
+				this.stateViewButton("piano", "disabled");
+				this.stateViewButton("graph", "disabled");
+				this.stateViewButton("memory", "enabled");
+				this.stateViewButton("stats", "disabled");
+				break;*/
+			case "jsidplay2":
+				// Doesn't support MEMO view
+				this.stateViewButton("piano", "enabled");
+				this.stateViewButton("graph", "enabled");
+				this.stateViewButton("memory", "disabled");
+				this.stateViewButton("stats", "enabled");
+				break;
+			case "resid":
+			case "legacy":
+			case "websid":
+			case "jssid":
+			case "asid":
+				this.stateViewButton("piano", "enabled");
+				this.stateViewButton("graph", "enabled");
+				this.stateViewButton("memory", "enabled");
+				this.stateViewButton("stats", "enabled");
+				break;
+			default:
+		}
+	},
+
+	/**
+	 * Enable or disable a view button.
+	 * 
+	 * @param {string} icon			E.g. "piano", "graph", etc.
+	 * @param {string} state		Set to "disabled" or "enabled".
+	 */
+	stateViewButton: function(icon, state) {
+		if (state == "disabled") {
+			$("#sticky-visuals button.icon-" + icon)
+				.prop("disabled", true)
+				.addClass("disabled")
+		} else
+			$("#sticky-visuals button.icon-" + icon)
+				.prop("disabled", false)
+				.removeClass("disabled")
+	},
+	
 	/**
 	 * Enable or disable a visuals ON/OFF toggle button and its label.
 	 * 
@@ -857,10 +912,10 @@ Viz.prototype = {
 	/**
 	 * Scope/Stereo: Initialize and draw the oscilloscope canvas boxes.
 	 * 
-	 * This makes use of 'sid_tracer.js' (renamed to 'scope.js' in DeepSID) which
-	 * was originally written by Jürgen Wothke for the Tiny'R'Sid web site.
+	 * This utilizes 'channelstreamer.js' written by Jürgen Wothke.
 	 */
 	initScope: function() {
+
 		this.scopeMode = true;
 		this.scopeZoom = 5; // Use 1 (closest) to 5 (farthest)
 
@@ -872,22 +927,17 @@ Viz.prototype = {
 			canvas += '<canvas class="scope" id="scope'+voice+'" style="display:none;"></canvas>';
 		$("#stopic-osc").empty().append(canvas+'<div class="sundryMsg" style="display:none;"></div>');
 
-		if (isLegacyWebSid) {
-			this.scopeVoice1 = new VoiceDisplay("scope1", function() { return scope.getDataVoice1(); }, false);
-			this.scopeVoice2 = new VoiceDisplay("scope2", function() { return scope.getDataVoice2(); }, false);
-			this.scopeVoice3 = new VoiceDisplay("scope3", function() { return scope.getDataVoice3(); }, false);
-			this.scopeVoice4 = new VoiceDisplay("scope4", function() { return scope.getDataVoice4(); }, true);		
-		} else {
-			this.scopeVoice1 = new VoiceDisplay("scope1", scope, function() { return scope.getData(0); }, false);
-			this.scopeVoice2 = new VoiceDisplay("scope2", scope, function() { return scope.getData(1); }, false);
-			this.scopeVoice3 = new VoiceDisplay("scope3", scope, function() { return scope.getData(2); }, false);
-			this.scopeVoice4 = new VoiceDisplay("scope4", scope, function() { return scope.getData(3); }, true);
+		if (isReSid) return;
 
-			this.scopeVoice1.setSize(512, 70);
-			this.scopeVoice2.setSize(512, 70);
-			this.scopeVoice3.setSize(512, 70);
-			this.scopeVoice4.setSize(512, 70);
-		}
+		this.scopeVoice1 = new VoiceDisplay("scope1", Tracer, function() { return Tracer.getData(0); }, this.scopeMode);
+		this.scopeVoice2 = new VoiceDisplay("scope2", Tracer, function() { return Tracer.getData(1); }, this.scopeMode);
+		this.scopeVoice3 = new VoiceDisplay("scope3", Tracer, function() { return Tracer.getData(2); }, this.scopeMode);
+		this.scopeVoice4 = new VoiceDisplay("scope4", Tracer, function() { return Tracer.getData(3); }, this.scopeMode);
+
+		this.scopeVoice1.setSize(512, 70);
+		this.scopeVoice2.setSize(512, 70);
+		this.scopeVoice3.setSize(512, 70);
+		this.scopeVoice4.setSize(512, 70);
 
 		for (var chip = 1; chip < 4; chip++) {
 			for (var voice = 1; voice < 4; voice++)
@@ -895,17 +945,17 @@ Viz.prototype = {
 		}
 
 		if (!isLegacyWebSid) {
-			this.scopeStereo[0][0] = new VoiceDisplay("scope-s1v1", scope, function() { return scope.getData(0); }, false);
-			this.scopeStereo[0][1] = new VoiceDisplay("scope-s1v2", scope, function() { return scope.getData(1); }, false);
-			this.scopeStereo[0][2] = new VoiceDisplay("scope-s1v3", scope, function() { return scope.getData(2); }, false);
+			this.scopeStereo[0][0] = new VoiceDisplay("scope-s1v1", Tracer, function() { return Tracer.getData(0); }, false);
+			this.scopeStereo[0][1] = new VoiceDisplay("scope-s1v2", Tracer, function() { return Tracer.getData(1); }, false);
+			this.scopeStereo[0][2] = new VoiceDisplay("scope-s1v3", Tracer, function() { return Tracer.getData(2); }, false);
 
-			this.scopeStereo[1][0] = new VoiceDisplay("scope-s2v1", scope, function() { return scope.getData(4); }, false);
-			this.scopeStereo[1][1] = new VoiceDisplay("scope-s2v2", scope, function() { return scope.getData(5); }, false);
-			this.scopeStereo[1][2] = new VoiceDisplay("scope-s2v3", scope, function() { return scope.getData(6); }, false);
+			this.scopeStereo[1][0] = new VoiceDisplay("scope-s2v1", Tracer, function() { return Tracer.getData(4); }, false);
+			this.scopeStereo[1][1] = new VoiceDisplay("scope-s2v2", Tracer, function() { return Tracer.getData(5); }, false);
+			this.scopeStereo[1][2] = new VoiceDisplay("scope-s2v3", Tracer, function() { return Tracer.getData(6); }, false);
 
-			this.scopeStereo[2][0] = new VoiceDisplay("scope-s3v1", scope, function() { return scope.getData(8); }, false);
-			this.scopeStereo[2][1] = new VoiceDisplay("scope-s3v2", scope, function() { return scope.getData(9); }, false);
-			this.scopeStereo[2][2] = new VoiceDisplay("scope-s3v3", scope, function() { return scope.getData(10); }, false);
+			this.scopeStereo[2][0] = new VoiceDisplay("scope-s3v1", Tracer, function() { return Tracer.getData(8); }, false);
+			this.scopeStereo[2][1] = new VoiceDisplay("scope-s3v2", Tracer, function() { return Tracer.getData(9); }, false);
+			this.scopeStereo[2][2] = new VoiceDisplay("scope-s3v3", Tracer, function() { return Tracer.getData(10); }, false);
 		}
 	},
 
@@ -936,10 +986,10 @@ Viz.prototype = {
 				$("#stereo-table,#stereo-controls").show();
 				this.tabStereoMode = "STEREO";
 			}
-			if (!isLegacyWebSid && SID.isPlaying()) {
+			if (SID.isPlaying()) {
 				for (var chip = 0; chip < 3; chip++) {
 					for (var voice = 0; voice < 3; voice++) {
-						scope.setMode(this.scopeMode, parseInt(this.scopeZoom));
+						Tracer.setZoom(parseInt(this.scopeZoom));
 						this.scopeStereo[chip][voice].redrawGraph();
 						this.scopeStereo[chip][voice].setStrokeColor("rgba("+(this.scopeLineColor[colorTheme])+", 1.0)");
 					}
@@ -957,40 +1007,29 @@ Viz.prototype = {
 				this.tabOscMode = "NOTWEBSID";
 			}
 			return;
-		} else if (isLegacyWebSid && this.bufferSize["legacy"] < 16384) {
-			if (this.tabOscMode !== "NOT16K") {
-				$("#scope1,#scope2,#scope3,#scope4").hide();
-				$("#stopic-osc .sundryMsg").empty().append('A buffer size of <button id="set-16k" style="font-size:13px;line-height:13px;">16384</button> is required.').show();
-				this.tabOscMode = "NOT16K";
-			}
-			return;
 		} else if (this.tabOscMode !== "OSC") {
 			// Okay to draw oscilloscope voices again now
-			if (isLegacyWebSid)
-				scope.setOutputSize(this.scopeMode ? 16384 : 246 << this.scopeZoom);
 			$("#stopic-osc .sundryMsg").hide();
 			$("#scope1,#scope2,#scope3,#scope4").show();
 			this.tabOscMode = "OSC";
 		}
 		if (SID.isPlaying()) {
-			if (isLegacyWebSid) {
-				this.scopeVoice1.redrawGraph(this.scopeMode, parseInt(this.scopeZoom));
-				this.scopeVoice2.redrawGraph(this.scopeMode, parseInt(this.scopeZoom));
-				this.scopeVoice3.redrawGraph(this.scopeMode, parseInt(this.scopeZoom));
-				this.scopeVoice4.redrawGraph(this.scopeMode, parseInt(this.scopeZoom));
-			} else {
-				scope.setMode(this.scopeMode, parseInt(this.scopeZoom));
+			Tracer.setZoom(parseInt(this.scopeZoom));
 
-				this.scopeVoice1.redrawGraph();
-				this.scopeVoice2.redrawGraph();
-				this.scopeVoice3.redrawGraph();
-				this.scopeVoice4.redrawGraph();
+			this.scopeVoice1.setSyncMode(this.scopeMode);
+			this.scopeVoice2.setSyncMode(this.scopeMode);
+			this.scopeVoice3.setSyncMode(this.scopeMode);
+			this.scopeVoice4.setSyncMode(this.scopeMode);
 
-				this.scopeVoice1.setStrokeColor("rgba("+(this.scopeLineColor[colorTheme])+", 1.0)");
-				this.scopeVoice2.setStrokeColor("rgba("+(this.scopeLineColor[colorTheme])+", 1.0)");
-				this.scopeVoice3.setStrokeColor("rgba("+(this.scopeLineColor[colorTheme])+", 1.0)");
-				this.scopeVoice4.setStrokeColor("rgba("+(this.scopeLineColor[colorTheme])+", 1.0)");
-				}
+			this.scopeVoice1.redrawGraph();
+			this.scopeVoice2.redrawGraph();
+			this.scopeVoice3.redrawGraph();
+			this.scopeVoice4.redrawGraph();
+
+			this.scopeVoice1.setStrokeColor("rgba("+(this.scopeLineColor[colorTheme])+", 1.0)");
+			this.scopeVoice2.setStrokeColor("rgba("+(this.scopeLineColor[colorTheme])+", 1.0)");
+			this.scopeVoice3.setStrokeColor("rgba("+(this.scopeLineColor[colorTheme])+", 1.0)");
+			this.scopeVoice4.setStrokeColor("rgba("+(this.scopeLineColor[colorTheme])+", 1.0)");
 		}
 	},
 
@@ -1768,6 +1807,7 @@ Viz.prototype = {
 	 * @param {number} word			The 16-bit value to be shown as hexadecimal.
 	 */
 	showWord: function(id, word) {
+		if (isNaN(word)) word = 0;
 		$(id+" span").empty().append(("000"+word.toString(16).toUpperCase()).slice(-4));
 	},
 

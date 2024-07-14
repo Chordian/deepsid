@@ -3,8 +3,7 @@ fonts/*
 hvsc
 images
 logs/*.txt
-js/_jssid/*
-js/_websid/*
+js/_sources/*
 php/move.txt
 php/_master/*
 php/hvsc_update/*

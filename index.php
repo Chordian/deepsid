@@ -29,9 +29,9 @@
 			: preg_match("/(android|avantgo|blackberry|bolt|boost|cricket|docomo|fone|hiptop|mini|mobi|palm|phone|pie|tablet|up\.browser|up\.link|webos|wos)/i", $_SERVER["HTTP_USER_AGENT"]);
 	}
 
-	function isLegacyWebSid() {
-		return (isset($_GET['emulator']) && strtolower($_GET['emulator']) == 'legacy') ||
-			(isset($_COOKIE['emulator']) && strtolower($_COOKIE['emulator']) == 'legacy');
+	function isEmulator($emulator) {
+		return (isset($_GET['emulator']) && strtolower($_GET['emulator']) == $emulator) ||
+			(isset($_COOKIE['emulator']) && strtolower($_COOKIE['emulator']) == $emulator);
 	}
 
 	function isLemon() {
@@ -97,16 +97,19 @@
 				');
 				window.stop();
 			}
+			window.WASM_SEARCH_PATH = "js/handlers/"; // Used by all of JW's emulators
 		</script>
 		<?php if (isset($_GET['websiddebug'])): ?>
 			<script type="text/javascript" src="http://www.wothke.ch/tmp/scriptprocessor_player.min.js"></script>
-			<script type="text/javascript" src="http://www.wothke.ch/tmp/backend_tinyrsid.js"></script>
+			<script type="text/javascript" src="http://www.wothke.ch/tmp/backend_websid.js"></script>
 		<?php else: ?>
 			<script type="text/javascript" src="js/handlers/scriptprocessor_player.min.js"></script>
-			<?php if (isLegacyWebSid()): ?>
-				<script type="text/javascript" src="js/handlers/backend_tinyrsid_legacy.js"></script>
-			<?php else: ?>
+			<?php if (isEmulator('legacy')): 		// WebSid Legacy ?>
 				<script type="text/javascript" src="js/handlers/backend_tinyrsid.js"></script>
+			<?php elseif (isEmulator('websid')): 	// WebSid HQ ?>
+				<script type="text/javascript" src="js/handlers/backend_websid.js"></script>
+			<?php else: 							// reSID ?>
+				<script type="text/javascript" src="js/handlers/backend_websidplay.js"></script>
 			<?php endif ?>
 		<?php endif ?>
 
@@ -124,12 +127,13 @@
 		<script type="text/javascript" src="js/opljs-if.js"></script>
 
 		<?php if (isset($_GET['websiddebug'])): ?>
-			<script type="text/javascript" src="http://www.wothke.ch/tmp/scope.js"></script>
+			<script type="text/javascript" src="http://www.wothke.ch/tmp/channelstreamer.js"></script>
 		<?php else: ?>
-			<?php if (isLegacyWebSid()): ?>
-				<script type="text/javascript" src="js/scope_legacy.js"></script>
-			<?php else : ?>
-				<script type="text/javascript" src="js/scope.js"></script> <!-- <= JW's sid_tracer.js -->
+			<script type="text/javascript" src="js/handlers/channelstreamer.min.js"></script>
+			<?php if (isEmulator('legacy')): ?>
+				<!--<script type="text/javascript" src="js/scope_legacy.js"></script>-->
+			<?php elseif (isEmulator('websid')): ?>
+				<!--<script type="text/javascript" src="js/scope.js"></script>--> <!-- <= JW's sid_tracer.js -->
 			<?php endif ?>
 		<?php endif ?>
 		<script type="text/javascript" src="js/viz.js"></script>
@@ -524,7 +528,9 @@
 					<?php if (MiniPlayer()) echo '<div style="position:absolute;top:24px;left:200px;white-space:nowrap;">mini-player</div>'; ?>
 				</div>
 				<select id="dropdown-emulator" name="select-emulator" style="visibility:hidden;">
-				<option value="jsidplay2">JSIDPlay2 (BETA)</option>
+					<option value="resid">reSID (BETA)</option>
+					<!--<option value="resid">reSID (WebSidPlay)</option>-->
+					<option value="jsidplay2">JSIDPlay2 (BETA)</option>
 					<!--<option value="jsidplay2">JSIDPlay2 (reSID)</option>-->
 					<option value="websid">WebSid emulator</option>
 					<option value="legacy">WebSid (Legacy)</option>
@@ -615,9 +621,10 @@
 				<div id="stopic-stil" class="stopic">
 					<?php if (!MiniPlayer()): ?>
 						<div id="sundry-news">
-							<span>The <a href="https://www.hvsc.c64.org/" target="_top">High Voltage SID Collection</a> has been upgraded to the latest version #81. Click <a href="//deepsid.chordian.net/?search=81&type=new">here</a> to see what's new in this update.</span>
+							<!--<span>The <a href="https://www.hvsc.c64.org/" target="_top">High Voltage SID Collection</a> has been upgraded to the latest version #81. Click <a href="//deepsid.chordian.net/?search=81&type=new">here</a> to see what's new in this update.</span>-->
 							<!--<span><a href="http://www.c64music.co.uk/" target="_top">Compute's Gazette SID Collection</a> has been upgraded to the latest version #146. Click <a href="//deepsid.chordian.net/?search=146&type=new">here</a> to see what's new in this update.</span>-->
 							<!--<a href="https://xparty.net/"><img src="images/sundry_x2024.png" alt="X'2024" /></a>-->
+							<span>A second SID handler for reSID has been added, this time ported by Jürgen Wothke. It is only about 30% slower than WebSid.</span>
 						</div>
 					<?php endif ?>
 				</div>
@@ -941,6 +948,7 @@
 						<div id="visuals-piano" class="visuals" style="display:none;">
 							<div class="edit" style="height:42px;width:683px;">
 								<label class="unselectable" style="margin-right:2px;">Emulator</label>
+								<button class="button-edit button-radio button-off viz-emu viz-resid" data-group="viz-emu" data-emu="resid">ReSID</button>
 								<button class="button-edit button-radio button-off viz-emu viz-jsidplay2" data-group="viz-emu" data-emu="jsidplay2">JSIDPl2</button>
 								<button class="button-edit button-radio button-off viz-emu viz-websid" data-group="viz-emu" data-emu="websid">WebSid</button>
 								<button class="button-edit button-radio button-off viz-emu viz-legacy" data-group="viz-emu" data-emu="legacy">Legacy</button>
@@ -1032,6 +1040,7 @@
 						<div id="visuals-graph" class="visuals" style="display:none;">
 							<div class="edit" style="height:42px;width:683px;">
 								<label class="unselectable" style="margin-right:2px;">Emulator</label>
+								<button class="button-edit button-radio button-off viz-emu viz-resid" data-group="viz-emu" data-emu="resid">ReSID</button>
 								<button class="button-edit button-radio button-off viz-emu viz-jsidplay2" data-group="viz-emu" data-emu="jsidplay2">JSIDPl2</button>
 								<button class="button-edit button-radio button-off viz-emu viz-websid" data-group="viz-emu" data-emu="websid">WebSid</button>
 								<button class="button-edit button-radio button-off viz-emu viz-legacy" data-group="viz-emu" data-emu="legacy">Legacy</button>
@@ -1440,17 +1449,26 @@
 
 						<h3>SID handlers</h3>
 						<p>
-							WebSid emulators by Jürgen Wothke (<a href="http://www.wothke.ch/tinyrsid/index.php" target="_top">Tiny'R'Sid</a>)<br />
-							<a href="http://www.wothke.ch/websid/" target="_top">http://www.wothke.ch/websid/</a><br />
-							<a href="https://github.com/wothke/websid" target="_top">https://github.com/wothke/websid</a><br />
-							<a href="https://github.com/wothke/webaudio-player" target="_top">https://github.com/wothke/webaudio-player</a>
+							WebSid HQ and Legacy emulators by Jürgen Wothke (Tiny'R'Sid)<br />
+							<a href="http://www.wothke.ch/tinyrsid/index.php" target="_top">http://www.wothke.ch/tinyrsid/index.php</a><br />
+							<a href="http://www.wothke.ch/websid/" target="_top">http://www.wothke.ch/websid/</a>
+						</p>
+						<p>
+							Web port of 'libsidplayfp' (WebSidPlay a.k.a. reSID) by Jürgen Wothke<br />
+							<a href="https://github.com/libsidplayfp/libsidplayfp" target="_top">https://github.com/libsidplayfp/libsidplayfp</a><br />
+							<a href="https://www.wothke.ch/websidplayfp/" target="_top">https://www.wothke.ch/websidplayfp/</a>
 						</p>
 						<p>
 							JSIDPlay2 emulator by Ken Händel, Antti S. Lankila and Wilfred Bos<br />
-							with Distortion Simulation and 6581/8580 emulation by Antti S. Lankila<br />
-							and reSID engine and 6581/8580 emulation by Dag Lem<br />
 							<a href="https://sourceforge.net/projects/jsidplay2/" target="_top">https://sourceforge.net/projects/jsidplay2/</a><br />
 							<a href="https://haendel.ddns.net:8443/static/teavm/c64jukebox.vue" target="_top">https://haendel.ddns.net:8443/static/teavm/c64jukebox.vue</a><br />
+						</p>
+						<p>
+							reSID engine (used by WebSidPlay and JSIDPlay2) by Dag Lem<br />
+							SidTune work by Michael Schwendt<br />
+							Main libsidplay2 code by Simon White<br />
+							Distortion Simulation by Antti Lankila<br />
+							Code refactoring by Leandro Nini
 						</p>
 						<p>
 							jsSID emulator by Mihály Horváth (<a href="http://csdb.chordian.net/?type=scener&id=18806" target="_top">Hermit</a>)
@@ -1680,6 +1698,30 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>July 14, 2024</h3>
+						<ul>
+							<li>Added a SID handler for another reSID emulator, this time 'WebSidPlay' by Jürgen Wothke (called 'reSID' here
+								to avoid confusion). It's a port of <a href="https://github.com/libsidplayfp/libsidplayfp" target="_top">libsidplayfp</a>
+								and is only 30% slower than WebSid HQ, making it a great choice for excellent emulation.
+								The new reSID handler is in BETA and still have the following issues:
+								<ul>
+									<li>Reading the digi type and rate is not supported yet.</li>
+									<li>Reading the SID registers is slow on big buffer sizes and only supports 1SID.</li>
+									<li>The oscilloscope is not supported yet.</li>
+									<li>Showing the PAL/NTSC and 6581/8580 flags is not ready yet.</li>
+									<li>Advanced reSID settings are not available.</li>
+									<li>Exotic SID tunes (4SID and more) are not supported.</li>
+								</ul>
+							</li>
+							<li>Another emulator button for the new reSID emulator has been added in the visuals tab.</li>
+							<li>Added logic for disabling view buttons (piano, graph, etc.) when a SID handler doesn't support it.</li>
+							<li>All three emulators by Jürgen Wothke (WebSid HQ, WebSid Legacy and reSID) now share a new and streamlined script player.
+								DeepSID has been overhauled accordingly to support this.</li>
+							<li>The scopes for WebSid HQ and WebSid Legacy have been significantly improved, using a new channel streamer script.
+								Setting a specific buffer size for the scope to work is no longer necessary.</li>
+							<li>A bug has been fixed in a player script for WebSid HQ. Now the visuals are perfectly synchronized.</li>
+						</ul>
 
 						<h3>July 6, 2024</h3>
 						<ul>

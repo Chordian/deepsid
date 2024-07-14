@@ -111,8 +111,12 @@
 	'	<h3>SID handlers</h3>
 		<p>If you click the drop-down box in the top left corner, another SID handler can be chosen.</p>
 
-		<h4><a href="//deepsid.chordian.net?emulator=legacy">JSIDPlay2 (BETA)</a></h4>
+		<h4><a href="//deepsid.chordian.net?emulator=resid">reSID (BETA)</a></h4>
 		<p>Uses the renowned reSID engine and offers excellent emulation.</p>
+		It is only about 30% slower than the WebSid emulator.
+
+		<h4><a href="//deepsid.chordian.net?emulator=jsidplay2">JSIDPlay2 (BETA)</a></h4>
+		<p>Also uses the reSID engine and offers the same emulation.</p>
 		Requires a really fast CPU.
 
 		<h4><a href="//deepsid.chordian.net?emulator=websid">WebSid emulator</a></h4>

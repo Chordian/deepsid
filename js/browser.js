@@ -1098,9 +1098,10 @@ Browser.prototype = {
 			ctrls.state("root/back", "enabled");
 
 			// Disable emulators/handlers in the drop-down according to parent folder attributes
-			$("#dropdown-emulator").styledOptionState("jsidplay2 websid legacy jssid asid lemon youtube download", "enabled");
+			$("#dropdown-emulator").styledOptionState("resid jsidplay2 websid legacy jssid asid lemon youtube download", "enabled");
 			$("#page .viz-emu").removeClass("disabled");
 			$("#dropdown-emulator").styledOptionState(this.cache.incompatible, "disabled");
+			if (this.cache.incompatible.indexOf("resid") !== -1) $("#page .viz-resid").addClass("disabled");
 			if (this.cache.incompatible.indexOf("jsidplay2") !== -1) $("#page .viz-jsidplay2").addClass("disabled");
 			if (this.cache.incompatible.indexOf("websid") !== -1) $("#page .viz-websid").addClass("disabled");
 			if (this.cache.incompatible.indexOf("jssid") !== -1) $("#page .viz-jssid").addClass("disabled");
@@ -1158,9 +1159,10 @@ Browser.prototype = {
 					var files = "";
 
 					// Disable emulators/handlers in the drop-down according to parent folder attributes
-					$("#dropdown-emulator").styledOptionState("jsidplay2 websid legacy jssid asid lemon youtube download", "enabled");
+					$("#dropdown-emulator").styledOptionState("resid jsidplay2 websid legacy jssid asid lemon youtube download", "enabled");
 					$("#page .viz-emu").removeClass("disabled");
 					$("#dropdown-emulator").styledOptionState(data.incompatible, "disabled");
+					if (data.incompatible.indexOf("resid") !== -1) $("#page .viz-resid").addClass("disabled");
 					if (data.incompatible.indexOf("jsidplay2") !== -1) $("#page .viz-jsidplay2").addClass("disabled");
 					if (data.incompatible.indexOf("websid") !== -1) $("#page .viz-websid").addClass("disabled");
 					if (data.incompatible.indexOf("jssid") !== -1) $("#page .viz-jssid").addClass("disabled");
