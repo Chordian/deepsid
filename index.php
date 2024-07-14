@@ -104,13 +104,9 @@
 			<script type="text/javascript" src="http://www.wothke.ch/tmp/backend_websid.js"></script>
 		<?php else: ?>
 			<script type="text/javascript" src="js/handlers/scriptprocessor_player.min.js"></script>
-			<?php if (isEmulator('legacy')): 		// WebSid Legacy ?>
-				<script type="text/javascript" src="js/handlers/backend_tinyrsid.js"></script>
-			<?php elseif (isEmulator('websid')): 	// WebSid HQ ?>
-				<script type="text/javascript" src="js/handlers/backend_websid.js"></script>
-			<?php else: 							// reSID ?>
-				<script type="text/javascript" src="js/handlers/backend_websidplay.js"></script>
-			<?php endif ?>
+			<script type="text/javascript" src="js/handlers/backend_tinyrsid.js"></script>
+			<script type="text/javascript" src="js/handlers/backend_websid.js"></script>
+			<script type="text/javascript" src="js/handlers/backend_websidplay.js"></script>
 		<?php endif ?>
 
 		<script type="text/javascript" src="js/handlers/jsidplay2.js"></script>
