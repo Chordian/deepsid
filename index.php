@@ -126,11 +126,6 @@
 			<script type="text/javascript" src="http://www.wothke.ch/tmp/channelstreamer.js"></script>
 		<?php else: ?>
 			<script type="text/javascript" src="js/handlers/channelstreamer.min.js"></script>
-			<?php if (isEmulator('legacy')): ?>
-				<!--<script type="text/javascript" src="js/scope_legacy.js"></script>-->
-			<?php elseif (isEmulator('websid')): ?>
-				<!--<script type="text/javascript" src="js/scope.js"></script>--> <!-- <= JW's sid_tracer.js -->
-			<?php endif ?>
 		<?php endif ?>
 		<script type="text/javascript" src="js/viz.js"></script>
 		<script type="text/javascript" src="js/main.js"></script>
@@ -931,6 +926,7 @@
 						<span id="visuals-toggle">
 							<label for="tab-visuals-toggle" class="unselectable" style="margin-right:1px;">Enabled</label>
 							<button id="tab-visuals-toggle" class="button-edit button-toggle button-on">On</button>
+							<span class="viz-warning viz-msg-enable" style="position:relative;top:-1px;"> <img src="images/composer_arrowleft.svg" style="position:relative;top:5px;height:18px;" alt="" /> Click this to enable the visuals</span>
 						</span>
 						<span id="memory-lc">
 							<label for="memory-lc-toggle" class="unselectable" style="margin-right:1px;">Lower case C64 font</label>
@@ -1694,6 +1690,11 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>July 15, 2024</h3>
+						<ul>
+							<li>Fixed a bug when refreshing the site while using other SID handlers than WebSid HQ, Legacy or reSID.</li>
+						</ul>
 
 						<h3>July 14, 2024</h3>
 						<ul>

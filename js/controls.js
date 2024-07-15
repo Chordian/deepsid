@@ -452,12 +452,7 @@ Controls.prototype = {
 					$("#search-box").val('"'+tag+'"').trigger("keyup");
 					$("#search-button").trigger("click");
 				} else if (event.target.className == "set-websid") {
-					var emulator = isLegacyWebSid ? "legacy" : "websid";
-					var stopic = $("#sundry-tabs .selected").attr("data-topic");
-					if (stopic === "filter" || stopic === "stereo")
-						emulator = "websid"; // Filter and stereo tabs need the HQ version only
-					// Button in a sundry box for forcing WebSid emulator
-					$("#dropdown-emulator").styledSetValue(emulator).next("div.styledSelect").trigger("change");
+					$("#dropdown-emulator").styledSetValue("websid").next("div.styledSelect").trigger("change");
 				} else if (event.target.className == "set-6581") {
 					$("#sid-model").trigger("click");
 				}

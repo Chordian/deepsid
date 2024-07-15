@@ -25,6 +25,8 @@ JSIDPlay2 UPDATE v2 TASKS:
 
 --------------
 
+- Make reSID time bar in black scheme slightly darker - it's faded too light brown.
+
 - Annex text: Also, add "Mastodon" to the list of social links.
 
 - When clicking an emulator button in visuals and it refreshes page, keep visuals selected.
@@ -42,6 +44,8 @@ JSIDPlay2 UPDATE v2 TASKS:
 
 - BUG: https://deepsid.chordian.net/?file=/SID%20Happens/2023/Siggraph_Invitro_4SID.sid
   has no database information!? (Maybe it needs to be moved out of there?)
+
+- BUG: Seems the cookie code for remembering main volume doesn't work anymore.
 
 - BUG: https://deepsid.chordian.net/?file=/DEMOS/M-R/Muso_64_BASIC.sid
   This and the non-BASIC version erroneously refers to themselves in the STIL text.

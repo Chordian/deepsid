@@ -159,6 +159,7 @@
 
 	--color-viz-msg-emu:			var(--color-pwd-bad);
 	--color-viz-msg-buffer:			#00a;
+	--color-viz-msg-enable:			var(--color-pwd-good);
 
 	--color-sid-row-error-entry:	#a33;				/* Error colors for SID file row that can't be played */
 	--color-sid-row-error-info:		#cc8282;
@@ -544,6 +545,7 @@
 
 	--color-viz-msg-emu:			#f44;
 	--color-viz-msg-buffer:			#88f;
+	--color-viz-msg-enable:			#2d2;
 
 	--color-sid-row-error-entry:	#fdd;
 	--color-sid-row-error-bg:		#382828;
@@ -1358,7 +1360,7 @@ small.u2 { margin-left: 2px; }
 			filter: var(--svg-filter-viz-msg-buffer);
 		}
 
-		.viz-msg-emu	{
+		.viz-msg-emu {
 			color: var(--color-viz-msg-emu);
 		}
 
@@ -1366,6 +1368,10 @@ small.u2 { margin-left: 2px; }
 			color: var(--color-viz-msg-buffer);
 			top: 0;
 			left: 18px;
+		}
+
+		.viz-msg-enable {
+			color: var(--color-viz-msg-enable);
 		}
 
 	.viz-buffer {

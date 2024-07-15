@@ -293,6 +293,7 @@ Viz.prototype = {
 			if (event.target.id === "tab-visuals-toggle") {
 				if ($this.hasClass("button-off")) {
 					// Turn the entire VISUALS tab ON
+					$("#visuals-toggle .viz-msg-enable").hide();
 					if ($("#tabs .selected").attr("data-topic") === "visuals")
 						$("#topic-visuals").show();
 					var visual = $("#sticky-visuals .visuals-buttons").attr("data-selected-visual");
@@ -305,6 +306,7 @@ Viz.prototype = {
 				} else {
 					// Turn the entire VISUALS tab OFF
 					$("#topic-visuals,#memory-lc,#sticky-visuals .waveform-colors").hide();
+					$("#visuals-toggle .viz-msg-enable").show();
 					$("#sticky-visuals .visuals-buttons").append('<div id="no-visuals"></div>');
 					this.visualsEnabled = SID.jp2SidWrites = false;
 				}
@@ -571,13 +573,6 @@ Viz.prototype = {
 	 */
 	supportedViewButtons: function(emulator) {
 		switch (emulator) {
-			/*case "resid":
-				// @resid Only MEMO view works for now
-				this.stateViewButton("piano", "disabled");
-				this.stateViewButton("graph", "disabled");
-				this.stateViewButton("memory", "enabled");
-				this.stateViewButton("stats", "disabled");
-				break;*/
 			case "jsidplay2":
 				// Doesn't support MEMO view
 				this.stateViewButton("piano", "enabled");
@@ -927,24 +922,24 @@ Viz.prototype = {
 			canvas += '<canvas class="scope" id="scope'+voice+'" style="display:none;"></canvas>';
 		$("#stopic-osc").empty().append(canvas+'<div class="sundryMsg" style="display:none;"></div>');
 
-		if (isReSid) return;
+		if (SID.emulator == "websid" || SID.emulator == "legacy") {
+			this.scopeVoice1 = new VoiceDisplay("scope1", Tracer, function() { return Tracer.getData(0); }, this.scopeMode);
+			this.scopeVoice2 = new VoiceDisplay("scope2", Tracer, function() { return Tracer.getData(1); }, this.scopeMode);
+			this.scopeVoice3 = new VoiceDisplay("scope3", Tracer, function() { return Tracer.getData(2); }, this.scopeMode);
+			this.scopeVoice4 = new VoiceDisplay("scope4", Tracer, function() { return Tracer.getData(3); }, this.scopeMode);
 
-		this.scopeVoice1 = new VoiceDisplay("scope1", Tracer, function() { return Tracer.getData(0); }, this.scopeMode);
-		this.scopeVoice2 = new VoiceDisplay("scope2", Tracer, function() { return Tracer.getData(1); }, this.scopeMode);
-		this.scopeVoice3 = new VoiceDisplay("scope3", Tracer, function() { return Tracer.getData(2); }, this.scopeMode);
-		this.scopeVoice4 = new VoiceDisplay("scope4", Tracer, function() { return Tracer.getData(3); }, this.scopeMode);
+			this.scopeVoice1.setSize(512, 70);
+			this.scopeVoice2.setSize(512, 70);
+			this.scopeVoice3.setSize(512, 70);
+			this.scopeVoice4.setSize(512, 70);
 
-		this.scopeVoice1.setSize(512, 70);
-		this.scopeVoice2.setSize(512, 70);
-		this.scopeVoice3.setSize(512, 70);
-		this.scopeVoice4.setSize(512, 70);
-
-		for (var chip = 1; chip < 4; chip++) {
-			for (var voice = 1; voice < 4; voice++)
-				$("#stereo-s"+chip+"v"+voice+"-scope").remove("canvas").append('<canvas class="scope" id="scope-s'+chip+'v'+voice+'"></canvas>');
+			for (var chip = 1; chip < 4; chip++) {
+				for (var voice = 1; voice < 4; voice++)
+					$("#stereo-s"+chip+"v"+voice+"-scope").remove("canvas").append('<canvas class="scope" id="scope-s'+chip+'v'+voice+'"></canvas>');
+			}
 		}
 
-		if (!isLegacyWebSid) {
+		if (SID.emulator == "websid") {
 			this.scopeStereo[0][0] = new VoiceDisplay("scope-s1v1", Tracer, function() { return Tracer.getData(0); }, false);
 			this.scopeStereo[0][1] = new VoiceDisplay("scope-s1v2", Tracer, function() { return Tracer.getData(1); }, false);
 			this.scopeStereo[0][2] = new VoiceDisplay("scope-s1v3", Tracer, function() { return Tracer.getData(2); }, false);

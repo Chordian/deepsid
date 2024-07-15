@@ -10,9 +10,6 @@ var cacheTabScrollPos = cachePlayerTabScrollPos = cacheGB64TabScrollPos = cacheR
 var sundryToggle = true, recommended = forum = players = $trAutoPlay = null, showTags, fastForwarding = false;
 var logCount = 1000, isMobile, miniPlayer;
 
-var isReSid = $("script[src='js/handlers/backend_websidplay.js']").length;
-var isWebSid = $("script[src='js/handlers/backend_websid.js']").length;
-var isLegacyWebSid = $("script[src='js/handlers/backend_tinyrsid.js']").length;
 var isMobile = $("body").attr("data-mobile") !== "0";
 var isNotips = $("body").attr("data-notips") !== "0";
 var miniPlayer = $("body").attr("data-mini");
