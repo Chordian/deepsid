@@ -19,12 +19,12 @@ List
        - It's a good idea to copy a row that has minimal information and then adapt.
        - If a composer seems to be involved in games more than scene stuff, you should
          consider changing the 'focus' field from SCENER to PRO or BOTH instead. Maybe
-         also add 'affiation' while you're at it.
+         also add 'affiliation' while you're at it.
 
   3. Search for avatar images and add them.
 
        - Go through the new folders that has a chance of finding a mugshot.
-       - Search Facebook, Linkedin - anything you can think of.
+       - Search Facebook, LinkedIn - anything you can think of.
        - The ideal size for a picture is 368x368 pixels. Also consider adding gamma.
 
   4. Go through all new folders and files and add tags and star ratings.

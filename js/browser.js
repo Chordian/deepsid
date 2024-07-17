@@ -1098,9 +1098,9 @@ Browser.prototype = {
 			ctrls.state("root/back", "enabled");
 
 			// Disable emulators/handlers in the drop-down according to parent folder attributes
-			$("#dropdown-emulator").styledOptionState("resid jsidplay2 websid legacy jssid asid lemon youtube download", "enabled");
+			$("#dropdown-topleft-emulator,#dropdown-settings-emulator").styledOptionState("resid jsidplay2 websid legacy jssid asid lemon youtube download", "enabled");
 			$("#page .viz-emu").removeClass("disabled");
-			$("#dropdown-emulator").styledOptionState(this.cache.incompatible, "disabled");
+			$("#dropdown-topleft-emulator,#dropdown-settings-emulator").styledOptionState(this.cache.incompatible, "disabled");
 			if (this.cache.incompatible.indexOf("resid") !== -1) $("#page .viz-resid").addClass("disabled");
 			if (this.cache.incompatible.indexOf("jsidplay2") !== -1) $("#page .viz-jsidplay2").addClass("disabled");
 			if (this.cache.incompatible.indexOf("websid") !== -1) $("#page .viz-websid").addClass("disabled");
@@ -1159,9 +1159,9 @@ Browser.prototype = {
 					var files = "";
 
 					// Disable emulators/handlers in the drop-down according to parent folder attributes
-					$("#dropdown-emulator").styledOptionState("resid jsidplay2 websid legacy jssid asid lemon youtube download", "enabled");
+					$("#dropdown-topleft-emulator,#dropdown-settings-emulator").styledOptionState("resid jsidplay2 websid legacy jssid asid lemon youtube download", "enabled");
 					$("#page .viz-emu").removeClass("disabled");
-					$("#dropdown-emulator").styledOptionState(data.incompatible, "disabled");
+					$("#dropdown-topleft-emulator,#dropdown-settings-emulator").styledOptionState(data.incompatible, "disabled");
 					if (data.incompatible.indexOf("resid") !== -1) $("#page .viz-resid").addClass("disabled");
 					if (data.incompatible.indexOf("jsidplay2") !== -1) $("#page .viz-jsidplay2").addClass("disabled");
 					if (data.incompatible.indexOf("websid") !== -1) $("#page .viz-websid").addClass("disabled");
@@ -1219,8 +1219,8 @@ Browser.prototype = {
 						this.previousOverridePath = "_SID Happens";
 					}
 
-					if (SID.emulator == "youtube" || SID.emulator == "download") {
-						// The 'Visuals' tab is useless to the 'YouTube' and 'Download' SID handlers
+					if (["lemon", "youtube", "download"].includes(SID.emulator)) {
+						// The 'Visuals' tab is useless to these SID handlers
 						$("#tab-visuals").addClass("disabled");
 						if ($selected.attr("data-topic") === "visuals")
 							$("#tab-profile").trigger("click");

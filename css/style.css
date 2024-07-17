@@ -652,7 +652,7 @@
 
 	--color-timebar-bg:				linear-gradient(to bottom, #1c1c1c 0%,#3a3a3a 75%);
 	--color-timebar-border:			#555;
-	--color-timebar-resid:			linear-gradient(to bottom, #b0705b 20%,#88503f 100%); 	/* #a64; */
+	--color-timebar-resid:			linear-gradient(to bottom, #a0604b 20%,#78402f 100%); 	/* #964; */
 	--color-timebar-jsidplay2:		linear-gradient(to bottom, #616fbb 20%,#44529d 100%); 	/* #44529d */
 	--color-timebar-websid:			linear-gradient(to bottom, #616fbb 20%,#44529d 100%); 	/* #44529d */
 	--color-timebar-jssid:			linear-gradient(to bottom, #368e39 20%,#266329 100%); 	/* #266329 */
@@ -1073,6 +1073,14 @@ small.u2 { margin-left: 2px; }
 		font-family: "Asap Condensed", sans-serif;
 	}
 
+	/* Additional styling for the emulator drop-down box in the settings */
+	#topic-settings .emulator {
+		position: relative;
+		top: 3px;
+		width: 136px;
+		margin-left: 5px;
+	}
+
 	/* Additional styling for the MIDI selector drop-down box for ASID */
 	/*#asid-midi .midi-outputs {
 		margin-bottom: 10px;
@@ -1322,6 +1330,10 @@ small.u2 { margin-left: 2px; }
 			margin-top: 0;
 		}
 
+		#topic-settings h4 {
+			font-size: 18.5px;
+		}
+
 		#topic-settings label b,
 		#dialog-upload-wiz3 label b,
 		#dialog-upload-wiz5 label b {
@@ -1382,7 +1394,8 @@ small.u2 { margin-left: 2px; }
 			margin-right: 4px !important;
 		}
 
-		.dropdown-buffer {
+		.dropdown-buffer,
+		.dropdown-unstyled {
 			position: relative;
 			top: 1px;
 			font-size: 13px;
@@ -4576,19 +4589,6 @@ input[type=range]::-ms-track {
 				top: 12px;
 				left: 120px;
 			}
-
-				/* An overlay to disable all four buttons at once */
-				/* @todo Need an overlay to match the black color scheme too
-				         or remove if disabling buttons instead later */
-				#no-visuals {
-					position: absolute;
-					top: -4px;
-					left: -4px;
-					width: 102%;
-					height: 130%;
-					background: #fff;
-					opacity: 0.8;
-				}
 
 				#sticky-visuals .visuals-buttons > button {
 					height: 27px;

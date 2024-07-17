@@ -518,7 +518,7 @@
 				<div id="logo" class="unselectable">D e e p S I D
 					<?php if (MiniPlayer()) echo '<div style="position:absolute;top:24px;left:200px;white-space:nowrap;">mini-player</div>'; ?>
 				</div>
-				<select id="dropdown-emulator" name="select-emulator" style="visibility:hidden;">
+				<select id="dropdown-topleft-emulator" name="select-topleft-emulator" style="visibility:hidden;">
 					<option value="resid">reSID (BETA)</option>
 					<!--<option value="resid">reSID (WebSidPlay)</option>-->
 					<option value="jsidplay2">JSIDPlay2 (BETA)</option>
@@ -1350,29 +1350,6 @@
 
 								<div class="space splitline"></div>
 
-								<h3>Buffer size</h3>
-								<p>If the currently selected SID handler supports it, you can change its buffer size here.
-									Higher values can reduce stuttering or eliminate it entirely.
-									However, some emulators also update the <b>Visuals</b> tab slowly when using higher values.
-								</p>
-
-								<select id="dropdown-settings-buffer" class="dropdown-buffer">
-									<!--<option value="256">256</option>
-									<option value="512">512</option>-->
-									<option value="1024">1024</option>
-									<option value="2048">2048</option>
-									<option value="4096">4096</option>
-									<option value="8192">8192</option>
-									<option value="16384" selected="selected">16384</option>
-									<option class="jsidplay2" value="24000" style="display:none;">24000</option>
-									<option class="jsidplay2" value="32000" style="display:none;">32000</option>
-									<option class="jsidplay2" value="40000" style="display:none;">40000</option>
-									<option class="jsidplay2" value="48000" style="display:none;">48000</option>
-								</select>
-								<label for="dropdown-settings-buffer" class="dropdown-buffer-label unselectable">Buffer size <span id="settings-emu-msg" style="display:none;">for <span id="settings-emu-type">?</span> emulator<span></label>
-
-								<div class="space splitline"></div>
-
 								<h3>Defaults</h3>
 
 								<button id="setting-first-subtune" class="button-edit button-toggle button-off">Off</button>
@@ -1405,6 +1382,123 @@
 
 								<button id="setting-skip-short" class="button-edit button-toggle button-off">Off</button>
 								<label for="setting-skip-short" class="unselectable">Auto-progress should automatically skip songs and sub tunes that lasts <b>less than ten seconds</b></label>
+
+								<div class="space splitline"></div>
+
+								<h3>SID handler
+									<select id="dropdown-settings-emulator" name="select-settings-emulator">
+										<option value="resid">reSID (BETA)</option>
+										<!--<option value="resid">reSID (WebSidPlay)</option>-->
+										<option value="jsidplay2">JSIDPlay2 (BETA)</option>
+										<!--<option value="jsidplay2">JSIDPlay2 (reSID)</option>-->
+										<option value="websid">WebSid emulator</option>
+										<option value="legacy">WebSid (Legacy)</option>
+										<option value="jssid">Hermit's (+FM)</option>
+										<option value="asid">ASID (MIDI)</option>
+										<option value="lemon">Lemon's MP3 files</option>
+										<option value="youtube">YouTube videos</option>
+										<option value="download">Download SID file</option>
+									</select>
+								</h3>
+
+								<p>These are settings that applies to the currently selected SID handler.</p>
+
+								<h4>Buffer size</h4>
+								<p>If the currently selected SID handler supports it, you can change its buffer size here.
+									Higher values can reduce stuttering or eliminate it entirely.
+									However, some emulators also update the <b>Visuals</b> tab slowly when using higher values.
+								</p>
+
+								<select id="dropdown-settings-buffer" class="dropdown-buffer">
+									<!--<option value="256">256</option>
+									<option value="512">512</option>-->
+									<option value="1024">1024</option>
+									<option value="2048">2048</option>
+									<option value="4096">4096</option>
+									<option value="8192">8192</option>
+									<option value="16384" selected="selected">16384</option>
+									<option class="jsidplay2" value="24000" style="display:none;">24000</option>
+									<option class="jsidplay2" value="32000" style="display:none;">32000</option>
+									<option class="jsidplay2" value="40000" style="display:none;">40000</option>
+									<option class="jsidplay2" value="48000" style="display:none;">48000</option>
+								</select>
+								<label for="dropdown-settings-buffer" class="dropdown-buffer-label unselectable">Buffer size <span id="settings-emu-msg" style="display:none;">for <span id="settings-emu-type">?</span> emulator<span></label>
+
+								<h4>Advanced settings</h4>
+								<p>This section will change if you select a different SID handler.</p>
+								<div class="settings-advanced-resid settings-advanced-websid settings-advanced-legacy settings-advanced-jssid settings-advanced-asid settings-advanced-lemon settings-advanced-youtube settings-advanced-download settings-advanced">
+									<label class="dropdown-unstyled-label unselectable">There are no advanced settings for this SID handler.</label>
+								</div>
+								<div class="settings-advanced-jsidplay2 settings-advanced">
+									<select id="dropdown-adv-jsidplay2-defemu" class="dropdown-unstyled">
+										<option value="RESID" selected="selected">reSID</option>
+										<option value="RESIDFP">reSIDfp</option>
+									</select>
+									<label for="dropdown-adv-jsidplay2-defemu" class="dropdown-unstyled-label unselectable">Default emulation</label>
+
+									<select id="dropdown-adv-jsidplay2-sampmethod" class="dropdown-unstyled" style="margin-left:10px;">
+										<option value="DECIMATE" selected="selected">Decimate</option>
+										<option value="RESAMPLE">Resample</option>
+									</select>
+									<label for="dropdown-adv-jsidplay2-sampmethod" class="dropdown-unstyled-label unselectable">Sampling method</label><span style="font-family:'Asap Condensed',sans-serif;font-size:14px;">(Resample is better quality but consumes more CPU time)</span>
+
+									<div class="space"></div>
+
+									<div id="filname-jsidplay2-resid" style="display:none;">
+										<select id="dropdown-adv-jsidplay2-fil6581resid" class="dropdown-unstyled">
+											<option>FilterLightest6581</option>
+											<option>FilterLighter6581</option>
+											<option>FilterLight6581</option>
+											<option selected="selected">FilterAverage6581</option>
+											<option>FilterDark6581</option>
+											<option>FilterDarker6581</option>
+											<option>FilterDarkest6581</option>
+										</select>
+										<label for="dropdown-adv-jsidplay2-fil6581resid" class="dropdown-unstyled-label unselectable">Filter name (6581)</label>
+
+										<select id="dropdown-adv-jsidplay2-fil8580resid" class="dropdown-unstyled" style="margin-left:10px;">
+											<option>FilterLight8580</option>
+											<option selected="selected">FilterAverage8580</option>
+											<option>FilterDark8580</option>
+										</select>
+										<label for="dropdown-adv-jsidplay2-fil8580resid" class="dropdown-unstyled-label unselectable">Filter name (8580)</label>
+									</div>
+
+									<div id="filname-jsidplay2-residfp" style="display:none;">
+										<select id="dropdown-adv-jsidplay2-fil6581residfp" class="dropdown-unstyled">
+											<option>FilterReSID6581</option>
+											<option selected="selected">FilterAlankila6581R4AR_3789</option>
+											<option>FilterAlankila6581R3_3984_1</option>
+											<option>FilterAlankila6581R3_3984_2</option>
+											<option>FilterLordNightmare6581R3_4285</option>
+											<option>FilterLordNightmare6581R3_4485</option>
+											<option>FilterLordNightmare6581R4_1986S</option>
+											<option>FilterZrX6581R3_0384</option>
+											<option>FilterZrX6581R3_1984</option>
+											<option>FilterZrx6581R3_3684</option>
+											<option>FilterZrx6581R3_3985</option>
+											<option>FilterZrx6581R4AR_2286</option>
+											<option>FilterTrurl6581R3_0784</option>
+											<option>FilterTrurl6581R3_0486S</option>
+											<option>FilterTrurl6581R3_3384</option>
+											<option>FilterTrurl6581R3_4885</option>
+											<option>FilterTrurl6581R4AR_3789</option>
+											<option>FilterTrurl6581R4AR_4486</option>
+											<option>FilterNata6581R3_2083</option>
+											<option>FilterGrue6581R4AR_3488</option>
+											<option>FilterKruLLo</option>
+											<option>FilterEnigma6581R3_4885</option>
+											<option>FilterEnigma6581R3_1585</option>
+										</select>
+										<label for="dropdown-adv-jsidplay2-fil6581residfp" class="dropdown-unstyled-label unselectable">Filter name (6581)</label>
+
+										<select id="dropdown-adv-jsidplay2-fil8580residfp" class="dropdown-unstyled" style="margin-left:10px;">
+											<option>FilterTrurl8580R5_1489</option>
+											<option selected="selected">FilterTrurl8580R5_3691</option>
+										</select>
+										<label for="dropdown-adv-jsidplay2-fil8580residfp" class="dropdown-unstyled-label unselectable">Filter name (8580)</label>
+									</div>
+								</div>
 							</div>
 						<?php endif ?>
 					</div>
@@ -1690,6 +1784,18 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>July 17, 2024</h3>
+						<ul>
+							<li>Advanced settings has been added in the settings tab. Its contents will depend on the SID handler chosen. There
+								are only advanced settings for JSIDPlay2 to begin with.</li>
+							<li>Moved the buffer size in the settings tab into the new section for advanced settings.</li>
+							<li>Added some advanced settings for the JSIDPlay2 emulator &ndash; default emulation (<i>reSID</i> or <i>reSIDfp</i>) and
+								sampling method (<i>Decimate</i> or <i>Resample</i>), plus a ton of filter names for 6581 and 8580 chips.</li>
+							<li>Selecting a different SID handler now always refreshes the site, instead of just a select few. To make up for this, the tab
+								you're in is remembered every time you change the SID handler.</li>
+							<li>All new files in HVSC #81 are now connected to CSDb entries.</li>
+						</ul>
 
 						<h3>July 15, 2024</h3>
 						<ul>

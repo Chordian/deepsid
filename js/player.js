@@ -9,7 +9,7 @@ const YOUTUBE_BLANK = "ENmZnF2M41A"; // Animated DeepSID logo
 function SIDPlayer(emulator) {
 
 	this.paused = false;
-	this.stopped = false;
+	this.stopped = true;
 	this.fastForward = false;
 
 	this.ytReady = false;
@@ -30,9 +30,24 @@ function SIDPlayer(emulator) {
 		jssid:		16384,
 	};
 
+	this.advancedSetting = {
+		resid:		{},
+		jsidplay2:	{
+			"defemu":			"RESID",
+			"sampmethod":		"DECIMATE",
+			"fil6581resid":		"FilterAverage6581",
+			"fil8580resid":		"FilterAverage8580",
+			"fil6581residfp":	"FilterAlankila6581R4AR_3789",
+			"fil8580residfp":	"FilterTrurl8580R5_3691",
+		},
+		websid:		{},
+		legacy:		{},
+		jssid:		{},
+	}
+
 	this.jp2Loading = true;
 	this.jp2PlayTime = 0;
-	this.jp2SidModel = "8580";
+	this.jp2SidModel = "MOS8580";
 
 	this.jp2SidWrites = true;			// _jp2Play()
 
@@ -94,7 +109,9 @@ function SIDPlayer(emulator) {
 			 * 
 			 * Search for "@resid" for things to be updated later
 			 */
-			
+
+			$("#settings-sid-handler").empty().append("reSID (WebSidPlay)");
+
 			if (typeof reSIDBackend === "undefined") reSIDBackend = new SIDPlayBackendAdapter(this.BASIC_ROM, this.CHAR_ROM, this.KERNAL_ROM);
 			reSIDBackend.setProcessorBufSize($("body").attr("data-mobile") !== "0" ? 16384 : this.bufferSize[this.emulator]);
 
@@ -132,6 +149,9 @@ function SIDPlayer(emulator) {
 				latencyHint: "interactive",
 				sampleRate: 48000,
 			});
+
+			this.applyAdvancedSetting("jsidplay2", "defemu", "RESID");
+			this.applyAdvancedSetting("jsidplay2", "sampmethod", "DECIMATE");
 
 			this.emulatorFlags.supportFaster	= true;
 			this.emulatorFlags.supportEncoding	= true;
@@ -499,6 +519,9 @@ SIDPlayer.prototype = {
 					if (browser.playlist[browser.songPos].clockspeed.substr(0, 4).toLowerCase() == "ntsc")
 						clockspeed = 60; // This is an NTSC tune
 
+					// Set as boolean depending on advanced setting
+					var samplingMethod = this.advancedSetting["jsidplay2"]["sampmethod"] == "RESAMPLE";
+
 					// Everything starts with INITIALISE where basic configuration is provided
 					this.jp2Worker.postMessage({
 						eventType: "INITIALISE",
@@ -507,7 +530,7 @@ SIDPlayer.prototype = {
 							bufferSize: 144000,				// How many clock ticks to advance per call (144000)
 							audioBufferSize: this.bufferSize[this.emulator], // Audio buffer fill level (max is 48000)
 							samplingRate: 48000,			// Sampling rate
-							samplingMethodResample: false,	// Resampling method DECIMATE (false) or RESAMPLE (true)
+							samplingMethodResample: samplingMethod, // Sampling method DECIMATE (false) or RESAMPLE (true)
 							reverbBypass: true,				// Reverb on (false) or off (true)
 							defaultClockSpeed: clockspeed,	// PAL (50) or NTSC (60)
 							jiffyDosInstalled: false,		// Floppy speeder off/on
@@ -561,8 +584,8 @@ SIDPlayer.prototype = {
 
 						} else if (eventType === "SID_WRITE") {
 
-							// The worker notifies about a SID write to the SID chip. We can
-							// ignore/report or send it to another SID chip implementation.
+							// Enable this to monitor everything the event outputs
+							console.log("relTime=" + eventData.relTime + ", addr=" + eventData.addr + ", value=" + eventData.value);
 
 							// Store SID value in an cache array with all registers
 							var sidRegister = false, sidValue = eventData.value,
@@ -1008,13 +1031,35 @@ SIDPlayer.prototype = {
 	_jp2Play: function() {
 
 		// The SID model can only be set before starting the tune
-		this.jp2SidModel = browser.playlist[browser.songPos].sidmodel == "MOS6581" ? "6581" : "8580";
+		this.jp2SidModel = browser.playlist[browser.songPos].sidmodel;
 		this.jp2Worker.postMessage({
 			eventType: "SET_DEFAULT_CHIP_MODEL",
 			eventData: {
-				chipModel: "MOS" + this.jp2SidModel
+				chipModel: this.jp2SidModel
 			},
 		});
+
+		// Set default emulation to RESID or RESIDFP
+		var defEmu = SID.advancedSetting["jsidplay2"]["defemu"];
+		this.jp2Worker.postMessage({
+			eventType: "SET_DEFAULT_EMULATION",
+			eventData: {
+				emulation: defEmu
+			},
+		});
+
+		// Select a filter name (for now it just applies to all SID chips in 2SID and 3SID tunes)
+		for (var chip = 0; chip <= 2; chip++) {
+			this.jp2Worker.postMessage({
+				eventType: "SET_FILTER_NAME",
+				eventData: {
+					emulation: defEmu,
+					chipModel: this.jp2SidModel,
+					sidNum: chip,
+					filterName: SID.advancedSetting["jsidplay2"]["fil" + this.jp2SidModel.substring(3) + defEmu.toLowerCase()]
+				},
+			});
+		}
 
 		this._jp2SetStereo();
 		this.jp2Worker.postMessage({
@@ -1990,7 +2035,6 @@ SIDPlayer.prototype = {
 		switch (this.emulator) {
 			case "resid":
 				try {
-					// @resid Not implemented yet
 					var value = reSIDBackend.getSIDRegister(chip, register);
 				} catch(e) { /* Ignore type errors */ }
 				return value;
@@ -2015,7 +2059,6 @@ SIDPlayer.prototype = {
 			case "legacy":
 				if (chip && typeof SIDBackend.sidFileHeader != "undefined")
 					// Use the SID file header to figure out the SID chip address
-					// NOTE: A line must be inserted in 'backend_tinyrsid.js' for this to work!
 					register += (SIDBackend.sidFileHeader[chip == 1 ? 0x7A : 0x7B] << 4) - 0x400;
 				return SIDBackend.getRegisterSID(register);
 			case "jssid":
@@ -2206,5 +2249,21 @@ SIDPlayer.prototype = {
 				sidToRead: this.jp2SIDToRead,		// Read FIRST_SID, SECOND_SID or THIRD_SID
 			},
 		});
+	},
+
+	/**
+	 * Apply an advanced setting as previously stored or set to a default.
+	 * 
+	 * @param {string} emulator		Emulator, e.g. "resid", "jsidplay2", etc.
+	 * @param {string} setting 		Setting in one word, e.g. "defemu" or "sampmethod"
+	 * @param {string} preset 		Default value if not in local storage
+	 * 
+	 * @return {string}				The value of the advanced setting
+	 */
+	applyAdvancedSetting: function(emulator, setting, preset) {
+		var storedValue = localStorage.getItem("advanced_setting_" + emulator + "_" + setting);
+		this.advancedSetting[emulator][setting] = storedValue ? storedValue : preset;
+
+		return this.advancedSetting[emulator][setting];
 	},
 }

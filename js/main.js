@@ -73,9 +73,6 @@ $(function() { // DOM ready
 	browser = new Browser();
 	viz = new Viz(emulator);
 
-	// JSIDPlay2 can't slow down while playing
-	viz.stateVisualsButton("#piano-slow", emulator == "jsidplay2" ? "disabled" : "enabled");
-
 	// Set the main volume that was used the last time
 	var vol = localStorage.getItem("volume");
 	if (vol == null) vol = 1;
@@ -97,11 +94,13 @@ $(function() { // DOM ready
 		});
 	}.bind(this));
 	
-	$("#dropdown-emulator")
+	$("#dropdown-topleft-emulator,#dropdown-settings-emulator")
 		.styledSelect("emulator")
 		.styledSetValue(emulator);
 
-	viz.supportedViewButtons(emulator);
+	// Show the appropriate advanced settings for the SID handler
+	$("#topic-settings .settings-advanced").hide();
+	$("#topic-settings .settings-advanced-" + emulator).show();
 
 	// Doesn't work correctly and I can't test it as I don't have a MIDI device
 	/*$("#asid-midi-outputs")
@@ -256,7 +255,7 @@ $(function() { // DOM ready
 
 					ctrls.state("root/back", "enabled");
 
-					$("#dropdown-emulator")
+					$("#dropdown-topleft-emulator,#dropdown-settings-emulator")
 						.styledOptionState("resid jsidplay2 websid legacy jssid asid", "enabled")
 						.styledOptionState("lemon youtube", "disabled");
 					$("#path").css("top", "5px").empty().append("Temporary emulator testing");
@@ -519,128 +518,32 @@ $(function() { // DOM ready
 	 * When changing one of the *STYLED* drop-down boxes.
 	 * 
 	 * Used here by the SID handler.
+	 * 
+	 * NOTE: As of July 2024, all SID handlers now refresh the page. Most of the SID
+	 * handlers already did this, and it made the code so much easier to maintain.
 	 */
 	$("div.styledSelect").change(function() {
-		switch ($(this).prev("select").attr("name")) {
-			case "select-emulator":
-				// Selecting a different SID handler (emulator, etc.)
-				var $selected = $("#folders tr.selected");
-				var isRowSelected = $selected.length,
-					wasPlaying = ctrls.isPlaying(),
-					mainVol = SID.mainVol,
-					prevEmulator = SID.emulator;
-				try {
-					SID.unload();
-				} catch (err) {}
-				ctrls.selectButton($("#stop"));
-				viz.allEmuButtonsOff();
+		// Get the choice from the drop-down box that was changed
+		var emulator = $(this).prev("select").attr("name") == "select-topleft-emulator"
+			? $("#dropdown-topleft-emulator").styledGetValue()
+			: $("#dropdown-settings-emulator").styledGetValue();
+		docCookies.setItem("emulator", emulator, "Infinity", "/");
 
-				var emulator = $("#dropdown-emulator").styledGetValue();
-				docCookies.setItem("emulator", emulator, "Infinity", "/");
-				viz.emulator = emulator.toLowerCase();
-				viz.setBufferSize(emulator);
-				viz.setEmuButton(emulator);
-				viz.setBufferMessage(emulator);
+		// Remember where we parked
+		localStorage.setItem("tab", $("#tabs .selected").attr("data-topic"));
 
-				// Jürgen's emulators has a hard time co-existing so refresh the browser to be sure it works
-				// YouTube is also required to refresh for 100% stability (and because of autoplay policy)
-				if (["resid", "websid", "legacy", "youtube"].includes(emulator)) {
-					window.location.reload();
-					return false;
-				}
-
-				SID = null;
-				delete SID;
-				SID = new SIDPlayer(emulator);
-				SID.mainVol = mainVol;
-				SID.setVolume(1);
-
-				HandleTopBox(emulator);
-
-				// Turn off visuals as default for JSIDPlay2 to save on CPU time
-				ToggleVisuals();
-
-				if (["lemon", "youtube", "download"].includes(emulator)) {
-					// It doesn't make sense to make the 'Visuals' tab available here
-					$("#tab-visuals").addClass("disabled");
-					if ($("#tabs .selected").attr("data-topic") === "visuals")
-						$("#tab-profile").trigger("click");
-				}
-				else
-					$("#tab-visuals").removeClass("disabled");
-
-				// Turn off view buttons that are not supported by the SID handler
-				viz.supportedViewButtons(emulator);
-
-				// JSIDPlay2 can't slow down while playing
-				viz.stateVisualsButton("#piano-slow", emulator == "jsidplay2" ? "disabled" : "enabled");
-
-				// The color of the time bar should be unique for the chosen SID handler
-				$("#time-bar").removeClass("resid jsidplay2 websid legacy jssid asid lemon youtube").addClass(emulator)
-					.css("cursor", SID.emulatorFlags.supportSeeking ? "pointer" : "default");
-
-				$("#faster").removeClass("disabled");
-				if (!SID.emulatorFlags.supportFaster) $("#faster").addClass("disabled");
-
-				// Clear all red error rows
-				var $tr = $("#folders tr");
-				$tr.find(".entry").css("color", "");
-				$tr.find("span.info").css("color", "");
-				$tr.css("background", "");
-
-				if (prevEmulator == "youtube")
-					// If the 'YouTube' handler was selected last then there may have been a lot of disabled rows
-					$tr.removeClass("disabled");
-
-				DisableIncompatibleRows();
-
-				if ($selected.hasClass("disabled")) {
-					// The new handler can't play this row so unselect it
-					isRowSelected = wasPlaying = false;
-					$selected.removeClass("selected");
-				}
-
-				ctrls.state("loop", SID.emulatorFlags.supportLoop ? "enabled" : "disabled");
-
-				if (SID.emulatorFlags.offline) {
-					// Using the player buttons doesn't make sense for the "download" option
-					ctrls.state("play/stop", "disabled");
-					ctrls.state("subtunes", "disabled");
-					ctrls.state("faster", "disabled");
-					ctrls.state("loop", "disabled");
-					$("#volume").prop("disabled", true);
-				}
-
-				if (isRowSelected && wasPlaying) {
-					// Clicking the same row again is safest
-					$selected.children("td.sid").trigger("click", ctrls.subtuneCurrent);
-				} else if (wasPlaying) {
-					ctrls.togglePlayOrPause();
-					ctrls.selectButton($("#play-pause"));
-					ctrls.setButtonPlay();
-				} else if (!isRowSelected) {
-					ctrls.state("play/stop", "disabled");
-					ctrls.state("prev/next", "disabled");
-					ctrls.state("subtunes", "disabled");
-					ctrls.state("faster", "disabled");
-					ctrls.state("loop", "disabled");
-					$("#volume").prop("disabled", true);
-				}
-				ctrls.emulatorChanged = true;
-				UpdateURL();
-				//viz.animateBufferEnded();
-				viz.startBufferEndedEffects();
-				ShowSundryFilterContents();
-				break;
-		}
+		// Refresh the page to activate the new emulator
+		window.location.reload();
+		return false;
 	});
 
 	/**
 	 * When clicking a link for choosing "Lemon's MP3 Files" SID handler.
 	 */
 	$("a.set-lemon").click(function() {
-		var emulator = "lemon";
-		$("#dropdown-emulator").styledSetValue(emulator).next("div.styledSelect").trigger("change");
+		$("#dropdown-topleft-emulator,#dropdown-settings-emulator")
+			.styledSetValue("lemon")
+			.next("div.styledSelect").trigger("change");
 	});
 
 	/**
@@ -1870,8 +1773,14 @@ $(function() { // DOM ready
 		});
 	}
 
-	// Select and show a "dexter" page tab	
-	selectTab = selectTab !== "" ? selectTab : "profile";
+	// Select and show a "dexter" page tab
+	if (selectTab == "") {
+		// Did we refresh from changing the SID handler?
+		var tab = localStorage.getItem("tab");
+		localStorage.removeItem("tab");
+		// Select tab from before refreshing otherwise a default
+		selectTab = tab ? tab : "profile";
+	}
 	var selectView = "";
 	if (selectTab === "flood") selectTab = "graph";
 	if (selectTab === "memo") selectTab = "memory";

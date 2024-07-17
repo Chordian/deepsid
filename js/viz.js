@@ -144,8 +144,26 @@ function Viz(emulator) {
 		jssid:		"Hermit's",
 	};
 
-	this.setBufferSize(this.emulator);
+	this.applyBufferSize(this.emulator);
 	this.setEmuButton(this.emulator);
+	this.supportedViewButtons(this.emulator);
+
+	switch (this.emulator) {
+		case "jsidplay2":
+			// JSIDPlay2 can't slow down while playing
+			this.stateVisualsButton("#piano-slow", "disabled");
+
+			// Apply advanced settings from local storage or a default value
+			var value = this.applyAdvancedSetting("jsidplay2", "defemu", "dropdown", "RESID");
+			this.selectFilterNameSettings(value);
+			this.applyAdvancedSetting("jsidplay2", "sampmethod", "dropdown", "DECIMATE");
+			this.applyAdvancedSetting("jsidplay2", "fil6581resid", "dropdown", "FilterAverage6581");
+			this.applyAdvancedSetting("jsidplay2", "fil8580resid", "dropdown", "FilterAverage8580");
+			this.applyAdvancedSetting("jsidplay2", "fil6581residfp", "dropdown", "FilterAlankila6581R4AR_3789");
+			this.applyAdvancedSetting("jsidplay2", "fil8580residfp", "dropdown", "FilterTrurl8580R5_3691");
+			break;
+		default:
+	}
 
 	this.initScope();
 	setTimeout(function() {
@@ -181,6 +199,7 @@ Viz.prototype = {
 		$("#visuals-piano,#visuals-graph,#visuals-stats,#sticky-right-buttons").on("click", ".button-toggle,.button-radio,.button-icon", this.onToggleClick.bind(this));
 		$("#visuals-piano").on("click", ".piano-voice", this.onVoiceClick.bind(this));
 		$("#visuals-piano,#visuals-graph,#topic-settings .dropdown-buffer").on("change", this.onChangeBufferSize.bind(this));
+		$("#topic-settings .settings-advanced").on("change", this.onChangeAdvancedSetting.bind(this));
 		$("#sticky-visuals").on("click", "button", this.onVisualsClick.bind(this));
 		$("#visuals-memory .block-info").on("click", "button", this.onPlayerBrowseClick.bind(this));
 	},
@@ -292,22 +311,25 @@ Viz.prototype = {
 				$this.empty().append($this.hasClass("button-off") ? "On" : "Off");
 			if (event.target.id === "tab-visuals-toggle") {
 				if ($this.hasClass("button-off")) {
-					// Turn the entire VISUALS tab ON
+					// Show the entire VISUALS tab
 					$("#visuals-toggle .viz-msg-enable").hide();
 					if ($("#tabs .selected").attr("data-topic") === "visuals")
 						$("#topic-visuals").show();
 					var visual = $("#sticky-visuals .visuals-buttons").attr("data-selected-visual");
-					$("#no-visuals").remove();
 					if (visual == "memory")
 						$("#memory-lc").show();
 					else if (visual == "piano" || visual == "graph")
 						$("#sticky-visuals .waveform-colors").show();
+					this.supportedViewButtons(this.emulator);
 					this.visualsEnabled = SID.jp2SidWrites = true;
 				} else {
-					// Turn the entire VISUALS tab OFF
+					// Hide the entire VISUALS tab
 					$("#topic-visuals,#memory-lc,#sticky-visuals .waveform-colors").hide();
 					$("#visuals-toggle .viz-msg-enable").show();
-					$("#sticky-visuals .visuals-buttons").append('<div id="no-visuals"></div>');
+					this.stateViewButton("piano", "disabled");
+					this.stateViewButton("graph", "disabled");
+					this.stateViewButton("memory", "disabled");
+					this.stateViewButton("stats", "disabled");
 					this.visualsEnabled = SID.jp2SidWrites = false;
 				}
 				if (SID.emulator == "jsidplay2" && SID.jp2Worker) {
@@ -351,7 +373,8 @@ Viz.prototype = {
 			switch (groupClass) {
 				case 'viz-emu':
 					// Adjust the top left drop-down box with SID handlers
-					$("#dropdown-emulator").styledSetValue($this.attr("data-emu"))
+					$("#dropdown-topleft-emulator,#dropdown-settings-emulator")
+						.styledSetValue($this.attr("data-emu"))
 						.next("div.styledSelect").trigger("change");
 					break;
 				case 'viz-layout':
@@ -416,11 +439,55 @@ Viz.prototype = {
 		$("#page .dropdown-buffer").val(SID.bufferSize[emulator]);
 		// Re-trigger the same emulator again to set the buffer size
 		// NOTE: Doing it in a specific visuals view is deliberate (avoids multiple triggering).
-		if (this.emulator == "asid")
-			$("#dropdown-emulator").styledSetValue("asid").next("div.styledSelect").trigger("change");
-		else
+		if (this.emulator == "asid") {
+			$("#dropdown-topleft-emulator,#dropdown-settings-emulator")
+				.styledSetValue("asid")
+				.next("div.styledSelect").trigger("change");
+		} else
 			$("#visuals-piano .viz-emu.button-on").trigger("click");
-		this.setBufferMessage(emulator);
+		this.showBufferMessage(emulator);
+	},
+
+	/**
+	 * When an advanced setting for a sid handler is changed.
+	 * 
+	 * It works with drop-down boxes for now.
+	 * 
+	 * @handlers jsidplay2 (for now)
+	 * 
+	 * @param {*} event 
+	 */
+	onChangeAdvancedSetting: function(event) {
+		var words = event.target.id.split("-"), value = $(event.target).val();
+		var emulator = words[2], setting = words[3];
+		SID.advancedSetting[emulator][setting] = value;
+		localStorage.setItem("advanced_setting_" + emulator + "_" + setting, value);
+
+		if (["defemu", "sampmethod", "fil6581resid", "fil8580resid", "fil6581residfp", "fil8580residfp"].includes(setting)) {
+			if (SID.isPlaying()) {
+				// Restart the tune
+				SID.stop();
+				setTimeout(function() {
+					SID.load();
+				}, 700);
+			}
+
+			// Adjust filter names depending on default emulation
+			if (setting == "defemu")
+				this.selectFilterNameSettings(value);
+		}
+	},
+
+	/**
+	 * Show the correct drop-down boxes for setting the filter name.
+	 * 
+	 * @handlers jsidplay2
+	 * 
+	 * @param {*} defaultEmulation 		Values "RESID" or "RESIDFP"
+	 */
+	selectFilterNameSettings: function(defaultEmulation) {
+		$("#filname-jsidplay2-resid,#filname-jsidplay2-residfp").hide();
+		$("#filname-jsidplay2-" + defaultEmulation.toLowerCase()).show();
 	},
 
 	/**
@@ -508,15 +575,15 @@ Viz.prototype = {
 			$("#page .viz-msg-emu").hide();
 		} else
 			$("#page .viz-msg-emu").show();
-		this.setBufferMessage(emulator);
+		this.showBufferMessage(emulator);
 	},
 
 	/**
-	 * Set buffer size as previously stored or set to a default.
+	 * Apply a buffer size as previously stored or set to a default.
 	 * 
 	 * @param {string} emulator 
 	 */
-	setBufferSize: function(emulator) {
+	applyBufferSize: function(emulator) {
 		// @todo JSIDPlay2 will have to wait until I can get the tune length calculation right
 		if (["resid", "disabled:jsidplay2", "websid", "legacy", "jssid", "asid"].includes(emulator)) {
 			if (emulator == "asid") emulator = "jssid";
@@ -562,14 +629,37 @@ Viz.prototype = {
 	 * If buffer size is not at lowest value then show a message about it in both
 	 * of the visuals views, except in WebSid (HQ) mode.
 	 */
-	setBufferMessage: function(emulator) {
+	showBufferMessage: function(emulator) {
 		SID.bufferSize[emulator] > 1024 && $("#page .viz-msg-emu").css("display") == "none" && emulator != "jsidplay2" && emulator != "websid"
 			? $("#page .viz-msg-buffer").show()
 			: $("#page .viz-msg-buffer").hide();
 	},
 
 	/**
+	 * Apply an advanced setting as previously stored or set to a default.
 	 * 
+	 * @param {string} emulator		Emulator, e.g. "resid", "jsidplay2", etc.
+	 * @param {string} setting 		Setting in one word, e.g. "defemu" or "sampmethod"
+	 * @param {string} type 		Input type, e.g. "dropdown"
+	 * @param {string} preset 		Default value if not in local storage
+	 * 
+	 * @return {string}				The value of the advanced setting
+	 */
+	applyAdvancedSetting: function(emulator, setting, type, preset) {
+		var value = SID.applyAdvancedSetting(emulator, setting, preset);
+		// Set the corresponding input element
+		if (type == "dropdown") {
+			$("#dropdown-adv-" + emulator + "-" + setting).val(value);
+		} else
+			console.log("applyAdvancedSetting: The '" + type + "' type is not supported.")
+
+		return value;
+	},
+
+	/**
+	 * Enable or disable all view buttons depending on what the SID handler supports.
+	 * 
+	 * @param {string} emulator
 	 */
 	supportedViewButtons: function(emulator) {
 		switch (emulator) {

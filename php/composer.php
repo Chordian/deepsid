@@ -296,7 +296,7 @@ if (isset($fullname)) {
 			}
 
 		} catch(PDOException $e) {
-			$account->LogActivityError('composer.php', $e->getMessage());
+			$account->LogActivityError('composer.php', $e->getMessage() + ' (' + $fullname + ')');
 			die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 		}
 	}

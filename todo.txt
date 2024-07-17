@@ -10,22 +10,12 @@ JSIDPlay2 UPDATE v2 TASKS:
 
 - Stereo
 - Fake stereo
-- Filter settings
-- reverb on or off
-- Set emulation in settings (RESID or RESIDFP)
-- Set resample method (DECIMATE or RESAMPLE)
+
 - Buffer size change when I can get the tune length timer calculation right (48000 for now)
 - When adding support for buffer size, two things to consider: tune length timer
     calculation + register read delay amount
 
-- The SID register cache pauses regularly on a fast CPU. Consider rejecting the cache?
-
-- Whoops: White overlay for visuals buttons OFF in dark color scheme. (Looks funny, LOL!)
-  UPDATE: Utilize the new disable stuff for visuals buttons instead?
-
 --------------
-
-- Make reSID time bar in black scheme slightly darker - it's faded too light brown.
 
 - Annex text: Also, add "Mastodon" to the list of social links.
 

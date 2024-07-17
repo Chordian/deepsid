@@ -452,7 +452,9 @@ Controls.prototype = {
 					$("#search-box").val('"'+tag+'"').trigger("keyup");
 					$("#search-button").trigger("click");
 				} else if (event.target.className == "set-websid") {
-					$("#dropdown-emulator").styledSetValue("websid").next("div.styledSelect").trigger("change");
+					$("#dropdown-topleft-emulator,#dropdown-settings-emulator")
+						.styledSetValue("websid")
+						.next("div.styledSelect").trigger("change");
 				} else if (event.target.className == "set-6581") {
 					$("#sid-model").trigger("click");
 				}
