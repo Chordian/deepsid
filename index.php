@@ -1785,6 +1785,11 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>July 18, 2024</h3>
+						<ul>
+							<li>Fixed main volume not being remembered when refreshing the site.</li>
+						</ul>
+
 						<h3>July 17, 2024</h3>
 						<ul>
 							<li>Advanced settings has been added in the settings tab. Its contents will depend on the SID handler chosen. There

@@ -2304,5 +2304,5 @@ function GetParam(name) {
  * Log a unique console line that doesn't huddle up.
  */
 function Log(text) {
-	console.log("DeepSID "+(logCount++)+": "+text);
+	console.log("DeepSID "+(logCount++)+": " + text);
 }

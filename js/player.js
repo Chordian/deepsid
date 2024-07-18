@@ -458,6 +458,11 @@ SIDPlayer.prototype = {
 					// The three callbacks here: onCompletion, onFail, onProgress
 					ScriptNodePlayer.loadMusicFromURL(file, options, (function(){}), (function(){}), (function(){}));
 
+					// Setting volume must be in this zero timeout or it will not happen
+					setTimeout(function() {
+						this.setVolume(1);
+					}.bind(this), 0);
+
 					if (typeof callback === "function") {
 						callback.call(this, error);
 					}
@@ -617,15 +622,12 @@ SIDPlayer.prototype = {
 
 						} else if (eventType === "INITIALISED") {
 
-							// If the emulation instance is initialized, the tune can be opened to play. This
-							// is required before clocking. If you need additional configuration (set volume
-							// level, stereo mode, etc), this is the right place before the tune is opened.
-
 							// Load the SID file
 							var request = new XMLHttpRequest();
 							request.open("GET", file, true);
 							request.responseType = "arraybuffer";
 
+							// Start playing
 							request.onload = function() {
 								this.contents = new Uint8Array(request.response);
 								this._jp2Play();
@@ -691,6 +693,11 @@ SIDPlayer.prototype = {
 					// The three callbacks here: onCompletion, onFail, onProgress
 					ScriptNodePlayer.loadMusicFromURL(file, options, (function(){}), (function(){}), (function(){}));
 
+					// Setting volume must be in this zero timeout or it will not happen
+					setTimeout(function() {
+						this.setVolume(1);
+					}.bind(this), 0);
+					
 					if (typeof callback === "function") {
 						callback.call(this, error);
 					}
@@ -1061,6 +1068,8 @@ SIDPlayer.prototype = {
 			});
 		}
 
+		this.setVolume(1);
+
 		this._jp2SetStereo();
 		this.jp2Worker.postMessage({
 			eventType: "OPEN",
@@ -1394,8 +1403,9 @@ SIDPlayer.prototype = {
 	setVolume: function(value) {
 		switch (this.emulator) {
 			case "resid":
-				if (this.reSID)
+				if (this.reSID) {
 					this.reSID.setVolume(value * this.mainVol);
+				}
 				break;
 			case "jsidplay2":
 				this._jp2Volume(value * this.mainVol);
