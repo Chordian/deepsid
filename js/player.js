@@ -57,6 +57,10 @@ function SIDPlayer(emulator) {
 	this.jp2FakeStereo = false;			// _jp2SetStereo()
 	this.jp2SIDToRead = "FIRST_SID";	// _jp2SetStereo()
 
+	this.jp2Volume = 0;					// _jp2VolumeStereoDelay()
+	this.jp2Stereo = [0.3, 0.7, 0.5];	// _jp2VolumeStereoDelay()
+	this.jp2Delay = [10, 0, 0];			// _jp2VolumeStereoDelay()
+
 	this.filterWebSid = {
 		base:				0.02387,	// 6581 filter settings for R2 type
 		max:				0.92,
@@ -422,10 +426,12 @@ SIDPlayer.prototype = {
 	 * Load a SID file but do not play it yet. Also handles callbacks to when the file
 	 * has loaded, and in some cases also when the music has timed out.
 	 * 
-  	 * @param {number} subtune		The subtune to be played.
-	 * @param {number} timeout		Number of seconds before the music times out.
-	 * @param {string} file			Fullname (including prepended HVSC root).
-	 * @param {function} callback 	Function to call after the SID file has loaded.
+	 * @handlers all
+	 * 
+  	 * @param {number} subtune		The subtune to be played
+	 * @param {number} timeout		Number of seconds before the music times out
+	 * @param {string} file			Fullname (including prepended HVSC root)
+	 * @param {function} callback 	Function to call after the SID file has loaded
 	 */
 	load: function(subtune, timeout, file, callback) {
 
@@ -455,13 +461,15 @@ SIDPlayer.prototype = {
 					// The instance should now be ready
 					this.reSID = ScriptNodePlayer.getInstance();
 
+					this.setVolume(1); // Must be set before calling loadMusicFromURL()
+					
 					// The three callbacks here: onCompletion, onFail, onProgress
 					ScriptNodePlayer.loadMusicFromURL(file, options, (function(){}), (function(){}), (function(){}));
 
-					// Setting volume must be in this zero timeout or it will not happen
+					// Sometimes the volume was not set above; make sure it is now
 					setTimeout(function() {
 						this.setVolume(1);
-					}.bind(this), 0);
+					}.bind(this), 500);
 
 					if (typeof callback === "function") {
 						callback.call(this, error);
@@ -590,7 +598,7 @@ SIDPlayer.prototype = {
 						} else if (eventType === "SID_WRITE") {
 
 							// Enable this to monitor everything the event outputs
-							console.log("relTime=" + eventData.relTime + ", addr=" + eventData.addr + ", value=" + eventData.value);
+							log("relTime=" + eventData.relTime + ", addr=" + eventData.addr + ", value=" + eventData.value);
 
 							// Store SID value in an cache array with all registers
 							var sidRegister = false, sidValue = eventData.value,
@@ -690,13 +698,15 @@ SIDPlayer.prototype = {
 					// The instance should now be ready
 					this.WebSid = ScriptNodePlayer.getInstance();
 
+					this.setVolume(1); // Must be set before calling loadMusicFromURL()
+
 					// The three callbacks here: onCompletion, onFail, onProgress
 					ScriptNodePlayer.loadMusicFromURL(file, options, (function(){}), (function(){}), (function(){}));
 
-					// Setting volume must be in this zero timeout or it will not happen
+					// Sometimes the volume was not set above; make sure it is now
 					setTimeout(function() {
 						this.setVolume(1);
-					}.bind(this), 0);
+					}.bind(this), 500);
 					
 					if (typeof callback === "function") {
 						callback.call(this, error);
@@ -934,6 +944,8 @@ SIDPlayer.prototype = {
 
 	/**
 	 * Unload and destroy object. Not all handlers support this.
+	 * 
+	 * @handlers jsidplay2, lemon
 	 */
 	unload: function() {
 		switch (this.emulator) {
@@ -968,7 +980,9 @@ SIDPlayer.prototype = {
 	 * Play the SID tune. Some handlers differ between continuing after a paused state
 	 * or a cold start. This too is handled whenever necessary.
 	 * 
-	 * @param {boolean} forcePlay	TRUE if forcing play state (cold start).
+	 * @handlers all except download
+	 * 
+	 * @param {boolean} forcePlay	TRUE if forcing play state (cold start)
 	 */
 	 play: function(forcePlay) {
 		if (!this.paused) {
@@ -1033,7 +1047,9 @@ SIDPlayer.prototype = {
 	},
 
 	/**
-	 * JSIDPlay2: Start playing. Used by both 'load()' and 'play()' methods.
+	 * Start playing. Used by both 'load()' and 'play()' methods.
+	 * 
+	 * @handlers jsidplay2
 	 */
 	_jp2Play: function() {
 
@@ -1063,14 +1079,14 @@ SIDPlayer.prototype = {
 					emulation: defEmu,
 					chipModel: this.jp2SidModel,
 					sidNum: chip,
-					filterName: SID.advancedSetting["jsidplay2"]["fil" + this.jp2SidModel.substring(3) + defEmu.toLowerCase()]
+					filterName: this.advancedSetting["jsidplay2"]["fil" + this.jp2SidModel.substring(3) + defEmu.toLowerCase()]
 				},
 			});
 		}
 
 		this.setVolume(1);
-
 		this._jp2SetStereo();
+
 		this.jp2Worker.postMessage({
 			eventType: "OPEN",
 			eventData: {
@@ -1100,7 +1116,9 @@ SIDPlayer.prototype = {
 	/**
 	 * Is a song currently playing?
 	 * 
-	 * @return {boolean}	TRUE if currently playing.
+	 * @handlers resid, jsidplay2, websid, legacy, youtube
+	 * 
+	 * @return {boolean}	TRUE if currently playing
 	 */
 	isPlaying: function() {
 		var playing;
@@ -1138,7 +1156,9 @@ SIDPlayer.prototype = {
 	/**
 	 * Is web browser auto play currently suspended?
 	 * 
-	 * @return {boolean}	TRUE if suspended.
+	 * @handlers all except youtube and download
+	 * 
+	 * @return {boolean}	TRUE if suspended
 	 */
 	 isSuspended: function() {
 		var suspended;
@@ -1172,6 +1192,8 @@ SIDPlayer.prototype = {
 
 	/**
 	 * Pause the SID tune.
+	 * 
+	 * @handlers all except download
 	 */
 	pause: function() {
 		this.paused = true;
@@ -1205,6 +1227,8 @@ SIDPlayer.prototype = {
 
 	/**
 	 * Stop the SID tune.
+	 * 
+	 * @handlers all except download
 	 */
 	stop: function() {
 		this.paused = false;
@@ -1253,9 +1277,11 @@ SIDPlayer.prototype = {
 	/**
 	 * Speed up the SID tune according to a multiplier.
 	 * 
-	 * Not all handlers may support this, others may have a multiplier cap.
+	 * Some SID handlers may have a multiplier cap.
 	 * 
-	 * @param {number} multiplier	Multipler (1 = normal speed).
+	 * @handlers all except download
+	 * 
+	 * @param {number} multiplier	Multipler (1 = normal speed)
 	 */
 	speed: function(multiplier) {
 		switch (this.emulator) {
@@ -1303,9 +1329,11 @@ SIDPlayer.prototype = {
 	 * Return an array with various information about the SID tune. This is retrieved
 	 * from the SID file itself when possible, otherwise from the database.
 	 * 
-	 * @param {string} override		Override the current emulator/handler string.
+	 * @handlers intrinsic: jssid, asid
 	 * 
-	 * @return {array}				The information array.
+	 * @param {string} override		Override the current emulator/handler string
+	 * 
+	 * @return {array}				The information array
 	 */
 	getSongInfo: function(override) {
 		var result = {},
@@ -1363,22 +1391,22 @@ SIDPlayer.prototype = {
 	/**
 	 * Set the main volume (usually controlled by a volume slider).
 	 * 
-	 * @param {float} value		Volume (0 to 1; e.g. half is 0.5).
+	 * @handlers all except download
+	 * 
+	 * @param {float} value		Volume (0 to 1; e.g. half is 0.5)
 	 */
 	setMainVolume: function(value) {
 		this.mainVol = value;
 		switch (this.emulator) {
 			case "resid":
-				if (this.reSID)
-					this.reSID.setVolume(value);
+				if (this.reSID) this.reSID.setVolume(value);
 				break;
 			case "jsidplay2":
-				this._jp2Volume(value);
+				this._jp2VolumeStereoDelay(value);
 				break;
 			case "websid":
 			case "legacy":
-				if (this.WebSid)
-					this.WebSid.setVolume(value);
+				if (this.WebSid) this.WebSid.setVolume(value);
 				break;
 			case "jssid":
 			case "asid":
@@ -1397,23 +1425,22 @@ SIDPlayer.prototype = {
 
 	/**
 	 * Set the volume of the SID tune within the span of the main volume.
+	 * 
+	 * @handlers all except download
 	 *
-	 * @param {float} value		Volume (0 to 1; e.g. half is 0.5).
+	 * @param {float} value		Volume (0 to 1; e.g. half is 0.5)
 	 */
 	setVolume: function(value) {
 		switch (this.emulator) {
 			case "resid":
-				if (this.reSID) {
-					this.reSID.setVolume(value * this.mainVol);
-				}
+				if (this.reSID) this.reSID.setVolume(value * this.mainVol);
 				break;
 			case "jsidplay2":
-				this._jp2Volume(value * this.mainVol);
+				this._jp2VolumeStereoDelay(value * this.mainVol);
 				break;
 			case "websid":
 			case "legacy":
-				if (this.WebSid)
-					this.WebSid.setVolume(value * this.mainVol);
+				if (this.WebSid) this.WebSid.setVolume(value * this.mainVol);
 				break;
 			case "jssid":
 			case "asid":
@@ -1431,34 +1458,11 @@ SIDPlayer.prototype = {
 	},
 
 	/**
-	 * JSIDPlay2: Set the volume. Used by 'setMainVolume' and 'setVolume' methods.
-	 *
-	 * @param {float} value		Volume (0 to 1; e.g. half is 0.5).
-	 */
-	_jp2Volume: function(value) {
-		if (this.jp2Worker) {
-			var volume = -6 + value * 6;		// Map 0 to 1 as -6 to 0 (boost is not used by DeepSID)
-			this.jp2Worker.postMessage({
-				eventType: "SET_VOLUME_LEVELS",
-				eventData: {
-					mainVolume:		volume,		// Volume goes from -6 (low) to 6 (boost) - 0 is normal
-					secondVolume:	volume,
-					thirdVolume:	volume,
-					mainBalance:	0.3,		// Stereo balance goes from 0 to 1 (in steps of 0.1)
-					secondBalance:	0.7,
-					thirdBalance:	0.5,
-					mainDelay:		10,			// Delay goes from 0 to 100 ms (in steps of 1)
-					secondDelay:	0,
-					thirdDelay:		0,
-				},
-			});
-		}
-	},
-
-	/**
-	 * Return the current play time of the SID tune being played.
+	 * Return the current playtime of the SID tune being played.
 	 * 
-	 * @return {array}	Number of seconds passed so far.
+	 * @handlers all except download
+	 * 
+	 * @return {number}		Number of seconds passed so far
 	 */
 	getCurrentPlaytime: function() {
 		var time = 0;
@@ -1496,7 +1500,9 @@ SIDPlayer.prototype = {
 	/**
 	 * Return the currently active handler/emulator.
 	 * 
-	 * @return {string}		Handler in lower case, e.g. "youtube".
+	 * @handlers all
+	 * 
+	 * @return {string}		Handler in lower case, e.g. "youtube"
 	 */
 	getHandler: function() {
 		return this.emulator;
@@ -1505,7 +1511,9 @@ SIDPlayer.prototype = {
 	/**
 	 * Set the seek of the song. Ignored by emulators.
 	 * 
-	 * @param {number} seconds	Number of seconds to move the seek to.
+	 * @handlers youtube, lemon
+	 * 
+	 * @param {number} seconds	Number of seconds to move the seek to
 	 */
 	setSeek: function(seconds) {
 		if (this.emulator == "youtube" && this.ytReady)
@@ -1515,10 +1523,12 @@ SIDPlayer.prototype = {
 	},
 
 	/**
-	 * WebSid HQ: Adjust filter parameters for 6581.
+	 * Adjust filter parameters for 6581.
+	 * 
+	 * @handlers websid
 	 * 
 	 * @param {string} property		Set to "base", "max", etc.
-	 * @param {number} value		The value to apply to the property.
+	 * @param {number} value		The value to apply to the property
 	 */
 	setFilter: function(property, value) {
 		if (this.emulator == "websid") {
@@ -1566,9 +1576,11 @@ SIDPlayer.prototype = {
 	},
 
 	/**
-	 * WebSid HQ: Set filter chip revision that affects 6581 filter.
+	 * Set filter chip revision that affects 6581 filter.
 	 * 
-	 * @param {string} property		Set to "r2", "r3", or "r4".
+	 * @handlers websid
+	 * 
+	 * @param {string} property		Set to "r2", "r3", or "r4"
 	 */
 	setRevision: function(revision) {
 		if (this.emulator == "websid") {
@@ -1632,6 +1644,8 @@ SIDPlayer.prototype = {
 
 	/**
 	 * Disable the timeout of a SID tune. Used for infinite looping.
+	 * 
+	 * @handlers resid, websid, legacy, lemon, youtube
 	 */
 	disableTimeout: function() {
 		switch (this.emulator) {
@@ -1664,7 +1678,9 @@ SIDPlayer.prototype = {
 	/**
 	 * Enable the timeout of a SID tune.
 	 * 
-	 * @param {number} length	Number of seconds before the music times out.
+	 * @handlers resid, websid, legacy, lemon, youtube
+	 * 
+	 * @param {number} length	Number of seconds before the music times out
 	 */
 	enableTimeout: function(length) {
 		switch (this.emulator) {
@@ -1697,7 +1713,9 @@ SIDPlayer.prototype = {
 	/**
 	 * Force the SID chip model to be used. Not all handlers support this.
 	 * 
-	 * @param {string} model	Use "6581" or "8580".
+	 * @handlers resid, websid, legacy, jssid, asid
+	 * 
+	 * @param {string} model	Use "6581" or "8580"
 	 */
 	setModel: function(model) {
 		switch (this.emulator) {
@@ -1725,7 +1743,9 @@ SIDPlayer.prototype = {
 	/**
 	 * Return the SID chip model currently used. Not all handlers support this.
 	 * 
-	 * @return {*}		Returns "6581" or "8580" (or FALSE if not supported).
+	 * @handlers resid, websid, legacy, jssid, asid
+	 * 
+	 * @return {*}		Returns "6581" or "8580" (or FALSE if not supported)
 	 */
 	getModel: function() {
 		switch (this.emulator) {
@@ -1751,7 +1771,9 @@ SIDPlayer.prototype = {
 	/**
 	 * Force the encoding to be used. Not all handlers support this.
 	 * 
-	 * @param {string} encoding		Use "NTSC" or "PAL".
+	 * @handlers resid, websid, legacy
+	 * 
+	 * @param {string} encoding		Use "NTSC" or "PAL"
 	 */
 	setEncoding: function(encoding) {
 		switch (this.emulator) {
@@ -1780,7 +1802,9 @@ SIDPlayer.prototype = {
 	/**
 	 * Return the encoding currently used. Not all handlers support this.
 	 * 
-	 * @return {*}		Returns "NTSC" or "PAL" (or FALSE if not supported).
+	 * @handlers websid, legacy
+	 * 
+	 * @return {*}		Returns "NTSC" or "PAL" (or FALSE if not supported)
 	 */
 	getEncoding: function() {
 		switch (this.emulator) {
@@ -1809,8 +1833,10 @@ SIDPlayer.prototype = {
 	 * is reset to 1111 every time a new tune is loaded and played. There are
 	 * 4 bits as some emulators also support toggling a digi channel.
 	 * 
-	 * @param {number} voice	Voice to toggle (1-4).
-	 * @param {number} chip		SID chip number (default is 1).
+	 * @handlers resid, jsidplay2, websid, legacy, jssid, asid
+	 * 
+	 * @param {number} voice	Voice to toggle (1-4)
+	 * @param {number} chip		SID chip number (default is 1)
 	 */
 	toggleVoice: function(voice, chip) {
 		if (typeof chip === "undefined") chip = 0; else chip -= 1;
@@ -1855,6 +1881,8 @@ SIDPlayer.prototype = {
 
 	/**
 	 * Enable all SID voices (including 2SID and 3SID).
+	 * 
+	 * @handlers resid, jsidplay2, websid, legacy, jssid, asid
 	 */
 	enableAllVoices: function() {
 		this.voiceMask = [0xF, 0xF, 0xF];
@@ -1910,7 +1938,9 @@ SIDPlayer.prototype = {
 	 * Return the speed relative to 50hz. Not all handlers support this. If
 	 * 0 is returned, the tune uses VBI. If > 0, it uses CIA.
 	 * 
-	 * @return {*}		Returns the multiplier value (4 = 4x speed), or FALSE.
+	 * @handlers websid, legacy, jssid, asid
+	 * 
+	 * @return {*}		Returns the multiplier value (4 = 4x speed), or FALSE
 	 */
 	getPace: function() {
 		switch (this.emulator) {
@@ -1946,7 +1976,9 @@ SIDPlayer.prototype = {
 	/**
 	 * Return the type of digi, if used by the song. Not all handlers support this.
 	 * 
-	 * @return {string}		Returns a short ID string, or empty if digi is not used.
+	 * @handlers websid, legacy
+	 * 
+	 * @return {string}		Returns a short ID string, or empty if digi is not used
 	 */
 	getDigiType: function() {
 		switch (this.emulator) {
@@ -1970,7 +2002,9 @@ SIDPlayer.prototype = {
 	 * Return the sample rate used by the digi samples, if used by the song. Not all
 	 * handlers support this.
 	 * 
-	 * @return {number}		Returns the sample rate, or 0 if digi is not used.
+	 * @handlers websid, legacy
+	 * 
+	 * @return {number}		Returns the sample rate, or 0 if digi is not used
 	 */
 	getDigiRate: function() {
 		switch (this.emulator) {
@@ -1993,9 +2027,11 @@ SIDPlayer.prototype = {
 	/**
 	 * Return the SID address for the specified SID chip.
 	 * 
-	 * @param {number} chip			SID chip number (1-3).
+	 * @handlers resid, jsidplay2, websid, legacy, jssid, asid
 	 * 
-	 * @return {*}					SID chip address (e.g. $D400), 0, or FALSE.
+	 * @param {number} chip			SID chip number (1-3)
+	 * 
+	 * @return {*}					SID chip address (e.g. $D400), 0, or FALSE
 	 */
 	getSIDAddress: function(chip) {
 		if (chip == 1) return 0xD400;
@@ -2012,7 +2048,6 @@ SIDPlayer.prototype = {
 				return SIDBackend.getSIDBaseAddr(chip - 1);
 			case "legacy":
 				// Use the SID file header to figure out the SID chip address
-				// NOTE: A line must be inserted in 'backend_tinyrsid.js' for this to work!
 				var address = 0;
 				if (typeof SIDBackend.sidFileHeader != "undefined") {
 					address = SIDBackend.sidFileHeader[chip == 2 ? 0x7A : 0x7B] << 4;
@@ -2033,10 +2068,12 @@ SIDPlayer.prototype = {
 	/**
 	 * Return the current 8-bit value of a SID register.
 	 * 
-	 * @param {number} register		Register $D400 to $D41C.
-	 * @param {number} chip			SID chip number (default is 1).
+	 * @handlers resid, jsidplay2, websid, legacy, jssid, asid
 	 * 
-	 * @return {*}					Byte value of the register, or FALSE.
+	 * @param {number} register		Register $D400 to $D41C
+	 * @param {number} chip			SID chip number (default is 1)
+	 * 
+	 * @return {*}					Byte value of the register, or FALSE
 	 */
 	readRegister: function(register, chip) {
 		if (register < 0xD400 && register > 0xD41C) return false;
@@ -2085,9 +2122,11 @@ SIDPlayer.prototype = {
 	/**
 	 * Return the 8-bit value of a C64 memory address.
 	 * 
-	 * @param {number} address		Address $0000 to $FFFF.
+	 * @handlers resid, websid, legacy, jssid, asid
 	 * 
-	 * @return {*}					Byte value of the register.
+	 * @param {number} address		Address $0000 to $FFFF
+	 * 
+	 * @return {number}				Byte value of the register
 	 */
 	readMemory: function(address) {
 		switch (this.emulator) {
@@ -2100,6 +2139,7 @@ SIDPlayer.prototype = {
 			case "asid":
 				return this.jsSID.readregister(address);
 			case "jsidplay2":
+				// Not supported
 			case "lemon":
 			case "youtube":
 			case "download":
@@ -2109,10 +2149,14 @@ SIDPlayer.prototype = {
 	},
 
 	/**
-	 * WebSid HQ: Return the current envelope level of a voice.
+	 * Return the current envelope level of a voice.
 	 * 
-	 * @param {number} voice	Voice to read (1-3).
-	 * @param {number} chip		SID chip number (default is 1).
+	 * @handlers websid
+	 * 
+	 * @param {number} voice	Voice to read (1-3)
+	 * @param {number} chip		SID chip number (default is 1)
+	 * 
+	 * @return {*}				Byte value of the register, or FALSE
 	 */
 	 readLevel: function(voice, chip) {
 		if (typeof chip === "undefined") chip = 0; else chip -= 1;
@@ -2134,17 +2178,19 @@ SIDPlayer.prototype = {
 	},
 
 	/**
-	 * WebSid HQ: Set the stereo panning level of a voice.
+	 * Set the stereo panning level of a voice.
 	 * 
-	 * @param {number} voice	Voice to set (1-3).
-	 * @param {number} chip		SID chip number (default is 1).
-	 * @param {number} panning	Panning level (0-100).
+	 * @handlers websid
+	 * 
+	 * @param {number} voice	Voice to set (1-3)
+	 * @param {number} chip		SID chip number (default is 1)
+	 * @param {number} panning	Panning level (0-100)
 	 */
 	 setStereoPanning: function(voice, chip, panning) {
 		if (typeof chip === "undefined") chip = 0; else chip -= 1;
 		switch (this.emulator) {
 			case "jsidplay2":
-				// @todo Check later if it's supported
+				// Not supported on a voice level (see setStereoChip() instead)
 				break;
 			case "websid":
 				SIDBackend.setPanning(chip, voice - 1, panning / 100);
@@ -2162,9 +2208,43 @@ SIDPlayer.prototype = {
 	},
 
 	/**
-	 * WebSid HQ: Set the stereo reverb level.
+	 * Set the stereo panning of an entire chip.
 	 * 
-	 * @param {number} reverb	Reverb level (0-100).
+	 * @handlers jsidplay2
+	 * 
+	 * @param {*} chip		SID chip number (0-2)
+	 * @param {*} panning	Panning level (0-1 in steps of 0.1 - center is 0.5)
+	 */
+	setStereoChip: function(chip, panning) {
+		if (this.emulator == "jsidplay2")
+			this._jp2VolumeStereoDelay(undefined,
+				(chip == 0 ? panning : undefined),
+				(chip == 1 ? panning : undefined),
+				(chip == 2 ? panning : undefined));
+	},
+
+	/**
+	 * Set the delay in milliseconds of an entire chip.
+	 * 
+	 * @handlers jsidplay2
+	 * 
+	 * @param {*} chip		SID chip number (0-2)
+	 * @param {*} delay		Delay in milliseconds (0-50)
+	 */
+	setDelayChip: function(chip, delay) {
+		if (this.emulator == "jsidplay2")
+			this._jp2VolumeStereoDelay(undefined, undefined, undefined, undefined,
+				(chip == 0 ? delay : undefined),
+				(chip == 1 ? delay : undefined),
+				(chip == 2 ? delay : undefined));
+	},
+
+	/**
+	 * Set the stereo reverb level.
+	 * 
+	 * @handlers websid
+	 * 
+	 * @param {number} reverb	Reverb level (0-100)
 	 */
 	 setStereoReverb: function(reverb) {
 		switch (this.emulator) {
@@ -2185,9 +2265,11 @@ SIDPlayer.prototype = {
 	},
 
 	/**
-	 * WebSid HQ: Set headphone mode for the stereo panning.
+	 * Set headphone mode for the stereo panning.
 	 * 
-	 * @param {number} mode		Enable (1) or disable (0).
+	 * @handlers websid
+	 * 
+	 * @param {number} mode		Enable (1) or disable (0)
 	 */
 	setStereoHeadphones: function(mode) {
 		switch (this.emulator) {
@@ -2208,19 +2290,48 @@ SIDPlayer.prototype = {
 	},
 
 	/**
-	 * WebSid HQ: Set stereo enhance mode.
+	 * Enable or disable fake stereo.
 	 * 
-	 * @param {number} mode		-1 (stereo off) or enhance level 0, 16384, 24576, 32767.
+	 * @handlers jsidplay2
+	 * 
+	 * @param {boolean} mode	Must be true or false
+	 */
+	setStereoFake: function(mode) {
+		if (this.emulator == "jsidplay2")
+			this._jp2SetStereo(undefined, undefined, undefined, mode);
+	},
+
+	/**
+	 * Select SID chip being read from for fake stereo.
+	 * 
+	 * @handlers jsidplay2
+	 * 
+	 * @param {string} chip		FIRST_SID, SECOND_SID or THIRD_SID
+	 */
+	setStereoRead: function(chip) {
+		if (this.emulator == "jsidplay2")
+			this._jp2SetStereo(undefined, undefined, undefined, undefined, chip);
+	},
+
+	/**
+	 * Set stereo enhance mode.
+	 * 
+	 * @handlers websid, jsidplay2
+	 * 
+	 * @param {*} mode		WebSid: 	-1 (stereo off) or enhance level 0, 16384, 24576, 32767
+	 * 						JSIDPlay2:	AUTO, STEREO or THREE_SID
 	 */
 	setStereoMode: function(mode) {
 		switch (this.emulator) {
+			case "jsidplay2":
+				this._jp2SetStereo(mode);
+				break;
 			case "websid":
 				this.stereoLevel = mode;
 				SIDBackend.setStereoLevel(mode);
 				break;
 			case "legacy":
 			case "resid":
-			case "jsidplay2":
 			case "jssid":
 			case "asid":
 			case "lemon":
@@ -2232,7 +2343,9 @@ SIDPlayer.prototype = {
 	},
 
 	/**
-	 * WebSid HQ: Reset all stereo panning (and their sliders) to center.
+	 * Reset all stereo panning (and their sliders) to center.
+	 * 
+	 * @handlers websid
 	 */
 	resetStereo: function() {
 		if (this.emulator == "websid") {
@@ -2246,23 +2359,9 @@ SIDPlayer.prototype = {
 	},
 
 	/**
-	 * JSIDPlay2: Set stereo modes and addresses.
-	 */
-	_jp2SetStereo: function() {
-		this.jp2Worker.postMessage({
-			eventType: "SET_STEREO",
-			eventData: {
-				stereoMode: this.jp2StereoMode,		// AUTO, STEREO or THREE_SID
-				dualSidBase: this.jp2SID2Base,		// 0xD420, 0xD440, 0xD500, 0xDE00 or 0xDF00
-				thirdSIDBase: this.jp2SID3Base,		// 0xD420, 0xD440, 0xD500, 0xDE00 or 0xDF00
-				fakeStereo: this.jp2FakeStereo,		// true or false
-				sidToRead: this.jp2SIDToRead,		// Read FIRST_SID, SECOND_SID or THIRD_SID
-			},
-		});
-	},
-
-	/**
 	 * Apply an advanced setting as previously stored or set to a default.
+	 * 
+	 * @handlers all
 	 * 
 	 * @param {string} emulator		Emulator, e.g. "resid", "jsidplay2", etc.
 	 * @param {string} setting 		Setting in one word, e.g. "defemu" or "sampmethod"
@@ -2275,5 +2374,88 @@ SIDPlayer.prototype = {
 		this.advancedSetting[emulator][setting] = storedValue ? storedValue : preset;
 
 		return this.advancedSetting[emulator][setting];
+	},
+	
+	/**
+	 * Set the volume, stereo panning or delay. Volume just fits all chips in DeepSID,
+	 * while stereo panning and delay can be set for individual chips.
+	 * 
+	 * @handlers jsidplay2
+	 *
+	 * @param {float} volume	Volume (0 to 1; e.g. half is 0.5)
+	 * @param {float} stereo1	Stereo panning for SID chip #1 (0 to 1; center is 0.5)
+	 * @param {float} stereo2	Stereo panning for SID chip #2
+	 * @param {float} stereo3	Stereo panning for SID chip #3
+	 * @param {number} delay1	Delay for SID chip #1 (0-50 ms)
+	 * @param {number} delay1	Delay for SID chip #2
+	 * @param {number} delay1	Delay for SID chip #3
+	 */
+	_jp2VolumeStereoDelay: function(volume, stereo1, stereo2, stereo3, delay1, delay2, delay3) {
+		if (this.jp2Worker) {
+
+			if (typeof volume !== "undefined")
+				this.jp2Volume = -6 + volume * 6;	// Map 0 to 1 as -6 to 0 (boost is not used by DeepSID)
+
+			if (typeof stereo1 !== "undefined")
+				this.jp2Stereo[0] = stereo1;
+			if (typeof stereo2 !== "undefined")
+				this.jp2Stereo[1] = stereo2;
+			if (typeof stereo3 !== "undefined")
+				this.jp2Stereo[2] = stereo3;
+
+			if (typeof delay1 !== "undefined")
+				this.jp2Delay[0] = delay1;
+			if (typeof delay2 !== "undefined")
+				this.jp2Delay[1] = delay2;
+			if (typeof delay3 !== "undefined")
+				this.jp2Delay[2] = delay3;
+
+			this.jp2Worker.postMessage({
+				eventType: "SET_VOLUME_LEVELS",
+				eventData: {
+					mainVolume:		this.jp2Volume,		// Volume goes from -6 (low) to 6 (boost) - 0 is normal
+					secondVolume:	this.jp2Volume,
+					thirdVolume:	this.jp2Volume,
+					mainBalance:	this.jp2Stereo[0],	// Stereo balance goes from 0 to 1 (in steps of 0.1)
+					secondBalance:	this.jp2Stereo[1],
+					thirdBalance:	this.jp2Stereo[2],
+					mainDelay:		this.jp2Delay[0],	// Delay goes from 0 to 50 ms (in steps of 1)
+					secondDelay:	this.jp2Delay[1],
+					thirdDelay:		this.jp2Delay[2],
+				},
+			});
+		}
+	},
+	
+	/**
+	 * Set stereo modes and addresses.
+	 * 
+	 * @handlers jsidplay2
+	 */
+	_jp2SetStereo: function(mode, base2, base3, fake, read) {
+		if (this.jp2Worker) {
+
+			if (typeof mode !== "undefined")
+				this.jp2StereoMode = mode;
+			if (typeof base2 !== "undefined")
+				this.jp2SID2Base = base2;
+			if (typeof base3 !== "undefined")
+				this.jp2SID3Base = base3;
+			if (typeof fake !== "undefined")
+				this.jp2FakeStereo = fake;
+			if (typeof read !== "undefined")
+				this.jp2SIDToRead = read;
+
+			this.jp2Worker.postMessage({
+				eventType: "SET_STEREO",
+				eventData: {
+					stereoMode: this.jp2StereoMode,		// AUTO, STEREO or THREE_SID
+					dualSidBase: this.jp2SID2Base,		// 0xD420, 0xD440, 0xD500, 0xDE00 or 0xDF00
+					thirdSIDBase: this.jp2SID3Base,		// 0xD420, 0xD440, 0xD500, 0xDE00 or 0xDF00
+					fakeStereo: this.jp2FakeStereo,		// true or false
+					sidToRead: this.jp2SIDToRead,		// Read FIRST_SID, SECOND_SID or THIRD_SID
+				},
+			});
+		}
 	},
 }

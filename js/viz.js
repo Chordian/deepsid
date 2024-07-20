@@ -245,7 +245,7 @@ Viz.prototype = {
 	/**
 	 * Reverse (solo) a voice.
 	 * 
-	 * @param {number} voice 		Voice (1, 2, 3 or 4).
+	 * @param {number} voice 		Voice (1, 2, 3 or 4)
 	 */
 	reverseVoice: function(voice) {
 		var voiceMask = [SID.voiceMask[0], SID.voiceMask[1], SID.voiceMask[2]];
@@ -373,9 +373,7 @@ Viz.prototype = {
 			switch (groupClass) {
 				case 'viz-emu':
 					// Adjust the top left drop-down box with SID handlers
-					$("#dropdown-topleft-emulator,#dropdown-settings-emulator")
-						.styledSetValue($this.attr("data-emu"))
-						.next("div.styledSelect").trigger("change");
+					ctrls.selectEmulator($this.attr("data-emu"));
 					break;
 				case 'viz-layout':
 					this.graphMode = $this.hasClass("viz-rows") ? 0 : 1;
@@ -439,11 +437,9 @@ Viz.prototype = {
 		$("#page .dropdown-buffer").val(SID.bufferSize[emulator]);
 		// Re-trigger the same emulator again to set the buffer size
 		// NOTE: Doing it in a specific visuals view is deliberate (avoids multiple triggering).
-		if (this.emulator == "asid") {
-			$("#dropdown-topleft-emulator,#dropdown-settings-emulator")
-				.styledSetValue("asid")
-				.next("div.styledSelect").trigger("change");
-		} else
+		if (this.emulator == "asid")
+			ctrls.selectEmulator("asid");
+		else
 			$("#visuals-piano .viz-emu.button-on").trigger("click");
 		this.showBufferMessage(emulator);
 	},
@@ -451,7 +447,7 @@ Viz.prototype = {
 	/**
 	 * When an advanced setting for a sid handler is changed.
 	 * 
-	 * It works with drop-down boxes for now.
+	 * This only works with drop-down boxes.
 	 * 
 	 * @handlers jsidplay2 (for now)
 	 * 
@@ -506,13 +502,9 @@ Viz.prototype = {
 		switch (this.visuals) {
 			case "piano":
 				$("#sticky-visuals .waveform-colors").show();
-				/*if (SID.emulator == "resid")
-					$("#sticky-visuals button.icon-memory").trigger("click");*/
 				break;
 			case "graph":
 				$("#sticky-visuals .waveform-colors").show();
-				/*if (SID.emulator == "resid")
-					$("#sticky-visuals button.icon-memory").trigger("click");*/
 				break;
 			case "memory":
 				$("#memory-lc").show();
@@ -520,8 +512,6 @@ Viz.prototype = {
 					$("#sticky-visuals button.icon-piano").trigger("click");
 				break;
 			case "stats":
-				/*if (SID.emulator == "resid")
-					$("#sticky-visuals button.icon-memory").trigger("click");*/
 				break;
 		}
 	},
@@ -566,7 +556,7 @@ Viz.prototype = {
 	/**
 	 * Press an emulator button in the visuals views or show a warning about the need.
 	 * 
-	 * @param {string} emulator 
+	 * @param {string} emulator		Emulator, e.g. "resid", "jsidplay2", etc.
 	 */
 	setEmuButton: function(emulator) {
 		if (["resid", "jsidplay2", "websid", "legacy", "jssid", "asid"].includes(emulator)) {
@@ -581,7 +571,7 @@ Viz.prototype = {
 	/**
 	 * Apply a buffer size as previously stored or set to a default.
 	 * 
-	 * @param {string} emulator 
+	 * @param {string} emulator		Emulator, e.g. "resid", "jsidplay2", etc.
 	 */
 	applyBufferSize: function(emulator) {
 		// @todo JSIDPlay2 will have to wait until I can get the tune length calculation right
@@ -628,6 +618,8 @@ Viz.prototype = {
 	/**
 	 * If buffer size is not at lowest value then show a message about it in both
 	 * of the visuals views, except in WebSid (HQ) mode.
+	 * 
+	 * @param {string} emulator		Emulator, e.g. "resid", "jsidplay2", etc.
 	 */
 	showBufferMessage: function(emulator) {
 		SID.bufferSize[emulator] > 1024 && $("#page .viz-msg-emu").css("display") == "none" && emulator != "jsidplay2" && emulator != "websid"
@@ -651,7 +643,7 @@ Viz.prototype = {
 		if (type == "dropdown") {
 			$("#dropdown-adv-" + emulator + "-" + setting).val(value);
 		} else
-			console.log("applyAdvancedSetting: The '" + type + "' type is not supported.")
+			log("applyAdvancedSetting: The '" + type + "' type is not supported.")
 
 		return value;
 	},
@@ -659,7 +651,7 @@ Viz.prototype = {
 	/**
 	 * Enable or disable all view buttons depending on what the SID handler supports.
 	 * 
-	 * @param {string} emulator
+	 * @param {string} emulator		Emulator, e.g. "resid", "jsidplay2", etc.
 	 */
 	supportedViewButtons: function(emulator) {
 		switch (emulator) {
@@ -688,7 +680,7 @@ Viz.prototype = {
 	 * Enable or disable a view button.
 	 * 
 	 * @param {string} icon			E.g. "piano", "graph", etc.
-	 * @param {string} state		Set to "disabled" or "enabled".
+	 * @param {string} state		Set to "disabled" or "enabled"
 	 */
 	stateViewButton: function(icon, state) {
 		if (state == "disabled") {
@@ -704,8 +696,8 @@ Viz.prototype = {
 	/**
 	 * Enable or disable a visuals ON/OFF toggle button and its label.
 	 * 
-	 * @param {string} element 		E.g. "#piano-slow".
-	 * @param {string} state		Set to "disabled" or "enabled".
+	 * @param {string} element 		E.g. "#piano-slow"
+	 * @param {string} state		Set to "disabled" or "enabled"
 	 */
 	stateVisualsButton: function(element, state) {
 		if (state == "disabled") {
@@ -935,12 +927,14 @@ Viz.prototype = {
 	},
 
 	/**
-	 * Get the waveform color based on the current ADSR envelope level (HQ WebSid only).
+	 * Get the waveform color based on the current ADSR envelope level.
 	 * 
-	 * @param {number} voice		Voice to read (1-3).
-	 * @param {number} chips		Number of SID chips (default is 1).
-	 * @param {string} key			Color of piano key (#000 or #FFF).
-	 * @param {number} waveform		Waveform (after >> 4).
+	 * @handlers websid
+	 * 
+	 * @param {number} voice		Voice to read (1-3)
+	 * @param {number} chips		Number of SID chips (default is 1)
+	 * @param {string} key			Color of piano key (#000 or #FFF)
+	 * @param {number} waveform		Waveform (after >> 4)
 	 */
 	getEnvelopeColor: function(voice, chip, key, waveform) {
 		var level = SID.readLevel(voice + 1, chip) * 3;
@@ -1048,9 +1042,6 @@ Viz.prototype = {
 	 * Scope/Stereo: Animate the oscilloscope canvas boxes in the sundry box.
 	 * 
 	 * Called by: requestAnimationFrame().
-	 * 
-	 * This makes use of 'sid_tracer.js' (renamed to 'scope.js' in DeepSID) which
-	 * was originally written by Jürgen Wothke for the Tiny'R'Sid web site.
 	 */
 	animateScope: function() {
 
@@ -1058,20 +1049,21 @@ Viz.prototype = {
 
 		if ($("#sundry-tabs .selected").attr("data-topic") == "stereo") {
 
-			if (SID.emulator !== "websid") {
-				if (this.tabStereoMode !== "NOTWEBSID") {
-					$("#stereo-table,#stereo-controls").hide();
-					$("#stereo-websid").show();
-					this.tabStereoMode = "NOTWEBSID";
+			if (SID.emulator !== "websid" && SID.emulator !== "jsidplay2") {
+				if (this.tabStereoMode !== "NOTSTEREO") {
+					$("#stereo-websid,#stereo-jsidplay2").hide();
+					$("#stereo-message").show();
+					this.tabStereoMode = "NOTSTEREO";
 				}
 				return;
 			} else if (this.tabStereoMode !== "STEREO") {
 				// Okay to show stereo sliders again now
-				$("#stereo-websid").hide();
-				$("#stereo-table,#stereo-controls").show();
+				$("#stereo-message").hide();
+				$("#stereo-websid,#stereo-jsidplay2").hide();
+				$("#stereo-"+SID.emulator).show();
 				this.tabStereoMode = "STEREO";
 			}
-			if (SID.isPlaying()) {
+			if (SID.emulator == "websid" && SID.isPlaying()) {
 				for (var chip = 0; chip < 3; chip++) {
 					for (var voice = 0; voice < 3; voice++) {
 						Tracer.setZoom(parseInt(this.scopeZoom));
@@ -1085,6 +1077,7 @@ Viz.prototype = {
 		// TAB: Scope
 
 		if ($("#sundry-tabs .selected").attr("data-topic") !== "osc") return; // Tab not active
+		
 		if (SID.emulator !== "websid" && SID.emulator !== "legacy") {
 			if (this.tabOscMode !== "NOTWEBSID") {
 				$("#scope1,#scope2,#scope3,#scope4").hide(); // Don't use 'canvas' or '.scope' here
@@ -1153,7 +1146,7 @@ Viz.prototype = {
 	/**
 	 * Graph: Initialize and draw the canvas areas.
 	 * 
-	 * @param {number} chips		Number of SID chips (default is 1).
+	 * @param {number} chips		Number of SID chips (default is 1)
 	 */
 	initGraph: function(chips) {
 
@@ -1343,10 +1336,10 @@ Viz.prototype = {
 	 * 
 	 * @link https://css-tricks.com/snippets/javascript/lighten-darken-color/
 	 * 
-	 * @param {string} col	Color string, e.g. "#FF807E".
-	 * @param {number} amt	Amount, e.g. -40 to darken.
+	 * @param {string} col		Color string, e.g. "#FF807E"
+	 * @param {number} amt		Amount, e.g. -40 to darken
 	 * 
-	 * @return {string}		The updated color string.
+	 * @return {string}			The updated color string
 	 */
 	lightenDarkenColor: function(col, amt) {
 
@@ -1381,11 +1374,11 @@ Viz.prototype = {
 	 * Memory: Build a block for a table cell with a monitor-style memory dump of
 	 * the RAM in a Commodore 64.
 	 * 
-	 * @param {number} addrStart	Start address in C64 RAM.
-	 * @param {number} addrEnd		End address in C64 RAM.
-	 * @param {array} arrMemory		Array to contain the bytes of the address span.
+	 * @param {number} addrStart	Start address in C64 RAM
+	 * @param {number} addrEnd		End address in C64 RAM
+	 * @param {array} arrMemory		Array to contain the bytes of the address span
 	 * 
-	 * @return {string}				HTML block.
+	 * @return {string}				HTML block
 	 */
 	showMemoryBlock: function(addrStart, addrEnd, arrMemory) {
 		var isLC = $("#memory-lc-toggle").hasClass("button-on"), dispNone = ' style="display:none;"';
@@ -1440,9 +1433,9 @@ Viz.prototype = {
 	 * 
 	 * NOTE: The caller must handle the negative class for PETSCII.
 	 * 
-	 * @param {number} byte		Byte value 0 to 255.
+	 * @param {number} byte		Byte value 0 to 255
 	 * 
-	 * @return {array}			Array with strings for all types.
+	 * @return {array}			Array with strings for all types
 	 */
 	convertByte: function(byte) {
 		var half = byte & 0x7F, pLC, pUC;
@@ -1486,9 +1479,9 @@ Viz.prototype = {
 	 * Memory: Compare a current block of bytes from previous update, then only
 	 * update those hexadecimal bytes and PETSCII characters that changed.
 	 * 
-	 * @param {number} addrStart	Start address in C64 RAM.
-	 * @param {number} addrEnd		End address in C64 RAM.
-	 * @param {array} arrMemory		Array to contain the bytes of the address span.
+	 * @param {number} addrStart	Start address in C64 RAM
+	 * @param {number} addrEnd		End address in C64 RAM
+	 * @param {array} arrMemory		Array to contain the bytes of the address span
 	 */
 	patchMemoryBlock: function(addrStart, addrEnd, arrMemory) {
 		var byte, cByte;
@@ -1508,7 +1501,7 @@ Viz.prototype = {
 	/**
 	 * Memory: Activate or deactive the updating of the monitor-style tables.
 	 * 
-	 * @param {boolean} activate	TRUE to activate, FALSE to turn off.
+	 * @param {boolean} activate	TRUE to activate, FALSE to turn off
 	 */
 	activateMemory: function(activate) {
 		if (browser.playlist.length == 0 || miniPlayer || $("body").attr("data-mobile") !== "0") return;
@@ -1558,9 +1551,9 @@ Viz.prototype = {
 	/**
 	 * Return a correctly padded hexadecimal memory address for displaying.
 	 * 
-	 * @param {number} address		Address 0 to 65535.
+	 * @param {number} address		Address 0 to 65535
 	 * 
-	 * @return {string}				Address 0000 to FFFF.
+	 * @return {string}				Address 0000 to FFFF
 	 */
 	paddedAddress: function(address) {
 		address = Number(address).toString(16).toUpperCase();
@@ -1673,8 +1666,8 @@ Viz.prototype = {
 										var realDistance = Math.abs(this.stat_freq[voice][i + 1] - this.stat_freq[voice][i]);
 
 										/*if (voice == 1) {
-											console.log(this.stat_freq[voice]);
-											console.log("gap = "+gap+"; realDistance = "+realDistance+"; allowedDistance = "+allowedDistance);
+											log(this.stat_freq[voice]);
+											log("gap = "+gap+"; realDistance = "+realDistance+"; allowedDistance = "+allowedDistance);
 										}*/
 
 										if (realDistance == 0 || realDistance > allowedDistance) {
@@ -1862,8 +1855,8 @@ Viz.prototype = {
 	/**
 	 * Stats: Set or clear the background color of a table column.
 	 * 
- 	 * @param {number} voice		SID voice 0-2.
-	 * @param {boolean} set			TRUE to set color, otherwise remove it.
+ 	 * @param {number} voice		SID voice 0-2
+	 * @param {boolean} set			TRUE to set color, otherwise remove it
 	 */
 	setVoiceColor: function(voice, set) {
 		$("#table-stats .stats-"+(voice + 1)).css("background", (set ? GetCSSVar("--color-bg-stats-filterbg") : "transparent"));
@@ -1872,10 +1865,10 @@ Viz.prototype = {
 	/**
 	 * Stats: Mark a line in the table.
 	 * 
- 	 * @param {number} voice		SID voice 0-2.
- 	 * @param {*} register			Typically SID root register 0-6, but can also be e.g. a letter.
- 	 * @param {*} item				Kind of a subject ID - can be e.g. a number of a letter.
-	 * @param {boolean} bit			If specified, do not show the bit.
+ 	 * @param {number} voice		SID voice 0-2
+ 	 * @param {*} register			Typically SID root register 0-6, but can also be e.g. a letter
+ 	 * @param {*} item				Kind of a subject ID - can be e.g. a number of a letter
+	 * @param {boolean} bit			If specified, do not show the bit
 	 */
 	mark: function(voice, register, item, bit) {
 		var id = "#stats-v"+(voice + 1)+"-"+register+"-"+item;
@@ -1888,8 +1881,8 @@ Viz.prototype = {
 	/**
 	 * Stats: Show a hexadecimal word value in a DIV row in the table.
 	 * 
-	 * @param {string} id			The ID of the DIV.
-	 * @param {number} word			The 16-bit value to be shown as hexadecimal.
+	 * @param {string} id			The ID of the DIV
+	 * @param {number} word			The 16-bit value to be shown as hexadecimal
 	 */
 	showWord: function(id, word) {
 		if (isNaN(word)) word = 0;

@@ -198,13 +198,17 @@ $(function() { // DOM ready
 					});
 				}
 			} else if (event.keyCode == 84) {							// Keyup 't' (test something)
-				Log("test");
+				log("test");
+				SID.jp2StereoMode = "STEREO";
+				SID._jp2SetStereo();
 			}
 		}
 	});
 
 	/**
 	 * Handle key presses in the dialog box for editing a file row.
+	 * 
+	 * @param {*} event 
 	 */
 	$("#dialog-edit-file").on("keydown", function(event) {
 		if (event.keyCode == 13) {
@@ -322,6 +326,8 @@ $(function() { // DOM ready
 
 	/**
 	 * Handle settings edit box and button for changing the password.
+	 * 
+	 * @param {*} event 
 	 */
 	$("#old-password").keydown(function(event) {
 		if (event.keyCode == 13 && $("#old-password").val() !== "")
@@ -377,7 +383,7 @@ $(function() { // DOM ready
 	 * When resizing the window. Also affected by toggling the developer pane.
 	 * 
 	 * @param {*} event 
-	 * @param {boolean} sundryIgnore	If specified and TRUE, ignores the sundry box.
+	 * @param {boolean} sundryIgnore	If specified and TRUE, ignores the sundry box
 	 */
 	$(window).on("resize", function(event, sundryIgnore) {
 		if (!sundryIgnore) {
@@ -520,7 +526,7 @@ $(function() { // DOM ready
 	 * Used here by the SID handler.
 	 * 
 	 * NOTE: As of July 2024, all SID handlers now refresh the page. Most of the SID
-	 * handlers already did this, and it made the code so much easier to maintain.
+	 * handlers already did this, and it made the code much easier to maintain.
 	 */
 	$("div.styledSelect").change(function() {
 		// Get the choice from the drop-down box that was changed
@@ -541,9 +547,7 @@ $(function() { // DOM ready
 	 * When clicking a link for choosing "Lemon's MP3 Files" SID handler.
 	 */
 	$("a.set-lemon").click(function() {
-		$("#dropdown-topleft-emulator,#dropdown-settings-emulator")
-			.styledSetValue("lemon")
-			.next("div.styledSelect").trigger("change");
+		ctrls.selectEmulator("lemon");
 	});
 
 	/**
@@ -651,6 +655,8 @@ $(function() { // DOM ready
 
 	/**
 	 * When one of the YouTube channel tabs are clicked.
+	 * 
+	 * @handlers youtube
 	 */
 	$("#youtube-tabs").on("click", ".tab", function() {
 		var $this = $(this);
@@ -736,8 +742,8 @@ $(function() { // DOM ready
 			case "stereo":
 				// The stereo view requires a minimum amount of vertical space
 				var $sundry = $("#sundry");
-				if ($sundry.css("flex-basis").replace("px", "") < 160)
-					$sundry.css("flex-basis", 160);
+				if ($sundry.css("flex-basis").replace("px", "") < 163)
+					$sundry.css("flex-basis", 163);
 				AddScopeControls();
 				break;
 		}
@@ -753,19 +759,23 @@ $(function() { // DOM ready
 	 * Add sundry controls for scope and stereo tabs.
 	 */
 	function AddScopeControls() {
-		$("#sundry-ctrls").append(
-			'<label class="unselectable">Min</label>'+
-			'<input id="osc-zoom" type="range" min="1" max="5" value="'+viz.scopeZoom+'" step="1" />'+
-			'<label class="unselectable">Max</label>'+
-			'<div style="display:inline-block;vertical-align:top;margin-left:13px;">'+
-				'<input type="checkbox" id="sidwiz" name="sidwiztoggle" class="unselectable" '+(viz.scopeMode ? '' : 'un')+'checked />'+
-			'</div>'+
-			'<label for="sidwiz" class="unselectable">Sync</label>'
-		);
+		if (SID.emulator == "websid" || (SID.emulator == "legacy" && $("#sundry-tabs .selected").attr("data-topic") == "osc")) {
+			$("#sundry-ctrls").append(
+				'<label class="unselectable">Min</label>'+
+				'<input id="osc-zoom" type="range" min="1" max="5" value="'+viz.scopeZoom+'" step="1" />'+
+				'<label class="unselectable">Max</label>'+
+				'<div style="display:inline-block;vertical-align:top;margin-left:13px;">'+
+					'<input type="checkbox" id="sidwiz" name="sidwiztoggle" class="unselectable" '+(viz.scopeMode ? '' : 'un')+'checked />'+
+				'</div>'+
+				'<label for="sidwiz" class="unselectable">Sync</label>'
+			);
+		}
 	}
 
 	/**
 	 * When a 6581 filter slider is dragged in the sundry box.
+	 * 
+	 * @handlers websid
 	 * 
 	 * @param {*} event 
 	 */
@@ -779,6 +789,8 @@ $(function() { // DOM ready
 	/**
 	 * When entering a value in a 6581 filter edit box.
 	 * 
+	 * @handlers websid
+	 * 
 	 * @param {*} event 
 	 */
 	$("#stopic-filter").on("keyup", "input[type='text']", function(event) {
@@ -791,11 +803,13 @@ $(function() { // DOM ready
 	});
 
 	/**
-	 * When a slider is dragged in the stereo sundry box.
+	 * When a slider is dragged in the stereo sundry box (WebSid).
+	 * 
+	 * @handlers websid
 	 * 
 	 * @param {*} event 
 	 */
-	$("#stopic-stereo").on("input", "input[type='range']", function(event) {
+	$("#stereo-websid").on("input", "input[type='range']", function(event) {
 		if (event.target.id == "stereo-reverb-slider") {
 			// Reverb slider
 			SID.setStereoReverb(event.target.value);
@@ -812,14 +826,72 @@ $(function() { // DOM ready
 	});
 
 	/**
-	 * When clicking the 'Headphones' check box for stereo panning.
+	 * When a slider is dragged in the stereo sundry box (JSIDPlay2).
+	 * 
+	 * @handlers jsidplay2
+	 * 
+	 * @param {*} event 
 	 */
-	$("#stereo-headphones").click(function(event) {
+	$("#stereo-jsidplay2").on("input", "input[type='range']", function(event) {
+		var chip = event.target.id.split("-")[2].substring(1) - 1;
+		if (event.target.id.indexOf("jp2-b") !== -1) {
+			// Balance slider
+			SID.setStereoChip(chip, event.target.value);
+		} else {
+			// Delay slider
+			SID.setDelayChip(chip, event.target.value);
+		}
+	});
+
+
+	/**
+	 * When the drop-down for setting stereo mode is changed (JSIDPlay2).
+	 * 
+	 * @handlers jsidplay2
+	 * 
+	 * @param {*} event 
+	 */
+	$("#dropdown-jp2-stereo-mode").on("change", function(event) {
+		// AUTO, STEREO or THREE_SID
+		SID.setStereoMode(event.target.value);
+	});
+
+	/**
+	 * When clicking the 'Fake stereo' check box (JSIDPlay2).
+	 * 
+	 * @handlers jsidplay2
+	 */
+	$("#stereo-fake").click(function() {
+		SID.setStereoFake($("#stereo-fake").is(":checked"));
+	});
+
+	/**
+	 * When the drop-down for setting chip being read for fake stereo (JSIDPlay2).
+	 * 
+	 * @handlers jsidplay2
+	 * 
+	 * @param {*} event 
+	 */
+	$("#dropdown-jp2-fake-read").on("change", function(event) {
+		// Read FIRST_SID, SECOND_SID or THIRD_SID
+		SID.setStereoRead(event.target.value);
+	});
+
+	/**
+	 * When clicking the 'Headphones' check box for stereo panning.
+	 * 
+	 * @handlers websid
+	 */
+	$("#stereo-headphones").click(function() {
 		$("#stereo-headphones").is(":checked") ? SID.setStereoHeadphones(1) : SID.setStereoHeadphones(0);
 	});
 
 	/**
 	 * When changing the enhance stereo mode in its drop-down box.
+	 * 
+	 * @handlers websid
+	 * 
+	 * @param {*} event 
 	 */
 	$("#dropdown-stereo-mode").change(function(event) {
 		if (SID.stereoLevel == -1 || event.target.value == -1) SID.resetStereo();
@@ -827,7 +899,7 @@ $(function() { // DOM ready
 	});
 
 	/**
-	 * When one of the ON/OFF toggle buttons are clicked in the settings page.
+	 * Settings: When one of the ON/OFF toggle buttons are clicked.
 	 * 
 	 * @param {*} event 
 	 */
@@ -941,7 +1013,7 @@ $(function() { // DOM ready
 //	}),
 
 	/**
-	 * When clicking the 'BACK' button on a GameBase64 page to show the list of them again.
+	 * When clicking the 'BACK' button on a 'Remix' page to show the list of them again.
 	 */
 	$("#topic-remix").on("click", "#go-back-remix", function() {
 		// Load the cache again
@@ -1019,6 +1091,8 @@ $(function() { // DOM ready
 
 	/**
 	 * When clicking a rating star in a composer profile.
+	 * 
+	 * @param {*} event 
 	 */
 	$("#topic-profile").on("click", ".folder-rating b", function(event) {
 		// Clicked a star to set a rating for a folder or SID file
@@ -1115,7 +1189,7 @@ $(function() { // DOM ready
 	 * When clicking a "clink" for opening a composer's links in the annex box.
 	 * 
 	 * @param {*} event 
-	 * @param {boolean} internal	If specified and TRUE, it wasn't clicked by a human.
+	 * @param {boolean} internal	If specified and TRUE, it wasn't clicked by a human
 	 */
 	$("#topic-profile").on("click", "a.clinks", function(event, internal) {
 		var $this = $(this);
@@ -1196,6 +1270,8 @@ $(function() { // DOM ready
 
 	/**
 	 * When ENTER key is hit in the dialog box above.
+	 * 
+	 * @param {*} event 
 	 */
 	$("#edit-clink-name-input,#edit-clink-url-input").keydown(function(event) {
 		if (event.keyCode == 13)
@@ -1267,6 +1343,8 @@ $(function() { // DOM ready
 
 	/**
 	 * When clicking a recommendation box in the root.
+	 * 
+	 * @param {*} event 
 	 */
 	$("#topic-profile").on("mousedown", "table.recommended", function() { return false; });
 	$("#topic-profile").on("mouseup", "table.recommended", function(event) {
@@ -1396,7 +1474,7 @@ $(function() { // DOM ready
 	 * When clicking the "PLAYERS" link in top.
 	 * 
 	 * @param {*} event 
-	 * @param {boolean} noclick		If specified and TRUE, the 'Player' tab won't be clicked.
+	 * @param {boolean} noclick		If specified and TRUE, the 'Player' tab won't be clicked
 	 */
 	$("#players").click(function(event, noclick){
 		$(this).blur();
@@ -1423,8 +1501,8 @@ $(function() { // DOM ready
 	});
 
 	/**
-	 * When clicking a row in the "PLAYER" list. This shows the page for the
-	 * specific player/editor.
+	 * When clicking a row in the "PLAYER" list. This shows the page for the specific
+	 * player/editor.
 	 */
 	$("#topic-player").on("click", ".player-entry", function() {
 		$this = $(this);
@@ -1576,10 +1654,10 @@ $(function() { // DOM ready
 	 * 
 	 * Only used by redirect "plinks" for now.
 	 * 
-	 * @param {string} fullname		The SID filename including folders.
-	 * @param {boolean} solitary	If specified and FALSE, the tune will continue like in a playlist.
+	 * @param {string} fullname		The SID filename including folders
+	 * @param {boolean} solitary	If specified and FALSE, the tune will continue like in a playlist
 	 * 
-	 * @return {boolean}			TRUE if the SID was found and is now playing.
+	 * @return {boolean}			TRUE if the SID was found and is now playing
 	 */
 	function ClickAndScrollToSID(fullname, solitary) {
 		if (typeof solitary == "undefined") solitary = true;
@@ -1716,6 +1794,10 @@ $(function() { // DOM ready
 
 	/**
 	 * When clicking the 'Edit' link for changing the YouTube tabs for a song.
+	 * 
+	 * @handlers youtube
+	 * 
+	 * @param {*} event 
 	 */
 	$("#youtube-tabs").on("click", "#edityttabs a", function(event) {
 		browser.editYouTubeLinks($(event.target).attr("data-name"));
@@ -1750,7 +1832,7 @@ $(function() { // DOM ready
 	});
 
 	/**
-	 * When clicking link for showing a topic in the annex box. Since the annex box
+	 * When clicking a link for showing a topic in the annex box. Since the annex box
 	 * could have been closed earlier, it is made visible again.
 	 */
 	 $("#page").on("click", "a.annex-link", function() {
@@ -1764,6 +1846,8 @@ $(function() { // DOM ready
 
 	/**
 	 * Used by the above two event clicks.
+	 * 
+	 * @param {string} topic	The topic link
 	 */
 	function ClickAnnexLink(topic) {
 		$("#annex .annex-tab").empty().append('Tips<div class="annex-close"></div>');
@@ -1773,7 +1857,9 @@ $(function() { // DOM ready
 		});
 	}
 
-	// Select and show a "dexter" page tab
+	/**
+	 * Select and show a "dexter" page tab.
+	 */
 	if (selectTab == "") {
 		// Did we refresh from changing the SID handler?
 		var tab = localStorage.getItem("tab");
@@ -1791,7 +1877,9 @@ $(function() { // DOM ready
 	$("#tab-"+selectTab).trigger("click");
 	if (selectView !== "") $("#sticky-visuals .icon-"+selectView).trigger("click"); // Select a visuals view
 
-	// Select and show a "sundry" box tab (an URL parameter overrides the local storage setting)
+	/**
+	 * Select and show a "sundry" box tab (an URL parameter overrides the local storage setting).
+	 */
 	if (selectSundryTab === "") {
 		selectSundryTab = localStorage.getItem("sundrytab");
 		if (selectSundryTab == null) selectSundryTab = "stil";
@@ -1800,14 +1888,18 @@ $(function() { // DOM ready
 	if (selectSundryTab === "scope") selectSundryTab = "osc";
 	$("#stab-"+selectSundryTab).trigger("click");
 
-	// Show a specific player/editor in the 'Player' tab
+	/**
+	 * Show a specific player/editor in the 'Player' tab.
+	 */
 	if (playerID != "") {
 		browser.getPlayerInfo({id: playerID});	// Show the page
 		$("#tab-player").trigger("click");
 	} else
 		$("#players").trigger("click", true);	// Otherwise just load the list of them
 
-	// Show a specific CSDb entry (only loads the content of the CSDb tab)
+	/**
+	 * Show a specific CSDb entry (only loads the content of the CSDb tab).
+	 */
 	if (typeCSDb === "sid" || typeCSDb === "release") {
 		browser.getCSDb(typeCSDb, idCSDb, false);
 		$("#sticky-csdb").show(); // Show sticky header
@@ -1831,6 +1923,8 @@ $(window).on("load", function() {
 
 /**
  * Enable or disable buttons and sliders in the sundry box for 6581 filter.
+ * 
+ * @handlers websid
  * 
  * NOTE: Don't call this too early or 'SID.getModel()' fails.
  */
@@ -1860,6 +1954,8 @@ function ShowSundryFilterContents() {
  * Make sure the visuals (and "SID_WRITE" event) are turned OFF as default for
  * JSIDPlay2, otherwise ON for all other SID handlers. This is of course to
  * save on CPU time for JSIDPlay2 as "SID_WRITE" is a very busy event.
+ * 
+ * @handlers jsidplay2
  */
 function ToggleVisuals() {
 	if (SID.emulator == "jsidplay2" && $("#tab-visuals-toggle").hasClass("button-on"))
@@ -1872,7 +1968,7 @@ function ToggleVisuals() {
 /**
  * Perform a search query, optionally with a type too.
  * 
- * @param {string} searchQuery	The search query string.
+ * @param {string} searchQuery	The search query string
  */
 function PerformSearchQuery(searchQuery) {
 	$("#dropdown-search").val(GetParam("type") !== "" ? GetParam("type").toLowerCase() : "#all#");
@@ -1914,9 +2010,9 @@ function PlayFromURLNow() {
 /**
  * Check if a file exists in the "SID Happens" folder.
  * 
- * @param {string} filename		Must be full path.
+ * @param {string} filename		Must be full path
  * 
- * @return {boolean}			TRUE if the file exists.
+ * @return {boolean}			TRUE if the file exists
  */
 function SidHappensFileExists(filename) {
 	var exists;
@@ -1933,6 +2029,8 @@ function SidHappensFileExists(filename) {
 
 /**
  * Reset the scrollbar in a "dexter" page to the top.
+ * 
+ * @param {string} topic	Name of tab, e.g. "profile", "csdb", etc.
  */
 function ResetDexterScrollBar(topic) {
 	tabPrevScrollPos[topic].pos = 0;
@@ -1940,10 +2038,10 @@ function ResetDexterScrollBar(topic) {
 }
 
 /**
- * Set the state of an ON/OFF toggle button in the settings tab.
+ * Settings: Set the state of an ON/OFF toggle button.
  * 
- * @param {string} id		Part of the ID to be appended.
- * @param {boolean} state	1 or 0.
+ * @param {string} id		Part of the ID to be appended
+ * @param {boolean} state	1 or 0
  */
 function SettingToggle(id, state) {
 	$("#setting-"+id)
@@ -1954,9 +2052,9 @@ function SettingToggle(id, state) {
 }
 
 /**
- * Get a value from the settings tab.
+ * Settings: Get a value.
  * 
- * @param {string} id		Part of the ID to be appended.
+ * @param {string} id		Part of the ID to be appended
  * 
  * @return {*}				The value.
  */
@@ -1979,12 +2077,12 @@ function ResizeIframe() {
 
 /**
  * Minimize or maximize the sundry box in case of a small display. When the box
- * is minimized, you can still click a tab to restore its size or you can drag
+ * is minimized, you can still click a tab to restore its size, or you can drag
  * the slider downwards to expand it.
  * 
  * All sundry tabs become unselected while minimized.
  * 
- * @param {boolean} shrink	TRUE to minimize, FALSE to return to before, or toggle if not specified.
+ * @param {boolean} shrink	TRUE to minimize, FALSE to return to before, or toggle if not specified
  */
 function ToggleSundry(shrink) {
 	if (typeof shrink === "undefined") shrink = sundryToggle;
@@ -2012,7 +2110,12 @@ function ToggleSundry(shrink) {
 }
 
 /**
- * Show video box in top instead of info box if "YouTube" is the SID handler.
+ * Show video box in top instead of info box if "YouTube" is the SID handler. Also shows
+ * a MIDI drop-down box in top if "ASID" is the SID handler.
+ * 
+ * @handlers youtube, asid
+ * 
+ * @param {string} emulator
  */
 function HandleTopBox(emulator) {
 	if (emulator == "youtube") {
@@ -2088,7 +2191,7 @@ function DisableIncompatibleRows() {
 /**
  * Update the URL in the web browser address field.
  * 
- * @param {boolean} id		If specified, TRUE to skip file check.
+ * @param {boolean} skipFileCheck	If specified, TRUE to skip file check
  */
 function UpdateURL(skipFileCheck) {
 	if (browser.isTempTestFile()) return;
@@ -2166,8 +2269,8 @@ function STILChangeReportLink() {
 /**
  * Set the scrollbar position instantly without animating a scrolling to it.
  * 
- * @param {object} element			The element to set the scrollbar position for.
- * @param {number} pos				The scrollbar position.
+ * @param {object} element			The element to set the scrollbar position for
+ * @param {number} pos				The scrollbar position
  */
 function SetScrollTopInstantly(element, pos) {
 	$(element)
@@ -2214,14 +2317,14 @@ $.fn.center = function () {
 /**
  * Show a custom dialog box.
  * 
- * @param {array} data				Associative array with data.
- * 									 - id		Must be set.
- * 								 	 - text		Must be set.
- * 								 	 - width	A default is used if not set.
- * 								 	 - height	A default is used if not set.
- * 									 - wizard	Don't fade cover if set and TRUE.
- * @param {function} callbackYes	Callback used if YES is clicked.
- * @param {function} callbackNo		Callback used if NO is clicked.
+ * @param {array} data				Associative array with data:
+ * 									 - id		Must be set
+ * 								 	 - text		Must be set
+ * 								 	 - width	A default is used if not set
+ * 								 	 - height	A default is used if not set
+ * 									 - wizard	Don't fade cover if set and TRUE
+ * @param {function} callbackYes	Callback used if YES is clicked
+ * @param {function} callbackNo		Callback used if NO is clicked
  */
 function CustomDialog(data, callbackYes, callbackNo) {
 	$(data.id).off("click", ".dialog-button-yes");
@@ -2266,7 +2369,7 @@ function CustomDialog(data, callbackYes, callbackNo) {
  * If the variable is not present in the CSS file for the dark theme, it will
  * automatically default to the ":root" variable.
  * 
- * @param {string} cssVar	The custom variable name.
+ * @param {string} cssVar	The custom variable name
  */
 function GetCSSVar(cssVar) {
 	return $(parseInt(colorTheme) ? "[data-theme='dark']" : ":root").css(cssVar);
@@ -2278,7 +2381,7 @@ function GetCSSVar(cssVar) {
  *
  * @link http://gsgd.co.uk/sandbox/jquery/easing/
  */
-$.extend($.easing,{
+$.extend($.easing, {
 	easeOutQuint: function (x, t, b, c, d) {
 		return c*((t=t/d-1)*t*t*t*t + 1) + b;
 	},
@@ -2292,17 +2395,25 @@ $.extend($.easing,{
  * parameters, using "stab" may also invoke "tab" as well. Make sure you
  * only use unique parameter names that can't be confused like that.
  * 
- * @param {string} name		Parameter to search for.
+ * @param {string} name		Parameter to search for
  * 
- * @return {string}			Value (empty if non-existent or equal to nothing).
+ * @return {string}			Value (empty if non-existent or equal to nothing)
  */
 function GetParam(name) {
 	return decodeURIComponent((RegExp(name + '=' + '(.+?)(&|$)').exec(location.search.replace(/\+/g, " "))||[,""])[1]);
 }
 
 /**
- * Log a unique console line that doesn't huddle up.
+ * Log a line in the console.
+ * 
+ * @param {string} text				The text to be logged
+ * @param {boolean} preventHuddle	Optional; set to TRUE to make each log output unique
  */
-function Log(text) {
-	console.log("DeepSID "+(logCount++)+": " + text);
+function log(text, preventHuddle) {
+	if (window.console) {
+		if (typeof preventHuddle !== "undefined" && preventHuddle)
+			console.log("DeepSID "+(logCount++)+": " + text);
+		else
+			console.log(text);
+	}
 }

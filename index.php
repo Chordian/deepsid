@@ -681,74 +681,132 @@
 					<div id="filter-websid" class="sundryMsg" style="display:none;">This tab requires the <button class="set-websid">WebSid</button> emulator.</div>
 				</div>
 				<div id="stopic-stereo" class="stopic" style="display:none;">
-					<table id="stereo-table">
-						<tr>
-							<td class="stereo-header">
-								<span id="stereo-sh1"><b>SID 1</b></span>
-							</td>
-							<td class="stereo-s1">
-								<label class="voice unselectable">Voice 1</label><br />
-								<div id="stereo-s1v1-scope" class="stereo-scope"><label class="stereo-letter left unselectable">L</label><input id="stereo-s1v1-slider" type="range" min="0" max="100" value="50" step="1" /><label class="stereo-letter right unselectable">R</label></div>
-							</td>
-							<td class="stereo-s1">
-								<label class="voice unselectable">Voice 2</label><br />
-								<div id="stereo-s1v2-scope" class="stereo-scope"><label class="stereo-letter left unselectable">L</label><input id="stereo-s1v2-slider" type="range" min="0" max="100" value="50" step="1" /><label class="stereo-letter right unselectable">R</label></div>
-							</td>
-							<td class="stereo-s1">
-								<label class="voice unselectable">Voice 3</label><br />
-								<div id="stereo-s1v3-scope" class="stereo-scope"><label class="stereo-letter left unselectable">L</label><input id="stereo-s1v3-slider" type="range" min="0" max="100" value="50" step="1" /><label class="stereo-letter right unselectable">R</label></div>
-							</td>
-						</tr>
-						<tr>
-							<td class="stereo-header">
-								<span id="stereo-sh2" class="disabled"><b>SID 2</b></span>
-							</td>
-							<td class="stereo-s2">
-								<label class="disabled voice unselectable">Voice 1</label><br />
-								<div id="stereo-s2v1-scope" class="stereo-scope"><label class="disabled stereo-letter left unselectable">L</label><input id="stereo-s2v1-slider" class="disabled" type="range" min="0" max="100" value="50" step="1" disabled="disabled" /><label class="disabled stereo-letter right unselectable">R</label></div>
-							</td>
-							<td class="stereo-s2">
-								<label class="disabled voice unselectable">Voice 2</label><br />
-								<div id="stereo-s2v2-scope" class="stereo-scope"><label class="disabled stereo-letter left unselectable">L</label><input id="stereo-s2v2-slider" class="disabled" type="range" min="0" max="100" value="50" step="1" disabled="disabled" /><label class="disabled stereo-letter right unselectable">R</label></div>
-							</td>
-							<td class="stereo-s2">
-								<label class="disabled voice unselectable">Voice 3</label><br />
-								<div id="stereo-s2v3-scope" class="stereo-scope"><label class="disabled stereo-letter left unselectable">L</label><input id="stereo-s2v3-slider" class="disabled" type="range" min="0" max="100" value="50" step="1" disabled="disabled" /><label class="disabled stereo-letter right unselectable">R</label></div>
-							</td>
-						</tr>
-						<tr>
-							<td class="stereo-header">
-								<span id="stereo-sh3" class="disabled"><b>SID 3</b></span>
-							</td>
-							<td class="stereo-s3">
-								<label class="disabled voice unselectable">Voice 1</label><br />
-								<div id="stereo-s3v1-scope" class="stereo-scope"><label class="disabled stereo-letter left unselectable">L</label><input id="stereo-s3v1-slider" class="disabled" type="range" min="0" max="100" value="50" step="1" disabled="disabled" /><label class="disabled stereo-letter right unselectable">R</label></div>
-							</td>
-							<td class="stereo-s3">
-								<label class="disabled voice unselectable">Voice 2</label><br />
-								<div id="stereo-s3v2-scope" class="stereo-scope"><label class="disabled stereo-letter left unselectable">L</label><input id="stereo-s3v2-slider" class="disabled" type="range" min="0" max="100" value="50" step="1" disabled="disabled" /><label class="disabled stereo-letter right unselectable">R</label></div>
-							</td>
-							<td class="stereo-s3">
-								<label class="disabled voice unselectable">Voice 3</label><br />
-								<div id="stereo-s3v3-scope" class="stereo-scope"><label class="disabled stereo-letter left unselectable">L</label><input id="stereo-s3v3-slider" class="disabled" type="range" min="0" max="100" value="50" step="1" disabled="disabled" /><label class="disabled stereo-letter right unselectable">R</label></div>
-							</td>
-						</tr>
-					</table>
-					<div id="stereo-controls" class="edit" style="margin-top:6px;padding-right:0;">
-						<label class="unselectable" style="position:relative;top:-1px;margin-right:4px;">Mode</label>
-						<select id="dropdown-stereo-mode" name="select-stereo-mode" style="position:relative;top:-1px;">
-							<option value="-1" selected="selected">No stereo</option>
-							<option value="0">Enhance off</option>
-							<option value="16384">Low enhance</option>
-							<option value="24576">Medium enhance</option>
-							<option value="32767">High enhance</option>
-						</select>
-						<div style="display:inline-block;margin-left:20px;">
-							<input type="checkbox" id="stereo-headphones" name="hptoggle" class="unselectable" unchecked /><label for="stereo-headphones" class="unselectable" title="Headphones"><svg id="svg-headphones" height="16" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path d="M256 32C114.52 32 0 146.496 0 288v48a32 32 0 0 0 17.689 28.622l14.383 7.191C34.083 431.903 83.421 480 144 480h24c13.255 0 24-10.745 24-24V280c0-13.255-10.745-24-24-24h-24c-31.342 0-59.671 12.879-80 33.627V288c0-105.869 86.131-192 192-192s192 86.131 192 192v1.627C427.671 268.879 399.342 256 368 256h-24c-13.255 0-24 10.745-24 24v176c0 13.255 10.745 24 24 24h24c60.579 0 109.917-48.098 111.928-108.187l14.382-7.191A32 32 0 0 0 512 336v-48c0-141.479-114.496-256-256-256z"/></svg></label>
+					<?php // Sundry tab: Stereo controls for WebSid ?>
+					<div id="stereo-websid">
+						<table>
+							<tr>
+								<td class="stereo-header">
+									<span id="stereo-sh1"><b>SID 1</b></span>
+								</td>
+								<td class="stereo-s1">
+									<label class="voice unselectable">Voice 1</label><br />
+									<div id="stereo-s1v1-scope" class="stereo-scope"><label class="stereo-letter left unselectable">L</label><input id="stereo-s1v1-slider" type="range" min="0" max="100" value="50" step="1" /><label class="stereo-letter right unselectable">R</label></div>
+								</td>
+								<td class="stereo-s1">
+									<label class="voice unselectable">Voice 2</label><br />
+									<div id="stereo-s1v2-scope" class="stereo-scope"><label class="stereo-letter left unselectable">L</label><input id="stereo-s1v2-slider" type="range" min="0" max="100" value="50" step="1" /><label class="stereo-letter right unselectable">R</label></div>
+								</td>
+								<td class="stereo-s1">
+									<label class="voice unselectable">Voice 3</label><br />
+									<div id="stereo-s1v3-scope" class="stereo-scope"><label class="stereo-letter left unselectable">L</label><input id="stereo-s1v3-slider" type="range" min="0" max="100" value="50" step="1" /><label class="stereo-letter right unselectable">R</label></div>
+								</td>
+							</tr>
+							<tr>
+								<td class="stereo-header">
+									<span id="stereo-sh2" class="disabled"><b>SID 2</b></span>
+								</td>
+								<td class="stereo-s2">
+									<label class="disabled voice unselectable">Voice 1</label><br />
+									<div id="stereo-s2v1-scope" class="stereo-scope"><label class="disabled stereo-letter left unselectable">L</label><input id="stereo-s2v1-slider" class="disabled" type="range" min="0" max="100" value="50" step="1" disabled="disabled" /><label class="disabled stereo-letter right unselectable">R</label></div>
+								</td>
+								<td class="stereo-s2">
+									<label class="disabled voice unselectable">Voice 2</label><br />
+									<div id="stereo-s2v2-scope" class="stereo-scope"><label class="disabled stereo-letter left unselectable">L</label><input id="stereo-s2v2-slider" class="disabled" type="range" min="0" max="100" value="50" step="1" disabled="disabled" /><label class="disabled stereo-letter right unselectable">R</label></div>
+								</td>
+								<td class="stereo-s2">
+									<label class="disabled voice unselectable">Voice 3</label><br />
+									<div id="stereo-s2v3-scope" class="stereo-scope"><label class="disabled stereo-letter left unselectable">L</label><input id="stereo-s2v3-slider" class="disabled" type="range" min="0" max="100" value="50" step="1" disabled="disabled" /><label class="disabled stereo-letter right unselectable">R</label></div>
+								</td>
+							</tr>
+							<tr>
+								<td class="stereo-header">
+									<span id="stereo-sh3" class="disabled"><b>SID 3</b></span>
+								</td>
+								<td class="stereo-s3">
+									<label class="disabled voice unselectable">Voice 1</label><br />
+									<div id="stereo-s3v1-scope" class="stereo-scope"><label class="disabled stereo-letter left unselectable">L</label><input id="stereo-s3v1-slider" class="disabled" type="range" min="0" max="100" value="50" step="1" disabled="disabled" /><label class="disabled stereo-letter right unselectable">R</label></div>
+								</td>
+								<td class="stereo-s3">
+									<label class="disabled voice unselectable">Voice 2</label><br />
+									<div id="stereo-s3v2-scope" class="stereo-scope"><label class="disabled stereo-letter left unselectable">L</label><input id="stereo-s3v2-slider" class="disabled" type="range" min="0" max="100" value="50" step="1" disabled="disabled" /><label class="disabled stereo-letter right unselectable">R</label></div>
+								</td>
+								<td class="stereo-s3">
+									<label class="disabled voice unselectable">Voice 3</label><br />
+									<div id="stereo-s3v3-scope" class="stereo-scope"><label class="disabled stereo-letter left unselectable">L</label><input id="stereo-s3v3-slider" class="disabled" type="range" min="0" max="100" value="50" step="1" disabled="disabled" /><label class="disabled stereo-letter right unselectable">R</label></div>
+								</td>
+							</tr>
+						</table>
+						<div class="edit" style="margin-top:6px;padding-right:0;">
+							<label class="unselectable" style="position:relative;top:-1px;margin-right:4px;">Mode</label>
+							<select id="dropdown-stereo-mode" name="select-stereo-mode" style="position:relative;top:-1px;">
+								<option value="-1" selected="selected">No stereo</option>
+								<option value="0">Enhance off</option>
+								<option value="16384">Low enhance</option>
+								<option value="24576">Medium enhance</option>
+								<option value="32767">High enhance</option>
+							</select>
+							<div style="display:inline-block;margin-left:20px;">
+								<input type="checkbox" id="stereo-headphones" name="hptoggle" class="unselectable" unchecked /><label for="stereo-headphones" class="unselectable" title="Headphones"><svg id="svg-headphones" height="16" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path d="M256 32C114.52 32 0 146.496 0 288v48a32 32 0 0 0 17.689 28.622l14.383 7.191C34.083 431.903 83.421 480 144 480h24c13.255 0 24-10.745 24-24V280c0-13.255-10.745-24-24-24h-24c-31.342 0-59.671 12.879-80 33.627V288c0-105.869 86.131-192 192-192s192 86.131 192 192v1.627C427.671 268.879 399.342 256 368 256h-24c-13.255 0-24 10.745-24 24v176c0 13.255 10.745 24 24 24h24c60.579 0 109.917-48.098 111.928-108.187l14.382-7.191A32 32 0 0 0 512 336v-48c0-141.479-114.496-256-256-256z"/></svg></label>
+							</div>
+							<label class="unselectable" style="margin-right:8px;">Reverb</label><input id="stereo-reverb-slider" style="position:relative;top:3px;width:60px;" type="range" min="0" max="100" value="100" step="1" />
 						</div>
-						<label class="unselectable" style="margin-right:8px;">Reverb</label><input id="stereo-reverb-slider" style="position:relative;top:3px;width:60px;" type="range" min="0" max="100" value="100" step="1" />
 					</div>
-					<div id="stereo-websid" class="sundryMsg" style="display:none;">This tab requires the <button class="set-websid">WebSid</button> emulator.</div>
+					<?php // Sundry tab: Stereo controls for JSIDPLAY2 ?>
+					<div id="stereo-jsidplay2">
+						<table>
+							<tr>
+								<td class="stereo-header">
+									<span id="stereo-jp2-bh"><b>Balance</b></span>
+								</td>
+								<td class="stereo-jp2-b1 stereo-cell">
+									<label class="voice unselectable">SID chip 1</label><br />
+									<label class="stereo-letter left unselectable">L</label><input id="stereo-jp2-b1-slider" type="range" min="0" max="1" value="0.3" step="0.1" /><label class="stereo-letter right unselectable">R</label>
+								</td>
+								<td class="stereo-jp2-b2 stereo-cell">
+									<label class="voice unselectable">SID chip 2</label><br />
+									<label class="stereo-letter left unselectable">L</label><input id="stereo-jp2-b2-slider" type="range" min="0" max="1" value="0.7" step="0.1" /><label class="stereo-letter right unselectable">R</label>
+								</td>
+								<td class="stereo-jp2-b3 stereo-cell">
+									<label class="voice unselectable">SID chip 3</label><br />
+									<label class="stereo-letter left unselectable">L</label><input id="stereo-jp2-b3-slider" type="range" min="0" max="1" value="0.5" step="0.1" /><label class="stereo-letter right unselectable">R</label>
+								</td>
+							</tr>
+							<tr>
+								<td class="stereo-header">
+									<span id="stereo-jp2-dh"><b>Delay</b></span>
+								</td>
+								<td class="stereo-jp2-d1 stereo-cell">
+									<label class="voice unselectable">SID chip 1</label><br />
+									<label class="stereo-letter-dense left-dense unselectable">0 ms&nbsp;&nbsp;</label><input id="stereo-jp2-d1-slider" type="range" min="0" max="50" value="10" step="1" /><label class="stereo-letter-dense right unselectable">50</label>
+								</td>
+								<td class="stereo-jp2-d2 stereo-cell">
+									<label class="voice unselectable">SID chip 2</label><br />
+									<label class="stereo-letter-dense left-dense unselectable">0 ms&nbsp;&nbsp;</label><input id="stereo-jp2-d2-slider" type="range" min="0" max="50" value="0" step="1" /><label class="stereo-letter-dense right unselectable">50</label>
+								</td>
+								<td class="stereo-jp2-d3 stereo-cell">
+									<label class="voice unselectable">SID chip 3</label><br />
+									<label class="stereo-letter-dense left-dense unselectable">0 ms&nbsp;&nbsp;</label><input id="stereo-jp2-d3-slider" type="range" min="0" max="50" value="0" step="1" /><label class="stereo-letter-dense right unselectable">50</label>
+								</td>
+							</tr>
+						</table>
+						<div class="edit" style="margin-top:6px;padding-right:0;">
+							<label class="unselectable" style="position:relative;top:0;margin-right:4px;">Stereo mode</label>
+							<select id="dropdown-jp2-stereo-mode" name="select-jp2-stereo-mode">
+								<option value="AUTO" selected="selected">Auto</option>
+								<option value="STEREO">Stereo</option>
+								<option value="THREE_SID">3SID</option>
+							</select>
+							<div style="display:inline-block;position:relative;top:2px;margin-left:15px;">
+								<input type="checkbox" id="stereo-fake" name="faketoggle" class="unselectable" unchecked /><label for="stereo-fake" class="unselectable">Fake stereo, using</label>
+							</div>
+							<select id="dropdown-jp2-fake-read" name="select-jp2-fake-read" style="position:relative;left:-13px;">
+								<option value="FIRST_SID" selected="selected">1st SID chip</option>
+								<option value="SECOND_SID">2nd SID chip</option>
+								<option value="THIRD_SID">3rd SID chip</option>
+							</select>
+						</div>
+					</div>
+					<div id="stereo-message" class="sundryMsg" style="display:none;">This tab requires the <button class="set-websid">WebSid</button> or the <button class="set-jsidplay2">JSIDPlay2</button> emulator.</div>
 				</div>
 				<a id="redirect-back" class="redirect continue" href="#" style="display:none"></a>
 			</div>
@@ -1785,6 +1843,12 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>July 20, 2024</h3>
+						<ul>
+							<li>The sundry tab for stereo is now also available for JSIDPlay2. Here you can set sliders for balance and delay,
+								change the stereo mode, and toggle fake stereo along with the SID chip to read from.</li>
+						</ul>
+
 						<h3>July 18, 2024</h3>
 						<ul>
 							<li>Fixed main volume not being remembered when refreshing the site.</li>
@@ -1819,6 +1883,7 @@
 									<li>The oscilloscope is not supported yet.</li>
 									<li>Showing the PAL/NTSC and 6581/8580 flags is not ready yet.</li>
 									<li>Advanced reSID settings are not available.</li>
+									<li>For 2SID and 3SID tunes, the visuals only show the first SID chip.</li>
 									<li>Exotic SID tunes (4SID and more) are not supported.</li>
 								</ul>
 							</li>

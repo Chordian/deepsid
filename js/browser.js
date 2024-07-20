@@ -316,10 +316,10 @@ Browser.prototype = {
 	 * Click the left mouse button somewhere below the control buttons.
 	 * 
 	 * @param {*} event 
-	 * @param {number} paramSubtune		If specified, override subtune number with a URL parameter.
-	 * @param {boolean} paramSkipCSDb	If specified and TRUE, skip generating the 'CSDb' tab contents.
-	 * @param {boolean} paramSolitary	If specified and TRUE, just stop the tune when it's done.
-	 * @param {boolean} paramWait		If specified, mark/play the tune then stop after X millseconds.
+	 * @param {number} paramSubtune		If specified, override subtune number with a URL parameter
+	 * @param {boolean} paramSkipCSDb	If specified and TRUE, skip generating the 'CSDb' tab contents
+	 * @param {boolean} paramSolitary	If specified and TRUE, just stop the tune when it's done
+	 * @param {boolean} paramWait		If specified, mark/play the tune then stop after X millseconds
 	 */
 	onClick: function(event, paramSubtune, paramSkipCSDb, paramSolitary, paramWait) {
 		this.clearSpinner();
@@ -1074,10 +1074,10 @@ Browser.prototype = {
 	/**
 	 * Get the folders and files in 'this.path' and show them in the browser panel.
 	 * 
-	 * @param {number} scrollPos	If specified, jump to position in list (otherwise just stay in top).
-	 * @param {string} searchQuery	If specified, search results will be shown instead.
-	 * @param {boolean} readCache	If specified, TRUE will load from a cache instead.
-	 * @param {function} callback 	If specified, the function to call after showing the contents.
+	 * @param {number} scrollPos	If specified, jump to position in list (otherwise just stay in top)
+	 * @param {string} searchQuery	If specified, search results will be shown instead
+	 * @param {boolean} readCache	If specified, TRUE will load from a cache instead
+	 * @param {function} callback 	If specified, the function to call after showing the contents
 	 */
 	getFolder: function(scrollPos, searchQuery, readCache, callback) {
 
@@ -1524,10 +1524,10 @@ Browser.prototype = {
 	/**
 	 * Get the length of the SID (sub) tune and convert it to just seconds.
 	 * 
-	 * @param {number} subtune		Subtune number.
-	 * @param {boolean} noReset		If specified and TRUE, skip resetting the bar fields.
+	 * @param {number} subtune		Subtune number
+	 * @param {boolean} noReset		If specified and TRUE, skip resetting the bar fields
 	 * 
-	 * @return {number}				The total number of seconds.
+	 * @return {number}				The total number of seconds
 	 */
 	getLength: function(subtune, noReset) {
 
@@ -1608,9 +1608,9 @@ Browser.prototype = {
 	/**
 	 * Build the HTML elements needed to show the marked stars in the SID file row.
 	 * 
-	 * @param {number} rating	The rating; 0 to 5.
+	 * @param {number} rating	The rating; 0 to 5
 	 * 
-	 * @return {string}			The HTML string to put into the SID row.
+	 * @return {string}			The HTML string to put into the SID row
 	 */
 	buildStars: function(rating) {
 		var s = $("#logout").length ? "sh " : "s "; // Only allow stars lighting up on hover if logged in
@@ -1630,10 +1630,10 @@ Browser.prototype = {
 	/**
 	 * Build the HTML elements needed to show the tags in the SID file row. 
 	 * 
-	 * @param {array} tags		Array with (sorted) tag names only.
-	 * @param {array} types		Array with (sorted) tag types only.
+	 * @param {array} tags		Array with (sorted) tag names only
+	 * @param {array} types		Array with (sorted) tag types only
 	 * 
-	 * @return {string}			The HTML string to put into the SID row.
+	 * @return {string}			The HTML string to put into the SID row
 	 */
 	buildTags: function(tags, types) {
 		var list_of_tags = remix64 = '';
@@ -1658,7 +1658,7 @@ Browser.prototype = {
 	/**
 	 * Hide the rating stars and show a spinner to show that the SID tune is loading.
 	 * 
-	 * @param {object} $td	The jQuery element with the SID filename.
+	 * @param {object} $td	The jQuery element with the SID filename
 	 */
 	showSpinner: function($td) {
 		if (SID.emulatorFlags.slowLoading) {
@@ -1702,8 +1702,8 @@ Browser.prototype = {
 	/**
 	 * Show the composer page in the 'Profile' tab.
 	 * 
-	 * @param {string} overridePath		If specified, fullname for profile (including file).
-	 * @param {boolean} rawPath			Unless, if specified, this is set to TRUE (path only).
+	 * @param {string} overridePath		If specified, fullname for profile (including file)
+	 * @param {boolean} rawPath			Unless, if specified, this is set to TRUE (path only)
 	 */
 	getComposer: function(overridePath, rawPath) {
 		if (miniPlayer || isMobile) return;
@@ -1831,7 +1831,7 @@ Browser.prototype = {
 	/**
 	 * Get the contents of the groups table and display it in the composer profile.
 	 * 
-	 * @param {string} fullname		The SID filename including folders.
+	 * @param {string} fullname		The SID filename including folders
 	 */
 	getGroups: function(fullname) {
 		if (miniPlayer) return;
@@ -1866,9 +1866,9 @@ Browser.prototype = {
 	 * 
 	 * Also handles the tab notification counter. 
 	 * 
-	 * @param {string} type		E.g. "release" (only used for permalinks).
-	 * @param {number} id		ID number used by CSDb (only used for permalinks).
-	 * @param {boolean} back	If specified and TRUE, show a 'BACK' button.
+	 * @param {string} type		E.g. "release" (only used for permalinks)
+	 * @param {number} id		ID number used by CSDb (only used for permalinks)
+	 * @param {boolean} back	If specified and TRUE, show a 'BACK' button
 	 */
 	getCSDb: function(type, id, back) {
 		if (miniPlayer || isMobile || this.isTempTestFile()) return;
@@ -1919,7 +1919,7 @@ Browser.prototype = {
 	 * 
 	 * Also handles the tab notification counter. 
 	 * 
-	 * @param {array} params	player: {string} or id: {number}.
+	 * @param {array} params	player: {string} or id: {number}
 	 */
 	getPlayerInfo: function(params) {
 		if (miniPlayer || isMobile || JSON.stringify(params) == JSON.stringify(this.playerParams)) return;
@@ -1954,9 +1954,9 @@ Browser.prototype = {
 	/**
 	 * Show a competition results list in the 'CSDb' tab.
 	 * 
-	 * @param {string} compo	Type, e.g. "C64 Music" (obtained from a CSDb page).
-	 * @param {number} id 		The CSDb event ID.
-	 * @param {number} mark		ID of the release page to mark on the competition results list.
+	 * @param {string} compo	Type, e.g. "C64 Music" (obtained from a CSDb page)
+	 * @param {number} id 		The CSDb event ID
+	 * @param {number} mark		ID of the release page to mark on the competition results list
 	 */
 	getCompoResults: function(compo, id, mark) {
 		if (miniPlayer || isMobile) return;
@@ -2001,7 +2001,7 @@ Browser.prototype = {
 	 * 
 	 * Also handles the tab notification counter. 
 	 * 
-	 * @param {number} optionalID		If specified, the ID to show a specific sub page.
+	 * @param {number} optionalID		If specified, the ID to show a specific sub page
 	 */
 	getGB64: function(optionalID) {
 
@@ -2045,7 +2045,7 @@ Browser.prototype = {
 	 * 
 	 * Also handles the tab notification counter. 
 	 * 
-	 * @param {number} optionalID		If specified, the ID to show a specific entry.
+	 * @param {number} optionalID		If specified, the ID to show a specific entry
 	 */
 	getRemix: function(optionalID) {
 		if (miniPlayer || isMobile || this.isTempTestFile()) return;
@@ -2477,8 +2477,10 @@ Browser.prototype = {
 	 * Edit the YouTube video links for a SID file. If there are multiple
 	 * subtunes, a small dialog box first asks for which one.
 	 * 
-	 * @param {string} fullname		The SID filename including folders.
-	 * @param {number} subtunes		Maximum number of subtunes.
+	 * @handlers youtube
+	 * 
+	 * @param {string} fullname		The SID filename including folders
+	 * @param {number} subtunes		Maximum number of subtunes
 	 */
 	editYouTubeLinks: function(fullname, subtunes) {
 
@@ -2519,9 +2521,11 @@ Browser.prototype = {
 	/**
 	 * Show the main dialog box for editing YouTube video links.
 	 * 
-	 * @param {string} fullname		The SID filename including folders.
-	 * @param {number} subtune		The subtune involved.
-	 * @param {boolean} noFade		If true, the dialog cover will not be faded.
+	 * @handlers youtube
+	 * 
+	 * @param {string} fullname		The SID filename including folders
+	 * @param {number} subtune		The subtune involved
+	 * @param {boolean} noFade		If true, the dialog cover will not be faded
 	 */ 
 	mainEditYouTube: function(fullname, subtune, noFade) {
 
@@ -2628,6 +2632,8 @@ Browser.prototype = {
 	/**
 	 * When clicking an item in the dialog box for editing YouTube video links.
 	 * 
+	 * @handlers youtube
+	 * 
 	 * @param {*} event 
 	 */
 	 onYouTubeLinksClick: function(event) {
@@ -2715,6 +2721,8 @@ Browser.prototype = {
 	/**
 	 * Move the video link row in the dialog box up or down.
 	 * 
+	 * @handlers youtube
+	 * 
 	 * @param {number} indexSource
 	 * @param {number} indexDest
 	 */
@@ -2758,10 +2766,10 @@ Browser.prototype = {
 	/**
 	 * Shorten a SID filename by abbreviating long collection names.
 	 * 
-	 * @param {string} name		The original SID filename.
+	 * @param {string} name		The original SID filename
 	 * @param {boolean} raw		TRUE to use raw HVSC/CGSC/ESTC collection names
 	 * 
-	 * @return {string}			The shortened SID filename.
+	 * @return {string}			The shortened SID filename
 	 */
 	adaptBrowserName: function(name, raw) {
 		underscore = typeof raw !== "undefined" ? "_" : "";
@@ -2778,10 +2786,10 @@ Browser.prototype = {
 	/**
 	 * Handle any errors after returning from an AJAX call.
 	 * 
-	 * @param {object} data			The data returned from the PHP script.
-	 * @param {function} callback	Function to call if no errors.
+	 * @param {object} data			The data returned from the PHP script
+	 * @param {function} callback	Function to call if no errors
 	 * 
-	 * @return {boolean}			TRUE if no errors.
+	 * @return {boolean}			TRUE if no errors
 	 */
 	validateData: function(data, callback) {
 		try {
@@ -2809,9 +2817,9 @@ Browser.prototype = {
 	/**
 	 * Collect tags for all files and present them in the relevant sundry tab.
 	 * 
-	 * @param {string} tags		List of tags from a previous collection to be shown now.
+	 * @param {string} tags		List of tags from a previous collection to be shown now
 	 * 
-	 * @return {string}			Tags collected this time.
+	 * @return {string}			Tags collected this time
 	 */
 	showFolderTags: function(tags) {
 		var allTags = tags;
@@ -2858,9 +2866,9 @@ Browser.prototype = {
 	/**
 	 * Prepare a loading SVG spinner for showing if a page takes time to load.
 	 * 
-	 * @param {string} id		CSS ID name.
+	 * @param {string} id		CSS ID name
 	 * 
-	 * @return {string}			The HTML string with the SVG image.
+	 * @return {string}			The HTML string with the SVG image
 	 */
 	loadingSpinner: function(id) {
 		return '<div style="height:400px;"><img id="loading-'+id+'" class="loading-spinner" src="images/loading.svg" style="display:none;" alt="" /></div>';
@@ -2946,9 +2954,9 @@ Browser.prototype = {
 	/**
 	 * Update the tags directly in the SID row. Also updates arrays.
 	 * 
-	 * @param {object} $selected		The DOM object with the <TD> SID row.
-	 * @param {string} list_of_tags		HTML list of tags.
-	 * @param {string} endName			The SID name without prepended path.
+	 * @param {object} $selected		The DOM object with the <TD> SID row
+	 * @param {string} list_of_tags		HTML list of tags
+	 * @param {string} endName			The SID name without prepended path
 	 */
 	updateStickyTags: function($selected, list_of_tags, endName) {
 	 
@@ -2979,8 +2987,8 @@ Browser.prototype = {
 	/**
 	 * Update the two list boxes in the dialog box for editing tags.
 	 * 
-	 * @param {array} arrAll		Associative array with ID's and names.
-	 * @param {array} arrSong		Standard array with ID's used by file.
+	 * @param {array} arrAll		Associative array with ID's and names
+	 * @param {array} arrSong		Standard array with ID's used by file
 	 */
 	updateTagLists: function(arrAll, arrSong) {
 		var allTags = songTags = "";
@@ -3003,7 +3011,7 @@ Browser.prototype = {
 	/**
 	 * Empty and then refill the contextual SORT/FILTER drop-down box.
 	 * 
-	 * @return {string}		Currently selected item (FILTER only).
+	 * @return {string}		Currently selected item (FILTER only)
 	 */
 	setupSortBox: function() {
 		var stickyMode = null;
@@ -3099,8 +3107,8 @@ Browser.prototype = {
 	/**
 	 * Fill the drop-down box with profile paths with options.
 	 * 
-	 * @param {array} data		Array with SID file information.
-	 * @param {string} value	Optional option value to set.
+	 * @param {array} data		Array with SID file information
+	 * @param {string} value	Optional option value to set
 	 */
 	getProfiles: function(data, value) {
 		$("#dropdown-upload-profile").empty();
@@ -3138,8 +3146,8 @@ Browser.prototype = {
 	/**
 	 * Show the wizard dialog box for uploading a new SID file.
 	 * 
-	 * @param {number} step		Wizard step to be shown.
-	 * @param {array} data		Array with SID file information.
+	 * @param {number} step		Wizard step to be shown
+	 * @param {array} data		Array with SID file information
 	 */
 	uploadWizard: function(step, data) {
 		if (typeof step == "undefined") {

@@ -1,13 +1,13 @@
 /**
 * Generic WebAudio Node based player.
 *
-* version 1.3.4
+* version 1.3.5
 *
 * Copyright (C) 2024 Juergen Wothke
 *
 *
 * Recent changes: fixed playback position related handling (e.g. when using "fast forward" and "seek"), 
-* restored getTickToggle() used in webSID
+* restored getTickToggle() used in webSID, persist "main volume" setting and workaround WebAudio "0-volume" garbage 
 *
 * As compared to earlier versions, a few non backward-compatible changes have been made in
 * version 1.2: AbstractTicker API was cleaned up and is now called AbstractTicker2 you need an updated
@@ -2203,6 +2203,7 @@ var ScriptNodePlayer = (function () {
 
 		this._isPlayerReady = false;
 		this._producerNode = null;
+		this._lastVolume = undefined;
 
 		backendAdapter._assertSyncNodeReadiness(function() {
 			this._ctor(backendAdapter, undefined, requiredFiles, spectrumEnabled, onPlayerReady, onTrackReadyToPlay, onTrackEnd, undefined, externalTicker);
@@ -2368,6 +2369,11 @@ var ScriptNodePlayer = (function () {
 				this._producerNode = this._backendAdapter._createProducerNode(ctx);
 
 				this._gainNode = ctx.createGain();
+				if (typeof this._lastVolume != 'undefined')
+				{
+					this.setVolume(this._lastVolume);	// app may have changed this before "user gesture"
+				}
+
 
 				this._producerNode.connect(this._gainNode);
 
@@ -2503,7 +2509,11 @@ var ScriptNodePlayer = (function () {
 		*/
 		setVolume: function(value)
 		{
-			if (typeof this._gainNode != 'undefined')
+			if (value == 0) value= 0.001;	// fucking WebAudio morons stop playback if volume is 0!
+			
+			this._lastVolume = value;
+
+			if ((typeof this._gainNode != 'undefined') && (typeof this._lastVolume != 'undefined'))
 			{
 				this._gainNode.gain.value= value;
 			}
@@ -2511,11 +2521,16 @@ var ScriptNodePlayer = (function () {
 
 		getVolume: function()
 		{
+			if (typeof this._lastVolume != 'undefined')
+			{
+				return this._lastVolume;
+			}
+						
 			if (typeof this._gainNode != 'undefined')
 			{
 				return this._gainNode.gain.value;
 			}
-			return -1;
+			return undefined;
 		},
 
 		/**
@@ -3366,9 +3381,13 @@ var ScriptNodePlayer = (function () {
 				console.log("warning: createInstance() no longer uses the 'bufferSize' param - backend now has to provide this if necessary!");
 			}
 
+			var oldVolume; // keep whatever app already used before
+			
 			if (typeof window.player != 'undefined' )
 			{			// stop existing pipeline
 				let p= window.player;
+				oldVolume = p.getVolume();
+				
 				p._isPaused = true;
 
 				if (typeof p._bufferSource != 'undefined') {
@@ -3386,9 +3405,10 @@ var ScriptNodePlayer = (function () {
 
 			// synchronously assigned to window.player before onPlayerReady is triggered
 
-			new PlayerImpl(backendAdapter, requiredFiles, spectrumEnabled,
+			let player = new PlayerImpl(backendAdapter, requiredFiles, spectrumEnabled,
 							onPlayerReady, onTrackReadyToPlay, onTrackEnd,
 							externalTicker, bufferSize);
+			player.setVolume(oldVolume);
 		},
 
 		/**

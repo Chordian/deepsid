@@ -3,25 +3,23 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-JSIDPlay2 UPDATE v2 TASKS:
-
-- For now, the time bar color of JSIDPlay2 is the same as for the WebSid handler. Consider
-  creating its own unique color for both bright and dark color schemes.
-
-- Stereo
-- Fake stereo
-
-- Buffer size change when I can get the tune length timer calculation right (48000 for now)
-- When adding support for buffer size, two things to consider: tune length timer
-    calculation + register read delay amount
-
-- Use 'SID.setVolume(0);' after changing an advanced setting drop-down box.
-
---------------
-
 - Annex text: Also, add "Mastodon" to the list of social links.
 
 - Override BACKSPACE to back out of a folder in DeepSID.
+
+- Rename "jssid" in all source codes to "hermit" instead. The former is confusing.
+
+- JSIDPlay2: For now, the time bar color of JSIDPlay2 is the same as for the WebSid handler.
+  Consider creating its own unique color for both bright and dark color schemes.
+
+- JSIDPlay2: Consider disabling and enablings balance/delay sliders depending on playing
+  1SID (all sliders disabled), 2SID (3SID disabled) or 3SID (all slider enabled). However,
+  setting stereo mode to other values than AUTO seems to change this behavior., so be
+  careful to check all combination. Or just leave it as it is now - all sliders enabled.
+
+- JSIDPlay2: Add buffer size change when the tune length timer calculation can be calculated
+  right (hardcoded to 48000 for now). When adding support for buffer size, there are two
+  things to consider: tune length timer calculation + register read delay amount.
 
 - Figure out why one user regularly get an access violation from the 'composer.php' file.
   UPDATE: All HVSC composer letter folders has been parsed. None of them gave an access
@@ -35,6 +33,11 @@ JSIDPlay2 UPDATE v2 TASKS:
 - BUG: https://deepsid.chordian.net/?file=/SID%20Happens/2023/Siggraph_Invitro_4SID.sid
   has no database information!? (Maybe it needs to be moved out of there?)
 
+- BUG: Main volume again. When searching in "SID Happens" then playing a result (for example
+  for "Abynx") the music is silent until I touch the main volume slider. Does it only happen
+  on fast computers like mine? (reSID and WebSid/Legacy issue only.)
+  UPDATE: I added the half second timer again, but now some tunes are cut in the beginning.
+
 - BUG: https://deepsid.chordian.net/?file=/DEMOS/M-R/Muso_64_BASIC.sid
   This and the non-BASIC version erroneously refers to themselves in the STIL text.
 
@@ -46,6 +49,9 @@ JSIDPlay2 UPDATE v2 TASKS:
   in the filenames, count files in them, etc.
 
 - Go through all of Hermit's player pages and remove the dead link to his web site.
+
+- Idea from Jan Joeli: Following a playlist and getting a notification when it's changed.
+  Could be expanded with a context menu option for ignoring uninteresting playlists.
 
 - When creating a playlist and suggesting a name, let it suggest "My favorites" as default.
 

@@ -83,7 +83,7 @@ Controls.prototype = {
 	 * When releasing a mouse button.
 	 * 
 	 * @param {*} event 
-	 * @param {boolean} autoProgress	If specified, auto-progress did the request, not a human.
+	 * @param {boolean} autoProgress	If specified, auto-progress did the request, not a human
 	 */
 	onMouseUp: function(event, autoProgress) {
 		var target = event.target;
@@ -452,9 +452,9 @@ Controls.prototype = {
 					$("#search-box").val('"'+tag+'"').trigger("keyup");
 					$("#search-button").trigger("click");
 				} else if (event.target.className == "set-websid") {
-					$("#dropdown-topleft-emulator,#dropdown-settings-emulator")
-						.styledSetValue("websid")
-						.next("div.styledSelect").trigger("change");
+					this.selectEmulator("websid");
+				} else if (event.target.className == "set-jsidplay2") {
+					this.selectEmulator("jsidplay2");
 				} else if (event.target.className == "set-6581") {
 					$("#sid-model").trigger("click");
 				}
@@ -484,7 +484,7 @@ Controls.prototype = {
 	/**
 	 * Select one of the control buttons.
 	 * 
-	 * @param {object} $element		The jQuery element with the button to select.
+	 * @param {object} $element		The jQuery element with the button to select
 	 */
 	selectButton: function($element) {
 		$(".button-ctrls").removeClass("button-idle button-selected").addClass("button-idle");
@@ -502,7 +502,7 @@ Controls.prototype = {
 	/**
 	 * Toggle playing or stopping a SID tune.
 	 * 
-	 * @param {boolean} buttonsOnly		If specified and TRUE, only handle the buttons.
+	 * @param {boolean} buttonsOnly		If specified and TRUE, only handle the buttons
 	 */
 	togglePlayOrPause: function(buttonsOnly) {
 		if (typeof buttonsOnly !== "undefined" && !buttonsOnly) {
@@ -545,7 +545,7 @@ Controls.prototype = {
 	/**
 	 * Is a SID tune currently playing?
 	 * 
-	 * @return {boolean}
+	 * @return {boolean}	TRUE if still playing
 	 */
 	isPlaying: function() {
 		return $("#play-pause").hasClass("button-selected") && $("#play").css("display") === "none";
@@ -914,7 +914,7 @@ Controls.prototype = {
 	/**
 	 * Update the sundry box with tags.
 	 * 
-	 * @param {string} tags		An HTML list of the tags.
+	 * @param {string} tags		An HTML list of the tags
 	 */
 	updateSundryTags: function(tags) {
 		$("#stopic-tags")
@@ -927,6 +927,8 @@ Controls.prototype = {
 
 	/**
 	 * Update the filter controls in the sundry box.
+	 * 
+	 * @handlers websid
 	 */
 	updateFilterControls: function() {
 		$("#filter-base-edit,#filter-base-slider").val(SID.filterWebSid.base);
@@ -942,6 +944,8 @@ Controls.prototype = {
 
 	/**
 	 * Reset all stereo panning to center and enable sliders for more chips.
+	 * 
+	 * @handlers websid
 	 */
 	resetStereoPanning: function() {
 
@@ -960,6 +964,8 @@ Controls.prototype = {
 
 	/**
 	 * Enable stereo panning sliders for a specific chip.
+	 * 
+	 * @handlers websid
 	 */
 	enableStereoChip: function(chip) {
 		$("#stereo-sh"+chip+",.stereo-s"+chip+" label,.stereo-s"+chip+" input").removeClass("disabled");
@@ -967,11 +973,25 @@ Controls.prototype = {
 	},
 
 	/**
+	 * Select SID handler. This changes the top left drop-down box, which in return
+	 * refreshes the web site in order for the new SID handler to be activated.
+	 * 
+	 * @handlers all
+	 * 
+	 * @param {string} emulator		Emulator, e.g. "resid", "jsidplay2", etc.
+	 */
+	selectEmulator: function(emulator) {
+		$("#dropdown-topleft-emulator,#dropdown-settings-emulator")
+			.styledSetValue(emulator)
+			.next("div.styledSelect").trigger("change");
+	},
+
+	/**
 	 * Set target to "disabled" (i.e. grayed out) or "enabled" (interactive). Affects
 	 * green buttons in controls and browser.
 	 * 
-	 * @param {string} target	An identifier string.
-	 * @param {string} state 	Set to "disabled" or "enabled".
+	 * @param {string} target	An identifier string
+	 * @param {string} state 	Set to "disabled" or "enabled"
 	 */
 	state: function(target, state) {
 		var $this;

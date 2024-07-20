@@ -2589,8 +2589,13 @@ input[type=range]::-ms-track {
 			z-index: 5;
 		}
 
-		#dropdown-stereo-mode {
+		#dropdown-stereo-mode,
+		#stereo-jsidplay2 select {
 			font-size: 13px;
+		}
+
+		#dropdown-jp2-fake-read {
+			width: 104px;
 		}
 
 	#svg-headphones {
@@ -2742,6 +2747,10 @@ input[type=range]::-ms-track {
 					top: 3px;
 				}
 
+				#stereo-jsidplay2 td.stereo-header {
+					width: 1%;
+				}
+
 			#stopic-stereo .voice {
 				display: inline-block;
 				width: 100%;
@@ -2756,9 +2765,36 @@ input[type=range]::-ms-track {
 				height: 20px;
 			}
 
-			#stopic-stereo .stereo-letter {
+				#stereo-jsidplay2 input[type="range"] {
+					width: 48%;
+				}
+
+			#stereo-jsidplay2 .edit label {
+				font-family: "Asap Condensed", sans-serif;
+				font-size: 13px;
+			}
+
+			#stopic-stereo .stereo-cell {
+				text-align: center;
+			}
+
+			#stopic-stereo .stereo-letter,
+			#stopic-stereo .stereo-letter-indent {
 				top: -10px;
 				font-weight: bold;
+			}
+
+				#stereo-jsidplay2 .left {
+					margin-left: 8px !important;
+				}
+
+				#stereo-jsidplay2 .left-dense {
+					margin-left: -2px !important;
+				}
+
+			#stopic-stereo .stereo-letter-dense {
+				top: -10px;
+				font-family: "Asap Condensed", sans-serif;
 			}
 
 				#stopic-stereo .left {
