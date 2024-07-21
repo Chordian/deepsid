@@ -571,7 +571,7 @@ Browser.prototype = {
 
 					// LOAD AND PLAY FILE
 
-					// NOTE: Don't add a SID.pause() here, it creates an error for jsSID on stop then re-click.
+					// NOTE: Don't add a SID.pause() here, it creates an error for Hermit's on stop then re-click.
 					SID.setVolume(0);
 					ctrls.setButtonPause();
 
@@ -1098,13 +1098,13 @@ Browser.prototype = {
 			ctrls.state("root/back", "enabled");
 
 			// Disable emulators/handlers in the drop-down according to parent folder attributes
-			$("#dropdown-topleft-emulator,#dropdown-settings-emulator").styledOptionState("resid jsidplay2 websid legacy jssid asid lemon youtube download", "enabled");
+			$("#dropdown-topleft-emulator,#dropdown-settings-emulator").styledOptionState("resid jsidplay2 websid legacy hermit asid lemon youtube download", "enabled");
 			$("#page .viz-emu").removeClass("disabled");
 			$("#dropdown-topleft-emulator,#dropdown-settings-emulator").styledOptionState(this.cache.incompatible, "disabled");
 			if (this.cache.incompatible.indexOf("resid") !== -1) $("#page .viz-resid").addClass("disabled");
 			if (this.cache.incompatible.indexOf("jsidplay2") !== -1) $("#page .viz-jsidplay2").addClass("disabled");
 			if (this.cache.incompatible.indexOf("websid") !== -1) $("#page .viz-websid").addClass("disabled");
-			if (this.cache.incompatible.indexOf("jssid") !== -1) $("#page .viz-jssid").addClass("disabled");
+			if (this.cache.incompatible.indexOf("hermit") !== -1) $("#page .viz-hermit").addClass("disabled");
 			if (this.cache.incompatible.indexOf("asid") !== -1) $("#page .viz-asid").addClass("disabled");
 
 			$("#path").css("top", "5px").empty().append(
@@ -1159,13 +1159,13 @@ Browser.prototype = {
 					var files = "";
 
 					// Disable emulators/handlers in the drop-down according to parent folder attributes
-					$("#dropdown-topleft-emulator,#dropdown-settings-emulator").styledOptionState("resid jsidplay2 websid legacy jssid asid lemon youtube download", "enabled");
+					$("#dropdown-topleft-emulator,#dropdown-settings-emulator").styledOptionState("resid jsidplay2 websid legacy hermit asid lemon youtube download", "enabled");
 					$("#page .viz-emu").removeClass("disabled");
 					$("#dropdown-topleft-emulator,#dropdown-settings-emulator").styledOptionState(data.incompatible, "disabled");
 					if (data.incompatible.indexOf("resid") !== -1) $("#page .viz-resid").addClass("disabled");
 					if (data.incompatible.indexOf("jsidplay2") !== -1) $("#page .viz-jsidplay2").addClass("disabled");
 					if (data.incompatible.indexOf("websid") !== -1) $("#page .viz-websid").addClass("disabled");
-					if (data.incompatible.indexOf("jssid") !== -1) $("#page .viz-jssid").addClass("disabled");
+					if (data.incompatible.indexOf("hermit") !== -1) $("#page .viz-hermit").addClass("disabled");
 					if (data.incompatible.indexOf("asid") !== -1) $("#page .viz-asid").addClass("disabled");
 
 					$("#path").css("top", "5px");
@@ -1636,7 +1636,7 @@ Browser.prototype = {
 	 * @return {string}			The HTML string to put into the SID row
 	 */
 	buildTags: function(tags, types) {
-		var list_of_tags = remix64 = '';
+		var list_of_tags = remix64 = "";
 		$.each(tags, function(i, tag) {
 			if (tag == "Remix64") {
 				// A special look for the "Remix 64" tag
@@ -1646,6 +1646,7 @@ Browser.prototype = {
 				list_of_tags += '<div class="tag tag-warning">'+tag+'</div>';
 			} else {
 				// NOTE: Don't change the order of tags or the collector for a folder will break!
+				// If you want to change the order of tags, see GetTagsAndTypes() in 'tags_read.php'
 				var hideTag = tag == "$31" || tag == "$61" || tag == "$71" ? ' style="display:none;"' : '';
 				list_of_tags += '<div class="tag tag-'+types[i]+'"'+hideTag+'>'+tag+'</div>';
 			}

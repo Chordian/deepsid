@@ -63,7 +63,7 @@
 			document.head.appendChild(viewport);
 		</script>
 		<meta name="description" content="A modern online SID player for the High Voltage and Compute's Gazette SID collections." /> <!-- Max 150 characters -->
-		<meta name="keywords" content="c64,commodore 64,sid,6581,8580,hvsc,high voltage,cgsc,compute's gazette,visualizer,stil,websid,jssid,asid,hermit" />
+		<meta name="keywords" content="c64,commodore 64,sid,6581,8580,hvsc,high voltage,cgsc,compute's gazette,visualizer,stil,websid,hermit,asid" />
 		<meta name="author" content="Jens-Christian Huus" />
 		<title>DeepSID | Chordian.net</title>
 		<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans%3A400%2C700%2C400italic%2C700italic%7CQuestrial%7CMontserrat&#038;subset=latin%2Clatin-ext" />
@@ -368,11 +368,11 @@
 			<form id="form-edit-file" onsubmit="return false;" autocomplete="off">
 				<div style="margin-top:16px;">
 					<label for="dd-newplname" style="width:100px;">New name&nbsp;&nbsp;</label>
-					<input type="text" name="dd-newplname" id="pr-newplname" maxlength="128" />
+					<input type="text" name="dd-newplname" id="pr-newplname" maxlength="128" value="My favorites" />
 				</div>
 			</form>
 			<div style="font-size:13px;margin-top:16px;">If you skip this, it will just have the filename. However, you can rename it later by right-clicking it in the root.</div>
-			<div class="dialog-buttons"><a href="#" class="dialog-cancel">Skip</a><button class="dialog-button-yes dialog-auto disabled" disabled="disabled">Rename</button></div>
+			<div class="dialog-buttons"><a href="#" class="dialog-cancel">Skip</a><button class="dialog-button-yes dialog-auto">Rename</button></div>
 		</div>
 
 		<div id="dialog-edit-videos" class="dialog-box">
@@ -525,7 +525,7 @@
 					<!--<option value="jsidplay2">JSIDPlay2 (reSID)</option>-->
 					<option value="websid">WebSid emulator</option>
 					<option value="legacy">WebSid (Legacy)</option>
-					<option value="jssid">Hermit's (+FM)</option>
+					<option value="hermit">Hermit's (+FM)</option>
 					<option value="asid">ASID (MIDI)</option>
 					<option value="lemon">Lemon's MP3 files</option>
 					<option value="youtube">YouTube videos</option>
@@ -1002,7 +1002,7 @@
 								<button class="button-edit button-radio button-off viz-emu viz-jsidplay2" data-group="viz-emu" data-emu="jsidplay2">JSIDPl2</button>
 								<button class="button-edit button-radio button-off viz-emu viz-websid" data-group="viz-emu" data-emu="websid">WebSid</button>
 								<button class="button-edit button-radio button-off viz-emu viz-legacy" data-group="viz-emu" data-emu="legacy">Legacy</button>
-								<button class="button-edit button-radio button-off viz-emu viz-jssid" data-group="viz-emu" data-emu="jssid">Hermit</button>
+								<button class="button-edit button-radio button-off viz-emu viz-hermit" data-group="viz-emu" data-emu="hermit">Hermit</button>
 								<span class="viz-warning viz-msg-emu" style="position:relative;top:-1px;"> <img src="images/composer_arrowleft.svg" style="position:relative;top:5px;height:18px;" alt="" /> You need one of these</span>
 								<span class="viz-warning viz-msg-buffer" style="position:relative;top:-1px;">Decrease if too slow <img src="images/composer_arrowright.svg" style="position:relative;top:4px;height:18px;" alt="" /></span>
 								<div class="viz-buffer">
@@ -1094,7 +1094,7 @@
 								<button class="button-edit button-radio button-off viz-emu viz-jsidplay2" data-group="viz-emu" data-emu="jsidplay2">JSIDPl2</button>
 								<button class="button-edit button-radio button-off viz-emu viz-websid" data-group="viz-emu" data-emu="websid">WebSid</button>
 								<button class="button-edit button-radio button-off viz-emu viz-legacy" data-group="viz-emu" data-emu="legacy">Legacy</button>
-								<button class="button-edit button-radio button-off viz-emu viz-jssid" data-group="viz-emu" data-emu="jssid">Hermit</button>
+								<button class="button-edit button-radio button-off viz-emu viz-hermit" data-group="viz-emu" data-emu="hermit">Hermit</button>
 								<span class="viz-warning viz-msg-emu" style="position:relative;top:-1px;"> <img src="images/composer_arrowleft.svg" style="position:relative;top:5px;height:18px;" alt="" /> You need one of these</span>
 								<span class="viz-warning viz-msg-buffer" style="position:relative;top:-1px;">Decrease if too slow <img src="images/composer_arrowright.svg" style="position:relative;top:4px;height:18px;" alt="" /></span>
 								<div class="viz-buffer">
@@ -1451,7 +1451,7 @@
 										<!--<option value="jsidplay2">JSIDPlay2 (reSID)</option>-->
 										<option value="websid">WebSid emulator</option>
 										<option value="legacy">WebSid (Legacy)</option>
-										<option value="jssid">Hermit's (+FM)</option>
+										<option value="hermit">Hermit's (+FM)</option>
 										<option value="asid">ASID (MIDI)</option>
 										<option value="lemon">Lemon's MP3 files</option>
 										<option value="youtube">YouTube videos</option>
@@ -1484,7 +1484,7 @@
 
 								<h4>Advanced settings</h4>
 								<p>This section will change if you select a different SID handler.</p>
-								<div class="settings-advanced-resid settings-advanced-websid settings-advanced-legacy settings-advanced-jssid settings-advanced-asid settings-advanced-lemon settings-advanced-youtube settings-advanced-download settings-advanced">
+								<div class="settings-advanced-resid settings-advanced-websid settings-advanced-legacy settings-advanced-hermit settings-advanced-asid settings-advanced-lemon settings-advanced-youtube settings-advanced-download settings-advanced">
 									<label class="dropdown-unstyled-label unselectable">There are no advanced settings for this SID handler.</label>
 								</div>
 								<div class="settings-advanced-jsidplay2 settings-advanced">
@@ -1831,7 +1831,7 @@
 						</p>
 						<p>
 							An example to play a SID tune:<br />
-							<a href="//deepsid.chordian.net?file=/MUSICIANS/H/Hubbard_Rob/Commando.sid&emulator=jssid&subtune=2">//deepsid.chordian.net?file=/MUSICIANS/H/Hubbard_Rob/Commando.sid&emulator=jssid&subtune=2</a>
+							<a href="//deepsid.chordian.net?file=/MUSICIANS/H/Hubbard_Rob/Commando.sid&emulator=hermit&subtune=2">//deepsid.chordian.net?file=/MUSICIANS/H/Hubbard_Rob/Commando.sid&emulator=hermit&subtune=2</a>
 						</p>
 						<p>
 							An example to show a CSDb entry:<br />
@@ -1843,10 +1843,16 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>July 21, 2024</h3>
+						<ul>
+							<li>The "Compo", "Winner" and "#1" to "#9" tags now always huddle together in a logical manner.</li>
+						</ul>
+
 						<h3>July 20, 2024</h3>
 						<ul>
 							<li>The sundry tab for stereo is now also available for JSIDPlay2. Here you can set sliders for balance and delay,
 								change the stereo mode, and toggle fake stereo along with the SID chip to read from.</li>
+							<li>You can now hit the BACKSPACE key to go back to the parent folder.</li>
 						</ul>
 
 						<h3>July 18, 2024</h3>

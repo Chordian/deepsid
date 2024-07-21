@@ -141,7 +141,7 @@ function Viz(emulator) {
 		jsidplay2:	"JSIDPlay2",
 		websid:		"the default WebSid",
 		legacy:		"the legacy WebSid",
-		jssid:		"Hermit's",
+		hermit:		"Hermit's",
 	};
 
 	this.applyBufferSize(this.emulator);
@@ -430,7 +430,7 @@ Viz.prototype = {
 	 * @param {*} event 
 	 */
 	onChangeBufferSize: function(event) {
-		var emulator = this.emulator == "asid" ? "jssid" : this.emulator;
+		var emulator = this.emulator == "asid" ? "hermit" : this.emulator;
 		SID.bufferSize[emulator] = $(event.target).val();
 		localStorage.setItem("buffer_" + emulator, SID.bufferSize[emulator]);
 		// Make sure all drop-down boxes of this kind agree on the new value
@@ -559,8 +559,8 @@ Viz.prototype = {
 	 * @param {string} emulator		Emulator, e.g. "resid", "jsidplay2", etc.
 	 */
 	setEmuButton: function(emulator) {
-		if (["resid", "jsidplay2", "websid", "legacy", "jssid", "asid"].includes(emulator)) {
-			if (emulator == "asid") emulator = "jssid";
+		if (["resid", "jsidplay2", "websid", "legacy", "hermit", "asid"].includes(emulator)) {
+			if (emulator == "asid") emulator = "hermit";
 			$("#page .viz-" + emulator).addClass("button-on"); 
 			$("#page .viz-msg-emu").hide();
 		} else
@@ -575,8 +575,8 @@ Viz.prototype = {
 	 */
 	applyBufferSize: function(emulator) {
 		// @todo JSIDPlay2 will have to wait until I can get the tune length calculation right
-		if (["resid", "disabled:jsidplay2", "websid", "legacy", "jssid", "asid"].includes(emulator)) {
-			if (emulator == "asid") emulator = "jssid";
+		if (["resid", "disabled:jsidplay2", "websid", "legacy", "hermit", "asid"].includes(emulator)) {
+			if (emulator == "asid") emulator = "hermit";
 			$("#page .dropdown-buffer").prop("disabled", false);
 			$("#page .dropdown-buffer-label").removeClass("disabled");
 			$("#settings-emu-type").empty().append(this.bufferEmulator[emulator]);
@@ -665,7 +665,7 @@ Viz.prototype = {
 			case "resid":
 			case "legacy":
 			case "websid":
-			case "jssid":
+			case "hermit":
 			case "asid":
 				this.stateViewButton("piano", "enabled");
 				this.stateViewButton("graph", "enabled");

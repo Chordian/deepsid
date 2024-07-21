@@ -3,12 +3,6 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- Annex text: Also, add "Mastodon" to the list of social links.
-
-- Override BACKSPACE to back out of a folder in DeepSID.
-
-- Rename "jssid" in all source codes to "hermit" instead. The former is confusing.
-
 - JSIDPlay2: For now, the time bar color of JSIDPlay2 is the same as for the WebSid handler.
   Consider creating its own unique color for both bright and dark color schemes.
 
@@ -23,52 +17,15 @@ SHOULD BE DONE
 
 - Figure out why one user regularly get an access violation from the 'composer.php' file.
   UPDATE: All HVSC composer letter folders has been parsed. None of them gave an access
-  violation error in the 'composer.php' file. Consider adding log of name in 'composer.php'
-  file to pinpoint why a user always get this error.
-
-- I abandoned GameBase64 a while back as their site had CORS issues, but why not use their
-  database instead? It’s available for download here: https://gb64.com/downloads.php
-  UPDATE: Now downloaded to: C:\Program Files (x86)\GameBase\GBC_v19
-
-- BUG: https://deepsid.chordian.net/?file=/SID%20Happens/2023/Siggraph_Invitro_4SID.sid
-  has no database information!? (Maybe it needs to be moved out of there?)
-
-- BUG: Main volume again. When searching in "SID Happens" then playing a result (for example
-  for "Abynx") the music is silent until I touch the main volume slider. Does it only happen
-  on fast computers like mine? (reSID and WebSid/Legacy issue only.)
-  UPDATE: I added the half second timer again, but now some tunes are cut in the beginning.
-
-- BUG: https://deepsid.chordian.net/?file=/DEMOS/M-R/Muso_64_BASIC.sid
-  This and the non-BASIC version erroneously refers to themselves in the STIL text.
-
-- BUG: Why do many GT2 tunes now report 2x or 3x multispeed, when it's probably still 1x?
-
-- BUG: Lemon's MP3 now has sticky loading spinner on its SID rows.
-
-- Automate CGSC update process. All REN, MOVE, etc. Create folders where they can't be found
-  in the filenames, count files in them, etc.
-
-- Go through all of Hermit's player pages and remove the dead link to his web site.
-
-- Idea from Jan Joeli: Following a playlist and getting a notification when it's changed.
-  Could be expanded with a context menu option for ignoring uninteresting playlists.
-
-- When creating a playlist and suggesting a name, let it suggest "My favorites" as default.
+  violation error in the 'composer.php' file.
+  UPDATE: I have now added log of name in 'composer.php' to pinpoint why a user always get
+  this error. Still waiting for him to do it again...
 
 - Add context menu option for downloading a tune as an MP3. I'm thinking, maybe I can grab one
   of Lemon's MP3 files?
 
-- Investigate if it's possible to add support for logging in with e.g. Google or FB accounts.
-  UPDATE: Idea for design - instead of "User" and "Pw" boxes as default, show three buttons for
-  local, Facebook, Google logins. If "Local" is clicked, the three buttons are then replaced by
-  the "User" and "Pw" boxes that originally used to be there.
-
-- I have started adding #1, #2, etc. tags for assisting compo tags. Can you make sure they are
-  always following the compo tag?
-
-- If one or more fields are empty in the top box, get the field(s) from the database instead.
-  Or, consider getting it all from the database instead. Or, maybe even better, add a toggle
-  button for showing info from the SID file itself versus from the database.
+- Make suggested-username-login-instantly work better on mobile phones. As it is now, the phone
+  is usually so fast that it thinks you're creating a new user.
 
 - The STIL entry for this tune is not parsed correctly - all links merge into one big link:
   https://deepsid.chordian.net/?file=/MUSICIANS/B/Bulldog/E_X_I_S.sid&subtune=1
@@ -129,6 +86,9 @@ CONSIDER THIS
 - Store stereo settings for a song with a pin icon.
 - The "WASM disabled" message should only be shown when WebSid (HQ and Legacy) is chosen.
 
+- Automate CGSC update process. All REN, MOVE, etc. Create folders where they can't be found
+  in the filenames, count files in them, etc.
+
 - In a profile page, make the small handles in group table into links and remove the corner external
   link icon. Then users can choose what handle to open in CSDb themselves.
 
@@ -136,9 +96,32 @@ CONSIDER THIS
   devices. Alternative: Just let WebSid HQ be the default on mobile devices from now on. However,
   I doubt most DeepSID users all have fast mobile devices yet...
 
+- BUG: Main volume again. When searching in "SID Happens" then playing a result (for example
+  for "Abynx") the music is silent until I touch the main volume slider. Does it only happen
+  on fast computers like mine? (reSID and WebSid/Legacy issue only.)
+  UPDATE: I added the half second timer again, but now some tunes are cut in the beginning.
+
+- Investigate if it's possible to add support for logging in with e.g. Google or FB accounts.
+  UPDATE: Idea for design - instead of "User" and "Pw" boxes as default, show three buttons for
+  local, Facebook, Google logins. If "Local" is clicked, the three buttons are then replaced by
+  the "User" and "Pw" boxes that originally used to be there.
+
 - Add search for tags by simply clicking one, instead of playing the SID row. However, it might
   be wise to have a toggle in settings for turning it off. (Should it even be off as default?)
   UPDATE: Fear it will be more annoying than helpful. When I click a row, I usually want it to play.
+
+- Idea from Jan Joeli: Following a playlist and getting a notification when it's changed.
+  Could be expanded with a context menu option for ignoring uninteresting playlists.
+
+- If one or more fields are empty in the top box, get the field(s) from the database instead.
+  Or, consider getting it all from the database instead. Or, maybe even better, add a toggle
+  button for showing info from the SID file itself versus from the database.
+  UPDATE: This has dropped in priority since all three of JW's emulators now get the info
+  from the database instead.
+
+- I abandoned GameBase64 a while back as their site had CORS issues, but why not use their
+  database instead? It’s available for download here: https://gb64.com/downloads.php
+  UPDATE: Now downloaded to: C:\Program Files (x86)\GameBase\GBC_v19
 
 - Kim Lemon wants me to make DeepSID cookieless. I could easily make the emulator choice into
   localstorage instead, but the PHP SESSION cookie belongs in a class I didn't write, and I
@@ -411,6 +394,9 @@ PROBABLY NOT?
   some composer's folder and then search for some other composer's song. When clicking one of the
   search results the respective song is played but the "Profile" tab is not updated.'
   UPDATE: I tried to reproduce it today (2021-11-07) but couldn't. Archived until further notice.
+
+- Add support for uploading 4SID tunes in the SH folder. Also make it so only WebSid may
+  play such tunes in the SH folder - the SID row must be disabled for all other SID handlers.
 
 - Link icons next to birth and death icons. E.g. #SoundCloud, etc.
   - Two problems: 1. Composers that don't want this? 2. Keeping up with links that changes over time.

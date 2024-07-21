@@ -217,6 +217,7 @@
 		
 		<h4>General hotkeys</h4>
 		<div class="annex-hotkey">Space</div><span class="annex-tiny">Pause/Play toggle</span>
+		<div class="annex-hotkey">Backspace</div><span class="annex-tiny">Back to parent folder</span>
 		<div class="annex-hotkey">[<i>Below</i>&nbsp;]&nbsp;Esc</div><span class="annex-tiny">Fast forward</span>
 		<div class="annex-hotkey">p</div><span class="annex-tiny">Pop-up tiny DeepSID</span>
 		<div class="annex-hotkey">s</div><span class="annex-tiny">Toggle sundry box</span>
@@ -347,7 +348,10 @@
 
 		<h4><a href="https://twitter.com/chordian">Twitter</a></h4>
 		Chordian\'s Twitter account and where all news and changes about DeepSID are always posted.
-	
+
+		<h4><a href="https://mastodon.social/@chordian">Mastodon</a></h4>
+		Chordian\'s Mastodon account, where all news and changes about DeepSID are also posted.
+
 		<h4><a href="http://csdb.chordian.net/?type=forums&roomid=14&topicid=129712">CSDb</a></h4>
 		A forum thread at CSDb that was created when DeepSID was born, but it\'s a ghost town today.
 

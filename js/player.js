@@ -27,7 +27,7 @@ function SIDPlayer(emulator) {
 		jsidplay2:	48000,
 		websid:		16384,
 		legacy:		16384,
-		jssid:		16384,
+		hermit:		16384,
 	};
 
 	this.advancedSetting = {
@@ -42,7 +42,7 @@ function SIDPlayer(emulator) {
 		},
 		websid:		{},
 		legacy:		{},
-		jssid:		{},
+		hermit:		{},
 	}
 
 	this.jp2Loading = true;
@@ -218,7 +218,7 @@ function SIDPlayer(emulator) {
 			this.emulatorFlags.offline			= false;
 			break;
 
-		case "jssid":
+		case "hermit":
 
 			/**
 			 * jsSID by Hermit (with OPL synthesis extension)
@@ -231,7 +231,7 @@ function SIDPlayer(emulator) {
 			 * - Cannot play BASIC and digi tunes (RSID)
 			 * - Some CIA tunes doesn't work either
 			 */
-			this.jsSID = new jsSID(($("body").attr("data-mobile") !== "0" ? 16384 : this.bufferSize[this.emulator]), 0.0005);
+			this.hermit = new jsSID(($("body").attr("data-mobile") !== "0" ? 16384 : this.bufferSize[this.emulator]), 0.0005);
 
 			this.emulatorFlags.supportFaster	= true;
 			this.emulatorFlags.supportEncoding	= false;
@@ -254,7 +254,7 @@ function SIDPlayer(emulator) {
 			 * # Uses a silent audio context to get 50Hz buffer
 			 * # Same features as Hermit's
 			 */
-			this.jsSID = new jsSID(0, 0, true);
+			this.hermit = new jsSID(0, 0, true);
 
 			this.emulatorFlags.supportFaster	= true;
 			this.emulatorFlags.supportEncoding	= false;
@@ -734,29 +734,29 @@ SIDPlayer.prototype = {
 				}
 				break;
 
-			case "jssid":
+			case "hermit":
 			case "asid":
 
 				// @todo Maybe catch most digi/speech stuff via the 'player' field?
 				var error = file.indexOf("_BASIC.") !== -1;
 				if (error) this.setVolume(0);
 
-				this.jsSID.setloadcallback(function() {
+				this.hermit.setloadcallback(function() {
 					// Reset volume just to be on the safe side
 					if (!error) this.setVolume(1);
 					if (typeof callback === "function")
 						callback.call(this, error);
 				}.bind(this));
-				this.jsSID.setendcallback(function() {
+				this.hermit.setendcallback(function() {
 					if (typeof this.callbackTrackEnd === "function")
 						this.callbackTrackEnd();
 				}.bind(this), timeout);
-				this.jsSID.setbuffercallback(function() {
+				this.hermit.setbuffercallback(function() {
 					if (typeof this.callbackBufferEnded === "function")
 						this.callbackBufferEnded();
 				}.bind(this), timeout);
-				this.jsSID.playcont(); // Added as a hack to avoid a nasty console error
-				this.jsSID.loadinit(file, subtune);
+				this.hermit.playcont(); // Added as a hack to avoid a nasty console error
+				this.hermit.loadinit(file, subtune);
 
 				if (error || timeout == 0) {
 					setTimeout(function() {
@@ -965,7 +965,7 @@ SIDPlayer.prototype = {
 			case "resid":
 			case "websid":
 			case "legacy":
-			case "jssid":
+			case "hermit":
 			case "asid":
 			case "youtube":
 				// At least stop the tune
@@ -1018,12 +1018,12 @@ SIDPlayer.prototype = {
 						this.WebSid.isPaused() ? this.WebSid.resume() : this.WebSid.play();
 				}
 				break;
-			case "jssid":
+			case "hermit":
 			case "asid":
 				if (typeof forcePlay !== "undefined")
-					this.jsSID.start(this.subtune);
+					this.hermit.start(this.subtune);
 				else {
-					this.paused ? this.jsSID.playcont() : this.jsSID.start(this.subtune);
+					this.paused ? this.hermit.playcont() : this.hermit.start(this.subtune);
 					this.paused = false;
 				}
 				break;
@@ -1135,7 +1135,7 @@ SIDPlayer.prototype = {
 				if (this.WebSid)
 					playing = !this.WebSid.isPaused();
 				break;
-			case "jssid":
+			case "hermit":
 			case "asid":
 				// @todo
 				break;
@@ -1173,9 +1173,9 @@ SIDPlayer.prototype = {
 			case "legacy":
 				suspended = ScriptNodePlayer.getWebAudioContext().state == "suspended";
 				break;
-			case "jssid":
+			case "hermit":
 			case "asid":
-				suspended = this.jsSID.issuspended();
+				suspended = this.hermit.issuspended();
 				break;
 			case "lemon":
 				suspended = true; // Doesn't seem to work without
@@ -1210,9 +1210,9 @@ SIDPlayer.prototype = {
 				if (this.WebSid)
 					this.WebSid.pause();
 				break;
-			case "jssid":
+			case "hermit":
 			case "asid":
-				this.jsSID.pause();
+				this.hermit.pause();
 				break;
 			case "lemon":
 				if (this.howler) this.howler.pause();
@@ -1256,10 +1256,10 @@ SIDPlayer.prototype = {
 					this.WebSid.pause();
 				}
 				break;
-			case "jssid":
+			case "hermit":
 			case "asid":
-				this.jsSID.playcont(); // Added as a hack to avoid a nasty console error
-				this.jsSID.stop();
+				this.hermit.playcont(); // Added as a hack to avoid a nasty console error
+				this.hermit.stop();
 				this.paused = false;
 				break;
 			case "lemon":
@@ -1310,9 +1310,9 @@ SIDPlayer.prototype = {
 				if (this.WebSid)
 					this.WebSid.resetSampleRate(normalSampleRate / multiplier);
 				break;
-			case "jssid":
+			case "hermit":
 			case "asid":
-				this.jsSID.setSpeedMultiplier(multiplier);
+				this.hermit.setSpeedMultiplier(multiplier);
 				break;
 			case "lemon":
 				if (this.howler) this.howler.rate(multiplier !== 1 ? 4.0 : 1.0);
@@ -1329,7 +1329,7 @@ SIDPlayer.prototype = {
 	 * Return an array with various information about the SID tune. This is retrieved
 	 * from the SID file itself when possible, otherwise from the database.
 	 * 
-	 * @handlers intrinsic: jssid, asid
+	 * @handlers intrinsic: hermit, asid
 	 * 
 	 * @param {string} override		Override the current emulator/handler string
 	 * 
@@ -1339,13 +1339,13 @@ SIDPlayer.prototype = {
 		var result = {},
 			isCGSC = this.file.indexOf("_Compute's Gazette SID Collection") !== -1;
 		switch (override || this.emulator) {
-			case "jssid":
+			case "hermit":
 			case "asid":
 				result.actualSubsong	= this.subtune;
-				result.maxSubsong		= isCGSC ? 0 : this.jsSID.getsubtunes() - 1;
-				result.songAuthor		= this.jsSID.getauthor();
-				result.songName			= this.jsSID.gettitle();
-				result.songReleased		= this.jsSID.getinfo();
+				result.maxSubsong		= isCGSC ? 0 : this.hermit.getsubtunes() - 1;
+				result.songAuthor		= this.hermit.getauthor();
+				result.songName			= this.hermit.gettitle();
+				result.songReleased		= this.hermit.getinfo();
 				break;
 			case "resid":
 			case "websid":
@@ -1408,9 +1408,9 @@ SIDPlayer.prototype = {
 			case "legacy":
 				if (this.WebSid) this.WebSid.setVolume(value);
 				break;
-			case "jssid":
+			case "hermit":
 			case "asid":
-				this.jsSID.setvolume(value);
+				this.hermit.setvolume(value);
 				break;
 			case "lemon":
 				if (this.howler) this.howler.volume(value);
@@ -1442,9 +1442,9 @@ SIDPlayer.prototype = {
 			case "legacy":
 				if (this.WebSid) this.WebSid.setVolume(value * this.mainVol);
 				break;
-			case "jssid":
+			case "hermit":
 			case "asid":
-				this.jsSID.setvolume(value * this.mainVol);
+				this.hermit.setvolume(value * this.mainVol);
 				break;
 			case "lemon":
 				if (this.howler) this.howler.volume(value * this.mainVol);
@@ -1479,9 +1479,9 @@ SIDPlayer.prototype = {
 				if (this.WebSid)
 					time = this.WebSid.getCurrentPlaytime();
 				break;
-			case "jssid":
+			case "hermit":
 			case "asid":
-				time = this.jsSID.getplaytime();
+				time = this.hermit.getplaytime();
 				break;
 			case "lemon":
 				var seek = this.howler ? parseFloat(this.howler.seek()) || 0 : 0;
@@ -1660,7 +1660,7 @@ SIDPlayer.prototype = {
 				if (this.WebSid)
 					this.WebSid.setPlaybackTimeout(-1);
 				break;
-			case "jssid":
+			case "hermit":
 			case "asid":
 				break;
 			case "lemon":
@@ -1695,7 +1695,7 @@ SIDPlayer.prototype = {
 				if (this.WebSid)
 					this.WebSid.setPlaybackTimeout(length * 1000);
 				break;
-			case "jssid":
+			case "hermit":
 			case "asid":
 				break;
 			case "lemon":
@@ -1713,7 +1713,7 @@ SIDPlayer.prototype = {
 	/**
 	 * Force the SID chip model to be used. Not all handlers support this.
 	 * 
-	 * @handlers resid, websid, legacy, jssid, asid
+	 * @handlers resid, websid, legacy, hermit, asid
 	 * 
 	 * @param {string} model	Use "6581" or "8580"
 	 */
@@ -1729,9 +1729,9 @@ SIDPlayer.prototype = {
 			case "legacy":
 				SIDBackend.setSID6581(model === "6581" ? 1 : 0);
 				break;
-			case "jssid":
+			case "hermit":
 			case "asid":
-				this.jsSID.setmodel(model === "6581" ? 6581.0 : 8580.0);
+				this.hermit.setmodel(model === "6581" ? 6581.0 : 8580.0);
 				break;
 			case "lemon":
 			case "youtube":
@@ -1743,7 +1743,7 @@ SIDPlayer.prototype = {
 	/**
 	 * Return the SID chip model currently used. Not all handlers support this.
 	 * 
-	 * @handlers resid, websid, legacy, jssid, asid
+	 * @handlers resid, websid, legacy, hermit, asid
 	 * 
 	 * @return {*}		Returns "6581" or "8580" (or FALSE if not supported)
 	 */
@@ -1757,9 +1757,9 @@ SIDPlayer.prototype = {
 			case "websid":
 			case "legacy":
 				return SIDBackend.isSID6581() ? "6581" : "8580";
-			case "jssid":
+			case "hermit":
 			case "asid":
-				return this.jsSID.getmodel() === 6581.0 ? "6581" : "8580";
+				return this.hermit.getmodel() === 6581.0 ? "6581" : "8580";
 			case "lemon":
 				//return this.modelLEMON.substr(3, 4);
 			case "youtube":
@@ -1787,10 +1787,10 @@ SIDPlayer.prototype = {
 			case "legacy":
 				SIDBackend.setNTSC(encoding === "NTSC" ? 1 : 0);
 				break;
-			case "jssid":
+			case "hermit":
 			case "asid":
-				// jsSID doesn't support this
-				// @todo Try changing: this.jsSID.C64_PAL_CPUCLK + this.jsSID.PAL_FRAMERATE
+				// Hermit's emulator doesn't support this
+				// @todo Try changing: this.hermit.C64_PAL_CPUCLK + this.hermit.PAL_FRAMERATE
 				break;
 			case "lemon":
 			case "youtube":
@@ -1817,9 +1817,9 @@ SIDPlayer.prototype = {
 			case "websid":
 			case "legacy":
 				return SIDBackend.isNTSC() ? "NTSC" : "PAL";
-			case "jssid":
+			case "hermit":
 			case "asid":
-				// jsSID always defaults to PAL
+				// Hermit's emulator always defaults to PAL
 				return "PAL";
 			case "lemon":
 			case "youtube":
@@ -1833,7 +1833,7 @@ SIDPlayer.prototype = {
 	 * is reset to 1111 every time a new tune is loaded and played. There are
 	 * 4 bits as some emulators also support toggling a digi channel.
 	 * 
-	 * @handlers resid, jsidplay2, websid, legacy, jssid, asid
+	 * @handlers resid, jsidplay2, websid, legacy, hermit, asid
 	 * 
 	 * @param {number} voice	Voice to toggle (1-4)
 	 * @param {number} chip		SID chip number (default is 1)
@@ -1863,13 +1863,13 @@ SIDPlayer.prototype = {
 			case "legacy":
 				SIDBackend.enableVoices(this.voiceMask[0]); // Legacy only controls 1SID voices ON/OFF
 				break;
-			case "jssid":
+			case "hermit":
 			case "asid":
-				// Stitch a mask together that works with jsSID (CCCBBBAAA)
+				// Stitch a mask together that works with Hermit's emulator (CCCBBBAAA)
 				var jsMask = 0;
 				for (var jsChip = 0; jsChip < 3; jsChip++)
 					jsMask += (this.voiceMask[jsChip] & 7) << (3 * jsChip);
-				this.jsSID.enableVoices(jsMask);
+				this.hermit.enableVoices(jsMask);
 				break;
 			case "lemon":
 			case "youtube":
@@ -1882,7 +1882,7 @@ SIDPlayer.prototype = {
 	/**
 	 * Enable all SID voices (including 2SID and 3SID).
 	 * 
-	 * @handlers resid, jsidplay2, websid, legacy, jssid, asid
+	 * @handlers resid, jsidplay2, websid, legacy, hermit, asid
 	 */
 	enableAllVoices: function() {
 		this.voiceMask = [0xF, 0xF, 0xF];
@@ -1922,9 +1922,9 @@ SIDPlayer.prototype = {
 			case "legacy":
 				SIDBackend.enableVoices(0xF);
 				break;				
-			case "jssid":
+			case "hermit":
 			case "asid":
-				this.jsSID.enableVoices(0x1FF);
+				this.hermit.enableVoices(0x1FF);
 				break;
 			case "lemon":
 			case "youtube":
@@ -1938,7 +1938,7 @@ SIDPlayer.prototype = {
 	 * Return the speed relative to 50hz. Not all handlers support this. If
 	 * 0 is returned, the tune uses VBI. If > 0, it uses CIA.
 	 * 
-	 * @handlers websid, legacy, jssid, asid
+	 * @handlers websid, legacy, hermit, asid
 	 * 
 	 * @return {*}		Returns the multiplier value (4 = 4x speed), or FALSE
 	 */
@@ -1962,9 +1962,9 @@ SIDPlayer.prototype = {
 				var cia = SIDBackend.getRAM(0xDC04) + SIDBackend.getRAM(0xDC05) * 256;
 				// 19654 relates to 1x; lower values speed up the tune
 				return cia ? Math.round(19654 / cia) : 0;
-			case "jssid":
+			case "hermit":
 			case "asid":
-				var cia = this.jsSID.getcia();
+				var cia = this.hermit.getcia();
 				return cia ? Math.round(19654 / cia) : 0;
 			case "lemon":
 			case "youtube":
@@ -1989,7 +1989,7 @@ SIDPlayer.prototype = {
 			case "legacy":
 				return SIDBackend.getDigiTypeDesc();
 			case "jsidplay2":
-			case "jssid":
+			case "hermit":
 			case "asid":
 			case "lemon":
 			case "youtube":
@@ -2015,7 +2015,7 @@ SIDPlayer.prototype = {
 			case "legacy":
 				return SIDBackend.getDigiRate();
 			case "jsidplay2":
-			case "jssid":
+			case "hermit":
 			case "asid":
 			case "lemon":
 			case "youtube":
@@ -2027,7 +2027,7 @@ SIDPlayer.prototype = {
 	/**
 	 * Return the SID address for the specified SID chip.
 	 * 
-	 * @handlers resid, jsidplay2, websid, legacy, jssid, asid
+	 * @handlers resid, jsidplay2, websid, legacy, hermit, asid
 	 * 
 	 * @param {number} chip			SID chip number (1-3)
 	 * 
@@ -2054,9 +2054,9 @@ SIDPlayer.prototype = {
 					if (address) address += 0xD000;
 				}
 				return address;
-			case "jssid":
+			case "hermit":
 			case "asid":
-				return this.jsSID.getSIDAddress(chip - 1);
+				return this.hermit.getSIDAddress(chip - 1);
 			case "lemon":
 			case "youtube":
 			case "download":
@@ -2068,7 +2068,7 @@ SIDPlayer.prototype = {
 	/**
 	 * Return the current 8-bit value of a SID register.
 	 * 
-	 * @handlers resid, jsidplay2, websid, legacy, jssid, asid
+	 * @handlers resid, jsidplay2, websid, legacy, hermit, asid
 	 * 
 	 * @param {number} register		Register $D400 to $D41C
 	 * @param {number} chip			SID chip number (default is 1)
@@ -2108,9 +2108,9 @@ SIDPlayer.prototype = {
 					// Use the SID file header to figure out the SID chip address
 					register += (SIDBackend.sidFileHeader[chip == 1 ? 0x7A : 0x7B] << 4) - 0x400;
 				return SIDBackend.getRegisterSID(register);
-			case "jssid":
+			case "hermit":
 			case "asid":
-				return this.jsSID.readregister(register + this.jsSID.getSIDAddress(chip));
+				return this.hermit.readregister(register + this.hermit.getSIDAddress(chip));
 			case "lemon":
 			case "youtube":
 			case "download":
@@ -2122,7 +2122,7 @@ SIDPlayer.prototype = {
 	/**
 	 * Return the 8-bit value of a C64 memory address.
 	 * 
-	 * @handlers resid, websid, legacy, jssid, asid
+	 * @handlers resid, websid, legacy, hermit, asid
 	 * 
 	 * @param {number} address		Address $0000 to $FFFF
 	 * 
@@ -2135,9 +2135,9 @@ SIDPlayer.prototype = {
 			case "websid":
 			case "legacy":
 				return SIDBackend.getRAM(address);
-			case "jssid":
+			case "hermit":
 			case "asid":
-				return this.jsSID.readregister(address);
+				return this.hermit.readregister(address);
 			case "jsidplay2":
 				// Not supported
 			case "lemon":
@@ -2167,7 +2167,7 @@ SIDPlayer.prototype = {
 			case "resid":
 				// @resid Not implemented
 			case "jsidplay2":
-			case "jssid":
+			case "hermit":
 			case "asid":
 			case "lemon":
 			case "youtube":
@@ -2197,7 +2197,7 @@ SIDPlayer.prototype = {
 				break;
 			case "legacy":
 			case "resid":
-			case "jssid":
+			case "hermit":
 			case "asid":
 			case "lemon":
 			case "youtube":
@@ -2254,7 +2254,7 @@ SIDPlayer.prototype = {
 			case "legacy":
 			case "resid":
 			case "jsidplay2":
-			case "jssid":
+			case "hermit":
 			case "asid":
 			case "lemon":
 			case "youtube":
@@ -2279,7 +2279,7 @@ SIDPlayer.prototype = {
 			case "legacy":
 			case "resid":
 			case "jsidplay2":
-			case "jssid":
+			case "hermit":
 			case "asid":
 			case "lemon":
 			case "youtube":
@@ -2332,7 +2332,7 @@ SIDPlayer.prototype = {
 				break;
 			case "legacy":
 			case "resid":
-			case "jssid":
+			case "hermit":
 			case "asid":
 			case "lemon":
 			case "youtube":
