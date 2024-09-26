@@ -3,32 +3,40 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+- BUG: Following files have no database information:
+  https://deepsid.chordian.net/?file=/GAMES/S-Z/Secret_of_Monkey_Island_tune_5.sid
+  https://deepsid.chordian.net/?file=/GAMES/S-Z/Secret_of_Monkey_Island_tune_6.sid
+  https://deepsid.chordian.net/?file=/GAMES/S-Z/Secret_of_Monkey_Island_tune_9.sid
+
 - JSIDPlay2: For now, the time bar color of JSIDPlay2 is the same as for the WebSid handler.
   Consider creating its own unique color for both bright and dark color schemes.
 
 - JSIDPlay2: Consider disabling and enablings balance/delay sliders depending on playing
   1SID (all sliders disabled), 2SID (3SID disabled) or 3SID (all slider enabled). However,
-  setting stereo mode to other values than AUTO seems to change this behavior., so be
-  careful to check all combination. Or just leave it as it is now - all sliders enabled.
+  setting stereo mode to other values than AUTO seems to change this behavior, so be
+  careful to check all combinations. Or just leave it as it is now - all sliders enabled.
 
 - JSIDPlay2: Add buffer size change when the tune length timer calculation can be calculated
   right (hardcoded to 48000 for now). When adding support for buffer size, there are two
   things to consider: tune length timer calculation + register read delay amount.
 
-- Figure out why one user regularly get an access violation from the 'composer.php' file.
-  UPDATE: All HVSC composer letter folders has been parsed. None of them gave an access
-  violation error in the 'composer.php' file.
+- A W A I T : Figure out why a user regularly get an access violation from 'composer.php' file.
   UPDATE: I have now added log of name in 'composer.php' to pinpoint why a user always get
   this error. Still waiting for him to do it again...
-
-- Add context menu option for downloading a tune as an MP3. I'm thinking, maybe I can grab one
-  of Lemon's MP3 files?
 
 - Make suggested-username-login-instantly work better on mobile phones. As it is now, the phone
   is usually so fast that it thinks you're creating a new user.
 
+- BUG: In temporary emulator testing, the max. subtune is not detected and shown.
+  Suggestion: See if you can use the file parser from when files are uploaded to the SH folder
+  to get the song name, author, released and max. subtune info for displaying. You may have
+  to adapt players.js/getSongInfo() and/or controls.js/updateInfo() for this to work.
+
 - The STIL entry for this tune is not parsed correctly - all links merge into one big link:
   https://deepsid.chordian.net/?file=/MUSICIANS/B/Bulldog/E_X_I_S.sid&subtune=1
+
+- Maybe green tags for compo, #1+ and winner, and copy party? A new type that huddles before
+  the default ones.
 
 
 WHEN THE TIME IS RIGHT
@@ -394,6 +402,11 @@ PROBABLY NOT?
   some composer's folder and then search for some other composer's song. When clicking one of the
   search results the respective song is played but the "Profile" tab is not updated.'
   UPDATE: I tried to reproduce it today (2021-11-07) but couldn't. Archived until further notice.
+
+- Add context menu option for downloading a tune as an MP3. I'm thinking, maybe I can grab one
+  of Lemon's MP3 files? UPDATE: I tried it using a download trick from Stack Overflow, but of
+  course I got CORS issues and I don't want to waste my time trying to fix that crap. If you
+  want to continue anyway, the test is here: temp\browser_download_mp3.js
 
 - Add support for uploading 4SID tunes in the SH folder. Also make it so only WebSid may
   play such tunes in the SH folder - the SID row must be disabled for all other SID handlers.

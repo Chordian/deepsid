@@ -1385,6 +1385,13 @@ SIDPlayer.prototype = {
 				});
 				break;
 		}
+		// If using e.g. temporary upload testing
+		if (typeof result.songName == "undefined")
+			result.songName = "<?>";
+		if (typeof result.songAuthor == "undefined")
+			result.songAuthor = "<?>";
+		if (typeof result.songReleased == "undefined")
+			result.songReleased = "<?>";
 		return result;
 	},
 

@@ -26,7 +26,7 @@ if __name__ == '__main__':
 				try:
 					tree = ElementTree.fromstring(response.content)
 				except:
-					# print 'Skipped ID %s' % sidId
+					# print('Skipped ID %s' % sidId)
 					continue
 
 				sid = tree.find('SID')
@@ -57,7 +57,7 @@ if __name__ == '__main__':
 				#				id = release.find('ID').text
 				#				break
 
-				#print '\nHVSC path: %s' % fullname
-				#print 'Type: %s, ID: %s' % (type, id)
+				#print('\nHVSC path: %s' % fullname)
+				#print('Type: %s, ID: %s' % (type, id))
 
 				writer.writerow(['_High Voltage SID Collection/'+fullname, type, id])

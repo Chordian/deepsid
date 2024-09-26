@@ -2177,6 +2177,9 @@ Browser.prototype = {
 				// It's a SID row from the 'SID Happens' folder and thus can be edited
 				contents += '<div class="divider"></div>'+
 					'<div class="line" data-action="edit-upload">Edit Uploaded File</div>';
+				if ($("#logged-username").text() == "JCH")
+					// The administrator can delete files in the 'SID Happens' folder
+					contents += '<div class="line" data-action="delete-file">Delete File</div>';
 				dividerForYouTube = '';
 			}
 
@@ -2301,7 +2304,7 @@ Browser.prototype = {
 				var $temp = $("<input>");
 				$("body").append($temp);
 				$temp.val(url).select();
-				document.execCommand("copy");
+				document.execCommand("copy"); // Deprecated but there is no replacement yet
 				$temp.remove();
 				break;
 			case 'edit-upload':
@@ -2335,6 +2338,27 @@ Browser.prototype = {
 						this.uploadWizard(2, data);
 					});
 				}.bind(this));
+				break;
+			case 'delete-file':
+				if ($("#logged-username").text() == "JCH") {
+					$("#file-name-delete").empty().append('<b>'+this.contextSID+'</b>');
+					CustomDialog({
+						id: '#dialog-delete-file',
+						text: '<h3>Delete an uploaded file</h3>'+
+							'<p>Are you sure you want to delete this SID file?</p>',
+						width: 500,
+						height: 196,
+					}, function() {
+						// Please don't try to hack - the PHP file only allows for deleting by an administrator
+						$.post("php/upload_delete.php", {
+							fullname:	(this.isSidFmFolder() ? PATH_SID_FM : PATH_UPLOADS)+"/"+this.contextSID
+						}, function(data) {
+							this.validateData(data, function() {
+								browser.getFolder();
+							});
+						}.bind(this));
+					}.bind(this));
+				}
 				break;
 			case 'edit-videos':
 				this.editYouTubeLinks((this.isSearching || this.isCompoFolder || this.path.substr(1, 1) == "$"

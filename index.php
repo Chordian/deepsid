@@ -449,6 +449,12 @@
 			<div class="dialog-buttons"><a href="#" class="dialog-cancel">Cancel</a><button class="dialog-button-yes dialog-auto">OK</button></div>
 		</div>
 
+		<div id="dialog-delete-file" class="dialog-box">
+			<div class="dialog-text"></div>
+			<div id="file-name-delete" class="clink-text ellipsis"></div>
+			<div class="dialog-buttons"><button class="dialog-button-yes">Yes</button><button class="dialog-button-no">No</button></div>
+		</div>
+
 		<div id="dialog-add-clink" class="dialog-box">
 			<div class="dialog-text"></div>
 			<form onsubmit="return false;" autocomplete="off">
@@ -1842,6 +1848,16 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>August 4, 2024</h3>
+						<ul>
+							<li>Fixed temporary emulating testing (hotkey "l") not playing the uploaded tune when clicked.</li>
+						</ul>
+
+						<h3>July 25, 2024</h3>
+						<ul>
+							<li>Added the CSDb music competitions related to HVSC #81.</li>
+						</ul>
 
 						<h3>July 21, 2024</h3>
 						<ul>
