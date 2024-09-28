@@ -2852,6 +2852,7 @@ Browser.prototype = {
 		this.sliderButton = false;
 		if (typeof tags == "undefined" || this.cache.folderTags == "0") {
 			var tagType = {
+				event:		"",
 				production:	"",
 				origin:		"",
 				suborigin:	"",
@@ -2874,6 +2875,7 @@ Browser.prototype = {
 				});
 			});
 			allTags =
+				tagType.event+
 				tagType.origin+
 				tagType.suborigin+
 				tagType.mixorigin+

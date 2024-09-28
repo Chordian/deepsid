@@ -1849,6 +1849,13 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>September 28, 2024</h3>
+						<ul>
+							<li>A new tag group type for events has been created. These tags have a green color are shown before all other tag types.
+								They are used for events such as demo parties. The event name always come first, then optionally "Compo"
+								which can then optionally be followed by the ranking such as "Winner" and "#1" to "#9" tags.</li>
+						</ul>
+
 						<h3>August 4, 2024</h3>
 						<ul>
 							<li>Fixed temporary emulating testing (hotkey "l") not playing the uploaded tune when clicked.</li>

@@ -379,6 +379,7 @@
 		<h4>Color codes</h4>
 		<p>The type of tags are divided up into groups that huddle together.</p>
 		<p>What the colors indicate:</p>
+		<div class="annex-hotkey"><a href="17" class="topic"><div class="tag tag-event">Event</div></a></div><span class="annex-tiny" style="position:relative;top:1px;">Typically a party</span>
 		<div class="annex-hotkey"><a href="14" class="topic"><div class="tag tag-production">Production</div></a></div><span class="annex-tiny" style="position:relative;top:1px;">Demos, intros, etc.</span>
 		<div class="annex-hotkey"><a href="13" class="topic"><div class="tag tag-origin">Origin</div></a></div><span class="annex-tiny" style="position:relative;top:1px;">Cover, conversion, etc.</span>
 		<div class="annex-hotkey"><a href="12" class="topic"><div class="tag tag-digi">Digi</div></a></div><span class="annex-tiny" style="position:relative;top:1px;">Digi, what type, etc.</span>
@@ -678,6 +679,31 @@
 
 		<p style="margin-top:20px;">Slashes before or after paths are not needed &ndash; works both ways.</p>
 	',
+
+	'	<h3>Event tags</h3>
+
+		<p>This is usually a demo party, a meeting or similar, where the SID file was released.</p>
+
+		<p>Tags before <b>Compo</b> is usually the name of the event.</p>
+
+		<h4>List of generel event tags</h4>
+		<ul class="annex-tags-list">
+			<li><a href="&quot;compo&quot;" class="search" data-type="tag"><div class="tag tag-event">Compo</div></a>= <b>From a competition</b>
+			<p>Participated in a competition at the event, typically a music competition.</p></li>
+		</ul>
+		<ul class="annex-tags-list">
+			<li><a href="&quot;winner&quot;" class="search" data-type="tag"><div class="tag tag-event">Winner</div></a>= <b>Won a competition</b>
+			<p>The winner of the competition it participated in.</p></li>
+		</ul>
+		<ul class="annex-tags-list">
+			<li><a href="&quot;#2&quot;" class="search" data-type="tag"><div class="tag tag-event">#2</div></a>= <b>#2 in a competition</b>
+			<p>Second in the competition it participated in. There are also tags for <b>#3</b>, <b>#4</b>, etc.</p></li>
+		</ul>
+
+		If you want to know more about handling tags, see <a href="10" class="topic">this</a> topic.
+
+	',
+
 );
 
 $id = isset($_GET['id']) ? $_GET['id'] : mt_rand(0, count($tips) - 1);
@@ -690,6 +716,7 @@ else
 		<ul style="margin-bottom:16px;">
 			<li><a href="6" class="topic">Color strips</a></li>
 			<li><a href="12" class="topic">Digi tags</a></li>
+			<li><a href="17" class="topic">Event tags</a></li>
 			<li><a href="2" class="topic">External links</a></li>
 			<li><a href="15" class="topic">General tags</a></li>
 			<li><a href="10" class="topic">Handling tags</a></li>

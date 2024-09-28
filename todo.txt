@@ -3,11 +3,6 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- BUG: Following files have no database information:
-  https://deepsid.chordian.net/?file=/GAMES/S-Z/Secret_of_Monkey_Island_tune_5.sid
-  https://deepsid.chordian.net/?file=/GAMES/S-Z/Secret_of_Monkey_Island_tune_6.sid
-  https://deepsid.chordian.net/?file=/GAMES/S-Z/Secret_of_Monkey_Island_tune_9.sid
-
 - JSIDPlay2: For now, the time bar color of JSIDPlay2 is the same as for the WebSid handler.
   Consider creating its own unique color for both bright and dark color schemes.
 
@@ -34,9 +29,6 @@ SHOULD BE DONE
 
 - The STIL entry for this tune is not parsed correctly - all links merge into one big link:
   https://deepsid.chordian.net/?file=/MUSICIANS/B/Bulldog/E_X_I_S.sid&subtune=1
-
-- Maybe green tags for compo, #1+ and winner, and copy party? A new type that huddles before
-  the default ones.
 
 
 WHEN THE TIME IS RIGHT
