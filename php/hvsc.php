@@ -615,7 +615,7 @@ try {
 				$xml = curl('https://csdb.dk/webservice/?type=event&id='.$event_id);
 				if (!strpos($xml, '<CSDbData>'))
 					die(json_encode(array('status' => 'error', 'message' => 'Could not get CSDb data for event ID: '.$event_id)));
-				$csdb_event = simplexml_load_string(utf8_decode($xml));
+				$csdb_event = simplexml_load_string($xml);
 
 				$compos = $csdb_event->Event->Compo;
 				if (!isset($compos))
@@ -637,7 +637,7 @@ try {
 						// Get the release XML from the CSDb web service
 						$xml = curl('https://csdb.dk/webservice/?type=release&id='.$release->ID);
 						if (strpos($xml, '<CSDbData>')) {
-							$csdb_release = simplexml_load_string(utf8_decode($xml));
+							$csdb_release = simplexml_load_string($xml);
 							if (isset($csdb_release->Release->UsedSIDs->SID->HVSCPath) && count($csdb_release->Release->UsedSIDs->SID) == 1) {
 								$fullname = '_High Voltage SID Collection'.$csdb_release->Release->UsedSIDs->SID->HVSCPath;
 								$files[] = $fullname;

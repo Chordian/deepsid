@@ -3,6 +3,9 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+- The following files returns a database error. Check it out.
+  https://deepsid.chordian.net/?file=/Compute%27s%20Gazette%20SID%20Collection/DC_Starr/Coventry_Carol_A.mus
+
 - JSIDPlay2: For now, the time bar color of JSIDPlay2 is the same as for the WebSid handler.
   Consider creating its own unique color for both bright and dark color schemes.
 

@@ -527,8 +527,7 @@
 				<select id="dropdown-topleft-emulator" name="select-topleft-emulator" style="visibility:hidden;">
 					<option value="resid">reSID (BETA)</option>
 					<!--<option value="resid">reSID (WebSidPlay)</option>-->
-					<option value="jsidplay2">JSIDPlay2 (BETA)</option>
-					<!--<option value="jsidplay2">JSIDPlay2 (reSID)</option>-->
+					<option value="jsidplay2">JSIDPlay2 (reSID)</option>
 					<option value="websid">WebSid emulator</option>
 					<option value="legacy">WebSid (Legacy)</option>
 					<option value="hermit">Hermit's (+FM)</option>
@@ -621,7 +620,7 @@
 							<!--<span>The <a href="https://www.hvsc.c64.org/" target="_top">High Voltage SID Collection</a> has been upgraded to the latest version #81. Click <a href="//deepsid.chordian.net/?search=81&type=new">here</a> to see what's new in this update.</span>-->
 							<!--<span><a href="http://www.c64music.co.uk/" target="_top">Compute's Gazette SID Collection</a> has been upgraded to the latest version #146. Click <a href="//deepsid.chordian.net/?search=146&type=new">here</a> to see what's new in this update.</span>-->
 							<!--<a href="https://xparty.net/"><img src="images/sundry_x2024.png" alt="X'2024" /></a>-->
-							<span>A second SID handler for reSID has been added, this time ported by Jürgen Wothke. It is only about 30% slower than WebSid.</span>
+							<span></span>
 						</div>
 					<?php endif ?>
 				</div>
@@ -1849,9 +1848,14 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>October 3, 2024</h3>
+						<ul>
+							<li>Fixed an UTF-8 issue due to an update on CSDb. All CSDb pages should display properly again.</li>
+						</ul>
+
 						<h3>September 28, 2024</h3>
 						<ul>
-							<li>A new tag group type for events has been created. These tags have a green color are shown before all other tag types.
+							<li>A new tag group type for events has been created. These tags have a green color and are shown before all other tag types.
 								They are used for events such as demo parties. The event name always come first, then optionally "Compo"
 								which can then optionally be followed by the ranking such as "Winner" and "#1" to "#9" tags.</li>
 						</ul>

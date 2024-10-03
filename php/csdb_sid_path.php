@@ -29,7 +29,7 @@ if (!isset($_GET['type']) || !isset($_GET['id']))
 $xml = curl('https://csdb.dk/webservice/?type='.$_GET['type'].'&id='.$_GET['id']);
 if (!strpos($xml, '<CSDbData>'))
 	die(json_encode(array('status' => 'warning', 'path' => 'N/A')));
-$csdb = simplexml_load_string(utf8_decode($xml));
+$csdb = simplexml_load_string($xml);
 
 switch ($_GET['type']) {
 	case 'sid':

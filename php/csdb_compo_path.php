@@ -25,7 +25,7 @@ if (!isset($_GET['id']))
 $xml = curl('https://csdb.dk/webservice/?type=release&id='.$_GET['id']);
 if (!strpos($xml, '<CSDbData>'))
 	die(json_encode(array('status' => 'warning', 'path' => 'N/A')));
-$csdb = simplexml_load_string(utf8_decode($xml));
+$csdb = simplexml_load_string($xml);
 
 $path = '<i>No SID file found</i>';
 if (isset($csdb->Release->UsedSIDs)) {

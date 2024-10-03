@@ -27,7 +27,7 @@ function CompoGetXML($event_id) {
 	if (!strpos($xml, '<CSDbData>'))
 		die(json_encode(array('status' => 'warning', 'html' => '<p style="margin-top:0;"><i>Uh... CSDb? Are you there?</i></p>'.
 			'<b>ID:</b> <a href="https://csdb.dk/event/?id='.$event_id.'" target="_blank">'.$event_id.'</a>')));
-	$csdb = simplexml_load_string(utf8_decode($xml));
+	$csdb = simplexml_load_string($xml);
 	return $csdb;		
 }
 

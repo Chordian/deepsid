@@ -98,7 +98,7 @@ if (isset($_GET['fullname'])) {
 		// Get the XML from the CSDb web service with a list of releases on this 'sid' page (default depth)
 		$xml = curl('https://csdb.dk/webservice/?type=sid&id='.$csdb_id);
 		if (strpos($xml, '<CSDbData>') !== false) {
-			$csdb = simplexml_load_string(utf8_decode($xml));
+			$csdb = simplexml_load_string($xml);
 
 			if (isset($csdb->SID->UsedIn) && count($csdb->SID->UsedIn->Release) == 1) {
 				// There is just *ONE* release for this SID so show that instead of the 'sid' page
@@ -122,7 +122,7 @@ $xml = curl('https://csdb.dk/webservice/?type='.$csdb_type.'&id='.$csdb_id.($csd
 if (!strpos($xml, '<CSDbData>'))
 	die(json_encode(array('status' => 'warning', 'html' => '<p style="margin-top:0;"><i>Uh... CSDb? Are you there?</i></p>'.
 		'<b>ID:</b> <a href="https://csdb.dk/'.$csdb_type.'/?id='.$csdb_id.'" target="_blank">'.$csdb_id.'</a>')));
-$csdb = simplexml_load_string(utf8_decode($xml));
+$csdb = simplexml_load_string($xml);
 
 // Building HTML
 if ($csdb_type == 'sid') {
@@ -134,7 +134,7 @@ if ($csdb_type == 'sid') {
 
 	// For user comments in "sid" entries, we need to get them with lower depth to ensure we get all handles
 	$xml = curl('https://csdb.dk/webservice/?type=sid&id='.$csdb_id);
-	$simple_csdb = !strpos($xml, '<CSDbData>') ? $csdb : simplexml_load_string(utf8_decode($xml));
+	$simple_csdb = !strpos($xml, '<CSDbData>') ? $csdb : simplexml_load_string($xml);
 
 	// For some reason the XML user comments for "sid" entries are not backwards
 	$user_comments = isset($simple_csdb->SID->UserComment)

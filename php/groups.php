@@ -73,7 +73,7 @@ $xml = curl('https://csdb.dk/webservice/?type='.$row->csdbtype.'&id='.$row->csdb
 if (!strpos($xml, '<CSDbData>'))
 	die(json_encode(array('status' => 'error', 'warning' => '<p style="margin-top:0;"><i>Uh... CSDb? Are you there?</i></p>'.
 		'<b>ID:</b> <a href="https://csdb.dk/'.$row->csdbtype.'/?id='.$row->csdbid.'" target="_blank">'.$row->csdbid.'</a>')));
-$csdb = simplexml_load_string(utf8_decode($xml));
+$csdb = simplexml_load_string($xml);
 
 if ($row->csdbtype == 'scener') {
 
@@ -99,7 +99,7 @@ if ($row->csdbtype == 'scener') {
 					continue; // BUG FIX: Don't show alert box but just silently ignore and continue
 					/*die(json_encode(array('status' => 'warning', 'message' => '<p style="margin-top:0;"><i>Uh... CSDb? Are you there?</i></p>'.
 						'<b>ID:</b> <a href="https://csdb.dk/scener/?id='.$handle->ID.'" target="_blank">'.$handle->ID.'</a>')));*/
-				$csdb_handle = simplexml_load_string(utf8_decode($xml));
+				$csdb_handle = simplexml_load_string($xml);
 				$this_handle = $handle->Handle;
 			}
 

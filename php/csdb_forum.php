@@ -24,7 +24,7 @@ if (!isset($_GET['room']) || !isset($_GET['topic']))
 $xml = curl('https://csdb.dk/webservice/?type=forum&id=1&roomid='.$_GET['room'].'&topicid='.$_GET['topic']);
 if (!strpos($xml, '<CSDbData>'))
 	die(json_encode(array('status' => 'warning', 'html' => '<p style="margin-top:0;"><i>Uh... CSDb? Are you there?</i></p>')));
-$csdb = simplexml_load_string(utf8_decode($xml));
+$csdb = simplexml_load_string($xml);
 
 $parser = new JBBCode\Parser();
 $parser->addCodeDefinitionSet(new JBBCode\DefaultCodeDefinitionSet());
