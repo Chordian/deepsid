@@ -620,7 +620,7 @@
 							<!--<span>The <a href="https://www.hvsc.c64.org/" target="_top">High Voltage SID Collection</a> has been upgraded to the latest version #81. Click <a href="//deepsid.chordian.net/?search=81&type=new">here</a> to see what's new in this update.</span>-->
 							<!--<span><a href="http://www.c64music.co.uk/" target="_top">Compute's Gazette SID Collection</a> has been upgraded to the latest version #146. Click <a href="//deepsid.chordian.net/?search=146&type=new">here</a> to see what's new in this update.</span>-->
 							<!--<a href="https://xparty.net/"><img src="images/sundry_x2024.png" alt="X'2024" /></a>-->
-							<span></span>
+							<span>I changed some Javascript files so make sure your browser cache is up to date. On Windows, hit <b style="color:#77c;">Ctrl+F5</b> while viewing the site, on Mac, hit <b style="color:#77c;">Cmd+Shift+R</b>.</span>
 						</div>
 					<?php endif ?>
 				</div>
@@ -1847,6 +1847,17 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>October 13, 2024</h3>
+						<ul>
+							<li>Ratings stars for a song are now shown in the info box too, so you can see and rate the song even when you have browsed away from it.
+								The collection version number has been moved down above the sundry box.</li>
+						</ul>
+
+						<h3>October 6, 2024</h3>
+						<ul>
+							<li>Added <a href="//deepsid.chordian.net/?player=130&type=player&search=quantum">Quantum Soundtracker</a> to the list of music editors.</li>
+						</ul>
 
 						<h3>October 3, 2024</h3>
 						<ul>

@@ -448,63 +448,7 @@ Browser.prototype = {
 				}
 
 				if (event.target.tagName === "B") {
-					// Clicked a star to set a rating for a folder or SID file
-					if (!$("#logout").length) {
-						// But must be logged in to do that
-						alert("Login or register and you can click these stars to vote for a file or folder.");
-						return false;
-					}
-					var rating = event.shiftKey ? 0 : 5 - $(event.target).index(); // Remember stars are backwards (RTL; see CSS)
-
-					// Star rating for a folder or a SID file (PHP script figures this out by itself)
-					$.post("php/rating_write.php", { fullname: thisFullname, rating: rating }, function(data) {
-						this.validateData(data, function(data) {
-
-							var stars = this.buildStars(data.rating);
-
-							// Make the rating sticky without refreshing the page
-							var $td = $(event.target).parents("td");
-							$td.find(".rating").empty().append(stars);
-
-							// But also update the relevant array for later filtering/sorting
-							var isFile = $td.parent("tr").find(".name").hasClass("file"),
-								endName = this.isSymlist || this.isCompoFolder ? thisFullname : thisFullname.split("/").slice(-1)[0];
-							if (isFile) {
-								// Update the playlist array
-								$.each(this.playlist, function(i, file) {
-									if (file.filename == endName) {
-										file.rating = data.rating;
-										return false;
-									}
-								});
-							} else {
-								// Update the cache HTML directly
-								var isCacheFolder = (this.path === "/CSDb Music Competitions" || this.path === "/_Compute's Gazette SID Collection") && this.cache.folder !== "";
-								// Temporarily make the HTML string of folders into a jQuery object
-								var $folders = $(isCacheFolder ? this.cache.folder : this.folders);
-								$($folders).find('.name[data-name="'+encodeURIComponent(endName)+'"]')
-									.parents("td").next().find(".rating")
-									.empty().append(stars);
-								// Has to be wrapped to get everything back
-								var wrapped = $("<div>").append($folders.clone()).html();
-								if (isCacheFolder)
-									this.cache.folder = wrapped;
-								else
-									this.folders = wrapped;
-							}
-							if (this.isBigCompoFolder()) {
-								// Update the compolist arrays
-								$.each([this.compolist, this.cache.compolist], function() {
-									$.each(this, function(i, file) {
-										if (file.foldername == endName) {
-											file.rating = data.rating;
-											return false;
-										}
-									});
-								});
-							}
-						});
-					}.bind(this));
+					this.registerStarRating(event, thisFullname);
 					return false;
 				}
 
@@ -1037,7 +981,7 @@ Browser.prototype = {
 						'<td class="sid unselectable">'+
 						'<div class="pl-strip'+playerType+'"><div class="has-stil">'+hasStil+'</div></div>'+
 						'<div class="block-wrap"><div class="block">'+(file.subtunes > 1 ? '<div class="subtunes'+(this.isSymlist ? ' specific' : '')+(isNew ? ' newst' : '')+'">'+(this.isSymlist ? file.startsubtune + 1 : file.subtunes)+'</div>' : (isNew ? '<div class="newsid"></div>' : ''))+
-						'<div class="entry name file'+(this.isSearching || this.isCompoFolder || this.path.substr(0, 2) === "/$" ? ' search' : '')+'" data-name="'+encodeURIComponent(file.filename)+'" data-type="'+file.type+'" data-symid="'+file.symid+'">'+adaptedName+'</div></div></div><br />'+
+						'<div class="entry name file'+(this.isSearching || this.isCompoFolder || this.path.substr(0, 2) === "/$" ? ' search' : '')+'" data-name="'+encodeURIComponent(file.filename)+'" data-type="'+file.type+'" data-id="'+file.id+'" data-symid="'+file.symid+'">'+adaptedName+'</div></div></div><br />'+
 						'<span class="info">'+file.copyright.substr(0, 4)+file.infosec+'<div class="tags-line"'+(showTags ? '' : ' style="display:none"')+'>'+file.tags+'</div></span></td>'+
 						'<td class="stars filestars"><span class="rating">'+this.buildStars(file.rating)+'</span>'+
 						'<span class="disqus-comment-count"></span>'+(typeof file.uploaded != "undefined" ? '<span class="uploaded-time">'+file.uploaded.substr(0, 10)+'</span>' : '')+
@@ -1455,7 +1399,7 @@ Browser.prototype = {
 								'<td class="sid unselectable">'+
 								'<div class="pl-strip'+playerType+'"><div class="has-stil">'+hasStil+'</div></div>'+
 								'<div class="block-wrap"><div class="block">'+(file.subtunes > 1 ? '<div class="subtunes'+(this.isSymlist ? ' specific' : '')+(isNew ? ' newst' : '')+'">'+(this.isSymlist ? file.startsubtune : file.subtunes)+'</div>' : (isNew ? '<div class="newsid"></div>' : ''))+
-								'<div class="entry name file'+(this.isSearching || this.isCompoFolder || this.path.substr(0, 2) === "/$" ? ' search' : '')+'" data-name="'+encodeURIComponent(file.filename)+'" data-type="'+file.type+'" data-symid="'+file.symid+'">'+adaptedName+'</div></div></div><br />'+
+								'<div class="entry name file'+(this.isSearching || this.isCompoFolder || this.path.substr(0, 2) === "/$" ? ' search' : '')+'" data-name="'+encodeURIComponent(file.filename)+'" data-type="'+file.type+'" data-id="'+file.id+'" data-symid="'+file.symid+'">'+adaptedName+'</div></div></div><br />'+
 								'<span class="info">'+file.copyright.substr(0, 4)+infoSecondary+'<div class="tags-line"'+(showTags ? '' : ' style="display:none"')+'>'+list_of_tags+'</div></span></td>'+
 								'<td class="stars filestars"><span class="rating">'+this.buildStars(file.rating)+'</span>'+
 								'<span class="disqus-comment-count"></span>'+(typeof file.uploaded != "undefined" ? '<span class="uploaded-time">'+file.uploaded.substr(0, 10)+'</span>' : '')+
@@ -1466,6 +1410,7 @@ Browser.prototype = {
 						if (stil.substr(2, 4) == "r />") stil = stil.substr(6);
 
 						this.playlist.push({
+							id:				file.id,
 							filename:		file.filename,
 							substname:		file.substname,	// Symlists can have renamed SID files
 							fullname:		this.ROOT_HVSC + rootFile,
@@ -1592,7 +1537,7 @@ Browser.prototype = {
 		$tr.css("background", GetCSSVar("--color-sid-row-error-bg"));
 
 		// Remove stuff, clear boxes, disable buttons
-		$("#sid-model,#clockspeed,#hvsc-version").remove();
+		$("#sid-model,#clockspeed").remove();
 		$("#memory-chunk").css({left: "0", width: "0"});
 		$("#info-text").empty();
 		$("#stopic-stil,#stopic-tags").empty();
@@ -1603,6 +1548,94 @@ Browser.prototype = {
 		ctrls.state("faster", "disabled");
 		ctrls.state("loop", "disabled");
 		$("#volume").prop("disabled", true);
+	},
+
+	/**
+	 * Clicked a star to set a rating for a file.
+	 * 
+	 * @param {*} event				Event when clicking the star (a <B> element)
+	 * @param {string} fullname		The SID filename including folders
+	 */
+	registerStarRating: function(event, fullname) {
+
+		if (!$("#logout").length) {
+			// But must be logged in to do that
+			alert("Login or register and you can click these stars to vote for a file or folder.");
+			return false;
+		}
+
+		var isInfoRating = event.currentTarget.tagName == "DIV",
+			rating = event.shiftKey ? 0 : 5 - $(event.target).index(); // Remember stars are backwards (RTL; see CSS)
+
+		// Star rating for a folder or a SID file (PHP script figures this out by itself)
+		$.post("php/rating_write.php", { fullname: fullname, rating: rating }, function(data) {
+			this.validateData(data, function(data) {
+
+				var stars = this.buildStars(data.rating);
+
+				if (isInfoRating) {
+					// Star ratings clicked in the info box
+					$("#info-rating").empty().append(stars);
+					var $relevant = $("#songs table").find("[data-id='"+ctrls.currentFileID+"']")
+					if ($relevant.length) {
+						// The current browse list contains the current song so adapt its ratings
+						$relevant.parents("tr").find("span.rating").empty().append(stars);
+						// Update the playlist array too so sorting also works
+						$.each(this.playlist, function(i, file) {
+							if (file.id == ctrls.currentFileID) {
+								file.rating = data.rating;
+								return false;
+							}
+						});
+					}
+				} else {
+					// Star ratings clicked in a SID row
+					var $tr = $(event.target).parents("tr");
+					$tr.find("span.rating").empty().append(stars);
+					if ($tr.find(".name").attr("data-id") == ctrls.currentFileID)
+						// It's the current song so adapt the info box ratings too
+						$("#info-rating").empty().append(stars);
+
+					// But also update the relevant array for later filtering/sorting
+					var isFile = $tr.find(".name").hasClass("file"),
+						endName = this.isSymlist || this.isCompoFolder ? fullname : fullname.split("/").slice(-1)[0];
+					if (isFile) {
+						// Update the playlist array
+						$.each(this.playlist, function(i, file) {
+							if (file.filename == endName) {
+								file.rating = data.rating;
+								return false;
+							}
+						});
+					} else {
+						// Update the cache HTML directly
+						var isCacheFolder = (this.path === "/CSDb Music Competitions" || this.path === "/_Compute's Gazette SID Collection") && this.cache.folder !== "";
+						// Temporarily make the HTML string of folders into a jQuery object
+						var $folders = $(isCacheFolder ? this.cache.folder : this.folders);
+						$($folders).find('.name[data-name="'+encodeURIComponent(endName)+'"]')
+							.parents("td").next().find(".rating")
+							.empty().append(stars);
+						// Has to be wrapped to get everything back
+						var wrapped = $("<div>").append($folders.clone()).html();
+						if (isCacheFolder)
+							this.cache.folder = wrapped;
+						else
+							this.folders = wrapped;
+					}
+					if (this.isBigCompoFolder()) {
+						// Update the compolist arrays
+						$.each([this.compolist, this.cache.compolist], function() {
+							$.each(this, function(i, file) {
+								if (file.foldername == endName) {
+									file.rating = data.rating;
+									return false;
+								}
+							});
+						});
+					}
+				}
+			});
+		}.bind(this));
 	},
 
 	/**

@@ -920,11 +920,12 @@ try {
 			$select->setFetchMode(PDO::FETCH_OBJ);
 
 			$player = $lengths = $type = $version = $playertype = $playercompat = $clockspeed = $sidmodel = $name = $author = $copyright = $hash = $stil = '';
-			$rating = $dataoffset = $datasize = $loadaddr = $initaddr = $playaddr = $subtunes = $startsubtune = $hvsc = $videos = 0;
+			$id = $rating = $dataoffset = $datasize = $loadaddr = $initaddr = $playaddr = $subtunes = $startsubtune = $hvsc = $videos = 0;
 
 			if ($select->rowCount()) {
 				$row = $select->fetch();
 
+				$id = 				$row->id;			// Unique database ID
 				$player = 			$row->player;		// MoN/FutureComposer
 				$lengths = 			$row->lengths;		// 6:47 0:46 0:04
 				$type = 			$row->type;			// PSID										RSID
@@ -1052,6 +1053,7 @@ try {
 				$player .= ' (unpacked)';
 
 			array_push($files_ext, array(
+				'id' =>				$id,
 				'filename' =>		$file,
 				'substname' =>		$substname,
 				'playerraw' =>		$player,

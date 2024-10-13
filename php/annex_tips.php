@@ -115,7 +115,7 @@
 		<p>Uses the renowned reSID engine and offers excellent emulation.</p>
 		It is only about 30% slower than the WebSid emulator.
 
-		<h4><a href="//deepsid.chordian.net?emulator=jsidplay2">JSIDPlay2 (BETA)</a></h4>
+		<h4><a href="//deepsid.chordian.net?emulator=jsidplay2">JSIDPlay2 (reSID)</a></h4>
 		<p>Also uses the reSID engine and offers the same emulation.</p>
 		Requires a really fast CPU.
 
@@ -250,9 +250,11 @@
 			<tr>
 				<td>emulator</td><td>Temporarily override the emulator.&nbsp;&nbsp;Options:
 					<ul>
+						<li><b>resid</b></li>
+						<li><b>jsidplay2</b></li>
 						<li><b>websid</b></li>
 						<li><b>legacy</b></li>
-						<li><b>jssid</b>&nbsp;&nbsp;(Hermit\'s)</li>
+						<li><b>hermit</li>
 						<li><b>asid</b>&nbsp;&nbsp;(MIDI)</li>
 						<li><b>lemon</b></li>
 						<li><b>youtube</b></li>

@@ -9,19 +9,6 @@ SHOULD BE DONE
 - JSIDPlay2: For now, the time bar color of JSIDPlay2 is the same as for the WebSid handler.
   Consider creating its own unique color for both bright and dark color schemes.
 
-- JSIDPlay2: Consider disabling and enablings balance/delay sliders depending on playing
-  1SID (all sliders disabled), 2SID (3SID disabled) or 3SID (all slider enabled). However,
-  setting stereo mode to other values than AUTO seems to change this behavior, so be
-  careful to check all combinations. Or just leave it as it is now - all sliders enabled.
-
-- JSIDPlay2: Add buffer size change when the tune length timer calculation can be calculated
-  right (hardcoded to 48000 for now). When adding support for buffer size, there are two
-  things to consider: tune length timer calculation + register read delay amount.
-
-- A W A I T : Figure out why a user regularly get an access violation from 'composer.php' file.
-  UPDATE: I have now added log of name in 'composer.php' to pinpoint why a user always get
-  this error. Still waiting for him to do it again...
-
 - Make suggested-username-login-instantly work better on mobile phones. As it is now, the phone
   is usually so fast that it thinks you're creating a new user.
 
@@ -32,6 +19,12 @@ SHOULD BE DONE
 
 - The STIL entry for this tune is not parsed correctly - all links merge into one big link:
   https://deepsid.chordian.net/?file=/MUSICIANS/B/Bulldog/E_X_I_S.sid&subtune=1
+
+- Check up on ""Auto-progress should select and center the next song as it proceeds to it"
+  setting again - it centers wrongly on my 32" screen and also doesn't toggle correctly?
+
+- Is it possible to import GameBase64's downloadable database to my own One.com database and
+  then make it work in the GB64 tab again at DeepSID?
 
 
 WHEN THE TIME IS RIGHT
@@ -88,6 +81,11 @@ CONSIDER THIS
 - Presets or load/save setup in the stereo sundry tab.
 - Store stereo settings for a song with a pin icon.
 - The "WASM disabled" message should only be shown when WebSid (HQ and Legacy) is chosen.
+
+- A W A I T : Figure out why a user regularly get an access violation from 'composer.php' file.
+  UPDATE: I have now added log of name in 'composer.php' to pinpoint why a user always get
+  this error. Still waiting for him to do it again...
+  UPDATE: Ever since enabling the above I have not seen it happen again. Lowering the priority.
 
 - Automate CGSC update process. All REN, MOVE, etc. Create folders where they can't be found
   in the filenames, count files in them, etc.
@@ -418,6 +416,15 @@ PROBABLY NOT?
 - Let the time pass for "download" tunes so that automatic skip to next tune works in playlists.
   - Problem is subtunes. You can't advance to next subtune in the offline player.
   - But maybe just discard that then so it just always advances to the next SID row.
+
+- JSIDPlay2: Consider disabling and enablings balance/delay sliders depending on playing
+  1SID (all sliders disabled), 2SID (3SID disabled) or 3SID (all sliders enabled). However,
+  setting stereo mode to other values than AUTO seems to change this behavior, so be
+  careful to check all combinations. Or just leave it as it is now - all sliders enabled.
+
+- JSIDPlay2: Add buffer size change when the tune length timer calculation can be calculated
+  right (hardcoded to 48000 for now). When adding support for buffer size, there are two
+  things to consider: tune length timer calculation + register read delay amount.
 
 - See here: https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-color-scheme
   With this you can preset to bright or dark color scheme the first time it is visited.

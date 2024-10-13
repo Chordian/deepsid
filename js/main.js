@@ -713,9 +713,8 @@ $(function() { // DOM ready
 
 		switch (stopic) {
 			case "stil":
-				// See the 'UpdateURL()' function below
-				if (browser.isHVSC())
-					$("#sundry-ctrls").append(reportSTIL);
+				// Show collection version for this song
+				ctrls.updateSundryVersion();
 				break;
 			case "tags":
 				$("#sundry-ctrls").append(
@@ -1917,7 +1916,6 @@ $(window).on("load", function() {
 	// Just in case the web browser prefilled the username and password fields
 	setTimeout(function() {
 		$("#username,#password").trigger("keydown");
-		STILChangeReportLink();
 	}, 350);
 });
 
@@ -2236,8 +2234,6 @@ function UpdateURL(skipFileCheck) {
 		history.pushState({}, document.title, link);
 	} else
 		history.replaceState({}, document.title, link);
-
-	STILChangeReportLink();
 }
 
 /**
@@ -2252,18 +2248,6 @@ function UpdateRedirectPlayIcons() {
 		if ($this.html() == browser.playlist[browser.songPos].fullname.replace(browser.ROOT_HVSC+"/_High Voltage SID Collection", ""))
 			$this.removeClass("playing").addClass("playing");
 	});
-}
-
-/**
- * Show the STIL change report link, but only if relevant for the current folder.
- */
-function STILChangeReportLink() {
-	var reportSTIL = '<a href="mailto:hvsc@c64.org?subject=STIL%20change&body=I%20have%20a%20STIL%20change%20request%20for:%0D%0A'+window.location.href+'%0D%0A%0D%0A" style="position:relative;top:-3px;font-size:11px;">Report a STIL change</a>';
-	if ($("#sundry-tabs .selected").attr("data-topic") === "stil") {
-		$("#sundry-ctrls").empty();
-		if (browser.isHVSC())
-			$("#sundry-ctrls").append(reportSTIL);
-	}
 }
 
 /**

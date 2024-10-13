@@ -891,10 +891,8 @@ SIDPlayer.prototype = {
 
 					if (this.youTubeScript) this.youTubeScript.abort();
 
-					var fullname = file.replace(browser.ROOT_HVSC+"/", "");
-
 					this.youTubeScript = $.get("php/youtube.php", {
-						fullname:		fullname,
+						fullname:		this.getFullName(),
 						subtune:		subtune,
 					}, function(data) {
 						browser.validateData(data, function(data) {
@@ -907,7 +905,7 @@ SIDPlayer.prototype = {
 									if (video.tab_default == 1) defaultTab = i;
 								});
 								// The 'Edit' corner link
-								$ytTabs.append('<div id="edityttabs"><a href="#" title="Edit YouTube links" data-name="'+fullname+'">Edit</a></div>');
+								$ytTabs.append('<div id="edityttabs"><a href="#" title="Edit YouTube links" data-name="'+this.getFullName()+'">Edit</a></div>');
 								// Handle optional time offset parameter if present
 								var video_id = data.videos[defaultTab].video_id,
 									offset = 0;
@@ -1358,7 +1356,7 @@ SIDPlayer.prototype = {
 			case "info":
 				// HVSC: We have to ask the server (look in database or parse the file)
 				$.ajax("php/info.php", {
-					data:		{fullname: this.file.replace(browser.ROOT_HVSC+"/", "")},
+					data:		{fullname: this.getFullName()},
 					async:		false, // Have to wait to make sure the array is returned correctly
 					success:	function(data) {
 						try {
@@ -1393,6 +1391,17 @@ SIDPlayer.prototype = {
 		if (typeof result.songReleased == "undefined")
 			result.songReleased = "<?>";
 		return result;
+	},
+
+	/**
+	 * Return the full name of the song currently ready to play.
+	 * 
+	 * @handlers all
+	 * 
+	 * @returns {string} 	Full name (path and file) excluding server root
+	 */
+	getFullName: function() {
+		return this.file.replace(browser.ROOT_HVSC+"/", "");
 	},
 
 	/**

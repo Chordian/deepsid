@@ -2241,14 +2241,14 @@ input[type=range]::-ms-track {
 	#hvsc-version,
 	#pace {
 		position: absolute;
-		right: 9px;
-		bottom: 15px;
+		right: 0;
+		bottom: 2px;
 		font-family: "Open Sans", helvetica, sans-serif;
 		font-size: 11px;
 	}
 
 	#hvsc-version	{ color: var(--color-text-faint); }
-	#pace			{ bottom: 35px; }
+	#pace			{ right: 9px; bottom: 36px; }
 
 	/* Encapsulates tags - they are allowed to line up through the next <TD> cell and to the edge of #songs */
 	.tags-line {
@@ -3095,6 +3095,7 @@ input[type=range]::-ms-track {
 		}
 
 		#songs .rating,
+		#info-rating,
 		#topic-profile .folder-rating {
 			position: relative;
 			unicode-bidi: isolate; /*bidi-override;*/ /* @link https://css-tricks.com/star-ratings/ */
@@ -3105,12 +3106,15 @@ input[type=range]::-ms-track {
 			display: block;
 		}
 
+		#info-rating,
 		#topic-profile .folder-rating {
 			cursor: pointer;
 		}
 
 		#songs b.s,
 		#songs b.sh,
+		#info-rating b.s,
+		#info-rating b.sh,
 		#topic-profile b.s,
 		#topic-profile b.sh { /* Star */
 			display: inline-block;
@@ -3120,9 +3124,17 @@ input[type=range]::-ms-track {
 			height: 18px;
 		}
 
+		#info-rating {
+			position: absolute;
+			bottom: 13px;
+			right: 7px;
+		}
+
 		/* Show filled stars when hovering on them (only when logged in) */
 		#songs .rating > b.sh:hover:before,
 		#songs .rating > b.sh:hover ~ b.sh:before,
+		#info-rating > b.sh:hover:before,
+		#info-rating > b.sh:hover ~ b.sh:before,
 		#topic-profile .folder-rating > b.sh:hover:before,
 		#topic-profile .folder-rating > b.sh:hover ~ b.sh:before {
 			content: "";
@@ -3135,16 +3147,19 @@ input[type=range]::-ms-track {
 		}
 
 		#songs b.xv,
+		#info-rating b.xv,
 		#topic-profile b.xv { /* User voted */
 			background: var(--svg-bg-star-orange);
 		}
 
 		#songs b.ev,
+		#info-rating b.ev,
 		#topic-profile b.ev { /* Empty voted */
 			background: var(--svg-bg-star-empty-voted);
 		}
 
 		#songs b.eu,
+		#info-rating b.eu,
 		#topic-profile b.eu { /* Empty unvoted */
 			background: var(--svg-bg-star-empty-unvoted);
 		}

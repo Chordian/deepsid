@@ -11,6 +11,8 @@
 	this.subtuneCurrent = 0;
 	this.subtuneMax = 0;
 
+	this.currentFileID = 0;
+
 	this.addEvents();
 }
 
@@ -27,7 +29,7 @@ Controls.prototype = {
 			.on("touchend", this.onTouchEnd.bind(this))
 
 		$("#stop,#loop,#time-bar").click(this.onClick.bind(this));
-		$("#info").on("click", "#sid-model,#clockspeed", this.onClick.bind(this));
+		$("#info").on("click", "#sid-model,#clockspeed,#info-rating", this.onClick.bind(this));
 		$("#sundry,#topic-stil").on("click", ".subtune", this.onClick.bind(this));
 		$("#sundry").on("click", "canvas,.tag", this.onClick.bind(this));
 		$("#stopic-osc,#stopic-filter,#stopic-stereo").on("click", "button", this.onClick.bind(this));
@@ -431,7 +433,10 @@ Controls.prototype = {
 				SID.setRevision(event.target.id.split("-")[1]);
 				break;
 			default:
-				if (event.target.className == "subtune") {
+				if (event.target.tagName === "B") {
+					// Clicked a star to set a rating for a file
+					browser.registerStarRating(event, SID.getFullName());
+				} else if (event.target.className == "subtune") {
 					// Play the subtune clicked in the STIL tab of the sundry box
 					this.subtuneCurrent = event.target.innerHTML - 1;
 					$("#subtune-plus,#subtune-minus").removeClass("disabled").addClass("disabled");
@@ -572,7 +577,7 @@ Controls.prototype = {
 		var info = SID.getSongInfo(isCGSC ? "info" : false), // Always parse .mus files
 			unknown = '<small class="u1">?</small>?<small class="u2">?</small>';
 			$infoText = $("#info-text");
-		$("#sid-model,#clockspeed,#hvsc-version").remove();
+		$("#sid-model,#clockspeed").remove();
 		$infoText.empty().append(isCGSC && SID.emulatorFlags.hasFlags ? '<div id="corner"></div>' : '');
 		if (isCGSC)
 			this.convertC64Text();
@@ -616,11 +621,13 @@ Controls.prototype = {
 				$("#info").append('<div id="clockspeed" class="'+clockSpeed+'" title="'+clockMsg+'">'+clockSpeed+'</div>');
 			}
 		}
-		// Version of HVSC/CGSC
-		var version = browser.playlist[browser.songPos].hvsc;
-		if (version >= 50 && SID.emulator != "youtube")
-			$("#info").append('<span id="hvsc-version">'+
-				(isCGSC ? 'CGSC v'+version.substr(0, 1)+'.'+version.substr(1) : 'HVSC #'+version)+'</span>');
+		// Remember unique file ID in case the user clicks the star rating in the info box
+		this.currentFileID = browser.playlist[browser.songPos].id;
+		this.updateInfoRating();
+		// Collection version
+		if ($("#stopic-stil").css("display") != "none")
+			// Only show collection version when the 'STIL/Lyrics' tab is selected
+			this.updateSundryVersion();
 
 		ShowSundryFilterContents();
 	},
@@ -940,6 +947,36 @@ Controls.prototype = {
 		$("#filter-distortScale-edit,#filter-distortScale-slider").val(SID.filterWebSid.distortScale);
 		$("#filter-distortThreshold-edit,#filter-distortThreshold-slider").val(SID.filterWebSid.distortThreshold);
 		$("#filter-kink-edit,#filter-kink-slider").val(SID.filterWebSid.kink);
+	},
+
+	/**
+	 * Update the collection version just above the sundry box.
+	 */
+	updateSundryVersion: function() {
+		if (typeof browser.songPos != "undefined") {
+			var version = browser.playlist[browser.songPos].hvsc,
+				isCGSC = browser.playlist[browser.songPos].fullname.substr(-4) == ".mus",
+				$sundryCtrls = $("#sundry-ctrls");
+			$sundryCtrls.empty();
+			if (version >= 50 && SID.emulator != "youtube")
+				$sundryCtrls.append('<span id="hvsc-version">'+
+					(isCGSC ? 'CGSC v'+String(version).substr(0, 1)+'.'+String(version).substr(1) : 'HVSC #'+String(version))+'</span>');
+		}
+	},
+
+	/**
+	 * Update the rating stars in the info box.
+	 * 
+	 * This is now shown for the YouTube handler and CGSC.
+	 * 
+	 * CGSC:     The colored info box overlaps ratings stars - solution could be to shrink the stars?
+	 * YouTube:  Video takes up all space - stars could be on top but this handler is rarely used anyway.
+	 */
+	updateInfoRating: function() {
+		var isCGSC = browser.playlist[browser.songPos].fullname.substr(-4) == ".mus";
+		$("#info-rating").remove();
+		if (!isCGSC && SID.emulator != "youtube")
+			$("#info").append('<div id="info-rating">'+browser.buildStars(browser.playlist[browser.songPos].rating)+'</div>');
 	},
 
 	/**
