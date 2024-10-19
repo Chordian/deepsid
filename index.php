@@ -1848,6 +1848,11 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>October 19, 2024</h3>
+						<ul>
+							<li>Fixed sid model and clock speed info flags not always showing the correct information.</li>
+						</ul>
+
 						<h3>October 13, 2024</h3>
 						<ul>
 							<li>Ratings stars for a song are now shown in the info box too, so you can see and rate the song even when you have browsed away from it.

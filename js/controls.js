@@ -607,21 +607,24 @@ Controls.prototype = {
 			left:	((address / 65536) * 430)+"px",
 			width:	((size / 65536) * 430)+"px",
 		}).prop("title", "Location: $"+(hexStart.length === 4 ? hexStart : "0"+hexStart)+"-$"+(hexEnd.length === 4 ? hexEnd : "0"+hexEnd)+" ("+size+" bytes)");
-		// SID model (values "unknown" and "MOS6581 / MOS858" (sic) will not be shown)
-		if (SID.emulatorFlags.forceModel)
-			browser.playlist[browser.songPos].sidmodel === "MOS6581" ? SID.setModel("6581") : SID.setModel("8580");
-		var sidModel = "MOS"+SID.getModel();
-		if (sidModel === "MOS6581" || sidModel === "MOS8580")
-			$("#info").append('<div id="sid-model" class="'+sidModel+'" title="Originally made for the '+sidModel+' SID chip model">'+sidModel.substr(3)+'</div>');
-		if (SID.emulatorFlags.supportEncoding) {
-			// Clock speed (PAL or NTSC)
-			var clockSpeed = SID.getEncoding();	// Relying on the emulator now
-			if (clockSpeed === "PAL" || clockSpeed === "NTSC") {
-				var clockMsg = clockSpeed === "PAL" ? "European PAL standard (50 Hz)" : "American NTSC standard (60 Hz)";
-				$("#info").append('<div id="clockspeed" class="'+clockSpeed+'" title="'+clockMsg+'">'+clockSpeed+'</div>');
+		// Getting SID model and clock speed must have a small delay as some SID handlers need to play first
+		setTimeout(function() {
+			// SID model (values "unknown" and "MOS6581 / MOS858" (sic) will not be shown)
+			if (SID.emulatorFlags.forceModel)
+				browser.playlist[browser.songPos].sidmodel === "MOS6581" ? SID.setModel("6581") : SID.setModel("8580");
+			var sidModel = "MOS"+SID.getModel();
+			if (sidModel === "MOS6581" || sidModel === "MOS8580")
+				$("#info").append('<div id="sid-model" class="'+sidModel+'" title="Originally made for the '+sidModel+' SID chip model">'+sidModel.substr(3)+'</div>');
+			if (SID.emulatorFlags.supportEncoding) {
+				// Clock speed (PAL or NTSC)
+				var clockSpeed = SID.getEncoding();	// Relying on the emulator now
+				if (clockSpeed === "PAL" || clockSpeed === "NTSC") {
+					var clockMsg = clockSpeed === "PAL" ? "European PAL standard (50 Hz)" : "American NTSC standard (60 Hz)";
+					$("#info").append('<div id="clockspeed" class="'+clockSpeed+'" title="'+clockMsg+'">'+clockSpeed+'</div>');
+				}
 			}
-		}
-		// Remember unique file ID in case the user clicks the star rating in the info box
+		}, 150);
+	// Remember unique file ID in case the user clicks the star rating in the info box
 		this.currentFileID = browser.playlist[browser.songPos].id;
 		this.updateInfoRating();
 		// Collection version

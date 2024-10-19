@@ -26,6 +26,9 @@ SHOULD BE DONE
 - Is it possible to import GameBase64's downloadable database to my own One.com database and
   then make it work in the GB64 tab again at DeepSID?
 
+- BUG: When uploading a new song to the SH folder, it's not possible to rate it using the
+  stars in the info box. You have to refresh the site first.
+
 
 WHEN THE TIME IS RIGHT
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
