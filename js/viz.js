@@ -429,8 +429,7 @@ Viz.prototype = {
 	 * 
 	 * @param {*} event 
 	 */
-	onChangeBufferSize: function(event) {
-		var emulator = this.emulator == "asid" ? "hermit" : this.emulator;
+		var emulator = this.emulator == "asid" || this.emulator == "webusb" ? "hermit" : this.emulator;
 		SID.bufferSize[emulator] = $(event.target).val();
 		localStorage.setItem("buffer_" + emulator, SID.bufferSize[emulator]);
 		// Make sure all drop-down boxes of this kind agree on the new value
@@ -439,6 +438,8 @@ Viz.prototype = {
 		// NOTE: Doing it in a specific visuals view is deliberate (avoids multiple triggering).
 		if (this.emulator == "asid")
 			ctrls.selectEmulator("asid");
+		else if (this.emulator == "webusb")
+			ctrls.selectEmulator("webusb");
 		else
 			$("#visuals-piano .viz-emu.button-on").trigger("click");
 		this.showBufferMessage(emulator);
@@ -559,9 +560,9 @@ Viz.prototype = {
 	 * @param {string} emulator		Emulator, e.g. "resid", "jsidplay2", etc.
 	 */
 	setEmuButton: function(emulator) {
-		if (["resid", "jsidplay2", "websid", "legacy", "hermit", "asid"].includes(emulator)) {
-			if (emulator == "asid") emulator = "hermit";
-			$("#page .viz-" + emulator).addClass("button-on"); 
+		if (["resid", "jsidplay2", "websid", "legacy", "webusb", "hermit", "asid"].includes(emulator)) {
+			if (emulator == "asid" || emulator == "webusb") emulator = "hermit";
+			$("#page .viz-" + emulator).addClass("button-on");
 			$("#page .viz-msg-emu").hide();
 		} else
 			$("#page .viz-msg-emu").show();
@@ -575,8 +576,8 @@ Viz.prototype = {
 	 */
 	applyBufferSize: function(emulator) {
 		// @todo JSIDPlay2 will have to wait until I can get the tune length calculation right
-		if (["resid", "disabled:jsidplay2", "websid", "legacy", "hermit", "asid"].includes(emulator)) {
-			if (emulator == "asid") emulator = "hermit";
+		if (["resid", "disabled:jsidplay2", "websid", "legacy", "webusb", "hermit", "asid"].includes(emulator)) {
+			if (emulator == "asid" || emulator == "webusb") emulator = "hermit";
 			$("#page .dropdown-buffer").prop("disabled", false);
 			$("#page .dropdown-buffer-label").removeClass("disabled");
 			$("#settings-emu-type").empty().append(this.bufferEmulator[emulator]);
@@ -665,6 +666,7 @@ Viz.prototype = {
 			case "resid":
 			case "legacy":
 			case "websid":
+			case "webusb":
 			case "hermit":
 			case "asid":
 				this.stateViewButton("piano", "enabled");
