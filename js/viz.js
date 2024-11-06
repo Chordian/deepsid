@@ -429,6 +429,7 @@ Viz.prototype = {
 	 * 
 	 * @param {*} event 
 	 */
+	onChangeBufferSize: function (event) {
 		var emulator = this.emulator == "asid" || this.emulator == "webusb" ? "hermit" : this.emulator;
 		SID.bufferSize[emulator] = $(event.target).val();
 		localStorage.setItem("buffer_" + emulator, SID.bufferSize[emulator]);
