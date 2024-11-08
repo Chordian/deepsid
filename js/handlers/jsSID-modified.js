@@ -468,7 +468,7 @@ function jsSID (bufferlen, background_noise, asid_enable = false, webusb_enable 
    if (savedport != null) {
      webusb.autoConnect();
    } else {
-     alert("Autoconnect not supported for WebUSB, please connect to a device.");
+     alert("Autoconnect not actived yet, please connect to a WebUSB device first.");
    }
    maxsid = 4;
  }
