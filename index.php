@@ -22,7 +22,7 @@
 			? $_GET['mini']
 			: 0;
 	}
-		
+
 	function isMobile() {
 		return isset($_GET['mobile'])
 			? $_GET['mobile']
@@ -63,7 +63,7 @@
 			document.head.appendChild(viewport);
 		</script>
 		<meta name="description" content="A modern online SID player for the High Voltage and Compute's Gazette SID collections." /> <!-- Max 150 characters -->
-		<meta name="keywords" content="c64,commodore 64,sid,6581,8580,hvsc,high voltage,cgsc,compute's gazette,visualizer,stil,websid,hermit,asid" />
+		<meta name="keywords" content="c64,commodore 64,sid,6581,8580,hvsc,high voltage,cgsc,compute's gazette,visualizer,stil,websid,hermit,asid,webusb,usbsid" />
 		<meta name="author" content="Jens-Christian Huus" />
 		<title>DeepSID | Chordian.net</title>
 		<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans%3A400%2C700%2C400italic%2C700italic%7CQuestrial%7CMontserrat&#038;subset=latin%2Clatin-ext" />
@@ -210,7 +210,7 @@
 				// @link https://stackoverflow.com/a/2269459/2242348
 				$png = imagecreatefrompng('images/og_overlay.png');
 				$jpeg = imagecreatefromjpeg('images/composers/'.$image);
-				
+
 				list($width, $height) = getimagesize('images/composers/'.$image);
 				list($newwidth, $newheight) = getimagesize('images/og_overlay.png');
 				$out = imagecreatetruecolor($newwidth, $newheight);
@@ -283,7 +283,7 @@
 					echo 'https://chordian.net/deepsid/images/example_play.png';
 				else
 					echo 'https://chordian.net/deepsid/images/composers/_sh.png';
-			} else 
+			} else
 				echo 'https://chordian.net/deepsid/images/example.png';
 		?>" />
 		<meta property="og:url" content="<?php echo (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]"; ?>" />
@@ -531,6 +531,7 @@
 					<option value="websid">WebSid emulator</option>
 					<option value="legacy">WebSid (Legacy)</option>
 					<option value="hermit">Hermit's (+FM)</option>
+					<option value="webusb">WebUSB (Hermit)</option>
 					<option value="asid">ASID (MIDI)</option>
 					<option value="lemon">Lemon's MP3 files</option>
 					<option value="youtube">YouTube videos</option>
@@ -569,6 +570,11 @@
 						</form>
 					<?php endif; ?>
 				<?php endif ?>
+			</div>
+			<div id="webusb-connect" style="display:none;">
+				<button id="device-connect">Connect</button>
+				<label id="connect-text" for="device-connect">to USB device</label>
+				<label id="status-text" for="device-connect"></label>
 			</div>
 			<div id="asid-midi" style="display:none;">
 				<label for="select-midi-outputs">MIDI port for ASID</label>
@@ -1193,7 +1199,7 @@
 									<td class="stats-bg stats-1">
 										<div id="stats-v1-1-V">Probably uses vibrato (or slide)<span></span></div>
 										<div id="stats-v1-3-P">Repeatedly changes pulse width<span></span></div>
-										
+
 										<div id="stats-v1-4-1" class="stats-space">Uses $1x waveform (triangle)<span></span></div>
 										<div id="stats-v1-4-2">Uses $2x waveform (sawtooth)<span></span></div>
 										<div id="stats-v1-4-3">Uses $3x waveform (tri+saw)<span></span></div>
@@ -1265,7 +1271,7 @@
 								<tr>
 									<td>
 										<div id="stats-global-C">Repeatedly changes filter cutoff<span></span></div>
-	
+
 										<div id="stats-global-1" class="stats-space">Uses filtering in voice 1<span></span></div>
 										<div id="stats-global-2">Uses filtering in voice 2<span></span></div>
 										<div id="stats-global-3">Uses filtering in voice 3<span></span></div>
@@ -1283,7 +1289,7 @@
 										<div id="stats-fmode-5">Uses $5x filter mode (LP+HP)<span></span></div>
 										<div id="stats-fmode-6">Uses $6x filter mode (BP+HP)<span></span></div>
 										<div id="stats-fmode-7">Uses $7x filter mode (LP+BP+HP)<span></span></div>
-								
+
 										<div id="stats-global-M" class="stats-space">Mutes voice 3<span></span></div>
 										<div id="stats-global-I">Sets the external input bit<span></span></div>
 									</td>
@@ -1322,7 +1328,7 @@
 						<p>This tab will show links to game entries in GameBase64 as you click SID files that were
 							used in at least one C64 game, released or unreleased (these are listed as a preview).</p>
 						<p>
-							<a href="https://gb64.com/" target="_blank">GameBase64</a> is a large database 
+							<a href="https://gb64.com/" target="_blank">GameBase64</a> is a large database
 							for C64 games with credits, details and screenshots.
 						</p>
 						<br />
@@ -1344,7 +1350,7 @@
 						</p>
 
 						<h3>STIL</h3>
-						<p>	
+						<p>
 							If you're clicking a song in the <b>High Voltage SID Collection</b> that has a STIL entry, this will be
 							shown here as well as in the box. Any sub tunes mentioned have green buttons that you can click.
 						</p>
@@ -1359,7 +1365,7 @@
 						</p>
 
 						<h3>Lyrics</h3>
-						<p>	
+						<p>
 							If you're clicking a song in <b>Compute's Gazette SID Collection</b> that has lyrics, this will
 							be shown here and in the box.
 						</p>
@@ -1377,7 +1383,7 @@
 						<p>
 							<a href="http://www.remix64.com/" target="_blank">Remix64</a> is a portal to the unified world
 								of Commodore 64 and Amiga music remixing, containing news, reviews, charts and chat. Remixes
-								can be uploaded and rated here. It's maintained by Markus Klein, also known as 
+								can be uploaded and rated here. It's maintained by Markus Klein, also known as
 								<a href="//deepsid.chordian.net/?file=/MUSICIANS/L/LMan/">LMan</a>.
 						</p>
 						<br />
@@ -1457,6 +1463,7 @@
 										<option value="websid">WebSid emulator</option>
 										<option value="legacy">WebSid (Legacy)</option>
 										<option value="hermit">Hermit's (+FM)</option>
+										<option value="webusb">WebUSB (Hermit)</option>
 										<option value="asid">ASID (MIDI)</option>
 										<option value="lemon">Lemon's MP3 files</option>
 										<option value="youtube">YouTube videos</option>
@@ -1987,7 +1994,7 @@
 
 						<h3>May 16, 2024</h3>
 						<ul>
-							<li>Hermit's emulator is now capable of playing back SID+FM files. These are SID files combined with 
+							<li>Hermit's emulator is now capable of playing back SID+FM files. These are SID files combined with
 								FM emulation and have been accomplished by using either the <a href="https://www.c64-wiki.com/wiki/Commodore_Sound_Expander" target="_top">SFX Sound Expander</a> or the <a href="https://c64.xentax.com/index.php/fm-yam" target="_top">FM-YAM</a>
 								cartridge. Thank you to Thomas Jansson (tubesockor) for this update.</li>
 							<li>A new <a href="//deepsid.chordian.net/?file=/SID%20Happens/SID+FM/">SID+FM</a> subfolder has been created in the <a href="//deepsid.chordian.net/?file=/SID%20Happens/">SID Happens</a> folder.
@@ -2477,7 +2484,7 @@
 							<li>Changed the logic of showing the filter settings depending on 6581 chip mode. The controls are
 								now disabled instead of invisible, and the chip mode button has been placed next to the tab.</li>
 						</ul>
-						
+
 						<h3>November 23, 2021</h3>
 						<ul>
 							<li>Fixed not being able to alternate between WebSid (HQ) and WebSid (Legacy) properly.</li>

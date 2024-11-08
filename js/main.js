@@ -60,6 +60,7 @@ $(function() { // DOM ready
 		"websid",
 		"legacy",
 		"hermit",
+		"webusb",
 		"asid",
 		"lemon",
 		"youtube",
@@ -260,7 +261,7 @@ $(function() { // DOM ready
 					ctrls.state("root/back", "enabled");
 
 					$("#dropdown-topleft-emulator,#dropdown-settings-emulator")
-						.styledOptionState("resid jsidplay2 websid legacy hermit asid", "enabled")
+						.styledOptionState("resid jsidplay2 websid legacy hermit webusb asid", "enabled")
 						.styledOptionState("lemon youtube", "disabled");
 					$("#path").css("top", "5px").empty().append("Temporary emulator testing");
 					$("#stab-stil,#tab-stil").empty().append("STIL");
@@ -2126,6 +2127,13 @@ function HandleTopBox(emulator) {
 		$("#memory-chunk").css("top", "-2px");
 	}
 
+	if (emulator == "webusb") {
+		$("#webusb-connect").show();
+	}
+	else {
+		$("#webusb-connect").hide();
+	}
+
 	if (emulator == "asid") {
 		$("#asid-midi").show();
 	}
@@ -2156,7 +2164,7 @@ function DisableIncompatibleRows() {
 				$tr.addClass("disabled");
 		} else if (isSIDFile && $tr.find(".name").attr("data-name").indexOf("BASIC.sid") !== -1) {
 			// These emulators can't do tunes made in BASIC
-			SID.emulator == "legacy" || SID.emulator == "hermit" || SID.emulator == "asid"
+			SID.emulator == "legacy" || SID.emulator == "hermit" || SID.emulator == "webusb" || SID.emulator == "asid"
 				? $tr.addClass("disabled")
 				: $tr.removeClass("disabled");
 		/*} else if (isSIDFile && (SID.emulator == "websid" || SID.emulator == "legacy") &&
@@ -2174,7 +2182,7 @@ function DisableIncompatibleRows() {
 				: $tr.removeClass("disabled");
 		} else if (isSIDFile && ($tr.find(".name").attr("data-type") === "RSID" || $tr.find(".name").attr("data-name").indexOf(".mus") !== -1)) {
 			// Hermit's emulator and ASID can't do neither any RSID tunes nor any MUS files
-			SID.emulator == "hermit" || SID.emulator == "asid"
+			SID.emulator == "hermit" || SID.emulator == "webusb" || SID.emulator == "asid"
 				? $tr.addClass("disabled")
 				: $tr.removeClass("disabled");
 		} else if (isSIDFile && $tr.find(".name").attr("data-name").indexOf(".mus") !== -1) {
