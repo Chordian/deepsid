@@ -405,7 +405,7 @@ let webusbplaying = false;
         connectButton.textContent = 'Disconnect';
         port.onReceive = data => {
           let textDecoder = new TextDecoder();
-          console.log(textDecoder.decode(data));
+          /* console.log(textDecoder.decode(data)); */
         };
         port.onReceiveError = error => {
           console.error("port.connect:", error);
@@ -592,6 +592,7 @@ function jsSID(bufferlen, background_noise, asid_enable = false, webusb_enable =
 
     if (webusb_enabled) {
       webusbplaying = false;
+      // Turn off volume and make sure it gets sent
       for (var chip = 0; chip < maxsid; chip++) {
         webusb.writeReg([0x0, ((chip * 0x20) | 0x18), 0x0]);
       }
@@ -710,6 +711,7 @@ function jsSID(bufferlen, background_noise, asid_enable = false, webusb_enable =
       initCPU(playaddr); framecnt = 1; finished = 0; CPUtime = 0; playtime = 0; ended = 0; initialized = 1;
 
       if (webusb_enabled) {
+        // Setup all registers after Init
         for (var chip = 0; chip < maxsid; chip++) {
           for (var addr = 0; addr <= 0x18; addr++) {
             webusb.writeReg([0x0, ((chip * 0x20) | addr), memory[SID_address[chip] + addr]]);
@@ -742,7 +744,8 @@ function jsSID(bufferlen, background_noise, asid_enable = false, webusb_enable =
             if (asid_enabled) {
               asidSend(0); asidSend(1); asidSend(2); asidFMSend()
             } else if (webusb_enabled) {
-              webusb.writeReg([0x0, ((0x20 * chip) | addr), 0x0]);
+              // No need to do anything here for webusb, the line below cut off all sound
+              /* webusb.writeReg([0x0, ((0x20 * chip) | addr), 0x0]); */
             };
             break;
           } else CPUtime += cycles;
