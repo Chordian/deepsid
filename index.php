@@ -1635,6 +1635,11 @@
 							<a href="https://github.com/thomasj" target="_top">https://github.com/thomasj</a><br />
 							<a href="https://www.youtube.com/@tubesockor" target="_top">https://www.youtube.com/@tubesockor</a><br />
 						</p>
+						<p>
+							WebUSB implementation by LouD<br/>
+							<a href="https://github.com/LouDnl" target="_top">https://github.com/LouDnl</a><br />
+							<a href="https://www.youtube.com/@LouDnl" target="_top">https://www.youtube.com/@LouDnl</a><br />
+						</p>
 
 						<p>
 							OPL3 emulator (FM playback) by Adam Nielsen<br />
@@ -1854,6 +1859,12 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>November 8, 2024</h3>
+						<ul>
+							<li>A new SID handler with WebUSB support for <a href="https://github.com/LouDnl/USBSID-Pico">USBSID-Pico</a> has been added to Hermit's emulator by LouD.
+								Note that WebUSB can be quite demanding resource wise.</li>
+						</ul>
 
 						<h3>October 19, 2024</h3>
 						<ul>

@@ -134,6 +134,9 @@
 		<h4><a href="//deepsid.chordian.net?emulator=asid">ASID (MIDI)</a></h4>
 		<p>Use with MIDI devices such as e.g. SidStation, TherapSID, etc.</p>
 
+		<h4><a href="//deepsid.chordian.net?emulator=asid">WebUSB (Hermit)</a></h4>
+		<p>Use with USB devices such as e.g. <a href="https://github.com/LouDnl/USBSID-Pico">USBSID-Pico</a>.</p>
+
 		<h4><a href="//deepsid.chordian.net?emulator=lemon">Lemon\'s MP3 files</a></h4>
 		<p>It plays MP3 files recorded from JSIDPlay2 (only
 		<a href="https://www.hvsc.c64.org/">HVSC</a> for now).</p>
@@ -256,6 +259,7 @@
 						<li><b>legacy</b></li>
 						<li><b>hermit</li>
 						<li><b>asid</b>&nbsp;&nbsp;(MIDI)</li>
+						<li><b>webusb</li>
 						<li><b>lemon</b></li>
 						<li><b>youtube</b></li>
 						<li><b>download</b></li>
