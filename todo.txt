@@ -27,7 +27,8 @@ SHOULD BE DONE
   then make it work in the GB64 tab again at DeepSID?
 
 - BUG: When uploading a new song to the SH folder, it's not possible to rate it using the
-  stars in the info box. You have to refresh the site first.
+  stars in the info box. You have to refresh the site first. (An easy solution to this is of
+  course to automatically refresh the site after uploading it.)
 
 
 WHEN THE TIME IS RIGHT
