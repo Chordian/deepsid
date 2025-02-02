@@ -7,10 +7,6 @@ SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
 - Update playlist text in right side help text. It doesn't mention the dialog box.
 
-- The Pace field in MEMO view is sometimes wrong (CIA instead of VBI).
-
-- JSIDPlay2: Next version with 40% less CPU is ready; wait until Ken says it can be released.
-
 - JSIDPlay2: For now, the time bar color of JSIDPlay2 is the same as for the WebSid handler.
   Consider creating its own unique color for both bright and dark color schemes.
 

@@ -1864,6 +1864,7 @@
 						<h3>February 2, 2025</h3>
 						<ul>
 							<li>Fixed too many bytes showing red colors in the MEMO view, when starting a tune.</li>
+							<li>Fixed the pace field in the MEMO view not always showing the correct information.</li>
 						</ul>
 
 						<h3>January 12, 2025</h3>

@@ -1593,12 +1593,14 @@ Viz.prototype = {
 			$("#visuals-memory .si-enc").empty().append(enc);
 			$("#visuals-memory .si-model").empty().append(chip);
 
-			var timer = NOT_APPLICABLE;
-			if (SID.emulatorFlags.returnCIA) {
-				var pace = SID.getPace();
-				timer = pace ? (pace == 1 ? 'CIA <span class="m">(on a 16-bit interval timer)</span>' : pace+'x <span class="m">(called '+pace+' times per VBI)</span>') : 'VBI <span class="m">(Vertical Blanking Interrupt)</span>';
-			}
-			$("#visuals-memory .si-pace").empty().append(timer);
+			setTimeout(function() {
+				var timer = NOT_APPLICABLE;
+				if (SID.emulatorFlags.returnCIA) {
+					var pace = SID.getPace();
+					timer = pace ? (pace == 1 ? 'CIA <span class="m">(on a 16-bit interval timer)</span>' : pace+'x <span class="m">(called '+pace+' times per VBI)</span>') : 'VBI <span class="m">(Vertical Blanking Interrupt)</span>';
+				}
+				$("#visuals-memory .si-pace").empty().append(timer);
+			}.bind(this), 0);
 
 			var addr = '$D400';
 			for (var chip = 2; chip <= browser.chips; chip++) {
