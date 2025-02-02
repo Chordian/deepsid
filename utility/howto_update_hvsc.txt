@@ -15,7 +15,7 @@ NOTE: The "http://chordian/deepsid/" URL just refers to a LOCALHOST version of D
 
 Social media
 ¯¯¯¯¯¯¯¯¯¯¯¯
-First things first - post on Facebook and Twitter (remember #deepsid tag for the latter).
+First things first - post on Facebook and Bluesky (remember #deepsid tag for the latter).
 
 Use the following text:
 
@@ -23,8 +23,9 @@ Use the following text:
 day or two. Stay tuned."
 
 If you don't do this first, you can be sure someone is going to post about it to "remind"
-you that the update has arrived (because obviously you are not aware of it). UPDATE: People
-don't seem to do this anymore.
+you that the update has arrived (because obviously you are not aware of it).
+
+UPDATE: People don't seem to do this anymore. You can skip this if you want.
 
 Backup
 ¯¯¯¯¯¯
@@ -75,7 +76,7 @@ First, do steps 1 to 7 above as you will need the big file later.
 
   1. On the local machine, you should already have deleted the old HVSC folder tree and
      copied in the new one. If you haven't done that yet, do it now.
-  2. Edit the HVSC_NEW_VERSION constant in the "update_hvsc_db.php" script.
+  2. Update the HVSC_NEW_VERSION constant in the "update_hvsc_db.php" script.
   3. Copy the new "Update##.hvs" file to the ./deepsid/php/hvsc_update/ folder.
   4. Edit the file and check the "Cleaning Up" section. If a real file is deleted
      there (e.g. something in DOCUMENTS) then delete that line and save. This goes for
@@ -332,8 +333,8 @@ Import data from the SID files themselves:
 Import STIL entries:
 
   1. Copy the latest STIL.txt file from HVSC (DOCUMENTS) to the folder with the "stil.py" script.
-  2. Open a command box there and run: python stil.py
-  3. Edit the resulting "stil.csv" in Notepad++, choose menu Encoding > Convert to UTF8, then save.
+  2. Edit STIL.txt in Notepad++, choose menu Encoding > Convert to UTF8, then save.
+  3. Open a command box there and run: python stil.py
 
   1. Enter the empty "hvsc_files_import" table again and click "Import".
   2. Click "Browse" and select the CSV file.

@@ -1714,7 +1714,7 @@ $(function() { // DOM ready
 			// No, does the file exist in the root SH folder, i.e. the current year?
 			if (!SidHappensFileExists(fileParam)) {
 				// No, figure out if it exists in one of the year subfolders then (backwards from latest)
-				for (var shYear = 2023; shYear >= 2020; shYear--) {
+				for (var shYear = 2024; shYear >= 2020; shYear--) {
 					var yearFolder = fileParam.replace("SID Happens/", "SID Happens/"+shYear+"/");
 					if (SidHappensFileExists(yearFolder)) {
 						fileParam = yearFolder;

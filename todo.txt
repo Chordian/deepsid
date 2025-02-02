@@ -1,10 +1,15 @@
 ToDo
 ¯¯¯¯
 
+- Look into the console logging alternatives, like warn, error, table, etc.
+
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- The following files returns a database error. Check it out.
-  https://deepsid.chordian.net/?file=/Compute%27s%20Gazette%20SID%20Collection/DC_Starr/Coventry_Carol_A.mus
+- Update playlist text in right side help text. It doesn't mention the dialog box.
+
+- The Pace field in MEMO view is sometimes wrong (CIA instead of VBI).
+
+- JSIDPlay2: Next version with 40% less CPU is ready; wait until Ken says it can be released.
 
 - JSIDPlay2: For now, the time bar color of JSIDPlay2 is the same as for the WebSid handler.
   Consider creating its own unique color for both bright and dark color schemes.
@@ -20,7 +25,7 @@ SHOULD BE DONE
 - The STIL entry for this tune is not parsed correctly - all links merge into one big link:
   https://deepsid.chordian.net/?file=/MUSICIANS/B/Bulldog/E_X_I_S.sid&subtune=1
 
-- Check up on ""Auto-progress should select and center the next song as it proceeds to it"
+- Check up on "Auto-progress should select and center the next song as it proceeds to it"
   setting again - it centers wrongly on my 32" screen and also doesn't toggle correctly?
 
 - Is it possible to import GameBase64's downloadable database to my own One.com database and

@@ -47,6 +47,7 @@ TEST
      them directly but also when refreshing the web browser.
   2. Try clicking a link somewhere (e.g. in Facebook) that used to refer to a file in the root of
      the SH folder. It should now automatically redirect to the new year subfolder.
+     UPDATE: Forget Facebook; they have blacklisted DeepSID.
   3. Check that the profile in the new year subfolder has the same style as for the other years.
 
 --------------------------------

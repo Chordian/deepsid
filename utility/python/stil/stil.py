@@ -3,11 +3,11 @@ import csv
 
 if __name__ == '__main__':
 
-	with open('stil.txt') as f:
+	with open('stil.txt', encoding='utf-8') as f:
 		# Read all lines and strips all \n characters
 		content = [line.strip() for line in f.readlines()]
 
-	with open('stil.csv', 'wb') as csvfile:
+	with open('stil.csv', 'w', newline='', encoding='utf-8') as csvfile:
 		writer = csv.writer(csvfile, delimiter=',')
 
 		block_mode = False

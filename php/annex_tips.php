@@ -352,8 +352,8 @@
 		<h4><a href="https://www.facebook.com/groups/deepsid/">Facebook</a></h4>
 		A group with requests or bugs from other users as well as news about everything SID-related.
 
-		<h4><a href="https://twitter.com/chordian">Twitter</a></h4>
-		Chordian\'s Twitter account and where all news and changes about DeepSID are always posted.
+		<h4><a href="https://bsky.app/profile/chordian.bsky.social">Bluesky</a></h4>
+		Chordian\'s Bluesky account and where all news and changes about DeepSID are always posted.
 
 		<h4><a href="https://mastodon.social/@chordian">Mastodon</a></h4>
 		Chordian\'s Mastodon account, where all news and changes about DeepSID are also posted.

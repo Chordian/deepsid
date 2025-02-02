@@ -109,7 +109,7 @@
 			<script type="text/javascript" src="js/handlers/backend_websidplay.js"></script>
 		<?php endif ?>
 
-		<script type="text/javascript" src="js/handlers/jsidplay2.js"></script>
+		<!--<script type="text/javascript" src="js/handlers/jsidplay2.js"></script>-->
 		<script type="text/javascript" src="js/handlers/jsSID-modified.js"></script>
 		<script type="text/javascript" src="js/handlers/howler.min.js"></script>
 		<script type="text/javascript" src="js/chartist.min.js"></script>
@@ -623,10 +623,11 @@
 				<div id="stopic-stil" class="stopic">
 					<?php if (!MiniPlayer()): ?>
 						<div id="sundry-news">
-							<!--<span>The <a href="https://www.hvsc.c64.org/" target="_top">High Voltage SID Collection</a> has been upgraded to the latest version #81. Click <a href="//deepsid.chordian.net/?search=81&type=new">here</a> to see what's new in this update.</span>-->
+							<span>The <a href="https://www.hvsc.c64.org/" target="_top">High Voltage SID Collection</a> has been upgraded to the latest version #82. Click <a href="//deepsid.chordian.net/?search=82&type=new">here</a> to see what's new in this update.</span>
 							<!--<span><a href="http://www.c64music.co.uk/" target="_top">Compute's Gazette SID Collection</a> has been upgraded to the latest version #146. Click <a href="//deepsid.chordian.net/?search=146&type=new">here</a> to see what's new in this update.</span>-->
 							<!--<a href="https://xparty.net/"><img src="images/sundry_x2024.png" alt="X'2024" /></a>-->
 							<!--<span>I changed some Javascript files so make sure your browser cache is up to date. On Windows, hit <b style="color:#77c;">Ctrl+F5</b> while viewing the site, on Mac, hit <b style="color:#77c;">Cmd+Shift+R</b>.</span>-->
+							<!--<span>Want to learn how to make SID tunes? Check out <a href="https://www.youtube.com/watch?v=nXNtLetxFUg">this tutorial video</a> now on YouTube.</span>-->
 						</div>
 					<?php endif ?>
 				</div>
@@ -959,7 +960,7 @@
 						<span>&#9642</span>
 					<!--<a href="https://www.lemon64.com/forum/viewtopic.php?t=68056" target="_blank">Lemon64</a>
 						<span>&#9642</span>-->
-					<a href="https://twitter.com/chordian" target="_blank">Twitter</a>
+					<a href="https://bsky.app/profile/chordian.bsky.social" target="_blank">Bluesky</a>
 						<span>&#9642</span>
 					<a rel="me" href="https://mastodon.social/@chordian" target="_blank">Mastodon</a>
 						<span>&#9642</span>
@@ -1654,7 +1655,7 @@
 
 						<h3>Libraries of SID tunes</h3>
 						<p>
-							High Voltage SID Collection #81<br />
+							High Voltage SID Collection #82<br />
 							<a href="https://www.hvsc.c64.org/" target="_top">https://www.hvsc.c64.org/</a>
 						</p>
 						<p>
@@ -1859,6 +1860,28 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>February 2, 2025</h3>
+						<ul>
+							<li>Fixed too many bytes showing red colors in the MEMO view, when starting a tune.</li>
+						</ul>
+
+						<h3>January 12, 2025</h3>
+						<ul>
+							<li>Added the CSDb music competitions related to HVSC #82.</li>
+						</ul>
+
+						<h3>January 11, 2025</h3>
+						<ul>
+							<li>All new files in HVSC #82 are now connected to CSDb entries.</li>
+						</ul>
+
+						<h3>December 27, 2024</h3>
+						<ul>
+							<li>The <a href="https://www.hvsc.c64.org/" target="_top">High Voltage SID Collection</a> has been upgraded to the latest version #82.</li>
+							<li>JSIDPlay2 has been changed to WebAssembly and it should now be fast enough to play stereo tunes on mobile devices.
+								It should play at least 40% faster.</li>
+						</ul>
 
 						<h3>November 8, 2024</h3>
 						<ul>

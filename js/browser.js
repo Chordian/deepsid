@@ -40,7 +40,7 @@ const playerStrips = [
 function Browser() {
 
 	this.ROOT_HVSC = 'hvsc';
-	this.HVSC_VERSION = 81;
+	this.HVSC_VERSION = 82;
 	this.CGSC_VERSION = 146;
 
 	this.path = "";
@@ -615,7 +615,6 @@ Browser.prototype = {
 						ctrls.resetStereoPanning();
 						viz.initGraph(this.chips);
 						viz.startBufferEndedEffects();
-
 
 						// Stop the tune after X milliseconds if a "?wait=X" URL parameter is specified
 						// NOTE: A bit of a nasty hack. Because of the way the SID.load() function ties into

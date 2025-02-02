@@ -1487,16 +1487,18 @@ Viz.prototype = {
 	 * @param {array} arrMemory		Array to contain the bytes of the address span
 	 */
 	patchMemoryBlock: function(addrStart, addrEnd, arrMemory) {
-		var byte, cByte;
-		for (var addr = addrStart; addr <= addrEnd; addr++) {
-			byte = SID.readMemory(addr);
-			if (byte != arrMemory[addr - addrStart]) {
-				// Byte has changed; update array and <SPAN> addresses in HTML block
-				arrMemory[addr - addrStart] = byte;
-				cByte = this.convertByte(byte);
-				$("#h"+addr).empty().append(cByte.hex).removeClass("ch").addClass("ch"); // Apply red color
-				$("#l"+addr).empty().append(cByte.lc).removeClass("ch").addClass("ch");
-				$("#u"+addr).empty().append(cByte.uc).removeClass("ch").addClass("ch");
+		if (this.showPatching) {
+			var byte, cByte;
+			for (var addr = addrStart; addr <= addrEnd; addr++) {
+				byte = SID.readMemory(addr);
+				if (byte != arrMemory[addr - addrStart]) {
+					// Byte has changed; update array and <SPAN> addresses in HTML block
+					arrMemory[addr - addrStart] = byte;
+					cByte = this.convertByte(byte);
+					$("#h"+addr).empty().append(cByte.hex).removeClass("ch").addClass("ch"); // Apply red color
+					$("#l"+addr).empty().append(cByte.lc).removeClass("ch").addClass("ch");
+					$("#u"+addr).empty().append(cByte.uc).removeClass("ch").addClass("ch");
+				}
 			}
 		}
 	},
@@ -1513,24 +1515,26 @@ Viz.prototype = {
 
 			var $zp = $("#visuals-memory .block-zp"),
 				$player = $("#visuals-memory .block-player");
-			$zp.empty();
-			$player.empty();
 
 			this.blockZP = [], this.blockPlayer = [];
-			$zp.append(this.showMemoryBlock(0x0000, 0x00FF, this.blockZP));
-
+				
 			this.playerAddrStart = this.playerAddrCurrent = Number(browser.playlist[browser.songPos].address);
 			this.playerAddrEnd = this.playerAddrStart + Number(browser.playlist[browser.songPos].size) - 3;
 
 			if (browser.playlist[browser.songPos].fullname.substr(-4) == ".mus") {
 				// MUS files in CGSC doesn't have an interesting player block to look at
-				$player.append('<div class="msg">N/A</div>');
+				$zp.empty().append(this.showMemoryBlock(0x0000, 0x00FF, this.blockZP));
+				$player.empty().append('<div class="msg">N/A</div>');
 				this.playerAddrCurrent = 0;
 				$("#visuals-memory .player-to-left,#visuals-memory .player-to-right")
 					.removeClass("disabled").addClass("disabled");
 			} else {
-				$("#player-addr").empty().append("$"+this.paddedAddress(this.playerAddrCurrent)+"-$"+this.paddedAddress(this.playerAddrEnd));
-				$player.append(this.showMemoryBlock(this.playerAddrCurrent, this.playerAddrCurrent + PAGESIZE_PLAYER - 1, this.blockPlayer));
+				this.showPatching = false;
+				setTimeout(function() {
+					$zp.empty().append(this.showMemoryBlock(0x0000, 0x00FF, this.blockZP));
+					$player.empty().append(this.showMemoryBlock(this.playerAddrCurrent, this.playerAddrCurrent + PAGESIZE_PLAYER - 1, this.blockPlayer));
+					this.showPatching = true;
+				}.bind(this), 0);
 			}
 		}
 		this.runningMemory = activate;

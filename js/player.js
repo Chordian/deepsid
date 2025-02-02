@@ -529,7 +529,7 @@ SIDPlayer.prototype = {
 				// NOTE: Whenever there is a new version of this file, increase the number at
 				// the end of the filename. Otherwise some web browsers (especially Firefox)
 				// might refuse to see the new file - even when clearing the cache.
-				this.jp2Worker = new Worker("js/handlers/jsidplay2-js-worker-002.js", );
+				this.jp2Worker = new Worker("js/handlers/jsidplay2-002.wasm-worker.js", );
 
 				this.jp2PlayTime = 0;
 				this.jp2Loading = true;
@@ -548,108 +548,67 @@ SIDPlayer.prototype = {
 
 				new Promise((resolve, reject) => {
 
-					var clockspeed = 50; // Assume PAL tune to begin with
+					var clockspeed = "PAL";		// Assume PAL tune to begin with
 					if (browser.playlist[browser.songPos].clockspeed.substr(0, 4).toLowerCase() == "ntsc")
-						clockspeed = 60; // This is an NTSC tune
+						clockspeed = "NTSC";	// This is an NTSC tune
 
 					// Set as boolean depending on advanced setting
+					// @todo Not used anymore? Investigate!
 					var samplingMethod = this.advancedSetting["jsidplay2"]["sampmethod"] == "RESAMPLE";
 
 					// Everything starts with INITIALISE where basic configuration is provided
 					this.jp2Worker.postMessage({
 						eventType: "INITIALISE",
 						eventData: {
-							palEmulation: true,				// PAL emulation on/off
-							bufferSize: 144000,				// How many clock ticks to advance per call (144000)
-							audioBufferSize: this.bufferSize[this.emulator], // Audio buffer fill level (max is 48000)
-							samplingRate: 48000,			// Sampling rate
-							samplingMethodResample: samplingMethod, // Sampling method DECIMATE (false) or RESAMPLE (true)
-							reverbBypass: true,				// Reverb on (false) or off (true)
-							defaultClockSpeed: clockspeed,	// PAL (50) or NTSC (60)
-							jiffyDosInstalled: false,		// Floppy speeder off/on
+							verbose: 0,			// Verbose mode in browser console
+							quiet: true,		// Be quiet on/off in browser console
+							debug: false,		// Debug messages on/off in browser console
 						},
 					});
+
+					var outer = this;
+
+					// Used by "SET_SAMPLING_RATE" below
+					function toSamplingRate(sampleRate) {
+						switch (sampleRate) {
+						  case 44100:
+							return "LOW";
+						  case 48000:
+							return "MEDIUM";
+						  case 96000:
+							return "HIGH";
+						}
+					}
 		
 					// Now listen to events from the JSIDPlay2 worker
-					this.jp2Worker.addEventListener("message", function (event) {
-						var { eventType, eventData } = event.data;
-
-						if (eventType === "SAMPLES") {
-
-							var sampleRate = this.jp2AudioContext.sampleRate;
-
-							// The worker has produced a chunk of sound data - create a stereo buffer and
-							// send it to the sound card
-							var buffer = this.jp2AudioContext.createBuffer(2, eventData.length, sampleRate);
-							buffer.getChannelData(0).set(eventData.left);
-							buffer.getChannelData(1).set(eventData.right);
-
-							var sourceNode = this.jp2AudioContext.createBufferSource();
-							sourceNode.buffer = buffer;
-							sourceNode.connect(this.jp2AudioContext.destination);
-
-							// Some magic to stay in sync, please experiment for yourself
-							if (this.jp2NextTime < this.jp2AudioContext.currentTime)
-								// If samples are not produced fast enough, add
-								// small hick-up and hope for better times
-								this.jp2NextTime = this.jp2AudioContext.currentTime + 0.005;
-							sourceNode.start(this.jp2NextTime);
-							this.jp2NextTime += eventData.length / sampleRate;
-
-							// Tick playtime in seconds taking fast forward into account
-							// @todo This needs to be adapted for other buffer sizes to work
-							this.jp2PlayTime += 1 / ((eventData.length / sampleRate) / (this.fastForward ? 2 : 1));
-
-							// At the end of the tune?
-							// NOTE: Restored here again since "TIMER_END" stopped working.
-							if (this.jp2PlayTime > timeout) {
-								if (typeof this.callbackTrackEnd === "function")
-									this.callbackTrackEnd();
-							}
-
-						} else if (eventType === "TIMER_END") {
-
-							// This event worked when I first implemented it, then
-							// it suddenly stopped working. I have no idea why.
-
-							/*if (typeof this.callbackTrackEnd === "function")
-								this.callbackTrackEnd();*/
-
-						} else if (eventType === "SID_WRITE") {
-
-							// Enable this to monitor everything the event outputs
-							log("relTime=" + eventData.relTime + ", addr=" + eventData.addr + ", value=" + eventData.value);
-
-							// Store SID value in an cache array with all registers
-							var sidRegister = false, sidValue = eventData.value,
-								timestamp = this.jp2AudioContext.currentTime;
-							if (eventData.addr >= this.jp2SID3Base && eventData.addr <= this.jp2SID3Base + 28)
-								// SID chip #3
-								sidRegister = eventData.addr - this.jp2SID3Base + (29 * 2);
-							else if (eventData.addr >= this.jp2SID2Base && eventData.addr <= this.jp2SID2Base + 28)
-								// SID chip #2
-								sidRegister = eventData.addr - this.jp2SID2Base + 29;
-							else if (eventData.addr <= 0xD400 + 28)
-								// SID chip #1
-								sidRegister = eventData.addr - 0xD400;
-								// For some reason JSIDPlay2 loops registers all the way up to 255 to begin with
-							if (sidRegister)
-								this.jp2RegisterCache[sidRegister].push({ value: sidValue, timestamp });
-
-						} else if (eventType === "OPENED" || eventType === "CLOCKED") {
-
-							// Every time a tune gets opened, we start the clocking here.
-							// After clocking, we clock again and so on.
-							if (!this.paused && !this.stopped && this.jp2NextTime - this.jp2AudioContext.currentTime <= 1) {								
-								// Clock the emulator to produce more samples and frames
-								this.jp2Worker.postMessage({ eventType: "CLOCK" });
-							} else {
-								// Get on the brakes, do nothing
-								this.jp2Worker.postMessage({ eventType: "IDLE" });
-							}
-
-						} else if (eventType === "INITIALISED") {
-
+					const eventMap = {
+						INITIALISED: function (eventData) {
+							// Set initial settings
+							outer.jp2Worker.postMessage({
+								eventType: "SET_SAMPLING_RATE",
+								eventData: {
+									samplingRate: toSamplingRate(outer.jp2AudioContext.sampleRate),
+								},
+							});
+							outer.jp2Worker.postMessage({
+								eventType: "SET_BUFFER_SIZE",
+							    eventData: {
+									bufferSize: 144000,
+								},
+							});
+							outer.jp2Worker.postMessage({
+								eventType: "SET_AUDIO_BUFFER_SIZE",
+								eventData: {
+									audioBufferSize: outer.bufferSize[outer.emulator],
+								},
+							});
+							outer.jp2Worker.postMessage({
+								eventType: "SET_DEFAULT_CLOCK_SPEED",
+								eventData: {
+									defaultClockSpeed: clockspeed,
+								},
+							});
+							
 							// Load the SID file
 							var request = new XMLHttpRequest();
 							request.open("GET", file, true);
@@ -657,16 +616,81 @@ SIDPlayer.prototype = {
 
 							// Start playing
 							request.onload = function() {
-								this.contents = new Uint8Array(request.response);
-								this._jp2Play();
-							}.bind(this);
+								outer.contents = new Uint8Array(request.response);
+								outer._jp2Play();
+							};
 							request.send(null);
 
 							if (typeof callback === "function") {
-								callback.call(this, error);
+								callback.call(outer, error);
 							}
+						},
+						OPENED: function (eventData) {
+							outer.jp2Worker.postMessage({ eventType: "CLOCK" });
+						},
+						CLOCKED: function (eventData) {
+							let clock = !outer.paused && !outer.stopped;
+							clock = clock && outer.jp2NextTime - outer.jp2AudioContext.currentTime <= 1;
+							if (clock) {
+								outer.jp2Worker.postMessage({ eventType: "CLOCK" });
+							} else {
+								outer.jp2Worker.postMessage({ eventType: "IDLE", eventData: { sleepTime: 3 }, });
+							}
+						},
+						TIMER_END: function (eventData) {
+							outer.callbackTrackEnd();
+						},
+						SAMPLES: function (eventData) {
+							var sampleRate = outer.jp2AudioContext.sampleRate;
 
-						}
+							// The worker has produced a chunk of sound data - create a stereo buffer and
+							// send it to the sound card
+							var buffer = outer.jp2AudioContext.createBuffer(2, eventData.length, sampleRate);
+							buffer.getChannelData(0).set(new Float32Array(eventData.left));
+							buffer.getChannelData(1).set(new Float32Array(eventData.right));
+
+							var sourceNode = outer.jp2AudioContext.createBufferSource();
+							sourceNode.buffer = buffer;
+							sourceNode.connect(outer.jp2AudioContext.destination);
+
+							if (outer.jp2NextTime < outer.jp2AudioContext.currentTime) {
+								 // if samples are not produced fast enough
+								outer.jp2NextTime = outer.jp2AudioContext.currentTime + 0.005;
+							}
+							sourceNode.start(outer.jp2NextTime);
+							outer.jp2NextTime += eventData.length / sampleRate;
+
+							// Tick playtime in seconds taking fast forward into account
+							// @todo This needs to be adapted for other buffer sizes to work
+							outer.jp2PlayTime += 1 / ((eventData.length / sampleRate) / (outer.fastForward ? 2 : 1));
+
+						},
+						SID_WRITE: function (eventData) {
+							// Enable this to monitor everything the event outputs
+							// log("relTime=" + eventData.relTime + ", addr=" + eventData.addr + ", value=" + eventData.value);
+
+							// Store SID value in an cache array with all registers
+							var sidRegister = false, sidValue = eventData.value,
+								timestamp = outer.jp2AudioContext.currentTime;
+							if (eventData.addr >= outer.jp2SID3Base && eventData.addr <= outer.jp2SID3Base + 28)
+								// SID chip #3
+								sidRegister = eventData.addr - outer.jp2SID3Base + (29 * 2);
+							else if (eventData.addr >= outer.jp2SID2Base && eventData.addr <= outer.jp2SID2Base + 28)
+								// SID chip #2
+								sidRegister = eventData.addr - outer.jp2SID2Base + 29;
+							else if (eventData.addr <= 0xD400 + 28)
+								// SID chip #1
+								sidRegister = eventData.addr - 0xD400;
+								// For some reason JSIDPlay2 loops registers all the way up to 255 to begin with
+							if (sidRegister)
+								outer.jp2RegisterCache[sidRegister].push({ value: sidValue, timestamp });
+						},
+					};
+ 					
+					this.jp2Worker.addEventListener("message", function (event) {
+			            var thisFun = eventMap[event.data.eventType];
+			
+			            if (thisFun) thisFun(event.data.eventData);
 					}.bind(this));
 
 					this.jp2Worker.addEventListener("error", function (error) {
@@ -1079,7 +1103,7 @@ SIDPlayer.prototype = {
 		this.jp2Worker.postMessage({
 			eventType: "SET_DEFAULT_CHIP_MODEL",
 			eventData: {
-				chipModel: this.jp2SidModel
+				defaultSidModel: this.jp2SidModel
 			},
 		});
 
@@ -1088,7 +1112,7 @@ SIDPlayer.prototype = {
 		this.jp2Worker.postMessage({
 			eventType: "SET_DEFAULT_EMULATION",
 			eventData: {
-				emulation: defEmu
+				defaultEmulation: defEmu
 			},
 		});
 
@@ -1119,14 +1143,15 @@ SIDPlayer.prototype = {
 				cartContents: null,				// Cartridge data as Uint8Array	(unused in DeepSID)
 				cartName: null,					// Cartridge name				(unused in DeepSID)
 				command: null,					// Command after C64 reset		(unused in DeepSID)
+				songLength: this.timeout,		// song-length to play for (0 means unknown, fallback to default play length)
 			},
 		});
 
-		// Doesn't set the time length; it's always 0.0
+		// Sets the default play length, if this.timeout is 0 (unknown)
 		this.jp2Worker.postMessage({
 			eventType: "SET_DEFAULT_PLAY_LENGTH",
 			eventData: {
-				timeInS: this.timeout
+				defaultPlayLength: 0,			// songLength above is 0? then use this default setting (0 means forever)
 			},
 		});
 
