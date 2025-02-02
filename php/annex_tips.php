@@ -15,17 +15,15 @@
 
 		<h4>How to start a new playlist:</h4>
 		<ol>
-			<li>Right-click any SID row.</li>
+			<li>Right-click any SID song.</li>
 			<li>Click <b>Add to New Playlist</b>.</li>
-			<li>Browse back to root.</li>
-			<li>Right-click your playlist.</li>
-			<li>Click <b>Rename Playlist</b>.</li>
-			<li>Type a great name for it.</li>
+			<li>Rename it if you wish.</li>
+			<li>Find it in the root bottom.</li>
 		</ol>
 
 		<h4>How to add more tunes to it:</h4>
 		<ol>
-			<li>Right-click any SID row.</li>
+			<li>Right-click any SID song.</li>
 			<li>Hover on <b>Add to Playlist</b>.</li>
 			<li>Click it in the context list.</li>
 		</ol>
