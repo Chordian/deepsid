@@ -5,7 +5,13 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- Update playlist text in right side help text. It doesn't mention the dialog box.
+- David Sturgeon reported that there is a problem with the timing between the oscilloscope
+  view and the music. Better have a closer look at it.
+
+- When playing a 6581 tune with WebSid, the options in the 'Filter' tab are ghosted unless
+  switching to 8580 and then back again to 6581.
+
+- Add tracking of how much playlists are clicked, tunes are clicked, and so on?
 
 - JSIDPlay2: For now, the time bar color of JSIDPlay2 is the same as for the WebSid handler.
   Consider creating its own unique color for both bright and dark color schemes.
