@@ -861,14 +861,14 @@ function jsSID (bufferlen, background_noise, asid_enable = false, webusb_enable 
     }  
     addr&=0xFFFF;  
     switch (IR&0xE0) {
-     case 0x00: memory[0x100+SP]=PC%256; SP--;SP&=0xFF; memory[0x100+SP]=PC/256;  SP--;SP&=0xFF; memory[0x100+SP]=ST; SP--;SP&=0xFF; 
+     case 0x00: memory[0x100+SP]=PC/256; SP--;SP&=0xFF; memory[0x100+SP]=PC%256;  SP--;SP&=0xFF; memory[0x100+SP]=ST; SP--;SP&=0xFF;
        PC = memory[0xFFFE]+memory[0xFFFF]*256-1; cycles=7; break; //BRK
      case 0x20: if(IR&0xF) { ST &= 0x3D; ST |= (memory[addr]&0xC0) | ( !(A&memory[addr]) )<<1; } //BIT
-      else { memory[0x100+SP]=(PC+2)%256; SP--;SP&=0xFF; memory[0x100+SP]=(PC+2)/256;  SP--;SP&=0xFF; PC=memory[addr]+memory[addr+1]*256-1; cycles=6; }  break; //JSR
+      else { memory[0x100+SP]=(PC+1)/256; SP--;SP&=0xFF; memory[0x100+SP]=(PC+1)%256;  SP--;SP&=0xFF; PC=memory[addr]+memory[addr+1]*256-1; cycles=6; }  break; //JSR
      case 0x40: if(IR&0xF) { PC = addr-1; cycles=3; } //JMP
-      else { if(SP>=0xFF) return 0xFE; SP++;SP&=0xFF; ST=memory[0x100+SP]; SP++;SP&=0xFF; T=memory[0x100+SP]; SP++;SP&=0xFF; PC=memory[0x100+SP]+T*256-1; cycles=6; }  break; //RTI
+      else { if(SP>=0xFF) return 0xFE; SP++;SP&=0xFF; ST=memory[0x100+SP]; SP++;SP&=0xFF; T=memory[0x100+SP]; SP++;SP&=0xFF; PC=256*memory[0x100+SP]+T-1; cycles=6; }  break; //RTI
      case 0x60: if(IR&0xF) { PC = memory[addr]+memory[addr+1]*256-1; cycles=5; } //JMP() (indirect)
-      else { if(SP>=0xFF) return 0xFF; SP++;SP&=0xFF; T=memory[0x100+SP]; SP++;SP&=0xFF; PC=memory[0x100+SP]+T*256-1; cycles=6; }  break; //RTS
+      else { if(SP>=0xFF) return 0xFF; SP++;SP&=0xFF; T=memory[0x100+SP]; SP++;SP&=0xFF; PC=256*memory[0x100+SP]+T; cycles=6; }  break; //RTS
      case 0xC0: T=Y-memory[addr]; ST&=124;ST|=(!(T&0xFF))<<1|(T&128)|(T>=0); break; //CPY
      case 0xE0: T=X-memory[addr]; ST&=124;ST|=(!(T&0xFF))<<1|(T&128)|(T>=0); break; //CPX
      case 0xA0: Y=memory[addr]; ST&=125;ST|=(!Y)<<1|(Y&128); break; //LDY
