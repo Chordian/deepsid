@@ -1,4 +1,5 @@
 <?php
+
 /**
  * DeepSID
  *
@@ -34,15 +35,14 @@ try {
 
 	// NOTE: Temporarily increase 'max_execution_time' to 800 in PHP.INI when done in LOCALHOST.
 	// Don't worry about doing it online; it's crazy fast there (less than half a minute).
-	foreach($select as $row) {
+	foreach ($select as $row) {
 		$lengths = explode(' ', $row->lengths);
-		foreach($lengths as $key => $length)
+		foreach ($lengths as $key => $length) {
 			// $db->query('INSERT INTO hvsc_lengths (fullname, length, subtune) VALUES("'.$row->fullname.'", "'.$length.'", '.$key.')');
+		}
 	}
 
 	echo "Script 'update_songlengths.php' has completed.";
-
-} catch(PDOException $e) {
-	echo 'ERROR: '.$e->getMessage();
+} catch (PDOException $e) {
+	echo 'ERROR: ' . $e->getMessage();
 }
-?>
