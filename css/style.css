@@ -296,7 +296,7 @@
 	--color-timebar-bg:				#fcfcfc;			/* Color of the inside of the time bar */
 	--color-timebar-border:			#c4c5b3;			/* Color for border of e.g. time bar, permalinks, etc. */
 	--color-timebar-resid:			#964;
-	--color-timebar-jsidplay2:		var(--color-memory-border-top);
+	--color-timebar-jsidplay2:		#6f7608;
 	--color-timebar-websid:			var(--color-memory-border-top);
 	--color-timebar-hermit:			rgb(38, 99, 41);
 	--color-timebar-asid:			#666;
@@ -657,7 +657,7 @@
 	--color-timebar-bg:				linear-gradient(to bottom, #1c1c1c 0%,#3a3a3a 75%);
 	--color-timebar-border:			#555;
 	--color-timebar-resid:			linear-gradient(to bottom, #a0604b 20%,#78402f 100%); 	/* #964; */
-	--color-timebar-jsidplay2:		linear-gradient(to bottom, #616fbb 20%,#44529d 100%); 	/* #44529d */
+	--color-timebar-jsidplay2:		linear-gradient(to bottom, #969e0a 20%,#6f7608 100%); 	/* #6f7608 */
 	--color-timebar-websid:			linear-gradient(to bottom, #616fbb 20%,#44529d 100%); 	/* #44529d */
 	--color-timebar-hermit:			linear-gradient(to bottom, #368e39 20%,#266329 100%); 	/* #266329 */
 	--color-timebar-asid:			linear-gradient(to bottom, #777 20%,#555 100%);			/* #666 */
@@ -2578,6 +2578,7 @@ input[type=range]::-ms-track {
 }
 
 	#sundry-news {
+		position: relative;
 		display: table;
 		height: 100%;
 		width: 96%;
@@ -2590,6 +2591,25 @@ input[type=range]::-ms-track {
 			display: table-cell;
 			vertical-align: middle;
 			font-weight: bold;
+		}
+
+		#sundry-news pre {
+			overflow: visible;
+			font: normal 15px/21px "Montserrat", sans-serif;
+  			white-space: pre-wrap;
+  			word-wrap: break-word;
+  			overflow-wrap: break-word;
+			position: relative;
+			top: 1px;
+			left: -8px;
+			width: 104.2%;
+			color: #fff;
+			padding: 0;
+			margin: 0;
+			background: none;
+			border: 0;
+			text-align: left;
+			cursor: pointer;
 		}
 
 	#sundry .stopic {

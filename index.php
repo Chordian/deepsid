@@ -623,11 +623,15 @@
 				<div id="stopic-stil" class="stopic">
 					<?php if (!MiniPlayer()): ?>
 						<div id="sundry-news">
-							<span>The <a href="https://www.hvsc.c64.org/" target="_top">High Voltage SID Collection</a> has been upgraded to the latest version #82. Click <a href="//deepsid.chordian.net/?search=82&type=new">here</a> to see what's new in this update.</span>
+							<!--<span>The <a href="https://www.hvsc.c64.org/" target="_top">High Voltage SID Collection</a> has been upgraded to the latest version #82. Click <a href="//deepsid.chordian.net/?search=82&type=new">here</a> to see what's new in this update.</span>-->
 							<!--<span><a href="http://www.c64music.co.uk/" target="_top">Compute's Gazette SID Collection</a> has been upgraded to the latest version #146. Click <a href="//deepsid.chordian.net/?search=146&type=new">here</a> to see what's new in this update.</span>-->
 							<!--<a href="https://xparty.net/"><img src="images/sundry_x2024.png" alt="X'2024" /></a>-->
+							<span>The 'Remix' tab entries are unavailable at the moment due to a change at the Remix64 web site. We are working on fixing the problem.</span>
 							<!--<span>I changed some Javascript files so make sure your browser cache is up to date. On Windows, hit <b style="color:#77c;">Ctrl+F5</b> while viewing the site, on Mac, hit <b style="color:#77c;">Cmd+Shift+R</b>.</span>-->
 							<!--<span>Want to learn how to make SID tunes? Check out <a href="https://www.youtube.com/watch?v=nXNtLetxFUg">this tutorial video</a> now on YouTube.</span>-->
+
+							<!-- See in controls.js: "showNewsImage" and "clickNews" for how to set up a news image -->
+							<!--<pre><b style="font-size:16px;">Coming up<br></b><b style="position:relative;top:-3px;font-size:13px;">17 - 19 Nov.</b><br><br><i style="position:absolute;bottom:-38px;right:4px;font-size:13px;line-height:17px;text-align:right;">New SID tunes<br><font style="font-size:17px;">incoming!</font></i></pre>-->
 						</div>
 					<?php endif ?>
 				</div>
@@ -1860,6 +1864,18 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>May 24, 2025</h3>
+						<ul>
+							<li>The JSIDPlay2 SID handler now has its own unique time bar color.</li>
+						</ul>
+
+						<h3>March 15, 2025</h3>
+						<ul>
+							<li>Thomas Jansson (tubesockor) fixed a 6510 emulation issue in Hermit's driver causing incompatibility with some tunes.
+								Some instructions were push/popping the stack in a reverse order than expected on 6510.
+								Huge thanks to Anthony Bybell who discovered this anomaly.</li>
+						</ul>
 
 						<h3>February 2, 2025</h3>
 						<ul>

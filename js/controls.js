@@ -32,6 +32,7 @@ Controls.prototype = {
 		$("#info").on("click", "#sid-model,#clockspeed,#info-rating", this.onClick.bind(this));
 		$("#sundry,#topic-stil").on("click", ".subtune", this.onClick.bind(this));
 		$("#sundry").on("click", "canvas,.tag", this.onClick.bind(this));
+		$("#sundry-news").on("click", "pre", this.clickNews.bind(this));
 		$("#stopic-osc,#stopic-filter,#stopic-stereo").on("click", "button", this.onClick.bind(this));
 		$("#sundry-ctrls").on("click", "#sidwiz,#showtags,#filter-6581", this.onClick.bind(this));
 
@@ -85,7 +86,7 @@ Controls.prototype = {
 	 * When releasing a mouse button.
 	 * 
 	 * @param {*} event 
-	 * @param {boolean} autoProgress	If specified, auto-progress did the request, not a human
+	 * @param {boolean} autoProgress	If specified; auto-progress did the request, not a human
 	 */
 	onMouseUp: function(event, autoProgress) {
 		var target = event.target;
@@ -766,6 +767,7 @@ Controls.prototype = {
 			stil = browser.playlist[browser.songPos].stil,
 			isCGSC = browser.playlist[browser.songPos].fullname.substr(-4) == ".mus",
 			isSidHappens = browser.playlist[browser.songPos].fullname.indexOf("/"+PATH_UPLOADS) !== -1;
+			//isRoot = $("#folder-root").hasClass("disabled");
 
 		var tabName = "STIL";
 		if (isCGSC)
@@ -773,6 +775,7 @@ Controls.prototype = {
 		else if (isSidHappens)
 			tabName = "Notes";
 		$("#tab-stil,#stab-stil").empty().append(tabName); // Set for both sundry and dexter tabs
+		this.showNewsImage(false);
 
 		if (isCGSC) {
 			$("#topic-stil,#stopic-stil").addClass("c64font");
@@ -922,6 +925,35 @@ Controls.prototype = {
 	},
 
 	/**
+	 * Show or hide a background image in the 'News' tab of the Sundry box. This can be
+	 * used to e.g. show an image of a party coming up in the next weekend.
+	 * 
+	 * Replace the 'news.png' file in the images folder with the image you want to show
+	 * in the sundry box. You can also zoom in, if you want to center on a logo and
+	 * also get more height. Just increase 100% to a higher value.
+	 * 
+	 * @param {boolean} show	If specified and TRUE, show image if in 'News' tab
+	 */
+	showNewsImage: function(show) {
+		if (show && $("#stab-stil").text() == "News")
+			$("#sundry").css({                                                    // Zoom
+				'background': 'var(--color-bg-box) url(images/news.png) center top / 102% auto no-repeat',
+			});
+		else
+			$("#sundry").css({
+				'background': 'var(--color-bg-box)',
+			});
+	},
+
+	/**
+	 * When clicking the 'News' tab while it's showing a background image. See above for
+	 * setting this up. Point this to the relevant web site for the image.
+	 */
+	clickNews: function() {
+		window.open("https://xparty.net/");
+	},
+
+	/**
 	 * Update the sundry box with tags.
 	 * 
 	 * @param {string} tags		An HTML list of the tags
@@ -956,7 +988,7 @@ Controls.prototype = {
 	 * Update the collection version just above the sundry box.
 	 */
 	updateSundryVersion: function() {
-		if (typeof browser.songPos != "undefined") {
+		if (typeof browser.playlist[browser.songPos] != "undefined") {
 			var version = browser.playlist[browser.songPos].hvsc,
 				isCGSC = browser.playlist[browser.songPos].fullname.substr(-4) == ".mus",
 				$sundryCtrls = $("#sundry-ctrls");

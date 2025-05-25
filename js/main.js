@@ -265,6 +265,7 @@ $(function() { // DOM ready
 						.styledOptionState("lemon youtube", "disabled");
 					$("#path").css("top", "5px").empty().append("Temporary emulator testing");
 					$("#stab-stil,#tab-stil").empty().append("STIL");
+					ctrls.showNewsImage(false);
 
 					// Only disable the ".." button
 					$("#folder-root,#folder-back").removeClass("disabled");
@@ -712,10 +713,13 @@ $(function() { // DOM ready
 		var stopic = $this.attr("data-topic");
 		localStorage.setItem("sundrytab", stopic);
 
+		ctrls.showNewsImage(false);
+
 		switch (stopic) {
 			case "stil":
 				// Show collection version for this song
 				ctrls.updateSundryVersion();
+				ctrls.showNewsImage(true);
 				break;
 			case "tags":
 				$("#sundry-ctrls").append(

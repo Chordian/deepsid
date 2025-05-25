@@ -5,16 +5,13 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- David Sturgeon reported that there is a problem with the timing between the oscilloscope
-  view and the music. Better have a closer look at it.
+- Idea from Anon-Relays: Loop song X number of times before moving on to the next one. In
+  the settings, the default number should of course be 1.
 
 - When playing a 6581 tune with WebSid, the options in the 'Filter' tab are ghosted unless
   switching to 8580 and then back again to 6581.
 
 - Add tracking of how much playlists are clicked, tunes are clicked, and so on?
-
-- JSIDPlay2: For now, the time bar color of JSIDPlay2 is the same as for the WebSid handler.
-  Consider creating its own unique color for both bright and dark color schemes.
 
 - Make suggested-username-login-instantly work better on mobile phones. As it is now, the phone
   is usually so fast that it thinks you're creating a new user.
@@ -124,6 +121,8 @@ CONSIDER THIS
 
 - Idea from Jan Joeli: Following a playlist and getting a notification when it's changed.
   Could be expanded with a context menu option for ignoring uninteresting playlists.
+
+- Idea from Anon-Relays: Pause/delay setting between tunes.
 
 - If one or more fields are empty in the top box, get the field(s) from the database instead.
   Or, consider getting it all from the database instead. Or, maybe even better, add a toggle

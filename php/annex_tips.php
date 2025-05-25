@@ -330,6 +330,9 @@
 				<td>csdbid</td><td>Show <b>CSDb</b> entry.&nbsp;&nbsp;Use with <b>csdbtype</b> above.</td>
 			</tr>
 			<tr>
+				<td>mini</td><td><b>0</b> for normal (desktop and mobile); <b>1</b> for mini player.</td>
+			</tr>
+			<tr>
 				<td>mobile</td><td><b>0</b> to force desktop view; <b>1</b> to force mobile view.</td>
 			</tr>
 			<tr>
