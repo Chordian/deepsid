@@ -2,11 +2,21 @@ ToDo
 ¯¯¯¯
 
 - Look into the console logging alternatives, like warn, error, table, etc.
+  @link https://developer.mozilla.org/en-US/docs/Web/API/console
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
 - Idea from Anon-Relays: Loop song X number of times before moving on to the next one. In
   the settings, the default number should of course be 1.
+
+- If server IP given to MK (Remix64) doesn't work either, then add text to the 'Remix' tab
+  about it not working anymore due to Markus Klein adding Cloudflare to his Remix64.com web
+  site to protect against DDoS attacks.
+
+- Bug found by JW: The current browser context is lost when switching the used emulator.
+  Example: Search for "M418" tag. In search results play one of the songs. Now switch to a
+  different emulator. This will still play the same song, but the browser now shows the
+  composer's folder and no longer the original search results.
 
 - When playing a 6581 tune with WebSid, the options in the 'Filter' tab are ghosted unless
   switching to 8580 and then back again to 6581.

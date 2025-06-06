@@ -32,6 +32,9 @@ if (isset($_GET['fullname'])) {
 		die(json_encode(array('status' => 'warning', 'html' => '<p style="margin:0;"><i>Uh... Remix64? Are you there?</i></p><small>Come on, Remix64, old buddy, don\'t let me down.</small>')));
 	}
 
+	//die(json_encode(array('status' => 'info', 'html' => 'API call: https://remix64.com/services/api/de/deepsid/?task=get_remixes&api_user=deepsid&hash='.$hash.'&data='.$encoded)));
+	//die(json_encode(array('status' => 'info', 'html' => '{'.$data.'}')));
+
 	$data = json_decode($data);
 
 	/* Example data: $data->data->[0 to MAX]

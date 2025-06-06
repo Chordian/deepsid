@@ -141,6 +141,8 @@ function GetAvatar($id, $name, $hvsc_folder) {
 
 /**
  * Return the correct color code for the CSDb user.
+ * 
+ * IF YOU UPDATE THIS THEN REMEMBER TO DO SO IN CSHELLDB TOO!
  *
  * @param	    string		$name               CSDb scener handle
  *
@@ -159,11 +161,8 @@ function GetUserColor($name) {
 			$color = ' class="forum-user-admin" title="Administrator"';     // Color for site admins
 			break;
 
-		case 'creamd':
-		case 'zyron':
-		case 'dishy':
-		case 'the_communist':
-		case 'hedning':
+		case 'raistlin':
+		case 'didi':
 		case 'moloch':
 		case 'e_g':
 		case 'count_zero':
@@ -175,6 +174,7 @@ function GetUserColor($name) {
 		case 'cba':
 		case 'fred':
 		case 'dymo':
+		case 'hedning':
 		case 'mace':
 		case 'wacek':
 		case 'a3':
@@ -182,6 +182,7 @@ function GetUserColor($name) {
         case 'jch':
 		case 'acidchild':
         case 'scooby':
+        case 'zyron':
 			$color = ' class="forum-user-trusted" title="Trusted User"';    // Color for trusted users
 			break;
 

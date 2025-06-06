@@ -1865,6 +1865,12 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>June 6, 2025</h3>
+						<ul>
+							<li>Improved phrase searching. Now searching e.g. filenames for "the party" (including the quotes) only return
+								the entries where the words are truly consecutive.</li>
+						</ul>
+
 						<h3>May 24, 2025</h3>
 						<ul>
 							<li>The JSIDPlay2 SID handler now has its own unique time bar color.</li>

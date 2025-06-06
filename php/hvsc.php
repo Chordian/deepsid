@@ -56,15 +56,17 @@ function PublicSymlistOwner() {
  */
 function ParseQuery($query) {
 
-	// Replace spaces ('_') inside quoted queries with '%' and remove the quotes themselves
-	// NOTE: This is actually a weird shortcut and sometimes produce unexpected results.
+	// Replace spaces ('_') inside quoted queries with '¤' and remove the quotes themselves
+	// NOTE: This is a weird shortcut but after exploding '_' characters below, the '¤' is
+	//       replaced with '_' to ensure the phrase also work with SID filenames.
 	preg_match_all('/"[^"]+"/', $query, $quoted);
 	foreach($quoted[0] as $q) {
-		$adapted = trim(str_replace('_', '%', $q), '"');
+		$adapted = trim(str_replace('_', '¤', $q), '"');
 		$query = str_replace($q, $adapted, $query);
 	}
 	// Get rid of any lonely quote stragglers and return an array
-	return explode('_', str_replace('"', '', $query));
+	$words = explode('_', str_replace('"', '', $query));
+	return array_map(fn($item) => str_replace('¤', '_', $item), $words);
 }
 
 /***** START *****/
@@ -256,6 +258,7 @@ try {
 					}
 				}
 				$select = $db->query('SELECT fullname FROM hvsc_files WHERE '.$searchContext.' AND '.$include.$exclude.' LIMIT 1000');
+				//$debug = $select;
 			}
 
 			$files = array();

@@ -1096,6 +1096,9 @@ Browser.prototype = {
 					searchHere:		($("#search-here").is(":checked") ? 1 : 0),
 			}, function(data) {
 				this.validateData(data, function(data) {
+
+					if (data.debug !== "") console.log(data.debug);
+
 					clearTimeout(loading);
 					$("#loading").hide();
 					ctrls.state("root/back", "enabled");
