@@ -1158,11 +1158,10 @@ Browser.prototype = {
 						if ($selected.attr("data-topic") === "csdb" || $selected.attr("data-topic") === "gb64" || $selected.attr("data-topic") === "remix")
 							$("#tab-profile").trigger("click");
 					} else if (this.isUploadFolder()) {
-						// The 'Remix' tab are useless to 'SID Happens'
-						// NOTE: I whitelisted 'GB64' because sometimes I add a link to GameBase64 in the database.
-						$("#tab-remix").addClass("disabled");
-						$("#note-remix").hide();
-						if ($selected.attr("data-topic") === "remix")
+						// The 'GB64' and 'Remix' tabs are useless to 'SID Happens'
+						$("#tab-gb64,#tab-remix").addClass("disabled");
+						$("#note-gb64,#note-remix").hide();
+						if ($selected.attr("data-topic") === "gb64" || $selected.attr("data-topic") === "remix")
 							$("#tab-profile").trigger("click");
 						this.previousOverridePath = "_SID Happens";
 					}
@@ -1673,11 +1672,14 @@ Browser.prototype = {
 	 * @return {string}			The HTML string to put into the SID row
 	 */
 	buildTags: function(tags, types) {
-		var list_of_tags = remix64 = "";
+		var list_of_tags = remix64 = gamebase64 = "";
 		$.each(tags, function(i, tag) {
 			if (tag == "Remix64") {
-				// A special look for the "Remix 64" tag
+				// A special look for the "Remix64" tag
 				remix64 = '<div class="tag tag-remix64">&nbsp;&nbsp;</div>';
+			} else if (tag == "GameBase64") {
+				// A special look for the "GameBase64" tag
+				gamebase64 = '<div class="tag tag-gamebase64">&nbsp;&nbsp;</div>';
 			} else if (tag == "Doubling" || tag == "Hack" || tag == "Mock" || tag == "Bug") {
 				// A unique color for tags that serves as a warning
 				list_of_tags += '<div class="tag tag-warning">'+tag+'</div>';
@@ -1690,7 +1692,7 @@ Browser.prototype = {
 		});
 		list_of_tags += '<div class="edit-tags" title="Edit tags">&nbsp;</div>';
 
-		return remix64+list_of_tags;
+		return gamebase64+remix64+list_of_tags;
 	},
 
 	/**
@@ -2043,9 +2045,6 @@ Browser.prototype = {
 	 */
 	getGB64: function(optionalID) {
 
-		return false;	// Disabled since the web site move to https://gb64.com in autumn 2023 
-						// The new location seems to have stricter cross-domain policies
-
 		if (miniPlayer || isMobile || this.isTempTestFile()) return;
 		if (this.gb64) this.gb64.abort();
 		$("#topic-gb64").empty().append(this.loadingSpinner("gb64"));
@@ -2055,8 +2054,10 @@ Browser.prototype = {
 			$("#loading-gb64").fadeIn(500);
 		}, 250);
 
+		thisFullname = browser.playlist[browser.songPos].fullname.substr(5); 
+
 		var params = typeof optionalID === "undefined"
-			? { fullname: browser.playlist[browser.songPos].fullname.substr(5) }
+			? { fullname: thisFullname }
 			: { id: optionalID };
 
 		this.gb64 = $.get("php/gb64.php", params, function(data) {
@@ -2072,7 +2073,39 @@ Browser.prototype = {
 					$("#note-gb64").empty().append(data.count).show();
 				else
 					$("#note-gb64").hide();
-	
+
+				// If there are entries then a "GameBase64" tag is already there or will be added below
+				// which means that the redundant "Game" and "Game Prev" tags should be removed
+				if (data.count > 0) {
+					$.post("php/tags_remove_game.php", {
+						fullname:	thisFullname,
+					}, function(data) {
+						browser.validateData(data, function(data) {
+							browser.updateStickyTags(
+								$("#songs tr.selected"),
+								browser.buildTags(data.tags, data.tagtypes),
+								thisFullname.split("/").slice(-1)[0]
+							);
+						});
+					}.bind(this));
+
+					// If there is no "GameBase64" tag then add it now
+					if (browser.playlist[browser.songPos].tags.indexOf("tag-gamebase64") == -1) {
+						$.post("php/tags_write_single.php", {
+							fullname:	thisFullname,
+							tag:		"GameBase64",
+						}, function(data) {
+							browser.validateData(data, function(data) {
+								// Both updates may be called asynchronously but it shouldn't break anything
+								browser.updateStickyTags(
+									$("#songs tr.selected"),
+									browser.buildTags(data.tags, data.tagtypes),
+									thisFullname.split("/").slice(-1)[0]
+								);
+							});
+						}.bind(this));
+					}
+				}
 			});
 		}.bind(this));
 	},
@@ -2115,7 +2148,7 @@ Browser.prototype = {
 				else
 					$("#note-remix").hide();
 
-				// IF there are entries but no "Remix64" tag then add it now
+				// If there are entries but no "Remix64" tag then add it now
 				if (data.count > 0 && browser.playlist[browser.songPos].tags.indexOf("tag-remix64") == -1) {
 					$.post("php/tags_write_single.php", {
 						fullname:	thisFullname,
@@ -2897,6 +2930,7 @@ Browser.prototype = {
 				digi:		"",
 				subdigi:	"",
 				remix64:	"",
+				gamebase64:	"",
 				other:		"",
 				warning:	"",
 			};
@@ -2920,6 +2954,7 @@ Browser.prototype = {
 				tagType.digi+
 				tagType.subdigi+
 				tagType.remix64+
+				tagType.gamebase64+
 				tagType.other+
 				tagType.warning;
 		}

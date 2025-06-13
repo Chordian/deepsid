@@ -6,43 +6,48 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- Idea from Anon-Relays: Loop song X number of times before moving on to the next one. In
+- When going back with ".." then cancel search if active. If this is not cancelled first, the
+  parent folder will not go to the remembered scroll position.
+
+- When clicking a GB64 image in a sub-page, show it zoomed up two or three times.
+
+- Investigate if searching in "Game" drop-down box mode searches the files column. This column
+  is deprecated. Can the "gamebase" database be searched instead for SID row hits?
+
+- LOOP X TIMES:
+  Idea from Anon-Relays: Loop song X number of times before moving on to the next one. In
   the settings, the default number should of course be 1.
 
-- If server IP given to MK (Remix64) doesn't work either, then add text to the 'Remix' tab
-  about it not working anymore due to Markus Klein adding Cloudflare to his Remix64.com web
-  site to protect against DDoS attacks.
+- MORE TRACKING:
+  Add tracking of how much playlists are clicked, tunes are clicked, and so on?
 
-- Bug found by JW: The current browser context is lost when switching the used emulator.
-  Example: Search for "M418" tag. In search results play one of the songs. Now switch to a
-  different emulator. This will still play the same song, but the browser now shows the
-  composer's folder and no longer the original search results.
+- GB64 AUTO-TAG:
+  When a GB64 auto-tag is added, any "Game" or "Game Prev" tags should also automatically be
+  removed. (But how about all those that were auto-added before this change?)
+  COMMENT: Don't remove the "GTW" tags, though.
 
-- When playing a 6581 tune with WebSid, the options in the 'Filter' tab are ghosted unless
-  switching to 8580 and then back again to 6581.
-
-- Add tracking of how much playlists are clicked, tunes are clicked, and so on?
-
+- MOBILE LOGIN:
 - Make suggested-username-login-instantly work better on mobile phones. As it is now, the phone
   is usually so fast that it thinks you're creating a new user.
 
-- BUG: In temporary emulator testing, the max. subtune is not detected and shown.
-  Suggestion: See if you can use the file parser from when files are uploaded to the SH folder
+- BUG TEMP LOAD:
+- In temporary emulator testing, the max. subtune is not detected and shown.
+  SUGGESTION: See if you can use the file parser from when files are uploaded to the SH folder
   to get the song name, author, released and max. subtune info for displaying. You may have
   to adapt players.js/getSongInfo() and/or controls.js/updateInfo() for this to work.
 
+- BUG STIL:
 - The STIL entry for this tune is not parsed correctly - all links merge into one big link:
   https://deepsid.chordian.net/?file=/MUSICIANS/B/Bulldog/E_X_I_S.sid&subtune=1
 
+- BUG CENTER:
 - Check up on "Auto-progress should select and center the next song as it proceeds to it"
   setting again - it centers wrongly on my 32" screen and also doesn't toggle correctly?
 
-- Is it possible to import GameBase64's downloadable database to my own One.com database and
-  then make it work in the GB64 tab again at DeepSID?
-
-- BUG: When uploading a new song to the SH folder, it's not possible to rate it using the
-  stars in the info box. You have to refresh the site first. (An easy solution to this is of
-  course to automatically refresh the site after uploading it.)
+- BUG RATE SH:
+- When uploading a new song to the SH folder, it's not possible to rate it using the stars in
+  the info box. You have to refresh the site first. (An easy solution to this is of course to
+  automatically refresh the site after uploading it.)
 
 
 WHEN THE TIME IS RIGHT
@@ -57,6 +62,9 @@ WHEN THE TIME IS RIGHT
     nothing to do with symlists. Rename it to something else to avoid confusion.
   - Maybe 'csdb.php' should also have an extended name, to make it more clear what it does.
   - Go through all the other files and see if anything else ought to be renamed.
+  CAVEAT: You can overcome e.g. cache issues by keeping the old copy of the renamed item for
+  a while. For example, copy 'hvsc.php' to e.g. 'music.php' but keep the old version around
+  too for a month before deleting it. By then everyone should be using the newest JS files.
 
 
 CONSIDER THIS
@@ -531,6 +539,14 @@ PROBABLY NOT?
   100% watertight. And that's where it transitions into it not being worth the trouble.
   UPDATE: I've now sent a request to the HVSC team about removing those text bits.
   UPDATE: They've amended a lot of tunes now, but not all of them.
+
+- Bug found by JW: The current browser [search] context is lost when switching the used emulator.
+  Example: Search for "M418" tag. In search results play one of the songs. Now switch to a different
+  emulator. This will still play the same song, but the browser now shows the composer's folder and no
+  longer the original search results. COMMENT: I do not intend to fix this. DeepSID forgets that it was
+  searching when the site it refreshed, but this is kind of working as intended. Adding support for
+  remembering a search session is too much work for an emulator switch situation that 99% of the
+  DeepSID users wouldn't care about anyway.
 
 - CSDb Music Competitions:
   - Thought about a better inside "path" box info where year and country is also visible, but it's not

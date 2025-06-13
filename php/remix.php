@@ -14,6 +14,33 @@ require_once("class.account.php"); // Includes setup
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest')
 	die("Direct access not permitted.");
 
+/**
+ * Modified version of 'curl' from the 'setup.php' script.
+ *
+ * @param	    string		$url                URL to obtain data from
+ *
+ * @return	    string		$data               data from the URL
+ */
+function curl2($url) {
+
+    $ch = curl_init();
+
+	curl_setopt($ch, CURLOPT_URL, $url);
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+	curl_setopt($ch, CURLOPT_HEADER, true);
+	curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0');
+    $data = curl_exec($ch);
+	$info = curl_getinfo($ch);
+
+	// Strip headers
+	$headerSize = $info['header_size'];
+	$data = substr($data, $headerSize);
+
+	curl_close($ch);
+
+    return $data;
+}
+
 $remixes = array();
 
 if (isset($_GET['fullname'])) {	
@@ -26,14 +53,14 @@ if (isset($_GET['fullname'])) {
 		// Get the entire JSON tree for the SID file from Remix64
 		// @example https://www.remix64.com/services/api/de/deepsid/?task=get_remixes&api_user=deepsid&hash=d0f7e95f7e2e4ca1f50a8aaf66ca3808&data={%22hvsc_path%22:%22MUSICIANS\/D\/Daglish_Ben\/Cobra.sid%22}
 		$data = substr($hvsc_path, -4) != '.mus' && !strpos($hvsc_path, 'Exotic SID Tunes Collection') && !strpos($hvsc_path, 'SID Happens')
-			? curl('https://remix64.com/services/api/de/deepsid/?task=get_remixes&api_user=deepsid&hash='.$hash.'&data='.$encoded)
+			? curl2('https://remix64.com/services/api/de/deepsid/?task=get_remixes&api_user=deepsid&hash='.$hash.'&data='.urlencode($encoded))
 			: json_encode(array('error_code' => 'SH, CGSC and ESTC not supported'));
 	} catch(ErrorException $e) {
 		die(json_encode(array('status' => 'warning', 'html' => '<p style="margin:0;"><i>Uh... Remix64? Are you there?</i></p><small>Come on, Remix64, old buddy, don\'t let me down.</small>')));
 	}
 
 	//die(json_encode(array('status' => 'info', 'html' => 'API call: https://remix64.com/services/api/de/deepsid/?task=get_remixes&api_user=deepsid&hash='.$hash.'&data='.$encoded)));
-	//die(json_encode(array('status' => 'info', 'html' => '{'.$data.'}')));
+	//die(json_encode(array('status' => 'info', 'html' => '{'.json_encode($data).'}')));
 
 	$data = json_decode($data);
 

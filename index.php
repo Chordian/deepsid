@@ -626,7 +626,8 @@
 							<!--<span>The <a href="https://www.hvsc.c64.org/" target="_top">High Voltage SID Collection</a> has been upgraded to the latest version #82. Click <a href="//deepsid.chordian.net/?search=82&type=new">here</a> to see what's new in this update.</span>-->
 							<!--<span><a href="http://www.c64music.co.uk/" target="_top">Compute's Gazette SID Collection</a> has been upgraded to the latest version #146. Click <a href="//deepsid.chordian.net/?search=146&type=new">here</a> to see what's new in this update.</span>-->
 							<!--<a href="https://xparty.net/"><img src="images/sundry_x2024.png" alt="X'2024" /></a>-->
-							<span>The 'Remix' tab entries are unavailable at the moment due to a change at the Remix64 web site. We are working on fixing the problem.</span>
+							<!--<span>The 'Remix' tab entries are unavailable at the moment due to a change at the Remix64 web site. We are working on fixing the problem.</span>-->
+							<span>The 'GB64' tab (for SID files used in games) is back, and the 'Remix' tab is  working again.</span>
 							<!--<span>I changed some Javascript files so make sure your browser cache is up to date. On Windows, hit <b style="color:#77c;">Ctrl+F5</b> while viewing the site, on Mac, hit <b style="color:#77c;">Cmd+Shift+R</b>.</span>-->
 							<!--<span>Want to learn how to make SID tunes? Check out <a href="https://www.youtube.com/watch?v=nXNtLetxFUg">this tutorial video</a> now on YouTube.</span>-->
 
@@ -975,7 +976,7 @@
 				<div id="tabs">
 					<div class="tab unselectable" data-topic="profile" id="tab-profile">Profile</div>
 					<div class="tab unselectable" data-topic="csdb" id="tab-csdb">CSDb<div id="note-csdb" class="notification csdbcolor"></div></div>
-					<!--<div class="tab unselectable" data-topic="gb64" id="tab-gb64">GB64<div id="note-gb64" class="notification gb64color"></div></div>-->
+					<div class="tab unselectable" data-topic="gb64" id="tab-gb64">GB64<div id="note-gb64" class="notification gb64color"></div></div>
 					<div class="tab unselectable" data-topic="remix" id="tab-remix">Remix<div id="note-remix" class="notification remixcolor"></div></div>
 					<div class="tab unselectable" data-topic="player" id="tab-player">Player<div id="note-player" class="notification playercolor"></div></div>
 					<div class="tab unselectable" data-topic="stil" id="tab-stil">STIL</div>
@@ -1328,7 +1329,7 @@
 						</p>
 					</div>
 
-					<!--<div id="topic-gb64" class="topic ext" style="display:none;">
+					<div id="topic-gb64" class="topic ext" style="display:none;">
 						<h2>GameBase64</h2>
 						<p>This tab will show links to game entries in GameBase64 as you click SID files that were
 							used in at least one C64 game, released or unreleased (these are listed as a preview).</p>
@@ -1341,7 +1342,7 @@
 							<i>This does not work in
 							<a href="http://www.c64music.co.uk/" target="_blank">Compute's Gazette SID Collection</a>.</i>
 						</p>
-					</div>-->
+					</div>
 
 					<div id="topic-player" class="topic ext" style="display:none;">
 						<h2>Player</h2>
@@ -1865,10 +1866,33 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>June 9, 2025</h3>
+						<ul>
+							<li>The "Game" and "Game Prev" tags will automatically be removed if a "GameBase64" tag either
+								exists or is added when GB64 entries are detected. The tags will not be affected if the SID row does not have any GB64 entries.</li>
+						</ul>
+
+						<h3>June 8, 2025</h3>
+						<ul>
+							<li>Fixed an issue where the GB64 tab sometimes showed irrelevant screenshots for a game.</li>
+							<li>The remix tab is working again.</li>
+							<li>If you click a song and DeepSID detects that it has entries in the GB64 tab, a "GameBase64" tag
+								will automatically be added to it if it doesn't already have it.</li>
+						</ul>
+
+						<h3>June 7, 2025</h3>
+						<ul>
+							<li>The GB64 tab is back, showing game information from <a href="https://gb64.com/">GameBase64</a> whenever a SID file is used in one or more games.
+								DeepSID now uses an imported database instead of scraping the site, which is both safer and faster.</li>
+							<li>Clicking a game in a list of multiple GB64 entries now shows the game page instead of jumping to the site.</li>
+						</ul>
+
 						<h3>June 6, 2025</h3>
 						<ul>
 							<li>Improved phrase searching. Now searching e.g. filenames for "the party" (including the quotes) only return
 								the entries where the words are truly consecutive.</li>
+							<li>Fixed a detection bug where the filter controls didn't show or hide correctly depending on whether the SID tune clicked was
+								made for 6581 or 8580.</li>
 						</ul>
 
 						<h3>May 24, 2025</h3>

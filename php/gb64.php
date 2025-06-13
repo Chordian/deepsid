@@ -20,117 +20,145 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH
 	die("Direct access not permitted.");
 
 /**
- * Have to set this up to catch an error from unserialize() as a proper
- * exception.
- *
- * @param		string		$errno				error number
- * @param		string		$errstr				error string
- * @param		string		$errfile			error file
- * @param		string		$errline			error line
+ * Return an array with information from the imported GameBase64 database.
  * 
- * @throws		ErrorException					cast by handler
- */
-function exception_error_handler($errno, $errstr, $errfile, $errline ) {
-	throw new ErrorException($errstr, $errno, 0, $errfile, $errline);
-}
-set_error_handler('exception_error_handler');
-
-/**
- * Return an array with information from a GameBase64 page.
+ * REMOVE THIS LINE!
+ * 
+ * @global		object		$gb					database connection
  *
  * @param		int			$id					id of page entry
  *
  * @return		array							array with information
  */
-function ReadRawGB64($id) {
+function ReadGB64DB($id) {
 
-	$find_scr	= ':showscreenshot';
-	$piece_scr	= 'gb64.com/Screenshots';
+	global $gb;
 
-	try {
-		// Read the raw HTML of that GameBase64 entry page
-		$page = curl('https://gb64.com/game.php?id='.$id);
-	} catch(ErrorException $e) {
-		die(json_encode(array('status' => 'warning', 'html' => '<p style="margin:0;"><i>Uh... GameBase64? Are you there?</i></p><small>Come on, GB64, old buddy, don\'t let me down.</small>')));
+	// Get the general info for the game
+	$select_games = $gb->prepare('SELECT * FROM Games WHERE GA_Id = :id LIMIT 1');
+	$select_games->execute(array(':id'=>$id));
+	$select_games->setFetchMode(PDO::FETCH_OBJ);
+	$games = $select_games->fetch();
+
+	// Get the title
+	$title = $games->Name;
+
+	// Get the year
+	$select_years = $gb->query('SELECT Year FROM Years WHERE YE_Id = '.$games->YE_Id.' LIMIT 1');
+	$select_years->setFetchMode(PDO::FETCH_OBJ);
+	$year = $select_years->fetch()->Year;
+	switch($year) {
+		case 9991:
+			$year = '????';
+			break;
+		case 9992:
+			$year = '19??';
+			break;
+		case 9994:
+			$year = '198?';
+			break;
+		case 9995:
+			$year = '199?';
+			break;
 	}
 
-	$dom = new DOMDocument();
-	libxml_use_internal_errors(true); // Ignores those pesky PHP warnings
-	$dom->loadHTML($page);
+	// Get the publisher
+	$select_publishers = $gb->query('SELECT Publisher FROM Publishers WHERE PU_Id = '.$games->PU_Id.' LIMIT 1');
+	$select_publishers->setFetchMode(PDO::FETCH_OBJ);
+	$company = $select_publishers->fetch()->Publisher;
 
-	$xpath = new DOMXPath($dom);
+	// Get the musician
+	$select_musicians = $gb->query('SELECT Musician FROM Musicians WHERE MU_Id = '.$games->MU_Id.' LIMIT 1');
+	$select_musicians->setFetchMode(PDO::FETCH_OBJ);
+	$musician = $select_musicians->fetch()->Musician;
 
-	// Find title
-	$nodes = $xpath->query('//td/font[@size="4"]/..//b');
-	$title = $nodes->item(0)->textContent;
+	// Get the artist
+	$select_artists = $gb->query('SELECT Artist FROM Artists WHERE AR_Id = '.$games->AR_Id.' LIMIT 1');
+	$select_artists->setFetchMode(PDO::FETCH_OBJ);
+	$graphics = $select_artists->fetch()->Artist;
+
+	// Get the programmer
+	$select_programmers = $gb->query('SELECT Programmer FROM Programmers WHERE PR_Id = '.$games->PR_Id.' LIMIT 1');
+	$select_programmers->setFetchMode(PDO::FETCH_OBJ);
+	$programmer = $select_programmers->fetch()->Programmer;
+
+	// Get the language
+	$select_languages = $gb->query('SELECT Language FROM Languages WHERE LA_Id = '.$games->LA_Id.' LIMIT 1');
+	$select_languages->setFetchMode(PDO::FETCH_OBJ);
+	$language = $select_languages->fetch()->Language;
+
+	// Get the genre
+	$select_genres = $gb->query('SELECT * FROM Genres WHERE GE_Id = '.$games->GE_Id.' LIMIT 1');
+	$select_genres->setFetchMode(PDO::FETCH_OBJ);
+	$genres = $select_genres->fetch();
+	$genre = $genres->Genre;
+
+		// Get the parent genre (prefix the genre)
+		$select_pgenres = $gb->query('SELECT ParentGenre FROM PGenres WHERE PG_Id = '.$genres->PG_Id.' LIMIT 1');
+		$select_pgenres->setFetchMode(PDO::FETCH_OBJ);
+		$genre = $select_pgenres->fetch()->ParentGenre.' - '.$genre;
+
+	$clone = ''; // Usually always empty - let's just forget about it for now
+
+	// Get control method
+	// @todo Where can I find information about the 'Control' values?
+	$pcontrol = $games->Control == 0 ? 'Joystick Port 2' : '';
+
+	// Get number of players
+	// @todo Might be more values to find later?
+	$pl_fr = $games->PlayersFrom;
+	$pl_to = $games->PlayersTo;
+	$players = '';
+	if ($pl_fr == 1 && $pl_to == 1)
+		$players = '1P Only';
+	else if ($pl_fr == 1 && $pl_to == 2)
+		$players = '1 - 2';
+
+	// Get comment
+	$comments = $games->Comment;
+
+	// Get screenshot paths
+	$webPathBase = '/images/gb64'; // Folder with GB64 screenshots
+	$diskPathBase = $_SERVER['HTTP_HOST'] == LOCALHOST
+		? '..'.$webPathBase
+		: $_SERVER['DOCUMENT_ROOT'].'/deepsid'.$webPathBase;
 	
-	// Find publisher line ("1986, Mastertronic")
-	$nodes = $xpath->query('//td/font[contains(text(), "Published:")]/..//b');
-	$year = $nodes->item(0)->textContent;
-	$company = $nodes->item(1)->textContent;
-
-	// Find musician(s)
-	$nodes = $xpath->query('//td/font[contains(text(), "Musician:")]/..//b');
-	$musician = $nodes->item(0)->textContent;
-
-	// Sometimes there is a HTML comment appended to the musician(s) that confuses the XML library
-	$musician = str_replace(' >', '', $musician);
-
-	// Find graphics artist(s)
-	$nodes = $xpath->query('//td/font[contains(text(), "Graphician:")]/..//b');
-	$graphics = $nodes->item(0)->textContent;
-
-	// Find programmer
-	$nodes = $xpath->query('//td/font[contains(text(), "Programmer:")]/..//b');
-	$programmer = $nodes->item(0)->textContent;
-	
-	// Find language
-	$nodes = $xpath->query('//td/font[contains(text(), "Language:")]/..//b');
-	$language = $nodes->item(0)->textContent;
-
-	// Find genre (not always present)
-	$nodes = $xpath->query('//td/font[contains(text(), "Genre:")]/..//b');
-	$genre = isset($nodes->item(0)->textContent) ? $nodes->item(0)->textContent : '';
-	
-	// Find clone of (usually always empty)
-	$nodes = $xpath->query('//td/font[contains(text(), "Clone Of:")]/..//b');
-	$clone = $nodes->item(0)->textContent;
-
-	// Find primary control
-	$nodes = $xpath->query('//td/font[contains(text(), "Primary Control:")]/..//b');
-	$pcontrol = $nodes->item(0)->textContent;
-
-	// Find players
-	$nodes = $xpath->query('//td/font[contains(text(), "Players:")]/..//b');
-	$players = $nodes->item(0)->textContent;
-
-	// Find comments (not always present)
-	// NOTE: Have to first ensure 'Players:' is just above it to avoid fetching an
-	// irrelevant comment in the 'Version Info' section further down the page.
-	$nodes = $xpath->query('//td/font[contains(text(), "Players:")]/../../../tr/td/font[contains(text(), "Comment:")]/..//b');
-	$comments = isset($nodes->item(0)->textContent) ? ucfirst($nodes->item(0)->textContent) : '';
-
-	// Loop through each occurrence of the screenshot javascript call in the GB64 HTML
-	// @todo This really should be converted to use the xpath stuff too.
-	if (strpos($page, $find_scr)) {
-		// There's a table row with several screenshots to choose among
-		$last_pos = 0;
-		$thumbnails = array();
-		while (($last_pos = stripos($page, $find_scr, $last_pos)) !== false) {
-			// Isolate the thumbnail path
-			$image_pos = stripos($page, $piece_scr, $last_pos) + strlen($piece_scr);
-			$thumbnails[] = substr($page, $image_pos, stripos($page, '.png', $image_pos) - $image_pos + 4);
-			$last_pos = $last_pos + strlen($find_scr);
-		}
-	} else if (strpos($page, $piece_scr)) {
-		// There's only one screenshot in the "monitor" graphics
-		$image_pos = stripos($page, $piece_scr) + strlen($piece_scr);
-		$thumbnails = array(
-			substr($page, $image_pos, stripos($page, '.png', $image_pos) - $image_pos + 4)
-		);
-	} else {
+	if (empty($games->ScrnshotFilename)) {
 		// There are no screenshots at all
 		$thumbnails = array('/noscreenshot.gif');
+	} else {
+		// Extract the directory and filename (without extension)
+		$relativePath = str_replace('\\', '/', $games->ScrnshotFilename);
+		
+		$dirname = pathinfo($relativePath, PATHINFO_DIRNAME); // "S"
+		$filename = pathinfo($relativePath, PATHINFO_FILENAME); // "Sanxion"
+		$extension = pathinfo($relativePath, PATHINFO_EXTENSION); // "png"
+
+		// Build the glob pattern for e.g. "S/Sanxion.png" and its variants with "_1", "_2", etc.
+		$pattern = $diskPathBase . '/' . $dirname . '/' . $filename . '{,_?}.' . $extension;
+
+		// Some filenames include e.g. "[Preview]" - those brackets need to be escaped
+		$pattern = str_replace('[', '\[', $pattern);
+		$pattern = str_replace(']', '\]', $pattern);
+
+		// Find all matching files
+		$matches = glob($pattern, GLOB_BRACE);
+
+		if (!empty($matches)) {
+			// Convert full paths to web paths (strip 'images/gb64/')
+			if ($_SERVER['HTTP_HOST'] == LOCALHOST) {
+				$thumbnails = array_map(function($path) use ($diskPathBase) {
+					return '/' . substr($path, strlen($diskPathBase));
+				}, $matches);
+			} else {
+		        $thumbnails = array_map(function($path) use ($diskPathBase) {
+		            // Convert absolute path to web path
+        		    return str_replace($diskPathBase, '', $path);
+        		}, $matches);
+			}
+		} else {
+			$thumbnails = array('/noscreenshot.gif');
+		}
 	}
 	$thumbnails = array_reverse($thumbnails);		// Want the title screen to be first in line
 
@@ -153,68 +181,66 @@ function ReadRawGB64($id) {
 
 /***** START *****/
 
-if (isset($_GET['fullname'])) {
-	// Prepare for a list of links
-	try {
-		if ($_SERVER['HTTP_HOST'] == LOCALHOST)
-			$db = new PDO(PDO_LOCALHOST, USER_LOCALHOST, PWD_LOCALHOST);
-		else
-			$db = new PDO(PDO_ONLINE, USER_ONLINE, PWD_ONLINE);
-		$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-		$db->exec("SET NAMES UTF8");
+try {
 
-		// Get the GB64 array from the database row
-		$select = $db->prepare('SELECT gb64 FROM hvsc_files WHERE fullname = :fullname LIMIT 1');
-		$select->execute(array(':fullname'=>$_GET['fullname']));
+	// Connect to DeepSID database
+	if ($_SERVER['HTTP_HOST'] == LOCALHOST)
+		$db = new PDO(PDO_LOCALHOST, USER_LOCALHOST, PWD_LOCALHOST);
+	else
+		$db = new PDO(PDO_ONLINE, USER_ONLINE, PWD_ONLINE);
+	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+	$db->exec("SET NAMES UTF8");
+
+	// Connect to imported GameBase64 database
+	if ($_SERVER['HTTP_HOST'] == LOCALHOST)
+		$gb = new PDO(PDO_GB_LOCAL, USER_LOCALHOST, PWD_LOCALHOST);
+	else
+		$gb = new PDO(PDO_GB_ONLINE, USER_GB_ONLINE, PWD_GB_ONLINE);
+	$gb->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+	$gb->exec("SET NAMES UTF8");
+
+	if (isset($_GET['fullname'])) {
+
+		// Get rid of the HVSC folder in the beginning
+		$sidFilename = substr($_GET['fullname'], strpos($_GET['fullname'], '/') + 1);
+		$sidFilename = str_replace('/', '\\', $sidFilename);
+
+		// What games are using this SID file?
+		$select = $gb->prepare('SELECT GA_Id FROM Games WHERE SidFilename = :fullname');
+		$select->execute(array(':fullname'=>$sidFilename));
 		$select->setFetchMode(PDO::FETCH_OBJ);
 
+		// Collect the GB64 ID numbers (if any)
+		$gbIds = array();
 		if ($select->rowCount()) {
-			$array = $select->fetch()->gb64;
-			if (empty($array))
-				die(json_encode(array('status' => 'warning', 'html' => '<p style="margin-top:0;"><i>No GameBase64 entries available.</i></p>')));
-			else {
-				// Format: [{name: "Air-Raid [Preview], id: 14006}, {...}]
-				$array = preg_replace_callback( // UTF8 fix
-					'!s:(\d+):"(.*?)";!s',
-					function($m) {
-						$len = strlen($m[2]);
-						$result = "s:$len:\"{$m[2]}\";";
-						return $result;
-					},
-					$array);
-				try {
-					$gb64 = unserialize($array);
-				} catch(Exception $e) {
-					$account->LogActivityError('gb64.php', $e);
-					$account->LogActivityError('gb64.php', $array);
-					die(json_encode(array('status' => 'fatal', 'html' => '<p>Something bad happened. Chordian will be able to see this in a log.</p><p>'.$e.'</p>'.$array)));
-				}
-				//$gb64 = array_reverse($gb64); // To get original game in top (most common order)
+			foreach ($select as $row) {
+				$gbIds[] = $GbRows = $row->GA_Id;
 			}
 		} else {
-			$account->LogActivityError('gb64.php', 'No database info returned; $_GET[\'fullname\'] = '.$_GET['fullname']);
-			die(json_encode(array('status' => 'error', 'message' => "Couldn't find the information in the database.")));
+			die(json_encode(array('status' => 'warning', 'html' => '<p style="margin-top:0;"><i>No GameBase64 entries available.</i></p>')));
 		}
-	} catch(PDOException $e) {
-		$account->LogActivityError('gb64.php', $e->getMessage());
-		die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
-	}
 
-	// If only one result then just show that as a sub page
-	$page_id = count($gb64) == 1 ? $gb64[0]['id'] : 0;
+		// If only one result then just show that as a sub page
+		$page_id = count($gbIds) == 1 ? $gbIds[0] : 0;
 
-} else if (isset($_GET['id'])) {
-	// A specific sub page ID was specified
-	$page_id = $_GET['id'];
-	$gb64 = [1];
-} else
-	die(json_encode(array('status' => 'error', 'message' => 'You must specify the proper GET variables.')));
+	} else if (isset($_GET['id'])) {
+
+		// A specific sub page ID was specified
+		$page_id = $_GET['id'];
+		$gbIds = array(1);
+
+	} else
+		die(json_encode(array('status' => 'error', 'message' => 'You must specify the proper GET variables.')));
+
+} catch(PDOException $e) {
+	$account->LogActivityError('gb64.php', $e->getMessage());
+	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
+}
 
 if ($page_id) {
 
 	/***** SUB PAGE *****/
-
-	$data = ReadRawGB64($page_id);
+	$data = ReadGB64DB($page_id);
 
 	$published		= '<p style="margin-top:-2px;"><b>Published:</b><br />'.$data['year'].', '.$data['company'].'</p>';
 	$musician		= (!empty($data['musician']) ? '<p><b>Music:</b><br />'.$data['musician'].'</p>' : '');
@@ -271,20 +297,20 @@ if ($page_id) {
 
 	$rows = '';
 
-	foreach($gb64 as $entry) {
+	foreach($gbIds as $id) {
 
-		$data = ReadRawGB64($entry['id']);
+		$data = ReadGB64DB($id);
 
 		$thumbnails = array_slice($data['thumbnails'], 0, 4);	// Maximum 4 thumbnails
 
 		$line_of_thumbnails = '';
 		foreach($thumbnails as $thumbnail)
-			$line_of_thumbnails .= '<a class="gb64-list-entry" href="https://gb64.com/game.php?id='.$entry['id'].'" target="_blank" data-id="'.$entry['id'].'"><img class="gb64" src="images/gb64'.$thumbnail.'" alt="'.$thumbnail.'" /></a>';
+			$line_of_thumbnails .= '<a class="gb64-list-entry" href="https://gb64.com/game.php?id='.$id.'" target="_blank" data-id="'.$id.'"><img class="gb64" src="images/gb64'.$thumbnail.'" alt="'.$thumbnail.'" /></a>';
 
 		$rows .=
 			'<tr>'.
 				'<td class="info">'.
-					'<a class="name gb64-list-entry" href="https://gb64.com/game.php?id='.$entry['id'].'" target="_blank" data-id="'.$entry['id'].'">'.$entry['name'].'</a><br />'.
+					'<a class="name gb64-list-entry" href="https://gb64.com/game.php?id='.$id.'" target="_blank" data-id="'.$id.'">'.$data['title'].'</a><br />'.
 					$data['year'].' '.$data['company'].'<br />'.
 					'<span class="language">'.$data['language'].'</span>'.
 				'</td>'.
@@ -296,10 +322,10 @@ if ($page_id) {
 
 	// Now build the HTML
 	$html = '<h2 style="display:inline-block;margin-top:0;">GameBase64</h2>'.
-		'<h3>'.count($gb64).' entr'.(count($gb64) > 1 ? 'ies' : 'y').' found</h3>'.
+		'<h3>'.count($gbIds).' entr'.(count($gbIds) > 1 ? 'ies' : 'y').' found</h3>'.
 		'<table class="releases">'.
 			$rows.
 		'</table>';
 }
-echo json_encode(array('status' => 'ok', 'html' => $html, 'count' => count($gb64)));
+echo json_encode(array('status' => 'ok', 'html' => $html, 'count' => count($gbIds)));
 ?>

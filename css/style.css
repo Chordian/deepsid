@@ -64,6 +64,8 @@
 	--color-text-tag-digi:			var(--color-text-tag);
 	--color-bg-tag-r64start:		#6c7cc0;
 	--color-bg-tag-remix64:			linear-gradient(to right, var(--color-bg-tag-r64start) 0%,#5458b0 100%);
+	--color-bg-tag-gb64start:		#7b7363; /*#634e42;*/
+	--color-bg-tag-gamebase64:		var(--color-bg-tag-gb64start);
 	--color-text-tag-warning:		var(--color-text-tag);
 	--color-bg-tag-warning:			#c33;
 
@@ -455,6 +457,8 @@
 	--color-text-tag-digi:			var(--color-text-tag);
 	--color-bg-tag-r64start:		#6878b0;
 	--color-bg-tag-remix64:			linear-gradient(to right, var(--color-bg-tag-r64start) 25%,#465692 100%);
+	--color-bg-tag-gb64start:		#685246; /* #634e42; */
+	--color-bg-tag-gamebase64:		var(--color-bg-tag-gb64start);
 	--color-text-tag-warning:		var(--color-text-tag);
 	--color-bg-tag-warning:			#f88;
 
@@ -2355,6 +2359,11 @@ input[type=range]::-ms-track {
 				background: url(../images/remix64.png) 11px 2.5px / 54px 7.5px no-repeat, var(--color-bg-tag-remix64);
 			}
 
+			.tag-gamebase64 {
+				width: 81px;
+				background: url(../images/gamebase64.png) 11px 3px / 66px 7.5px no-repeat, var(--color-bg-tag-gamebase64);
+			}
+
 		.edit-tags {
 			display: none;
 			padding: 0;
@@ -2414,6 +2423,10 @@ input[type=range]::-ms-track {
 
 				.tag-remix64:before {
 					border-color: transparent var(--color-bg-tag-r64start) transparent transparent;
+				}
+
+				.tag-gamebase64:before {
+					border-color: transparent var(--color-bg-tag-gb64start) transparent transparent;
 				}
 
 				#songs tr.selected .tag:before,

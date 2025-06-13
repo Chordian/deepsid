@@ -553,6 +553,29 @@ $(function() { // DOM ready
 	});
 
 	/**
+	 * When clicking a title or thumbnail in a list of GameBase64 entries.
+	 */
+	$("#topic-gb64").on("click", ".gb64-list-entry", function() {
+		// First cache the list of releases in case we return to it
+		cacheGB64 = $("#topic-gb64").html();
+		cacheGB64TabScrollPos = $("#page").scrollTop();
+		// Show the page
+		browser.getGB64($(this).attr("data-id"));
+		return false;
+	});
+
+
+	/**
+	 * When clicking the 'BACK' button on a GameBase64 page to show the list of them again.
+	 */
+	$("#topic-gb64").on("click", "#go-back-gb64", function() {
+		// Load the cache again
+		$("#topic-gb64")/*.css("visibility", "hidden")*/.empty().append(cacheGB64);
+		// Also set scroll position to where we clicked last time
+		SetScrollTopInstantly("#page", cacheGB64TabScrollPos);
+	}),
+
+	/**
 	 * When the color theme toggle button is clicked.
 	 * 
 	 * A data attribute is set in the BODY element. Profile avatars and brand images
@@ -1005,16 +1028,6 @@ $(function() { // DOM ready
 			SetScrollTopInstantly("#page", cachePlayerTabScrollPos);
 		}
 	}),
-
-	/**
-	 * When clicking the 'BACK' button on a GameBase64 page to show the list of them again.
-	 */
-//	$("#topic-gb64").on("click", "#go-back-gb64", function() {
-		// Load the cache again
-//		$("#topic-gb64")/*.css("visibility", "hidden")*/.empty().append(cacheGB64);
-		// Also set scroll position to where we clicked last time
-//		SetScrollTopInstantly("#page", cacheGB64TabScrollPos);
-//	}),
 
 	/**
 	 * When clicking the 'BACK' button on a 'Remix' page to show the list of them again.
@@ -1523,18 +1536,6 @@ $(function() { // DOM ready
 	}),
 
 	/**
-	 * When clicking a title or thumbnail in a list of GameBase64 entries.
-	 */
-//	$("#topic-gb64").on("click", ".gb64-list-entry", function() {
-		// First cache the list of releases in case we return to it
-//		cacheGB64 = $("#topic-gb64").html();
-//		cacheGB64TabScrollPos = $("#page").scrollTop();
-		// Show the page
-//		browser.getGB64($(this).attr("data-id"));
-//		return false;
-//	});
-
-	/**
 	 * When clicking a title or thumbnail in a list of remix entries.
 	 */
 	$("#topic-remix").on("click", ".remix-list-entry", function() {
@@ -1934,23 +1935,25 @@ $(window).on("load", function() {
 function ShowSundryFilterContents() {
 	$("#filter-websid").hide();
 	$("#stopic-filter form").show();
-	if (SID.emulator == "websid" && SID.getModel() == "6581") {
-		// Enable filter controls
-		$("#stopic-filter form label,#stopic-filter form input,#filter-revisions button")
-			.prop("disabled", false).removeClass("disabled");
-		$("#filter-6581").addClass("disable-6581");
-		$("#filter-6581 button").prop("disabled", true).addClass("disabled");
-	} else if (SID.emulator == "websid") {
-		// Disable filter controls (since 6581 chip mode is not active)
-		$("#stopic-filter form label,#stopic-filter form input,#filter-revisions button")
-			.prop("disabled", true).addClass("disabled");
-		$("#filter-6581").removeClass("disable-6581");
-		$("#filter-6581 button").prop("disabled", false).removeClass("disabled");
-	} else {
-		// Show "WebSid" button (the HQ version is required for these controls)
-		$("#filter-websid").show();
-		$("#stopic-filter form").hide();
-	}
+	setTimeout(function(){
+		if (SID.emulator == "websid" && SID.getModel() == "6581") {
+			// Enable filter controls
+			$("#stopic-filter form label,#stopic-filter form input,#filter-revisions button")
+				.prop("disabled", false).removeClass("disabled");
+			$("#filter-6581").addClass("disable-6581");
+			$("#filter-6581 button").prop("disabled", true).addClass("disabled");
+		} else if (SID.emulator == "websid") {
+			// Disable filter controls (since 6581 chip mode is not active)
+			$("#stopic-filter form label,#stopic-filter form input,#filter-revisions button")
+				.prop("disabled", true).addClass("disabled");
+			$("#filter-6581").removeClass("disable-6581");
+			$("#filter-6581 button").prop("disabled", false).removeClass("disabled");
+		} else {
+			// Show "WebSid" button (the HQ version is required for these controls)
+			$("#filter-websid").show();
+			$("#stopic-filter form").hide();
+		}
+	}, 0);
 }
 
 /**

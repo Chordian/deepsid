@@ -2,42 +2,6 @@ How to update DeepSID to a new version of GameBase64.
 
 Let's call the new version ## in this document.
 
-
-
-
-THIS NEEDS TO BE UPDATED FOR THE NEW DATABASE METHOD!
-
-Include this step in the updated text:
-
-Fixing:
-
-  1. Open the online "gamebase" database in phpMyAdmin.
-  2. Select the "Games" database and search for "tintin" in the "Name" field.
-  3. Edit the SID screenshot filename and change the upper case "O" to a lower
-     case "o" instead.
-  4. Open the following to see if the screenshots now pop up in the tab:
-     https://deepsid.chordian.net/?file=/MUSICIANS/T/Tel_Jeroen/Tintin_on_the_Moon.sid&tab=gb64
-
-
-Chris Cox: Get Off My Garden.sid: Lower "m" instead.
-Jay Derrey: ZIP: Change "Zip "to upper case "ZIP".
-Matt Furniss: Badlands: Upper case "L" instead.
-Matt Furniss: STUN Runner: Change "Stun" to upper case "STUN".
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 Requirements
 ¯¯¯¯¯¯¯¯¯¯¯¯
   o  Access to MySQL databases (LOCALHOST and/or ONLINE) through PhpMyAdmin.

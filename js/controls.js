@@ -452,7 +452,11 @@ Controls.prototype = {
 					}.bind(this));
 				} else if (event.target.className.substr(0, 3) == "tag") {
 					// Clicked a tag in the sundry box; search "here" for it now
-					var tag = event.target.innerHTML == "&nbsp;&nbsp;" ? "remix64" : event.target.innerHTML.toLowerCase();
+					var tag = event.target.innerHTML.toLowerCase();
+					if ($(event.target).hasClass("tag-remix64"))
+						tag = "remix64";
+					else if ($(event.target).hasClass("tag-gamebase64"))
+						tag = "gamebase64";
 					$("#dropdown-search").val("tag");
 					$("#search-here").prop('checked', true);
 					$("#search-box").val('"'+tag+'"').trigger("keyup");
@@ -625,7 +629,7 @@ Controls.prototype = {
 				}
 			}
 		}, 150);
-	// Remember unique file ID in case the user clicks the star rating in the info box
+		// Remember unique file ID in case the user clicks the star rating in the info box
 		this.currentFileID = browser.playlist[browser.songPos].id;
 		this.updateInfoRating();
 		// Collection version

@@ -28,6 +28,14 @@ define('PDO_ONLINE',		'mysql:host='.HOST_ONLINE.';dbname='.DB_ONLINE);
 define('USER_ONLINE',		'[REDACTED]');
 define('PWD_ONLINE',		'[REDACTED]');
 
+define('DB_GB_LOCAL',       'gamebase');                // Name of imported GB64 database
+define('PDO_GB_LOCAL',		'mysql:host='.HOST_LOCALHOST.';dbname='.DB_GB_LOCAL);
+
+define('DB_GB_ONLINE',      'chordian_netgamebase');
+define('PDO_GB_ONLINE',		'mysql:host='.HOST_ONLINE.';dbname='.DB_GB_ONLINE);
+define('USER_GB_ONLINE',	'chordian_netgamebase');
+define('PWD_GB_ONLINE',		'commodore64');
+
 define('REMIX64_API',       'oDqHpvKZp2fM05JydWY2ylR8bCE8Y2PN');
 
 define('DB_ERROR',          'A database error has been written to a log regularly monitored by Chordian.');
