@@ -7,7 +7,7 @@ var $=jQuery.noConflict();
 
 var cacheCSDb = cacheSticky = cacheStickyBeforeCompo = cacheCSDbProfile = cacheBeforeCompo = cachePlayer = cacheGB64 = cacheRemix = prevFile = sundryTab = reportSTIL = "";
 var cacheTabScrollPos = cachePlayerTabScrollPos = cacheGB64TabScrollPos = cacheRemixTabScrollPos = cachePosBeforeCompo = cacheDDCSDbSort = peekCounter = sundryHeight = 0;
-var sundryToggle = true, recommended = forum = players = $trAutoPlay = null, showTags, fastForwarding = false;
+var sundryToggle = true, recommended = forum = players = $trAutoPlay = null, showTags, fastForwarding, registering = false;
 var logCount = 1000, isMobile, miniPlayer;
 
 var isMobile = $("body").attr("data-mobile") !== "0";
@@ -438,14 +438,40 @@ $(function() { // DOM ready
 	});
 
 	/**
+	 * Click 'Register' in the login/register response line.
+	 */
+	$("#response").on("click", "a.reg-new", function() {
+		$("#label-username").empty().append('<span class="new-user">New</span>');
+		$("#label-password").empty().append('<span class="new-user">Pw</span>');
+		$("#response").empty().removeClass("good bad").append('Type the user name and password | <a href="#" class="reg-cancel">Cancel</a>');
+		$("#username,#password").val("");
+		$("#reg-login-button").prop("disabled", false).removeClass("disabled");
+		registering = true;
+		return false;
+	});
+
+	/**
+	 * Click 'Cancel' in the login/register response line.
+	 */
+	$("#response").on("click", "a.reg-cancel", function() {
+		$("#label-username").empty().append('User');
+		$("#label-password").empty().append('Pw');
+		$("#response").empty().removeClass("good bad").append('Login or <a href="#" class="reg-new">register</a> to rate tunes');
+		$("#username,#password").val("");
+		$("#reg-login-button").prop("disabled", false).removeClass("disabled");
+		registering = false;
+		return false;
+	});
+
+	/**
 	 * Submit a login/register attempt.
 	 * 
 	 * @param {*} event 
 	 */
 	$("#userform").submit(function(event) {
 		event.preventDefault();
-		if ($("#username").val() === "" || $("#password").val() === "") return false;
-		if (!userExists) {
+		if ($("#username").val() === "" || $("#password").val() === "" || $("#reg-login-button").hasClass("disabled")) return false;
+		if (registering) {
 			// Show a dialog confirmation box first
 			CustomDialog({
 				id: '#dialog-register',
@@ -455,8 +481,7 @@ $(function() { // DOM ready
 				width: 389,
 				height: 195,
 			}, LoginOrRegister, function() {
-				$("#response").empty().removeClass("good bad").append("Login or register to rate tunes");
-				$("#username,#password").val("");
+				$("#response a.reg-cancel").trigger("click");
 			});
 		} else
 			LoginOrRegister();
@@ -467,7 +492,34 @@ $(function() { // DOM ready
 	 */
 	function LoginOrRegister() {
 		$("#response").empty().removeClass("good bad").append("Hang on");
-		$.post("php/account_login_register.php?register="+!userExists, $("#userform").serialize(), function(data) {
+		// Does this username exist?
+		$.post("php/account_exists.php", { username: $("#username").val() }, function(data) {
+			browser.validateData(data, function(data) {
+
+				if (data['exists']) {
+					if (registering)
+						// This situation should not occur
+						$("#response a.reg-cancel").trigger("click");
+					else
+						ExecuteLoginOrRegister(false);	// User name exists so log in
+				} else {
+					if (registering)
+						ExecuteLoginOrRegister(true);	// Register the new user name
+					else {
+						$("#response").empty().removeClass("good bad").addClass("bad").append('This user name does not exist');
+					}
+				}
+			});
+		}.bind(this));
+	}
+
+	/**
+	 * Perform the registration of login.
+	 * 
+	 * @param {boolean} register	TRUE if registering, FALSE if just logging in
+	 */
+	function ExecuteLoginOrRegister(register) {
+		$.post("php/account_login_register.php?register="+register, $("#userform").serialize(), function(data) {
 			browser.validateData(data, function(data) {
 				if (data['result'] === false) {
 					// PHP login script reported an error
@@ -487,23 +539,23 @@ $(function() { // DOM ready
 	$("#username").keyup(function(event) {
 		if (event.keyCode == 13)
 			$("#password").focus();
-		else {
-			// Throttle the reaction to the typing
-			// Commented out the throttle in July 2023 to prevent automatic password entering systems
-			// from overtaking it, thereby confusing DeepSID about whether the user name is already taken.
-			//setTimeout(function() {
-				// So does this username exist?
-				$.post("php/account_exists.php", { username: $("#username").val() }, function(data) {
-					browser.validateData(data, function(data) {
+		else if (registering) {
+			// So does this username exist?
+			$.post("php/account_exists.php", { username: $("#username").val() }, function(data) {
+				browser.validateData(data, function(data) {
+					var $response = $("#response");
+					$response.empty().removeClass("good bad");
 
-						userExists = data['exists'];
-						$("#response").empty().removeClass("good bad").addClass("good").append(userExists
-							? "User exists; click to log in"
-							: "User name is available; type a password and log in");
+					if (data['exists']) {
+						$response.addClass("bad").append('The user name already exists | <a href="#" class="reg-cancel">Cancel</a>');
+						$("#reg-login-button").prop("disabled", true).addClass("disabled");
+					} else {
+						$response.addClass("good").append('The user name is available | <a href="#" class="reg-cancel">Cancel</a>');
+						$("#reg-login-button").prop("disabled", false).removeClass("disabled");
+					}
 
-					});
-				}.bind(this));
-			//}, 350);
+				});
+			}.bind(this));
 		}
 	}).on("input", function() {
 		// This event triggers if the field has been autocompleted
@@ -564,6 +616,21 @@ $(function() { // DOM ready
 		return false;
 	});
 
+	/**
+	 * When clicking a GB64 sub-page screenshot to zoom it up.
+	 */
+	$("#topic-gb64").on("click", ".zoom-gb64", function() {
+		$("#dialog-cover").show();
+		$("#zoomed-gb64").attr("src", $(this).attr("data-src")).show();
+		return false;
+	});
+
+	/**
+	 * When clicking a zoomed up GB64 screenshot to discard it.
+	 */
+	$("#zoomed-gb64").on("click", function() {
+		$("#dialog-cover,#zoomed-gb64").hide();
+	});
 
 	/**
 	 * When clicking the 'BACK' button on a GameBase64 page to show the list of them again.

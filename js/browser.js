@@ -216,7 +216,7 @@ Browser.prototype = {
 		$(document).keyup(function(event) {
 			switch (event.keyCode) {
 				case 27: // ESC
-					$("#dialog-cover,.dialog-box").hide();
+					$("#dialog-cover,.dialog-box,#zoomed-gb64").hide();
 					$("#contextmenu,#contextsubmenu").remove();
 					$("#dialog-all-tags").blur();
 					if (typeof this.contextTR != "undefined")
@@ -352,6 +352,8 @@ Browser.prototype = {
 					}
 					ctrls.state("prev/next", "disabled");
 					ctrls.state("subtunes", "disabled");
+					if (this.isSearching)
+						this.scrollPositions.pop(); // First pop out of search state
 					this.getFolder(this.scrollPositions.pop(), undefined,
 						(this.path === "/CSDb Music Competitions" || this.path === "/_Compute's Gazette SID Collection")
 							&& this.cache.folder !== "" /* <- Boolean parameter */ );

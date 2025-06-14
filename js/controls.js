@@ -291,7 +291,7 @@ Controls.prototype = {
 
 				// A timed out tune should only auto-center if a setting demands it
 				if (!isAutoProgress || GetSettingValue("mark-tune")) {
-					var rowPos = $("tr").eq($("tr.selected").index())[0].offsetTop;
+					var rowPos = $("#folders tr").eq($("tr.selected").index())[0].offsetTop;
 					var halfway = $("#folders").height() / 2 - 26; // Last value is half of SID file row height
 					$("#folders").scrollTop(rowPos > halfway ? rowPos - halfway : 0);
 				}

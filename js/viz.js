@@ -1432,7 +1432,7 @@ Viz.prototype = {
 	},
 
 	/**
-	 * Covert a byte to hexadecimal + both lower and upper case PETSCII characters.
+	 * Convert a byte to hexadecimal + both lower and upper case PETSCII characters.
 	 * 
 	 * NOTE: The caller must handle the negative class for PETSCII.
 	 * 

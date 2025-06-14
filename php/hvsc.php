@@ -161,6 +161,37 @@ try {
 					$datasize = hexdec(substr($datasize, 2));
 				$select->execute(array(':datasize'=>$datasize));
 
+			} else if ($_GET['searchType'] == 'gb64') {
+
+				// Connect to imported GameBase64 database
+				if ($_SERVER['HTTP_HOST'] == LOCALHOST)
+					$gb = new PDO(PDO_GB_LOCAL, USER_LOCALHOST, PWD_LOCALHOST);
+				else
+					$gb = new PDO(PDO_GB_ONLINE, USER_GB_ONLINE, PWD_GB_ONLINE);
+				$gb->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+				$gb->exec("SET NAMES UTF8");
+
+				// Parse the search query
+				$word_list = '';
+				$search_words = ParseQuery($_GET['searchQuery']);
+				foreach($search_words as $word)
+					$word_list .= ' OR (Name LIKE "%'.$word.'%" AND SidFilename != "")';
+				$word_list = substr($word_list, 4);
+
+				// Get list of SID files from GameBase64 database
+				$select_gb64 = $gb->query('SELECT SidFilename FROM Games WHERE '.$word_list.' LIMIT 1000');
+				$select_gb64->setFetchMode(PDO::FETCH_OBJ);
+
+				$chain = '1 = 2';
+				foreach ($select_gb64 as $sid) {
+					$sid = '_High Voltage SID Collection/'.$sid->SidFilename;
+					$sid = str_replace('\\', '/', $sid);
+
+					$chain .= ' OR fullname = "'.$sid.'"';
+				}
+
+				$select = $db->query('SELECT fullname from hvsc_files WHERE '.$chain.' LIMIT 1000');
+
 			} else if ($_GET['searchType'] == 'type') {
 
 				$select = $db->prepare('SELECT fullname FROM hvsc_files'.
@@ -246,7 +277,7 @@ try {
 					if ($_GET['searchType'] == '#all#') {
 						// Searching ALL should of course include a range of columns
 						$columns = $comma = '';
-						foreach(array('fullname', 'author', 'copyright', 'player', 'stil', 'gb64') as $column) {
+						foreach(array('fullname', 'author', 'copyright', 'player', 'stil') as $column) {
 							$columns .= $comma.$column.', " "';
 							$comma = ', ';
 						}
@@ -493,7 +524,7 @@ try {
 						if ($_GET['searchType'] == '#all#') {
 							// Searching ALL should of course include a range of columns
 							$columns = $comma = '';
-							foreach(array('fullname', 'author', 'copyright', 'player', 'stil', 'gb64') as $column) {
+							foreach(array('fullname', 'author', 'copyright', 'player', 'stil') as $column) {
 								$columns .= $comma.$column.', " "';
 								$comma = ', ';
 							}

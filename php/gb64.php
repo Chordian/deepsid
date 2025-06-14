@@ -255,7 +255,7 @@ if ($page_id) {
 
 	$col_of_thumbnails = '';
 	foreach($data['thumbnails'] as $thumbnail)
-		$col_of_thumbnails .= '<img class="thumbnail-gb64" src="images/gb64'.$thumbnail.'" alt="'.$thumbnail.'" /> ';
+		$col_of_thumbnails .= '<a href="#" class="zoom-gb64" data-src="images/gb64'.$thumbnail.'"><img class="thumbnail-gb64" src="images/gb64'.$thumbnail.'" alt="'.$thumbnail.'" /></a> ';
 
 	// Now build the HTML
 	$html = '<h2 style="display:inline-block;margin-bottom:20px;">'.$data['title'].'</h2>'.

@@ -70,7 +70,7 @@
 	'	<h3>Registering</h3>
 
 		<h4>Registering a new user</h4>
-		<p>Just type a user and password. If the user is unknown, DeepSID will accept it as a new user.</p>
+		<p>Just click the <b>Register</b> link above the user name and password boxes to begin the registration process.</p>
 		<b>So, what can you do when logged in?</b>
 
 		<h4>Rate tunes and folders</h4>

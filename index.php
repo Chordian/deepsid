@@ -325,6 +325,7 @@
 				<span class="text-below"><?php echo isMobile() ? 'Touch' : 'Click'; ?> to play</span>
 			</div>
 		</div>
+		<img id="zoomed-gb64" src="" alt="Zoomed screenshot from GB64" />
 
 		<div id="dialog-register" class="dialog-box">
 			<div class="dialog-text"></div>
@@ -550,19 +551,19 @@
 					<?php else : ?>
 						<form id="userform" action="<?php echo $account->Self(); ?>" method="post" accept-charset="UTF-8">
 							<fieldset>
-								<div id="response">Login or register to rate tunes</div>
+								<div id="response">Login or <a href="#" class="reg-new">register</a> to rate tunes</div>
 								<input type="hidden" name="submitted" value="1" />
 								<input type="text" class="spmhidip" name="<?php echo $account->SpamTrapName(); ?>" style="display:none;" />
 
-								<label for="username">User</label>
+								<label for="username" id="label-username">User</label>
 								<input type="text" name="username" id="username" value="<?php echo $account->PostValue('username'); ?>" maxlength="64" />
 
-								<label for="password">Pw</label>
+								<label for="password" id="label-password">Pw</label>
 								<input type="password" name="password" id="password" maxlength="32" />
 
 								<label>
 									<input type="submit" name="submit" value="Submit" style="display:none;" />
-									<button title="Log in or register">
+									<button title="Log in or register" id="reg-login-button">
 										<svg height="14" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1312 896q0 26-19 45l-544 544q-19 19-45 19t-45-19-19-45v-288h-448q-26 0-45-19t-19-45v-384q0-26 19-45t45-19h448v-288q0-26 19-45t45-19 45 19l544 544q19 19 19 45zm352-352v704q0 119-84.5 203.5t-203.5 84.5h-320q-13 0-22.5-9.5t-9.5-22.5q0-4-1-20t-.5-26.5 3-23.5 10-19.5 20.5-6.5h320q66 0 113-47t47-113v-704q0-66-47-113t-113-47h-312l-11.5-1-11.5-3-8-5.5-7-9-2-13.5q0-4-1-20t-.5-26.5 3-23.5 10-19.5 20.5-6.5h320q119 0 203.5 84.5t84.5 203.5z"/></svg>
 									</button>
 								</label>
@@ -626,9 +627,7 @@
 							<!--<span>The <a href="https://www.hvsc.c64.org/" target="_top">High Voltage SID Collection</a> has been upgraded to the latest version #82. Click <a href="//deepsid.chordian.net/?search=82&type=new">here</a> to see what's new in this update.</span>-->
 							<!--<span><a href="http://www.c64music.co.uk/" target="_top">Compute's Gazette SID Collection</a> has been upgraded to the latest version #146. Click <a href="//deepsid.chordian.net/?search=146&type=new">here</a> to see what's new in this update.</span>-->
 							<!--<a href="https://xparty.net/"><img src="images/sundry_x2024.png" alt="X'2024" /></a>-->
-							<!--<span>The 'Remix' tab entries are unavailable at the moment due to a change at the Remix64 web site. We are working on fixing the problem.</span>-->
-							<span>The 'GB64' tab (for SID files used in games) is back, and the 'Remix' tab is  working again.</span>
-							<!--<span>I changed some Javascript files so make sure your browser cache is up to date. On Windows, hit <b style="color:#77c;">Ctrl+F5</b> while viewing the site, on Mac, hit <b style="color:#77c;">Cmd+Shift+R</b>.</span>-->
+							<span>I changed some Javascript files so make sure your browser cache is up to date. On Windows, hit <b style="color:#77c;">Ctrl+F5</b> while viewing the site, on Mac, hit <b style="color:#77c;">Cmd+Shift+R</b>.</span>
 							<!--<span>Want to learn how to make SID tunes? Check out <a href="https://www.youtube.com/watch?v=nXNtLetxFUg">this tutorial video</a> now on YouTube.</span>-->
 
 							<!-- See in controls.js: "showNewsImage" and "clickNews" for how to set up a news image -->
@@ -1725,9 +1724,8 @@
 
 						<h3>How do I register?</h3>
 						<p>
-							The user name and password boxes are used for both registering and logging in. To register,
-							just type the user name you want. If it is available (a status message tells you) then type a
-							password and hit the button.
+							The previous method of registering has been reworked for clarity. Now just click the 'Register' link
+							above the user name and password boxes to begin the registration process.
 						</p>
 						<p>
 							The annex box also has information about what you can do when logged in: <a class="annex-link" href="3">Registering</a>
@@ -1865,6 +1863,22 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>June 14, 2025</h3>
+						<ul>
+							<li>The registration process has been reworked. There is now a 'Register' link above the user name and password fields that
+								you have to click in order to register a new user. The removal of the previously automatic registration should also mean that
+								automatic login on mobile devices should work properly.</li>
+						</ul>
+
+						<h3>June 13, 2025</h3>
+						<ul>
+							<li>The "Game" search type now searches the imported GB64 database directly. Note that you will only get results if the game
+								you're looking for actually uses a SID file in the High Voltage SID Collection.</li>
+							<li>You can now click a GB64 screenshot on a game page to view it at three times its original size.</li>
+							<li>Fixed scroll position not being restored when browsing back from a search state.</li>
+							<li>Fixed SID row not centering correctly when skipping to the previous or next tune.</li>
+						</ul>
 
 						<h3>June 9, 2025</h3>
 						<ul>

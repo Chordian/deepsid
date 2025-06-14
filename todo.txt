@@ -4,31 +4,15 @@ ToDo
 - Look into the console logging alternatives, like warn, error, table, etc.
   @link https://developer.mozilla.org/en-US/docs/Web/API/console
 
+
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- When going back with ".." then cancel search if active. If this is not cancelled first, the
-  parent folder will not go to the remembered scroll position.
-
-- When clicking a GB64 image in a sub-page, show it zoomed up two or three times.
-
-- Investigate if searching in "Game" drop-down box mode searches the files column. This column
-  is deprecated. Can the "gamebase" database be searched instead for SID row hits?
-
 - LOOP X TIMES:
   Idea from Anon-Relays: Loop song X number of times before moving on to the next one. In
   the settings, the default number should of course be 1.
 
 - MORE TRACKING:
   Add tracking of how much playlists are clicked, tunes are clicked, and so on?
-
-- GB64 AUTO-TAG:
-  When a GB64 auto-tag is added, any "Game" or "Game Prev" tags should also automatically be
-  removed. (But how about all those that were auto-added before this change?)
-  COMMENT: Don't remove the "GTW" tags, though.
-
-- MOBILE LOGIN:
-- Make suggested-username-login-instantly work better on mobile phones. As it is now, the phone
-  is usually so fast that it thinks you're creating a new user.
 
 - BUG TEMP LOAD:
 - In temporary emulator testing, the max. subtune is not detected and shown.
@@ -39,10 +23,6 @@ SHOULD BE DONE
 - BUG STIL:
 - The STIL entry for this tune is not parsed correctly - all links merge into one big link:
   https://deepsid.chordian.net/?file=/MUSICIANS/B/Bulldog/E_X_I_S.sid&subtune=1
-
-- BUG CENTER:
-- Check up on "Auto-progress should select and center the next song as it proceeds to it"
-  setting again - it centers wrongly on my 32" screen and also doesn't toggle correctly?
 
 - BUG RATE SH:
 - When uploading a new song to the SH folder, it's not possible to rate it using the stars in
