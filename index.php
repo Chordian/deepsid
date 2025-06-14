@@ -1463,8 +1463,7 @@
 									<select id="dropdown-settings-emulator" name="select-settings-emulator">
 										<option value="resid">reSID (BETA)</option>
 										<!--<option value="resid">reSID (WebSidPlay)</option>-->
-										<option value="jsidplay2">JSIDPlay2 (BETA)</option>
-										<!--<option value="jsidplay2">JSIDPlay2 (reSID)</option>-->
+										<option value="jsidplay2">JSIDPlay2</option>
 										<option value="websid">WebSid emulator</option>
 										<option value="legacy">WebSid (Legacy)</option>
 										<option value="hermit">Hermit's (+FM)</option>
@@ -1869,6 +1868,8 @@
 							<li>The registration process has been reworked. There is now a 'Register' link above the user name and password fields that
 								you have to click in order to register a new user. The removal of the previously automatic registration should also mean that
 								automatic login on mobile devices should work properly.</li>
+							<li>Upgraded the JSIDPlay2 emulator. It now uses WASM_GC (Web Assembly Garbage Collector) and is estimated to be 10%
+								faster than the previous version.</li>
 						</ul>
 
 						<h3>June 13, 2025</h3>

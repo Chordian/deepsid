@@ -529,7 +529,7 @@ SIDPlayer.prototype = {
 				// NOTE: Whenever there is a new version of this file, increase the number at
 				// the end of the filename. Otherwise some web browsers (especially Firefox)
 				// might refuse to see the new file - even when clearing the cache.
-				this.jp2Worker = new Worker("js/handlers/jsidplay2-002.wasm-worker.js", );
+				this.jp2Worker = new Worker("js/handlers/jsidplay2-003.wasm_gc-worker.js", );
 
 				this.jp2PlayTime = 0;
 				this.jp2Loading = true;
