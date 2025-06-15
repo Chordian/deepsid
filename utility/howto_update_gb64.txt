@@ -29,7 +29,7 @@ Matt Furniss: STUN Runner: Change "Stun" to upper case "STUN".
 
 
 
-
+Remember to update version number in '$footnote' in the 'gb64.php' file.
 
 
 

@@ -199,6 +199,8 @@ try {
 	$gb->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	$gb->exec("SET NAMES UTF8");
 
+	$footnote = '<i><small>Generated using <a href="https://gb64.com/downloads.php" target="_blank">GameBase64</a> database v19</small></i>';
+
 	if (isset($_GET['fullname'])) {
 
 		// Get rid of the HVSC folder in the beginning
@@ -217,7 +219,8 @@ try {
 				$gbIds[] = $GbRows = $row->GA_Id;
 			}
 		} else {
-			die(json_encode(array('status' => 'warning', 'html' => '<p style="margin-top:0;"><i>No GameBase64 entries available.</i></p>')));
+			$sticky = '<h2 style="display:inline-block;margin-top:0;">GameBase64</h2>';
+			die(json_encode(array('status' => 'warning', 'sticky' => $sticky, 'html' => '<h3>0 entries found</h3><div style="border-top:1px solid var(--color-border);">'.$footnote.'</div>')));
 		}
 
 		// If only one result then just show that as a sub page
@@ -255,15 +258,18 @@ if ($page_id) {
 
 	$col_of_thumbnails = '';
 	foreach($data['thumbnails'] as $thumbnail)
-		$col_of_thumbnails .= '<a href="#" class="zoom-gb64" data-src="images/gb64'.$thumbnail.'"><img class="thumbnail-gb64" src="images/gb64'.$thumbnail.'" alt="'.$thumbnail.'" /></a> ';
+		$col_of_thumbnails .= '<a href="#" class="zoom-up" data-src="images/gb64'.$thumbnail.'"><img class="thumbnail-gb64" src="images/gb64'.$thumbnail.'" alt="'.$thumbnail.'" /></a> ';
 
-	// Now build the HTML
-	$html = '<h2 style="display:inline-block;margin-bottom:20px;">'.$data['title'].'</h2>'.
-	(isset($_GET['id']) ? '<button id="go-back-gb64">Back</button>' : '').
-	'<div class="corner-icons">'.
-		'<a href="https://gb64.com/game.php?id='.$page_id.'" title="See this at GameBase64" target="_blank"><svg class="outlink" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg></a>'.
-	'</div>'.
-	'<table style="border:none;">
+	// Build the sticky header HTML for the '#sticky' DIV
+	$sticky = '<h2 style="display:inline-block;margin-top:0;">'.$data['title'].'</h2>'.
+		(isset($_GET['id']) ? '<button id="go-back-gb64">Back</button>' : '').
+		'<a href="//deepsid.chordian.net?tab=csdb&csdbtype=release&csdbid='.$csdb->Release->ID.'" title="Permalink">'.$svg_permalink.'</a>'.
+		'<div class="corner-icons">'.
+			'<a href="https://gb64.com/game.php?id='.$page_id.'" title="See this at GameBase64" target="_blank"><svg class="outlink" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg></a>'.
+		'</div>';
+
+	// And Now build the HTML
+	$html = '<table style="border:none;">
 		<tr>
 			<td style="padding-left:0;vertical-align:top;border:none;">
 				<h3 style="margin-top:6px;">Game info</h3>
@@ -289,7 +295,7 @@ if ($page_id) {
 				$col_of_thumbnails.
 			'</td>
 		</tr>
-	</table>';
+	</table><div style="border-top:1px solid var(--color-border);">'.$footnote.'</div>';
 
 } else {
 
@@ -320,12 +326,14 @@ if ($page_id) {
 			'</tr>';
 	}
 
-	// Now build the HTML
-	$html = '<h2 style="display:inline-block;margin-top:0;">GameBase64</h2>'.
-		'<h3>'.count($gbIds).' entr'.(count($gbIds) > 1 ? 'ies' : 'y').' found</h3>'.
+	// Build the sticky header HTML for the '#sticky' DIV
+	$sticky = '<h2 style="display:inline-block;margin-top:0;">GameBase64</h2>';
+
+	// And now build the HTML
+	$html = '<h3>'.count($gbIds).' entr'.(count($gbIds) > 1 ? 'ies' : 'y').' found</h3>'.
 		'<table class="releases">'.
 			$rows.
-		'</table>';
+		'</table>'.$footnote;
 }
-echo json_encode(array('status' => 'ok', 'html' => $html, 'count' => count($gbIds)));
+echo json_encode(array('status' => 'ok', 'sticky' => $sticky, 'html' => $html, 'count' => count($gbIds)));
 ?>

@@ -325,7 +325,7 @@
 				<span class="text-below"><?php echo isMobile() ? 'Touch' : 'Click'; ?> to play</span>
 			</div>
 		</div>
-		<img id="zoomed-gb64" src="" alt="Zoomed screenshot from GB64" />
+		<img id="zoomed" src="" alt="Zoomed screenshot" />
 
 		<div id="dialog-register" class="dialog-box">
 			<div class="dialog-text"></div>
@@ -988,6 +988,7 @@
 					<div class="tab right unselectable" data-topic="about" id="tab-about">About</div>
 				</div>
 				<div id="sticky-csdb"><h2 style="margin-top:0;">CSDb</h2></div>
+				<div id="sticky-gb64"><h2 style="margin-top:0;">GameBase64</h2></div>
 				<div id="sticky-visuals"><h2 style="margin-top:0;">Visuals</h2>
 					<div class="visuals-buttons" data-selected-visual="">
 						<button class="visuals-button icon-piano button-off" data-visual="piano">Piano</button>
@@ -1329,7 +1330,6 @@
 					</div>
 
 					<div id="topic-gb64" class="topic ext" style="display:none;">
-						<h2>GameBase64</h2>
 						<p>This tab will show links to game entries in GameBase64 as you click SID files that were
 							used in at least one C64 game, released or unreleased (these are listed as a preview).</p>
 						<p>
@@ -1862,6 +1862,13 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>June 15, 2025</h3>
+						<ul>
+							<li>You can now click any screenshot (not just in the GB64 tab) to view it at three times its original size.</li>
+							<li>Fixed temporary emulating testing (hotkey "l") not showing the correct number of subtunes for a song.</li>
+							<li>The GB64 tab now uses the same sticky white header bar as the CSDb tab.</li>
+						</ul>
 
 						<h3>June 14, 2025</h3>
 						<ul>

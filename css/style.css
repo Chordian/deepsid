@@ -4144,6 +4144,7 @@ input[type=range]::-ms-track {
 			width: 384px;
 			height: 272px;
 			border: 1px solid var(--color-border);
+			cursor: pointer;
 		}
 
 		#page .ext .no-profile {
@@ -4670,6 +4671,7 @@ input[type=range]::-ms-track {
 
 		/* Container for a sticky white top header box (used by e.g. the 'CSDb' tab) */
 		#sticky-csdb,
+		#sticky-gb64,
 		#sticky-visuals {
 			display: none;
 			position: relative;
@@ -5234,7 +5236,7 @@ input[type=range]::-ms-track {
 					margin-left: 8px;
 				}
 
-				#zoomed-gb64 {
+				#zoomed {
 					display: none;
 					position: fixed;
 					top: 50%;
@@ -5469,6 +5471,7 @@ input[type=range]::-ms-track {
 
 			#page .ext button,
 			#sticky-csdb button,
+			#sticky-gb64 button,
 			#sticky-right-buttons button {
 				font-size: 11px;
 				height: 21px;
@@ -5683,6 +5686,10 @@ input[type=range]::-ms-track {
 
 	#topic-gb64 .thumbnail-gb64 {
 		width: 320px;
+	}
+
+	#topic-player .thumbnail-player {
+		cursor: pointer;
 	}
 
 	#topic-player .svg {

@@ -7,6 +7,11 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+- White static header and "0 results" in other tabs.
+  UPDATE: GB64 now done.
+
+- Add the newest images for SID Factory II.
+
 - LOOP X TIMES:
   Idea from Anon-Relays: Loop song X number of times before moving on to the next one. In
   the settings, the default number should of course be 1.
@@ -14,20 +19,9 @@ SHOULD BE DONE
 - MORE TRACKING:
   Add tracking of how much playlists are clicked, tunes are clicked, and so on?
 
-- BUG TEMP LOAD:
-- In temporary emulator testing, the max. subtune is not detected and shown.
-  SUGGESTION: See if you can use the file parser from when files are uploaded to the SH folder
-  to get the song name, author, released and max. subtune info for displaying. You may have
-  to adapt players.js/getSongInfo() and/or controls.js/updateInfo() for this to work.
-
 - BUG STIL:
 - The STIL entry for this tune is not parsed correctly - all links merge into one big link:
   https://deepsid.chordian.net/?file=/MUSICIANS/B/Bulldog/E_X_I_S.sid&subtune=1
-
-- BUG RATE SH:
-- When uploading a new song to the SH folder, it's not possible to rate it using the stars in
-  the info box. You have to refresh the site first. (An easy solution to this is of course to
-  automatically refresh the site after uploading it.)
 
 
 WHEN THE TIME IS RIGHT

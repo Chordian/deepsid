@@ -216,7 +216,7 @@ Browser.prototype = {
 		$(document).keyup(function(event) {
 			switch (event.keyCode) {
 				case 27: // ESC
-					$("#dialog-cover,.dialog-box,#zoomed-gb64").hide();
+					$("#dialog-cover,.dialog-box,#zoomed").hide();
 					$("#contextmenu,#contextsubmenu").remove();
 					$("#dialog-all-tags").blur();
 					if (typeof this.contextTR != "undefined")
@@ -2050,6 +2050,7 @@ Browser.prototype = {
 		if (miniPlayer || isMobile || this.isTempTestFile()) return;
 		if (this.gb64) this.gb64.abort();
 		$("#topic-gb64").empty().append(this.loadingSpinner("gb64"));
+		$("#sticky-gb64").empty();
 
 		var loadingGB64 = setTimeout(function() {
 			// Fade in a GIF loading spinner if the AJAX call takes a while
@@ -2066,6 +2067,7 @@ Browser.prototype = {
 			this.validateData(data, function(data) {
 
 				clearTimeout(loadingGB64);
+				$("#sticky-gb64").empty().append(data.sticky);
 				$("#topic-gb64").empty().append(data.html)
 					.css("visibility", "visible");
 				ResetDexterScrollBar("gb64");

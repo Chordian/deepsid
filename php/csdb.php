@@ -558,7 +558,7 @@ if ($csdb_type == 'sid') {
 	// And now the body HTML for the '#page' DIV
 	$html = '<table style="border:none;margin-bottom:0;"><tr>'.
 			'<td style="padding:0;border:none;width:384px;">'.
-				'<img class="screenshot" src="'.$screenshot.'" alt="'.$csdb->Release->Name.'" />'.
+				'<img class="screenshot zoom-up" src="'.$screenshot.'" data-src="'.$screenshot.'" alt="'.$csdb->Release->Name.'" />'.
 			'</td>'.
 			'<td style="position:relative;vertical-align:top;">'.
 				$released_by.

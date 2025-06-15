@@ -30,9 +30,18 @@ try {
 	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	$db->exec("SET NAMES UTF8");
 
-	// First delete the database entry
-	$delete = $db->prepare('DELETE FROM hvsc_files WHERE fullname = :fullname LIMIT 1');
-	$delete->execute(array(':fullname'=>$fullname));
+	// Get the ID for this SID tune
+	$select = $db->prepare('SELECT id FROM hvsc_files WHERE fullname = :fullname LIMIT 1');
+	$select->execute(array(':fullname'=>$fullname));
+	$select->setFetchMode(PDO::FETCH_OBJ);
+
+	$file_id = $select->fetch()->id;
+
+	// First delete the file database entry
+	$delete = $db->query('DELETE FROM hvsc_files WHERE id = '.$file_id.' LIMIT 1');
+
+	// Then delete the special database row with the date
+	$delete = $db->query('DELETE FROM uploads WHERE files_id = '.$file_id.' LIMIT 1');
 
 	// Now delete the actual file too
 	unlink(ROOT_HVSC.'/'.$fullname);

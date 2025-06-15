@@ -319,7 +319,8 @@ $(function() { // DOM ready
 
 					// Hack to make sure the bottom search bar sits in the correct bottom of the viewport
 					$(window).trigger("resize");
-					SetScrollTopInstantly("#folders", scrollPos);
+					//SetScrollTopInstantly("#folders", scrollPos);
+					SetScrollTopInstantly("#folders", 0);
 					DisableIncompatibleRows();
 				});
 			}
@@ -619,23 +620,24 @@ $(function() { // DOM ready
 	/**
 	 * When clicking a GB64 sub-page screenshot to zoom it up.
 	 */
-	$("#topic-gb64").on("click", ".zoom-gb64", function() {
+	$("#page").on("click", ".zoom-up", function() {
 		$("#dialog-cover").show();
-		$("#zoomed-gb64").attr("src", $(this).attr("data-src")).show();
+		$("#zoomed").attr("src", $(this).attr("data-src")).show();
 		return false;
 	});
 
 	/**
-	 * When clicking a zoomed up GB64 screenshot to discard it.
+	 * When clicking a zoomed up screenshot to discard it.
 	 */
-	$("#zoomed-gb64").on("click", function() {
-		$("#dialog-cover,#zoomed-gb64").hide();
+	$("#zoomed").on("click", function() {
+		$("#dialog-cover,#zoomed").hide();
 	});
 
 	/**
 	 * When clicking the 'BACK' button on a GameBase64 page to show the list of them again.
 	 */
-	$("#topic-gb64").on("click", "#go-back-gb64", function() {
+	$("#sticky-gb64").on("click", "#go-back-gb64", function() {
+		$("#sticky-gb64").empty().append('<h2 style="display:inline-block;margin-top:0;">GameBase64</h2>');
 		// Load the cache again
 		$("#topic-gb64")/*.css("visibility", "hidden")*/.empty().append(cacheGB64);
 		// Also set scroll position to where we clicked last time
@@ -695,7 +697,7 @@ $(function() { // DOM ready
 		$this.addClass("selected");
 
 		// Show the selected topic
-		$("#page .topic,#sticky-csdb,#sticky-visuals").hide();
+		$("#page .topic,#sticky-csdb,#sticky-gb64,#sticky-visuals").hide();
 		if (topic != "visuals")
 			$("#topic-"+topic).show();
 
@@ -728,8 +730,11 @@ $(function() { // DOM ready
 			}
 		}
 
-		// If 'GB64' tab is selected then hide the notification on it
-		if (topic === "gb64") $("#note-gb64").hide();
+		// If 'GB64' tab is selected
+		if (topic === "gb64") {
+ 			$("#note-gb64").hide();
+			$("#sticky-gb64").show();
+		}
 
 		// If 'Remix' tab is selected then hide the notification on it
 		if (topic === "remix") $("#note-remix").hide();
