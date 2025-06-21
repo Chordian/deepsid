@@ -2305,6 +2305,10 @@ input[type=range]::-ms-track {
 				cursor: pointer;
 			}
 
+			#stopic-tags .tag-transparent {
+				margin-left: -5px;
+			}
+
 		.disabled .ptype {
 			color: var(--color-disabled);
 			border-color: var(--color-disabled);
@@ -2328,6 +2332,21 @@ input[type=range]::-ms-track {
 				color: var(--color-text-tag-event);
 				background: var(--color-bg-tag-event);
 			}
+
+				.tag-winner img {
+					position: absolute;
+					top: 0;
+					width: 12px;
+					height: 12px;
+					filter: var(--svg-filter-edit-tags);
+					pointer-events: none;
+				}
+
+				.tag-winner span {
+					padding: 0 21px;
+					font-weight: bold;
+					pointer-events: none;
+				}
 
 			.tag-production {
 				color: var(--color-text-tag-prod);
@@ -2364,6 +2383,18 @@ input[type=range]::-ms-track {
 			.tag-gamebase64 {
 				width: 81px;
 				background: url(../images/gamebase64.png) 11px 3px / 66px 7.5px no-repeat, var(--color-bg-tag-gamebase64);
+			}
+
+			.tag-transparent {
+				position: relative;
+				top: 1px;
+				left: 3px;
+				padding: 0 1px 0 1.5px;
+				margin: 0;
+				color: var(--color-text-distinct);
+				background: transparent;
+				font-size: 12px;
+				z-index: 1;
 			}
 
 		.edit-tags {
@@ -2431,6 +2462,10 @@ input[type=range]::-ms-track {
 					border-color: transparent var(--color-bg-tag-gb64start) transparent transparent;
 				}
 
+				.tag-transparent:before {
+					border: 0;
+				}
+
 				#songs tr.selected .tag:before,
 				#songs tr.selected:hover .tag:before {
 					background: var(--color-bg-sid-selected);
@@ -2482,6 +2517,10 @@ input[type=range]::-ms-track {
 
 				.tag-mixorigin:after {
 					color: var(--color-text-tag-mixorigin);
+				}
+
+				.tag-transparent:after {
+					color: transparent;
 				}
 
 	/* Light blue bar indicating all of 64 KB RAM */

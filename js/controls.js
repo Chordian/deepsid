@@ -455,6 +455,8 @@ Controls.prototype = {
 					var tag = event.target.innerHTML.toLowerCase();
 					if ($(event.target).hasClass("tag-remix64"))
 						tag = "remix64";
+					else if ($(event.target).hasClass("tag-winner"))
+						tag = "winner";
 					else if ($(event.target).hasClass("tag-gamebase64"))
 						tag = "gamebase64";
 					$("#dropdown-search").val("tag");

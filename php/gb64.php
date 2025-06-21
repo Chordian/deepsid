@@ -96,7 +96,9 @@ function ReadGB64DB($id) {
 		// Get the parent genre (prefix the genre)
 		$select_pgenres = $gb->query('SELECT ParentGenre FROM PGenres WHERE PG_Id = '.$genres->PG_Id.' LIMIT 1');
 		$select_pgenres->setFetchMode(PDO::FETCH_OBJ);
-		$genre = $select_pgenres->fetch()->ParentGenre.' - '.$genre;
+		$pgenre = $select_pgenres->fetch()->ParentGenre;
+		$genre = empty($pgenre) ? $genre : $pgenre.' - '.$genre;
+		$genre = str_replace('[uncategorized]', '<i>Uncategorized</i>', $genre);
 
 	$clone = ''; // Usually always empty - let's just forget about it for now
 

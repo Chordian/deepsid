@@ -9,7 +9,7 @@
  * 
  * If the path returned is empty, either a SID path did not exist or there were
  * more than one SID file. The jQuery code can then use the name returned to
- * instead make the link looks a little prettier (still an improvement).
+ * instead make the link look a little prettier (still an improvement).
  * 
  * @uses		$_GET['type']				can be "release" or "sid"
  * @uses		$_GET['id']

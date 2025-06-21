@@ -23,6 +23,7 @@ function GetTagsAndTypes($file_id, &$list_of_tags, &$type_of_tags) {
 	$tags_event_p1 = array();
 	$tags_event_p2 = array();
 	$tags_event_p3 = array();
+	$tags_event_p4 = array();
 	$tags_origin = array();
 	$tags_suborigin = array();
 	$tags_mixorigin = array();
@@ -41,12 +42,15 @@ function GetTagsAndTypes($file_id, &$list_of_tags, &$type_of_tags) {
 		$tag_info = $tag->fetch();
 		switch ($tag_info->type) {
 			case 'EVENT':
-				if ($tag_info->name == "Compo")
+				if ($tag_info->name == "Compo" || $tag_info->name == "<-")
 					// Must come before the competition ranking
 					array_push($tags_event_p2, $tag_info->name);
 				else if ($tag_info->name == "Winner"  || substr($tag_info->name, 0, 1) == "#")
 					// Competition ranking
 					array_push($tags_event_p3, $tag_info->name);
+				else if ($tag_info->name == "->")
+					// Arrow to right is always last
+					array_push($tags_event_p4, $tag_info->name);
 				else
 					// Party names should always come first (before the other two above)
 					array_push($tags_event_p1, $tag_info->name);
@@ -76,6 +80,7 @@ function GetTagsAndTypes($file_id, &$list_of_tags, &$type_of_tags) {
 	sort($tags_event_p1);
 	sort($tags_event_p2);
 	sort($tags_event_p3);
+	sort($tags_event_p4);
 	sort($tags_origin);
 	sort($tags_suborigin);
 	sort($tags_mixorigin);
@@ -84,12 +89,13 @@ function GetTagsAndTypes($file_id, &$list_of_tags, &$type_of_tags) {
 	sort($tags_subdigi);
 	sort($tags_other);
 
-	$list_of_tags = array_merge($tags_event_p1, $tags_event_p2, $tags_event_p3, $tags_production, $tags_origin, $tags_suborigin, $tags_mixorigin, $tags_digi, $tags_subdigi, $tags_other);
+	$list_of_tags = array_merge($tags_event_p1, $tags_event_p2, $tags_event_p3, $tags_event_p4, $tags_production, $tags_origin, $tags_suborigin, $tags_mixorigin, $tags_digi, $tags_subdigi, $tags_other);
 
 	$type_of_tags = array_merge(
 		array_fill(0, count($tags_event_p1),	'event'),
 		array_fill(0, count($tags_event_p2),	'event'),
 		array_fill(0, count($tags_event_p3),	'event'),
+		array_fill(0, count($tags_event_p4),	'event'),
 		array_fill(0, count($tags_production),	'production'),
 		array_fill(0, count($tags_origin),		'origin'),
 		array_fill(0, count($tags_suborigin),	'suborigin'),

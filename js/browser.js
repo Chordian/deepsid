@@ -443,7 +443,8 @@ Browser.prototype = {
 									});
 								}.bind(this));
 							});
-							$("#dialog-all-tags").focus();
+							$("#dialog-all-tags").scrollTop(0).focus();
+							$("#dialog-song-tags").scrollTop(0);
 						});
 					}.bind(this));
 					return false;
@@ -1685,6 +1686,15 @@ Browser.prototype = {
 			} else if (tag == "Doubling" || tag == "Hack" || tag == "Mock" || tag == "Bug") {
 				// A unique color for tags that serves as a warning
 				list_of_tags += '<div class="tag tag-warning">'+tag+'</div>';
+			} else if (tag == "Winner") {
+				// A slightly snazzier tag for winners (takes up a lot of space though)
+				list_of_tags += '<div class="tag tag-event tag-winner"><img src="images/composer_star.svg" /><img style="left:18px;" src="images/composer_star.svg" /><img style="left:66px;" src="images/composer_star.svg" /><img style="left:76px;" src="images/composer_star.svg" /><span>Winner</span></div>';
+			} else if (tag == "<-") {
+				// Replace "<-" with a pretty unicode arrow instead
+				list_of_tags += '<div class="tag tag-transparent">🡨</div>';
+			} else if (tag == "->") {
+				// Replace "->" with a pretty unicode arrow instead
+				list_of_tags += '<div class="tag tag-transparent">🡪</div>';
 			} else {
 				// NOTE: Don't change the order of tags or the collector for a folder will break!
 				// If you want to change the order of tags, see GetTagsAndTypes() in 'tags_read.php'
@@ -2926,17 +2936,18 @@ Browser.prototype = {
 		this.sliderButton = false;
 		if (typeof tags == "undefined" || this.cache.folderTags == "0") {
 			var tagType = {
-				event:		"",
-				production:	"",
-				origin:		"",
-				suborigin:	"",
-				mixorigin:	"",
-				digi:		"",
-				subdigi:	"",
-				remix64:	"",
-				gamebase64:	"",
-				other:		"",
-				warning:	"",
+				event:			"",
+				production:		"",
+				origin:			"",
+				suborigin:		"",
+				mixorigin:		"",
+				digi:			"",
+				subdigi:		"",
+				remix64:		"",
+				gamebase64:		"",
+				other:			"",
+				warning:		"",
+				transparent:	"", // The arrow tag icons are not included below
 			};
 
 			$.each(browser.playlist, function(i, file) {

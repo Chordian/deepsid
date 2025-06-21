@@ -224,6 +224,7 @@
 		<div class="annex-hotkey">s</div><span class="annex-tiny">Toggle sundry box</span>
 		<div class="annex-hotkey">l</div><span class="annex-tiny">Upload SID for testing</span>
 		<div class="annex-hotkey">b</div><span class="annex-tiny">Back from plink</span>
+		<div class="annex-hotkey">f</div><span class="annex-tiny">Refresh folder</span>
 		<p>Testing a SID is temporary and for you only. No one else can hear it.</p>
 		A "plink" is a link with a play icon in front of it, e.g. in the <b>CSDb</b> tab.
 		

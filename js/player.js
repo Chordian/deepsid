@@ -144,8 +144,7 @@ function SIDPlayer(emulator) {
 			 * + Preset filter settings available
 			 * + Stereo panning up to 3 SID chips
 			 * + Fake stereo using several SID chips
-			 * - Very CPU demanding (slow in Firefox)
-			 * - Take several seconds to play a tune
+			 * - A significant lag on all actions =(
 			 * - Logs stuff in the browser console
 			 */
 
@@ -178,10 +177,11 @@ function SIDPlayer(emulator) {
 			 * + SID model and encoding
 			 * + Can play 2SID and 3SID tunes
 			 * + Can play MUS files in CGSC
-			 * + Emulation quality is good
+			 * + Emulation quality is pretty good
 			 * + Can play BASIC program tunes
 			 * + Filter adjusting for 6581
 			 * + Stereo panning up to 3 SID chips
+			 * + Has the best support of visuals
 			 */
 
 			if (typeof SIDBackend === "undefined") SIDBackend = new SIDBackendAdapter(this.BASIC_ROM, this.CHAR_ROM, this.KERNAL_ROM);

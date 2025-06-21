@@ -913,7 +913,7 @@
 						<select id="dropdown-sort" name="sort"><!-- browser.js --></select>
 					</div>
 				</div>
-				<div id="folders"><table></table></div>
+				<div id="folders" tabindex="0"><table></table></div>
 				<img id="loading" class="loading-spinner" src="images/loading.svg" style="display:none;" alt="" />
 				<div id="search">
 					<select id="dropdown-search" name="search-type">
@@ -1862,6 +1862,29 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>June 21, 2025</h3>
+						<ul>
+							<li>The dialog box for editing tags now scrolls both lists to the top when opened.</li>
+							<li>After clicking a SID row in the folder list, you can now use standard navigation keys such as
+								Home, End, Page Up, Page Down, and the arrow keys.</li>
+							<li>Made the "Winner" tag a bit snazzier so it stands out more.</li>
+						</ul>
+
+						<h3>June 20, 2025</h3>
+						<ul>
+							<li>The scroll position is now remembered when refreshing the current folder with the "f" key.</li>
+						</ul>
+
+						<h3>June 19, 2025</h3>
+						<ul>
+							<li>Left and right arrow tag icons have been added. These always appear between event (green) and production (blue) tags.
+								A green event tag with a right-pointing arrow toward a blue production tag (e.g. a demo) indicates that the SID file was
+								created specifically for that production, which was released at the event.</li>
+							<li>If the arrow points to the left instead, it means the SID file was released at the event but not made for a particular
+								production and did not participate in a music competition.</li>
+							<li>You can now refresh the current folder by hitting the "f" key. <del>This will also go back to the top of the list.</del></li>
+						</ul>
 
 						<h3>June 15, 2025</h3>
 						<ul>

@@ -200,6 +200,11 @@ $(function() { // DOM ready
 				}
 			} else if (event.keyCode == 8) {							// Keyup 'BACKSPACE' (parent folder)
 				$("#folder-back").trigger("click");
+			} else if (event.keyCode == 70) {							// Keyup 'f' (refresh folder)
+				var here = $("#folders").scrollTop();
+				browser.getFolder(0, undefined, undefined, function() {
+					SetScrollTopInstantly("#folders", here);
+				});
 			} else if (event.keyCode == 84) {							// Keyup 't' (test something)
 				log("test");
 			}
