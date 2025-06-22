@@ -33,6 +33,7 @@
 	--color-anchor-notable:			var(--color-anchor);
 	--color-anchor-hover-notable:	var(--color-anchor-hover);
 	--color-table:					#a8ad95;			/* Standard colors for <TABLE>, <TH> and <TD> elements */
+	--color-outline:				rgba(168, 173, 149, 0.5);
 	--color-table-th-bg:			#f5f6f2;
 	--color-table-border:			#b0b29a;
 	--color-table-border-thandle:	#d5d5c9;			/* Color of line below tiny handle in group table */
@@ -430,6 +431,7 @@
 	--color-anchor-notable:			#980000;
 	--color-anchor-hover-notable:	#e80000;
 	--color-table:					#606060;			/* Standard colors for <TABLE>, <TH> and <TD> elements */
+	--color-outline:				rgba(96, 96, 96, 0.3);
 	--color-table-th-bg:			transparent;
 	--color-table-border:			#4c4c4c;
 	--color-table-border-thandle:	#3c3c3c;
@@ -3104,6 +3106,16 @@ input[type=range]::-ms-track {
 		scrollbar-width: thin;
 		scroll-behavior: smooth;
 		scrollbar-color: var(--color-scrollbar-thumb) var(--color-scrollbar-track);
+	}
+
+	#folders:focus {
+		outline: none;
+	}
+
+	/* Not visible in Firefox but has a subtle effect in Chrome */
+	#folders:focus-visible {
+		outline: 0.5px solid var(--color-outline);
+		outline-offset: -1px;
 	}
 
 	::-webkit-scrollbar {
@@ -6385,7 +6397,7 @@ input[type=range]::-ms-track {
 	list-style: none;
 	border: 1px solid var(--color-styled-select-border);
 	background: var(--color-styled-select-bg);
-	max-height: 221px;
+	max-height: 250px; /* 221px */
 	overflow-y: none;
 	line-height: 1.75em;
 	box-shadow: 0 1px 2px var(--color-styled-shadow);

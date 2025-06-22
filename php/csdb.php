@@ -329,7 +329,7 @@ if ($csdb_type == 'sid') {
 	}
 
 	// Build the sticky header HTML for the '#sticky' DIV
-	$sticky = '<h2 style="display:inline-block;margin-top:0;">'.$csdb->SID->Name.'</h2>'.
+	$sticky = '<h2 class="ellipsis" style="display:inline-block;margin:0 0 -8px 0;max-width:710px;" title="'.$csdb->SID->Name.'">'.$csdb->SID->Name.'</h2>'.
 	'<a href="//deepsid.chordian.net?tab=csdb&csdbtype=sid&csdbid='.$csdb->SID->ID.'" title="Permalink">'.$svg_permalink.'</a>'.
 	'<div class="corner-icons">'.
 		'<a href="https://csdb.dk/sid/?id='.$csdb->SID->ID.'" title="See this at CSDb" target="_blank"><svg class="outlink" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg></a>'.
@@ -549,7 +549,7 @@ if ($csdb_type == 'sid') {
 		'<small class="shared-all-comments">Shared for all types of comment sections.</small><br />';
 
 	// Build the sticky header HTML for the '#sticky' DIV
-	$sticky = '<h2 style="display:inline-block;margin-top:0;">'.$csdb->Release->Name.'</h2>'.$go_back.
+	$sticky = '<h2 class="ellipsis" style="display:inline-block;margin:0 0 -8px 0;max-width:710px;" title="'.$csdb->Release->Name.'">'.$csdb->Release->Name.'</h2>'.$go_back.
 		'<a href="//deepsid.chordian.net?tab=csdb&csdbtype=release&csdbid='.$csdb->Release->ID.'" title="Permalink">'.$svg_permalink.'</a>'.
 		'<div class="corner-icons">'.
 			'<a href="http://csdb.chordian.net/?type=release&id='.$csdb->Release->ID.'" title="See this at CSDb" target="_blank"><svg class="outlink" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg></a>'.

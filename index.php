@@ -537,6 +537,7 @@
 					<option value="lemon">Lemon's MP3 files</option>
 					<option value="youtube">YouTube videos</option>
 					<option value="download">Download SID file</option>
+					<option value="silence">No SID handler</option>
 				</select>
 				<div id="theme-selector" title="Click here to toggle the color theme"><div></div></div>
 
@@ -1472,6 +1473,7 @@
 										<option value="lemon">Lemon's MP3 files</option>
 										<option value="youtube">YouTube videos</option>
 										<option value="download">Download SID file</option>
+										<option value="silence">No SID handler</option>
 									</select>
 								</h3>
 
@@ -1500,7 +1502,7 @@
 
 								<h4>Advanced settings</h4>
 								<p>This section will change if you select a different SID handler.</p>
-								<div class="settings-advanced-resid settings-advanced-websid settings-advanced-legacy settings-advanced-hermit settings-advanced-asid settings-advanced-lemon settings-advanced-youtube settings-advanced-download settings-advanced">
+								<div class="settings-advanced-resid settings-advanced-websid settings-advanced-legacy settings-advanced-hermit settings-advanced-asid settings-advanced-lemon settings-advanced-youtube settings-advanced-download settings-advanced-silence settings-advanced">
 									<label class="dropdown-unstyled-label unselectable">There are no advanced settings for this SID handler.</label>
 								</div>
 								<div class="settings-advanced-jsidplay2 settings-advanced">
@@ -1862,6 +1864,13 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>June 22, 2025</h3>
+						<ul>
+							<li>Headers on the CSDb and GB64 tabs now handle long titles without overflowing.</li>
+							<li>The "No SID Handler" option has been added. It obviously plays no music, but can be handy when
+								you just want to browse for information. The auto-play overlay is not shown either.</li>
+						</ul>
 
 						<h3>June 21, 2025</h3>
 						<ul>

@@ -65,6 +65,7 @@ $(function() { // DOM ready
 		"lemon",
 		"youtube",
 		"download",
+		"silence",
 	]) === -1) emulator = storedEmulator;
 
 	HandleTopBox(emulator);

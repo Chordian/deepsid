@@ -415,6 +415,27 @@ function SIDPlayer(emulator) {
 			this.emulatorFlags.offline			= true;
 			break;
 
+		case "silence":
+
+			/**
+			 * Silence
+			 * 
+			 * + Can be used when just handling info
+			 * + Doesn't show the auto-play overlay
+			 * - No music playing (which is the point)
+			 */
+			this.emulatorFlags.supportFaster	= false;
+			this.emulatorFlags.supportEncoding	= false;
+			this.emulatorFlags.supportSeeking	= false;
+			this.emulatorFlags.supportLoop		= false;
+			this.emulatorFlags.forceModel		= false;
+			this.emulatorFlags.forcePlay		= false;
+			this.emulatorFlags.hasFlags			= false;
+			this.emulatorFlags.slowLoading		= false;
+			this.emulatorFlags.returnCIA		= false;
+			this.emulatorFlags.offline			= false;
+			break;
+
 		default:
 
 			alert("ERROR: Invalid SID handler specified");
@@ -982,6 +1003,12 @@ SIDPlayer.prototype = {
 				if (typeof callback === "function")
 					callback.call(this, error);
 				break;
+
+			case "silence":
+
+				if (typeof callback === "function")
+					callback.call(this, error);
+				break;
 		}
 	},
 
@@ -1016,6 +1043,7 @@ SIDPlayer.prototype = {
 				this.stop();
 				break;
 			case "download":
+			case "silence":
 				break;
 		}
 	},
@@ -1079,6 +1107,7 @@ SIDPlayer.prototype = {
 				if (this.ytReady) this.YouTube.playVideo();
 				break;
 			case "download":
+			case "silence":
 				break;
 		}
 		UpdateRedirectPlayIcons();
@@ -1194,6 +1223,7 @@ SIDPlayer.prototype = {
 					playing = this.YouTube.getPlayerState() === YT.PlayerState.PLAYING;
 				break;
 			case "download":
+			case "silence":
 				// Unknown
 				break;
 		}
@@ -1232,6 +1262,7 @@ SIDPlayer.prototype = {
 				// @todo
 				break;
 			case "download":
+			case "silence":
 				// Unknown
 				break;
 		}
@@ -1270,6 +1301,7 @@ SIDPlayer.prototype = {
 				if (this.ytReady) this.YouTube.pauseVideo();
 				break;
 			case "download":
+			case "silence":
 				break;
 		}
 	},
@@ -1319,6 +1351,7 @@ SIDPlayer.prototype = {
 				if (this.ytReady) this.YouTube.stopVideo();
 				break;
 			case "download":
+			case "silence":
 				break;
 		}
 		viz.stopScope();
@@ -1372,6 +1405,7 @@ SIDPlayer.prototype = {
 				if (this.ytReady) this.YouTube.setPlaybackRate(multiplier);
 				break;
 			case "download":
+			case "silence":
 				break;
 		}
 	},
@@ -1407,6 +1441,7 @@ SIDPlayer.prototype = {
 			case "lemon":
 			case "youtube":
 			case "download":
+			case "silence":
 			case "info":
 				// HVSC: We have to ask the server (look in database or parse the file)
 				$.ajax("php/info.php", {
@@ -1492,6 +1527,7 @@ SIDPlayer.prototype = {
 				if (this.ytReady) this.YouTube.setVolume(value * 100);
 				break;
 			case "download":
+			case "silence":
 				break;
 		}
 	},
@@ -1527,6 +1563,7 @@ SIDPlayer.prototype = {
 				if (this.ytReady) this.YouTube.setVolume((value * this.mainVol) * 100);
 				break;
 			case "download":
+			case "silence":
 				break;
 		}
 	},
@@ -1567,6 +1604,7 @@ SIDPlayer.prototype = {
 					time = this.YouTube.getCurrentTime();
 				break;
 			case "download":
+			case "silence":
 				break;
 		}
 		return isNaN(time) ? 0 : time;
@@ -1747,6 +1785,7 @@ SIDPlayer.prototype = {
 				if (this.ytReady) this.YouTube.setLoop(true);
 				break;
 			case "download":
+			case "silence":
 				break;
 		}
 	},
@@ -1783,6 +1822,7 @@ SIDPlayer.prototype = {
 				if (this.ytReady) this.YouTube.setLoop(false);
 				break;
 			case "download":
+			case "silence":
 				break;
 		}
 	},
@@ -1814,6 +1854,7 @@ SIDPlayer.prototype = {
 			case "lemon":
 			case "youtube":
 			case "download":
+			case "silence":
 				break;
 		}
 	},
@@ -1843,6 +1884,7 @@ SIDPlayer.prototype = {
 				//return this.modelLEMON.substr(3, 4);
 			case "youtube":
 			case "download":
+			case "silence":
 				return false;
 		}
 	},
@@ -1875,6 +1917,7 @@ SIDPlayer.prototype = {
 			case "lemon":
 			case "youtube":
 			case "download":
+			case "silence":
 				break;
 		}
 	},
@@ -1905,6 +1948,7 @@ SIDPlayer.prototype = {
 			case "lemon":
 			case "youtube":
 			case "download":
+			case "silence":
 				return false;
 		}
 	},
@@ -1962,6 +2006,7 @@ SIDPlayer.prototype = {
 			case "lemon":
 			case "youtube":
 			case "download":
+			case "silence":
 				// Not possible
 				break;
 		}
@@ -2018,6 +2063,7 @@ SIDPlayer.prototype = {
 			case "lemon":
 			case "youtube":
 			case "download":
+			case "silence":
 				// Not possible
 				break;
 		}
@@ -2059,6 +2105,7 @@ SIDPlayer.prototype = {
 			case "lemon":
 			case "youtube":
 			case "download":
+			case "silence":
 				return false;
 		}
 	},
@@ -2085,6 +2132,7 @@ SIDPlayer.prototype = {
 			case "lemon":
 			case "youtube":
 			case "download":
+			case "silence":
 				return "";
 		}
 	},
@@ -2112,6 +2160,7 @@ SIDPlayer.prototype = {
 			case "lemon":
 			case "youtube":
 			case "download":
+			case "silence":
 				return 0;
 		}
 	},
@@ -2153,6 +2202,7 @@ SIDPlayer.prototype = {
 			case "lemon":
 			case "youtube":
 			case "download":
+			case "silence":
 				// Not possible
 				return false;
 		}
@@ -2208,6 +2258,7 @@ SIDPlayer.prototype = {
 			case "lemon":
 			case "youtube":
 			case "download":
+			case "silence":
 				// Not possible
 				return false;
 		}
@@ -2238,6 +2289,7 @@ SIDPlayer.prototype = {
 			case "lemon":
 			case "youtube":
 			case "download":
+			case "silence":
 				// Not possible
 				return 0;
 		}
@@ -2268,6 +2320,7 @@ SIDPlayer.prototype = {
 			case "lemon":
 			case "youtube":
 			case "download":
+			case "silence":
 				// Not supported
 				return false;
 		}
@@ -2299,6 +2352,7 @@ SIDPlayer.prototype = {
 			case "lemon":
 			case "youtube":
 			case "download":
+			case "silence":
 				// Not supported
 				break;
 		}
@@ -2357,6 +2411,7 @@ SIDPlayer.prototype = {
 			case "lemon":
 			case "youtube":
 			case "download":
+			case "silence":
 				// Not supported
 				break;
 		}
@@ -2383,6 +2438,7 @@ SIDPlayer.prototype = {
 			case "lemon":
 			case "youtube":
 			case "download":
+			case "silence":
 				// Not supported
 				break;
 		}
@@ -2437,6 +2493,7 @@ SIDPlayer.prototype = {
 			case "lemon":
 			case "youtube":
 			case "download":
+			case "silence":
 				// Not supported
 				break;
 		}

@@ -263,7 +263,7 @@ if ($page_id) {
 		$col_of_thumbnails .= '<a href="#" class="zoom-up" data-src="images/gb64'.$thumbnail.'"><img class="thumbnail-gb64" src="images/gb64'.$thumbnail.'" alt="'.$thumbnail.'" /></a> ';
 
 	// Build the sticky header HTML for the '#sticky' DIV
-	$sticky = '<h2 style="display:inline-block;margin-top:0;">'.$data['title'].'</h2>'.
+	$sticky = '<h2 class="ellipsis" style="display:inline-block;margin:0 0 -8px 0;max-width:720px;" title="'.$data['title'].'">'.$data['title'].'</h2>'.
 		(isset($_GET['id']) ? '<button id="go-back-gb64">Back</button>' : '').
 		'<a href="//deepsid.chordian.net?tab=csdb&csdbtype=release&csdbid='.$csdb->Release->ID.'" title="Permalink">'.$svg_permalink.'</a>'.
 		'<div class="corner-icons">'.

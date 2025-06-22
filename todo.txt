@@ -10,22 +10,8 @@ SHOULD BE DONE
 - White static header and "0 results" in other tabs.
   UPDATE: GB64 now done.
 
-- Create a new SID handler for non-music activities such as just browsing for info. When a
-  SID row is clicked, it doesn't play it. (And if you try, it's just silent.)
-  Name suggestions: "Silence" or "No SID handler"
-
 - Consider versioned JS files, e.g. <script src="main.20250625.js"></script>
   But I imagine updating it in index.php would be annoying. Can it be automated somehow?
-
-- Make sure headers in all tabs use "..." when the title is too long.
-  Test for CSDb tab (may also have to find examples with BACK button shown?):
-  https://deepsid.chordian.net/?file=/MUSICIANS/J/Jammer/Rippin_Off_the_Most_Jazzy_Lads.sid
-  https://deepsid.chordian.net/?file=/MUSICIANS/F/Fegolhuzz/Emergent_Behavior_of_Hydrogen.sid
-  Test for GB64 tab (enter a game page for one of the two hits):
-  https://deepsid.chordian.net/?file=/MUSICIANS/B/Bogas_Ed/Murder_on_the_Mississippi.sid
-
-- The "tabindex" addition that enables navigation keys in the folders list tend to enable
-  an ugly white outline border on Chrome when using such keys. Can this be removed?
 
 - Idea for pinpointing a compo tune used in a production earlier (which is iffy) - a RED
   arrow from the green tags to the blue production tag.
@@ -563,8 +549,16 @@ PROBABLY NOT?
   - Test API and write a PHP page to show the game ID in a page tab.
   - See text file "Howto_Mobygames_API.txt" for more.
 
-- New handler: Silence - for development and just for looking up stuff.
-  - Play is never activated. (Don't disable the buttons, though.)
-  - Counter argument: Just mute the web browser tab! (Works in Firefox which I'm using.)
+
+TEST RESOURCES
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+- Very long headers:
+
+  CSDb tab:
+  https://deepsid.chordian.net/?file=/MUSICIANS/J/Jammer/Rippin_Off_the_Most_Jazzy_Lads.sid
+  https://deepsid.chordian.net/?file=/MUSICIANS/F/Fegolhuzz/Emergent_Behavior_of_Hydrogen.sid
+
+  GB64 tab (enter a game page for one of the two hits):
+  https://deepsid.chordian.net/?file=/MUSICIANS/B/Bogas_Ed/Murder_on_the_Mississippi.sid
 
 END

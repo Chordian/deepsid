@@ -1044,7 +1044,7 @@ Browser.prototype = {
 			ctrls.state("root/back", "enabled");
 
 			// Disable emulators/handlers in the drop-down according to parent folder attributes
-			$("#dropdown-topleft-emulator,#dropdown-settings-emulator").styledOptionState("resid jsidplay2 websid legacy hermit webusb asid lemon youtube download", "enabled");
+			$("#dropdown-topleft-emulator,#dropdown-settings-emulator").styledOptionState("resid jsidplay2 websid legacy hermit webusb asid lemon youtube download silence", "enabled");
 			$("#page .viz-emu").removeClass("disabled");
 			$("#dropdown-topleft-emulator,#dropdown-settings-emulator").styledOptionState(this.cache.incompatible, "disabled");
 			if (this.cache.incompatible.indexOf("resid") !== -1) $("#page .viz-resid").addClass("disabled");
@@ -1109,7 +1109,7 @@ Browser.prototype = {
 					var files = "";
 
 					// Disable emulators/handlers in the drop-down according to parent folder attributes
-					$("#dropdown-topleft-emulator,#dropdown-settings-emulator").styledOptionState("resid jsidplay2 websid legacy hermit webusb asid lemon youtube download", "enabled");
+					$("#dropdown-topleft-emulator,#dropdown-settings-emulator").styledOptionState("resid jsidplay2 websid legacy hermit webusb asid lemon youtube download silence", "enabled");
 					$("#page .viz-emu").removeClass("disabled");
 					$("#dropdown-topleft-emulator,#dropdown-settings-emulator").styledOptionState(data.incompatible, "disabled");
 					if (data.incompatible.indexOf("resid") !== -1) $("#page .viz-resid").addClass("disabled");
@@ -1169,7 +1169,7 @@ Browser.prototype = {
 						this.previousOverridePath = "_SID Happens";
 					}
 
-					if (["lemon", "youtube", "download"].includes(SID.emulator)) {
+					if (["lemon", "youtube", "download", "silence"].includes(SID.emulator)) {
 						// The 'Visuals' tab is useless to these SID handlers
 						$("#tab-visuals").addClass("disabled");
 						if ($selected.attr("data-topic") === "visuals")
@@ -1688,7 +1688,7 @@ Browser.prototype = {
 				list_of_tags += '<div class="tag tag-warning">'+tag+'</div>';
 			} else if (tag == "Winner") {
 				// A slightly snazzier tag for winners (takes up a lot of space though)
-				list_of_tags += '<div class="tag tag-event tag-winner"><img src="images/composer_star.svg" /><img style="left:18px;" src="images/composer_star.svg" /><img style="left:66px;" src="images/composer_star.svg" /><img style="left:76px;" src="images/composer_star.svg" /><span>Winner</span></div>';
+				list_of_tags += '<div class="tag tag-event tag-winner"><img src="images/composer_star.svg" /><img style="left:18px;" src="images/composer_star.svg" /><img style="left:66px;" src="images/composer_star.svg" /><img style="left:75.5px;" src="images/composer_star.svg" /><span>Winner</span></div>';
 			} else if (tag == "<-") {
 				// Replace "<-" with a pretty unicode arrow instead
 				list_of_tags += '<div class="tag tag-transparent">🡨</div>';

@@ -147,6 +147,11 @@
 		<p>Clicking a SID row will download it to your computer.</p>
 		Useful if you have associated the SID files to automatically
 		run an external program.
+
+		<h4><a href="//deepsid.chordian.net?emulator=silence">No SID handler</a></h4>
+		<p>Obviously plays no music at all.</p>
+		Useful when you only want to browse for information. The
+		auto-play overlay is not shown.
 	',
 
 	'	<h3>Searching</h3>
@@ -262,6 +267,7 @@
 						<li><b>lemon</b></li>
 						<li><b>youtube</b></li>
 						<li><b>download</b></li>
+						<li><b>silence</b></li>
 					</ul>
 				</td>
 			</tr>
