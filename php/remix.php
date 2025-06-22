@@ -153,16 +153,18 @@ if (isset($_GET['fullname'])) {
 	} else
 		$amount = 0; // No remixes found
 
-// Now build the HTML
-$html = '<h2 style="display:inline-block;margin-top:0;">Remix64</h2>'.
-	'<h3>'.$amount.' entr'.($amount == 0 || $amount > 1 ? 'ies' : 'y').' found'.
-	($amount == 0 ? '</h3><div class="zero-releases-line"></div>': '<div class="remix64-vote"></div></h3>' ).
-	'<table class="releases">'.
-		$rows.
-	'</table>';
+	// Build the sticky header HTML for the '#sticky' DIV
+	$sticky = '<h2 style="display:inline-block;margin-top:0;">Remix64</h2>';
+
+	// Now build the HTML
+	$html = '<h3>'.$amount.' entr'.($amount == 0 || $amount > 1 ? 'ies' : 'y').' found'.
+		($amount == 0 ? '</h3><div class="zero-releases-line"></div>': '<div class="remix64-vote"></div></h3>' ).
+		'<table class="releases">'.
+			$rows.
+		'</table>';
 
 } else
 	die(json_encode(array('status' => 'error', 'message' => 'You must specify the proper GET variables.')));
 
-echo json_encode(array('status' => 'ok', 'html' => $html.'<i><small>Generated using an API for <a href="https://www.remix64.com/" target="_blank">Remix64.com</a></small>', 'count' => $amount));
+echo json_encode(array('status' => 'ok', 'sticky' => $sticky, 'html' => $html.'<i><small>Generated using an API for <a href="https://www.remix64.com/" target="_blank">Remix64.com</a></small>', 'count' => $amount));
 ?>

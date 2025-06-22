@@ -72,8 +72,11 @@ try {
 			'</tr>';
 	}
 
-	$html = '<h2 style="display:inline-block;margin-top:0;">Players / Editors</h2>'.
-		'<p style="margin-top:0;">This is a list of all the players/editors in the database. If you click to see
+	// Build the sticky header HTML for the '#sticky' DIV
+	$sticky = '<h2 style="display:inline-block;margin-top:0;">Players / Editors</h2>';
+
+	// Now build the HTML
+	$html = '<p style="margin-top:0;">This is a list of all the players/editors in the database. If you click to see
 			a page, the SID browser will automatically find all tunes related to it. Most CPU time measures you
 			see here were made with <a href="http://csdb.chordian.net/?type=release&id=152422">SIDDump</a> and are approximate.</p>'.
 		//'<h3>'.$select->rowCount().' entries found</h3>'.
@@ -85,5 +88,5 @@ try {
 	$account->LogActivityError('player_list.php', $e->getMessage());
 	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 }
-echo json_encode(array('status' => 'ok', 'html' => $html));
+echo json_encode(array('status' => 'ok', 'sticky' => $sticky, 'html' => $html));
 ?>

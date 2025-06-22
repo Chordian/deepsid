@@ -703,7 +703,7 @@ $(function() { // DOM ready
 		$this.addClass("selected");
 
 		// Show the selected topic
-		$("#page .topic,#sticky-csdb,#sticky-gb64,#sticky-visuals").hide();
+		$("#page .topic,#sticky-csdb,#sticky-gb64,#sticky-remix,#sticky-player,#sticky-stil,#sticky-visuals").hide();
 		if (topic != "visuals")
 			$("#topic-"+topic).show();
 
@@ -742,11 +742,21 @@ $(function() { // DOM ready
 			$("#sticky-gb64").show();
 		}
 
-		// If 'Remix' tab is selected then hide the notification on it
-		if (topic === "remix") $("#note-remix").hide();
+		// If 'Remix' tab is selected
+		if (topic === "remix") {
+			$("#note-remix").hide();
+			$("#sticky-remix").show();
+		}
 
-		// If 'Player' tab is selected then hide the notification on it
-		if (topic === "player") $("#note-player").hide();
+		// If 'Player' tab is selected
+		if (topic === "player") {
+			$("#note-player").hide();
+			$("#sticky-player").show();
+		}
+
+		// If 'STIL' tab is selected
+		if (topic === "stil")
+			$("#sticky-stil").show();
 
 		// If 'Profile' tab is selected then refresh the charts if present
 		// NOTE: If this is not done the charts will appear "flattened" towards the left side.
@@ -1094,12 +1104,13 @@ $(function() { // DOM ready
 	/**
 	 * When clicking the 'BACK' button on a player/editor page to show the list of them again.
 	 */
-	$("#topic-player").on("click", "#go-back-player", function() {
+	$("#sticky-player").on("click", "#go-back-player", function() {
 		if (cachePlayer == "") {
 			// First time?
 			$("#players").trigger("click");
 		} else {
 			$this = $(this);
+			$("#sticky-player").empty().height(34).append('<h2 style="display:inline-block;margin-top:0;">Players / Editors</h2>');
 			// Load the cache again
 			$("#topic-player")/*.css("visibility", "hidden")*/.empty().append(cachePlayer);
 			// Also set scroll position to where we clicked last time
@@ -1575,6 +1586,7 @@ $(function() { // DOM ready
 		$(this).blur();
 		if (players) players.abort();
 		$("#topic-players").empty().append(browser.loadingSpinner("profile"));
+		$("#sticky-player").empty();
 
 		if ($("#tabs .selected").attr("data-topic") !== "player" && typeof noclick == "undefined")
 			$("#tab-player").trigger("click");
@@ -1587,6 +1599,7 @@ $(function() { // DOM ready
 		players = $.get("php/player_list.php", function(data) {
 			browser.validateData(data, function(data) {
 				clearTimeout(loadingPlayers);
+				$("#sticky-player").empty().height(34).append(data.sticky);
 				$("#topic-player").empty().append(data.html);
 				ResetDexterScrollBar("player");
 				$("#note-csdb").hide();

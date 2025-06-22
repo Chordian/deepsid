@@ -7,8 +7,8 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- White static header and "0 results" in other tabs.
-  UPDATE: GB64 now done.
+- Replace cause of death with age at death instead. (Don't delete the cause of death data,
+  though. Just don't use it.)
 
 - Consider versioned JS files, e.g. <script src="main.20250625.js"></script>
   But I imagine updating it in index.php would be annoying. Can it be automated somehow?

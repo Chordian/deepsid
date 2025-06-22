@@ -4723,6 +4723,9 @@ input[type=range]::-ms-track {
 		/* Container for a sticky white top header box (used by e.g. the 'CSDb' tab) */
 		#sticky-csdb,
 		#sticky-gb64,
+		#sticky-remix,
+		#sticky-player,
+		#sticky-stil,
 		#sticky-visuals {
 			display: none;
 			position: relative;
@@ -4818,6 +4821,7 @@ input[type=range]::-ms-track {
 
 		#page .ext .permalink,
 		#sticky-csdb .permalink,
+		#sticky-player .permalink,
 		#path .permalink {
 			width: 12px;
 			height: 12px;
@@ -5523,6 +5527,8 @@ input[type=range]::-ms-track {
 			#page .ext button,
 			#sticky-csdb button,
 			#sticky-gb64 button,
+			#sticky-remix button,
+			#sticky-player button,
 			#sticky-right-buttons button {
 				font-size: 11px;
 				height: 21px;
@@ -5750,7 +5756,7 @@ input[type=range]::-ms-track {
 		margin-left: -2px;
 	}
 
-	#topic-player .download-dot {
+	#sticky-player .download-dot {
 		margin: 0 6px;
 		color: #8a8c7a;
 		font-size: 10px;

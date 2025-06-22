@@ -920,7 +920,7 @@ Controls.prototype = {
 				$("#stopic-stil")
 					.css("overflow", "none")
 					.append('<div id="tips" class="no-info">'+(isSidHappens ? 'No notes for this SID file' : 'No STIL information')+'</div>');
-				$("#topic-stil").empty().append("<i>"+(isSidHappens ? "No notes" : "No STIL information")+" available for this SID file.</i>");
+				$("#topic-stil").empty().append("<i>No information available.</i>");
 			} else {
 				$("#topic-stil,#stopic-stil").empty().append(stil);
 			}

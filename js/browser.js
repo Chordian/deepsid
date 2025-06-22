@@ -1977,6 +1977,7 @@ Browser.prototype = {
 		if (miniPlayer || isMobile || JSON.stringify(params) == JSON.stringify(this.playerParams)) return;
 		if (this.playerInfo) this.playerInfo.abort();
 		$("#topic-player").empty().append(this.loadingSpinner("player"));
+		$("#sticky-player").empty();
 
 		this.playerParams = params; // Prevents reloading of the same page (not 100% perfect)
 
@@ -1988,7 +1989,10 @@ Browser.prototype = {
 		this.playerInfo = $.get("php/player.php", params, function(data) {
 			this.validateData(data, function(data) {
 
+				var height = data.info ? 58 : 34;
+
 				clearTimeout(loadingPlayer);
+				$("#sticky-player").empty().height(height).append(data.sticky);
 				$("#topic-player").empty().append(data.html)
 					.css("visibility", "visible");
 				ResetDexterScrollBar("player");
@@ -2136,6 +2140,7 @@ Browser.prototype = {
 		if (miniPlayer || isMobile || this.isTempTestFile()) return;
 		if (this.remix) this.remix.abort();
 		$("#topic-remix").empty().append(this.loadingSpinner("remix"));
+		$("#sticky-remix").empty();
 
 		var loadingRemix = setTimeout(function() {
 			// Fade in a GIF loading spinner if the AJAX call takes a while
@@ -2152,6 +2157,7 @@ Browser.prototype = {
 			this.validateData(data, function(data) {
 
 				clearTimeout(loadingRemix);
+				$("#sticky-remix").empty().append(data.sticky);
 				$("#topic-remix").empty().append(data.html)
 					.css("visibility", "visible");
 				ResetDexterScrollBar("remix");

@@ -89,8 +89,10 @@ if (isset($_GET['fullname'])) {
 		die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 	}
 
-	if (empty($csdb_type))
-		die(json_encode(array('status' => 'warning', 'html' => '<p style="margin-top:0;"><i>No CSDb entry available.</i></p>')));
+	if (empty($csdb_type)) {
+		$sticky = '<h2 style="display:inline-block;margin-top:0;">CSDb</h2>';
+		die(json_encode(array('status' => 'warning', 'sticky' => $sticky, 'html' => '<p style="margin-top:0;"><i>No CSDb entry available.</i></p>')));
+	}
 
 	$go_back = '';
 

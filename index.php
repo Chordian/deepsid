@@ -990,6 +990,9 @@
 				</div>
 				<div id="sticky-csdb"><h2 style="margin-top:0;">CSDb</h2></div>
 				<div id="sticky-gb64"><h2 style="margin-top:0;">GameBase64</h2></div>
+				<div id="sticky-remix"><h2 style="margin-top:0;">Remix64</h2></div>
+				<div id="sticky-player"><h2 style="margin-top:0;">Players / Editors</h2></div>
+				<div id="sticky-stil"><h2 style="margin-top:0;">STIL / Lyrics</h2></div>
 				<div id="sticky-visuals"><h2 style="margin-top:0;">Visuals</h2>
 					<div class="visuals-buttons" data-selected-visual="">
 						<button class="visuals-button icon-piano button-off" data-visual="piano">Piano</button>
@@ -1325,8 +1328,7 @@
 						<br />
 						<p>
 							<i>This does not work in
-							<a href="http://www.c64music.co.uk/" target="_blank">Compute's Gazette SID Collection</a> as
-							CSDb has almost no data for it.</i>
+							<a href="http://www.c64music.co.uk/" target="_blank">Compute's Gazette SID Collection</a>.</i>
 						</p>
 					</div>
 
@@ -1345,12 +1347,10 @@
 					</div>
 
 					<div id="topic-player" class="topic ext" style="display:none;">
-						<h2>Player</h2>
 						<p>If available, this tab will show information about the editor/player that made the song.</p>
 					</div>
 
-					<div id="topic-stil" class="topic" style="display:none;">
-						<h2>STIL / Lyrics</h2>
+					<div id="topic-stil" class="topic ext" style="display:none;">
 						<p>This tab will sometimes show one of two things depending on the SID collection you're browsing.
 							It will display the same contents as the first tab in the box just above the player controls.
 						</p>
@@ -1383,7 +1383,6 @@
 					</div>
 
 					<div id="topic-remix" class="topic ext" style="display:none;">
-						<h2>Remix64</h2>
 						<p>If you click a SID file that has been remixed into modern forms, this tab will show
 							those entries from Remix64.</p>
 						<p>
@@ -1868,6 +1867,7 @@
 						<h3>June 22, 2025</h3>
 						<ul>
 							<li>Headers on the CSDb and GB64 tabs now handle long titles without overflowing.</li>
+							<li>All page tabs now use the same sticky header bar as the CSDb and GB64 tabs.</li>
 							<li>The "No SID Handler" option has been added. It obviously plays no music, but can be handy when
 								you just want to browse for information. The auto-play overlay is not shown either.</li>
 						</ul>
@@ -1899,7 +1899,7 @@
 						<ul>
 							<li>You can now click any screenshot (not just in the GB64 tab) to view it at three times its original size.</li>
 							<li>Fixed temporary emulating testing (hotkey "l") not showing the correct number of subtunes for a song.</li>
-							<li>The GB64 tab now uses the same sticky white header bar as the CSDb tab.</li>
+							<li>The GB64 tab now uses the same sticky header bar as the CSDb tab.</li>
 						</ul>
 
 						<h3>June 14, 2025</h3>
