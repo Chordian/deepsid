@@ -10,12 +10,6 @@ SHOULD BE DONE
 - Replace cause of death with age at death instead. (Don't delete the cause of death data,
   though. Just don't use it.)
 
-- Consider versioned JS files, e.g. <script src="main.20250625.js"></script>
-  But I imagine updating it in index.php would be annoying. Can it be automated somehow?
-
-- Idea for pinpointing a compo tune used in a production earlier (which is iffy) - a RED
-  arrow from the green tags to the blue production tag.
-
 - Now that cursor up/down works in the folders list, consider moving the faint row marker
   when using those keys, and Enter to select and play a SID row.
 
@@ -497,6 +491,10 @@ PROBABLY NOT?
 - Someone asked for a context menu option for exporting SID to MIDI, but it would be way too much work.
   I would need someone to have created a SID to MIDI library in JS or PHP so I can use it right away.
   Converting e.g. the XSID source code is not an option.
+
+- Idea for pinpointing a compo tune used in a production earlier (which is iffy) - a RED
+  arrow from the green tags to the blue production tag.
+  UPDATE: I later hid the left and right arrow tags completely, as they were too confusing.
 
 - Now that the "download" option is available, it would make sense to play CGSC stereo files. However,
   there's a problem there. Stereo files are two files; one MUS and one STR file, yet a row click

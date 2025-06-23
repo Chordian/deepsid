@@ -70,8 +70,8 @@
 		<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Asap+Condensed" />
 		<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Kanit" />
 		<link rel="stylesheet" type="text/css" href="//blog.chordian.net/wordpress/wp-content/themes/olivi/style.css" />
-		<link rel="stylesheet" type="text/css" href="css/chartist.css" />
-		<link rel="stylesheet" type="text/css" href="css/style.css" />
+		<link rel="stylesheet" type="text/css" href="css/chartist.css?v=<?php echo filemtime('css/chartist.css') ?>" />
+		<link rel="stylesheet" type="text/css" href="css/style.css?v=<?php echo filemtime('css/style.css') ?>" />
 		<?php if (isLemon()): ?>
 			<!-- For Lemon64: START -->
 			<link rel="stylesheet" type="text/css" href="https://www.lemon64.com/assets/external/deepsid/style.css" />
@@ -103,32 +103,32 @@
 			<script type="text/javascript" src="http://www.wothke.ch/tmp/scriptprocessor_player.min.js"></script>
 			<script type="text/javascript" src="http://www.wothke.ch/tmp/backend_websid.js"></script>
 		<?php else: ?>
-			<script type="text/javascript" src="js/handlers/scriptprocessor_player.min.js"></script>
-			<script type="text/javascript" src="js/handlers/backend_tinyrsid.js"></script>
-			<script type="text/javascript" src="js/handlers/backend_websid.js"></script>
-			<script type="text/javascript" src="js/handlers/backend_websidplay.js"></script>
+			<script type="text/javascript" src="js/handlers/scriptprocessor_player.min.js?v=<?php echo filemtime('js/handlers/scriptprocessor_player.min.js') ?>"></script>
+			<script type="text/javascript" src="js/handlers/backend_tinyrsid.js?v=<?php echo filemtime('js/handlers/backend_tinyrsid.js') ?>"></script>
+			<script type="text/javascript" src="js/handlers/backend_websid.js?v=<?php echo filemtime('js/handlers/backend_websid.js') ?>"></script>
+			<script type="text/javascript" src="js/handlers/backend_websidplay.js?v=<?php echo filemtime('js/handlers/backend_websidplay.js') ?>"></script>
 		<?php endif ?>
 
 		<!--<script type="text/javascript" src="js/handlers/jsidplay2.js"></script>-->
-		<script type="text/javascript" src="js/handlers/jsSID-modified.js"></script>
-		<script type="text/javascript" src="js/handlers/howler.min.js"></script>
-		<script type="text/javascript" src="js/chartist.min.js"></script>
+		<script type="text/javascript" src="js/handlers/jsSID-modified.js?v=<?php echo filemtime('js/handlers/jsSID-modified.js') ?>"></script>
+		<script type="text/javascript" src="js/handlers/howler.min.js?v=<?php echo filemtime('js/handlers/howler.min.js') ?>"></script>
+		<script type="text/javascript" src="js/chartist.min.js?v=<?php echo filemtime('js/chartist.min.js') ?>"></script>
 		<?php // @link https://github.com/madmurphy/cookies.js ?>
-		<script type="text/javascript" src="js/cookies.min.js"></script>
-		<script type="text/javascript" src="js/select.js"></script>
-		<script type="text/javascript" src="js/player.js"></script>
-		<script type="text/javascript" src="js/controls.js"></script>
-		<script type="text/javascript" src="js/browser.js"></script>
-		<script type="text/javascript" src="js/lib/opl.js"></script>
-		<script type="text/javascript" src="js/opljs-if.js"></script>
+		<script type="text/javascript" src="js/cookies.min.js?v=<?php echo filemtime('js/cookies.min.js') ?>"></script>
+		<script type="text/javascript" src="js/select.js?v=<?php echo filemtime('js/select.js') ?>"></script>
+		<script type="text/javascript" src="js/player.js?v=<?php echo filemtime('js/player.js') ?>"></script>
+		<script type="text/javascript" src="js/controls.js?v=<?php echo filemtime('js/controls.js') ?>"></script>
+		<script type="text/javascript" src="js/browser.js?v=<?php echo filemtime('js/browser.js') ?>"></script>
+		<script type="text/javascript" src="js/lib/opl.js?v=<?php echo filemtime('js/lib/opl.js') ?>"></script>
+		<script type="text/javascript" src="js/opljs-if.js?v=<?php echo filemtime('js/opljs-if.js') ?>"></script>
 
 		<?php if (isset($_GET['websiddebug'])): ?>
 			<script type="text/javascript" src="http://www.wothke.ch/tmp/channelstreamer.js"></script>
 		<?php else: ?>
-			<script type="text/javascript" src="js/handlers/channelstreamer.min.js"></script>
+			<script type="text/javascript" src="js/handlers/channelstreamer.min.js?v=<?php echo filemtime('js/handlers/channelstreamer.min.js') ?>"></script>
 		<?php endif ?>
-		<script type="text/javascript" src="js/viz.js"></script>
-		<script type="text/javascript" src="js/main.js"></script>
+		<script type="text/javascript" src="js/viz.js?v=<?php echo filemtime('js/viz.js') ?>"></script>
+		<script type="text/javascript" src="js/main.js?v=<?php echo filemtime('js/main.js') ?>"></script>
 		<?php if (isLemon()): ?>
 			<!-- For Lemon64: START -->
 			<script type="text/javascript" src="https://www.lemon64.com/assets/external/deepsid/main.js"></script>
@@ -627,11 +627,9 @@
 						<div id="sundry-news">
 							<!--<span>The <a href="https://www.hvsc.c64.org/" target="_top">High Voltage SID Collection</a> has been upgraded to the latest version #82. Click <a href="//deepsid.chordian.net/?search=82&type=new">here</a> to see what's new in this update.</span>-->
 							<!--<span><a href="http://www.c64music.co.uk/" target="_top">Compute's Gazette SID Collection</a> has been upgraded to the latest version #146. Click <a href="//deepsid.chordian.net/?search=146&type=new">here</a> to see what's new in this update.</span>-->
-							<!--<a href="https://xparty.net/"><img src="images/sundry_x2024.png" alt="X'2024" /></a>-->
-							<span>I changed some Javascript files so make sure your browser cache is up to date. On Windows, hit <b style="color:#77c;">Ctrl+F5</b> while viewing the site, on Mac, hit <b style="color:#77c;">Cmd+Shift+R</b>.</span>
+							<!--   SHOULD NOT BE NECESSARY ANYMORE: <span>I changed some Javascript files so make sure your browser cache is up to date. On Windows, hit <b style="color:#77c;">Ctrl+F5</b> while viewing the site, on Mac, hit <b style="color:#77c;">Cmd+Shift+R</b>.</span>-->
 							<!--<span>Want to learn how to make SID tunes? Check out <a href="https://www.youtube.com/watch?v=nXNtLetxFUg">this tutorial video</a> now on YouTube.</span>-->
-
-							<!-- See in controls.js: "showNewsImage" and "clickNews" for how to set up a news image -->
+							<!--   See in controls.js: "showNewsImage" and "clickNews" for how to set up a news image -->
 							<!--<pre><b style="font-size:16px;">Coming up<br></b><b style="position:relative;top:-3px;font-size:13px;">17 - 19 Nov.</b><br><br><i style="position:absolute;bottom:-38px;right:4px;font-size:13px;line-height:17px;text-align:right;">New SID tunes<br><font style="font-size:17px;">incoming!</font></i></pre>-->
 						</div>
 					<?php endif ?>
@@ -1864,6 +1862,11 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>June 23, 2025</h3>
+						<ul>
+							<li>The left and right arrow tag icons (introduced June 19) have been revoked, as they were too confusing.</li>
+						</ul>
+
 						<h3>June 22, 2025</h3>
 						<ul>
 							<li>Headers on the CSDb and GB64 tabs now handle long titles without overflowing.</li>
@@ -1887,11 +1890,11 @@
 
 						<h3>June 19, 2025</h3>
 						<ul>
-							<li>Left and right arrow tag icons have been added. These always appear between event (green) and production (blue) tags.
+							<li><del>Left and right arrow tag icons have been added. These always appear between event (green) and production (blue) tags.
 								A green event tag with a right-pointing arrow toward a blue production tag (e.g. a demo) indicates that the SID file was
-								created specifically for that production, which was released at the event.</li>
-							<li>If the arrow points to the left instead, it means the SID file was released at the event but not made for a particular
-								production and did not participate in a music competition.</li>
+								created specifically for that production, which was released at the event.</del></li>
+							<li><del>If the arrow points to the left instead, it means the SID file was released at the event but not made for a particular
+								production and did not participate in a music competition.</del></li>
 							<li>You can now refresh the current folder by hitting the "f" key. <del>This will also go back to the top of the list.</del></li>
 						</ul>
 

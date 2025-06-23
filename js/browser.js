@@ -1691,15 +1691,20 @@ Browser.prototype = {
 				list_of_tags += '<div class="tag tag-event tag-winner"><img src="images/composer_star.svg" /><img style="left:18px;" src="images/composer_star.svg" /><img style="left:66px;" src="images/composer_star.svg" /><img style="left:75.5px;" src="images/composer_star.svg" /><span>Winner</span></div>';
 			} else if (tag == "<-") {
 				// Replace "<-" with a pretty unicode arrow instead
-				list_of_tags += '<div class="tag tag-transparent">🡨</div>';
+				// Disabled as perhaps users find them too confusing.
+				//list_of_tags += '<div class="tag tag-transparent">🡨</div>';
 			} else if (tag == "->") {
 				// Replace "->" with a pretty unicode arrow instead
-				list_of_tags += '<div class="tag tag-transparent">🡪</div>';
+				// Disabled as perhaps users find them too confusing.
+				//list_of_tags += '<div class="tag tag-transparent">🡪</div>';
+			} else if (tag == "$31" || tag == "$61" || tag == "$71" || tag.indexOf("Small Event") !== -1) {
+				// These tags will not be shown for various reasons:
+				// Waveforms: Too commonly used in SID tunes and just adds noise.
+				// Small Event: Just don't add an event tag if it's tiny and rare.
 			} else {
 				// NOTE: Don't change the order of tags or the collector for a folder will break!
 				// If you want to change the order of tags, see GetTagsAndTypes() in 'tags_read.php'
-				var hideTag = tag == "$31" || tag == "$61" || tag == "$71" ? ' style="display:none;"' : '';
-				list_of_tags += '<div class="tag tag-'+types[i]+'"'+hideTag+'>'+tag+'</div>';
+				list_of_tags += '<div class="tag tag-'+types[i]+'">'+tag+'</div>';
 			}
 		});
 		list_of_tags += '<div class="edit-tags" title="Edit tags">&nbsp;</div>';
