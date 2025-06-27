@@ -443,8 +443,9 @@ Browser.prototype = {
 									});
 								}.bind(this));
 							});
-							$("#dialog-all-tags").scrollTop(0).focus();
-							$("#dialog-song-tags").scrollTop(0);
+							SetScrollTopInstantly("#dialog-all-tags", 0);
+							SetScrollTopInstantly("#dialog-song-tags", 0);
+							$("#dialog-all-tags").focus();
 						});
 					}.bind(this));
 					return false;
@@ -1100,7 +1101,7 @@ Browser.prototype = {
 			}, function(data) {
 				this.validateData(data, function(data) {
 
-					if (data.debug !== "") console.log(data.debug);
+					// if (data.debug !== "") console.log(data.debug);
 
 					clearTimeout(loading);
 					$("#loading").hide();
@@ -1686,9 +1687,15 @@ Browser.prototype = {
 			} else if (tag == "Doubling" || tag == "Hack" || tag == "Mock" || tag == "Bug") {
 				// A unique color for tags that serves as a warning
 				list_of_tags += '<div class="tag tag-warning">'+tag+'</div>';
+			} else if (tag == "Collection") {
+				// Add a double note to make it clear this is for a music collection
+				list_of_tags += '<div class="tag tag-production tag-notes tag-collection"><img src="images/composer_doublenote.svg" /><span>Collection</span></div>';
+			} else if (tag == "Compo") {
+				// Add a double note to make it clear this is for music competitions only
+				list_of_tags += '<div class="tag tag-event tag-notes tag-compo"><img src="images/composer_doublenote.svg" /><span>Compo</span></div>';
 			} else if (tag == "Winner") {
-				// A slightly snazzier tag for winners (takes up a lot of space though)
-				list_of_tags += '<div class="tag tag-event tag-winner"><img src="images/composer_star.svg" /><img style="left:18px;" src="images/composer_star.svg" /><img style="left:66px;" src="images/composer_star.svg" /><img style="left:75.5px;" src="images/composer_star.svg" /><span>Winner</span></div>';
+				// A slightly snazzier tag for winners (takes up a lot of space though) - now uses unicode chars
+				list_of_tags += '<div class="tag tag-event tag-winner">★★ Winner ★★</div>';
 			} else if (tag == "<-") {
 				// Replace "<-" with a pretty unicode arrow instead
 				// Disabled as perhaps users find them too confusing.
@@ -1945,12 +1952,35 @@ Browser.prototype = {
 		this.csdb = $.get("php/csdb.php", args, function(data) {
 			this.validateData(data, function(data) {
 
+				// if (data.debug !== "") console.log(data.debug);
+
+				// Gather the group names used by the scener (if applicable)
+				var groupTexts = [];
+				$("a.group").each(function() {
+					let clone = $(this).clone();
+					clone.find("del").contents().unwrap();
+					groupTexts.push(clone.text().trim());
+				});
+				var groupNames = [...new Set(groupTexts)];
+
 				clearTimeout(loadingCSDb);
 				$("#sticky-csdb").empty().append(data.sticky);
 				if (parseInt(colorTheme)) data.html = data.html.replace(/composer\.png/g, "composer_dark.png");
 				$("#topic-csdb").empty().append(data.html)
 					.css("visibility", "visible");
 				ResetDexterScrollBar("csdb");
+
+				// Emphasize other group names in green that might also be relevant productions
+				setTimeout(function() {
+					$("a.csdb-group").each(function(i, element) {
+						var currentText = $(element).text().trim().toLowerCase();
+						groupNames.forEach(function(name) {
+							if (name.toLowerCase() === currentText) {
+								$(element).addClass("empSec");
+							}
+						});
+					});
+				}, 0);
 
 				UpdateRedirectPlayIcons();
 

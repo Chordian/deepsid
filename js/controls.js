@@ -455,6 +455,10 @@ Controls.prototype = {
 					var tag = event.target.innerHTML.toLowerCase();
 					if ($(event.target).hasClass("tag-remix64"))
 						tag = "remix64";
+					else if ($(event.target).hasClass("tag-collection"))
+						tag = "collection";
+					else if ($(event.target).hasClass("tag-compo"))
+						tag = "compo";
 					else if ($(event.target).hasClass("tag-winner"))
 						tag = "winner";
 					else if ($(event.target).hasClass("tag-gamebase64"))
@@ -942,7 +946,7 @@ Controls.prototype = {
 	 */
 	showNewsImage: function(show) {
 		if (show && $("#stab-stil").text() == "News")
-			$("#sundry").css({                                                    // Zoom
+			$("#sundry").css({                                                    // Zoom  102%
 				'background': 'var(--color-bg-box) url(images/news.png) center top / 102% auto no-repeat',
 			});
 		else
@@ -956,7 +960,7 @@ Controls.prototype = {
 	 * setting this up. Point this to the relevant web site for the image.
 	 */
 	clickNews: function() {
-		window.open("https://xparty.net/");
+		window.open("https://en.wikipedia.org/wiki/Commodore_64");
 	},
 
 	/**

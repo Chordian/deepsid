@@ -44,6 +44,7 @@
 	--color-notable:				#f8f848;			/* Color for notable achievements in composer profile */
 	--color-oldest-in-top:			#c86d55;			/* Color for right corner line above CSDb comments table */
 	--color-emphasize:				#ffff80;			/* Color for emphasizing handles or groups in CSDb releases */
+	--color-empSec:					#cfc;
 	--color-bg-block-data:			var(--color-top);
 	--color-text-block:				var(--color-bottom);
 	--color-text-block-toggled:		#9a9a90;			/* #7c7e60 #929292 */
@@ -439,6 +440,7 @@
 	--color-selection-text:			#222;
 	--color-notable:				#d9ce6f;
 	--color-emphasize:				#449;
+	--color-empSec:					#005000;
 	--color-bg-block-data:			var(--color-bottom);
 	--color-text-block:				#bcbebc;
 	--color-text-block-toggled:		var(--color-top);
@@ -2335,7 +2337,7 @@ input[type=range]::-ms-track {
 				background: var(--color-bg-tag-event);
 			}
 
-				.tag-winner img {
+				.tag-notes img {
 					position: absolute;
 					top: 0;
 					width: 12px;
@@ -2344,9 +2346,14 @@ input[type=range]::-ms-track {
 					pointer-events: none;
 				}
 
-				.tag-winner span {
-					padding: 0 21px;
-					font-weight: bold;
+					.tag-notes img {
+						top: 2px;
+						width: 9px;
+						height: 9px;
+					}
+
+				.tag-notes span {
+					padding-left: 12px;
 					pointer-events: none;
 				}
 
@@ -4967,6 +4974,11 @@ input[type=range]::-ms-track {
 		/* Used to emphasize handles or groups in a list of CSDb releases */
 		#page .ext .emphasize {
 			background: var(--color-emphasize);
+		}
+
+		/* Used to emphasize other groups in a list of CSDb releases */
+		#page .ext .empSec {
+			background: var(--color-empSec);
 		}
 
 		#page .ext .shared-all-comments {

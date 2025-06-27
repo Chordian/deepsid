@@ -237,10 +237,10 @@ if ($csdb_type == 'sid') {
 						// We've had this group before so we know the name
 						$grp = $sid_groups[(string)$id];
 					$yellow = stripos($copyright, strtolower($grp)) > -1
-						? ' class="emphasize"'
-						: '';
+						? 'emphasize'
+						: 'csdb-group';
 					$released_by .= (!empty($grp)
-						? ', <a href="http://csdb.chordian.net/?type=group&id='.$id.'" target="_blank"'.$yellow.'>'.$grp.'</a>'
+						? ', <a href="http://csdb.chordian.net/?type=group&id='.$id.'" target="_blank" class="'.$yellow.'">'.$grp.'</a>'
 						: ', [<a href="http://csdb.chordian.net/?type=group&id='.$id.'" target="_blank">Group:'.$id.'</a>]'
 					);
 					if (!$amount) {

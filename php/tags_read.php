@@ -45,7 +45,7 @@ function GetTagsAndTypes($file_id, &$list_of_tags, &$type_of_tags) {
 				if ($tag_info->name == "Compo" || $tag_info->name == "<-")
 					// Must come before the competition ranking
 					array_push($tags_event_p2, $tag_info->name);
-				else if ($tag_info->name == "Winner"  || substr($tag_info->name, 0, 1) == "#")
+				else if ($tag_info->name == "Winner" || $tag_info->name == "Solitary" || substr($tag_info->name, 0, 1) == "#")
 					// Competition ranking
 					array_push($tags_event_p3, $tag_info->name);
 				else if ($tag_info->name == "->")

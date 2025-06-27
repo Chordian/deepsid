@@ -93,7 +93,7 @@ if ($row->csdbtype == 'scener') {
 				$csdb_handle = $csdb;
 				$this_handle = $csdb->Handle->Handle;
 			} else {
-				// There another handle so get the XML for it now
+				// There's another handle so get the XML for it now
 				$xml = curl('https://csdb.dk/webservice/?type=scener&id='.$handle->ID);
 				if (!strpos($xml, '<CSDbData>'))
 					continue; // BUG FIX: Don't show alert box but just silently ignore and continue
