@@ -76,7 +76,7 @@ First, do steps 1 to 7 above as you will need the big file later.
 
   1. On the local machine, you should already have deleted the old HVSC folder tree and
      copied in the new one. If you haven't done that yet, do it now.
-  2. Update the HVSC_NEW_VERSION constant in the "update_hvsc_db.php" script.
+  2. Update the HVSC_NEW_VERSION constant in the "update_hvsc_db.php" script. (!!!)
   3. Copy the new "Update##.hvs" file to the ./deepsid/php/hvsc_update/ folder.
   4. Edit the file and check the "Cleaning Up" section. If a real file is deleted
      there (e.g. something in DOCUMENTS) then delete that line and save. This goes for
@@ -411,7 +411,7 @@ Fixing HVSC update discrepancies:
   4. When done, test the SID file in DeepSID to see if it now plays correctly and have data.
   5. Repeat step 2 to 4 for the other problem rows.
   6. When you have done this for the LOCAL version, export the rows to a patch SQL file.
-  7. Edit the SQL file and remove the ID column.
+  7. Edit the SQL file and remove the ID column and (!!!) the drop line.
   8. When importing it for ONLINE later, find and delete the old problem rows in it too.
 
 TABLE: hvsc_folders
