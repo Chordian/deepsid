@@ -66,12 +66,14 @@ try {
 	// Now get sorted arrays of the tag names and types used by this file right now
 	$list_of_tags = array();
 	$type_of_tags = array();
-	GetTagsAndTypes($file_id, $list_of_tags, $type_of_tags);
+	$id_of_tags = array();
+	$id_tag_start = $id_tag_end = 0;
+	GetTagsAndTypes($file_id, $list_of_tags, $type_of_tags, $id_of_tags, $id_tag_start, $id_tag_end);
 
 } catch(PDOException $e) {
 	$account->LogActivityError('tags_write_single.php', $e->getMessage());
 	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 }
 
-echo json_encode(array('status' => 'ok', 'tags' => $list_of_tags, 'tagtypes' => $type_of_tags));
+echo json_encode(array('status' => 'ok', 'tags' => $list_of_tags, 'tagtypes' => $type_of_tags, 'tagids' => $id_of_tags, 'tagidstart' => $id_tag_start, 'tagidend' => $id_tag_end));
 ?>

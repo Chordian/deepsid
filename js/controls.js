@@ -455,6 +455,8 @@ Controls.prototype = {
 					var tag = event.target.innerHTML.toLowerCase();
 					if ($(event.target).hasClass("tag-remix64"))
 						tag = "remix64";
+					else if ($(event.target).hasClass("tag-music"))
+						tag = "music";
 					else if ($(event.target).hasClass("tag-collection"))
 						tag = "collection";
 					else if ($(event.target).hasClass("tag-compo"))
@@ -945,6 +947,9 @@ Controls.prototype = {
 	 * @param {boolean} show	If specified and TRUE, show image if in 'News' tab
 	 */
 	showNewsImage: function(show) {
+
+		return; // Comment this out when you want to show a news image
+
 		if (show && $("#stab-stil").text() == "News")
 			$("#sundry").css({                                                    // Zoom  102%
 				'background': 'var(--color-bg-box) url(images/news.png) center top / 102% auto no-repeat',

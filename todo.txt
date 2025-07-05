@@ -7,28 +7,53 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- TAGS: Idea for a special search in 'hvsc.php' which searches: Everything in GB64 database
-  where SidFilename != "" AND a "GameBase64" tag doesn't already exist for this fullname in
-  the DeepSID database. List them all in DeepSID so they can be handled once and for all.
-
-- TAGS: Maybe show blue "Music" tag as a double note only? If so, consider always letting
-  it be the first of the blue production tags.
+- Remember the cache system for Steam images at GameDeed? Consider doing the same thing for
+  CSDb pages. Good for when CSDb is down (or even gone one day).
 
 - DeepSID.com now works as a short link redirector. Make an addition to 'shorten.php' so
   the URL specified in the input is validated to have 'https://deepsid.chordian.net' in
   the beginning or else it will be discarded.
 
-- Remember the cache system for Steam images at GameDeed? Consider doing the same thing for
-  CSDb pages. Good for when CSDb is down (or even gone one day).
+- TAGS: Idea for event connection to production tag: A line below tags, going from event to
+  relevant production. You could expand the 'tags_lookup' table with a second tags_id column.
+  When empty, the behavior is as it previously was. When an ID is specified, the previous
+  tags_id is the source (usually an green event tag) and the second tags_id is the
+  destination (usually a blue production tag). JS then uses this to draw a line.
 
-- Walk through all player/editor pages and click tunes to see if the player/editor page
-  pops up as expected. Edit or add player names in the database as necessary.
+
+      @todo When the start tag is removed, then added again, updatestickytag should not
+            re-render the bracket line anymore.
+
+
+- User interface for tag connecting: Add a button or a link in the normal tag dialog box.
+  Click to replace dialog box with another. Click Back on that return to the normal dialog
+  box again (or just click OK or Cancel). In the new one, two lists, both with tags that
+  have been selected for that SID row. One can be marked in both. Only when one is marked
+  in both is OK enabled. Don't add code for disabled right box as it would make it too
+  cumbersome to re-click other choices in both. Instead allow selecting same as start and
+  end tag, but when clicking OK, an Alert warning appears. "You cannot..."
+
+
+
+
+
+- A cool idea for extra info in SID rows: Weakened big letters in the left side of the row,
+  taking up all height but always subtly in the background. Example: 2SID
 
 - If you look closely, some tag names are too high up. It differs from SID row to SID row
   in Firefox. Test decimal line heights to see if it can be fixed.
 
+- Abbreviate "Colleciton" to "Coll." - you're going to have to change some code for that.
+
+- Add hotkey "t" for adding tags to the currently selected SID row.
+
+- Put the "GameBase64" tag in the "Handling tags" annex topic.
+
 - Replace cause of death with age at death instead. Don't delete the cause of death data,
   though; just don't use it. Don't store age at death; calculate it from birth/death years.
+
+- Go through all "Links" in all profile pages and make sure the full composer name fits.
+  If it ends in "..." create a short name, e.g. with a letter + full stop for first name.
 
 - Now that cursor up/down works in the folders list, consider moving the faint row marker
   when using those keys, and Enter to select and play a SID row.
@@ -37,9 +62,18 @@ SHOULD BE DONE
   the settings, the default number should of course be 1.
 
 - Add tracking of how much playlists are clicked, tunes are clicked, and so on?
+  Maybe create a generic function to call with type parameter, etc. so it's easy to add in
+  the many places where it makes sense.
+
+- Consider a HTML button somewhere for testing a SID, so it's not just the "l" hotkey.
+
+- BUG: Missing database information:
+  https://deepsid.chordian.net/?file=/Compute%27s%20Gazette%20SID%20Collection/BJ_Pools/Heaven_Knows_A.mus
 
 - BUG: The number of DL links here breaks the design of the page:
   https://deepsid.chordian.net/?file=/MUSICIANS/O/Onebitman/Walking_in_the_Air.sid
+  Just remove them completely from CSDb lists. You need to see what you're downloading and
+  you can't see that in a forest of DL links in the list row - only on the release page.
 
 - BUG: The STIL entry here is not parsed correctly - all links merge into one big link:
   https://deepsid.chordian.net/?file=/MUSICIANS/B/Bulldog/E_X_I_S.sid&subtune=1
@@ -107,12 +141,6 @@ CONSIDER THIS
   UPDATE: I have now added log of name in 'composer.php' to pinpoint why a user always get
   this error. Still waiting for him to do it again...
   UPDATE: Ever since enabling the above I have not seen it happen again. Lowering the priority.
-
-- TAGS: Idea for event connection to production tag: A line below tags, going from event to
-  relevant production. You could expand the 'tags_lookup' table with a second tags_id column.
-  When empty, the behavior is as it previously was. When an ID is specified, the previous
-  tags_id is the source (usually an green event tag) and the second tags_id is the
-  destination (usually a blue production tag). JS then uses this to draw a line.
 
 - Automate CGSC update process. All REN, MOVE, etc. Create folders where they can't be found
   in the filenames, count files in them, etc.

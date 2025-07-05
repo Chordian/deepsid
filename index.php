@@ -352,6 +352,12 @@
 					<svg height="16" style="enable-background:new 0 0 512 512;" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><polygon points="448,224 288,224 288,64 224,64 224,224 64,224 64,288 224,288 224,448 288,448 288,288 448,288 "/></svg>
 				</button></form>
 			</div>
+			<div class="dialog-connect">
+				<label for="start-tags">Connect this tag:</label><br />
+				<select id="dialog-list-start-tag" name="start-tags"></select>
+				<label for="end-tags">With this tag:</label><br />
+				<select id="dialog-list-end-tag" name="end-tags"></select>
+			</div>
 			<div class="dialog-buttons" style="width:136px;"><button class="dialog-button-yes dialog-auto" style="float:left;margin:0;">OK</button><button class="dialog-button-no dialog-auto" style="float:right;margin:0;">Cancel</button></div>
 		</div>
 
@@ -1862,9 +1868,28 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>July 1, 2025</h3>
+						<ul>
+							<li>All new files in HVSC #83 are now connected to CSDb entries.</li>
+						</ul>
+
+						<h3>June 30, 2025</h3>
+						<ul>
+							<li>Fixed missing database information for <a href="https://deepsid.chordian.net/?file=/MUSICIANS/B/Blues_Muz/Gallefoss_Glenn/N0s_Intro_83.sid">N0s_Intro_83.sid</a> by Glenn Rune Gallefoss.</li>
+						</ul>
+
+						<h3>June 29, 2025</h3>
+						<ul>
+							<li>The blue "Music" tag (used for music releases) is now displayed as a double note icon without its name.
+								It also always appears first among the blue production tags. (To add the tag in the dialog box or search
+								for it in the bottom, just use the "Music" name as usual.)</li>
+							<li>Validated the look-up of all players with a player/editor page and fixed those that didn't work.</li>
+						</ul>
+
 						<h3>June 28, 2025</h3>
 						<ul>
 							<li>The <a href="https://www.hvsc.c64.org/" target="_top">High Voltage SID Collection</a> has been upgraded to the latest version #83.</li>
+							<li>Added composer profiles for the new folders in HVSC #83.</li>
 						</ul>
 
 						<h3>June 27, 2025</h3>

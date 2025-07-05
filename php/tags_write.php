@@ -7,11 +7,14 @@
  * 
  * The script also logs to a CSV file that can be used to undo actions.
  * 
- * It is currently not possible to delete entries in the pool of all tags.
+ * It is currently not possible to delete entries in the pool of all tags. If
+ * you need to do this, you must do it directly in the database.
  * 
  * @uses		$_POST['fileID']			file ID of the song being affected
  * @uses		$_POST['allTags']			may contain new tags with ID 60000 and up
  * @uses		$_POST['fileTags']			list of ID's after adding and removing
+ * @uses		$_POST['startTag']			start of "bracket" connecting two tags
+ * @uses		$_POST['endTag']			end of "bracket" connecting two tags
  * 
  * @used-by		browser.js
  */
@@ -127,15 +130,29 @@ try {
 		}
 	}
 
+	// Find START tag and store counterpart END tag for "bracket" connection
+	if (isset($_POST['startTag']) && isset($_POST['endTag'])) {
+		// First reset all end tag ID just to be sure
+		$update = $db->query('UPDATE tags_lookup SET end_id = 0'.
+			' WHERE files_id = '.$_POST['fileID']);
+
+		// The standard tags ID field also serves as the start tag ID
+		$update = $db->prepare('UPDATE tags_lookup SET end_id = :id'.
+			' WHERE files_id = '.$_POST['fileID'].' AND tags_id = '.$_POST['startTag'].' LIMIT 1');
+		$update->execute(array(':id'=>$_POST['endTag']));
+	}
+
 	// Now get sorted arrays of the tag names and types used by this file right now
 	$list_of_tags = array();
 	$type_of_tags = array();
-	GetTagsAndTypes($_POST['fileID'], $list_of_tags, $type_of_tags);
+	$id_of_tags = array();
+	$id_tag_start = $id_tag_end = 0;
+	GetTagsAndTypes($_POST['fileID'], $list_of_tags, $type_of_tags, $id_of_tags, $id_tag_start, $id_tag_end);
 
 } catch(PDOException $e) {
 	$account->LogActivityError('tags_write.php', $e->getMessage());
 	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 }
 
-echo json_encode(array('status' => 'ok', 'tags' => $list_of_tags, 'tagtypes' => $type_of_tags));
+echo json_encode(array('status' => 'ok', 'tags' => $list_of_tags, 'tagtypes' => $type_of_tags, 'tagids' => $id_of_tags, 'tagidstart' => $id_tag_start, 'tagidend' => $id_tag_end));
 ?>

@@ -5,104 +5,106 @@
  * @used-by		hvsc.php
  * @used-by		tags_write.php
  * @used-by		tags_write_single.php
+ * @used-by		tags_remove_game.php
  */
 
  /**
  * Update the current lists of tags and types for a file.
+ * 
+ * This function has been refactored by ChatGPT.
  * 
  * @global		object		$db					database connection
  *
  * @param		int			$file_id
  * @param		array		&$list_of_tags		reference to array with list of tags
  * @param		array		&$type_of_tags		reference to array with types of tags
+ * @param		array		&$id_of_tags		reference to array with id of tags
+ * @param		int			&$id_tag_start		id to start bracket connection
+ * @param		int			&$id_tag_end		id to end bracket connection
  */
-function GetTagsAndTypes($file_id, &$list_of_tags, &$type_of_tags) {
-
+function GetTagsAndTypes($file_id, &$list_of_tags, &$type_of_tags, &$id_of_tags, &$id_tag_start, &$id_tag_end) {
 	global $db;
 
-	$tags_event_p1 = array();
-	$tags_event_p2 = array();
-	$tags_event_p3 = array();
-	$tags_event_p4 = array();
-	$tags_origin = array();
-	$tags_suborigin = array();
-	$tags_mixorigin = array();
-	$tags_production = array();
-	$tags_digi = array();
-	$tags_subdigi = array();
-	$tags_other = array();
+	$id_tag_start = 0;
+	$id_tag_end = 0;
 
-	$tag_ids = $db->prepare('SELECT tags_id FROM tags_lookup WHERE files_id = :id');
-	$tag_ids->execute(array(':id'=>$file_id));
-	$tag_ids->setFetchMode(PDO::FETCH_OBJ);
-
-	foreach($tag_ids as $row) {
-		$tag = $db->query('SELECT name, type FROM tags_info WHERE id = '.$row->tags_id.' LIMIT 1');
-		$tag->setFetchMode(PDO::FETCH_OBJ);
-		$tag_info = $tag->fetch();
-		switch ($tag_info->type) {
-			case 'EVENT':
-				if ($tag_info->name == "Compo" || $tag_info->name == "<-")
-					// Must come before the competition ranking
-					array_push($tags_event_p2, $tag_info->name);
-				else if ($tag_info->name == "Winner" || $tag_info->name == "Solitary" || substr($tag_info->name, 0, 1) == "#")
-					// Competition ranking
-					array_push($tags_event_p3, $tag_info->name);
-				else if ($tag_info->name == "->")
-					// Arrow to right is always last
-					array_push($tags_event_p4, $tag_info->name);
-				else
-					// Party names should always come first (before the other two above)
-					array_push($tags_event_p1, $tag_info->name);
-				break;
-			case 'ORIGIN':
-				array_push($tags_origin, $tag_info->name);
-				break;
-			case 'SUBORIGIN':
-				array_push($tags_suborigin, $tag_info->name);
-				break;
-			case 'MIXORIGIN':
-				array_push($tags_mixorigin, $tag_info->name);
-				break;
-			case 'PRODUCTION':
-				array_push($tags_production, $tag_info->name);
-				break;
-			case 'DIGI':
-				array_push($tags_digi, $tag_info->name);
-				break;
-			case 'SUBDIGI':
-				array_push($tags_subdigi, $tag_info->name);
-				break;
-			default:
-				array_push($tags_other, $tag_info->name);
-		}
-	}
-	sort($tags_event_p1);
-	sort($tags_event_p2);
-	sort($tags_event_p3);
-	sort($tags_event_p4);
-	sort($tags_origin);
-	sort($tags_suborigin);
-	sort($tags_mixorigin);
-	sort($tags_production);
-	sort($tags_digi);
-	sort($tags_subdigi);
-	sort($tags_other);
-
-	$list_of_tags = array_merge($tags_event_p1, $tags_event_p2, $tags_event_p3, $tags_event_p4, $tags_production, $tags_origin, $tags_suborigin, $tags_mixorigin, $tags_digi, $tags_subdigi, $tags_other);
-
-	$type_of_tags = array_merge(
-		array_fill(0, count($tags_event_p1),	'event'),
-		array_fill(0, count($tags_event_p2),	'event'),
-		array_fill(0, count($tags_event_p3),	'event'),
-		array_fill(0, count($tags_event_p4),	'event'),
-		array_fill(0, count($tags_production),	'production'),
-		array_fill(0, count($tags_origin),		'origin'),
-		array_fill(0, count($tags_suborigin),	'suborigin'),
-		array_fill(0, count($tags_mixorigin),	'mixorigin'),
-		array_fill(0, count($tags_digi),		'digi'),
-		array_fill(0, count($tags_subdigi),		'subdigi'),
-		array_fill(0, count($tags_other),		'other')
+	// Fetch all relevant tags in one go
+	$select = $db->prepare(
+		'SELECT i.id, i.name, i.type, l.tags_id, l.end_id
+		 FROM tags_lookup l
+		 JOIN tags_info i ON l.tags_id = i.id
+		 WHERE l.files_id = :id'
 	);
+
+	$select->execute([':id' => $file_id]);
+	$select->setFetchMode(PDO::FETCH_OBJ);
+	$all_tags = iterator_to_array($select); // Convert to array for sorting
+
+	// Define type priorities for sorting
+	$type_order = [
+		'EVENT'      => 1,
+		'PRODUCTION' => 2,
+		'ORIGIN'     => 3,
+		'SUBORIGIN'  => 4,
+		'MIXORIGIN'  => 5,
+		'DIGI'       => 6,
+		'SUBDIGI'    => 7,
+		'OTHER'      => 8
+	];
+
+	// Sorting logic
+	usort($all_tags, function($a, $b) use ($type_order) {
+		$a_rank = $type_order[$a->type] ?? 999;
+		$b_rank = $type_order[$b->type] ?? 999;
+
+		if ($a_rank !== $b_rank)
+			return $a_rank - $b_rank;
+
+		// Sort special EVENT tag names
+		if ($a->type === 'EVENT') {
+			$event_rank = function($name) {
+				if ($name === 'Compo' || $name === '<-') return 1;
+				if ($name === 'Winner' || $name === 'Solitary' || str_starts_with($name, '#')) return 2;
+				if ($name === '->') return 4;
+				return 0; // Party names first
+			};
+			$a_event_rank = $event_rank($a->name);
+			$b_event_rank = $event_rank($b->name);
+			if ($a_event_rank !== $b_event_rank)
+				return $a_event_rank - $b_event_rank;
+		}
+
+		// Sort special PRODUCTION tag name
+		if ($a->type === 'PRODUCTION') {
+			if ($a->name === 'Music') return -1;
+			if ($b->name === 'Music') return 1;
+		}
+
+		// Fallback to alphabetical
+		return strcasecmp($a->name, $b->name);
+	});
+
+	// Extract final arrays
+	$list_of_tags = [];
+	$type_of_tags = [];
+	$id_of_tags   = [];
+
+	foreach ($all_tags as $tag) {
+		// Fallback for empty or missing type
+		// NOTE: The 'GENRE' type is treated as 'OTHER' for the time being.
+		$raw_type = strtoupper(trim($tag->type));
+		$allowed_types = ['EVENT', 'PRODUCTION', 'ORIGIN', 'SUBORIGIN', 'MIXORIGIN', 'DIGI', 'SUBDIGI'];
+		$type = in_array($raw_type, $allowed_types) ? strtolower($raw_type) : 'other';
+
+		$list_of_tags[] = $tag->name;
+		$type_of_tags[] = $type;
+		$id_of_tags[]   = $tag->id;
+
+		// Assign start/end tag if end_id is valid and no pair has been set yet
+		if ($tag->end_id > 0 && $id_tag_start === 0 && $id_tag_end === 0) {
+			$id_tag_start = $tag->tags_id;
+			$id_tag_end   = $tag->end_id;
+		}		
+	}
 }
 ?>

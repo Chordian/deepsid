@@ -246,6 +246,50 @@ try {
 							' AND tags_info.name LIKE "%Game" LIMIT 1000');
 						break;
 
+					case 'nogb64yet':
+
+						// Connect to imported GameBase64 database
+						if ($_SERVER['HTTP_HOST'] == LOCALHOST)
+							$gb = new PDO(PDO_GB_LOCAL, USER_LOCALHOST, PWD_LOCALHOST);
+						else
+							$gb = new PDO(PDO_GB_ONLINE, USER_GB_ONLINE, PWD_GB_ONLINE);
+						$gb->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+						$gb->exec("SET NAMES UTF8");
+
+						// Get a list of all games that have a SID file indication (no limit)
+						$gb64 = $gb->query('SELECT SidFilename FROM Games WHERE SidFilename != ""');
+						$gb64->setFetchMode(PDO::FETCH_OBJ);
+
+						$fullname_list = [];
+						foreach ($gb64 as $game) {
+							$sidFilename = str_replace('\\', '/', $game->SidFilename);
+							$fullname = '_High Voltage SID Collection/'.$sidFilename;
+							$fullname_list[] = $fullname;
+						}
+
+						// Escape values properly
+						$escaped_list = array_map(function($val) use ($db) {
+							return $db->quote($val); // Uses PDO::quote to safely escape strings
+						}, $fullname_list);
+
+						// Join into a single comma-separated string
+						$in_clause = implode(',', $escaped_list);
+
+						// Find all SID tunes with GB64 entries that doesn't have a "GameBase64" tag yet
+						$select = $db->query('
+							SELECT fullname
+							FROM hvsc_files
+							WHERE fullname IN ('.$in_clause.')
+							AND NOT EXISTS (
+								SELECT 1
+								FROM tags_lookup
+								JOIN tags_info ON tags_info.id = tags_lookup.tags_id
+								WHERE tags_lookup.files_id = hvsc_files.id
+								AND tags_info.name = "GameBase64"
+							)
+						');
+						break;
+
 					default:
 
 						// Don't find anything if not a recognized special search
@@ -1066,7 +1110,9 @@ try {
 			// Get an array of tags for this file ("Jazz", "Rock", etc.)
 			$list_of_tags = array();
 			$type_of_tags = array();
-			GetTagsAndTypes($row->id, $list_of_tags, $type_of_tags);
+			$id_of_tags = array();
+			$id_tag_start = $id_tag_end = 0;
+			GetTagsAndTypes($row->id, $list_of_tags, $type_of_tags, $id_of_tags, $id_tag_start, $id_tag_end);
 
 			// Some player names have to be fetched specifically or there may be undesired changes elsewhere
 			if ($player == 'Jeff') $player = 'Jeff\'s player';
@@ -1094,6 +1140,9 @@ try {
 				'player' =>			str_replace(array_keys($prettyPlayerNames), $prettyPlayerNames, $player), // Remember it reads the array multiple times!
 				'tags' =>			$list_of_tags,
 				'tagtypes' =>		$type_of_tags,
+				'tagids' =>			$id_of_tags,
+				'tagidstart' =>		$id_tag_start,
+				'tagidend' =>		$id_tag_end,
 				'lengths' => 		$lengths,
 				'type' => 			$type,
 				'version' => 		$version,

@@ -129,6 +129,9 @@
 	--color-text-time:				#c6c6c6;
 	--color-text-sundry-disabled:	#b2b3ad;
 
+	--color-tags-bracket:			#a1a294;			/* Used for horizontal tag start-to-end brackets */
+	--color-tags-bracket-up:		#949494;
+
 	--color-border-subtune:			#888;				/* Border for round sub tune indicators in playlists */
 	--color-text-subtune:			#222;				/* Text color for sub tune indicators in playlists */
 	--color-bg-subtune:				var(--color-top);
@@ -523,6 +526,9 @@
 	--color-text-time:				#484848;
 	--color-text-sundry-disabled:	#4a4a4a;
 
+	--color-tags-bracket:			#808080;			/* Used for horizontal tag start-to-end brackets */
+	--color-tags-bracket-up:		#949494;
+
 	--color-border-subtune:			#000;
 	--color-bg-subtune:				#d4d4d4;
 
@@ -794,6 +800,12 @@ input,
 select,
 textarea {
 	color: var(--color-text-body);
+}
+
+/* Added July 2025 to ensure white background color (Firefox issue) */
+select {
+	background: #fff;
+	border: 1px solid var(--color-border-box);
 }
 
 code {
@@ -2270,6 +2282,19 @@ input[type=range]::-ms-track {
 		z-index: 2;
 	}
 
+	/* For the bracket-style line below tags that connects two of the tags */
+	.tags-bracket {
+		position: absolute;
+		height: 6px; /* Enough to allow vertical side lines */
+		border-bottom: 1.5px solid var(--color-tags-bracket);
+		border-left: 1.75px solid var(--color-tags-bracket-up);
+		border-right: 1.75px solid var(--color-tags-bracket-up);
+		border-radius: 1px;
+		bottom: -6px;
+		display: none; /* hidden until JS sets position */
+		/*z-index: 1;*/
+	}
+
 	.tag {
 		pointer-events: auto;
 	}
@@ -3106,6 +3131,8 @@ input[type=range]::-ms-track {
 	#page,
 	#dialog-all-tags,
 	#dialog-song-tags,
+	#dialog-list-start-tag,
+	#dialog-list-end-tag,
 	#upload-stil-text,
 	#annex-tips {
 		overflow-y: auto;
@@ -5883,6 +5910,7 @@ input[type=range]::-ms-track {
 
 .dialog-label-top,
 .dialog-new label,
+.dialog-connect label,
 .dialog-wizard label {
 	font: normal 13px "Montserrat", sans-serif;
 	color: var(--color-text-fine);
@@ -5890,13 +5918,15 @@ input[type=range]::-ms-track {
 }
 
 #dialog-all-tags,
-#dialog-song-tags {
+#dialog-song-tags,
+#dialog-list-start-tag,
+#dialog-list-end-tag {
 	font-size: 14px;
 	width: 136px;
 }
 
 #dialog-all-tags {
-	height: 210px;
+	height: 320px;
 }
 
 #dialog-song-tags {
@@ -5923,12 +5953,18 @@ input[type=range]::-ms-track {
 			width: 24px;
 		}
 
-	.dialog-new {
+	.dialog-new,
+	.dialog-connect {
 		position: relative;
-		top: -91px;
+		top: -201px;
 		float: right;
 		width: 136px;
 	}
+
+		.dialog-connect {
+			clear: right;
+			top: -190px;
+		}
 
 	#new-tag {
 		font-size: 14px;

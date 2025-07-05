@@ -16,9 +16,12 @@ try {
 	// Get the requested path
 	$hash = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
 
-	if (empty($hash))
-		// @todo Consider just redirecting to front page if empty?
-		die('Welcome to DeepSID Short Links. Nothing to redirect.');
+	if (empty($hash)) {
+		// Just go to the root of the site
+		header("HTTP/1.1 301 Moved Permanently");
+		header("Location: https://deepsid.chordian.net");
+		exit;
+	}
 
 	// Look up the hash
 	$select = $db->prepare("SELECT full_url FROM short_urls WHERE hash = ?");

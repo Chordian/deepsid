@@ -48,10 +48,18 @@ try {
 	foreach ($select as $row)
 		$sid_tags[] += $row->tags_id;
 
+	// Get the START and END tag ID numbers for "bracket" connection
+	$select = $db->query('SELECT tags_id, end_id FROM tags_lookup'.
+		' WHERE files_id = '.$file_id.' AND end_id != 0 LIMIT 1');
+	$select->setFetchMode(PDO::FETCH_OBJ);
+	$row = $select->fetch();
+	$start_id = $select->rowCount() ? $row->tags_id : 0;
+	$end_id = $select->rowCount() ? $row->end_id : 0;
+
 } catch(PDOException $e) {
 	$account->LogActivityError('tags_get.php', $e->getMessage());
 	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 }
 
-echo json_encode(array('status' => 'ok', 'all' => $all_tags, 'sid' => $sid_tags, 'id' => $file_id));
+echo json_encode(array('status' => 'ok', 'all' => $all_tags, 'sid' => $sid_tags, 'id' => $file_id, 'start' => $start_id, 'end' => $end_id));
 ?>

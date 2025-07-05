@@ -62,10 +62,10 @@ List
          should have a file bookmarked that you can check from time to time. When it
          finally reveals that CSDb has been updated, perform the steps.
 
-  8. Add production tags to all new files.
+  8. Add production and event tags to all new files.
 
        - Go through all new files in the HVSC update in DeepSID and check CSDb pages in
-         its tab as you click them. Add production tags where it makes sense.
+         its tab as you click them. Add production and event tags where it makes sense.
 
   9. Wait a while then add competitions.
 

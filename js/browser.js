@@ -6,6 +6,8 @@
 const TR_SPACER 		= '<tr class="disabled"><td class="spacer" colspan="2"></td></tr>';
 const TR_DIVIDER		= '<tr class="disabled"><td class="divider" colspan="2"></td></tr>';
 
+const TAGS_BRACKET		= '<div class="tags-bracket"></div>';
+
 const playerStrips = [
 	{
 		type:	"GoatTracker",
@@ -190,6 +192,16 @@ Browser.prototype = {
 					}
 				}
 			});
+
+		// Arrow functions preserve the outer 'this'
+		// @todo Consider adapting all events that end in 'bind(this)'
+		$("#dialog-list-start-tag").on("change", (event) => {
+			this.startTag = $(event.target).val();
+		});
+
+		$("#dialog-list-end-tag").on("change", (event) => {
+			this.endTag = $(event.target).val();
+		});
 
 		$("#pr-newplname").on("keydown", function(event) {
 			var $renameButton = $("#dialog-playlist-rename .dialog-button-yes");
@@ -414,9 +426,14 @@ Browser.prototype = {
 							this.fileID		= data.id;
 							this.allTags	= data.all;
 							this.fileTags	= data.sid;
+							this.startTag	= data.start;
+							this.endTag		= data.end;
 							this.newTagID	= 60000;
 							this.updateTagLists(this.allTags, this.fileTags);
+							this.updateConnectTagLists(this.allTags, this.fileTags);
 							$("#new-tag").val("");
+							$("#dialog-list-start-tag").val(this.startTag);
+							$("#dialog-list-end-tag").val(this.endTag);
 							// Show the dialog box
 							CustomDialog({
 								id: '#dialog-tags',
@@ -424,16 +441,18 @@ Browser.prototype = {
 									'<span class="dialog-label-top" style="float:left;">All tags available:</span>'+
 									'<span class="dialog-label-top" style="float:right;width:136px;">Tags for this file:</span>',
 								width: 390,
-								height: 345,
+								height: 448,
 							}, function() {
 								// OK was clicked; make all the tag changes
 								$.post("php/tags_write.php", {
 									fileID:		browser.fileID,
 									allTags:	browser.allTags,
-									fileTags:	browser.fileTags
+									fileTags:	browser.fileTags,
+									startTag:	browser.startTag,
+									endTag:		browser.endTag
 								}, function(data) {
 									browser.validateData(data, function(data) {
-										var htmlTags = browser.buildTags(data.tags, data.tagtypes);
+										var htmlTags = browser.buildTags(data.tags, data.tagtypes, data.tagids);
 										browser.updateStickyTags(
 											$(event.target).parents("td"),
 											htmlTags,
@@ -669,6 +688,7 @@ Browser.prototype = {
 						browser.fileTags.push(parseInt(this.value));		
 				});
 				this.updateTagLists(this.allTags, this.fileTags);
+				this.updateConnectTagLists(this.allTags, this.fileTags);
 				break;
 			case "dialog-tags-left":
 				// Edit tags: Transfer items from right to left list
@@ -678,6 +698,7 @@ Browser.prototype = {
 						if (index > -1) browser.fileTags.splice(index, 1);
 				});
 				this.updateTagLists(this.allTags, this.fileTags);
+				this.updateConnectTagLists(this.allTags, this.fileTags);
 				break;
 			case "dialog-tags-plus":
 				// Edit tags: Add a new tag in the right list
@@ -985,13 +1006,14 @@ Browser.prototype = {
 						'<div class="pl-strip'+playerType+'"><div class="has-stil">'+hasStil+'</div></div>'+
 						'<div class="block-wrap"><div class="block">'+(file.subtunes > 1 ? '<div class="subtunes'+(this.isSymlist ? ' specific' : '')+(isNew ? ' newst' : '')+'">'+(this.isSymlist ? file.startsubtune + 1 : file.subtunes)+'</div>' : (isNew ? '<div class="newsid"></div>' : ''))+
 						'<div class="entry name file'+(this.isSearching || this.isCompoFolder || this.path.substr(0, 2) === "/$" ? ' search' : '')+'" data-name="'+encodeURIComponent(file.filename)+'" data-type="'+file.type+'" data-id="'+file.id+'" data-symid="'+file.symid+'">'+adaptedName+'</div></div></div><br />'+
-						'<span class="info">'+file.copyright.substr(0, 4)+file.infosec+'<div class="tags-line"'+(showTags ? '' : ' style="display:none"')+'>'+file.tags+'</div></span></td>'+
+						'<span class="info">'+file.copyright.substr(0, 4)+file.infosec+'<div class="tags-line"'+(showTags ? '' : ' style="display:none"')+file.tagstartend+'>'+TAGS_BRACKET+file.tags+'</div></span></td>'+
 						'<td class="stars filestars"><span class="rating">'+this.buildStars(file.rating)+'</span>'+
 						'<span class="disqus-comment-count"></span>'+(typeof file.uploaded != "undefined" ? '<span class="uploaded-time">'+file.uploaded.substr(0, 10)+'</span>' : '')+
 						'</td>'+
 					'</tr>';
 			}.bind(this));
 			$("#songs table").append(this.folders+files);
+			this.showTagsBrackets();
 			DisableIncompatibleRows();
 		} else if (this.isBigCompoFolder()) {
 			// Rebuild the big CSDb music competitions folder
@@ -1101,7 +1123,7 @@ Browser.prototype = {
 			}, function(data) {
 				this.validateData(data, function(data) {
 
-					// if (data.debug !== "") console.log(data.debug);
+					if (data.debug !== "") console.log(data.debug);
 
 					clearTimeout(loading);
 					$("#loading").hide();
@@ -1391,8 +1413,9 @@ Browser.prototype = {
 								(typeof file.uploaded != "undefined" && file.uploaded.substr(0, 10) == this.today.substr(0, 10));
 						var adaptedName = file.substname == "" ? file.filename.replace(/^\_/, '') : file.substname;
 						adaptedName = this.adaptBrowserName(adaptedName);
-						var list_of_tags = this.buildTags(file.tags, file.tagtypes),
+						var list_of_tags = this.buildTags(file.tags, file.tagtypes, file.tagids),
 							infoSecondary = typeof file.uploaded != "undefined" ? ' by '+file.author : ' in '+player;
+						var tag_start_end = file.tagidend ? ' data-tag-start-id="'+file.tagidstart+'" data-tag-end-id="'+file.tagidend+'"': '';
 						var stil = file.stil;
 						var hasStil = stil != "" ? "<div></div><div></div><div></div>" : "";
 						$.each(playerStrips, function(i, strip) {
@@ -1407,7 +1430,7 @@ Browser.prototype = {
 								'<div class="pl-strip'+playerType+'"><div class="has-stil">'+hasStil+'</div></div>'+
 								'<div class="block-wrap"><div class="block">'+(file.subtunes > 1 ? '<div class="subtunes'+(this.isSymlist ? ' specific' : '')+(isNew ? ' newst' : '')+'">'+(this.isSymlist ? file.startsubtune : file.subtunes)+'</div>' : (isNew ? '<div class="newsid"></div>' : ''))+
 								'<div class="entry name file'+(this.isSearching || this.isCompoFolder || this.path.substr(0, 2) === "/$" ? ' search' : '')+'" data-name="'+encodeURIComponent(file.filename)+'" data-type="'+file.type+'" data-id="'+file.id+'" data-symid="'+file.symid+'">'+adaptedName+'</div></div></div><br />'+
-								'<span class="info">'+file.copyright.substr(0, 4)+infoSecondary+'<div class="tags-line"'+(showTags ? '' : ' style="display:none"')+'>'+list_of_tags+'</div></span></td>'+
+								'<span class="info">'+file.copyright.substr(0, 4)+infoSecondary+'<div class="tags-line"'+(showTags ? '' : ' style="display:none"')+tag_start_end+'>'+TAGS_BRACKET+list_of_tags+'</div></span></td>'+
 								'<td class="stars filestars"><span class="rating">'+this.buildStars(file.rating)+'</span>'+
 								'<span class="disqus-comment-count"></span>'+(typeof file.uploaded != "undefined" ? '<span class="uploaded-time">'+file.uploaded.substr(0, 10)+'</span>' : '')+
 								'</td>'+
@@ -1424,6 +1447,7 @@ Browser.prototype = {
 							playerraw:		file.playerraw,
 							player: 		player,
 							tags:			list_of_tags,
+							tagstartend:	tag_start_end,
 							length: 		file.lengths,
 							type:			file.type,
 							version:		file.version,
@@ -1451,6 +1475,8 @@ Browser.prototype = {
 					/*var pos = this.folders.lastIndexOf('<tr>');
 					this.folders = this.folders.slice(0, pos) + this.folders.slice(pos).replace('<tr>', '<tr class="last">');*/
 					$("#songs table").append(this.folders+files);
+
+					this.showTagsBrackets();
 
 					if ((this.path == "/CSDb Music Competitions" || this.path == "/_Compute's Gazette SID Collection") && !this.isSearching) {
 						// Cache this big folder for fast back-browsing
@@ -1672,38 +1698,43 @@ Browser.prototype = {
 	 * 
 	 * @param {array} tags		Array with (sorted) tag names only
 	 * @param {array} types		Array with (sorted) tag types only
+	 * @param {array} ids		Array with (sorted) tag ids only
 	 * 
 	 * @return {string}			The HTML string to put into the SID row
 	 */
-	buildTags: function(tags, types) {
-		var list_of_tags = remix64 = gamebase64 = "";
+	buildTags: function(tags, types, ids) {
+		var list_of_tags = remix64 = gamebase64 = id = "";
 		$.each(tags, function(i, tag) {
+			id = ' data-id="'+ids[i]+'"';
 			if (tag == "Remix64") {
 				// A special look for the "Remix64" tag
-				remix64 = '<div class="tag tag-remix64">&nbsp;&nbsp;</div>';
+				remix64 = '<div class="tag tag-remix64"'+id+'>&nbsp;&nbsp;</div>';
 			} else if (tag == "GameBase64") {
 				// A special look for the "GameBase64" tag
-				gamebase64 = '<div class="tag tag-gamebase64">&nbsp;&nbsp;</div>';
+				gamebase64 = '<div class="tag tag-gamebase64"'+id+'>&nbsp;&nbsp;</div>';
 			} else if (tag == "Doubling" || tag == "Hack" || tag == "Mock" || tag == "Bug") {
 				// A unique color for tags that serves as a warning
-				list_of_tags += '<div class="tag tag-warning">'+tag+'</div>';
+				list_of_tags += '<div class="tag tag-warning"'+id+'>'+tag+'</div>';
+			} else if (tag == "Music") {
+				// Change this tag into just a double note
+				list_of_tags += '<div class="tag tag-production tag-notes tag-music"'+id+'><img src="images/composer_doublenote.svg" /><span></span></div>';
 			} else if (tag == "Collection") {
 				// Add a double note to make it clear this is for a music collection
-				list_of_tags += '<div class="tag tag-production tag-notes tag-collection"><img src="images/composer_doublenote.svg" /><span>Collection</span></div>';
+				list_of_tags += '<div class="tag tag-production tag-notes tag-collection"'+id+'><img src="images/composer_doublenote.svg" /><span>Collection</span></div>';
 			} else if (tag == "Compo") {
 				// Add a double note to make it clear this is for music competitions only
-				list_of_tags += '<div class="tag tag-event tag-notes tag-compo"><img src="images/composer_doublenote.svg" /><span>Compo</span></div>';
+				list_of_tags += '<div class="tag tag-event tag-notes tag-compo"'+id+'><img src="images/composer_doublenote.svg" /><span>Compo</span></div>';
 			} else if (tag == "Winner") {
 				// A slightly snazzier tag for winners (takes up a lot of space though) - now uses unicode chars
-				list_of_tags += '<div class="tag tag-event tag-winner">★★ Winner ★★</div>';
+				list_of_tags += '<div class="tag tag-event tag-winner"'+id+'>★★ Winner ★★</div>';
 			} else if (tag == "<-") {
 				// Replace "<-" with a pretty unicode arrow instead
 				// Disabled as perhaps users find them too confusing.
-				//list_of_tags += '<div class="tag tag-transparent">🡨</div>';
+				//list_of_tags += '<div class="tag tag-transparent"'+id+'>🡨</div>';
 			} else if (tag == "->") {
 				// Replace "->" with a pretty unicode arrow instead
 				// Disabled as perhaps users find them too confusing.
-				//list_of_tags += '<div class="tag tag-transparent">🡪</div>';
+				//list_of_tags += '<div class="tag tag-transparent"'+id+'>🡪</div>';
 			} else if (tag == "$31" || tag == "$61" || tag == "$71" || tag.indexOf("Small Event") !== -1) {
 				// These tags will not be shown for various reasons:
 				// Waveforms: Too commonly used in SID tunes and just adds noise.
@@ -1711,7 +1742,7 @@ Browser.prototype = {
 			} else {
 				// NOTE: Don't change the order of tags or the collector for a folder will break!
 				// If you want to change the order of tags, see GetTagsAndTypes() in 'tags_read.php'
-				list_of_tags += '<div class="tag tag-'+types[i]+'">'+tag+'</div>';
+				list_of_tags += '<div class="tag tag-'+types[i]+'"'+id+'>'+tag+'</div>';
 			}
 		});
 		list_of_tags += '<div class="edit-tags" title="Edit tags">&nbsp;</div>';
@@ -2136,7 +2167,7 @@ Browser.prototype = {
 						browser.validateData(data, function(data) {
 							browser.updateStickyTags(
 								$("#songs tr.selected"),
-								browser.buildTags(data.tags, data.tagtypes),
+								browser.buildTags(data.tags, data.tagtypes, data.tagids),
 								thisFullname.split("/").slice(-1)[0]
 							);
 						});
@@ -2152,7 +2183,7 @@ Browser.prototype = {
 								// Both updates may be called asynchronously but it shouldn't break anything
 								browser.updateStickyTags(
 									$("#songs tr.selected"),
-									browser.buildTags(data.tags, data.tagtypes),
+									browser.buildTags(data.tags, data.tagtypes, data.tagids),
 									thisFullname.split("/").slice(-1)[0]
 								);
 							});
@@ -2212,7 +2243,7 @@ Browser.prototype = {
 						browser.validateData(data, function(data) {
 							browser.updateStickyTags(
 								$("#songs tr.selected"),
-								browser.buildTags(data.tags, data.tagtypes),
+								browser.buildTags(data.tags, data.tagtypes, data.tagids),
 								thisFullname.split("/").slice(-1)[0]
 							);
 						});
@@ -2416,6 +2447,7 @@ Browser.prototype = {
 			case 'edit-tags':
 				// Just click the "+" button (it may be hidden but it should still react to this)
 				this.contextEntry.parents("tr").find(".edit-tags").trigger("click");
+				break;
 			case 'copy-link':
 				var url = window.location.href,
 					more = url.indexOf("&") != -1;
@@ -3019,6 +3051,57 @@ Browser.prototype = {
 	},
 
 	/**
+	 * Run through all SID rows and add underlining horizontal "bracket" lines
+	 * from start to end tags, thereby showing their mutual connection.
+	 * 
+	 * @param {element} optionalTdElement		If specified, only update this SID row
+	 */
+	showTagsBrackets: function(optionalTdElement) {
+
+		var $lines;
+
+		if (optionalTdElement) {
+			const $row = $(optionalTdElement).closest('tr');
+			if ($row.length === 0) return;
+
+			$lines = $row.find('.tags-line');
+
+			// They may have been changed when editing the tags
+			$lines.eq(0).attr("data-tag-start-id", this.startTag);
+			$lines.eq(0).attr("data-tag-end-id", this.endTag);
+
+		} else {
+			$lines = $('#songs .tags-line');
+		}
+
+		$lines.each(function() {
+			const $line = $(this);
+			const startID = $line.attr('data-tag-start-id');
+			const endID = $line.attr('data-tag-end-id');
+
+			const $startTag = $line.find(`.tag[data-id="${startID}"]`);
+			const $endTag = $line.find(`.tag[data-id="${endID}"]`);
+
+			if ($startTag.length && $endTag.length) {
+				const offsetA = $startTag.position().left + 6 + $startTag.outerWidth() / 2;
+				const offsetB = $endTag.position().left + 8 + $endTag.outerWidth() / 2;
+
+				const left = Math.min(offsetA, offsetB);
+				const width = Math.abs(offsetB - offsetA);
+
+				const $indicator = $line.find('.tags-bracket');
+				$indicator.css({
+					left: `${left}px`,
+					width: `${width}px`,
+					display: 'block'
+				});
+			} else {
+				$line.find('.tags-bracket').hide(); // Hide if one is missing
+			}			
+		});
+	},
+
+	/**
 	 * Prepare a loading SVG spinner for showing if a page takes time to load.
 	 * 
 	 * @param {string} id		CSS ID name
@@ -3116,7 +3199,8 @@ Browser.prototype = {
 	updateStickyTags: function($selected, list_of_tags, endName) {
 	 
 		// Make the tags sticky without refreshing the page
-		$selected.find(".tags-line").empty().append(list_of_tags);
+		$selected.find(".tags-line").empty().append(TAGS_BRACKET+list_of_tags);
+		this.showTagsBrackets($selected);
 
 		// Update the playlist array
 		$.each(this.playlist, function(i, file) {
@@ -3161,6 +3245,40 @@ Browser.prototype = {
 				allTags += '<option value="'+tag.id+'">'+tag.name+'</option>';
 		});
 		$("#dialog-all-tags").empty().append(allTags);
+	},
+
+	/**
+	 * Update the two list boxes in the dialog box for connecting two tags.
+	 * 
+	 * @param {array} arrAll		Associative array with ID's and names
+	 * @param {array} arrSong		Standard array with ID's used by file
+	 */
+	updateConnectTagLists: function(arrAll, arrSong) {
+		var songTags = "",
+			$startTag = $("#dialog-list-start-tag"),
+			$endTag = $("#dialog-list-end-tag");
+
+		// Get the current (i.e. old) tag selections
+		var oldStart = $startTag.find("option:selected").val(),
+			oldEnd = $endTag.find("option:selected").val();
+
+		$.each(arrSong, function(i, tagID) {
+			var tagName = $.grep(arrAll, function(entry) {
+				return entry.id == tagID;
+			})[0];
+			songTags += '<option value="'+tagID+'">'+tagName.name+'</option>';
+		});
+
+		$("#dialog-list-start-tag,#dialog-list-end-tag").empty().append(
+			'<option value="0">Not selected</option>'+songTags);
+
+		// Try to select the previous selections again (if still there)
+		$startTag.find(`option[value="${oldStart}"]`).length
+			? $startTag.val(oldStart)
+			: $startTag.val(0);
+		$endTag.find(`option[value="${oldEnd}"]`).length
+			? $endTag.val(oldEnd)
+			: $endTag.val(0);
 	},
 
 	/**
