@@ -359,12 +359,19 @@ if (strpos($fullname, $uploadFolder) !== false) {
 }
 
 if (isset($row)) {
+	// If there are both a birth and death year, calculate the age of death
+	$year_birth = (int) substr($row->born, 0, 4);
+	$year_death = (int) substr($row->died, 0, 4);
+	$age_of_death = $year_birth && $year_death ? ' ('.$year_death - $year_birth.')' : '';
+	$age_current = $year_birth && empty($age_of_death) ? ' ('.date("Y") - $year_birth.')' : '';
+
 	// We have extended info from the 'composers' database table
 	$name			= $row->name;
 	$handles		= str_replace(', ', ', <img class="arrow" src="images/composer_arrowright.svg" alt="" style="position:relative;top:1px;" />', $row->handles);
 	$born			= $row->born; 
 	$died			= substr($row->died, 0, 4);
-	$cause			= (!empty($row->cause) ? '('.$row->cause.')' : '');
+	$age_death		= $age_of_death;
+	$age_now		= $age_current;
 	$notable		= str_replace('[#]', '<img class="inline-icon icon-editor" src="images/composer_editor.svg" title="Music editor" alt="">', $row->notable);
 	$country		= $row->country;
 	$csdbtype		= $row->csdbtype;
@@ -388,7 +395,8 @@ if (isset($row)) {
 	$handles		= '';
 	$born			= '0000-00-00';
 	$died			= '0000';
-	$cause			= '';
+	$age_death		= '';
+	$age_now		= '';
 	$notable		= '';
 	$country		= '';
 	$csdbid			= 0;
@@ -438,9 +446,9 @@ $html = '<table style="border:none;margin-bottom:0;"><tr>'.
 				(!empty($handles) ? '<h3 style="margin-top:0;margin-bottom:7px;">'.$handles.'</h3>' : '').
 				($isExoticComposerFolder || $isBorrowedProfile ? '' : '<span class="line folder-rating"></span>'). // Placeholder for star ratings (handled by JS)
 				($born != '0000-00-00' ? '<span class="line"><img class="icon cake" src="images/composer_cake.svg" title="Born" alt="" />'.
-					substr($born, 0, 4).'</span>' : '').
+					substr($born, 0, 4).$age_now.'</span>' : '').
 				($died != '0000' ? '<span class="line"><img class="icon stone" src="images/composer_stone.svg" title="Died" alt="" style="position:relative;top:3px;height:18px;margin-right:5px;" />'.
-					$died.' '.$cause.'</span>' : '').
+					$died.$age_death.'</span>' : '').
 				$clink.
 				(!empty($notable) ? '<span class="notable">'.
 					'<img class="icon cstar" src="images/composer_star.svg" title="Notable" alt="" style="top:-1px;" /><b style="position:relative;top:-5px;">'.$notable.'&nbsp;</b></span>' : '').

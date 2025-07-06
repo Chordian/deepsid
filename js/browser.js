@@ -458,6 +458,11 @@ Browser.prototype = {
 											htmlTags,
 											(browser.isSymlist || browser.isCompoFolder ? thisFullname : thisFullname.split("/").slice(-1)[0])
 										);
+										// Make sure sorting also works
+										var $filteredRows = $tr.parent().children("tr:has(td.sid)");
+										var index = $filteredRows.index($tr);										
+										browser.playlist[index].tagstart = browser.startTag;
+										browser.playlist[index].tagend = browser.endTag;
 										ctrls.updateSundryTags(htmlTags);
 									});
 								}.bind(this));
@@ -993,6 +998,7 @@ Browser.prototype = {
 					(typeof file.uploaded != "undefined" && file.uploaded.substr(0, 10) == this.today.substr(0, 10));
 				adaptedName = file.substname == "" ? file.filename.replace(/^\_/, '') : file.substname;
 				adaptedName = this.adaptBrowserName(adaptedName);
+				var tag_start_end = file.tagend ? ' data-tag-start-id="'+file.tagstart+'" data-tag-end-id="'+file.tagend+'"': '';
 				var playerType = "",
 					hasStil = file.stil != "" ? "<div></div><div></div><div></div>" : "";
 				$.each(playerStrips, function(i, strip) {
@@ -1002,11 +1008,11 @@ Browser.prototype = {
 					}
 				});
 				files += '<tr>'+
-						'<td class="sid unselectable">'+
+						'<td class="sid unselectable">'+file.underlay+
 						'<div class="pl-strip'+playerType+'"><div class="has-stil">'+hasStil+'</div></div>'+
 						'<div class="block-wrap"><div class="block">'+(file.subtunes > 1 ? '<div class="subtunes'+(this.isSymlist ? ' specific' : '')+(isNew ? ' newst' : '')+'">'+(this.isSymlist ? file.startsubtune + 1 : file.subtunes)+'</div>' : (isNew ? '<div class="newsid"></div>' : ''))+
 						'<div class="entry name file'+(this.isSearching || this.isCompoFolder || this.path.substr(0, 2) === "/$" ? ' search' : '')+'" data-name="'+encodeURIComponent(file.filename)+'" data-type="'+file.type+'" data-id="'+file.id+'" data-symid="'+file.symid+'">'+adaptedName+'</div></div></div><br />'+
-						'<span class="info">'+file.copyright.substr(0, 4)+file.infosec+'<div class="tags-line"'+(showTags ? '' : ' style="display:none"')+file.tagstartend+'>'+TAGS_BRACKET+file.tags+'</div></span></td>'+
+						'<span class="info">'+file.copyright.substr(0, 4)+file.infosec+'<div class="tags-line"'+(showTags ? '' : ' style="display:none"')+tag_start_end+'>'+TAGS_BRACKET+file.tags+'</div></span></td>'+
 						'<td class="stars filestars"><span class="rating">'+this.buildStars(file.rating)+'</span>'+
 						'<span class="disqus-comment-count"></span>'+(typeof file.uploaded != "undefined" ? '<span class="uploaded-time">'+file.uploaded.substr(0, 10)+'</span>' : '')+
 						'</td>'+
@@ -1424,9 +1430,16 @@ Browser.prototype = {
 								return false;
 							}
 						});
+						// Show a big font underlay below the SID texts
+						var underlay = '';
+						if (file.filename.slice(-9) == "_2SID.sid")
+							underlay = '2sid';
+						else if (file.filename.slice(-9) == "_3SID.sid")
+							underlay = '3sid';
+						if (underlay != '') underlay = '<div class="underlay">'+underlay+'</div>';
 						files +=
 							'<tr'+(SID.emulator == "youtube" && countVideos == 0 ? ' class="disabled"' : '')+'>'+
-								'<td class="sid unselectable">'+
+								'<td class="sid unselectable">'+underlay+
 								'<div class="pl-strip'+playerType+'"><div class="has-stil">'+hasStil+'</div></div>'+
 								'<div class="block-wrap"><div class="block">'+(file.subtunes > 1 ? '<div class="subtunes'+(this.isSymlist ? ' specific' : '')+(isNew ? ' newst' : '')+'">'+(this.isSymlist ? file.startsubtune : file.subtunes)+'</div>' : (isNew ? '<div class="newsid"></div>' : ''))+
 								'<div class="entry name file'+(this.isSearching || this.isCompoFolder || this.path.substr(0, 2) === "/$" ? ' search' : '')+'" data-name="'+encodeURIComponent(file.filename)+'" data-type="'+file.type+'" data-id="'+file.id+'" data-symid="'+file.symid+'">'+adaptedName+'</div></div></div><br />'+
@@ -1447,7 +1460,9 @@ Browser.prototype = {
 							playerraw:		file.playerraw,
 							player: 		player,
 							tags:			list_of_tags,
-							tagstartend:	tag_start_end,
+							tagstart:		file.tagidstart,
+							tagend:			file.tagidend,
+							underlay:		underlay,
 							length: 		file.lengths,
 							type:			file.type,
 							version:		file.version,
@@ -1720,10 +1735,10 @@ Browser.prototype = {
 				list_of_tags += '<div class="tag tag-production tag-notes tag-music"'+id+'><img src="images/composer_doublenote.svg" /><span></span></div>';
 			} else if (tag == "Collection") {
 				// Add a double note to make it clear this is for a music collection
-				list_of_tags += '<div class="tag tag-production tag-notes tag-collection"'+id+'><img src="images/composer_doublenote.svg" /><span>Collection</span></div>';
-			} else if (tag == "Compo") {
+				list_of_tags += '<div class="tag tag-production tag-notes tag-collection"'+id+'><img src="images/composer_doublenote.svg" /><span>Coll.</span></div>';
+			/*} else if (tag == "Compo") {
 				// Add a double note to make it clear this is for music competitions only
-				list_of_tags += '<div class="tag tag-event tag-notes tag-compo"'+id+'><img src="images/composer_doublenote.svg" /><span>Compo</span></div>';
+				list_of_tags += '<div class="tag tag-event tag-notes tag-compo"'+id+'><img src="images/composer_doublenote.svg" /><span>Compo</span></div>';*/
 			} else if (tag == "Winner") {
 				// A slightly snazzier tag for winners (takes up a lot of space though) - now uses unicode chars
 				list_of_tags += '<div class="tag tag-event tag-winner"'+id+'>★★ Winner ★★</div>';

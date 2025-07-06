@@ -395,10 +395,11 @@
 		<p>What the colors indicate:</p>
 		<div class="annex-hotkey"><a href="17" class="topic"><div class="tag tag-event">Event</div></a></div><span class="annex-tiny" style="position:relative;top:1px;">Typically a party</span>
 		<div class="annex-hotkey"><a href="14" class="topic"><div class="tag tag-production">Production</div></a></div><span class="annex-tiny" style="position:relative;top:1px;">Demos, intros, etc.</span>
-		<div class="annex-hotkey"><a href="13" class="topic"><div class="tag tag-origin">Origin</div></a></div><span class="annex-tiny" style="position:relative;top:1px;">Cover, conversion, etc.</span>
+		<div class="annex-hotkey"><a href="13" class="topic"><div class="tag tag-origin">Origin</div></a></div><span class="annex-tiny" style="position:relative;top:1px;">Cover, remake, etc.</span>
 		<div class="annex-hotkey"><a href="12" class="topic"><div class="tag tag-digi">Digi</div></a></div><span class="annex-tiny" style="position:relative;top:1px;">Digi, what type, etc.</span>
 		<div class="annex-hotkey"><a href="11" class="topic"><div class="tag tag-warning">Warning</div></a></div><span class="annex-tiny" style="position:relative;top:1px;">Bugged, hacked, etc.</span>
 		<div class="annex-hotkey" style="position:relative;top:3.5px;"><a href="remix64" class="search" data-type="tag"><div class="tag tag-remix64"></div></a></div><span class="annex-tiny" style="position:relative;top:1px;">It has been remixed</span>
+		<div class="annex-hotkey" style="position:relative;top:3.5px;"><a href="gamebase64" class="search" data-type="tag"><div class="tag tag-gamebase64"></div></a></div><span class="annex-tiny" style="position:relative;top:1px;">It has a game entry</span>
 		<div class="annex-hotkey"><a href="15" class="topic"><div class="tag">General</div></a></div><span class="annex-tiny" style="position:relative;top:1px;">All other tags</span>
 		<p>If a SID has been remixed, click the <b>Remix</b> tab in top to check this out.</p>
 

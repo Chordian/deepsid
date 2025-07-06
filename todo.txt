@@ -7,50 +7,9 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- Remember the cache system for Steam images at GameDeed? Consider doing the same thing for
-  CSDb pages. Good for when CSDb is down (or even gone one day).
-
 - DeepSID.com now works as a short link redirector. Make an addition to 'shorten.php' so
   the URL specified in the input is validated to have 'https://deepsid.chordian.net' in
   the beginning or else it will be discarded.
-
-- TAGS: Idea for event connection to production tag: A line below tags, going from event to
-  relevant production. You could expand the 'tags_lookup' table with a second tags_id column.
-  When empty, the behavior is as it previously was. When an ID is specified, the previous
-  tags_id is the source (usually an green event tag) and the second tags_id is the
-  destination (usually a blue production tag). JS then uses this to draw a line.
-
-
-      @todo When the start tag is removed, then added again, updatestickytag should not
-            re-render the bracket line anymore.
-
-
-- User interface for tag connecting: Add a button or a link in the normal tag dialog box.
-  Click to replace dialog box with another. Click Back on that return to the normal dialog
-  box again (or just click OK or Cancel). In the new one, two lists, both with tags that
-  have been selected for that SID row. One can be marked in both. Only when one is marked
-  in both is OK enabled. Don't add code for disabled right box as it would make it too
-  cumbersome to re-click other choices in both. Instead allow selecting same as start and
-  end tag, but when clicking OK, an Alert warning appears. "You cannot..."
-
-
-
-
-
-- A cool idea for extra info in SID rows: Weakened big letters in the left side of the row,
-  taking up all height but always subtly in the background. Example: 2SID
-
-- If you look closely, some tag names are too high up. It differs from SID row to SID row
-  in Firefox. Test decimal line heights to see if it can be fixed.
-
-- Abbreviate "Colleciton" to "Coll." - you're going to have to change some code for that.
-
-- Add hotkey "t" for adding tags to the currently selected SID row.
-
-- Put the "GameBase64" tag in the "Handling tags" annex topic.
-
-- Replace cause of death with age at death instead. Don't delete the cause of death data,
-  though; just don't use it. Don't store age at death; calculate it from birth/death years.
 
 - Go through all "Links" in all profile pages and make sure the full composer name fits.
   If it ends in "..." create a short name, e.g. with a letter + full stop for first name.
@@ -67,13 +26,13 @@ SHOULD BE DONE
 
 - Consider a HTML button somewhere for testing a SID, so it's not just the "l" hotkey.
 
+- If you look closely, some tag names are too high up. It differs from SID row to SID row
+  in Firefox. Test decimal line heights to see if it can be fixed.
+
 - BUG: Missing database information:
   https://deepsid.chordian.net/?file=/Compute%27s%20Gazette%20SID%20Collection/BJ_Pools/Heaven_Knows_A.mus
 
-- BUG: The number of DL links here breaks the design of the page:
-  https://deepsid.chordian.net/?file=/MUSICIANS/O/Onebitman/Walking_in_the_Air.sid
-  Just remove them completely from CSDb lists. You need to see what you're downloading and
-  you can't see that in a forest of DL links in the list row - only on the release page.
+- BUG: In CGSC folders, there's a querySelectorAll console error related to chartist.
 
 - BUG: The STIL entry here is not parsed correctly - all links merge into one big link:
   https://deepsid.chordian.net/?file=/MUSICIANS/B/Bulldog/E_X_I_S.sid&subtune=1
@@ -147,6 +106,9 @@ CONSIDER THIS
 
 - In a profile page, make the small handles in group table into links and remove the corner external
   link icon. Then users can choose what handle to open in CSDb themselves.
+
+- Remember the cache system for Steam images at GameDeed? Consider doing the same thing for
+  CSDb pages. Good for when CSDb is down (or even gone one day).
 
 - Consider a settings option for choosing WebSid HQ or WebSid Legacy as the default on mobile
   devices. Alternative: Just let WebSid HQ be the default on mobile devices from now on. However,
@@ -616,5 +578,8 @@ TEST RESOURCES
 
   GB64 tab (enter a game page for one of the two hits):
   https://deepsid.chordian.net/?file=/MUSICIANS/B/Bogas_Ed/Murder_on_the_Mississippi.sid
+
+  Too many DL links on a CSDb list page:
+  https://deepsid.chordian.net/?file=/MUSICIANS/O/Onebitman/Walking_in_the_Air.sid
 
 END

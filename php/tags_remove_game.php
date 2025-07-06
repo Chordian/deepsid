@@ -8,7 +8,7 @@
  * 		'Game'
  * 		'Game Prev'
  * 
- * The 'GTW' tag will not be removed, however.
+ * The 'GTW' tag will not be removed.
  * 
  * @uses		$_POST['fullname']
  * 

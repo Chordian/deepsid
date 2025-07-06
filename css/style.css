@@ -128,6 +128,8 @@
 	--color-text-label-disabled:	var(--color-border);
 	--color-text-time:				#c6c6c6;
 	--color-text-sundry-disabled:	#b2b3ad;
+	/*--color-text-underlay:			#dfdfd5;			xx For very big SID row underlay text */
+	--color-text-underlay:			linear-gradient(to top, #e8e7e1 10%, #e1e1d5);
 
 	--color-tags-bracket:			#a1a294;			/* Used for horizontal tag start-to-end brackets */
 	--color-tags-bracket-up:		#949494;
@@ -525,6 +527,8 @@
 	--color-text-label-disabled:	#555;
 	--color-text-time:				#484848;
 	--color-text-sundry-disabled:	#4a4a4a;
+	/*--color-text-underlay:			#3c3c3c;			xx For very big SID row underlay text */
+	--color-text-underlay:			linear-gradient(to top, #363636 10%, #484848);
 
 	--color-tags-bracket:			#808080;			/* Used for horizontal tag start-to-end brackets */
 	--color-tags-bracket-up:		#949494;
@@ -3349,6 +3353,21 @@ input[type=range]::-ms-track {
 			position: relative;
 			max-width: 325px; /* This fix prevents the left TD from pushing the TD with star ratings */
 		}
+
+			#songs .underlay {
+				overflow: visible;
+				position: absolute;
+				height: 46px;
+				width: 100%;
+				top: 4px; /* 24px */
+				left: 6px;
+				font: bold 62px/42px "Open Sans", sans-serif;
+				text-transform: uppercase;
+				background: var(--color-text-underlay);
+				-webkit-background-clip: text; /* Required for Safari */
+				background-clip: text;
+				color: transparent;		
+			}
 
 			#songs .pl-strip {
 				position: absolute;
@@ -6320,7 +6339,7 @@ input[type=range]::-ms-track {
 
 	.annex-hotkey {
 		display: inline-block;
-		width: 85px;
+		width: 95px;
 		font-weight: bold;
 		margin-left: 10px;
 		font-family: "Asap Condensed", sans-serif;

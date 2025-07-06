@@ -459,8 +459,8 @@ Controls.prototype = {
 						tag = "music";
 					else if ($(event.target).hasClass("tag-collection"))
 						tag = "collection";
-					else if ($(event.target).hasClass("tag-compo"))
-						tag = "compo";
+					/*else if ($(event.target).hasClass("tag-compo"))
+						tag = "compo";*/
 					else if ($(event.target).hasClass("tag-winner"))
 						tag = "winner";
 					else if ($(event.target).hasClass("tag-gamebase64"))

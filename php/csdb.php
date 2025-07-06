@@ -267,12 +267,19 @@ if ($csdb_type == 'sid') {
 
 			// Download links
 			$download_link = '';
-			if (isset($release->DownloadLinks)) {
-				$dlinks = $release->DownloadLinks->DownloadLink;
-				foreach($dlinks as $dlink) {
-					$download_link .= '<span class="count"><a href="'.$dlink->CounterLink.'">DL</a></span>';
+			/*
+				This has been disabled because DL links in a list can break the design of the page if there
+				are a ton them. Users have to open a release page instead to find any download links.
+
+				Example: https://deepsid.chordian.net/?file=/MUSICIANS/O/Onebitman/Walking_in_the_Air.sid
+
+				if (isset($release->DownloadLinks)) {
+					$dlinks = $release->DownloadLinks->DownloadLink;
+					foreach($dlinks as $dlink) {
+						$download_link .= '<span class="count"><a href="'.$dlink->CounterLink.'">DL</a></span>';
+					}
 				}
-			}
+			*/
 
 			$external_icon = '';
 			if (!$can_show_internally) {

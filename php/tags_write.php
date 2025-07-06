@@ -132,14 +132,58 @@ try {
 
 	// Find START tag and store counterpart END tag for "bracket" connection
 	if (isset($_POST['startTag']) && isset($_POST['endTag'])) {
-		// First reset all end tag ID just to be sure
-		$update = $db->query('UPDATE tags_lookup SET end_id = 0'.
-			' WHERE files_id = '.$_POST['fileID']);
+		// What was stored prior to this change?
+		$select = $db->prepare('SELECT tags_id, end_id FROM tags_lookup WHERE files_id = :files_id');
+		$select->execute(array(':files_id'=>$_POST['fileID']));
+		$select->setFetchMode(PDO::FETCH_OBJ);
+		
+		// Assume no connection line to begin with
+		$start_before = $end_before = 0;
+		foreach ($select as $row) {
+			if ($row->end_id) {
+				// A connection line was defined
+				$start_before = $row->tags_id;
+				$end_before = $row->end_id;
+			}			
+		}
 
-		// The standard tags ID field also serves as the start tag ID
-		$update = $db->prepare('UPDATE tags_lookup SET end_id = :id'.
-			' WHERE files_id = '.$_POST['fileID'].' AND tags_id = '.$_POST['startTag'].' LIMIT 1');
-		$update->execute(array(':id'=>$_POST['endTag']));
+		// Update and log only if the previous connection setup is actually changed
+		if ($_POST['startTag'] != $start_before || $_POST['endTag'] != $end_before) {
+
+			// What are the names of the tags uses as start and end?
+			$select = $db->prepare('SELECT name FROM tags_info WHERE id = :id');
+			$select->execute(array(':id'=>$_POST['startTag']));
+			$select->setFetchMode(PDO::FETCH_OBJ);
+			$start_tag_name = $_POST['startTag'] ? $select->fetch()->name : '[Not selected]';
+
+			$select = $db->prepare('SELECT name FROM tags_info WHERE id = :id');
+			$select->execute(array(':id'=>$_POST['endTag']));
+			$select->setFetchMode(PDO::FETCH_OBJ);
+			$end_tag_name = $_POST['startTag'] ? $select->fetch()->name : '[Not selected]';
+
+			// First reset all end tag ID just to be sure
+			$update = $db->prepare('UPDATE tags_lookup SET end_id = 0 WHERE files_id = :files_id');
+			$update->execute(array(':files_id'=>$_POST['fileID']));
+
+			// The standard tags ID field also serves as the start tag ID
+			$update = $db->prepare('UPDATE tags_lookup SET end_id = :end_id WHERE files_id = :files_id AND tags_id = :tags_id LIMIT 1');
+			$update->execute(array(':end_id'=>$_POST['endTag'],':files_id'=>$_POST['fileID'],':tags_id'=>$_POST['startTag']));
+
+			// More information is logged in this version
+			file_put_contents($_SERVER['DOCUMENT_ROOT'].'/deepsid/logs/tags.txt',
+					date('Y-m-d H:i:s', strtotime(TIME_ADJUST)).','.
+					$_SERVER['REMOTE_ADDR'].','.
+					$user_id.','.
+					$user_name.','.
+					$_POST['fileID'].','.
+					$fullname.','.
+					'BRACKET,'.
+					$_POST['startTag'].','.
+					$start_tag_name.','.
+					$_POST['endTag'].','.
+					$end_tag_name.
+				PHP_EOL, FILE_APPEND);
+		}
 	}
 
 	// Now get sorted arrays of the tag names and types used by this file right now

@@ -1868,6 +1868,28 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>July 6, 2025</h3>
+						<ul>
+							<li>You can now edit the tags for the currently selected song by hitting the "t" key.</li>
+							<li>The "Collection" tag has been abbreviated to "Coll." in the blue tag, as it could be
+								quite visually dominant. However, you can still search for and select it using "Collection".</li>
+							<li>The cause of death for deceased composers has been replaced with their age at the time of death.</li>
+							<li>If a birth year is known, the current age is shown for composers who are still with us.</li>
+							<li>The "DL" download links have been removed from CSDb lists shown when there is more than one
+								release for a song. You now need to open a specific CSDb release page to find any download links.</li>
+							<li>Removed the double note icon in the "Compo" tags, as the new connection system for tags can make it
+								more obvious what the "Compo" tag and # ranking applies to.</li>
+							<li>2SID and 3SID tunes are now easier to spot thanks to large-font text displayed beneath the SID rows.</li>
+						</ul>
+
+						<h3>July 5, 2025</h3>
+						<ul>
+							<li>The 'Edit Tags' dialog box now has two new drop-down boxes for optionally selecting a start and end tag.
+								Setting both creates a horizontal line below the tags in the SID row, showing the connection between them.
+								This can be used, for example, to show that a SID tune was released at a party where it was used in a demo.
+								I will gradually begin using this new feature by adding connections here and there.</li>
+						</ul>
+
 						<h3>July 1, 2025</h3>
 						<ul>
 							<li>All new files in HVSC #83 are now connected to CSDb entries.</li>
@@ -1912,7 +1934,7 @@
 						<h3>June 23, 2025</h3>
 						<ul>
 							<li>The left and right arrow tag icons (introduced June 19) have been revoked, as they were too confusing.</li>
-							<li>The "Compo" tag now shows a double note icon to make it clear this tag is for music competitions only.</li>
+							<li><del>The "Compo" tag now shows a double note icon to make it clear this tag is for music competitions only.</del></li>
 						</ul>
 
 						<h3>June 22, 2025</h3>
