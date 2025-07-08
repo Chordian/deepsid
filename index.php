@@ -1868,6 +1868,22 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>July 8, 2025</h3>
+						<ul>
+							<li>Fixed an issue where pressing 'Space' to pause/play would also scroll down the song list.</li>
+							<li>You can now use the left and right arrow keys to skip to the previous or next SID row. The new
+								selection is centered, just like when using the control buttons. If you hold down 'Shift' while
+								skipping, the auto-progress setting from the setup is applied. If auto-progress is set to 'Off',
+								the selection won't be centered.</li>
+						</ul>
+
+						<h3>July 7, 2025</h3>
+						<ul>
+							<li>Added the CSDb music competitions related to HVSC #83.</li>
+							<li>In the CSDb tab, in addition to the usual rule where group names are highlighted in various colors,
+								a scener's real name or handle may now also be highlighted in red if it matches a release.</li>
+						</ul>
+
 						<h3>July 6, 2025</h3>
 						<ul>
 							<li>You can now edit the tags for the currently selected song by hitting the "t" key.</li>

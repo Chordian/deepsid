@@ -45,6 +45,7 @@
 	--color-oldest-in-top:			#c86d55;			/* Color for right corner line above CSDb comments table */
 	--color-emphasize:				#ffff80;			/* Color for emphasizing handles or groups in CSDb releases */
 	--color-empSec:					#cfc;
+	--color-empThird:				#fdd;
 	--color-bg-block-data:			var(--color-top);
 	--color-text-block:				var(--color-bottom);
 	--color-text-block-toggled:		#9a9a90;			/* #7c7e60 #929292 */
@@ -446,6 +447,7 @@
 	--color-notable:				#d9ce6f;
 	--color-emphasize:				#449;
 	--color-empSec:					#005000;
+	--color-empThird:				#700000;
 	--color-bg-block-data:			var(--color-bottom);
 	--color-text-block:				#bcbebc;
 	--color-text-block-toggled:		var(--color-top);
@@ -5025,6 +5027,11 @@ input[type=range]::-ms-track {
 		/* Used to emphasize other groups in a list of CSDb releases */
 		#page .ext .empSec {
 			background: var(--color-empSec);
+		}
+
+		/* Used to emphasize the real name or handle of the scener in a list of CSDb releases */
+		#page .ext .empThird {
+			background: var(--color-empThird);
 		}
 
 		#page .ext .shared-all-comments {

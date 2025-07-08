@@ -211,10 +211,10 @@ if ($csdb_type == 'sid') {
 						// We've had this scener before so we know the name
 						$scener = $sid_handles[(string)$id];
 					$yellow = stripos($copyright, strtolower($scener)) > -1
-						? ' class="emphasize"'
-						: '';
+						? 'emphasize'
+						: 'csdb-scener';
 					$released_by .= (!empty($scener)
-						? ', <a href="http://csdb.chordian.net/?type=scener&id='.$id.'" target="_blank"'.$yellow.'>'.$scener.'</a>'
+						? ', <a href="http://csdb.chordian.net/?type=scener&id='.$id.'" target="_blank" class="'.$yellow.'">'.$scener.'</a>'
 						: ', [<a href="http://csdb.chordian.net/?type=scener&id='.$id.'" target="_blank">Scener:'.$id.'</a>]'
 					);
 					if (!$amount) {

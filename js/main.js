@@ -132,86 +132,139 @@ $(function() { // DOM ready
 				// Fast forward ON
 				$("#faster").trigger("mousedown");
 				fastForwarding = true;
+			} else if (event.keyCode == 32) {
+				// Don't use 'Space' to scroll down
+				event.preventDefault();
 			}
 		}
 	}).on("keyup", function(event) {
 		if (!$("input[type=text],input[type=password],textarea,select").is(":focus")) {
-			if (event.keyCode == 220) {									// Keyup key below 'Escape'
-				// Fast forward OFF
-				$("#faster").trigger("mouseup");
-				fastForwarding = false;
-			} else if (event.keyCode == 32)	{							// Keyup 'Space'
-				$("#play-pause").trigger("mouseup");
-			} else if (event.keyCode == 80) {							// Keyup 'p' (pop-up window)
-				// Open a pop-up window with only the width of the #panel area
-				window.open("//deepsid.chordian.net/?mobile=1&emulator=websid", "_blank",
-					"'left=0,top=0,width=450,height="+(screen.height-150)+",scrollbars=no'");
-			} else if (event.keyCode == 67 && browser.isCompoFolder) {	// Keyup 'c'
-				// Refresh the competition cache if inside a single competition folder
-				if ($("#logged-username").text() == "JCH") {
-					// NOTE: This is undocumented to the public but if you are reading this and wondering about it,
-					// it's used to refresh the cache in case an HVSC path has been added to a CSDb release page of
-					// a SID file, thereby making it visible to the cache script. This can improve compo lists.
-					$.post("php/csdb_compo_clear_cache.php",
-						{ competition: browser.path.replace("/CSDb Music Competitions/", "") }, function(data) {
-						browser.validateData(data, function() {
-							// Now reload the folder to automatically refresh the cache
-							browser.getFolder();
-						});
-					}.bind(this));
-				}
-			} else if (event.keyCode == 83) {							// Keyup 's' (sundry)
-				// Toggle the sundry box minimized or restored
-				ToggleSundry();
-				$(window).trigger("resize", true);
-			} else if (event.keyCode == 76) {							// Keyup 'l' (load)
-				// Upload and test one or more external SID tune(s)
-				$("#upload-test").trigger("click");
-			} else if (event.keyCode == 66) {							// Keyup 'b' (back before redirect)
-				$("a.redirect").removeClass("playing");
-				$("#redirect-back").trigger("click");
-			} else if (event.keyCode == 106) {							// Keyup 'Keypad Multiply'
-				var $selected = $("#folders tr.selected");
-				var name = decodeURIComponent($selected.find(".name").attr("data-name"));
-				if (name != "undefined" && $("#logged-username").text() == "JCH") {
-					// Prepare some edit boxes with current data
-					var playerInfo = SID.getSongInfo("info");
-					$("#edit-file-name-input").val(name.split("/").slice(-1)[0]);
-					$("#edit-file-player-input").val(browser.playlist[browser.songPos].playerraw);
-					$("#edit-file-author-input").val(playerInfo.songAuthor);
-					$("#edit-file-copyright-input").val(playerInfo.songReleased);
-					// Show dialog box for editing the file (only the year for now)
-					CustomDialog({
-						id: '#dialog-edit-file',
-						text: '<h3>Edit file</h3>',
-						width: 390,
-						height: 258,
-					}, function() {
-						// OK was clicked; make the changes to the file row in the database
-						$.post("php/update_file.php", {
-							fullname:	browser.playlist[browser.songPos].fullname.replace(browser.ROOT_HVSC+"/", ""),
-							name:		$("#edit-file-name-input").val(),
-							player:		$("#edit-file-player-input").val(),
-							author:		$("#edit-file-author-input").val(),
-							copyright:	$("#edit-file-copyright-input").val(),
-						}, function(data) {
+
+			switch (event.keyCode) {
+
+				case 220:	// Keyup key below 'Escape' - fast forward
+
+					// Fast forward OFF
+					$("#faster").trigger("mouseup");
+					fastForwarding = false;
+					break;
+	
+				case 32:	// Keyup 'Space' - play/pause
+
+					$("#play-pause").trigger("mouseup");
+					break;
+	
+				case 80:	// Keyup 'p' - pop-up window
+
+					// Open a pop-up window with only the width of the #panel area
+					window.open("//deepsid.chordian.net/?mobile=1&emulator=websid", "_blank",
+						"'left=0,top=0,width=450,height="+(screen.height-150)+",scrollbars=no'");
+					break;
+
+				case 67:	// Keyup 'c' - refresh compo cache - ADMIN ONLY
+
+					if (browser.isCompoFolder && $("#logged-username").text() == "JCH") {
+						$.post("php/csdb_compo_clear_cache.php",
+							{ competition: browser.path.replace("/CSDb Music Competitions/", "") }, function(data) {
 							browser.validateData(data, function() {
+								// Now reload the folder to automatically refresh the cache
 								browser.getFolder();
 							});
+						}.bind(this));
+					}
+					break;
+
+				case 83:	// Keyup 's' - open/close sundry box
+
+					// Toggle the sundry box minimized or restored
+					ToggleSundry();
+					$(window).trigger("resize", true);
+					break;
+
+				case 76:	// Keyup 'l' - load a SID file for local testing
+
+					// Upload and test one or more external SID tune(s)
+					$("#upload-test").trigger("click");
+					break;
+
+				case 66:	// Keyup 'b' - go back before redirect
+
+					$("a.redirect").removeClass("playing");
+					$("#redirect-back").trigger("click");
+					break;
+
+				case 106:	// Keyup 'Keypad Multiply' - edit player info - ADMIN ONLY
+
+					var $selected = $("#folders tr.selected");
+					var name = decodeURIComponent($selected.find(".name").attr("data-name"));
+
+					if (name != "undefined" && $("#logged-username").text() == "JCH") {
+
+						// Prepare some edit boxes with current data
+						var playerInfo = SID.getSongInfo("info");
+						$("#edit-file-name-input").val(name.split("/").slice(-1)[0]);
+						$("#edit-file-player-input").val(browser.playlist[browser.songPos].playerraw);
+						$("#edit-file-author-input").val(playerInfo.songAuthor);
+						$("#edit-file-copyright-input").val(playerInfo.songReleased);
+
+						// Show dialog box for editing the file (only the year for now)
+						CustomDialog({
+							id: '#dialog-edit-file',
+							text: '<h3>Edit file</h3>',
+							width: 390,
+							height: 258,
+						}, function() {
+							// OK was clicked; make the changes to the file row in the database
+							$.post("php/update_file.php", {
+								fullname:	browser.playlist[browser.songPos].fullname.replace(browser.ROOT_HVSC+"/", ""),
+								name:		$("#edit-file-name-input").val(),
+								player:		$("#edit-file-player-input").val(),
+								author:		$("#edit-file-author-input").val(),
+								copyright:	$("#edit-file-copyright-input").val(),
+							}, function(data) {
+								browser.validateData(data, function() {
+									browser.getFolder();
+								});
+							});
 						});
+					}
+					break;
+
+				case 8:		// Keyup 'BACKSPACE' - browse back to parent folder
+
+					$("#folder-back").trigger("click");
+					break;
+
+				case 70:	// Keyup 'f' - refresh current folder
+
+					var here = $("#folders").scrollTop();
+					browser.getFolder(0, undefined, undefined, function() {
+						SetScrollTopInstantly("#folders", here);
 					});
-				}
-			} else if (event.keyCode == 8) {							// Keyup 'BACKSPACE' (parent folder)
-				$("#folder-back").trigger("click");
-			} else if (event.keyCode == 70) {							// Keyup 'f' (refresh folder)
-				var here = $("#folders").scrollTop();
-				browser.getFolder(0, undefined, undefined, function() {
-					SetScrollTopInstantly("#folders", here);
-				});
-			} else if (event.keyCode == 84) {							// Keyup 't' (edit tags)
-				$("#songs tr.selected").find(".edit-tags").trigger("click");
-			} else if (event.keyCode == 160) {							// Keyup '^' (test something)
-				log("test");
+					break;
+
+				case 84:	// Keyup 't' - open dialog box for editing tags
+
+					$("#songs tr.selected").find(".edit-tags").trigger("click");
+					break;
+
+				case 37:	// Keyup 'ARROW-LEFT' - skip to previous (+ SHIFT to emulate auto-progress)
+
+					$("#skip-prev").trigger("mouseup", event.shiftKey ? false : undefined);
+					break;
+
+				case 39:	// Keyup 'ARROW-RIGHT' - skip to next (+ SHIFT to emulate auto-progress)
+
+					$("#skip-next").trigger("mouseup", event.shiftKey ? false : undefined);
+					break;
+
+				case 160:	// Keyup '^' - test something
+
+					log("test");
+					break;
+
+				default:
+
 			}
 		}
 	});

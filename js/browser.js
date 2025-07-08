@@ -2016,8 +2016,15 @@ Browser.prototype = {
 					.css("visibility", "visible");
 				ResetDexterScrollBar("csdb");
 
-				// Emphasize other group names in green that might also be relevant productions
 				setTimeout(function() {
+
+					// Get the name and/or handle of the composer
+					var songAuthor = SID.getSongInfo("info").songAuthor;
+					var nameMatch = songAuthor.match(/^([^(]+?)(?: \(([^)]+)\))?$/);
+					var realName = nameMatch ? nameMatch[1].trim().toLowerCase() : "";
+					var handle = nameMatch && nameMatch[2] ? nameMatch[2].trim().toLowerCase() : "";
+
+					// Emphasize other group names in green that might also be relevant productions
 					$("a.csdb-group").each(function(i, element) {
 						var currentText = $(element).text().trim().toLowerCase();
 						groupNames.forEach(function(name) {
@@ -2026,6 +2033,14 @@ Browser.prototype = {
 							}
 						});
 					});
+
+					// Also emphasize if the composer used a real name or handle for the release
+					$("a.csdb-scener").each(function(i, element) {
+						var currentText = $(element).text().trim().toLowerCase();
+					if ((realName && realName === currentText) || (handle && handle === currentText))
+							$(element).addClass("empThird");
+					});
+
 				}, 0);
 
 				UpdateRedirectPlayIcons();

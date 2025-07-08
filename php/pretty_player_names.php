@@ -21,6 +21,7 @@ $prettyPlayerNames = array(
 	'Americana' =>				'Americana\'s player',
 	'Andreas_Bauernfeind' =>	'Andreas Bauernfeind\'s player',
 	'Andrew_Colin' =>			'Andrew Colin\'s player',
+	'Andy_Brown' =>				'Andy Brown\'s player',
 	'Andy_Morton' =>			'Andy Morton\'s player',
 	'Andy_Wilson' =>			'Andy Wilson\'s player',
 	'Anthony_Lees' =>			'Anthony Lees\' player',
