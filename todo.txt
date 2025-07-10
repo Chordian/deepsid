@@ -15,8 +15,9 @@ SHOULD BE DONE
 
 
 - kb: ToDo
+    - Browsing back to prev folder shows kb marker on the folder you CLICKED to get there
 
-    - Browse back to prev folder show show kb marker on the folder you CLICKED to get there
+
 
 
 

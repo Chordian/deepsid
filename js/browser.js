@@ -1061,7 +1061,7 @@ Browser.prototype = {
 
 		if (this.hvsc) this.hvsc.abort();
 
-		this.moveKeyboardToFirst();
+		$("#kb-marker").hide();
 
 		ctrls.state("root/back", "disabled");
 		$("#dropdown-sort").prop("disabled", true);
@@ -1103,6 +1103,8 @@ Browser.prototype = {
 				// Must be in this timer or the emptying above will not be visible
 				$("#songs table").append(this.cache.folder);
 				this.compolist = this.cache.compolist;
+
+				this.moveKeyboardToFirst();
 
 				// Hack to make sure the bottom search bar sits in the correct bottom of the viewport
 				$(window).trigger("resize");
@@ -1497,6 +1499,7 @@ Browser.prototype = {
 					$("#songs table").append(this.folders+files);
 
 					this.showTagsBrackets();
+					this.moveKeyboardToFirst();
 
 					if ((this.path == "/CSDb Music Competitions" || this.path == "/_Compute's Gazette SID Collection") && !this.isSearching) {
 						// Cache this big folder for fast back-browsing
@@ -3323,26 +3326,29 @@ Browser.prototype = {
 	 * example when refreshing the site with a SID file in the URL. This
 	 * performs its own scrolling to the SID row.
 	 * 
-	 * @param {int} row						Index of the current song row
+	 * @param {int} row						Index of the current song row (move marker to it)
 	 * @param {boolean} moveSmoothly		Optional; True = Smoothly; False = Instantly
 	 * @param {boolean} scrollIntoView		Optional; False = Ignore scrolling into view
 	 */
 	moveKeyboardSelection: function(row, moveSmoothly, scrollIntoView) {
-		var $kb = $("#kb-marker"), $targetRow = $("#songs tr").eq(row);
+		const $kb = $("#kb-marker");
+		const $rows = $("#folders tr");
+		const $targetRow = $rows.eq(row);
 
-		if (moveSmoothly == "undefined") moveSmoothly = true;
+		if (!$targetRow.length || !$targetRow.position()) return;
+
+		if (typeof moveSmoothly === "undefined") moveSmoothly = true;
 		moveSmoothly ? $kb.show() : $kb.hide();
-		
-		// Move the marker
+
+		// Move the keyboard marker
 		$kb.css({
 			top: $targetRow.position().top,
 			height: $targetRow.outerHeight()
 		});
 
 		if (scrollIntoView !== false) {
-			// Scroll the row into view
 			$targetRow[0].scrollIntoView({
-				behavior: 'smooth',
+				behavior: 'auto',
 				block: 'nearest'
 			});
 		}
@@ -3357,20 +3363,14 @@ Browser.prototype = {
 	 * this is a spacer or a divider.
 	 */
 	moveKeyboardToFirst: function() {
-
-		$("#kb-marker").css({
-			top: 0,
-			height: 0
-		}); //.hide();
-
-		const $rows = $("#folders tr");
-		const firstValidRow = $rows.not(".disabled").first();
-		const validIndex = $rows.index(firstValidRow);
-
-		if (validIndex !== -1) {
-			this.kbSelectedRow = validIndex;
-			this.moveKeyboardSelection(validIndex, false);
-		}		
+		var $tr = $("#songs tr");
+		for (var i = 0; i < $tr.length; i++) {
+			if (!$tr.eq(i).hasClass("disabled")) {
+				this.kbSelectedRow = i;
+				this.moveKeyboardSelection(i, false);
+				break;
+			}
+		}
 	},
 
 	/**

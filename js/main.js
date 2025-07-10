@@ -7,7 +7,7 @@ var $=jQuery.noConflict();
 
 var cacheCSDb = cacheSticky = cacheStickyBeforeCompo = cacheCSDbProfile = cacheBeforeCompo = cachePlayer = cacheGB64 = cacheRemix = prevFile = sundryTab = reportSTIL = "";
 var cacheTabScrollPos = cachePlayerTabScrollPos = cacheGB64TabScrollPos = cacheRemixTabScrollPos = cachePosBeforeCompo = cacheDDCSDbSort = peekCounter = sundryHeight = 0;
-var sundryToggle = true, recommended = forum = players = $trAutoPlay = null, showTags, fastForwarding, registering = false;
+var sundryToggle = true, recommended = forum = players = $trAutoPlay = null, showTags, fastForwarding, registering = kbScrollLocked = false;
 var logCount = 1000, isMobile, miniPlayer;
 
 var isMobile = $("body").attr("data-mobile") !== "0";
@@ -27,6 +27,8 @@ var tabPrevScrollPos = {
 	faq:		{ pos: 0, reset: false },
 	about:		{ pos: 0, reset: false },
 }
+
+const isFirefox = typeof InstallTrigger !== "undefined"; // Firefox can scroll a lot faster than Chrome
 
 const PATH_UPLOADS = "_SID Happens";
 const PATH_SID_FM = PATH_UPLOADS + "/SID+FM";
@@ -147,7 +149,11 @@ $(function() { // DOM ready
 
 				case 38:	// Keydown 'ARROW-UP' - move keyboard-selected SID row up
 
+					if (!isFirefox && kbScrollLocked) return;
+					if (!isFirefox) kbScrollLocked = true;
+
 					event.preventDefault();
+
 					var $tr = $("#songs tr"),
 						indexUp = browser.kbSelectedRow;
 
@@ -159,11 +165,22 @@ $(function() { // DOM ready
 							break;
 						}
 					}
+
+					// Chrome and Edge uses asynchronous scrolling and it stutters if not throttled
+					if (!isFirefox) {
+						setTimeout(() => {
+							kbScrollLocked = false;
+						}, 150);
+					}
 					break;
 
 				case 40:	// Keydown 'ARROW-DOWN' - move keyboard-selected SID row down
 
+					if (!isFirefox && kbScrollLocked) return;
+					if (!isFirefox) kbScrollLocked = true;
+
 					event.preventDefault();
+
 					var $tr = $("#songs tr"),
 						indexDown = browser.kbSelectedRow;
 					const rowCount = $tr.length;
@@ -176,22 +193,22 @@ $(function() { // DOM ready
 							break;
 						}
 					}
-					break;
 
-				case 36: // Keydown 'HOME' - move keyboard-selected SID row to top
-	
-					event.preventDefault();
-					var $tr = $("#songs tr");
-					for (var i = 0; i < $tr.length; i++) {
-						if (!$tr.eq(i).hasClass("disabled")) {
-							browser.kbSelectedRow = i;
-							browser.moveKeyboardSelection(i, false);
-							break;
-						}
+					// Chrome and Edge uses asynchronous scrolling and it stutters if not throttled
+					if (!isFirefox) {
+						setTimeout(() => {
+							kbScrollLocked = false;
+						}, 150);
 					}
 					break;
 
-				case 35: // Keydown 'END' - move keyboard-selected SID row to bottom
+				case 36: 	// Keydown 'HOME' - move keyboard-selected SID row to top
+	
+					event.preventDefault();
+					browser.moveKeyboardToFirst();
+					break;
+
+				case 35: 	// Keydown 'END' - move keyboard-selected SID row to bottom
 
 					event.preventDefault();
 					var $tr = $("#songs tr");
@@ -204,8 +221,11 @@ $(function() { // DOM ready
 					}
 					break;					
 
-				case 33: // Keydown 'PageUp' - move keyboard-selected SID row one page up
-				case 34: // Keydown 'PageDown' - move keyboard-selected SID row one page down
+				case 33: 	// Keydown 'PageUp' - move keyboard-selected SID row one page up
+				case 34: 	// Keydown 'PageDown' - move keyboard-selected SID row one page down
+
+					if (!isFirefox && kbScrollLocked) return;
+					if (!isFirefox) kbScrollLocked = true;
 
 					event.preventDefault();
 
@@ -238,6 +258,13 @@ $(function() { // DOM ready
 					// Update and scroll to the new position
 					browser.kbSelectedRow = fullIndex;
 					browser.moveKeyboardSelection(fullIndex, false);
+
+					// Chrome and Edge uses asynchronous scrolling and it stutters if not throttled
+					if (!isFirefox) {
+						setTimeout(() => {
+							kbScrollLocked = false;
+						}, 300);
+					}
 					break;
 
 				default:
