@@ -918,7 +918,7 @@
 						<select id="dropdown-sort" name="sort"><!-- browser.js --></select>
 					</div>
 				</div>
-				<div id="folders" tabindex="0"><table></table></div>
+				<div id="folders" tabindex="0"><div id="kb-marker"></div><table></table></div>
 				<img id="loading" class="loading-spinner" src="images/loading.svg" style="display:none;" alt="" />
 				<div id="search">
 					<select id="dropdown-search" name="search-type">
@@ -1868,6 +1868,13 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>July 9, 2025</h3>
+						<ul>
+							<li>The "Coll." tag has been replaced with a double note icon followed by a list icon. It now
+								appears second among the blue production tags, just after the "Music" tag. You can still use "Collection" to
+								search for or add it.</li>
+						</ul>
+
 						<h3>July 8, 2025</h3>
 						<ul>
 							<li>Fixed an issue where pressing 'Space' to pause/play would also scroll down the song list.</li>
@@ -1887,8 +1894,8 @@
 						<h3>July 6, 2025</h3>
 						<ul>
 							<li>You can now edit the tags for the currently selected song by hitting the "t" key.</li>
-							<li>The "Collection" tag has been abbreviated to "Coll." in the blue tag, as it could be
-								quite visually dominant. However, you can still search for and select it using "Collection".</li>
+							<li><del>The "Collection" tag has been abbreviated to "Coll." in the blue tag, as it could be
+								quite visually dominant. However, you can still search for and select it using "Collection".</del></li>
 							<li>The cause of death for deceased composers has been replaced with their age at the time of death.</li>
 							<li>If a birth year is known, the current age is shown for composers who are still with us.</li>
 							<li>The "DL" download links have been removed from CSDb lists shown when there is more than one

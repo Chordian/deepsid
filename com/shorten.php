@@ -18,6 +18,11 @@ try {
 			die('Invalid URL.');
 		}
 
+		$allowed_prefix = 'https://deepsid.chordian.net';
+		if (stripos($url, $allowed_prefix) !== 0) {
+			die('Only DeepSID URLs are allowed.');
+		}		
+
 		// Generate a unique 5-character hash
 		do {
 			$hash = substr(md5(uniqid()), 0, 5);

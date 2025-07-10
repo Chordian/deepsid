@@ -3127,6 +3127,7 @@ input[type=range]::-ms-track {
 
 	/* Scrollable box with folders and SID files */
 	#folders {
+		position: relative;
 		height: calc(100% - 100px); /* Minus the height of #songs-buttons and #search */
 		border-top: 1px solid var(--color-border-box);
 		border-bottom: 1px solid var(--color-border-box);
@@ -3183,6 +3184,39 @@ input[type=range]::-ms-track {
 		color: var(--color-text-sid-selected) !important;
 		background: var(--color-bg-sid-selected);
 		font-weight: bold;
+	}
+
+:root {
+			--color-border-sid-kb: var(--color-bg-sid-selected); /* or #d5d5c9 and 1.5px border*/
+			--color-border-sid-kb: #e4e4dc;
+
+			--color-sid-kb-radius: -7px;
+			--color-sid-kb-opacity: 0.4;
+}
+
+[data-theme="dark"] {
+			--color-border-sid-kb: var(--color-bg-sid-selected); /* or #393939 and 1.5px border */
+			--color-border-sid-kb: #3b3b3b;
+
+			--color-sid-kb-radius: -6px;
+			--color-sid-kb-opacity: 0.9;
+}
+
+	/* The selection for a keyboard-controlled SID row */
+	#kb-marker {
+		display: none;
+		position: absolute;
+		left: 0;
+		right: 0;
+		height: 100%;
+		pointer-events: none;
+		border-top: 1.5px solid var(--color-border-sid-kb);
+		border-bottom: 1.5px solid var(--color-border-sid-kb);
+		/*box-shadow:
+			inset 0 6px 6px var(--color-sid-kb-radius) rgba(0, 0, 0, var(--color-sid-kb-opacity)),
+			inset 0 -6px 6px var(--color-sid-kb-radius) rgba(0, 0, 0, var(--color-sid-kb-opacity));*/
+		transition: top 0.1s ease;
+		z-index: 0; /* Avoíds disturbing the text when smooth scrolling past a row */
 	}
 
 	#songs .selected .info,

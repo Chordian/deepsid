@@ -128,13 +128,119 @@ $(function() { // DOM ready
 	 */
 	$(window).on("keydown", function(event) {
 		if (!$("input[type=text],input[type=password],textarea,select").is(":focus")) {
-			if (event.keyCode == 220 && ! fastForwarding) {				// Keydown key below 'Escape'
-				// Fast forward ON
-				$("#faster").trigger("mousedown");
-				fastForwarding = true;
-			} else if (event.keyCode == 32) {
-				// Don't use 'Space' to scroll down
-				event.preventDefault();
+
+			switch (event.keyCode) {
+
+				case 220:	// Keydown key below 'Escape' - fast forward
+
+					if (!fastForwarding) {
+						// Fast forward ON
+						$("#faster").trigger("mousedown");
+						fastForwarding = true;
+					}
+					break;
+
+				case 32:	// Don't use 'Space' to scroll down
+
+					event.preventDefault();
+					break;
+
+				case 38:	// Keydown 'ARROW-UP' - move keyboard-selected SID row up
+
+					event.preventDefault();
+					var $tr = $("#songs tr"),
+						indexUp = browser.kbSelectedRow;
+
+					while (indexUp > 0) {
+						indexUp--;
+						if (!$tr.eq(indexUp).hasClass("disabled")) {
+							browser.kbSelectedRow = indexUp;
+							browser.moveKeyboardSelection(indexUp, true);
+							break;
+						}
+					}
+					break;
+
+				case 40:	// Keydown 'ARROW-DOWN' - move keyboard-selected SID row down
+
+					event.preventDefault();
+					var $tr = $("#songs tr"),
+						indexDown = browser.kbSelectedRow;
+					const rowCount = $tr.length;
+
+					while (indexDown < rowCount - 1) {
+						indexDown++;
+						if (!$tr.eq(indexDown).hasClass("disabled")) {
+							browser.kbSelectedRow = indexDown;
+							browser.moveKeyboardSelection(indexDown, true);
+							break;
+						}
+					}
+					break;
+
+				case 36: // Keydown 'HOME' - move keyboard-selected SID row to top
+	
+					event.preventDefault();
+					var $tr = $("#songs tr");
+					for (var i = 0; i < $tr.length; i++) {
+						if (!$tr.eq(i).hasClass("disabled")) {
+							browser.kbSelectedRow = i;
+							browser.moveKeyboardSelection(i, false);
+							break;
+						}
+					}
+					break;
+
+				case 35: // Keydown 'END' - move keyboard-selected SID row to bottom
+
+					event.preventDefault();
+					var $tr = $("#songs tr");
+					for (var i = $tr.length - 1; i >= 0; i--) {
+						if (!$tr.eq(i).hasClass("disabled")) {
+							browser.kbSelectedRow = i;
+							browser.moveKeyboardSelection(i, false);
+							break;
+						}
+					}
+					break;					
+
+				case 33: // Keydown 'PageUp' - move keyboard-selected SID row one page up
+				case 34: // Keydown 'PageDown' - move keyboard-selected SID row one page down
+
+					event.preventDefault();
+
+					var $container = $("#folders");
+					var $allRows = $container.find("tr");
+					var $selectableRows = $allRows.filter(":not(.disabled)");
+
+					// Current selected full row
+					const $currentFullRow = $allRows.eq(browser.kbSelectedRow);
+
+					// Find index in filtered selectable rows
+					const currentFilteredIndex = $selectableRows.index($currentFullRow);
+
+					// Fallback if somehow not found (e.g., stale state)
+					if (currentFilteredIndex === -1) break;
+
+					// Measure row height of current type
+					const rowHeight = $currentFullRow.outerHeight();
+					const containerHeight = $container.height();
+					const rowsPerPage = Math.floor(containerHeight / rowHeight);
+
+					// Calculate new index in the filtered list
+					var newFilteredIndex = currentFilteredIndex + (event.keyCode === 34 ? rowsPerPage : -rowsPerPage);
+					newFilteredIndex = Math.max(0, Math.min(newFilteredIndex, $selectableRows.length - 1));
+
+					// Get the actual target row and index in full list
+					const $newTargetRow = $selectableRows.eq(newFilteredIndex);
+					const fullIndex = $allRows.index($newTargetRow);
+
+					// Update and scroll to the new position
+					browser.kbSelectedRow = fullIndex;
+					browser.moveKeyboardSelection(fullIndex, false);
+					break;
+
+				default:
 			}
 		}
 	}).on("keyup", function(event) {
@@ -187,7 +293,7 @@ $(function() { // DOM ready
 					$("#upload-test").trigger("click");
 					break;
 
-				case 66:	// Keyup 'b' - go back before redirect
+				case 66:	// Keyup 'b' - go back from "plink"
 
 					$("a.redirect").removeClass("playing");
 					$("#redirect-back").trigger("click");
@@ -258,13 +364,17 @@ $(function() { // DOM ready
 					$("#skip-next").trigger("mouseup", event.shiftKey ? false : undefined);
 					break;
 
+				case 13:	// Keyup 'ENTER' - click the row keyboard-selected row
+
+					$("#songs tr").eq(browser.kbSelectedRow).trigger("click");
+					break;
+
 				case 160:	// Keyup '^' - test something
 
 					log("test");
 					break;
 
 				default:
-
 			}
 		}
 	});

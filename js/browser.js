@@ -61,6 +61,7 @@ function Browser() {
 	this.symlistFolders = [];
 	this.fileTags = [];
 
+	this.kbSelectedRow = 0;
 	this.currentScrollPos = 0;
 	this.scrollPositions = [];
 	this.sliderButton = false;
@@ -573,6 +574,8 @@ Browser.prototype = {
 					// fixed a row marking bug on iOS in playlists with duplicate use of songs.
 					$("#songs tr").removeClass("selected");
 					$tr.addClass("selected");
+					this.kbSelectedRow = $tr.index();
+					this.moveKeyboardSelection(this.kbSelectedRow, false, false);
 
 					SID.load(subtune, this.getLength(subtune), this.playlist[this.songPos].fullname, function(error) {
 
@@ -1057,6 +1060,8 @@ Browser.prototype = {
 	getFolder: function(scrollPos, searchQuery, readCache, callback) {
 
 		if (this.hvsc) this.hvsc.abort();
+
+		this.moveKeyboardToFirst();
 
 		ctrls.state("root/back", "disabled");
 		$("#dropdown-sort").prop("disabled", true);
@@ -1731,11 +1736,11 @@ Browser.prototype = {
 				// A unique color for tags that serves as a warning
 				list_of_tags += '<div class="tag tag-warning"'+id+'>'+tag+'</div>';
 			} else if (tag == "Music") {
-				// Change this tag into just a double note
+				// Change music tag into just a double note icon
 				list_of_tags += '<div class="tag tag-production tag-notes tag-music"'+id+'><img src="images/composer_doublenote.svg" /><span></span></div>';
 			} else if (tag == "Collection") {
-				// Add a double note to make it clear this is for a music collection
-				list_of_tags += '<div class="tag tag-production tag-notes tag-collection"'+id+'><img src="images/composer_doublenote.svg" /><span>Coll.</span></div>';
+				// Change collection tag into a double note icon followed by a list icon
+				list_of_tags += '<div class="tag tag-production tag-notes tag-collection"'+id+'><img src="images/composer_doublenote.svg" /><img style="margin-left: 12px;" src="images/visuals_memory.svg" /><span>&nbsp;&nbsp;&nbsp;&nbsp&nbsp</span></div>';
 			/*} else if (tag == "Compo") {
 				// Add a double note to make it clear this is for music competitions only
 				list_of_tags += '<div class="tag tag-event tag-notes tag-compo"'+id+'><img src="images/composer_doublenote.svg" /><span>Compo</span></div>';*/
@@ -3309,6 +3314,63 @@ Browser.prototype = {
 		$endTag.find(`option[value="${oldEnd}"]`).length
 			? $endTag.val(oldEnd)
 			: $endTag.val(0);
+	},
+
+	/**
+	 * Moves the [smooth] keyboard selection to the specified row.
+	 * 
+	 * Ignoring scrolling into view can be important in some situations; for
+	 * example when refreshing the site with a SID file in the URL. This
+	 * performs its own scrolling to the SID row.
+	 * 
+	 * @param {int} row						Index of the current song row
+	 * @param {boolean} moveSmoothly		Optional; True = Smoothly; False = Instantly
+	 * @param {boolean} scrollIntoView		Optional; False = Ignore scrolling into view
+	 */
+	moveKeyboardSelection: function(row, moveSmoothly, scrollIntoView) {
+		var $kb = $("#kb-marker"), $targetRow = $("#songs tr").eq(row);
+
+		if (moveSmoothly == "undefined") moveSmoothly = true;
+		moveSmoothly ? $kb.show() : $kb.hide();
+		
+		// Move the marker
+		$kb.css({
+			top: $targetRow.position().top,
+			height: $targetRow.outerHeight()
+		});
+
+		if (scrollIntoView !== false) {
+			// Scroll the row into view
+			$targetRow[0].scrollIntoView({
+				behavior: 'smooth',
+				block: 'nearest'
+			});
+		}
+
+		setTimeout(() => {
+			$kb.show();
+		}, 250);
+	},
+
+	/**
+	 * Select the first viable item for keyboard selection, i.e. ignores if
+	 * this is a spacer or a divider.
+	 */
+	moveKeyboardToFirst: function() {
+
+		$("#kb-marker").css({
+			top: 0,
+			height: 0
+		}); //.hide();
+
+		const $rows = $("#folders tr");
+		const firstValidRow = $rows.not(".disabled").first();
+		const validIndex = $rows.index(firstValidRow);
+
+		if (validIndex !== -1) {
+			this.kbSelectedRow = validIndex;
+			this.moveKeyboardSelection(validIndex, false);
+		}		
 	},
 
 	/**

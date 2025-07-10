@@ -287,7 +287,10 @@ Controls.prototype = {
 
 				// Mark the next row in the browser list
 				$("#songs tr").removeClass("selected");
-				$("#folders tr").eq(browser.subFolders + browser.songPos).addClass("selected");
+				var $tr = $("#folders tr").eq(browser.subFolders + browser.songPos);
+				$tr.addClass("selected");
+				browser.kbSelectedRow = $tr.index();
+				browser.moveKeyboardSelection(browser.kbSelectedRow, false);
 
 				// A timed out tune should only auto-center if a setting demands it
 				if (!isAutoProgress || GetSettingValue("mark-tune")) {

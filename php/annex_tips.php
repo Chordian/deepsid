@@ -223,6 +223,8 @@
 		
 		<h4>General hotkeys</h4>
 		<div class="annex-hotkey">Space</div><span class="annex-tiny">Pause/Play toggle</span>
+		<div class="annex-hotkey">Left arrow</div><span class="annex-tiny">Previous SID row</span>
+		<div class="annex-hotkey">Right arrow</div><span class="annex-tiny">Next SID row</span>
 		<div class="annex-hotkey">Backspace</div><span class="annex-tiny">Back to parent folder</span>
 		<div class="annex-hotkey">[<i>Below</i>&nbsp;]&nbsp;Esc</div><span class="annex-tiny">Fast forward</span>
 		<div class="annex-hotkey">p</div><span class="annex-tiny">Pop-up tiny DeepSID</span>
@@ -230,6 +232,7 @@
 		<div class="annex-hotkey">l</div><span class="annex-tiny">Upload SID for testing</span>
 		<div class="annex-hotkey">b</div><span class="annex-tiny">Back from plink</span>
 		<div class="annex-hotkey">f</div><span class="annex-tiny">Refresh folder</span>
+		<div class="annex-hotkey">t</div><span class="annex-tiny">Edit tags</span>
 		<p>Testing a SID is temporary and for you only. No one else can hear it.</p>
 		A "plink" is a link with a play icon in front of it, e.g. in the <b>CSDb</b> tab.
 		

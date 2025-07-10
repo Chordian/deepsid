@@ -76,8 +76,13 @@ function GetTagsAndTypes($file_id, &$list_of_tags, &$type_of_tags, &$id_of_tags,
 
 		// Sort special PRODUCTION tag name
 		if ($a->type === 'PRODUCTION') {
+			// Prioritize "Music" first
 			if ($a->name === 'Music') return -1;
 			if ($b->name === 'Music') return 1;
+
+			// Then prioritize "Collection"
+			if ($a->name === 'Collection') return -1;
+			if ($b->name === 'Collection') return 1;			
 		}
 
 		// Fallback to alphabetical

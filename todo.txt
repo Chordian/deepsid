@@ -7,18 +7,20 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- DeepSID.com now works as a short link redirector. Make an addition to 'shorten.php' so
-  the URL specified in the input is validated to have 'https://deepsid.chordian.net' in
-  the beginning or else it will be discarded.
-
-- How about expanding "Coll." tag to "Collection" again, but alwayds let it be the last of
-  its blue production kind?
-
-- Go through all "Links" in all profile pages and make sure the full composer name fits.
+- WIP: Go through all "Links" in all profile pages and make sure the full composer name fits.
   If it ends in "..." create a short name, e.g. with a letter + full stop for first name.
+   ......... Next: MUSICIANS/E
 
-- Seriously consider hiding the "Compo" tag. With tag connection, the event and production
-  tags surrounding the # ranking might be enough.
+
+
+
+- kb: ToDo
+
+    - Browse back to prev folder show show kb marker on the folder you CLICKED to get there
+
+
+
+- On mobile devices, disable the new keyboard-controlled marker.
 
 - Now that cursor up/down works in the folders list, consider moving the faint row marker
   when using those keys, and Enter to select and play a SID row.
@@ -34,10 +36,6 @@ SHOULD BE DONE
 
 - If you look closely, some tag names are too high up. It differs from SID row to SID row
   in Firefox. Test decimal line heights to see if it can be fixed.
-
-- Consider a tag sorting dialog box. If not opened and used, the tags follow the usual
-  sorting. If tags are complicated - e.g several events and productions - you can move the
-  tags around to show a more logical setup of tags.
 
 - BUG: Missing database information:
   https://deepsid.chordian.net/?file=/Compute%27s%20Gazette%20SID%20Collection/BJ_Pools/Heaven_Knows_A.mus
@@ -148,6 +146,10 @@ CONSIDER THIS
   button for showing info from the SID file itself versus from the database.
   UPDATE: This has dropped in priority since all three of JW's emulators now get the info
   from the database instead.
+
+- Consider a tag sorting dialog box. If not opened and used, the tags follow the usual
+  sorting. If tags are complicated - e.g several events and productions - you can move the
+  tags around to show a more logical setup of tags.
 
 - I abandoned GameBase64 a while back as their site had CORS issues, but why not use their
   database instead? It’s available for download here: https://gb64.com/downloads.php
