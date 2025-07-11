@@ -11,13 +11,18 @@ SHOULD BE DONE
   If it ends in "..." create a short name, e.g. with a letter + full stop for first name.
    ......... Next: MUSICIANS/E
 
-- KB: In search mode, 'ESC' should also work as Cancel.
-  UPDATE: This is difficult to do because of key bubbling. Pausing it for first KB release.
+- KB: Need to test this THOROUGLY! The following items need to be done before release:
 
-- KB: If 'ArrowRight' is hit while on a folder, enter the folder.
-- KB: Make it so setting focus to dexter pages makes it possible to use up/down, etc.
-- KB BUG: ON/OFF buttons in settings need blur.
-- KB BUG: Channel buttons, ON/OFF etc. in VISUALS view needs blur.
+  - NOTE: Before vacation I managed to kill the BACK bug by using blur().
+
+  - KB: ON/OFF buttons in settings need blur.
+  - KB: Channel buttons, ON/OFF etc. in VISUALS view needs blur.
+  - KB: Make it so setting focus to dexter pages make it possible to use up/down, etc.
+
+- KB: If 'ArrowRight' is pressed while on a folder, enter the folder. Can be done later.
+
+- KB: In search mode, 'ESC' should also work as Cancel. This is difficult to do because of
+  key bubbling and/or multi-events. Fiddle with it later.
 
 - Now that cursor up/down works in the folders list, consider moving the faint row marker
   when using those keys, and Enter to select and play a SID row.
