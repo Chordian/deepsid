@@ -7,7 +7,7 @@ var $=jQuery.noConflict();
 
 var cacheCSDb = cacheSticky = cacheStickyBeforeCompo = cacheCSDbProfile = cacheBeforeCompo = cachePlayer = cacheGB64 = cacheRemix = prevFile = sundryTab = reportSTIL = "";
 var cacheTabScrollPos = cachePlayerTabScrollPos = cacheGB64TabScrollPos = cacheRemixTabScrollPos = cachePosBeforeCompo = cacheDDCSDbSort = peekCounter = sundryHeight = 0;
-var sundryToggle = true, recommended = forum = players = $trAutoPlay = null, showTags, fastForwarding, registering = kbScrollLocked = false;
+var sundryToggle = true, recommended = forum = players = $trAutoPlay = null, showTags, fastForwarding, registering = kbScrollLocked = blockNextEnter = false;
 var logCount = 1000, isMobile, miniPlayer;
 
 var isMobile = $("body").attr("data-mobile") !== "0";
@@ -129,7 +129,9 @@ $(function() { // DOM ready
 	 * @param {*} event 
 	 */
 	$(window).on("keydown", function(event) {
-		if (!$("input[type=text],input[type=password],textarea,select").is(":focus")) {
+		if (!$("input[type=text],input[type=password],textarea,select").is(":focus") &&
+			!$(".styledSelect").hasClass("active") &&
+			!$("#dialog-cover").is(":visible")) {
 
 			switch (event.keyCode) {
 
@@ -271,7 +273,9 @@ $(function() { // DOM ready
 			}
 		}
 	}).on("keyup", function(event) {
-		if (!$("input[type=text],input[type=password],textarea,select").is(":focus")) {
+		if (!$("input[type=text],input[type=password],textarea,select").is(":focus") &&
+			!$(".styledSelect").hasClass("active") &&
+			!$("#dialog-cover").is(":visible")) {
 
 			switch (event.keyCode) {
 
@@ -280,6 +284,11 @@ $(function() { // DOM ready
 					// Fast forward OFF
 					$("#faster").trigger("mouseup");
 					fastForwarding = false;
+					break;
+
+				case 27:	// Keyup 'Esc' - cancel search mode
+
+					// @todo Escaping custom dialog box should not escape search mode!
 					break;
 	
 				case 32:	// Keyup 'Space' - play/pause
@@ -393,7 +402,12 @@ $(function() { // DOM ready
 
 				case 13:	// Keyup 'ENTER' - click the row keyboard-selected row
 
-					$("#songs tr").eq(browser.kbSelectedRow).trigger("click");
+					// Blocking next keyup is used by the custom dialog box
+					if (!isMobile && !blockNextEnter) {
+						$("#songs tr").eq(browser.kbSelectedRow).trigger("click");
+					} else {
+						blockNextEnter = false;
+					}
 					break;
 
 				case 160:	// Keyup '^' - test something
@@ -415,6 +429,7 @@ $(function() { // DOM ready
 		if (event.keyCode == 13) {
 			$("#dialog-edit-file .dialog-button-yes").trigger("click");	// Click 'OK' button
 			$("#dialog-edit-file input").blur();
+			return false;
 		}
 	});
 
@@ -541,6 +556,7 @@ $(function() { // DOM ready
 			$("#new-password-button").prop("disabled", false);
 		else
 			$("#new-password-button").prop("enabled", false).addClass("disabled");
+		return false;
 	});
 
 	$("#new-password").keydown(function(event) {
@@ -552,6 +568,7 @@ $(function() { // DOM ready
 			$("#new-password-button").prop("disabled", false);
 		else
 			$("#new-password-button").prop("enabled", false).addClass("disabled");
+		return false;
 	});
 
 	$("#new-password-button").click(function() {
@@ -738,9 +755,10 @@ $(function() { // DOM ready
 	 * @param {*} event 
 	 */
 	$("#username").keyup(function(event) {
-		if (event.keyCode == 13)
+		if (event.keyCode == 13) {
 			$("#password").focus();
-		else if (registering) {
+			return false;
+		} else if (registering) {
 			// So does this username exist?
 			$.post("php/account_exists.php", { username: $("#username").val() }, function(data) {
 				browser.validateData(data, function(data) {
@@ -1108,6 +1126,7 @@ $(function() { // DOM ready
 			// Adjust the slider to reflect the entered value in the edit box
 			$("#"+event.target.id.replace("-edit", "-slider")).val($this.val());
 			$this.blur();
+			return false;
 		}
 	});
 
@@ -1574,8 +1593,10 @@ $(function() { // DOM ready
 	 * @param {*} event 
 	 */
 	$("#edit-clink-name-input,#edit-clink-url-input").keydown(function(event) {
-		if (event.keyCode == 13)
+		if (event.keyCode == 13) {
 			$("#dialog-add-clink .dialog-button-yes").trigger("click");
+			return false;
+		}
 	});
 
 	/**
@@ -2611,6 +2632,7 @@ $.fn.center = function () {
  * @param {function} callbackNo		Callback used if NO is clicked
  */
 function CustomDialog(data, callbackYes, callbackNo) {
+
 	$(data.id).off("click", ".dialog-button-yes");
 	$(data.id).off("click", ".dialog-button-no");
 
@@ -2618,7 +2640,7 @@ function CustomDialog(data, callbackYes, callbackNo) {
 	var height = typeof data.height != "undefined" ? data.height : 200;
 
 	var $dialog = $("#dialog-cover,"+data.id);
-
+	
 	$(data.id).css({ width: width, height: height }).center();
 	$(data.id+" .dialog-text").empty().append(data.text);
 	if (typeof data.wizard !== "undefined" && data.wizard)
@@ -2627,6 +2649,8 @@ function CustomDialog(data, callbackYes, callbackNo) {
 		$dialog.fadeIn("fast");
 
 	$(data.id).on("click", ".dialog-button-yes", function() {
+		// Prevent 'Enter' from also firing in the browser list
+		blockNextEnter = true;
 		$dialog.hide();
 		if (typeof callbackYes === "function")
 			callbackYes.call(this);

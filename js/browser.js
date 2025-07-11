@@ -64,6 +64,7 @@ function Browser() {
 	this.kbSelectedRow = 0;
 	this.currentScrollPos = 0;
 	this.scrollPositions = [];
+	this.kbPositions = [];
 	this.sliderButton = false;
 	this.annexNotWanted = GetParam("notips") !== ""
 
@@ -101,7 +102,8 @@ Browser.prototype = {
 		});
 
 		$("#songs")
-			.on("click", "button,tr", this.onClick.bind(this))
+			.on("click", "button", this.onClickButton.bind(this))
+			.on("click", "tr", this.onClickRow.bind(this))
 			.on("mouseover", "tr", this.onMouseOver.bind(this))
 			.on("mouseleave", "tr", this.onMouseLeave.bind(this));
 		$("#dialog-tags").on("click", "button", this.onClickDialogBox.bind(this));
@@ -132,8 +134,10 @@ Browser.prototype = {
 		}.bind(this), 200);
 
 		$("#search-box").keydown(function(event) {
-			if (event.keyCode == 13 && $("#search-box").val() !== "")
+			if (event.keyCode == 13 && $("#search-box").val() !== "") {
+				event.target.blur();
 				$("#search-button").trigger("click");
+			}
 		}).keyup(function() {
 			$("#search-button").removeClass("disabled");
 			if ($("#search-box").val() !== "")
@@ -329,13 +333,13 @@ Browser.prototype = {
 	 * Click the left mouse button somewhere below the control buttons.
 	 * 
 	 * @param {*} event 
-	 * @param {number} paramSubtune		If specified, override subtune number with a URL parameter
-	 * @param {boolean} paramSkipCSDb	If specified and TRUE, skip generating the 'CSDb' tab contents
-	 * @param {boolean} paramSolitary	If specified and TRUE, just stop the tune when it's done
-	 * @param {boolean} paramWait		If specified, mark/play the tune then stop after X millseconds
 	 */
-	onClick: function(event, paramSubtune, paramSkipCSDb, paramSolitary, paramWait) {
+	onClickButton: function(event) {
+
 		this.clearSpinner();
+
+		// Lose focus on the button to avoid hotkeys triggering it again
+		event.target.blur();
 
 		switch (event.target.id) {
 			case "folder-root":
@@ -344,7 +348,13 @@ Browser.prototype = {
 					this.path = "";
 					ctrls.state("prev/next", "disabled");
 					ctrls.state("subtunes", "disabled");
-					this.getFolder(this.scrollPositions[0]);
+					this.getFolder(this.scrollPositions[0], undefined, undefined,
+						function() {
+							this.kbSelectedRow = [this.kbPositions[0]];
+							if (typeof this.kbSelectedRow == "undefined")
+								this.moveKeyboardToFirst();
+							this.moveKeyboardSelection(this.kbSelectedRow, false);
+					}.bind(this));
 					this.scrollPositions = [this.scrollPositions[0]];
 					this.getComposer();
 					// Go to home URL and clear subtune switch
@@ -365,11 +375,19 @@ Browser.prototype = {
 					}
 					ctrls.state("prev/next", "disabled");
 					ctrls.state("subtunes", "disabled");
-					if (this.isSearching)
+					if (this.isSearching) {
 						this.scrollPositions.pop(); // First pop out of search state
+						this.kbPositions.pop();
+					}
 					this.getFolder(this.scrollPositions.pop(), undefined,
 						(this.path === "/CSDb Music Competitions" || this.path === "/_Compute's Gazette SID Collection")
-							&& this.cache.folder !== "" /* <- Boolean parameter */ );
+							&& this.cache.folder !== "" /* <- Boolean parameter */ ,
+						function() {
+							this.kbSelectedRow = this.kbPositions.pop();
+							if (typeof this.kbSelectedRow == "undefined")
+								this.moveKeyboardToFirst();
+							this.moveKeyboardSelection(this.kbSelectedRow, false);
+					}.bind(this));
 					this.getComposer();
 					ctrls.subtuneCurrent = ctrls.subtuneMax = 0; // Clear subtune switch
 					UpdateURL(true);
@@ -383,6 +401,7 @@ Browser.prototype = {
 				ctrls.state("loop", "disabled");
 
 				this.scrollPositions.push($("#folders").scrollTop()); // Remember where we parked
+				this.kbPositions.push(this.kbSelectedRow);
 				this.getFolder(0, $("#search-box").val().replace(/\s/g, "_"));
 				break;
 			case "search-cancel":
@@ -391,6 +410,8 @@ Browser.prototype = {
 				ctrls.state("subtunes", "disabled");
 
 				this.getFolder(this.scrollPositions.pop());
+				this.kbSelectedRow = [this.kbPositions[0]];
+				this.moveKeyboardSelection(this.kbSelectedRow, false);
 				this.getComposer();
 				break;
 			case "upload-wizard":
@@ -403,280 +424,298 @@ Browser.prototype = {
 				this.uploadWizard();
 				break;
 			default:
-				// A TD element was clicked (folder, SID file, star rating)
-				var $tr = $(event.currentTarget);
-				if ($($tr).hasClass("disabled")) return false;
+				// TR handling has been moved into the 'onClickRow' event handler
+		}
+	},
 
-				// Get the unmodified name of this entry
-				// NOTE: Elsewhere, "extra" folders have their prefixed "_" removed for displaying.
-				var name = decodeURIComponent($tr.find(".name").attr("data-name"));
-				var thisFullname = ((this.isSearching || this.isSymlist || this.isCompoFolder ? "/" : this.path+"/")+name).substr(1);
+	/**
+	 * Click the left mouse button on a table row.
+	 * 
+	 * @param {*} event 
+	 * @param {number} paramSubtune		If specified, override subtune number with a URL parameter
+	 * @param {boolean} paramSkipCSDb	If specified and TRUE, skip generating the 'CSDb' tab contents
+	 * @param {boolean} paramSolitary	If specified and TRUE, just stop the tune when it's done
+	 * @param {boolean} paramWait		If specified, mark/play the tune then stop after X milliseconds
+	 */
+	onClickRow: function(event, paramSubtune, paramSkipCSDb, paramSolitary, paramWait) {
 
-				if (event.target.className === "edit-tags") {
-					// Clicked the "+" icon button to edit tags for a SID file
-					if (!$("#logout").length) {
-						// But must be logged in to do that
-						alert("Login or register and you can edit the tags for this file.");
-						return false;
-					}
+		this.clearSpinner();
 
-					$.get("php/tags_get.php", {
-						fullname: thisFullname
-					}, function(data) {
-						this.validateData(data, function(data) {
-							this.fileID		= data.id;
-							this.allTags	= data.all;
-							this.fileTags	= data.sid;
-							this.startTag	= data.start;
-							this.endTag		= data.end;
-							this.newTagID	= 60000;
-							this.updateTagLists(this.allTags, this.fileTags);
-							this.updateConnectTagLists(this.allTags, this.fileTags);
-							$("#new-tag").val("");
-							$("#dialog-list-start-tag").val(this.startTag);
-							$("#dialog-list-end-tag").val(this.endTag);
-							// Show the dialog box
-							CustomDialog({
-								id: '#dialog-tags',
-								text: '<h3>Edit tags</h3><p>'+name.split("/").slice(-1)[0]+'</p>'+
-									'<span class="dialog-label-top" style="float:left;">All tags available:</span>'+
-									'<span class="dialog-label-top" style="float:right;width:136px;">Tags for this file:</span>',
-								width: 390,
-								height: 448,
-							}, function() {
-								// OK was clicked; make all the tag changes
-								$.post("php/tags_write.php", {
-									fileID:		browser.fileID,
-									allTags:	browser.allTags,
-									fileTags:	browser.fileTags,
-									startTag:	browser.startTag,
-									endTag:		browser.endTag
-								}, function(data) {
-									browser.validateData(data, function(data) {
-										var htmlTags = browser.buildTags(data.tags, data.tagtypes, data.tagids);
-										browser.updateStickyTags(
-											$(event.target).parents("td"),
-											htmlTags,
-											(browser.isSymlist || browser.isCompoFolder ? thisFullname : thisFullname.split("/").slice(-1)[0])
-										);
-										// Make sure sorting also works
-										var $filteredRows = $tr.parent().children("tr:has(td.sid)");
-										var index = $filteredRows.index($tr);										
-										browser.playlist[index].tagstart = browser.startTag;
-										browser.playlist[index].tagend = browser.endTag;
-										ctrls.updateSundryTags(htmlTags);
-									});
-								}.bind(this));
+		// A TD element was clicked (folder, SID file, star rating)
+		var $tr = $(event.currentTarget);
+		if ($($tr).hasClass("disabled")) return false;
+
+		// Get the unmodified name of this entry
+		// NOTE: Elsewhere, "extra" folders have their prefixed "_" removed for displaying.
+		var name = decodeURIComponent($tr.find(".name").attr("data-name"));
+		var thisFullname = ((this.isSearching || this.isSymlist || this.isCompoFolder ? "/" : this.path+"/")+name).substr(1);
+
+		if (event.target.className === "edit-tags") {
+			// Clicked the "+" icon button to edit tags for a SID file
+			if (!$("#logout").length) {
+				// But must be logged in to do that
+				alert("Login or register and you can edit the tags for this file.");
+				return false;
+			}
+
+			$.get("php/tags_get.php", {
+				fullname: thisFullname
+			}, function(data) {
+				this.validateData(data, function(data) {
+					this.fileID		= data.id;
+					this.allTags	= data.all;
+					this.fileTags	= data.sid;
+					this.startTag	= data.start;
+					this.endTag		= data.end;
+					this.newTagID	= 60000;
+					this.updateTagLists(this.allTags, this.fileTags);
+					this.updateConnectTagLists(this.allTags, this.fileTags);
+					$("#new-tag").val("");
+					$("#dialog-list-start-tag").val(this.startTag);
+					$("#dialog-list-end-tag").val(this.endTag);
+					// Show the dialog box
+					CustomDialog({
+						id: '#dialog-tags',
+						text: '<h3>Edit tags</h3><p>'+name.split("/").slice(-1)[0]+'</p>'+
+							'<span class="dialog-label-top" style="float:left;">All tags available:</span>'+
+							'<span class="dialog-label-top" style="float:right;width:136px;">Tags for this file:</span>',
+						width: 390,
+						height: 448,
+					}, function() {
+						// OK was clicked; make all the tag changes
+						$.post("php/tags_write.php", {
+							fileID:		browser.fileID,
+							allTags:	browser.allTags,
+							fileTags:	browser.fileTags,
+							startTag:	browser.startTag,
+							endTag:		browser.endTag
+						}, function(data) {
+							browser.validateData(data, function(data) {
+								var htmlTags = browser.buildTags(data.tags, data.tagtypes, data.tagids);
+								browser.updateStickyTags(
+									$(event.target).parents("td"),
+									htmlTags,
+									(browser.isSymlist || browser.isCompoFolder ? thisFullname : thisFullname.split("/").slice(-1)[0])
+								);
+								// Make sure sorting also works
+								var $filteredRows = $tr.parent().children("tr:has(td.sid)");
+								var index = $filteredRows.index($tr);										
+								browser.playlist[index].tagstart = browser.startTag;
+								browser.playlist[index].tagend = browser.endTag;
+								ctrls.updateSundryTags(htmlTags);
 							});
-							SetScrollTopInstantly("#dialog-all-tags", 0);
-							SetScrollTopInstantly("#dialog-song-tags", 0);
-							$("#dialog-all-tags").focus();
-						});
-					}.bind(this));
-					return false;
-				}
+						}.bind(this));
+					});
+					SetScrollTopInstantly("#dialog-all-tags", 0);
+					SetScrollTopInstantly("#dialog-song-tags", 0);
+					$("#dialog-all-tags").focus();
+				});
+			}.bind(this));
+			return false;
+		}
 
-				if (event.target.tagName === "B") {
-					this.registerStarRating(event, thisFullname);
-					return false;
-				}
+		if (event.target.tagName === "B") {
+			this.registerStarRating(event, thisFullname);
+			return false;
+		}
 
-				// A row was clicked, but was it a folder or a SID file?
-				if (name.indexOf(".sid") === -1 && name.indexOf(".mus") === -1) {
+		// A row was clicked, but was it a folder or a SID file?
+		if (name.indexOf(".sid") === -1 && name.indexOf(".mus") === -1) {
 
-					// ENTER FOLDER
+			// ENTER FOLDER
 
-					var $target = $(event.target).find(".entry");
-					var searchType = $target.attr("data-search-type");
-					var redirectFolder = $target.attr("data-redirect-folder");
+			var $target = $(event.target).find(".entry");
+			var searchType = $target.attr("data-search-type");
+			var redirectFolder = $target.attr("data-redirect-folder");
 
-					ctrls.subtuneCurrent = ctrls.subtuneMax = 0; // Clear subtune switch
+			ctrls.subtuneCurrent = ctrls.subtuneMax = 0; // Clear subtune switch
 
-					if (typeof searchType != "undefined") {
+			if (typeof searchType != "undefined") {
 
-						// SEARCH SHORTCUT
+				// SEARCH SHORTCUT
 
-						$("#dropdown-search").val(searchType);
-						$("#search-box").val($target.attr("data-search-query"));
+				$("#dropdown-search").val(searchType);
+				$("#search-box").val($target.attr("data-search-query"));
 
-						var $searchButton = $("#search-button");
-						$searchButton.removeClass("disabled");
-						if ($("#search-box").val() !== "")
-							$searchButton.prop("disabled", false);
-						else
-							$searchButton.prop("enabled", false).addClass("disabled");
-						$searchButton.trigger("click"); // Perform the search now
+				var $searchButton = $("#search-button");
+				$searchButton.removeClass("disabled");
+				if ($("#search-box").val() !== "")
+					$searchButton.prop("disabled", false);
+				else
+					$searchButton.prop("enabled", false).addClass("disabled");
+				$searchButton.trigger("click"); // Perform the search now
 
-					} else {
+			} else {
 
-						// OTHER FOLDERS
+				// OTHER FOLDERS
 
-						this.redirectFolder = "";
-						if (typeof redirectFolder != "undefined") {
-							if (this.isSearching)
-								// Origin path is a group parent folder
-								this.redirectFolder = "/"+name.substr(0, name.lastIndexOf("/"));
-							else
-								// Remember origin path
-								this.redirectFolder = this.path;
-							this.groupMember = name;
-							this.path = "/"+redirectFolder 		// Folder to jump to instead
-						} else if ($target.hasClass("search"))
-							this.path = "/"+name; // Search folders already have the full path
-						else
-							this.path += "/"+name;
+				this.redirectFolder = "";
+				if (typeof redirectFolder != "undefined") {
+					if (this.isSearching)
+						// Origin path is a group parent folder
+						this.redirectFolder = "/"+name.substr(0, name.lastIndexOf("/"));
+					else
+						// Remember origin path
+						this.redirectFolder = this.path;
+					this.groupMember = name;
+					this.path = "/"+redirectFolder 		// Folder to jump to instead
+				} else if ($target.hasClass("search"))
+					this.path = "/"+name; // Search folders already have the full path
+				else
+					this.path += "/"+name;
 
-						ctrls.state("prev/next", "disabled");
-						ctrls.state("subtunes", "disabled");
-						ctrls.state("loop", "disabled");
+				ctrls.state("prev/next", "disabled");
+				ctrls.state("subtunes", "disabled");
+				ctrls.state("loop", "disabled");
 
-						this.scrollPositions.push($("#folders").scrollTop()); // Remember where we parked
-						this.currentScrollPos = 0;
-						this.getFolder(0, undefined, undefined, function() {
-							this.cache.folderTags = this.showFolderTags();
-						});
-						this.getComposer();
+				this.scrollPositions.push($("#folders").scrollTop()); // Remember where we parked
+				this.kbPositions.push($tr.index());
 
-						UpdateURL();
-					}
+				this.currentScrollPos = 0;
+				this.getFolder(0, undefined, undefined, function() {
+					this.cache.folderTags = this.showFolderTags();
+				});
+				this.getComposer();
+
+				UpdateURL();
+			}
+
+		} else {
+
+			// LOAD AND PLAY FILE
+
+			// NOTE: Don't add a SID.pause() here, it creates an error for Hermit's on stop then re-click.
+			SID.setVolume(0);
+			ctrls.setButtonPause();
+
+			this.songPos = $tr.index() - this.subFolders;
+
+			if (!SID.emulatorFlags.offline) {
+				$("#play-pause,#stop,#subtune-plus,#subtune-minus,#subtune-value").removeClass("disabled");
+				$("#volume").prop("disabled", false);
+			}
+			if (SID.emulatorFlags.supportFaster) $("#faster").removeClass("disabled");
+			ctrls.state("subtunes", "disabled");
+
+			$("#time-bar").empty().append('<div></div>');
+			
+			this.showSpinner($(event.target).parents("tr").children("td.sid"));
+
+			// Override default sub tune to first if demanded by a setting
+			var subtuneStart = GetSettingValue("first-subtune") ? 0 : this.playlist[this.songPos].startsubtune;
+			// Either default start subtune, or an override from a "?subtune=" URL parameter
+			var subtune = typeof paramSubtune !== "undefined" ? paramSubtune : subtuneStart,
+				subtuneMax = this.playlist[this.songPos].subtunes - 1;
+			// Make sure the overridden value is within what is available for that SID tune
+			subtune = subtune < 0 ? 0 : subtune;
+			subtune = subtune > subtuneMax ? subtuneMax : subtune;
+
+			// NOTE: These two lines used to be placed below SID.load(). Placing them up here instead
+			// fixed a row marking bug on iOS in playlists with duplicate use of songs.
+			$("#songs tr").removeClass("selected");
+			$tr.addClass("selected");
+			this.kbSelectedRow = $tr.index();
+			this.moveKeyboardSelection(this.kbSelectedRow, false, false);
+
+			SID.load(subtune, this.getLength(subtune), this.playlist[this.songPos].fullname, function(error) {
+
+				this.clearSpinner();
+
+				if (error) {
+
+					this.errorRow();
 
 				} else {
 
-					// LOAD AND PLAY FILE
+					ctrls.subtuneMax = SID.getSongInfo().maxSubsong;
+					ctrls.subtuneCurrent = subtune;
+					ctrls.updateSubtuneText();
+					if (ctrls.subtuneMax > 0 && !SID.emulatorFlags.offline) $("#subtune-value").removeClass("disabled");
+					if (subtune < ctrls.subtuneMax && !SID.emulatorFlags.offline) $("#subtune-plus").removeClass("disabled");
+					if (subtune > 0 && !SID.emulatorFlags.offline) $("#subtune-minus").removeClass("disabled");
+					ctrls.state("prev/next", "enabled");
+					ctrls.state("loop", !SID.emulatorFlags.offline && SID.emulatorFlags.supportLoop
+						? "enabled"
+						: "disabled"
+					);
 
-					// NOTE: Don't add a SID.pause() here, it creates an error for Hermit's on stop then re-click.
-					SID.setVolume(0);
-					ctrls.setButtonPause();
+					ctrls.updateInfo();
+					ctrls.updateSundry();
 
-					this.songPos = $tr.index() - this.subFolders;
-
-					if (!SID.emulatorFlags.offline) {
-						$("#play-pause,#stop,#subtune-plus,#subtune-minus,#subtune-value").removeClass("disabled");
-						$("#volume").prop("disabled", false);
+					this.sliderButton = true;
+					if ($("#sundry-tabs .selected").attr("data-topic") == "tags" && $("#sundry").css("flex-basis").replace("px", "") > 37) {
+						$("#slider-button").show();
 					}
-					if (SID.emulatorFlags.supportFaster) $("#faster").removeClass("disabled");
-					ctrls.state("subtunes", "disabled");
 
-					$("#time-bar").empty().append('<div></div>');
-					
-					this.showSpinner($(event.target).parents("tr").children("td.sid"));
-
-					// Override default sub tune to first if demanded by a setting
-					var subtuneStart = GetSettingValue("first-subtune") ? 0 : this.playlist[this.songPos].startsubtune;
-					// Either default start subtune, or an override from a "?subtune=" URL parameter
-					var subtune = typeof paramSubtune !== "undefined" ? paramSubtune : subtuneStart,
-						subtuneMax = this.playlist[this.songPos].subtunes - 1;
-					// Make sure the overridden value is within what is available for that SID tune
-					subtune = subtune < 0 ? 0 : subtune;
-					subtune = subtune > subtuneMax ? subtuneMax : subtune;
-
-					// NOTE: These two lines used to be placed below SID.load(). Placing them up here instead
-					// fixed a row marking bug on iOS in playlists with duplicate use of songs.
-					$("#songs tr").removeClass("selected");
-					$tr.addClass("selected");
-					this.kbSelectedRow = $tr.index();
-					this.moveKeyboardSelection(this.kbSelectedRow, false, false);
-
-					SID.load(subtune, this.getLength(subtune), this.playlist[this.songPos].fullname, function(error) {
-
-						this.clearSpinner();
-
-						if (error) {
-
-							this.errorRow();
-
-						} else {
-
-							ctrls.subtuneMax = SID.getSongInfo().maxSubsong;
-							ctrls.subtuneCurrent = subtune;
-							ctrls.updateSubtuneText();
-							if (ctrls.subtuneMax > 0 && !SID.emulatorFlags.offline) $("#subtune-value").removeClass("disabled");
-							if (subtune < ctrls.subtuneMax && !SID.emulatorFlags.offline) $("#subtune-plus").removeClass("disabled");
-							if (subtune > 0 && !SID.emulatorFlags.offline) $("#subtune-minus").removeClass("disabled");
-							ctrls.state("prev/next", "enabled");
-							ctrls.state("loop", !SID.emulatorFlags.offline && SID.emulatorFlags.supportLoop
-								? "enabled"
-								: "disabled"
-							);
-
-							ctrls.updateInfo();
-							ctrls.updateSundry();
-
-							this.sliderButton = true;
-							if ($("#sundry-tabs .selected").attr("data-topic") == "tags" && $("#sundry").css("flex-basis").replace("px", "") > 37) {
-								$("#slider-button").show();
-							}
-
-							if (!paramWait) {
-								SID.play(true);
-								setTimeout(ctrls.setButtonPlay, 75); // For nice pause-to-play delay animation
-							}
-						}
-
-						// Disable PREV or NEXT if at list boundaries, or if it's a solitary playing
-						if (this.songPos == this.playlist.length - 1 || paramSolitary)
-							$("#skip-next").addClass("disabled");
-						if (this.songPos == 0 || paramSolitary)
-							$("#skip-prev").addClass("disabled");
-
-						ctrls.emulatorChanged = false;
-
-						if (typeof paramSkipCSDb === "undefined" || !paramSkipCSDb) {
-							this.getCSDb();
-							if (typeof this.playlist[this.songPos].profile != "undefined")
-								if (this.playlist[this.songPos].profile != "") {
-									this.getComposer(this.playlist[this.songPos].profile, true);
-								} else {
-									// If composers_id = 0 then do this
-									$("#topic-profile").empty().append('<i>No profile available.</i>');
-									this.previousOverridePath = "_SID Happens";
-								}
-							else if (this.isSearching || this.path.substr(0, 2) === "/$" || this.path.substr(0, 2) === "/!")
-								this.getComposer(this.playlist[this.songPos].fullname);
-						} else
-							this.getComposer();
-						this.getGB64();
-						this.getRemix();
-						this.getPlayerInfo({player: this.playlist[this.songPos].player});
-
-						UpdateURL();
-						this.chips = 1;
-						if (this.playlist[this.songPos].fullname.indexOf("_2SID") != -1) this.chips = 2;
-						else if (this.playlist[this.songPos].fullname.indexOf("_3SID") != -1) this.chips = 3;
-						ctrls.resetStereoPanning();
-						viz.initGraph(this.chips);
-						viz.startBufferEndedEffects();
-
-						// Stop the tune after X milliseconds if a "?wait=X" URL parameter is specified
-						// NOTE: A bit of a nasty hack. Because of the way the SID.load() function ties into
-						// playing immediately, the alternative would have cost a lot more code and effort.
-						if (paramWait) {
-							SID.setVolume(0);
-							setTimeout(function() {
-								$("#stop").trigger("mouseup");
-								SID.stop();
-								SID.setVolume(1);
-							}, paramWait);
-						}
-
-					}.bind(this));
-
-					SID.setCallbackTrackEnd(function() {
-						if ($("#loop").hasClass("button-off")) {
-							// Play the next subtune, or if no more subtunes, the next tune in the list
-							$("#faster").trigger("mouseup"); // Easy there cowboy
-							if (!paramSolitary && !GetSettingValue("skip-tune") && (ctrls.subtuneCurrent < ctrls.subtuneMax && !$("#subtune-plus").hasClass("disabled")))
-								// Next subtune
-								$("#subtune-plus").trigger("mouseup", false);
-							else if (this.songPos < (this.playlist.length - 1) && !$("#skip-next").hasClass("disabled"))
-								// Next song
-								$("#skip-next").trigger("mouseup", false);
-							else
-								// At the end of everything
-								$("#stop").trigger("mouseup").trigger("click");
-						}
-					}.bind(this));
+					if (!paramWait) {
+						SID.play(true);
+						setTimeout(ctrls.setButtonPlay, 75); // For nice pause-to-play delay animation
+					}
 				}
+
+				// Disable PREV or NEXT if at list boundaries, or if it's a solitary playing
+				if (this.songPos == this.playlist.length - 1 || paramSolitary)
+					$("#skip-next").addClass("disabled");
+				if (this.songPos == 0 || paramSolitary)
+					$("#skip-prev").addClass("disabled");
+
+				ctrls.emulatorChanged = false;
+
+				if (typeof paramSkipCSDb === "undefined" || !paramSkipCSDb) {
+					this.getCSDb();
+					if (typeof this.playlist[this.songPos].profile != "undefined")
+						if (this.playlist[this.songPos].profile != "") {
+							this.getComposer(this.playlist[this.songPos].profile, true);
+						} else {
+							// If composers_id = 0 then do this
+							$("#topic-profile").empty().append('<i>No profile available.</i>');
+							this.previousOverridePath = "_SID Happens";
+						}
+					else if (this.isSearching || this.path.substr(0, 2) === "/$" || this.path.substr(0, 2) === "/!")
+						this.getComposer(this.playlist[this.songPos].fullname);
+				} else
+					this.getComposer();
+				this.getGB64();
+				this.getRemix();
+				this.getPlayerInfo({player: this.playlist[this.songPos].player});
+
+				UpdateURL();
+				this.chips = 1;
+				if (this.playlist[this.songPos].fullname.indexOf("_2SID") != -1) this.chips = 2;
+				else if (this.playlist[this.songPos].fullname.indexOf("_3SID") != -1) this.chips = 3;
+				ctrls.resetStereoPanning();
+				viz.initGraph(this.chips);
+				viz.startBufferEndedEffects();
+
+				// Stop the tune after X milliseconds if a "?wait=X" URL parameter is specified
+				// NOTE: A bit of a nasty hack. Because of the way the SID.load() function ties into
+				// playing immediately, the alternative would have cost a lot more code and effort.
+				if (paramWait) {
+					SID.setVolume(0);
+					setTimeout(function() {
+						$("#stop").trigger("mouseup");
+						SID.stop();
+						SID.setVolume(1);
+					}, paramWait);
+				}
+
+			}.bind(this));
+
+			SID.setCallbackTrackEnd(function() {
+				if ($("#loop").hasClass("button-off")) {
+					// Play the next subtune, or if no more subtunes, the next tune in the list
+					$("#faster").trigger("mouseup"); // Easy there cowboy
+					if (!paramSolitary && !GetSettingValue("skip-tune") && (ctrls.subtuneCurrent < ctrls.subtuneMax && !$("#subtune-plus").hasClass("disabled")))
+						// Next subtune
+						$("#subtune-plus").trigger("mouseup", false);
+					else if (this.songPos < (this.playlist.length - 1) && !$("#skip-next").hasClass("disabled"))
+						// Next song
+						$("#skip-next").trigger("mouseup", false);
+					else
+						// At the end of everything
+						$("#stop").trigger("mouseup").trigger("click");
+				}
+			}.bind(this));
 		}
 	},
 
@@ -1111,6 +1150,8 @@ Browser.prototype = {
 				SetScrollTopInstantly("#folders", scrollPos);
 				DisableIncompatibleRows();
 				if (this.isBigCompoFolder()) $("#dropdown-sort").prop("disabled", false);
+
+				if (typeof callback === "function") callback.call(this);
 			}.bind(this), 1);
 
 		} else {
@@ -3331,6 +3372,8 @@ Browser.prototype = {
 	 * @param {boolean} scrollIntoView		Optional; False = Ignore scrolling into view
 	 */
 	moveKeyboardSelection: function(row, moveSmoothly, scrollIntoView) {
+		if (isMobile) return;
+
 		const $kb = $("#kb-marker");
 		const $rows = $("#folders tr");
 		const $targetRow = $rows.eq(row);
@@ -3363,6 +3406,8 @@ Browser.prototype = {
 	 * this is a spacer or a divider.
 	 */
 	moveKeyboardToFirst: function() {
+		if (isMobile) return;
+
 		var $tr = $("#songs tr");
 		for (var i = 0; i < $tr.length; i++) {
 			if (!$tr.eq(i).hasClass("disabled")) {

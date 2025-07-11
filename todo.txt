@@ -11,17 +11,13 @@ SHOULD BE DONE
   If it ends in "..." create a short name, e.g. with a letter + full stop for first name.
    ......... Next: MUSICIANS/E
 
+- KB: In search mode, 'ESC' should also work as Cancel.
+  UPDATE: This is difficult to do because of key bubbling. Pausing it for first KB release.
 
-
-
-- kb: ToDo
-    - Browsing back to prev folder shows kb marker on the folder you CLICKED to get there
-
-
-
-
-
-- On mobile devices, disable the new keyboard-controlled marker.
+- KB: If 'ArrowRight' is hit while on a folder, enter the folder.
+- KB: Make it so setting focus to dexter pages makes it possible to use up/down, etc.
+- KB BUG: ON/OFF buttons in settings need blur.
+- KB BUG: Channel buttons, ON/OFF etc. in VISUALS view needs blur.
 
 - Now that cursor up/down works in the folders list, consider moving the faint row marker
   when using those keys, and Enter to select and play a SID row.
