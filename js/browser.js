@@ -1776,7 +1776,7 @@ Browser.prototype = {
 			} else if (tag == "GameBase64") {
 				// A special look for the "GameBase64" tag
 				gamebase64 = '<div class="tag tag-gamebase64"'+id+'>&nbsp;&nbsp;</div>';
-			} else if (tag == "Doubling" || tag == "Hack" || tag == "Mock" || tag == "Bug") {
+			} else if (tag == "Doubling" || tag == "Hack" || tag == "Mock" || tag == "Bug" || tag == "Recycled") {
 				// A unique color for tags that serves as a warning
 				list_of_tags += '<div class="tag tag-warning"'+id+'>'+tag+'</div>';
 			} else if (tag == "Music") {

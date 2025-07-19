@@ -1,0 +1,136 @@
+TEST
+¯¯¯¯
+Left-click
+  SID row play
+  Folder
+  Back
+  Root
+
+Right-click
+  All context menu options
+
+Keyboard-control
+  Move SID row
+  Home/End
+  PageUp/Dn
+  Space doesn't move down!
+  Select SID row
+  Select folder
+  BACKSPACE
+  Left/Right for skipping
+  ½ for fast forward
+  Various other hotkeys
+  KC and control buttons
+
+Focus
+  Page in focus (KC disabled)
+    Up/Down
+    PageUp/Dn
+    Home/End
+    Space works
+
+Hotkeys
+  Esc - cancel various
+  ½ - fast forward
+  Space - play/pause
+  p - pop up window
+  c - refresh cache (compo)
+  s - sundry box
+  l - load SID file test
+  b - back from plink
+  * - Admin SID edit
+  Backspace - folder back
+  f - refresh folder
+  t - tags in current row
+  Left/Right - skipping
+  Enter - play or select
+  ^ - Log test
+  1/2/3/4 voices on/off
+  q/w/e/d voices on/off
+  Shift+above for solo
+
+Dialog boxes
+  Edit tags
+  Upload wizard
+  Delete file
+  Rename new playlist
+  Edit YT subtunes
+  Edit YT video links
+  * Admin file edit
+  Register confirmation
+  Add clink (annex)
+  Edit clink (annex)
+  Delete clink (annex)
+  
+Visuals
+  Enabled ON/OFF
+ 
+  Piano
+    Show help toggle
+    Click voices on/off
+    Test ON/OFF toggles
+    Emulator buttons
+    Buffer size
+
+  Graph
+    Show help toggle
+    Test ON/OFF toggles
+    Emulator buttons
+    Buffer size
+
+  Memo
+    Show help toggle
+    Font button
+    Change page L/R
+
+  Stats
+    Show help toggle
+    Solo buttons
+
+Profile
+  Click clinks
+    Click a clink
+  Click a graph year
+  Click group
+  Change profile rating
+
+CSDb tab
+  Click image for zoom
+  Click release in list
+  Back
+  Show compo list
+  Click comment button
+  Click plinks
+  Click PM in thread
+  Click folder in thread
+  Click avatar in thread
+  Change list sorting
+  Click ext. link icon
+
+GB64
+  Click image for zoom
+  Click game in list
+  Back
+
+Players
+  Click row
+  Click all links
+  Test SID files
+  Back
+
+Annex
+  Click all topics
+  Test all links
+
+Other
+  Subtune buttons in STIL
+  Play etc. in Remix tab
+  Click clinks in profile
+  Check all top menus
+  
+
+
+
+    
+  
+  

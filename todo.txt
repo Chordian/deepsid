@@ -9,23 +9,35 @@ SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
 - WIP: Go through all "Links" in all profile pages and make sure the full composer name fits.
   If it ends in "..." create a short name, e.g. with a letter + full stop for first name.
-   ......... Next: MUSICIANS/E
-
-- KB: Need to test this THOROUGLY! The following items need to be done before release:
-
-  - NOTE: Before vacation I managed to kill the BACK bug by using blur().
-
-  - KB: ON/OFF buttons in settings need blur.
-  - KB: Channel buttons, ON/OFF etc. in VISUALS view needs blur.
-  - KB: Make it so setting focus to dexter pages make it possible to use up/down, etc.
+  Takes a while going through this ......... Next: MUSICIANS/E
 
 - KB: If 'ArrowRight' is pressed while on a folder, enter the folder. Can be done later.
 
 - KB: In search mode, 'ESC' should also work as Cancel. This is difficult to do because of
   key bubbling and/or multi-events. Fiddle with it later.
 
-- Now that cursor up/down works in the folders list, consider moving the faint row marker
-  when using those keys, and Enter to select and play a SID row.
+- KB: When using 'f' for folder refresh, remember KB row position too.
+
+- KB: Sometimes I have to press ENTER twice on a SID row before it plays. Usually after
+  having done some navigation elsewhere in DeepSID. The first ENTER is probably some kind
+  of focus enabling, but try to investigate further.
+
+- If focus is on CSDb page, the BACKSPACE key should hit the BACK button instead.
+
+- While I still think hiding "Compo" is okay, perhaps consider an alert to pop up (or show
+  a message in the dialog box) saying that it will be hidden because the ranking should
+  already make it clear, this is for a competition.
+
+- In the bar with the ROOT/BACK buttons, move the SID path line up a little, then below it
+  (with small font) write the folder total, e.g. "178 tunes". Look at how it's done for
+  playlists (only top text should of course not be bold).
+
+- Consider adding "Music" and "Collection" buttons in the middle of the tags dialog box.
+
+- Henrik Andersen -> Henrik Andersen's Player
+  https://deepsid.chordian.net/?file=/MUSICIANS/D/Demosic/Did_My_Voice_Crack.sid
+
+- Annex tips: Add info about "Solitary" to event tags. And about "Recycled" to bad tags.
 
 - Idea from Anon-Relays: Loop song X number of times before moving on to the next one. In
   the settings, the default number should of course be 1.
@@ -41,6 +53,13 @@ SHOULD BE DONE
 
 - BUG: Missing database information:
   https://deepsid.chordian.net/?file=/Compute%27s%20Gazette%20SID%20Collection/BJ_Pools/Heaven_Knows_A.mus
+  https://deepsid.chordian.net/?file=/_High Voltage SID Collection/MUSICIANS/N/Nordischsound/Nordischsound_Medley.sid
+
+- BUG: Click "Slow" then a new SID row - button is still down but slow mode is off. I
+  recommended popping up the "Slow" button when starting a new song.
+
+- BUG: Turning off noise waveform doesn't work anymore:
+  https://deepsid.chordian.net/?file=/SID%20Happens/The_Medley_Part_2.sid
 
 - BUG: In CGSC folders, there's a querySelectorAll console error related to chartist.
 

@@ -146,12 +146,15 @@ $(function() { // DOM ready
 
 				case 32:	// Don't use 'Space' to scroll down
 
+					if (document.activeElement.closest("#page")) return; // Allow in pages
+
 					event.preventDefault();
 					break;
 
 				case 38:	// Keydown 'ARROW-UP' - move keyboard-selected SID row up
 
-					if (!isFirefox && kbScrollLocked) return;
+					if ((!isFirefox && kbScrollLocked) ||
+						document.activeElement.closest("#page")) return; // Ignore if in pages
 					if (!isFirefox) kbScrollLocked = true;
 
 					event.preventDefault();
@@ -178,7 +181,8 @@ $(function() { // DOM ready
 
 				case 40:	// Keydown 'ARROW-DOWN' - move keyboard-selected SID row down
 
-					if (!isFirefox && kbScrollLocked) return;
+					if ((!isFirefox && kbScrollLocked) ||
+						document.activeElement.closest("#page")) return; // Ignore if in pages
 					if (!isFirefox) kbScrollLocked = true;
 
 					event.preventDefault();
@@ -205,12 +209,16 @@ $(function() { // DOM ready
 					break;
 
 				case 36: 	// Keydown 'HOME' - move keyboard-selected SID row to top
-	
+
+					if (document.activeElement.closest("#page")) return; // Ignore if in pages
+				
 					event.preventDefault();
 					browser.moveKeyboardToFirst();
 					break;
 
 				case 35: 	// Keydown 'END' - move keyboard-selected SID row to bottom
+
+					if (document.activeElement.closest("#page")) return; // Ignore if in pages
 
 					event.preventDefault();
 					var $tr = $("#songs tr");
@@ -226,7 +234,8 @@ $(function() { // DOM ready
 				case 33: 	// Keydown 'PageUp' - move keyboard-selected SID row one page up
 				case 34: 	// Keydown 'PageDown' - move keyboard-selected SID row one page down
 
-					if (!isFirefox && kbScrollLocked) return;
+					if ((!isFirefox && kbScrollLocked) ||
+						document.activeElement.closest("#page")) return; // Ignore if in pages
 					if (!isFirefox) kbScrollLocked = true;
 
 					event.preventDefault();
@@ -292,6 +301,8 @@ $(function() { // DOM ready
 					break;
 	
 				case 32:	// Keyup 'Space' - play/pause
+
+					if (document.activeElement.closest("#page")) return; // Ignore if in pages
 
 					$("#play-pause").trigger("mouseup");
 					break;
@@ -431,6 +442,16 @@ $(function() { // DOM ready
 			$("#dialog-edit-file input").blur();
 			return false;
 		}
+	});
+
+	/**
+	 * Always lose focus on a button to avoid clashing with a keyboard-
+	 * controlled SID row.
+	 * 
+	 * Doesn't work with VISUALS ON/OFF which has its own blur().
+	 */
+	$(document).on("click", "button", function() {
+		this.blur();
 	});
 
 	/**

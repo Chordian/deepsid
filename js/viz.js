@@ -310,6 +310,7 @@ Viz.prototype = {
 			} else
 				$this.empty().append($this.hasClass("button-off") ? "On" : "Off");
 			if (event.target.id === "tab-visuals-toggle") {
+				$this.blur(); // To avoid clashing with keyboard-controlled SID row
 				if ($this.hasClass("button-off")) {
 					// Show the entire VISUALS tab
 					$("#visuals-toggle .viz-msg-enable").hide();

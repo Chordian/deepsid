@@ -1017,7 +1017,7 @@
 						</span>
 					</div>
 				</div>
-				<div id="page">
+				<div id="page" tabindex="0">
 
 					<div id="topic-visuals" class="topic ext" style="display:none;">
 						<div id="visuals-piano" class="visuals" style="display:none;">
