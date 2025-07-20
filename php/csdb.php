@@ -323,6 +323,8 @@ if ($csdb_type == 'sid') {
 			$comment_button.
 			'<h3 id="csdb-releases">'.$amount_releases.' release'.($amount_releases > 1 ? 's' : '').' found</h3>'.
 			'<div id="csdb-sort">
+				<label for="csdb-emp-filter" class="unselectable">Highlighted only</label><button
+					id="csdb-emp-filter" class="button-edit button-toggle button-off">Off</button>&nbsp;&nbsp;
 				<label for="dropdown-sort-csdb" class="unselectable">Sort by</label>
 				<select id="dropdown-sort-csdb" name="sort-csdb">
 					<option value="title">Title</option>
@@ -332,7 +334,7 @@ if ($csdb_type == 'sid') {
 					<option value="low-id">Lower ID</option>
 					<option value="high-id">Higher ID</option>
 				</select>
-			</div>'.
+			 </div>'.
 			'<table class="releases">'.
 			'</table>';
 	}

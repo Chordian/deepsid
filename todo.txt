@@ -11,18 +11,12 @@ SHOULD BE DONE
   If it ends in "..." create a short name, e.g. with a letter + full stop for first name.
   Takes a while going through this ......... Next: MUSICIANS/E
 
-- KB: If 'ArrowRight' is pressed while on a folder, enter the folder. Can be done later.
+- Always show ages in hex?
+
+- KB: If 'ArrowRight' is pressed while on a folder, enter the folder.
 
 - KB: In search mode, 'ESC' should also work as Cancel. This is difficult to do because of
-  key bubbling and/or multi-events. Fiddle with it later.
-
-- KB: When using 'f' for folder refresh, remember KB row position too.
-
-- KB: Sometimes I have to press ENTER twice on a SID row before it plays. Usually after
-  having done some navigation elsewhere in DeepSID. The first ENTER is probably some kind
-  of focus enabling, but try to investigate further.
-
-- If focus is on CSDb page, the BACKSPACE key should hit the BACK button instead.
+  key bubbling and/or multi-events.
 
 - While I still think hiding "Compo" is okay, perhaps consider an alert to pop up (or show
   a message in the dialog box) saying that it will be hidden because the ranking should
@@ -37,8 +31,6 @@ SHOULD BE DONE
 - Henrik Andersen -> Henrik Andersen's Player
   https://deepsid.chordian.net/?file=/MUSICIANS/D/Demosic/Did_My_Voice_Crack.sid
 
-- Annex tips: Add info about "Solitary" to event tags. And about "Recycled" to bad tags.
-
 - Idea from Anon-Relays: Loop song X number of times before moving on to the next one. In
   the settings, the default number should of course be 1.
 
@@ -48,12 +40,12 @@ SHOULD BE DONE
 
 - Consider a HTML button somewhere for testing a SID, so it's not just the "l" hotkey.
 
+- KB: Sometimes I have to press ENTER twice on a SID row before it plays. Usually after
+  having done some navigation elsewhere in DeepSID. The first ENTER is probably some kind
+  of focus enabling, but try to investigate further.
+
 - If you look closely, some tag names are too high up. It differs from SID row to SID row
   in Firefox. Test decimal line heights to see if it can be fixed.
-
-- BUG: Missing database information:
-  https://deepsid.chordian.net/?file=/Compute%27s%20Gazette%20SID%20Collection/BJ_Pools/Heaven_Knows_A.mus
-  https://deepsid.chordian.net/?file=/_High Voltage SID Collection/MUSICIANS/N/Nordischsound/Nordischsound_Medley.sid
 
 - BUG: Click "Slow" then a new SID row - button is still down but slow mode is off. I
   recommended popping up the "Slow" button when starting a new song.

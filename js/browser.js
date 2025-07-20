@@ -789,6 +789,9 @@ Browser.prototype = {
 	 * @param {*} event 
 	 */
 	onChangeCSDb: function(event) {
+
+		var isEmpOn = $("#csdb-emp-filter").hasClass("button-on");
+
 		$("#topic-csdb table.releases").empty();
 		sortedList = "";
 		switch (event.target.value) {
@@ -830,7 +833,12 @@ Browser.prototype = {
 		$.each(this.sidEntries, function(i, entry) {
 			sortedList += entry.html;
 		});
-		$("#topic-csdb table.releases").append(sortedList);
+		$releases = $("#topic-csdb table.releases");
+		$releases.hide().append(sortedList);
+		this.additionalEmphasizing(isEmpOn);
+		setTimeout(() => {
+			$releases.show();
+		}, 100);
 	},
 
 	/**
@@ -2056,7 +2064,7 @@ Browser.prototype = {
 					clone.find("del").contents().unwrap();
 					groupTexts.push(clone.text().trim());
 				});
-				var groupNames = [...new Set(groupTexts)];
+				this.groupNames = [...new Set(groupTexts)];
 
 				clearTimeout(loadingCSDb);
 				$("#sticky-csdb").empty().append(data.sticky);
@@ -2065,33 +2073,7 @@ Browser.prototype = {
 					.css("visibility", "visible");
 				ResetDexterScrollBar("csdb");
 
-				setTimeout(function() {
-
-					// Get the name and/or handle of the composer
-					var songAuthor = SID.getSongInfo("info").songAuthor;
-					var nameMatch = songAuthor.match(/^([^(]+?)(?: \(([^)]+)\))?$/);
-					var realName = nameMatch ? nameMatch[1].trim().toLowerCase() : "";
-					var handle = nameMatch && nameMatch[2] ? nameMatch[2].trim().toLowerCase() : "";
-
-					// Emphasize other group names in green that might also be relevant productions
-					$("a.csdb-group").each(function(i, element) {
-						var currentText = $(element).text().trim().toLowerCase();
-						groupNames.forEach(function(name) {
-							if (name.toLowerCase() === currentText) {
-								$(element).addClass("empSec");
-							}
-						});
-					});
-
-					// Also emphasize if the composer used a real name or handle for the release
-					$("a.csdb-scener").each(function(i, element) {
-						var currentText = $(element).text().trim().toLowerCase();
-					if ((realName && realName === currentText) || (handle && handle === currentText))
-							$(element).addClass("empThird");
-					});
-
-				}, 0);
-
+				this.additionalEmphasizing(false);
 				UpdateRedirectPlayIcons();
 
 				if (data.entries != "") this.sidEntries = data.entries; // Array used for sorting
@@ -2108,6 +2090,48 @@ Browser.prototype = {
 
 			});
 		}.bind(this));
+	},
+
+	/**
+	 * Add additional highlighting of group names, real name or handle, in green and
+	 * red in the list of CSDb entries.
+	 */
+	additionalEmphasizing: function(alsoSort) {
+		this.alsoSortEmp = alsoSort;
+		setTimeout(function() {
+
+			// Get the name and/or handle of the composer
+			var songAuthor = SID.getSongInfo("info").songAuthor;
+			var nameMatch = songAuthor.match(/^([^(]+?)(?: \(([^)]+)\))?$/);
+			var realName = nameMatch ? nameMatch[1].trim().toLowerCase() : "";
+			var handle = nameMatch && nameMatch[2] ? nameMatch[2].trim().toLowerCase() : "";
+
+			// Emphasize other group names in green that might also be relevant productions
+			$("a.csdb-group").each(function(i, element) {
+				var currentText = $(element).text().trim().toLowerCase();
+				browser.groupNames.forEach(function(name) {
+					if (name.toLowerCase() === currentText) {
+						$(element).addClass("empSec");
+					}
+				});
+			});
+
+			// Also emphasize if the composer used a real name or handle for the release
+			$("a.csdb-scener").each(function(i, element) {
+				var currentText = $(element).text().trim().toLowerCase();
+			if ((realName && realName === currentText) || (handle && handle === currentText))
+					$(element).addClass("empThird");
+			});
+
+			if (typeof browser.alsoSortEmp !== "undefined" && browser.alsoSortEmp) {
+				// We need to filter highlighted entries only again after sorting
+				$("#topic-csdb table.releases tr").each(function() {
+					var hasHighlight = $(this).find("a.emphasize, a.csdb-group.empSec, a.csdb-scener.empThird").length > 0;
+					if (!hasHighlight) $(this).hide();
+				});
+			}
+
+		}, 0);
 	},
 
 	/**

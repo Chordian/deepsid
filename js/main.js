@@ -383,16 +383,30 @@ $(function() { // DOM ready
 					}
 					break;
 
-				case 8:		// Keyup 'BACKSPACE' - browse back to parent folder
+				case 8:		// Keyup 'BACKSPACE' - with or without SHIFT held down
 
-					$("#folder-back").trigger("click");
+					if (event.shiftKey) {
+						// Keyup 'SHIFT+BACKSPACE' - click 'BACK' button on the visible tab page
+						// Case-insensitive click only in the currently selected tab
+						$(".tab.selected").each(function() {
+							$("#sticky-" + $(this).data("topic") + " button").filter(function() {
+								return /back/i.test($(this).text());
+							}).click();
+						});
+					} else {
+						// Keyup 'BACKSPACE' - browse back to parent folder
+						$("#folder-back").trigger("click");
+					}
 					break;
 
 				case 70:	// Keyup 'f' - refresh current folder
 
 					var here = $("#folders").scrollTop();
+					var kbSelectedBefore = browser.kbSelectedRow;
 					browser.getFolder(0, undefined, undefined, function() {
 						SetScrollTopInstantly("#folders", here);
+						browser.kbSelectedRow = kbSelectedBefore;
+						browser.moveKeyboardSelection(browser.kbSelectedRow, false);
 					});
 					break;
 
@@ -557,6 +571,7 @@ $(function() { // DOM ready
 					$(window).trigger("resize");
 					//SetScrollTopInstantly("#folders", scrollPos);
 					SetScrollTopInstantly("#folders", 0);
+					browser.moveKeyboardToFirst();
 					DisableIncompatibleRows();
 				});
 			}
@@ -1333,6 +1348,29 @@ $(function() { // DOM ready
 	 */
 	$("#topic-csdb,#sticky-csdb").on("click", "#go-back-init", function() {
 		browser.getCSDb("sid", $(this).attr("data-id"));
+	});
+
+	/**
+	 * When clicking the filter toggle button in a CSDb list, for hiding all rows that are
+	 * not emphasized in yellow/green/red, or for showing all rows again.
+	 */
+	$("#topic-csdb").on("click", "#csdb-emp-filter", function() {
+		var $this = $(this);
+		var state = $this.hasClass("button-off");
+		$this.removeClass("button-off button-on").empty();
+
+		if (state) {
+			// Hide all CSDb entries that don't have emphasize/empSec/empThird classes
+			$this.addClass("button-on").append("On");
+			$("#topic-csdb table.releases tr").each(function() {
+				var hasHighlight = $(this).find("a.emphasize, a.csdb-group.empSec, a.csdb-scener.empThird").length > 0;
+				if (!hasHighlight) $(this).hide();
+			});
+		} else {
+			// Show all CSDb entries again
+			$this.addClass("button-off").append("Off");
+			$("#topic-csdb table.releases tr").show();
+		}
 	});
 
 	/**

@@ -631,11 +631,11 @@
 				<div id="stopic-stil" class="stopic">
 					<?php if (!MiniPlayer()): ?>
 						<div id="sundry-news">
-							<span>The <a href="https://www.hvsc.c64.org/" target="_top">High Voltage SID Collection</a> has been upgraded to the latest version #83. Click <a href="//deepsid.chordian.net/?search=83&type=new">here</a> to see what's new in this update.</span>
+							<!--<span>The <a href="https://www.hvsc.c64.org/" target="_top">High Voltage SID Collection</a> has been upgraded to the latest version #83. Click <a href="//deepsid.chordian.net/?search=83&type=new">here</a> to see what's new in this update.</span>-->
 							<!--<span><a href="http://www.c64music.co.uk/" target="_top">Compute's Gazette SID Collection</a> has been upgraded to the latest version #146. Click <a href="//deepsid.chordian.net/?search=146&type=new">here</a> to see what's new in this update.</span>-->
-							<!--   SHOULD NOT BE NECESSARY ANYMORE: <span>I changed some Javascript files so make sure your browser cache is up to date. On Windows, hit <b style="color:#77c;">Ctrl+F5</b> while viewing the site, on Mac, hit <b style="color:#77c;">Cmd+Shift+R</b>.</span>-->
 							<!--<span>Want to learn how to make SID tunes? Check out <a href="https://www.youtube.com/watch?v=nXNtLetxFUg">this tutorial video</a> now on YouTube.</span>-->
-							<!--   See in controls.js: "showNewsImage" and "clickNews" for how to set up a news image -->
+							    <!--   See in controls.js: "showNewsImage" and "clickNews" for how to set up a news image -->
+							<span><font style="color:var(--color-forum-moderator);">Keyboard control is here!</font>&nbsp;&nbsp;Use Up, Down, Home, End, Page Up, Page Down, and Enter to select a SID row. Press Backspace to go back one folder. See <a href="#" onclick="$('#tab-changes').trigger('click'); return false;">Changes</a> for more info.</span>
 							<!--<pre><b style="font-size:16px;">Coming up<br></b><b style="position:relative;top:-3px;font-size:13px;">17 - 19 Nov.</b><br><br><i style="position:absolute;bottom:-38px;right:4px;font-size:13px;line-height:17px;text-align:right;">New SID tunes<br><font style="font-size:17px;">incoming!</font></i></pre>-->
 						</div>
 					<?php endif ?>
@@ -1868,11 +1868,30 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>July 20, 2025</h3>
+						<ul>
+							<li>You can now use Shift+Backspace to go back from any tab page with a 'BACK' button.</li>
+							<li>Added a toggle button to CSDb lists to show only highlighted entries, prioritizing those where the copyright line contains the group name, or where the composer's group, previous groups, real name, or handle matches.</li>
+							<li>Fixed missing database information for <a href="https://deepsid.chordian.net/?file=/MUSICIANS/N/Nordischsound/Nordischsound_Medley.sid">Nordischsound_Medley.sid</a> by Nordischsound.</li>
+							<li>Fixed missing database information for <a href="https://deepsid.chordian.net/?file=/Compute%27s%20Gazette%20SID%20Collection/BJ_Pools/Heaven_Knows_A.mus">Heaven_Knows_A.mus</a> by BJ Pools.</li>
+						</ul>
+
+						<h3>July 19, 2025</h3>
+						<ul>
+							<li>You can now navigate the SID folders using keyboard controls &mdash; specifically, the arrow
+								keys (up/down), Home, End, Page Up, Page Down, and Enter to select a SID row. Press Backspace
+								to go back one folder. This new feature is currently in BETA and took quite a bit of tweaking
+								and testing to get right. I’ve done my best to iron out all major bugs, but there may still be
+								minor glitches. Note that in some browsers, such as Chrome and Edge, keyboard navigation is
+								throttled slightly to avoid stuttering. Firefox, on the other hand, has better keyboard handling
+								and moves at the maximum speed possible.</li>
+						</ul>
+
 						<h3>July 9, 2025</h3>
 						<ul>
 							<li>The "Coll." tag has been replaced with a double note icon followed by a list icon. It now
-								appears second among the blue production tags, just after the "Music" tag. You can still use "Collection" to
-								search for or add it.</li>
+								appears second among the blue production tags, just after the "Music" tag. You can still use
+								"Collection" to search for or add it.</li>
 						</ul>
 
 						<h3>July 8, 2025</h3>

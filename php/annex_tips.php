@@ -226,6 +226,7 @@
 		<div class="annex-hotkey">Left arrow</div><span class="annex-tiny">Previous SID row</span>
 		<div class="annex-hotkey">Right arrow</div><span class="annex-tiny">Next SID row</span>
 		<div class="annex-hotkey">Backspace</div><span class="annex-tiny">Back to parent folder</span>
+		<div class="annex-hotkey">Shift+Backspc</div><span class="annex-tiny">Back to parent tab page</span>
 		<div class="annex-hotkey">[<i>Below</i>&nbsp;]&nbsp;Esc</div><span class="annex-tiny">Fast forward</span>
 		<div class="annex-hotkey">p</div><span class="annex-tiny">Pop-up tiny DeepSID</span>
 		<div class="annex-hotkey">s</div><span class="annex-tiny">Toggle sundry box</span>
@@ -450,6 +451,10 @@
 			<li><a href="mock" class="search" data-type="tag"><div class="tag tag-warning">Mock</div></a>= <b>Intentionally bad</b>
 			<p>The composer deliberately wanted this SID to sound bad.</p></li>
 		</ul>
+		<ul class="annex-tags-list">
+			<li><a href="recycled" class="search" data-type="tag"><div class="tag tag-warning">Recycled</div></a>= <b>Reused in compos</b>
+			<p>The composer reused the SID in multiple competitions, which is generally frowned upon.</p></li>
+		</ul>
 		If you want to know more about handling tags, see <a href="10" class="topic">this</a> topic.
 
 	',
@@ -630,6 +635,10 @@
 			<p>This is the first tune made (or released) by the composer.</p></li>
 		</ul>
 		<ul class="annex-tags-list">
+			<li><a href="unearthed" class="search" data-type="tag"><div class="tag">Unearthed</div></a>= <b>Released much later</b>
+			<p>Originally composed several years before its release, when it first became known.</p></li>
+		</ul>
+		<ul class="annex-tags-list">
 			<li><a href="flanging" class="search" data-type="tag"><div class="tag">Flanging</div></a>= <b>A rich detuning effect</b>
 			<p>The tune uses two identical notes where one has been slightly detuned to create a rich sound.</p>
 			<p>If the notes are not detuned, it\'s called <a href="doubling" class="search" data-type="tag">Doubling</a>.</p></li>
@@ -716,6 +725,10 @@
 		<ul class="annex-tags-list">
 			<li><a href="&quot;#2&quot;" class="search" data-type="tag"><div class="tag tag-event">#2</div></a>= <b>#2 in a competition</b>
 			<p>Second in the competition it participated in. There are also tags for <b>#3</b>, <b>#4</b>, etc.</p></li>
+		</ul>
+		<ul class="annex-tags-list">
+			<li><a href="&quot;solitary&quot;" class="search" data-type="tag"><div class="tag tag-event">Solitary</div></a>= <b>The only contender</b>
+			<p>The only contender of the competition. It may sometimes be seen as #1 in CSDb.</p></li>
 		</ul>
 
 		If you want to know more about handling tags, see <a href="10" class="topic">this</a> topic.
