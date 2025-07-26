@@ -6,13 +6,16 @@
  * which shows a long list of releases all using the same song, or it can be a
  * RELEASE entry especially made for that particular song.
  * 
+ * In July 2025 this was extended with a cache system. It loads from the cache
+ * if a cache file exists and the latest entry is older than 30 days.
+ * 
  * @uses		$_GET['fullname']
  * 
  *		- OR -
  * 
  * @uses		$_GET['type']
  * @uses		$_GET['id']
- * @uses		$_GET['back']				1 to show a BACK button
+ * @uses		$_GET['copyright']
  * 
  * @used-by		browser.js
  */
@@ -29,6 +32,10 @@ $scener_id = array();
 $sid_entries = array();
 
 $svg_permalink = '<svg class="permalink" style="enable-background:new 0 0 80 80;" version="1.1" viewBox="0 0 80 80" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g><path d="M29.298,63.471l-4.048,4.02c-3.509,3.478-9.216,3.481-12.723,0c-1.686-1.673-2.612-3.895-2.612-6.257 s0.927-4.585,2.611-6.258l14.9-14.783c3.088-3.062,8.897-7.571,13.131-3.372c1.943,1.93,5.081,1.917,7.01-0.025 c1.93-1.942,1.918-5.081-0.025-7.009c-7.197-7.142-17.834-5.822-27.098,3.37L5.543,47.941C1.968,51.49,0,56.21,0,61.234 s1.968,9.743,5.544,13.292C9.223,78.176,14.054,80,18.887,80c4.834,0,9.667-1.824,13.348-5.476l4.051-4.021 c1.942-1.928,1.953-5.066,0.023-7.009C34.382,61.553,31.241,61.542,29.298,63.471z M74.454,6.044 c-7.73-7.67-18.538-8.086-25.694-0.986l-5.046,5.009c-1.943,1.929-1.955,5.066-0.025,7.009c1.93,1.943,5.068,1.954,7.011,0.025 l5.044-5.006c3.707-3.681,8.561-2.155,11.727,0.986c1.688,1.673,2.615,3.896,2.615,6.258c0,2.363-0.928,4.586-2.613,6.259 l-15.897,15.77c-7.269,7.212-10.679,3.827-12.134,2.383c-1.943-1.929-5.08-1.917-7.01,0.025c-1.93,1.942-1.918,5.081,0.025,7.009 c3.337,3.312,7.146,4.954,11.139,4.954c4.889,0,10.053-2.462,14.963-7.337l15.897-15.77C78.03,29.083,80,24.362,80,19.338 C80,14.316,78.03,9.595,74.454,6.044z"/></g><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/></svg>';
+
+// --------------------------------------------------------------------------
+// FUNCTIONS
+// --------------------------------------------------------------------------
 
 /**
  * Custom UTF8 converter function.
@@ -58,7 +65,115 @@ function to_utf8($string) {
 		return iconv('CP1252', 'UTF-8', $string);
 }
 
-/***** START *****/
+/**
+ * Return relative time such as "3 days ago" etc.
+ */
+function relative_age_text($timestamp) {
+    $age = time() - $timestamp;
+
+    if ($age < 60) {
+        $seconds = (int)$age;
+        return $seconds . ' second' . ($seconds == 1 ? '' : 's') . ' ago';
+    } elseif ($age < 3600) {
+        $minutes = (int)floor($age / 60);
+        return $minutes . ' minute' . ($minutes == 1 ? '' : 's') . ' ago';
+    } elseif ($age < 86400) {
+        $hours = (int)floor($age / 3600);
+        return $hours . ' hour' . ($hours == 1 ? '' : 's') . ' ago';
+    } else {
+        $days = (int)floor($age / 86400);
+        return $days . ' day' . ($days == 1 ? '' : 's') . ' ago';
+    }
+}
+
+/**
+ * Force reading results from cache if available, or show error message.
+ * 
+ * @param		string		$cache_file			Path of cached file
+ * @param		string		$error_message		Message to display if no cache
+ */
+function serve_cache_or_error($cache_file, $error_message) {
+    if (file_exists($cache_file)) {
+        $cached = json_decode(gzdecode(file_get_contents($cache_file)), true);
+        echo json_encode(array(
+            'status'  => 'ok',
+            'sticky'  => $cached['sticky'],
+            'html'    => $cached['html'] .
+                         '<i><small>Generated from cache (CSDb unreachable)</small></i>',
+            'count'   => $cached['count'],
+            'entries' => $cached['entries']
+        ));
+        exit;
+    }
+    // No cache available – show fallback error
+    die(json_encode(array('status' => 'warning', 'html' => $error_message)));
+}
+
+/**
+ * Extract a release date from a string like YYYY-MM-DD in HTML.
+ * 
+ * @param		string		$html				The HTML block to parse
+ */
+function find_release_date_in_cache($html) {
+    // First, try ISO date format (YYYY-MM-DD)
+    if (preg_match('/\b(\d{4})-(\d{2})-(\d{2})\b/', $html, $matches)) {
+        return strtotime($matches[0]);
+    }
+
+    // Try natural date formats like "19 July 2025" or "1 January 2024"
+    if (preg_match('/\b(\d{1,2})\s+(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d{4})\b/i', $html, $matches)) {
+        return strtotime($matches[0]); // strtotime handles "19 July 2025" well
+    }
+
+    return false; // No recognizable date
+}
+
+/**
+ * Cache CSDb images and replace sources in <IMG> elements.
+ * 
+ * @param		string		$html				The HTML block to parse
+ * @param		string		$image_cache_dir	The cache folder on the server
+ * @param		string		$csdb_type			Can be 'sid' or 'release'
+ * @param		int			$csdb_id			The ID of the specified type
+ */
+function cache_images_in_html($html, $image_cache_dir, $csdb_type, $csdb_id) {
+    return preg_replace_callback(
+        '/<img[^>]+src=[\'"]([^\'"]+)[\'"][^>]*>/i',
+        function ($matches) use ($image_cache_dir, $csdb_type, $csdb_id) {
+            $url = $matches[1];
+
+            // Skip if not from CSDb
+            if (strpos($url, 'csdb.dk') === false && strpos($url, '/images/noscreenshot.gif') === false) {
+                return $matches[0];
+            }
+
+            // Add https://csdb.dk prefix if URL is relative
+            if (strpos($url, 'http') !== 0) {
+                $url = 'https://csdb.dk' . $url;
+            }
+
+            // Generate unique filename including type
+            $filename   = $csdb_type . '_' . $csdb_id . '_' . basename(parse_url($url, PHP_URL_PATH));
+            $local_path = $image_cache_dir . $filename;
+
+            // Download image if missing
+            if (!file_exists($local_path)) {
+                $img_data = @file_get_contents($url);
+                if ($img_data !== false) {
+                    file_put_contents($local_path, $img_data);
+                }
+            }
+
+            // Replace src with local cache path
+            return str_replace($matches[1], 'cache/csdb_images/' . $filename, $matches[0]);
+        },
+        $html
+    );
+}
+
+// --------------------------------------------------------------------------
+// START
+// --------------------------------------------------------------------------
 
 if (isset($_GET['fullname'])) {
 	// Get the CSDb 'type' and 'id' from the database row
@@ -94,8 +209,6 @@ if (isset($_GET['fullname'])) {
 		die(json_encode(array('status' => 'warning', 'sticky' => $sticky, 'html' => '<p style="margin-top:0;"><i>No CSDb entry available.</i></p>')));
 	}
 
-	$go_back = '';
-
 	if ($csdb_type == 'sid') {
 		// Get the XML from the CSDb web service with a list of releases on this 'sid' page (default depth)
 		$xml = curl('https://csdb.dk/webservice/?type=sid&id='.$csdb_id);
@@ -114,22 +227,92 @@ if (isset($_GET['fullname'])) {
 	// The 'type' and 'id' was directly specified (permalink)
 	$csdb_type = $_GET['type'];
 	$csdb_id = $_GET['id'];
-	$copyright = '';
-	$go_back = $_GET['back'] ? '<button id="go-back">Back</button>' : '';
+	$copyright = $_GET['copyright'];
 } else
 	die(json_encode(array('status' => 'error', 'message' => 'You must specify the proper GET variables.')));
 
-// Get the XML from the CSDb web service
-$xml = curl('https://csdb.dk/webservice/?type='.$csdb_type.'&id='.$csdb_id.($csdb_type == 'sid' ? '&depth=3' : ''));
-if (!strpos($xml, '<CSDbData>'))
-	die(json_encode(array('status' => 'warning', 'html' => '<p style="margin-top:0;"><i>Uh... CSDb? Are you there?</i></p>'.
-		'<b>ID:</b> <a href="https://csdb.dk/'.$csdb_type.'/?id='.$csdb_id.'" target="_blank">'.$csdb_id.'</a>')));
+// --------------------------------------------------------------------------
+// PREPARE CACHE VARIABLES
+// --------------------------------------------------------------------------
+
+$cache_dir       = __DIR__ . '/../cache/csdb/';
+$image_cache_dir = __DIR__ . '/../cache/csdb_images/';
+$fresh_days      = 30;                   // Cache skip for items < 30 days old
+$ttl             = 7 * 24 * 60 * 60;     // Fallback TTL for date-less items (7 days)
+
+// Ensure cache directories exist
+if (!is_dir($cache_dir))       mkdir($cache_dir, 0777, true);
+if (!is_dir($image_cache_dir)) mkdir($image_cache_dir, 0777, true);
+
+// Example: $csdb_type = 'release'; $csdb_id = 12345;
+$cache_file = $cache_dir . $csdb_type . '_' . $csdb_id . '.cache.gz';
+$cache_age = relative_age_text(filemtime($cache_file));
+
+// --------------------------------------------------------------------------
+// SMART CACHE-READ
+// --------------------------------------------------------------------------
+
+if (file_exists($cache_file)) {
+    $cached_data = json_decode(gzdecode(file_get_contents($cache_file)), true);
+    $too_fresh   = false;
+
+    if ($csdb_type === 'release') {
+        // Try to parse release date from cached HTML
+        $release_timestamp = find_release_date_in_cache($cached_data['html']);
+        if ($release_timestamp && (time() - $release_timestamp) < ($fresh_days * 24 * 60 * 60)) {
+            $too_fresh = true;
+        }
+    } elseif ($csdb_type === 'sid' && !empty($cached_data['entries'])) {
+        // Check the most recent entry date
+        $latest_date = 0;
+        foreach ($cached_data['entries'] as $entry) {
+            $entry_timestamp = strtotime($entry['date']);
+            if ($entry_timestamp > $latest_date) {
+                $latest_date = $entry_timestamp;
+            }
+        }
+        if ($latest_date && (time() - $latest_date) < ($fresh_days * 24 * 60 * 60)) {
+            $too_fresh = true;
+        }
+    }
+
+    // Serve cache if not too fresh and not expired
+    if (!$too_fresh && (time() - filemtime($cache_file) < $ttl)) {
+		echo json_encode(array(
+			'status'  => 'ok',
+			'sticky'  => $cached_data['sticky'],
+			'html'    => $cached_data['html'] .
+						'<i><small>Generated from cache (' . $cache_age . ')</small></i>',
+			'count'   => $cached_data['count'],
+			'entries' => $cached_data['entries']
+		));
+        exit;
+    }
+}
+
+// --------------------------------------------------------------------------
+// FETCH FROM CSDb
+// --------------------------------------------------------------------------
+
+$xml = curl('https://csdb.dk/webservice/?type=' . $csdb_type . '&id=' . $csdb_id . ($csdb_type == 'sid' ? '&depth=3' : ''));
+if (!strpos($xml, '<CSDbData>')) {
+    serve_cache_or_error(
+        $cache_file,
+        '<p style="margin-top:0;"><i>Uh... CSDb? Are you there?</i></p>' .
+        '<b>ID:</b> <a href="https://csdb.dk/' . $csdb_type . '/?id=' . $csdb_id . '" target="_blank">' . $csdb_id . '</a>'
+    );
+}
 $csdb = simplexml_load_string($xml);
 
-// Building HTML
+// --------------------------------------------------------------------------
+// BUILD HTML
+// --------------------------------------------------------------------------
+
 if ($csdb_type == 'sid') {
 
-	/***** Entry: SID *****/
+	// --------------------------------------------------------------------------
+	// Entry: SID
+	// --------------------------------------------------------------------------
 
 	$sid_handles = array();
 	$sid_groups = array();
@@ -323,8 +506,8 @@ if ($csdb_type == 'sid') {
 			$comment_button.
 			'<h3 id="csdb-releases">'.$amount_releases.' release'.($amount_releases > 1 ? 's' : '').' found</h3>'.
 			'<div id="csdb-sort">
-				<label for="csdb-emp-filter" class="unselectable">Highlighted only</label><button
-					id="csdb-emp-filter" class="button-edit button-toggle button-off">Off</button>&nbsp;&nbsp;
+				<label id="csdb-emp-filter-label" for="csdb-emp-filter" class="unselectable disabled">Highlighted only</label><button
+					id="csdb-emp-filter" class="button-edit button-toggle button-off disabled" disabled>Off</button>&nbsp;&nbsp;
 				<label for="dropdown-sort-csdb" class="unselectable">Sort by</label>
 				<select id="dropdown-sort-csdb" name="sort-csdb">
 					<option value="title">Title</option>
@@ -341,10 +524,10 @@ if ($csdb_type == 'sid') {
 
 	// Build the sticky header HTML for the '#sticky' DIV
 	$sticky = '<h2 class="ellipsis" style="display:inline-block;margin:0 0 -8px 0;max-width:710px;" title="'.$csdb->SID->Name.'">'.$csdb->SID->Name.'</h2>'.
-	'<a href="//deepsid.chordian.net?tab=csdb&csdbtype=sid&csdbid='.$csdb->SID->ID.'" title="Permalink">'.$svg_permalink.'</a>'.
-	'<div class="corner-icons">'.
-		'<a href="https://csdb.dk/sid/?id='.$csdb->SID->ID.'" title="See this at CSDb" target="_blank"><svg class="outlink" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg></a>'.
-	'</div>';
+		'<a href="//deepsid.chordian.net?tab=csdb&csdbtype=sid&csdbid='.$csdb->SID->ID.'" title="Permalink">'.$svg_permalink.'</a>'.
+		'<div class="corner-icons">'.
+			'<a href="https://csdb.dk/sid/?id='.$csdb->SID->ID.'" title="See this at CSDb" target="_blank"><svg class="outlink" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg></a>'.
+		'</div>';
 
 	// And now the body HTML for the '#page' DIV
 	$html = $used_by_releases;
@@ -358,18 +541,9 @@ if ($csdb_type == 'sid') {
 
 } else if ($csdb_type == 'release') {
 
-	/***** Entry: RELEASE *****/
-
-	// Find the SID page ID for creating a 'BACK' button (if the HVSC URL exists on the page)
-	if (isset($csdb->Release->UsedSIDs->SID) && isset($_GET['fullname'])) {
-		$sids = $csdb->Release->UsedSIDs->SID;
-		foreach($sids as $sid) {
-			if ($sid->HVSCPath == '/'.str_replace('_High Voltage SID Collection/', '',$_GET['fullname'])) {
-				$go_back = '<button id="go-back-init" data-id="'.$sid->ID.'">Back</button>';
-				break;
-			}
-		}
-	}
+	// --------------------------------------------------------------------------
+	// Entry: RELEASE
+	// --------------------------------------------------------------------------
 
 	$sceners = array();
 	$amount_releases = -1; // This is how the notification value on the 'CSDb' tab knows it's a release
@@ -383,7 +557,10 @@ if ($csdb_type == 'sid') {
 		$handles = $csdb->Release->ReleasedBy->Handle; 
 		if (isset($handles)) {
 			foreach($handles as $handle) {
-				$released_by .= ', <a href="http://csdb.chordian.net/?type=scener&id='.$handle->ID.'" target="_blank">'.$handle->Handle.'</a>';
+				$yellow = stripos($copyright, strtolower($handle->Handle)) > -1
+					? 'emphasize'
+					: 'csdb-scener';
+				$released_by .= ', <a href="http://csdb.chordian.net/?type=scener&id='.$handle->ID.'" target="_blank" class="'.$yellow.'">'.$handle->Handle.'</a>';
 				if (!array_key_exists((string)$handle->ID, $sceners))
 					// Save the handle in case the ID is repeated in 'Credits' further below
 					$sceners[(string)$handle->ID] = $handle->Handle;
@@ -392,7 +569,10 @@ if ($csdb_type == 'sid') {
 		$groups = $csdb->Release->ReleasedBy->Group;
 		if (isset($groups)) {
 			foreach($groups as $group) {
-				$released_by .= ', <a href="http://csdb.chordian.net/?type=group&id='.$group->ID.'" target="_blank">'.$group->Name.'</a>';
+				$yellow = stripos($copyright, strtolower($group->Name)) > -1
+					? 'emphasize'
+					: 'csdb-group';
+				$released_by .= ', <a href="http://csdb.chordian.net/?type=group&id='.$group->ID.'" target="_blank" class="'.$yellow.'">'.$group->Name.'</a>';
 			}
 		}
 		$released_by = '<p><b>Released by:</b><br />'.substr($released_by, 2).'</p>';
@@ -560,7 +740,7 @@ if ($csdb_type == 'sid') {
 		'<small class="shared-all-comments">Shared for all types of comment sections.</small><br />';
 
 	// Build the sticky header HTML for the '#sticky' DIV
-	$sticky = '<h2 class="ellipsis" style="display:inline-block;margin:0 0 -8px 0;max-width:710px;" title="'.$csdb->Release->Name.'">'.$csdb->Release->Name.'</h2>'.$go_back.
+	$sticky = '<h2 class="ellipsis" style="display:inline-block;margin:0 0 -8px 0;max-width:710px;" title="'.$csdb->Release->Name.'">'.$csdb->Release->Name.'</h2><button id="go-back">Back</button>'.
 		'<a href="//deepsid.chordian.net?tab=csdb&csdbtype=release&csdbid='.$csdb->Release->ID.'" title="Permalink">'.$svg_permalink.'</a>'.
 		'<div class="corner-icons">'.
 			'<a href="http://csdb.chordian.net/?type=release&id='.$csdb->Release->ID.'" title="See this at CSDb" target="_blank"><svg class="outlink" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg></a>'.
@@ -592,5 +772,49 @@ if ($csdb_type == 'sid') {
 		$user_comments.
 		$comment_button;
 }
-echo json_encode(array('status' => 'ok', 'sticky' => $sticky, 'html' => $html.'<i><small>Generated using the <a href="https://csdb.dk/webservice/" target="_blank">CSDb web service</a></small></i><button class="to-top" title="Scroll back to the top" style="display:none;"><img src="images/to_top.svg" alt="" /></button>', 'count' => $amount_releases, 'entries' => $sid_entries));
+
+// --------------------------------------------------------------------------
+// IMAGE CACHING
+// --------------------------------------------------------------------------
+
+// Ensure image cache folder exists
+if (!is_dir($image_cache_dir)) {
+    mkdir($image_cache_dir, 0777, true);
+}
+
+// Process main HTML
+$html = cache_images_in_html($html, $image_cache_dir, $csdb_type, $csdb_id);
+
+// Process each entry's HTML
+if (!empty($sid_entries)) {
+    foreach ($sid_entries as &$entry) {
+        $entry['html'] = cache_images_in_html($entry['html'], $image_cache_dir, $csdb_type, $csdb_id);
+    }
+    unset($entry);
+}
+
+// --------------------------------------------------------------------------
+// WRITE TO CACHE
+// --------------------------------------------------------------------------
+
+$cache_data = array(
+    'sticky'  => $sticky,
+    'html'    => $html,
+    'count'   => $amount_releases,
+    'entries' => $sid_entries,
+    'time'    => time()
+);
+
+file_put_contents($cache_file, gzencode(json_encode($cache_data), 9));
+
+// --------------------------------------------------------------------------
+// FINAL OUTPUT
+// --------------------------------------------------------------------------
+
+echo json_encode(array(
+	'status' => 'ok',
+	'sticky' => $sticky,
+	'html' => $html.'<i><small>Generated using the <a href="https://csdb.dk/webservice/" target="_blank">CSDb web service</a></small></i>',
+	'count' => $amount_releases,
+	'entries' => $sid_entries));
 ?>

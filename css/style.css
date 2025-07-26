@@ -1246,7 +1246,8 @@ small.u2 { margin-left: 2px; }
 	.dialog-box button.disabled,
 	#filter-revisions button.disabled,
 	#filter-6581 button.disabled,
-	#sticky-visuals button.disabled {
+	#sticky-visuals button.disabled,
+	#csdb-sort button.disabled {
 		cursor: default;
 		background: var(--color-button-disabled);
 		border-color: var(--color-button-disabled);
@@ -2102,6 +2103,17 @@ input[type=range]::-ms-track {
 	font-size: 14px;
 }
 
+	/* A smaller version of the avatar image in the left side of the info box */
+	#info-composer {
+		display: none;
+		float: left;
+		width: 58px;
+		height: 58px;
+		margin: 8px -3px 0 8px;
+		border: 1px solid var(--color-border);
+		background: var(--color-avatar-bg);
+	}
+
 	/* The '#info-text' and '#youtube' boxes are mutually exclusive */
 	#info-text {
 		display: none;
@@ -2387,6 +2399,20 @@ input[type=range]::-ms-track {
 					padding-left: 12px;
 					pointer-events: none;
 				}
+
+				/* Turn the "Winner" tag into gold */
+				.tag-winner {
+					position: relative;
+					background: linear-gradient(180deg, #ffd700, #e6c200 40%, #bfa000 100%);
+					color: #544200;
+					font-weight: bold;
+					text-shadow: 0 1px 1px rgba(255, 255, 255, 0.6),
+								0 -1px 1px rgba(0, 0, 0, 0.2);
+				}
+
+					.tag-winner:before {
+						border-color: transparent #d8b800 transparent transparent !important;
+					}
 
 			.tag-production {
 				color: var(--color-text-tag-prod);
@@ -2697,7 +2723,8 @@ input[type=range]::-ms-track {
 			top: 1px;
 			left: -8px;
 			width: 104.2%;
-			color: #fff;
+			height: 104px;
+			color: #555;
 			padding: 0;
 			margin: 0;
 			background: none;
@@ -2783,7 +2810,8 @@ input[type=range]::-ms-track {
 			#sundry label.disabled,
 			#stopic-stereo td.stereo-header > .disabled,
 			#topic-visuals label.disabled,
-			#page .dropdown-buffer-label.disabled {
+			#page .dropdown-buffer-label.disabled,
+			#csdb-emp-filter-label.disabled {
 				color: var(--color-text-label-disabled);
 			}
 
@@ -3086,13 +3114,18 @@ input[type=range]::-ms-track {
 			font-weight: bold;
 		}
 
-		#path .maintainer {
+		#path .maintainer,
+		#path .counts {
 			position: relative;
 			top: -9px;
 			font-size: 10px;
 			color: var(--color-text-minor);
 			font-style: italic;
 		}
+
+			#path .counts {
+				top: -7px;
+			}
 
 		#upload-wizard {
 			position: absolute;

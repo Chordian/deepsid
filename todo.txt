@@ -11,9 +11,17 @@ SHOULD BE DONE
   If it ends in "..." create a short name, e.g. with a letter + full stop for first name.
   Takes a while going through this ......... Next: MUSICIANS/E
 
+- Cache: Keep an eye on what happens when CSDb is not available to determine whether a SID
+  list has only one entry, thus it should default to the release page instead. The problem
+  is that 'csdb.php' still uses a direct web service call for that part. If it works badly,
+  perhaps it should somehow be cached too.
+
+- How about a sticky footer on tab pages? For the CSDb tab it would be particularly useful
+  as it makes it easy to see if the contents were generated from the cache or not.
+
 - Always show ages in hex?
 
-- KB: If 'ArrowRight' is pressed while on a folder, enter the folder.
+- Add a "*" notification flag to STIL tab whenever there is STIL text. (And lyrics?)
 
 - KB: In search mode, 'ESC' should also work as Cancel. This is difficult to do because of
   key bubbling and/or multi-events.
@@ -21,15 +29,6 @@ SHOULD BE DONE
 - While I still think hiding "Compo" is okay, perhaps consider an alert to pop up (or show
   a message in the dialog box) saying that it will be hidden because the ranking should
   already make it clear, this is for a competition.
-
-- In the bar with the ROOT/BACK buttons, move the SID path line up a little, then below it
-  (with small font) write the folder total, e.g. "178 tunes". Look at how it's done for
-  playlists (only top text should of course not be bold).
-
-- Consider adding "Music" and "Collection" buttons in the middle of the tags dialog box.
-
-- Henrik Andersen -> Henrik Andersen's Player
-  https://deepsid.chordian.net/?file=/MUSICIANS/D/Demosic/Did_My_Voice_Crack.sid
 
 - Idea from Anon-Relays: Loop song X number of times before moving on to the next one. In
   the settings, the default number should of course be 1.
@@ -40,12 +39,26 @@ SHOULD BE DONE
 
 - Consider a HTML button somewhere for testing a SID, so it's not just the "l" hotkey.
 
+- An "Admin" tab with buttons? Ideas for task buttons:
+
+  - Folder counts are off everywhere. Especially in CGSC. How about writing a PHP script
+    that goes through everything and updates folder counts in the database?
+
+  - PHP script that detects and shows all rows with no database information. Even though I
+    am very meticulous each collection update, these still tend to sneak in.
+
 - KB: Sometimes I have to press ENTER twice on a SID row before it plays. Usually after
   having done some navigation elsewhere in DeepSID. The first ENTER is probably some kind
   of focus enabling, but try to investigate further.
+  UPDATE: Spotted one. Need to ENTER to select a row after using "f" to refresh folder.
 
 - If you look closely, some tag names are too high up. It differs from SID row to SID row
   in Firefox. Test decimal line heights to see if it can be fixed.
+
+- Cache: Consider also caching the 'SHOW' pages. Alternatively, you could just disable the
+  button on cached pages loaded whenever CSDb is down.
+
+- Cache: Consider also caching the competition pages.
 
 - BUG: Click "Slow" then a new SID row - button is still down but slow mode is off. I
   recommended popping up the "Slow" button when starting a new song.
@@ -71,9 +84,6 @@ WHEN THE TIME IS RIGHT
     nothing to do with symlists. Rename it to something else to avoid confusion.
   - Maybe 'csdb.php' should also have an extended name, to make it more clear what it does.
   - Go through all the other files and see if anything else ought to be renamed.
-  CAVEAT: You can overcome e.g. cache issues by keeping the old copy of the renamed item for
-  a while. For example, copy 'hvsc.php' to e.g. 'music.php' but keep the old version around
-  too for a month before deleting it. By then everyone should be using the newest JS files.
 
 
 CONSIDER THIS
@@ -128,8 +138,11 @@ CONSIDER THIS
 - In a profile page, make the small handles in group table into links and remove the corner external
   link icon. Then users can choose what handle to open in CSDb themselves.
 
-- Remember the cache system for Steam images at GameDeed? Consider doing the same thing for
-  CSDb pages. Good for when CSDb is down (or even gone one day).
+- SID rows with several subtunes could open up a list with the subtunes below the row. The subtunes
+  could be given names that are stored in the database, and they could each show song length. This
+  is a cool idea, but probably very difficult to implement. I imagine it would require meticulous
+  alterations and testing to get right. About opening up - either as soon as the row is clicked,
+  where DeepSID detects multiple subtunes, or a wide "+" button next to the number of subtunes.
 
 - Consider a settings option for choosing WebSid HQ or WebSid Legacy as the default on mobile
   devices. Alternative: Just let WebSid HQ be the default on mobile devices from now on. However,
@@ -495,6 +508,8 @@ PROBABLY NOT?
   - A general static button to replace #panel with STIL contents.
   - Or perhaps sliding STIL in from the right by clicking a general static button always available?
 
+- KB: If 'ArrowRight' is pressed while on a folder, enter the folder.
+
 - Use the new image credit field - hover on composer image to slide up a small "Source:" row.
   - If set to "UNKNOWN" then nothing is sliding up (i.e. as before).
 
@@ -607,5 +622,10 @@ TEST RESOURCES
 
   Too many DL links on a CSDb list page:
   https://deepsid.chordian.net/?file=/MUSICIANS/O/Onebitman/Walking_in_the_Air.sid
+
+- Legacy CSDb cache data with no 'BACK' button for sticky header:
+  https://deepsid.chordian.net/?file=/MUSICIANS/G/G-Fellow/A_Message_for_You.sid
+  https://deepsid.chordian.net/?file=/MUSICIANS/G/G-Fellow/Neural_Consciousness_V2.sid
+  https://deepsid.chordian.net/?file=/MUSICIANS/G/G-Fellow/Wigwam.sid
 
 END

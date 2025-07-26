@@ -719,7 +719,7 @@
 			<p>Participated in a competition at the event, typically a music competition.</p></li>
 		</ul>
 		<ul class="annex-tags-list">
-			<li><a href="&quot;winner&quot;" class="search" data-type="tag"><div class="tag tag-event">Winner</div></a>= <b>Won a competition</b>
+			<li><a href="&quot;winner&quot;" class="search" data-type="tag"><div class="tag tag-event tag-winner">Winner</div></a>= <b>Won a competition</b>
 			<p>The winner of the competition it participated in.</p></li>
 		</ul>
 		<ul class="annex-tags-list">

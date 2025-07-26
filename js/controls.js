@@ -595,9 +595,53 @@ Controls.prototype = {
 			$infoText = $("#info-text");
 		$("#sid-model,#clockspeed").remove();
 		$infoText.empty().append(isCGSC && SID.emulatorFlags.hasFlags ? '<div id="corner"></div>' : '');
-		if (isCGSC)
+
+		if (isCGSC) {
+
 			this.convertC64Text();
-		else {
+			$("#info-composer").hide();
+
+		} else {
+
+			// Show a smaller avatar image in the left side of the info box (HVSC and SH only)
+			if (fullname.indexOf("/MUSICIANS/") !== -1 || fullname.indexOf("/_SID Happens/") !== -1) {
+				// Construct the image filename out of fullname (or profile if in SH folder)
+				var homeFolder = "", thumbnail;
+				if (fullname.indexOf("/MUSICIANS/") !== -1) {
+					homeFolder = fullname
+						.replace("hvsc/", "")
+						.replace("_High Voltage SID Collection/", "")
+						.replace(/\/[^/]+$/, ""); // Get rid of the SID filename
+					thumbnail = "images/composers/"+fullname.substring(fullname.indexOf("MUSICIANS"))
+						.split("/").slice(0, -1).join("_").toLowerCase() + ".jpg";
+				} else {
+					homeFolder = profile
+						.replace("_High Voltage SID Collection/", "");
+					thumbnail = "images/composers/"+profile.substring(profile.indexOf("MUSICIANS"))
+						.replace(/\//g, "_").toLowerCase() + ".jpg";				
+				}
+				// Prepare a link to composer's home folder if it exists
+				var homeStart = homeFolder !== ""
+					? '<a href="?file=/'+homeFolder+'" class="redirect">'
+					: '';
+				var homeEnd = homeFolder !== ""
+					? '</a>'
+					: '';
+				let img = new Image();
+				img.onload = function() {
+					// The image file exists so show it in the info box
+					$("#info-composer").empty().append(homeStart+'<img src="'+thumbnail+'" alt="" />'+homeEnd).show();
+				};
+				img.onerror = function() {
+					// No image file so just show a generic placeholder image
+					$("#info-composer").empty().append(homeStart+'<img src="images/composer'+
+						(parseInt(colorTheme) ? "_dark" : "")+'.png" alt="" />'+homeEnd).show();
+				};
+				img.src = thumbnail;
+			} else {
+				$("#info-composer").hide();
+			}
+
 			// If the SID tune is not played in its home folder, add links to song name and author
 			var songName = info.songName.replace("<?>", unknown),
 				songAuthor = info.songAuthor.replace("<?>", unknown);
@@ -951,7 +995,7 @@ Controls.prototype = {
 	 */
 	showNewsImage: function(show) {
 
-		return; // Comment this out when you want to show a news image
+		//return; // Comment this out when you want to show a news image
 
 		if (show && $("#stab-stil").text() == "News")
 			$("#sundry").css({                                                    // Zoom  102%
@@ -968,7 +1012,7 @@ Controls.prototype = {
 	 * setting this up. Point this to the relevant web site for the image.
 	 */
 	clickNews: function() {
-		window.open("https://en.wikipedia.org/wiki/Commodore_64");
+		window.open("https://www.boom-party.c64.fun/index-en.php");
 	},
 
 	/**

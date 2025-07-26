@@ -594,6 +594,7 @@
 				<div class="tab unselectable selected">DeepSID</div>
 			</div>
 			<div id="info">
+				<div id="info-composer"></div>
 				<div id="info-text">
 					<?php if (MiniPlayer()): ?>
 						<div style="text-align:center;font-size:12px;">
@@ -634,9 +635,10 @@
 							<!--<span>The <a href="https://www.hvsc.c64.org/" target="_top">High Voltage SID Collection</a> has been upgraded to the latest version #83. Click <a href="//deepsid.chordian.net/?search=83&type=new">here</a> to see what's new in this update.</span>-->
 							<!--<span><a href="http://www.c64music.co.uk/" target="_top">Compute's Gazette SID Collection</a> has been upgraded to the latest version #146. Click <a href="//deepsid.chordian.net/?search=146&type=new">here</a> to see what's new in this update.</span>-->
 							<!--<span>Want to learn how to make SID tunes? Check out <a href="https://www.youtube.com/watch?v=nXNtLetxFUg">this tutorial video</a> now on YouTube.</span>-->
+							<!--<span><font style="color:var(--color-forum-moderator);">Keyboard control is here!</font>&nbsp;&nbsp;Use Up, Down, Home, End, Page Up, Page Down, and Enter to select a SID row. Press Backspace to go back one folder. See <a href="#" onclick="$('#tab-changes').trigger('click'); return false;">Changes</a> for more info.</span>-->
 							    <!--   See in controls.js: "showNewsImage" and "clickNews" for how to set up a news image -->
-							<span><font style="color:var(--color-forum-moderator);">Keyboard control is here!</font>&nbsp;&nbsp;Use Up, Down, Home, End, Page Up, Page Down, and Enter to select a SID row. Press Backspace to go back one folder. See <a href="#" onclick="$('#tab-changes').trigger('click'); return false;">Changes</a> for more info.</span>
 							<!--<pre><b style="font-size:16px;">Coming up<br></b><b style="position:relative;top:-3px;font-size:13px;">17 - 19 Nov.</b><br><br><i style="position:absolute;bottom:-38px;right:4px;font-size:13px;line-height:17px;text-align:right;">New SID tunes<br><font style="font-size:17px;">incoming!</font></i></pre>-->
+							<pre><b style="font-size:16px;">This weekend<br></b><b style="position:relative;top:-3px;font-size:13px;">24 - 27 July</b><br><br><i style="position:absolute;bottom:2px;right:4px;font-size:13px;line-height:17px;text-align:right;">New SID tunes<br><font style="font-size:17px;">incoming!</font></i></pre>
 						</div>
 					<?php endif ?>
 				</div>
@@ -1868,11 +1870,43 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>July 26, 2025</h3>
+						<ul>
+							<li>Fixed a bug where clicking 'BACK' from a CSDb release page sometimes displayed a reduced list.</li>
+						</ul>
+
+						<h3>July 25, 2025</h3>
+						<ul>
+							<li>All images from CSDb are now cached after their first display to reduce the overall load on the CSDb server.</li>
+							<li>DeepSID now caches CSDb data, such as release and SID pages, to improve loading times and reduce reliance on the CSDb server. Fresh content is still fetched in real-time, while older pages are served from the cache since they rarely change. If CSDb is temporarily unavailable, DeepSID will automatically fall back to cached versions when possible. The cache builds gradually as users browse, so its benefits increase over time.</li>
+						</ul>
+
+						<h3>July 24, 2025</h3>
+						<ul>
+							<li>You can now click the composer avatar in the top-left info box to go to the composer's home folder. This also works while already in the home folder, allowing you to reset the view.</li>
+							<li>Fixed missing database information for <a href="https://deepsid.chordian.net/?file=/MUSICIANS/M/Mixer/Jungle.sid">Jungle.sid</a> by Mixer.</li>
+							<li>Fixed missing database information for <a href="https://deepsid.chordian.net/?file=/MUSICIANS/N/Nordischsound/Medley.sid">Medley.sid</a> by Nordischsound.</li>
+							<li>Fixed erroneous database information for <a href="https://deepsid.chordian.net/?file=/MUSICIANS/N/Nordischsound/Nordischsound_Medley.sid">Nordischsound Medley.sid</a> by Nordischsound.</li>
+						</ul>
+
+						<h3>July 22, 2025</h3>
+						<ul>
+							<li>Most collection folders now display the number of folders and files below the path line.</li>
+							<li>The composer avatar now also appears in the top-left info box when available.</li>
+						</ul>
+
+						<h3>July 21, 2025</h3>
+						<ul>
+							<li>The author highlighting previously only available in the CSDb list can now also be seen on CSDb release pages.</li>
+							<li>The new toggle button in CSDb lists is now only enabled when there are highlighted entries.</li>
+							<li>The stars around the "Winner" tag made it too wide. I removed them and turned the tag into gold instead.</li>
+						</ul>
+
 						<h3>July 20, 2025</h3>
 						<ul>
 							<li>You can now use Shift+Backspace to go back from any tab page with a 'BACK' button.</li>
 							<li>Added a toggle button to CSDb lists to show only highlighted entries, prioritizing those where the copyright line contains the group name, or where the composer's group, previous groups, real name, or handle matches.</li>
-							<li>Fixed missing database information for <a href="https://deepsid.chordian.net/?file=/MUSICIANS/N/Nordischsound/Nordischsound_Medley.sid">Nordischsound_Medley.sid</a> by Nordischsound.</li>
+							<li><del>Fixed missing database information for <a href="https://deepsid.chordian.net/?file=/MUSICIANS/N/Nordischsound/Nordischsound_Medley.sid">Nordischsound_Medley.sid</a> by Nordischsound.</del></li>
 							<li>Fixed missing database information for <a href="https://deepsid.chordian.net/?file=/Compute%27s%20Gazette%20SID%20Collection/BJ_Pools/Heaven_Knows_A.mus">Heaven_Knows_A.mus</a> by BJ Pools.</li>
 						</ul>
 

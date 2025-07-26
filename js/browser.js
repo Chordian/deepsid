@@ -833,12 +833,8 @@ Browser.prototype = {
 		$.each(this.sidEntries, function(i, entry) {
 			sortedList += entry.html;
 		});
-		$releases = $("#topic-csdb table.releases");
-		$releases.hide().append(sortedList);
+		$("#topic-csdb table.releases").append(sortedList);
 		this.additionalEmphasizing(isEmpOn);
-		setTimeout(() => {
-			$releases.show();
-		}, 100);
 	},
 
 	/**
@@ -1175,6 +1171,7 @@ Browser.prototype = {
 			this.compolist = [];	// For the big CSDb music competitions folder list
 			this.subFolders = 0;
 			this.path = this.path.replace("/_CSDb", "/CSDb");
+			$("#path").empty();
 
 			// Call the AJAX PHP script that delivers the list of files and folders
 			this.hvsc = $.get("php/hvsc.php", {
@@ -1205,7 +1202,7 @@ Browser.prototype = {
 					if (data.incompatible.indexOf("asid") !== -1) $("#page .viz-asid").addClass("disabled");
 
 					$("#path").css("top", "5px");
-					var pathText = this.path == "" ? "/" : this.path
+					var pathAppend = "", pathText = this.path == "" ? "/" : this.path
 						.replace(/^\/_/, '/')
 						.replace("/Compute's Gazette SID Collection", '<span class="dim">CGSC</span>')
 						.replace("/High Voltage SID Collection", '<span class="dim">HVSC</span>')
@@ -1235,7 +1232,18 @@ Browser.prototype = {
 							? this.groupMember
 							: this.groupMember.split("/").slice(-1)[0];
 					}
-					$("#path").empty().append(pathText);
+
+					// Show number of folders and files for certain folder types
+					if (/hvsc|cgsc|estc|sid\ happens/i.test(pathText) && (data.folders.length || data.files.length)) {
+						$("#path").css("top", "-2.5px");
+						pathAppend = '<br /><span class="counts">'+
+							(data.folders.length ? data.folders.length+' folder'+(data.folders.length == 1 ? '' : 's') : '')+
+							(data.folders.length && data.files.length ? ' and ' : '')+
+							(data.files.length ? data.files.length+' file'+(data.files.length == 1 ? '' : 's') : '')+
+							'</span>';
+					}
+
+					$("#path").append(pathText+pathAppend);
 
 					$("#tabs .tab").removeClass("disabled");
 					var $selected = $("#tabs .selected");
@@ -1797,8 +1805,8 @@ Browser.prototype = {
 				// Add a double note to make it clear this is for music competitions only
 				list_of_tags += '<div class="tag tag-event tag-notes tag-compo"'+id+'><img src="images/composer_doublenote.svg" /><span>Compo</span></div>';*/
 			} else if (tag == "Winner") {
-				// A slightly snazzier tag for winners (takes up a lot of space though) - now uses unicode chars
-				list_of_tags += '<div class="tag tag-event tag-winner"'+id+'>★★ Winner ★★</div>';
+				// Add a class that turns the tag into gold
+				list_of_tags += '<div class="tag tag-event tag-winner"'+id+'>Winner</div>';
 			} else if (tag == "<-") {
 				// Replace "<-" with a pretty unicode arrow instead
 				// Disabled as perhaps users find them too confusing.
@@ -2033,11 +2041,11 @@ Browser.prototype = {
 	 * 
 	 * Also handles the tab notification counter. 
 	 * 
-	 * @param {string} type		E.g. "release" (only used for permalinks)
-	 * @param {number} id		ID number used by CSDb (only used for permalinks)
-	 * @param {boolean} back	If specified and TRUE, show a 'BACK' button
+	 * @param {string} type			Optional; e.g. 'sid' or 'release'
+	 * @param {number} id			Optional; ID number used by CSDb
+	 * @param {boolean} canReturn	Optional; if TRUE, coming from list
 	 */
-	getCSDb: function(type, id, back) {
+	getCSDb: function(type, id, canReturn) {
 		if (miniPlayer || isMobile || this.isTempTestFile()) return;
 		if (this.csdb) this.csdb.abort();
 		$("#topic-csdb").empty().append(this.loadingSpinner("csdb"));
@@ -2048,8 +2056,14 @@ Browser.prototype = {
 			$("#loading-csdb").fadeIn(500);
 		}, 250);
 
+		// Get the group or user in the copyright text
+		var lines = $("#info-text").html().split("<br>");
+		var lastLine = lines[lines.length - 1];
+		var copyright = lastLine.substring(lastLine.indexOf(" ") + 1);
+
+		// Determine the arguments to be sent to the PHP file
 		var args = typeof type !== "undefined" && typeof id !== "undefined"
-			? { type: type, id: id, back: (typeof back === "undefined" ? 1 : 0) }
+			? { type: type, id: id, copyright: copyright }
 			: { fullname: browser.playlist[browser.songPos].fullname.substr(5) };
 
 		this.csdb = $.get("php/csdb.php", args, function(data) {
@@ -2067,14 +2081,31 @@ Browser.prototype = {
 				this.groupNames = [...new Set(groupTexts)];
 
 				clearTimeout(loadingCSDb);
+				if (typeof canReturn !== "undefined" && canReturn) {
+					// Make sure legacy cache files always use the default 'BACK' button
+					data.sticky = data.sticky.replace("go-back-init", "go-back");
+					// Sometimes a 'BACK' button is missing (e.g. if a link chain icon click was cached)
+					if (data.sticky.indexOf("go-back") === -1)
+						data.sticky = data.sticky.replace('</h2>', '</h2><button id="go-back">Back</button>');
+				} else {
+					// A single release page should never show a 'BACK' button
+					data.sticky = $("<div>").html(data.sticky).find("#go-back, #go-back-init").remove().end().html();
+				}
 				$("#sticky-csdb").empty().append(data.sticky);
-				if (parseInt(colorTheme)) data.html = data.html.replace(/composer\.png/g, "composer_dark.png");
+				if (parseInt(colorTheme))
+					data.html = data.html.replace(/composer\.png/g, "composer_dark.png");
 				$("#topic-csdb").empty().append(data.html)
 					.css("visibility", "visible");
 				ResetDexterScrollBar("csdb");
 
 				this.additionalEmphasizing(false);
 				UpdateRedirectPlayIcons();
+
+				// Enable highlighting button and its label if any emphasizing is present
+				setTimeout(() => {
+					if ($("table.releases tr").find("a.emphasize, a.empSec, a.empThird").length > 0)
+						$("#csdb-emp-filter, #csdb-emp-filter-label").removeClass('disabled').prop('disabled', false);
+				}, 0);
 
 				if (data.entries != "") this.sidEntries = data.entries; // Array used for sorting
 

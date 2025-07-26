@@ -78,6 +78,7 @@ $prettyPlayerNames = array(
 	'Harald_Rosenfeldt' =>		'Harald Rosenfeldt\'s player',
 	'Harri_Palviainen' =>		'Harri Palviainen\'s player',
 	'Henrik_Jensen' =>			'Henrik Jensen\'s player',
+	'Henning_Andersen' =>		'Henning Andersen\'s player',
 	'Holger_Gehrmann' =>		'Holger Gehrmann\'s player',
 	'Ivan_Del_Duca' =>			'Ivan Del Duca\'s player',
 	'JammicroV1_1' =>			'JammicroV1',

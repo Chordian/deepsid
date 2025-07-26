@@ -907,6 +907,12 @@ $(function() { // DOM ready
 	$("#theme-selector").click(function() {
 		colorTheme ^= 1;
 
+		$("#info-composer").find("img").each(function() {
+			var $this = $(this);
+			if ($this.attr("src") == "images/composer"+(colorTheme ? "" : "_dark")+".png")
+				$this.attr("src", "images/composer"+(colorTheme ? "_dark" : "")+".png");
+		});
+
 		$("#topic-profile").find("img.composer").each(function() {
 			var $this = $(this);
 			if ($this.attr("src") == "images/composer"+(colorTheme ? "" : "_dark")+".png")
@@ -1316,8 +1322,8 @@ $(function() { // DOM ready
 		cacheSticky = $("#sticky-csdb").html();
 		cacheTabScrollPos = $("#page").scrollTop();
 		cacheDDCSDbSort = $("#dropdown-sort-csdb").val();
-		// Now load the new content
-		browser.getCSDb("release", $(this).attr("data-id"));
+		// Now load the actual release page
+		browser.getCSDb("release", $(this).attr("data-id"), true);
 		return false;
 	});
 
@@ -1332,22 +1338,13 @@ $(function() { // DOM ready
 		}
 		$this = $(this);
 		// Load the cache again (much faster than calling browser.getCSDb() to regenerate it)
-		$("#topic-csdb")/*.css("visibility", "hidden")*/.empty()
+		$("#topic-csdb").empty()
 			.append($this.hasClass("compo") ? cacheBeforeCompo : cacheCSDb);
 		$("#sticky-csdb").empty().append($this.hasClass("compo") ? cacheStickyBeforeCompo : cacheSticky);
 		// Adjust drop-down box to the sort setting
 		$("#dropdown-sort-csdb").val(cacheDDCSDbSort);
 		// Also set scroll position to where we clicked last time
 		SetScrollTopInstantly("#page", $this.hasClass("compo") ? cachePosBeforeCompo : cacheTabScrollPos);
-	});
-
-	/**
-	 * When clicking the 'BACK' button on a CSDb page to show the releases for the first time.
-	 * 
-	 * NOTE: This version is used where the release page had a link to the SID tune page.
-	 */
-	$("#topic-csdb,#sticky-csdb").on("click", "#go-back-init", function() {
-		browser.getCSDb("sid", $(this).attr("data-id"));
 	});
 
 	/**
@@ -2271,7 +2268,7 @@ $(function() { // DOM ready
 	 * Show a specific CSDb entry (only loads the content of the CSDb tab).
 	 */
 	if (typeCSDb === "sid" || typeCSDb === "release") {
-		browser.getCSDb(typeCSDb, idCSDb, false);
+		browser.getCSDb(typeCSDb, idCSDb);
 		$("#sticky-csdb").show(); // Show sticky header
 	}
 
