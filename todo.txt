@@ -4,6 +4,9 @@ ToDo
 - Look into the console logging alternatives, like warn, error, table, etc.
   @link https://developer.mozilla.org/en-US/docs/Web/API/console
 
+- TRY THIS IF CSDB IS OFFLINE:
+  Go through acrouzet's folder. All of his CSDb lists and release pages should still work.
+
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
@@ -11,17 +14,13 @@ SHOULD BE DONE
   If it ends in "..." create a short name, e.g. with a letter + full stop for first name.
   Takes a while going through this ......... Next: MUSICIANS/E
 
-- Cache: Keep an eye on what happens when CSDb is not available to determine whether a SID
-  list has only one entry, thus it should default to the release page instead. The problem
-  is that 'csdb.php' still uses a direct web service call for that part. If it works badly,
-  perhaps it should somehow be cached too.
-
-- How about a sticky footer on tab pages? For the CSDb tab it would be particularly useful
-  as it makes it easy to see if the contents were generated from the cache or not.
-
-- Always show ages in hex?
+- Consider a HTML button somewhere for testing a SID, so it's not just the "l" hotkey.
+  Perhaps in the root where only a "\" is displayed?
 
 - Add a "*" notification flag to STIL tab whenever there is STIL text. (And lyrics?)
+
+- A "refresh cache" link next to cached message in the footer of a CSDb page. (Consider only
+  showing this for DeepSID administrators.)
 
 - KB: In search mode, 'ESC' should also work as Cancel. This is difficult to do because of
   key bubbling and/or multi-events.
@@ -37,15 +36,15 @@ SHOULD BE DONE
   Maybe create a generic function to call with type parameter, etc. so it's easy to add in
   the many places where it makes sense.
 
-- Consider a HTML button somewhere for testing a SID, so it's not just the "l" hotkey.
-
 - An "Admin" tab with buttons? Ideas for task buttons:
 
   - Folder counts are off everywhere. Especially in CGSC. How about writing a PHP script
     that goes through everything and updates folder counts in the database?
 
   - PHP script that detects and shows all rows with no database information. Even though I
-    am very meticulous each collection update, these still tend to sneak in.
+    am very meticulous each collection update, these still tend to pop up.
+
+- Always show ages in hex? (Hover on age to show tooltip with decimal age.)
 
 - KB: Sometimes I have to press ENTER twice on a SID row before it plays. Usually after
   having done some navigation elsewhere in DeepSID. The first ENTER is probably some kind
@@ -66,7 +65,8 @@ SHOULD BE DONE
 - BUG: Turning off noise waveform doesn't work anymore:
   https://deepsid.chordian.net/?file=/SID%20Happens/The_Medley_Part_2.sid
 
-- BUG: In CGSC folders, there's a querySelectorAll console error related to chartist.
+- BUG: In CGSC folders, there's a 'querySelectorAll' console error related to chartist.
+  Perhaps just put a try/catch block around chartist with a continue?
 
 - BUG: The STIL entry here is not parsed correctly - all links merge into one big link:
   https://deepsid.chordian.net/?file=/MUSICIANS/B/Bulldog/E_X_I_S.sid&subtune=1
@@ -134,6 +134,9 @@ CONSIDER THIS
 
 - Automate CGSC update process. All REN, MOVE, etc. Create folders where they can't be found
   in the filenames, count files in them, etc.
+
+- Cache: When CSDb is down and a cache file is shown instead, a warning message in top
+  could say that CSDb is currently unreachable so here's a cached file instead.
 
 - In a profile page, make the small handles in group table into links and remove the corner external
   link icon. Then users can choose what handle to open in CSDb themselves.
@@ -460,6 +463,9 @@ PROBABLY NOT?
 
 - Add support for uploading 4SID tunes in the SH folder. Also make it so only WebSid may
   play such tunes in the SH folder - the SID row must be disabled for all other SID handlers.
+
+- How about a sticky footer on tab pages? For the CSDb tab it would be particularly useful
+  as it makes it easy to see if the contents were generated from the cache or not.
 
 - When using a green event tag and a production the music was used in at that event, consider a
   setting for adapting the colors of the production tag. Ideas: Fading from green to blue, or the

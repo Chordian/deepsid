@@ -747,6 +747,14 @@ Browser.prototype = {
 				this.updateTagLists(this.allTags, this.fileTags);
 				this.updateConnectTagLists(this.allTags, this.fileTags);
 				break;
+			case "dialog-tags-music":
+				// Edit tags: Transfer "Music" tag
+				this.toggleTag("Music");
+			    break;
+			case "dialog-tags-collection":
+				// Edit tags: Transfer "Collection" tag
+				this.toggleTag("Collection");
+				break;
 			case "dialog-tags-plus":
 				// Edit tags: Add a new tag in the right list
 				var newTag = $("#new-tag").val();
@@ -781,6 +789,36 @@ Browser.prototype = {
 				}
 				return false;
 		}
+	},
+
+	/**
+	 * Toggle a tag (i.e. move it between the left/right lists in the dialog box
+	 * for editing tags).
+	 *
+	 * @param {string} tagName - The name of the tag to toggle (e.g. "Music")
+	 */
+	toggleTag: function(tagName) {
+		// Find the tag ID in allTags
+		var tagEntry = $.grep(this.allTags, function(entry) {
+			return entry.name === tagName;
+		})[0];
+
+		if (!tagEntry) return; // Fail-safe if not found
+
+		var tagId = parseInt(tagEntry.id);
+		var index = this.fileTags.indexOf(tagId);
+
+		if (index > -1) {
+			// Tag is in right list, remove it
+			this.fileTags.splice(index, 1);
+		} else {
+			// Tag is in left list, add it
+			this.fileTags.push(tagId);
+		}
+
+		// Refresh both lists
+		this.updateTagLists(this.allTags, this.fileTags);
+		this.updateConnectTagLists(this.allTags, this.fileTags);
 	},
 
 	/**
@@ -1800,12 +1838,12 @@ Browser.prototype = {
 				list_of_tags += '<div class="tag tag-production tag-notes tag-music"'+id+'><img src="images/composer_doublenote.svg" /><span></span></div>';
 			} else if (tag == "Collection") {
 				// Change collection tag into a double note icon followed by a list icon
-				list_of_tags += '<div class="tag tag-production tag-notes tag-collection"'+id+'><img src="images/composer_doublenote.svg" /><img style="margin-left: 12px;" src="images/visuals_memory.svg" /><span>&nbsp;&nbsp;&nbsp;&nbsp&nbsp</span></div>';
+				list_of_tags += '<div class="tag tag-production tag-notes tag-collection"'+id+'><img src="images/composer_doublenote.svg" /><img style="margin-left:12px;" src="images/visuals_memory.svg" /><span>&nbsp;&nbsp;&nbsp;&nbsp&nbsp</span></div>';
 			/*} else if (tag == "Compo") {
 				// Add a double note to make it clear this is for music competitions only
 				list_of_tags += '<div class="tag tag-event tag-notes tag-compo"'+id+'><img src="images/composer_doublenote.svg" /><span>Compo</span></div>';*/
 			} else if (tag == "Winner") {
-				// Add a class that turns the tag into gold
+				// Add a class that turns the tag into gold (the philosopher's stone)
 				list_of_tags += '<div class="tag tag-event tag-winner"'+id+'>Winner</div>';
 			} else if (tag == "<-") {
 				// Replace "<-" with a pretty unicode arrow instead
@@ -2069,7 +2107,7 @@ Browser.prototype = {
 		this.csdb = $.get("php/csdb.php", args, function(data) {
 			this.validateData(data, function(data) {
 
-				// if (data.debug !== "") console.log(data.debug);
+				if (data.debug !== "") console.log(data.debug);
 
 				// Gather the group names used by the scener (if applicable)
 				var groupTexts = [];
@@ -2081,7 +2119,7 @@ Browser.prototype = {
 				this.groupNames = [...new Set(groupTexts)];
 
 				clearTimeout(loadingCSDb);
-				if (typeof canReturn !== "undefined" && canReturn) {
+				if ((typeof canReturn !== "undefined" && canReturn) && data.status !== "warning") {
 					// Make sure legacy cache files always use the default 'BACK' button
 					data.sticky = data.sticky.replace("go-back-init", "go-back");
 					// Sometimes a 'BACK' button is missing (e.g. if a link chain icon click was cached)

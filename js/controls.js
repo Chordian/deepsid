@@ -637,6 +637,7 @@ Controls.prototype = {
 					$("#info-composer").empty().append(homeStart+'<img src="images/composer'+
 						(parseInt(colorTheme) ? "_dark" : "")+'.png" alt="" />'+homeEnd).show();
 				};
+				// The "onerror" event will show a red error line in console log; this is harmless
 				img.src = thumbnail;
 			} else {
 				$("#info-composer").hide();
@@ -995,7 +996,7 @@ Controls.prototype = {
 	 */
 	showNewsImage: function(show) {
 
-		//return; // Comment this out when you want to show a news image
+		return; // Comment this out when you want to show a news image
 
 		if (show && $("#stab-stil").text() == "News")
 			$("#sundry").css({                                                    // Zoom  102%

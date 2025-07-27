@@ -337,11 +337,17 @@
 			<div class="dialog-text"></div>
 			<select id="dialog-all-tags" name="all-tags" multiple></select>
 			<div class="dialog-transfer">
-				<button id="dialog-tags-left" class="dialog-to-left">
+				<button id="dialog-tags-left" class="dialog-to-left" title="Move selected tags left">
 					<svg height="24" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><path d="M30.83 32.67l-9.17-9.17 9.17-9.17-2.83-2.83-12 12 12 12z"/><path d="M0-.5h48v48h-48z" fill="none"/></svg>
 				</button>
-				<button id="dialog-tags-right" class="dialog-to-right" style="margin-left:2px;">
+				<button id="dialog-tags-right" class="dialog-to-right" style="margin-left:2px;" title="Move selected tags right">
 					<svg height="24" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><path d="M17.17 32.92l9.17-9.17-9.17-9.17 2.83-2.83 12 12-12 12z"/><path d="M0-.25h48v48h-48z" fill="none"/></svg>
+				</button><br />
+				<button id="dialog-tags-music" class="dialog-transfer-tag" style="margin-top:6px;" title="Toggle 'Music' tag">
+					<img src="images/composer_doublenote.svg" alt="" />
+				</button><br />
+				<button id="dialog-tags-collection" class="dialog-transfer-tag" title="Toggle 'Collection' tag">
+					<img src="images/composer_doublenote.svg" alt="" /><img style="margin-left:4px;" src="images/visuals_memory.svg" />
 				</button>
 			</div>
 			<select id="dialog-song-tags" name="song-tags" size="6" multiple></select>
@@ -638,7 +644,7 @@
 							<!--<span><font style="color:var(--color-forum-moderator);">Keyboard control is here!</font>&nbsp;&nbsp;Use Up, Down, Home, End, Page Up, Page Down, and Enter to select a SID row. Press Backspace to go back one folder. See <a href="#" onclick="$('#tab-changes').trigger('click'); return false;">Changes</a> for more info.</span>-->
 							    <!--   See in controls.js: "showNewsImage" and "clickNews" for how to set up a news image -->
 							<!--<pre><b style="font-size:16px;">Coming up<br></b><b style="position:relative;top:-3px;font-size:13px;">17 - 19 Nov.</b><br><br><i style="position:absolute;bottom:-38px;right:4px;font-size:13px;line-height:17px;text-align:right;">New SID tunes<br><font style="font-size:17px;">incoming!</font></i></pre>-->
-							<pre><b style="font-size:16px;">This weekend<br></b><b style="position:relative;top:-3px;font-size:13px;">24 - 27 July</b><br><br><i style="position:absolute;bottom:2px;right:4px;font-size:13px;line-height:17px;text-align:right;">New SID tunes<br><font style="font-size:17px;">incoming!</font></i></pre>
+							<!--<pre><b style="font-size:16px;">This weekend<br></b><b style="position:relative;top:-3px;font-size:13px;">24 - 27 July</b><br><br><i style="position:absolute;bottom:2px;right:4px;font-size:13px;line-height:17px;text-align:right;">New SID tunes<br><font style="font-size:17px;">incoming!</font></i></pre>-->
 						</div>
 					<?php endif ?>
 				</div>
@@ -1869,6 +1875,11 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>July 27, 2025</h3>
+						<ul>
+							<li>The "Music" and "Collection" tags now have their own toggle buttons in the The 'Edit Tags' dialog box.</li>
+						</ul>
 
 						<h3>July 26, 2025</h3>
 						<ul>

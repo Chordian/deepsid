@@ -26,6 +26,7 @@ require_once("csdb_comments.php");
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest')
 	die("Direct access not permitted.");
 
+$debug = '';
 $amount_releases = 0;
 $scener_handle = array();
 $scener_id = array();
@@ -93,6 +94,7 @@ function relative_age_text($timestamp) {
  * @param		string		$error_message		Message to display if no cache
  */
 function serve_cache_or_error($cache_file, $error_message) {
+	global $debug;
     if (file_exists($cache_file)) {
         $cached = json_decode(gzdecode(file_get_contents($cache_file)), true);
         echo json_encode(array(
@@ -101,12 +103,13 @@ function serve_cache_or_error($cache_file, $error_message) {
             'html'    => $cached['html'] .
                          '<i><small>Generated from cache (CSDb unreachable)</small></i>',
             'count'   => $cached['count'],
-            'entries' => $cached['entries']
+            'entries' => $cached['entries'],
+			'debug'   => $debug
         ));
         exit;
     }
     // No cache available – show fallback error
-    die(json_encode(array('status' => 'warning', 'html' => $error_message)));
+    die(json_encode(array('status' => 'warning', 'sticky' => '<h2 style="margin-top:0;">CSDb</h2>', 'html' => $error_message, 'debug' => $debug)));
 }
 
 /**
@@ -206,9 +209,11 @@ if (isset($_GET['fullname'])) {
 
 	if (empty($csdb_type)) {
 		$sticky = '<h2 style="display:inline-block;margin-top:0;">CSDb</h2>';
-		die(json_encode(array('status' => 'warning', 'sticky' => $sticky, 'html' => '<p style="margin-top:0;"><i>No CSDb entry available.</i></p>')));
+		die(json_encode(array('status' => 'warning', 'sticky' => $sticky, 'html' => '<p style="margin-top:0;"><i>No CSDb entry available.</i></p>', 'debug' => $debug)));
 	}
 
+	// If there is just one release then we don't need to show the SID list first. The release page is then shown
+	// straight away. A database mapping is stored in case CSDb is offline, so the cache reader can still work.
 	if ($csdb_type == 'sid') {
 		// Get the XML from the CSDb web service with a list of releases on this 'sid' page (default depth)
 		$xml = curl('https://csdb.dk/webservice/?type=sid&id='.$csdb_id);
@@ -216,9 +221,29 @@ if (isset($_GET['fullname'])) {
 			$csdb = simplexml_load_string($xml);
 
 			if (isset($csdb->SID->UsedIn) && count($csdb->SID->UsedIn->Release) == 1) {
-				// There is just *ONE* release for this SID so show that instead of the 'sid' page
+				// Only one release; store mapping
+				$release_id = (int)$csdb->SID->UsedIn->Release->ID;
+
+				$replace = $db->prepare('REPLACE INTO sid_release_map (sid_id, release_id) VALUES (?, ?)');
+				$replace->execute([$csdb_id, $release_id]);
+
+				// Switch type to release
 				$csdb_type = 'release';
-				$csdb_id = $csdb->SID->UsedIn->Release->ID;
+				$csdb_id = $release_id;
+			} else {
+				// More than one release — remove any stale mapping
+				$delete = $db->prepare('DELETE FROM sid_release_map WHERE sid_id = ?');
+				$delete->execute([$csdb_id]);
+			}
+		} else {
+			// CSDb is down; try to use existing mapping
+			$select = $db->prepare('SELECT release_id FROM sid_release_map WHERE sid_id = ?');
+			$select->execute([$csdb_id]);
+			$release_id = $select->fetchColumn();
+
+			if ($release_id) {
+				$csdb_type = 'release';
+				$csdb_id = $release_id;
 			}
 		}
 	}
@@ -284,7 +309,8 @@ if (file_exists($cache_file)) {
 			'html'    => $cached_data['html'] .
 						'<i><small>Generated from cache (' . $cache_age . ')</small></i>',
 			'count'   => $cached_data['count'],
-			'entries' => $cached_data['entries']
+			'entries' => $cached_data['entries'],
+			'debug'	  => $debug
 		));
         exit;
     }
@@ -298,7 +324,7 @@ $xml = curl('https://csdb.dk/webservice/?type=' . $csdb_type . '&id=' . $csdb_id
 if (!strpos($xml, '<CSDbData>')) {
     serve_cache_or_error(
         $cache_file,
-        '<p style="margin-top:0;"><i>Uh... CSDb? Are you there?</i></p>' .
+        '<p style="margin-top:0;"><i>CSDb is currently unreachable.</i></p>' .
         '<b>ID:</b> <a href="https://csdb.dk/' . $csdb_type . '/?id=' . $csdb_id . '" target="_blank">' . $csdb_id . '</a>'
     );
 }
@@ -816,5 +842,6 @@ echo json_encode(array(
 	'sticky' => $sticky,
 	'html' => $html.'<i><small>Generated using the <a href="https://csdb.dk/webservice/" target="_blank">CSDb web service</a></small></i>',
 	'count' => $amount_releases,
-	'entries' => $sid_entries));
+	'entries' => $sid_entries,
+	'debug' => $debug));
 ?>

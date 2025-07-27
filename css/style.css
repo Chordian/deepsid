@@ -2724,7 +2724,7 @@ input[type=range]::-ms-track {
 			left: -8px;
 			width: 104.2%;
 			height: 104px;
-			color: #555;
+			color: #fff;
 			padding: 0;
 			margin: 0;
 			background: none;
@@ -6029,7 +6029,7 @@ input[type=range]::-ms-track {
 
 .dialog-transfer {
 	position: absolute;
-	top: 155px;
+	top: 120px;
 	left: 168px;
 }
 
@@ -6045,6 +6045,20 @@ input[type=range]::-ms-track {
 		.dialog-new button {
 			width: 24px;
 		}
+
+		.dialog-transfer-tag {
+			margin: 8px 0 0 5.5px;
+			width: 43px;
+		}
+
+			.dialog-transfer-tag img {
+				position: relative;
+				top: -2px;
+				left: -1px;
+				height: 13px;
+				filter: var(--svg-filter-white);
+				pointer-events: none;
+			}
 
 	.dialog-new,
 	.dialog-connect {
