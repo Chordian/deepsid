@@ -1876,6 +1876,12 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>July 28, 2025</h3>
+						<ul>
+							<li>The large-font text beneath SID rows for 2SID and 3SID tunes has been removed. Instead, a new blue or
+								red label is now shown at the end of the SID filename, just before the rating stars.</li>
+						</ul>
+
 						<h3>July 27, 2025</h3>
 						<ul>
 							<li>The "Music" and "Collection" tags now have their own toggle buttons in the The 'Edit Tags' dialog box.</li>
@@ -1966,7 +1972,7 @@
 								release for a song. You now need to open a specific CSDb release page to find any download links.</li>
 							<li>Removed the double note icon in the "Compo" tags, as the new connection system for tags can make it
 								more obvious what the "Compo" tag and # ranking applies to.</li>
-							<li>2SID and 3SID tunes are now easier to spot thanks to large-font text displayed beneath the SID rows.</li>
+							<li><del>2SID and 3SID tunes are now easier to spot thanks to large-font text displayed beneath the SID rows.</del></li>
 						</ul>
 
 						<h3>July 5, 2025</h3>

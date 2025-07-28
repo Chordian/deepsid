@@ -1062,6 +1062,7 @@ Browser.prototype = {
 			}
 
 		if (isTempFolder) {
+
 			var files = "";
 			$.each(this.playlist, function(i, file) {
 				var year = isNaN(file.copyright.substr(0, 4)) ? "unknown year" : file.copyright.substr(0, 4);
@@ -1074,8 +1075,10 @@ Browser.prototype = {
 			}.bind(this));
 			$("#songs table").append(files);
 			DisableIncompatibleRows();
+
 		} else if (!filterFolders && !this.isBigCompoFolder()) {
-			// Rebuild the reordered table list (files only; the folders in top are just preserved)
+
+			// SORT/FILTER: Rebuild the reordered table list (files only; the folders in top are just preserved)
 			var files = adaptedName = "";
 			$.each(this.playlist, function(i, file) {
 				var isNew = file.hvsc == this.HVSC_VERSION || file.hvsc == this.CGSC_VERSION ||
@@ -1091,22 +1094,24 @@ Browser.prototype = {
 						return false;
 					}
 				});
-				files += '<tr>'+
-						'<td class="sid unselectable">'+file.underlay+
+				files += '<tr>'+ // SORT/FILTER SID ROW
+						'<td class="sid unselectable">'+file.sidspecial+
 						'<div class="pl-strip'+playerType+'"><div class="has-stil">'+hasStil+'</div></div>'+
-						'<div class="block-wrap"><div class="block">'+(file.subtunes > 1 ? '<div class="subtunes'+(this.isSymlist ? ' specific' : '')+(isNew ? ' newst' : '')+'">'+(this.isSymlist ? file.startsubtune + 1 : file.subtunes)+'</div>' : (isNew ? '<div class="newsid"></div>' : ''))+
+						'<div class="block-wrap'+(file.sidspecial !== "" ? ' bw-sidsp' : '')+'"><div class="block">'+(file.subtunes > 1 ? '<div class="subtunes'+(this.isSymlist ? ' specific' : '')+(isNew ? ' newst' : '')+'">'+(this.isSymlist ? file.startsubtune + 1 : file.subtunes)+'</div>' : (isNew ? '<div class="newsid"></div>' : ''))+
 						'<div class="entry name file'+(this.isSearching || this.isCompoFolder || this.path.substr(0, 2) === "/$" ? ' search' : '')+'" data-name="'+encodeURIComponent(file.filename)+'" data-type="'+file.type+'" data-id="'+file.id+'" data-symid="'+file.symid+'">'+adaptedName+'</div></div></div><br />'+
 						'<span class="info">'+file.copyright.substr(0, 4)+file.infosec+'<div class="tags-line"'+(showTags ? '' : ' style="display:none"')+tag_start_end+'>'+TAGS_BRACKET+file.tags+'</div></span></td>'+
 						'<td class="stars filestars"><span class="rating">'+this.buildStars(file.rating)+'</span>'+
 						'<span class="disqus-comment-count"></span>'+(typeof file.uploaded != "undefined" ? '<span class="uploaded-time">'+file.uploaded.substr(0, 10)+'</span>' : '')+
 						'</td>'+
-					'</tr>';
+					'</tr>';					
 			}.bind(this));
 			$("#songs table").append(this.folders+files);
 			this.showTagsBrackets();
 			DisableIncompatibleRows();
+
 		} else if (this.isBigCompoFolder()) {
-			// Rebuild the big CSDb music competitions folder
+
+			// SORT/FILTER: Rebuild the big CSDb music competitions folder
 			var folders = "";
 			$.each(this.compolist, function(i, folder) {
 				var isMobileDenied = folder.incompatible.indexOf("mobile") !== -1 && isMobile;
@@ -1532,18 +1537,19 @@ Browser.prototype = {
 								return false;
 							}
 						});
-						// Show a big font underlay below the SID texts
-						var underlay = '';
-						if (file.filename.slice(-9) == "_2SID.sid")
-							underlay = '2sid';
-						else if (file.filename.slice(-9) == "_3SID.sid")
-							underlay = '3sid';
-						if (underlay != '') underlay = '<div class="underlay">'+underlay+'</div>';
-						files +=
+
+						// Need to show a special flag box for e.g. "2SID"?
+						var sidSpecial = "";
+						if (file.filename.toLowerCase().indexOf("_2sid.sid") !== -1)
+							sidSpecial = '<div class="sid-special sidsp-2sid">2SID</div>';
+						else if (file.filename.toLowerCase().indexOf("_3sid.sid") !== -1)
+							sidSpecial = '<div class="sid-special sidsp-3sid">3SID</div>';
+
+						files += // GET FOLDER SID ROW
 							'<tr'+(SID.emulator == "youtube" && countVideos == 0 ? ' class="disabled"' : '')+'>'+
-								'<td class="sid unselectable">'+underlay+
+								'<td class="sid unselectable">'+sidSpecial+
 								'<div class="pl-strip'+playerType+'"><div class="has-stil">'+hasStil+'</div></div>'+
-								'<div class="block-wrap"><div class="block">'+(file.subtunes > 1 ? '<div class="subtunes'+(this.isSymlist ? ' specific' : '')+(isNew ? ' newst' : '')+'">'+(this.isSymlist ? file.startsubtune : file.subtunes)+'</div>' : (isNew ? '<div class="newsid"></div>' : ''))+
+								'<div class="block-wrap'+(sidSpecial !== "" ? ' bw-sidsp' : '')+'"><div class="block">'+(file.subtunes > 1 ? '<div class="subtunes'+(this.isSymlist ? ' specific' : '')+(isNew ? ' newst' : '')+'">'+(this.isSymlist ? file.startsubtune : file.subtunes)+'</div>' : (isNew ? '<div class="newsid"></div>' : ''))+
 								'<div class="entry name file'+(this.isSearching || this.isCompoFolder || this.path.substr(0, 2) === "/$" ? ' search' : '')+'" data-name="'+encodeURIComponent(file.filename)+'" data-type="'+file.type+'" data-id="'+file.id+'" data-symid="'+file.symid+'">'+adaptedName+'</div></div></div><br />'+
 								'<span class="info">'+file.copyright.substr(0, 4)+infoSecondary+'<div class="tags-line"'+(showTags ? '' : ' style="display:none"')+tag_start_end+'>'+TAGS_BRACKET+list_of_tags+'</div></span></td>'+
 								'<td class="stars filestars"><span class="rating">'+this.buildStars(file.rating)+'</span>'+
@@ -1559,12 +1565,12 @@ Browser.prototype = {
 							filename:		file.filename,
 							substname:		file.substname,	// Symlists can have renamed SID files
 							fullname:		this.ROOT_HVSC + rootFile,
+							sidspecial:		sidSpecial,
 							playerraw:		file.playerraw,
 							player: 		player,
 							tags:			list_of_tags,
 							tagstart:		file.tagidstart,
 							tagend:			file.tagidend,
-							underlay:		underlay,
 							length: 		file.lengths,
 							type:			file.type,
 							version:		file.version,
@@ -1853,7 +1859,7 @@ Browser.prototype = {
 				// Replace "->" with a pretty unicode arrow instead
 				// Disabled as perhaps users find them too confusing.
 				//list_of_tags += '<div class="tag tag-transparent"'+id+'>🡪</div>';
-			} else if (tag == "$31" || tag == "$61" || tag == "$71" || tag.indexOf("Small Event") !== -1) {
+			} else if (tag == "$31" || tag == "$61" || tag == "$71" || tag == "2SID" || tag == "3SID" || tag.indexOf("Small Event") !== -1) {
 				// These tags will not be shown for various reasons:
 				// Waveforms: Too commonly used in SID tunes and just adds noise.
 				// Small Event: Just don't add an event tag if it's tiny and rare.

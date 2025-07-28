@@ -14,6 +14,12 @@ SHOULD BE DONE
   If it ends in "..." create a short name, e.g. with a letter + full stop for first name.
   Takes a while going through this ......... Next: MUSICIANS/E
 
+- A button in the 'Edit tags' dialog box for auto-filling the two drop-down boxes. As for the
+  first, it chooses the first event type tag that is not "Compo", "Winner", "Solitary" or
+  starts with "#". For the second, it chooses "Music" if it exists, otherwise the first
+  production type tag it finds among the chosen tags. (If the tag arrays doesn't have event
+  type information in them, you may have to add it.)
+
 - Consider a HTML button somewhere for testing a SID, so it's not just the "l" hotkey.
   Perhaps in the root where only a "\" is displayed?
 
@@ -52,7 +58,7 @@ SHOULD BE DONE
   UPDATE: Spotted one. Need to ENTER to select a row after using "f" to refresh folder.
 
 - If you look closely, some tag names are too high up. It differs from SID row to SID row
-  in Firefox. Test decimal line heights to see if it can be fixed.
+  in Firefox. Test floating point line heights to see if it can be fixed.
 
 - Cache: Consider also caching the 'SHOW' pages. Alternatively, you could just disable the
   button on cached pages loaded whenever CSDb is down.
@@ -70,6 +76,8 @@ SHOULD BE DONE
 
 - BUG: The STIL entry here is not parsed correctly - all links merge into one big link:
   https://deepsid.chordian.net/?file=/MUSICIANS/B/Bulldog/E_X_I_S.sid&subtune=1
+  Here's one that could have been a mess too, but it actually works:
+  https://deepsid.chordian.net/?file=/MUSICIANS/G/Greg/Leppard.sid
 
 
 WHEN THE TIME IS RIGHT

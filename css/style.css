@@ -129,8 +129,6 @@
 	--color-text-label-disabled:	var(--color-border);
 	--color-text-time:				#c6c6c6;
 	--color-text-sundry-disabled:	#b2b3ad;
-	/*--color-text-underlay:			#dfdfd5;			xx For very big SID row underlay text */
-	--color-text-underlay:			linear-gradient(to top, #e8e7e1 10%, #e1e1d5);
 
 	--color-tags-bracket:			#a1a294;			/* Used for horizontal tag start-to-end brackets */
 	--color-tags-bracket-up:		#949494;
@@ -144,6 +142,13 @@
 
 	--color-bg-ffi:					var(--color-top);
 	--color-text-ffi:				#181818;
+
+	--color-text-sidsp-2sid:		#44b;
+	--color-border-sidsp-2sid:		#44b;
+	--color-bg-sidsp-2sid:			#f6f6fa;
+	--color-text-sidsp-3sid:		#b44;
+	--color-border-sidsp-3sid:		#b44;
+	--color-bg-sidsp-3sid:			#faf6f6;
 
 	--color-scrollbar-thumb:		#ccccbe;
 	--color-scrollbar-thumb-hover:	#a5a59a;
@@ -529,8 +534,6 @@
 	--color-text-label-disabled:	#555;
 	--color-text-time:				#484848;
 	--color-text-sundry-disabled:	#4a4a4a;
-	/*--color-text-underlay:			#3c3c3c;			xx For very big SID row underlay text */
-	--color-text-underlay:			linear-gradient(to top, #363636 10%, #484848);
 
 	--color-tags-bracket:			#808080;			/* Used for horizontal tag start-to-end brackets */
 	--color-tags-bracket-up:		#949494;
@@ -543,6 +546,13 @@
 
 	--color-bg-ffi:					var(--color-bg);
 	--color-text-ffi:				var(--color-text-body);
+
+	--color-text-sidsp-2sid:		#bbe;
+	--color-border-sidsp-2sid:		#bbe;
+	--color-bg-sidsp-2sid:			#262e46;
+	--color-text-sidsp-3sid:		#ebb;
+	--color-border-sidsp-3sid:		#ebb;
+	--color-bg-sidsp-3sid:			#361e24;
 
 	--color-scrollbar-thumb:		#555;
 	--color-scrollbar-thumb-hover:	#6a6a6a;
@@ -3423,20 +3433,41 @@ input[type=range]::-ms-track {
 			max-width: 325px; /* This fix prevents the left TD from pushing the TD with star ratings */
 		}
 
-			#songs .underlay {
-				overflow: visible;
+			/* A SID special label for info like "2SID" etc. */
+			#songs .sid-special {
 				position: absolute;
-				height: 46px;
-				width: 100%;
-				top: 4px; /* 24px */
-				left: 6px;
-				font: bold 62px/42px "Open Sans", sans-serif;
-				text-transform: uppercase;
-				background: var(--color-text-underlay);
-				-webkit-background-clip: text; /* Required for Safari */
-				background-clip: text;
-				color: transparent;		
+				top: 11px;
+				right: 7px;
+				height: 14px;
+				padding: 0 3px;
+				font-size: 9px;
+				font-weight: bold;
+				letter-spacing: 0.2px;
+				line-height: 13px;
+				background: transparent;
+				border: 1px solid var(--color-timebar-border);
+				text-align: center;
+				pointer-events: none;
 			}
+
+				/* SID special label for 2SID files */
+				#songs .sidsp-2sid {
+					color: var(--color-text-sidsp-2sid);
+					border-color: var(--color-border-sidsp-2sid);
+					background: var(--color-bg-sidsp-2sid);
+				}
+
+				/* SID special label for 3SID files */
+				#songs .sidsp-3sid {
+					color: var(--color-text-sidsp-3sid);
+					border-color: var(--color-border-sidsp-3sid);
+					background: var(--color-bg-sidsp-3sid);
+				}
+
+				/* A smaller block-wrap width for the SID filename when the SID special label is present */
+				#songs .bw-sidsp {
+					max-width: 275px;
+				}
 
 			#songs .pl-strip {
 				position: absolute;
