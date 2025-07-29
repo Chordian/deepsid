@@ -6062,6 +6062,7 @@ input[type=range]::-ms-track {
 	position: absolute;
 	top: 120px;
 	left: 168px;
+	height: 308px;
 }
 
 	/* The "<" and ">" buttons */
@@ -6089,6 +6090,14 @@ input[type=range]::-ms-track {
 				height: 13px;
 				filter: var(--svg-filter-white);
 				pointer-events: none;
+			}
+
+		#dialog-tags-magic-wand {
+			margin-top: 116px;
+		}
+
+			#dialog-tags-magic-wand img {
+				height: 15px;
 			}
 
 	.dialog-new,

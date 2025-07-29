@@ -14,11 +14,10 @@ SHOULD BE DONE
   If it ends in "..." create a short name, e.g. with a letter + full stop for first name.
   Takes a while going through this ......... Next: MUSICIANS/E
 
-- A button in the 'Edit tags' dialog box for auto-filling the two drop-down boxes. As for the
-  first, it chooses the first event type tag that is not "Compo", "Winner", "Solitary" or
-  starts with "#". For the second, it chooses "Music" if it exists, otherwise the first
-  production type tag it finds among the chosen tags. (If the tag arrays doesn't have event
-  type information in them, you may have to add it.)
+- The new database table for one release CSDb check must be called using the cache timeout
+  rules. Only when those are timed out does it actually call the web service. Otherwise you
+  still get unpleasant delays while DeepSID tries to call the web service when CSDb is down.
+  Perhaps you can get help for implementing it.
 
 - Consider a HTML button somewhere for testing a SID, so it's not just the "l" hotkey.
   Perhaps in the root where only a "\" is displayed?

@@ -23,7 +23,7 @@ try {
 	$db->exec("SET NAMES UTF8");
 
 	// Get a list of all tags
-	$select = $db->query('SELECT id, name FROM tags_info ORDER BY name');
+	$select = $db->query('SELECT id, name, type FROM tags_info ORDER BY name');
 	$select->setFetchMode(PDO::FETCH_OBJ);
 
 	$all_tags = array();
@@ -31,6 +31,7 @@ try {
 		array_push($all_tags, array(
 			'id' =>				$row->id,
 			'name' =>			$row->name,
+			'type' =>			$row->type
 		));
 	}
 

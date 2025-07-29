@@ -463,7 +463,7 @@ Browser.prototype = {
 			}, function(data) {
 				this.validateData(data, function(data) {
 					this.fileID		= data.id;
-					this.allTags	= data.all;
+					this.allTags	= data.all; // Now also includes the type
 					this.fileTags	= data.sid;
 					this.startTag	= data.start;
 					this.endTag		= data.end;
@@ -754,6 +754,42 @@ Browser.prototype = {
 			case "dialog-tags-collection":
 				// Edit tags: Transfer "Collection" tag
 				this.toggleTag("Collection");
+				break;
+			case "dialog-tags-magic-wand":
+				// Edit tags: Select event and production tag as bracket start and end
+				const $startTag = $("#dialog-list-start-tag");
+				const $endTag = $("#dialog-list-end-tag");
+
+				// --- 1. Select EVENT type for the top drop-down ---
+				const eventTag = this.fileTags
+					.map(tagID => this.allTags.find(tag => tag.id == tagID))
+					.filter(tag => tag && tag.type === "EVENT")	// Only EVENT tags
+					.filter(tag => !["Winner", "Solitary", "Compo", "<-", "->"].includes(tag.name))
+					.filter(tag => !tag.name.startsWith("#"))	// Skip tags starting with '#'
+					.shift(); // Take the first matching event
+
+				const startTagValue = eventTag ? eventTag.id : 0;
+				$startTag.val(startTagValue);
+				this.startTag = startTagValue;
+
+				// --- 2. Select PRODUCTION type for the bottom drop-down ---
+				const productionTags = this.fileTags
+					.map(tagID => this.allTags.find(tag => tag.id == tagID))
+					.filter(tag => tag && tag.type === "PRODUCTION"); // Only PRODUCTION tags
+
+				// Apply priority: Music > Demo > first production tag
+				let productionId = 0;
+				if (productionTags.length) {
+					let music = productionTags.find(tag => tag.name === "Music");
+					let demo = productionTags.find(tag => tag.name === "Demo");
+
+					if (music) productionId = music.id;
+					else if (demo) productionId = demo.id;
+					else productionId = productionTags[0].id;
+				}
+
+				$endTag.val(productionId);
+				this.endTag = productionId;
 				break;
 			case "dialog-tags-plus":
 				// Edit tags: Add a new tag in the right list
@@ -1849,7 +1885,7 @@ Browser.prototype = {
 				// Add a double note to make it clear this is for music competitions only
 				list_of_tags += '<div class="tag tag-event tag-notes tag-compo"'+id+'><img src="images/composer_doublenote.svg" /><span>Compo</span></div>';*/
 			} else if (tag == "Winner") {
-				// Add a class that turns the tag into gold (the philosopher's stone)
+				// Add a class that turns the tag into gold
 				list_of_tags += '<div class="tag tag-event tag-winner"'+id+'>Winner</div>';
 			} else if (tag == "<-") {
 				// Replace "<-" with a pretty unicode arrow instead
@@ -1863,6 +1899,7 @@ Browser.prototype = {
 				// These tags will not be shown for various reasons:
 				// Waveforms: Too commonly used in SID tunes and just adds noise.
 				// Small Event: Just don't add an event tag if it's tiny and rare.
+				// 2SID/3SID: No longer needed because of SID special labels.
 			} else {
 				// NOTE: Don't change the order of tags or the collector for a folder will break!
 				// If you want to change the order of tags, see GetTagsAndTypes() in 'tags_read.php'
@@ -3404,7 +3441,7 @@ Browser.prototype = {
 	/**
 	 * Update the two list boxes in the dialog box for editing tags.
 	 * 
-	 * @param {array} arrAll		Associative array with ID's and names
+	 * @param {array} arrAll		Associative array with ID's, names, and types
 	 * @param {array} arrSong		Standard array with ID's used by file
 	 */
 	updateTagLists: function(arrAll, arrSong) {
@@ -3428,7 +3465,7 @@ Browser.prototype = {
 	/**
 	 * Update the two list boxes in the dialog box for connecting two tags.
 	 * 
-	 * @param {array} arrAll		Associative array with ID's and names
+	 * @param {array} arrAll		Associative array with ID's, names, and types
 	 * @param {array} arrSong		Standard array with ID's used by file
 	 */
 	updateConnectTagLists: function(arrAll, arrSong) {

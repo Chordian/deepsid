@@ -348,6 +348,9 @@
 				</button><br />
 				<button id="dialog-tags-collection" class="dialog-transfer-tag" title="Toggle 'Collection' tag">
 					<img src="images/composer_doublenote.svg" alt="" /><img style="margin-left:4px;" src="images/visuals_memory.svg" />
+				</button><br />
+				<button id="dialog-tags-magic-wand" class="dialog-transfer-tag">
+					<img src="images/wand.svg" alt="" />
 				</button>
 			</div>
 			<select id="dialog-song-tags" name="song-tags" size="6" multiple></select>
@@ -1876,6 +1879,12 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>July 29, 2025</h3>
+						<ul>
+							<li>A new magic wand button has been added to the 'Edit tags' dialog box. When clicked, it presets the
+								two drop-down boxes with the most logical combination of an event and production tag.</li>
+						</ul>
+
 						<h3>July 28, 2025</h3>
 						<ul>
 							<li>The large-font text beneath SID rows for 2SID and 3SID tunes has been removed. Instead, a new blue or
@@ -1884,7 +1893,7 @@
 
 						<h3>July 27, 2025</h3>
 						<ul>
-							<li>The "Music" and "Collection" tags now have their own toggle buttons in the The 'Edit Tags' dialog box.</li>
+							<li>The "Music" and "Collection" tags now have their own toggle buttons in the 'Edit tags' dialog box.</li>
 						</ul>
 
 						<h3>July 26, 2025</h3>
@@ -1977,7 +1986,7 @@
 
 						<h3>July 5, 2025</h3>
 						<ul>
-							<li>The 'Edit Tags' dialog box now has two new drop-down boxes for optionally selecting a start and end tag.
+							<li>The 'Edit tags' dialog box now has two new drop-down boxes for optionally selecting a start and end tag.
 								Setting both creates a horizontal line below the tags in the SID row, showing the connection between them.
 								This can be used, for example, to show that a SID tune was released at a party where it was used in a demo.
 								I will gradually begin using this new feature by adding connections here and there.</li>
