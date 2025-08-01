@@ -902,6 +902,17 @@ try {
 			$folder_type = $isCSDbCompo ? 'COMPO' : 'FOLDERS';
 			$rating = $filescount = 0;
 
+			// Get the focus (SCENER, PRO, etc.) of the composer if applicable
+			$focus = '';
+			if (stripos($fullname, '/MUSICIANS/') !== false) {
+				$composer = $db->prepare('SELECT focus FROM composers WHERE fullname = :fullname LIMIT 1');
+				$composer->execute(array(':fullname'=>$fullname));
+				$composer->setFetchMode(PDO::FETCH_OBJ);
+
+				if ($composer->rowCount())
+					$focus = $composer->fetch()->focus;
+			}
+
 			// Figure out the name of the thumbnail (if it exists)
 			$fullname = str_replace('_High Voltage SID Collection/', '', $fullname);
 			$fullname = str_replace("_Compute's Gazette SID Collection/", "cgsc_", $fullname);
@@ -970,6 +981,7 @@ try {
 				'filescount'	=> $filescount,
 				'incompatible'	=> $incompat_row,
 				'hasphoto'		=> (isset($has_photo) ? $has_photo : false),
+				'focus'			=> $focus,
 				'rating'		=> $rating,
 				'flags'			=> (isset($flags) ? $flags : 0),
 				'hvsc'			=> (isset($hvsc) ? $hvsc : 0),							// Example

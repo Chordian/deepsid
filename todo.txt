@@ -4,23 +4,24 @@ ToDo
 - Look into the console logging alternatives, like warn, error, table, etc.
   @link https://developer.mozilla.org/en-US/docs/Web/API/console
 
-- TRY THIS IF CSDB IS OFFLINE:
-  Go through acrouzet's folder. All of his CSDb lists and release pages should still work.
-
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- WIP: Go through all "Links" in all profile pages and make sure the full composer name fits.
-  If it ends in "..." create a short name, e.g. with a letter + full stop for first name.
-  Takes a while going through this ......... Next: MUSICIANS/E
-
 - The new database table for one release CSDb check must be called using the cache timeout
   rules. Only when those are timed out does it actually call the web service. Otherwise you
   still get unpleasant delays while DeepSID tries to call the web service when CSDb is down.
   Perhaps you can get help for implementing it.
 
+- CLICK TAG IN SID ROW: When a blue production tag is clicked in a SID row, it could both play
+  the song and also show the associated CSDb release page. You will probably need additional
+  database storage for the tag target CSDb release page. Also, clicking a green event tag will
+  work IF it has a bracket connection. The production tag on the other end will then receive
+  the actual click.
+
 - Consider a HTML button somewhere for testing a SID, so it's not just the "l" hotkey.
   Perhaps in the root where only a "\" is displayed?
+
+- Make direct URL arguments redirect correctly for the DeepSID.com domain.
 
 - Add a "*" notification flag to STIL tab whenever there is STIL text. (And lyrics?)
 
@@ -77,6 +78,10 @@ SHOULD BE DONE
   https://deepsid.chordian.net/?file=/MUSICIANS/B/Bulldog/E_X_I_S.sid&subtune=1
   Here's one that could have been a mess too, but it actually works:
   https://deepsid.chordian.net/?file=/MUSICIANS/G/Greg/Leppard.sid
+
+- WIP: Go through all "Links" in all profile pages and make sure the full composer name fits.
+  If it ends in "..." create a short name, e.g. with a letter + full stop for first name.
+  Takes a while going through this ......... Next: MUSICIANS/E
 
 
 WHEN THE TIME IS RIGHT
@@ -209,10 +214,6 @@ CONSIDER THIS
     late time, his history from the previous visit it still there.
   - Along with the above v2, "X" icons for deleting individual entries, plus a general button for
     clearing the entire history.
-
-- Idea for folders in MUSICIANS folder: Faded flat color icons just before the star ratings,
-  for indicating a professional, a scener, or both. Two icons side-by-side. You have the info
-  ready in the 'composers' table, in a new 'focus' column.
 
 - NoobTracker: Store the random seed used to shuffle a playlist in the URL so you can reload that
   page without messing up the order.
@@ -640,5 +641,8 @@ TEST RESOURCES
   https://deepsid.chordian.net/?file=/MUSICIANS/G/G-Fellow/A_Message_for_You.sid
   https://deepsid.chordian.net/?file=/MUSICIANS/G/G-Fellow/Neural_Consciousness_V2.sid
   https://deepsid.chordian.net/?file=/MUSICIANS/G/G-Fellow/Wigwam.sid
+
+- Testing max-width on block-wrap for song showing "2SID" special label:
+  https://deepsid.chordian.net/?file=/MUSICIANS/H/Hermit/Song_of_the_Second_Moon_Delta_2SID.sid
 
 END

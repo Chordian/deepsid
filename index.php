@@ -1879,6 +1879,17 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>August 1, 2025</h3>
+						<ul>
+							<li>Folder rows now display a dollar icon for professional musicians who composed music for commercial games.</li>
+						</ul>
+
+						<h3>July 30, 2025</h3>
+						<ul>
+							<li>In the 'Edit Tags' dialog box, the 'Music', 'Collection', and magic wand buttons can now be
+								middle-clicked. Doing so will perform the action and automatically click the 'OK' button.</li>
+						</ul>
+
 						<h3>July 29, 2025</h3>
 						<ul>
 							<li>A new magic wand button has been added to the 'Edit tags' dialog box. When clicked, it presets the

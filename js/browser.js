@@ -107,6 +107,7 @@ Browser.prototype = {
 			.on("mouseover", "tr", this.onMouseOver.bind(this))
 			.on("mouseleave", "tr", this.onMouseLeave.bind(this));
 		$("#dialog-tags").on("click", "button", this.onClickDialogBox.bind(this));
+		$("#dialog-tags").on("mouseup", "button", this.onMouseUpDialogBox.bind(this));
 		$("#dropdown-sort").change(this.onChange.bind(this));
 		$("#topic-csdb").on("change", "#dropdown-sort-csdb", this.onChangeCSDb.bind(this));
 		$("#upload-new").change(this.onUpload.bind(this));
@@ -828,6 +829,37 @@ Browser.prototype = {
 	},
 
 	/**
+	 * Mouse up in a dialog box. This is required in order to detect a middle mouse
+	 * button click.
+	 * 
+	 * NOTE: For now only bound to the dialog box for editing tags.
+	 * 
+	 * @param {*} event 
+	 */
+	onMouseUpDialogBox: function(event) {
+		switch (event.target.id) {
+			case "dialog-tags-music":
+				if (event.which === 2) {
+					this.toggleTag("Music");
+					$("#dialog-tags .dialog-button-yes").trigger("click");
+				}
+			    break;
+			case "dialog-tags-collection":
+				if (event.which === 2) {
+					this.toggleTag("Collection");
+					$("#dialog-tags .dialog-button-yes").trigger("click");
+				}
+			    break;
+			case "dialog-tags-magic-wand":
+				if (event.which === 2) {
+					$("#dialog-tags-magic-wand").trigger("click");
+					$("#dialog-tags .dialog-button-yes").trigger("click");
+				}
+			    break;
+		}
+	},
+
+	/**
 	 * Toggle a tag (i.e. move it between the left/right lists in the dialog box
 	 * for editing tags).
 	 *
@@ -1151,7 +1183,7 @@ Browser.prototype = {
 			var folders = "";
 			$.each(this.compolist, function(i, folder) {
 				var isMobileDenied = folder.incompatible.indexOf("mobile") !== -1 && isMobile;
-				folders +=
+				folders += // SORT/FILTER: COMPETITIONS
 					'<tr'+(folder.incompatible.indexOf(SID.emulator) !== -1 || isMobileDenied ? ' class="disabled"' : '')+'>'+
 						'<td class="folder compo unselectable"><div class="block-wrap"><div class="block slimfont">'+
 							(folder.filescount > 0 ? '<div class="filescount">'+folder.filescount+'</div>' : '')+
@@ -1384,7 +1416,7 @@ Browser.prototype = {
 								rating:			folder.rating,
 							});
 
-							var folderEntry =
+							var folderEntry = // GET FOLDER: COMPETITIONS
 								'<tr'+(folder.incompatible.indexOf(SID.emulator) !== -1 || isMobileDenied ? ' class="disabled"' : '')+'>'+
 									'<td class="folder compo unselectable"><div class="block-wrap"><div class="block slimfont">'+
 										(folder.filescount > 0 ? '<div class="filescount">'+folder.filescount+'</div>' : '')+
@@ -1424,11 +1456,17 @@ Browser.prototype = {
 								folderIcon = 'playlist';
 							else if (isSearchShortcut)
 								folderIcon = 'search-shortcut';
-							var folderEntry =
+
+							// Show a money icon for professional composers
+							var folderSpecial = "";
+							if (folder.focus == "PRO" || folder.focus == "BOTH")
+								folderSpecial = '<div class="folder-special"><img src="images/money.svg" alt="" /></div>';
+
+							var folderEntry = // GET FOLDER: GENERAL FOLDERS
 								'<tr'+(folder.incompatible.indexOf(SID.emulator) !== -1 || isMobileDenied ? ' class="disabled"' : '')+'>'+
 									'<td class="folder unselectable '+folderIcon+
 										(folder.hvsc == this.HVSC_VERSION || folder.hvsc == this.CGSC_VERSION ? ' new' : '')+
-										'"><div class="block-wrap"><div class="block'+(isRedirectFolder ? " slimfont" : "")+'">'+
+										'">'+folderSpecial+'<div class="block-wrap"><div class="block'+(isRedirectFolder ? " slimfont" : "")+'">'+
 									(folder.foldername == "SID+FM" ? '<div class="sid_fm">Use Hermit\'s (+FM) emulator</div>' : '')+
 									(folder.filescount > 0 ? '<div class="filescount">'+folder.filescount+'</div>' : '')+
 									(folder.foldername == "_SID Happens" ? '<div class="new-uploads'+(data.uploads.substr(0, 6) == "NO NEW" ? ' no-new' : '')+'">'+data.uploads+'</div>' : '')+
@@ -1475,7 +1513,8 @@ Browser.prototype = {
 							this.subFolders += 2;
 						}
 						if (collections.length)
-							this.folders = publicUploadFolder+collections[1]+collections[0]; // HVSC should be before CGSC
+							// HVSC should be before CGSC
+							this.folders = publicUploadFolder+collections[1]+collections[0];
 						this.folders += csdbCompoEntry;
 						this.folders += exoticCollection;
 						this.folders = TR_SPACER+this.folders;
@@ -1581,7 +1620,7 @@ Browser.prototype = {
 						else if (file.filename.toLowerCase().indexOf("_3sid.sid") !== -1)
 							sidSpecial = '<div class="sid-special sidsp-3sid">3SID</div>';
 
-						files += // GET FOLDER SID ROW
+						files += // GET FOLDER: SID ROW
 							'<tr'+(SID.emulator == "youtube" && countVideos == 0 ? ' class="disabled"' : '')+'>'+
 								'<td class="sid unselectable">'+sidSpecial+
 								'<div class="pl-strip'+playerType+'"><div class="has-stil">'+hasStil+'</div></div>'+

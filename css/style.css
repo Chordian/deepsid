@@ -216,6 +216,7 @@
 	--svg-filter-icon-disabled:		var(--svg-filter-white);
 	--svg-filter-edit-tags:			var(--svg-filter-white);
 	--svg-filter-close:				var(--svg-filter-button);
+	--svg-filter-money:				invert(59%) sepia(11%) saturate(1135%) hue-rotate(38deg) brightness(90%) contrast(84%);
 
 	--svg-bg-star-orange:			url(../images/if_star_orange.svg) 0 0 / 18px 18px no-repeat;
 	--svg-bg-star-empty-voted:		url(../images/if_star_empty_voted.svg) 0 0 / 18px 18px no-repeat;
@@ -607,6 +608,7 @@
 	--svg-filter-icon-disabled:		var(--svg-filter-icon-visuals);
 	--svg-filter-edit-tags:			none;
 	--svg-filter-close:				var(--svg-filter-icon-bottom);
+	--svg-filter-money:				invert(58%) sepia(12%) saturate(928%) hue-rotate(38deg) brightness(98%) contrast(94%);
 
 	--svg-bg-star-orange:			url(../images/if_star_orange_dark.svg) 0 0 / 18px 18px no-repeat;
 	--svg-bg-star-empty-voted:		url(../images/if_star_empty_voted_dark.svg) 0 0 / 18px 18px no-repeat;
@@ -3466,7 +3468,20 @@ input[type=range]::-ms-track {
 
 				/* A smaller block-wrap width for the SID filename when the SID special label is present */
 				#songs .bw-sidsp {
-					max-width: 275px;
+					max-width: 272px;
+				}
+
+			/* A money icon for professional composers */
+			#songs .folder-special {
+				position: absolute;
+				top: 7px;
+				right: 10px;
+				pointer-events: none;
+			}
+
+				#songs .folder-special img {
+					filter: var(--svg-filter-money);
+					height: 18px;
 				}
 
 			#songs .pl-strip {
