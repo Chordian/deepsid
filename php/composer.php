@@ -478,11 +478,8 @@ $html = '<table style="border:none;margin-bottom:0;"><tr>'.
 
 // Chartist - @link https://gionkunz.github.io/chartist-js/index.html
 $cgsc = "_Compute's Gazette SID Collection";
+$isCGSC = substr($fullname, 0, strlen($cgsc)) === $cgsc;
 
-/*if ($fullname == $cgsc) {							// This doesn't work when DeepSID uses HTTPS
-	// Show an IFRAME with the CGSC web site
-	$html = '<iframe class="deepsid-iframe" src="http://www.c64music.co.uk/" onload="ResizeIframe();"></iframe>';
-*/
 if ($fullname == $exoticFolder) {
 	// Show a box with technical information about the custom SID format
 	$info = file_get_contents('../sidv4e.txt');
@@ -497,7 +494,7 @@ if ($fullname == $exoticFolder) {
 	// Charts for HVSC sub folders as well as custom "_" folders
 	$html .= '<h3 style="margin-top:21px;">Active years<div class="legend">X = year (1982-)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Y = number of SID files</div></h3>
 		<div id="ct-years"></div>'.
-		(substr($fullname, 0, strlen($cgsc)) != $cgsc
+		(!$isCGSC
 			? '<h3 style="margin-top:0;">Players used</h3><div id="ct-players"></div>'
 			: '').
 		'<script type="text/javascript">'.
@@ -525,36 +522,38 @@ if ($fullname == $exoticFolder) {
 					offset: 30,
 					onlyInteger: true,
 				},
-			});
-			ctPlayers = new Chartist.Bar("#ct-players",
-			{
-				labels: '.json_encode($player_labels).',
-				series: '.json_encode($player_counts).',
-			},
-			{
-				height: '.((32 * count($player_labels)) + 42).',
-				/*width: "90%",*/
-				horizontalBars: true,
-				distributeSeries: true,
-				chartPadding: {
-					top: 0,
-					right: 90,
+			});'.
+			(!$isCGSC
+				? 'ctPlayers = new Chartist.Bar("#ct-players",
+				{
+					labels: '.json_encode($player_labels).',
+					series: '.json_encode($player_counts).',
 				},
-				axisX: {
-					onlyInteger: true,
-				},
-				axisY: {
-					offset: 140,
-					showGrid: false,
-				},
-			}).on("draw", function(data) {
-				if(data.type === "bar") {
-					data.element.attr({
-						style: "stroke-width: 20px"
-					});
-				}
-			});
-		</script>';
+				{
+					height: '.((32 * count($player_labels)) + 42).',
+					/*width: "90%",*/
+					horizontalBars: true,
+					distributeSeries: true,
+					chartPadding: {
+						top: 0,
+						right: 90,
+					},
+					axisX: {
+						onlyInteger: true,
+					},
+					axisY: {
+						offset: 140,
+						showGrid: false,
+					},
+				}).on("draw", function(data) {
+					if(data.type === "bar") {
+						data.element.attr({
+							style: "stroke-width: 20px"
+						});
+					}
+				});'
+				: '').
+		'</script>';
 }
 
 echo json_encode(array('status' => 'ok', 'html' => $html, 'rating' => $rating));

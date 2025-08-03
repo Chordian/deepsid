@@ -1009,9 +1009,10 @@ $(function() { // DOM ready
 		}
 
 		// If 'STIL' tab is selected
-		if (topic === "stil")
+		if (topic === "stil") {
 			$("#note-stil").hide();
 			$("#sticky-stil").show();
+		}
 
 		// If 'Profile' tab is selected then refresh the charts if present
 		// NOTE: If this is not done the charts will appear "flattened" towards the left side.

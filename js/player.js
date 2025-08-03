@@ -1069,6 +1069,7 @@ SIDPlayer.prototype = {
 					else
 						this.reSID.isPaused() ? this.reSID.resume() : this.reSID.play();
 				}
+				this.speed($("#piano-slow").hasClass("button-on") ? viz.slowSpeed : 1);
 				break;
 			case "jsidplay2":
 				if (this.paused) {
@@ -1089,6 +1090,7 @@ SIDPlayer.prototype = {
 					else
 						this.WebSid.isPaused() ? this.WebSid.resume() : this.WebSid.play();
 				}
+				this.speed($("#piano-slow").hasClass("button-on") ? viz.slowSpeed : 1);
 				break;
 			case "hermit":
 			case "webusb":

@@ -1881,7 +1881,11 @@
 
 						<h3>August 2, 2025</h3>
 						<ul>
-							<li>The STIL/Lyrics tab now also shows a notification icon when it has contents.</li>
+							<li>The STIL/Lyrics tab now also shows a cyan notification icon when it has contents.</li>
+							<li>Fixed a console log error when browsing Compute's Gazette SID collection.</li>
+							<li>The 'Noise Waveform' toggle in the 'PIANO' view has been fixed and should now work 100% correctly.</li>
+							<li>The 'Slow speed' toggle  in the 'PIANO' view now remembers its slow state for Jürgen Wothke's SID emulators.</li>
+							<li>The composer avatar is no longer shown in the top-left info box when using the YouTube SID handler.</li>
 						</ul>
 
 						<h3>August 1, 2025</h3>

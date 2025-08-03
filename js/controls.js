@@ -604,7 +604,7 @@ Controls.prototype = {
 		} else {
 
 			// Show a smaller avatar image in the left side of the info box (HVSC and SH only)
-			if (fullname.indexOf("/MUSICIANS/") !== -1 || fullname.indexOf("/_SID Happens/") !== -1) {
+			if ((fullname.indexOf("/MUSICIANS/") !== -1 || fullname.indexOf("/_SID Happens/") !== -1) && SID.emulator !== "youtube") {
 				// Construct the image filename out of fullname (or profile if in SH folder)
 				var homeFolder = "", thumbnail;
 				if (fullname.indexOf("/MUSICIANS/") !== -1) {

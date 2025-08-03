@@ -844,21 +844,17 @@ Viz.prototype = {
 					this.prevOctave[voice_and_chip] = octave;
 					this.prevNote[voice_and_chip] = note;
 				}
-				if ((SID.readRegister(0xD404 + voice * 7, chip) & 1) || pianoGateIsOff) {
-					// Gate ON
-					if ((waveform >= 1 && waveform <= 7) || (waveform == 8 && $("#piano-noise").hasClass("button-on"))) {
-						// The waveform is good so color the key on the piano
-						fillColor = SID.emulator == "websid" && !pianoGateIsOff
-							? this.getEnvelopeColor(voice, chip, this.pianoKeyColors[note], waveform)
-							: this.waveformColors[waveform];
-						$("#v"+keyboard+"_oct"+octave+"_"+note).css("transition", "none").attr("fill", fillColor);
-					}
-				} else {
-					// Gate OFF
-					fillColor = SID.emulator == "websid"
+				if ((waveform >= 1 && waveform <= 7) || (waveform == 8 && $("#piano-noise").hasClass("button-on"))) {
+					const gateOn = (SID.readRegister(0xD404 + voice * 7, chip) & 1) || pianoGateIsOff;
+					fillColor = SID.emulator == "websid" && gateOn
 						? this.getEnvelopeColor(voice, chip, this.pianoKeyColors[note], waveform)
-						: this.pianoKeyColors[note];
-					$("#v"+keyboard+"_oct"+octave+"_"+note).css("transition", "none").attr("fill", fillColor);
+						: gateOn
+							? this.waveformColors[waveform]
+							: this.pianoKeyColors[note];
+
+					$("#v"+keyboard+"_oct"+octave+"_"+note)
+						.css("transition", "none")
+						.attr("fill", fillColor);
 				}
 
 				// Show the pulse width as a horizontal canvas bar
