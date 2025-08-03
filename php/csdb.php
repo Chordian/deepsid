@@ -32,6 +32,9 @@ $scener_handle = array();
 $scener_id = array();
 $sid_entries = array();
 
+$fresh_days      = 30;                   // Cache skip for items < 30 days old
+$ttl             = 7 * 24 * 60 * 60;     // Fallback TTL for date-less items (7 days)
+
 $svg_permalink = '<svg class="permalink" style="enable-background:new 0 0 80 80;" version="1.1" viewBox="0 0 80 80" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g><path d="M29.298,63.471l-4.048,4.02c-3.509,3.478-9.216,3.481-12.723,0c-1.686-1.673-2.612-3.895-2.612-6.257 s0.927-4.585,2.611-6.258l14.9-14.783c3.088-3.062,8.897-7.571,13.131-3.372c1.943,1.93,5.081,1.917,7.01-0.025 c1.93-1.942,1.918-5.081-0.025-7.009c-7.197-7.142-17.834-5.822-27.098,3.37L5.543,47.941C1.968,51.49,0,56.21,0,61.234 s1.968,9.743,5.544,13.292C9.223,78.176,14.054,80,18.887,80c4.834,0,9.667-1.824,13.348-5.476l4.051-4.021 c1.942-1.928,1.953-5.066,0.023-7.009C34.382,61.553,31.241,61.542,29.298,63.471z M74.454,6.044 c-7.73-7.67-18.538-8.086-25.694-0.986l-5.046,5.009c-1.943,1.929-1.955,5.066-0.025,7.009c1.93,1.943,5.068,1.954,7.011,0.025 l5.044-5.006c3.707-3.681,8.561-2.155,11.727,0.986c1.688,1.673,2.615,3.896,2.615,6.258c0,2.363-0.928,4.586-2.613,6.259 l-15.897,15.77c-7.269,7.212-10.679,3.827-12.134,2.383c-1.943-1.929-5.08-1.917-7.01,0.025c-1.93,1.942-1.918,5.081,0.025,7.009 c3.337,3.312,7.146,4.954,11.139,4.954c4.889,0,10.053-2.462,14.963-7.337l15.897-15.77C78.03,29.083,80,24.362,80,19.338 C80,14.316,78.03,9.595,74.454,6.044z"/></g><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/></svg>';
 
 // --------------------------------------------------------------------------
@@ -213,35 +216,50 @@ if (isset($_GET['fullname'])) {
 	}
 
 	// If there is just one release then we don't need to show the SID list first. The release page is then shown
-	// straight away. A database mapping is stored in case CSDb is offline, so the cache reader can still work.
-	if ($csdb_type == 'sid') {
-		// Get the XML from the CSDb web service with a list of releases on this 'sid' page (default depth)
-		$xml = curl('https://csdb.dk/webservice/?type=sid&id='.$csdb_id);
-		if (strpos($xml, '<CSDbData>') !== false) {
-			$csdb = simplexml_load_string($xml);
+	// straight away. A database mapping is read first in case CSDb is offline, so the cache reader can work.
+	if ($csdb_type === 'sid') {
+		$release_id = null;
+		$read_from_db = false;
 
-			if (isset($csdb->SID->UsedIn) && count($csdb->SID->UsedIn->Release) == 1) {
-				// Only one release; store mapping
-				$release_id = (int)$csdb->SID->UsedIn->Release->ID;
+		// Check if there's a mapping in the database
+		$select = $db->prepare('SELECT release_id, updated_at FROM sid_release_map WHERE sid_id = ?');
+		$select->execute([$csdb_id]);
+		$row = $select->fetch(PDO::FETCH_ASSOC);
 
-				$replace = $db->prepare('REPLACE INTO sid_release_map (sid_id, release_id) VALUES (?, ?)');
-				$replace->execute([$csdb_id, $release_id]);
+		if ($row) {
+			$release_id = $row['release_id'];
+			$updated_at = strtotime($row['updated_at']);
 
-				// Switch type to release
+			if ((time() - $updated_at) < $fresh_days) {
+				// Mapping is recent – skip curl and use it immediately
 				$csdb_type = 'release';
 				$csdb_id = $release_id;
-			} else {
-				// More than one release — remove any stale mapping
-				$delete = $db->prepare('DELETE FROM sid_release_map WHERE sid_id = ?');
-				$delete->execute([$csdb_id]);
+				$read_from_db = true;
 			}
-		} else {
-			// CSDb is down; try to use existing mapping
-			$select = $db->prepare('SELECT release_id FROM sid_release_map WHERE sid_id = ?');
-			$select->execute([$csdb_id]);
-			$release_id = $select->fetchColumn();
+		}
 
-			if ($release_id) {
+		if (!$read_from_db) {
+			// No mapping or mapping is stale — try CSDb
+			$xml = curl('https://csdb.dk/webservice/?type=sid&id=' . $csdb_id);
+			if (strpos($xml, '<CSDbData>') !== false) {
+				$csdb = simplexml_load_string($xml);
+
+				if (isset($csdb->SID->UsedIn) && count($csdb->SID->UsedIn->Release) === 1) {
+					$release_id = (int)$csdb->SID->UsedIn->Release->ID;
+
+					// Store (or refresh) mapping
+					$replace = $db->prepare('REPLACE INTO sid_release_map (sid_id, release_id) VALUES (?, ?)');
+					$replace->execute([$csdb_id, $release_id]);
+
+					$csdb_type = 'release';
+					$csdb_id = $release_id;
+				} else {
+					// SID now has multiple releases — remove stale map
+					$delete = $db->prepare('DELETE FROM sid_release_map WHERE sid_id = ?');
+					$delete->execute([$csdb_id]);
+				}
+			} elseif ($row) {
+				// Curl failed — fallback to stale mapping if we have one
 				$csdb_type = 'release';
 				$csdb_id = $release_id;
 			}
@@ -262,8 +280,6 @@ if (isset($_GET['fullname'])) {
 
 $cache_dir       = __DIR__ . '/../cache/csdb/';
 $image_cache_dir = __DIR__ . '/../cache/csdb_images/';
-$fresh_days      = 30;                   // Cache skip for items < 30 days old
-$ttl             = 7 * 24 * 60 * 60;     // Fallback TTL for date-less items (7 days)
 
 // Ensure cache directories exist
 if (!is_dir($cache_dir))       mkdir($cache_dir, 0777, true);

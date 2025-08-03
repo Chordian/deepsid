@@ -252,6 +252,7 @@
 	--color-notification-gb64:		#070;
 	--color-notification-player:	#808;
 	--color-notification-remix:		#777;
+	--color-notification-stil:		#088;
 
 	/* SOASC status in top */
 
@@ -643,6 +644,7 @@
 	--color-notification-gb64:		#474;
 	--color-notification-player:	#848;
 	--color-notification-remix:		#666;
+	--color-notification-stil:		#077;
 
 	/* SOASC status in top */
 
@@ -1235,6 +1237,12 @@ small.u2 { margin-left: 2px; }
 		box-shadow: 2px 2px 4px var(--color-button-shadow);
 	}
 
+		[data-theme="dark"] {
+			button {
+				transition: all .03s linear;
+			}
+		}
+
 	#controls button:active,
 	#songs button:active,
 	.edit button:active,
@@ -1247,6 +1255,17 @@ small.u2 { margin-left: 2px; }
 	.block-info button:active {
 		box-shadow: var(--shadow-button-selected);
 	}
+
+		[data-theme="dark"] {
+			button:active {
+				transform: scale(0.935);
+				transform-origin: center center;
+			}
+
+			button:disabled {
+				transform: none;
+			}
+		}
 
 	#controls button.disabled,
 	#songs button.disabled,
@@ -2315,13 +2334,13 @@ input[type=range]::-ms-track {
 	/* For the bracket-style line below tags that connects two of the tags */
 	.tags-bracket {
 		position: absolute;
-		height: 6px; /* Enough to allow vertical side lines */
+		height: 5px; /* Enough to allow vertical side lines */
 		border-bottom: 1.5px solid var(--color-tags-bracket);
 		border-left: 1.75px solid var(--color-tags-bracket-up);
 		border-right: 1.75px solid var(--color-tags-bracket-up);
 		border-radius: 1px;
-		bottom: -6px;
-		display: none; /* hidden until JS sets position */
+		bottom: -5px;
+		display: none; /* Hidden until JS sets position */
 		/*z-index: 1;*/
 	}
 
@@ -4204,6 +4223,10 @@ input[type=range]::-ms-track {
 
 		#tabs .remixcolor {
 			background: var(--color-notification-remix);
+		}
+
+		#tabs .stilcolor {
+			background: var(--color-notification-stil);
 		}
 
 	/* Where the contents of a dexter tab is shown */

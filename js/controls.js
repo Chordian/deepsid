@@ -815,6 +815,8 @@ Controls.prototype = {
 	/**
 	 * Update the sundry box below the top info box.
 	 * 
+	 * Also updates the STIL page tab.
+	 * 
 	 * HVSC: Adapted STIL information for the selected SID file, if available.
 	 * CGSC: Lyrics for the MUS file, if available.
 	 */
@@ -834,7 +836,8 @@ Controls.prototype = {
 			tabName = "Lyrics";
 		else if (isSidHappens)
 			tabName = "Notes";
-		$("#tab-stil,#stab-stil").empty().append(tabName); // Set for both sundry and dexter tabs
+		$("#stab-stil").empty().append(tabName); // Set for both sundry and dexter tabs
+		$("#tab-stil").empty().append(tabName+'<div id="note-stil" class="notification stilcolor"></div>');
 		this.showNewsImage(false);
 
 		if (isCGSC) {
@@ -956,10 +959,11 @@ Controls.prototype = {
 								i++;
 							}
 							out += "</span>";
-							$("#topic-stil,#stopic-stil").empty().append('<div class="c64blackbg">'+out+'</div>');
+							$("#topic-stil,#stopic-stil").append('<div class="c64blackbg">'+out+'</div>');
 						}
 						reader.readAsBinaryString(blob);
 					});
+					this.handleStilNotification();				
 				} else {
 					// WDS file does not exist
 					$("#stopic-stil")
@@ -967,7 +971,7 @@ Controls.prototype = {
 						.empty().append('<div id="tips" class="no-info">No lyrics</div>');
 					$("#topic-stil").empty().append("No lyrics available for this MUS file.");
 				}
-			});
+			}.bind(this));
 		} else {
 			// Standard .sid file so show STIL information from HVSC
 			if (stil === "") {
@@ -977,11 +981,22 @@ Controls.prototype = {
 				$("#topic-stil").empty().append("<i>No information available.</i>");
 			} else {
 				$("#topic-stil,#stopic-stil").empty().append(stil);
+				this.handleStilNotification();				
 			}
 		}
 
 		// Tab 'Tags'
 		this.updateSundryTags(browser.playlist[browser.songPos].tags);
+	},
+
+	/**
+	 * Show a special notification character (if not in focus).
+	 */
+	handleStilNotification: function() {
+		if ($("#tabs .selected").attr("data-topic") !== "stil")
+			$("#note-stil").empty().append("&#9679;").show();
+		else
+			$("#note-stil").hide();
 	},
 
 	/**
