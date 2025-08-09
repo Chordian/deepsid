@@ -415,6 +415,13 @@ $(function() { // DOM ready
 					$("#songs tr.selected").find(".edit-tags").trigger("click");
 					break;
 
+				case 89:	// Keyup 'y' - toggle showing tags on or off
+
+					showTags = !showTags;
+					$("#showtags").prop("checked", showTags);
+					showTags ? $("#songs .tags-line").show() : $("#songs .tags-line").hide();
+					break;
+
 				case 37:	// Keyup 'ARROW-LEFT' - skip to previous (+ SHIFT to emulate auto-progress)
 
 					$("#skip-prev").trigger("mouseup", event.shiftKey ? false : undefined);

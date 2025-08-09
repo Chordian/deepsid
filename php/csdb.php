@@ -251,6 +251,11 @@ if (isset($_GET['fullname'])) {
 					$replace = $db->prepare('REPLACE INTO sid_release_map (sid_id, release_id) VALUES (?, ?)');
 					$replace->execute([$csdb_id, $release_id]);
 
+					// Store count of one CSDb entry for this SID file
+					$insert = $db->prepare('INSERT INTO csdb (sid_id, entries) VALUES (?, 1)
+						ON DUPLICATE KEY UPDATE entries = 1');
+					$insert->execute([$csdb_id]);					
+
 					$csdb_type = 'release';
 					$csdb_id = $release_id;
 				} else {
@@ -323,7 +328,7 @@ if (file_exists($cache_file)) {
 			'status'  => 'ok',
 			'sticky'  => $cached_data['sticky'],
 			'html'    => $cached_data['html'] .
-						'<i><small>Generated from cache (' . $cache_age . ')</small></i>',
+						'<i><small>Generated from cache (updated ' . $cache_age . ')</small></i>',
 			'count'   => $cached_data['count'],
 			'entries' => $cached_data['entries'],
 			'debug'	  => $debug
@@ -353,7 +358,7 @@ $csdb = simplexml_load_string($xml);
 if ($csdb_type == 'sid') {
 
 	// --------------------------------------------------------------------------
-	// Entry: SID
+	// Entry: SID (a list of entries)
 	// --------------------------------------------------------------------------
 
 	$sid_handles = array();
@@ -574,6 +579,11 @@ if ($csdb_type == 'sid') {
 	// And now the body HTML for the '#page' DIV
 	$html = $used_by_releases;
 
+	// Store count of CSDb entries for this SID file
+	$insert_csdb = $db->prepare('INSERT INTO csdb (sid_id, entries) VALUES (?, ?)
+		ON DUPLICATE KEY UPDATE entries = VALUES(entries)');
+	$insert_csdb->execute([$csdb_id, $amount_releases]);
+	
 	if (!empty($user_comments) && $amount_releases == 0)
 		$amount_releases = -1; // There are at least comments present in top
 
@@ -584,7 +594,7 @@ if ($csdb_type == 'sid') {
 } else if ($csdb_type == 'release') {
 
 	// --------------------------------------------------------------------------
-	// Entry: RELEASE
+	// Entry: RELEASE (one entry)
 	// --------------------------------------------------------------------------
 
 	$sceners = array();
@@ -854,10 +864,10 @@ file_put_contents($cache_file, gzencode(json_encode($cache_data), 9));
 // --------------------------------------------------------------------------
 
 echo json_encode(array(
-	'status' => 'ok',
-	'sticky' => $sticky,
-	'html' => $html.'<i><small>Generated using the <a href="https://csdb.dk/webservice/" target="_blank">CSDb web service</a></small></i>',
-	'count' => $amount_releases,
-	'entries' => $sid_entries,
-	'debug' => $debug));
+	'status'	=> 'ok',
+	'sticky'	=> $sticky,
+	'html'		=> $html.'<i><small>Generated using the <a href="https://csdb.dk/webservice/" target="_blank">CSDb web service</a></small></i>',
+	'count'		=> $amount_releases,
+	'entries'	=> $sid_entries,
+	'debug'		=> $debug));
 ?>

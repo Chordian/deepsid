@@ -3294,7 +3294,7 @@ input[type=range]::-ms-track {
 	}
 
 	#songs .selected .info,
-	#songs .selected .disqus-comment-count {
+	#songs .selected .factoid {
 		font-weight: normal;
 		color: var(--color-button-hover);
 	}
@@ -3398,7 +3398,7 @@ input[type=range]::-ms-track {
 			background: var(--svg-bg-star-empty-unvoted);
 		}
 
-		#songs .disqus-comment-count,
+		#songs .factoid,
 		#songs .uploaded-time {
 			float: right;
 			position: relative;
@@ -3408,6 +3408,13 @@ input[type=range]::-ms-track {
 			line-height: 11px;
 			color: var(--color-text-minor);
 		}
+
+			/* Static width factoid field */
+			#songs .factoid span {
+				display: inline-block;
+				width: 22px;
+				text-align: right;
+			}
 
 		#songs .disqus-sh {
 			display: none !important;

@@ -642,7 +642,7 @@
 					<?php if (!MiniPlayer()): ?>
 						<div id="sundry-news">
 							<!--<span>The <a href="https://www.hvsc.c64.org/" target="_top">High Voltage SID Collection</a> has been upgraded to the latest version #83. Click <a href="//deepsid.chordian.net/?search=83&type=new">here</a> to see what's new in this update.</span>-->
-							<!--<span><a href="http://www.c64music.co.uk/" target="_top">Compute's Gazette SID Collection</a> has been upgraded to the latest version #146. Click <a href="//deepsid.chordian.net/?search=146&type=new">here</a> to see what's new in this update.</span>-->
+							<span><a href="http://www.c64music.co.uk/" target="_top">Compute's Gazette SID Collection</a> has been upgraded to the latest version #147. Click <a href="//deepsid.chordian.net/?search=147&type=new">here</a> to see what's new in this update.</span>
 							<!--<span>Want to learn how to make SID tunes? Check out <a href="https://www.youtube.com/watch?v=nXNtLetxFUg">this tutorial video</a> now on YouTube.</span>-->
 							<!--<span><font style="color:var(--color-forum-moderator);">Keyboard control is here!</font>&nbsp;&nbsp;Use Up, Down, Home, End, Page Up, Page Down, and Enter to select a SID row. Press Backspace to go back one folder. See <a href="#" onclick="$('#tab-changes').trigger('click'); return false;">Changes</a> for more info.</span>-->
 							    <!--   See in controls.js: "showNewsImage" and "clickNews" for how to set up a news image -->
@@ -1678,7 +1678,7 @@
 							<a href="https://www.hvsc.c64.org/" target="_top">https://www.hvsc.c64.org/</a>
 						</p>
 						<p>
-							Compute's Gazette SID Collection #146<br />
+							Compute's Gazette SID Collection #147<br />
 							<a href="http://www.c64music.co.uk/" target="_top">http://www.c64music.co.uk/</a>
 						</p>
 
@@ -1878,6 +1878,23 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>August 9, 2025</h3>
+						<ul>
+							<li>DeepSID's copy of Compute's Gazette SID Collection has now been upgraded to version 1.47.</li>
+							<li>You can now see the song length in the bottom right corner of SID rows (except in the <a href="//deepsid.chordian.net/?file=/SID%20Happens/">SID Happens</a> folder).
+								For songs with multiple subtunes, the song length for the default subtune is shown.</li>
+						</ul>
+
+						<h3>August 7, 2025</h3>
+						<ul>
+							<li>The tags can now be toggled on and off with the "y" hotkey.</li>
+						</ul>
+
+						<h3>August 4, 2025</h3>
+						<ul>
+							<li>The search limit has been increased from 1000 to 2000 results.</li>
+						</ul>
 
 						<h3>August 2, 2025</h3>
 						<ul>

@@ -9,6 +9,23 @@ SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
 - Make direct URL arguments redirect correctly for the DeepSID.com domain.
 
+- Factoid: Songs lengths and CSDb entries are ready. For now, only the song lengths are
+  available to users. Consider how to choose or toggle them. Ideas - drop-down in the
+  settings tab, toggle key, and/or triangle button in bottom left corner or browser.
+
+- Factoid: Other ideas for data: number of GB64, click rate (not direct number but e.g.
+  percentage or similar), SID chip model (6581 or 8580), HVSC update version, etc.
+
+- Factoid: Hotkey "U" could browse through the source choice in real time. (Should this
+  refresh the folder like the "F" hotkey?)
+
+- Sometimes browsing back from a folder requires two ENTER to enter another (especially
+  if the dexter area has been accessed earlier). Maybe clear the Boolean variable for
+  preventing double ENTER in the code where the BACKSPACE key is processed?
+
+- In addition to the dollar icon for professional composers, an icon for sceners. But what
+  should it look like?
+
 - Somehow add blue tags to CSDb list so it's apparent what the refer to. It could be
   appended to the date in the lists. It a logical way to show it and should be done, but it
   will require additional database storage. Maybe a "+" icon will appear after dates here
@@ -16,6 +33,12 @@ SHOULD BE DONE
 
 - Add a "X" in the end of the search edit box. When clicked it not only clears the edit
   box, it also resets the drop-down box and clears the check box.
+
+- After using "*" to edit e.g. year, remember the scroll position.
+
+- Expanding the "Y" hotkey: Instead of toggling tags on and off, cycle through types. First
+  hit removes event tags, then also production tags, and so on. In the end all are gone,
+  and the next hit then shows everything again.
 
 - BUG: Sometimes a CSDb release page highlights a creator that seems to be irrelevant.
   Try gfx.col. here: https://deepsid.chordian.net/?file=/MUSICIANS/M/Megmyx/Quest.sid
@@ -45,8 +68,6 @@ SHOULD BE DONE
   - PHP script that detects and shows all rows with no database information. Even though I
     am very meticulous each collection update, these still tend to pop up.
 
-- Always show ages in hex? (Hover on age to show tooltip with decimal age.)
-
 - KB: Sometimes I have to press ENTER twice on a SID row before it plays. Usually after
   having done some navigation elsewhere in DeepSID. The first ENTER is probably some kind
   of focus enabling, but try to investigate further.
@@ -74,6 +95,8 @@ SHOULD BE DONE
 - WIP: Go through all "Links" in all profile pages and make sure the full composer name fits.
   If it ends in "..." create a short name, e.g. with a letter + full stop for first name.
   Takes a while going through this ......... Next: MUSICIANS/E
+
+- Tag-parse Merman's folder thoroughly. Only done superficially for now (it's enormous).
 
 
 WHEN THE TIME IS RIGHT
@@ -594,6 +617,10 @@ PROBABLY NOT?
   searching when the site it refreshed, but this is kind of working as intended. Adding support for
   remembering a search session is too much work for an emulator switch situation that 99% of the
   DeepSID users wouldn't care about anyway.
+
+- Detect if the tag wording is long. If it is, the tag uses a smaller font. Try e.g. "Crack Intro
+  Music" full length tag text, and then test with that. UPDATE: The "Asap Condensed" font is slightly
+  tighter but it doesn't really help that much, and it is considerably harder to read.
 
 - CSDb Music Competitions:
   - Thought about a better inside "path" box info where year and country is also visible, but it's not

@@ -43,7 +43,7 @@ function Browser() {
 
 	this.ROOT_HVSC = 'hvsc';
 	this.HVSC_VERSION = 83;
-	this.CGSC_VERSION = 146;
+	this.CGSC_VERSION = 147;
 
 	this.path = "";
 	this.search = "";
@@ -1169,7 +1169,7 @@ Browser.prototype = {
 						'<div class="entry name file'+(this.isSearching || this.isCompoFolder || this.path.substr(0, 2) === "/$" ? ' search' : '')+'" data-name="'+encodeURIComponent(file.filename)+'" data-type="'+file.type+'" data-id="'+file.id+'" data-symid="'+file.symid+'">'+adaptedName+'</div></div></div><br />'+
 						'<span class="info">'+file.copyright.substr(0, 4)+file.infosec+'<div class="tags-line"'+(showTags ? '' : ' style="display:none"')+tag_start_end+'>'+TAGS_BRACKET+file.tags+'</div></span></td>'+
 						'<td class="stars filestars"><span class="rating">'+this.buildStars(file.rating)+'</span>'+
-						'<span class="disqus-comment-count"></span>'+(typeof file.uploaded != "undefined" ? '<span class="uploaded-time">'+file.uploaded.substr(0, 10)+'</span>' : '')+
+						(typeof file.uploaded != "undefined" ? '<span class="uploaded-time">'+file.uploaded.substr(0, 10)+'</span>' : '<span class="factoid">'+file.factoid+'</span>')+
 						'</td>'+
 					'</tr>';					
 			}.bind(this));
@@ -1290,6 +1290,7 @@ Browser.prototype = {
 					searchType:		$("#dropdown-search").val(),
 					searchQuery:	this.isSearching ? searchQuery : "",
 					searchHere:		($("#search-here").is(":checked") ? 1 : 0),
+					factoid:		1, // 1 = Song lengths
 			}, function(data) {
 				this.validateData(data, function(data) {
 
@@ -1628,7 +1629,7 @@ Browser.prototype = {
 								'<div class="entry name file'+(this.isSearching || this.isCompoFolder || this.path.substr(0, 2) === "/$" ? ' search' : '')+'" data-name="'+encodeURIComponent(file.filename)+'" data-type="'+file.type+'" data-id="'+file.id+'" data-symid="'+file.symid+'">'+adaptedName+'</div></div></div><br />'+
 								'<span class="info">'+file.copyright.substr(0, 4)+infoSecondary+'<div class="tags-line"'+(showTags ? '' : ' style="display:none"')+tag_start_end+'>'+TAGS_BRACKET+list_of_tags+'</div></span></td>'+
 								'<td class="stars filestars"><span class="rating">'+this.buildStars(file.rating)+'</span>'+
-								'<span class="disqus-comment-count"></span>'+(typeof file.uploaded != "undefined" ? '<span class="uploaded-time">'+file.uploaded.substr(0, 10)+'</span>' : '')+
+								(typeof file.uploaded != "undefined" ? '<span class="uploaded-time">'+file.uploaded.substr(0, 10)+'</span>' : '<span class="factoid">'+file.factoid+'</span>')+
 								'</td>'+
 							'</tr>'; // &#9642; is the dot character if needed
 
@@ -1664,6 +1665,7 @@ Browser.prototype = {
 							hvsc:			file.hvsc,
 							symid:			file.symid,
 							videos:			file.videos,
+							factoid:		file.factoid,
 							profile:		file.profile,	// Only files from 'SID Happens'
 							uploaded:		file.uploaded,	// Only files from 'SID Happens'
 						});
