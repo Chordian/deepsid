@@ -5,6 +5,12 @@
 
 var $=jQuery.noConflict();
 
+// Namespace for global variables and functions
+// @todo Move globals below into it and adapt where used
+var main = {
+	factoidType:	2,
+};
+
 var cacheCSDb = cacheSticky = cacheStickyBeforeCompo = cacheCSDbProfile = cacheBeforeCompo = cachePlayer = cacheGB64 = cacheRemix = prevFile = sundryTab = reportSTIL = "";
 var cacheTabScrollPos = cachePlayerTabScrollPos = cacheGB64TabScrollPos = cacheRemixTabScrollPos = cachePosBeforeCompo = cacheDDCSDbSort = peekCounter = sundryHeight = 0;
 var sundryToggle = true, recommended = forum = players = $trAutoPlay = null, showTags, fastForwarding, registering = kbScrollLocked = blockNextEnter = false;
@@ -95,6 +101,7 @@ $(function() { // DOM ready
 			SettingToggle("skip-bad",		data.settings.skipbad);
 			SettingToggle("skip-long",		data.settings.skiplong);
 			SettingToggle("skip-short",		data.settings.skipshort);
+			main.factoidType = data.settings.factoid;
 		});
 	}.bind(this));
 	
@@ -420,6 +427,18 @@ $(function() { // DOM ready
 					showTags = !showTags;
 					$("#showtags").prop("checked", showTags);
 					showTags ? $("#songs .tags-line").show() : $("#songs .tags-line").hide();
+					break;
+
+				case 85:	// Keyup 'u' - cycle through factoid types
+
+					main.factoidType++;
+					if (main.factoidType > 12) main.factoidType = 0;
+					// Store the factoid type in the database settings
+					$.post("php/settings.php", { factoid: main.factoidType }, function(data) {
+						browser.validateData(data);
+					});
+					// Refresh the folder while remembering the scroll position
+					$(window).trigger($.Event("keyup", { key: "f", code: "KeyF", keyCode: 70, which: 70 }));
 					break;
 
 				case 37:	// Keyup 'ARROW-LEFT' - skip to previous (+ SHIFT to emulate auto-progress)
@@ -2429,7 +2448,7 @@ function SettingToggle(id, state) {
 }
 
 /**
- * Settings: Get a value.
+ * Settings: Get a value from an ON/OFF toggle button.
  * 
  * @param {string} id		Part of the ID to be appended
  * 

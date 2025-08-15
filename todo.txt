@@ -9,15 +9,24 @@ SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
 - Make direct URL arguments redirect correctly for the DeepSID.com domain.
 
-- Factoid: Songs lengths and CSDb entries are ready. For now, only the song lengths are
-  available to users. Consider how to choose or toggle them. Ideas - drop-down in the
-  settings tab, toggle key, and/or triangle button in bottom left corner or browser.
 
-- Factoid: Other ideas for data: number of GB64, click rate (not direct number but e.g.
-  percentage or similar), SID chip model (6581 or 8580), HVSC update version, etc.
+
+- REMEMBER TO CHANGE USERS FLAG COL INTO 'TEXT' INSTEAD OF VARCHAR(128) !!!
+
+- Show "tooltip" in bottom of browser each time you cycle to another factoid.
+- If hitting "u" to cycle factoid without being logged in, of course skip trying to store
+  it in the database.
+
+
+
+- Factoid: Ideas for how to choose or toggle them: Drop-down in the settings tab, toggle
+  key, and/or a triangle button in bottom left corner of browser.
+
+- Factoid type: SID row click rate (not direct number but e.g. percentage or similar).
+  Maybe the click rate percentage could even be shown as a colored percentage bar?
 
 - Factoid: Hotkey "U" could browse through the source choice in real time. (Should this
-  refresh the folder like the "F" hotkey?)
+  refresh the folder like the "F" hotkey?) Remember to store the choice.
 
 - Sometimes browsing back from a folder requires two ENTER to enter another (especially
   if the dexter area has been accessed earlier). Maybe clear the Boolean variable for
@@ -30,6 +39,9 @@ SHOULD BE DONE
   appended to the date in the lists. It a logical way to show it and should be done, but it
   will require additional database storage. Maybe a "+" icon will appear after dates here
   too, clicking will open 'Edit tags' dialog box.
+
+- Globalize variables in 'main.js' - either 'g_variableName', or even better yet, put them
+  as well as global functions inside a namespace object: var DeepSID = { ... }
 
 - Add a "X" in the end of the search edit box. When clicked it not only clears the edit
   box, it also resets the drop-down box and clears the check box.
@@ -75,6 +87,10 @@ SHOULD BE DONE
 
 - If you look closely, some tag names are too high up. It differs from SID row to SID row
   in Firefox. Test floating point line heights to see if it can be fixed.
+
+- The 'application' column in 'hvsc_files' has not been maintained in many HVSC updates.
+  It can read 'RELEASE' or 'PREVIEW' and pertains to games. Maybe write a PHP script that
+  sets it depending on the GB64 entries found for the SID rows?
 
 - Cache: Consider also caching the 'SHOW' pages. Alternatively, you could just disable the
   button on cached pages loaded whenever CSDb is down.

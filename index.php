@@ -929,7 +929,33 @@
 						<select id="dropdown-sort" name="sort"><!-- browser.js --></select>
 					</div>
 				</div>
-				<div id="folders" tabindex="0"><div id="kb-marker"></div><table></table></div>
+				<div id="corner-buttons">
+					<svg width="0" height="0" aria-hidden="true" focusable="false">
+						<defs>
+							<!-- Bottom-right triangle in object-bounding-box coords (0..1) -->
+							<clipPath id="cb-corner-clip" clipPathUnits="objectBoundingBox">
+								<polygon points="1 0, 0 1, 1 1"/>
+							</clipPath>
+						</defs>
+					</svg>
+					<button class="corner-svg" aria-label="Do thing">
+						<!-- Use any inline SVG icon here -->
+						<svg class="cb-icon" viewBox="0 0 24 24" width="32" height="32" aria-hidden="true">
+							<!-- Corner lines (1px, crisp on .5 coords) -->
+							<path d="M12.5 23.5 H23.5"
+							fill="none" stroke="currentColor" stroke-width="1"
+							stroke-linecap="square" vector-effect="non-scaling-stroke"/>
+							<path d="M23.5 16.5 V23.5"
+							fill="none" stroke="currentColor" stroke-width="1"
+							stroke-linecap="square" vector-effect="non-scaling-stroke"/>
+
+							<!-- “Value” blob: 4×2 px, 2 px away from both lines -->
+							<rect x="17.5" y="19.5" width="4" height="2" rx="0.5" ry="0.5" fill="currentColor"/>
+						</svg>
+					</button>
+				</div>
+				<div id="folders" tabindex="0"><div id="kb-marker"></div><table></table>
+				</div>
 				<img id="loading" class="loading-spinner" src="images/loading.svg" style="display:none;" alt="" />
 				<div id="search">
 					<select id="dropdown-search" name="search-type">

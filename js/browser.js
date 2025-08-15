@@ -1290,7 +1290,6 @@ Browser.prototype = {
 					searchType:		$("#dropdown-search").val(),
 					searchQuery:	this.isSearching ? searchQuery : "",
 					searchHere:		($("#search-here").is(":checked") ? 1 : 0),
-					factoid:		1, // 1 = Song lengths
 			}, function(data) {
 				this.validateData(data, function(data) {
 

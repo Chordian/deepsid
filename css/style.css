@@ -129,6 +129,7 @@
 	--color-text-label-disabled:	var(--color-border);
 	--color-text-time:				#c6c6c6;
 	--color-text-sundry-disabled:	#b2b3ad;
+	--color-text-fa-common:			#c8c8c8;
 
 	--color-tags-bracket:			#a1a294;			/* Used for horizontal tag start-to-end brackets */
 	--color-tags-bracket-up:		#949494;
@@ -537,6 +538,7 @@
 	--color-text-label-disabled:	#555;
 	--color-text-time:				#484848;
 	--color-text-sundry-disabled:	#4a4a4a;
+	--color-text-fa-common:			#464646;
 
 	--color-tags-bracket:			#808080;			/* Used for horizontal tag start-to-end brackets */
 	--color-tags-bracket-up:		#949494;
@@ -3414,6 +3416,62 @@ input[type=range]::-ms-track {
 				display: inline-block;
 				width: 22px;
 				text-align: right;
+			}
+
+				/* Wider static field for e.g. ID type values */
+				#songs .factoid span.id {
+					width: 32px;
+				}
+
+				/* Even wider */
+				#songs .factoid span.big {
+					width: 38px;
+				}
+
+			/* Faded factoid field for a very common value */
+			#songs .factoid div {
+				color: var(--color-text-fa-common);
+			}
+
+		#corner-buttons {
+			position: absolute;
+			bottom: 51px;
+			width: 100%;
+			height: 40px;
+		}
+
+			#corner-buttons .corner-svg {
+				position: absolute;
+				right: 0;
+				bottom: 0;
+				width: 38px;
+				height: 38px;
+				background: var(--color-button);
+				clip-path: url(#cb-corner-clip);
+				display: inline-flex;
+				align-items: flex-end;
+				justify-content: flex-end;
+				padding: 6px;
+				border: 0;
+				cursor: pointer;
+				box-shadow: none;
+				color: var(--color-button-text);
+				z-index: 2;
+			}
+
+			#corner-buttons .corner-svg:hover {
+				background: var(--color-button-hover);
+			}
+
+			#corner-buttons .corner-svg:active {
+				transform: scale(0.935);
+				transform-origin: center center;
+			}
+
+			#corner-buttons .cb-icon {
+				display: block;
+				position: relative;
+				left: -1px;
 			}
 
 		#songs .disqus-sh {
