@@ -11,22 +11,16 @@ SHOULD BE DONE
 
 
 
+
+
 - REMEMBER TO CHANGE USERS FLAG COL INTO 'TEXT' INSTEAD OF VARCHAR(128) !!!
 
-- Show "tooltip" in bottom of browser each time you cycle to another factoid.
-- If hitting "u" to cycle factoid without being logged in, of course skip trying to store
-  it in the database.
 
 
 
-- Factoid: Ideas for how to choose or toggle them: Drop-down in the settings tab, toggle
-  key, and/or a triangle button in bottom left corner of browser.
 
 - Factoid type: SID row click rate (not direct number but e.g. percentage or similar).
   Maybe the click rate percentage could even be shown as a colored percentage bar?
-
-- Factoid: Hotkey "U" could browse through the source choice in real time. (Should this
-  refresh the folder like the "F" hotkey?) Remember to store the choice.
 
 - Sometimes browsing back from a folder requires two ENTER to enter another (especially
   if the dexter area has been accessed earlier). Maybe clear the Boolean variable for

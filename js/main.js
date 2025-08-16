@@ -14,7 +14,7 @@ var main = {
 var cacheCSDb = cacheSticky = cacheStickyBeforeCompo = cacheCSDbProfile = cacheBeforeCompo = cachePlayer = cacheGB64 = cacheRemix = prevFile = sundryTab = reportSTIL = "";
 var cacheTabScrollPos = cachePlayerTabScrollPos = cacheGB64TabScrollPos = cacheRemixTabScrollPos = cachePosBeforeCompo = cacheDDCSDbSort = peekCounter = sundryHeight = 0;
 var sundryToggle = true, recommended = forum = players = $trAutoPlay = null, showTags, fastForwarding, registering = kbScrollLocked = blockNextEnter = false;
-var logCount = 1000, isMobile, miniPlayer;
+var logCount = 1000, isMobile, miniPlayer, cornerMessageTimer;
 
 var isMobile = $("body").attr("data-mobile") !== "0";
 var isNotips = $("body").attr("data-notips") !== "0";
@@ -33,6 +33,22 @@ var tabPrevScrollPos = {
 	faq:		{ pos: 0, reset: false },
 	about:		{ pos: 0, reset: false },
 }
+
+const factoidMessage = [
+	"Show nothing",							// 0
+	"Internal database ID",					// 1
+	"Song length",							// 2
+	"Type (PSID/RSID) and version",			// 3
+	"Compatibility (e.g. BASIC)",			// 4
+	"Clock speed (PAL/NTSC)",				// 5
+	"SID model (6581/8580)",				// 6
+	"Size in bytes (decimal)",				// 7
+	"Start and end address (hexadecimal)",	// 8
+	"HVSC or CGSC update version",			// 9
+	"CSDb SID ID",							// 10
+	"Game status (RELEASE/PREVIEW)",		// 11
+	"Number of CSDb entries",				// 12
+];
 
 const isFirefox = typeof InstallTrigger !== "undefined"; // Firefox can scroll a lot faster than Chrome
 
@@ -427,16 +443,22 @@ $(function() { // DOM ready
 					showTags = !showTags;
 					$("#showtags").prop("checked", showTags);
 					showTags ? $("#songs .tags-line").show() : $("#songs .tags-line").hide();
+
+					BrowserMessage("Show tags: "+(showTags ? "ON" : "OFF"));
 					break;
 
 				case 85:	// Keyup 'u' - cycle through factoid types
 
 					main.factoidType++;
 					if (main.factoidType > 12) main.factoidType = 0;
+
+					BrowserMessage(factoidMessage[main.factoidType]);
+
 					// Store the factoid type in the database settings
 					$.post("php/settings.php", { factoid: main.factoidType }, function(data) {
 						browser.validateData(data);
 					});
+
 					// Refresh the folder while remembering the scroll position
 					$(window).trigger($.Event("keyup", { key: "f", code: "KeyF", keyCode: 70, which: 70 }));
 					break;
@@ -468,6 +490,25 @@ $(function() { // DOM ready
 
 				default:
 			}
+		}
+	});
+
+	/**
+	 * When clicking one of the two triangular corner buttons.
+	 */
+	$("#corner-buttons").on("click", function(event) {
+		var $this = $(event.target);
+		if ($this.hasClass("corner-right")) {
+			// Cycle factoid
+			$(window).trigger($.Event("keyup", { key: "u", code: "KeyU", keyCode: 85, which: 85 }));
+		} else if ($this.hasClass("corner-left")) {
+			// Toggle tags ON/OFF
+			$(window).trigger($.Event("keyup", { key: "y", code: "KeyY", keyCode: 89, which: 89 }));
+		} else {
+			// Clicking the transparent container should perform click-through
+			$("#corner-buttons").hide();
+		    $(document.elementFromPoint(event.clientX, event.clientY)).trigger("click");
+    		$("#corner-buttons").show();
 		}
 	});
 
@@ -2359,6 +2400,20 @@ function ToggleVisuals() {
 		$("#sticky-visuals .icon-piano,#tab-visuals-toggle").trigger("click");
 	else if (SID.emulator != "jsidplay2" && $("#tab-visuals-toggle").hasClass("button-off"))
 		$("#tab-visuals-toggle").trigger("click");
+}
+
+/**
+ * Show a floating message for a short period of time in the bottom of the song
+ * browser window. Used by e.g. the triangular corner buttons.
+ * 
+ * @param {string} message 
+ */
+function BrowserMessage(message) {
+	clearTimeout(cornerMessageTimer);
+	$("#corner-buttons .message").empty().append(message).css("display", "inline-block");
+	cornerMessageTimer = setTimeout(() => {
+		$("#corner-buttons .message").hide();
+	}, 1500);
 }
 
 /**

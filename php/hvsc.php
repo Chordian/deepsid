@@ -9,6 +9,7 @@
  * @uses		$_GET['searchType']
  * @uses		$_GET['searchQuery']		overrides 'folder' if used
  * @uses		$_GET['searchHere']			1 = in current folder, 0 = in everything
+ * @uses		$_GET['factoid']			factoid for users not logged in
  * 
  * @used-by		browser.js
  */
@@ -1172,7 +1173,7 @@ try {
 			// A "factoid" is the info field in the bottom right corner of a SID row
 			$factoid = '';
 			$isCGSC = stripos($fullname, "_Compute's Gazette SID Collection/") !== false;
-			switch ($settings['factoid']) {
+			switch ($user_id ? $settings['factoid'] : $_GET['factoid']) {
 
 				case 1:		// ID (hvsc_files)
 

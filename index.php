@@ -964,6 +964,7 @@
 						</svg>
 					</button>
 					<div class="corner-shadow-left"></div>
+					<div class="message">Location in RAM (hexadecimal)</div>
 				</div>
 				<div id="folders" tabindex="0"><div id="kb-marker"></div><table></table>
 				</div>

@@ -1290,6 +1290,7 @@ Browser.prototype = {
 					searchType:		$("#dropdown-search").val(),
 					searchQuery:	this.isSearching ? searchQuery : "",
 					searchHere:		($("#search-here").is(":checked") ? 1 : 0),
+					factoid:		main.factoidType,
 			}, function(data) {
 				this.validateData(data, function(data) {
 
