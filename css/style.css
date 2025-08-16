@@ -102,6 +102,8 @@
 	--border-button-select:			var(--color-button-border-select);
 	--shadow-button-select:			0 0 0 transparent;
 
+	--shadow-button-triangle:		#d2d2d2;
+
 	--color-theme-selector-bg:		var(--color-button);
 	--color-theme-selector-border:	var(--color-button-border);
 	--color-theme-bg-hovtop:		var(--color-top);
@@ -510,6 +512,8 @@
 
 	--border-button-select:			#b4bbad;
 	--shadow-button-select:			none; /*inset 1px 1px 6px #111;*/
+
+	--shadow-button-triangle:		#181818;
 
 	--color-theme-selector-bg:		#242424;
 	--color-theme-selector-border:	var(--color-theme-selector-bg);
@@ -3433,31 +3437,95 @@ input[type=range]::-ms-track {
 				color: var(--color-text-fa-common);
 			}
 
+		/* Container for the two corner buttons in the bottom */
 		#corner-buttons {
+			overflow: hidden;
 			position: absolute;
-			bottom: 51px;
+			bottom: 50px;
 			width: 100%;
-			height: 40px;
+			height: 80px;
+			z-index: 1;
 		}
 
+			/* Base triangle button look (shared) */
 			#corner-buttons .corner-svg {
 				position: absolute;
-				right: 0;
-				bottom: 0;
 				width: 38px;
 				height: 38px;
 				background: var(--color-button);
-				clip-path: url(#cb-corner-clip);
 				display: inline-flex;
 				align-items: flex-end;
 				justify-content: flex-end;
 				padding: 6px;
 				border: 0;
-				cursor: pointer;
 				box-shadow: none;
+				cursor: pointer;
 				color: var(--color-button-text);
-				z-index: 2;
 			}
+
+				/* Right corner button */
+				#corner-buttons .corner-right {
+					clip-path: url(#cb-corner-clip-right);
+					right: -14px;	/* Collapsed */
+					bottom: -13px;
+					transition: right 100ms linear, bottom 100ms linear;
+				}
+
+					/* Reveal button on corner buttons AND search containers */
+					#songs:has(:is(#corner-buttons, #search):is(:hover, :focus-within)) .corner-right {
+						right: 0;
+						bottom: 1px;
+					}
+
+				/* Shadow borders for the triangle towards the corner of the container */
+				#corner-buttons .corner-shadow-right {
+					position: absolute;
+					right: 0;
+					bottom: 1px;
+					width: 0;
+					height: 0;
+					border-bottom: 2px solid var(--shadow-button-triangle);
+					border-right: 2px solid var(--shadow-button-triangle);
+					z-index: -1;
+					transition: all 100ms linear;
+				}
+
+					#songs:has(:is(#corner-buttons, #search):is(:hover, :focus-within)) .corner-shadow-right {
+						width: 34px;
+						height: 34px;
+					}
+
+				/* Left corner button */
+				#corner-buttons .corner-left {
+					clip-path: url(#cb-corner-clip-left);
+					left: -14px;	/* Collapsed */
+					bottom: -13px;
+					transition: left 100ms linear, bottom 100ms linear;
+				}
+
+					/* Reveal button on corner buttons AND search containers */
+					#songs:has(:is(#corner-buttons, #search):is(:hover, :focus-within)) .corner-left {
+						left: 0;
+						bottom: 1px;
+					}
+
+				/* Shadow borders for the triangle towards the corner of the container */
+				#corner-buttons .corner-shadow-left {
+					position: absolute;
+					left: 0;
+					bottom: 1px;
+					width: 0;
+					height: 0;
+					border-bottom: 2px solid var(--shadow-button-triangle);
+					border-left: 2px solid var(--shadow-button-triangle);
+					z-index: -1;
+					transition: all 100ms linear;
+				}
+
+					#songs:has(:is(#corner-buttons, #search):is(:hover, :focus-within)) .corner-shadow-left {
+						width: 34px;
+						height: 34px;
+					}
 
 			#corner-buttons .corner-svg:hover {
 				background: var(--color-button-hover);
@@ -3471,8 +3539,21 @@ input[type=range]::-ms-track {
 			#corner-buttons .cb-icon {
 				display: block;
 				position: relative;
-				left: -1px;
+				opacity: 0;
 			}
+
+				#corner-buttons .corner-right .cb-icon {
+					left: -1px;
+				}
+
+				#corner-buttons .corner-left .cb-icon {
+					bottom: -1px;
+					left: -4px;
+				}
+
+				#songs:has(:is(#corner-buttons, #search):is(:hover, :focus-within)) .cb-icon {
+					opacity: 1;
+				}
 
 		#songs .disqus-sh {
 			display: none !important;
