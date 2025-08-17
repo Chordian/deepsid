@@ -1283,7 +1283,6 @@ Browser.prototype = {
 			this.subFolders = 0;
 			this.path = this.path.replace("/_CSDb", "/CSDb");
 			$("#path").empty();
-
 			// Call the AJAX PHP script that delivers the list of files and folders
 			this.hvsc = $.get("php/hvsc.php", {
 					folder:			this.path,

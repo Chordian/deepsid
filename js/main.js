@@ -8,7 +8,7 @@ var $=jQuery.noConflict();
 // Namespace for global variables and functions
 // @todo Move globals below into it and adapt where used
 var main = {
-	factoidType:	2,
+	factoidType:	0,
 };
 
 var cacheCSDb = cacheSticky = cacheStickyBeforeCompo = cacheCSDbProfile = cacheBeforeCompo = cachePlayer = cacheGB64 = cacheRemix = prevFile = sundryTab = reportSTIL = "";
@@ -94,6 +94,9 @@ $(function() { // DOM ready
 
 	HandleTopBox(emulator);
 
+	// Default factoid is song length
+	main.factoidType = parseInt(localStorage.getItem("factoid") ?? 2, 10);
+
 	SID = new SIDPlayer(emulator);
 	ctrls = new Controls();
 	browser = new Browser();
@@ -117,7 +120,6 @@ $(function() { // DOM ready
 			SettingToggle("skip-bad",		data.settings.skipbad);
 			SettingToggle("skip-long",		data.settings.skiplong);
 			SettingToggle("skip-short",		data.settings.skipshort);
-			main.factoidType = data.settings.factoid;
 		});
 	}.bind(this));
 	
@@ -453,11 +455,7 @@ $(function() { // DOM ready
 					if (main.factoidType > 12) main.factoidType = 0;
 
 					BrowserMessage(factoidMessage[main.factoidType]);
-
-					// Store the factoid type in the database settings
-					$.post("php/settings.php", { factoid: main.factoidType }, function(data) {
-						browser.validateData(data);
-					});
+					localStorage.setItem("factoid", main.factoidType);
 
 					// Refresh the folder while remembering the scroll position
 					$(window).trigger($.Event("keyup", { key: "f", code: "KeyF", keyCode: 70, which: 70 }));
@@ -494,6 +492,24 @@ $(function() { // DOM ready
 	});
 
 	/**
+	 * Reveal the triangular corner buttons when hovering near the bottom of the
+	 * song browser. This includes hovering on the search bar.
+	 */
+	$(document).on("mousemove", function(event) {
+		var $songs = $("#songs");
+		var rect = $songs[0].getBoundingClientRect();
+		var inX = (event.clientX >= rect.left && event.clientX <= rect.right);
+		// Integer = height of '#corner-buttons' + '#search' combined
+		var nearBottom = (event.clientY >= (rect.bottom - 110) && event.clientY <= (rect.bottom + 8));
+
+		$songs.toggleClass("cb-prox", inX && nearBottom);
+	});
+
+	$("#songs").on("mouseleave", function () {
+		$(this).removeClass("cb-prox");
+	});	
+
+	/**
 	 * When clicking one of the two triangular corner buttons.
 	 */
 	$("#corner-buttons").on("click", function(event) {
@@ -504,11 +520,6 @@ $(function() { // DOM ready
 		} else if ($this.hasClass("corner-left")) {
 			// Toggle tags ON/OFF
 			$(window).trigger($.Event("keyup", { key: "y", code: "KeyY", keyCode: 89, which: 89 }));
-		} else {
-			// Clicking the transparent container should perform click-through
-			$("#corner-buttons").hide();
-		    $(document.elementFromPoint(event.clientX, event.clientY)).trigger("click");
-    		$("#corner-buttons").show();
 		}
 	});
 

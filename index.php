@@ -642,10 +642,13 @@
 					<?php if (!MiniPlayer()): ?>
 						<div id="sundry-news">
 							<!--<span>The <a href="https://www.hvsc.c64.org/" target="_top">High Voltage SID Collection</a> has been upgraded to the latest version #83. Click <a href="//deepsid.chordian.net/?search=83&type=new">here</a> to see what's new in this update.</span>-->
-							<span><a href="http://www.c64music.co.uk/" target="_top">Compute's Gazette SID Collection</a> has been upgraded to the latest version #147. Click <a href="//deepsid.chordian.net/?search=147&type=new">here</a> to see what's new in this update.</span>
+							<!--<span><a href="http://www.c64music.co.uk/" target="_top">Compute's Gazette SID Collection</a> has been upgraded to the latest version #147. Click <a href="//deepsid.chordian.net/?search=147&type=new">here</a> to see what's new in this update.</span>-->
+
 							<!--<span>Want to learn how to make SID tunes? Check out <a href="https://www.youtube.com/watch?v=nXNtLetxFUg">this tutorial video</a> now on YouTube.</span>-->
-							<!--<span><font style="color:var(--color-forum-moderator);">Keyboard control is here!</font>&nbsp;&nbsp;Use Up, Down, Home, End, Page Up, Page Down, and Enter to select a SID row. Press Backspace to go back one folder. See <a href="#" onclick="$('#tab-changes').trigger('click'); return false;">Changes</a> for more info.</span>-->
-							    <!--   See in controls.js: "showNewsImage" and "clickNews" for how to set up a news image -->
+
+							<span>You can now cycle through <i>factoids</i> using one of the new triangular buttons at the bottom of the song browser. See <a href="#" onclick="$('#tab-changes').trigger('click'); return false;">Changes</a> for info.</span>
+
+								<!--   See in controls.js: "showNewsImage" and "clickNews" for how to set up a news image -->
 							<!--<pre><b style="font-size:16px;">Coming up<br></b><b style="position:relative;top:-3px;font-size:13px;">17 - 19 Nov.</b><br><br><i style="position:absolute;bottom:-38px;right:4px;font-size:13px;line-height:17px;text-align:right;">New SID tunes<br><font style="font-size:17px;">incoming!</font></i></pre>-->
 							<!--<pre><b style="font-size:16px;">This weekend<br></b><b style="position:relative;top:-3px;font-size:13px;">24 - 27 July</b><br><br><i style="position:absolute;bottom:2px;right:4px;font-size:13px;line-height:17px;text-align:right;">New SID tunes<br><font style="font-size:17px;">incoming!</font></i></pre>-->
 						</div>
@@ -1916,6 +1919,33 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>August 17, 2025</h3>
+						<ul>
+							<li>The info field showing song lengths in the bottom-right corner of SID rows has been expanded into a
+								<i>factoid</i> field, which can now display other kinds of information. See below about how to change this.</li>
+							<li>Two new triangular buttons have been added at the bottom of the song browser window. They expand when
+								you move the mouse near them. The left button toggles tags on and off, while the right button cycles
+								through the available factoids. You can also use the hotkeys "y" and "u" to perform the same actions.</li>
+							<li>You can cycle through the following factoids:
+								<table style="margin:12px 0 12px 12px;max-width:750px;">
+									<tr><th style="width:320px;">Show nothing</th><td>The field will remain empty</td></tr>
+									<tr><th>Internal database ID</th><td>Probably only interesting to the DeepSID programmer</td></tr>
+									<tr><th>Song length</th><td>Default song length is shown if multiple subtunes</td></tr>
+									<tr><th>Type (PSID/RSID) and version</th><td>RSID is for SID files that require strict C64 compliance</td></tr>
+									<tr><th>Compatibility (e.g. BASIC)</th><td>Shown if the SID file was written in BASIC</td></tr>
+									<tr><th>Clock speed (PAL/NTSC)</th><td>Update frequency 50 Hz (PAL) or 60 Hz (NTSC)</td></tr>
+									<tr><th>SID model (6581/8580)</th><td>Composed using old SID chip (6581) or new (8580)</td></tr>
+									<tr><th>Size in bytes (decimal)</th><td>The size of the SID file (player and song data)</td></tr>
+									<tr><th>Start and end address (hexadecimal)</th><td>Where the SID file is located in C64 RAM</td></tr>
+									<tr><th>HVSC or CGSC update version</th><td>When it was added in an update (incomplete data)</td></tr>
+									<tr><th>CSDb SID ID</th><td>The SID ID as used by the CSDb web site</td></tr>
+									<tr><th>Game status (RELEASE/PREVIEW)</th><td>Applies to SID files used in games (needs updating)</td></tr>
+									<tr><th>Number of CSDb entries</th><td>Data is automatically updated as users revisit songs</td></tr>
+								</table>
+							</li>
+							<li>The selected factoid is stored locally.</li>
+						</ul>
 
 						<h3>August 9, 2025</h3>
 						<ul>

@@ -3445,6 +3445,7 @@ input[type=range]::-ms-track {
 			width: 100%;
 			height: 60px;
 			z-index: 3;
+			pointer-events: none;
 		}
 
 :root {
@@ -3484,6 +3485,7 @@ input[type=range]::-ms-track {
 				box-shadow: none;
 				cursor: pointer;
 				color: var(--color-button-text);
+				pointer-events: auto;
 			}
 
 				/* Right corner button */
@@ -3495,7 +3497,7 @@ input[type=range]::-ms-track {
 				}
 
 					/* Reveal button on corner buttons AND search containers */
-					#songs:has(:is(#corner-buttons, #search):is(:hover, :focus-within)) .corner-right {
+					#songs.cb-prox .corner-right {
 						right: 0;
 						bottom: 1px;
 					}
@@ -3513,7 +3515,7 @@ input[type=range]::-ms-track {
 					transition: all 100ms linear;
 				}
 
-					#songs:has(:is(#corner-buttons, #search):is(:hover, :focus-within)) .corner-shadow-right {
+					#songs.cb-prox .corner-shadow-right {
 						width: 34px;
 						height: 34px;
 					}
@@ -3527,7 +3529,7 @@ input[type=range]::-ms-track {
 				}
 
 					/* Reveal button on corner buttons AND search containers */
-					#songs:has(:is(#corner-buttons, #search):is(:hover, :focus-within)) .corner-left {
+					#songs.cb-prox  .corner-left {
 						left: 0;
 						bottom: 1px;
 					}
@@ -3545,7 +3547,7 @@ input[type=range]::-ms-track {
 					transition: all 100ms linear;
 				}
 
-					#songs:has(:is(#corner-buttons, #search):is(:hover, :focus-within)) .corner-shadow-left {
+					#songs.cb-prox  .corner-shadow-left {
 						width: 34px;
 						height: 34px;
 					}
@@ -3574,7 +3576,7 @@ input[type=range]::-ms-track {
 					left: -4px;
 				}
 
-				#songs:has(:is(#corner-buttons, #search):is(:hover, :focus-within)) .cb-icon {
+				#songs.cb-prox .cb-icon {
 					opacity: 1;
 				}
 

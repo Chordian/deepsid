@@ -9,7 +9,7 @@
  * @uses		$_GET['searchType']
  * @uses		$_GET['searchQuery']		overrides 'folder' if used
  * @uses		$_GET['searchHere']			1 = in current folder, 0 = in everything
- * @uses		$_GET['factoid']			factoid for users not logged in
+ * @uses		$_GET['factoid']			factoid type
  * 
  * @used-by		browser.js
  */
@@ -900,11 +900,6 @@ try {
 	// Extra data for CSDb compo parent folders
 	$isCompoRoot = $isCSDbCompo && empty($compoName);
 
-	// Read the user's settings
-	$users = $db->query('SELECT flags FROM users WHERE id = '.$user_id);
-	$users->setFetchMode(PDO::FETCH_OBJ);
-	$settings = unserialize($users->fetch()->flags);
-
 	foreach($files as $file) {
 
 		$extension = substr($file, -4);
@@ -1173,7 +1168,7 @@ try {
 			// A "factoid" is the info field in the bottom right corner of a SID row
 			$factoid = '';
 			$isCGSC = stripos($fullname, "_Compute's Gazette SID Collection/") !== false;
-			switch ($user_id ? $settings['factoid'] : $_GET['factoid']) {
+			switch ($_GET['factoid']) {
 
 				case 1:		// ID (hvsc_files)
 

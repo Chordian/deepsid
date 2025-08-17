@@ -15,7 +15,6 @@
  * @uses		$_POST['skipbad']			0 or 1
  * @uses		$_POST['skiplong']			0 or 1
  * @uses		$_POST['skipshort']			0 or 1
- * @uses		$_POST['factoid']			Integer
  * 
  * @used-by		main.js
  */
@@ -32,7 +31,6 @@ $firstTime = array(
 	'skipbad' =>		0,
 	'skiplong' =>		0,
 	'skipshort' =>		0,
-	'factoid' =>		2,
 );
 
 $user_id = $account->CheckLogin() ? $account->UserID() : 0;
@@ -60,10 +58,6 @@ try {
 	if (isset($_POST['skipbad']))		$settings['skipbad'] =		(int)$_POST['skipbad'];
 	if (isset($_POST['skiplong']))		$settings['skiplong'] =		(int)$_POST['skiplong'];
 	if (isset($_POST['skipshort']))		$settings['skipshort'] =	(int)$_POST['skipshort'];
-	if (isset($_POST['factoid']))		$settings['factoid'] =		(int)$_POST['factoid'];
-
-	// Make sure newer settings are reset if not in the user's settings yet
-	$settings['factoid'] = $settings['factoid'] ?? 2;
 
 	if ($_POST) {
 		// Store the settings
