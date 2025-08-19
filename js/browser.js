@@ -1620,6 +1620,30 @@ Browser.prototype = {
 						else if (file.filename.toLowerCase().indexOf("_3sid.sid") !== -1)
 							sidSpecial = '<div class="sid-special sidsp-3sid">3SID</div>';
 
+
+
+
+
+						var fbarWidth = 0;
+						if (file.fvalue) {
+							switch (main.factoidType) {
+								case 2:
+									const full = 10 * 60 * 1000; // First # is max minutes
+									const ratio = Math.min(1, Math.max(0, file.fvalue / full));
+									fbarWidth = Math.round(ratio * 200); // Last # is max bar size in px
+									fbarWidth += 23; // Width of text in px
+									break;
+								case 12:
+									fbarWidth = (file.fvalue * 1.25) + 54; // Last # is width of text in px
+									break;
+							}
+						}
+	
+
+
+
+
+
 						files += // GET FOLDER: SID ROW
 							'<tr'+(SID.emulator == "youtube" && countVideos == 0 ? ' class="disabled"' : '')+'>'+
 								'<td class="sid unselectable">'+sidSpecial+
@@ -1628,7 +1652,7 @@ Browser.prototype = {
 								'<div class="entry name file'+(this.isSearching || this.isCompoFolder || this.path.substr(0, 2) === "/$" ? ' search' : '')+'" data-name="'+encodeURIComponent(file.filename)+'" data-type="'+file.type+'" data-id="'+file.id+'" data-symid="'+file.symid+'">'+adaptedName+'</div></div></div><br />'+
 								'<span class="info">'+file.copyright.substr(0, 4)+infoSecondary+'<div class="tags-line"'+(showTags ? '' : ' style="display:none"')+tag_start_end+'>'+TAGS_BRACKET+list_of_tags+'</div></span></td>'+
 								'<td class="stars filestars"><span class="rating">'+this.buildStars(file.rating)+'</span>'+
-								(typeof file.uploaded != "undefined" ? '<span class="uploaded-time">'+file.uploaded.substr(0, 10)+'</span>' : '<span class="factoid">'+file.factoid+'</span>')+
+								(typeof file.uploaded != "undefined" ? '<span class="uploaded-time">'+file.uploaded.substr(0, 10)+'</span>' : '<div class="fdiv"><div class="fbar" style="width:'+fbarWidth+'px"></div><span class="factoid">'+file.factoid+'</span></div>')+
 								'</td>'+
 							'</tr>'; // &#9642; is the dot character if needed
 
@@ -1665,6 +1689,7 @@ Browser.prototype = {
 							symid:			file.symid,
 							videos:			file.videos,
 							factoid:		file.factoid,
+							fvalue:			file.fvalue,
 							profile:		file.profile,	// Only files from 'SID Happens'
 							uploaded:		file.uploaded,	// Only files from 'SID Happens'
 						});

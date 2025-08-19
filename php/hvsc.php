@@ -74,6 +74,40 @@ function ParseQuery($query) {
 	return array_map(fn($item) => str_replace('¤', '_', $item), $words);
 }
 
+/**
+ * Convert song length (3:33 or 3:33.333) to raw milliseconds.
+ * 
+ * @param		string		$length				HVSC song length
+ * 
+ * @return		int								Value in raw milliseconds
+ */
+function songLengthToMilliseconds(?string $length): ?int {
+    if (!is_string($length)) return null;
+
+    // Normalize and quick sanity checks
+    $length = trim($length);
+    if ($length === '') return 0;
+    if (strlen($length) > 20) return 0; // Avoid accidentally passing huge strings
+
+    // Match m:ss OR m:ss.xxx (minutes up to 4 digits, seconds 0-59)
+    if (!preg_match(
+        '/^(?<min>\d{1,4}):(?<sec>[0-5]?\d)(?:\.(?<frac>\d{1,9}))?$/',
+        $length,
+        $m
+    )) {
+        return 0;
+    }
+
+    $minutes = (int)$m['min'];
+    $seconds = (int)$m['sec'];
+
+    // Normalize fraction to milliseconds (pad/truncate to 3 digits)
+    $frac = $m['frac'] ?? '0';
+    $ms = (int) substr(str_pad($frac, 3, '0'), 0, 3);
+
+    return ($minutes * 60 + $seconds) * 1000 + $ms;
+}
+
 // --------------------------------------------------------------------------
 // START
 // --------------------------------------------------------------------------
@@ -1166,7 +1200,7 @@ try {
 				$player .= ' (unpacked)';
 
 			// A "factoid" is the info field in the bottom right corner of a SID row
-			$factoid = '';
+			$factoid = $fvalue = '';
 			$isCGSC = stripos($fullname, "_Compute's Gazette SID Collection/") !== false;
 			switch ($_GET['factoid']) {
 
@@ -1191,6 +1225,8 @@ try {
 						else
 							// Default HVSC subtune
 							$factoid = $sub_lengths[$startsubtune - 1];
+
+						$fvalue = SongLengthToMilliseconds($factoid);
 
 						// Get rid of the milliseconds
 						$factoid = explode('.', $factoid, 2)[0];
@@ -1268,6 +1304,7 @@ try {
 						$frow = $db->query('SELECT entries FROM csdb
 							WHERE sid_id = '.$csdbid.' LIMIT 1')->fetch(PDO::FETCH_OBJ);
 						if ($frow) {
+							$fvalue = $frow->entries;
 							$factoid = 'CSDb:<span>' . $frow->entries .'</span>';
 							if ($frow->entries == 0)
 								$factoid = '<div>' . $factoid . '</div>'; // Fade it
@@ -1316,6 +1353,7 @@ try {
 				'symid' =>			$symid,
 				'videos' =>			$videos,
 				'factoid' =>		$factoid,
+				'fvalue' =>			$fvalue,
 			));
 
 			// Add extra values for uploaded SID files too if available

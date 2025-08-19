@@ -2336,7 +2336,7 @@ input[type=range]::-ms-track {
 		overflow: visible;
 		max-height: 15px;
 		max-width: 100px;
-		z-index: 2;
+		z-index: 3;
 	}
 
 	/* For the bracket-style line below tags that connects two of the tags */
@@ -3404,6 +3404,10 @@ input[type=range]::-ms-track {
 			background: var(--svg-bg-star-empty-unvoted);
 		}
 
+		#songs .fdiv {
+			position: relative;
+		}
+
 		#songs .factoid,
 		#songs .uploaded-time {
 			float: right;
@@ -3412,7 +3416,9 @@ input[type=range]::-ms-track {
 			right: 13px;
 			font-size: 11px;
 			line-height: 11px;
-			color: var(--color-text-minor);
+			/*color: var(--color-text-minor);*/
+			color: var(--color-text-player);
+			z-index: 2;
 		}
 
 			/* Static width factoid field */
@@ -3437,6 +3443,37 @@ input[type=range]::-ms-track {
 				color: var(--color-text-fa-common);
 			}
 
+:root {
+			--color-fbar1: #c8c9b9ff 0%;
+			--color-fbar2: #c8c9b9c0 70%;
+			--color-fbar3: #c8c9b900 100%;
+}
+
+[data-theme="dark"] {
+			--color-fbar1: #6e7965ff 0%;
+			--color-fbar2: #6e796570 70%;
+			--color-fbar3: #6e796500 100%;
+}
+
+
+		/* Horizontal bar below factoid value */
+		#songs .fbar {
+			position: absolute;
+			top: 1.5px;
+			right: 12px;
+			height: 13.5px;
+			width: 0; /* Set in browser.js */
+			max-width: 200px;
+			border-radius: 2px;
+			/*background: #d4d4ff;*/
+			/*background: linear-gradient(to right, #acbb78ff 0%, #acbb7800 100%);*/
+			background: linear-gradient(to right, var(--color-fbar1), var(--color-fbar2), var(--color-fbar3));
+			background-size: 200px 100%;        /* Anchor scale */
+			background-repeat: no-repeat;
+			background-position: right center;  /* Gradient anchored at right edge */
+			z-index: 1;
+		}
+
 		/* Container for the two corner buttons in the bottom */
 		#corner-buttons {
 			overflow: hidden;
@@ -3444,7 +3481,7 @@ input[type=range]::-ms-track {
 			bottom: 50px;
 			width: 100%;
 			height: 60px;
-			z-index: 3;
+			z-index: 4;
 			pointer-events: none;
 		}
 
@@ -3455,6 +3492,7 @@ input[type=range]::-ms-track {
 [data-theme="dark"] {
 			--color-border-message: transparent;
 }
+
 			#corner-buttons .message {
 				display: none;
 				position: relative;
@@ -3468,7 +3506,7 @@ input[type=range]::-ms-track {
 				box-shadow: 2px 2px 4px var(--color-button-shadow);
 				border-radius: 5px;
 				border: 1px solid var(--color-border-message);
-				z-index: 3;
+				z-index: 4;
 			}
 
 			/* Base triangle button look (shared) */

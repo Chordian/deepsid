@@ -9,13 +9,18 @@ SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
 - Make direct URL arguments redirect correctly for the DeepSID.com domain.
 
-- Factoid type: SID row click rate (not direct number but e.g. percentage or similar).
-  Maybe the click rate percentage could even be shown as a colored percentage bar?
-
-- Factoid for CSDb entries: Add a colored bar below the value. Longer = more entries.
+- Factoid: A colored bar below the value for various span values. Could be used for: Song
+  length, CSDb entries, size in bytes, location (size).
 
 - Factoid: Cycling in search mode escapes it. Perhaps the culprit is the "f" refresh
-  call. Can it be updated to retain search mode after refreshing?
+  call. Can it be updated to retain search mode after refreshing? Maybe detect if search
+  was on, if so re-search, and then restore scroll position.
+
+- Consider hiding the "# ?" tag in JS.
+
+- Also use local storage for tags ON or OFF.
+
+- The tags ON/OFF corner button could toggle BETWEEN tags and factoids?
 
 - Sometimes browsing back from a folder requires two ENTER to enter another (especially
   if the dexter area has been accessed earlier). Maybe clear the Boolean variable for
@@ -166,6 +171,9 @@ CONSIDER THIS
 
 - Automate CGSC update process. All REN, MOVE, etc. Create folders where they can't be found
   in the filenames, count files in them, etc.
+
+- Factoid type: SID row click rate (not direct number but e.g. percentage or similar).
+  Maybe the click rate percentage could even be shown as a colored percentage bar?
 
 - Cache: When CSDb is down and a cache file is shown instead, a warning message in top
   could say that CSDb is currently unreachable so here's a cached file instead.
