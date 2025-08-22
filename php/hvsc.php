@@ -1267,6 +1267,7 @@ try {
 
 				case 7:		// Size in bytes (decimal)
 
+					$fvalue = $datasize - 3;
 					$factoid = ($datasize - 3) .' bytes';
 					break;
 

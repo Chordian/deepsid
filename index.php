@@ -944,18 +944,10 @@
 						</defs>
 					</svg>
 					<!-- Right triangle button (factoid toggle) -->
-					<button class="corner-svg corner-right" aria-label="Toggle tags">
-						<svg class="cb-icon" viewBox="0 0 24 24" width="32" height="32" aria-hidden="true">
-							<path d="M12.5 23.5 H23.5" fill="none" stroke="currentColor" stroke-width="1"
-								stroke-linecap="square" vector-effect="non-scaling-stroke"/>
-							<path d="M23.5 16.5 V23.5" fill="none" stroke="currentColor" stroke-width="1"
-								stroke-linecap="square" vector-effect="non-scaling-stroke"/>
-							<rect x="17.5" y="19.5" width="4" height="2" rx="0.5" ry="0.5" fill="currentColor"/>
-						</svg>
-					</button>
+					<button class="corner-svg corner-right" aria-label="Cycle factoid"><div>2</div></button>
 					<div class="corner-shadow-right"></div>
 					<!-- Left triangle button (tags on/off) -->
-					<button class="corner-svg corner-left" aria-label="Cycle factoid">
+					<button class="corner-svg corner-left" aria-label="Toggle tags">
 						<svg class="cb-icon" viewBox="0 0 24 24" width="32" height="32" aria-hidden="true">
 							<path fill="currentColor" fill-rule="evenodd"
 								d="
@@ -1919,6 +1911,12 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>August 20, 2025</h3>
+						<ul>
+							<li>The triangular button for cycling factoids now shows the current factoid number instead of a static icon.</li>
+							<li>The tag on/off state is now stored locally.</li>
+						</ul>
 
 						<h3>August 17, 2025</h3>
 						<ul>

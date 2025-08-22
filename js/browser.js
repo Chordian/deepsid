@@ -403,7 +403,76 @@ Browser.prototype = {
 
 				this.scrollPositions.push($("#folders").scrollTop()); // Remember where we parked
 				this.kbPositions.push(this.kbSelectedRow);
-				this.getFolder(0, $("#search-box").val().replace(/\s/g, "_"));
+
+
+
+				// Use ChatGPT suggestion!
+
+
+
+				var searchValue = $("#search-box").val();
+				if (searchValue.startsWith("@")) {
+					// Search command
+					switch (searchValue) {
+						case "@a":
+							// Go to letter folder 'A'
+							this.gotoFolder('MUSICIANS/A');
+							break;
+						case "@sh":
+							// Go to the 'SID Happens' folder
+							this.gotoFolder('/_SID Happens');
+							break;
+						case "@mer":
+						case "@mermaid":
+							// Go to Mermaid's folder
+							this.gotoFolder('MUSICIANS/M/Mermaid');
+							break;
+						case "@tel":
+						case "@jeroen":
+							// Go to Jeroen Tel's folder
+							this.gotoFolder('MUSICIANS/T/Tel_Jeroen');
+							break;
+						case "@rob":
+						case "@hub":
+						case "@hubbard":
+							// Go to Rob Hubbard's folder
+							this.gotoFolder('MUSICIANS/H/Hubbard_Rob');
+							break;
+						case "@jch":
+							// Go to JCH's folder
+							this.gotoFolder('MUSICIANS/J/JCH');
+							break;
+						case "@jam":
+						case "@jammer":
+							// Go to Jammer's folder
+							this.gotoFolder('MUSICIANS/J/Jammer');
+							break;
+						case "@gal":
+						case "@galway":
+							// Go to Martin Galway's folder
+							this.gotoFolder('MUSICIANS/G/Galway_Martin');
+							break;
+						case "@ben":
+						case "@dag":
+						case "@daglish":
+							// Go to Ben Daglish's folder
+							this.gotoFolder('MUSICIANS/D/Daglish_Ben');
+							break;
+						case "@drax":
+							// Go to DRAX's folder
+							this.gotoFolder('MUSICIANS/D/DRAX');
+							break;
+						case "@cd":
+						case "@dee":
+						case "@deenen":
+							// Go to Charles Deenen's folder
+							this.gotoFolder('MUSICIANS/D/Deenen_Charles');
+							break;
+						default:
+					}
+				} else
+					// Normal search
+					this.getFolder(0, searchValue.replace(/\s/g, "_"));
 				break;
 			case "search-cancel":
 				// Cancel the search results and return to the previous normal folder view
@@ -1169,7 +1238,7 @@ Browser.prototype = {
 						'<div class="entry name file'+(this.isSearching || this.isCompoFolder || this.path.substr(0, 2) === "/$" ? ' search' : '')+'" data-name="'+encodeURIComponent(file.filename)+'" data-type="'+file.type+'" data-id="'+file.id+'" data-symid="'+file.symid+'">'+adaptedName+'</div></div></div><br />'+
 						'<span class="info">'+file.copyright.substr(0, 4)+file.infosec+'<div class="tags-line"'+(showTags ? '' : ' style="display:none"')+tag_start_end+'>'+TAGS_BRACKET+file.tags+'</div></span></td>'+
 						'<td class="stars filestars"><span class="rating">'+this.buildStars(file.rating)+'</span>'+
-						(typeof file.uploaded != "undefined" ? '<span class="uploaded-time">'+file.uploaded.substr(0, 10)+'</span>' : '<span class="factoid">'+file.factoid+'</span>')+
+						(typeof file.uploaded != "undefined" ? '<span class="uploaded-time">'+file.uploaded.substr(0, 10)+'</span>' : '<div class="fdiv"><div class="fbar" style="width:'+file.fbarwidth+'px"></div><span class="factoid">'+file.factoid+'</span></div>')+
 						'</td>'+
 					'</tr>';					
 			}.bind(this));
@@ -1620,21 +1689,43 @@ Browser.prototype = {
 						else if (file.filename.toLowerCase().indexOf("_3sid.sid") !== -1)
 							sidSpecial = '<div class="sid-special sidsp-3sid">3SID</div>';
 
-
-
-
-
-						var fbarWidth = 0;
+						// Define a bar width for size-type factoids
+						var fbarWidth = 0, textWidth;
+						const maxBarSize = 200;
 						if (file.fvalue) {
 							switch (main.factoidType) {
-								case 2:
-									const full = 10 * 60 * 1000; // First # is max minutes
+								case 2:		// Song length
+									const maxMinutes = 10;
+									const full = maxMinutes * 60 * 1000;
 									const ratio = Math.min(1, Math.max(0, file.fvalue / full));
-									fbarWidth = Math.round(ratio * 200); // Last # is max bar size in px
-									fbarWidth += 23; // Width of text in px
+									textWidth = 23;
+									fbarWidth = Math.round(ratio * maxBarSize) + textWidth;
 									break;
-								case 12:
-									fbarWidth = (file.fvalue * 1.25) + 54; // Last # is width of text in px
+								case 7:		// Size in bytes (decimal)
+
+									const maxRamSize = 53248,
+										b = Math.max(0, Number(file.fvalue) || 0);
+									if (b !== 0) {
+										const ratio = Math.min(1, b / maxRamSize);
+										var px = Math.round(ratio * maxBarSize);
+									}
+									textWidth = 50;
+									fbarWidth = (px === 0 ? 1 : px) + textWidth;
+
+									/*var b = Math.max(0, Number(file.fvalue) || 0);
+									const floorBytes = 128, fullScaleBytes = 65536; // 128, 65536
+									if (b !== 0) {
+										b = Math.max(b, floorBytes);
+										const ratio = Math.min(1, Math.log(b / floorBytes) / Math.log(fullScaleBytes / floorBytes));
+										fbarWidth = Math.round(ratio * 200); // Last # is max bar size in px
+									}*/
+
+
+
+									break;
+								case 12:	// Number of CSDb entries
+									textWidth = 54;
+									fbarWidth = (file.fvalue * 1.25) + textWidth;
 									break;
 							}
 						}
@@ -1689,7 +1780,7 @@ Browser.prototype = {
 							symid:			file.symid,
 							videos:			file.videos,
 							factoid:		file.factoid,
-							fvalue:			file.fvalue,
+							fbarwidth:		fbarWidth,
 							profile:		file.profile,	// Only files from 'SID Happens'
 							uploaded:		file.uploaded,	// Only files from 'SID Happens'
 						});
@@ -1722,6 +1813,33 @@ Browser.prototype = {
 
 			}.bind(this));
 		}
+	},
+
+	/**
+	 * Go to the specified folder and show its contents.
+	 * 
+	 * @param {string} path 		Full path to the folder
+	 */
+	gotoFolder: function(path) {
+		if (path.substring(0, 6) == "DEMOS/" || path.substring(0, 6) == "GAMES/" || path.substring(0, 10) == "MUSICIANS/")
+			this.path = '/_High Voltage SID Collection/' + path;
+		else
+			this.path = path;
+
+		ctrls.state("prev/next", "disabled");
+		ctrls.state("subtunes", "disabled");
+
+		blockNextEnter = true;
+
+		this.getFolder();
+		this.scrollPositions = [this.scrollPositions[0]];
+		this.kbSelectedRow = [this.kbPositions[0]];
+		this.moveKeyboardSelection(this.kbSelectedRow, false);
+		this.getComposer();
+		ctrls.subtuneCurrent = ctrls.subtuneMax = 0; // Clear subtune switch
+		this.redirectFolder = "";
+
+		UpdateURL(true);
 	},
 
 	/**

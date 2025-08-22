@@ -3464,7 +3464,7 @@ input[type=range]::-ms-track {
 			height: 13.5px;
 			width: 0; /* Set in browser.js */
 			max-width: 200px;
-			border-radius: 2px;
+			border-radius: 1px;
 			/*background: #d4d4ff;*/
 			/*background: linear-gradient(to right, #acbb78ff 0%, #acbb7800 100%);*/
 			background: linear-gradient(to right, var(--color-fbar1), var(--color-fbar2), var(--color-fbar3));
@@ -3540,6 +3540,14 @@ input[type=range]::-ms-track {
 						bottom: 1px;
 					}
 
+					/* Currently selected factoid number */
+					#songs .corner-right div {
+						position: relative;
+						font: bold 13px "Open Sans", sans-serif;
+						opacity: 0;
+						pointer-events: none;
+					}
+
 				/* Shadow borders for the triangle towards the corner of the container */
 				#corner-buttons .corner-shadow-right {
 					position: absolute;
@@ -3605,16 +3613,13 @@ input[type=range]::-ms-track {
 				opacity: 0;
 			}
 
-				#corner-buttons .corner-right .cb-icon {
-					left: -1px;
-				}
-
 				#corner-buttons .corner-left .cb-icon {
 					bottom: -1px;
 					left: -4px;
 				}
 
-				#songs.cb-prox .cb-icon {
+				#songs.cb-prox .cb-icon,
+				#songs.cb-prox .corner-right div {
 					opacity: 1;
 				}
 

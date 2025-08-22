@@ -35,19 +35,19 @@ var tabPrevScrollPos = {
 }
 
 const factoidMessage = [
-	"Show nothing",							// 0
-	"Internal database ID",					// 1
-	"Song length",							// 2
-	"Type (PSID/RSID) and version",			// 3
-	"Compatibility (e.g. BASIC)",			// 4
-	"Clock speed (PAL/NTSC)",				// 5
-	"SID model (6581/8580)",				// 6
-	"Size in bytes (decimal)",				// 7
-	"Start and end address (hexadecimal)",	// 8
-	"HVSC or CGSC update version",			// 9
-	"CSDb SID ID",							// 10
-	"Game status (RELEASE/PREVIEW)",		// 11
-	"Number of CSDb entries",				// 12
+	"0. Show nothing",
+	"1. Internal database ID",
+	"2. Song length",
+	"3. Type (PSID/RSID) and version",
+	"4. Compatibility (e.g. BASIC)",
+	"5. Clock speed (PAL/NTSC)",
+	"6. SID model (6581/8580)",
+	"7. Size in bytes (decimal)",
+	"8. Start and end address (hexadecimal)",
+	"9. HVSC or CGSC update version",
+	"10. CSDb SID ID",
+	"11. Game status (RELEASE/PREVIEW)",
+	"12. Number of CSDb entries",
 ];
 
 const isFirefox = typeof InstallTrigger !== "undefined"; // Firefox can scroll a lot faster than Chrome
@@ -56,8 +56,6 @@ const PATH_UPLOADS = "_SID Happens";
 const PATH_SID_FM = PATH_UPLOADS + "/SID+FM";
 
 $(function() { // DOM ready
-
-	var userExists = false;
 
 	isMobile = $("body").attr("data-mobile") !== "0";
 	isNotips = $("body").attr("data-notips") !== "0";
@@ -74,7 +72,7 @@ $(function() { // DOM ready
 	}
 
 	// Don't show tags on mobile devices as the dragging there might give way to sideways scrolling
-	showTags = !isMobile;
+	showTags = isMobile ? false : localStorage.getItem("showtags") !== "false";
 
 	// However, a URL switch may TEMPORARILY override the stored emulator
 	var emulator = GetParam("emulator").toLowerCase();
@@ -96,6 +94,7 @@ $(function() { // DOM ready
 
 	// Default factoid is song length
 	main.factoidType = parseInt(localStorage.getItem("factoid") ?? 2, 10);
+	UpdateFactoidButton(main.factoidType);
 
 	SID = new SIDPlayer(emulator);
 	ctrls = new Controls();
@@ -446,6 +445,8 @@ $(function() { // DOM ready
 					$("#showtags").prop("checked", showTags);
 					showTags ? $("#songs .tags-line").show() : $("#songs .tags-line").hide();
 
+					localStorage.setItem("showtags", showTags); // Boolean is stored as a string
+
 					BrowserMessage("Show tags: "+(showTags ? "ON" : "OFF"));
 					break;
 
@@ -454,6 +455,7 @@ $(function() { // DOM ready
 					main.factoidType++;
 					if (main.factoidType > 12) main.factoidType = 0;
 
+					UpdateFactoidButton(main.factoidType);
 					BrowserMessage(factoidMessage[main.factoidType]);
 					localStorage.setItem("factoid", main.factoidType);
 
@@ -2425,6 +2427,33 @@ function BrowserMessage(message) {
 	cornerMessageTimer = setTimeout(() => {
 		$("#corner-buttons .message").hide();
 	}, 1500);
+}
+
+/**
+ * Update the number in the triangle corner button for cycling factoids. It
+ * should match the currently selected factoid number.
+ * 
+ * @param {number} factoid 
+ */
+function UpdateFactoidButton(factoid) {
+	$factoidButton = $("#corner-buttons .corner-right div");
+	$factoidButton.empty().append(factoid);
+	var style;
+	if (factoid < 10)
+		style = {
+			// Numbers 0 to 9
+			"font-size":	"13px",
+			"top":			"1px",
+			"left":			"0.5px",
+		}
+	else
+		style = {
+			// Numbers 10 and up
+			"font-size":	"10px",
+			"top":			"-1px",
+			"left":			"2px",
+		}
+	$factoidButton.css(style);
 }
 
 /**
