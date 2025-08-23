@@ -3455,7 +3455,6 @@ input[type=range]::-ms-track {
 			--color-fbar3: #6e796500 100%;
 }
 
-
 		/* Horizontal bar below factoid value */
 		#songs .fbar {
 			position: absolute;

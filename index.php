@@ -1912,10 +1912,12 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
-						<h3>August 20, 2025</h3>
+						<h3>August 23, 2025</h3>
 						<ul>
+							<li>All size-type factoids (song length, size in bytes, number of CSDb entries) now display a horizontal bar. To see them clearly,
+								remember to turn off tags (using either the left triangular button or the "y" hotkey).</li>
+							<li>The tag on/off state is now stored locally too.</li>
 							<li>The triangular button for cycling factoids now shows the current factoid number instead of a static icon.</li>
-							<li>The tag on/off state is now stored locally.</li>
 						</ul>
 
 						<h3>August 17, 2025</h3>
@@ -1927,19 +1929,19 @@
 								through the available factoids. You can also use the hotkeys "y" and "u" to perform the same actions.</li>
 							<li>You can cycle through the following factoids:
 								<table style="margin:12px 0 12px 12px;max-width:750px;">
-									<tr><th style="width:320px;">Show nothing</th><td>The field will remain empty</td></tr>
-									<tr><th>Internal database ID</th><td>Probably only interesting to the DeepSID programmer</td></tr>
-									<tr><th>Song length</th><td>Default song length is shown if multiple subtunes</td></tr>
-									<tr><th>Type (PSID/RSID) and version</th><td>RSID is for SID files that require strict C64 compliance</td></tr>
-									<tr><th>Compatibility (e.g. BASIC)</th><td>Shown if the SID file was written in BASIC</td></tr>
-									<tr><th>Clock speed (PAL/NTSC)</th><td>Update frequency 50 Hz (PAL) or 60 Hz (NTSC)</td></tr>
-									<tr><th>SID model (6581/8580)</th><td>Composed using old SID chip (6581) or new (8580)</td></tr>
-									<tr><th>Size in bytes (decimal)</th><td>The size of the SID file (player and song data)</td></tr>
-									<tr><th>Start and end address (hexadecimal)</th><td>Where the SID file is located in C64 RAM</td></tr>
-									<tr><th>HVSC or CGSC update version</th><td>When it was added in an update (incomplete data)</td></tr>
-									<tr><th>CSDb SID ID</th><td>The SID ID as used by the CSDb web site</td></tr>
-									<tr><th>Game status (RELEASE/PREVIEW)</th><td>Applies to SID files used in games (needs updating)</td></tr>
-									<tr><th>Number of CSDb entries</th><td>Data is automatically updated as users revisit songs</td></tr>
+									<tr><th style="width:330px;">0. Show nothing</th><td>The field will remain empty</td></tr>
+									<tr><th>1. Internal database ID</th><td>Probably only interesting to the DeepSID programmer</td></tr>
+									<tr><th>2. Song length</th><td>Default song length is shown if multiple subtunes</td></tr>
+									<tr><th>3. Type (PSID/RSID) and version</th><td>RSID is for SID files that require strict C64 compliance</td></tr>
+									<tr><th>4. Compatibility (e.g. BASIC)</th><td>Shown if the SID file was written in BASIC</td></tr>
+									<tr><th>5. Clock speed (PAL/NTSC)</th><td>Update frequency 50 Hz (PAL) or 60 Hz (NTSC)</td></tr>
+									<tr><th>6. SID model (6581/8580)</th><td>Composed using old SID chip (6581) or new (8580)</td></tr>
+									<tr><th>7. Size in bytes (decimal)</th><td>The size of the SID file (player and song data)</td></tr>
+									<tr><th>8. Start and end address (hexadecimal)</th><td>Where the SID file is located in C64 RAM</td></tr>
+									<tr><th>9. HVSC or CGSC update version</th><td>When it was added in an update (incomplete data)</td></tr>
+									<tr><th>10. CSDb SID ID</th><td>The SID ID as used by the CSDb web site</td></tr>
+									<tr><th>11. Game status (RELEASE/PREVIEW)</th><td>Applies to SID files used in games (needs updating)</td></tr>
+									<tr><th>12. Number of CSDb entries</th><td>Data is automatically updated as users revisit songs</td></tr>
 								</table>
 							</li>
 							<li>The selected factoid is stored locally.</li>

@@ -12,11 +12,13 @@ SHOULD BE DONE
 - Factoid: A colored bar below the value for various span values. Could be used for: Song
   length, CSDb entries, size in bytes, location (size).
 
-- Factoid: Cycling in search mode escapes it. Perhaps the culprit is the "f" refresh
+- Factoid: Cycling escapes search mode if in it. Perhaps the culprit is the "f" refresh
   call. Can it be updated to retain search mode after refreshing? Maybe detect if search
   was on, if so re-search, and then restore scroll position. UPDATE: That would take
   search time each refresh. Maybe better to cache the browser list and restore the cache
   upon refresh?
+
+- Add more "+" search commands. Consider a different initiator hotkey or character.
 
 - Consider hiding the "# ?" tag in JS.
 
@@ -26,17 +28,15 @@ SHOULD BE DONE
 
 - When hitting BACKSPACE to go one folder back, also set focus to browser window.
 
+- Uploading songs with "Abc - Def" (which becomes "Abc_-_Def") should automatically be
+  adapted to "Abc_Def" instead by the JS uploader.
+
 - Right-clicking the factoid corner button should show a context menu, where you can
   choose the factoid directly. More convenient than toggling with the left mouse button.
 
 - Sometimes browsing back from a folder requires two ENTER to enter another (especially
   if the dexter area has been accessed earlier). Maybe clear the Boolean variable for
   preventing double ENTER in the code where the BACKSPACE key is processed?
-
-- Fancy search shortcuts. First an easy special char, e.g. @ or something, then a command.
-  For example, @tel instantly open Jeroen Tel's folder. For maximum comfort, allow a whole
-  range of special chars, not just @ but also ½, *, +, etc. UPDATE: When typing the first
-  character @ even if NOT in the search box, it should focus to it and type it.
 
 - In addition to the dollar icon for professional composers, an icon for sceners. But what
   should it look like?

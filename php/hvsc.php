@@ -1268,7 +1268,7 @@ try {
 				case 7:		// Size in bytes (decimal)
 
 					$fvalue = $datasize - 3;
-					$factoid = ($datasize - 3) .' bytes';
+					$factoid = 'Bytes: <span class="id">' . ($datasize - 3) . '</span>';
 					break;
 
 				case 8:		// Start and end address (hexadecimal)

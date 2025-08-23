@@ -323,6 +323,12 @@ $(function() { // DOM ready
 
 					// @todo Escaping custom dialog box should not escape search mode!
 					break;
+
+				case 107:	// Keyup '+' - search command
+				case 171:
+
+					$("#search-box").focus().val("+");
+					break;
 	
 				case 32:	// Keyup 'Space' - play/pause
 

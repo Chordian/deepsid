@@ -39,6 +39,78 @@ const playerStrips = [
 	},
 ];
 
+const commandGroups = [
+	['',											['', 'root']],
+	['/_SID Happens',								['sh']],
+	['/_SID Happens/SID+FM',						['fm']],
+	["/_Compute's Gazette SID Collection",			['cgsc']],
+	["/_Compute's Gazette SID Collection/Misc",		['misc']],
+	['MUSICIANS/0-9/20CC',							['2', '20', '20cc']],
+	['MUSICIANS/0-9/20CC/van_Santen_Edwin',			['san', 'sant', 'santen', 'edw', 'edwin']],
+	['MUSICIANS/0-9/4-Mat',							['4', '4mat']],
+	['MUSICIANS/A/A-Man',							['aman']],
+	['MUSICIANS/A/Abynx',							['aby', 'abynx']],
+	['MUSICIANS/A/Abaddon',							['aba']],
+	['MUSICIANS/A/Acrouzet',						['ac', 'acro', 'acrouzet']],
+	['MUSICIANS/A/Agemixer',						['am', 'age', 'agemixer']],
+	['MUSICIANS/A/Ajitek',							['aj', 'aji', 'ajitek']],
+	['MUSICIANS/A/AMJ',								['amj']],
+	['MUSICIANS/A/Apollyon',						['ap', 'apo', 'apollyon']],
+	['MUSICIANS/A/Atomcode',						['atom', 'atomcode']],
+	['MUSICIANS/A/ATOO',							['atoo']],
+	['MUSICIANS/A/Avalon',							['av', 'ava', 'avalon']],
+	['MUSICIANS/B/Bakewell_Dwayne',					['db', 'dwa', 'bake', 'bakewell']],
+	['MUSICIANS/B/Bakker_Nantco',					['bakker', 'nan', 'nantco']],
+	['MUSICIANS/B/Baldwin_Neil',					['bal', 'bald', 'baldwin', 'demon']],
+	['MUSICIANS/B/Barik',							['barik']],
+	['MUSICIANS/B/Bayliss_Richard',					['rb', 'bay', 'bayliss', 'rich', 'richard']],
+	['MUSICIANS/B/Beat_Machine/Xayne',				['xay', 'xayne']],
+	['MUSICIANS/B/Beben_Wally',						['wb', 'wal', 'wally', 'beb', 'beben']],
+	['MUSICIANS/B/Behdad_Arman',					['arm', 'arman', 'beh', 'behdad', 'int', 'intensity']],
+	['MUSICIANS/B/Bjerregaard_Johannes',			['jb', 'jozz', 'johannes', 'bj', 'bje', 'bjer', 'bjerre']],
+	['MUSICIANS/B/Blidon_Jens',						['jens', 'bli', 'blid', 'blidon']],
+	['MUSICIANS/B/Blues_Muz',						['bm', 'blu', 'blue', 'blues']],
+	['MUSICIANS/B/Blues_Muz/Gallefoss_Glenn',		['gg', 'grg', 'gal', 'galle', 'glenn', '6r6']],
+	['MUSICIANS/B/Blues_Muz/Nordboe_Kjell',			['kn', 'kje', 'kjel', 'kjell', 'nor', 'nord']],
+	['MUSICIANS/B/Bogas_Ed',						['ed', 'bog', 'bogas']],
+	['MUSICIANS/B/BOGG',							['bogg']],
+	['MUSICIANS/B/Booker',							['book', 'booker']],
+	['MUSICIANS/B/Brandon_Walsh',					['bw', 'bra', 'bran', 'brand', 'brandon', 'wal', 'walsh']],
+	['MUSICIANS/B/Brandt_Georg',					['gb', 'geo', 'georg', 'brandt']],
+	['MUSICIANS/B/Brennan_Neil',					['nb', 'neil', 'bre', 'bren', 'brennan']],
+	['MUSICIANS/B/Brian',							['bri', 'brian']],
+	['MUSICIANS/B/Brimble_Allister',				['ab', 'al', 'all', 'allister', 'brim', 'brimble']],
+	['MUSICIANS/B/Britelite',						['brit', 'britelite']],
+	['MUSICIANS/B/Brooke_Jason',					['bro', 'broo', 'brook', 'brooke']],
+	['MUSICIANS/B/Buddha',							['bud', 'buddha']],
+	['MUSICIANS/B/Bzyk',							['bz', 'bzy', 'bzyk']],
+
+	['MUSICIANS/D/Daglish_Ben',						['ben', 'dag', 'daglish']],
+	['MUSICIANS/D/Deenen_Charles',					['cd', 'dee', 'deen', 'deenen', 'cha', 'charles']],
+	['MUSICIANS/D/DRAX',							['drax']],
+	['MUSICIANS/F/Follin_Tim',						['tf', 'tim', 'fol', 'follin']],
+	['MUSICIANS/G/Galway_Martin',					['mg', 'gal', 'galway']],
+	['MUSICIANS/G/Gray_Fred',						['fg', 'fred']],
+	['MUSICIANS/G/Gray_Matt',						['mat', 'matt', 'gray']],
+	['MUSICIANS/H/Hubbard_Rob',						['rh', 'rob', 'hub', 'hubbard']],
+	['MUSICIANS/H/Huelsbeck_Chris',					['ch', 'chris', 'huel', 'huelsbeck']],
+	['MUSICIANS/J/Jammer',							['jam', 'jammer']],
+	['MUSICIANS/J/JCH',								['jch']],
+	['MUSICIANS/L/Laxity',							['lax', 'laxity', 'tep', 'ege', 'egeskov']],
+	['MUSICIANS/L/Lft',								['lft']],
+	['MUSICIANS/L/Link',							['kg', 'link']],
+	['MUSICIANS/L/LMan',							['lman', 'markus', 'klein']],
+	['MUSICIANS/M/Mermaid',							['mer', 'mermaid']],
+	['MUSICIANS/O/Ouwehand_Reyn',					['ro', 'rey', 'reyn', 'ouw', 'ouwe', 'ouwehand']],
+	['MUSICIANS/P/Page_Jason',						['jp', 'jas', 'jason', 'page']],
+	['MUSICIANS/S/Shogoon',							['sho', 'shog', 'shogoon']],
+	['MUSICIANS/T/Tel_Jeroen',						['jt', 'tel', 'jer', 'jeroen']],
+];
+
+const aliasToFolder = new Map(
+	commandGroups.flatMap(([folder, aliases]) => aliases.map(a => [a, folder]))
+);
+
 function Browser() {
 
 	this.ROOT_HVSC = 'hvsc';
@@ -404,74 +476,9 @@ Browser.prototype = {
 				this.scrollPositions.push($("#folders").scrollTop()); // Remember where we parked
 				this.kbPositions.push(this.kbSelectedRow);
 
-
-
-				// Use ChatGPT suggestion!
-
-
-
 				var searchValue = $("#search-box").val();
-				if (searchValue.startsWith("@")) {
-					// Search command
-					switch (searchValue) {
-						case "@a":
-							// Go to letter folder 'A'
-							this.gotoFolder('MUSICIANS/A');
-							break;
-						case "@sh":
-							// Go to the 'SID Happens' folder
-							this.gotoFolder('/_SID Happens');
-							break;
-						case "@mer":
-						case "@mermaid":
-							// Go to Mermaid's folder
-							this.gotoFolder('MUSICIANS/M/Mermaid');
-							break;
-						case "@tel":
-						case "@jeroen":
-							// Go to Jeroen Tel's folder
-							this.gotoFolder('MUSICIANS/T/Tel_Jeroen');
-							break;
-						case "@rob":
-						case "@hub":
-						case "@hubbard":
-							// Go to Rob Hubbard's folder
-							this.gotoFolder('MUSICIANS/H/Hubbard_Rob');
-							break;
-						case "@jch":
-							// Go to JCH's folder
-							this.gotoFolder('MUSICIANS/J/JCH');
-							break;
-						case "@jam":
-						case "@jammer":
-							// Go to Jammer's folder
-							this.gotoFolder('MUSICIANS/J/Jammer');
-							break;
-						case "@gal":
-						case "@galway":
-							// Go to Martin Galway's folder
-							this.gotoFolder('MUSICIANS/G/Galway_Martin');
-							break;
-						case "@ben":
-						case "@dag":
-						case "@daglish":
-							// Go to Ben Daglish's folder
-							this.gotoFolder('MUSICIANS/D/Daglish_Ben');
-							break;
-						case "@drax":
-							// Go to DRAX's folder
-							this.gotoFolder('MUSICIANS/D/DRAX');
-							break;
-						case "@cd":
-						case "@dee":
-						case "@deenen":
-							// Go to Charles Deenen's folder
-							this.gotoFolder('MUSICIANS/D/Deenen_Charles');
-							break;
-						default:
-					}
-				} else
-					// Normal search
+				// Search the query unless a search command was entered
+				if (!this.handleSearchCommand.call(this, searchValue)) 
 					this.getFolder(0, searchValue.replace(/\s/g, "_"));
 				break;
 			case "search-cancel":
@@ -1690,7 +1697,7 @@ Browser.prototype = {
 							sidSpecial = '<div class="sid-special sidsp-3sid">3SID</div>';
 
 						// Define a bar width for size-type factoids
-						var fbarWidth = 0, textWidth;
+						var fbarWidth = 0;
 						const maxBarSize = 200;
 						if (file.fvalue) {
 							switch (main.factoidType) {
@@ -1698,42 +1705,16 @@ Browser.prototype = {
 									const maxMinutes = 10;
 									const full = maxMinutes * 60 * 1000;
 									const ratio = Math.min(1, Math.max(0, file.fvalue / full));
-									textWidth = 23;
-									fbarWidth = Math.round(ratio * maxBarSize) + textWidth;
+									fbarWidth = Math.round(ratio * maxBarSize) + 23; // Text width
 									break;
 								case 7:		// Size in bytes (decimal)
-
-									const maxRamSize = 53248,
-										b = Math.max(0, Number(file.fvalue) || 0);
-									if (b !== 0) {
-										const ratio = Math.min(1, b / maxRamSize);
-										var px = Math.round(ratio * maxBarSize);
-									}
-									textWidth = 50;
-									fbarWidth = (px === 0 ? 1 : px) + textWidth;
-
-									/*var b = Math.max(0, Number(file.fvalue) || 0);
-									const floorBytes = 128, fullScaleBytes = 65536; // 128, 65536
-									if (b !== 0) {
-										b = Math.max(b, floorBytes);
-										const ratio = Math.min(1, Math.log(b / floorBytes) / Math.log(fullScaleBytes / floorBytes));
-										fbarWidth = Math.round(ratio * 200); // Last # is max bar size in px
-									}*/
-
-
-
+									fbarWidth = this.bytesToBarWidthPivotLog(file.fvalue);  // Text width
 									break;
 								case 12:	// Number of CSDb entries
-									textWidth = 54;
-									fbarWidth = (file.fvalue * 1.25) + textWidth;
+									fbarWidth = (file.fvalue * 1.25) + 54; // Text width
 									break;
 							}
 						}
-	
-
-
-
-
 
 						files += // GET FOLDER: SID ROW
 							'<tr'+(SID.emulator == "youtube" && countVideos == 0 ? ' class="disabled"' : '')+'>'+
@@ -1813,6 +1794,86 @@ Browser.prototype = {
 
 			}.bind(this));
 		}
+	},
+
+	/**
+	 * Use pivoted log scale for size of SID files in bytes.
+	 * 
+	 * - floorBytes: Lower bound for log (prevents -Inf)
+	 * - smallBoostBytes: Bytes up to here keep the pure log mapping (so tiny tunes still stand out)
+	 * - gamma: >1 compresses mid/high region; e.g. 1.3 to 1.7
+	 */
+	bytesToBarWidthPivotLog: function (
+		bytes,
+		maxPx = 200,
+		fullScaleBytes = 65536,
+		floorBytes = 54,		// Default 128
+		smallBoostBytes = 300,  // Keep tiny sizes boosted
+		gamma = 1.5             // Compress mid (2–8 KB) a bit
+	) {
+
+		let b = Math.max(0, Number(bytes) || 0);
+		if (b === 0) return 0;
+
+		// Clamp to [floor, full] for the log math
+		const full = Math.max(fullScaleBytes, floorBytes + 1);
+		b = Math.min(Math.max(b, floorBytes), full);
+
+		// Base log ratio in [0..1]
+		const logDen = Math.log(full / floorBytes);
+		const ratio = logDen > 0 ? Math.log(b / floorBytes) / logDen : 0;
+
+		// Split point for the “tiny boost” region
+		const rSmall = Math.log(Math.max(smallBoostBytes, floorBytes) / floorBytes) / logDen;
+
+		let rAdj;
+		if (ratio <= rSmall) {
+			// Keep tiny region as-is (pure log)
+			rAdj = ratio;
+		} else {
+			// Compress the rest using gamma, but keep continuity at rSmall
+			const t = (ratio - rSmall) / (1 - rSmall); // Normalize to [0..1]
+			rAdj = rSmall + (1 - rSmall) * Math.pow(t, gamma);
+		}
+
+		return Math.round(rAdj * maxPx);
+	},
+
+	/**
+	 * Perform a search command (starts with specific character) if specified.
+	 * 
+	 * @param {string} raw 			Search query		
+	 * 
+	 * @returns {boolean}			TRUE if a search command was executed
+	 */
+	handleSearchCommand: function(raw) {
+		const v = String(raw).trim();
+		if (!v.startsWith("+")) return false;
+
+		const key = v.slice(1).toLowerCase();
+
+		// Single-letter A–Z goes to MUSICIANS/<LETTER>
+		if (/^[a-z]$/.test(key)) {
+			this.gotoFolder(`MUSICIANS/${key.toUpperCase()}`);
+			return true;
+		}
+
+		const folder = aliasToFolder.get(key);
+		if (folder) {
+			this.gotoFolder(folder);
+			return true;
+		}
+
+		// If no exact alias, try longest alias that matches the start
+		// e.g. '@merm' → Mermaid
+		for (const [alias, f] of aliasToFolder) {
+			if (key.startsWith(alias)) {
+				this.gotoFolder(f);
+				return true;
+			}
+		}
+
+		return false;		
 	},
 
 	/**
