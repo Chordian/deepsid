@@ -22,11 +22,14 @@ SHOULD BE DONE
 
 - Consider hiding the "# ?" tag in JS.
 
+- Remix tab shows 0 entries after LMan made a change. Find out why it doesn't work.
+
 - Add a sort option for currently selected factoid.
 
 - Replace folder icon click in comments with 'gotoFolder()' instead.
 
 - When hitting BACKSPACE to go one folder back, also set focus to browser window.
+  Maybe also when using left/right cursor keys for selecting prev/next SID file.
 
 - Uploading songs with "Abc - Def" (which becomes "Abc_-_Def") should automatically be
   adapted to "Abc_Def" instead by the JS uploader.

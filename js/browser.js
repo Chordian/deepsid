@@ -84,6 +84,28 @@ const commandGroups = [
 	['MUSICIANS/B/Brooke_Jason',					['bro', 'broo', 'brook', 'brooke']],
 	['MUSICIANS/B/Buddha',							['bud', 'buddha']],
 	['MUSICIANS/B/Bzyk',							['bz', 'bzy', 'bzyk']],
+	['MUSICIANS/C/C0zmo',							['coz', 'cozmo']],
+	['MUSICIANS/C/Cadaver',							['cad', 'cadaver']],
+	['MUSICIANS/C/Cannon_Matthew',					['mc', 'can', 'cannon']],
+	['MUSICIANS/C/Carlos_Breeze',					['carl', 'carlos']],
+	['MUSICIANS/C/Chiummo_Aldo',					['ald', 'aldo']],
+	['MUSICIANS/C/Chiummo_Gaetano',					['gae', 'gaet', 'gaetano']],
+	['MUSICIANS/C/Chotaire',						['cho', 'chot', 'chotaire']],
+	['MUSICIANS/C/Clarke_Peter',					['pc', 'pete', 'peter', 'cla', 'clark', 'clarke']],
+	['MUSICIANS/C/Cleve',							['cle', 'cleve']],
+	['MUSICIANS/C/Clever_Music',					['clev', 'clever']],
+	['MUSICIANS/C/Comer',							['com', 'come', 'comer']],
+	['MUSICIANS/C/Compod',							['comp', 'compod']],
+	['MUSICIANS/C/Connolly_Sean',					['sean', 'con', 'conn', 'connolly']],
+	['MUSICIANS/C/Cooksey_Mark',					['mark', 'coo', 'cook', 'cooksey']],
+	['MUSICIANS/C/Cosowi',							['cos', 'coso', 'cosowi']],
+	['MUSICIANS/C/Cox_Chris',						['cc', 'cox']],
+	['MUSICIANS/C/CreaMD',							['cre', 'crea', 'cream', 'creamd', 'rom', 'roman']],
+	['MUSICIANS/C/Cross_Saul',						['sau', 'saul', 'cross']],
+	['MUSICIANS/C/Crowley_Owen',					['ow', 'owen', 'crow', 'crowley', 'conrad']],
+	['MUSICIANS/C/Crowther_Antony',					['ac', 'ant', 'antony', 'crowt', 'crowther']],
+	['MUSICIANS/C/Cyberbrain',						['cb', 'cyb', 'cyber', 'cyberbrain']],
+	['MUSICIANS/C/Cycleburner',						['cyc', 'cycle', 'cycleburner']],
 
 	['MUSICIANS/D/Daglish_Ben',						['ben', 'dag', 'daglish']],
 	['MUSICIANS/D/Deenen_Charles',					['cd', 'dee', 'deen', 'deenen', 'cha', 'charles']],
@@ -1699,7 +1721,7 @@ Browser.prototype = {
 						// Define a bar width for size-type factoids
 						var fbarWidth = 0;
 						const maxBarSize = 200;
-						if (file.fvalue) {
+						if (file.fvalue > 0) {
 							switch (main.factoidType) {
 								case 2:		// Song length
 									const maxMinutes = 10;
@@ -1708,7 +1730,7 @@ Browser.prototype = {
 									fbarWidth = Math.round(ratio * maxBarSize) + 23; // Text width
 									break;
 								case 7:		// Size in bytes (decimal)
-									fbarWidth = this.bytesToBarWidthPivotLog(file.fvalue);  // Text width
+									fbarWidth = this.bytesToBarWidthPivotLog(file.fvalue); // No text width
 									break;
 								case 12:	// Number of CSDb entries
 									fbarWidth = (file.fvalue * 1.25) + 54; // Text width
