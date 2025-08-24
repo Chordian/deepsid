@@ -39,100 +39,6 @@ const playerStrips = [
 	},
 ];
 
-const commandGroups = [
-	['',											['', 'root']],
-	['/_SID Happens',								['sh']],
-	['/_SID Happens/SID+FM',						['fm']],
-	["/_Compute's Gazette SID Collection",			['cgsc']],
-	["/_Compute's Gazette SID Collection/Misc",		['misc']],
-	['MUSICIANS/0-9/20CC',							['2', '20', '20cc']],
-	['MUSICIANS/0-9/20CC/van_Santen_Edwin',			['san', 'sant', 'santen', 'edw', 'edwin']],
-	['MUSICIANS/0-9/4-Mat',							['4', '4mat']],
-	['MUSICIANS/A/A-Man',							['aman']],
-	['MUSICIANS/A/Abynx',							['aby', 'abynx']],
-	['MUSICIANS/A/Abaddon',							['aba']],
-	['MUSICIANS/A/Acrouzet',						['ac', 'acro', 'acrouzet']],
-	['MUSICIANS/A/Agemixer',						['am', 'age', 'agemixer']],
-	['MUSICIANS/A/Ajitek',							['aj', 'aji', 'ajitek']],
-	['MUSICIANS/A/AMJ',								['amj']],
-	['MUSICIANS/A/Apollyon',						['ap', 'apo', 'apollyon']],
-	['MUSICIANS/A/Atomcode',						['atom', 'atomcode']],
-	['MUSICIANS/A/ATOO',							['atoo']],
-	['MUSICIANS/A/Avalon',							['av', 'ava', 'avalon']],
-	['MUSICIANS/B/Bakewell_Dwayne',					['db', 'dwa', 'bake', 'bakewell']],
-	['MUSICIANS/B/Bakker_Nantco',					['bakker', 'nan', 'nantco']],
-	['MUSICIANS/B/Baldwin_Neil',					['bal', 'bald', 'baldwin', 'demon']],
-	['MUSICIANS/B/Barik',							['barik']],
-	['MUSICIANS/B/Bayliss_Richard',					['rb', 'bay', 'bayliss', 'rich', 'richard']],
-	['MUSICIANS/B/Beat_Machine/Xayne',				['xay', 'xayne']],
-	['MUSICIANS/B/Beben_Wally',						['wb', 'wal', 'wally', 'beb', 'beben']],
-	['MUSICIANS/B/Behdad_Arman',					['arm', 'arman', 'beh', 'behdad', 'int', 'intensity']],
-	['MUSICIANS/B/Bjerregaard_Johannes',			['jb', 'jozz', 'johannes', 'bj', 'bje', 'bjer', 'bjerre']],
-	['MUSICIANS/B/Blidon_Jens',						['jens', 'bli', 'blid', 'blidon']],
-	['MUSICIANS/B/Blues_Muz',						['bm', 'blu', 'blue', 'blues']],
-	['MUSICIANS/B/Blues_Muz/Gallefoss_Glenn',		['gg', 'grg', 'gal', 'galle', 'glenn', '6r6']],
-	['MUSICIANS/B/Blues_Muz/Nordboe_Kjell',			['kn', 'kje', 'kjel', 'kjell', 'nor', 'nord']],
-	['MUSICIANS/B/Bogas_Ed',						['ed', 'bog', 'bogas']],
-	['MUSICIANS/B/BOGG',							['bogg']],
-	['MUSICIANS/B/Booker',							['book', 'booker']],
-	['MUSICIANS/B/Brandon_Walsh',					['bw', 'bra', 'bran', 'brand', 'brandon', 'wal', 'walsh']],
-	['MUSICIANS/B/Brandt_Georg',					['gb', 'geo', 'georg', 'brandt']],
-	['MUSICIANS/B/Brennan_Neil',					['nb', 'neil', 'bre', 'bren', 'brennan']],
-	['MUSICIANS/B/Brian',							['bri', 'brian']],
-	['MUSICIANS/B/Brimble_Allister',				['ab', 'al', 'all', 'allister', 'brim', 'brimble']],
-	['MUSICIANS/B/Britelite',						['brit', 'britelite']],
-	['MUSICIANS/B/Brooke_Jason',					['bro', 'broo', 'brook', 'brooke']],
-	['MUSICIANS/B/Buddha',							['bud', 'buddha']],
-	['MUSICIANS/B/Bzyk',							['bz', 'bzy', 'bzyk']],
-	['MUSICIANS/C/C0zmo',							['coz', 'cozmo']],
-	['MUSICIANS/C/Cadaver',							['cad', 'cadaver']],
-	['MUSICIANS/C/Cannon_Matthew',					['mc', 'can', 'cannon']],
-	['MUSICIANS/C/Carlos_Breeze',					['carl', 'carlos']],
-	['MUSICIANS/C/Chiummo_Aldo',					['ald', 'aldo']],
-	['MUSICIANS/C/Chiummo_Gaetano',					['gae', 'gaet', 'gaetano']],
-	['MUSICIANS/C/Chotaire',						['cho', 'chot', 'chotaire']],
-	['MUSICIANS/C/Clarke_Peter',					['pc', 'pete', 'peter', 'cla', 'clark', 'clarke']],
-	['MUSICIANS/C/Cleve',							['cle', 'cleve']],
-	['MUSICIANS/C/Clever_Music',					['clev', 'clever']],
-	['MUSICIANS/C/Comer',							['com', 'come', 'comer']],
-	['MUSICIANS/C/Compod',							['comp', 'compod']],
-	['MUSICIANS/C/Connolly_Sean',					['sean', 'con', 'conn', 'connolly']],
-	['MUSICIANS/C/Cooksey_Mark',					['mark', 'coo', 'cook', 'cooksey']],
-	['MUSICIANS/C/Cosowi',							['cos', 'coso', 'cosowi']],
-	['MUSICIANS/C/Cox_Chris',						['cc', 'cox']],
-	['MUSICIANS/C/CreaMD',							['cre', 'crea', 'cream', 'creamd', 'rom', 'roman']],
-	['MUSICIANS/C/Cross_Saul',						['sau', 'saul', 'cross']],
-	['MUSICIANS/C/Crowley_Owen',					['ow', 'owen', 'crow', 'crowley', 'conrad']],
-	['MUSICIANS/C/Crowther_Antony',					['ac', 'ant', 'antony', 'crowt', 'crowther']],
-	['MUSICIANS/C/Cyberbrain',						['cb', 'cyb', 'cyber', 'cyberbrain']],
-	['MUSICIANS/C/Cycleburner',						['cyc', 'cycle', 'cycleburner']],
-
-	['MUSICIANS/D/Daglish_Ben',						['ben', 'dag', 'daglish']],
-	['MUSICIANS/D/Deenen_Charles',					['cd', 'dee', 'deen', 'deenen', 'cha', 'charles']],
-	['MUSICIANS/D/DRAX',							['drax']],
-	['MUSICIANS/F/Follin_Tim',						['tf', 'tim', 'fol', 'follin']],
-	['MUSICIANS/G/Galway_Martin',					['mg', 'gal', 'galway']],
-	['MUSICIANS/G/Gray_Fred',						['fg', 'fred']],
-	['MUSICIANS/G/Gray_Matt',						['mat', 'matt', 'gray']],
-	['MUSICIANS/H/Hubbard_Rob',						['rh', 'rob', 'hub', 'hubbard']],
-	['MUSICIANS/H/Huelsbeck_Chris',					['ch', 'chris', 'huel', 'huelsbeck']],
-	['MUSICIANS/J/Jammer',							['jam', 'jammer']],
-	['MUSICIANS/J/JCH',								['jch']],
-	['MUSICIANS/L/Laxity',							['lax', 'laxity', 'tep', 'ege', 'egeskov']],
-	['MUSICIANS/L/Lft',								['lft']],
-	['MUSICIANS/L/Link',							['kg', 'link']],
-	['MUSICIANS/L/LMan',							['lman', 'markus', 'klein']],
-	['MUSICIANS/M/Mermaid',							['mer', 'mermaid']],
-	['MUSICIANS/O/Ouwehand_Reyn',					['ro', 'rey', 'reyn', 'ouw', 'ouwe', 'ouwehand']],
-	['MUSICIANS/P/Page_Jason',						['jp', 'jas', 'jason', 'page']],
-	['MUSICIANS/S/Shogoon',							['sho', 'shog', 'shogoon']],
-	['MUSICIANS/T/Tel_Jeroen',						['jt', 'tel', 'jer', 'jeroen']],
-];
-
-const aliasToFolder = new Map(
-	commandGroups.flatMap(([folder, aliases]) => aliases.map(a => [a, folder]))
-);
-
 function Browser() {
 
 	this.ROOT_HVSC = 'hvsc';
@@ -207,6 +113,7 @@ Browser.prototype = {
 		$("#upload-new").change(this.onUpload.bind(this));
 
 		$("#folders table").on("contextmenu", "tr", this.contextMenu.bind(this));
+		$("#corner-buttons").on("contextmenu", "button", this.contextCorner.bind(this));
 		$("#panel")
 			.on("click", ".context", this.onContextClick.bind(this))
 			.on("contextmenu", "#contextmenu", function() { return false; })
@@ -499,9 +406,27 @@ Browser.prototype = {
 				this.kbPositions.push(this.kbSelectedRow);
 
 				var searchValue = $("#search-box").val();
-				// Search the query unless a search command was entered
-				if (!this.handleSearchCommand.call(this, searchValue)) 
-					this.getFolder(0, searchValue.replace(/\s/g, "_"));
+				switch (searchValue) {
+					case "+":
+						// Raw "+" goes to root
+						this.gotoFolder("");
+						break;
+					case "+sh":
+						this.gotoFolder("/_SID Happens");
+						break;
+					case "+cgsc":
+						this.gotoFolder("/_Compute's Gazette SID Collection");
+						break;
+					case "+misc":
+						this.gotoFolder("/_Compute's Gazette SID Collection/Misc");
+						break;
+					default:
+						// Search the query unless a search command was entered
+						cmds.handlePlusCommand.call(this, searchValue).then(handled => {
+							if (!handled)
+								this.getFolder(0, searchValue.replace(/\s/g, "_"));
+						});
+				}
 				break;
 			case "search-cancel":
 				// Cancel the search results and return to the previous normal folder view
@@ -1187,6 +1112,13 @@ Browser.prototype = {
 					localStorage.setItem("sort", "newest");
 				}
 				break;
+			case "factoid":
+				// Sort according to factoid (doesn't make sense with all factoid types)
+				this.playlist.sort(function(obj1, obj2) {
+					return obj1.fvalue < obj2.fvalue ? 1 : -1;
+				});
+				localStorage.setItem("sort", "factoid");
+				break;
 			case "shuffle":
 				// Sort playlist in a random manner (randomize)
 				// NOTE: Previous "Math.random() >= 0.5" method didn't work in Chrome; this fix by JW.
@@ -1660,6 +1592,12 @@ Browser.prototype = {
 									return obj1.copyright < obj2.copyright ? 1 : -1;
 								});
 								break;
+							case "factoid":
+								// Sort playlist according to the 'factoid' string
+								data.files.sort(function(obj1, obj2) {
+									return obj1.fvalue < obj2.fvalue ? 1 : -1;
+								});
+								break;
 							case "shuffle":
 								// Sort playlist in a random manner (randomize)
 								for (var i = 0; i < data.files.length; i++) {
@@ -1722,7 +1660,7 @@ Browser.prototype = {
 						var fbarWidth = 0;
 						const maxBarSize = 200;
 						if (file.fvalue > 0) {
-							switch (main.factoidType) {
+							switch (parseInt(main.factoidType)) {
 								case 2:		// Song length
 									const maxMinutes = 10;
 									const full = maxMinutes * 60 * 1000;
@@ -1783,6 +1721,7 @@ Browser.prototype = {
 							symid:			file.symid,
 							videos:			file.videos,
 							factoid:		file.factoid,
+							fvalue:			file.fvalue,
 							fbarwidth:		fbarWidth,
 							profile:		file.profile,	// Only files from 'SID Happens'
 							uploaded:		file.uploaded,	// Only files from 'SID Happens'
@@ -1862,43 +1801,6 @@ Browser.prototype = {
 	},
 
 	/**
-	 * Perform a search command (starts with specific character) if specified.
-	 * 
-	 * @param {string} raw 			Search query		
-	 * 
-	 * @returns {boolean}			TRUE if a search command was executed
-	 */
-	handleSearchCommand: function(raw) {
-		const v = String(raw).trim();
-		if (!v.startsWith("+")) return false;
-
-		const key = v.slice(1).toLowerCase();
-
-		// Single-letter A–Z goes to MUSICIANS/<LETTER>
-		if (/^[a-z]$/.test(key)) {
-			this.gotoFolder(`MUSICIANS/${key.toUpperCase()}`);
-			return true;
-		}
-
-		const folder = aliasToFolder.get(key);
-		if (folder) {
-			this.gotoFolder(folder);
-			return true;
-		}
-
-		// If no exact alias, try longest alias that matches the start
-		// e.g. '@merm' → Mermaid
-		for (const [alias, f] of aliasToFolder) {
-			if (key.startsWith(alias)) {
-				this.gotoFolder(f);
-				return true;
-			}
-		}
-
-		return false;		
-	},
-
-	/**
 	 * Go to the specified folder and show its contents.
 	 * 
 	 * @param {string} path 		Full path to the folder
@@ -1906,8 +1808,10 @@ Browser.prototype = {
 	gotoFolder: function(path) {
 		if (path.substring(0, 6) == "DEMOS/" || path.substring(0, 6) == "GAMES/" || path.substring(0, 10) == "MUSICIANS/")
 			this.path = '/_High Voltage SID Collection/' + path;
+		else if (path == "")
+			this.path = ""; // Root
 		else
-			this.path = path;
+			this.path = (path.startsWith("/") ? path : "/" + path);
 
 		ctrls.state("prev/next", "disabled");
 		ctrls.state("subtunes", "disabled");
@@ -2161,7 +2065,7 @@ Browser.prototype = {
 				// Replace "->" with a pretty unicode arrow instead
 				// Disabled as perhaps users find them too confusing.
 				//list_of_tags += '<div class="tag tag-transparent"'+id+'>🡪</div>';
-			} else if (tag == "$31" || tag == "$61" || tag == "$71" || tag == "2SID" || tag == "3SID" || tag.indexOf("Small Event") !== -1) {
+			} else if (tag == "$31" || tag == "$61" || tag == "$71" || tag == "2SID" || tag == "3SID" || tag == "# ?" || tag.indexOf("Small Event") !== -1) {
 				// These tags will not be shown for various reasons:
 				// Waveforms: Too commonly used in SID tunes and just adds noise.
 				// Small Event: Just don't add an event tag if it's tiny and rare.
@@ -2869,6 +2773,48 @@ Browser.prototype = {
 	},
 
 	/**
+	 * Show a context menu when right-clicking a triangular corner button.
+	 * 
+	 * @param {*} event 
+	 */
+	contextCorner: function(event) {
+		let contents = "", $panel = $("#panel");
+		const indent = ' style="margin-left:8px;"';
+		$("#contextmenu").remove();
+
+		if (event.target.className.indexOf("corner-right") !== -1)
+			// Factoid choices
+			contents = 
+				'<div class="line" data-action="factoid"'+indent+'>0. Nothing</div>'+
+				'<div class="line" data-action="factoid"'+indent+'>1. Internal database ID</div>'+
+				'<div class="line" data-action="factoid"'+indent+'>2. Song length</div>'+
+				'<div class="line" data-action="factoid"'+indent+'>3. Type (PSID/RSID) and version</div>'+
+				'<div class="line" data-action="factoid"'+indent+'>4. Compatibility (e.g. BASIC)</div>'+
+				'<div class="line" data-action="factoid"'+indent+'>5. Clock speed (PAL/NTSC)</div>'+
+				'<div class="line" data-action="factoid"'+indent+'>6. SID model (6581/8580)</div>'+
+				'<div class="line" data-action="factoid"'+indent+'>7. Size in bytes (decimal)</div>'+
+				'<div class="line" data-action="factoid"'+indent+'>8. Start and end address (hexadecimal)</div>'+
+				'<div class="line" data-action="factoid"'+indent+'>9. HVSC or CGSC update version</div>'+
+				'<div class="line" data-action="factoid">10. CSDb SID ID</div>'+
+				'<div class="line" data-action="factoid">11. Game status (RELEASE/PREVIEW)</div>'+
+				'<div class="line" data-action="factoid">12. Number of CSDb entries</div>';
+		else
+			// @todo toggling tag types
+			return;
+
+		// Create the context menu
+		$panel.prepend('<div id="contextmenu" class="context unselectable">'+contents+'</div>');
+		let $contextMenu = $("#contextmenu");
+
+		$contextMenu
+			.css("top", event.pageY - $contextMenu.outerHeight()) // Always flip this menu upwards
+			.css("left", event.pageX - ($panel.offset().left - 8))
+			.css("visibility","visible");
+
+		return false;
+	},
+
+	/**
 	 * Show a sub context menu attached to a main context menu. Typically used to show
 	 * playlist folders available that the user can add a SID file to.
 	 * 
@@ -2916,6 +2862,15 @@ Browser.prototype = {
 		var $target = $(event.target);
 		if ($target.hasClass("disabled")) return;
 		var action = $target.attr("data-action");
+
+		// Handle choice of factoid
+		if (action == "factoid") {
+			main.factoidType = $target.html().split(".")[0];
+			SelectFactoid(main.factoidType, false);
+			return;
+		}
+
+		// Handle other context menu options
 		switch (action) {
 			case "download-file":
 				// Stop playing in DeepSID in case an external SID player is going to take over now
@@ -3882,6 +3837,7 @@ Browser.prototype = {
 				'<option value="rating">Rating</option>'+
 				'<option value="oldest">Oldest</option>'+
 				'<option value="newest">Newest</option>'+
+				'<option value="factoid">Factoid</option>'+
 				'<option value="shuffle">Shuffle</option>'
 			);
 			// Sort box for everything else

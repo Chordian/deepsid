@@ -4197,7 +4197,7 @@ input[type=range]::-ms-track {
 .context {
 	visibility: hidden;
 	position: absolute;
-	z-index: 4;
+	z-index: 5;
 	background: var(--color-context-bg);
 	border: 1px solid var(--color-context-border);
 	padding: 4px 6px;
@@ -4205,7 +4205,7 @@ input[type=range]::-ms-track {
 }
 
 	#contextsubmenu {
-		z-index: 5;
+		z-index: 6;
 	}
 
 	.context .line {

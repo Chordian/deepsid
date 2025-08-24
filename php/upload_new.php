@@ -61,6 +61,9 @@ try {
 		$filename = str_replace(ucwords($no_cap), strtolower($no_cap), $filename);
 	$sid['name'] = str_replace(' ', '_', $filename);
 
+	// No repeated underscores
+	$sid['name'] = preg_replace('/_{2,}/', '_', $sid['name']);
+
 	// Make sure the extension is all lower case
 	$sid['name'] = substr($sid['name'], 0, -4).'.sid';
 

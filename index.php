@@ -117,6 +117,7 @@
 		<script type="text/javascript" src="js/cookies.min.js?v=<?php echo filemtime('js/cookies.min.js') ?>"></script>
 		<script type="text/javascript" src="js/select.js?v=<?php echo filemtime('js/select.js') ?>"></script>
 		<script type="text/javascript" src="js/player.js?v=<?php echo filemtime('js/player.js') ?>"></script>
+		<script type="text/javascript" src="js/commands.js?v=<?php echo filemtime('js/commands.js') ?>"></script>
 		<script type="text/javascript" src="js/controls.js?v=<?php echo filemtime('js/controls.js') ?>"></script>
 		<script type="text/javascript" src="js/browser.js?v=<?php echo filemtime('js/browser.js') ?>"></script>
 		<script type="text/javascript" src="js/lib/opl.js?v=<?php echo filemtime('js/lib/opl.js') ?>"></script>
@@ -646,7 +647,8 @@
 
 							<!--<span>Want to learn how to make SID tunes? Check out <a href="https://www.youtube.com/watch?v=nXNtLetxFUg">this tutorial video</a> now on YouTube.</span>-->
 
-							<span>You can now cycle through <i>factoids</i> using one of the new triangular buttons at the bottom of the song browser. See <a href="#" onclick="$('#tab-changes').trigger('click'); return false;">Changes</a> for info.</span>
+							<span><b style="color:var(--color-pwd-good);">Search commands are here.</b> (Shortcuts)<br />Hit '+' anywhere to focus on the search box, append a partial composer name or handle, then hit the 'Enter' key to show folder.</span>
+							<!--<span> .... See <a href="#" onclick="$('#tab-changes').trigger('click'); return false;">Changes</a> for info.</span>-->
 
 								<!--   See in controls.js: "showNewsImage" and "clickNews" for how to set up a news image -->
 							<!--<pre><b style="font-size:16px;">Coming up<br></b><b style="position:relative;top:-3px;font-size:13px;">17 - 19 Nov.</b><br><br><i style="position:absolute;bottom:-38px;right:4px;font-size:13px;line-height:17px;text-align:right;">New SID tunes<br><font style="font-size:17px;">incoming!</font></i></pre>-->
@@ -1912,10 +1914,20 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>August 24, 2025</h3>
+						<ul>
+							<li>You can now right-click the right triangular corner button to select a different factoid from a context menu.</li>
+							<li>Standard folders can now by sorted by factoid. This is most useful for song length, file size in bytes, or number
+								of CSDb entries. The largest values will appear at the top.</li>
+							<li>The search limit has been reverted to 1000 results.</li>
+						</ul>
+
 						<h3>August 23, 2025</h3>
 						<ul>
-							<li>All size-type factoids (song length, size in bytes, number of CSDb entries) now display a horizontal bar. To see them clearly,
-								remember to turn off tags (using either the left triangular button or the "y" hotkey).</li>
+							<li>Added search commands. Type '+' plus a shortcut (e.g., +hub, +jammer) to jump directly to a composer folder.
+								Commands match against composer folders in the database.</li>
+							<li>All size-type factoids (song length, size in bytes, number of CSDb entries) now display a horizontal bar. To see
+								them clearly, remember to turn off tags (using either the left triangular button or the "y" hotkey).</li>
 							<li>The tag on/off state is now stored locally too.</li>
 							<li>The triangular button for cycling factoids now shows the current factoid number instead of a static icon.</li>
 						</ul>
@@ -1961,7 +1973,7 @@
 
 						<h3>August 4, 2025</h3>
 						<ul>
-							<li>The search limit has been increased from 1000 to 2000 results.</li>
+							<li><del>The search limit has been increased from 1000 to 2000 results.</del></li>
 						</ul>
 
 						<h3>August 2, 2025</h3>

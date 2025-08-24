@@ -9,37 +9,17 @@ SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
 - Make direct URL arguments redirect correctly for the DeepSID.com domain.
 
-- Factoid: A colored bar below the value for various span values. Could be used for: Song
-  length, CSDb entries, size in bytes, location (size).
-
 - Factoid: Cycling escapes search mode if in it. Perhaps the culprit is the "f" refresh
   call. Can it be updated to retain search mode after refreshing? Maybe detect if search
   was on, if so re-search, and then restore scroll position. UPDATE: That would take
   search time each refresh. Maybe better to cache the browser list and restore the cache
   upon refresh?
 
-- Add more "+" search commands. Consider a different initiator hotkey or character.
-
-- Consider hiding the "# ?" tag in JS.
-
-- Remix tab shows 0 entries after LMan made a change. Find out why it doesn't work.
-
-- Add a sort option for currently selected factoid.
-
-- Replace folder icon click in comments with 'gotoFolder()' instead.
-
-- When hitting BACKSPACE to go one folder back, also set focus to browser window.
-  Maybe also when using left/right cursor keys for selecting prev/next SID file.
-
-- Uploading songs with "Abc - Def" (which becomes "Abc_-_Def") should automatically be
-  adapted to "Abc_Def" instead by the JS uploader.
-
-- Right-clicking the factoid corner button should show a context menu, where you can
-  choose the factoid directly. More convenient than toggling with the left mouse button.
-
-- Sometimes browsing back from a folder requires two ENTER to enter another (especially
-  if the dexter area has been accessed earlier). Maybe clear the Boolean variable for
-  preventing double ENTER in the code where the BACKSPACE key is processed?
+- BUG: Enter a folder with tags that has bracket lines, turn off tags, backspace out, then
+  enter another folder and turn on tags again. Now the bracket lines have been replaced
+  with a small "louse" in front of the tags. Proper fix is to make it not do that at all.
+  Lazy fix is to refresh the folder when tags are turned on again, because that eliminates
+  the bug (showing proper bracket lines again).
 
 - In addition to the dollar icon for professional composers, an icon for sceners. But what
   should it look like?
@@ -49,6 +29,10 @@ SHOULD BE DONE
   will require additional database storage. Maybe a "+" icon will appear after dates here
   too, clicking will open 'Edit tags' dialog box.
 
+- BUG: If you add a song from 'SID Happens' to a symlist, you can 'Edit Uploaded File' on
+  its context menu. Remove that option in symlists. UPDATE: Same thing when searching,
+  you can 'Edit Uploaded File' on SH files among the search results.
+
 - Globalize more variables in 'main.js' in the new 'main' namespace.
 
 - Add a "X" in the end of the search edit box. When clicked it not only clears the edit
@@ -56,7 +40,7 @@ SHOULD BE DONE
 
 - After using "*" to edit e.g. year, remember the scroll position.
 
-- Expanding the "Y" hotkey: Instead of toggling tags on and off, cycle through types. First
+- Expanding the "y" hotkey: Instead of toggling tags on and off, cycle through types. First
   hit removes event tags, then also production tags, and so on. In the end all are gone,
   and the next hit then shows everything again.
 
@@ -65,9 +49,6 @@ SHOULD BE DONE
 
 - A "refresh cache" link next to cached message in the footer of a CSDb page. (Consider only
   showing this for DeepSID administrators.)
-
-- KB: In search mode, 'ESC' should also work as Cancel. This is difficult to do because of
-  key bubbling and/or multi-events.
 
 - While I still think hiding "Compo" is okay, perhaps consider an alert to pop up (or show
   a message in the dialog box) saying that it will be hidden because the ranking should
@@ -565,6 +546,9 @@ PROBABLY NOT?
   - Or perhaps sliding STIL in from the right by clicking a general static button always available?
 
 - KB: If 'ArrowRight' is pressed while on a folder, enter the folder.
+
+- KB: In search mode, 'ESC' should also work as Cancel. This is difficult to do because of key
+  bubbling and/or multi-events.
 
 - Use the new image credit field - hover on composer image to slide up a small "Source:" row.
   - If set to "UNKNOWN" then nothing is sliding up (i.e. as before).

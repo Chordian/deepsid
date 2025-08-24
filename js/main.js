@@ -157,6 +157,12 @@ $(function() { // DOM ready
 			!$(".styledSelect").hasClass("active") &&
 			!$("#dialog-cover").is(":visible")) {
 
+			// Key '+' - search command (this version to ensure compatibility)
+			if (event.key === '+' || event.code === 'NumpadAdd' || (event.key === '=' && event.shiftKey)) {
+				$("#search-box").focus().val("+");
+				return false;
+			}
+
 			switch (event.keyCode) {
 
 				case 220:	// Keydown key below 'Escape' - fast forward
@@ -323,12 +329,6 @@ $(function() { // DOM ready
 
 					// @todo Escaping custom dialog box should not escape search mode!
 					break;
-
-				case 107:	// Keyup '+' - search command
-				case 171:
-
-					$("#search-box").focus().val("+");
-					break;
 	
 				case 32:	// Keyup 'Space' - play/pause
 
@@ -426,6 +426,7 @@ $(function() { // DOM ready
 					} else {
 						// Keyup 'BACKSPACE' - browse back to parent folder
 						$("#folder-back").trigger("click");
+						$("#folders").focus();
 					}
 					break;
 
@@ -461,22 +462,19 @@ $(function() { // DOM ready
 					main.factoidType++;
 					if (main.factoidType > 12) main.factoidType = 0;
 
-					UpdateFactoidButton(main.factoidType);
-					BrowserMessage(factoidMessage[main.factoidType]);
-					localStorage.setItem("factoid", main.factoidType);
-
-					// Refresh the folder while remembering the scroll position
-					$(window).trigger($.Event("keyup", { key: "f", code: "KeyF", keyCode: 70, which: 70 }));
+					SelectFactoid(main.factoidType);
 					break;
 
 				case 37:	// Keyup 'ARROW-LEFT' - skip to previous (+ SHIFT to emulate auto-progress)
 
 					$("#skip-prev").trigger("mouseup", event.shiftKey ? false : undefined);
+					$("#folders").focus();
 					break;
 
 				case 39:	// Keyup 'ARROW-RIGHT' - skip to next (+ SHIFT to emulate auto-progress)
 
 					$("#skip-next").trigger("mouseup", event.shiftKey ? false : undefined);
+					$("#folders").focus();
 					break;
 
 				case 13:	// Keyup 'ENTER' - click the row keyboard-selected row
@@ -2001,11 +1999,7 @@ $(function() { // DOM ready
 	 * When clicking a home folder icon in a CSDb comment table.
 	 */
 	$("#topic-profile,#topic-csdb,#topic-player").on("click", ".home-folder", function() {
-		browser.path = "/"+$(this).attr("data-home");
-		ctrls.state("root/back", "enabled");
-		browser.getFolder(0, undefined, undefined, function() {
-			browser.getComposer(); // Comment this out to keep comment thread (not sure what users prefer here?)
-		});
+		browser.gotoFolder($(this).attr("data-home"));
 	});
 
 	/**
@@ -2460,6 +2454,21 @@ function UpdateFactoidButton(factoid) {
 			"left":			"2px",
 		}
 	$factoidButton.css(style);
+}
+
+/**
+ * Select factoid number and update folder.
+ * 
+ * @param {number} factoid 
+ */
+function SelectFactoid(factoid, showMessage = true) {
+	UpdateFactoidButton(factoid);
+	if (showMessage)
+		BrowserMessage(factoidMessage[factoid]);
+	localStorage.setItem("factoid", factoid);
+
+	// Refresh the folder while remembering the scroll position
+	$(window).trigger($.Event("keyup", { key: "f", code: "KeyF", keyCode: 70, which: 70 }));
 }
 
 /**
