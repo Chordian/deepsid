@@ -428,7 +428,7 @@ Controls.prototype = {
 			case "showtags":
 				// Toggle tags shown in SID rows ON or OFF
 				showTags = $("#showtags").is(":checked");
-				showTags ? $("#songs .tags-line").show() : $("#songs .tags-line").hide();
+				$("#songs .tags-line").css("visibility", showTags ? "" : "hidden");
 				break;
 			case "filter-r2":
 			case "filter-r3":

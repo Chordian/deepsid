@@ -1917,6 +1917,9 @@
 						<h3>August 27, 2025</h3>
 						<ul>
 							<li>Refreshing the folder (hotkey "f") or switching factoids now works in search mode without losing your query.</li>
+							<li>Holding down the key below Escape now supports two speeds; normal fast forward on its own, or double speed fast forward when combined with Shift.</li>
+							<li>Replaced the dollar icon in folder rows with a 'P' icon for professional game composers, and added an 'S' icon
+								for sceners. Note that not all icons are correct yet &ndash; another parse through composer folders is still needed.</li>
 						</ul>
 
 						<h3>August 26, 2025</h3>
@@ -1997,7 +2000,7 @@
 
 						<h3>August 1, 2025</h3>
 						<ul>
-							<li>Folder rows now display a dollar icon for professional musicians who composed music for commercial games.</li>
+							<li><del>Folder rows now display a dollar icon for professional musicians who composed music for commercial games.</del></li>
 						</ul>
 
 						<h3>July 30, 2025</h3>

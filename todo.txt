@@ -9,12 +9,6 @@ SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
 - Make direct URL arguments redirect correctly for the DeepSID.com domain.
 
-- BUG: Enter a folder with tags that has bracket lines, turn off tags, backspace out, then
-  enter another folder and turn on tags again. Now the bracket lines have been replaced
-  with a small "louse" in front of the tags. Proper fix is to make it not do that at all.
-  Lazy fix is to refresh the folder when tags are turned on again, because that eliminates
-  the bug (showing proper bracket lines again).
-
 - In addition to the dollar icon for professional composers, an icon for sceners. But what
   should it look like?
 

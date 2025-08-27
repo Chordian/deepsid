@@ -1197,7 +1197,7 @@ Browser.prototype = {
 						'<div class="pl-strip'+playerType+'"><div class="has-stil">'+hasStil+'</div></div>'+
 						'<div class="block-wrap'+(file.sidspecial !== "" ? ' bw-sidsp' : '')+'"><div class="block">'+(file.subtunes > 1 ? '<div class="subtunes'+(this.isSymlist ? ' specific' : '')+(isNew ? ' newst' : '')+'">'+(this.isSymlist ? file.startsubtune + 1 : file.subtunes)+'</div>' : (isNew ? '<div class="newsid"></div>' : ''))+
 						'<div class="entry name file'+(this.isSearching || this.isCompoFolder || this.path.substr(0, 2) === "/$" ? ' search' : '')+'" data-name="'+encodeURIComponent(file.filename)+'" data-type="'+file.type+'" data-id="'+file.id+'" data-symid="'+file.symid+'">'+adaptedName+'</div></div></div><br />'+
-						'<span class="info">'+file.copyright.substr(0, 4)+file.infosec+'<div class="tags-line"'+(showTags ? '' : ' style="display:none"')+tag_start_end+'>'+TAGS_BRACKET+file.tags+'</div></span></td>'+
+						'<span class="info">'+file.copyright.substr(0, 4)+file.infosec+'<div class="tags-line"'+(showTags ? '' : ' style="visibility:hidden;"')+tag_start_end+'>'+TAGS_BRACKET+file.tags+'</div></span></td>'+
 						'<td class="stars filestars"><span class="rating">'+this.buildStars(file.rating)+'</span>'+
 						(typeof file.uploaded != "undefined" ? '<span class="uploaded-time">'+file.uploaded.substr(0, 10)+'</span>' : '<div class="fdiv"><div class="fbar" style="width:'+file.fbarwidth+'px"></div><span class="factoid">'+file.factoid+'</span></div>')+
 						'</td>'+
@@ -1493,16 +1493,30 @@ Browser.prototype = {
 							else if (isSearchShortcut)
 								folderIcon = 'search-shortcut';
 
-							// Show a money icon for professional composers
-							var folderSpecial = "";
-							if (folder.focus == "PRO" || folder.focus == "BOTH")
-								folderSpecial = '<div class="folder-special"><img src="images/money.svg" alt="" /></div>';
+							// Show a P icon for professional composers and an S icon for sceners
+							var folderFocus = focusItems = "";
+							if (folder.focus !== "N/A" && folder.foldername.toLowerCase() !== "worktunes" && folder.foldername.toLowerCase() !== "unreleased") {
+								switch (folder.focus) {
+									case "SCENER":
+										focusItems = '<div class="px"></div><div class="s"></div>';
+										break;
+									case "PRO":
+										focusItems = '<div class="p"></div><div class="sx"></div>';
+										break;
+									case "BOTH":
+										focusItems = '<div class="p"></div><div class="s"></div>';
+										break;
+									default:
+										focusItems = '<div class="px"></div><div class="sx"></div>';
+								}
+								folderFocus = '<div class="folder-focus">'+focusItems+'</div>'
+							}
 
 							var folderEntry = // GET FOLDER: GENERAL FOLDERS
 								'<tr'+(folder.incompatible.indexOf(SID.emulator) !== -1 || isMobileDenied ? ' class="disabled"' : '')+'>'+
 									'<td class="folder unselectable '+folderIcon+
 										(folder.hvsc == this.HVSC_VERSION || folder.hvsc == this.CGSC_VERSION ? ' new' : '')+
-										'">'+folderSpecial+'<div class="block-wrap"><div class="block'+(isRedirectFolder ? " slimfont" : "")+'">'+
+										'">'+folderFocus+'<div class="block-wrap"><div class="block'+(isRedirectFolder ? " slimfont" : "")+'">'+
 									(folder.foldername == "SID+FM" ? '<div class="sid_fm">Use Hermit\'s (+FM) emulator</div>' : '')+
 									(folder.filescount > 0 ? '<div class="filescount">'+folder.filescount+'</div>' : '')+
 									(folder.foldername == "_SID Happens" ? '<div class="new-uploads'+(data.uploads.substr(0, 6) == "NO NEW" ? ' no-new' : '')+'">'+data.uploads+'</div>' : '')+
@@ -1688,7 +1702,7 @@ Browser.prototype = {
 								'<div class="pl-strip'+playerType+'"><div class="has-stil">'+hasStil+'</div></div>'+
 								'<div class="block-wrap'+(sidSpecial !== "" ? ' bw-sidsp' : '')+'"><div class="block">'+(file.subtunes > 1 ? '<div class="subtunes'+(this.isSymlist ? ' specific' : '')+(isNew ? ' newst' : '')+'">'+(this.isSymlist ? file.startsubtune : file.subtunes)+'</div>' : (isNew ? '<div class="newsid"></div>' : ''))+
 								'<div class="entry name file'+(this.isSearching || this.isCompoFolder || this.path.substr(0, 2) === "/$" ? ' search' : '')+'" data-name="'+encodeURIComponent(file.filename)+'" data-type="'+file.type+'" data-id="'+file.id+'" data-symid="'+file.symid+'">'+adaptedName+'</div></div></div><br />'+
-								'<span class="info">'+file.copyright.substr(0, 4)+infoSecondary+'<div class="tags-line"'+(showTags ? '' : ' style="display:none"')+tag_start_end+'>'+TAGS_BRACKET+list_of_tags+'</div></span></td>'+
+								'<span class="info">'+file.copyright.substr(0, 4)+infoSecondary+'<div class="tags-line"'+(showTags ? '' : ' style="visibility:hidden;"')+tag_start_end+'>'+TAGS_BRACKET+list_of_tags+'</div></span></td>'+
 								'<td class="stars filestars"><span class="rating">'+this.buildStars(file.rating)+'</span>'+
 								(typeof file.uploaded != "undefined" ? '<span class="uploaded-time">'+file.uploaded.substr(0, 10)+'</span>' : '<div class="fdiv"><div class="fbar" style="width:'+fbarWidth+'px"></div><span class="factoid">'+file.factoid+'</span></div>')+
 								'</td>'+
@@ -2095,10 +2109,11 @@ Browser.prototype = {
 	showSpinner: function($td) {
 		if (SID.emulatorFlags.slowLoading) {
 			// Temporarily hide the rating stars and tags, show a loading spinner instead
-			$($td).children("span.info").children("div.tags-line").hide();
+			$($td).children("span.info").children("div.tags-line").css("visibility", "hidden");
 			$stars = $($td).next("td.stars");
 			$stars.children("span").hide();
 			$stars.append('<span id="spinner"></span>');
+			$stars.children("div.fdiv").hide();
 		}
 	},
 
@@ -2106,10 +2121,9 @@ Browser.prototype = {
 	 * Clear the SID tune loading spinner and show the ratings stars again.
 	 */
 	clearSpinner: function() {
-		$("#songs td.stars span").show();
-		if (showTags) {
-			$("#songs .tags-line").show();
-		}
+		$("#songs td.stars span,#songs td.stars div.fdiv").show();
+		if (showTags)
+			$("#songs .tags-line").css("visibility", "");
 		$("#spinner").remove();
 	},
 

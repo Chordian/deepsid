@@ -958,14 +958,13 @@ try {
 			$rating = $filescount = 0;
 
 			// Get the focus (SCENER, PRO, etc.) of the composer if applicable
-			$focus = '';
-			if (stripos($fullname, '/MUSICIANS/') !== false) {
+			$focus = 'N/A';
+			if (preg_match('~(?:^|/)MUSICIANS/[^/]+/[^/]+(?:/|$)~i', $fullname)) {
 				$composer = $db->prepare('SELECT focus FROM composers WHERE fullname = :fullname LIMIT 1');
 				$composer->execute(array(':fullname'=>$fullname));
 				$composer->setFetchMode(PDO::FETCH_OBJ);
 
-				if ($composer->rowCount())
-					$focus = $composer->fetch()->focus;
+				$focus = $composer->rowCount() ? $composer->fetch()->focus : '';
 			}
 
 			// Figure out the name of the thumbnail (if it exists)

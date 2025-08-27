@@ -167,10 +167,18 @@ $(function() { // DOM ready
 
 				case 220:	// Keydown key below 'Escape' - fast forward
 
+					// Fast forward ON
 					if (!fastForwarding) {
-						// Fast forward ON
-						$("#faster").trigger("mousedown");
-						fastForwarding = true;
+						if (event.shiftKey) {
+							// Create a fake middle mouse button down event
+							var e = $.Event("mousedown");
+							e.which = 2;   // MMB
+							e.button = 1;  // MMB (in standard DOM)
+							$("#faster").trigger(e);
+						} else {
+							// Normal left mouse fallback
+							$("#faster").trigger("mousedown");
+						}
 					}
 					break;
 
@@ -444,7 +452,9 @@ $(function() { // DOM ready
 
 					showTags = !showTags;
 					$("#showtags").prop("checked", showTags);
-					showTags ? $("#songs .tags-line").show() : $("#songs .tags-line").hide();
+					showTags
+						? $("#songs .tags-line").css("visibility", "")	//.show()
+						: $("#songs .tags-line").css("visibility", "hidden")	//.hide();
 
 					localStorage.setItem("showtags", showTags); // Boolean is stored as a string
 

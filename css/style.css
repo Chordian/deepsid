@@ -3720,17 +3720,48 @@ input[type=range]::-ms-track {
 				}
 
 			/* A money icon for professional composers */
-			#songs .folder-special {
+			#songs .folder-focus {
 				position: absolute;
-				top: 7px;
-				right: 10px;
-				pointer-events: none;
+				top: 8px;
+				right: 8px;
 			}
 
-				#songs .folder-special img {
-					filter: var(--svg-filter-money);
-					height: 18px;
+:root {
+	--color-text-focus-px: #fff;
+	--color-bg-focus-px: #e9ebe3;
+}
+
+[data-theme="dark"] {
+	--color-text-focus-px: var(--color-bg-box);
+	--color-bg-focus-px: #313131;
+}
+				#songs .folder-focus div {
+					display: inline-block;
+					height: 14px;
+					width: 14px;
+					margin-right: 4px;
+					border-radius: 20px;
 				}
+
+					#songs .folder-focus div:before {
+						content: "";
+						color: var(--color-text-focus-px);
+						font: bold 10px/13.5px "Open Sans", sans-serif;
+						padding-left: 4px;
+					}
+
+						#songs .folder-focus div.p { background: #b09460; }	/* PRO */
+						#songs .folder-focus div.p:before,
+						#songs .folder-focus div.px:before { content: "P"; }
+
+						#songs .folder-focus div.s { background: #99a; }		/* SCENER */
+						#songs .folder-focus div.s:before,
+						#songs .folder-focus div.sx:before { content: "S"; padding-left: 4.25px; }
+
+						#songs .folder-focus div.sx,							 /* NONE */
+						#songs .folder-focus div.px {
+							background: var(--color-bg-focus-px);
+						}
 
 			#songs .pl-strip {
 				position: absolute;

@@ -235,6 +235,8 @@
 		<div class="annex-hotkey">f</div><span class="annex-tiny">Refresh folder</span>
 		<div class="annex-hotkey">t</div><span class="annex-tiny">Edit tags</span>
 		<div class="annex-hotkey">y</div><span class="annex-tiny">Toggle tags on/off</span>
+		<div class="annex-hotkey">u</div><span class="annex-tiny">Cycle factoids</span>
+		<div class="annex-hotkey">+</div><span class="annex-tiny">Search command</span>
 		<p>Testing a SID is temporary and for you only. No one else can hear it.</p>
 		A "plink" is a link with a play icon in front of it, e.g. in the <b>CSDb</b> tab.
 		
