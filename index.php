@@ -1914,10 +1914,20 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>August 27, 2025</h3>
+						<ul>
+							<li>Refreshing the folder (hotkey "f") or switching factoids now works in search mode without losing your query.</li>
+						</ul>
+
+						<h3>August 26, 2025</h3>
+						<ul>
+							<li>Fixed an issue that blocked new user registrations.</li>
+						</ul>
+
 						<h3>August 24, 2025</h3>
 						<ul>
 							<li>You can now right-click the right triangular corner button to select a different factoid from a context menu.</li>
-							<li>Standard folders can now by sorted by factoid. This is most useful for song length, file size in bytes, or number
+							<li>Standard folders can now be sorted by factoid. This is most useful for song length, file size in bytes, or number
 								of CSDb entries. The largest values will appear at the top.</li>
 							<li>The search limit has been reverted to 1000 results.</li>
 						</ul>

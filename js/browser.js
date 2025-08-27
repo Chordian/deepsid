@@ -1308,17 +1308,23 @@ Browser.prototype = {
 				$("#loading").css("top", $("#songs").height() / 2 - 50 /* Half size of SVG */).fadeIn(350);
 			}, 150);
 
+			// Remember the search settings in case the folder is refreshed later
+			this.searchType = $("#dropdown-search").val();
+			this.searchQuery = this.isSearching ? searchQuery : "";
+			this.searchHere = $("#search-here").is(":checked") ? 1 : 0;
+
 			this.playlist = [];		// Every folder we enter will become its own local playlist
 			this.compolist = [];	// For the big CSDb music competitions folder list
 			this.subFolders = 0;
 			this.path = this.path.replace("/_CSDb", "/CSDb");
 			$("#path").empty();
+
 			// Call the AJAX PHP script that delivers the list of files and folders
 			this.hvsc = $.get("php/hvsc.php", {
 					folder:			this.path,
-					searchType:		$("#dropdown-search").val(),
-					searchQuery:	this.isSearching ? searchQuery : "",
-					searchHere:		($("#search-here").is(":checked") ? 1 : 0),
+					searchType:		this.searchType,
+					searchQuery:	this.searchQuery,
+					searchHere:		this.searchHere,
 					factoid:		main.factoidType,
 			}, function(data) {
 				this.validateData(data, function(data) {
@@ -2714,7 +2720,7 @@ Browser.prototype = {
 				'<div class="line'+(this.isSearching || this.isCompoFolder || isPersonalSymlist || isPublicSymlist ? " disabled" : "")+'" data-action="copy-link">Copy Link</div>';
 
 			var dividerForYouTube = '<div class="divider"></div>';
-			if (typeof this.playlist[thisRow].uploaded != "undefined") {
+			if (typeof this.playlist[thisRow].uploaded !== "undefined") {
 				// It's a SID row from the 'SID Happens' folder and thus can be edited
 				contents += '<div class="divider"></div>'+
 					'<div class="line" data-action="edit-upload">Edit Uploaded File</div>';

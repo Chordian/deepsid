@@ -9,12 +9,6 @@ SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
 - Make direct URL arguments redirect correctly for the DeepSID.com domain.
 
-- Factoid: Cycling escapes search mode if in it. Perhaps the culprit is the "f" refresh
-  call. Can it be updated to retain search mode after refreshing? Maybe detect if search
-  was on, if so re-search, and then restore scroll position. UPDATE: That would take
-  search time each refresh. Maybe better to cache the browser list and restore the cache
-  upon refresh?
-
 - BUG: Enter a folder with tags that has bracket lines, turn off tags, backspace out, then
   enter another folder and turn on tags again. Now the bracket lines have been replaced
   with a small "louse" in front of the tags. Proper fix is to make it not do that at all.
@@ -24,14 +18,10 @@ SHOULD BE DONE
 - In addition to the dollar icon for professional composers, an icon for sceners. But what
   should it look like?
 
-- Somehow add blue tags to CSDb list so it's apparent what the refer to. It could be
+- Somehow add blue tags to CSDb tab list so it's apparent what they refer to. It could be
   appended to the date in the lists. It a logical way to show it and should be done, but it
   will require additional database storage. Maybe a "+" icon will appear after dates here
   too, clicking will open 'Edit tags' dialog box.
-
-- BUG: If you add a song from 'SID Happens' to a symlist, you can 'Edit Uploaded File' on
-  its context menu. Remove that option in symlists. UPDATE: Same thing when searching,
-  you can 'Edit Uploaded File' on SH files among the search results.
 
 - Globalize more variables in 'main.js' in the new 'main' namespace.
 

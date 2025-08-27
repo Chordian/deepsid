@@ -425,20 +425,14 @@ $(function() { // DOM ready
 						});
 					} else {
 						// Keyup 'BACKSPACE' - browse back to parent folder
-						$("#folder-back").trigger("click");
 						$("#folders").focus();
+						$("#folder-back").trigger("click");
 					}
 					break;
 
 				case 70:	// Keyup 'f' - refresh current folder
 
-					var here = $("#folders").scrollTop();
-					var kbSelectedBefore = browser.kbSelectedRow;
-					browser.getFolder(0, undefined, undefined, function() {
-						SetScrollTopInstantly("#folders", here);
-						browser.kbSelectedRow = kbSelectedBefore;
-						browser.moveKeyboardSelection(browser.kbSelectedRow, false);
-					});
+					RefreshFolder();
 					break;
 
 				case 84:	// Keyup 't' - open dialog box for editing tags
@@ -467,14 +461,14 @@ $(function() { // DOM ready
 
 				case 37:	// Keyup 'ARROW-LEFT' - skip to previous (+ SHIFT to emulate auto-progress)
 
-					$("#skip-prev").trigger("mouseup", event.shiftKey ? false : undefined);
 					$("#folders").focus();
+					$("#skip-prev").trigger("mouseup", event.shiftKey ? false : undefined);
 					break;
 
 				case 39:	// Keyup 'ARROW-RIGHT' - skip to next (+ SHIFT to emulate auto-progress)
 
-					$("#skip-next").trigger("mouseup", event.shiftKey ? false : undefined);
 					$("#folders").focus();
+					$("#skip-next").trigger("mouseup", event.shiftKey ? false : undefined);
 					break;
 
 				case 13:	// Keyup 'ENTER' - click the row keyboard-selected row
@@ -2467,18 +2461,45 @@ function SelectFactoid(factoid, showMessage = true) {
 		BrowserMessage(factoidMessage[factoid]);
 	localStorage.setItem("factoid", factoid);
 
-	// Refresh the folder while remembering the scroll position
-	$(window).trigger($.Event("keyup", { key: "f", code: "KeyF", keyCode: 70, which: 70 }));
+	RefreshFolder();
 }
 
 /**
- * Perform a search query, optionally with a type too.
+ * Refresh the currently displayed folder, even if searching.
+ */
+function RefreshFolder() {
+	var here = $("#folders").scrollTop();
+	var kbSelectedBefore = browser.kbSelectedRow;
+
+	if (browser.isSearching) {
+		// Something could have changed so have to repeat the same search
+		$("#dropdown-search").val(browser.searchType);
+		$("#search-here").prop("checked", browser.searchHere === 1);
+		$("#search-box").val(browser.searchQuery).trigger("keyup");
+
+		browser.getFolder(0, browser.searchQuery, undefined, function() {
+			SetScrollTopInstantly("#folders", here);
+			browser.kbSelectedRow = kbSelectedBefore;
+			browser.moveKeyboardSelection(browser.kbSelectedRow, false);
+		});
+	} else {
+		// Standard folder refresh
+		browser.getFolder(0, undefined, undefined, function() {
+			SetScrollTopInstantly("#folders", here);
+			browser.kbSelectedRow = kbSelectedBefore;
+			browser.moveKeyboardSelection(browser.kbSelectedRow, false);
+		});
+	}
+}
+
+/**
+ * Perform a search query from the URL parameters.
  * 
  * @param {string} searchQuery	The search query string
  */
 function PerformSearchQuery(searchQuery) {
 	$("#dropdown-search").val(GetParam("type") !== "" ? GetParam("type").toLowerCase() : "#all#");
-	$("#search-here").prop('checked', GetParam("here") == "1");
+	$("#search-here").prop("checked", GetParam("here") == "1");
 	$("#search-box").val(searchQuery).trigger("keyup");
 	$("#search-button").trigger("click");
 }
