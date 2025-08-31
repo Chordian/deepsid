@@ -957,14 +957,15 @@ try {
 			$folder_type = $isCSDbCompo ? 'COMPO' : 'FOLDERS';
 			$rating = $filescount = 0;
 
-			// Get the focus (SCENER, PRO, etc.) of the composer if applicable
-			$focus = 'N/A';
+			// Get the two focus fields (SCENER, PRO, etc.) of the composer if applicable
+			$focus1 = $focus2 = 'N/A';
 			if (preg_match('~(?:^|/)MUSICIANS/[^/]+/[^/]+(?:/|$)~i', $fullname)) {
-				$composer = $db->prepare('SELECT focus FROM composers WHERE fullname = :fullname LIMIT 1');
-				$composer->execute(array(':fullname'=>$fullname));
-				$composer->setFetchMode(PDO::FETCH_OBJ);
+				$composer = $db->prepare('SELECT focus1, focus2 FROM composers WHERE fullname = :fullname LIMIT 1');
+				$composer->execute([':fullname' => $fullname]);
+				$row = $composer->fetch(PDO::FETCH_OBJ);
 
-				$focus = $composer->rowCount() ? $composer->fetch()->focus : '';
+				$focus1 = $row ? $row->focus1 : '';	// 'PRO' or 'NONE'
+				$focus2 = $row ? $row->focus2 : '';	// 'SCENER' or 'NONE'				
 			}
 
 			// Figure out the name of the thumbnail (if it exists)
@@ -1035,7 +1036,8 @@ try {
 				'filescount'	=> $filescount,
 				'incompatible'	=> $incompat_row,
 				'hasphoto'		=> (isset($has_photo) ? $has_photo : false),
-				'focus'			=> $focus,
+				'focus1'		=> $focus1,
+				'focus2'		=> $focus2,
 				'rating'		=> $rating,
 				'flags'			=> (isset($flags) ? $flags : 0),
 				'hvsc'			=> (isset($hvsc) ? $hvsc : 0),							// Example

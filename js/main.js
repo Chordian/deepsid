@@ -745,6 +745,8 @@ $(function() { // DOM ready
 			$("#page .deepsid-iframe").height($("#page").outerHeight() - 61); // 24
 		}
 		$(".dialog-box").center();
+
+		browser.positionFocusExplainer();		
 	});
 
 	/**

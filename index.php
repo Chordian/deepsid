@@ -1914,12 +1914,19 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>August 31, 2025</h3>
+						<ul>
+							<li>Added a 'C' icon for composers who were on Compunet.</li>
+							<li>The path box now displays a '?' icon when browsing MUSICIANS folders that show focus icons. Hover over this '?'
+								icon to see a tooltip explaining what the letters mean.</li>
+						</ul>
+
 						<h3>August 27, 2025</h3>
 						<ul>
 							<li>Refreshing the folder (hotkey "f") or switching factoids now works in search mode without losing your query.</li>
 							<li>Holding down the key below Escape now supports two speeds; normal fast forward on its own, or double speed fast forward when combined with Shift.</li>
 							<li>Replaced the dollar icon in folder rows with a 'P' icon for professional game composers, and added an 'S' icon
-								for sceners. Note that not all icons are correct yet &ndash; another parse through composer folders is still needed.</li>
+								for sceners. <del>Note that not all icons are correct yet.</del></li>
 						</ul>
 
 						<h3>August 26, 2025</h3>

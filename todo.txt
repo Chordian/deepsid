@@ -9,20 +9,31 @@ SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
 - Make direct URL arguments redirect correctly for the DeepSID.com domain.
 
-- In addition to the dollar icon for professional composers, an icon for sceners. But what
-  should it look like?
+- Also add the S and P icons to profile pages. A good place could be on the left side where
+  notable stuff is sometimes shown (which could then appear after the two icons). Remember
+  to also show the grayed out Sx and Px icons when relevant.
+
+- Introduce a new focus type for "almost PRO" (find a good DB name) and add it. Use it for
+  those game composers that make music for mags or public domain games. Then add a P icon
+  that has halfway brown color.
 
 - Somehow add blue tags to CSDb tab list so it's apparent what they refer to. It could be
   appended to the date in the lists. It a logical way to show it and should be done, but it
   will require additional database storage. Maybe a "+" icon will appear after dates here
   too, clicking will open 'Edit tags' dialog box.
 
+- A few composers in HVSC also have a folder in CGSC and vice versa. How about cross-link?
+
 - Globalize more variables in 'main.js' in the new 'main' namespace.
+
+- When turning off sundry with "s" it opens again when changing folders. Keep it closed.
 
 - Add a "X" in the end of the search edit box. When clicked it not only clears the edit
   box, it also resets the drop-down box and clears the check box.
 
 - After using "*" to edit e.g. year, remember the scroll position.
+
+- Is game statistics in profile table hard-coded? It should count all "GameBase64" tags.
 
 - Expanding the "y" hotkey: Instead of toggling tags on and off, cycle through types. First
   hit removes event tags, then also production tags, and so on. In the end all are gone,

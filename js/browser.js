@@ -1493,23 +1493,27 @@ Browser.prototype = {
 							else if (isSearchShortcut)
 								folderIcon = 'search-shortcut';
 
-							// Show a P icon for professional composers and an S icon for sceners
-							var folderFocus = focusItems = "";
-							if (folder.focus !== "N/A" && folder.foldername.toLowerCase() !== "worktunes" && folder.foldername.toLowerCase() !== "unreleased") {
-								switch (folder.focus) {
-									case "SCENER":
-										focusItems = '<div class="px"></div><div class="s"></div>';
-										break;
+							// Show focus icons (composer folders in a MUSICIANS letter folder only)
+							var folderFocus = focusLeft = focusRight = "";
+							if (folder.focus1 !== 'N/A' && folder.foldername.toLowerCase() !== "worktunes" && folder.foldername.toLowerCase() !== "unreleased") {
+								switch (folder.focus1) {
 									case "PRO":
-										focusItems = '<div class="p"></div><div class="sx"></div>';
-										break;
-									case "BOTH":
-										focusItems = '<div class="p"></div><div class="s"></div>';
+										focusLeft = '<div class="p"></div>';
 										break;
 									default:
-										focusItems = '<div class="px"></div><div class="sx"></div>';
+										focusLeft = '<div class="px"></div>';
 								}
-								folderFocus = '<div class="folder-focus">'+focusItems+'</div>'
+								switch (folder.focus2) {
+									case "SCENER":
+										focusRight = '<div class="s"></div>';
+										break;
+									case "CNET":
+										focusRight = '<div class="c"></div>';
+										break;
+									default:
+										focusRight = '<div class="sx"></div>';
+								}
+								folderFocus = '<div class="folder-focus">'+focusLeft+focusRight+'</div>'
 							}
 
 							var folderEntry = // GET FOLDER: GENERAL FOLDERS
@@ -1756,6 +1760,12 @@ Browser.prototype = {
 					this.showTagsBrackets();
 					this.moveKeyboardToFirst();
 
+					// Show question mark icon for focus icons (but only where these are shown)
+					if (!this.isSearching && this.isMusiciansLetterFolder()) {
+						$("#path").append('<div id="focus-explainer" title="Focus icons:\n\nP = Professional (game composer)\nS = Scener (active in e.g. CSDb)\nC = Compunet (UK-based network)">?</div>');
+						this.positionFocusExplainer();
+					}
+
 					if ((this.path == "/CSDb Music Competitions" || this.path == "/_Compute's Gazette SID Collection") && !this.isSearching) {
 						// Cache this big folder for fast back-browsing
 						this.cache.folder = this.folders+files;
@@ -1774,6 +1784,23 @@ Browser.prototype = {
 				DisableIncompatibleRows();
 
 			}.bind(this));
+		}
+	},
+
+	/**
+	 * Make sure the '?' explainer lines up with the focus icons.
+	 */
+	positionFocusExplainer: function() {
+		const $path = $("#path")
+			$firstIcon = $("#songs .folder-focus:visible").first(),
+			$expl = $("#focus-explainer");
+
+		if ($firstIcon.length && $path.length && $expl.length) {
+			const iconLeft = $firstIcon.offset().left;
+			const pathLeft = $path.offset().left;
+			const leftInPath = Math.round(iconLeft - pathLeft) + 8;
+
+			$expl.css({ left: leftInPath + "px" });
 		}
 	},
 

@@ -3211,7 +3211,7 @@ input[type=range]::-ms-track {
 		height: calc(100% - 100px); /* Minus the height of #songs-buttons and #search */
 		border-top: 1px solid var(--color-border-box);
 		border-bottom: 1px solid var(--color-border-box);
-	}
+		}
 
 	#folders,
 	#sundry,
@@ -3751,17 +3751,32 @@ input[type=range]::-ms-track {
 					}
 
 						#songs .folder-focus div.p { background: #b09460; }	/* PRO */
-						#songs .folder-focus div.p:before,
-						#songs .folder-focus div.px:before { content: "P"; }
+						#songs .folder-focus div.p:before { content: "P"; }
 
 						#songs .folder-focus div.s { background: #99a; }		/* SCENER */
-						#songs .folder-focus div.s:before,
-						#songs .folder-focus div.sx:before { content: "S"; padding-left: 4.25px; }
+						#songs .folder-focus div.s:before { content: "S"; padding-left: 4.25px; }
+
+						#songs .folder-focus div.c { background: #c07070; }	/* CNET */
+						#songs .folder-focus div.c:before { content: "C";}
 
 						#songs .folder-focus div.sx,							 /* NONE */
 						#songs .folder-focus div.px {
 							background: var(--color-bg-focus-px);
 						}
+
+			#focus-explainer {
+				position: absolute;
+				top: 10px;
+				left: 0;		/* Set in browser.js */
+				width: 16px;
+				height: 16px;
+				padding-left: 4.25px;
+				font: bold 12px/12px "Open Sans", sans-serif;
+				border: 1.5px solid var(--color-text-player);
+				border-radius: 20px;
+				color: var(--color-text-player);
+				cursor: default;
+			}
 
 			#songs .pl-strip {
 				position: absolute;
