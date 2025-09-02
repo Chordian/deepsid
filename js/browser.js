@@ -1500,6 +1500,9 @@ Browser.prototype = {
 									case "PRO":
 										focusLeft = '<div class="p"></div>';
 										break;
+									case "BOTB":
+										focusLeft = '<div class="b"></div>';
+										break;
 									default:
 										focusLeft = '<div class="px"></div>';
 								}
@@ -1762,7 +1765,7 @@ Browser.prototype = {
 
 					// Show question mark icon for focus icons (but only where these are shown)
 					if (!this.isSearching && this.isMusiciansLetterFolder()) {
-						$("#path").append('<div id="focus-explainer" title="Focus icons:\n\nP = Professional (game composer)\nS = Scener (active in e.g. CSDb)\nC = Compunet (UK-based network)">?</div>');
+						$("#path").append('<div id="focus-explainer" title="Focus icons:\n\nP = Professional (game composer)\nS = Scener (active in e.g. CSDb)\nC = Compunet (UK-based network)\nB = Battle of the Bits (chiptune community)">?</div>');
 						this.positionFocusExplainer();
 					}
 

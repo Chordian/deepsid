@@ -1916,9 +1916,11 @@
 
 						<h3>August 31, 2025</h3>
 						<ul>
-							<li>Added a 'C' icon for composers who were on Compunet.</li>
+							<li>Added a 'C' focus icon for composers who were on Compunet.</li>
+							<li>Added a 'B' focus icon for composers who were on Battle of the Bits.</li>
 							<li>The path box now displays a '?' icon when browsing MUSICIANS folders that show focus icons. Hover over this '?'
 								icon to see a tooltip explaining what the letters mean.</li>
+							<li>The MUSICIANS profile pages now also show the 'P', 'S', 'C' and 'B' focus icons.</li>
 						</ul>
 
 						<h3>August 27, 2025</h3>

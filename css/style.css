@@ -3719,11 +3719,18 @@ input[type=range]::-ms-track {
 					background: transparent;
 				}
 
-			/* A money icon for professional composers */
+			/* Container for focus icons */
 			#songs .folder-focus {
 				position: absolute;
 				top: 8px;
 				right: 8px;
+			}
+
+			#topic-profile .folder-focus {
+				display: inline-block;
+				position: relative;
+				top: 11px;
+				left: 10px;
 			}
 
 :root {
@@ -3735,7 +3742,7 @@ input[type=range]::-ms-track {
 	--color-text-focus-px: var(--color-bg-box);
 	--color-bg-focus-px: #313131;
 }
-				#songs .folder-focus div {
+				.folder-focus div {
 					display: inline-block;
 					height: 14px;
 					width: 14px;
@@ -3743,24 +3750,43 @@ input[type=range]::-ms-track {
 					border-radius: 20px;
 				}
 
-					#songs .folder-focus div:before {
+				#topic-profile .folder-focus div {
+					height: 15px;
+					width: 15px;
+					pointer-events: auto;
+				}
+
+					.folder-focus div:before {
 						content: "";
 						color: var(--color-text-focus-px);
 						font: bold 10px/13.5px "Open Sans", sans-serif;
 						padding-left: 4px;
 					}
 
-						#songs .folder-focus div.p { background: #b09460; }	/* PRO */
-						#songs .folder-focus div.p:before { content: "P"; }
+					#topic-profile .folder-focus div:before {
+						position: relative;
+						top: -15.25px;
+						padding-left: 4.5px;
+					}
 
-						#songs .folder-focus div.s { background: #99a; }		/* SCENER */
-						#songs .folder-focus div.s:before { content: "S"; padding-left: 4.25px; }
+						.folder-focus div.p { background: #b09460; }	/* PRO */
+						.folder-focus div.p:before { content: "P"; }
 
-						#songs .folder-focus div.c { background: #c07070; }	/* CNET */
-						#songs .folder-focus div.c:before { content: "C";}
+						#topic-profile .folder-focus div.p:before { padding-left: 4.35px; }
 
-						#songs .folder-focus div.sx,							 /* NONE */
-						#songs .folder-focus div.px {
+						.folder-focus div.s { background: #99a; }		/* SCENER */
+						.folder-focus div.s:before { content: "S"; padding-left: 4.5px; }
+
+						.folder-focus div.c { background: #c07070; }	/* CNET */
+						.folder-focus div.c:before { content: "C"; padding-left: 3.75px;}
+
+						#topic-profile .folder-focus div.c:before { padding-left: 4px; }
+
+						.folder-focus div.b { background: #ca5e81 }	/* BOTB */
+						.folder-focus div.b:before { content: "B"; padding-left: 3.75px;}
+
+						.folder-focus div.sx,							 /* NONE */
+						.folder-focus div.px {
 							background: var(--color-bg-focus-px);
 						}
 

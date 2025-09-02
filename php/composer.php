@@ -22,7 +22,7 @@ require_once("countries.php");
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest')
 	die("Direct access not permitted.");
 
-$html = '';
+$html = $folderFocus = '';
 $rating = 0;
 $fullname = $_GET['fullname'];
 $escaped_fullname = str_replace('_', '\_', $fullname);
@@ -295,6 +295,29 @@ if (isset($fullname)) {
 				}
 			}
 
+			// Only show focus icons in MUSICIANS profile pages
+			if (preg_match('~(?:^|/)MUSICIANS/[^/]+/[^/]+(?:/|$)~i', $fullname)) {
+				// Fetch focus flags (defaults to 'NONE' if no row)
+				$select = $db->prepare('SELECT focus1, focus2 FROM composers WHERE fullname = :fullname LIMIT 1');
+				$select->execute([':fullname' => $fullname]);
+				[$focus1, $focus2] = $select->fetch(PDO::FETCH_NUM) ?: ['NONE', 'NONE'];
+
+				// Build focus icons via small maps
+				$leftMap  = [
+					'PRO' 		=> '<div class="p" title="Professional (game composer)"></div>',
+					'BOTB'		=> '<div class="b" title="Battle of the Bits (chiptune community)"></div>',
+				];
+				$rightMap = [
+					'SCENER'	=> '<div class="s" title="Scener (active in e.g. CSDb)"></div>',
+					'CNET'		=> '<div class="c" title="Compunet (UK-based network)"></div>',
+				];
+
+				$focusLeft  = $leftMap[$focus1]  ?? '<div class="px"></div>';
+				$focusRight = $rightMap[$focus2] ?? '<div class="sx"></div>';
+
+				$folderFocus = '<div class="folder-focus">'.$focusLeft.$focusRight.'</div>';
+			}
+
 		} catch(PDOException $e) {
 			$account->LogActivityError('composer.php', $e->getMessage() + ' (' + $fullname + ')');
 			die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
@@ -442,7 +465,7 @@ $html = '<table style="border:none;margin-bottom:0;"><tr>'.
 				'<img class="composer'.($fullname == $uploadFolder ? ' nobg' : '').'" src="'.$thumbnail.'" alt="" />'.
 			'</td>'.
 			'<td style="position:relative;vertical-align:top;">'.
-				'<h2 style="margin-top:0;'.(!empty($handles) ? 'margin-bottom:-1px;' : 'margin-bottom:6px;').'">'.$name.'</h2>'.
+				'<h2 style="margin-top:0;'.(!empty($handles) ? 'margin-bottom:-1px;' : 'margin-bottom:6px;').'">'.$name.$folderFocus.'</h2>'.
 				(!empty($handles) ? '<h3 style="margin-top:0;margin-bottom:7px;">'.$handles.'</h3>' : '').
 				($isExoticComposerFolder || $isBorrowedProfile ? '' : '<span class="line folder-rating"></span>'). // Placeholder for star ratings (handled by JS)
 				($born != '0000-00-00' ? '<span class="line"><img class="icon cake" src="images/composer_cake.svg" title="Born" alt="" />'.
