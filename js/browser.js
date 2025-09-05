@@ -1504,7 +1504,7 @@ Browser.prototype = {
 										focusLeft = '<div class="b"></div>';
 										break;
 									default:
-										focusLeft = '<div class="px"></div>';
+										focusLeft = '<div class="none"></div>';
 								}
 								switch (folder.focus2) {
 									case "SCENER":
@@ -1514,7 +1514,7 @@ Browser.prototype = {
 										focusRight = '<div class="c"></div>';
 										break;
 									default:
-										focusRight = '<div class="sx"></div>';
+										focusRight = '<div class="none"></div>';
 								}
 								folderFocus = '<div class="folder-focus">'+focusLeft+focusRight+'</div>'
 							}
@@ -1765,7 +1765,7 @@ Browser.prototype = {
 
 					// Show question mark icon for focus icons (but only where these are shown)
 					if (!this.isSearching && this.isMusiciansLetterFolder()) {
-						$("#path").append('<div id="focus-explainer" title="Focus icons:\n\nP = Professional (game composer)\nS = Scener (active in e.g. CSDb)\nC = Compunet (UK-based network)\nB = Battle of the Bits (chiptune community)">?</div>');
+						$("#path").append('<div id="focus-explainer" title="P = Professional\nS = Scener\nC = Compunet\nB = Battle of the Bits">?</div>');
 						this.positionFocusExplainer();
 					}
 

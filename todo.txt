@@ -9,12 +9,6 @@ SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
 - Make direct URL arguments redirect correctly for the DeepSID.com domain.
 
-- Introduce a new focus type for "almost PRO" (find a good DB name) and add it. Use it for
-  those game composers that make music for mags or public domain games. Then add a P icon
-  that has halfway brown color.
-
-- FIRST: Use better aligning CSS for focus icons.
-
 - Sean Connolly was on Compunet. Probably also Ash & Dave.
 
 - How about an 'M' focus icon for Master Composer users?
@@ -26,12 +20,17 @@ SHOULD BE DONE
 
 - A few composers in HVSC also have a folder in CGSC and vice versa. How about cross-link?
 
+- Add contrast handling to event logos. See topic on ChatGPT.
+
 - Globalize more variables in 'main.js' in the new 'main' namespace.
 
 - When turning off sundry with "s" it opens again when changing folders. Keep it closed.
 
 - Add a "X" in the end of the search edit box. When clicked it not only clears the edit
   box, it also resets the drop-down box and clears the check box.
+
+- Also add the ellipsis CSS to SHOW pages.
+  https://deepsid.chordian.net/?file=/MUSICIANS/T/The_Dungeon_Master/Fairy_Well.sid&subtune=1
 
 - After using "*" to edit e.g. year, remember the scroll position.
 

@@ -1914,6 +1914,11 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>September 5, 2025</h3>
+						<ul>
+							<li>Focus icons now use SVG instead of CSS, improving letter alignment.</li>
+						</ul>
+
 						<h3>August 31, 2025</h3>
 						<ul>
 							<li>Added a 'C' focus icon for composers who were on Compunet.</li>

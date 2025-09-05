@@ -304,16 +304,16 @@ if (isset($fullname)) {
 
 				// Build focus icons via small maps
 				$leftMap  = [
-					'PRO' 		=> '<div class="p" title="Professional (game composer)"></div>',
-					'BOTB'		=> '<div class="b" title="Battle of the Bits (chiptune community)"></div>',
+					'PRO' 		=> '<div class="p" title="Professional"></div>',
+					'BOTB'		=> '<div class="b" title="Battle of the Bits"></div>',
 				];
 				$rightMap = [
-					'SCENER'	=> '<div class="s" title="Scener (active in e.g. CSDb)"></div>',
-					'CNET'		=> '<div class="c" title="Compunet (UK-based network)"></div>',
+					'SCENER'	=> '<div class="s" title="Scener"></div>',
+					'CNET'		=> '<div class="c" title="Compunet"></div>',
 				];
 
-				$focusLeft  = $leftMap[$focus1]  ?? '<div class="px"></div>';
-				$focusRight = $rightMap[$focus2] ?? '<div class="sx"></div>';
+				$focusLeft  = $leftMap[$focus1]  ?? '<div class="none"></div>';
+				$focusRight = $rightMap[$focus2] ?? '<div class="none"></div>';
 
 				$folderFocus = '<div class="folder-focus">'.$focusLeft.$focusRight.'</div>';
 			}

@@ -3719,76 +3719,55 @@ input[type=range]::-ms-track {
 					background: transparent;
 				}
 
+:root {
+	--svg-url-circle-p: url(../images/circle_p_light.svg);
+	--svg-url-circle-s: url(../images/circle_s_light.svg);
+	--svg-url-circle-c: url(../images/circle_c_light.svg);
+	--svg-url-circle-b: url(../images/circle_b_light.svg);
+	--svg-url-circle-none: url(../images/circle_none_light.svg);
+}
+
+[data-theme="dark"] {
+	--svg-url-circle-p: url(../images/circle_p_dark.svg);
+	--svg-url-circle-s: url(../images/circle_s_dark.svg);
+	--svg-url-circle-c: url(../images/circle_c_dark.svg);
+	--svg-url-circle-b: url(../images/circle_b_dark.svg);
+	--svg-url-circle-none: url(../images/circle_none_dark.svg);
+}
+
 			/* Container for focus icons */
 			#songs .folder-focus {
 				position: absolute;
-				top: 8px;
-				right: 8px;
+				top: 7px;
+				right: 9px;
 			}
 
 			#topic-profile .folder-focus {
 				display: inline-block;
 				position: relative;
-				top: 11px;
+				top: 0;
 				left: 10px;
 			}
 
-:root {
-	--color-text-focus-px: #fff;
-	--color-bg-focus-px: #e9ebe3;
-}
-
-[data-theme="dark"] {
-	--color-text-focus-px: var(--color-bg-box);
-	--color-bg-focus-px: #313131;
-}
 				.folder-focus div {
 					display: inline-block;
-					height: 14px;
-					width: 14px;
-					margin-right: 4px;
-					border-radius: 20px;
+					height: 16px;
+					width: 16px;
+					margin-right: 1px;
 				}
 
 				#topic-profile .folder-focus div {
-					height: 15px;
-					width: 15px;
+					height: 18px;
+					width: 18px;
+					background-size: 20px 20px !important;
 					pointer-events: auto;
 				}
-
-					.folder-focus div:before {
-						content: "";
-						color: var(--color-text-focus-px);
-						font: bold 10px/13.5px "Open Sans", sans-serif;
-						padding-left: 4px;
-					}
-
-					#topic-profile .folder-focus div:before {
-						position: relative;
-						top: -15.25px;
-						padding-left: 4.5px;
-					}
-
-						.folder-focus div.p { background: #b09460; }	/* PRO */
-						.folder-focus div.p:before { content: "P"; }
-
-						#topic-profile .folder-focus div.p:before { padding-left: 4.35px; }
-
-						.folder-focus div.s { background: #99a; }		/* SCENER */
-						.folder-focus div.s:before { content: "S"; padding-left: 4.5px; }
-
-						.folder-focus div.c { background: #c07070; }	/* CNET */
-						.folder-focus div.c:before { content: "C"; padding-left: 3.75px;}
-
-						#topic-profile .folder-focus div.c:before { padding-left: 4px; }
-
-						.folder-focus div.b { background: #ca5e81 }	/* BOTB */
-						.folder-focus div.b:before { content: "B"; padding-left: 3.75px;}
-
-						.folder-focus div.sx,							 /* NONE */
-						.folder-focus div.px {
-							background: var(--color-bg-focus-px);
-						}
+				
+				.folder-focus .p  { background: var(--svg-url-circle-p) 0 0 / 18px 18px no-repeat; }
+				.folder-focus .s  { background: var(--svg-url-circle-s) 0 0 / 18px 18px no-repeat; }
+				.folder-focus .c  { background: var(--svg-url-circle-c) 0 0 / 18px 18px no-repeat; }
+				.folder-focus .b  { background: var(--svg-url-circle-b) 0 0 / 18px 18px no-repeat; }
+				.folder-focus .none  { background: var(--svg-url-circle-none) 0 0 / 18px 18px no-repeat; }
 
 			#focus-explainer {
 				position: absolute;
