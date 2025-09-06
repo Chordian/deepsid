@@ -8,12 +8,13 @@ var $=jQuery.noConflict();
 // Namespace for global variables and functions
 // @todo Move globals below into it and adapt where used
 var main = {
-	factoidType:	0,
+	factoidType:		0,
+	sundryBoxShow:		true,
 };
 
 var cacheCSDb = cacheSticky = cacheStickyBeforeCompo = cacheCSDbProfile = cacheBeforeCompo = cachePlayer = cacheGB64 = cacheRemix = prevFile = sundryTab = reportSTIL = "";
 var cacheTabScrollPos = cachePlayerTabScrollPos = cacheGB64TabScrollPos = cacheRemixTabScrollPos = cachePosBeforeCompo = cacheDDCSDbSort = peekCounter = sundryHeight = 0;
-var sundryToggle = true, recommended = forum = players = $trAutoPlay = null, showTags, fastForwarding, registering = kbScrollLocked = blockNextEnter = false;
+var recommended = forum = players = $trAutoPlay = null, showTags, fastForwarding, registering = kbScrollLocked = blockNextEnter = false;
 var logCount = 1000, isMobile, miniPlayer, cornerMessageTimer;
 
 var isMobile = $("body").attr("data-mobile") !== "0";
@@ -369,7 +370,7 @@ $(function() { // DOM ready
 
 					// Toggle the sundry box minimized or restored
 					ToggleSundry();
-					$(window).trigger("resize", true);
+					$(window).trigger("resize");
 					break;
 
 				case 76:	// Keyup 'l' - load a SID file for local testing
@@ -727,15 +728,8 @@ $(function() { // DOM ready
 	 * When resizing the window. Also affected by toggling the developer pane.
 	 * 
 	 * @param {*} event 
-	 * @param {boolean} sundryIgnore	If specified and TRUE, ignores the sundry box
 	 */
-	$(window).on("resize", function(event, sundryIgnore) {
-		if (!sundryIgnore) {
-			if ($(window).height() > 840 && !sundryToggle)
-				ToggleSundry(false);
-			else if ($(window).height() <= 840 && sundryToggle)
-				ToggleSundry(true);
-		}
+	$(window).on("resize", function() {
 		// Make sure the browser box always take up all screen height upon resizing the window
 		$("#folders").height(0).height($("#songs").height() - 100);
 		if (!miniPlayer && !isMobile) {
@@ -765,8 +759,8 @@ $(function() { // DOM ready
 				"padding":		"6px 10px",
 			});
 			sundryHeight = newHeight;
-			if (!sundryToggle) {
-				sundryToggle = true;
+			if (!main.sundryBoxShow) {
+				main.sundryBoxShow = true;
 				$("#sundry-tabs").find(".tab[data-topic='"+sundryTab+"']").addClass("selected");
 				$("#sundry-ctrls").show();
 			}
@@ -1158,7 +1152,7 @@ $(function() { // DOM ready
 		}
 
 		// If the box was minimized, restore it first
-		if (!sundryToggle) ToggleSundry(false);
+		if (!main.sundryBoxShow) ToggleSundry(false);
 
 		$("#sundry-ctrls").empty(); // Clear corner controls
 		$("#slider-button").hide();
@@ -1428,7 +1422,7 @@ $(function() { // DOM ready
 			browser.getCSDb();
 			return;
 		}
-		$this = $(this);
+		var $this = $(this);
 		// Load the cache again (much faster than calling browser.getCSDb() to regenerate it)
 		$("#topic-csdb").empty()
 			.append($this.hasClass("compo") ? cacheBeforeCompo : cacheCSDb);
@@ -1470,7 +1464,6 @@ $(function() { // DOM ready
 			// First time?
 			$("#players").trigger("click");
 		} else {
-			$this = $(this);
 			$("#sticky-player").empty().height(34).append('<h2 style="display:inline-block;margin-top:0;">Players / Editors</h2>');
 			// Load the cache again
 			$("#topic-player")/*.css("visibility", "hidden")*/.empty().append(cachePlayer);
@@ -1496,7 +1489,7 @@ $(function() { // DOM ready
 		cacheBeforeCompo = $("#topic-csdb").html();
 		cacheStickyBeforeCompo = $("#sticky-csdb").html();
 		cachePosBeforeCompo = $("#page").scrollTop();
-		$this = $(this);
+		var $this = $(this);
 		browser.getCompoResults($this.attr("data-compo"), $this.attr("data-id"), $this.attr("data-mark"));
 	});
 
@@ -1907,7 +1900,7 @@ $(function() { // DOM ready
 	 * When clicking one of the topic thread links in the "FORUM" page.
 	 */
 	$("#topic-csdb").on("click", "a.thread", function() {
-		$this = $(this);
+		var $this = $(this);
 		if (forum) forum.abort();
 		$("#topic-csdb").empty().append(browser.loadingSpinner("csdb"));
 		$("#loading-csdb").fadeIn(500);
@@ -1976,7 +1969,7 @@ $(function() { // DOM ready
 	 * player/editor.
 	 */
 	$("#topic-player").on("click", ".player-entry", function() {
-		$this = $(this);
+		var $this = $(this);
 		// First cache the list of releases in case we return to it
 		cachePlayer = $("#topic-player").html();
 		cachePlayerTabScrollPos = $("#page").scrollTop();
@@ -2624,25 +2617,27 @@ function ResizeIframe() {
  * @param {boolean} shrink	TRUE to minimize, FALSE to return to before, or toggle if not specified
  */
 function ToggleSundry(shrink) {
-	if (typeof shrink === "undefined") shrink = sundryToggle;
+	if (typeof shrink === "undefined") shrink = main.sundryBoxShow;
 	if (!shrink) {
+		// Expand sundry box
 		$("#sundry").css({
 			"flex-basis":	sundryHeight,
 			"padding":		"6px 10px",
 		});
-		sundryToggle = true;
+		main.sundryBoxShow = true;
 		$("#sundry-tabs").find(".tab[data-topic='"+sundryTab+"']").addClass("selected");
 		$("#sundry-ctrls").show();
 		if (parseInt(sundryHeight) > 37 && browser.sliderButton && $("#sundry-tabs .selected").attr("data-topic") == "tags")
 			$("#slider-button").show();
 	} else {
+		// Collapse sundry box
 		sundryHeight = $("#sundry").css("flex-basis");
 		sundryTab = $("#sundry-tabs .selected").attr("data-topic");
 		$("#sundry").css({
 			"flex-basis":	0,
 			"padding":		0,
 		});
-		sundryToggle = false;
+		main.sundryBoxShow = false;
 		$("#sundry-tabs .tab").removeClass("selected"); // No tab selected anymore
 		$("#sundry-ctrls,#slider-button").hide();
 	}

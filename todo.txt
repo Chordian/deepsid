@@ -9,22 +9,9 @@ SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
 - Make direct URL arguments redirect correctly for the DeepSID.com domain.
 
-- Sean Connolly was on Compunet. Probably also Ash & Dave.
-
 - How about an 'M' focus icon for Master Composer users?
 
-- Somehow add blue tags to CSDb tab list so it's apparent what they refer to. It could be
-  appended to the date in the lists. It a logical way to show it and should be done, but it
-  will require additional database storage. Maybe a "+" icon will appear after dates here
-  too, clicking will open 'Edit tags' dialog box.
-
 - A few composers in HVSC also have a folder in CGSC and vice versa. How about cross-link?
-
-- Add contrast handling to event logos. See topic on ChatGPT.
-
-- Globalize more variables in 'main.js' in the new 'main' namespace.
-
-- When turning off sundry with "s" it opens again when changing folders. Keep it closed.
 
 - Add a "X" in the end of the search edit box. When clicked it not only clears the edit
   box, it also resets the drop-down box and clears the check box.
@@ -65,13 +52,16 @@ SHOULD BE DONE
   - PHP script that detects and shows all rows with no database information. Even though I
     am very meticulous each collection update, these still tend to pop up.
 
+  - Edit box for setting number of search results (default is 1000).
+
 - KB: Sometimes I have to press ENTER twice on a SID row before it plays. Usually after
   having done some navigation elsewhere in DeepSID. The first ENTER is probably some kind
   of focus enabling, but try to investigate further.
   UPDATE: Spotted one. Need to ENTER to select a row after using "f" to refresh folder.
 
 - If you look closely, some tag names are too high up. It differs from SID row to SID row
-  in Firefox. Test floating point line heights to see if it can be fixed.
+  in Firefox. Test floating point line heights to see if it can be fixed. UPDATE: Having
+  fought with something similar with focus icons, I really doubt you can fix this.
 
 - The 'application' column in 'hvsc_files' has not been maintained in many HVSC updates.
   It can read 'RELEASE' or 'PREVIEW' and pertains to games. Maybe write a PHP script that
@@ -112,6 +102,7 @@ WHEN THE TIME IS RIGHT
     nothing to do with symlists. Rename it to something else to avoid confusion.
   - Maybe 'csdb.php' should also have an extended name, to make it more clear what it does.
   - Go through all the other files and see if anything else ought to be renamed.
+  - Globalize more variables in 'main.js' in the new 'main' namespace.
 
 
 CONSIDER THIS
@@ -159,6 +150,11 @@ CONSIDER THIS
   UPDATE: I have now added log of name in 'composer.php' to pinpoint why a user always get
   this error. Still waiting for him to do it again...
   UPDATE: Ever since enabling the above I have not seen it happen again. Lowering the priority.
+
+- Somehow add blue tags to CSDb tab list so it's apparent what they refer to. It could be
+  appended to the date in the lists. It a logical way to show it and should be done, but it
+  will require additional database storage. Maybe a "+" icon will appear after dates here
+  too, clicking will open 'Edit tags' dialog box.
 
 - Automate CGSC update process. All REN, MOVE, etc. Create folders where they can't be found
   in the filenames, count files in them, etc.
@@ -660,7 +656,7 @@ TEST RESOURCES
   GB64 tab (enter a game page for one of the two hits):
   https://deepsid.chordian.net/?file=/MUSICIANS/B/Bogas_Ed/Murder_on_the_Mississippi.sid
 
-  Too many DL links on a CSDb list page:
+- Too many DL links on a CSDb list page:
   https://deepsid.chordian.net/?file=/MUSICIANS/O/Onebitman/Walking_in_the_Air.sid
 
 - Legacy CSDb cache data with no 'BACK' button for sticky header:
@@ -670,5 +666,15 @@ TEST RESOURCES
 
 - Testing max-width on block-wrap for song showing "2SID" special label:
   https://deepsid.chordian.net/?file=/MUSICIANS/H/Hermit/Song_of_the_Second_Moon_Delta_2SID.sid
+
+- Dark background on event graphics that wants light background:
+  https://deepsid.chordian.net/?file=%2FCSDb%20Music%20Competitions%2FDecrunch%202117
+  https://deepsid.chordian.net/?file=%2FCSDb%20Music%20Competitions%2FWorld%20Wide%20ZOO
+
+- Light background on event graphics that wants dark background:
+  https://deepsid.chordian.net/?file=%2FCSDb%20Music%20Competitions%2FEdison%202017
+  https://deepsid.chordian.net/?file=%2FCSDb%20Music%20Competitions%2FP%C3%A5gadata%202023
+  https://deepsid.chordian.net/?file=%2FCSDb%20Music%20Competitions%2FRevision%202017
+  https://deepsid.chordian.net/?file=%2FCSDb%20Music%20Competitions%2FXenium%202022%20%5BMixed%5D
 
 END

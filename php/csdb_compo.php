@@ -123,7 +123,7 @@ function CompoGetImage($event_id) {
 	// (x) is the first digit of the ID and (id) is the event ID itself.
 	// Example: https://csdb.dk/gfx/events/2000/2043.jpg
 	$image = 'https://csdb.dk/gfx/events/'.substr($event_id, 0, 1).'000/'.$event_id.'.jpg';
-	return @getimagesize($image) ? '<img src="'.$image.'" style="max-width:50%;max-height:50%;" />' : '';
+	return @getimagesize($image) ? '<img class="event" src="'.$image.'" style="max-width:50%;max-height:50%;" />' : '';
 }
 
 /**
