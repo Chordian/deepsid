@@ -1501,7 +1501,22 @@ Browser.prototype = {
 										focusLeft = '<div class="p"></div>';
 										break;
 									case "BOTB":
-										focusLeft = '<div class="b"></div>';
+										focusLeft = '<div class="b"></div>';	// Battle of the Bits
+										break;
+									case "CNET":
+										focusLeft = '<div class="c"></div>';	// Compunet
+										break;
+									case "MC":
+										focusLeft = '<div class="m"></div>';	// Master Composer
+										break;
+									case "LS":
+										focusLeft = '<div class="l"></div>';	// Loadstar Songsmith
+										break;
+									case "DM":
+										focusLeft = '<div class="d"></div>';	// DefleMask
+										break;
+									case "BASIC":
+										focusLeft = '<div class="bc"></div>';	// BASIC
 										break;
 									default:
 										focusLeft = '<div class="none"></div>';
@@ -1510,8 +1525,23 @@ Browser.prototype = {
 									case "SCENER":
 										focusRight = '<div class="s"></div>';
 										break;
+									case "BOTB":
+										focusRight = '<div class="c"></div>';
+										break;
 									case "CNET":
 										focusRight = '<div class="c"></div>';
+										break;
+									case "MC":
+										focusRight = '<div class="m"></div>';
+										break;
+									case "LS":
+										focusRight = '<div class="l"></div>';
+										break;
+									case "DM":
+										focusRight = '<div class="d"></div>';
+										break;
+									case "BASIC":
+										focusRight = '<div class="bc"></div>';
 										break;
 									default:
 										focusRight = '<div class="none"></div>';
@@ -1765,7 +1795,7 @@ Browser.prototype = {
 
 					// Show question mark icon for focus icons (but only where these are shown)
 					if (!this.isSearching && this.isMusiciansLetterFolder()) {
-						$("#path").append('<div id="focus-explainer" title="P = Professional\nS = Scener\nC = Compunet\nB = Battle of the Bits">?</div>');
+						$("#path").append('<div id="focus-explainer" title="B = BASIC program (green/gray)\nB = Battle of the Bits (magenta)\nC = Compunet\nD = DefleMask\nL = Loadstar Songsmith\nM = Master Composer\nP = Professional\nS = Scener">?</div>');
 						this.positionFocusExplainer();
 					}
 

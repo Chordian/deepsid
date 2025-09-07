@@ -647,7 +647,7 @@
 
 							<!--<span>Want to learn how to make SID tunes? Check out <a href="https://www.youtube.com/watch?v=nXNtLetxFUg">this tutorial video</a> now on YouTube.</span>-->
 
-							<span><b style="color:var(--color-pwd-good);">Search commands are here.</b> (Shortcuts)<br />Hit '+' anywhere to focus on the search box, append a partial composer name or handle, then hit the 'Enter' key to show folder.</span>
+							<span><p style="margin:0 0 4px 0;">Have you made a new SID tune and need to slap a cool visualizer with a logo on it?</p><b style="font-size:22px;">Check out <a href="https://sidquake.c64demo.com/">SIDquake</a> by Raistlin!</b></span>
 							<!--<span> .... See <a href="#" onclick="$('#tab-changes').trigger('click'); return false;">Changes</a> for info.</span>-->
 
 								<!--   See in controls.js: "showNewsImage" and "clickNews" for how to set up a news image -->
@@ -1913,6 +1913,14 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>September 7, 2025</h3>
+						<ul>
+							<li>Added an 'M' focus icon for composers who only used Master Composer.</li>
+							<li>Added an 'L' focus icon for composers who only used Loadstar Songsmith.</li>
+							<li>Added a 'D' focus icon for composers who mostly used DefleMask.</li>
+							<li>Added a green/gray 'B' focus icon for composers who mostly used BASIC programs.</li>
+						</ul>
 
 						<h3>September 6, 2025</h3>
 						<ul>

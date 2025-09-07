@@ -305,11 +305,21 @@ if (isset($fullname)) {
 				// Build focus icons via small maps
 				$leftMap  = [
 					'PRO' 		=> '<div class="p" title="Professional"></div>',
+					'CNET'		=> '<div class="c" title="Compunet"></div>',
 					'BOTB'		=> '<div class="b" title="Battle of the Bits"></div>',
+					'MC'		=> '<div class="m" title="Master Composer"></div>',
+					'LS'		=> '<div class="l" title="Loadstar Songsmith"></div>',
+					'DM'		=> '<div class="d" title="DefleMask"></div>',
+					'BASIC'		=> '<div class="bc" title="BASIC"></div>',
 				];
 				$rightMap = [
 					'SCENER'	=> '<div class="s" title="Scener"></div>',
 					'CNET'		=> '<div class="c" title="Compunet"></div>',
+					'BOTB'		=> '<div class="b" title="Battle of the Bits"></div>',
+					'MC'		=> '<div class="m" title="Master Composer"></div>',
+					'LS'		=> '<div class="l" title="Loadstar Songsmith"></div>',
+					'DM'		=> '<div class="d" title="DefleMask"></div>',
+					'BASIC'		=> '<div class="bc" title="BASIC"></div>',
 				];
 
 				$focusLeft  = $leftMap[$focus1]  ?? '<div class="none"></div>';
