@@ -9,7 +9,32 @@
  * @used-by		main.js
  */
 
- $tips = array(
+function MakeSiteLink($url, $header, $name) {
+
+	// Ensure proper escaping
+    $escUrl    = htmlspecialchars($url,    ENT_QUOTES, 'UTF-8');
+    $escHeader = htmlspecialchars($header, ENT_QUOTES, 'UTF-8');
+    $escName   = htmlspecialchars($name,   ENT_QUOTES, 'UTF-8');
+
+    // Pre-encode URL for Microlink
+    $encodedUrl = rawurlencode($url);
+
+    return '
+        <li class="site-card">
+            <a class="site-link"
+                href="' . $escUrl . '"
+                target="_blank" rel="noopener"
+                data-url="' . $escUrl . '">
+                <img class="thumb"
+                    src="https://api.microlink.io/?url=' . $encodedUrl . '&screenshot=true&meta=false&embed=screenshot.url"
+                    alt="' . $escHeader . '" loading="lazy">
+                <h3 class="site-header">' . $escHeader . '</h3>
+            </a>
+            <p class="site-name">' . $escName . '</p>
+        </li>';
+}
+
+$tips = array(
 
 	'	<h3>Playlists</h3>
 
@@ -738,9 +763,35 @@
 
 	',
 
+    '   <h3>Useful links</h3>
+
+        <ul class="site-list">'
+        . makeSiteLink('https://8bitlegends.com', '8BitLegends', 'Legends of the C64')
+        . makeSiteLink('https://c64.ch', 'C64.CH', 'Comprehensive database')
+        . makeSiteLink('https://www.c64.com', 'C64.com', 'Database, interviews, etc.')
+        . makeSiteLink('https://c64gfx.com', 'C64GFX', 'C64 graphics database')
+        . makeSiteLink('https://intros.c64.org', 'C64intros', 'Database of C64 intros')
+        . makeSiteLink('https://www.ccs64.com', 'CCS64', 'Legacy C64 emulator')
+        . makeSiteLink('https://codebase64.net', 'Codebase64', 'Source codes, tutorials, etc.')
+        . makeSiteLink('https://www.c64music.co.uk', 'CGSC', 'Compute\'s Gazette Sid Coll.')
+        . makeSiteLink('https://csdb.dk', 'CSDb', 'The C-64 Scene Database')
+        . makeSiteLink('https://www.docsnyderspage.com', 'Doc Snyder', 'Intros running in browser')
+        . makeSiteLink('https://gb64.com', 'GameBase64', 'Database of C64 games')
+        . makeSiteLink('https://www.hvsc.c64.org', 'HVSC', 'High Voltage SID Collection')
+        . makeSiteLink('https://lemon64.com', 'Lemon64', 'Database, reviews, forum')
+        . makeSiteLink('https://onslaught.c64.org', 'Onslaught', 'All-round C64 group')
+        . makeSiteLink('https://c64demo.com', 'Raistlin Papers', 'Blog about C64 demos')
+        . makeSiteLink('http://recollection.c64.org', 'Recollection', 'Tons of nostalgic interviews')
+        . makeSiteLink('https://sidquake.c64demo.com', 'SIDquake', 'Analyzer, linker, tool suite')
+        . makeSiteLink('https://vandalism.news', 'Vandalism', 'The popular diskmag')
+        . makeSiteLink('https://vice-emu.sourceforge.io', 'VICE', 'The Versatile C= Emulator')
+    	. '</ul>
+	',
 );
 
 $id = isset($_GET['id']) ? $_GET['id'] : mt_rand(0, count($tips) - 1);
+
+$id = 18; //////////////////////////////////
 
 if ($id != -1)
 	echo $tips[$id];
@@ -765,6 +816,7 @@ else
 			<li><a href="4" class="topic">SID handlers</a></li>
 			<li><a href="9" class="topic">Social links</a></li>
 			<li><a href="8" class="topic">URL parameters</a></li>
+			<li><a href="18" class="topic">Useful links</a></li>
 			<li><a href="11" class="topic">Warning tags</a></li>
 		</ul>
 		More tips may be added later.

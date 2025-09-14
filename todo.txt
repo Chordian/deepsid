@@ -28,10 +28,13 @@ SHOULD BE DONE
 
 - Expanding the "y" hotkey: Instead of toggling tags on and off, cycle through types. First
   hit removes event tags, then also production tags, and so on. In the end all are gone,
-  and the next hit then shows everything again.
+  and the next hit then shows everything again. Also add the context menu to this.
 
 - BUG: Sometimes a CSDb release page highlights a creator that seems to be irrelevant.
   Try gfx.col. here: https://deepsid.chordian.net/?file=/MUSICIANS/M/Megmyx/Quest.sid
+
+- Make it so quoted searches (" or %22) is accepted without triggering the malignant URL
+  detector error line.
 
 - A "refresh cache" link next to cached message in the footer of a CSDb page. (Consider only
   showing this for DeepSID administrators.)

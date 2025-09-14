@@ -4255,6 +4255,51 @@ input[type=range]::-ms-track {
 				line-height: 26px;
 			}
 
+/* ---- Thumbnails for links ------------------------------------------------- */
+
+.site-list {
+	list-style: none;
+	margin: 0;
+	padding: 0 !important;
+}
+
+.site-card {
+	height: 59px;
+}
+
+.site-link {
+	text-decoration: none;
+}
+
+.thumb {
+	width: 80px;
+	height: 51px;
+	object-fit: cover;
+	background: #eee;
+}
+
+.site-header {
+	position: relative;
+	top: -54px;
+	left: 88px !important;
+	font-size: 19px !important;
+	background: transparent;
+	border: none;
+}
+
+.site-name {
+	position: relative;
+	top: -59px;
+	left: 88px;
+	font: normal 13px "Asap Condensed", sans-serif;
+	white-space: nowrap;
+}
+
+.meta p {
+	margin: 0;
+	opacity: .8;
+}			
+
 /* ---- Context menu -------------------------------------------------------- */
 
 .context {

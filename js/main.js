@@ -2607,6 +2607,50 @@ function ResizeIframe() {
 	$("#page .deepsid-iframe").show();
 }
 
+// --------------------------------------------------------------------------
+// THUMBNAILS FOR LINKS
+// --------------------------------------------------------------------------
+
+const DAY_MS = 24*60*60*1000;
+
+function GetMicrolinkSrc(url, force){
+	var base = "https://api.microlink.io/"
+		+ "?url=" + encodeURIComponent(url)
+		+ "&screenshot=true&meta=false&embed=screenshot.url";
+	if (force)
+		base += "&force=true&ts=" + Date.now(); // Cache-bust
+	return base;
+}
+
+function GetSiteKey(url){ 
+	return "thumb_last_refresh_" + btoa(url); 
+}
+
+$(".site-link").on("click", function() {
+	var $a   = $(this);
+	var $img = $a.find("img.thumb");
+	var url  = $a.data("url");
+	var k    = GetSiteKey(url);
+	var last = parseInt(localStorage.getItem(k) || "0", 10);
+	var now  = Date.now();
+
+	// Refresh at most once per 24h per user
+	if((now - last) > DAY_MS) {
+		var forcedSrc = GetMicrolinkSrc(url, true);
+		var fallback  = GetMicrolinkSrc(url, false);
+
+		$img.one("load", function() {
+			localStorage.setItem(k, String(now));
+		}).attr("src", forcedSrc).on("error", function() {
+			// If quota exceeded (429) → revert to cached image
+			$(this).attr("src", fallback);
+		});
+	}
+	// Don't preventDefault → link still opens in new tab
+});
+
+// --------------------------------------------------------------------------
+
 /**
  * Minimize or maximize the sundry box in case of a small display. When the box
  * is minimized, you can still click a tab to restore its size, or you can drag
