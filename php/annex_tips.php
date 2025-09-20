@@ -70,7 +70,7 @@ $tips = array(
 		Want more info? Click it. This will take you to the <b>MEMO</b> view.
 	',
 
-	'	<h3>External links</h3>
+	'	<h3>External linking</h3>
 
 		<h4>Linking to specific SID files</h4>
 		<p>Just copy the URL in the address bar of your web browser.</p>
@@ -765,27 +765,80 @@ $tips = array(
 
     '   <h3>Useful links</h3>
 
+
+		<h4>Portals</h4>
+
         <ul class="site-list">'
-        . makeSiteLink('https://8bitlegends.com', '8BitLegends', 'Legends of the C64')
         . makeSiteLink('https://c64.ch', 'C64.CH', 'Comprehensive database')
         . makeSiteLink('https://www.c64.com', 'C64.com', 'Database, interviews, etc.')
+        . makeSiteLink('https://www.c64-wiki.com', 'C64-Wiki', 'Special C64 encyclopedia')
         . makeSiteLink('https://c64gfx.com', 'C64GFX', 'C64 graphics database')
         . makeSiteLink('https://intros.c64.org', 'C64intros', 'Database of C64 intros')
-        . makeSiteLink('https://www.ccs64.com', 'CCS64', 'Legacy C64 emulator')
-        . makeSiteLink('https://codebase64.net', 'Codebase64', 'Source codes, tutorials, etc.')
-        . makeSiteLink('https://www.c64music.co.uk', 'CGSC', 'Compute\'s Gazette Sid Coll.')
         . makeSiteLink('https://csdb.dk', 'CSDb', 'The C-64 Scene Database')
-        . makeSiteLink('https://www.docsnyderspage.com', 'Doc Snyder', 'Intros running in browser')
         . makeSiteLink('https://gb64.com', 'GameBase64', 'Database of C64 games')
-        . makeSiteLink('https://www.hvsc.c64.org', 'HVSC', 'High Voltage SID Collection')
+        . makeSiteLink('https://www.gamesthatwerent.com/welcome-to-gtw64', 'GTW', 'Games That Weren\'t (C64)')
         . makeSiteLink('https://lemon64.com', 'Lemon64', 'Database, reviews, forum')
+        // . makeSiteLink('http://recollection.c64.org', 'Recollection', 'Tons of nostalgic interviews')
+        . makeSiteLink('https://remix64.com', 'Remix64', 'Modern takes on SID tunes')
+        . makeSiteLink('https://remix.kwed.org', 'RKO', 'Remix.Kwed.org')
+    	. '</ul>
+
+		<h4>Events</h4>
+
+        <ul class="site-list">'
+        . makeSiteLink('https://arok.intro.hu', 'Arok', 'Annual demoscene event')
+    	. '</ul>
+
+		<h4>Groups</h4>
+
+        <ul class="site-list">'
+        . makeSiteLink('https://cadaver.github.io', 'Covert Bitops', 'Small C64 group')
         . makeSiteLink('https://onslaught.c64.org', 'Onslaught', 'All-round C64 group')
-        . makeSiteLink('https://c64demo.com', 'Raistlin Papers', 'Blog about C64 demos')
-        . makeSiteLink('http://recollection.c64.org', 'Recollection', 'Tons of nostalgic interviews')
-        . makeSiteLink('https://sidquake.c64demo.com', 'SIDquake', 'Analyzer, linker, tool suite')
+        . makeSiteLink('https://www.triad.se', 'Triad', 'C64 group active since 1986')
+    	. '</ul>
+
+		<h4>Development</h4>
+
+        <ul class="site-list">'
+        . makeSiteLink('https://codebase64.net', 'Codebase64', 'Source codes, tutorials, etc.')
+    	. '</ul>
+
+		<h4>Diskmags</h4>
+
+		<ul class="site-list">'
         . makeSiteLink('https://vandalism.news', 'Vandalism', 'The popular diskmag')
+    	. '</ul>
+
+		<h4>Specialized</h4>
+
+        <ul class="site-list">'
+        . makeSiteLink('https://8bitlegends.com', '8BitLegends', 'Legends of the C64')
+        . makeSiteLink('https://c64audio.com', 'C64Audio', 'Albums, books, etc.')
+        . makeSiteLink('https://csdb.chordian.net', 'CShellDB', 'Nice GUI for CSDb')
+        . makeSiteLink('https://www.docsnyderspage.com', 'Doc Snyder', 'Intros running in browser')
+        . makeSiteLink('https://www.forum64.de', 'Forum64', 'German C64 forum')
+        . makeSiteLink('https://project64.c64.org', 'Project 64', 'Manuals for C64/C128')
+        . makeSiteLink('https://c64demo.com', 'Raistlin Papers', 'Blog about C64 demos')
+        . makeSiteLink('https://sidquake.c64demo.com', 'SIDquake', 'Analyzer, linker, tool suite')
+        . makeSiteLink('https://www.slayradio.org', 'SLAY Radio', 'Web radio playing remixes')
+    	. '</ul>
+
+		<h4>Emulators</h4>
+
+		<ul class="site-list">'
+        . makeSiteLink('https://www.ccs64.com', 'CCS64', 'Legacy C64 emulator')
         . makeSiteLink('https://vice-emu.sourceforge.io', 'VICE', 'The Versatile C= Emulator')
     	. '</ul>
+
+		<h4>Collections</h4>
+
+		<ul class="site-list">'
+        . makeSiteLink('https://www.c64music.co.uk', 'CGSC', 'Compute\'s Gazette Sid Coll.')
+        . makeSiteLink('https://www.hvsc.c64.org', 'HVSC', 'High Voltage SID Collection')
+        . makeSiteLink('https://www.6581-8580.com', 'SOASC', 'Real C64 music recordings')
+        . makeSiteLink('https://ultimatesid.dk', 'USC', 'Ultimate SID Collection')
+    	. '</ul>
+
 	',
 );
 
@@ -802,7 +855,7 @@ else
 			<li><a href="6" class="topic">Color strips</a></li>
 			<li><a href="12" class="topic">Digi tags</a></li>
 			<li><a href="17" class="topic">Event tags</a></li>
-			<li><a href="2" class="topic">External links</a></li>
+			<li><a href="2" class="topic">External linking</a></li>
 			<li><a href="15" class="topic">General tags</a></li>
 			<li><a href="10" class="topic">Handling tags</a></li>
 			<li><a href="7" class="topic">Hotkeys</a></li>

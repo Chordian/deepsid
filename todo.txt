@@ -16,11 +16,20 @@ SHOULD BE DONE
 
 - Add a search category for one or more focus letters.
 
+- Instead of just an ID link, add a retry button when CSDb is unreachable.
+
+- Idea for improving folder refresh further: If browsing down but not having a SID row
+  selected in that folder yet, remember the current view scroll position when refreshing and
+  then scroll back to that.
+
 - Add a "X" in the end of the search edit box. When clicked it not only clears the edit
   box, it also resets the drop-down box and clears the check box.
 
+- Maybe also change the question mark circle above the focus icons with an SVG icon.
+
 - Also add the ellipsis CSS to SHOW pages.
   https://deepsid.chordian.net/?file=/MUSICIANS/T/The_Dungeon_Master/Fairy_Well.sid&subtune=1
+  https://deepsid.chordian.net/?file=/MUSICIANS/W/Wijnhoven_Joachim/Devil_Ronin.sid
 
 - After using "*" to edit e.g. year, remember the scroll position.
 

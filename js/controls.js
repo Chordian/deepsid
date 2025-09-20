@@ -1011,11 +1011,11 @@ Controls.prototype = {
 	 */
 	showNewsImage: function(show) {
 
-		return; // Comment this out when you want to show a news image
+		//return; // Comment this out when you want to show a news image
 
 		if (show && $("#stab-stil").text() == "News")
 			$("#sundry").css({                                                    // Zoom  102%
-				'background': 'var(--color-bg-box) url(images/news.png) center top / 102% auto no-repeat',
+				'background': 'var(--color-bg-box) url(images/news.png) center -1px / 100% auto no-repeat',
 			});
 		else
 			$("#sundry").css({
@@ -1028,7 +1028,7 @@ Controls.prototype = {
 	 * setting this up. Point this to the relevant web site for the image.
 	 */
 	clickNews: function() {
-		window.open("https://www.boom-party.c64.fun/index-en.php");
+		window.open("https://mysdata.org/2025/index.html");
 	},
 
 	/**
