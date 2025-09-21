@@ -4,17 +4,14 @@ ToDo
 - Look into the console logging alternatives, like warn, error, table, etc.
   @link https://developer.mozilla.org/en-US/docs/Web/API/console
 
+- Add more useful links.
+
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
 - Make direct URL arguments redirect correctly for the DeepSID.com domain.
 
-- Incredible I haven't thought of this before: Add a topic in the annex with cool links to
-  various other C64/SID-related web sites. Make sure https://sidquake.c64demo.com is there.
-
 - A few composers in HVSC also have a folder in CGSC and vice versa. How about cross-link?
-
-- Add a search category for one or more focus letters.
 
 - Instead of just an ID link, add a retry button when CSDb is unreachable.
 

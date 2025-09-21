@@ -651,7 +651,7 @@
 							<!--<span> .... See <a href="#" onclick="$('#tab-changes').trigger('click'); return false;">Changes</a> for info.</span>-->
 
 								<!--   See in controls.js: "showNewsImage" and "clickNews" for how to set up a news image -->
-							<pre style="height:112px;"></pre>
+							<!--<pre style="height:112px;"></pre>-->
 							<!--<pre><b style="font-size:16px;">Coming up<br></b><b style="position:relative;top:-3px;font-size:13px;">17 - 19 Nov.</b><br><br><i style="position:absolute;bottom:-38px;right:4px;font-size:13px;line-height:17px;text-align:right;">New SID tunes<br><font style="font-size:17px;">incoming!</font></i></pre>-->
 							<!--<pre><b style="font-size:16px;">This weekend<br></b><b style="position:relative;top:-3px;font-size:13px;">24 - 27 July</b><br><br><i style="position:absolute;bottom:2px;right:4px;font-size:13px;line-height:17px;text-align:right;">New SID tunes<br><font style="font-size:17px;">incoming!</font></i></pre>-->
 						</div>
@@ -981,6 +981,7 @@
 						<option value="stil">STIL</option>
 						<option value="rating">Rating</option>
 						<option value="country">Country</option>
+						<option value="focus">Focus</option>
 						<option value="new">Version</option>
 						<option value="latest">Latest</option>
 						<option value="folders" style="display:none;">Folders</option>
@@ -1914,6 +1915,12 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+					
+						<h3>September 21, 2025</h3>
+						<ul>
+							<li>Added a list of useful links in the annex box with self-updating thumbnails. More links will be added over time.</li>
+							<li>Focus letters are now searchable; use "basic" or "botb" to separate the two 'B' types.</li>
+						</ul>
 
 						<h3>September 7, 2025</h3>
 						<ul>

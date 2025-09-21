@@ -4264,41 +4264,51 @@ input[type=range]::-ms-track {
 }
 
 .site-card {
-	height: 59px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 8px;
+	height: auto;
 }
 
 .site-link {
+	display: flex;
+	align-items: center;
+	gap: 6px;
 	text-decoration: none;
+	width: 300px;
 }
 
 .thumb {
-	width: 80px;
-	height: 51px;
+	width: 40px;
+	height: 25px;
 	object-fit: cover;
 	background: #eee;
 }
 
 .site-header {
 	position: relative;
-	top: -54px;
-	left: 88px !important;
-	font-size: 19px !important;
+	top: 2px;
+	margin-left: 1px;
+	font-size: 17px !important;
 	background: transparent;
 	border: none;
+	white-space: nowrap;
+	transition: all .07s linear;
 }
 
-.site-name {
+[data-theme="dark"] .site-header:hover {
+	color: #fff !important;
+}
+
+.site-type {
+	float: right !important;
 	position: relative;
-	top: -59px;
-	left: 88px;
+	top: -2px;
 	font: normal 13px "Asap Condensed", sans-serif;
 	white-space: nowrap;
+	opacity: .4;
 }
-
-.meta p {
-	margin: 0;
-	opacity: .8;
-}			
 
 /* ---- Context menu -------------------------------------------------------- */
 

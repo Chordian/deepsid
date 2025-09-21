@@ -1011,7 +1011,7 @@ Controls.prototype = {
 	 */
 	showNewsImage: function(show) {
 
-		//return; // Comment this out when you want to show a news image
+		return; // Comment this out when you want to show a news image
 
 		if (show && $("#stab-stil").text() == "News")
 			$("#sundry").css({                                                    // Zoom  102%

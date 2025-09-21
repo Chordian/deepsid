@@ -258,6 +258,11 @@ try {
 				$select = $db->query('SELECT fullname from hvsc_files'.
 					' WHERE new = "'.$version.'" AND (fullname LIKE "%'.$query.'%" OR author LIKE "%'.$query.'%") LIMIT '.SEARCH_LIMIT);
 
+			} else if ($_GET['searchType'] == 'focus') {
+
+				$select = $db->prepare('SELECT fullname FROM composers WHERE '.$searchContext.' AND (focus1 LIKE :query OR focus2 LIKE :query) LIMIT '.SEARCH_LIMIT);
+				$select->execute(array(':query'=>$_GET['searchQuery'].'%'));
+
 			} else if ($_GET['searchType'] == 'folders') {
 
 				// Don't find any files for this one

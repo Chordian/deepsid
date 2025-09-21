@@ -137,6 +137,7 @@ Browser.prototype = {
 
 		$("#search-box").keydown(function(event) {
 			if (event.keyCode == 13 && $("#search-box").val() !== "") {
+				blockNextEnter = true;
 				event.target.blur();
 				$("#search-button").trigger("click");
 			}
