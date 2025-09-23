@@ -346,7 +346,8 @@ if (!strpos($xml, '<CSDbData>')) {
     serve_cache_or_error(
         $cache_file,
         '<p style="margin-top:0;"><i>CSDb is currently unreachable.</i></p>' .
-        '<b>ID:</b> <a href="https://csdb.dk/' . $csdb_type . '/?id=' . $csdb_id . '" target="_blank">' . $csdb_id . '</a>'
+        '<b>ID:</b> <a href="https://csdb.dk/' . $csdb_type . '/?id=' . $csdb_id . '" target="_blank">' . $csdb_id . '</a>' .
+		'<button class="csdb-retry" style="position:relative;top:-1px;margin-left:12px;">Retry</button>'
     );
 }
 $csdb = simplexml_load_string($xml);

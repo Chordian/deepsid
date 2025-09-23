@@ -13,17 +13,23 @@ try {
 	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	$db->exec("SET NAMES UTF8");
 	
-	// Get the requested path
 	$hash = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
 
-	if (empty($hash)) {
-		// Just go to the root of the site
+	// If no path and query params exist, just redirect to the home page
+	if ($hash === '' && empty($_SERVER['QUERY_STRING'])) {
 		header("HTTP/1.1 301 Moved Permanently");
 		header("Location: https://deepsid.chordian.net");
 		exit;
 	}
 
-	// Look up the hash
+	// If no path, but query string exists (e.g. ?file=/GAMES/...), pass it through to deepsid.chordian.net
+	if ($hash === '' && !empty($_SERVER['QUERY_STRING'])) {
+		header("HTTP/1.1 301 Moved Permanently");
+		header("Location: https://deepsid.chordian.net/?" . $_SERVER['QUERY_STRING']);
+		exit;
+	}
+
+	// Otherwise, treat it as a possible short link
 	$select = $db->prepare("SELECT full_url FROM short_urls WHERE hash = ?");
 	$select->execute([$hash]);
 

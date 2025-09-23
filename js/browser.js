@@ -3840,6 +3840,77 @@ Browser.prototype = {
 	},
 
 	/**
+	 * Determines if the keyboard marker for a SID row is in view or if the user has
+	 * scrolled far away from it.
+	 * 
+	 * @returns {boolean}	True if currently visible, otherwise false
+	 */
+	isKeyboardMarkerInView: function() {
+		const $rows = $("#folders tr");
+		const scrollTop = $("#folders").scrollTop();
+		const containerHeight = $("#folders").height();
+
+		let firstVisibleIndex = -1;
+		let lastVisibleIndex = -1;
+
+		$rows.each(function(index) {
+			const $row = $(this);
+			const offsetTop = $row.position().top;
+			const rowHeight = $row.outerHeight();
+
+			if (offsetTop + rowHeight >= scrollTop && offsetTop <= scrollTop + containerHeight) {
+				if (firstVisibleIndex === -1)
+					firstVisibleIndex = index;
+				lastVisibleIndex = index;
+			}
+		});
+
+		return (
+			this.kbSelectedRow >= firstVisibleIndex &&
+			this.kbSelectedRow <= lastVisibleIndex
+		);
+	},
+
+	/**
+	 * Returns the SID row index of the center of the current browser view.
+	 * 
+	 * @returns {int}	SID row index
+	 */
+	getIndexClosestToCenter: function() {
+		const $container = $('#folders');
+		const scrollTop = $container.scrollTop();
+		const viewTop = scrollTop;
+		const viewBottom = scrollTop + $container.height();
+		const viewCenter = (viewTop + viewBottom) / 2;
+
+		// Consider only rows that are actually visible in the container
+		const $rows = $container.find("tr").filter(function () {
+			const $r = $(this);
+			const top = $r.position().top;
+			const bottom = top + $r.outerHeight();
+			return bottom >= viewTop && top <= viewBottom; // Intersects viewport
+		});
+
+		let bestIdx = -1;
+		let bestDist = Infinity;
+
+		$rows.each(function () {
+			const $r = $(this);
+			const top = $r.position().top;
+			const center = top + $r.outerHeight() / 2;
+			const dist = Math.abs(center - viewCenter);
+
+			const fullIndex = $r.index(); // Index among ALL #folders TR
+			if (dist < bestDist) {
+				bestDist = dist;
+				bestIdx = fullIndex;
+			}
+		});
+
+		return bestIdx; // -1 if no rows
+	},
+
+	/**
 	 * Select the first viable item for keyboard selection, i.e. ignores if
 	 * this is a spacer or a divider.
 	 */

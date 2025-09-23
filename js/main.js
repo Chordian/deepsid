@@ -1018,6 +1018,14 @@ $(function() { // DOM ready
 		localStorage.setItem("theme", colorTheme);
 	});
 
+
+	/**
+	 * When clicking 'RETRY' in the CSDb tab where a page load has failed.
+	 */
+	$("#topic-csdb").on("click", ".csdb-retry", function() {
+		browser.getCSDb();
+	});
+
 	/**
 	 * When one of the "dexter" page tabs are clicked.
 	 */
@@ -2473,8 +2481,9 @@ function SelectFactoid(factoid, showMessage = true) {
  * Refresh the currently displayed folder, even if searching.
  */
 function RefreshFolder() {
-	var here = $("#folders").scrollTop();
-	var kbSelectedBefore = browser.kbSelectedRow;
+	var scrollPosition = $("#folders").scrollTop(),
+		kbSelectedBefore = browser.kbSelectedRow,
+		isMarkerInView =  browser.isKeyboardMarkerInView();
 
 	if (browser.isSearching) {
 		// Something could have changed so have to repeat the same search
@@ -2483,18 +2492,28 @@ function RefreshFolder() {
 		$("#search-box").val(browser.searchQuery).trigger("keyup");
 
 		browser.getFolder(0, browser.searchQuery, undefined, function() {
-			SetScrollTopInstantly("#folders", here);
-			browser.kbSelectedRow = kbSelectedBefore;
-			browser.moveKeyboardSelection(browser.kbSelectedRow, false);
+			applyKeyboardSelection(scrollPosition, kbSelectedBefore, isMarkerInView);
 		});
 	} else {
 		// Standard folder refresh
 		browser.getFolder(0, undefined, undefined, function() {
-			SetScrollTopInstantly("#folders", here);
-			browser.kbSelectedRow = kbSelectedBefore;
-			browser.moveKeyboardSelection(browser.kbSelectedRow, false);
+			applyKeyboardSelection(scrollPosition, kbSelectedBefore, isMarkerInView);
 		});
 	}
+}
+
+/**
+ * Helper function used by RefreshFolder().
+ */
+function applyKeyboardSelection(scrollPosition, kbSelectedBefore, isMarkerInView) {
+	SetScrollTopInstantly("#folders", scrollPosition);
+	if (isMarkerInView)
+		// Only go to same keyboard marker if it was visible
+		browser.kbSelectedRow = kbSelectedBefore;
+	else
+		// Keyboard marker was not visible to set it in the middle of view
+		browser.kbSelectedRow = browser.getIndexClosestToCenter();
+	browser.moveKeyboardSelection(browser.kbSelectedRow, false);
 }
 
 /**

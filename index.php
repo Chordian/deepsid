@@ -1916,10 +1916,17 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 					
+						<h3>September 23, 2025</h3>
+						<ul>
+							<li>Improved folder refreshing with the "f" hotkey. If the keyboard selection is not visible, refreshing now restores
+								the same scroll position but centers the selection within it.</li>
+						</ul>
+
 						<h3>September 21, 2025</h3>
 						<ul>
 							<li>Added a list of useful links in the annex box with self-updating thumbnails. More links will be added over time.</li>
 							<li>Focus letters are now searchable; use "basic" or "botb" to separate the two 'B' types.</li>
+							<li>Added a 'RETRY' button for failed CSDb page loads.</li>
 						</ul>
 
 						<h3>September 7, 2025</h3>

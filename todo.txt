@@ -9,15 +9,7 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- Make direct URL arguments redirect correctly for the DeepSID.com domain.
-
 - A few composers in HVSC also have a folder in CGSC and vice versa. How about cross-link?
-
-- Instead of just an ID link, add a retry button when CSDb is unreachable.
-
-- Idea for improving folder refresh further: If browsing down but not having a SID row
-  selected in that folder yet, remember the current view scroll position when refreshing and
-  then scroll back to that.
 
 - Add a "X" in the end of the search edit box. When clicked it not only clears the edit
   box, it also resets the drop-down box and clears the check box.
