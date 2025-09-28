@@ -216,8 +216,16 @@ class Account {
 	 * @param		boolean		true if common (will have a weaker color)
 	 */
 	public function LogActivity($str, $common = false) {
-			$time_ip = date('Y-m-d H:i:s', strtotime(TIME_ADJUST)).' - '.$_SERVER['REMOTE_ADDR'].' - ';
-			file_put_contents($_SERVER['DOCUMENT_ROOT'].'/deepsid/logs/activity.txt', ($common ? '<span style="color:#999;">' : '').$time_ip.$str.($common ? '</span>' : '').PHP_EOL, FILE_APPEND);
+		static $rotatedThisRequest = false;
+
+		// Run rotation opportunistically on the 1st of each month
+		if (!$rotatedThisRequest && (int)date('j') === 1) {
+			@require_once __DIR__ . '/rotate_logs.php';
+			$rotatedThisRequest = true;
+		}
+
+		$time_ip = date('Y-m-d H:i:s', strtotime(TIME_ADJUST)).' - '.$_SERVER['REMOTE_ADDR'].' - ';
+		file_put_contents($_SERVER['DOCUMENT_ROOT'].'/deepsid/logs/activity.txt', ($common ? '<span style="color:#999;">' : '').$time_ip.$str.($common ? '</span>' : '').PHP_EOL, FILE_APPEND);
 	}
 
 	/**

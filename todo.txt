@@ -21,9 +21,6 @@ SHOULD BE DONE
 
 - Maybe also change the question mark circle above the focus icons with an SVG icon.
 
-- Make the log files automatically backup and reset each first of months. Talk to ChatGPT
-  about how to do this the best way.
-
 - After using "*" to edit e.g. year, remember the scroll position.
 
 - Is game statistics in profile table hard-coded? It should count all "GameBase64" tags.

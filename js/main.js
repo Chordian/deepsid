@@ -2971,7 +2971,9 @@ function CustomDialog(data, callbackYes, callbackNo) {
  * @param {function} callback	If specified, the function to call after PHP call
  */
 function TrackEvent(type, target, callback) {
-	log("TRACKING: Type: '"+type+"' Target: '"+target+"'");
+	if (["JCH", "Ratings"].includes($("#logged-username").text())) return;
+
+	// log("TRACKING: Type: '"+type+"' Target: '"+target+"'");
 
 	$.post("php/track.php", { type, target })
 		.done(function() {
