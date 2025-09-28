@@ -920,8 +920,12 @@ $(function() { // DOM ready
 	 * 
 	 * NOTE: As of July 2024, all SID handlers now refresh the page. Most of the SID
 	 * handlers already did this, and it made the code much easier to maintain.
+	 * 
+	 * @param {boolean} ignore		If specified and TRUE, exit immediately
 	 */
-	$("div.styledSelect").change(function() {
+	$("div.styledSelect").change(function(event, ignore) {
+		if (ignore) return;
+
 		// Get the choice from the drop-down box that was changed
 		var emulator = $(this).prev("select").attr("name") == "select-topleft-emulator"
 			? $("#dropdown-topleft-emulator").styledGetValue()
@@ -931,8 +935,10 @@ $(function() { // DOM ready
 		// Remember where we parked
 		localStorage.setItem("tab", $("#tabs .selected").attr("data-topic"));
 
-		// Refresh the page to activate the new emulator
-		window.location.reload();
+		TrackEvent("select:emulator", emulator, function() {
+			// Refresh the page to activate the new emulator
+			window.location.reload();
+		});
 		return false;
 	});
 
@@ -2953,6 +2959,31 @@ function CustomDialog(data, callbackYes, callbackNo) {
 		$("#dialog-cover,.dialog-box").hide();
 		return false;
 	});
+}
+
+/**
+ * Track user behaviour for later statistics.
+ * 
+ * Only an IP address is logged, not a specific user.
+ * 
+ * @param {string} type			E.g. "start", "enter", "select", etc.
+ * @param {string} target		E.g. song ID, folder path, emulator name, etc.
+ * @param {function} callback	If specified, the function to call after PHP call
+ */
+function TrackEvent(type, target, callback) {
+	log("TRACKING: Type: '"+type+"' Target: '"+target+"'");
+
+	$.post("php/track.php", { type, target })
+		.done(function() {
+			if (typeof callback === "function") {
+				callback();
+			}
+		})
+		.fail(function() {
+			if (typeof callback === "function") {
+				callback();
+			}
+		});
 }
 
 /**

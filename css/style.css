@@ -5383,6 +5383,12 @@ input[type=range]::-ms-track {
 				margin: 0 8px 0 5px;
 			}
 
+		.csdb-ellipsis {
+			display: inline-block !important;
+			margin: 0 0 -8px 0 !important;
+			max-width: 710px !important;
+		}
+
 		.corner-icons {
 			position: absolute;
 			top: 12px;

@@ -602,6 +602,7 @@ Browser.prototype = {
 				});
 				this.getComposer();
 
+				TrackEvent("enter:folder", this.path.substring(1));
 				UpdateURL();
 			}
 
@@ -643,6 +644,8 @@ Browser.prototype = {
 			this.moveKeyboardSelection(this.kbSelectedRow, false, false);
 
 			SID.load(subtune, this.getLength(subtune), this.playlist[this.songPos].fullname, function(error) {
+
+				TrackEvent("start:sid", browser.playlist[browser.songPos].id);
 
 				this.clearSpinner();
 

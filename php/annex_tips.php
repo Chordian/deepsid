@@ -811,6 +811,7 @@ $tips = array(
         . makeSiteLink('https://remix64.com', 'Remix64', 'Music')
         . makeSiteLink('https://remix.kwed.org', 'Remix.Kwed.org', 'Music')
         . makeSiteLink('https://2025.revision-party.net', 'Revision', 'Event')
+        . makeSiteLink('https://sanderfocus.nl', 'SanderFocus', 'Graphics')
         // . makeSiteLink('http://sid.oth4.com', 'SID.OTH4.COM', '')
         . makeSiteLink('https://sceneworld.org', 'Scene World', 'Diskmag')
         . makeSiteLink('https://sidquake.c64demo.com', 'SIDquake', 'Tool')

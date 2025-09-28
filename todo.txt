@@ -1,6 +1,8 @@
 ToDo
 ¯¯¯¯
 
+- Yes, I sometimes use ChatGPT. Sue me.
+
 - Look into the console logging alternatives, like warn, error, table, etc.
   @link https://developer.mozilla.org/en-US/docs/Web/API/console
 
@@ -14,11 +16,13 @@ SHOULD BE DONE
 - Add a "X" in the end of the search edit box. When clicked it not only clears the edit
   box, it also resets the drop-down box and clears the check box.
 
+- Detect PAL/NTSC/CIA when clicking a SID row, and if not in the database, add it, so the
+  factoid information is increasingly more complete over time.
+
 - Maybe also change the question mark circle above the focus icons with an SVG icon.
 
-- Also add the ellipsis CSS to SHOW pages.
-  https://deepsid.chordian.net/?file=/MUSICIANS/T/The_Dungeon_Master/Fairy_Well.sid&subtune=1
-  https://deepsid.chordian.net/?file=/MUSICIANS/W/Wijnhoven_Joachim/Devil_Ronin.sid
+- Make the log files automatically backup and reset each first of months. Talk to ChatGPT
+  about how to do this the best way.
 
 - After using "*" to edit e.g. year, remember the scroll position.
 
@@ -43,10 +47,6 @@ SHOULD BE DONE
 
 - Idea from Anon-Relays: Loop song X number of times before moving on to the next one. In
   the settings, the default number should of course be 1.
-
-- Add tracking of how much playlists are clicked, tunes are clicked, and so on?
-  Maybe create a generic function to call with type parameter, etc. so it's easy to add in
-  the many places where it makes sense.
 
 - An "Admin" tab with buttons? Ideas for task buttons:
 
@@ -656,6 +656,10 @@ TEST RESOURCES
   https://deepsid.chordian.net/?file=/MUSICIANS/J/Jammer/Rippin_Off_the_Most_Jazzy_Lads.sid
   https://deepsid.chordian.net/?file=/MUSICIANS/F/Fegolhuzz/Emergent_Behavior_of_Hydrogen.sid
   https://deepsid.chordian.net/?file=/MUSICIANS/C/Chiummo_Aldo/Unreadibility.sid (overflows BACK)
+
+  SHOW compo in CSDb tab:
+  https://deepsid.chordian.net/?file=/MUSICIANS/T/The_Dungeon_Master/Fairy_Well.sid&subtune=1
+  https://deepsid.chordian.net/?file=/MUSICIANS/W/Wijnhoven_Joachim/Devil_Ronin.sid
 
   GB64 tab (enter a game page for one of the two hits):
   https://deepsid.chordian.net/?file=/MUSICIANS/B/Bogas_Ed/Murder_on_the_Mississippi.sid

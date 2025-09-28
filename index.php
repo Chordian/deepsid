@@ -1916,6 +1916,11 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 					
+						<h3>September 27, 2025</h3>
+						<ul>
+							<li>The header on the compo list page inside the CSDb tab now handles a long title without overflowing.</li>
+						</ul>
+
 						<h3>September 23, 2025</h3>
 						<ul>
 							<li>Improved folder refreshing with the "f" hotkey. If the keyboard selection is not visible, refreshing now restores

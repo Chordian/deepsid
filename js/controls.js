@@ -236,6 +236,8 @@ Controls.prototype = {
 
 			SID.load(subtune, browser.getLength(subtune), browser.playlist[browser.songPos].fullname, function(error) {
 
+				TrackEvent("start:sid", browser.playlist[browser.songPos].id);
+
 				browser.clearSpinner();
 
 				if (!error) {
@@ -1131,9 +1133,14 @@ Controls.prototype = {
 	 * @param {string} emulator		Emulator, e.g. "resid", "jsidplay2", etc.
 	 */
 	selectEmulator: function(emulator) {
-		$("#dropdown-topleft-emulator,#dropdown-settings-emulator")
+		$("#dropdown-topleft-emulator")
 			.styledSetValue(emulator)
-			.next("div.styledSelect").trigger("change");
+			.next("div.styledSelect")
+			.trigger("change");
+		$("#dropdown-settings-emulator")
+			.styledSetValue(emulator)
+			.next("div.styledSelect")
+			.trigger("change", true); // Ignore event function call
 	},
 
 	/**
