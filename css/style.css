@@ -4205,11 +4205,30 @@ input[type=range]::-ms-track {
 			left: 105px;
 			width: 184px; /* 242px */
 			font-size: 14px;
-			padding: 4px;
+			padding: 4px 22px 4px 4px; /* Make room for the "X" */
 			height: 21px;
 			border: 0.5px solid var(--color-border-box);
 			border-radius: 1px;
 		}
+
+			/* The "X" icon for clearing the search edit box */
+			#search-clear {
+				position: absolute;
+				right: 145px;
+				top: 49%;
+				transform: translateY(-50%);
+				width: 13px;
+				height: 13px;
+				cursor: pointer;
+				opacity: 0;
+				visibility: hidden;
+				transition: opacity .06s linear, visibility .06s linear;
+			}
+
+			#search-clear.visible {
+				opacity: 0.8;
+				visibility: visible;
+			}
 
 		#songs .medium,
 		#topic-settings .medium {

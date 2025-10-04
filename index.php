@@ -10,8 +10,8 @@
 	// $inside_iframe = isset($_SERVER['HTTP_SEC_FETCH_DEST']) && $_SERVER['HTTP_SEC_FETCH_DEST'] == 'iframe';
 
 	// Detect and block if the URL contains unwanted characters
-	// Example: https://deepsid.chordian.net/?file=%22%3E%3Ch1%3Efoobarbaz
-	$special_chars = array('[', ']', '<', '>', ';', ',', '"', '*');
+	// Example: https://deepsid.chordian.net/?file=%3E%3Ch1%3Efoobarbaz
+	$special_chars = array('[', ']', '<', '>', ';', ',', '*');
 	$url = urldecode("https://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]");
 	foreach ($special_chars as $char)
 		if (strpos($url, $char) !== false)
@@ -988,12 +988,17 @@
 						<option value="gb64">Game</option>
 						<option value="special" style="display:none;">Special</option>
 					</select>
-					<form onsubmit="return false;" autocomplete="off"><input type="text" name="search-box" id="search-box" maxlength="64" placeholder="Search..." /></form>
+					<form onsubmit="return false;" autocomplete="off">
+						<div class="search-wrapper">
+							<input type="text" name="search-box" id="search-box" maxlength="64" placeholder="Search..." />
+							<img src="images/close.svg" id="search-clear" alt="Clear" />
+						</div>
+					</form>
 					<div id="search-here-container">
 						<input type="checkbox" id="search-here" name="shtoggle" class="unselectable" unchecked />
 						<label for="search-here" class="unselectable">Here</label>
 					</div>
-					<button id="search-button" class="medium disabled" disabled="disabled">Search</button>
+					<button id="search-button" class="medium disabled" disabled>Search</button>
 				</div>
 			</div>
 		</div>
@@ -1916,6 +1921,12 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 					
+						<h3>October 4, 2025</h3>
+						<ul>
+							<li>The search box now shows an 'X' icon when it contains text. Clicking it empties the search box, resets the
+								drop-down to 'All', and clears the 'Here' checkbox.</li>
+						</ul>
+
 						<h3>September 27, 2025</h3>
 						<ul>
 							<li>The header on the compo list page inside the CSDb tab now handles a long title without overflowing.</li>

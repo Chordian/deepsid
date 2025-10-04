@@ -935,7 +935,7 @@ $(function() { // DOM ready
 		// Remember where we parked
 		localStorage.setItem("tab", $("#tabs .selected").attr("data-topic"));
 
-		TrackEvent("select:emulator", emulator, function() {
+		TrackingEvent("select:emulator", emulator, function() {
 			// Refresh the page to activate the new emulator
 			window.location.reload();
 		});
@@ -2970,7 +2970,7 @@ function CustomDialog(data, callbackYes, callbackNo) {
  * @param {string} target		E.g. song ID, folder path, emulator name, etc.
  * @param {function} callback	If specified, the function to call after PHP call
  */
-function TrackEvent(type, target, callback) {
+function TrackingEvent(type, target, callback) {
 	if (["JCH", "Ratings"].includes($("#logged-username").text())) return;
 
 	// log("TRACKING: Type: '"+type+"' Target: '"+target+"'");

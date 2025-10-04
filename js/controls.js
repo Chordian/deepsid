@@ -236,7 +236,7 @@ Controls.prototype = {
 
 			SID.load(subtune, browser.getLength(subtune), browser.playlist[browser.songPos].fullname, function(error) {
 
-				TrackEvent("start:sid", browser.playlist[browser.songPos].id);
+				TrackingEvent("start:sid", browser.playlist[browser.songPos].id);
 
 				browser.clearSpinner();
 

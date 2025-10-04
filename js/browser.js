@@ -143,10 +143,20 @@ Browser.prototype = {
 			}
 		}).keyup(function() {
 			$("#search-button").removeClass("disabled");
-			if ($("#search-box").val() !== "")
-				$("#search-button").prop("disabled", false);
-			else
+			if ($("#search-box").val() !== "") {
+				$("#search-button").prop("disabled", false).removeClass("disabled");
+    			$("#search-clear").addClass("visible");
+			} else {
 				$("#search-button").prop("enabled", false).addClass("disabled");
+				$("#search-clear").removeClass("visible");
+			}
+		});
+
+		// Clicking the "X" icon at the right end of the edit box
+		$("#search-clear").click(function() {
+			$("#dropdown-search").val("#all#");
+			$("#search-here").prop("checked", false);
+			$("#search-box").val("").trigger("keyup").focus();
 		});
 
 		// Turn "82 83 84..." years in composer chart into search links
@@ -602,7 +612,7 @@ Browser.prototype = {
 				});
 				this.getComposer();
 
-				TrackEvent("enter:folder", this.path.substring(1));
+				TrackingEvent("enter:folder", this.path.substring(1));
 				UpdateURL();
 			}
 
@@ -645,7 +655,7 @@ Browser.prototype = {
 
 			SID.load(subtune, this.getLength(subtune), this.playlist[this.songPos].fullname, function(error) {
 
-				TrackEvent("start:sid", browser.playlist[browser.songPos].id);
+				TrackingEvent("start:sid", browser.playlist[browser.songPos].id);
 
 				this.clearSpinner();
 
