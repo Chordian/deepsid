@@ -295,6 +295,18 @@ if (isset($fullname)) {
 				}
 			}
 
+			// Get the crosslink folder if there is any (i.e. HVSC composer has a CGSC folder or vice versa)
+			// NOTE: For now 'LIMIT 1' but the folder could in the future return multiple results.
+			$select_alt = $db->query('SELECT type, fullname FROM folders_map WHERE folders_id = '.$row_folder->id.' LIMIT 1');
+			$select_alt->setFetchMode(PDO::FETCH_OBJ);
+			$row_alt = $select_alt->fetch();
+
+			$alt_type = $alt_fullname = '';
+			if ($select_alt->rowCount()) {
+				$alt_type = $row_alt->type;
+				$alt_fullname = $row_alt->fullname;
+			}
+
 			// Only show focus icons in MUSICIANS profile pages
 			if (preg_match('~(?:^|/)MUSICIANS/[^/]+/[^/]+(?:/|$)~i', $fullname)) {
 				// Fetch focus flags (defaults to 'NONE' if no row)
@@ -468,6 +480,10 @@ if (isset($row)) {
 	$clink = '<span class="line"><img class="icon clinks" src="images/composer_link.svg" title="Links" alt="" style="position:relative;top:2.5px;height:16px;" /><a href="#" class="clinks" data-id="'.$row->id.'" data-name="'.$clink_name.'" data-handle="'.$clink_handle.'">Links</a><img class="icon clinks" src="images/composer_arrowright.svg" alt="" style="position:relative;top:3px;height:15px;margin-left:3px;" alt="" /></span>';
 }
 
+$crossfolder = '';
+if (!empty($alt_type))
+	$crossfolder = '<span class="line"><img class="icon xfolder" src="images/composer_folder.svg" title="See also" alt="" style="position:relative;top:3px;height:16px;margin-right:5px;" /><a href="?file=/'.$alt_fullname.'">'.$alt_type.'</a></span>';
+
 // Top part with thumbnail, birthday, country, etc.
 $html = '<table style="border:none;margin-bottom:0;"><tr>'.
 			'<td style="position:relative;padding:0;border:none;width:184px;">'.
@@ -482,6 +498,7 @@ $html = '<table style="border:none;margin-bottom:0;"><tr>'.
 					substr($born, 0, 4).$age_now.'</span>' : '').
 				($died != '0000' ? '<span class="line"><img class="icon stone" src="images/composer_stone.svg" title="Died" alt="" style="position:relative;top:3px;height:18px;margin-right:5px;" />'.
 					$died.$age_death.'</span>' : '').
+				$crossfolder.
 				$clink.
 				(!empty($notable) ? '<span class="notable">'.
 					'<img class="icon cstar" src="images/composer_star.svg" title="Notable" alt="" style="top:-1px;" /><b style="position:relative;top:-5px;">'.$notable.'&nbsp;</b></span>' : '').

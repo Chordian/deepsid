@@ -5,10 +5,13 @@
  * Track a behavior on the web site.
  */
 
-require_once("setup.php");
+require_once("class.account.php"); // Includes setup
 
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest')
 	die("Direct access not permitted.");
+
+if ($account->UserName() == 'JCH' || $account->UserName() == 'Ratings')
+	exit();
 
 exit(); //////////////// TURNED OFF FOR NOW
 

@@ -11,14 +11,12 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- A few composers in HVSC also have a folder in CGSC and vice versa. How about cross-link?
-
 - Detect PAL/NTSC/CIA when clicking a SID row, and if not in the database, add it, so the
   factoid information is increasingly more complete over time.
 
-- Maybe also change the question mark circle above the focus icons with an SVG icon.
+- Add a profile "page" in the annex box.
 
-- After using "*" to edit e.g. year, remember the scroll position.
+- Maybe also change the question mark circle above the focus icons with an SVG icon.
 
 - Is game statistics in profile table hard-coded? It should count all "GameBase64" tags.
 
@@ -650,6 +648,7 @@ TEST RESOURCES
   https://deepsid.chordian.net/?file=/MUSICIANS/J/Jammer/Rippin_Off_the_Most_Jazzy_Lads.sid
   https://deepsid.chordian.net/?file=/MUSICIANS/F/Fegolhuzz/Emergent_Behavior_of_Hydrogen.sid
   https://deepsid.chordian.net/?file=/MUSICIANS/C/Chiummo_Aldo/Unreadibility.sid (overflows BACK)
+  https://deepsid.chordian.net/?file=/MUSICIANS/B/Bakker_Nantco/When_Im_64.sid
 
   SHOW compo in CSDb tab:
   https://deepsid.chordian.net/?file=/MUSICIANS/T/The_Dungeon_Master/Fairy_Well.sid&subtune=1

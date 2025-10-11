@@ -14,7 +14,7 @@ var main = {
 
 var cacheCSDb = cacheSticky = cacheStickyBeforeCompo = cacheCSDbProfile = cacheBeforeCompo = cachePlayer = cacheGB64 = cacheRemix = prevFile = sundryTab = reportSTIL = "";
 var cacheTabScrollPos = cachePlayerTabScrollPos = cacheGB64TabScrollPos = cacheRemixTabScrollPos = cachePosBeforeCompo = cacheDDCSDbSort = peekCounter = sundryHeight = 0;
-var recommended = forum = players = $trAutoPlay = null, showTags, fastForwarding, registering = kbScrollLocked = blockNextEnter = false;
+var recommended = forum = players = $trAutoPlay = null, showTags, fastForwarding, registering = blockNextEnter = false;
 var logCount = 1000, isMobile, miniPlayer, cornerMessageTimer;
 
 var isMobile = $("body").attr("data-mobile") !== "0";
@@ -51,7 +51,7 @@ const factoidMessage = [
 	"12. Number of CSDb entries",
 ];
 
-const isFirefox = typeof InstallTrigger !== "undefined"; // Firefox can scroll a lot faster than Chrome
+const isFirefox = typeof InstallTrigger !== "undefined"; // Firefox can scroll more smoothly than Chrome
 
 const PATH_UPLOADS = "_SID Happens";
 const PATH_SID_FM = PATH_UPLOADS + "/SID+FM";
@@ -192,10 +192,6 @@ $(function() { // DOM ready
 
 				case 38:	// Keydown 'ARROW-UP' - move keyboard-selected SID row up
 
-					if ((!isFirefox && kbScrollLocked) ||
-						document.activeElement.closest("#page")) return; // Ignore if in pages
-					if (!isFirefox) kbScrollLocked = true;
-
 					event.preventDefault();
 
 					var $tr = $("#songs tr"),
@@ -209,20 +205,9 @@ $(function() { // DOM ready
 							break;
 						}
 					}
-
-					// Chrome and Edge uses asynchronous scrolling and it stutters if not throttled
-					if (!isFirefox) {
-						setTimeout(() => {
-							kbScrollLocked = false;
-						}, 150);
-					}
 					break;
 
 				case 40:	// Keydown 'ARROW-DOWN' - move keyboard-selected SID row down
-
-					if ((!isFirefox && kbScrollLocked) ||
-						document.activeElement.closest("#page")) return; // Ignore if in pages
-					if (!isFirefox) kbScrollLocked = true;
 
 					event.preventDefault();
 
@@ -237,13 +222,6 @@ $(function() { // DOM ready
 							browser.moveKeyboardSelection(indexDown, true);
 							break;
 						}
-					}
-
-					// Chrome and Edge uses asynchronous scrolling and it stutters if not throttled
-					if (!isFirefox) {
-						setTimeout(() => {
-							kbScrollLocked = false;
-						}, 150);
 					}
 					break;
 
@@ -272,10 +250,6 @@ $(function() { // DOM ready
 
 				case 33: 	// Keydown 'PageUp' - move keyboard-selected SID row one page up
 				case 34: 	// Keydown 'PageDown' - move keyboard-selected SID row one page down
-
-					if ((!isFirefox && kbScrollLocked) ||
-						document.activeElement.closest("#page")) return; // Ignore if in pages
-					if (!isFirefox) kbScrollLocked = true;
 
 					event.preventDefault();
 
@@ -308,13 +282,6 @@ $(function() { // DOM ready
 					// Update and scroll to the new position
 					browser.kbSelectedRow = fullIndex;
 					browser.moveKeyboardSelection(fullIndex, false);
-
-					// Chrome and Edge uses asynchronous scrolling and it stutters if not throttled
-					if (!isFirefox) {
-						setTimeout(() => {
-							kbScrollLocked = false;
-						}, 300);
-					}
 					break;
 
 				default:
@@ -415,7 +382,7 @@ $(function() { // DOM ready
 								copyright:	$("#edit-file-copyright-input").val(),
 							}, function(data) {
 								browser.validateData(data, function() {
-									browser.getFolder();
+									RefreshFolder();
 								});
 							});
 						});
@@ -2971,7 +2938,6 @@ function CustomDialog(data, callbackYes, callbackNo) {
  * @param {function} callback	If specified, the function to call after PHP call
  */
 function TrackingEvent(type, target, callback) {
-	if (["JCH", "Ratings"].includes($("#logged-username").text())) return;
 
 	// log("TRACKING: Type: '"+type+"' Target: '"+target+"'");
 

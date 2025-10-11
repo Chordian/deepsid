@@ -3211,7 +3211,13 @@ input[type=range]::-ms-track {
 		height: calc(100% - 100px); /* Minus the height of #songs-buttons and #search */
 		border-top: 1px solid var(--color-border-box);
 		border-bottom: 1px solid var(--color-border-box);
+	}
+	
+	@supports (-webkit-appearance:none) and (not (-moz-appearance:none)) {
+		#folders {
+			scroll-behavior: auto !important;
 		}
+	}
 
 	#folders,
 	#sundry,
@@ -4847,6 +4853,7 @@ input[type=range]::-ms-track {
 			#page .ext img.cake,
 			#page .ext img.earth,
 			#page .ext img.stone,
+			#page .ext img.xfolder,
 			#page .ext img.clinks,
 			.doublenote {
 				filter: var(--svg-filter-icon-bottom);

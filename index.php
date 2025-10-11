@@ -1921,6 +1921,16 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 					
+						<h3>October 11, 2025</h3>
+						<ul>
+							<li>Improved keyboard scrolling performance in Chromium-based browsers.</li>
+						</ul>
+
+						<h3>October 5, 2025</h3>
+						<ul>
+							<li>A few selected profile pages now show a 'See also' link when the composer has folders in both HVSC and CGSC.</li>
+						</ul>
+
 						<h3>October 4, 2025</h3>
 						<ul>
 							<li>The search box now shows an 'X' icon when it contains text. Clicking it empties the search box, resets the
