@@ -58,7 +58,7 @@ if (isset($fullname)) {
 		if ($select->rowCount())
 			$row = $select->fetch();
 		else
-			die(json_encode(array('status' => 'ok', 'html' => ''))); // No profile found
+			die(json_encode(array('status' => 'ok', 'dexter_html' => '', 'annex_html' => ''))); // No profile found
 
 	} catch(PDOException $e) {
 		$account->LogActivityError('groups.php', $e->getMessage());
@@ -80,7 +80,8 @@ if ($row->csdbtype == 'scener') {
 	// SCENER
 
 	$count_releases = $count_credits = 0;
-	$groups_array = array();
+	$annex_groups_array = array();
+	$dexter_groups_array = array();
 	$founder_array = array();
 
 	// Loop through all of the handles this user have ever had
@@ -112,7 +113,8 @@ if ($row->csdbtype == 'scener') {
 			}
 
 			$all_dates = ['0000-00-00'];
-			$members_array = array();
+			$annex_members_array = array();
+			$dexter_members_array = array();
 			$group_array = array();
 
 			// Build left table with list of groups in the demo scene
@@ -154,13 +156,21 @@ if ($row->csdbtype == 'scener') {
 							$all_dates[] = $dateEnd;
 						}
 
-						$members_array[($status == 'active' ? 'z' : $status).$dateStart.$name] = // $status = 'z' or 'ex'
+						$first_column =
 							'<tr>'.
 								'<td>'.
 									//'<span class="up icon-before icon-arrowright" title="Joined...">'.
 									'<span class="up icon-before '.($founder ? 'icon-founder" title="Founded...">' : 'icon-arrowright" title="Joined...">').
 									'<a class="group ellipsis" href="http://csdb.chordian.net/?type=group&id='.$id.'" target="_blank">'.($status == 'ex' ? '<del>'.$name.'</del>' : $name).'</a></span>'.
-								'</td>'.
+								'</td>';
+
+						// Annex box
+						$annex_members_array[($status == 'active' ? 'z' : $status).$dateStart.$name] = // $status = 'z' or 'ex'
+							$first_column.'</tr>';
+
+						// Dexter page
+						$dexter_members_array[($status == 'active' ? 'z' : $status).$dateStart.$name] = // $status = 'z' or 'ex'
+							$first_column.
 								'<td>'.
 									(empty($dateStart) ? '<span class="filler">0000-00-00</span>' : $dateStart).
 								'</td>'.
@@ -172,18 +182,34 @@ if ($row->csdbtype == 'scener') {
 				}
 			}
 			sort($all_dates);
-			ksort($members_array);
-			$member_of = '<tr><td colspan="3" class="tinyhandle">'.$this_handle.'</td></tr>
-				<tr><td colspan="3" class="tinytop">&nbsp;</td></tr>';
-			if (empty($members_array)) {
-				$member_of .= '<tr><td class="dim">N/A</td><td></td><td><span class="filler">0000-00-00</span></td></tr>';
+
+			// Annex box
+			ksort($annex_members_array);
+			$annex_member_of = '<tr><td class="tinyhandle">'.$this_handle.'</td></tr>
+				<tr><td class="tinytop">&nbsp;</td></tr>';
+			if (empty($annex_members_array)) {
+				$annex_member_of .= '<tr><td class="dim">N/A</td></tr>';
 			} else {
-				foreach($members_array as $key => $member) {
-					$member_of .= $member;
+				foreach($annex_members_array as $key => $member) {
+					$annex_member_of .= $member;
 				}
 			}
-			$member_of .= '<tr><td colspan="3" class="tinybottom">&nbsp;</td></tr>';
-			$groups_array[end($all_dates).str_replace(' ', '_', $this_handle)] = $member_of;
+			$annex_member_of .= '<tr><td class="tinybottom">&nbsp;</td></tr>';
+
+			// Dexter page
+			ksort($dexter_members_array);
+			$dexter_member_of = '<tr><td colspan="3" class="tinyhandle">'.$this_handle.'</td></tr>
+				<tr><td colspan="3" class="tinytop">&nbsp;</td></tr>';
+			if (empty($dexter_members_array)) {
+				$dexter_member_of .= '<tr><td class="dim">N/A</td><td></td><td><span class="filler">0000-00-00</span></td></tr>';
+			} else {
+				foreach($dexter_members_array as $key => $member) {
+					$dexter_member_of .= $member;
+				}
+			}
+			$dexter_member_of .= '<tr><td colspan="3" class="tinybottom">&nbsp;</td></tr>';
+			$annex_groups_array[end($all_dates).str_replace(' ', '_', $this_handle)] = $annex_member_of;
+			$dexter_groups_array[end($all_dates).str_replace(' ', '_', $this_handle)] = $dexter_member_of;
 		
 			if (isset($csdb_handle->Handle->Released))
 				$count_releases += $csdb_handle->Handle->Released->Release->count();
@@ -191,29 +217,53 @@ if ($row->csdbtype == 'scener') {
 				$count_credits += $csdb_handle->Handle->Credits->Credit->count();
 		}
 
-		$all_groups = '';
-		ksort($groups_array);
-		foreach($groups_array as $group) {
-			$all_groups .= $group;
+		$annex_all_groups = $dexter_all_groups ='';
+
+		// Annex box
+		ksort($annex_groups_array);
+		foreach($annex_groups_array as $group) {
+			$annex_all_groups .= $group;
 		}
 
-		if (!empty($all_groups)) {
-			$member_of =
+		if (!empty($annex_all_groups)) {
+			$annex_member_of =
+				'<table class="tight" style="margin-top:0;">'.
+					'<tr>'.
+						'<th style="width:220px;padding:0 16px 6px 18px;"><u>Group</u></th>'.
+					'</tr>'.
+					$annex_all_groups.
+				'</table>';
+		}
+
+		$annex_counts = '';
+		if ($count_releases)
+			$annex_counts = $count_releases.' release'.($count_releases == 1 ? '' : 's');
+		if ($count_credits)
+			$annex_counts .= (!empty($annex_counts) ? ' + ' : '').$count_credits.' credit'.($count_credits == 1 ? '' : 's');
+
+		// Dexter page
+		ksort($dexter_groups_array);
+		foreach($dexter_groups_array as $group) {
+			$dexter_all_groups .= $group;
+		}
+
+		if (!empty($dexter_all_groups)) {
+			$dexter_member_of =
 				'<table class="tight" style="margin-top:0;">'.
 					'<tr>'.
 						'<th style="width:220px;padding:0 16px 6px 18px;"><u>Group</u></th>'.
 						'<th style="width:100px;padding-bottom:6px;"><u>Joined</u></th>'.
 						'<th style="padding-bottom:6px;"><u>Quit</u></th>'.
 					'</tr>'.
-					$all_groups.
+					$dexter_all_groups.
 				'</table>';
 		}
 
-		$counts = '';
+		$dexter_counts = '';
 		if ($count_releases)
-			$counts = $count_releases.' scener release'.($count_releases == 1 ? '' : 's');
+			$dexter_counts = $count_releases.' scener release'.($count_releases == 1 ? '' : 's');
 		if ($count_credits)
-			$counts .= (!empty($counts) ? ' +' : '').' Credit'.($count_credits == 1 ? '' : 's').' in '.$count_credits.' scene production'.($count_credits == 1 ? '' : 's');
+			$dexter_counts .= (!empty($dexter_counts) ? ' +' : '').' Credit'.($count_credits == 1 ? '' : 's').' in '.$count_credits.' scene production'.($count_credits == 1 ? '' : 's');
 	}
 
 } else {
@@ -230,8 +280,8 @@ if ($row->csdbtype == 'scener') {
 	}
 
 	// Build left table with list of members in this group
-	$member_of = '';
-	$members_array = array();
+	$dexter_member_of = '';
+	$dexter_members_array = array();
 	if (isset($csdb->Group->Member)) {
 		$members = $csdb->Group->Member;
 		foreach($members as $member) {
@@ -261,7 +311,7 @@ if ($row->csdbtype == 'scener') {
 					}
 				}
 
-				$members_array[($status == 'active' ? 'z' : $status).$dateStart.$name] = 
+				$dexter_members_array[($status == 'active' ? 'z' : $status).$dateStart.$name] = 
 					'<tr>'.
 						'<td>'.
 							//'<span class="up icon-before icon-arrowright" title="Joined...">'.
@@ -278,28 +328,28 @@ if ($row->csdbtype == 'scener') {
 			}
 		}
 
-		ksort($members_array);
-		foreach($members_array as $key => $member) {
-			$member_of .= $member;
+		ksort($dexter_members_array);
+		foreach($dexter_members_array as $key => $member) {
+			$dexter_member_of .= $member;
 		}
 
-		if (!empty($member_of)) {
-			$member_of =
+		if (!empty($dexter_member_of)) {
+			$dexter_member_of =
 				'<table class="tight" style="margin-top:0;">'.
 					'<tr>'.
 						'<th style="width:220px;padding:0 16px 6px 18px;"><u>Member</u></th>'.
 						'<th style="width:100px;padding-bottom:6px;"><u>Joined</u></th>'.
 						'<th style="padding-bottom:6px;"><u>Quit</u></th>'.
 					'</tr>'.
-					$member_of.
+					$dexter_member_of.
 				'</table>';
 		}
 	}
 
-	$counts = '';
+	$dexter_counts = '';
 	if (isset($csdb->Group->Release)) {
 		$count = $csdb->Group->Release->count();
-		$counts = $count.' group release'.($count == 1 ? '' : 's');
+		$dexter_counts = $count.' group release'.($count == 1 ? '' : 's');
 	}
 
 }
@@ -334,16 +384,24 @@ if (!empty($row->employment)) {
 	}
 	$employment = '<table class="tight" style="margin-top:0;">'.$employment.'</table>';
 }
-$html = /*'<table class="tight top" style="min-width:100%;font-size:14px;">'.*/
-			(!empty($member_of) || !empty($employment) ? '<tr>'.
-				'<td class="topline leftline" style="padding:0 0 6px 10px;width:50%;">'.(!empty($member_of) ? $member_of : '').'</td>'.
+
+$annex_html =
+			(!empty($annex_member_of) ? '<tr>'.
+				'<td class="topline leftline rightline" style="padding:0 0 6px 10px;">'.(!empty($annex_member_of) ? $annex_member_of : '').'</td>'.
+			'</tr>' : '').
+			'<tr>'.
+				'<td class="topline bottomline leftline rightline" style="padding-left:10px !important;">'.(!empty($annex_counts) ? '<span class="icon-before icon-swing title="Produced...">'.$annex_counts.'</span>' : '<div class="nocounts">No CSDb profile</div>').'</td>'.
+			'</tr>';
+
+$dexter_html =
+			(!empty($dexter_member_of) || !empty($employment) ? '<tr>'.
+				'<td class="topline leftline" style="padding:0 0 6px 10px;width:50%;">'.(!empty($dexter_member_of) ? $dexter_member_of : '').'</td>'.
 				'<td class="topline leftline rightline" style="padding:0 0 6px 10px;width:50%;">'.(!empty($employment) ? $employment : '').'</td>'.
 			'</tr>' : '').
 			'<tr>'.
-				'<td class="topline bottomline leftline" style="padding-left:10px;width:50%;">'.(!empty($counts) ? '<span class="icon-before icon-swing title="Produced...">'.$counts.'</span>' : '<div class="nocounts">No CSDb profile</div>').'</td>'.
+				'<td class="topline bottomline leftline" style="padding-left:10px;width:50%;">'.(!empty($dexter_counts) ? '<span class="icon-before icon-swing title="Produced...">'.$dexter_counts.'</span>' : '<div class="nocounts">No CSDb profile</div>').'</td>'.
 				'<td class="topline bottomline leftline rightline" style="padding-left:10px;">'.($count_release || $count_preview ? '<span class="icon-before icon-note" title="Made music for...">'.($count_release ? $count_release.' released game'.($count_release != 1 ? 's' : '') : '').($count_release && $count_preview ? ' and ' : '').($count_preview ? $count_preview.' game preview'.($count_preview != 1 ? 's' : '') : '').'</span>' : '<div class="nocounts">No game statistics</div>').'</td>'.
 			'</tr>';
-		/*'</table>';*/
 
-echo json_encode(array('status' => 'ok', 'html' => $html));
+echo json_encode(array('status' => 'ok', 'dexter_html' => $dexter_html, 'annex_html' => $annex_html));
 ?>

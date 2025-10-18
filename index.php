@@ -2524,16 +2524,21 @@
 			</div>
 
 			<div id="annex" style="display:none;">
-				<div class="annex-tabs">
-					<div class="annex-tab selected">Tips
-						<div class="annex-close"></div>
-					</div>
-					<div class="annex-topics" title="Topics"></div>
+				<div id="annex-tabs">
+					<div class="annex-tab unselectable selected" data-topic="profile" id="atab-profile">Profile</div>
+					<div class="annex-tab unselectable" data-topic="links" id="atab-links">Links</div>
+					<div class="annex-tab unselectable" data-topic="tips" id="atab-tips">Tips</div>
+					<div class="annex-close"></div>
+					<div class="annex-topics" style="display:none;" title="Topics"></div>
 				</div>
-				<div id="annex-tips">
-					<div style="padding:6px 0;text-align:center;">
-						<img src="images/loading_threedots.svg" style="margin:0;border:none;" alt="Loading" />
+				<div id="annex-page">
+					<div id="atopic-profile" class="atopic">
+						<div style="padding:6px 0;text-align:center;">
+							<img src="images/loading_threedots.svg" style="margin:0;border:none;" alt="Loading" />
+						</div>
 					</div>
+					<div id="atopic-links" class="atopic" style="display:none;"></div>
+					<div id="atopic-tips" class="atopic" style="display:none;"></div>
 				</div>
 			</div>
 

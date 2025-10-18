@@ -7,6 +7,8 @@
  * 
  * The group/work tables have been moved to the 'groups.php' file instead.
  * 
+ * As of October 2025, the file also returns HTML for the annex box.
+ * 
  * @uses		$_GET['fullname']			to folder
  * 
  * @used-by		browser.js
@@ -22,7 +24,7 @@ require_once("countries.php");
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest')
 	die("Direct access not permitted.");
 
-$html = $folderFocus = '';
+$html = $annex_html = $folderFocus = '';
 $rating = 0;
 $fullname = $_GET['fullname'];
 $escaped_fullname = str_replace('_', '\_', $fullname);
@@ -30,7 +32,7 @@ $escaped_fullname = str_replace('_', '\_', $fullname);
 if (isset($fullname)) {
 
 	if (empty($fullname))
-		die(json_encode(array('status' => 'ok', 'html' => ''))); // Don't do root
+		die(json_encode(array('status' => 'ok', 'html' => '', 'annex_html' => ''))); // Don't do root
 
 	if (substr($fullname, 0, 23) == 'CSDb Music Competitions' && strlen($fullname) > 24) {
 
@@ -166,14 +168,14 @@ if (isset($fullname)) {
 					$org_groups.
 					$user_comments.'</div>';
 
-				die(json_encode(array('status' => 'ok', 'html' => $html.'<i><small>Generated using the <a href="https://csdb.dk/webservice/" target="_blank">CSDb web service</a></small></i><button class="to-top" title="Scroll back to the top" style="display:none;"><img src="images/to_top.svg" alt="" /></button>')));
+				die(json_encode(array('status' => 'ok', 'html' => $html.'<i><small>Generated using the <a href="https://csdb.dk/webservice/" target="_blank">CSDb web service</a></small></i><button class="to-top" title="Scroll back to the top" style="display:none;"><img src="images/to_top.svg" alt="" /></button>', 'annex_html' => $annex_html)));
 			}
 
 		} catch(PDOException $e) {
 			$account->LogActivityError('composer.php (compo)', $e->getMessage());
 			die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 		}
-		die(json_encode(array('status' => 'ok', 'html' => $html)));
+		die(json_encode(array('status' => 'ok', 'html' => $html, 'annex_html' => $annex_html)));
 
 	} else {
 
@@ -191,7 +193,7 @@ if (isset($fullname)) {
 			$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 			$db->exec("SET NAMES UTF8");
 
-			// If we are in a sub folder of a composer (e.g. work tunes or a previous handle) with no profile then re-use
+			// If in a sub folder of a composer (e.g. work tunes or a previous handle) with no profile then re-use
 			// NOTE: This block is also used in the 'groups.php' file.
 			$folders = explode('/', $fullname);
 			$isBorrowedProfile = false;
@@ -484,6 +486,65 @@ $crossfolder = '';
 if (!empty($alt_type))
 	$crossfolder = '<span class="line"><img class="icon xfolder" src="images/composer_folder.svg" title="See also" alt="" style="position:relative;top:3px;height:16px;margin-right:5px;" /><a href="?file=/'.$alt_fullname.'">'.$alt_type.'</a></span>';
 
+
+/*
+
+todo
+
+
+remove entire table hover effect
+
+
+
+
+*/
+
+
+
+
+// HTML for the slender 'Profile' tab in the annex box
+if (isset($row)) {
+	$annex_all_handles = $row->handles;
+	$annex_full_name = $row->name;
+	$annex_thumbnail = strpos($thumbnail, '.jpg')
+		? '<img class="composer" src="'.$thumbnail.'" alt="" />'
+		: '';
+	$annex_born = $row->born != '0000-00-00' 
+		? '<img class="icon cake" src="images/composer_cake.svg" title="Born" alt="" />'.substr($row->born, 0, 4)
+		: '';
+	$annex_died = $row->died != '0000-00-00'
+		? '<img class="icon stone" style="height:16px;top:6.3px;margin-left:10px;" src="images/composer_stone.svg" title="Died" alt="" />'.substr($row->died, 0, 4)
+		: '';
+
+	// Always show just one country
+	$parts = preg_split('/,\s*/', $country);
+	$last_country = trim(end($parts));
+	$single_country = count($parts) > 1
+		? '<img class="icon arrow" style="height:16px;" src="images/composer_arrowright.svg" title="Moved" alt="" /> ' . $last_country
+		: $last_country;
+	$annex_country = '<br /><div class="annex-condensed" style="width:100%;margin-top:4px;">'.(!empty($country) ? '<img class="icon earth" style="top:4px;" src="images/composer_earth.svg" title="Country" alt="" /><span>'.$single_country.'</span>' : '').'<div style="float:right;margin-top:4px;">'.$folderFocus.'</div></div>';
+
+	$annex_html = '
+		<h3 class="ellipsis" style="width:229px;margin-bottom:0;" title="'.$annex_full_name.'">'.$clink_name.'</h3>
+		<h4 class="ellipsis" style="width:229px;margin-top:0;" title="'.$annex_all_handles.'">'.$clink_handle.'</h4>
+		' . $annex_thumbnail
+		  . ($isExoticComposerFolder || $isBorrowedProfile ? '' : '<span class="folder-rating"></span>')
+		  . '<div class="annex-condensed" style="position:relative;float:right;top:-4px;">' . $annex_born
+		  . $annex_died . '</div>'
+		  . $annex_country .
+		// Below is empty groups/work table placeholder
+		($fullname != $csdbCompoFolder && $fullname != $exoticFolder && $fullname != $uploadFolder ?
+			'<table id="annex-table-groups" class="tight top" style="min-width:100%;font-size:14px;margin-top:5px;">'.
+				'<tr>'.
+					'<td id="annex-table-message" class="topline bottomline leftline rightline" style="height:30px;padding:0 !important;text-align:center;">'.($spinner ? '<img class="loading-dots" src="images/loading_threedots.svg" alt="" style="margin-top:10px;" />' : '<div class="no-profile">No profile data</div>').'</td>'.
+				'</tr>'.
+			'</table>' : '') . '
+
+	';
+} else {
+	$annex_html = '<div class="annexMsg">No profile to show.</div>';
+}
+
 // Top part with thumbnail, birthday, country, etc.
 $html = '<table style="border:none;margin-bottom:0;"><tr>'.
 			'<td style="position:relative;padding:0;border:none;width:184px;">'.
@@ -606,5 +667,5 @@ if ($fullname == $exoticFolder) {
 		'</script>';
 }
 
-echo json_encode(array('status' => 'ok', 'html' => $html, 'rating' => $rating));
+echo json_encode(array('status' => 'ok', 'html' => $html, 'annex_html' => $annex_html, 'rating' => $rating));
 ?>

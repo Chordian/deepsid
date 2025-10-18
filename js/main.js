@@ -1088,6 +1088,36 @@ $(function() { // DOM ready
 	});
 
 	/**
+	 * When one of the annex tabs are clicked.
+	 */
+	$("#annex-tabs .annex-tab").click(function() {
+		var $this = $(this);
+		if ($this.hasClass("selected") || $this.hasClass("disabled")) return false;
+
+		var topic = $this.attr("data-topic");
+
+		// Select the new tab
+		$("#annex-tabs .annex-tab").removeClass("selected");
+		$this.addClass("selected");
+		$("#annex-tabs .annex-topics").hide();
+
+		// Show the selected topic
+		$("#annex-page .atopic").hide();
+		$("#atopic-"+topic).show();
+
+		// If 'Tips' tab is selected
+		if (topic === "tips") {
+			if ($("#atopic-tips").is(":empty"))
+				// Show the topics for the tips
+				$.get("php/annex_tips.php", { id: -1 }, function(tips) {
+					$("#atopic-tips").empty().append(tips).attr("data-index", "-1");
+				});
+			else if ($("#atopic-tips").attr("data-index") !== "-1")
+				$("#annex-tabs .annex-topics").show();
+		}
+	});
+
+	/**
 	 * When one of the YouTube channel tabs are clicked.
 	 * 
 	 * @handlers youtube
@@ -1531,11 +1561,11 @@ $(function() { // DOM ready
 	});
 
 	/**
-	 * When clicking a rating star in a composer profile.
+	 * When clicking a rating star in a composer or annex profile.
 	 * 
 	 * @param {*} event 
 	 */
-	$("#topic-profile").on("click", ".folder-rating b", function(event) {
+	$("#topic-profile,#annex").on("click", ".folder-rating b", function(event) {
 		// Clicked a star to set a rating for a folder or SID file
 		if (!$("#logout").length) {
 			// But must be logged in to do that
@@ -1556,7 +1586,7 @@ $(function() { // DOM ready
 		$.post("php/rating_write.php", { fullname: homePath, rating: rating }, function(data) {
 			browser.validateData(data, function(data) {
 				var stars = browser.buildStars(data.rating);
-				$("#topic-profile .folder-rating").empty().append(stars);
+				$("#topic-profile .folder-rating,#annex .folder-rating").empty().append(stars);
 
 				if (browser.path.indexOf("Compute's Gazette SID Collection") !== -1 && browser.cache.folder !== "") {
 					// Update the folder cache for CGSC too
@@ -1634,20 +1664,20 @@ $(function() { // DOM ready
 	 */
 	$("#topic-profile").on("click", "a.clinks", function(event, internal) {
 		var $this = $(this);
-		$("#annex .annex-tab").empty().append('Links<div class="annex-close"></div>');
 		$.get("php/annex_clinks.php", { id: $this.attr("data-id") }, function(data) {
 			browser.validateData(data, function(data) {
 				var handle = $this.attr("data-handle");
-				$("#annex-tips").empty().append(
+				$("#atopic-links").empty().append(
 					'<h3 class="ellipsis" style="width:200px;'+(handle != "" ? 'margin-bottom:0;'  : '')+'">'+$this.attr("data-name")+'</h3>'+
 					'<h4 class="ellipsis" style="width:170px;margin-top:0;">'+handle+'</h4>'+
 					data.html+
 					'<a href="" id="edit-add-clink" class="clink-corner-link" style="right:'+(data.clinks ? '44' : '17')+'px;">Add</a>'+
 					(data.clinks ? '<a href="" id="edit-cancel-clink" class="clink-corner-link"">Edit</a>' : '')
 				);
-				$(".annex-topics").show();
-				if (typeof internal == "undefined")
+				if (typeof internal == "undefined") {
 					$("#annex").show(); // It was clicked by a human so better make sure the annex box is visible
+					$("#atab-links").trigger("click");
+				}
 			});
 		});
 		return false;
@@ -2245,9 +2275,8 @@ $(function() { // DOM ready
 	 * When clicking the annex corner icon for showing the topics.
 	 */
 	$("#annex").on("click", ".annex-topics", function() {
-		$("#annex .annex-tab").empty().append('Tips<div class="annex-close"></div>');
 		$.get("php/annex_tips.php", { id: -1 }, function(topics) {
-			$("#annex-tips").empty().append(topics);
+			$("#atopic-tips").empty().append(topics).attr("data-index", "-1");
 			$(".annex-topics").hide();
 		});
 	});
@@ -2279,9 +2308,8 @@ $(function() { // DOM ready
 	 * @param {string} topic	The topic link
 	 */
 	function ClickAnnexLink(topic) {
-		$("#annex .annex-tab").empty().append('Tips<div class="annex-close"></div>');
 		$.get("php/annex_tips.php", { id: topic }, function(tips) {
-			$("#annex-tips").empty().append(tips);
+			$("#atopic-tips").empty().append(tips).attr("data-index", topic);
 			$(".annex-topics").show();
 		});
 	}

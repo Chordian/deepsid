@@ -782,7 +782,8 @@
 	color: #ddd;
 }
 
-[data-theme="dark"] #page .ext table.tight th {
+[data-theme="dark"] #page .ext table.tight th,
+[data-theme="dark"] #annex table.tight th {
 	color: #e4e4e4;
 }
 
@@ -3013,14 +3014,19 @@ input[type=range]::-ms-track {
 				}
 
 	/* NOTE: This is also used for centered lines such as "No STIL information" or "No lyrics" etc. */
-	#tips,			/* Deprecated ID from back when the STIL box was used for tips */
-	.sundryMsg {
+	#tips,
+	.sundryMsg,
+	#annex .annexMsg {
 		position: relative;
 		top: 50%; /* These three lines centers the DIV in the sundry box */
 		transform: translateY(-50%);
 		font-size: 12px;
 		text-align: center;
 	}
+
+		#annex .annexMsg {
+			margin: 21px 0 6px;
+		}
 
 		#tips p,
 		.sundryMsg p {
@@ -3033,7 +3039,8 @@ input[type=range]::-ms-track {
 		}
 
 		#stopic-stil .no-info,
-		#stopic-tags .no-info {
+		#stopic-tags .no-info,
+		#annex .annexMsg {
 			color: var(--color-text-subtle);
 		}
 
@@ -3141,7 +3148,8 @@ input[type=range]::-ms-track {
 		/* For the small HVSC or CGSC in the path line */
 		#path .dim,
 		#folders .dim,
-		#page .dim {
+		#page .dim,
+		#annex .dim {
 			position: relative;
 			top: -1px;
 			color: var(--color-text-dim);
@@ -3150,7 +3158,8 @@ input[type=range]::-ms-track {
 		}
 
 		#folders .dim,
-		#page .dim {
+		#page .dim,
+		#annex .dim {
 			font-size: 11px;
 			color: var(--color-text-minor);
 		}
@@ -3227,7 +3236,7 @@ input[type=range]::-ms-track {
 	#dialog-list-start-tag,
 	#dialog-list-end-tag,
 	#upload-stil-text,
-	#annex-tips {
+	#annex-page {
 		overflow-y: auto;
 		overflow-x: hidden !important;
 		scrollbar-width: thin;
@@ -3340,9 +3349,20 @@ input[type=range]::-ms-track {
 			padding-top: 6px;
 		}
 
+		#annex .annex-condensed {
+			display: inline-block;
+			font: normal 14px "Asap Condensed", sans-serif;
+		}
+
+			#annex .annex-condensed span {
+				position: relative;
+				top: -4px;
+			}
+
 		#songs .rating,
 		#info-rating,
-		#topic-profile .folder-rating {
+		#topic-profile .folder-rating,
+		#annex .folder-rating {
 			position: relative;
 			unicode-bidi: isolate; /*bidi-override;*/ /* @link https://css-tricks.com/star-ratings/ */
 			direction: rtl;
@@ -3353,7 +3373,8 @@ input[type=range]::-ms-track {
 		}
 
 		#info-rating,
-		#topic-profile .folder-rating {
+		#topic-profile .folder-rating,
+		#annex .folder-rating {
 			cursor: pointer;
 		}
 
@@ -3362,7 +3383,8 @@ input[type=range]::-ms-track {
 		#info-rating b.s,
 		#info-rating b.sh,
 		#topic-profile b.s,
-		#topic-profile b.sh { /* Star */
+		#topic-profile b.sh,
+		#annex b.sh { /* Star */
 			display: inline-block;
 			position: relative;
 			top: 3px;
@@ -3382,7 +3404,9 @@ input[type=range]::-ms-track {
 		#info-rating > b.sh:hover:before,
 		#info-rating > b.sh:hover ~ b.sh:before,
 		#topic-profile .folder-rating > b.sh:hover:before,
-		#topic-profile .folder-rating > b.sh:hover ~ b.sh:before {
+		#annex .folder-rating > b.sh:hover:before,
+		#topic-profile .folder-rating > b.sh:hover ~ b.sh:before,
+		#annex .folder-rating > b.sh:hover ~ b.sh:before {
 			content: "";
 			display: inline-block;
 			position: relative;
@@ -3394,19 +3418,22 @@ input[type=range]::-ms-track {
 
 		#songs b.xv,
 		#info-rating b.xv,
-		#topic-profile b.xv { /* User voted */
+		#topic-profile b.xv,
+		#annex b.xv { /* User voted */
 			background: var(--svg-bg-star-orange);
 		}
 
 		#songs b.ev,
 		#info-rating b.ev,
-		#topic-profile b.ev { /* Empty voted */
+		#topic-profile b.ev,
+		#annex b.ev { /* Empty voted */
 			background: var(--svg-bg-star-empty-voted);
 		}
 
 		#songs b.eu,
 		#info-rating b.eu,
-		#topic-profile b.eu { /* Empty unvoted */
+		#topic-profile b.eu,
+		#annex b.eu { /* Empty unvoted */
 			background: var(--svg-bg-star-empty-unvoted);
 		}
 
@@ -4523,7 +4550,7 @@ input[type=range]::-ms-track {
 				top: 0;
 				width: auto;
 				padding-left: 10px;
-				padding-right: 24px;
+				padding-right: 10px;
 			}
 
 		#tabs .selected,
@@ -4753,11 +4780,13 @@ input[type=range]::-ms-track {
 				filter: var(--svg-filter-button-hover);
 			}
 
-		#page .ext del {
+		#page .ext del,
+		#annex del {
 			color: var(--color-text-faint);
 		}
 
-		#page .ext a > del {
+		#page .ext a > del,
+		#annex a > del {
 			color: var(--color-text-del);
 		}
 
@@ -4768,11 +4797,25 @@ input[type=range]::-ms-track {
 			cursor: pointer;
 		}
 
-		#page .ext .no-profile {
+		#page .ext .no-profile,
+		#annex .no-profile {
 			margin-top: 5px;
 			font-size: 12px;
 			color: var(--color-text-subtle);
 		}
+
+		#annex-table-groups {
+			padding: 3px 0 0 0 !important;
+			line-height: normal;
+		}
+
+			#annex-table-groups td {
+				padding-right: 8px !important;
+			}
+
+			#annex-table-groups img {
+				border: none !important;
+			}
 
 		#page .ext .composer {
 			width: 184px;
@@ -4781,7 +4824,15 @@ input[type=range]::-ms-track {
 			background: var(--color-avatar-bg);
 		}
 
-			#page .ext .nobg {
+			#annex-page .composer {
+				width: 229px;
+				height: 229px;
+				border: 1px solid var(--color-border);
+				background: var(--color-avatar-bg);
+			}
+
+			#page .ext .nobg,
+			#annex-page .nobg {
 				border: none;
 				background: none;
 			}
@@ -4828,12 +4879,27 @@ input[type=range]::-ms-track {
 				margin: 0 1px;
 			}
 
-			#page .ext img.icon {
+			#page .ext img.icon,
+			#annex img.icon {
 				position: relative;
 				top: 4px;
 				height: 21px;
 				margin-right: 3px;
 			}
+
+				#annex img.icon {
+					top: 7px;
+					height: 18px;
+					border: none;
+				}
+
+				#annex img.flag {
+					position: relative;
+					top: 5px;
+					height: 11px;
+					margin-left: 2px;
+					margin-right: 2px;
+				}
 
 			#page .ext img.iconbigger {
 				position: relative;
@@ -4850,11 +4916,11 @@ input[type=range]::-ms-track {
 				filter: var(--svg-filter-icon-bottom);
 			}
 
-			#page .ext img.cake,
-			#page .ext img.earth,
-			#page .ext img.stone,
-			#page .ext img.xfolder,
-			#page .ext img.clinks,
+			img.cake,
+			img.earth,
+			img.stone,
+			img.xfolder,
+			img.clinks,
 			.doublenote {
 				filter: var(--svg-filter-icon-bottom);
 			}
@@ -4912,18 +4978,21 @@ input[type=range]::-ms-track {
 				top: -2px;
 			}
 
-		#page .ext .tinyhandle {
+		#page .ext .tinyhandle,
+		#annex .tinyhandle {
 			font-size: 10px;
 			padding-top: 4px !important;
 			/*padding-bottom: 1px !important;*/
 			border-bottom: 1px solid var(--color-table-border-thandle) !important;
 		}
 
-		#page .ext .tinytop {
+		#page .ext .tinytop,
+		#annex .tinytop {
 			font-size: 2px;
 		}
 
-		#page .ext .tinybottom {
+		#page .ext .tinybottom,
+		#annex .tinybottom {
 			font-size: 6px;
 		}
 
@@ -4932,13 +5001,16 @@ input[type=range]::-ms-track {
 		}
 
 		#page .ext .icon-before:before,
-		#page .ext .compo-pos:before {
+		#page .ext .compo-pos:before,
+		#annex .icon-before:before,
+		#annex .compo-pos:before {
 			content: "";
 			position: relative;
 			display: inline-block;
 		}
 
-			#page .ext .icon-arrowright:before {
+			#page .ext .icon-arrowright:before,
+			#annex .icon-arrowright:before {
 				top: 4px;
 				height: 18px;
 				width: 18px;
@@ -4947,7 +5019,8 @@ input[type=range]::-ms-track {
 				margin-right: 2px;
 			}
 
-			#page .ext .compo-pos:before {
+			#page .ext .compo-pos:before,
+			#annex .compo-pos:before {
 				top: 1px;
 				height: 16px;
 				width: 18px;
@@ -4955,7 +5028,8 @@ input[type=range]::-ms-track {
 				filter: var(--svg-filter-icon-bottom);
 			}
 
-			#page .ext .icon-founder:before {
+			#page .ext .icon-founder:before,
+			#annex .icon-founder:before {
 				top: 4px;
 				height: 18px;
 				width: 18px;
@@ -4973,7 +5047,8 @@ input[type=range]::-ms-track {
 				margin-right: 2px;
 			}
 
-			#page .ext .icon-created:before {
+			#page .ext .icon-created:before,
+			#annex .icon-created:before {
 				top: 2px;
 				left: 1px;
 				height: 16px;
@@ -5002,7 +5077,8 @@ input[type=range]::-ms-track {
 				margin-right: 3px;
 			}
 
-			#page .ext .icon-swing:before {
+			#page .ext .icon-swing:before,
+			#annex .icon-swing:before {
 				top: 4px;
 				height: 18px;
 				width: 18px;
@@ -6141,42 +6217,51 @@ input[type=range]::-ms-track {
 					margin: 6px 6px 0 0;
 				}
 
-	#page .ext table.tight {
+	#page .ext table.tight,
+	#annex table.tight {
 		width: auto !important;
 		border: none;
 		margin-bottom: 0;
 	}
 
 	#page .ext table.tight th,
-	#page .ext table.tight td {
+	#page .ext table.tight td,
+	#annex table.tight th,
+	#annex table.tight td {
 		border: none;
 		padding: 0;
 	}
 
-		#page .ext .top td {
+		#page .ext .top td,
+		#annex .top td {
 			vertical-align: top;
 		}
 
-		#page .ext .topline {
+		#page .ext .topline,
+		#annex .topline {
 			padding-top: 6px !important;
 			border-top: 1px solid var(--color-table-border) !important;
 		}
 
-		#page .ext .bottomline {
+		#page .ext .bottomline,
+		#annex .bottomline {
 			padding-bottom: 8px !important;
 			border-bottom: 1px solid var(--color-table-border) !important;
 		}
 
-		#page .ext .leftline {
+		#page .ext .leftline,
+		#annex  .leftline {
 			border-left: 1px solid var(--color-table-border) !important;
 		}
 
-		#page .ext .rightline {
+		#page .ext .rightline,
+		#annex  .rightline {
 			border-right: 1px solid var(--color-table-border) !important;
 		}
 
-		/* No CSDb profile | No game statics */
-		#page .ext .nocounts {
+		/* No CSDb profile | No game statistics */
+		#page .ext .nocounts,
+		#annex .nocounts {
 			margin-top: 1px;
 			font-size: 12px;
 			line-height: 22px;
@@ -6769,11 +6854,11 @@ input[type=range]::-ms-track {
 	height: calc(100% - 48px);
 }
 
-	.annex-tabs {
+	#annex-tabs {
 		width: 100%;
 	}
 
-	#annex-tips {
+	#annex-page {
 		clear: left;
 		overflow: auto;
 		position: relative;
@@ -6788,48 +6873,48 @@ input[type=range]::-ms-track {
 		z-index: 2;
 	}
 
-	#annex-tips b,
+	#annex-page b,
 	.annex-tiny {
 		font-family: "Asap Condensed", sans-serif;
 	}
 
-		#annex-tips h1,
-		#annex-tips h2,
-		#annex-tips h3,
-		#annex-tips h4 {
+		#annex-page h1,
+		#annex-page h2,
+		#annex-page h3,
+		#annex-page h4 {
 			position: relative;
 			left: -1px;
 			margin-top: 0;
 			margin-bottom: 0.5em;
 		}
 
-		#annex-tips h4 {
+		#annex-page h4 {
 			font-size: 17px;
 			margin-top: 1.1em;
 		}
 
-		#annex-tips h3 + h4 {
+		#annex-page h3 + h4 {
 			margin-top: 0.8em;
 		}
 
-		#annex-tips p {
+		#annex-page p {
 			margin-top: 0.6em;
 			margin-bottom: 0.6em;
 		}
 
-		#annex-tips ul,
-		#annex-tips ol {
+		#annex-page ul,
+		#annex-page ol {
 			margin-top: 0.8em;
 			margin-bottom: 0.8em;
 			padding: 0 6px 0 30px;
 		}
 
-			#annex-tips ul > li,
-			#annex-tips ol > li {
+			#annex-page ul > li,
+			#annex-page ol > li {
 				line-height: 1.2em;
 			}
 
-		#annex-tips img {
+		#annex-page img {
 			border: 1px solid var(--color-border-info);
 			margin-bottom: 4px;
 		}

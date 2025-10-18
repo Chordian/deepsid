@@ -6,17 +6,24 @@ ToDo
 - Look into the console logging alternatives, like warn, error, table, etc.
   @link https://developer.mozilla.org/en-US/docs/Web/API/console
 
-- Add more useful links.
-
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+- Tag updating has now transitioned into CSDb count parsing. Next folder: D
+
 - Detect PAL/NTSC/CIA when clicking a SID row, and if not in the database, add it, so the
   factoid information is increasingly more complete over time.
 
-- Add a profile "page" in the annex box.
+- Add a profile "page" in the annex box. Add a new annex tab for it, and also "Links" so
+  that category can also have its own tab page. Is in WIP.
+
+- When profile tab in annex box is done: Investigate the possibility for having profiles
+  for musicians in e.g. DEMOS that doesn't have a MUSICIANS folder yet.
 
 - Maybe also change the question mark circle above the focus icons with an SVG icon.
+
+- Go through the csdb.dk page of all MUSICIANS composers and check for COMPUNET notes.
+  If there are any, add the CNET attribute in the database. WIP: Next to parse: B
 
 - Is game statistics in profile table hard-coded? It should count all "GameBase64" tags.
 
@@ -82,8 +89,10 @@ SHOULD BE DONE
 - WIP: Go through all "Links" in all profile pages and make sure the full composer name fits.
   If it ends in "..." create a short name, e.g. with a letter + full stop for first name.
   Takes a while going through this ......... Next: MUSICIANS/E
+  IDEA: First go through all composers in phpMyAdmin and handle the worst of them there.
 
 - Tag-parse Merman's folder thoroughly. Only done superficially for now (it's enormous).
+- The composer subfolders of "Blues Muz" are not parsed properly for event tags either.
 
 
 WHEN THE TIME IS RIGHT

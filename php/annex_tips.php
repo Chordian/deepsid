@@ -835,7 +835,7 @@ if ($id != -1)
 	echo $tips[$id];
 else
 	echo
-	'	<h3>List of annex tips:</h3>
+	'	<h3>Select a topic:</h3>
 		<ul style="margin-bottom:16px;">
 			<li><a href="6" class="topic">Color strips</a></li>
 			<li><a href="12" class="topic">Digi tags</a></li>
@@ -857,6 +857,5 @@ else
 			<li><a href="18" class="topic">Useful links</a></li>
 			<li><a href="11" class="topic">Warning tags</a></li>
 		</ul>
-		More tips may be added later.
 	';
 ?>

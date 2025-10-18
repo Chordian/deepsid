@@ -2205,18 +2205,8 @@ Browser.prototype = {
 	 * If the annex box is not visible, show it with links or tips.
 	 */
 	 showAnnexBox: function() {
-		if (!$("#annex").is(":visible") && !this.annexNotWanted) {
-			if ($("#topic-profile a.clinks").length) {
-				// Show links in the annex box for the currently shown profile
-				$("#topic-profile a.clinks").trigger("click");
-			} else {
-				// Show a random tip in an annex box
-				$.get("php/annex_tips.php", /*{ id: 15 },*/ function(tips) {
-					$("#annex-tips").empty().append(tips);
-					$(".annex-topics,#annex").show();
-				});
-			}
-		}
+		if (!$("#annex").is(":visible") && !this.annexNotWanted)
+			$("#annex").show();
 	},
 
 	/**
@@ -2320,17 +2310,18 @@ Browser.prototype = {
 				this.validateData(data, function(data) {
 
 					clearTimeout(loadingComposer);
-					if (parseInt(colorTheme)) data.html = data.html.replace(/composer\.png/g, "composer_dark.png");
+					if (parseInt(colorTheme)) {
+						data.html = data.html.replace(/composer\.png/g, "composer_dark.png");
+						// Composers without avatar images won't have the placeholder
+						// data.annex_html = data.annex_html.replace(/composer\.png/g, "composer_dark.png");
+					}
 					$("#topic-profile").empty().append(data.html);
+					$("#atopic-profile").empty().append(data.annex_html);
 					ResetDexterScrollBar("profile");
 
 					// Add star rating for this composer profile
-					$("#topic-profile .folder-rating").append(this.buildStars(data.rating));
-
-					// Add report profile change link
-					var composerFolder = "https://deepsid.chordian.net/?file=/"+(overridePath == "" ? this.path.substr(1) : overridePath);
-					// Commented out as nobody was using it and it clashed with long names
-					// $("#profilechange").append('<a href="mailto:chordian@gmail.com?subject=DeepSID%20profile%20change&body=I%20have%20a%20profile%20change%20request%20for:%0D%0A'+composerFolder+'%0D%0A%0D%0A">Report a profile change</a>');
+					$("#topic-profile .folder-rating,#annex .folder-rating")
+						.append(this.buildStars(data.rating));
 
 					// Enable the brand image (if available) for the correct color theme
 					$("#brand-"+(parseInt(colorTheme) ? "dark" : "light")).show();
@@ -2338,8 +2329,8 @@ Browser.prototype = {
 					this.showAnnexBox();
 
 					// If the "Links" tab in the annex box is present then refresh the box
-					if ($("#annex .annex-tabs").text().indexOf("Links") != -1)
-						$("#topic-profile a.clinks").trigger("click", true);					
+					if ($("#atab-links").hasClass("selected") != -1)
+						$("#topic-profile a.clinks").trigger("click", true);
 
 					this.groupsFullname = overridePath == "" ? this.path.substr(1) : overridePath;
 					this.getGroups(this.groupsFullname);
@@ -2371,8 +2362,9 @@ Browser.prototype = {
 					$("#table-message").empty().append('<img class="loading-dots" src="images/loading_threedots.svg" alt="" style="margin-top:10px;" />');
 					this.getGroups(this.groupsFullname);
 				}.bind(this), 20000);
-			} else if (data.html !== "") {
-				$("#table-groups").empty().append(data.html);
+			} else if (data.dexter_html !== "") {
+				$("#annex-table-groups").empty().append(data.annex_html);
+				$("#table-groups").empty().append(data.dexter_html);
 				var html = $("#topic-profile").html();
 				// Don't include the script or the chart stuff will be shown twice
 				this.composerCache = html.substr(0, html.indexOf("<script"));
