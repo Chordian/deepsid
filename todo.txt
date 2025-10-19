@@ -14,12 +14,6 @@ SHOULD BE DONE
 - Detect PAL/NTSC/CIA when clicking a SID row, and if not in the database, add it, so the
   factoid information is increasingly more complete over time.
 
-- Add a profile "page" in the annex box. Add a new annex tab for it, and also "Links" so
-  that category can also have its own tab page. Is in WIP.
-
-- When profile tab in annex box is done: Investigate the possibility for having profiles
-  for musicians in e.g. DEMOS that doesn't have a MUSICIANS folder yet.
-
 - Maybe also change the question mark circle above the focus icons with an SVG icon.
 
 - Go through the csdb.dk page of all MUSICIANS composers and check for COMPUNET notes.
@@ -665,6 +659,11 @@ TEST RESOURCES
 
   GB64 tab (enter a game page for one of the two hits):
   https://deepsid.chordian.net/?file=/MUSICIANS/B/Bogas_Ed/Murder_on_the_Mississippi.sid
+
+- Long group names in group box:
+  http://chordian/deepsid/?file=/MUSICIANS/L/Luca/
+  http://chordian/deepsid/?file=/MUSICIANS/M/Mr_Mouse/
+  http://chordian/deepsid/?file=/MUSICIANS/N/Nightbreed/
 
 - Too many DL links on a CSDb list page:
   https://deepsid.chordian.net/?file=/MUSICIANS/O/Onebitman/Walking_in_the_Air.sid

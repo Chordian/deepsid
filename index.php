@@ -1921,6 +1921,16 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 					
+						<h3>October 19, 2025</h3>
+						<ul>
+							<li>The annex box on the right side now has three tabs: Profile, Links, and Tips.</li>
+							<li>The Tips tab in the annex box now always shows the list of topics first instead of a random tip.</li>
+							<li>A new Profile tab has been added to the annex box on the right side. It shows a condensed version of the
+								main profile page, featuring a larger avatar image. The advantage is that you can always view profile
+								information even while browsing other page tabs.</li>
+						</ul>
+
+
 						<h3>October 11, 2025</h3>
 						<ul>
 							<li>Improved keyboard scrolling performance in Chromium-based browsers.</li>
@@ -2532,10 +2542,8 @@
 					<div class="annex-topics" style="display:none;" title="Topics"></div>
 				</div>
 				<div id="annex-page">
-					<div id="atopic-profile" class="atopic">
-						<div style="padding:6px 0;text-align:center;">
-							<img src="images/loading_threedots.svg" style="margin:0;border:none;" alt="Loading" />
-						</div>
+					<div id="atopic-profile" class="atopic" style="position:relative;">
+						<div class="annex-big-logo"></div><div class="annex-taller"></div>
 					</div>
 					<div id="atopic-links" class="atopic" style="display:none;"></div>
 					<div id="atopic-tips" class="atopic" style="display:none;"></div>

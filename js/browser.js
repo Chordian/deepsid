@@ -2254,6 +2254,9 @@ Browser.prototype = {
 			if ($("#tabs .selected").attr("data-topic") === "profile")
 				$("#page").addClass("big-logo");
 
+			// Big logo for annex profile page
+			$("#atopic-profile").empty().append('<div class="annex-big-logo"></div><div class="annex-taller"></div>');
+
 			this.composer = $.get("php/root.php", function(data) {
 				this.validateData(data, function(data) {
 
@@ -2304,11 +2307,11 @@ Browser.prototype = {
 			// Composer profile page
 			if ($("#tabs .selected").attr("data-topic") === "profile")
 				$("#page").removeClass("big-logo");
+
 			this.composer = $.get("php/composer.php", {
 				fullname: (overridePath == "" ? this.path.substr(1) : overridePath)
 			}, function(data) {
 				this.validateData(data, function(data) {
-
 					clearTimeout(loadingComposer);
 					if (parseInt(colorTheme)) {
 						data.html = data.html.replace(/composer\.png/g, "composer_dark.png");

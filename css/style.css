@@ -4647,6 +4647,21 @@ input[type=range]::-ms-track {
 			image-rendering: crisp-edges;
 		}
 
+			.annex-big-logo {
+				position: absolute;
+				top: -10px;
+				left: -12px;
+				height: 45px;
+				width: 400px;
+				background: var(--color-bg-box) var(--url-biglogo) 0 0 / 254px no-repeat !important;
+				image-rendering: crisp-edges;
+				z-index: 2;
+			}
+
+			.annex-taller {
+				height: 25px;
+			}
+
 		/* Tabs with no big logo should start at the top */
 		#page h2:first-child {
 			margin-top: 0;
@@ -5357,11 +5372,16 @@ input[type=range]::-ms-track {
 
 		/* Container for group name in table list to have ellipsis on it */
 		#page .ext .group,
-		#page .ext .participant {
+		#page .ext .participant,
+		#annex .group {
 			display: inline-block;
 			max-width: 195px;
 			vertical-align: bottom;
 		}
+
+			#annex .group {
+				width: 180px;
+			}
 
 		#page .ext .participant {
 			max-width: 250px;

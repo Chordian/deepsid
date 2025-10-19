@@ -32,7 +32,8 @@ $escaped_fullname = str_replace('_', '\_', $fullname);
 if (isset($fullname)) {
 
 	if (empty($fullname))
-		die(json_encode(array('status' => 'ok', 'html' => '', 'annex_html' => ''))); // Don't do root
+		 // Don't do root
+		die(json_encode(array('status' => 'ok', 'html' => '', 'annex_html' => '<div class="annexMsg">No profile to show.</div>')));
 
 	if (substr($fullname, 0, 23) == 'CSDb Music Competitions' && strlen($fullname) > 24) {
 
@@ -152,7 +153,10 @@ if (isset($fullname)) {
 					$org_groups = '<p><b>Organizer Groups:</b><br />'.$org_groups.'</p>';
 				}
 
-				// Build the page HTML
+				// Build the annex tab HTML
+				$annex_html = '<div class="annexMsg">No profile to show.</div>';
+
+				// Build the dexter page HTML
 				$html = '<div id="compo-profile"><h2 style="display:inline-block;margin:0;">'.$csdb->Event->Name.'</h2>'.
 					'<div class="corner-icons">'.
 						'<a href="http://csdb.chordian.net/?type=event&id='.$event_id.'" title="See this at CSDb" target="_blank"><svg class="outlink" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg></a>'.
@@ -486,22 +490,6 @@ $crossfolder = '';
 if (!empty($alt_type))
 	$crossfolder = '<span class="line"><img class="icon xfolder" src="images/composer_folder.svg" title="See also" alt="" style="position:relative;top:3px;height:16px;margin-right:5px;" /><a href="?file=/'.$alt_fullname.'">'.$alt_type.'</a></span>';
 
-
-/*
-
-todo
-
-
-remove entire table hover effect
-
-
-
-
-*/
-
-
-
-
 // HTML for the slender 'Profile' tab in the annex box
 if (isset($row)) {
 	$annex_all_handles = $row->handles;
@@ -533,14 +521,11 @@ if (isset($row)) {
 		  . $annex_died . '</div>'
 		  . $annex_country .
 		// Below is empty groups/work table placeholder
-		($fullname != $csdbCompoFolder && $fullname != $exoticFolder && $fullname != $uploadFolder ?
-			'<table id="annex-table-groups" class="tight top" style="min-width:100%;font-size:14px;margin-top:5px;">'.
-				'<tr>'.
-					'<td id="annex-table-message" class="topline bottomline leftline rightline" style="height:30px;padding:0 !important;text-align:center;">'.($spinner ? '<img class="loading-dots" src="images/loading_threedots.svg" alt="" style="margin-top:10px;" />' : '<div class="no-profile">No profile data</div>').'</td>'.
-				'</tr>'.
-			'</table>' : '') . '
-
-	';
+		'<table id="annex-table-groups" class="tight top" style="min-width:100%;font-size:14px;margin-top:5px;">'.
+			'<tr>'.
+				'<td id="annex-table-message" class="topline bottomline leftline rightline" style="height:30px;padding:0 !important;text-align:center;">'.($spinner ? '<img class="loading-dots" src="images/loading_threedots.svg" alt="" style="margin-top:10px;" />' : '<div class="no-profile">No profile data</div>').'</td>'.
+			'</tr>'.
+		'</table>';
 } else {
 	$annex_html = '<div class="annexMsg">No profile to show.</div>';
 }
