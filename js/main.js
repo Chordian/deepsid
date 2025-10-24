@@ -1668,7 +1668,7 @@ $(function() { // DOM ready
 			browser.validateData(data, function(data) {
 				var handle = $this.attr("data-handle");
 				$("#atopic-links").empty().append(
-					'<h3 class="ellipsis" style="width:200px;'+(handle != "" ? 'margin-bottom:0;'  : '')+'">'+$this.attr("data-name")+'</h3>'+
+					'<h3 class="ellipsis" style="width:229px;'+(handle != "" ? 'margin-bottom:0;'  : '')+'">'+$this.attr("data-name")+'</h3>'+
 					'<h4 class="ellipsis" style="width:170px;margin-top:0;">'+handle+'</h4>'+
 					data.html+
 					'<a href="" id="edit-add-clink" class="clink-corner-link" style="right:'+(data.clinks ? '44' : '17')+'px;">Add</a>'+

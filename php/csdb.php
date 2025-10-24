@@ -441,11 +441,8 @@ if ($csdb_type == 'sid') {
 					} else if (array_key_exists((string)$id, $sid_handles))
 						// We've had this scener before so we know the name
 						$scener = $sid_handles[(string)$id];
-					$yellow = stripos($copyright, strtolower($scener)) > -1
-						? 'emphasize'
-						: 'csdb-scener';
 					$released_by .= (!empty($scener)
-						? ', <a href="http://csdb.chordian.net/?type=scener&id='.$id.'" target="_blank" class="'.$yellow.'">'.$scener.'</a>'
+						? ', <a href="http://csdb.chordian.net/?type=scener&id='.$id.'" target="_blank" class="csdb-scener">'.$scener.'</a>'
 						: ', [<a href="http://csdb.chordian.net/?type=scener&id='.$id.'" target="_blank">Scener:'.$id.'</a>]'
 					);
 					if (!$amount) {
@@ -467,11 +464,8 @@ if ($csdb_type == 'sid') {
 					} else if (array_key_exists((string)$id, $sid_groups))
 						// We've had this group before so we know the name
 						$grp = $sid_groups[(string)$id];
-					$yellow = stripos($copyright, strtolower($grp)) > -1
-						? 'emphasize'
-						: 'csdb-group';
 					$released_by .= (!empty($grp)
-						? ', <a href="http://csdb.chordian.net/?type=group&id='.$id.'" target="_blank" class="'.$yellow.'">'.$grp.'</a>'
+						? ', <a href="http://csdb.chordian.net/?type=group&id='.$id.'" target="_blank" class="csdb-group">'.$grp.'</a>'
 						: ', [<a href="http://csdb.chordian.net/?type=group&id='.$id.'" target="_blank">Group:'.$id.'</a>]'
 					);
 					if (!$amount) {
@@ -610,10 +604,7 @@ if ($csdb_type == 'sid') {
 		$handles = $csdb->Release->ReleasedBy->Handle; 
 		if (isset($handles)) {
 			foreach($handles as $handle) {
-				$yellow = stripos($copyright, strtolower($handle->Handle)) > -1
-					? 'emphasize'
-					: 'csdb-scener';
-				$released_by .= ', <a href="http://csdb.chordian.net/?type=scener&id='.$handle->ID.'" target="_blank" class="'.$yellow.'">'.$handle->Handle.'</a>';
+				$released_by .= ', <a href="http://csdb.chordian.net/?type=scener&id='.$handle->ID.'" target="_blank" class="csdb-scener">'.$handle->Handle.'</a>';
 				if (!array_key_exists((string)$handle->ID, $sceners))
 					// Save the handle in case the ID is repeated in 'Credits' further below
 					$sceners[(string)$handle->ID] = $handle->Handle;
@@ -622,10 +613,7 @@ if ($csdb_type == 'sid') {
 		$groups = $csdb->Release->ReleasedBy->Group;
 		if (isset($groups)) {
 			foreach($groups as $group) {
-				$yellow = stripos($copyright, strtolower($group->Name)) > -1
-					? 'emphasize'
-					: 'csdb-group';
-				$released_by .= ', <a href="http://csdb.chordian.net/?type=group&id='.$group->ID.'" target="_blank" class="'.$yellow.'">'.$group->Name.'</a>';
+				$released_by .= ', <a href="http://csdb.chordian.net/?type=group&id='.$group->ID.'" target="_blank" class="csdb-group">'.$group->Name.'</a>';
 			}
 		}
 		$released_by = '<p><b>Released by:</b><br />'.substr($released_by, 2).'</p>';

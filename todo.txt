@@ -9,24 +9,35 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- Tag updating has now transitioned into CSDb count parsing. Next folder: D
+- Tag updating has now transitioned into CSDb count parsing. Next folder: D/Digger
 
 - Detect PAL/NTSC/CIA when clicking a SID row, and if not in the database, add it, so the
   factoid information is increasingly more complete over time.
 
-- Maybe also change the question mark circle above the focus icons with an SVG icon.
+- Focus icon problem: Not fond of "C S" combination. Also, Jason Page is technically P, C
+  and S. Can S and C have a combo icon, somehow? Animated? Smartly designed?
 
-- Go through the csdb.dk page of all MUSICIANS composers and check for COMPUNET notes.
-  If there are any, add the CNET attribute in the database. WIP: Next to parse: B
+- When there is no profile available (e.g. in SH) show no profile message in annex profile.
+
+- Replace the question mark circle above the focus icons with an SVG icon.
+
+- Names from the "short name" field are not short enough for recommended boxes. It works
+  well for the annex profile, so don't shorten them further. Instead, introduce ellipsis
+  in the recommended box and a "recommended name" table column with even shorter names.
+
+- Figure out correct player for this and apply in special patch update:
+  https://deepsid.chordian.net/?file=/GAMES/M-R/River_Chase.sid&subtune=1
+
+- Add a "Cover" button on last SH upload wizard step. When clicked, it prefills the box
+  with TITLE:, ARTIST: and COMMENT: lines (i.e. HVSC standard lines).
 
 - Is game statistics in profile table hard-coded? It should count all "GameBase64" tags.
+
+- Consider caching the group table too.
 
 - Expanding the "y" hotkey: Instead of toggling tags on and off, cycle through types. First
   hit removes event tags, then also production tags, and so on. In the end all are gone,
   and the next hit then shows everything again. Also add the context menu to this.
-
-- BUG: Sometimes a CSDb release page highlights a creator that seems to be irrelevant.
-  Try gfx.col. here: https://deepsid.chordian.net/?file=/MUSICIANS/M/Megmyx/Quest.sid
 
 - A "refresh cache" link next to cached message in the footer of a CSDb page. (Consider only
   showing this for DeepSID administrators.)
@@ -80,13 +91,9 @@ SHOULD BE DONE
   Here's one that could have been a mess too, but it actually works:
   https://deepsid.chordian.net/?file=/MUSICIANS/G/Greg/Leppard.sid
 
-- WIP: Go through all "Links" in all profile pages and make sure the full composer name fits.
-  If it ends in "..." create a short name, e.g. with a letter + full stop for first name.
-  Takes a while going through this ......... Next: MUSICIANS/E
-  IDEA: First go through all composers in phpMyAdmin and handle the worst of them there.
-
 - Tag-parse Merman's folder thoroughly. Only done superficially for now (it's enormous).
 - The composer subfolders of "Blues Muz" are not parsed properly for event tags either.
+- Thomas Detert's folder may also need a closer look.
 
 
 WHEN THE TIME IS RIGHT
@@ -206,9 +213,9 @@ CONSIDER THIS
   sorting. If tags are complicated - e.g several events and productions - you can move the
   tags around to show a more logical setup of tags.
 
-- I abandoned GameBase64 a while back as their site had CORS issues, but why not use their
-  database instead? It’s available for download here: https://gb64.com/downloads.php
-  UPDATE: Now downloaded to: C:\Program Files (x86)\GameBase\GBC_v19
+- Ellipsis box in annex group box is too wide on my work PC. (Chrome?)
+  UPDATE: I tested a lot of composer with long group names and suddenly couldn't hit the
+  but on my work PC anymore. Parking it for now.
 
 - Kim Lemon wants me to make DeepSID cookieless. I could easily make the emulator choice into
   localstorage instead, but the PHP SESSION cookie belongs in a class I didn't write, and I
@@ -664,6 +671,19 @@ TEST RESOURCES
   http://chordian/deepsid/?file=/MUSICIANS/L/Luca/
   http://chordian/deepsid/?file=/MUSICIANS/M/Mr_Mouse/
   http://chordian/deepsid/?file=/MUSICIANS/N/Nightbreed/
+  https://deepsid.chordian.net/?file=/MUSICIANS/D/Deathangels_Shadow/
+  https://deepsid.chordian.net/?file=/MUSICIANS/D/Demosic/
+  https://deepsid.chordian.net/?file=/MUSICIANS/G/Galancy/
+  https://deepsid.chordian.net/?file=/MUSICIANS/G/Gaston/
+  https://deepsid.chordian.net/?file=/MUSICIANS/G/Gillgrass_Dan/
+  https://deepsid.chordian.net/?file=/MUSICIANS/G/Gillies_Ewen/
+  https://deepsid.chordian.net/?file=/MUSICIANS/G/Gilmore_Adam/
+  https://deepsid.chordian.net/?file=/MUSICIANS/G/Green_David/
+  https://deepsid.chordian.net/?file=/MUSICIANS/G/Groepaz/
+  https://deepsid.chordian.net/?file=/MUSICIANS/H/Harlequin/
+  https://deepsid.chordian.net/?file=/MUSICIANS/H/Hero/
+  https://deepsid.chordian.net/?file=/MUSICIANS/H/HIC/
+  https://deepsid.chordian.net/?file=/MUSICIANS/H/Hulten_Jonas/
 
 - Too many DL links on a CSDb list page:
   https://deepsid.chordian.net/?file=/MUSICIANS/O/Onebitman/Walking_in_the_Air.sid

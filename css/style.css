@@ -4931,6 +4931,10 @@ input[type=range]::-ms-track {
 				filter: var(--svg-filter-icon-bottom);
 			}
 
+				#annex img.arrow {
+					filter: var(--svg-filter-icon-bottom);
+				}
+
 			img.cake,
 			img.earth,
 			img.stone,

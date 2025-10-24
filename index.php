@@ -1921,6 +1921,11 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 					
+						<h3>October 24, 2025</h3>
+						<ul>
+							<li>Fixed a highlighting bug in the CSDb tab.</li>
+						</ul>
+
 						<h3>October 19, 2025</h3>
 						<ul>
 							<li>The annex box on the right side now has three tabs: Profile, Links, and Tips.</li>
@@ -1929,7 +1934,6 @@
 								main profile page, featuring a larger avatar image. The advantage is that you can always view profile
 								information even while browsing other page tabs.</li>
 						</ul>
-
 
 						<h3>October 11, 2025</h3>
 						<ul>

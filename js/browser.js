@@ -977,7 +977,7 @@ Browser.prototype = {
 			sortedList += entry.html;
 		});
 		$("#topic-csdb table.releases").append(sortedList);
-		this.additionalEmphasizing(isEmpOn);
+		this.emphasizing(isEmpOn);
 	},
 
 	/**
@@ -2438,13 +2438,13 @@ Browser.prototype = {
 					.css("visibility", "visible");
 				ResetDexterScrollBar("csdb");
 
-				this.additionalEmphasizing(false);
+				this.emphasizing(false);
 				UpdateRedirectPlayIcons();
 
 				// Enable highlighting button and its label if any emphasizing is present
 				setTimeout(() => {
 					if ($("table.releases tr").find("a.emphasize, a.empSec, a.empThird").length > 0)
-						$("#csdb-emp-filter, #csdb-emp-filter-label").removeClass('disabled').prop('disabled', false);
+						$("#csdb-emp-filter, #csdb-emp-filter-label").removeClass("disabled").prop("disabled", false);
 				}, 0);
 
 				if (data.entries != "") this.sidEntries = data.entries; // Array used for sorting
@@ -2464,22 +2464,34 @@ Browser.prototype = {
 	},
 
 	/**
-	 * Add additional highlighting of group names, real name or handle, in green and
+	 * Add highlighting of group names, real name or handle, in yellow/blue, green and
 	 * red in the list of CSDb entries.
 	 */
-	additionalEmphasizing: function(alsoSort) {
+	emphasizing: function(alsoSort) {
 		this.alsoSortEmp = alsoSort;
 		setTimeout(function() {
 
+			var infoArray = SID.getSongInfo("info");
+
+			// Handle occurrences of this class that might be lingering in a cached file
+			$("a.emphasize").removeClass("emphasize").addClass("csdb-replace");
+
 			// Get the name and/or handle of the composer
-			var songAuthor = SID.getSongInfo("info").songAuthor;
+			var currentText, songAuthor = infoArray.songAuthor, songCopyright = infoArray.songReleased;
+			var releaseName = songCopyright.substring(songCopyright.indexOf(" ") + 1).toLowerCase();
 			var nameMatch = songAuthor.match(/^([^(]+?)(?: \(([^)]+)\))?$/);
 			var realName = nameMatch ? nameMatch[1].trim().toLowerCase() : "";
 			var handle = nameMatch && nameMatch[2] ? nameMatch[2].trim().toLowerCase() : "";
 
+			// Emphasize group names that match the copyright line
+			$("a.csdb-replace,a.csdb-scener,a.csdb-group").each(function(i, element) {
+				if (releaseName === $(element).text().trim().toLowerCase())
+					$(element).removeClass("csdb-replace csdb-scener csdb-group").addClass("emphasize");
+			});
+
 			// Emphasize other group names in green that might also be relevant productions
 			$("a.csdb-group").each(function(i, element) {
-				var currentText = $(element).text().trim().toLowerCase();
+				currentText = $(element).text().trim().toLowerCase();
 				browser.groupNames.forEach(function(name) {
 					if (name.toLowerCase() === currentText) {
 						$(element).addClass("empSec");
@@ -2489,8 +2501,8 @@ Browser.prototype = {
 
 			// Also emphasize if the composer used a real name or handle for the release
 			$("a.csdb-scener").each(function(i, element) {
-				var currentText = $(element).text().trim().toLowerCase();
-			if ((realName && realName === currentText) || (handle && handle === currentText))
+				currentText = $(element).text().trim().toLowerCase();
+				if ((realName && realName === currentText) || (handle && handle === currentText))
 					$(element).addClass("empThird");
 			});
 
