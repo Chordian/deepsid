@@ -1508,32 +1508,31 @@ Browser.prototype = {
 								folderIcon = 'search-shortcut';
 
 							// Show focus icons (composer folders in a MUSICIANS letter folder only)
-							var folderFocus = focusLeft = focusRight = "";
+							var folderFocus = focusMiddle = "",
+								focusLeft = focusRight = '<div class="none"></div>';
 							if (folder.focus1 !== 'N/A' && folder.foldername.toLowerCase() !== "worktunes" && folder.foldername.toLowerCase() !== "unreleased") {
 								switch (folder.focus1) {
 									case "PRO":
-										focusLeft = '<div class="p"></div>';
+										focusLeft = '<div class="p"></div>';		// Professional
 										break;
 									case "BOTB":
-										focusLeft = '<div class="b"></div>';	// Battle of the Bits
+										focusLeft = '<div class="b"></div>';		// Battle of the Bits
 										break;
 									case "CNET":
-										focusLeft = '<div class="c"></div>';	// Compunet
+										focusMiddle = '<div class="cextra"></div>';	// Compunet
 										break;
 									case "MC":
-										focusLeft = '<div class="m"></div>';	// Master Composer
+										focusLeft = '<div class="m"></div>';		// Master Composer
 										break;
 									case "LS":
-										focusLeft = '<div class="l"></div>';	// Loadstar Songsmith
+										focusLeft = '<div class="l"></div>';		// Loadstar Songsmith
 										break;
 									case "DM":
-										focusLeft = '<div class="d"></div>';	// DefleMask
+										focusLeft = '<div class="d"></div>';		// DefleMask
 										break;
 									case "BASIC":
-										focusLeft = '<div class="bc"></div>';	// BASIC
+										focusLeft = '<div class="bc"></div>';		// BASIC
 										break;
-									default:
-										focusLeft = '<div class="none"></div>';
 								}
 								switch (folder.focus2) {
 									case "SCENER":
@@ -1543,7 +1542,7 @@ Browser.prototype = {
 										focusRight = '<div class="c"></div>';
 										break;
 									case "CNET":
-										focusRight = '<div class="c"></div>';
+										focusMiddle = '<div class="cextra"></div>';
 										break;
 									case "MC":
 										focusRight = '<div class="m"></div>';
@@ -1554,13 +1553,15 @@ Browser.prototype = {
 									case "DM":
 										focusRight = '<div class="d"></div>';
 										break;
+									case "CNET+SCENER":
+										focusMiddle = '<div class="cextra"></div>';
+										focusRight = '<div class="s"></div>';
+										break;
 									case "BASIC":
 										focusRight = '<div class="bc"></div>';
 										break;
-									default:
-										focusRight = '<div class="none"></div>';
 								}
-								folderFocus = '<div class="folder-focus">'+focusLeft+focusRight+'</div>'
+								folderFocus = '<div class="folder-focus">'+focusLeft+focusMiddle+focusRight+'</div>'
 							}
 
 							var folderEntry = // GET FOLDER: GENERAL FOLDERS

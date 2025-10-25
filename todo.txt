@@ -14,9 +14,6 @@ SHOULD BE DONE
 - Detect PAL/NTSC/CIA when clicking a SID row, and if not in the database, add it, so the
   factoid information is increasingly more complete over time.
 
-- Focus icon problem: Not fond of "C S" combination. Also, Jason Page is technically P, C
-  and S. Can S and C have a combo icon, somehow? Animated? Smartly designed?
-
 - When there is no profile available (e.g. in SH) show no profile message in annex profile.
 
 - Replace the question mark circle above the focus icons with an SVG icon.
@@ -24,9 +21,6 @@ SHOULD BE DONE
 - Names from the "short name" field are not short enough for recommended boxes. It works
   well for the annex profile, so don't shorten them further. Instead, introduce ellipsis
   in the recommended box and a "recommended name" table column with even shorter names.
-
-- Figure out correct player for this and apply in special patch update:
-  https://deepsid.chordian.net/?file=/GAMES/M-R/River_Chase.sid&subtune=1
 
 - Add a "Cover" button on last SH upload wizard step. When clicked, it prefills the box
   with TITLE:, ARTIST: and COMMENT: lines (i.e. HVSC standard lines).

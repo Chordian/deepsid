@@ -1921,6 +1921,11 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 					
+						<h3>October 25, 2025</h3>
+						<ul>
+							<li>The 'C' focus icon for Compunet is now a third, smaller icon displayed before the two standard focus icons.</li>
+						</ul>
+
 						<h3>October 24, 2025</h3>
 						<ul>
 							<li>Fixed a highlighting bug in the CSDb tab.</li>

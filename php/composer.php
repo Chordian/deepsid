@@ -316,34 +316,48 @@ if (isset($fullname)) {
 			// Only show focus icons in MUSICIANS profile pages
 			if (preg_match('~(?:^|/)MUSICIANS/[^/]+/[^/]+(?:/|$)~i', $fullname)) {
 				// Fetch focus flags (defaults to 'NONE' if no row)
-				$select = $db->prepare('SELECT focus1, focus2 FROM composers WHERE fullname = :fullname LIMIT 1');
-				$select->execute([':fullname' => $fullname]);
-				[$focus1, $focus2] = $select->fetch(PDO::FETCH_NUM) ?: ['NONE', 'NONE'];
+				$select_focus = $db->prepare('SELECT focus1, focus2 FROM composers WHERE fullname = :fullname LIMIT 1');
+				$select_focus->execute([':fullname' => $fullname]);
+				$row_focus = $select_focus->fetch(PDO::FETCH_ASSOC) ?: ['focus1' => 'NONE', 'focus2' => 'NONE'];
 
-				// Build focus icons via small maps
-				$leftMap  = [
-					'PRO' 		=> '<div class="p" title="Professional"></div>',
-					'CNET'		=> '<div class="c" title="Compunet"></div>',
-					'BOTB'		=> '<div class="b" title="Battle of the Bits"></div>',
-					'MC'		=> '<div class="m" title="Master Composer"></div>',
-					'LS'		=> '<div class="l" title="Loadstar Songsmith"></div>',
-					'DM'		=> '<div class="d" title="DefleMask"></div>',
-					'BASIC'		=> '<div class="bc" title="BASIC"></div>',
-				];
-				$rightMap = [
-					'SCENER'	=> '<div class="s" title="Scener"></div>',
-					'CNET'		=> '<div class="c" title="Compunet"></div>',
-					'BOTB'		=> '<div class="b" title="Battle of the Bits"></div>',
-					'MC'		=> '<div class="m" title="Master Composer"></div>',
-					'LS'		=> '<div class="l" title="Loadstar Songsmith"></div>',
-					'DM'		=> '<div class="d" title="DefleMask"></div>',
-					'BASIC'		=> '<div class="bc" title="BASIC"></div>',
+				$focus1 = $row_focus['focus1'];
+				$focus2 = $row_focus['focus2'];
+
+				// Icon snippets
+				$icon = [
+					'PRO'   	=> '<div class="p"  title="Professional"></div>',
+					'SCENER'	=> '<div class="s"  title="Scener"></div>',
+					'CNET'  	=> '<div class="c"  title="Compunet"></div>',
+					'BOTB'  	=> '<div class="b"  title="Battle of the Bits"></div>',
+					'MC'    	=> '<div class="m"  title="Master Composer"></div>',
+					'LS'    	=> '<div class="l"  title="Loadstar Songsmith"></div>',
+					'DM'    	=> '<div class="d"  title="DefleMask"></div>',
+					'BASIC' 	=> '<div class="bc" title="BASIC"></div>',
+					'NONE'		=> '<div class="none"></div>',
+					'EXTRA'		=> '<div class="extra"></div>'
 				];
 
-				$focusLeft  = $leftMap[$focus1]  ?? '<div class="none"></div>';
-				$focusRight = $rightMap[$focus2] ?? '<div class="none"></div>';
+				$focusExtra = $icon['EXTRA'];
 
-				$folderFocus = '<div class="folder-focus">'.$focusLeft.$focusRight.'</div>';
+				// Left icon (and special case for CNET)
+				if ($focus1 === 'CNET') {
+					$focusExtra = $icon['CNET'];
+					$focusLeft = $icon['NONE'];
+				} else	
+					$focusLeft = $icon[$focus1] ?? $icon['NONE'];
+
+				// Right icon (and special case for CNET)
+				if ($focus2 === 'CNET+SCENER') {
+					$focusExtra = $icon['CNET'];
+					$focusRight  = $icon['SCENER'];
+				} else if ($focus2 === 'CNET') {
+					$focusExtra = $icon['CNET'];
+					$focusRight = $icon['NONE'];
+				} else {
+					$focusRight  = $icon[$focus2] ?? $icon['NONE'];
+				}
+
+				$folderFocus = '<div class="folder-focus">'.$focusExtra.$focusLeft.$focusRight.'</div>';
 			}
 
 		} catch(PDOException $e) {
