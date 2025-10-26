@@ -270,6 +270,8 @@ Controls.prototype = {
 						} else {
 							// If composers_id = 0 then do this
 							$("#topic-profile").empty().append('<i>No profile available.</i>');
+							$("#atopic-profile").empty().append('<div class="annexMsg">No profile to show.</div>');
+							$("#atopic-links").empty();
 							browser.previousOverridePath = "_SID Happens";
 						}
 					else if (browser.isSearching || browser.path.substr(0, 2) === "/$" || browser.path.substr(0, 2) === "/!")

@@ -11,13 +11,6 @@ SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
 - Tag updating has now transitioned into CSDb count parsing. Next folder: D/Digger
 
-- Detect PAL/NTSC/CIA when clicking a SID row, and if not in the database, add it, so the
-  factoid information is increasingly more complete over time.
-
-- When there is no profile available (e.g. in SH) show no profile message in annex profile.
-
-- Replace the question mark circle above the focus icons with an SVG icon.
-
 - Names from the "short name" field are not short enough for recommended boxes. It works
   well for the annex profile, so don't shorten them further. Instead, introduce ellipsis
   in the recommended box and a "recommended name" table column with even shorter names.
@@ -28,6 +21,9 @@ SHOULD BE DONE
 - Is game statistics in profile table hard-coded? It should count all "GameBase64" tags.
 
 - Consider caching the group table too.
+
+- Annex profile: Below group table, add a colored bar showing start and end activity years.
+  It should probably be "cutout" (zoomed) rather than all time from 1982 and up until today.
 
 - Expanding the "y" hotkey: Instead of toggling tags on and off, cycle through types. First
   hit removes event tags, then also production tags, and so on. In the end all are gone,
@@ -161,6 +157,9 @@ CONSIDER THIS
 
 - Factoid type: SID row click rate (not direct number but e.g. percentage or similar).
   Maybe the click rate percentage could even be shown as a colored percentage bar?
+
+- Detect PAL/NTSC/CIA when clicking a SID row, and if not in the database, add it, so the
+  factoid information is increasingly more complete over time.
 
 - Cache: When CSDb is down and a cache file is shown instead, a warning message in top
   could say that CSDb is currently unreachable so here's a cached file instead.

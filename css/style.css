@@ -3762,6 +3762,7 @@ input[type=range]::-ms-track {
 	--svg-url-circle-d: url(../images/circle_d_light.svg);
 	--svg-url-circle-basic: url(../images/circle_basic_light.svg);
 	--svg-url-circle-none: url(../images/circle_none_light.svg);
+	--svg-filter-icon-browser: invert(47%) sepia(15%) saturate(573%) hue-rotate(25deg) brightness(99%) contrast(88%);
 }
 
 [data-theme="dark"] {
@@ -3774,6 +3775,7 @@ input[type=range]::-ms-track {
 	--svg-url-circle-d: url(../images/circle_d_dark.svg);
 	--svg-url-circle-basic: url(../images/circle_basic_dark.svg);
 	--svg-url-circle-none: url(../images/circle_none_dark.svg);
+	--svg-filter-icon-browser: invert(56%) sepia(0%) saturate(25%) hue-rotate(135deg) brightness(96%) contrast(94%);
 }
 
 			/* Container for focus icons */
@@ -3862,14 +3864,11 @@ input[type=range]::-ms-track {
 				position: absolute;
 				top: 10px;
 				left: 0;		/* Set in browser.js */
-				width: 16px;
-				height: 16px;
-				padding-left: 4.25px;
-				font: bold 12px/12px "Open Sans", sans-serif;
-				border: 1.5px solid var(--color-text-player);
-				border-radius: 20px;
-				color: var(--color-text-player);
-				cursor: default;
+				width: 18px;
+				height: 18px;
+				background: url(../images/questionmark.svg) 0 0 / 18px 18px no-repeat;
+				filter: var(--svg-filter-icon-browser);
+				cursor: help;
 			}
 
 			#songs .pl-strip {

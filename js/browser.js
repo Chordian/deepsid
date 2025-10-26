@@ -707,6 +707,8 @@ Browser.prototype = {
 						} else {
 							// If composers_id = 0 then do this
 							$("#topic-profile").empty().append('<i>No profile available.</i>');
+							$("#atopic-profile").empty().append('<div class="annexMsg">No profile to show.</div>');
+							$("#atopic-links").empty();
 							this.previousOverridePath = "_SID Happens";
 						}
 					else if (this.isSearching || this.path.substr(0, 2) === "/$" || this.path.substr(0, 2) === "/!")
@@ -1810,7 +1812,7 @@ Browser.prototype = {
 
 					// Show question mark icon for focus icons (but only where these are shown)
 					if (!this.isSearching && this.isMusiciansLetterFolder()) {
-						$("#path").append('<div id="focus-explainer" title="B = BASIC program (green/gray)\nB = Battle of the Bits (magenta)\nC = Compunet\nD = DefleMask\nL = Loadstar Songsmith\nM = Master Composer\nP = Professional\nS = Scener">?</div>');
+						$("#path").append('<div id="focus-explainer" title="B = BASIC program (green/gray)\nB = Battle of the Bits (magenta)\nC = Compunet\nD = DefleMask\nL = Loadstar Songsmith\nM = Master Composer\nP = Professional\nS = Scener"></div>');
 						this.positionFocusExplainer();
 					}
 
