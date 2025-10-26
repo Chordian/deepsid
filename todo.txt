@@ -9,21 +9,13 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- Tag updating has now transitioned into CSDb count parsing. Next folder: D/Digger
-
-- Names from the "short name" field are not short enough for recommended boxes. It works
-  well for the annex profile, so don't shorten them further. Instead, introduce ellipsis
-  in the recommended box and a "recommended name" table column with even shorter names.
-
-- Add a "Cover" button on last SH upload wizard step. When clicked, it prefills the box
-  with TITLE:, ARTIST: and COMMENT: lines (i.e. HVSC standard lines).
+- Tag updating has now transitioned into CSDb count parsing. Next folder: E
 
 - Is game statistics in profile table hard-coded? It should count all "GameBase64" tags.
 
-- Consider caching the group table too.
-
-- Annex profile: Below group table, add a colored bar showing start and end activity years.
-  It should probably be "cutout" (zoomed) rather than all time from 1982 and up until today.
+- /MUSICIANS/S/Safavy_Mehdi/ contains all 19?? year tunes and thus 'Chartist' fails. Both
+  in the page profile and in the annex profile.
+  Here's another one: https://deepsid.chordian.net/?file=/MUSICIANS/T/TCC/
 
 - Expanding the "y" hotkey: Instead of toggling tags on and off, cycle through types. First
   hit removes event tags, then also production tags, and so on. In the end all are gone,
@@ -142,6 +134,9 @@ CONSIDER THIS
   UPDATE: I have now added log of name in 'composer.php' to pinpoint why a user always get
   this error. Still waiting for him to do it again...
   UPDATE: Ever since enabling the above I have not seen it happen again. Lowering the priority.
+
+- Consider also caching the group table. (If doing this, is it possible to cache Rob Hubbard's
+  group data? It's so massive that it always times out, but I only need to get it once.)
 
 - Somehow add blue tags to CSDb tab list so it's apparent what they refer to. It could be
   appended to the date in the lists. It a logical way to show it and should be done, but it
@@ -401,6 +396,10 @@ CONSIDER THIS
   - Plus button, then drop-down for table ("files", "folders", etc.) then column, then an
     input box for typing search query (always used LIKE %...% search). More?
   - Could also have an in-between drop-down box with "is", "contains", "not", etc.
+
+- Names from the "short name" field are not short enough for recommended boxes. It works well for
+  the annex profile, so don't shorten them further. Instead, add a "recommended name" table column
+  in the database with even shorter names.
 
 - A tab with post effects, applied by the web audio synth library.
   - And maybe a setting toggle for applying this to the URL as a settings parameter string.

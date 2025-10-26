@@ -528,7 +528,7 @@
 		</div>
 		<div id="dialog-upload-wiz5" class="dialog-box dialog-wizard">
 			<div class="dialog-text"></div>
-			<label for="upload-stil">Custom text for the <b>STIL</b> tabs:</label>
+			<label for="upload-stil">Custom text for the <b>STIL</b> tabs:</label><button id="cover-lines" style="float:right;font-size:8px;line-height:1;height:20px;margin-bottom:6px;">Cover</button>
 			<textarea id="upload-stil-text" name="upload-stil" maxlength="8192"></textarea>
 			<div class="dialog-buttons"><a href="#" class="dialog-cancel">Cancel</a><button class="dialog-button-no dialog-auto">Back</button><button class="dialog-button-yes dialog-auto">Finish</button></div>
 		</div>
@@ -1921,6 +1921,12 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 					
+						<h3>October 26, 2025</h3>
+						<ul>
+							<li>Added a 'COVER' button to the final wizard upload step for inserting HVSC-standard keywords.</li>
+							<li>The annex profile now includes an activity bar displaying the composer's active years.</li>
+						</ul>
+
 						<h3>October 25, 2025</h3>
 						<ul>
 							<li>The 'C' focus icon for Compunet is now a third, smaller icon displayed before the two standard focus icons.</li>

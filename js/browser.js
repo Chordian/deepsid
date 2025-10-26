@@ -221,6 +221,12 @@ Browser.prototype = {
 			this.endTag = $(event.target).val();
 		});
 
+		// Prepend lines preparing for cover information about an uploaded SID file (last wizard step)
+		$("#cover-lines").on("click", function() {
+			var $textarea = $("#upload-stil-text");
+			$textarea.val("TITLE: \nARTIST: \nCOMMENT: \n" + $textarea.val());
+		});
+
 		$("#pr-newplname").on("keydown", function(event) {
 			var $renameButton = $("#dialog-playlist-rename .dialog-button-yes");
 			if ($(this).val() == "")
