@@ -203,7 +203,7 @@ function CreateRecBox($random_id) {
 					'<img class="composer root-thumbnail" src="'.$thumbnail.'" alt="" />'.
 				'</td>'.
 				'<td style="padding-top:1px;">'.
-					'<h4>'.$name.'</h4>'.
+					'<h4 class="ellipsis">'.$name.'</h4>'.
 					'<h5>'.$handle.'</h5>'.
 					'<div style="position:absolute;bottom:8px;"><img class="icon'.$icss.' doublenote" src="images/'.$ifile.'.svg" title="'.$ititle.'" alt="" />'.$songs.' '.$items.'</div>'.
 				'</td>'.

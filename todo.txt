@@ -54,10 +54,6 @@ SHOULD BE DONE
   of focus enabling, but try to investigate further.
   UPDATE: Spotted one. Need to ENTER to select a row after using "f" to refresh folder.
 
-- If you look closely, some tag names are too high up. It differs from SID row to SID row
-  in Firefox. Test floating point line heights to see if it can be fixed. UPDATE: Having
-  fought with something similar with focus icons, I really doubt you can fix this.
-
 - The 'application' column in 'hvsc_files' has not been maintained in many HVSC updates.
   It can read 'RELEASE' or 'PREVIEW' and pertains to games. Maybe write a PHP script that
   sets it depending on the GB64 entries found for the SID rows?
@@ -207,8 +203,8 @@ CONSIDER THIS
   tags around to show a more logical setup of tags.
 
 - Ellipsis box in annex group box is too wide on my work PC. (Chrome?)
-  UPDATE: I tested a lot of composer with long group names and suddenly couldn't hit the
-  but on my work PC anymore. Parking it for now.
+  UPDATE: I tested a lot of composer with long group names and suddenly couldn't hit the bug
+  on my work PC anymore. Parking it for now.
 
 - Kim Lemon wants me to make DeepSID cookieless. I could easily make the emulator choice into
   localstorage instead, but the PHP SESSION cookie belongs in a class I didn't write, and I
@@ -477,6 +473,10 @@ PROBABLY NOT?
   some composer's folder and then search for some other composer's song. When clicking one of the
   search results the respective song is played but the "Profile" tab is not updated.'
   UPDATE: I tried to reproduce it today (2021-11-07) but couldn't. Archived until further notice.
+
+- If you look closely, some tag names are too high up. It differs from SID row to SID row
+  in Firefox. Test floating point line heights to see if it can be fixed. UPDATE: Having
+  fought with something similar with focus icons, I really doubt you can fix this.
 
 - Add context menu option for downloading a tune as an MP3. I'm thinking, maybe I can grab one
   of Lemon's MP3 files? UPDATE: I tried it using a download trick from Stack Overflow, but of

@@ -3672,6 +3672,11 @@ input[type=range]::-ms-track {
 			vertical-align: bottom;
 		}
 
+			/* Folders in MUSICIANS need to be shorter because of the focus icons present */
+			#songs td.musicians .block-wrap {
+				max-width: 270px;
+			}
+
 		#songs .block,
 		#page .block {
 			width: 100%;
@@ -5300,7 +5305,12 @@ input[type=range]::-ms-track {
 				#page table.rec h4 {
 					margin: 0;
 					font-size: 19px;
+					width: 164px;
 				}
+
+					.quickbox h4 {
+						width: auto !important;
+					}
 
 				/* "Jozz" */
 				#page table.rec h5 {

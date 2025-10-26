@@ -1508,6 +1508,8 @@ Browser.prototype = {
 								folderIcon = 'playlist';
 							else if (isSearchShortcut)
 								folderIcon = 'search-shortcut';
+							// Folders in MUSICIANS need to be shorter because of the focus icons present
+							var musicians = this.isSearching || this.path.indexOf("_High Voltage SID Collection/MUSICIANS") !== -1 ? ' musicians' : '';
 
 							// Show focus icons (composer folders in a MUSICIANS letter folder only)
 							var folderFocus = focusMiddle = "",
@@ -1568,7 +1570,7 @@ Browser.prototype = {
 
 							var folderEntry = // GET FOLDER: GENERAL FOLDERS
 								'<tr'+(folder.incompatible.indexOf(SID.emulator) !== -1 || isMobileDenied ? ' class="disabled"' : '')+'>'+
-									'<td class="folder unselectable '+folderIcon+
+									'<td class="folder'+musicians+' unselectable '+folderIcon+
 										(folder.hvsc == this.HVSC_VERSION || folder.hvsc == this.CGSC_VERSION ? ' new' : '')+
 										'">'+folderFocus+'<div class="block-wrap"><div class="block'+(isRedirectFolder ? " slimfont" : "")+'">'+
 									(folder.foldername == "SID+FM" ? '<div class="sid_fm">Use Hermit\'s (+FM) emulator</div>' : '')+
