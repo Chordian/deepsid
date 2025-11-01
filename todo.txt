@@ -9,10 +9,6 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- Is game statistics in profile table hard-coded? It should count all "GameBase64" tags.
-
-- Make sure the activity bar in annex profiles doesn't show up on GROUP folders.
-
 - Investigate the 'RetroGL' folder. It can be searched for and entered, but it also doesn't
   seem to exist? It doesn't exist in HVSC either.
 
@@ -22,10 +18,6 @@ SHOULD BE DONE
 
 - A "refresh cache" link next to cached message in the footer of a CSDb page. (Consider only
   showing this for DeepSID administrators.)
-
-- While I still think hiding "Compo" is okay, perhaps consider an alert to pop up (or show
-  a message in the dialog box) saying that it will be hidden because the ranking should
-  already make it clear, this is for a competition.
 
 - Idea from Anon-Relays: Loop song X number of times before moving on to the next one. In
   the settings, the default number should of course be 1.
@@ -494,6 +486,10 @@ PROBABLY NOT?
 
 - How about a sticky footer on tab pages? For the CSDb tab it would be particularly useful
   as it makes it easy to see if the contents were generated from the cache or not.
+
+- I still ponder if hiding "Compo" is okay. If hiding it, perhaps consider an alert to pop up (or
+  show a message in the dialog box) saying that it will be hidden because the ranking should
+  already make it clear, this is for a competition.
 
 - When using a green event tag and a production the music was used in at that event, consider a
   setting for adapting the colors of the production tag. Ideas: Fading from green to blue, or the

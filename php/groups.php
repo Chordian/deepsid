@@ -40,15 +40,22 @@ if (isset($fullname)) {
 				$fullname = str_replace('/'.$folders[count($folders) - 1], '', $fullname);
 		}
 
-		// Get count of RELEASE
-		$select = $db->prepare('SELECT count(application) FROM hvsc_files WHERE fullname LIKE :fullname AND application = "RELEASE"');
+		// Get count of 'GameBase64' tags. These tags are automatically added, and there are always only one tag
+		// for each individual game (since GB64 can only link to one SID file) so it's fairly good for statistics.
+		$select = $db->prepare('
+			SELECT count(1)
+			FROM hvsc_files
+			WHERE fullname LIKE :fullname
+			AND EXISTS (
+				SELECT 1
+				FROM tags_lookup
+				JOIN tags_info ON tags_info.id = tags_lookup.tags_id
+				WHERE tags_lookup.files_id = hvsc_files.id
+				AND tags_info.name = "GameBase64"
+			)
+		');
 		$select->execute(array(':fullname'=>$fullname.'/%'));
-		$count_release = $select->rowCount() ? $select->fetchColumn() : 0;
-
-		// Get count of PREVIEW
-		$select = $db->prepare('SELECT count(application) FROM hvsc_files WHERE fullname LIKE :fullname AND application = "PREVIEW"');
-		$select->execute(array(':fullname'=>$fullname.'/%'));
-		$count_preview = $select->rowCount() ? $select->fetchColumn() : 0;
+		$count_gb64 = $select->rowCount() ? $select->fetchColumn() : 0;
 
 		// Get data from the composer profile (if it exists)
 		$select = $db->prepare('SELECT * FROM composers WHERE fullname = :fullname LIMIT 1');
@@ -400,7 +407,7 @@ $dexter_html =
 			'</tr>' : '').
 			'<tr>'.
 				'<td class="topline bottomline leftline" style="padding-left:10px;width:50%;">'.(!empty($dexter_counts) ? '<span class="icon-before icon-swing title="Produced...">'.$dexter_counts.'</span>' : '<div class="nocounts">No CSDb profile</div>').'</td>'.
-				'<td class="topline bottomline leftline rightline" style="padding-left:10px;">'.($count_release || $count_preview ? '<span class="icon-before icon-note" title="Made music for...">'.($count_release ? $count_release.' released game'.($count_release != 1 ? 's' : '') : '').($count_release && $count_preview ? ' and ' : '').($count_preview ? $count_preview.' game preview'.($count_preview != 1 ? 's' : '') : '').'</span>' : '<div class="nocounts">No game statistics</div>').'</td>'.
+				'<td class="topline bottomline leftline rightline" style="padding-left:10px;">'.($count_gb64 ? '<span class="icon-before icon-note" title="Made music for...">'.$count_gb64.' game'.($count_gb64 != 1 ? 's' : '').' according to GameBase64</span>' : '<div class="nocounts">No game statistics</div>').'</td>'.
 			'</tr>';
 
 echo json_encode(array('status' => 'ok', 'dexter_html' => $dexter_html, 'annex_html' => $annex_html));

@@ -187,6 +187,7 @@ if (isset($fullname)) {
 
 		$exoticFullname = ProxyExotic($fullname);
 		$isExoticComposerFolder = ($fullname != $exoticFullname);
+		$isGroupsFolder = stripos($fullname, '/GROUPS/') !== false;
 		$fullname = $exoticFullname;
 
 		try {
@@ -580,40 +581,42 @@ if (isset($row)) {
 		  . $annex_died . '</div>'
 		  . $annex_country .
 		// Below is empty groups/work table placeholder
-		'<div id="annex-groups-box"><table id="annex-table-groups" class="tight top" style="min-width:100%;font-size:14px;margin-top:5px;">'.
-			'<tr>'.
-				'<td id="annex-table-message" class="topline bottomline leftline rightline" style="height:30px;padding:0 !important;text-align:center;">'.($spinner ? '<img class="loading-dots" src="images/loading_threedots.svg" alt="" style="margin-top:10px;" />' : '<div class="no-profile">No profile data</div>').'</td>'.
-			'</tr>'.
-		'</table></div>' .
-		// Activity (years) - sort of reverse engineered 'Chartist'
-		(strpos($fullname, $uploadFolder) === false ?
-			'<div style="white-space:nowrap;"><h4 style="display:inline-block;margin-top:12px;margin-right:8px;">Active</h4><span class="ct-label">'. ($last_year !== $first_year ? $first_year : ($first_year < 2007 ? '<div style="display:inline-block;width:35px;"></div>' . $first_year : '<div style="display:inline-block;width:27px;"></div>')) .'</span>
-			<div style="display:inline-block;height:24px;width:114px;position:relative;top:7px;">
-				<svg class="ct-chart-line" style="width:100%;height:100%;">
-					<g class="ct-grids">
-						<line class="ct-grid ct-horizontal" x1="6" x2="106" y1="1" y2="1"></line>
-						<line class="ct-grid ct-horizontal" x1="6" x2="106" y1="23" y2="23"></line>
-						<line class="ct-grid ct-vertical" y1="1" y2="23" x1="6" x2="6" ></line>
-						<line class="ct-grid ct-vertical" y1="1" y2="23" x1="26" x2="26" ></line>
-						<line class="ct-grid ct-vertical" y1="1" y2="23" x1="46" x2="46" ></line>
-						<line class="ct-grid ct-vertical" y1="1" y2="23" x1="66" x2="66" ></line>
-						<line class="ct-grid ct-vertical" y1="1" y2="23" x1="86" x2="86" ></line>
-						<line class="ct-grid ct-vertical" y1="1" y2="23" x1="106" x2="106" ></line>
-					</g>
-					<g>
-						<g class="ct-series ct-series-a">' .
-							($last_year > $first_year
-								? '<line class="ct-line" x1="'.$x1.'" x2="'.$x2.'" y1="12" y2="12"></line>'
-								: '') . '
-							<line class="ct-point" x1="'.$x1.'" x2="'.$x1.'" y1="12" y2="12"></line>' .
-							($last_year > $first_year
-								? '<line class="ct-point" x1="'.$x2.'" x2="'.$x2.'" y1="12" y2="12"></line>'
-								: '') . '
+		(!$isGroupsFolder ?
+			'<div id="annex-groups-box"><table id="annex-table-groups" class="tight top" style="min-width:100%;font-size:14px;margin-top:5px;">'.
+				'<tr>'.
+					'<td id="annex-table-message" class="topline bottomline leftline rightline" style="height:30px;padding:0 !important;text-align:center;">'.($spinner ? '<img class="loading-dots" src="images/loading_threedots.svg" alt="" style="margin-top:10px;" />' : '<div class="no-profile">No profile data</div>').'</td>'.
+				'</tr>'.
+			'</table></div>' .
+			// Activity (years) - sort of reverse engineered 'Chartist'
+			(strpos($fullname, $uploadFolder) === false ?
+				'<div style="white-space:nowrap;"><h4 style="display:inline-block;margin-top:12px;margin-right:8px;">Active</h4><span class="ct-label">'. ($last_year !== $first_year ? $first_year : ($first_year < 2007 ? '<div style="display:inline-block;width:35px;"></div>' . $first_year : '<div style="display:inline-block;width:27px;"></div>')) .'</span>
+				<div style="display:inline-block;height:24px;width:114px;position:relative;top:7px;">
+					<svg class="ct-chart-line" style="width:100%;height:100%;">
+						<g class="ct-grids">
+							<line class="ct-grid ct-horizontal" x1="6" x2="106" y1="1" y2="1"></line>
+							<line class="ct-grid ct-horizontal" x1="6" x2="106" y1="23" y2="23"></line>
+							<line class="ct-grid ct-vertical" y1="1" y2="23" x1="6" x2="6" ></line>
+							<line class="ct-grid ct-vertical" y1="1" y2="23" x1="26" x2="26" ></line>
+							<line class="ct-grid ct-vertical" y1="1" y2="23" x1="46" x2="46" ></line>
+							<line class="ct-grid ct-vertical" y1="1" y2="23" x1="66" x2="66" ></line>
+							<line class="ct-grid ct-vertical" y1="1" y2="23" x1="86" x2="86" ></line>
+							<line class="ct-grid ct-vertical" y1="1" y2="23" x1="106" x2="106" ></line>
 						</g>
-					</g>
-				</svg>
-			</div><span class="ct-label"' . ($last_year ===  date("Y") ? ' style="font-weight:bold;color:var(--color-text-resp-good);"' : '' ). '>' . ($last_year !== $first_year ? $last_year : ($first_year > 2007 ? $last_year : '')) . '</span>
-			</div>'
+						<g>
+							<g class="ct-series ct-series-a">' .
+								($last_year > $first_year
+									? '<line class="ct-line" x1="'.$x1.'" x2="'.$x2.'" y1="12" y2="12"></line>'
+									: '') . '
+								<line class="ct-point" x1="'.$x1.'" x2="'.$x1.'" y1="12" y2="12"></line>' .
+								($last_year > $first_year
+									? '<line class="ct-point" x1="'.$x2.'" x2="'.$x2.'" y1="12" y2="12"></line>'
+									: '') . '
+							</g>
+						</g>
+					</svg>
+				</div><span class="ct-label"' . ($last_year ===  date("Y") ? ' style="font-weight:bold;color:var(--color-text-resp-good);"' : '' ). '>' . ($last_year !== $first_year ? $last_year : ($first_year > 2007 ? $last_year : '')) . '</span>
+				</div>'
+				: '')
 			: '');
 
 } else {
