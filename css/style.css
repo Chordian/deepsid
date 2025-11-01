@@ -3674,7 +3674,7 @@ input[type=range]::-ms-track {
 
 			/* Folders in MUSICIANS need to be shorter because of the focus icons present */
 			#songs td.musicians .block-wrap {
-				max-width: 270px;
+				max-width: 240px; /* Good: 240-242px, Acceptable: 246px */
 			}
 
 		#songs .block,
@@ -4866,6 +4866,15 @@ input[type=range]::-ms-track {
 			font-size: 12px;
 			color: var(--color-text-subtle);
 		}
+
+		#groups-box,
+		#annex-groups-box {
+			overflow: hidden;
+		}
+			#groups-box.is-animating,
+			#annex-groups-box.is-animating {
+				transition: height 280ms ease;
+			}		
 
 		#annex-table-groups {
 			padding: 3px 0 0 0 !important;

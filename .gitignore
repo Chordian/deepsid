@@ -4,6 +4,7 @@ fonts/*
 hvsc
 images
 logs/*.txt
+logs/archives/*
 js/_sources/*
 php/move.txt
 php/_master/*

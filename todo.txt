@@ -9,13 +9,12 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- Tag updating has now transitioned into CSDb count parsing. Next folder: E
-
 - Is game statistics in profile table hard-coded? It should count all "GameBase64" tags.
 
-- /MUSICIANS/S/Safavy_Mehdi/ contains all 19?? year tunes and thus 'Chartist' fails. Both
-  in the page profile and in the annex profile.
-  Here's another one: https://deepsid.chordian.net/?file=/MUSICIANS/T/TCC/
+- Make sure the activity bar in annex profiles doesn't show up on GROUP folders.
+
+- Investigate the 'RetroGL' folder. It can be searched for and entered, but it also doesn't
+  seem to exist? It doesn't exist in HVSC either.
 
 - Expanding the "y" hotkey: Instead of toggling tags on and off, cycle through types. First
   hit removes event tags, then also production tags, and so on. In the end all are gone,
@@ -45,6 +44,14 @@ SHOULD BE DONE
   having done some navigation elsewhere in DeepSID. The first ENTER is probably some kind
   of focus enabling, but try to investigate further.
   UPDATE: Spotted one. Need to ENTER to select a row after using "f" to refresh folder.
+
+- BUG report from user Denny Müller:
+  "With handler "WebSid (Legacy)": muting channel 4 doesn't gray out the scope. After re-
+   clicking on channel 4, it's greyed out, but unmuted.
+   With handler "WebSid emulator" (1): clicking on channel 4 doesn't do anything, but gray
+   out. Muting the other channels reduces the volume of channel 4.
+   With handler "WebSid emulator" (2): Muting all channels and then (unmute) channel 4 stops
+   playback or skips to next track."
 
 - The 'application' column in 'hvsc_files' has not been maintained in many HVSC updates.
   It can read 'RELEASE' or 'PREVIEW' and pertains to games. Maybe write a PHP script that
@@ -697,5 +704,10 @@ TEST RESOURCES
   https://deepsid.chordian.net/?file=%2FCSDb%20Music%20Competitions%2FP%C3%A5gadata%202023
   https://deepsid.chordian.net/?file=%2FCSDb%20Music%20Competitions%2FRevision%202017
   https://deepsid.chordian.net/?file=%2FCSDb%20Music%20Competitions%2FXenium%202022%20%5BMixed%5D
+
+- Unknown years:
+  https://deepsid.chordian.net/?file=/MUSICIANS/T/TCC/ (199?)
+  https://deepsid.chordian.net/?file=/MUSICIANS/T/The_Invincible_Cracker/ (198?)
+  https://deepsid.chordian.net/?file=/MUSICIANS/H/Hogg_Steve/ (19??)
 
 END

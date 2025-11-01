@@ -549,6 +549,20 @@ if (isset($row)) {
 	else if ($last_year < 2027)
 		$x2 = 86;
 
+	if (empty($first_year) && empty($last_year)) {
+		$first_year = substr($player_row->copyright, 0, 4); // The last one obtained is fine
+		if ($first_year === '198?') {
+			$first_year = $last_year = '198?';
+			$x1 = 6;
+		} else if ($first_year === '199?') {
+			$first_year = $last_year = '199?';
+			$x1 = 26;
+		} else if ($first_year === '19??') {
+			$first_year = $last_year = '19??';
+			$x1 = 26;
+		}
+	}
+
 	// Always show just one country
 	$parts = preg_split('/,\s*/', $country);
 	$last_country = trim(end($parts));
@@ -566,11 +580,11 @@ if (isset($row)) {
 		  . $annex_died . '</div>'
 		  . $annex_country .
 		// Below is empty groups/work table placeholder
-		'<table id="annex-table-groups" class="tight top" style="min-width:100%;font-size:14px;margin-top:5px;">'.
+		'<div id="annex-groups-box"><table id="annex-table-groups" class="tight top" style="min-width:100%;font-size:14px;margin-top:5px;">'.
 			'<tr>'.
 				'<td id="annex-table-message" class="topline bottomline leftline rightline" style="height:30px;padding:0 !important;text-align:center;">'.($spinner ? '<img class="loading-dots" src="images/loading_threedots.svg" alt="" style="margin-top:10px;" />' : '<div class="no-profile">No profile data</div>').'</td>'.
 			'</tr>'.
-		'</table>' .
+		'</table></div>' .
 		// Activity (years) - sort of reverse engineered 'Chartist'
 		(strpos($fullname, $uploadFolder) === false ?
 			'<div style="white-space:nowrap;"><h4 style="display:inline-block;margin-top:12px;margin-right:8px;">Active</h4><span class="ct-label">'. ($last_year !== $first_year ? $first_year : ($first_year < 2007 ? '<div style="display:inline-block;width:35px;"></div>' . $first_year : '<div style="display:inline-block;width:27px;"></div>')) .'</span>
@@ -638,11 +652,11 @@ $html = '<table style="border:none;margin-bottom:0;"><tr>'.
 		'</tr></table>'.
 		// Below is empty groups/work table placeholder
 		($fullname != $csdbCompoFolder && $fullname != $exoticFolder && $fullname != $uploadFolder ?
-			'<table id="table-groups" class="tight top" style="min-width:100%;font-size:14px;margin-top:5px;">'.
+			'<div id="groups-box"><table id="table-groups" class="tight top" style="min-width:100%;font-size:14px;margin-top:5px;">'.
 				'<tr>'.
 					'<td id="table-message" class="topline bottomline leftline rightline" style="height:30px;padding:0 !important;text-align:center;">'.($spinner ? '<img class="loading-dots" src="images/loading_threedots.svg" alt="" style="margin-top:10px;" />' : '<div class="no-profile">No profile data</div>').'</td>'.
 				'</tr>'.
-			'</table>' : '').
+			'</table></div>' : '').
 		'<div class="corner-icons">'.
 			'<div id="profilechange" style="'.($csdbid ? 'left:-153' : 'right:-3').'px;"></div>'.
 			($csdbid ? '<a href="http://csdb.chordian.net/?type='.$csdbtype.'&id='.$csdbid.'" title="See this at CSDb" target="_blank"><svg class="outlink" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg></a>' : '').

@@ -1921,6 +1921,12 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 					
+						<h3>November 1, 2025</h3>
+						<ul>
+							<li>Unknown years (198?, 199?, 19??) are now displayed correctly by the activity bar in the annex profile.</li>
+							<li>The groups table shown on profile pages now opens smoothly instead of all at once.</li>
+						</ul>
+
 						<h3>October 26, 2025</h3>
 						<ul>
 							<li>Added a 'COVER' button to the final wizard upload step for inserting HVSC-standard keywords.</li>

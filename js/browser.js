@@ -2377,13 +2377,62 @@ Browser.prototype = {
 					this.getGroups(this.groupsFullname);
 				}.bind(this), 20000);
 			} else if (data.dexter_html !== "") {
-				$("#annex-table-groups").empty().append(data.annex_html);
-				$("#table-groups").empty().append(data.dexter_html);
+				this.smoothReplaceAndExpand($("#annex-groups-box"), "#annex-table-groups", data.annex_html);
+				this.smoothReplaceAndExpand($("#groups-box"), "#table-groups", data.dexter_html);
 				var html = $("#topic-profile").html();
 				// Don't include the script or the chart stuff will be shown twice
 				this.composerCache = html.substr(0, html.indexOf("<script"));
 			}
 		}.bind(this));
+	},
+
+	/**
+	 * Helper function used by 'getGroups' above. It makes sure the groups table is
+	 * expanding smoothly instead of just all at once.
+	 * 
+	 * @param {object} $box			Groups box jQuery object
+	 * @param {string} table		ID of groups table
+	 * @param {string} newHtml		The HTML to put into the table
+	 */
+	smoothReplaceAndExpand: function($box, table, newHtml) {
+		// Stop any previous run
+		$box.removeClass('is-animating').off('.expand').css('height', '');
+
+		// Measure and lock height before mutating
+		const startH = $box.outerHeight();
+		$box.css('height', startH + 'px');
+
+		// Replace content
+		$box.find(table).html(newHtml);
+
+		// If hidden (tab not shown) don't try to animate now
+		if (!this.isActuallyVisible($box)) {
+			$box.css('height', ''); // Back to auto
+			return;
+		}
+
+		// Compute target after DOM update
+		const targetH = $box.prop('scrollHeight');
+
+		// Animate height; force a reflow so the browser acknowledges the locked start height
+		// eslint-disable-next-line no-unused-expressions
+		$box[0].offsetHeight;
+		$box.addClass('is-animating').css('height', targetH + 'px');
+
+		const cleanup = () => {
+			$box.removeClass('is-animating').off('.expand').css('height', '');
+		};
+
+		// Cleanup when done (with a timeout fallback)
+		$box.one('transitionend.expand', cleanup);
+		setTimeout(cleanup, 600);
+	},
+
+	/**
+	 * Helper function used by 'smoothReplaceAndExpand' above.
+	 */
+	isActuallyVisible: function($el) {
+		return $el.is(':visible') && $el[0].offsetParent !== null;
 	},
 
 	/**
