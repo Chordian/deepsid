@@ -1925,7 +1925,8 @@
 						<ul>
 							<li>Unknown years (198?, 199?, 19??) are now displayed correctly by the activity bar in the annex profile.</li>
 							<li>The groups table shown on profile pages now opens smoothly instead of all at once.</li>
-							<li>The profile page now shows the number of games a musician composed for, based on a dynamic count of GameBase64 entries. This should correct many of the misleading counts seen recently.</li>
+							<li>The profile page now shows the number of games a musician composed for based on a dynamic count of GameBase64 entries. This should correct many of the misleading counts seen recently.</li>
+							<li>The 'Most games covered' statistics on the front page now also use a dynamic count of GameBase64 entries.</li>
 						</ul>
 
 						<h3>October 26, 2025</h3>

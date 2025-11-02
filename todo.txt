@@ -9,12 +9,7 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- Investigate the 'RetroGL' folder. It can be searched for and entered, but it also doesn't
-  seem to exist? It doesn't exist in HVSC either.
-
-- Expanding the "y" hotkey: Instead of toggling tags on and off, cycle through types. First
-  hit removes event tags, then also production tags, and so on. In the end all are gone,
-  and the next hit then shows everything again. Also add the context menu to this.
+- Write a blog post about the latest tagging. "Everyone and his dog has a collection!"
 
 - A "refresh cache" link next to cached message in the footer of a CSDb page. (Consider only
   showing this for DeepSID administrators.)
@@ -147,6 +142,10 @@ CONSIDER THIS
 
 - Factoid type: SID row click rate (not direct number but e.g. percentage or similar).
   Maybe the click rate percentage could even be shown as a colored percentage bar?
+
+- Expanding the "y" hotkey: Instead of toggling tags on and off, cycle through types. First
+  hit removes event tags, then also production tags, and so on. In the end all are gone,
+  and the next hit then shows everything again. Also add the context menu to this.
 
 - Detect PAL/NTSC/CIA when clicking a SID row, and if not in the database, add it, so the
   factoid information is increasingly more complete over time.

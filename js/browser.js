@@ -367,6 +367,7 @@ Browser.prototype = {
 					this.path = "";
 					ctrls.state("prev/next", "disabled");
 					ctrls.state("subtunes", "disabled");
+					CancelTrackType("enter:folder");
 					this.getFolder(this.scrollPositions[0], undefined, undefined,
 						function() {
 							this.kbSelectedRow = [this.kbPositions[0]];
@@ -398,6 +399,7 @@ Browser.prototype = {
 						this.scrollPositions.pop(); // First pop out of search state
 						this.kbPositions.pop();
 					}
+					CancelTrackType("enter:folder");
 					this.getFolder(this.scrollPositions.pop(), undefined,
 						(this.path === "/CSDb Music Competitions" || this.path === "/_Compute's Gazette SID Collection")
 							&& this.cache.folder !== "" /* <- Boolean parameter */ ,

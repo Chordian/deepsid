@@ -35,6 +35,16 @@ var tabPrevScrollPos = {
 	about:		{ pos: 0, reset: false },
 }
 
+// One timer per tracking event type
+const trackingTimers = Object.create(null);
+
+// Tracking acceptance timeouts (ms)
+const TRACK_DELAY = {
+	"enter:folder":		5000,
+	"start:sid":		5000,
+	"select:emulator":	0
+};
+
 const factoidMessage = [
 	"0. Show nothing",
 	"1. Internal database ID",
@@ -401,6 +411,7 @@ $(function() { // DOM ready
 						});
 					} else {
 						// Keyup 'BACKSPACE' - browse back to parent folder
+						CancelTrackType("enter:folder");
 						$("#folders").focus();
 						$("#folder-back").trigger("click");
 					}
@@ -2964,22 +2975,64 @@ function CustomDialog(data, callbackYes, callbackNo) {
  * @param {string} type			E.g. "start", "enter", "select", etc.
  * @param {string} target		E.g. song ID, folder path, emulator name, etc.
  * @param {function} callback	If specified, the function to call after PHP call
+ * @param {number} debounceMs	Override default delay for this call
  */
-function TrackingEvent(type, target, callback) {
+function TrackingEvent(type, target, callback, debounceMs) {
 
-	// log("TRACKING: Type: '"+type+"' Target: '"+target+"'");
+	const key = type; // Per-type debounce
+	const delay = typeof debounceMs === "number"
+		? debounceMs
+		: (TRACK_DELAY[type] ?? 5000);
 
-	$.post("php/track.php", { type, target })
-		.done(function() {
-			if (typeof callback === "function") {
-				callback();
-			}
-		})
-		.fail(function() {
-			if (typeof callback === "function") {
-				callback();
-			}
-		});
+	// Clear pending send for this type only
+	if (trackingTimers[key]) {
+		clearTimeout(trackingTimers[key].id);
+		delete trackingTimers[key];
+	}
+
+	const fire = () => {
+
+		// log("TRACKING: Type: '"+type+"' Target: '"+target+"'");
+
+		// If a callback is provided, use $.post so we can wait and then call it
+		$.post("php/track.php", { type, target })
+			.always(function() {
+				if (typeof callback === "function") callback();
+			});
+		delete trackingTimers[key];
+	};
+
+	// If delay is 0, send immediately; else debounce
+	if (delay <= 0) {
+		fire();
+	} else {
+		trackingTimers[key] = { id: setTimeout(fire, delay) };
+	}
+}
+
+/**
+ * Utility function for 'TrackingEvent' above.
+ * 
+ * Cancel only a specific type (e.g. when backing out of a folder).
+ * 
+ * @param {*} type 
+ */
+function CancelTrackType(type) {
+	const t = trackingTimers[type];
+	if (t) { clearTimeout(t.id); delete trackingTimers[type]; }
+}
+
+// 
+/**
+ * Utility function for 'TrackingEvent' above.
+ * 
+ * Cancel all pending tracking.
+ */
+function CancelAllTracking() {
+	for (const k in trackingTimers) {
+		clearTimeout(trackingTimers[k].id);
+		delete trackingTimers[k];
+	}
 }
 
 /**

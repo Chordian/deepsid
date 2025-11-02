@@ -101,16 +101,32 @@ function GenerateList($rows, $type) {
 				$entry = "Composer";
 				$value = 'Games';
 
-				$select = $db->query('SELECT fullname, application, count(1) AS c FROM hvsc_files WHERE application = "RELEASE" '.
-					'GROUP BY SUBSTRING_INDEX(fullname, "/", 4) HAVING c > 1 ORDER BY c DESC LIMIT '.$rows);
+				$select = $db->query('
+					SELECT
+						fullname,
+						COUNT(1) AS c
+					FROM hvsc_files
+					WHERE EXISTS (
+						SELECT 1
+						FROM tags_lookup tl
+						JOIN tags_info ti ON ti.id = tl.tags_id
+						WHERE tl.files_id = hvsc_files.id
+							AND ti.name = "GameBase64"
+					)
+					GROUP BY SUBSTRING_INDEX(fullname, "/", 4)
+					HAVING c > 1
+					ORDER BY c DESC
+					LIMIT '.$rows
+				);
 				$select->setFetchMode(PDO::FETCH_OBJ);
+
 				if ($select->rowCount()) {
-					foreach($select as $row) {
+					foreach ($select as $row) {
 						$folder = substr($row->fullname, 0, strrpos($row->fullname, '/'));
-						array_push($list, array(
-							'entry' =>	AdaptBrowserName($folder, HOST.'?file=/'.$folder),
-							'value' =>	$row->c,
-						));
+						$list[] = array(
+							'entry' => AdaptBrowserName($folder, HOST.'?file=/'.$folder),
+							'value' => (int)$row->c,
+						);
 					}
 				}
 				break;
