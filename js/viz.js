@@ -217,26 +217,31 @@ Viz.prototype = {
 			if (event.keyCode == 49 || event.keyCode == 81) {			// Keyup '1' or 'q'
 				if (event.shiftKey) { // Reverse (solo)
 					this.reverseVoice(1);
-				} else
+				} else {
 					// Toggle a SID voice 1 ON/OFF using the piano toggle buttons
 					$("#page .pv0").trigger("click");
+				}
 			} else if (event.keyCode == 50 || event.keyCode == 87) {	// Keyup '2' or 'w'
 				if (event.shiftKey) {
 					this.reverseVoice(2);
-				} else
+				} else {
 					$("#page .pv1").trigger("click");
+				}
 			} else if (event.keyCode == 51 || event.keyCode == 69) {	// Keyup '3' or 'e'
 				if (event.shiftKey) {
 					this.reverseVoice(3);
-				} else
+				} else {
 					$("#page .pv2").trigger("click");
+				}
 			} else if (event.keyCode == 52 || event.keyCode == 82) {	// Keyup '4' or 'r'
+				 // Only legacy WebSid can toggle the fourth channel
+				if (SID.emulator !== "legacy") return;
 				if (event.shiftKey) {
 					this.reverseVoice(4);
 				} else {
 					// Using direct call (piano view doesn't support digi tunes)
 					SID.toggleVoice(4);
-					$("#scope4").css("opacity", (SID.voiceMask[0] & 0x8 ? "0.3" : "1"));
+					$("#scope4").css("opacity", (SID.voiceMask[0] & 0x8 ? "1" : "0.3"));
 				}
 			}
 		}
@@ -1089,6 +1094,9 @@ Viz.prototype = {
 			// Okay to draw oscilloscope voices again now
 			$("#stopic-osc .sundryMsg").hide();
 			$("#scope1,#scope2,#scope3,#scope4").show();
+			if (SID.emulator !== "legacy")
+				// Only legacy WebSid allows toggling so remove pointer cursor
+				$("#scope4").css("cursor", "default");
 			this.tabOscMode = "OSC";
 		}
 		if (SID.isPlaying()) {

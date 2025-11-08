@@ -11,6 +11,9 @@ SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
 - Write a blog post about the latest tagging. "Everyone and his dog has a collection!"
 
+- Ellipsis problems again in annex box groups table (only on work PC):
+  https://deepsid.chordian.net/?file=/MUSICIANS/B/Blues_Muz/Gallefoss_Glenn/
+
 - A "refresh cache" link next to cached message in the footer of a CSDb page. (Consider only
   showing this for DeepSID administrators.)
 
@@ -26,23 +29,6 @@ SHOULD BE DONE
     am very meticulous each collection update, these still tend to pop up.
 
   - Edit box for setting number of search results (default is 1000).
-
-- KB: Sometimes I have to press ENTER twice on a SID row before it plays. Usually after
-  having done some navigation elsewhere in DeepSID. The first ENTER is probably some kind
-  of focus enabling, but try to investigate further.
-  UPDATE: Spotted one. Need to ENTER to select a row after using "f" to refresh folder.
-
-- BUG report from user Denny Müller:
-  "With handler "WebSid (Legacy)": muting channel 4 doesn't gray out the scope. After re-
-   clicking on channel 4, it's greyed out, but unmuted.
-   With handler "WebSid emulator" (1): clicking on channel 4 doesn't do anything, but gray
-   out. Muting the other channels reduces the volume of channel 4.
-   With handler "WebSid emulator" (2): Muting all channels and then (unmute) channel 4 stops
-   playback or skips to next track."
-
-- The 'application' column in 'hvsc_files' has not been maintained in many HVSC updates.
-  It can read 'RELEASE' or 'PREVIEW' and pertains to games. Maybe write a PHP script that
-  sets it depending on the GB64 entries found for the SID rows?
 
 - Cache: Consider also caching the 'SHOW' pages. Alternatively, you could just disable the
   button on cached pages loaded whenever CSDb is down.
@@ -63,9 +49,7 @@ SHOULD BE DONE
   Here's one that could have been a mess too, but it actually works:
   https://deepsid.chordian.net/?file=/MUSICIANS/G/Greg/Leppard.sid
 
-- Tag-parse Merman's folder thoroughly. Only done superficially for now (it's enormous).
-- The composer subfolders of "Blues Muz" are not parsed properly for event tags either.
-- Thomas Detert's folder may also need a closer look.
+- The composer subfolders of "Blues Muz" need to be parsed for event tags.
 
 
 WHEN THE TIME IS RIGHT
@@ -489,6 +473,11 @@ PROBABLY NOT?
 - I still ponder if hiding "Compo" is okay. If hiding it, perhaps consider an alert to pop up (or
   show a message in the dialog box) saying that it will be hidden because the ranking should
   already make it clear, this is for a competition.
+
+- KB: Sometimes I have to press ENTER twice on a SID row before it plays. Usually after having
+  done some navigation elsewhere in DeepSID. The first ENTER is probably some kind of focus
+  enabling. But the funny thing is, I actually don't mind this so much. It's easy to get used to
+  and it adds to the quirky charm of the web site.
 
 - When using a green event tag and a production the music was used in at that event, consider a
   setting for adapting the colors of the production tag. Ideas: Fading from green to blue, or the

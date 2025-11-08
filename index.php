@@ -1921,6 +1921,13 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 					
+						<h3>November 8, 2025</h3>
+						<ul>
+							<li>Fixed the fourth scope channel so it now grays out as intended when toggled.</li>
+							<li>The fourth scope channel can now only be toggled in the legacy WebSid emulator. The standard WebSid
+								emulator combines digi with SID voices, so toggling is not possible.</li>
+						</ul>
+
 						<h3>November 1, 2025</h3>
 						<ul>
 							<li>Unknown years (198?, 199?, 19??) are now displayed correctly by the activity bar in the annex profile.</li>
