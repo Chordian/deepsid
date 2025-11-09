@@ -13,14 +13,20 @@ SHOULD BE DONE
 
 - Ellipsis problems again in annex box groups table (only on work PC):
   https://deepsid.chordian.net/?file=/MUSICIANS/B/Blues_Muz/Gallefoss_Glenn/
+  UPDATE: Turned CSS width down from 180px to 170px (CSS: "sidemouse") - test on work PC.
 
 - A "refresh cache" link next to cached message in the footer of a CSDb page. (Consider only
   showing this for DeepSID administrators.)
 
+- Add a function, a hotkey, whatever, to send a rating change for a composer or folder over
+  to the 'Ratings' user while still being logged in as the 'JCH' user.
+
+- Replace all "utf8mb3_unicode_ci" database collations with "utf8mb4_0900_ai_ci" instead.
+
 - Idea from Anon-Relays: Loop song X number of times before moving on to the next one. In
   the settings, the default number should of course be 1.
 
-- An "Admin" tab with buttons? Ideas for task buttons:
+- An "Admin" tab with buttons? Ideas for task buttons:        <- WIP!
 
   - Folder counts are off everywhere. Especially in CGSC. How about writing a PHP script
     that goes through everything and updates folder counts in the database?

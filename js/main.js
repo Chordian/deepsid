@@ -33,6 +33,7 @@ var tabPrevScrollPos = {
 	changes:	{ pos: 0, reset: false },
 	faq:		{ pos: 0, reset: false },
 	about:		{ pos: 0, reset: false },
+	admin:		{ pos: 0, reset: false },
 }
 
 // One timer per tracking event type
@@ -164,318 +165,320 @@ $(function() { // DOM ready
 	 * @param {*} event 
 	 */
 	$(window).on("keydown", function(event) {
-		if (!$("input[type=text],input[type=password],textarea,select").is(":focus") &&
-			!$(".styledSelect").hasClass("active") &&
-			!$("#dialog-cover").is(":visible")) {
+		if (!$("#dialog-cover").is(":visible") && !$(".styledSelect").hasClass("active")) {
+			const tag = document.activeElement.tagName.toLowerCase();
+			if (["input", "textarea", "select"].indexOf(tag) === -1) {
 
-			// Key '+' - search command (this version to ensure compatibility)
-			if (event.key === '+' || event.code === 'NumpadAdd' || (event.key === '=' && event.shiftKey)) {
-				$("#search-box").focus().val("+");
-				return false;
-			}
+				// Key '+' - search command (this version to ensure compatibility)
+				if (event.key === '+' || event.code === 'NumpadAdd' || (event.key === '=' && event.shiftKey)) {
+					$("#search-box").focus().val("+");
+					return false;
+				}
 
-			switch (event.keyCode) {
+				switch (event.keyCode) {
 
-				case 220:	// Keydown key below 'Escape' - fast forward
+					case 220:	// Keydown key below 'Escape' - fast forward
 
-					// Fast forward ON
-					if (!fastForwarding) {
-						if (event.shiftKey) {
-							// Create a fake middle mouse button down event
-							var e = $.Event("mousedown");
-							e.which = 2;   // MMB
-							e.button = 1;  // MMB (in standard DOM)
-							$("#faster").trigger(e);
-						} else {
-							// Normal left mouse fallback
-							$("#faster").trigger("mousedown");
+						// Fast forward ON
+						if (!fastForwarding) {
+							if (event.shiftKey) {
+								// Create a fake middle mouse button down event
+								var e = $.Event("mousedown");
+								e.which = 2;   // MMB
+								e.button = 1;  // MMB (in standard DOM)
+								$("#faster").trigger(e);
+							} else {
+								// Normal left mouse fallback
+								$("#faster").trigger("mousedown");
+							}
 						}
-					}
-					break;
+						break;
 
-				case 32:	// Don't use 'Space' to scroll down
+					case 32:	// Don't use 'Space' to scroll down
 
-					if (document.activeElement.closest("#page")) return; // Allow in pages
+						if (document.activeElement.closest("#page")) return; // Allow in pages
 
-					event.preventDefault();
-					break;
+						event.preventDefault();
+						break;
 
-				case 38:	// Keydown 'ARROW-UP' - move keyboard-selected SID row up
+					case 38:	// Keydown 'ARROW-UP' - move keyboard-selected SID row up
 
-					event.preventDefault();
+						event.preventDefault();
 
-					var $tr = $("#songs tr"),
-						indexUp = browser.kbSelectedRow;
+						var $tr = $("#songs tr"),
+							indexUp = browser.kbSelectedRow;
 
-					while (indexUp > 0) {
-						indexUp--;
-						if (!$tr.eq(indexUp).hasClass("disabled")) {
-							browser.kbSelectedRow = indexUp;
-							browser.moveKeyboardSelection(indexUp, true);
-							break;
+						while (indexUp > 0) {
+							indexUp--;
+							if (!$tr.eq(indexUp).hasClass("disabled")) {
+								browser.kbSelectedRow = indexUp;
+								browser.moveKeyboardSelection(indexUp, true);
+								break;
+							}
 						}
-					}
-					break;
+						break;
 
-				case 40:	// Keydown 'ARROW-DOWN' - move keyboard-selected SID row down
+					case 40:	// Keydown 'ARROW-DOWN' - move keyboard-selected SID row down
 
-					event.preventDefault();
+						event.preventDefault();
 
-					var $tr = $("#songs tr"),
-						indexDown = browser.kbSelectedRow;
-					const rowCount = $tr.length;
+						var $tr = $("#songs tr"),
+							indexDown = browser.kbSelectedRow;
+						const rowCount = $tr.length;
 
-					while (indexDown < rowCount - 1) {
-						indexDown++;
-						if (!$tr.eq(indexDown).hasClass("disabled")) {
-							browser.kbSelectedRow = indexDown;
-							browser.moveKeyboardSelection(indexDown, true);
-							break;
+						while (indexDown < rowCount - 1) {
+							indexDown++;
+							if (!$tr.eq(indexDown).hasClass("disabled")) {
+								browser.kbSelectedRow = indexDown;
+								browser.moveKeyboardSelection(indexDown, true);
+								break;
+							}
 						}
-					}
-					break;
+						break;
 
-				case 36: 	// Keydown 'HOME' - move keyboard-selected SID row to top
+					case 36: 	// Keydown 'HOME' - move keyboard-selected SID row to top
 
-					if (document.activeElement.closest("#page")) return; // Ignore if in pages
-				
-					event.preventDefault();
-					browser.moveKeyboardToFirst();
-					break;
+						if (document.activeElement.closest("#page")) return; // Ignore if in pages
+					
+						event.preventDefault();
+						browser.moveKeyboardToFirst();
+						break;
 
-				case 35: 	// Keydown 'END' - move keyboard-selected SID row to bottom
+					case 35: 	// Keydown 'END' - move keyboard-selected SID row to bottom
 
-					if (document.activeElement.closest("#page")) return; // Ignore if in pages
+						if (document.activeElement.closest("#page")) return; // Ignore if in pages
 
-					event.preventDefault();
-					var $tr = $("#songs tr");
-					for (var i = $tr.length - 1; i >= 0; i--) {
-						if (!$tr.eq(i).hasClass("disabled")) {
-							browser.kbSelectedRow = i;
-							browser.moveKeyboardSelection(i, false);
-							break;
+						event.preventDefault();
+						var $tr = $("#songs tr");
+						for (var i = $tr.length - 1; i >= 0; i--) {
+							if (!$tr.eq(i).hasClass("disabled")) {
+								browser.kbSelectedRow = i;
+								browser.moveKeyboardSelection(i, false);
+								break;
+							}
 						}
-					}
-					break;					
+						break;					
 
-				case 33: 	// Keydown 'PageUp' - move keyboard-selected SID row one page up
-				case 34: 	// Keydown 'PageDown' - move keyboard-selected SID row one page down
+					case 33: 	// Keydown 'PageUp' - move keyboard-selected SID row one page up
+					case 34: 	// Keydown 'PageDown' - move keyboard-selected SID row one page down
 
-					event.preventDefault();
+						event.preventDefault();
 
-					var $container = $("#folders");
-					var $allRows = $container.find("tr");
-					var $selectableRows = $allRows.filter(":not(.disabled)");
+						var $container = $("#folders");
+						var $allRows = $container.find("tr");
+						var $selectableRows = $allRows.filter(":not(.disabled)");
 
-					// Current selected full row
-					const $currentFullRow = $allRows.eq(browser.kbSelectedRow);
+						// Current selected full row
+						const $currentFullRow = $allRows.eq(browser.kbSelectedRow);
 
-					// Find index in filtered selectable rows
-					const currentFilteredIndex = $selectableRows.index($currentFullRow);
+						// Find index in filtered selectable rows
+						const currentFilteredIndex = $selectableRows.index($currentFullRow);
 
-					// Fallback if somehow not found (e.g., stale state)
-					if (currentFilteredIndex === -1) break;
+						// Fallback if somehow not found (e.g., stale state)
+						if (currentFilteredIndex === -1) break;
 
-					// Measure row height of current type
-					const rowHeight = $currentFullRow.outerHeight();
-					const containerHeight = $container.height();
-					const rowsPerPage = Math.floor(containerHeight / rowHeight);
+						// Measure row height of current type
+						const rowHeight = $currentFullRow.outerHeight();
+						const containerHeight = $container.height();
+						const rowsPerPage = Math.floor(containerHeight / rowHeight);
 
-					// Calculate new index in the filtered list
-					var newFilteredIndex = currentFilteredIndex + (event.keyCode === 34 ? rowsPerPage : -rowsPerPage);
-					newFilteredIndex = Math.max(0, Math.min(newFilteredIndex, $selectableRows.length - 1));
+						// Calculate new index in the filtered list
+						var newFilteredIndex = currentFilteredIndex + (event.keyCode === 34 ? rowsPerPage : -rowsPerPage);
+						newFilteredIndex = Math.max(0, Math.min(newFilteredIndex, $selectableRows.length - 1));
 
-					// Get the actual target row and index in full list
-					const $newTargetRow = $selectableRows.eq(newFilteredIndex);
-					const fullIndex = $allRows.index($newTargetRow);
+						// Get the actual target row and index in full list
+						const $newTargetRow = $selectableRows.eq(newFilteredIndex);
+						const fullIndex = $allRows.index($newTargetRow);
 
-					// Update and scroll to the new position
-					browser.kbSelectedRow = fullIndex;
-					browser.moveKeyboardSelection(fullIndex, false);
-					break;
+						// Update and scroll to the new position
+						browser.kbSelectedRow = fullIndex;
+						browser.moveKeyboardSelection(fullIndex, false);
+						break;
 
-				default:
+					default:
+				}
 			}
 		}
 	}).on("keyup", function(event) {
-		if (!$("input[type=text],input[type=password],textarea,select").is(":focus") &&
-			!$(".styledSelect").hasClass("active") &&
-			!$("#dialog-cover").is(":visible")) {
+		if (!$("#dialog-cover").is(":visible") && !$(".styledSelect").hasClass("active")) {
+			const tag = document.activeElement.tagName.toLowerCase();
+			if (["input", "textarea", "select"].indexOf(tag) === -1) {
 
-			switch (event.keyCode) {
+				switch (event.keyCode) {
 
-				case 220:	// Keyup key below 'Escape' - fast forward
+					case 220:	// Keyup key below 'Escape' - fast forward
 
-					// Fast forward OFF
-					$("#faster").trigger("mouseup");
-					fastForwarding = false;
-					break;
+						// Fast forward OFF
+						$("#faster").trigger("mouseup");
+						fastForwarding = false;
+						break;
 
-				case 27:	// Keyup 'Esc' - cancel search mode
+					case 27:	// Keyup 'Esc' - cancel search mode
 
-					// @todo Escaping custom dialog box should not escape search mode!
-					break;
-	
-				case 32:	// Keyup 'Space' - play/pause
+						// @todo Escaping custom dialog box should not escape search mode!
+						break;
+		
+					case 32:	// Keyup 'Space' - play/pause
 
-					if (document.activeElement.closest("#page")) return; // Ignore if in pages
+						if (document.activeElement.closest("#page")) return; // Ignore if in pages
 
-					$("#play-pause").trigger("mouseup");
-					break;
-	
-				case 80:	// Keyup 'p' - pop-up window
+						$("#play-pause").trigger("mouseup");
+						break;
+		
+					case 80:	// Keyup 'p' - pop-up window
 
-					// Open a pop-up window with only the width of the #panel area
-					window.open("//deepsid.chordian.net/?mobile=1&emulator=websid", "_blank",
-						"'left=0,top=0,width=450,height="+(screen.height-150)+",scrollbars=no'");
-					break;
+						// Open a pop-up window with only the width of the #panel area
+						window.open("//deepsid.chordian.net/?mobile=1&emulator=websid", "_blank",
+							"'left=0,top=0,width=450,height="+(screen.height-150)+",scrollbars=no'");
+						break;
 
-				case 67:	// Keyup 'c' - refresh compo cache - ADMIN ONLY
+					case 67:	// Keyup 'c' - refresh compo cache - ADMIN ONLY
 
-					if (browser.isCompoFolder && $("#logged-username").text() == "JCH") {
-						$.post("php/csdb_compo_clear_cache.php",
-							{ competition: browser.path.replace("/CSDb Music Competitions/", "") }, function(data) {
-							browser.validateData(data, function() {
-								// Now reload the folder to automatically refresh the cache
-								browser.getFolder();
-							});
-						}.bind(this));
-					}
-					break;
-
-				case 83:	// Keyup 's' - open/close sundry box
-
-					// Toggle the sundry box minimized or restored
-					ToggleSundry();
-					$(window).trigger("resize");
-					break;
-
-				case 76:	// Keyup 'l' - load a SID file for local testing
-
-					// Upload and test one or more external SID tune(s)
-					$("#upload-test").trigger("click");
-					break;
-
-				case 66:	// Keyup 'b' - go back from "plink"
-
-					$("a.redirect").removeClass("playing");
-					$("#redirect-back").trigger("click");
-					break;
-
-				case 106:	// Keyup 'Keypad Multiply' - edit player info - ADMIN ONLY
-
-					var $selected = $("#folders tr.selected");
-					var name = decodeURIComponent($selected.find(".name").attr("data-name"));
-
-					if (name != "undefined" && $("#logged-username").text() == "JCH") {
-
-						// Prepare some edit boxes with current data
-						var playerInfo = SID.getSongInfo("info");
-						$("#edit-file-name-input").val(name.split("/").slice(-1)[0]);
-						$("#edit-file-player-input").val(browser.playlist[browser.songPos].playerraw);
-						$("#edit-file-author-input").val(playerInfo.songAuthor);
-						$("#edit-file-copyright-input").val(playerInfo.songReleased);
-
-						// Show dialog box for editing the file (only the year for now)
-						CustomDialog({
-							id: '#dialog-edit-file',
-							text: '<h3>Edit file</h3>',
-							width: 390,
-							height: 258,
-						}, function() {
-							// OK was clicked; make the changes to the file row in the database
-							$.post("php/update_file.php", {
-								fullname:	browser.playlist[browser.songPos].fullname.replace(browser.ROOT_HVSC+"/", ""),
-								name:		$("#edit-file-name-input").val(),
-								player:		$("#edit-file-player-input").val(),
-								author:		$("#edit-file-author-input").val(),
-								copyright:	$("#edit-file-copyright-input").val(),
-							}, function(data) {
+						if (browser.isCompoFolder && $("#logged-username").text() == "JCH") {
+							$.post("php/csdb_compo_clear_cache.php",
+								{ competition: browser.path.replace("/CSDb Music Competitions/", "") }, function(data) {
 								browser.validateData(data, function() {
-									RefreshFolder();
+									// Now reload the folder to automatically refresh the cache
+									browser.getFolder();
+								});
+							}.bind(this));
+						}
+						break;
+
+					case 83:	// Keyup 's' - open/close sundry box
+
+						// Toggle the sundry box minimized or restored
+						ToggleSundry();
+						$(window).trigger("resize");
+						break;
+
+					case 76:	// Keyup 'l' - load a SID file for local testing
+
+						// Upload and test one or more external SID tune(s)
+						$("#upload-test").trigger("click");
+						break;
+
+					case 66:	// Keyup 'b' - go back from "plink"
+
+						$("a.redirect").removeClass("playing");
+						$("#redirect-back").trigger("click");
+						break;
+
+					case 106:	// Keyup 'Keypad Multiply' - edit player info - ADMIN ONLY
+
+						var $selected = $("#folders tr.selected");
+						var name = decodeURIComponent($selected.find(".name").attr("data-name"));
+
+						if (name != "undefined" && $("#logged-username").text() == "JCH") {
+
+							// Prepare some edit boxes with current data
+							var playerInfo = SID.getSongInfo("info");
+							$("#edit-file-name-input").val(name.split("/").slice(-1)[0]);
+							$("#edit-file-player-input").val(browser.playlist[browser.songPos].playerraw);
+							$("#edit-file-author-input").val(playerInfo.songAuthor);
+							$("#edit-file-copyright-input").val(playerInfo.songReleased);
+
+							// Show dialog box for editing the file (only the year for now)
+							CustomDialog({
+								id: '#dialog-edit-file',
+								text: '<h3>Edit file</h3>',
+								width: 390,
+								height: 258,
+							}, function() {
+								// OK was clicked; make the changes to the file row in the database
+								$.post("php/update_file.php", {
+									fullname:	browser.playlist[browser.songPos].fullname.replace(browser.ROOT_HVSC+"/", ""),
+									name:		$("#edit-file-name-input").val(),
+									player:		$("#edit-file-player-input").val(),
+									author:		$("#edit-file-author-input").val(),
+									copyright:	$("#edit-file-copyright-input").val(),
+								}, function(data) {
+									browser.validateData(data, function() {
+										RefreshFolder();
+									});
 								});
 							});
-						});
-					}
-					break;
+						}
+						break;
 
-				case 8:		// Keyup 'BACKSPACE' - with or without SHIFT held down
+					case 8:		// Keyup 'BACKSPACE' - with or without SHIFT held down
 
-					if (event.shiftKey) {
-						// Keyup 'SHIFT+BACKSPACE' - click 'BACK' button on the visible tab page
-						// Case-insensitive click only in the currently selected tab
-						$(".tab.selected").each(function() {
-							$("#sticky-" + $(this).data("topic") + " button").filter(function() {
-								return /back/i.test($(this).text());
-							}).click();
-						});
-					} else {
-						// Keyup 'BACKSPACE' - browse back to parent folder
-						CancelTrackType("enter:folder");
+						if (event.shiftKey) {
+							// Keyup 'SHIFT+BACKSPACE' - click 'BACK' button on the visible tab page
+							// Case-insensitive click only in the currently selected tab
+							$(".tab.selected").each(function() {
+								$("#sticky-" + $(this).data("topic") + " button").filter(function() {
+									return /back/i.test($(this).text());
+								}).click();
+							});
+						} else {
+							// Keyup 'BACKSPACE' - browse back to parent folder
+							CancelTrackType("enter:folder");
+							$("#folders").focus();
+							$("#folder-back").trigger("click");
+						}
+						break;
+
+					case 70:	// Keyup 'f' - refresh current folder
+
+						RefreshFolder();
+						break;
+
+					case 84:	// Keyup 't' - open dialog box for editing tags
+
+						$("#songs tr.selected").find(".edit-tags").trigger("click");
+						break;
+
+					case 89:	// Keyup 'y' - toggle showing tags on or off
+
+						showTags = !showTags;
+						$("#showtags").prop("checked", showTags);
+						showTags
+							? $("#songs .tags-line").css("visibility", "")	//.show()
+							: $("#songs .tags-line").css("visibility", "hidden")	//.hide();
+
+						localStorage.setItem("showtags", showTags); // Boolean is stored as a string
+
+						BrowserMessage("Show tags: "+(showTags ? "ON" : "OFF"));
+						break;
+
+					case 85:	// Keyup 'u' - cycle through factoid types
+
+						main.factoidType++;
+						if (main.factoidType > 12) main.factoidType = 0;
+
+						SelectFactoid(main.factoidType);
+						break;
+
+					case 37:	// Keyup 'ARROW-LEFT' - skip to previous (+ SHIFT to emulate auto-progress)
+
 						$("#folders").focus();
-						$("#folder-back").trigger("click");
-					}
-					break;
+						$("#skip-prev").trigger("mouseup", event.shiftKey ? false : undefined);
+						break;
 
-				case 70:	// Keyup 'f' - refresh current folder
+					case 39:	// Keyup 'ARROW-RIGHT' - skip to next (+ SHIFT to emulate auto-progress)
 
-					RefreshFolder();
-					break;
+						$("#folders").focus();
+						$("#skip-next").trigger("mouseup", event.shiftKey ? false : undefined);
+						break;
 
-				case 84:	// Keyup 't' - open dialog box for editing tags
+					case 13:	// Keyup 'ENTER' - click the row keyboard-selected row
 
-					$("#songs tr.selected").find(".edit-tags").trigger("click");
-					break;
+						// Blocking next keyup is used by the custom dialog box
+						if (!isMobile && !blockNextEnter) {
+							$("#songs tr").eq(browser.kbSelectedRow).trigger("click");
+						} else {
+							blockNextEnter = false;
+						}
+						break;
 
-				case 89:	// Keyup 'y' - toggle showing tags on or off
+					case 160:	// Keyup '^' - test something
 
-					showTags = !showTags;
-					$("#showtags").prop("checked", showTags);
-					showTags
-						? $("#songs .tags-line").css("visibility", "")	//.show()
-						: $("#songs .tags-line").css("visibility", "hidden")	//.hide();
+						log("test");
+						break;
 
-					localStorage.setItem("showtags", showTags); // Boolean is stored as a string
-
-					BrowserMessage("Show tags: "+(showTags ? "ON" : "OFF"));
-					break;
-
-				case 85:	// Keyup 'u' - cycle through factoid types
-
-					main.factoidType++;
-					if (main.factoidType > 12) main.factoidType = 0;
-
-					SelectFactoid(main.factoidType);
-					break;
-
-				case 37:	// Keyup 'ARROW-LEFT' - skip to previous (+ SHIFT to emulate auto-progress)
-
-					$("#folders").focus();
-					$("#skip-prev").trigger("mouseup", event.shiftKey ? false : undefined);
-					break;
-
-				case 39:	// Keyup 'ARROW-RIGHT' - skip to next (+ SHIFT to emulate auto-progress)
-
-					$("#folders").focus();
-					$("#skip-next").trigger("mouseup", event.shiftKey ? false : undefined);
-					break;
-
-				case 13:	// Keyup 'ENTER' - click the row keyboard-selected row
-
-					// Blocking next keyup is used by the custom dialog box
-					if (!isMobile && !blockNextEnter) {
-						$("#songs tr").eq(browser.kbSelectedRow).trigger("click");
-					} else {
-						blockNextEnter = false;
-					}
-					break;
-
-				case 160:	// Keyup '^' - test something
-
-					log("test");
-					break;
-
-				default:
+					default:
+				}
 			}
 		}
 	});
@@ -1033,7 +1036,7 @@ $(function() { // DOM ready
 		$this.addClass("selected");
 
 		// Show the selected topic
-		$("#page .topic,#sticky-csdb,#sticky-gb64,#sticky-remix,#sticky-player,#sticky-stil,#sticky-visuals").hide();
+		$("#page .topic,#sticky-admin,#sticky-csdb,#sticky-gb64,#sticky-remix,#sticky-player,#sticky-stil,#sticky-visuals").hide();
 		if (topic != "visuals")
 			$("#topic-"+topic).show();
 
@@ -1088,6 +1091,17 @@ $(function() { // DOM ready
 		if (topic === "stil") {
 			$("#note-stil").hide();
 			$("#sticky-stil").show();
+		}
+
+		// If 'Admin' tab is selected (administrators only)
+		if (topic === "admin") {
+			$("#sticky-admin").show();
+			$("#topic-admin").empty();
+			$.get("php/admin_settings_read.php", function(data) {
+				browser.validateData(data, function(data) {
+					$("#topic-admin").append(data.html);
+				});
+			});
 		}
 
 		// If 'Profile' tab is selected then refresh the charts if present
@@ -1377,7 +1391,64 @@ $(function() { // DOM ready
 	});
 
 	/**
-	 * Settings: When one of the ON/OFF toggle buttons are clicked.
+	 * Admin settings: When clicking the 'Edit' icon.
+	 */
+	$("#topic-admin").on("click", ".edit", function() {
+		var $this = $(this), html = sel = "";
+		var type = $this.attr("data-type"), options = $this.attr("data-options").split(","),
+			$value = $this.parents(".setting").children(".value"), value = $value.html();
+
+		$("#topic-admin .edit").hide(); // Hide not just this 'Edit' icon but all of them
+
+		switch (type) {
+			case 'list':
+				// Drop-down box
+				html = '<select class="admin-temp-select">';
+				options.forEach(function(opt) {
+					sel = opt == value ? ' selected' : '';
+					html += '<option value="'+opt+'"'+sel+'>' + opt.charAt(0).toUpperCase()+opt.slice(1) + '</option>';
+				});
+				html += '</select>';
+				break;
+			default:
+				// Text edit box
+				html = '<input class="admin-temp-edit" name="temp-edit" value="' + value + '" />';
+		}
+		$value.empty().append(html);
+		$("#topic-admin .admin-temp-edit").focus().each(function() {
+			// Place the cursor at the end of the value
+			const len = this.value.length;
+			this.setSelectionRange(len, len);
+		});
+	});
+
+	/**
+	 * Admin settings: When hitting ENTER in an edit box.
+	 */
+	$("#topic-admin").on("keydown", ".admin-temp-edit", function(event) {
+		if (event.keyCode == 13) {
+			var $parent = $(this).parents(".setting"),
+				value = $("#topic-admin .admin-temp-edit").val();
+
+			var title = $parent.children(".title").html();
+			$parent.children(".value").empty().append(value);
+
+
+
+			// @todo Create 'admin_settings_write.php'
+
+
+
+			$("#topic-admin .edit").show(); // Allow editing a row again
+
+			// Prevent 'Enter' from also firing in the browser list
+			blockNextEnter = true;
+			return false;
+		}
+	});
+
+	/**
+	 * User settings: When one of the ON/OFF toggle buttons are clicked.
 	 * 
 	 * @param {*} event 
 	 */

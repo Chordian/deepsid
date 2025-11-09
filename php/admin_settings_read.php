@@ -1,0 +1,52 @@
+<?php
+/**
+ * DeepSID
+ *
+ * Show the settings page in the 'Admin' tab.
+ * 
+ * For administrators only.
+ * 
+ * @used-by		main.js
+ */
+
+require_once("class.account.php"); // Includes setup
+
+if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest')
+	die("Direct access not permitted.");
+if (!$account->CheckLogin() || $account->UserName() != 'JCH' || $account->UserID() != JCH)
+	die("This is for administrators only.");
+
+$html = '';
+
+	try {
+		if ($_SERVER['HTTP_HOST'] == LOCALHOST)
+			$db = new PDO(PDO_LOCALHOST, USER_LOCALHOST, PWD_LOCALHOST);
+		else
+			$db = new PDO(PDO_ONLINE, USER_ONLINE, PWD_ONLINE);
+		$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		$db->exec("SET NAMES UTF8");
+
+		// Get all the admin settings
+		$select = $db->query('SELECT * FROM admin_settings ORDER BY setting_key');
+		$settings = $select->fetchAll(PDO::FETCH_OBJ);
+
+		$html = '<h3>Settings</h3>';
+
+		// Build the rows for each setting
+		foreach ($settings as $s) {
+			$html .= '
+				<div class="setting">
+					<div class="title">' . $s->setting_key . '</div>
+					<span> ' . htmlspecialchars($s->description) . '</span>
+					<div class="value">' . htmlspecialchars($s->setting_value) . '</div>
+					<div class="edit" data-type="' . $s->setting_type . '" data-options="' . $s->setting_options . '"></div>
+				</div>
+			';
+		}
+
+	} catch(PDOException $e) {
+		$account->LogActivityError('admin_settings_read.php', $e->getMessage());
+		die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
+	}
+	die(json_encode(array('status' => 'ok', 'html' => $html)));
+?>

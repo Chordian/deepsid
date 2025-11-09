@@ -115,6 +115,7 @@
 	--color-link-hover:				#e95927;			/* Hovering on a link */
 
 	--color-text-body:				#404040;			/* Default text color */
+	--color-text-admin-title:		#303030;
 	--color-text-notable:			var(--color-text-body);
 	--color-text-subtle:			#a1a294;			/* For e.g. top links */
 	--color-text-fine:				#68695a;			/* For e.g. login user name */
@@ -526,6 +527,7 @@
 	--color-link-hover:				var(--color-anchor-hover);
 
 	--color-text-body:				#bcbebc;			/* Default text color */ /* #bec0ba */
+	--color-text-admin-title:		#ccc;
 	--color-text-notable:			#404040;
 	--color-text-subtle:			#666;				/* For e.g. top links */
 	--color-text-fine:				#a8ada0;			/* For e.g. login user name*/
@@ -4503,6 +4505,66 @@ input[type=range]::-ms-track {
 		width: 32px;
 	}
 
+/* ---- Administrator page -------------------------------------------------- */
+
+	#topic-admin h3 {
+		margin: 0 0 16px;
+	}
+
+	#topic-admin .setting {
+		position: relative;
+		height: 45px;
+		border-bottom: 1px solid var(--color-text-fa-common);
+	}
+
+		#topic-admin .setting:first-of-type {
+			border-top: 1px solid var(--color-text-fa-common);
+		}
+
+		#topic-admin .setting .title {
+			width: 70%;
+			line-height: 14px;
+			padding-top: 6px;
+			color: var(--color-text-admin-title);
+		}
+
+		#topic-admin .setting span {
+			font-size: 11px;
+			color: var(--color-text-minor);
+		}
+
+		#topic-admin .value {
+			display: flex;
+			position: absolute;
+			top: 0;
+			right: 30px; /* Making room for 'Edit' icon */
+			height: 100%;
+			width: 30%;
+			line-height: 16px;
+			text-align: right;
+			justify-content: center;
+			flex-direction: column;
+			font-size: 17px;
+			color: var(--color-forum-moderator);
+		}
+
+		#topic-admin .edit {
+			position: absolute;
+			top: 13px;
+			right: 0;
+			height: 20px;
+			width: 20px;
+			background: url(../images/edit.svg) 0 0 / 18px 18px no-repeat;
+			filter: var(--svg-filter-icon-bottom);
+			border: none;
+			cursor: pointer;
+			opacity: 0;
+		}
+
+			#topic-admin .setting:hover .edit {
+				opacity: 0.7;
+			}
+
 /* ---- Right side container with tabs -------------------------------------- */
 
 /* Container for entire left side (top, info/memory/stil, controls, browser, search) */
@@ -4627,7 +4689,8 @@ input[type=range]::-ms-track {
 
 		#tabs .tab:not(.selected):hover.tab:not(.disabled):hover,
 		#sundry-tabs .tab:not(.selected):hover.tab:not(.disabled):hover,
-		#youtube-tabs .tab:not(.selected):hover.tab:not(.disabled):hover {
+		#youtube-tabs .tab:not(.selected):hover.tab:not(.disabled):hover,
+		#annex .annex-tab:not(.selected):hover.annex-tab:not(.disabled):hover {
 			color: var(--color-tab-hover-text);
 			background: var(--color-tab-hover-bg);
 		}
@@ -5446,7 +5509,7 @@ input[type=range]::-ms-track {
 		}
 
 			#annex .group {
-				width: 180px;
+				width: 170px; /* Sidemouse - down from 180px */
 			}
 
 		#page .ext .participant {
@@ -5459,7 +5522,8 @@ input[type=range]::-ms-track {
 		#sticky-remix,
 		#sticky-player,
 		#sticky-stil,
-		#sticky-visuals {
+		#sticky-visuals,
+		#sticky-admin {
 			display: none;
 			position: relative;
 			padding: 8px 10px;
@@ -6278,6 +6342,7 @@ input[type=range]::-ms-track {
 			#sticky-gb64 button,
 			#sticky-remix button,
 			#sticky-player button,
+			#sticky-admin button,
 			#sticky-right-buttons button {
 				font-size: 11px;
 				height: 21px;

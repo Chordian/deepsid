@@ -3,6 +3,7 @@
 
 	require_once("php/class.account.php"); // Includes setup
 	$user_id = $account->CheckLogin() ? $account->UserID() : 0;
+	$is_admin = $user_id && $account->UserName() === "JCH";
 
 	require_once("tracking.php"); // Also called every 5 minutes by 'main.js'
 
@@ -1044,7 +1045,13 @@
 					<div class="tab right unselectable" data-topic="changes" id="tab-changes" style="width:80px;">Changes</div>
 					<div class="tab right unselectable" data-topic="faq" id="tab-faq">FAQ</div>
 					<div class="tab right unselectable" data-topic="about" id="tab-about">About</div>
+					<?php if ($is_admin): ?>
+						<div class="tab right unselectable" style="margin-right:12px;"data-topic="admin" id="tab-admin">Admin</div>
+					<?php endif ?>
 				</div>
+				<?php if ($is_admin): ?>
+					<div id="sticky-admin"><h2 style="margin-top:0;">Administration</h2></div>
+				<?php endif ?>
 				<div id="sticky-csdb"><h2 style="margin-top:0;">CSDb</h2></div>
 				<div id="sticky-gb64"><h2 style="margin-top:0;">GameBase64</h2></div>
 				<div id="sticky-remix"><h2 style="margin-top:0;">Remix64</h2></div>
@@ -1634,6 +1641,10 @@
 							</div>
 						<?php endif ?>
 					</div>
+
+					<?php if ($is_admin): ?>
+						<div id="topic-admin" class="topic" style="display:none;"></div>
+					<?php endif ?>
 
 					<div id="topic-about" class="topic" style="display:none;">
 						<h2>About</h2>
