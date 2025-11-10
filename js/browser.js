@@ -3592,8 +3592,8 @@ Browser.prototype = {
 			if (typeof callback === "function")
 				callback.call(this, data);
 			return true;
-		}
-	},
+		}		
+	},	
 
 	/**
 	 * Collect tags for all files and present them in the relevant sundry tab.

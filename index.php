@@ -110,6 +110,11 @@
 			<script type="text/javascript" src="js/handlers/backend_websidplay.js?v=<?php echo filemtime('js/handlers/backend_websidplay.js') ?>"></script>
 		<?php endif ?>
 
+		<script>// Administrator settings
+			window.DeepSID = window.DeepSID || {};
+			DeepSID.adminSettings = <?= json_encode($account->GetAllAdminSettings(), JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE) ?>;
+		</script>
+
 		<!--<script type="text/javascript" src="js/handlers/jsidplay2.js"></script>-->
 		<script type="text/javascript" src="js/handlers/jsSID-modified.js?v=<?php echo filemtime('js/handlers/jsSID-modified.js') ?>"></script>
 		<script type="text/javascript" src="js/handlers/howler.min.js?v=<?php echo filemtime('js/handlers/howler.min.js') ?>"></script>
@@ -647,6 +652,8 @@
 							<!--<span><a href="http://www.c64music.co.uk/" target="_top">Compute's Gazette SID Collection</a> has been upgraded to the latest version #147. Click <a href="//deepsid.chordian.net/?search=147&type=new">here</a> to see what's new in this update.</span>-->
 
 							<!--<span>Want to learn how to make SID tunes? Check out <a href="https://www.youtube.com/watch?v=nXNtLetxFUg">this tutorial video</a> now on YouTube.</span>-->
+
+							<span>If the tags overlap or hide factoids like song lengths, you can turn them off with the left corner button or by pressing 'Y'.</span>
 
 							<!--<span><p style="margin:0 0 4px 0;">Have you made a new SID tune and need to slap a cool visualizer with a logo on it?</p><b style="font-size:22px;">Check out <a href="https://sidquake.c64demo.com/">SIDquake</a> by Raistlin!</b></span>-->
 							<!--<span> .... See <a href="#" onclick="$('#tab-changes').trigger('click'); return false;">Changes</a> for info.</span>-->

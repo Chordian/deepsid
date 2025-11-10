@@ -1097,7 +1097,7 @@ $(function() { // DOM ready
 		if (topic === "admin") {
 			$("#sticky-admin").show();
 			$("#topic-admin").empty();
-			$.get("php/admin_settings_read.php", function(data) {
+			$.get("php/admin_settings_read_all.php", function(data) {
 				browser.validateData(data, function(data) {
 					$("#topic-admin").append(data.html);
 				});
@@ -1424,6 +1424,8 @@ $(function() { // DOM ready
 
 	/**
 	 * Admin settings: When hitting ENTER in an edit box.
+	 * 
+	 * @param {*} event 
 	 */
 	$("#topic-admin").on("keydown", ".admin-temp-edit", function(event) {
 		if (event.keyCode == 13) {
@@ -1433,11 +1435,9 @@ $(function() { // DOM ready
 			var title = $parent.children(".title").html();
 			$parent.children(".value").empty().append(value);
 
-
-
-			// @todo Create 'admin_settings_write.php'
-
-
+			$.post("php/admin_settings_write.php", { key: title, value: value }, function(data) {
+				browser.validateData(data);
+			});
 
 			$("#topic-admin .edit").show(); // Allow editing a row again
 
@@ -2690,13 +2690,29 @@ function SettingToggle(id, state) {
  * 
  * @param {string} id		Part of the ID to be appended
  * 
- * @return {*}				The value.
+ * @return {*}				The value
  */
 function GetSettingValue(id) {
 	$setting = $("#setting-"+id);
 	if ($setting.hasClass("button-toggle"))
 		// Checkbox style toggle button; return boolean
 		return $setting.hasClass("button-on");
+}
+
+/**
+ * Read one setting in the admin table and return its value.
+ * 
+ * @param {string} key 		Name of setting, e.g. "search-limit"
+ * 
+ * @returns {string}		The value
+ */
+function GetAdminSetting(key) {
+	if (typeof DeepSID === "undefined" || !DeepSID.adminSettings) {
+		console.warn("Admin settings not loaded yet.");
+		return null;
+	}
+	const value = DeepSID.adminSettings[key];
+	return value !== undefined ? value : null;
 }
 
 /**

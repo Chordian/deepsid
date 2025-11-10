@@ -45,7 +45,7 @@ $html = '';
 		}
 
 	} catch(PDOException $e) {
-		$account->LogActivityError('admin_settings_read.php', $e->getMessage());
+		$account->LogActivityError('admin_settings_read_all.php', $e->getMessage());
 		die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 	}
 	die(json_encode(array('status' => 'ok', 'html' => $html)));
