@@ -145,8 +145,14 @@
 			var colorTheme = 0;
 			function setTheme() {
 				colorTheme = localStorage.getItem("theme");
-				if (colorTheme == 1)
+				if (colorTheme === null) {
+					// No theme stored yet – use admin default
+					if (GetAdminSetting("default_theme") === "dark")
+						$("body").attr("data-theme", "dark");
+				} else if (colorTheme == 1) {
+					// Stored theme = dark
 					$("body").attr("data-theme", "dark");
+				}
 			}
 		</script>
 		<link rel="icon" href="images/deepsid_icon_32x32.png" sizes="32x32" />

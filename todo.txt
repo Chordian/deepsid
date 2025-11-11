@@ -18,6 +18,11 @@ SHOULD BE DONE
 - A "refresh cache" link next to cached message in the footer of a CSDb page. (Consider only
   showing this for DeepSID administrators.)
 
+- Random recommended click sometimes goes to a first-level letter folder. Prevent that.
+
+- Make rolling random tips in the upper news box. Hotkeys to use, etc. Part of the random
+  messages could also be other things, for example a recommended link.
+
 - Add a function, a hotkey, whatever, to send a rating change for a composer or folder over
   to the 'Ratings' user while still being logged in as the 'JCH' user.
 
@@ -26,7 +31,7 @@ SHOULD BE DONE
 - Idea from Anon-Relays: Loop song X number of times before moving on to the next one. In
   the settings, the default number should of course be 1.
 
-- An "Admin" tab with buttons? Ideas for task buttons:        <- WIP!
+- Ideas for task buttons in the new admin page:
 
   - Folder counts are off everywhere. Especially in CGSC. How about writing a PHP script
     that goes through everything and updates folder counts in the database?
@@ -34,7 +39,9 @@ SHOULD BE DONE
   - PHP script that detects and shows all rows with no database information. Even though I
     am very meticulous each collection update, these still tend to pop up.
 
-  - Edit box for setting number of search results (default is 1000).
+- After making the 'Admin' tab: Create a role column in the database table with users and
+  give both "JCH" and "Ratings" the admin role. Then replace all checking for "JCH" here
+  and there in JS and PHP source codes.
 
 - Cache: Consider also caching the 'SHOW' pages. Alternatively, you could just disable the
   button on cached pages loaded whenever CSDb is down.
@@ -70,7 +77,7 @@ WHEN THE TIME IS RIGHT
     nothing to do with symlists. Rename it to something else to avoid confusion.
   - Maybe 'csdb.php' should also have an extended name, to make it more clear what it does.
   - Go through all the other files and see if anything else ought to be renamed.
-  - Globalize more variables in 'main.js' in the new 'main' namespace.
+  - Globalize more variables in 'main.js' in the new 'main' namespace. Maybe also functions?
 
 
 CONSIDER THIS

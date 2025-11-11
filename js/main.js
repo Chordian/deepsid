@@ -1448,6 +1448,26 @@ $(function() { // DOM ready
 	});
 
 	/**
+	 * Admin settings: When selecting an option in a drop-down box.
+	 * 
+	 * @param {*} event 
+	 */
+	$("#topic-admin").on("change", ".admin-temp-select", function(event) {
+		var $parent = $(this).parents(".setting");
+		var title = $parent.children(".title").html();
+		$parent.children(".value").empty().append(event.target.value);
+
+		$.post("php/admin_settings_write.php", { key: title, value: event.target.value }, function(data) {
+			browser.validateData(data);
+		});
+
+		$("#topic-admin .edit").show(); // Allow editing a row again
+
+		// Prevent 'Enter' from also firing in the browser list
+		blockNextEnter = true;
+	});
+
+	/**
 	 * User settings: When one of the ON/OFF toggle buttons are clicked.
 	 * 
 	 * @param {*} event 
