@@ -11,10 +11,6 @@ SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
 - Write a blog post about the latest tagging. "Everyone and his dog has a collection!"
 
-- Ellipsis problems again in annex box groups table (only on work PC):
-  https://deepsid.chordian.net/?file=/MUSICIANS/B/Blues_Muz/Gallefoss_Glenn/
-  UPDATE: Turned CSS width down from 180px to 170px (CSS: "sidemouse") - test on work PC.
-
 - A "refresh cache" link next to cached message in the footer of a CSDb page. (Consider only
   showing this for DeepSID administrators.)
 
@@ -30,18 +26,6 @@ SHOULD BE DONE
 
 - Idea from Anon-Relays: Loop song X number of times before moving on to the next one. In
   the settings, the default number should of course be 1.
-
-- Ideas for task buttons in the new admin page:
-
-  - Folder counts are off everywhere. Especially in CGSC. How about writing a PHP script
-    that goes through everything and updates folder counts in the database?
-
-  - PHP script that detects and shows all rows with no database information. Even though I
-    am very meticulous each collection update, these still tend to pop up.
-
-- After making the 'Admin' tab: Create a role column in the database table with users and
-  give both "JCH" and "Ratings" the admin role. Then replace all checking for "JCH" here
-  and there in JS and PHP source codes.
 
 - Cache: Consider also caching the 'SHOW' pages. Alternatively, you could just disable the
   button on cached pages loaded whenever CSDb is down.
@@ -63,6 +47,32 @@ SHOULD BE DONE
   https://deepsid.chordian.net/?file=/MUSICIANS/G/Greg/Leppard.sid
 
 - The composer subfolders of "Blues Muz" need to be parsed for event tags.
+
+
+ADMIN PAGE
+¯¯¯¯¯¯¯¯¯¯
+- Ideas for more admin settings:
+
+  - debug_mode: Enable verbose logging, PHP error display, or client console diagnostics.
+  - allow_registrations: Toggle user self-signup on/off. (Would this ever be needed?)
+  - admin_email: Contact address shown in error popups.
+  - log_rotation_days: Maybe more than that; see the cache stuff in the 'hvsc.php' file.
+  - enable_auto_backup: For when the backup script has been made (see other todo task).
+
+- Ideas for admin info:
+
+  - last_deploy_time: Use the timestamp of the 'index.php' file? (Do I need this at all?)
+  - Info from PHP itself such as PHP version, etc.
+
+- Ideas for task buttons in the new admin page:
+
+  - Folder counts are off everywhere. Especially in CGSC. How about writing a PHP script
+    that goes through everything and updates folder counts in the database?
+
+  - PHP script that detects and shows all rows with no database information. Even though I
+    am very meticulous each collection update, these still tend to pop up.
+
+  - Buttons for various currently homeless PHP scripts used during HVSC updates.
 
 
 WHEN THE TIME IS RIGHT
@@ -147,6 +157,11 @@ CONSIDER THIS
 - Detect PAL/NTSC/CIA when clicking a SID row, and if not in the database, add it, so the
   factoid information is increasingly more complete over time.
 
+- After making the 'Admin' tab: Create a role column in the database table with users and
+  give both "JCH" and "Ratings" the admin role. Then replace all checking for "JCH" here
+  and there in JS and PHP source codes. ADDENDUM: This is to prepare for more admins in the
+  future, but I'm not sure if it will ever happen or even be necessary.
+
 - Cache: When CSDb is down and a cache file is shown instead, a warning message in top
   could say that CSDb is currently unreachable so here's a cached file instead.
 
@@ -195,6 +210,11 @@ CONSIDER THIS
 - Ellipsis box in annex group box is too wide on my work PC. (Chrome?)
   UPDATE: I tested a lot of composer with long group names and suddenly couldn't hit the bug
   on my work PC anymore. Parking it for now.
+
+- User wish: Option for automatic renaming of files in a downloaded playlist, so a composer is
+  prepended. For example, "Cybernoid.sid" becomes "Jeroen Tel - Cybernoid.sid" instead. I am not
+  too hot on this idea. I suspect no one else is asking for this, and the feature would not be that
+  easy to make. Lowering on priority.
 
 - Kim Lemon wants me to make DeepSID cookieless. I could easily make the emulator choice into
   localstorage instead, but the PHP SESSION cookie belongs in a class I didn't write, and I

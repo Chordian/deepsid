@@ -69,6 +69,15 @@ const PATH_SID_FM = PATH_UPLOADS + "/SID+FM";
 
 $(function() { // DOM ready
 
+	// Background call of the 'backup_tables.php' script (run at most once every 24 hours)
+	if (DEEPSID_BACKUP_DUE) {
+		$.ajax({
+			url: "php/backup_worker.php",
+			method: "GET",
+			cache: false
+		});
+	}
+
 	isMobile = $("body").attr("data-mobile") !== "0";
 	isNotips = $("body").attr("data-notips") !== "0";
 	miniPlayer = parseInt($("body").attr("data-mini"));

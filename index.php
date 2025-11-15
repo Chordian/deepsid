@@ -5,7 +5,15 @@
 	$user_id = $account->CheckLogin() ? $account->UserID() : 0;
 	$is_admin = $user_id && $account->UserName() === "JCH";
 
-	require_once("tracking.php"); // Also called every 5 minutes by 'main.js'
+	require_once("tracking.php");			// Also called every 5 minutes by 'main.js'
+
+	$backupDue = false;
+
+	$backupDir     = __DIR__ . '/backups/';
+	$timestampFile = $backupDir . 'last_backup.txt';
+
+	if (!file_exists($timestampFile) || (time() - filemtime($timestampFile)) > 86400)
+		$backupDue = true;
 
 	// @link https://stackoverflow.com/a/60199374/2242348
 	// $inside_iframe = isset($_SERVER['HTTP_SEC_FETCH_DEST']) && $_SERVER['HTTP_SEC_FETCH_DEST'] == 'iframe';
@@ -58,11 +66,15 @@
 
 		<meta charset="utf-8" />
 		<script type="text/javascript">
+
 			var viewport = document.createElement("meta");
 			viewport.setAttribute("name", "viewport");
 			viewport.setAttribute("content", "width="+(screen.width < 450 ? "450" : "1320"));
 			document.head.appendChild(viewport);
-		</script>
+
+			var DEEPSID_BACKUP_DUE = <?php echo $backupDue ? 'true' : 'false'; ?>;
+
+		</script>		
 		<meta name="description" content="A modern online SID player for the High Voltage and Compute's Gazette SID collections." /> <!-- Max 150 characters -->
 		<meta name="keywords" content="c64,commodore 64,sid,6581,8580,hvsc,high voltage,cgsc,compute's gazette,visualizer,stil,websid,hermit,asid,webusb,usbsid" />
 		<meta name="author" content="Jens-Christian Huus" />

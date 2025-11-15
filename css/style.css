@@ -5509,7 +5509,7 @@ input[type=range]::-ms-track {
 		}
 
 			#annex .group {
-				width: 174px; /* Sidemouse - down from 180px */
+				width: 170px; /* Don't increase this or 6R6's annex group table looks bad */
 			}
 
 		#page .ext .participant {
