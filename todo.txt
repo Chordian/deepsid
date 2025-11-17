@@ -12,6 +12,8 @@ SHOULD BE DONE
 - A "refresh cache" link next to cached message in the footer of a CSDb page. (Consider only
   showing this for DeepSID administrators.)
 
+- Fix the CGSC database errors 'check_missing_info.php' finds online.
+
 - Make rolling random tips in the upper news box. Hotkeys to use, etc. Part of the random
   messages could also be other things, for example a recommended link.
 
@@ -63,9 +65,7 @@ ADMIN PAGE
 - Ideas for task buttons in the new admin page:
 
   - For the 'update_counts_all.php' script.
-  
-  - PHP script that detects and shows all rows with no database information. Even though I
-    am very meticulous each collection update, these still tend to pop up.
+  - For the 'check_missing_info' script.
 
   - Buttons for various currently homeless PHP scripts used during HVSC updates.
 
