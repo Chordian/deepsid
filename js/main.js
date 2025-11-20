@@ -1105,12 +1105,8 @@ $(function() { // DOM ready
 		// If 'Admin' tab is selected (administrators only)
 		if (topic === "admin") {
 			$("#sticky-admin").show();
-			$("#topic-admin").empty();
-			$.get("php/admin_settings_read_all.php", function(data) {
-				browser.validateData(data, function(data) {
-					$("#topic-admin").append(data.html);
-				});
-			});
+			if ($("#topic-admin").html() === "")
+				$("#sticky-admin button.ac-settings").trigger("click");
 		}
 
 		// If 'Profile' tab is selected then refresh the charts if present
@@ -1397,6 +1393,47 @@ $(function() { // DOM ready
 	$("#dropdown-stereo-mode").change(function(event) {
 		if (SID.stereoLevel == -1 || event.target.value == -1) SID.resetStereo();
 		SID.setStereoMode(event.target.value);
+	});
+
+	/**
+	 * When clicking one of the admin category buttons.
+	 */
+	$("#sticky-admin").on("click", "button", function(event) {
+		var category = $(event.target).attr("data-category");
+
+		$("#sticky-admin .admin-cat-buttons .button-on").removeClass("button-on").addClass("button-off");
+		$(this).removeClass("button-off").addClass("button-on");
+		$("#topic-admin").empty();
+
+		switch (category) {
+			case "info":
+	
+	
+	
+				break;
+			case "settings":
+				$.get("php/admin_settings_read_all.php", function(data) {
+					browser.validateData(data, function(data) {
+						$("#topic-admin").append(data.html);
+					});
+				});
+				break;
+			case "scripts":
+				$.get("php/admin_scripts.php", function(data) {
+					browser.validateData(data, function(data) {
+						$("#topic-admin").append(data.html);
+					});
+				});
+				break;
+			default:
+		}
+	});
+
+	/**
+	 * Admin scripts: When clicking the 'RUN' button.
+	 */
+	$("#topic-admin").on("click", ".run-script", function(event) {
+		window.open($(event.target).attr("data-script"), "_blank");
 	});
 
 	/**

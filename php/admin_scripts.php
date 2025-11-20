@@ -2,7 +2,7 @@
 /**
  * DeepSID
  *
- * Show the settings page in the 'Admin' tab.
+ * Show the scripts page in the 'Admin' tab.
  * 
  * For administrators only.
  * 
@@ -17,6 +17,7 @@ if (!$account->CheckLogin() || $account->UserName() != 'JCH' || $account->UserID
 	die("This is for administrators only.");
 
 $html = '';
+$baseURL = $_SERVER['HTTP_HOST'] == LOCALHOST ? "http://chordian/deepsid/php/" : "https://deepsid.chordian.net/php/";
 
 try {
 	if ($_SERVER['HTTP_HOST'] == LOCALHOST)
@@ -26,26 +27,25 @@ try {
 	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	$db->exec("SET NAMES UTF8");
 
-	// Get all the admin settings
-	$select = $db->query('SELECT * FROM admin_settings ORDER BY setting_key');
-	$settings = $select->fetchAll(PDO::FETCH_OBJ);
+	// Get all the admin scripts rows
+	$select = $db->query('SELECT * FROM admin_scripts ORDER BY name');
+	$scripts = $select->fetchAll(PDO::FETCH_OBJ);
 
-	$html = '<h3>Settings</h3>';
+	$html = '<h3>Scripts</h3>';
 
 	// Build the rows for each setting
-	foreach ($settings as $s) {
+	foreach ($scripts as $s) {
 		$html .= '
-			<div class="setting">
-				<div class="title">' . $s->setting_key . '</div>
+			<div class="script">
+				<div class="name">' . $s->name . '</div>
 				<span> ' . htmlspecialchars($s->description) . '</span>
-				<div class="value">' . htmlspecialchars($s->setting_value) . '</div>
-				<div class="edit" data-type="' . $s->setting_type . '" data-options="' . $s->setting_options . '"></div>
+				<button class="run-script" data-script="'.$baseURL.'run_shell.php?script=' . $s->script . '" title="' . $baseURL.$s->script . '">RUN</button>
 			</div>
 		';
 	}
 
 } catch(PDOException $e) {
-	$account->LogActivityError('admin_settings_read_all.php', $e->getMessage());
+	$account->LogActivityError('admin_scripts.php', $e->getMessage());
 	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 }
 die(json_encode(array('status' => 'ok', 'html' => $html)));

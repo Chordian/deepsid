@@ -52,6 +52,7 @@
 	--color-text-block-changed:		#c00;
 	--color-text-spottext:			var(--color-top);
 	--color-text-new-user:			#0a0;
+	--color-text-script-name:		#a44;
 
 	--color-text-tag:				var(--color-top);	 /* Default tag colors */
 	--color-bg-tag:					#a8ad95;
@@ -466,6 +467,7 @@
 	--color-text-block-changed:		#e66;
 	--color-text-spottext:			var(--color-bottom);
 	--color-text-new-user:			#0f0;
+	--color-text-script-name:		#cc7070;
 
 	--color-text-tag:				var(--color-bottom);  /* Default tag colors */
 	--color-bg-tag:					#b6b9a5;
@@ -805,11 +807,13 @@
 	fill: var(--color-tab-selected-text);
 }
 
-[data-theme="dark"] #sticky-visuals .visuals-buttons {
+[data-theme="dark"] #sticky-visuals .visuals-buttons,
+[data-theme="dark"] #sticky-admin .admin-cat-buttons {
 	top: 13px;
 }
 
 [data-theme="dark"] #sticky-visuals .visuals-buttons > button,
+[data-theme="dark"] #sticky-admin .admin-cat-buttons > button,
 [data-theme="dark"] #visuals-stats button.stats-solo {
 	height: 25px;
 	border: none;
@@ -1239,6 +1243,7 @@ small.u2 { margin-left: 2px; }
 	.edit button,
 	#sundry button,
 	#sticky-visuals button,
+	#sticky-admin button,
 	#topic-remix .action button,
 	.dialog-transfer button,
 	.dialog-new button,
@@ -1289,6 +1294,7 @@ small.u2 { margin-left: 2px; }
 	#filter-revisions button.disabled,
 	#filter-6581 button.disabled,
 	#sticky-visuals button.disabled,
+	#sticky-admin button.disabled,
 	#csdb-sort button.disabled {
 		cursor: default;
 		background: var(--color-button-disabled);
@@ -4511,24 +4517,38 @@ input[type=range]::-ms-track {
 		margin: 0 0 16px;
 	}
 
-	#topic-admin .setting {
+	#topic-admin .setting,
+	#topic-admin .script {
 		position: relative;
 		height: 45px;
 		border-bottom: 1px solid var(--color-text-fa-common);
 	}
 
-		#topic-admin .setting:first-of-type {
+		#topic-admin .script {
+			height: 55px;
+			padding-top: 5px;
+		}
+
+		#topic-admin .setting:first-of-type,
+		#topic-admin .script:first-of-type {
 			border-top: 1px solid var(--color-text-fa-common);
 		}
 
-		#topic-admin .setting .title {
+		#topic-admin .setting .title,
+		#topic-admin .script .name {
 			width: 70%;
 			line-height: 14px;
 			padding-top: 6px;
 			color: var(--color-text-admin-title);
 		}
 
-		#topic-admin .setting span {
+		#topic-admin .script .name {
+			font-weight: bold;
+			color: var(--color-text-script-name);
+		}
+
+		#topic-admin .setting span,
+		#topic-admin .script span {
 			font-size: 11px;
 			color: var(--color-text-minor);
 		}
@@ -4564,6 +4584,16 @@ input[type=range]::-ms-track {
 			#topic-admin .setting:hover .edit {
 				opacity: 0.7;
 			}
+
+		#topic-admin .run-script {
+			position: absolute;
+			top: 12px;
+			right: 0;
+			height: auto !important;
+			padding: 2px 10px;
+			font-size: 12px;
+			line-height: 24px;
+		}
 
 /* ---- Right side container with tabs -------------------------------------- */
 
@@ -5545,13 +5575,19 @@ input[type=range]::-ms-track {
 				font-size: 13px;
 			}
 
-			#sticky-visuals .visuals-buttons {
+			#sticky-visuals .visuals-buttons,
+			#sticky-admin .admin-cat-buttons {
 				position: absolute;
 				top: 12px;
 				left: 120px;
 			}
 
-				#sticky-visuals .visuals-buttons > button {
+				#sticky-admin .admin-cat-buttons {
+					left: 114px;
+				}
+
+				#sticky-visuals .visuals-buttons > button,
+				#sticky-admin .admin-cat-buttons > button {
 					height: 27px;
 					width: 88px;
 					padding: 0 6px;
@@ -5559,6 +5595,10 @@ input[type=range]::-ms-track {
 					line-height: 0;
 					border-radius: 3px;
 				}
+
+					#sticky-admin .admin-cat-buttons > button {
+						width: 80px;
+					}
 
 				#sticky-visuals button:before {
 					content: "";
@@ -5570,7 +5610,8 @@ input[type=range]::-ms-track {
 					filter: var(--svg-filter-white);
 				}
 				
-				#sticky-visuals .button-on {
+				#sticky-visuals .button-on,
+				#sticky-admin .button-on {
 					font-weight: bold;
 				}
 

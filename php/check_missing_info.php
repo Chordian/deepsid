@@ -4,7 +4,7 @@
  * 
  * SEPARATE UTILITY SCRIPT
  * 
- * Detect missing HVSC database rows and missing/invalid fields.
+ * Detect missing database rows and missing/invalid fields.
  */
 
 require_once("class.account.php"); // Includes setup
@@ -63,8 +63,7 @@ $requiredFields = [
 $unpreparedThreshold = 6;
 
 // URL base
-$isLocal = (strpos($_SERVER['HTTP_HOST'], 'chordian') !== false);
-$baseURL = $isLocal ? "http://chordian/deepsid/?file=" : "https://deepsid.chordian.net/?file=";
+$baseURL = $_SERVER['HTTP_HOST'] == LOCALHOST ? "http://chordian/deepsid/?file=" : "https://deepsid.chordian.net/?file=";
 
 // -----------------------------------------------------------
 // Helper: Build browser URL from fullname
@@ -182,7 +181,7 @@ try {
 	}
 
 } catch (Exception $e) {
-    $account->LogActivityError('update_counts_all.php', $e->getMessage());
+    $account->LogActivityError('check_missing_info.php', $e->getMessage());
 }
 
 echo "<p>Scanning completed.</p>";

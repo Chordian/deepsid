@@ -9,13 +9,20 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+
+
+- ADD THE NEW JSIDPLAY2 FROM KEN!
+
+
 - A "refresh cache" link next to cached message in the footer of a CSDb page. (Consider only
   showing this for DeepSID administrators.)
 
-- Fix the CGSC database errors 'check_missing_info.php' finds online.
+- Prefix folder names with a tick mark when all files inside have been starred.
 
 - Make rolling random tips in the upper news box. Hotkeys to use, etc. Part of the random
   messages could also be other things, for example a recommended link.
+
+- Rename the "Tips" tab in annex to "Help" instead. Don't rename anything else, though.
 
 - Add a function, a hotkey, whatever, to send a rating change for a composer or folder over
   to the 'Ratings' user while still being logged in as the 'JCH' user.

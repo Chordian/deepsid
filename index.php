@@ -1076,7 +1076,13 @@
 					<?php endif ?>
 				</div>
 				<?php if ($is_admin): ?>
-					<div id="sticky-admin"><h2 style="margin-top:0;">Administration</h2></div>
+					<div id="sticky-admin"><h2 style="margin-top:0;">Admin</h2>
+						<div class="admin-cat-buttons">
+							<button class="admin-cat-button ac-info button-off" data-category="info">Info</button>
+							<button class="admin-cat-button ac-settings button-on" data-category="settings">Settings</button>
+							<button class="admin-cat-button ac-scripts button-off" data-category="scripts">Scripts</button>
+						</div>
+					</div>
 				<?php endif ?>
 				<div id="sticky-csdb"><h2 style="margin-top:0;">CSDb</h2></div>
 				<div id="sticky-gb64"><h2 style="margin-top:0;">GameBase64</h2></div>
