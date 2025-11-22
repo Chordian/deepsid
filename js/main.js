@@ -1106,7 +1106,7 @@ $(function() { // DOM ready
 		if (topic === "admin") {
 			$("#sticky-admin").show();
 			if ($("#topic-admin").html() === "")
-				$("#sticky-admin button.ac-settings").trigger("click");
+				$("#sticky-admin button.ac-info").trigger("click");
 		}
 
 		// If 'Profile' tab is selected then refresh the charts if present
@@ -1407,9 +1407,11 @@ $(function() { // DOM ready
 
 		switch (category) {
 			case "info":
-	
-	
-	
+				$.get("php/admin_info.php", function(data) {
+					browser.validateData(data, function(data) {
+						$("#topic-admin").append(data.html);
+					});
+				});
 				break;
 			case "settings":
 				$.get("php/admin_settings_read_all.php", function(data) {

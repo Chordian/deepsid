@@ -1078,9 +1078,9 @@
 				<?php if ($is_admin): ?>
 					<div id="sticky-admin"><h2 style="margin-top:0;">Admin</h2>
 						<div class="admin-cat-buttons">
-							<button class="admin-cat-button ac-info button-off" data-category="info">Info</button>
-							<button class="admin-cat-button ac-settings button-on" data-category="settings">Settings</button>
-							<button class="admin-cat-button ac-scripts button-off" data-category="scripts">Scripts</button>
+							<button class="admin-cat-button ac-info button-on" data-category="info">Info</button>
+							<button class="admin-cat-button ac-settings button-off" data-category="settings">Set</button>
+							<button class="admin-cat-button ac-scripts button-off" data-category="scripts">PHP</button>
 						</div>
 					</div>
 				<?php endif ?>

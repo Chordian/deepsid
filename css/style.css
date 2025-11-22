@@ -53,6 +53,7 @@
 	--color-text-spottext:			var(--color-top);
 	--color-text-new-user:			#0a0;
 	--color-text-script-name:		#a44;
+	--color-text-monitor:			#282;
 
 	--color-text-tag:				var(--color-top);	 /* Default tag colors */
 	--color-bg-tag:					#a8ad95;
@@ -134,6 +135,8 @@
 	--color-text-time:				#c6c6c6;
 	--color-text-sundry-disabled:	#b2b3ad;
 	--color-text-fa-common:			#c8c8c8;
+	--color-text-admin-span:		#888977;
+	--color-text-deprecated:		#e22;
 
 	--color-tags-bracket:			#a1a294;			/* Used for horizontal tag start-to-end brackets */
 	--color-tags-bracket-up:		#949494;
@@ -468,7 +471,8 @@
 	--color-text-spottext:			var(--color-bottom);
 	--color-text-new-user:			#0f0;
 	--color-text-script-name:		#cc7070;
-
+	--color-text-monitor:			#70cc70;
+	
 	--color-text-tag:				var(--color-bottom);  /* Default tag colors */
 	--color-bg-tag:					#b6b9a5;
 	--color-bg-tag-hover:			#c8cbbb;
@@ -547,6 +551,8 @@
 	--color-text-time:				#484848;
 	--color-text-sundry-disabled:	#4a4a4a;
 	--color-text-fa-common:			#464646;
+	--color-text-admin-span:		#888;
+	--color-text-deprecated:		#e33;
 
 	--color-tags-bracket:			#808080;			/* Used for horizontal tag start-to-end brackets */
 	--color-tags-bracket-up:		#949494;
@@ -1411,7 +1417,8 @@ small.u2 { margin-left: 2px; }
 			margin-top: 0;
 		}
 
-		#topic-settings h4 {
+		#topic-settings h4,
+		#topic-admin h4 {
 			font-size: 18.5px;
 		}
 
@@ -4517,6 +4524,20 @@ input[type=range]::-ms-track {
 		margin: 0 0 16px;
 	}
 
+	#topic-admin code {
+		font-size: 11px;
+	}
+
+		#topic-admin .name code {
+			position: relative;
+			top: -1px;
+			margin-left: 20px;
+			color: var(--color-text-deprecated);
+			background: none;
+			border-color: var(--color-text-dim);
+			letter-spacing: 0.5px;
+		}	
+
 	#topic-admin .setting,
 	#topic-admin .script {
 		position: relative;
@@ -4530,27 +4551,33 @@ input[type=range]::-ms-track {
 		}
 
 		#topic-admin .setting:first-of-type,
-		#topic-admin .script:first-of-type {
+		#topic-admin h4 + .script {
 			border-top: 1px solid var(--color-text-fa-common);
 		}
 
 		#topic-admin .setting .title,
-		#topic-admin .script .name {
+		#topic-admin .script .name,
+		#topic-admin .script .monitor {
 			width: 70%;
 			line-height: 14px;
 			padding-top: 6px;
 			color: var(--color-text-admin-title);
 		}
 
-		#topic-admin .script .name {
-			font-weight: bold;
-			color: var(--color-text-script-name);
-		}
+			#topic-admin .script .name {
+				font-weight: bold;
+				color: var(--color-text-script-name);
+			}
+
+			#topic-admin .script .monitor {
+				font-weight: bold;
+				color: var(--color-text-monitor);
+			}
 
 		#topic-admin .setting span,
 		#topic-admin .script span {
 			font-size: 11px;
-			color: var(--color-text-minor);
+			color: var(--color-text-admin-span);
 		}
 
 		#topic-admin .value {
@@ -5597,7 +5624,7 @@ input[type=range]::-ms-track {
 				}
 
 					#sticky-admin .admin-cat-buttons > button {
-						width: 80px;
+						width: 55px;
 					}
 
 				#sticky-visuals button:before {

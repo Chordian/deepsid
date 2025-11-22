@@ -3,7 +3,6 @@
  * DeepSID
  *
  * Update the database according to the original CGSC update batch file.
- * files) released with a new version on their web site.
  * 
  * WARNING: THIS IS A PROTOTYPE SCRIPT THAT FOR NOW ONLY PERFORMS A SUBSET. IT
  * ONLY PARSES THE MOVE LINES FOR .MUS FILES FROM AN ADAPTED TEXT FILE.

@@ -39,6 +39,50 @@ class Account {
 	private $error_message;
 
 	/**
+	 * Connects to the database using PDO. Call this before any database operation.
+	 * 
+	 * Made public in November 2025.
+	 *
+	 * @return		boolean		false = call $this->GetErrorMessage()
+	 */
+	public function ConnectDB() {
+		try {
+			// Skip connecting if already connected
+			if ($this->database instanceof PDO) {
+				return true;
+			}
+
+			$options = array(
+				PDO::MYSQL_ATTR_FOUND_ROWS	=> true, // So that UPDATE statements actually return a row
+				PDO::ATTR_ERRMODE			=> PDO::ERRMODE_EXCEPTION
+			);
+			if ($_SERVER['HTTP_HOST'] == LOCALHOST) {
+				$this->database = new PDO(PDO_LOCALHOST, USER_LOCALHOST, PWD_LOCALHOST, $options);
+			} else {
+				$this->database = new PDO(PDO_ONLINE, USER_ONLINE, PWD_ONLINE, $options);
+			}
+			$this->database->exec("SET NAMES utf8mb4");
+			return true;
+
+		} catch (PDOException $exception) {
+			$this->LogError($exception->getMessage());
+			return false;
+		}
+	}
+
+	/**
+	 * Returns the PDO database connection.
+	 * 
+	 * @return		PDO			The PDO database connection
+	 */
+	public function GetDB() {
+		if (!$this->ConnectDB())
+			throw new RuntimeException("Failed to connect to database.");
+
+		return $this->database;
+	}
+
+	/**
 	 * Registers a new user.
 	 *
 	 * @uses		$_POST['submitted'] - set when registration form is submitted
@@ -574,36 +618,6 @@ class Account {
 			return false;
 		}
 		return true;
-	}
-
-	/**
-	 * Connects to the database using PDO. Call this before any database operation.
-	 *
-	 * @return		boolean		false = call $this->GetErrorMessage()
-	 */
-	private function ConnectDB() {
-		try {
-			// Skip connecting if already connected
-			if ($this->database instanceof PDO) {
-				return true;
-			}
-
-			$options = array(
-				PDO::MYSQL_ATTR_FOUND_ROWS	=> true, // So that UPDATE statements actually return a row
-				PDO::ATTR_ERRMODE			=> PDO::ERRMODE_EXCEPTION
-			);
-			if ($_SERVER['HTTP_HOST'] == LOCALHOST) {
-				$this->database = new PDO(PDO_LOCALHOST, USER_LOCALHOST, PWD_LOCALHOST, $options);
-			} else {
-				$this->database = new PDO(PDO_ONLINE, USER_ONLINE, PWD_ONLINE, $options);
-			}
-			$this->database->exec("SET NAMES utf8mb4");
-			return true;
-
-		} catch (PDOException $exception) {
-			$this->LogError($exception->getMessage());
-			return false;
-		}
 	}
 
 	/**

@@ -37,7 +37,7 @@ try {
 	foreach($select as $row) {
 		$lengths = explode(' ', $row->lengths);
 		foreach($lengths as $key => $length)
-			// $db->query('INSERT INTO hvsc_lengths (fullname, length, subtune) VALUES("'.$row->fullname.'", "'.$length.'", '.$key.')');
+			$db->query('INSERT INTO hvsc_lengths (fullname, length, subtune) VALUES("'.$row->fullname.'", "'.$length.'", '.$key.')');
 	}
 
 	echo "Script 'update_songlengths.php' has completed.";

@@ -137,7 +137,7 @@ try {
 				else {
 					echo '<td style="color:#00a;">Not in symlist; <b>adding now</b>';
 					// Add the symlist entry to the database
-					// $db->query('INSERT INTO symlists (folder_id, file_id) VALUES('.SYMFOLDER.', '.$file_id.')');
+					$db->query('INSERT INTO symlists (folder_id, file_id) VALUES('.SYMFOLDER.', '.$file_id.')');
 				}
 			} else
 				echo '<td style="color:#a00;"><b>Skipped (handle manually)</b>';

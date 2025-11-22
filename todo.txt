@@ -40,6 +40,8 @@ SHOULD BE DONE
 - Consider a HTML button somewhere for testing a SID, so it's not just the "l" hotkey.
   I thought about in the root where only a "\" is displayed, but is there a better place?
 
+- Replace the PDO connection block in PHP scripts with '$db = $account->GetDB();' instead.
+
 - BUG: In some situations the search box doesn't show the 'X' icon when it should. For
   example, when clicking the 'New in HVSC update #83' folder link.
 
@@ -63,18 +65,6 @@ ADMIN PAGE
   - admin_email: Contact address shown in error popups.
   - log_rotation_days: Maybe more than that; see the cache stuff in the 'hvsc.php' file.
   - enable_auto_backup: For when the backup script has been made (see other todo task).
-
-- Ideas for admin info:
-
-  - last_deploy_time: Use the timestamp of the 'index.php' file? (Do I need this at all?)
-  - Info from PHP itself such as PHP version, etc.
-
-- Ideas for task buttons in the new admin page:
-
-  - For the 'update_counts_all.php' script.
-  - For the 'check_missing_info' script.
-
-  - Buttons for various currently homeless PHP scripts used during HVSC updates.
 
 
 WHEN THE TIME IS RIGHT

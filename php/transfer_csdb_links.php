@@ -2,7 +2,7 @@
 /**
  * DeepSID
  *
- * One-shot script.
+ * Generate CSDb links for every composer with a page on CSDb.
  * 
  * @used-by		N/A
  */
