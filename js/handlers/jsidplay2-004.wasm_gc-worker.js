@@ -1,34 +1,43 @@
-importScripts("jsidplay2-003.wasm_gc-runtime.js");
+/**
+ * Web Worker for JSIDPlay2 (TeaVM / WASM GC version)
+ *
+ * This worker runs the SID emulation logic compiled to WebAssembly.
+ * It communicates with the main thread via `postMessage()`, transferring
+ * audio, video, and control data. Transferable objects (ArrayBuffers, ImageBitmaps)
+ * are used to minimize memory copies between worker and main thread.
+ *
+ * Author: Ken Händel
+ */
+importScripts("jsidplay2-004.wasm_gc-runtime.js");
 
 // $DEVTOOLS_SECTION_1
 
 function processSamples(lf, ri, le) {
-  var left = new Float32Array(lf).buffer;
-  var right = new Float32Array(ri).buffer;
   postMessage(
     {
       eventType: "SAMPLES",
       eventData: {
-        left: left,
-        right: right,
+        left: lf.buffer,
+        right: ri.buffer,
         length: le,
       },
     },
-    [left, right]
+    [lf.buffer, ri.buffer]
   );
 }
 
 function processPixels(pi, le) {
-  createImageBitmap(new ImageData(new Uint8ClampedArray(new Uint8Array(pi)), 384, le / 1536)).then((bitmap) =>
-    postMessage(
-      {
-        eventType: "FRAME",
-        eventData: {
-          image: bitmap,
+  createImageBitmap(new ImageData(new Uint8ClampedArray(pi.buffer, pi.byteOffset, pi.byteLength), 384, le / 1536)).then(
+    (bitmap) =>
+      postMessage(
+        {
+          eventType: "FRAME",
+          eventData: {
+            image: bitmap,
+          },
         },
-      },
-      [bitmap]
-    )
+        [bitmap]
+      )
   );
 }
 
@@ -42,6 +51,77 @@ function processSidWrite(at, ti, ad, va) {
       value: va,
     },
   });
+}
+
+function processOsc(
+  sidNum,
+  wav0, wav0Txt,
+  wav1, wav1Txt,
+  wav2, wav2Txt,
+  env0, env0Txt,
+  env1, env1Txt,
+  env2, env2Txt,
+  frq0, frq0Txt,
+  frq1, frq1Txt,
+  frq2, frq2Txt,
+  vol, volTxt,
+  res, resTxt,
+  fil, filTxt
+) {
+  const wav0S = wav0.buffer.slice(4, 4 + (new DataView(wav0.buffer).getInt32(0, true) - 1) * 4);
+  const wav1S = wav1.buffer.slice(4, 4 + (new DataView(wav1.buffer).getInt32(0, true) - 1) * 4);
+  const wav2S = wav2.buffer.slice(4, 4 + (new DataView(wav2.buffer).getInt32(0, true) - 1) * 4);
+
+  const env0S = env0.buffer.slice(4, 4 + (new DataView(env0.buffer).getInt32(0, true) - 1) * 4);
+  const env1S = env1.buffer.slice(4, 4 + (new DataView(env1.buffer).getInt32(0, true) - 1) * 4);
+  const env2S = env2.buffer.slice(4, 4 + (new DataView(env2.buffer).getInt32(0, true) - 1) * 4);
+
+  const frq0S = frq0.buffer.slice(4, 4 + (new DataView(frq0.buffer).getInt32(0, true) - 1) * 4);
+  const frq1S = frq1.buffer.slice(4, 4 + (new DataView(frq1.buffer).getInt32(0, true) - 1) * 4);
+  const frq2S = frq2.buffer.slice(4, 4 + (new DataView(frq2.buffer).getInt32(0, true) - 1) * 4);
+
+  const volS = vol.buffer.slice(4, 4 + (new DataView(vol.buffer).getInt32(0, true) - 1) * 4);
+  const resS = res.buffer.slice(4, 4 + (new DataView(res.buffer).getInt32(0, true) - 1) * 4);
+  const filS = fil.buffer.slice(4, 4 + (new DataView(fil.buffer).getInt32(0, true) - 1) * 4);
+
+  postMessage(
+    {
+      eventType: "OSC",
+      eventData: {
+        sidNum,
+        wav0: wav0S,
+        wav0Txt,
+        wav1: wav1S,
+        wav1Txt,
+        wav2: wav2S,
+        wav2Txt,
+        env0: env0S,
+        env0Txt,
+        env1: env1S,
+        env1Txt,
+        env2: env2S,
+        env2Txt,
+        frq0: frq0S,
+        frq0Txt,
+        frq1: frq1S,
+        frq1Txt,
+        frq2: frq2S,
+        frq2Txt,
+        vol: volS,
+        volTxt,
+        res: resS,
+        resTxt,
+        fil: filS,
+        filTxt,
+      },
+    },
+    [
+      wav0S, wav1S, wav2S,
+      env0S, env1S, env2S,
+      frq0S, frq1S, frq2S,
+      volS, resS, filS
+    ]
+  );
 }
 
 function timerEnd(ed) {
@@ -63,21 +143,20 @@ function processPrinter(op) {
 }
 
 function whatsSid(ar, le) {
-  var wav = new Int8Array(ar).buffer;
   postMessage(
     {
       eventType: "WHATSSID",
       eventData: {
-        wav: wav,
+        wav: ar.buffer,
       },
     },
-    [wav]
+    [ar.buffer]
   );
 }
 
 const eventMap = {
   INITIALISE: function (eventData) {
-    TeaVM.wasmGC.load("jsidplay2-003.wasm", { installImports(o) {} }).then((teavm) => {
+    TeaVM.wasmGC.load("jsidplay2-004.wasm", { installImports(o) {} }).then((teavm) => {
       instance = teavm;
 
       let args = [];
@@ -99,7 +178,9 @@ const eventMap = {
       eventData.cartContents ?? null,
       eventData.cartName ?? null,
       eventData.command ?? null,
-      eventData.songLength || 0
+      eventData.songLength || 0,
+      eventData.sfxSoundExpander,
+      eventData.sfxSoundExpanderType || 0
     );
 
     postMessage({
@@ -515,6 +596,26 @@ const eventMap = {
       },
     });
   },
+  GET_PLAYER_INFO: function (eventData) {
+    let result = instance.exports.js2playerInfo();
+
+    postMessage({
+      eventType: "GOT_PLAYER_INFO",
+      eventData: {
+        playerInfo: result,
+      },
+    });
+  },
+  GET_ACTIVE_SETTINGS: function (eventData) {
+    let result = instance.exports.js2activeSettings();
+
+    postMessage({
+      eventType: "GOT_ACTIVE_SETTINGS",
+      eventData: {
+        activeSettings: result,
+      },
+    });
+  },
   GET_PLAYLIST: function (eventData) {
     let result = instance.exports.js2playList();
 
@@ -589,6 +690,18 @@ const eventMap = {
 
     postMessage({
       eventType: "CARTRIDGE_FREEZED",
+    });
+  },
+  SET_OSCILLOSCOPE: function (eventData) {
+    instance.exports.js2oscilloscope(
+      eventData.enable,
+      eventData.fps,
+      eventData.width,
+      eventData.height
+    );
+
+    postMessage({
+      eventType: "OSCILLOSCOPE_SET",
     });
   },
 };

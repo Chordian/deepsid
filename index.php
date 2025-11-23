@@ -1963,7 +1963,12 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
-					
+
+						<h3>November 23, 2025</h3>
+						<ul>
+							<li>Upgraded the JSIDPlay2 emulator to v4.13. It’s now even faster and supports FM+SID playback as well as exotic SID formats such as 4SID, 8SID, and 10SID.</li>
+						</ul>
+
 						<h3>November 16, 2025</h3>
 						<ul>
 							<li>Virtually all folders should now have accurate file counts.</li>

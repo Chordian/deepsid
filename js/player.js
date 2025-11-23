@@ -550,7 +550,7 @@ SIDPlayer.prototype = {
 				// NOTE: Whenever there is a new version of this file, increase the number at
 				// the end of the filename. Otherwise some web browsers (especially Firefox)
 				// might refuse to see the new file - even when clearing the cache.
-				this.jp2Worker = new Worker("js/handlers/jsidplay2-003.wasm_gc-worker.js", );
+				this.jp2Worker = new Worker("js/handlers/jsidplay2-004.wasm_gc-worker.js", );
 
 				this.jp2PlayTime = 0;
 				this.jp2Loading = true;
@@ -679,7 +679,7 @@ SIDPlayer.prototype = {
 								outer.jp2NextTime = outer.jp2AudioContext.currentTime + 0.005;
 							}
 							sourceNode.start(outer.jp2NextTime);
-							outer.jp2NextTime += eventData.length / sampleRate;
+							outer.jp2NextTime += buffer.duration; // New in v4.13
 
 							// Tick playtime in seconds taking fast forward into account
 							// @todo This needs to be adapted for other buffer sizes to work
@@ -1162,7 +1162,7 @@ SIDPlayer.prototype = {
 
 		this.setVolume(1);
 		this._jp2SetStereo();
-
+		
 		this.jp2Worker.postMessage({
 			eventType: "OPEN",
 			eventData: {
@@ -1174,7 +1174,9 @@ SIDPlayer.prototype = {
 				cartContents: null,				// Cartridge data as Uint8Array	(unused in DeepSID)
 				cartName: null,					// Cartridge name				(unused in DeepSID)
 				command: null,					// Command after C64 reset		(unused in DeepSID)
-				songLength: this.timeout,		// song-length to play for (0 means unknown, fallback to default play length)
+				songLength: this.timeout,		// Song length to play for (0 means unknown, fallback to default play length)
+				sfxSoundExpander: true,			// Enable SoundExpander
+				sfxSoundExpanderType: 1,		// SoundExpander type (OPL1: YM3526 = 0, OPL2: YM3812 = 1)
 			},
 		});
 
