@@ -1573,14 +1573,17 @@ Browser.prototype = {
 										focusRight = '<div class="bc"></div>';
 										break;
 								}
-								folderFocus = '<div class="folder-focus">'+focusLeft+focusMiddle+focusRight+'</div>'
+								folderFocus = '<div class="folder-focus">'+focusLeft+focusMiddle+focusRight+'</div>';
 							}
+
+							// Add a small star in front of the folder if everything within has been rated
+							var allStarred = folder.all_rated ? '<div class="all-starred"></div>' : '';
 
 							var folderEntry = // GET FOLDER: GENERAL FOLDERS
 								'<tr'+(folder.incompatible.indexOf(SID.emulator) !== -1 || isMobileDenied ? ' class="disabled"' : '')+'>'+
 									'<td class="folder'+musicians+' unselectable '+folderIcon+
 										(folder.hvsc == this.HVSC_VERSION || folder.hvsc == this.CGSC_VERSION ? ' new' : '')+
-										'">'+folderFocus+'<div class="block-wrap"><div class="block'+(isRedirectFolder ? " slimfont" : "")+'">'+
+										'">'+allStarred+folderFocus+'<div class="block-wrap"><div class="block'+(isRedirectFolder ? " slimfont" : "")+'">'+
 									(folder.foldername == "SID+FM" ? '<div class="sid_fm">Use Hermit\'s (+FM) emulator</div>' : '')+
 									(folder.filescount > 0 ? '<div class="filescount">'+folder.filescount+'</div>' : '')+
 									(folder.foldername == "_SID Happens" ? '<div class="new-uploads'+(data.uploads.substr(0, 6) == "NO NEW" ? ' no-new' : '')+'">'+data.uploads+'</div>' : '')+

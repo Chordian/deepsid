@@ -72,7 +72,8 @@ $html .=  '<h4>PHP ini</h4>
 			<th>post_max_size</th>
 			<td>'.ini_get('post_max_size').'</td>
 		</tr>
-		<tr>
+	</table>';
+/*		<tr>
 			<th>display_errors</th>
 			<td>'.ini_get('display_errors').'</td>
 			<th>log_errors</th>
@@ -84,7 +85,7 @@ $html .=  '<h4>PHP ini</h4>
 			<th>date.timezone</th>
 			<td>'.ini_get('date.timezone').'</td>
 		</tr>
-	</table>';
+	</table>';*/
 
 $html .=  '<h4>PHP variables</h4>
 	<table style="font-size:13px;">
@@ -162,7 +163,7 @@ $html .= '<h4>PHP info</h4>
 		</tr>
 	</table>';
 
-$html .=  '<h4>Session info</h4>
+/*$html .=  '<h4>Session info</h4>
 	<table style="font-size:13px;">
 		<tr>
 			<th style="width:1px;">session_id()</th>
@@ -176,9 +177,9 @@ $html .=  '<h4>Session info</h4>
 			<th>session_status()</th>
 			<td>'.session_status().'</td>
 		</tr>
-	</table>';
+	</table>';*/
 
-$html .=  '<h4>Memory usage</h4>
+/*$html .=  '<h4>Memory usage</h4>
 	<table style="font-size:13px;">
 		<tr>
 			<th style="width:1px;">memory_get_usage(true)</th>
@@ -188,7 +189,7 @@ $html .=  '<h4>Memory usage</h4>
 			<th>memory_get_peak_usage(true)</th>
 			<td>'.memory_get_peak_usage(true).'</td>
 		</tr>
-	</table>';
+	</table>';*/
 
 die(json_encode(array('status' => 'ok', 'html' => $html)));
 ?>

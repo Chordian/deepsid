@@ -5,7 +5,7 @@
 	$user_id = $account->CheckLogin() ? $account->UserID() : 0;
 	$is_admin = $user_id && $account->UserName() === "JCH";
 
-	require_once("tracking.php");			// Also called every 5 minutes by 'main.js'
+	require_once("tracking.php"); // Also called periodically by 'main.js'
 
 	$backupDue = false;
 
@@ -82,7 +82,13 @@
 		<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans%3A400%2C700%2C400italic%2C700italic%7CQuestrial%7CMontserrat&#038;subset=latin%2Clatin-ext" />
 		<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Asap+Condensed" />
 		<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Kanit" />
-		<link rel="stylesheet" type="text/css" href="//blog.chordian.net/wordpress/wp-content/themes/olivi/style.css" />
+
+		<?php if ($_SERVER['HTTP_HOST'] == LOCALHOST) : ?>
+			<link rel="stylesheet" type="text/css" href="http://chordian/wordpress/wp-content/themes/olivi/style.css" />
+		<?php else: ?>
+			<link rel="stylesheet" type="text/css" href="//blog.chordian.net/wordpress/wp-content/themes/olivi/style.css" />
+		<?php endif ?>
+
 		<link rel="stylesheet" type="text/css" href="css/chartist.css?v=<?php echo filemtime('css/chartist.css') ?>" />
 		<link rel="stylesheet" type="text/css" href="css/style.css?v=<?php echo filemtime('css/style.css') ?>" />
 		<?php if (isLemon()): ?>

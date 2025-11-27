@@ -1,88 +1,162 @@
 <?php
 /**
- * DeepSID / Tracking
+ * DeepSID / Tracking (overhauled)
  *
- * Tracks IP addresses visiting the web site in real time. Called once upon
- * load by 'index.php' and then every 5 minutes by 'main.js'.
- * 
- * The resulting file, 'visitors.txt', can then be examined and its data output
- * to e.g. another web page to keep track of visitors to the site.
- * 
- * @used-by		index.php
- * @used-by		main.js
+ * Tracks IP addresses visiting the web site in (semi) real time. Called
+ * once upon load by 'index.php' and then periodically by 'main.js'.
+ *
+ * Output format in visitors.txt is kept identical:
+ *   ip_address, user_agent, user_name, time_created, time_updated
+ *
+ * @used-by     index.php
+ * @used-by     main.js
  */
 
 require_once("php/class.account.php"); // Includes setup
 
 define('TRACKFILE', 'visitors.txt');
 
+// How long (in minutes) a visitor is considered "active"
+define('ACTIVE_WINDOW_MINUTES', 30);
+
 try {
 
-	$now = strtotime(date('Y-m-d H:i:s', strtotime(TIME_ADJUST)));
-	$lines = array();
-	$user_name = $account->CheckLogin() ? $account->UserName() : '';
+    // Normalized "now", same style as the existing scripts
+    $now = strtotime(date('Y-m-d H:i:s', strtotime(TIME_ADJUST)));
 
-	if (($handle = fopen(TRACKFILE, 'r')) != false) {
-		// Get an array of lines and their CSV fields
-		while (($line = fgetcsv($handle)) != false) {
-			if (!isset($line[1])) break; // Empty file
-			array_push($lines, array(
-				'ip_address'	=> $line[0],
-				'user_agent'	=> $line[1], // Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:69.0) Gecko/20100101 Firefox/69.0
-				'user_name'		=> $line[2], // Empty if not logged in
-				'time_created'	=> $line[3],
-				'time_updated'	=> $line[4], // Unix timestamps
-			));
-		}
-	}
-	fclose($handle);
+    $userName   = $account->CheckLogin() ? $account->UserName() : '';
+    $ip         = isset($_SERVER['REMOTE_ADDR'])      ? $_SERVER['REMOTE_ADDR']      : '';
+    $userAgent  = isset($_SERVER['HTTP_USER_AGENT'])  ? $_SERVER['HTTP_USER_AGENT']  : '';
 
-	// Delete expired lines
-	foreach($lines as $index => $visitor) {
-		$minutes = round(($now - $visitor['time_updated']) / 60);
-		if ($minutes > 10)
-			unset($lines[$index]); // 10 minutes has passed; remove it
-	}
+    // Basic sanity: if we don't have IP or UA, just bail quietly
+    if ($ip === '' || $userAgent === '') {
+        return;
+    }
 
-	$exists = false;
-	foreach($lines as $index => $visitor) {
-		if ($visitor['ip_address'] == $_SERVER['REMOTE_ADDR'] &&
-			$visitor['user_agent'] == $_SERVER['HTTP_USER_AGENT']) {
-			// Still at it; update time
-			$lines[$index]['time_updated'] = $now;
-			// Update user name too if changed
-			$lines[$index]['user_name'] = $user_name;
-			$exists = true;
-			break;
-		}
-	}
+    // Skip external hits from Facebook (as in the original code),
+    // but use strict comparison to avoid the 0 == false pitfall.
+    if (strpos($userAgent, 'www.facebook.com') !== false) {
+        return;
+    }
 
-	// Add new visitor to array (except external hits from Facebook as they can be spammy)
-	// Also skip repeated IP addresses
-	if (!$exists && strpos($_SERVER['HTTP_USER_AGENT'], 'www.facebook.com') == false &&
-			array_search($_SERVER['REMOTE_ADDR'], array_column($lines, 'ip_address')) === false) {
-		array_push($lines, array(
-			'ip_address'	=> $_SERVER['REMOTE_ADDR'],
-			'user_agent'	=> $_SERVER['HTTP_USER_AGENT'],
-			'user_name'		=> $user_name,
-			'time_created'	=> $now,
-			'time_updated'	=> $now,
-		));
-	}
+    // Load existing visitors, if any
+    $visitors = array();
 
-	if (($handle = fopen(TRACKFILE, 'w+')) != false) {
-		// Write array to purged file
-		foreach($lines as $visitor) {
-			fputcsv($handle, $visitor);
-		}
-	}
-	fclose($handle);
+    if (file_exists(TRACKFILE)) {
+        $handle = fopen(TRACKFILE, 'r');
+        if ($handle !== false) {
+            while (($line = fgetcsv($handle)) !== false) {
+                // Expecting 5 columns: ip, ua, username, time_created, time_updated
+                if (count($line) < 5) {
+                    // Broken / placeholder line; ignore it
+                    continue;
+                }
 
-} catch(Throwable $e) {
-	$account->LogActivityError('tracking.php', $e->getMessage());
-	// Just delete the file in case of internal server error 500
-	unlink(TRACKFILE);
-	// Recreate it with a placeholder line in it
-	file_put_contents(TRACKFILE, '0');
+                $lineIp         = $line[0];
+                $lineUa         = $line[1];
+                $lineUser       = $line[2];
+                $timeCreated    = (int)$line[3];
+                $timeUpdated    = (int)$line[4];
+
+                // Drop expired visitors
+                $minutesSinceUpdate = round(($now - $timeUpdated) / 60);
+                if ($minutesSinceUpdate > ACTIVE_WINDOW_MINUTES) {
+                    continue;
+                }
+
+                $visitors[] = array(
+                    'ip_address'    => $lineIp,
+                    'user_agent'    => $lineUa,
+                    'user_name'     => $lineUser,
+                    'time_created'  => $timeCreated,
+                    'time_updated'  => $timeUpdated,
+                );
+            }
+            fclose($handle);
+        }
+    }
+
+    // Look for current visitor (IP + UA combo)
+    $exists        = false;
+    $existingIndex = null;
+
+    foreach ($visitors as $index => $visitor) {
+        if ($visitor['ip_address'] === $ip && $visitor['user_agent'] === $userAgent) {
+            $exists        = true;
+            $existingIndex = $index;
+            break;
+        }
+    }
+
+    if ($exists && $existingIndex !== null) {
+        // Update existing visitor
+        $visitors[$existingIndex]['time_updated'] = $now;
+
+        // If user_name changed (e.g. logged in after anon), update it
+        if ($userName !== '' && $visitors[$existingIndex]['user_name'] !== $userName) {
+            $visitors[$existingIndex]['user_name'] = $userName;
+        }
+
+    } else {
+        // Optional: keep only one entry per IP at a time, as in the old script
+        // (skip repeated IP addresses if already present with any UA).
+        $ipAlreadyPresent = false;
+        foreach ($visitors as $v) {
+            if ($v['ip_address'] === $ip) {
+                $ipAlreadyPresent = true;
+                break;
+            }
+        }
+
+        if (!$ipAlreadyPresent) {
+            // New visitor
+            $visitors[] = array(
+                'ip_address'    => $ip,
+                'user_agent'    => $userAgent,
+                'user_name'     => $userName,
+                'time_created'  => $now,
+                'time_updated'  => $now,
+            );
+        }
+    }
+
+    // Write back to file with locking, preserving the same CSV structure
+    $handle = fopen(TRACKFILE, 'c+');
+    if ($handle === false) {
+        throw new Exception('Unable to open tracking file for writing.');
+    }
+
+    // Obtain exclusive lock
+    if (!flock($handle, LOCK_EX)) {
+        fclose($handle);
+        throw new Exception('Unable to obtain lock on tracking file.');
+    }
+
+    // Truncate and rewrite
+    ftruncate($handle, 0);
+    rewind($handle);
+
+    foreach ($visitors as $visitor) {
+        fputcsv($handle, array(
+            $visitor['ip_address'],
+            $visitor['user_agent'],
+            $visitor['user_name'],
+            $visitor['time_created'],
+            $visitor['time_updated'],
+        ));
+    }
+
+    fflush($handle);
+    flock($handle, LOCK_UN);
+    fclose($handle);
+
+} catch (Throwable $e) {
+    // Log and reset tracking file gracefully
+    if (isset($account)) {
+        $account->LogActivityError('tracking.php', $e->getMessage());
+    }
+    @unlink(TRACKFILE);
+    // Recreate with placeholder, as in the original script
+    @file_put_contents(TRACKFILE, '0');
 }
 ?>

@@ -161,10 +161,29 @@ $(function() { // DOM ready
 	$("#time-bar").addClass(emulator)
 		.css("cursor", SID.emulatorFlags.supportSeeking ? "pointer" : "default");
 
-	// Update tracking every 5 minutes (also called once by 'index.php' upon load)
-	setInterval(function() {
-		$.get("tracking.php");
-	}, 300000);
+	/**
+	 * Handle root tracking. This is not related to event tracking.
+	 */
+
+		// 1. Ping once shortly after load
+		$(document).ready(function() {
+			setTimeout(PingTracking, 1000);
+		});
+
+		// 2. Periodic ping
+		setInterval(function() {
+			PingTracking();
+		}, 4 * 60 * 1000); // Every 4 minutes
+
+		// 3. Ping when tab becomes visible again
+		$(document).on("visibilitychange", function() {
+			if (!document.hidden) PingTracking();
+		});
+
+		// 4. Ping on unload
+		$(window).on("beforeunload", function() {
+			PingTracking();
+		});
 
 	/**
 	 * Handle hotkeys.
@@ -3127,6 +3146,8 @@ function CustomDialog(data, callbackYes, callbackNo) {
  * 
  * Only an IP address is logged, not a specific user.
  * 
+ * This is not related to root tracking. See below for more about that.
+ * 
  * @param {string} type			E.g. "start", "enter", "select", etc.
  * @param {string} target		E.g. song ID, folder path, emulator name, etc.
  * @param {function} callback	If specified, the function to call after PHP call
@@ -3188,6 +3209,28 @@ function CancelAllTracking() {
 		clearTimeout(trackingTimers[k].id);
 		delete trackingTimers[k];
 	}
+}
+
+/**
+ * Call the root tracking.
+ * 
+ * This is not related to the event tracking above. This is used for generating
+ * a text file that is then parsed and displayed as a separate HTML file.
+ */
+function PingTracking() {
+
+	// Prefer sendBeacon (even though it's not jQuery, it's passive and ideal here)
+	if (navigator.sendBeacon) {
+		try {
+			navigator.sendBeacon("tracking.php");
+			return;
+		} catch(e) {
+			// Fall through to AJAX fallback
+		}
+	}
+
+	// jQuery fallback
+	$.get("tracking.php");
 }
 
 /**

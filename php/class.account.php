@@ -530,7 +530,8 @@ class Account {
 						setcookie('user', $cookiehash, time()+3600*24*365, '/', COOKIE_HOST);
 						return true;
 					} else {
-						$this->LogError('No rows found containing the cookie hash "'.$cookiehash.'"');
+						// Commented out because it was blowing up the 'db_errors_account.txt' file
+						// $this->LogError('No rows found containing the cookie hash "'.$cookiehash.'"');
 						return false;
 					}
 				} catch(PDOException $exception) {

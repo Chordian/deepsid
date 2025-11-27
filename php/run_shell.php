@@ -61,12 +61,21 @@ if (!in_array($script, $allowedScripts)) {
 				font-size: 20px;
 			}
 
-			#output {
-				margin-top: 100px;
-				padding: 15px;
-				white-space: pre-wrap;
-				font-family: monospace;
+			#outputTransport {
+				box-sizing: border-box;
+
+				position: absolute;
+				top: 100px;
+				left: 0;
+				right: 0;
+				bottom: 0;
+
+				width: 100%;
+				height: calc(100vh - 100px);
+
+				border: none;
 			}
+
 			#runBtn {
 				padding: 8px 15px;
 				font-size: 14px;
@@ -83,26 +92,17 @@ if (!in_array($script, $allowedScripts)) {
 			<span id="status" style="margin-left:10px; color:#666;"></span>
 		</div>
 
-		<div id="output"></div>
+		<iframe id="outputTransport"></iframe>
+		<div id="output" style="display:none;"></div>
 
 		<script>
 			$("#runBtn").on("click", function() {
 				$("#status").text("Running...");
 				$("#output").empty();
 
-				$.ajax({
-					url: "run_execute.php",
-					method: "POST",
-					data: { script: "<?php echo $script; ?>" },
-					success: function(data) {
-						$("#output").html(data);
-						$("#status").text("Completed.");
-					},
-					error: function(xhr) {
-						$("#output").text("Error running script:\n\n" + xhr.responseText);
-						$("#status").text("Error!");
-					}
-				});
+				// Load and stream output into hidden iframe
+				document.getElementById("outputTransport").src =
+					"run_execute.php?script=<?php echo $script; ?>";
 			});
 		</script>
 	</body>
