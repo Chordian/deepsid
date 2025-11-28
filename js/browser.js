@@ -1577,7 +1577,10 @@ Browser.prototype = {
 							}
 
 							// Add a small star in front of the folder if everything within has been rated
-							var allStarred = folder.all_rated ? '<div class="all-starred"></div>' : '';
+							// BETA: Only evaluated by JCH for now.
+							var allStarred = '';
+							if ($("#logged-username").text() == "JCH")
+								allStarred = folder.all_rated ? '<div class="all-starred"></div>' : '';
 
 							var folderEntry = // GET FOLDER: GENERAL FOLDERS
 								'<tr'+(folder.incompatible.indexOf(SID.emulator) !== -1 || isMobileDenied ? ' class="disabled"' : '')+'>'+
@@ -2043,6 +2046,11 @@ Browser.prototype = {
 		// Star rating for a folder or a SID file (PHP script figures this out by itself)
 		$.post("php/rating_write.php", { fullname: fullname, rating: rating }, function(data) {
 			this.validateData(data, function(data) {
+
+				// Rebuild the ratings cache
+				$.get("php/rating_cache.php", function(data) {
+					this.validateData(data);
+				}.bind(this));
 
 				var stars = this.buildStars(data.rating);
 

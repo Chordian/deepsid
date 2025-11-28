@@ -1,6 +1,8 @@
 <?php
 /**
- * DeepSID - rebuild ratings cache for all users
+ * DeepSID
+ * 
+ * Rebuild the ratings cache for all users.
  */
 
 if (!$account->CheckLogin() || $account->UserName() != 'JCH' || $account->UserID() != JCH)

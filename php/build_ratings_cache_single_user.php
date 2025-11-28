@@ -1,19 +1,22 @@
 <?php
 /**
+ * DeepSID
+ * 
  * Build ratings_cache rows for a single user.
- * Now creates rows for ALL folders, even if rated_files = 0.
+ * 
+ * @used-by		build_ratings_cache_all_users.php
+ * @used-by		build_ratings_cache_specific_user.php
  */
 
-if (!$account->CheckLogin() || $account->UserName() != 'JCH' || $account->UserID() != JCH)
-	die("This is for administrators only.");
-
 /**
+ * Build the ratings cache for the specified user ID.
+ * 
  * @param PDO $db
  * @param int $userId
  */
 function build_ratings_cache_for_user(PDO $db, int $userId): void
 {
-    // 1) Get ALL FOLDERS from hvsc_folders
+    // 1. Get ALL FOLDERS from hvsc_folders
     $select_folders = $db->query('SELECT fullname FROM hvsc_folders ORDER BY fullname');
     $folders = $select_folders->fetchAll(PDO::FETCH_OBJ);
 
@@ -21,7 +24,7 @@ function build_ratings_cache_for_user(PDO $db, int $userId): void
         return;
     }
     
-    // 2) Get ALL RATED FILES for this user (direct ratings only)
+    // 2. Get ALL RATED FILES for this user (direct ratings only)
     $select_ratings = $db->prepare('
         SELECT f.fullname
         FROM ratings r
@@ -33,12 +36,11 @@ function build_ratings_cache_for_user(PDO $db, int $userId): void
     $select_ratings->execute([':user_id' => $userId]);
     $ratedFiles = $select_ratings->fetchAll(PDO::FETCH_COLUMN, 0);
 
-    // Build folder => count map from rated files
     $folderMap = []; // folder => rated_files
 
     foreach ($ratedFiles as $fullname) {
         $pos = strrpos($fullname, '/');
-        if ($pos === false) continue; // safety
+        if ($pos === false) continue; // Safety
 
         $folder = substr($fullname, 0, $pos);
 
@@ -46,16 +48,16 @@ function build_ratings_cache_for_user(PDO $db, int $userId): void
             $folderMap[$folder] = 0;
         }
 
-        $folderMap[$folder] += 1; // one rated file in this folder
+        $folderMap[$folder] += 1; // One rated file in this folder
     }
 
-    // 3) Prepare insertion
+    // 3. Prepare insertion
     $stmtInsert = $db->prepare('
         INSERT INTO ratings_cache (user_id, folder, rated_files)
         VALUES (:user, :folder, :rated)
     ');
 
-    // 4) Insert ALL folders — zeros included
+    // 4. Insert ALL folders — zeros included
     foreach ($folders as $f) {
         $folder = $f->fullname;
 

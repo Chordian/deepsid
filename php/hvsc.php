@@ -1037,33 +1037,36 @@ try {
 
 			// Find out if the user has rated EVERYTHING inside this folder (and its sub folders)
 			// NOTES: This requires that the 'ratings_cache' table is up to date with recent collections.
-			$select_files = $db->prepare("
-				SELECT files
-				FROM hvsc_folders
-				WHERE fullname = :folder
-			");
-			$select_files->execute([':folder' => $folder.$file]);
-			$total_files = (int)$select_files->fetchColumn();
-
-			if ($total_files === 0) {
-				$all_rated = false;
-			} else {
-				// Sum ratings from cache for this folder and its subfolders
-				// NOTE: This requires a composite index for 'user_id' and 'folder' in the 'ratings_cache' table.
-				$select_cache = $db->prepare("
-					SELECT SUM(rated_files)
-					FROM ratings_cache
-					WHERE user_id = :uid
-					AND (folder = :folder OR folder LIKE CONCAT(:folder, '/%'))
+			if ($account->UserID() == JCH) { // BETA: Only evaluated by JCH for now.
+				$select_files = $db->prepare("
+					SELECT files
+					FROM hvsc_folders
+					WHERE fullname = :folder
 				");
-				$select_cache->execute([
-					':uid'    => $user_id,
-					':folder' => $folder.$file
-				]);
+				$select_files->execute([':folder' => $folder.$file]);
+				$total_files = (int)$select_files->fetchColumn();
 
-				$rated_sum = (int)$select_cache->fetchColumn();
-				$all_rated = ($rated_sum === $total_files); // Boolean verdict
-			}
+				if ($total_files === 0) {
+					$all_rated = false;
+				} else {
+					// Sum ratings from cache for this folder and its subfolders
+					// NOTE: This requires a composite index for 'user_id' and 'folder' in the 'ratings_cache' table.
+					$select_cache = $db->prepare("
+						SELECT SUM(rated_files)
+						FROM ratings_cache
+						WHERE user_id = :uid
+						AND (folder = :folder OR folder LIKE CONCAT(:folder, '/%'))
+					");
+					$select_cache->execute([
+						':uid'    => $user_id,
+						':folder' => $folder.$file
+					]);
+
+					$rated_sum = (int)$select_cache->fetchColumn();
+					$all_rated = ($rated_sum === $total_files); // Boolean verdict
+				}
+			} else
+				$all_rated = false; // BETA: This feature is not ready for other users yet.
 
 			array_push($folders_ext, array(
 				'foldername'	=> $file,
