@@ -385,33 +385,60 @@ Browser.prototype = {
 				break;
 			case "folder-back":
 				if (!$("#folder-back").hasClass("disabled")) {
-					if (this.redirectFolder == "") {
-						// Go back one folder in the HVSC tree
-						this.path = this.path.substr(0, this.path.lastIndexOf("/"));
-					} else {
-						// Jump back to origin
-						this.path = this.redirectFolder;
-						this.redirectFolder = "";
-					}
-					ctrls.state("prev/next", "disabled");
-					ctrls.state("subtunes", "disabled");
-					if (this.isSearching) {
-						this.scrollPositions.pop(); // First pop out of search state
-						this.kbPositions.pop();
-					}
-					CancelTrackType("enter:folder");
-					this.getFolder(this.scrollPositions.pop(), undefined,
-						(this.path === "/CSDb Music Competitions" || this.path === "/_Compute's Gazette SID Collection")
-							&& this.cache.folder !== "" /* <- Boolean parameter */ ,
-						function() {
-							this.kbSelectedRow = this.kbPositions.pop();
-							if (typeof this.kbSelectedRow == "undefined")
-								this.moveKeyboardToFirst();
-							this.moveKeyboardSelection(this.kbSelectedRow, false);
+					// First get the boolean for showing the "all starred" icon when showing parent folder
+					// NOTE: This is actually only used by CGSC since its main folder is cached.
+					$.get("php/rating_folder.php", { fullname: this.path.substring(1) }, function(data) {
+						this.validateData(data, function(data) {
+							// Does CGSC need to show the tiny "all starred" icon for the leaving folder?
+							if (this.path.indexOf("Compute's Gazette SID Collection") !== -1 &&
+									this.cache.folder !== "") {
+
+								var folderName = this.path.split("/").slice(-1)[0],
+									$folders = $(this.cache.folder);
+								var $the_folder = $($folders)
+									.find('.name[data-name="'+encodeURIComponent(folderName)+'"]').parents("td");
+
+								if (data.all_rated) {
+									// TRUE; unwrap and add icon
+									$the_folder.prepend('<div class="all-starred"></div>');
+								} else {
+									// FALSE; unwrap and remove icon
+									$the_folder.find('div.all-starred').remove();
+								}
+
+								// Wrap it up again
+								this.cache.folder = $("<div>").append($folders.clone()).html();
+							}
+
+							if (this.redirectFolder == "") {
+								// Go back one folder in the HVSC tree
+								this.path = this.path.substr(0, this.path.lastIndexOf("/"));
+							} else {
+								// Jump back to origin
+								this.path = this.redirectFolder;
+								this.redirectFolder = "";
+							}
+							ctrls.state("prev/next", "disabled");
+							ctrls.state("subtunes", "disabled");
+							if (this.isSearching) {
+								this.scrollPositions.pop(); // First pop out of search state
+								this.kbPositions.pop();
+							}
+							CancelTrackType("enter:folder");
+							this.getFolder(this.scrollPositions.pop(), undefined,
+								(this.path === "/CSDb Music Competitions" || this.path === "/_Compute's Gazette SID Collection")
+									&& this.cache.folder !== "" /* <- Boolean parameter */ ,
+								function() {
+									this.kbSelectedRow = this.kbPositions.pop();
+									if (typeof this.kbSelectedRow == "undefined")
+										this.moveKeyboardToFirst();
+									this.moveKeyboardSelection(this.kbSelectedRow, false);
+							}.bind(this));
+							this.getComposer();
+							ctrls.subtuneCurrent = ctrls.subtuneMax = 0; // Clear subtune switch
+							UpdateURL(true);
+						});
 					}.bind(this));
-					this.getComposer();
-					ctrls.subtuneCurrent = ctrls.subtuneMax = 0; // Clear subtune switch
-					UpdateURL(true);
 				}
 				break;
 			case "search-button":

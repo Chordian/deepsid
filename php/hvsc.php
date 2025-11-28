@@ -1036,7 +1036,8 @@ try {
 			}
 
 			// Find out if the user has rated EVERYTHING inside this folder (and its sub folders)
-			// NOTES: This requires that the 'ratings_cache' table is up to date with recent collections.
+			// NOTE: This requires that the 'ratings_cache' table is up to date with recent collections.
+			// NOTE: See also 'ratings_folder.php' for duplicated code.
 			if ($account->UserID() == JCH) { // BETA: Only evaluated by JCH for now.
 				$select_files = $db->prepare("
 					SELECT files
