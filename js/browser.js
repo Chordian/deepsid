@@ -394,15 +394,15 @@ Browser.prototype = {
 									this.cache.folder !== "") {
 
 								var folderName = this.path.split("/").slice(-1)[0],
-									$folders = $(this.cache.folder);
+									$folders = $(this.cache.folder); // Unwrap it
 								var $the_folder = $($folders)
 									.find('.name[data-name="'+encodeURIComponent(folderName)+'"]').parents("td");
 
 								if (data.all_rated) {
-									// TRUE; unwrap and add icon
+									// TRUE:  Add icon
 									$the_folder.prepend('<div class="all-starred"></div>');
 								} else {
-									// FALSE; unwrap and remove icon
+									// FALSE: Remove icon
 									$the_folder.find('div.all-starred').remove();
 								}
 
@@ -1604,9 +1604,8 @@ Browser.prototype = {
 							}
 
 							// Add a small star in front of the folder if everything within has been rated
-							// BETA: Only evaluated by JCH for now.
 							var allStarred = '';
-							if ($("#logged-username").text() == "JCH")
+							if (this.path !== "") // Don't show the icons in the root
 								allStarred = folder.all_rated ? '<div class="all-starred"></div>' : '';
 
 							var folderEntry = // GET FOLDER: GENERAL FOLDERS

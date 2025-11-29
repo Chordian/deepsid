@@ -137,6 +137,7 @@
 	--color-text-fa-common:			#c8c8c8;
 	--color-text-admin-span:		#888977;
 	--color-text-deprecated:		#e22;
+	--color-text-strong:			var(--color-bottom);
 
 	--color-tags-bracket:			#a1a294;			/* Used for horizontal tag start-to-end brackets */
 	--color-tags-bracket-up:		#949494;
@@ -554,6 +555,7 @@
 	--color-text-fa-common:			#464646;
 	--color-text-admin-span:		#888;
 	--color-text-deprecated:		#e33;
+	--color-text-strong:			var(--color-top);
 
 	--color-tags-bracket:			#808080;			/* Used for horizontal tag start-to-end brackets */
 	--color-tags-bracket-up:		#949494;
@@ -963,6 +965,11 @@ small.u2 { margin-left: 2px; }
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
+}
+
+/* Text color is absolute white or black (depending on the color theme) */
+.strong {
+	color: var(--color-text-strong);
 }
 
 /* @link http://style64.org/c64-truetype */

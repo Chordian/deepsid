@@ -9,27 +9,10 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- More work on the ratings cache feature:
-
-  - Need first time cache update!
-  
-  - CGSC folder is cached - that's why "allStarred" doesn't work when browsing back.
-      - Now fixed in browser.js - upload and test it!
-
-
-
-  - Symlists always sit at 0 rated. Why?
-
-
-
 - A "refresh cache" link next to cached message in the footer of a CSDb page. (Consider only
   showing this for DeepSID administrators.)
 
 - Ken (JSIDPlay2) has a lot more FM YAM songs in his demo folder. Check that out.
-
-- Prefix folder names with a tick mark when all files inside have been starred.
-  UPDATE: Tried this in 'hvsc.php' with count of rating rows, but is was too slow online.
-  I need a ratings cache table - see a ready ChatGPT chat about this.
 
 - Make rolling random tips in the upper news box. Hotkeys to use, etc. Part of the random
   messages could also be other things, for example a recommended link.

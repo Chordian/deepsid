@@ -17,15 +17,12 @@ require_once("class.account.php"); // Includes setup
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest')
 	die("Direct access not permitted.");
 
-if (!$account->CheckLogin())
-	die(json_encode(['status'=>'error', 'message'=>'User not logged in']));
+if ($account->CheckLogin()) {
+	$user_id = $account->UserID();
 
-$user_id = $account->UserID();
+	try {
+		$db = $account->GetDB();
 
-try {
-	$db = $account->GetDB();
-
-	if ($account->UserID() == JCH) { // BETA: Only evaluated by JCH for now.
 		$select_files = $db->prepare("
 			SELECT files
 			FROM hvsc_folders
@@ -52,13 +49,13 @@ try {
 			$rated_sum = (int)$select_cache->fetchColumn();
 			$all_rated = ($rated_sum === $total_files); // Boolean verdict
 		}
-	} else
-		$all_rated = false; // BETA: This feature is not ready for other users yet.
 
-} catch(PDOException $e) {
-	$account->LogActivityError('rating_folder.php', $e->getMessage());
-	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
+	} catch(PDOException $e) {
+		$account->LogActivityError('rating_folder.php', $e->getMessage());
+		die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
+	}
+} else {
+	$all_rated = false;
 }
-
 echo json_encode(array('status' => 'ok', 'all_rated' => $all_rated));
 ?>

@@ -678,7 +678,7 @@
 							<!--<span>Want to learn how to make SID tunes? Check out <a href="https://www.youtube.com/watch?v=nXNtLetxFUg">this tutorial video</a> now on YouTube.</span>-->
 
 							<!-- <span>If the tags overlap or hide factoids like song lengths, you can turn them off with the left corner button or by pressing 'Y'.</span>-->
-							<span>I've published a new <a href="https://blog.chordian.net/2025/11/15/more-tags-in-deepsid/">blog post</a>. I go over all the latest tag additions and what they mean.</span>
+							<span><div style="margin-bottom:10px;"><b class="strong">NEW:</b> A small star icon in front of a folder means that everything inside has been rated.</div>Cool for completionists!</span>
 
 							<!--<span><p style="margin:0 0 4px 0;">Have you made a new SID tune and need to slap a cool visualizer with a logo on it?</p><b style="font-size:22px;">Check out <a href="https://sidquake.c64demo.com/">SIDquake</a> by Raistlin!</b></span>-->
 							<!--<span> .... See <a href="#" onclick="$('#tab-changes').trigger('click'); return false;">Changes</a> for info.</span>-->
@@ -1969,6 +1969,12 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>November 29, 2025</h3>
+						<ul>
+							<li>A small star icon in front of a folder indicates that everything inside has been rated. This includes all subfolders.
+								The feature applies only to the HVSC, CGSC, and SH collection folders.</li>
+						</ul>
 
 						<h3>November 23, 2025</h3>
 						<ul>

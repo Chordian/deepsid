@@ -78,6 +78,11 @@ $(function() { // DOM ready
 		});
 	}
 
+	// Make sure the ratings cache is ready
+	$.get("php/rating_cache.php", function(data) {
+		browser.validateData(data);
+	});
+
 	isMobile = $("body").attr("data-mobile") !== "0";
 	isNotips = $("body").attr("data-notips") !== "0";
 	miniPlayer = parseInt($("body").attr("data-mini"));
