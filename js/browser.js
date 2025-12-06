@@ -1775,7 +1775,7 @@ Browser.prototype = {
 							sidSpecial = '<div class="sid-special sidsp-3sid">3SID</div>';
 						else if (this.labelTag != "")
 							// Box for tag label
-							sidSpecial = '<div class="sid-special sidsp-label"><div class="o"><div class="i"></div><span></span></div> ' + this.labelTag + '</div>';
+							sidSpecial = '<div class="sid-special sidsp-label"><div></div> ' + this.labelTag + '</div>';
 
 						// Define a bar width for size-type factoids
 						var fbarWidth = 0;

@@ -158,12 +158,10 @@
 	--color-text-sidsp-3sid:		#b44;				/* Box for 3SID */
 	--color-border-sidsp-3sid:		#b44;
 	--color-bg-sidsp-3sid:			#faf6f6;
-	--color-text-sidsp-label:		#333;				/* Box for tag label #707590 */
+	--color-text-sidsp-label:		#666;				/* Box for tag label #707590 */
 	--color-border-sidsp-label:		transparent;
 	--color-bg-sidsp-label:			transparent;
-	--color-bg-label-c64:			#5b69b9;
-	--color-border-label-c64:		#aeb1c0;
-	--color-border-label-tv:		var(--color-bottom);
+	--color-dot-sidsp-label:		#666;
 
 	--color-scrollbar-thumb:		#ccccbe;
 	--color-scrollbar-thumb-hover:	#a5a59a;
@@ -581,12 +579,10 @@
 	--color-text-sidsp-3sid:		#ebb;				/* Box for 3SID */
 	--color-border-sidsp-3sid:		#ebb;
 	--color-bg-sidsp-3sid:			#361e24;
-	--color-text-sidsp-label:		#eee;				/* Box for tag label */
+	--color-text-sidsp-label:		#ccc;				/* Box for tag label */
 	--color-border-sidsp-label:		transparent;
 	--color-bg-sidsp-label:			transparent;
-	--color-bg-label-c64:			#44529d;
-	--color-border-label-c64:		var(--color-bg-tag-prod);
-	--color-border-label-tv:		var(--color-bottom);
+	--color-dot-sidsp-label:		#ccc;
 
 	--color-scrollbar-thumb:		#555;
 	--color-scrollbar-thumb-hover:	#6a6a6a;
@@ -3784,42 +3780,24 @@ input[type=range]::-ms-track {
 
 				/* SID special label for tag labels */
 				#songs .sidsp-label {
-					top: 10px;
+					top: 11px;
 					right: 5px;
 					color: var(--color-text-sidsp-label);
 					border-color: var(--color-border-sidsp-label);
 					background: var(--color-bg-sidsp-label);
 				}
 
-					#songs .sidsp-label div.o {
+					/* Dot in front of production title */
+					#songs .sidsp-label div {
 						display: inline-block;
 						position: relative;
-						top: 2px;
-						background: var(--color-bg-label-c64);
-						height: 11px;
-						width: 14px;
+						top: -1px;
+						background: var(--color-dot-sidsp-label);
+						height: 4px;
+						width: 4px;
 						margin-right: 1px;
-						border: 1px solid var(--color-border-label-tv);
 						border-radius: 1px;
 					}
-
-						#songs .sidsp-label div.i {
-							height: 100%;
-							width: 100%;
-							line-height: 0;
-							background: transparent;
-							border: 1.5px solid var(--color-border-label-c64);
-						}
-
-							#songs .sidsp-label span {
-								display: block;
-								position: relative;
-								top: -7px;
-								left: 2.5px;
-								background: var(--color-border-label-c64);
-								width: 2px;
-								height: 1px;
-							}
 
 				/* A smaller block-wrap width for the SID filename when the SID special label is present */
 				#songs .bw-sidsp {
