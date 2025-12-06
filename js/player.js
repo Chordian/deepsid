@@ -1395,6 +1395,7 @@ SIDPlayer.prototype = {
 			case "legacy":
 				var normalSampleRate = ScriptNodePlayer.getWebAudioSampleRate();
 				if (this.WebSid)
+					// Lowest possible for max speed is 3277 (at least on my PC)
 					this.WebSid.resetSampleRate(normalSampleRate / multiplier);
 				break;
 			case "hermit":

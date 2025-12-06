@@ -505,9 +505,16 @@ $(function() { // DOM ready
 						}
 						break;
 
-					case 160:	// Keyup '^' - test something
+					case 65:	// Keyup 'a' - test something
 
 						log("test");
+
+						SID.setVolume(0.3);
+						//SID.WebSid.resetSampleRate(5050); // Lowest possible rate for max FF speed = 3277
+						SID.speed(10); // Max allowed by WebSid emulator is 14
+						setTimeout(() => {
+							$("#faster").trigger("mouseup");
+						}, 2000); // 2 seconds fast forwards ~20-30 seconds of playtime
 						break;
 
 					default:

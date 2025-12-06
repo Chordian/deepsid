@@ -1765,12 +1765,17 @@ Browser.prototype = {
 							}
 						});
 
-						// Need to show a special flag box for e.g. "2SID"?
+						// Need to show a special label box?
 						var sidSpecial = "";
 						if (file.filename.toLowerCase().indexOf("_2sid.sid") !== -1)
+							// Box for 2SID
 							sidSpecial = '<div class="sid-special sidsp-2sid">2SID</div>';
 						else if (file.filename.toLowerCase().indexOf("_3sid.sid") !== -1)
+							// Box for 3SID
 							sidSpecial = '<div class="sid-special sidsp-3sid">3SID</div>';
+						else if (this.labelTag != "")
+							// Box for tag label
+							sidSpecial = '<div class="sid-special sidsp-label"><div class="o"><div class="i"></div><span></span></div> ' + this.labelTag + '</div>';
 
 						// Define a bar width for size-type factoids
 						var fbarWidth = 0;
@@ -2177,8 +2182,9 @@ Browser.prototype = {
 	 * @return {string}			The HTML string to put into the SID row
 	 */
 	buildTags: function(tags, types, ids) {
+		this.labelTag = "";
 		var list_of_tags = remix64 = gamebase64 = id = "";
-		$.each(tags, function(i, tag) {
+		$.each(tags, (i, tag) => {
 			id = ' data-id="'+ids[i]+'"';
 			if (tag == "Remix64") {
 				// A special look for the "Remix64" tag
@@ -2208,12 +2214,15 @@ Browser.prototype = {
 			} else if (tag == "->") {
 				// Replace "->" with a pretty unicode arrow instead
 				// Disabled as perhaps users find them too confusing.
-				//list_of_tags += '<div class="tag tag-transparent"'+id+'>🡪</div>';
+				// list_of_tags += '<div class="tag tag-transparent"'+id+'>🡪</div>';
 			} else if (tag == "$31" || tag == "$61" || tag == "$71" || tag == "2SID" || tag == "3SID" || tag == "# ?" || tag.indexOf("Small Event") !== -1) {
 				// These tags will not be shown for various reasons:
 				// Waveforms: Too commonly used in SID tunes and just adds noise.
 				// Small Event: Just don't add an event tag if it's tiny and rare.
 				// 2SID/3SID: No longer needed because of SID special labels.
+			} else if (types[i] == "label") {
+				// A label tag is placed where the special 2SID/3SID labels are also located
+				this.labelTag = tag;
 			} else {
 				// NOTE: Don't change the order of tags or the collector for a folder will break!
 				// If you want to change the order of tags, see GetTagsAndTypes() in 'tags_read.php'

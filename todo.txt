@@ -9,10 +9,30 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+- The ability to add a "special tag" - like the name of a demo. Uses the same box as the 2SID
+  and 3SID label uses. Could be used for the "Fitty" songs. It would probably be a good idea
+  to add an option (e.g. "Edit Special Tag") on the context menu for this.
+
 - A "refresh cache" link next to cached message in the footer of a CSDb page. (Consider only
   showing this for DeepSID administrators.)
 
+- Investigate with WebSid emulator: Click progress bar and 100% fast forward to that point?
+  WIP: Tested a little with hotkey 'a' (test). See 'main.js' for code.
+
+- Tags: Make a unified tag for files that have less then 3 channels, then replace all those
+  1ch, 2ch and 3ch tags. You have to find one yourself - all the suggestions offered by both
+  ChatGPT and Gemini sucks.
+
 - Ken (JSIDPlay2) has a lot more FM YAM songs in his demo folder. Check that out.
+
+- Tag brackets drop-down boxes: Only allow event type tags in top drop-down box and only
+  allow production type tags in bottom drop-down box. (Perhaps allow administrators access
+  to all types in both drop-down boxes.)
+
+- Tags dialog box: Make a dummy first item in the left tag box and code it so if this is
+  pressed ENTER on, it doesn't add it but instead accepts to close the dialog box. This is to
+  circumvent an annoying change to web browsers recently that everyone (including myself)
+  have a hard time getting used to.
 
 - Make rolling random tips in the upper news box. Hotkeys to use, etc. Part of the random
   messages could also be other things, for example a recommended link.
@@ -25,7 +45,9 @@ SHOULD BE DONE
 - Replace all "utf8mb3_unicode_ci" database collations with "utf8mb4_0900_ai_ci" instead.
 
 - Idea from Anon-Relays: Loop song X number of times before moving on to the next one. In
-  the settings, the default number should of course be 1.
+  the settings, the default number should of course be 1. UPDATE: It doesn't have to be a
+  setting. It could also be continuously toggle the LOOP button to get, infinity, 2 times,
+  3 times, and then start over.
 
 - Cache: Consider also caching the 'SHOW' pages. Alternatively, you could just disable the
   button on cached pages loaded whenever CSDb is down.
@@ -36,6 +58,8 @@ SHOULD BE DONE
   I thought about in the root where only a "\" is displayed, but is there a better place?
 
 - Replace the PDO connection block in PHP scripts with '$db = $account->GetDB();' instead.
+
+- See if you can get ChatGPT to convert tasks in HVSC update ToDo to PHP files.
 
 - BUG: In some situations the search box doesn't show the 'X' icon when it should. For
   example, when clicking the 'New in HVSC update #83' folder link.
