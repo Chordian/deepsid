@@ -1970,6 +1970,11 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>December 6, 2025</h3>
+						<ul>
+							<li>Added a tag label next to the rating stars showing the production a SID was made for.</li>
+						</ul>
+
 						<h3>November 29, 2025</h3>
 						<ul>
 							<li>A small star icon in front of a folder indicates that everything inside has been rated. This includes all subfolders.

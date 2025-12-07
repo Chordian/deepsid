@@ -9,10 +9,6 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- The ability to add a "special tag" - like the name of a demo. Uses the same box as the 2SID
-  and 3SID label uses. Could be used for the "Fitty" songs. It would probably be a good idea
-  to add an option (e.g. "Edit Special Tag") on the context menu for this.
-
 - A "refresh cache" link next to cached message in the footer of a CSDb page. (Consider only
   showing this for DeepSID administrators.)
 

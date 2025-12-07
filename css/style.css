@@ -159,8 +159,6 @@
 	--color-border-sidsp-3sid:		#b44;
 	--color-bg-sidsp-3sid:			#faf6f6;
 	--color-text-sidsp-label:		#666;				/* Box for tag label #707590 */
-	--color-border-sidsp-label:		transparent;
-	--color-bg-sidsp-label:			transparent;
 	--color-dot-sidsp-label:		#666;
 
 	--color-scrollbar-thumb:		#ccccbe;
@@ -580,8 +578,6 @@
 	--color-border-sidsp-3sid:		#ebb;
 	--color-bg-sidsp-3sid:			#361e24;
 	--color-text-sidsp-label:		#ccc;				/* Box for tag label */
-	--color-border-sidsp-label:		transparent;
-	--color-bg-sidsp-label:			transparent;
 	--color-dot-sidsp-label:		#ccc;
 
 	--color-scrollbar-thumb:		#555;
@@ -3778,13 +3774,20 @@ input[type=range]::-ms-track {
 					background: var(--color-bg-sidsp-3sid);
 				}
 
-				/* SID special label for tag labels */
+				/* SID special label for tag labels with a production title */
 				#songs .sidsp-label {
-					top: 11px;
+					top: 9px;
 					right: 5px;
+					height: 18px;
+					line-height: 1.8;
+					padding-left: 30px;
 					color: var(--color-text-sidsp-label);
-					border-color: var(--color-border-sidsp-label);
-					background: var(--color-bg-sidsp-label);
+					border: none;
+					background: linear-gradient(to right,
+						transparent 0%,
+						var(--color-bg-box) 22%
+					);
+					z-index: 1;
 				}
 
 					/* Dot in front of production title */
@@ -3797,6 +3800,22 @@ input[type=range]::-ms-track {
 						width: 4px;
 						margin-right: 1px;
 						border-radius: 1px;
+					}
+
+					/* When hovering on the SID row */
+					#songs tr:hover .sidsp-label {
+						background: linear-gradient(to right,
+							transparent 0%,
+							var(--color-bg-sid-hover) 22%
+						);
+					}
+
+					/* When the SID row is selected */
+					#songs tr.selected .sidsp-label {
+						background: linear-gradient(to right,
+							transparent 0%,
+							var(--color-bg-sid-selected) 22%
+						);
 					}
 
 				/* A smaller block-wrap width for the SID filename when the SID special label is present */
