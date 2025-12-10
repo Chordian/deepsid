@@ -60,6 +60,7 @@ const factoidMessage = [
 	"10. CSDb SID ID",
 	"11. Game status (RELEASE/PREVIEW)",
 	"12. Number of CSDb entries",
+	"13. Production label",
 ];
 
 const isFirefox = typeof InstallTrigger !== "undefined"; // Firefox can scroll more smoothly than Chrome
@@ -478,7 +479,7 @@ $(function() { // DOM ready
 					case 85:	// Keyup 'u' - cycle through factoid types
 
 						main.factoidType++;
-						if (main.factoidType > 12) main.factoidType = 0;
+						if (main.factoidType > 13) main.factoidType = 0;
 
 						SelectFactoid(main.factoidType);
 						break;

@@ -1278,7 +1278,7 @@ try {
 					$factoid = $type . ' ' . $version;
 
 					if ($factoid == 'PSID 2.0') {
-						$factoid = '<div>' . $factoid . '<div>';
+						$factoid = '<div>' . $factoid . '</div>';
 					}
 					break;
 

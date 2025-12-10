@@ -2652,6 +2652,8 @@
 
 		<?php endif ?>
 
+		<div id="measure-factoid" style="position:absolute;left:-9999px;top:-9999px;visibility:hidden;white-space:nowrap;"></div>
+
 	</body>
 
 </html>

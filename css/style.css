@@ -3343,7 +3343,8 @@ input[type=range]::-ms-track {
 	}
 
 	#songs .selected .info,
-	#songs .selected .factoid {
+	#songs .selected .factoid,
+	#measure-factoid .factoid {
 		font-weight: normal;
 		color: var(--color-button-hover);
 	}
@@ -3374,7 +3375,7 @@ input[type=range]::-ms-track {
 		/* Stars for SID files need to be aligned with the first line (the SID filename itself) */
 		#songs td.filestars {
 			vertical-align: top;
-			padding-top: 6px;
+			padding-top: 4.5px;
 		}
 
 		#annex .annex-condensed {
@@ -3467,14 +3468,16 @@ input[type=range]::-ms-track {
 
 		#songs .fdiv {
 			position: relative;
+			top: 9px;
 		}
 
 		#songs .factoid,
-		#songs .uploaded-time {
+		#songs .uploaded-time,
+		#measure-factoid .factoid {
 			float: right;
 			position: relative;
 			top: 2px;
-			right: 13px;
+			right: 8px;
 			font-size: 11px;
 			line-height: 11px;
 			/*color: var(--color-text-minor);*/
@@ -3482,20 +3485,28 @@ input[type=range]::-ms-track {
 			z-index: 2;
 		}
 
+			#songs .uploaded-time {
+				top: 4px;
+				right: 13px;
+			}
+
 			/* Static width factoid field */
-			#songs .factoid span {
+			#songs .factoid span,
+			#measure-factoid .factoid span {
 				display: inline-block;
 				width: 22px;
 				text-align: right;
 			}
 
 				/* Wider static field for e.g. ID type values */
-				#songs .factoid span.id {
+				#songs .factoid span.id,
+				#measure-factoid .factoid span.id {
 					width: 32px;
 				}
 
 				/* Even wider */
-				#songs .factoid span.big {
+				#songs .factoid span.big,
+				#measure-factoid .factoid span.big {
 					width: 38px;
 				}
 
@@ -3531,7 +3542,7 @@ input[type=range]::-ms-track {
 			background-size: 200px 100%;        /* Anchor scale */
 			background-repeat: no-repeat;
 			background-position: right center;  /* Gradient anchored at right edge */
-			z-index: 1;
+			z-index: 0;
 		}
 
 		/* Container for the two corner buttons in the bottom */
@@ -4001,6 +4012,7 @@ input[type=range]::-ms-track {
 		/* Alloyrun.sid (file) */
 		#songs .file {
 			padding-top: 6px;
+			text-shadow: 1px 1px 1px var(--color-bg-box); /* Shadow on factoid bar */
 		}
 
 		#songs .selected .info {

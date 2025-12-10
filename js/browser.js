@@ -1766,8 +1766,9 @@ Browser.prototype = {
 						});
 
 						// Need to show a special label box?
+//@todo change or remove
 						var sidSpecial = "";
-						if (file.filename.toLowerCase().indexOf("_2sid.sid") !== -1)
+						/*if (file.filename.toLowerCase().indexOf("_2sid.sid") !== -1)
 							// Box for 2SID
 							sidSpecial = '<div class="sid-special sidsp-2sid">2SID</div>';
 						else if (file.filename.toLowerCase().indexOf("_3sid.sid") !== -1)
@@ -1776,6 +1777,7 @@ Browser.prototype = {
 						else if (this.labelTag != "")
 							// Box for tag label
 							sidSpecial = '<div class="sid-special sidsp-label"><div></div> ' + this.labelTag + '</div>';
+						*/
 
 						// Define a bar width for size-type factoids
 						var fbarWidth = 0;
@@ -1797,15 +1799,28 @@ Browser.prototype = {
 							}
 						}
 
+						if (main.factoidType == 13)
+							// Use tag label as factoid
+							file.factoid = this.labelTag;
+
+						var factoidText = '<span class="factoid">'+file.factoid+'</span>';
+						$("#measure-factoid").html(factoidText); // Find the width of the factoid text
+						var nameWidth = 300 - $("#measure-factoid span").outerWidth(); // Set width of name
+
+						var factoid =
+							'<div class="fdiv">'+
+								'<div class="fbar" style="width:'+fbarWidth+'px"></div>'+factoidText+
+							'</div>';
+
 						files += // GET FOLDER: SID ROW
 							'<tr'+(SID.emulator == "youtube" && countVideos == 0 ? ' class="disabled"' : '')+'>'+
-								'<td class="sid unselectable">'+sidSpecial+
+								'<td class="sid unselectable">'+factoid+
 								'<div class="pl-strip'+playerType+'"><div class="has-stil">'+hasStil+'</div></div>'+
-								'<div class="block-wrap'+(sidSpecial !== "" ? ' bw-sidsp' : '')+'"><div class="block">'+(file.subtunes > 1 ? '<div class="subtunes'+(this.isSymlist ? ' specific' : '')+(isNew ? ' newst' : '')+'">'+(this.isSymlist ? file.startsubtune : file.subtunes)+'</div>' : (isNew ? '<div class="newsid"></div>' : ''))+
+								'<div class="block-wrap" style="max-width:'+nameWidth+'px;"><div class="block">'+(file.subtunes > 1 ? '<div class="subtunes'+(this.isSymlist ? ' specific' : '')+(isNew ? ' newst' : '')+'">'+(this.isSymlist ? file.startsubtune : file.subtunes)+'</div>' : (isNew ? '<div class="newsid"></div>' : ''))+
 								'<div class="entry name file'+(this.isSearching || this.isCompoFolder || this.path.substr(0, 2) === "/$" ? ' search' : '')+'" data-name="'+encodeURIComponent(file.filename)+'" data-type="'+file.type+'" data-id="'+file.id+'" data-symid="'+file.symid+'">'+adaptedName+'</div></div></div><br />'+
 								'<span class="info">'+file.copyright.substr(0, 4)+infoSecondary+'<div class="tags-line"'+(showTags ? '' : ' style="visibility:hidden;"')+tag_start_end+'>'+TAGS_BRACKET+list_of_tags+'</div></span></td>'+
 								'<td class="stars filestars"><span class="rating">'+this.buildStars(file.rating)+'</span>'+
-								(typeof file.uploaded != "undefined" ? '<span class="uploaded-time">'+file.uploaded.substr(0, 10)+'</span>' : '<div class="fdiv"><div class="fbar" style="width:'+fbarWidth+'px"></div><span class="factoid">'+file.factoid+'</span></div>')+
+								(typeof file.uploaded != "undefined" ? '<span class="uploaded-time">'+file.uploaded.substr(0, 10)+'</span>' : '')+
 								'</td>'+
 							'</tr>'; // &#9642; is the dot character if needed
 
@@ -1817,7 +1832,7 @@ Browser.prototype = {
 							filename:		file.filename,
 							substname:		file.substname,	// Symlists can have renamed SID files
 							fullname:		this.ROOT_HVSC + rootFile,
-							sidspecial:		sidSpecial,
+							//sidspecial:		sidSpecial,
 							playerraw:		file.playerraw,
 							player: 		player,
 							tags:			list_of_tags,
@@ -2221,7 +2236,7 @@ Browser.prototype = {
 				// Small Event: Just don't add an event tag if it's tiny and rare.
 				// 2SID/3SID: No longer needed because of SID special labels.
 			} else if (types[i] == "label") {
-				// A label tag is placed where the special 2SID/3SID labels are also located
+				// A label tag becomes part of the factoid family
 				this.labelTag = tag;
 			} else {
 				// NOTE: Don't change the order of tags or the collector for a folder will break!
@@ -3006,7 +3021,8 @@ Browser.prototype = {
 				'<div class="line" data-action="factoid"'+indent+'>9. HVSC or CGSC update version</div>'+
 				'<div class="line" data-action="factoid">10. CSDb SID ID</div>'+
 				'<div class="line" data-action="factoid">11. Game status (RELEASE/PREVIEW)</div>'+
-				'<div class="line" data-action="factoid">12. Number of CSDb entries</div>';
+				'<div class="line" data-action="factoid">12. Number of CSDb entries</div>'+
+				'<div class="line" data-action="factoid">13. Production label</div>';
 		else
 			// @todo toggling tag types
 			return;
