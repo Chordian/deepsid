@@ -60,6 +60,13 @@ function LogTagActivity($action, $tag_id, $tag_name) {
 
 /***** START *****/
 
+// Uncompress all tags (compressed in 'browser.js' to avoid 'max_input_vars' limit in PHP)
+if (isset($_POST['allTags'])) {
+	$decoded = base64_decode($_POST['allTags']);
+	$decoded = mb_convert_encoding($decoded, 'UTF-8', 'ISO-8859-1');
+	$_POST['allTags'] = json_decode($decoded, true);
+}
+
 $file_tags = isset($_POST['fileTags']) ? $_POST['fileTags'] : array();
 
 if (!$account->CheckLogin())
@@ -105,7 +112,7 @@ try {
 	$select->setFetchMode(PDO::FETCH_OBJ);
 
 	foreach($select as $row) {
-		$current_tags[] += $row->tags_id;
+		$current_tags[] = (int)$row->tags_id;
 		if (!in_array($row->tags_id, $file_tags)) {
 			// Delete database entry if not in the revised list (i.e. tag was removed in the dialog box)
 			$delete = $db->prepare('DELETE FROM tags_lookup WHERE files_id = :id AND tags_id = '.$row->tags_id.' LIMIT 1');
@@ -159,7 +166,7 @@ try {
 			$select = $db->prepare('SELECT name FROM tags_info WHERE id = :id');
 			$select->execute(array(':id'=>$_POST['endTag']));
 			$select->setFetchMode(PDO::FETCH_OBJ);
-			$end_tag_name = $_POST['startTag'] ? $select->fetch()->name : '[Not selected]';
+			$end_tag_name = $_POST['endTag'] ? $select->fetch()->name : '[Not selected]';
 
 			// First reset all end tag ID just to be sure
 			$update = $db->prepare('UPDATE tags_lookup SET end_id = 0 WHERE files_id = :files_id');

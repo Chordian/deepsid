@@ -18,11 +18,34 @@ SHOULD BE DONE
   - Small factoid toggle button next to "191 files" in white bar.
   - Remove both corner buttons.
 
-         - Adapt other SID row code (the sorting one)
-         - Different text colors?
+	- Adapt other SID row code (the sorting one)
+	- Different text colors?
+
+	- Am now in doubt about this. Factoids looked a lot better where they were...
+        - How about... a toggle button. Either show tags or factoids - never both.
+          In fact, the toggle browse button could have tags as the 14th option!
+        - And in label spot, a toggle browse button exists too. You can see all factoids
+          here but they use a different font and never show a bar.
+        - Next to sort drop-down, a "..." label. Left-click it and a context menu unfolds
+          with factoid options.  
+
+          remove uploaded-time css
+
+
+- Turn sound expander off in JSIDPlay2 unless it's an FM tune. If it's not easy to detect
+  it, turn the sound expander off completely and ignore certain folders.
+
+- The labels do not belong in the tags database table. They need their own table. See if you
+  can move them over with a swift SQL query or two. But until you can add its own UI too.
+
+- In the Admin tab, add a "notepad" box for remembering progress when updating something.
 
 - A "refresh cache" link next to cached message in the footer of a CSDb page. (Consider only
   showing this for DeepSID administrators.)
+
+- Add an admin setting for temporarily turning off editing tags. I had one disaster lately
+  where I could have used that feature. Perhaps a drop-down with "Everyone", "Admin only"
+  and "Off" as options.
 
 - Tags: Make a unified tag for files that have less then 3 channels, then replace all those
   1ch, 2ch and 3ch tags. You have to find one yourself - all the suggestions offered by both

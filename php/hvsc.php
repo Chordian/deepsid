@@ -9,7 +9,8 @@
  * @uses		$_GET['searchType']
  * @uses		$_GET['searchQuery']		overrides 'folder' if used
  * @uses		$_GET['searchHere']			1 = in current folder, 0 = in everything
- * @uses		$_GET['factoid']			factoid type
+ * @uses		$_GET['factoidTop']			factoid type in top line
+ * @uses		$_GET['factoidBottom']		factoid type in bottom line
  * 
  * @used-by		browser.js
  */
@@ -1239,124 +1240,139 @@ try {
 				stripos($file, 'Quadtron.sid') === false)		// Quadtron.sid by Cosowi
 				$player .= ' (unpacked)';
 
-			// A "factoid" is the info field in the bottom right corner of a SID row
-			$factoid = $fvalue = '';
+			// A "factoid" is the info field in two places of a SID row
+			$fmode = array($_GET['factoidTop'], $_GET['factoidBottom']);
+			$factoid = ["", ""];
+			$fvalue = ["", ""];
+
 			$isCGSC = stripos($fullname, "_Compute's Gazette SID Collection/") !== false;
-			switch ($_GET['factoid']) {
 
-				case 1:		// ID (hvsc_files)
+			foreach ([0, 1] as $f) {
+				switch ($fmode[$f]) {
 
-					$factoid = 'DB ID: <span class="id">' . $id .'</span';
-					break;
+					case 1:		// Show tags
 
-				case 2:		// Song lengths
+						// Shown in 'browser.js'
+						break;
 
-					if (!$isCGSC) {
-						// Get the user's settings
-						$frow = $db->query('SELECT flags FROM users WHERE id = '.$user_id)->fetch(PDO::FETCH_OBJ);
-						$settings = unserialize($frow->flags);
+					case 2:		// ID (hvsc_files)
 
-						$sub_lengths = explode(' ', $lengths);
+						$factoid[$f] = 'DB ID: <span class="id">' . $id .'</span>';
+						break;
 
-						// If multiple subtunes then get the length for the default subtune
-						if ($settings['firstsubtune'])
-							// User has overridden HVSC default so always the first one
-							$factoid = $sub_lengths[0];
-						else
-							// Default HVSC subtune
-							$factoid = $sub_lengths[$startsubtune - 1];
+					case 3:		// Song lengths
 
-						$fvalue = SongLengthToMilliseconds($factoid);
+						if (!$isCGSC) {
+							// Get the user's settings
+							$frow = $db->query('SELECT flags FROM users WHERE id = '.$user_id)->fetch(PDO::FETCH_OBJ);
+							$settings = unserialize($frow->flags);
 
-						// Get rid of the milliseconds
-						$factoid = explode('.', $factoid, 2)[0];
-					}
-					break;
+							$sub_lengths = explode(' ', $lengths);
 
-				case 3:		// Type (PSID or RSID) and version (2.0, etc.)
+							// If multiple subtunes then get the length for the default subtune
+							if ($settings['firstsubtune'])
+								// User has overridden HVSC default so always the first one
+								$factoid[$f] = $sub_lengths[0];
+							else
+								// Default HVSC subtune
+								$factoid[$f] = $sub_lengths[$startsubtune - 1];
 
-					$factoid = $type . ' ' . $version;
+							$fvalue[$f] = SongLengthToMilliseconds($factoid[$f]);
 
-					if ($factoid == 'PSID 2.0') {
-						$factoid = '<div>' . $factoid . '</div>';
-					}
-					break;
-
-				case 4:		// Compatibility (e.g. BASIC)
-
-					$factoid = $playercompat == 'C64 BASIC' ? 'BASIC' : '';
-					break;
-
-				case 5:		// Clock speed
-
-					// Mixed or unknown are not accepted
-					if ($clockspeed === 'PAL 50Hz')
-						$factoid = '<div>PAL</div>';
-					else if ($clockspeed === 'NTSC 60Hz')
-						$factoid = 'NTSC';
-					break;
-
-				case 6:		// SID model
-
-					// Mixed or unknown are not accepted
-					if ($sidmodel === 'MOS6581')
-						$factoid = '<div>6581</div>';
-					else if ($sidmodel === 'MOS8580')
-						$factoid = '8580';
-					break;
-
-				case 7:		// Size in bytes (decimal)
-
-					if (!$isCGSC) {
-						$fvalue = $datasize - 3;
-						$factoid = 'Bytes: <span class="id">' . ($datasize - 3) . '</span>';
-					}
-					break;
-
-				case 8:		// Start and end address (hexadecimal)
-
-					if ($datasize && $loadaddr)
-						$factoid = '$' . strtoupper(str_pad(dechex($loadaddr), 4, '0', STR_PAD_LEFT)).'-'.
-							'$' . strtoupper(str_pad(dechex($loadaddr + $datasize - 3), 4, '0', STR_PAD_LEFT));
-					break;
-
-				case 9:		// HVSC or CGSC version
-
-					if ((int)$hvsc) {
-						if ($isCGSC)
-							$factoid = 'CGSC v'.substr($hvsc, 0, 1).'.'.substr($hvsc, 1);
-						else
-							$factoid = 'HVSC #'.$hvsc;
-					}
-					break;
-
-				case 10:	// CSDb 'sid' ID
-
-					if ($csdbtype == 'sid' && $csdbid)
-						$factoid = 'SID ID: <span class="id">' . $csdbid .'</span';
-					break;
-
-				case 11:	// Application (RELEASE or PREVIEW) - pertains to games
-
-					$factoid = $application;
-					break;
-
-				case 12:	// Number of CSDb entries
-
-					if ($csdbtype === 'sid') {
-						$frow = $db->query('SELECT entries FROM csdb
-							WHERE sid_id = '.$csdbid.' LIMIT 1')->fetch(PDO::FETCH_OBJ);
-						if ($frow) {
-							$fvalue = $frow->entries;
-							$factoid = 'CSDb:<span>' . $frow->entries .'</span>';
-							if ($frow->entries == 0)
-								$factoid = '<div>' . $factoid . '</div>'; // Fade it
+							// Get rid of the milliseconds
+							$factoid[$f] = explode('.', $factoid[$f], 2)[0];
 						}
-					}
-					break;
+						break;
 
-				default:	// Nothing
+					case 4:		// Type (PSID or RSID) and version (2.0, etc.)
 
+						$factoid[$f] = $type . ' ' . $version;
+
+						if ($factoid[$f] == 'PSID 2.0') {
+							$factoid[$f] = '<div>' . $factoid[$f] . '</div>';
+						}
+						break;
+
+					case 5:		// Compatibility (e.g. BASIC)
+
+						$factoid[$f] = $playercompat == 'C64 BASIC' ? 'BASIC' : '';
+						break;
+
+					case 6:		// Clock speed
+
+						// Mixed or unknown are not accepted
+						if ($clockspeed === 'PAL 50Hz')
+							$factoid[$f] = '<div>PAL</div>';
+						else if ($clockspeed === 'NTSC 60Hz')
+							$factoid[$f] = 'NTSC';
+						break;
+
+					case 7:		// SID model
+
+						// Mixed or unknown are not accepted
+						if ($sidmodel === 'MOS6581')
+							$factoid[$f] = '<div>6581</div>';
+						else if ($sidmodel === 'MOS8580')
+							$factoid[$f] = '8580';
+						break;
+
+					case 8:		// Size in bytes (decimal)
+
+						if (!$isCGSC) {
+							$fvalue[$f] = $datasize - 3;
+							$factoid[$f] = 'Bytes: <span class="id">' . ($datasize - 3) . '</span>';
+						}
+						break;
+
+					case 9:		// Start and end address (hexadecimal)
+
+						if ($datasize && $loadaddr)
+							$factoid[$f] = '$' . strtoupper(str_pad(dechex($loadaddr), 4, '0', STR_PAD_LEFT)).'-'.
+								'$' . strtoupper(str_pad(dechex($loadaddr + $datasize - 3), 4, '0', STR_PAD_LEFT));
+						break;
+
+					case 10:	// HVSC or CGSC version
+
+						if ((int)$hvsc) {
+							if ($isCGSC)
+								$factoid[$f] = 'CGSC v'.substr($hvsc, 0, 1).'.'.substr($hvsc, 1);
+							else
+								$factoid[$f] = 'HVSC #'.$hvsc;
+						}
+						break;
+
+					case 11:	// CSDb 'sid' ID
+
+						if ($csdbtype == 'sid' && $csdbid)
+							$factoid[$f] = 'SID ID: <span class="id">' . $csdbid .'</span>';
+						break;
+
+					case 12:	// Application (RELEASE or PREVIEW) - pertains to games
+
+						$factoid[$f] = $application;
+						break;
+
+					case 13:	// Number of CSDb entries
+
+						if ($csdbtype === 'sid') {
+							$frow = $db->query('SELECT entries FROM csdb
+								WHERE sid_id = '.$csdbid.' LIMIT 1')->fetch(PDO::FETCH_OBJ);
+							if ($frow) {
+								$fvalue[$f] = $frow->entries;
+								$factoid[$f] = 'CSDb:<span>' . $frow->entries .'</span>';
+								if ($frow->entries == 0)
+									$factoid[$f] = '<div>' . $factoid[$f] . '</div>'; // Fade it
+							}
+						}
+						break;
+
+					case 14:	// Production title (previously tag label)
+
+						// Shown in 'browser.js'
+						break;
+
+					default:	// Nothing
+				}
 			}
 
 			if ($sidmodel != 'MOS8580') $sidmodel = 'MOS6581'; // Always default to 6581 if not specifically 8580
@@ -1395,8 +1411,10 @@ try {
 				'hvsc' =>			$hvsc,
 				'symid' =>			$symid,
 				'videos' =>			$videos,
-				'factoid' =>		$factoid,
-				'fvalue' =>			$fvalue,
+				'factoidtop' =>		$factoid[0],
+				'factoidbottom' =>	$factoid[1],
+				'fvaluetop' =>		$fvalue[0],
+				'fvaluebottom' =>	$fvalue[1],
 			));
 
 			// Add extra values for uploaded SID files too if available

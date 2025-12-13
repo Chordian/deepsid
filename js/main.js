@@ -8,7 +8,8 @@ var $=jQuery.noConflict();
 // Namespace for global variables and functions
 // @todo Move globals below into it and adapt where used
 var main = {
-	factoidType:		0,
+	factoidTypeTop:		0,
+	factoidTypeBottom:	0,
 	sundryBoxShow:		true,
 };
 
@@ -48,19 +49,20 @@ const TRACK_DELAY = {
 
 const factoidMessage = [
 	"0. Show nothing",
-	"1. Internal database ID",
-	"2. Song length",
-	"3. Type (PSID/RSID) and version",
-	"4. Compatibility (e.g. BASIC)",
-	"5. Clock speed (PAL/NTSC)",
-	"6. SID model (6581/8580)",
-	"7. Size in bytes (decimal)",
-	"8. Start and end address (hexadecimal)",
-	"9. HVSC or CGSC update version",
-	"10. CSDb SID ID",
-	"11. Game status (RELEASE/PREVIEW)",
-	"12. Number of CSDb entries",
-	"13. Production label",
+	"1. Show tags",
+	"2. Internal database ID",
+	"3. Song length",
+	"4. Type (PSID/RSID) and version",
+	"5. Compatibility (e.g. BASIC)",
+	"6. Clock speed (PAL/NTSC)",
+	"7. SID model (6581/8580)",
+	"8. Size in bytes (decimal)",
+	"9. Start and end address (hexadecimal)",
+	"10. HVSC or CGSC update version",
+	"11. CSDb SID ID",
+	"12. Game status (RELEASE/PREVIEW)",
+	"13. Number of CSDb entries",
+	"14. Production label",
 ];
 
 const isFirefox = typeof InstallTrigger !== "undefined"; // Firefox can scroll more smoothly than Chrome
@@ -119,9 +121,11 @@ $(function() { // DOM ready
 
 	HandleTopBox(emulator);
 
-	// Default factoid is song length
-	main.factoidType = parseInt(localStorage.getItem("factoid") ?? 2, 10);
-	UpdateFactoidButton(main.factoidType);
+	// Default factoid in top is song length
+	main.factoidTypeTop = parseInt(localStorage.getItem("factoidTop") ?? 3, 10);
+	// Default factoid in bottom is tags
+	main.factoidTypeBottom = parseInt(localStorage.getItem("factoidBottom") ?? 1, 10);
+	UpdateFactoidButton(main.factoidTypeBottom);
 
 	SID = new SIDPlayer(emulator);
 	ctrls = new Controls();
@@ -476,12 +480,22 @@ $(function() { // DOM ready
 						BrowserMessage("Show tags: "+(showTags ? "ON" : "OFF"));
 						break;
 
-					case 85:	// Keyup 'u' - cycle through factoid types
+					case 85:	// Keyup 'u' - cycle through factoid types (top)
 
-						main.factoidType++;
-						if (main.factoidType > 13) main.factoidType = 0;
+						main.factoidTypeTop++;
+						if (main.factoidTypeTop == 1) main.factoidTypeTop++; // Skip tags
+						if (main.factoidTypeTop > 14) main.factoidTypeTop = 0;
 
-						SelectFactoid(main.factoidType);
+						localStorage.setItem("factoidTop", main.factoidTypeTop);
+						RefreshFolder();
+						break;
+
+					case 73:	// Keyup 'i' - cycle through factoid types (bottom)
+
+						main.factoidTypeBottom++;
+						if (main.factoidTypeBottom > 14) main.factoidTypeBottom = 0;
+
+						SelectFactoid(main.factoidTypeBottom);
 						break;
 
 					case 37:	// Keyup 'ARROW-LEFT' - skip to previous (+ SHIFT to emulate auto-progress)
@@ -2621,7 +2635,7 @@ function BrowserMessage(message) {
 
 /**
  * Update the number in the triangle corner button for cycling factoids. It
- * should match the currently selected factoid number.
+ * should match the currently selected bottom factoid number.
  * 
  * @param {number} factoid 
  */
@@ -2647,7 +2661,7 @@ function UpdateFactoidButton(factoid) {
 }
 
 /**
- * Select factoid number and update folder.
+ * Select bottom factoid number and update folder.
  * 
  * @param {number} factoid 
  */
@@ -2655,7 +2669,7 @@ function SelectFactoid(factoid, showMessage = true) {
 	UpdateFactoidButton(factoid);
 	if (showMessage)
 		BrowserMessage(factoidMessage[factoid]);
-	localStorage.setItem("factoid", factoid);
+	localStorage.setItem("factoidBottom", factoid);
 
 	RefreshFolder();
 }

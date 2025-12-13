@@ -555,7 +555,7 @@ Browser.prototype = {
 						// OK was clicked; make all the tag changes
 						$.post("php/tags_write.php", {
 							fileID:		browser.fileID,
-							allTags:	browser.allTags,
+							allTags:	btoa(JSON.stringify(browser.allTags)),
 							fileTags:	browser.fileTags,
 							startTag:	browser.startTag,
 							endTag:		browser.endTag
@@ -1168,7 +1168,7 @@ Browser.prototype = {
 				this.playlist.sort(function(obj1, obj2) {
 					return obj1.fvalue < obj2.fvalue ? 1 : -1;
 				});
-				localStorage.setItem("sort", "factoid");
+				localStorage.setItem("sort", "factoid"); // @todo which factoid line?
 				break;
 			case "shuffle":
 				// Sort playlist in a random manner (randomize)
@@ -1244,6 +1244,8 @@ Browser.prototype = {
 					}
 				});
 				files += '<tr>'+ // SORT/FILTER SID ROW
+
+// @ TODO NEEDS TO BE ADAPTED TO CHANGES!
 						'<td class="sid unselectable">'+file.sidspecial+
 						'<div class="pl-strip'+playerType+'"><div class="has-stil">'+hasStil+'</div></div>'+
 						'<div class="block-wrap'+(file.sidspecial !== "" ? ' bw-sidsp' : '')+'"><div class="block">'+(file.subtunes > 1 ? '<div class="subtunes'+(this.isSymlist ? ' specific' : '')+(isNew ? ' newst' : '')+'">'+(this.isSymlist ? file.startsubtune + 1 : file.subtunes)+'</div>' : (isNew ? '<div class="newsid"></div>' : ''))+
@@ -1376,7 +1378,8 @@ Browser.prototype = {
 					searchType:		this.searchType,
 					searchQuery:	this.searchQuery,
 					searchHere:		this.searchHere,
-					factoid:		main.factoidType,
+					factoidTop:		main.factoidTypeTop,
+					factoidBottom:	main.factoidTypeBottom,
 			}, function(data) {
 				this.validateData(data, function(data) {
 
@@ -1708,7 +1711,7 @@ Browser.prototype = {
 									return obj1.copyright < obj2.copyright ? 1 : -1;
 								});
 								break;
-							case "factoid":
+							case "factoid": // @todo There are now two factoids!
 								// Sort playlist according to the 'factoid' string
 								data.files.sort(function(obj1, obj2) {
 									return obj1.fvalue < obj2.fvalue ? 1 : -1;
@@ -1745,19 +1748,30 @@ Browser.prototype = {
 					}
 
 					$.each(data.files, function(i, file) {
+
 						// Player: Replace "_" with space + "V" with "v" for versions
 						var player = file.player.replace(/_/g, " ").replace(/(V)(\d)/g, "v$2"),
 							rootFile = (this.isSearching || this.isSymlist || this.isCompoFolder ? "" : this.path) + "/" + file.filename,
-							countVideos = file.videos, playerType = "",
+							countVideos = file.videos, playerType = sidTags = "", fbarWidth = 0,
 							isNew = file.hvsc == this.HVSC_VERSION || file.hvsc == this.CGSC_VERSION ||
 								(typeof file.uploaded != "undefined" && file.uploaded.substr(0, 10) == this.today.substr(0, 10));
+
+						const maxBarSize = 200; // Max size of bar shown below some factoids
+
+						// SID name
 						var adaptedName = file.substname == "" ? file.filename.replace(/^\_/, '') : file.substname;
 						adaptedName = this.adaptBrowserName(adaptedName);
+
+						// Prepare tags
 						var list_of_tags = this.buildTags(file.tags, file.tagtypes, file.tagids),
 							infoSecondary = typeof file.uploaded != "undefined" ? ' by '+file.author : ' in '+player;
 						var tag_start_end = file.tagidend ? ' data-tag-start-id="'+file.tagidstart+'" data-tag-end-id="'+file.tagidend+'"': '';
+
+						// STIL icon (three lines)
 						var stil = file.stil;
 						var hasStil = stil != "" ? "<div></div><div></div><div></div>" : "";
+
+						// Colored player strip
 						$.each(playerStrips, function(i, strip) {
 							if (file.player.indexOf(strip.type) != -1) {
 								playerType = " "+strip.class;
@@ -1765,64 +1779,90 @@ Browser.prototype = {
 							}
 						});
 
-						// Need to show a special label box?
-//@todo change or remove
-						var sidSpecial = "";
-						/*if (file.filename.toLowerCase().indexOf("_2sid.sid") !== -1)
-							// Box for 2SID
-							sidSpecial = '<div class="sid-special sidsp-2sid">2SID</div>';
-						else if (file.filename.toLowerCase().indexOf("_3sid.sid") !== -1)
-							// Box for 3SID
-							sidSpecial = '<div class="sid-special sidsp-3sid">3SID</div>';
-						else if (this.labelTag != "")
-							// Box for tag label
-							sidSpecial = '<div class="sid-special sidsp-label"><div></div> ' + this.labelTag + '</div>';
-						*/
-
-						// Define a bar width for size-type factoids
-						var fbarWidth = 0;
-						const maxBarSize = 200;
-						if (file.fvalue > 0) {
-							switch (parseInt(main.factoidType)) {
-								case 2:		// Song length
-									const maxMinutes = 10;
-									const full = maxMinutes * 60 * 1000;
-									const ratio = Math.min(1, Math.max(0, file.fvalue / full));
-									fbarWidth = Math.round(ratio * maxBarSize) + 23; // Text width
-									break;
-								case 7:		// Size in bytes (decimal)
-									fbarWidth = this.bytesToBarWidthPivotLog(file.fvalue); // No text width
-									break;
-								case 12:	// Number of CSDb entries
-									fbarWidth = (file.fvalue * 1.25) + 54; // Text width
-									break;
-							}
+						// Which top factoid type?
+						switch (parseInt(main.factoidTypeTop)) {
+							case 14:	// Use tag label as factoid
+								file.factoidtop = this.labelTag;
+								break;
 						}
 
-						if (main.factoidType == 13)
-							// Use tag label as factoid
-							file.factoid = this.labelTag;
+						// Which bottom factoid type?
+						switch (parseInt(main.factoidTypeBottom)) {
+							case 0:		// Nothing (upload date in SH folder)
+								if (this.isUploadFolder())
+									file.factoidbottom = typeof file.uploaded != "undefined"
+										? file.uploaded.substr(0, 10)
+										: '';
+								break;
+							case 1:		// Tags
+								sidTags = '<div class="tags-line"'+(showTags ? '' : ' style="visibility:hidden;"')+tag_start_end+'>'+TAGS_BRACKET+list_of_tags+'</div>';
+								break;
+							case 3:		// Song length
+								if (file.fvaluebottom > 0) {
+									// Define a bar width
+									const maxMinutes = 10;
+									const full = maxMinutes * 60 * 1000;
+									const ratio = Math.min(1, Math.max(0, file.fvaluebottom / full));
+									fbarWidth = Math.round(ratio * maxBarSize) + 23; // Text width
+								}
+								break;
+							case 8:		// Size in bytes (decimal)
+								if (file.fvaluebottom > 0)
+									// Define a bar width
+									fbarWidth = this.bytesToBarWidthPivotLog(file.fvaluebottom); // No text width
+								break;
+							case 13:	// Number of CSDb entries
+								if (file.fvaluebottom > 0)
+									// Define a bar width
+									fbarWidth = (file.fvaluebottom * 1.25) + 54; // Text width
+								break;
+							case 14:	// Use tag label as factoid
+								file.factoidbottom = this.labelTag;
+								break;
+						}
 
-						var factoidText = '<span class="factoid">'+file.factoid+'</span>';
-						$("#measure-factoid").html(factoidText); // Find the width of the factoid text
-						var nameWidth = 300 - $("#measure-factoid span").outerWidth(); // Set width of name
+						var factoidTop = '<div class="factoid-top">' + file.factoidtop + '</div>';
+						// BEFORE: <div class="sid-special sidsp-label"><div></div> ' + this.labelTag + '</div>
+						$("#measure-factoid").html(factoidTop); // Find the width of the factoid text
+						var nameWidth = 300 - $("#measure-factoid div").outerWidth(); // Set width of name
 
-						var factoid =
+						var factoidBottom =
 							'<div class="fdiv">'+
-								'<div class="fbar" style="width:'+fbarWidth+'px"></div>'+factoidText+
+								'<div class="fbar" style="width:'+fbarWidth+'px"></div>'+
+								'<span class="factoid-bottom">'+file.factoidbottom+'</span>'+
 							'</div>';
 
 						files += // GET FOLDER: SID ROW
 							'<tr'+(SID.emulator == "youtube" && countVideos == 0 ? ' class="disabled"' : '')+'>'+
-								'<td class="sid unselectable">'+factoid+
-								'<div class="pl-strip'+playerType+'"><div class="has-stil">'+hasStil+'</div></div>'+
-								'<div class="block-wrap" style="max-width:'+nameWidth+'px;"><div class="block">'+(file.subtunes > 1 ? '<div class="subtunes'+(this.isSymlist ? ' specific' : '')+(isNew ? ' newst' : '')+'">'+(this.isSymlist ? file.startsubtune : file.subtunes)+'</div>' : (isNew ? '<div class="newsid"></div>' : ''))+
-								'<div class="entry name file'+(this.isSearching || this.isCompoFolder || this.path.substr(0, 2) === "/$" ? ' search' : '')+'" data-name="'+encodeURIComponent(file.filename)+'" data-type="'+file.type+'" data-id="'+file.id+'" data-symid="'+file.symid+'">'+adaptedName+'</div></div></div><br />'+
-								'<span class="info">'+file.copyright.substr(0, 4)+infoSecondary+'<div class="tags-line"'+(showTags ? '' : ' style="visibility:hidden;"')+tag_start_end+'>'+TAGS_BRACKET+list_of_tags+'</div></span></td>'+
-								'<td class="stars filestars"><span class="rating">'+this.buildStars(file.rating)+'</span>'+
-								(typeof file.uploaded != "undefined" ? '<span class="uploaded-time">'+file.uploaded.substr(0, 10)+'</span>' : '')+
+								// Top line factoid (next to rating stars)
+								'<td class="sid unselectable">'+factoidTop+
+									// Colored player strip
+									'<div class="pl-strip'+playerType+'">'+
+										// STIL icon
+										'<div class="has-stil">'+hasStil+'</div>'+
+									'</div>'+
+									// SID name, etc.
+									'<div class="block-wrap" style="max-width:'+nameWidth+'px;">'+
+										// Optional: Subtunes box + "NEW" label (this line is a mess)
+										'<div class="block">'+(file.subtunes > 1 ? '<div class="subtunes'+(this.isSymlist ? ' specific' : '')+(isNew ? ' newst' : '')+'">'+(this.isSymlist ? file.startsubtune : file.subtunes)+'</div>' : (isNew ? '<div class="newsid"></div>' : ''))+
+											// Various data attributes
+											'<div class="entry name file'+(this.isSearching || this.isCompoFolder || this.path.substr(0, 2) === "/$" ? ' search' : '')+'" data-name="'+encodeURIComponent(file.filename)+'" data-type="'+file.type+'" data-id="'+file.id+'" data-symid="'+file.symid+'">'+
+												adaptedName+
+											'</div>'+
+										'</div>'+
+									'</div><br />'+
+									// Second line (player, tags, etc.)
+									'<span class="info">'+
+										file.copyright.substr(0, 4)+infoSecondary+sidTags+
+									'</span>'+
 								'</td>'+
-							'</tr>'; // &#9642; is the dot character if needed
+								'<td class="stars filestars">'+
+									// Rating stars
+									'<span class="rating">'+this.buildStars(file.rating)+'</span>'+
+									// Bottom line factoid (tags is one of them)
+									factoidBottom+
+								'</td>'+
+							'</tr>';
 
 						// If the STIL text starts with a <BR> newline or a <HR> line, get rid of it
 						if (stil.substr(2, 4) == "r />") stil = stil.substr(6);
@@ -1856,7 +1896,8 @@ Browser.prototype = {
 							hvsc:			file.hvsc,
 							symid:			file.symid,
 							videos:			file.videos,
-							factoid:		file.factoid,
+							factoidtop:		file.factoidtop,
+							factoidbottom:	file.factoidbottom,
 							fvalue:			file.fvalue,
 							fbarwidth:		fbarWidth,
 							profile:		file.profile,	// Only files from 'SID Happens'
@@ -3010,19 +3051,20 @@ Browser.prototype = {
 			// Factoid choices
 			contents = 
 				'<div class="line" data-action="factoid"'+indent+'>0. Nothing</div>'+
-				'<div class="line" data-action="factoid"'+indent+'>1. Internal database ID</div>'+
-				'<div class="line" data-action="factoid"'+indent+'>2. Song length</div>'+
-				'<div class="line" data-action="factoid"'+indent+'>3. Type (PSID/RSID) and version</div>'+
-				'<div class="line" data-action="factoid"'+indent+'>4. Compatibility (e.g. BASIC)</div>'+
-				'<div class="line" data-action="factoid"'+indent+'>5. Clock speed (PAL/NTSC)</div>'+
-				'<div class="line" data-action="factoid"'+indent+'>6. SID model (6581/8580)</div>'+
-				'<div class="line" data-action="factoid"'+indent+'>7. Size in bytes (decimal)</div>'+
-				'<div class="line" data-action="factoid"'+indent+'>8. Start and end address (hexadecimal)</div>'+
-				'<div class="line" data-action="factoid"'+indent+'>9. HVSC or CGSC update version</div>'+
-				'<div class="line" data-action="factoid">10. CSDb SID ID</div>'+
-				'<div class="line" data-action="factoid">11. Game status (RELEASE/PREVIEW)</div>'+
-				'<div class="line" data-action="factoid">12. Number of CSDb entries</div>'+
-				'<div class="line" data-action="factoid">13. Production label</div>';
+				'<div class="line" data-action="factoid"'+indent+'>1. Show tags</div>'+
+				'<div class="line" data-action="factoid"'+indent+'>2. Internal database ID</div>'+
+				'<div class="line" data-action="factoid"'+indent+'>3. Song length</div>'+
+				'<div class="line" data-action="factoid"'+indent+'>4. Type (PSID/RSID) and version</div>'+
+				'<div class="line" data-action="factoid"'+indent+'>5. Compatibility (e.g. BASIC)</div>'+
+				'<div class="line" data-action="factoid"'+indent+'>6. Clock speed (PAL/NTSC)</div>'+
+				'<div class="line" data-action="factoid"'+indent+'>7. SID model (6581/8580)</div>'+
+				'<div class="line" data-action="factoid"'+indent+'>8. Size in bytes (decimal)</div>'+
+				'<div class="line" data-action="factoid"'+indent+'>9. Start and end address (hexadecimal)</div>'+
+				'<div class="line" data-action="factoid"'+indent+'>10. HVSC or CGSC update version</div>'+
+				'<div class="line" data-action="factoid">11. CSDb SID ID</div>'+
+				'<div class="line" data-action="factoid">12. Game status (RELEASE/PREVIEW)</div>'+
+				'<div class="line" data-action="factoid">13. Number of CSDb entries</div>'+
+				'<div class="line" data-action="factoid">14. Production label</div>';
 		else
 			// @todo toggling tag types
 			return;
