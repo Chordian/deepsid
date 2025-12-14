@@ -1250,7 +1250,7 @@ try {
 			foreach ([0, 1] as $f) {
 				switch ($fmode[$f]) {
 
-					case 1:		// Show tags
+					case 1:		// Show tags (only bottom factoid)
 
 						// Shown in 'browser.js'
 						break;
@@ -1320,7 +1320,8 @@ try {
 
 						if (!$isCGSC) {
 							$fvalue[$f] = $datasize - 3;
-							$factoid[$f] = 'Bytes: <span class="id">' . ($datasize - 3) . '</span>';
+							//$factoid[$f] = 'Bytes: <span class="id">' . ($datasize - 3) . '</span>';
+							$factoid[$f] = ($datasize - 3) . ' bytes';
 						}
 						break;
 

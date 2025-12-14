@@ -11,25 +11,21 @@ SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
 - Major change of factoids and tag label:
 
-  - DONE: All factoids move to tag label spot (so now they also work in SH folder).
-  - DONE: Tag label becomes part of the rotatable factoid series.
-  - DONE: Nothing where factoids used to be so tags again have the space to themselves.
-  - DONE: If possible make factoid bars crawl under both factoid and SID name text.
-  - Small factoid toggle button next to "191 files" in white bar.
+  - Top expander button and expanded panel for three drop-downs (f1, f2, sorting).
   - Remove both corner buttons.
 
-	- Adapt other SID row code (the sorting one)
-	- Different text colors?
+    @todo:
 
-	- Am now in doubt about this. Factoids looked a lot better where they were...
-        - How about... a toggle button. Either show tags or factoids - never both.
-          In fact, the toggle browse button could have tags as the 14th option!
-        - And in label spot, a toggle browse button exists too. You can see all factoids
-          here but they use a different font and never show a bar.
-        - Next to sort drop-down, a "..." label. Left-click it and a context menu unfolds
-          with factoid options.  
+	    - Adapt other SID row code (the sorting one)
+      - Remove uploaded-time css
+      - Make db id factoid admin-only
+      - Sorting by factoid should now be factoid top or bottom
+      - BUG: Can't activate tags dialog box without tags as factoid
+          Maybe always show "+" icon there?
+      - Make sure sorting in SH folder doesn't show "undefined" in SID rows
+      - Add browser text to top factoid
 
-          remove uploaded-time css
+
 
 
 - Turn sound expander off in JSIDPlay2 unless it's an FM tune. If it's not easy to detect

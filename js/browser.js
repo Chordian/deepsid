@@ -113,7 +113,7 @@ Browser.prototype = {
 		$("#upload-new").change(this.onUpload.bind(this));
 
 		$("#folders table").on("contextmenu", "tr", this.contextMenu.bind(this));
-		$("#corner-buttons").on("contextmenu", "button", this.contextCorner.bind(this));
+		$("#songs-buttons").on("click", "img.path-more", this.contextCorner.bind(this));
 		$("#panel")
 			.on("click", ".context", this.onContextClick.bind(this))
 			.on("contextmenu", "#contextmenu", function() { return false; })
@@ -1298,7 +1298,7 @@ Browser.prototype = {
 
 		if (this.hvsc) this.hvsc.abort();
 
-		$("#kb-marker").hide();
+		$("#kb-marker,img.path-more").hide();
 
 		ctrls.state("root/back", "disabled");
 		$("#dropdown-sort").prop("disabled", true);
@@ -1752,7 +1752,7 @@ Browser.prototype = {
 						// Player: Replace "_" with space + "V" with "v" for versions
 						var player = file.player.replace(/_/g, " ").replace(/(V)(\d)/g, "v$2"),
 							rootFile = (this.isSearching || this.isSymlist || this.isCompoFolder ? "" : this.path) + "/" + file.filename,
-							countVideos = file.videos, playerType = sidTags = "", fbarWidth = 0,
+							countVideos = file.videos, playerType = "", fbarWidth = 0,
 							isNew = file.hvsc == this.HVSC_VERSION || file.hvsc == this.CGSC_VERSION ||
 								(typeof file.uploaded != "undefined" && file.uploaded.substr(0, 10) == this.today.substr(0, 10));
 
@@ -1766,6 +1766,8 @@ Browser.prototype = {
 						var list_of_tags = this.buildTags(file.tags, file.tagtypes, file.tagids),
 							infoSecondary = typeof file.uploaded != "undefined" ? ' by '+file.author : ' in '+player;
 						var tag_start_end = file.tagidend ? ' data-tag-start-id="'+file.tagidstart+'" data-tag-end-id="'+file.tagidend+'"': '';
+						// At least always have the "+" icon button ready for tags
+						var sidTags = '<div class="tags-line" style="display:none;"><div class="edit-tags" title="Edit tags">&nbsp;</div></div>';
 
 						// STIL icon (three lines)
 						var stil = file.stil;
@@ -1824,7 +1826,7 @@ Browser.prototype = {
 						var factoidTop = '<div class="factoid-top">' + file.factoidtop + '</div>';
 						// BEFORE: <div class="sid-special sidsp-label"><div></div> ' + this.labelTag + '</div>
 						$("#measure-factoid").html(factoidTop); // Find the width of the factoid text
-						var nameWidth = 300 - $("#measure-factoid div").outerWidth(); // Set width of name
+						var nameWidth = 305 - $("#measure-factoid .factoid-top").outerWidth(); // Set width of name
 
 						var factoidBottom =
 							'<div class="fdiv">'+
@@ -1855,12 +1857,12 @@ Browser.prototype = {
 									'<span class="info">'+
 										file.copyright.substr(0, 4)+infoSecondary+sidTags+
 									'</span>'+
+									// Bottom line factoid (tags is one of them)
+									factoidBottom+
 								'</td>'+
 								'<td class="stars filestars">'+
 									// Rating stars
 									'<span class="rating">'+this.buildStars(file.rating)+'</span>'+
-									// Bottom line factoid (tags is one of them)
-									factoidBottom+
 								'</td>'+
 							'</tr>';
 
@@ -1905,6 +1907,7 @@ Browser.prototype = {
 						});
 					}.bind(this));
 
+					if (files !== "") $("img.path-more").show(); // Show the "..." icon button
 					if (files !== "" || this.path === "" || this.isBigCompoFolder() || this.isMusiciansLetterFolder()) $("#dropdown-sort").prop("disabled", false);
 					/*var pos = this.folders.lastIndexOf('<tr>');
 					this.folders = this.folders.slice(0, pos) + this.folders.slice(pos).replace('<tr>', '<tr class="last">');*/
@@ -3047,27 +3050,23 @@ Browser.prototype = {
 		const indent = ' style="margin-left:8px;"';
 		$("#contextmenu").remove();
 
-		if (event.target.className.indexOf("corner-right") !== -1)
-			// Factoid choices
-			contents = 
-				'<div class="line" data-action="factoid"'+indent+'>0. Nothing</div>'+
-				'<div class="line" data-action="factoid"'+indent+'>1. Show tags</div>'+
-				'<div class="line" data-action="factoid"'+indent+'>2. Internal database ID</div>'+
-				'<div class="line" data-action="factoid"'+indent+'>3. Song length</div>'+
-				'<div class="line" data-action="factoid"'+indent+'>4. Type (PSID/RSID) and version</div>'+
-				'<div class="line" data-action="factoid"'+indent+'>5. Compatibility (e.g. BASIC)</div>'+
-				'<div class="line" data-action="factoid"'+indent+'>6. Clock speed (PAL/NTSC)</div>'+
-				'<div class="line" data-action="factoid"'+indent+'>7. SID model (6581/8580)</div>'+
-				'<div class="line" data-action="factoid"'+indent+'>8. Size in bytes (decimal)</div>'+
-				'<div class="line" data-action="factoid"'+indent+'>9. Start and end address (hexadecimal)</div>'+
-				'<div class="line" data-action="factoid"'+indent+'>10. HVSC or CGSC update version</div>'+
-				'<div class="line" data-action="factoid">11. CSDb SID ID</div>'+
-				'<div class="line" data-action="factoid">12. Game status (RELEASE/PREVIEW)</div>'+
-				'<div class="line" data-action="factoid">13. Number of CSDb entries</div>'+
-				'<div class="line" data-action="factoid">14. Production label</div>';
-		else
-			// @todo toggling tag types
-			return;
+		// Factoid choices
+		contents = 
+			'<div class="line" data-action="factoid"'+indent+'>0. Nothing</div>'+
+			'<div class="line" data-action="factoid"'+indent+'>1. Show tags</div>'+
+			'<div class="line" data-action="factoid"'+indent+'>2. Internal database ID</div>'+
+			'<div class="line" data-action="factoid"'+indent+'>3. Song length</div>'+
+			'<div class="line" data-action="factoid"'+indent+'>4. Type (PSID/RSID) and version</div>'+
+			'<div class="line" data-action="factoid"'+indent+'>5. Compatibility (e.g. BASIC)</div>'+
+			'<div class="line" data-action="factoid"'+indent+'>6. Clock speed (PAL/NTSC)</div>'+
+			'<div class="line" data-action="factoid"'+indent+'>7. SID model (6581/8580)</div>'+
+			'<div class="line" data-action="factoid"'+indent+'>8. Size in bytes (decimal)</div>'+
+			'<div class="line" data-action="factoid"'+indent+'>9. Start and end address (hexadecimal)</div>'+
+			'<div class="line" data-action="factoid"'+indent+'>10. HVSC or CGSC update version</div>'+
+			'<div class="line" data-action="factoid">11. CSDb SID ID</div>'+
+			'<div class="line" data-action="factoid">12. Game status (RELEASE/PREVIEW)</div>'+
+			'<div class="line" data-action="factoid">13. Number of CSDb entries</div>'+
+			'<div class="line" data-action="factoid">14. Production label</div>';
 
 		// Create the context menu
 		$panel.prepend('<div id="contextmenu" class="context unselectable">'+contents+'</div>');

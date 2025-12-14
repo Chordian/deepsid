@@ -964,6 +964,7 @@
 					<button id="folder-back" class="button-lady browser-ctrls">
 						<b style="font-size:18px;position:relative;top:-6px;">..</b>
 					</button> <div id="path" class="ellipsis"></div>
+					<img class="path-more" src="images/ellipsis.svg" alt="" />
 					<div id="sort">
 						<select id="dropdown-sort" name="sort"><!-- browser.js --></select>
 					</div>

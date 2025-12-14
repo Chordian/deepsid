@@ -202,6 +202,7 @@
 	--svg-filter-button-hover:		invert(36%) sepia(21%) saturate(406%) hue-rotate(26deg) brightness(99%) contrast(91%);
 	--svg-filter-button-disabled:	invert(86%) sepia(12%) saturate(216%) hue-rotate(25deg) brightness(93%) contrast(89%);
 	--svg-filter-text-player:		invert(50%) sepia(14%) saturate(593%) hue-rotate(25deg) brightness(94%) contrast(88%);
+	--svg-filter-strong:			invert(0%) sepia(100%) saturate(0%) hue-rotate(234deg) brightness(96%) contrast(107%);
 
 	--svg-filter-viz-msg-buffer:	none;
 	--svg-filter-icon-bottom:		none;
@@ -222,6 +223,7 @@
 	--svg-filter-money:				invert(59%) sepia(11%) saturate(1135%) hue-rotate(38deg) brightness(90%) contrast(84%);
 	--svg-filter-tn-disabled:		var(--svg-filter-white);
 	--svg-filter-all-starred:		invert(38%) sepia(100%) saturate(655%) hue-rotate(10deg) brightness(100%) contrast(101%);
+	--svg-filter-path-more:			invert(48%) sepia(0%) saturate(372%) hue-rotate(160deg) brightness(95%) contrast(78%);
 
 	--svg-bg-star-orange:			url(../images/if_star_orange.svg) 0 0 / 18px 18px no-repeat;
 	--svg-bg-star-empty-voted:		url(../images/if_star_empty_voted.svg) 0 0 / 18px 18px no-repeat;
@@ -620,6 +622,8 @@
 	--svg-filter-money:				invert(58%) sepia(12%) saturate(928%) hue-rotate(38deg) brightness(98%) contrast(94%);
 	--svg-filter-tn-disabled:		invert(0%) sepia(9%) saturate(4037%) hue-rotate(328deg) brightness(104%) contrast(73%);
 	--svg-filter-all-starred:		invert(77%) sepia(66%) saturate(335%) hue-rotate(8deg) brightness(100%) contrast(78%);
+	--svg-filter-path-more:			invert(72%) sepia(87%) saturate(0%) hue-rotate(206deg) brightness(93%) contrast(101%);
+	--svg-filter-strong:			var(--svg-filter-white);
 
 	--svg-bg-star-orange:			url(../images/if_star_orange_dark.svg) 0 0 / 18px 18px no-repeat;
 	--svg-bg-star-empty-voted:		url(../images/if_star_empty_voted_dark.svg) 0 0 / 18px 18px no-repeat;
@@ -3152,10 +3156,22 @@ input[type=range]::-ms-track {
 		top: 5px;
 		margin-left: 8px;
 		font-size: 14px;
-		width: 61%; /* If you change the panel box width you may have to finetune this */
+		width: 54%; /* If you change the panel box width you may have to finetune this */
 		height: 34px;
 		color: var(--color-button-shadow);
 	}
+
+		img.path-more {
+			display: none;
+			position: relative;
+			top: -8.5px;
+			width: 22px;
+			filter: var(--svg-filter-path-more);
+		}
+
+			img.path-more:hover {
+				filter: var(--svg-filter-strong);
+			}
 	
 		/* For the small HVSC or CGSC in the path line */
 		#path .dim,
@@ -3451,8 +3467,9 @@ input[type=range]::-ms-track {
 		}
 
 		#songs .fdiv {
-			position: relative;
-			top: 1px; /* 9px */
+			position: absolute;
+			top: 29px;
+			right: -101px;
 		}
 
 		/* Top factoid */
@@ -3465,7 +3482,7 @@ input[type=range]::-ms-track {
 			line-height: 1.8px;
 			padding: 0 3px;
 			font-size: 9px;
-			/*font-weight: bold;*/
+			font-weight: normal;
 			color: var(--color-text-factoid-top);
 			background: transparent;
 			text-align: center;
@@ -3490,7 +3507,8 @@ input[type=range]::-ms-track {
 
 			/* Static width factoid field */
 			#songs .factoid-bottom span,
-			#songs .factoid-top span {
+			#songs .factoid-top span,
+			#measure-factoid .factoid-top span {
 				display: inline-block;
 				width: 22px;
 				text-align: right;
@@ -3498,15 +3516,23 @@ input[type=range]::-ms-track {
 
 				/* Wider static field for e.g. ID type values */
 				#songs .factoid-bottom span.id,
-				#songs .factoid-top span.id {
+				#songs .factoid-top span.id,
+				#measure-factoid .factoid-top span.id {
 					width: 32px;
 				}
 
 				/* Even wider */
 				#songs .factoid-bottom span.big,
-				#songs .factoid-top span.big {
+				#songs .factoid-top span.big,
+				#measure-factoid .factoid-top span.big {
 					width: 38px;
 				}
+
+			/* Faded factoid field for a very common value */
+			#songs .factoid-bottom div,
+			#songs .factoid-top div {
+				color: var(--color-text-fa-common);
+			}
 
 :root {
 			--color-fbar1: #c8c9b9ff 0%;

@@ -472,7 +472,7 @@ $(function() { // DOM ready
 						showTags = !showTags;
 						$("#showtags").prop("checked", showTags);
 						showTags
-							? $("#songs .tags-line").css("visibility", "")	//.show()
+							? $("#songs .tags-line").css("visibility", "")			//.show()
 							: $("#songs .tags-line").css("visibility", "hidden")	//.hide();
 
 						localStorage.setItem("showtags", showTags); // Boolean is stored as a string
@@ -480,7 +480,7 @@ $(function() { // DOM ready
 						BrowserMessage("Show tags: "+(showTags ? "ON" : "OFF"));
 						break;
 
-					case 85:	// Keyup 'u' - cycle through factoid types (top)
+					case 73:	// Keyup 'i' - cycle through factoid types (top)
 
 						main.factoidTypeTop++;
 						if (main.factoidTypeTop == 1) main.factoidTypeTop++; // Skip tags
@@ -490,7 +490,7 @@ $(function() { // DOM ready
 						RefreshFolder();
 						break;
 
-					case 73:	// Keyup 'i' - cycle through factoid types (bottom)
+					case 85:	// Keyup 'u' - cycle through factoid types (bottom)
 
 						main.factoidTypeBottom++;
 						if (main.factoidTypeBottom > 14) main.factoidTypeBottom = 0;
