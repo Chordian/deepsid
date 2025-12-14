@@ -16,7 +16,7 @@ var main = {
 var cacheCSDb = cacheSticky = cacheStickyBeforeCompo = cacheCSDbProfile = cacheBeforeCompo = cachePlayer = cacheGB64 = cacheRemix = prevFile = sundryTab = reportSTIL = "";
 var cacheTabScrollPos = cachePlayerTabScrollPos = cacheGB64TabScrollPos = cacheRemixTabScrollPos = cachePosBeforeCompo = cacheDDCSDbSort = peekCounter = sundryHeight = 0;
 var recommended = forum = players = $trAutoPlay = null, showTags, fastForwarding, registering = blockNextEnter = false;
-var logCount = 1000, isMobile, miniPlayer, cornerMessageTimer;
+var logCount = 1000, isMobile, miniPlayer, browserMessageTimer;
 
 var isMobile = $("body").attr("data-mobile") !== "0";
 var isNotips = $("body").attr("data-notips") !== "0";
@@ -48,27 +48,33 @@ const TRACK_DELAY = {
 };
 
 const factoidMessage = [
-	"0. Show nothing",
-	"1. Show tags",
-	"2. Internal database ID",
-	"3. Song length",
-	"4. Type (PSID/RSID) and version",
-	"5. Compatibility (e.g. BASIC)",
-	"6. Clock speed (PAL/NTSC)",
-	"7. SID model (6581/8580)",
-	"8. Size in bytes (decimal)",
-	"9. Start and end address (hexadecimal)",
-	"10. HVSC or CGSC update version",
-	"11. CSDb SID ID",
-	"12. Game status (RELEASE/PREVIEW)",
-	"13. Number of CSDb entries",
-	"14. Production label",
+	"Show nothing / upload date",
+	"Show tags",
+	"Song length",
+	"Type (PSID/RSID) and version",
+	"Compatibility (e.g. BASIC)",
+	"Clock speed (PAL/NTSC)",
+	"SID model (6581/8580)",
+	"Size in bytes (decimal)",
+	"Start and end address (hex)",
+	"HVSC or CGSC update version",
+	"Game status (RELEASE/PREVIEW)",
+	"Number of CSDb entries",
+	"Production label",
 ];
+
+const factoidMessageAdmin = [
+	"Internal database ID",
+	"CSDb SID ID",
+]
 
 const isFirefox = typeof InstallTrigger !== "undefined"; // Firefox can scroll more smoothly than Chrome
 
 const PATH_UPLOADS = "_SID Happens";
 const PATH_SID_FM = PATH_UPLOADS + "/SID+FM";
+
+const FACTOID_TOP = "Inline factoid";
+const FACTOID_BOTTOM = "Detail factoid";
 
 $(function() { // DOM ready
 
@@ -122,10 +128,11 @@ $(function() { // DOM ready
 	HandleTopBox(emulator);
 
 	// Default factoid in top is song length
-	main.factoidTypeTop = parseInt(localStorage.getItem("factoidTop") ?? 3, 10);
+	main.factoidTypeTop = parseInt(localStorage.getItem("factoidTop") ?? 2, 10);
+	$("#dropdown-settings-factoid-top").val(main.factoidTypeTop);
 	// Default factoid in bottom is tags
 	main.factoidTypeBottom = parseInt(localStorage.getItem("factoidBottom") ?? 1, 10);
-	UpdateFactoidButton(main.factoidTypeBottom);
+	$("#dropdown-settings-factoid-bottom").val(main.factoidTypeBottom);
 
 	SID = new SIDPlayer(emulator);
 	ctrls = new Controls();
@@ -484,18 +491,17 @@ $(function() { // DOM ready
 
 						main.factoidTypeTop++;
 						if (main.factoidTypeTop == 1) main.factoidTypeTop++; // Skip tags
-						if (main.factoidTypeTop > 14) main.factoidTypeTop = 0;
+						if (main.factoidTypeTop > 12) main.factoidTypeTop = 0;
 
-						localStorage.setItem("factoidTop", main.factoidTypeTop);
-						RefreshFolder();
+						$("#dropdown-settings-factoid-top").val(main.factoidTypeTop).trigger("change");
 						break;
 
 					case 85:	// Keyup 'u' - cycle through factoid types (bottom)
 
 						main.factoidTypeBottom++;
-						if (main.factoidTypeBottom > 14) main.factoidTypeBottom = 0;
+						if (main.factoidTypeBottom > 12) main.factoidTypeBottom = 0;
 
-						SelectFactoid(main.factoidTypeBottom);
+						$("#dropdown-settings-factoid-bottom").val(main.factoidTypeBottom).trigger("change");
 						break;
 
 					case 37:	// Keyup 'ARROW-LEFT' - skip to previous (+ SHIFT to emulate auto-progress)
@@ -535,38 +541,6 @@ $(function() { // DOM ready
 					default:
 				}
 			}
-		}
-	});
-
-	/**
-	 * Reveal the triangular corner buttons when hovering near the bottom of the
-	 * song browser. This includes hovering on the search bar.
-	 */
-	$(document).on("mousemove", function(event) {
-		var $songs = $("#songs");
-		var rect = $songs[0].getBoundingClientRect();
-		var inX = (event.clientX >= rect.left && event.clientX <= rect.right);
-		// Integer = height of '#corner-buttons' + '#search' combined
-		var nearBottom = (event.clientY >= (rect.bottom - 110) && event.clientY <= (rect.bottom + 8));
-
-		$songs.toggleClass("cb-prox", inX && nearBottom);
-	});
-
-	$("#songs").on("mouseleave", function () {
-		$(this).removeClass("cb-prox");
-	});	
-
-	/**
-	 * When clicking one of the two triangular corner buttons.
-	 */
-	$("#corner-buttons").on("click", function(event) {
-		var $this = $(event.target);
-		if ($this.hasClass("corner-right")) {
-			// Cycle factoid
-			$(window).trigger($.Event("keyup", { key: "u", code: "KeyU", keyCode: 85, which: 85 }));
-		} else if ($this.hasClass("corner-left")) {
-			// Toggle tags ON/OFF
-			$(window).trigger($.Event("keyup", { key: "y", code: "KeyY", keyCode: 89, which: 89 }));
 		}
 	});
 
@@ -1592,6 +1566,26 @@ $(function() { // DOM ready
 				browser.validateData(data);
 			});
 		}
+	});
+
+	/**
+	 * User settings: When changing the top factoid drop-down box.
+	 * 
+	 * @param {*} event 
+	 */
+	$("#dropdown-settings-factoid-top").change(function(event) {
+		main.factoidTypeTop = event.target.value;
+		SelectFactoid(FACTOID_TOP, main.factoidTypeTop);
+	});
+
+	/**
+	 * User settings: When changing the bottom factoid drop-down box.
+	 * 
+	 * @param {*} event 
+	 */
+	$("#dropdown-settings-factoid-bottom").change(function(event) {
+		main.factoidTypeBottom = event.target.value;
+		SelectFactoid(FACTOID_BOTTOM, main.factoidTypeBottom);
 	});
 
 	/**
@@ -2621,56 +2615,29 @@ function ToggleVisuals() {
 
 /**
  * Show a floating message for a short period of time in the bottom of the song
- * browser window. Used by e.g. the triangular corner buttons.
+ * browser window. Used when e.g. cycling the factoids.
  * 
  * @param {string} message 
  */
 function BrowserMessage(message) {
-	clearTimeout(cornerMessageTimer);
-	$("#corner-buttons .message").empty().append(message).css("display", "inline-block");
-	cornerMessageTimer = setTimeout(() => {
-		$("#corner-buttons .message").hide();
+	clearTimeout(browserMessageTimer);
+	$("#browser-bottom .message").empty().append(message).css("display", "inline-block");
+	browserMessageTimer = setTimeout(() => {
+		$("#browser-bottom .message").hide();
 	}, 1500);
 }
 
 /**
- * Update the number in the triangle corner button for cycling factoids. It
- * should match the currently selected bottom factoid number.
+ * Select top or bottom factoid number and update folder.
  * 
- * @param {number} factoid 
+ * @param {string} factoid		Use FACTOID_TOP or FACTOID_BOTTOM
+ * @param {number} number		0 and up
  */
-function UpdateFactoidButton(factoid) {
-	$factoidButton = $("#corner-buttons .corner-right div");
-	$factoidButton.empty().append(factoid);
-	var style;
-	if (factoid < 10)
-		style = {
-			// Numbers 0 to 9
-			"font-size":	"13px",
-			"top":			"1px",
-			"left":			"0.5px",
-		}
-	else
-		style = {
-			// Numbers 10 and up
-			"font-size":	"10px",
-			"top":			"-1px",
-			"left":			"2px",
-		}
-	$factoidButton.css(style);
-}
-
-/**
- * Select bottom factoid number and update folder.
- * 
- * @param {number} factoid 
- */
-function SelectFactoid(factoid, showMessage = true) {
-	UpdateFactoidButton(factoid);
+function SelectFactoid(factoid, number, showMessage = true) {
 	if (showMessage)
-		BrowserMessage(factoidMessage[factoid]);
-	localStorage.setItem("factoidBottom", factoid);
+		BrowserMessage(factoid + ": " + factoidMessage[number]);
 
+	localStorage.setItem((factoid == FACTOID_TOP ? "factoidTop" : "factoidBottom"), number);
 	RefreshFolder();
 }
 

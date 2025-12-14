@@ -1255,12 +1255,7 @@ try {
 						// Shown in 'browser.js'
 						break;
 
-					case 2:		// ID (hvsc_files)
-
-						$factoid[$f] = 'DB ID: <span class="id">' . $id .'</span>';
-						break;
-
-					case 3:		// Song lengths
+					case 2:		// Song lengths
 
 						if (!$isCGSC) {
 							// Get the user's settings
@@ -1284,7 +1279,7 @@ try {
 						}
 						break;
 
-					case 4:		// Type (PSID or RSID) and version (2.0, etc.)
+					case 3:		// Type (PSID or RSID) and version (2.0, etc.)
 
 						$factoid[$f] = $type . ' ' . $version;
 
@@ -1293,12 +1288,12 @@ try {
 						}
 						break;
 
-					case 5:		// Compatibility (e.g. BASIC)
+					case 4:		// Compatibility (e.g. BASIC)
 
 						$factoid[$f] = $playercompat == 'C64 BASIC' ? 'BASIC' : '';
 						break;
 
-					case 6:		// Clock speed
+					case 5:		// Clock speed
 
 						// Mixed or unknown are not accepted
 						if ($clockspeed === 'PAL 50Hz')
@@ -1307,7 +1302,7 @@ try {
 							$factoid[$f] = 'NTSC';
 						break;
 
-					case 7:		// SID model
+					case 6:		// SID model
 
 						// Mixed or unknown are not accepted
 						if ($sidmodel === 'MOS6581')
@@ -1316,7 +1311,7 @@ try {
 							$factoid[$f] = '8580';
 						break;
 
-					case 8:		// Size in bytes (decimal)
+					case 7:		// Size in bytes (decimal)
 
 						if (!$isCGSC) {
 							$fvalue[$f] = $datasize - 3;
@@ -1325,14 +1320,14 @@ try {
 						}
 						break;
 
-					case 9:		// Start and end address (hexadecimal)
+					case 8:		// Start and end address (hexadecimal)
 
 						if ($datasize && $loadaddr)
 							$factoid[$f] = '$' . strtoupper(str_pad(dechex($loadaddr), 4, '0', STR_PAD_LEFT)).'-'.
 								'$' . strtoupper(str_pad(dechex($loadaddr + $datasize - 3), 4, '0', STR_PAD_LEFT));
 						break;
 
-					case 10:	// HVSC or CGSC version
+					case 9:	// HVSC or CGSC version
 
 						if ((int)$hvsc) {
 							if ($isCGSC)
@@ -1342,18 +1337,12 @@ try {
 						}
 						break;
 
-					case 11:	// CSDb 'sid' ID
-
-						if ($csdbtype == 'sid' && $csdbid)
-							$factoid[$f] = 'SID ID: <span class="id">' . $csdbid .'</span>';
-						break;
-
-					case 12:	// Application (RELEASE or PREVIEW) - pertains to games
+					case 10:	// Application (RELEASE or PREVIEW) - pertains to games
 
 						$factoid[$f] = $application;
 						break;
 
-					case 13:	// Number of CSDb entries
+					case 11:	// Number of CSDb entries
 
 						if ($csdbtype === 'sid') {
 							$frow = $db->query('SELECT entries FROM csdb
@@ -1367,9 +1356,22 @@ try {
 						}
 						break;
 
-					case 14:	// Production title (previously tag label)
+					case 12:	// Production title (previously tag label)
 
 						// Shown in 'browser.js'
+						break;
+
+					// ONLY ADMIN FACTOIDS BELOW (currently not available)
+
+					case 1000:	// ID (hvsc_files)
+
+						$factoid[$f] = 'DB ID: <span class="id">' . $id .'</span>';
+						break;
+
+					case 1001:	// CSDb 'sid' ID
+
+						if ($csdbtype == 'sid' && $csdbid)
+							$factoid[$f] = 'SID ID: <span class="id">' . $csdbid .'</span>';
 						break;
 
 					default:	// Nothing

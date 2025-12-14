@@ -9,27 +9,13 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- Major change of factoids and tag label:
-
-  - Top expander button and expanded panel for three drop-downs (f1, f2, sorting).
-  - Remove both corner buttons.
-
-    @todo:
-
-	    - Adapt other SID row code (the sorting one)
-      - Remove uploaded-time css
-      - Make db id factoid admin-only
-      - Sorting by factoid should now be factoid top or bottom
-      - BUG: Can't activate tags dialog box without tags as factoid
-          Maybe always show "+" icon there?
-      - Make sure sorting in SH folder doesn't show "undefined" in SID rows
-      - Add browser text to top factoid
-
-
-
-
 - Turn sound expander off in JSIDPlay2 unless it's an FM tune. If it's not easy to detect
   it, turn the sound expander off completely and ignore certain folders.
+
+- Sorting by factoid (inline or detail) doesn't work for all factoids, which is fair to
+  some extext, but some - like production title - ought to work.
+
+- Make admin-only factoids available to admins (rotating and drop-down boxes).
 
 - The labels do not belong in the tags database table. They need their own table. See if you
   can move them over with a swift SQL query or two. But until you can add its own UI too.

@@ -113,7 +113,6 @@ Browser.prototype = {
 		$("#upload-new").change(this.onUpload.bind(this));
 
 		$("#folders table").on("contextmenu", "tr", this.contextMenu.bind(this));
-		$("#songs-buttons").on("click", "img.path-more", this.contextCorner.bind(this));
 		$("#panel")
 			.on("click", ".context", this.onContextClick.bind(this))
 			.on("contextmenu", "#contextmenu", function() { return false; })
@@ -1163,12 +1162,19 @@ Browser.prototype = {
 					localStorage.setItem("sort", "newest");
 				}
 				break;
-			case "factoid":
-				// Sort according to factoid (doesn't make sense with all factoid types)
+			case "factoidtop":
+				// Sort according to top "inline" factoid
 				this.playlist.sort(function(obj1, obj2) {
-					return obj1.fvalue < obj2.fvalue ? 1 : -1;
+					return obj1.fvaluetop < obj2.fvaluetop ? 1 : -1;
 				});
-				localStorage.setItem("sort", "factoid"); // @todo which factoid line?
+				localStorage.setItem("sort", "factoidtop");
+				break;
+			case "factoidbottom":
+				// Sort according to top "detail" factoid
+				this.playlist.sort(function(obj1, obj2) {
+					return obj1.fvaluebottom < obj2.fvaluebottom ? 1 : -1;
+				});
+				localStorage.setItem("sort", "factoidbottom");
 				break;
 			case "shuffle":
 				// Sort playlist in a random manner (randomize)
@@ -1243,18 +1249,39 @@ Browser.prototype = {
 						return false;
 					}
 				});
-				files += '<tr>'+ // SORT/FILTER SID ROW
 
-// @ TODO NEEDS TO BE ADAPTED TO CHANGES!
-						'<td class="sid unselectable">'+file.sidspecial+
-						'<div class="pl-strip'+playerType+'"><div class="has-stil">'+hasStil+'</div></div>'+
-						'<div class="block-wrap'+(file.sidspecial !== "" ? ' bw-sidsp' : '')+'"><div class="block">'+(file.subtunes > 1 ? '<div class="subtunes'+(this.isSymlist ? ' specific' : '')+(isNew ? ' newst' : '')+'">'+(this.isSymlist ? file.startsubtune + 1 : file.subtunes)+'</div>' : (isNew ? '<div class="newsid"></div>' : ''))+
-						'<div class="entry name file'+(this.isSearching || this.isCompoFolder || this.path.substr(0, 2) === "/$" ? ' search' : '')+'" data-name="'+encodeURIComponent(file.filename)+'" data-type="'+file.type+'" data-id="'+file.id+'" data-symid="'+file.symid+'">'+adaptedName+'</div></div></div><br />'+
-						'<span class="info">'+file.copyright.substr(0, 4)+file.infosec+'<div class="tags-line"'+(showTags ? '' : ' style="visibility:hidden;"')+tag_start_end+'>'+TAGS_BRACKET+file.tags+'</div></span></td>'+
-						'<td class="stars filestars"><span class="rating">'+this.buildStars(file.rating)+'</span>'+
-						(typeof file.uploaded != "undefined" ? '<span class="uploaded-time">'+file.uploaded.substr(0, 10)+'</span>' : '<div class="fdiv"><div class="fbar" style="width:'+file.fbarwidth+'px"></div><span class="factoid">'+file.factoid+'</span></div>')+
+				files += // SORT/FILTER -SID ROW-
+					'<tr'+(SID.emulator == "youtube" && file.videos == 0 ? ' class="disabled"' : '')+'>'+
+						// Top line factoid (next to rating stars)
+						'<td class="sid unselectable">'+file.factoidtop+
+							// Colored player strip
+							'<div class="pl-strip'+playerType+'">'+
+								// STIL icon
+								'<div class="has-stil">'+hasStil+'</div>'+
+							'</div>'+
+							// SID name, etc.
+							'<div class="block-wrap" style="max-width:'+file.namewidth+'px;">'+
+								// Optional: Subtunes box + "NEW" label (this line is a mess)
+								'<div class="block">'+(file.subtunes > 1 ? '<div class="subtunes'+(this.isSymlist ? ' specific' : '')+(isNew ? ' newst' : '')+'">'+(this.isSymlist ? file.startsubtune + 1 : file.subtunes)+'</div>' : (isNew ? '<div class="newsid"></div>' : ''))+
+									// Various data attributes
+									'<div class="entry name file'+(this.isSearching || this.isCompoFolder || this.path.substr(0, 2) === "/$" ? ' search' : '')+'" data-name="'+encodeURIComponent(file.filename)+'" data-type="'+file.type+'" data-id="'+file.id+'" data-symid="'+file.symid+'">'+
+										adaptedName+
+									'</div>'+
+								'</div>'+
+							'</div><br />'+
+							// Second line (player, tags, etc.)
+							'<span class="info">'+
+								file.copyright.substr(0, 4)+file.infosec+file.sidtags+
+							'</span>'+
+							// Bottom line factoid (tags is one of them)
+							file.factoidbottom+
+						'</td>'+
+						'<td class="stars filestars">'+
+							// Rating stars
+							'<span class="rating">'+this.buildStars(file.rating)+'</span>'+
 						'</td>'+
 					'</tr>';					
+
 			}.bind(this));
 			$("#songs table").append(this.folders+files);
 			this.showTagsBrackets();
@@ -1298,7 +1325,7 @@ Browser.prototype = {
 
 		if (this.hvsc) this.hvsc.abort();
 
-		$("#kb-marker,img.path-more").hide();
+		$("#kb-marker").hide();
 
 		ctrls.state("root/back", "disabled");
 		$("#dropdown-sort").prop("disabled", true);
@@ -1711,10 +1738,16 @@ Browser.prototype = {
 									return obj1.copyright < obj2.copyright ? 1 : -1;
 								});
 								break;
-							case "factoid": // @todo There are now two factoids!
-								// Sort playlist according to the 'factoid' string
+							case "factoidtop":
+								// Sort playlist according to the "inline" factoid string
 								data.files.sort(function(obj1, obj2) {
-									return obj1.fvalue < obj2.fvalue ? 1 : -1;
+									return obj1.fvaluetop < obj2.fvaluetop ? 1 : -1;
+								});
+								break;
+							case "factoidbottom":
+								// Sort playlist according to the "detail" factoid string
+								data.files.sort(function(obj1, obj2) {
+									return obj1.fvaluebottom < obj2.fvaluebottom ? 1 : -1;
 								});
 								break;
 							case "shuffle":
@@ -1783,8 +1816,14 @@ Browser.prototype = {
 
 						// Which top factoid type?
 						switch (parseInt(main.factoidTypeTop)) {
-							case 14:	// Use tag label as factoid
-								file.factoidtop = this.labelTag;
+							case 0:		// Nothing (upload date in SH folder)
+								if (this.isUploadFolder())
+									file.factoidtop = typeof file.uploaded != "undefined"
+										? file.uploaded.substr(0, 10)
+										: '';
+								break;
+							case 12:	// Use tag label as factoid
+								file.factoidtop = '<b>'+this.labelTag+'</b>';
 								break;
 						}
 
@@ -1799,7 +1838,7 @@ Browser.prototype = {
 							case 1:		// Tags
 								sidTags = '<div class="tags-line"'+(showTags ? '' : ' style="visibility:hidden;"')+tag_start_end+'>'+TAGS_BRACKET+list_of_tags+'</div>';
 								break;
-							case 3:		// Song length
+							case 2:		// Song length
 								if (file.fvaluebottom > 0) {
 									// Define a bar width
 									const maxMinutes = 10;
@@ -1808,17 +1847,17 @@ Browser.prototype = {
 									fbarWidth = Math.round(ratio * maxBarSize) + 23; // Text width
 								}
 								break;
-							case 8:		// Size in bytes (decimal)
+							case 7:		// Size in bytes (decimal)
 								if (file.fvaluebottom > 0)
 									// Define a bar width
 									fbarWidth = this.bytesToBarWidthPivotLog(file.fvaluebottom); // No text width
 								break;
-							case 13:	// Number of CSDb entries
+							case 11:	// Number of CSDb entries
 								if (file.fvaluebottom > 0)
 									// Define a bar width
 									fbarWidth = (file.fvaluebottom * 1.25) + 54; // Text width
 								break;
-							case 14:	// Use tag label as factoid
+							case 12:	// Use tag label as factoid
 								file.factoidbottom = this.labelTag;
 								break;
 						}
@@ -1834,7 +1873,7 @@ Browser.prototype = {
 								'<span class="factoid-bottom">'+file.factoidbottom+'</span>'+
 							'</div>';
 
-						files += // GET FOLDER: SID ROW
+						files += // GET FOLDER: -SID ROW-
 							'<tr'+(SID.emulator == "youtube" && countVideos == 0 ? ' class="disabled"' : '')+'>'+
 								// Top line factoid (next to rating stars)
 								'<td class="sid unselectable">'+factoidTop+
@@ -1898,16 +1937,17 @@ Browser.prototype = {
 							hvsc:			file.hvsc,
 							symid:			file.symid,
 							videos:			file.videos,
-							factoidtop:		file.factoidtop,
-							factoidbottom:	file.factoidbottom,
-							fvalue:			file.fvalue,
-							fbarwidth:		fbarWidth,
+							factoidtop:		factoidTop,
+							factoidbottom:	factoidBottom,
+							fvaluetop:		file.fvaluetop,
+							fvaluebottom:	file.fvaluebottom,
+							namewidth:		nameWidth,
+							sidtags:		sidTags,
 							profile:		file.profile,	// Only files from 'SID Happens'
 							uploaded:		file.uploaded,	// Only files from 'SID Happens'
 						});
 					}.bind(this));
 
-					if (files !== "") $("img.path-more").show(); // Show the "..." icon button
 					if (files !== "" || this.path === "" || this.isBigCompoFolder() || this.isMusiciansLetterFolder()) $("#dropdown-sort").prop("disabled", false);
 					/*var pos = this.folders.lastIndexOf('<tr>');
 					this.folders = this.folders.slice(0, pos) + this.folders.slice(pos).replace('<tr>', '<tr class="last">');*/
@@ -2281,6 +2321,7 @@ Browser.prototype = {
 				// 2SID/3SID: No longer needed because of SID special labels.
 			} else if (types[i] == "label") {
 				// A label tag becomes part of the factoid family
+				// @todo Need to move these out of the tags database table.
 				this.labelTag = tag;
 			} else {
 				// NOTE: Don't change the order of tags or the collector for a folder will break!
@@ -3041,46 +3082,6 @@ Browser.prototype = {
 	},
 
 	/**
-	 * Show a context menu when right-clicking a triangular corner button.
-	 * 
-	 * @param {*} event 
-	 */
-	contextCorner: function(event) {
-		let contents = "", $panel = $("#panel");
-		const indent = ' style="margin-left:8px;"';
-		$("#contextmenu").remove();
-
-		// Factoid choices
-		contents = 
-			'<div class="line" data-action="factoid"'+indent+'>0. Nothing</div>'+
-			'<div class="line" data-action="factoid"'+indent+'>1. Show tags</div>'+
-			'<div class="line" data-action="factoid"'+indent+'>2. Internal database ID</div>'+
-			'<div class="line" data-action="factoid"'+indent+'>3. Song length</div>'+
-			'<div class="line" data-action="factoid"'+indent+'>4. Type (PSID/RSID) and version</div>'+
-			'<div class="line" data-action="factoid"'+indent+'>5. Compatibility (e.g. BASIC)</div>'+
-			'<div class="line" data-action="factoid"'+indent+'>6. Clock speed (PAL/NTSC)</div>'+
-			'<div class="line" data-action="factoid"'+indent+'>7. SID model (6581/8580)</div>'+
-			'<div class="line" data-action="factoid"'+indent+'>8. Size in bytes (decimal)</div>'+
-			'<div class="line" data-action="factoid"'+indent+'>9. Start and end address (hexadecimal)</div>'+
-			'<div class="line" data-action="factoid"'+indent+'>10. HVSC or CGSC update version</div>'+
-			'<div class="line" data-action="factoid">11. CSDb SID ID</div>'+
-			'<div class="line" data-action="factoid">12. Game status (RELEASE/PREVIEW)</div>'+
-			'<div class="line" data-action="factoid">13. Number of CSDb entries</div>'+
-			'<div class="line" data-action="factoid">14. Production label</div>';
-
-		// Create the context menu
-		$panel.prepend('<div id="contextmenu" class="context unselectable">'+contents+'</div>');
-		let $contextMenu = $("#contextmenu");
-
-		$contextMenu
-			.css("top", event.pageY - $contextMenu.outerHeight()) // Always flip this menu upwards
-			.css("left", event.pageX - ($panel.offset().left - 8))
-			.css("visibility","visible");
-
-		return false;
-	},
-
-	/**
 	 * Show a sub context menu attached to a main context menu. Typically used to show
 	 * playlist folders available that the user can add a SID file to.
 	 * 
@@ -3129,14 +3130,7 @@ Browser.prototype = {
 		if ($target.hasClass("disabled")) return;
 		var action = $target.attr("data-action");
 
-		// Handle choice of factoid
-		if (action == "factoid") {
-			main.factoidType = $target.html().split(".")[0];
-			SelectFactoid(main.factoidType, false);
-			return;
-		}
-
-		// Handle other context menu options
+		// Handle context menu options
 		switch (action) {
 			case "download-file":
 				// Stop playing in DeepSID in case an external SID player is going to take over now
@@ -4164,6 +4158,8 @@ Browser.prototype = {
 				'<option value="rating">Rating</option>'+
 				'<option value="oldest">Oldest</option>'+
 				'<option value="newest">Newest</option>'+
+				'<option value="factoidtop">Inline</option>'+
+				'<option value="factoidbottom">Detail</option>'+
 				'<option value="shuffle">Shuffle</option>'
 			).val("newest");
 		} else {
@@ -4174,7 +4170,8 @@ Browser.prototype = {
 				'<option value="rating">Rating</option>'+
 				'<option value="oldest">Oldest</option>'+
 				'<option value="newest">Newest</option>'+
-				'<option value="factoid">Factoid</option>'+
+				'<option value="factoidtop">Inline</option>'+
+				'<option value="factoidbottom">Detail</option>'+
 				'<option value="shuffle">Shuffle</option>'
 			);
 			// Sort box for everything else

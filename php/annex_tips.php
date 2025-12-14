@@ -263,8 +263,8 @@ $tips = array(
 		<div class="annex-hotkey">b</div><span class="annex-tiny">Back from plink</span>
 		<div class="annex-hotkey">f</div><span class="annex-tiny">Refresh folder</span>
 		<div class="annex-hotkey">t</div><span class="annex-tiny">Edit tags</span>
-		<div class="annex-hotkey">o</div><span class="annex-tiny">Toggle tags on/off</span>
-		<div class="annex-hotkey">y</div><span class="annex-tiny">Cycle top factoids</span>
+		<div class="annex-hotkey">y</div><span class="annex-tiny">Toggle tags on/off</span>
+		<div class="annex-hotkey">i</div><span class="annex-tiny">Cycle top factoids</span>
 		<div class="annex-hotkey">u</div><span class="annex-tiny">Cycle bottom factoids</span>
 		<div class="annex-hotkey">+</div><span class="annex-tiny">Search command</span>
 		<p>Testing a SID is temporary and for you only. No one else can hear it.</p>

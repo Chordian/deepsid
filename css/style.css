@@ -223,7 +223,6 @@
 	--svg-filter-money:				invert(59%) sepia(11%) saturate(1135%) hue-rotate(38deg) brightness(90%) contrast(84%);
 	--svg-filter-tn-disabled:		var(--svg-filter-white);
 	--svg-filter-all-starred:		invert(38%) sepia(100%) saturate(655%) hue-rotate(10deg) brightness(100%) contrast(101%);
-	--svg-filter-path-more:			invert(48%) sepia(0%) saturate(372%) hue-rotate(160deg) brightness(95%) contrast(78%);
 
 	--svg-bg-star-orange:			url(../images/if_star_orange.svg) 0 0 / 18px 18px no-repeat;
 	--svg-bg-star-empty-voted:		url(../images/if_star_empty_voted.svg) 0 0 / 18px 18px no-repeat;
@@ -622,7 +621,6 @@
 	--svg-filter-money:				invert(58%) sepia(12%) saturate(928%) hue-rotate(38deg) brightness(98%) contrast(94%);
 	--svg-filter-tn-disabled:		invert(0%) sepia(9%) saturate(4037%) hue-rotate(328deg) brightness(104%) contrast(73%);
 	--svg-filter-all-starred:		invert(77%) sepia(66%) saturate(335%) hue-rotate(8deg) brightness(100%) contrast(78%);
-	--svg-filter-path-more:			invert(72%) sepia(87%) saturate(0%) hue-rotate(206deg) brightness(93%) contrast(101%);
 	--svg-filter-strong:			var(--svg-filter-white);
 
 	--svg-bg-star-orange:			url(../images/if_star_orange_dark.svg) 0 0 / 18px 18px no-repeat;
@@ -1484,11 +1482,16 @@ small.u2 { margin-left: 2px; }
 		}
 
 		.dropdown-buffer,
+		.dropdown-factoid,
 		.dropdown-unstyled {
 			position: relative;
 			top: 1px;
 			font-size: 13px;
 		}
+
+			.dropdown-factoid {
+				margin-right: 20px;
+			}
 
 	#piano-combine-area span {
 		display: none;
@@ -2863,6 +2866,11 @@ input[type=range]::-ms-track {
 			height: 38px;
 		}
 
+		#page .factoid-box {
+			display: inline-block;
+			width: 320px;
+		}
+
 		#sundry label,
 		#stopic-stereo .stereo-letter {
 			position: relative;
@@ -2877,6 +2885,17 @@ input[type=range]::-ms-track {
 			#page .dropdown-buffer-label.disabled,
 			#csdb-emp-filter-label.disabled {
 				color: var(--color-text-label-disabled);
+			}
+
+			#page .dropdown-factoid-label {
+				display: inline-block;
+				margin: 0 !important;
+				width: 94px;
+			}
+
+			#page .factoid-more {
+				font: normal 12px "Open Sans", sans-serif;
+				color: var(--color-text-fine);
 			}
 
 		#sundry input[type="text"] {
@@ -3156,23 +3175,11 @@ input[type=range]::-ms-track {
 		top: 5px;
 		margin-left: 8px;
 		font-size: 14px;
-		width: 54%; /* If you change the panel box width you may have to finetune this */
+		width: 60%; /* If you change the panel box width you may have to finetune this */
 		height: 34px;
 		color: var(--color-button-shadow);
 	}
 
-		img.path-more {
-			display: none;
-			position: relative;
-			top: -8.5px;
-			width: 22px;
-			filter: var(--svg-filter-path-more);
-		}
-
-			img.path-more:hover {
-				filter: var(--svg-filter-strong);
-			}
-	
 		/* For the small HVSC or CGSC in the path line */
 		#path .dim,
 		#folders .dim,
@@ -3564,8 +3571,8 @@ input[type=range]::-ms-track {
 			z-index: 0;
 		}
 
-		/* Container for the two corner buttons in the bottom */
-		#corner-buttons {
+		/* Container previously used by the now deprecated corner buttons - still used for browser message */
+		#browser-bottom {
 			overflow: hidden;
 			position: absolute;
 			bottom: 50px;
@@ -3583,7 +3590,7 @@ input[type=range]::-ms-track {
 			--color-border-message: transparent;
 }
 
-			#corner-buttons .message {
+			#browser-bottom .message {
 				display: none;
 				position: relative;
 				left: 50%;
@@ -3598,120 +3605,6 @@ input[type=range]::-ms-track {
 				border: 1px solid var(--color-border-message);
 				z-index: 4;
 			}
-
-			/* Base triangle button look (shared) */
-			#corner-buttons .corner-svg {
-				position: absolute;
-				width: 38px;
-				height: 38px;
-				background: var(--color-button);
-				display: inline-flex;
-				align-items: flex-end;
-				justify-content: flex-end;
-				padding: 6px;
-				border: 0;
-				box-shadow: none;
-				cursor: pointer;
-				color: var(--color-button-text);
-				pointer-events: auto;
-			}
-
-				/* Right corner button */
-				#corner-buttons .corner-right {
-					clip-path: url(#cb-corner-clip-right);
-					right: -14px;	/* Collapsed */
-					bottom: -13px;
-					transition: right 100ms linear, bottom 100ms linear;
-				}
-
-					/* Reveal button on corner buttons AND search containers */
-					#songs.cb-prox .corner-right {
-						right: 0;
-						bottom: 1px;
-					}
-
-					/* Currently selected factoid number */
-					#songs .corner-right div {
-						position: relative;
-						font: bold 13px "Open Sans", sans-serif;
-						opacity: 0;
-						pointer-events: none;
-					}
-
-				/* Shadow borders for the triangle towards the corner of the container */
-				#corner-buttons .corner-shadow-right {
-					position: absolute;
-					right: 0;
-					bottom: 1px;
-					width: 0;
-					height: 0;
-					border-bottom: 2px solid var(--shadow-button-triangle);
-					border-right: 2px solid var(--shadow-button-triangle);
-					z-index: -1;
-					transition: all 100ms linear;
-				}
-
-					#songs.cb-prox .corner-shadow-right {
-						width: 34px;
-						height: 34px;
-					}
-
-				/* Left corner button */
-				#corner-buttons .corner-left {
-					clip-path: url(#cb-corner-clip-left);
-					left: -14px;	/* Collapsed */
-					bottom: -13px;
-					transition: left 100ms linear, bottom 100ms linear;
-				}
-
-					/* Reveal button on corner buttons AND search containers */
-					#songs.cb-prox  .corner-left {
-						left: 0;
-						bottom: 1px;
-					}
-
-				/* Shadow borders for the triangle towards the corner of the container */
-				#corner-buttons .corner-shadow-left {
-					position: absolute;
-					left: 0;
-					bottom: 1px;
-					width: 0;
-					height: 0;
-					border-bottom: 2px solid var(--shadow-button-triangle);
-					border-left: 2px solid var(--shadow-button-triangle);
-					z-index: -1;
-					transition: all 100ms linear;
-				}
-
-					#songs.cb-prox  .corner-shadow-left {
-						width: 34px;
-						height: 34px;
-					}
-
-			#corner-buttons .corner-svg:hover {
-				background: var(--color-button-hover);
-			}
-
-			#corner-buttons .corner-svg:active {
-				transform: scale(0.935);
-				transform-origin: center center;
-			}
-
-			#corner-buttons .cb-icon {
-				display: block;
-				position: relative;
-				opacity: 0;
-			}
-
-				#corner-buttons .corner-left .cb-icon {
-					bottom: -1px;
-					left: -4px;
-				}
-
-				#songs.cb-prox .cb-icon,
-				#songs.cb-prox .corner-right div {
-					opacity: 1;
-				}
 
 		#songs .disqus-sh {
 			display: none !important;

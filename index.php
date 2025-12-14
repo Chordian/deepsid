@@ -677,8 +677,7 @@
 
 							<!--<span>Want to learn how to make SID tunes? Check out <a href="https://www.youtube.com/watch?v=nXNtLetxFUg">this tutorial video</a> now on YouTube.</span>-->
 
-							<!-- <span>If the tags overlap or hide factoids like song lengths, you can turn them off with the left corner button or by pressing 'Y'.</span>-->
-							<span><div style="margin-bottom:10px;"><b class="strong">NEW:</b> A small star icon in front of a folder means that everything inside has been rated.</div>Cool for completionists!</span>
+							<span><b class="strong">NEW:</b> A SID row now has two factoids. You can select what to show in them with two new drop-down boxes in the setup tab.</span>
 
 							<!--<span><p style="margin:0 0 4px 0;">Have you made a new SID tune and need to slap a cool visualizer with a logo on it?</p><b style="font-size:22px;">Check out <a href="https://sidquake.c64demo.com/">SIDquake</a> by Raistlin!</b></span>-->
 							<!--<span> .... See <a href="#" onclick="$('#tab-changes').trigger('click'); return false;">Changes</a> for info.</span>-->
@@ -964,40 +963,11 @@
 					<button id="folder-back" class="button-lady browser-ctrls">
 						<b style="font-size:18px;position:relative;top:-6px;">..</b>
 					</button> <div id="path" class="ellipsis"></div>
-					<img class="path-more" src="images/ellipsis.svg" alt="" />
 					<div id="sort">
 						<select id="dropdown-sort" name="sort"><!-- browser.js --></select>
 					</div>
 				</div>
-				<div id="corner-buttons">
-					<svg width="0" height="0" aria-hidden="true" focusable="false">
-						<defs>
-							<clipPath id="cb-corner-clip-right" clipPathUnits="objectBoundingBox">
-								<polygon points="1 0, 0 1, 1 1"/> <!-- Bottom-right triangle -->
-							</clipPath>
-							<clipPath id="cb-corner-clip-left" clipPathUnits="objectBoundingBox">
-								<polygon points="0 0, 0 1, 1 1"/> <!-- Bottom-left triangle -->
-							</clipPath>
-						</defs>
-					</svg>
-					<!-- Right triangle button (factoid toggle) -->
-					<button class="corner-svg corner-right" aria-label="Cycle factoid"><div>2</div></button>
-					<div class="corner-shadow-right"></div>
-					<!-- Left triangle button (tags on/off) -->
-					<button class="corner-svg corner-left" aria-label="Toggle tags">
-						<svg class="cb-icon" viewBox="0 0 24 24" width="32" height="32" aria-hidden="true">
-							<path fill="currentColor" fill-rule="evenodd"
-								d="
-								M6.5 18.5 H13.5 V23.5 H6.5 L2.5 21 Z
-								M5 21
-								a0.75 0.75 0 1 1 1.5 0
-								a0.75 0.75 0 1 1 -1.5 0 Z
-								" />
-						</svg>
-					</button>
-					<div class="corner-shadow-left"></div>
-					<div class="message">Location in RAM (hexadecimal)</div>
-				</div>
+				<div id="browser-bottom"><div class="message"></div></div>
 				<div id="folders" tabindex="0"><div id="kb-marker"></div><table></table>
 				</div>
 				<img id="loading" class="loading-spinner" src="images/loading.svg" style="display:none;" alt="" />
@@ -1531,7 +1501,7 @@
 
 								<button id="setting-first-subtune" class="button-edit button-toggle button-off">Off</button>
 								<label for="setting-first-subtune" class="unselectable">Always start at the <b>first sub tune</b> in a song instead of the default set by HVSC</label>
-
+								
 								<div class="space splitline"></div>
 
 								<h3>Auto-progress</h3>
@@ -1559,6 +1529,50 @@
 
 								<button id="setting-skip-short" class="button-edit button-toggle button-off">Off</button>
 								<label for="setting-skip-short" class="unselectable">Auto-progress should automatically skip songs and sub tunes that lasts <b>less than ten seconds</b></label>
+
+								<div class="space splitline"></div>
+
+								<h3>Factoids</h3>
+								<p>Factoids let you choose which extra information is shown in each SID row.</p>
+
+								<div class="factoid-box">
+									<label for="dropdown-settings-factoid-top" class="dropdown-factoid-label unselectable">Inline factoid</label>
+									<select id="dropdown-settings-factoid-top" class="dropdown-factoid">
+										<option value="0">Nothing / Upload date</option>
+										<option value="2">Song Length</option>
+										<option value="3">Type (PSID/RSID) + version</option>
+										<option value="4">Compatibility (e.g. BASIC)</option>
+										<option value="5">Clock speed (PAL/NTSC)</option>
+										<option value="6">SID model (6581/8580)</option>
+										<option value="7">Size in bytes (decimal)</option>
+										<option value="8">Start and end address (hex)</option>
+										<option value="9">HVSC/CGSC update version</option>
+										<option value="10">Game status (REL/PREV)</option>
+										<option value="11">Number of CSDb entries</option>
+										<option value="12">Production title</option>
+									</select>
+								</div><span class="factoid-more">Shown on the first line between the SID title and rating stars.</span>
+
+								<div class="space"></div>
+
+								<div class="factoid-box">
+									<label for="dropdown-settings-factoid-bottom" class="dropdown-factoid-label unselectable">Detail factoid</label>
+									<select id="dropdown-settings-factoid-bottom" class="dropdown-factoid">
+										<option value="0">Nothing / Upload date</option>
+										<option value="1">Show tags</option>
+										<option value="2">Song Length</option>
+										<option value="3">Type (PSID/RSID) + version</option>
+										<option value="4">Compatibility (e.g. BASIC)</option>
+										<option value="5">Clock speed (PAL/NTSC)</option>
+										<option value="6">SID model (6581/8580)</option>
+										<option value="7">Size in bytes (decimal)</option>
+										<option value="8">Start and end address (hex)</option>
+										<option value="9">HVSC/CGSC update version</option>
+										<option value="10">Game status (REL/PREV)</option>
+										<option value="11">Number of CSDb entries</option>
+										<option value="12">Production title</option>
+									</select>
+								</div><span class="factoid-more">Shown on the second line at the far right. Only this factoid can display tags.</span>
 
 								<div class="space splitline"></div>
 
@@ -1970,6 +1984,23 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>December 14, 2025</h3>
+						<ul>
+							<li>There are now two factoid fields in a SID row.
+								The top "inline" factoid is shown on the first line between the SID title and rating stars.
+								The bottom "detail" factoid is shown on the second line at the far right.</li>
+							<li>You can select what factoids to show in the setup tab. Each factoid has its own drop-down box.</li>
+							<li>You can also use hotkey "i" to rotate top factoids, and hotkey "u" to rotate bottom factoids.</li>
+							<li>Both tags and the new tag label (with the production title) are now part of the factoid family.
+								This means tags will no longer overlap a factoid since it's now a factoid itself.</li>
+							<li>Only the bottom factoid can show tags, as well as bars for certain values.</li>
+							<li>If you select nothing as factoid, the upload date will be shown instead in the 'SID Happens' folder.</li>
+							<li>The corner buttons in the bottom of the browser have been removed.</li>
+							<li>You can sort SID files by "inline" or "detail" factoids.
+								This doesn't work for all types of factoids.</li>
+							<li>Fixed a sorting bug when using the YouTube handler.</li>
+						</ul>
 
 						<h3>December 6, 2025</h3>
 						<ul>
