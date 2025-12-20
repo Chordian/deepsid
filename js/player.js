@@ -1175,7 +1175,7 @@ SIDPlayer.prototype = {
 				cartName: null,					// Cartridge name				(unused in DeepSID)
 				command: null,					// Command after C64 reset		(unused in DeepSID)
 				songLength: this.timeout,		// Song length to play for (0 means unknown, fallback to default play length)
-				sfxSoundExpander: true,			// Enable SoundExpander
+				sfxSoundExpander: false,		// Enable SoundExpander (true = +30% CPU time)
 				sfxSoundExpanderType: 1,		// SoundExpander type (OPL1: YM3526 = 0, OPL2: YM3812 = 1)
 			},
 		});

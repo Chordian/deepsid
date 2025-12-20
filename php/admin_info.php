@@ -33,7 +33,7 @@ $html = '<h3>Information</h3>
 				<div class="script">
 					<div class="monitor">Tags log</div>
 					<span>Show a log of the latest tags added to or removed from SID files.</span>
-					<button class="run-script" data-script="'.$baseURL.'../logs/activity.htm">SHOW</button>
+					<button class="run-script" data-script="'.$baseURL.'../logs/tags.htm">SHOW</button>
 				</div>
 				<div class="script">
 					<div class="monitor">Database errors</div>

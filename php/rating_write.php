@@ -73,8 +73,19 @@ try {
 	// ---------------------------------------------------------------------
 	foreach ($id_list as $id) {
 		// Did the user rate this folder or SID file before?
-		$select = $db->query('SELECT id, rating FROM ratings
-							  WHERE user_id = '.$user_id.' AND table_id = '.$id.' AND type = "'.$type.'"LIMIT 1');
+		/*$select = $db->query('SELECT id, rating FROM ratings
+							  WHERE user_id = '.$user_id.' AND table_id = '.$id.' AND type = "'.$type.'"LIMIT 1');*/
+		$select = $db->prepare(
+			'SELECT id, rating FROM ratings
+			WHERE user_id = :uid AND table_id = :tid AND type = :type
+			LIMIT 1'
+		);
+		$select->execute([
+			':uid'  => $user_id,
+			':tid'  => $id,
+			':type' => $type
+		]);
+
 		$select->setFetchMode(PDO::FETCH_OBJ);
 
 		$rating = $_POST['rating'];

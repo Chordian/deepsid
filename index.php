@@ -677,7 +677,7 @@
 
 							<!--<span>Want to learn how to make SID tunes? Check out <a href="https://www.youtube.com/watch?v=nXNtLetxFUg">this tutorial video</a> now on YouTube.</span>-->
 
-							<span><b class="strong">NEW:</b> A SID row now has two factoids. You can select what to show in them with two new drop-down boxes in the setup tab.</span>
+							<span><b class="strong">NEW:</b> A SID row now has <u>two</u> factoids. You can select what to show in them with two new drop-down boxes in the setup tab.</span>
 
 							<!--<span><p style="margin:0 0 4px 0;">Have you made a new SID tune and need to slap a cool visualizer with a logo on it?</p><b style="font-size:22px;">Check out <a href="https://sidquake.c64demo.com/">SIDquake</a> by Raistlin!</b></span>-->
 							<!--<span> .... See <a href="#" onclick="$('#tab-changes').trigger('click'); return false;">Changes</a> for info.</span>-->
@@ -1984,6 +1984,11 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>December 18, 2025</h3>
+						<ul>
+							<li>Fixed a ratings cache bug that caused an alert on page load. No ratings were affected.</li>
+						</ul>
 
 						<h3>December 14, 2025</h3>
 						<ul>

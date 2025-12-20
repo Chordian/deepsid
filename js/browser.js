@@ -1822,6 +1822,10 @@ Browser.prototype = {
 										? file.uploaded.substr(0, 10)
 										: '';
 								break;
+							case 2:		// Song length
+								if (this.isUploadFolder() && file.factoidtop == "5:00")
+									file.factoidtop = '<div>5:00</div>';	// Undefined in SH folder
+								break;
 							case 12:	// Use tag label as factoid
 								file.factoidtop = '<b>'+this.labelTag+'</b>';
 								break;
@@ -1839,7 +1843,9 @@ Browser.prototype = {
 								sidTags = '<div class="tags-line"'+(showTags ? '' : ' style="visibility:hidden;"')+tag_start_end+'>'+TAGS_BRACKET+list_of_tags+'</div>';
 								break;
 							case 2:		// Song length
-								if (file.fvaluebottom > 0) {
+								if (this.isUploadFolder() && file.factoidbottom == "5:00")
+									file.factoidbottom = '<div>5:00</div>';	// Undefined in SH folder
+								else if (file.fvaluebottom > 0) {
 									// Define a bar width
 									const maxMinutes = 10;
 									const full = maxMinutes * 60 * 1000;
