@@ -68,7 +68,7 @@ try {
 		rename(ROOT_HVSC.'/'.$_POST['fullname'], ROOT_HVSC.'/'.$new_name);
 
 } catch(PDOException $e) {
-	$account->LogActivityError('update_file.php', $e->getMessage());
+	$account->LogActivityError(basename(__FILE__), $e->getMessage());
 	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 }
 

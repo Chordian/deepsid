@@ -47,7 +47,7 @@ try {
 	$row = $select->fetch(PDO::FETCH_OBJ);
 
 	if (!$row) {
-		$account->LogActivityError('rating_write.php',
+		$account->LogActivityError(basename(__FILE__),
 			"Name error; fullname '$fullname' not found in '$table'");
 		die(json_encode(['status'=>'error','message'=>DB_ERROR]));
 	}
@@ -107,7 +107,7 @@ try {
 	// NOTE: Updating the ratings cache was moved to the 'rating_cache.php' script (called by browser.js).
 
 } catch(PDOException $e) {
-	$account->LogActivityError('rating_write.php', $e->getMessage());
+	$account->LogActivityError(basename(__FILE__), $e->getMessage());
 	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 }
 

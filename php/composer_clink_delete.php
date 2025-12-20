@@ -45,7 +45,7 @@ if ($account->CheckLogin()) {
 		$account->LogActivity('User "'.$account->UserName().'" deleted the "'.$_POST['name'].'" composer link ('.$_POST['url'].') for "'.$fullname.'"');
 
 	} catch(PDOException $e) {
-		$account->LogActivityError('composer_clink_delete.php', $e->getMessage());
+		$account->LogActivityError(basename(__FILE__), $e->getMessage());
 		die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 	}
 

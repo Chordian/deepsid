@@ -108,6 +108,6 @@ try {
     }
 
 } catch (Exception $e) {
-    $account->LogActivityError('backup_tables.php', $e->getMessage());
+    $account->LogActivityError(basename(__FILE__), $e->getMessage());
 }
 ?>

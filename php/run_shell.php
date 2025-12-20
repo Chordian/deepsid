@@ -20,7 +20,7 @@ try {
     	->fetchAll(PDO::FETCH_COLUMN);	
 
 } catch(PDOException $e) {
-	$account->LogActivityError('run_shell.php', $e->getMessage());
+	$account->LogActivityError(basename(__FILE__), $e->getMessage());
 	exit;
 }		
 

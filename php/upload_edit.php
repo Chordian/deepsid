@@ -87,7 +87,7 @@ try {
 	);
 
 } catch(PDOException $e) {
-	$account->LogActivityError('upload_edit.php', $e->getMessage());
+	$account->LogActivityError(basename(__FILE__), $e->getMessage());
 	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 }
 

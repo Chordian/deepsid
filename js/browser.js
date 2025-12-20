@@ -1827,7 +1827,7 @@ Browser.prototype = {
 									file.factoidtop = '<div>5:00</div>';	// Undefined in SH folder
 								break;
 							case 12:	// Use tag label as factoid
-								file.factoidtop = '<b>'+this.labelTag+'</b>';
+								file.factoidtop = '<b class="label">'+this.labelTag+'</b>';
 								break;
 						}
 

@@ -1442,11 +1442,11 @@ try {
 	}
 
 } catch(PDOException $e) {
-	$account->LogActivityError('hvsc.php', $e->getMessage());
-	$account->LogActivityError('hvsc.php', '$_GET[\'folder\'] = '.(empty($_GET['folder']) ? '(root)' : $_GET['folder']).
+	$account->LogActivityError(basename(__FILE__), $e->getMessage());
+	$account->LogActivityError(basename(__FILE__), '$_GET[\'folder\'] = '.(empty($_GET['folder']) ? '(root)' : $_GET['folder']).
 		($isSearching ? ', $_GET[\'searchType\'] = '.$_GET['searchType'].', $_GET[\'searchQuery\'] = '.$_GET['searchQuery'] : ' (user was not searching)'));
-	// if (isset($files_ext)) $account->LogActivityError('hvsc.php', 'Files: '.print_r($files_ext, true));
-	// if (isset($folders_ext)) $account->LogActivityError('hvsc.php', 'Folders: '.print_r($folders_ext, true));
+	// if (isset($files_ext)) $account->LogActivityError(basename(__FILE__), 'Files: '.print_r($files_ext, true));
+	// if (isset($folders_ext)) $account->LogActivityError(basename(__FILE__), 'Folders: '.print_r($folders_ext, true));
 	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 }
 

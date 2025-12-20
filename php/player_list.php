@@ -24,7 +24,7 @@ try {
 	$select->setFetchMode(PDO::FETCH_OBJ);
 
 	if (!$select->rowCount()) {
-		$account->LogActivityError('player_list.php', 'No entries returned');
+		$account->LogActivityError(basename(__FILE__), 'No entries returned');
 		die(json_encode(array('status' => 'error', 'message' => "Couldn't find the information in the database.")));
 	}
 
@@ -85,7 +85,7 @@ try {
 		'</table>';
 
 } catch(PDOException $e) {
-	$account->LogActivityError('player_list.php', $e->getMessage());
+	$account->LogActivityError(basename(__FILE__), $e->getMessage());
 	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 }
 echo json_encode(array('status' => 'ok', 'sticky' => $sticky, 'html' => $html));

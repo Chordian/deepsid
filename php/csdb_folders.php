@@ -27,7 +27,7 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH
 		echo json_encode($rows, JSON_UNESCAPED_UNICODE);
 
 	} catch(PDOException $e) {
-		$account->LogActivityError('csdb_folders.php', $e->getMessage());
+		$account->LogActivityError(basename(__FILE__), $e->getMessage());
 		die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 	}
 ?>

@@ -45,7 +45,7 @@ try {
 	$account->LogActivity('User "'.$_SESSION['user_name'].'" deleted the "'.$_POST['symlist'].'" playlist');
 
 } catch(PDOException $e) {
-	$account->LogActivityError('symlist_delete.php', $e->getMessage());
+	$account->LogActivityError(basename(__FILE__), $e->getMessage());
 	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 }
 

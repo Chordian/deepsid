@@ -139,7 +139,8 @@
 	--color-text-deprecated:		#e22;
 	--color-text-strong:			var(--color-bottom);
 	--color-text-factoid-top:		#666;				/* Box for top factoid #707590 */
-
+	--color-text-factoid-label:		#666690;			/* Production title */
+	
 	--color-tags-bracket:			#a1a294;			/* Used for horizontal tag start-to-end brackets */
 	--color-tags-bracket-up:		#949494;
 
@@ -552,6 +553,7 @@
 	--color-text-deprecated:		#e33;
 	--color-text-strong:			var(--color-top);
 	--color-text-factoid-top:		#ccc;				/* Box for tag label */
+	--color-text-factoid-label:		#c8c8d9;			/* Production title */
 
 	--color-tags-bracket:			#808080;			/* Used for horizontal tag start-to-end brackets */
 	--color-tags-bracket-up:		#949494;
@@ -3497,6 +3499,11 @@ input[type=range]::-ms-track {
 
 			#songs .disabled .factoid-top {
 				color: var(--color-disabled);
+			}
+
+			/* Production title in top factoid */
+			#songs b.label {
+				color: var(--color-text-factoid-label);
 			}
 
 		/* Bottom factoid */

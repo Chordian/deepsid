@@ -238,7 +238,7 @@ try {
 		die(json_encode(array('status' => 'error', 'message' => 'You must specify the proper GET variables.')));
 
 } catch(PDOException $e) {
-	$account->LogActivityError('gb64.php', $e->getMessage());
+	$account->LogActivityError(basename(__FILE__), $e->getMessage());
 	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 }
 

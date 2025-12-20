@@ -45,7 +45,7 @@ try {
 	 }
 
 } catch(PDOException $e) {
-	$account->LogActivityError('annex_clinks.php', $e->getMessage());
+	$account->LogActivityError(basename(__FILE__), $e->getMessage());
 	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 }
 die(json_encode(array('status' => 'ok', 'html' => $html, 'clinks' => $content)));

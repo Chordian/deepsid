@@ -181,7 +181,7 @@ try {
 	}
 
 } catch (Exception $e) {
-    $account->LogActivityError('check_missing_info.php', $e->getMessage());
+	$account->LogActivityError(basename(__FILE__), $e->getMessage());
 }
 
 echo "<p>Scanning completed.</p>";

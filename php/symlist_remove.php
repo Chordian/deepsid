@@ -69,7 +69,7 @@ try {
 		die(json_encode(array('status' => 'error', 'message' => 'Could not update the count of files in '.$_POST['symlist'])));
 
 } catch(PDOException $e) {
-	$account->LogActivityError('symlist_remove.php', $e->getMessage());
+	$account->LogActivityError(basename(__FILE__), $e->getMessage());
 	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 }
 

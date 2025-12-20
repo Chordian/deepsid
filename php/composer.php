@@ -176,7 +176,7 @@ if (isset($fullname)) {
 			}
 
 		} catch(PDOException $e) {
-			$account->LogActivityError('composer.php (compo)', $e->getMessage());
+			$account->LogActivityError(basename(__FILE__) . ' (compo)', $e->getMessage());
 			die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 		}
 		die(json_encode(array('status' => 'ok', 'html' => $html, 'annex_html' => $annex_html)));
@@ -365,7 +365,7 @@ if (isset($fullname)) {
 			}
 
 		} catch(PDOException $e) {
-			$account->LogActivityError('composer.php', $e->getMessage() + ' (' + $fullname + ')');
+			$account->LogActivityError(basename(__FILE__), $e->getMessage() + ' (' + $fullname + ')');
 			die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 		}
 	}

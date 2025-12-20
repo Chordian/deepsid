@@ -31,7 +31,7 @@ if ($account->CheckLogin()) {
 		build_ratings_cache_for_user($db, (int)$user_id);
 
 	} catch(PDOException $e) {
-		$account->LogActivityError('rating_cache.php', $e->getMessage());
+		$account->LogActivityError(basename(__FILE__), $e->getMessage());
 		die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 	}
 }

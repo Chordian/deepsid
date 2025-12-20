@@ -49,7 +49,7 @@ try {
 	$account->LogActivity('An administrator deleted the "'.$fullname.'" file');
 
 } catch(PDOException $e) {
-	$account->LogActivityError('upload_delete.php', $e->getMessage());
+	$account->LogActivityError(basename(__FILE__), $e->getMessage());
 	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 }
 

@@ -77,8 +77,8 @@ if ($account->CheckLogin()) {
 		} else
 			die('There were no ratings to be exported.');
 
-	} catch(PDOException $exception) {
-		$account->LogActivityError('export.php', $exception->getMessage());
+	} catch(PDOException $e) {
+		$account->LogActivityError(basename(__FILE__), $e->getMessage());
 		die('A database error occurred.');
 	}
 

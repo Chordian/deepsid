@@ -88,7 +88,7 @@ if (substr($_GET['fullname'], -4) == '.mus') {
 		if ($info['sidmodel'] != 'MOS8580') $info['sidmodel'] = 'MOS6581';
 
 	} catch(PDOException $e) {
-		$account->LogActivityError('info.php', $e->getMessage());
+		$account->LogActivityError(basename(__FILE__), $e->getMessage());
 		die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 	}
 }

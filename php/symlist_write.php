@@ -104,7 +104,7 @@ try {
 		die(json_encode(array('status' => 'error', 'message' => 'Could not update the count of files in '.$symlist_folder)));
 
 } catch(PDOException $e) {
-	$account->LogActivityError('symlist_write.php', $e->getMessage());
+	$account->LogActivityError(basename(__FILE__), $e->getMessage());
 	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 }
 

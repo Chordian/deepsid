@@ -153,7 +153,7 @@ try {
 } catch (Throwable $e) {
     // Log and reset tracking file gracefully
     if (isset($account)) {
-        $account->LogActivityError('tracking.php', $e->getMessage());
+        $account->LogActivityError(basename(__FILE__), $e->getMessage());
     }
     @unlink(TRACKFILE);
     // Recreate with placeholder, as in the original script

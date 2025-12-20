@@ -44,7 +44,7 @@ try {
 	$account->LogActivity('User "'.$_SESSION['user_name'].'" cleared the cache for the "'.$_POST['competition'].'" competition folder');
 
 } catch(PDOException $e) {
-	$account->LogActivityError('csdb_compo_refresh.php', $e->getMessage());
+	$account->LogActivityError(basename(__FILE__), $e->getMessage());
 	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 }
 

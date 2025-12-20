@@ -47,7 +47,7 @@ try {
 	}
 
 } catch(PDOException $e) {
-	$account->LogActivityError('rating_quality.php', $e->getMessage());
+	$account->LogActivityError(basename(__FILE__), $e->getMessage());
 	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 }
 echo json_encode(array('status' => 'ok', 'ready' => $ready, 'results' => $results));

@@ -31,7 +31,7 @@ if (!$account->CheckLogin() || $account->UserName() != 'JCH' || $account->UserID
 		$insert->execute([':key' => $_POST['key'], ':value' => $_POST['value']]);
 
 	} catch(PDOException $e) {
-		$account->LogActivityError('admin_settings_write.php', $e->getMessage());
+		$account->LogActivityError(basename(__FILE__), $e->getMessage());
 		die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 	}
 	die(json_encode(array('status' => 'ok')));

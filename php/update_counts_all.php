@@ -147,7 +147,7 @@ try {
 	}
 
 } catch (Exception $e) {
-    $account->LogActivityError('update_counts_all.php', $e->getMessage());
+    $account->LogActivityError(basename(__FILE__), $e->getMessage());
 }
 
 echo "\n✓ All folder/file counts updated.\n";

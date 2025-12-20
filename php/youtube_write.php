@@ -65,7 +65,7 @@ try {
 	$account->LogActivity('User "'.$_SESSION['user_name'].'" edited the video links for "'.$fullname.'" (subtune #'.$_POST['subtune'].')');
 
 } catch(PDOException $e) {
-	$account->LogActivityError('youtube_write.php', $e->getMessage());
+	$account->LogActivityError(basename(__FILE__), $e->getMessage());
 	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 }
 

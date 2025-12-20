@@ -202,11 +202,11 @@ if (isset($_GET['fullname'])) {
 			$copyright = $row->copyright;	// E.g. "1988 Jewels"
 			$copyright = substr($copyright, strpos($copyright, ' ') + 1); // Only need "Jewels"
 		} else {
-			$account->LogActivityError('csdb.php', 'No database info returned; $_GET[\'fullname\'] = '.$_GET['fullname']);
+			$account->LogActivityError(basename(__FILE__), 'No database info returned; $_GET[\'fullname\'] = '.$_GET['fullname']);
 			die(json_encode(array('status' => 'error', 'message' => "Couldn't find the information in the database.")));
 		}
 	} catch(PDOException $e) {
-		$account->LogActivityError('csdb.php', $e->getMessage());
+		$account->LogActivityError(basename(__FILE__), $e->getMessage());		
 		die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 	}
 

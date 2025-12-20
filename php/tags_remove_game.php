@@ -86,7 +86,7 @@ try {
 	GetTagsAndTypes($file_id, $list_of_tags, $type_of_tags, $id_of_tags, $id_tag_start, $id_tag_end);
 
 } catch(PDOException $e) {
-	$account->LogActivityError('tags_remove_game.php', $e->getMessage());
+	$account->LogActivityError(basename(__FILE__), $e->getMessage());
 	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 }
 

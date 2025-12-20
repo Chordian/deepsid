@@ -68,7 +68,7 @@ if (isset($fullname)) {
 			die(json_encode(array('status' => 'ok', 'dexter_html' => '', 'annex_html' => ''))); // No profile found
 
 	} catch(PDOException $e) {
-		$account->LogActivityError('groups.php', $e->getMessage());
+		$account->LogActivityError(basename(__FILE__), $e->getMessage());
 		die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 	}
 
