@@ -1155,14 +1155,14 @@ $(function() { // DOM ready
 		$("#annex-page .atopic").hide();
 		$("#atopic-"+topic).show();
 
-		// If 'Tips' tab is selected
-		if (topic === "tips") {
-			if ($("#atopic-tips").is(":empty"))
-				// Show the topics for the tips
-				$.get("php/annex_tips.php", { id: -1 }, function(tips) {
-					$("#atopic-tips").empty().append(tips).attr("data-index", "-1");
+		// If 'Help' tab is selected (previously known as 'Tips')
+		if (topic === "help") {
+			if ($("#atopic-help").is(":empty"))
+				// Show the help topics
+				$.get("php/annex_help.php", { id: -1 }, function(help) {
+					$("#atopic-help").empty().append(help).attr("data-index", "-1");
 				});
-			else if ($("#atopic-tips").attr("data-index") !== "-1")
+			else if ($("#atopic-help").attr("data-index") !== "-1")
 				$("#annex-tabs .annex-topics").show();
 		}
 	});
@@ -1447,6 +1447,18 @@ $(function() { // DOM ready
 					});
 				});
 				break;
+			case "notes":
+				$.get("php/admin_notes.php", function(data) {
+					browser.validateData(data, function(data) {
+						$("#topic-admin").append(data.html);
+						$.post("php/admin_notes_read.php", function(data) {
+							browser.validateData(data, function(data) {
+								$("#admin-notes-text").val(data.text);
+							});
+						});
+					});
+				});
+				break;
 			default:
 		}
 	});
@@ -1533,6 +1545,19 @@ $(function() { // DOM ready
 
 		// Prevent 'Enter' from also firing in the browser list
 		blockNextEnter = true;
+	});
+
+	/**
+	 * Admin settings: When saving a note.
+	 */
+	$("#topic-admin").on("click", "#admin-notes-save", function() {
+		$.post("php/admin_notes_write.php", { text: $("#admin-notes-text").val() }, function(data) {
+			browser.validateData(data);
+		});
+		$("#admin-notes-info").append("Saved.");
+		setTimeout(() => {
+			$("#admin-notes-info").empty();
+		}, 1000);
 	});
 
 	/**
@@ -2465,8 +2490,8 @@ $(function() { // DOM ready
 	 * When clicking the annex corner icon for showing the topics.
 	 */
 	$("#annex").on("click", ".annex-topics", function() {
-		$.get("php/annex_tips.php", { id: -1 }, function(topics) {
-			$("#atopic-tips").empty().append(topics).attr("data-index", "-1");
+		$.get("php/annex_help.php", { id: -1 }, function(topics) {
+			$("#atopic-help").empty().append(topics).attr("data-index", "-1");
 			$(".annex-topics").hide();
 		});
 	});
@@ -2498,8 +2523,8 @@ $(function() { // DOM ready
 	 * @param {string} topic	The topic link
 	 */
 	function ClickAnnexLink(topic) {
-		$.get("php/annex_tips.php", { id: topic }, function(tips) {
-			$("#atopic-tips").empty().append(tips).attr("data-index", topic);
+		$.get("php/annex_help.php", { id: topic }, function(help) {
+			$("#atopic-help").empty().append(help).attr("data-index", topic);
 			$(".annex-topics").show();
 		});
 	}

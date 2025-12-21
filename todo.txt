@@ -9,12 +9,9 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- Sorting by factoid (inline or detail) doesn't work for all factoids, which is fair to
-  some extent, but some - like production title - ought to work.
+- Update 'labels_info' database with types and CSDb info numbers.
 
 - Make admin-only factoids available to admins (rotating and drop-down boxes).
-
-- In the Admin tab, add a "notepad" box for remembering progress when updating something.
 
 - A "refresh cache" link next to cached message in the footer of a CSDb page. (Consider only
   showing this for DeepSID administrators.)
@@ -35,8 +32,6 @@ SHOULD BE DONE
 
 - Make rolling random tips in the upper news box. Hotkeys to use, etc. Part of the random
   messages could also be other things, for example a recommended link.
-
-- Rename the "Tips" tab in annex to "Help" instead. Don't rename anything else, though.
 
 - Add a function, a hotkey, whatever, to send a rating change for a composer or folder over
   to the 'Ratings' user while still being logged in as the 'JCH' user.

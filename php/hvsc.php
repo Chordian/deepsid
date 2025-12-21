@@ -187,6 +187,18 @@ try {
 					' GROUP BY tags_lookup.files_id'.
 					' HAVING COUNT(*) = '.count($search_tags).' LIMIT '.$search_limit);
 
+
+			} else if ($_GET['searchType'] == 'label') {
+
+				// Search for a label (production title)
+				$select = $db->prepare('SELECT fullname FROM hvsc_files'.
+					' LEFT JOIN labels_lookup ON hvsc_files.id = labels_lookup.files_id'.
+					' LEFT JOIN labels_info ON labels_info.id = labels_lookup.labels_id'.
+					' WHERE '.str_replace('fullname', 'hvsc_files.fullname', $searchContext).
+					' AND labels_info.name LIKE :label'.
+					' GROUP BY labels_lookup.files_id LIMIT '.$search_limit);
+				$select->execute(array(':label'=>'%'.$_GET['searchQuery'].'%'));
+
 			} else if ($_GET['searchType'] == 'location') {
 
 				$select = $db->prepare('SELECT fullname FROM hvsc_files'.

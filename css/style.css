@@ -4534,6 +4534,22 @@ input[type=range]::-ms-track {
 			line-height: 24px;
 		}
 
+	#admin-notes-text {
+		height: 400px;
+		min-height: 28px;
+		min-width: 100%;
+		max-width: 100%;
+	}
+
+		#admin-notes-save {
+			margin-top: 6px;
+		}
+
+		#admin-notes-info {
+			margin-left: 8px;
+			color: var(--color-text-admin-span);
+		}
+
 /* ---- Right side container with tabs -------------------------------------- */
 
 /* Container for entire left side (top, info/memory/stil, controls, browser, search) */

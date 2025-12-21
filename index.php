@@ -985,6 +985,7 @@
 						<option value="stil">STIL</option>
 						<option value="rating">Rating</option>
 						<option value="country">Country</option>
+						<option value="label">Labels</option>
 						<option value="focus">Focus</option>
 						<option value="new">Version</option>
 						<option value="latest">Latest</option>
@@ -1058,6 +1059,7 @@
 							<button class="admin-cat-button ac-info button-on" data-category="info">Info</button>
 							<button class="admin-cat-button ac-settings button-off" data-category="settings">Set</button>
 							<button class="admin-cat-button ac-scripts button-off" data-category="scripts">PHP</button>
+							<button class="admin-cat-button ac-notes button-off" data-category="notes">Note</button>
 						</div>
 					</div>
 				<?php endif ?>
@@ -1985,6 +1987,14 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>December 21, 2025</h3>
+						<ul>
+							<li>Labels (the factoid that shows production titles) now use their own dedicated database tables and have been removed from the tags tables.</li>
+							<li>You can now also search for labels.</li>
+							<li>Sorting by the 'Inline' or 'Detail' factoid now works for most factoid types.</li>
+							<li>The 'Tips' annex tab has been renamed to 'Help'.</li>
+						</ul>
+
 						<h3>December 18, 2025</h3>
 						<ul>
 							<li>Fixed a ratings cache bug that caused an alert on page load. No ratings were affected.</li>
@@ -2674,7 +2684,7 @@
 				<div id="annex-tabs">
 					<div class="annex-tab unselectable selected" data-topic="profile" id="atab-profile">Profile</div>
 					<div class="annex-tab unselectable" data-topic="links" id="atab-links">Links</div>
-					<div class="annex-tab unselectable" data-topic="tips" id="atab-tips">Tips</div>
+					<div class="annex-tab unselectable" data-topic="help" id="atab-help">Help</div>
 					<div class="annex-close"></div>
 					<div class="annex-topics" style="display:none;" title="Topics"></div>
 				</div>
@@ -2683,7 +2693,7 @@
 						<div class="annex-big-logo"></div><div class="annex-taller"></div>
 					</div>
 					<div id="atopic-links" class="atopic" style="display:none;"></div>
-					<div id="atopic-tips" class="atopic" style="display:none;"></div>
+					<div id="atopic-help" class="atopic" style="display:none;"></div>
 				</div>
 			</div>
 

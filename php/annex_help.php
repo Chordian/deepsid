@@ -2,7 +2,7 @@
 /**
  * DeepSID
  *
- * Returns a randomly chosen block of HTML for the annex box with tips.
+ * Returns a randomly chosen block of HTML for the annex box with help topics.
  * 
  * @uses		$_GET['id']			optional
  *
@@ -35,7 +35,7 @@ function MakeSiteLink($url, $header, $type = '') {
         </li>';
 }
 
-$tips = array(
+$help = array(
 
 	'	<h3>Playlists</h3>
 
@@ -386,7 +386,7 @@ $tips = array(
 				<td>wait</td><td>Select but do not play the song.&nbsp;&nbsp;Value is <b>ms</b> before pausing.&nbsp;&nbsp;<b>100</b> works well.</td>
 			</tr>
 			<tr>
-				<td>notips</td><td><b>1</b> to avoid showing the annex box with these tips.</td>
+				<td>notips</td><td><b>1</b> to avoid showing this annex box.</td>
 			</tr>
 		</table>
 
@@ -828,12 +828,12 @@ $tips = array(
 	',
 );
 
-$id = isset($_GET['id']) ? $_GET['id'] : mt_rand(0, count($tips) - 1);
+$id = isset($_GET['id']) ? $_GET['id'] : mt_rand(0, count($help) - 1);
 
 // $id = 18;
 
 if ($id != -1)
-	echo $tips[$id];
+	echo $help[$id];
 else
 	echo
 	'	<h3>Select a topic:</h3>

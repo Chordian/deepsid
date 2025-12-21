@@ -1165,14 +1165,18 @@ Browser.prototype = {
 			case "factoidtop":
 				// Sort according to top "inline" factoid
 				this.playlist.sort(function(obj1, obj2) {
-					return obj1.fvaluetop < obj2.fvaluetop ? 1 : -1;
+					const av = obj1.fvaluetop || obj1.factoidtop;
+					const bv = obj2.fvaluetop || obj2.factoidtop;
+					return av < bv ? 1 : -1;
 				});
 				localStorage.setItem("sort", "factoidtop");
 				break;
 			case "factoidbottom":
 				// Sort according to top "detail" factoid
 				this.playlist.sort(function(obj1, obj2) {
-					return obj1.fvaluebottom < obj2.fvaluebottom ? 1 : -1;
+					const av = obj1.fvaluebottom || obj1.factoidbottom;
+					const bv = obj2.fvaluebottom || obj2.factoidbottom;
+					return av < bv ? 1 : -1;
 				});
 				localStorage.setItem("sort", "factoidbottom");
 				break;
@@ -1748,13 +1752,17 @@ Browser.prototype = {
 							case "factoidtop":
 								// Sort playlist according to the "inline" factoid string
 								data.files.sort(function(obj1, obj2) {
-									return obj1.fvaluetop < obj2.fvaluetop ? 1 : -1;
+									const av = obj1.fvaluetop || obj1.factoidtop;
+									const bv = obj2.fvaluetop || obj2.factoidtop;
+									return av < bv ? 1 : -1;
 								});
 								break;
 							case "factoidbottom":
 								// Sort playlist according to the "detail" factoid string
 								data.files.sort(function(obj1, obj2) {
-									return obj1.fvaluebottom < obj2.fvaluebottom ? 1 : -1;
+									const av = obj1.fvaluebottom || obj1.factoidbottom;
+									const bv = obj2.fvaluebottom || obj2.factoidbottom;
+									return av < bv ? 1 : -1;
 								});
 								break;
 							case "shuffle":
@@ -2376,7 +2384,7 @@ Browser.prototype = {
 	},
 
 	/**
-	 * If the annex box is not visible, show it with links or tips.
+	 * If the annex box is not visible, show it with links or help.
 	 */
 	 showAnnexBox: function() {
 		if (!$("#annex").is(":visible") && !this.annexNotWanted)
