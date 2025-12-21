@@ -1356,9 +1356,23 @@ try {
 						}
 						break;
 
-					case 12:	// Production title (previously tag label)
+					case 12:	// Production title (previously tag label, now its own tables)
 
-						// Shown in 'browser.js'
+						$label_name = $label_type = '';
+						$label_csdbid = 0;
+
+						$lrow = $db->query('
+							SELECT i.id, i.name, i.type, i.csdbid, l.labels_id
+							FROM labels_lookup l
+							JOIN labels_info i ON l.labels_id = i.id
+							WHERE l.files_id = '.$id.' LIMIT 1'
+						)->fetch(PDO::FETCH_OBJ);
+						if ($lrow) {
+							$label_name = $lrow->name;			// Dutch Breeze
+							$label_type = $lrow->type;			// Demo
+							$label_csdbid = $lrow->csdbid;		// 11584
+						}
+						$factoid[$f] = $label_name;
 						break;
 
 					// ONLY ADMIN FACTOIDS BELOW (currently not available)
@@ -1418,6 +1432,9 @@ try {
 				'factoidbottom' =>	$factoid[1],
 				'fvaluetop' =>		$fvalue[0],
 				'fvaluebottom' =>	$fvalue[1],
+				'labelname' =>		$label_name,
+				'labeltype' =>		$label_type,
+				'labelcsdbid' =>	$label_csdbid,
 			));
 
 			// Add extra values for uploaded SID files too if available

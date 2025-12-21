@@ -1264,8 +1264,15 @@ Browser.prototype = {
 								// Optional: Subtunes box + "NEW" label (this line is a mess)
 								'<div class="block">'+(file.subtunes > 1 ? '<div class="subtunes'+(this.isSymlist ? ' specific' : '')+(isNew ? ' newst' : '')+'">'+(this.isSymlist ? file.startsubtune + 1 : file.subtunes)+'</div>' : (isNew ? '<div class="newsid"></div>' : ''))+
 									// Various data attributes
-									'<div class="entry name file'+(this.isSearching || this.isCompoFolder || this.path.substr(0, 2) === "/$" ? ' search' : '')+'" data-name="'+encodeURIComponent(file.filename)+'" data-type="'+file.type+'" data-id="'+file.id+'" data-symid="'+file.symid+'">'+
-										adaptedName+
+									'<div class="entry name file'+(this.isSearching || this.isCompoFolder || this.path.substr(0, 2) === "/$" ? ' search' : '')+
+										'" data-name="'+encodeURIComponent(file.filename)+
+										'" data-type="'+file.type+
+										'" data-id="'+file.id+
+										'" data-symid="'+file.symid+
+										'" data-lname="'+file.labelname+
+										'" data-ltype="'+file.labeltype+
+										'" data-lcid="'+file.labelcsdbid+
+										'">'+adaptedName+
 									'</div>'+
 								'</div>'+
 							'</div><br />'+
@@ -1827,7 +1834,7 @@ Browser.prototype = {
 									file.factoidtop = '<div>5:00</div>';	// Undefined in SH folder
 								break;
 							case 12:	// Use tag label as factoid
-								file.factoidtop = '<b class="label">'+this.labelTag+'</b>';
+								file.factoidtop = '<b class="label">'+file.factoidtop+'</b>';
 								break;
 						}
 
@@ -1863,13 +1870,9 @@ Browser.prototype = {
 									// Define a bar width
 									fbarWidth = (file.fvaluebottom * 1.25) + 54; // Text width
 								break;
-							case 12:	// Use tag label as factoid
-								file.factoidbottom = this.labelTag;
-								break;
 						}
 
 						var factoidTop = '<div class="factoid-top">' + file.factoidtop + '</div>';
-						// BEFORE: <div class="sid-special sidsp-label"><div></div> ' + this.labelTag + '</div>
 						$("#measure-factoid").html(factoidTop); // Find the width of the factoid text
 						var nameWidth = 305 - $("#measure-factoid .factoid-top").outerWidth(); // Set width of name
 
@@ -1893,8 +1896,15 @@ Browser.prototype = {
 										// Optional: Subtunes box + "NEW" label (this line is a mess)
 										'<div class="block">'+(file.subtunes > 1 ? '<div class="subtunes'+(this.isSymlist ? ' specific' : '')+(isNew ? ' newst' : '')+'">'+(this.isSymlist ? file.startsubtune : file.subtunes)+'</div>' : (isNew ? '<div class="newsid"></div>' : ''))+
 											// Various data attributes
-											'<div class="entry name file'+(this.isSearching || this.isCompoFolder || this.path.substr(0, 2) === "/$" ? ' search' : '')+'" data-name="'+encodeURIComponent(file.filename)+'" data-type="'+file.type+'" data-id="'+file.id+'" data-symid="'+file.symid+'">'+
-												adaptedName+
+											'<div class="entry name file'+(this.isSearching || this.isCompoFolder || this.path.substr(0, 2) === "/$" ? ' search' : '')+
+												'" data-name="'+encodeURIComponent(file.filename)+
+												'" data-type="'+file.type+
+												'" data-id="'+file.id+
+												'" data-symid="'+file.symid+
+												'" data-lname="'+file.labelname+
+												'" data-ltype="'+file.labeltype+
+												'" data-lcid="'+file.labelcsdbid+
+												'">'+adaptedName+
 											'</div>'+
 										'</div>'+
 									'</div><br />'+
@@ -1947,6 +1957,9 @@ Browser.prototype = {
 							factoidbottom:	factoidBottom,
 							fvaluetop:		file.fvaluetop,
 							fvaluebottom:	file.fvaluebottom,
+							labelname:		file.labelname,
+							labeltype:		file.labeltype,
+							labelcsdbid:	file.labelcsdbid,
 							namewidth:		nameWidth,
 							sidtags:		sidTags,
 							profile:		file.profile,	// Only files from 'SID Happens'
@@ -2287,7 +2300,6 @@ Browser.prototype = {
 	 * @return {string}			The HTML string to put into the SID row
 	 */
 	buildTags: function(tags, types, ids) {
-		this.labelTag = "";
 		var list_of_tags = remix64 = gamebase64 = id = "";
 		$.each(tags, (i, tag) => {
 			id = ' data-id="'+ids[i]+'"';
@@ -2320,15 +2332,12 @@ Browser.prototype = {
 				// Replace "->" with a pretty unicode arrow instead
 				// Disabled as perhaps users find them too confusing.
 				// list_of_tags += '<div class="tag tag-transparent"'+id+'>🡪</div>';
-			} else if (tag == "$31" || tag == "$61" || tag == "$71" || tag == "2SID" || tag == "3SID" || tag == "# ?" || tag.indexOf("Small Event") !== -1) {
+			} else if (tag == "$31" || tag == "$61" || tag == "$71" || tag == "# ?" || tag.indexOf("Small Event") !== -1 || types[i] == "label") {
 				// These tags will not be shown for various reasons:
 				// Waveforms: Too commonly used in SID tunes and just adds noise.
 				// Small Event: Just don't add an event tag if it's tiny and rare.
-				// 2SID/3SID: No longer needed because of SID special labels.
-			} else if (types[i] == "label") {
-				// A label tag becomes part of the factoid family
-				// @todo Need to move these out of the tags database table.
-				this.labelTag = tag;
+				// 2SID/3SID: Re-enabled again because of top factoids.
+				// The 'LABEL' type: Moved to other database tables.
 			} else {
 				// NOTE: Don't change the order of tags or the collector for a folder will break!
 				// If you want to change the order of tags, see GetTagsAndTypes() in 'tags_read.php'

@@ -14,11 +14,6 @@ SHOULD BE DONE
 
 - Make admin-only factoids available to admins (rotating and drop-down boxes).
 
-- The labels do not belong in the tags database table. They need their own table. See if you
-  can move them over with a swift SQL query or two. But only when you can add its own UI
-  too. Regarding the database table: Apart from the name, each row should also have a type
-  for DEMO, GAME, and also a with the CSDb ID.
-
 - In the Admin tab, add a "notepad" box for remembering progress when updating something.
 
 - A "refresh cache" link next to cached message in the footer of a CSDb page. (Consider only
