@@ -10,6 +10,8 @@
 
 require_once("class.account.php"); // Includes setup
 
+die("This script has served its purpose. It doesn't need to be run again.");
+
 try {
 	$db = $account->GetDB();
 

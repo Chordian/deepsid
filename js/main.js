@@ -1561,6 +1561,32 @@ $(function() { // DOM ready
 	});
 
 	/**
+	 * Admin controls in CSDb page: Adding a label.
+	 */
+	$("#page").on("click", "#admin-csdb-add-label", function() {
+		var $this = $(this);
+
+		var $selectedSidFile = $("#folders tr.selected");
+		if ($selectedSidFile.length) {
+			$.post("php/labels_write.php", {
+				id:			$selectedSidFile.find(".entry").attr("data-id"),
+				name:		$this.attr("data-name"),
+				type:		$this.attr("data-type"),
+				csdbid:		$this.attr("data-csdbid")
+			}, function(data) {
+				browser.validateData(data, function(data) {
+					if (data.created)
+						BrowserMessage("Created the label");
+					else
+						BrowserMessage("Linked to existing label");
+					RefreshFolder();
+				});
+			});
+		} else
+			alert("No song selected.");
+	});
+
+	/**
 	 * User settings: When one of the ON/OFF toggle buttons are clicked.
 	 * 
 	 * @param {*} event 

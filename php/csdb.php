@@ -632,6 +632,15 @@ if ($csdb_type == 'sid') {
 		$release_date = '<p><b>Release date:</b><br />'.$day.' '.$month.' '.$year.'</p>';
 	}
 
+	// Extra controls for administrators only
+	$admin_ctrls = '';
+	if ($account->CheckLogin() && $account->UserName() === 'JCH')
+		// Button for adding a label (production title factoid)
+		$admin_ctrls = '<button id="admin-csdb-add-label" class="admin-csdb-button"
+			data-name="'.$csdb->Release->Name.'"
+			data-type="'.$csdb->Release->Type.'"
+			data-csdbid="'.$csdb_id.'">Add Label</button>';
+
 	// Also known as
 	$also_known_as = isset($csdb->Release->AKA) ? '<p><b>AKA:</b><br />'.$csdb->Release->AKA.'</p>' : '';
 
@@ -796,6 +805,7 @@ if ($csdb_type == 'sid') {
 				$released_by.
 				$release_date.
 				'<p><b>Type:</b><br />'.$csdb->Release->Type.'</p>'.
+				$admin_ctrls.
 			'</td>'.
 		'</tr></table>'.
 		$also_known_as.

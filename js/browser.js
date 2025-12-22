@@ -3032,10 +3032,12 @@ Browser.prototype = {
 
 				? '<div class="line" data-action="symentry-rename">Rename</div>'+			// SID in symlist folder
 				  '<div class="line" data-action="symentry-remove">Remove</div>'+
-				  '<div class="line'+(this.playlist[thisRow].subtunes > 1 ? '' : ' disabled')+'" data-action="symentry-subtune">Select Subtune</div>'
+				  '<div class="line'+(this.playlist[thisRow].subtunes > 1 ? '' : ' disabled')+
+				  	'" data-action="symentry-subtune">Select Subtune</div>'
 					
 				: '<div class="line" data-action="symlist-new">Add to New Playlist</div>'+	// SID in normal folder
-				  '<div class="line submenu'+(this.symlistFolders.length === 0 ? ' disabled' : '')+'">Add to Playlist</div>';
+				  '<div class="line submenu'+(this.symlistFolders.length === 0 ? ' disabled' : '')+
+				  	'">Add to Playlist</div>';
 
 			// Divider to more common SID file actions
 			contents += '<div class="divider"></div>';
@@ -3043,9 +3045,10 @@ Browser.prototype = {
 			contents +=
 				'<div class="line" data-action="download-file">Download File</div>'+
 				'<div class="line" data-action="edit-tags">Edit Tags</div>'+
-				'<div class="line'+(this.isSearching || this.isCompoFolder || isPersonalSymlist || isPublicSymlist ? " disabled" : "")+'" data-action="copy-link">Copy Link</div>';
+				'<div class="line'+(this.isSearching || this.isCompoFolder || isPersonalSymlist || isPublicSymlist ? " disabled" : "")+
+					'" data-action="copy-link">Copy Link</div>';
 
-			var dividerForYouTube = '<div class="divider"></div>';
+			var dividerForYouTube = dividerForAdmin = '<div class="divider"></div>';
 			if (typeof this.playlist[thisRow].uploaded !== "undefined") {
 				// It's a SID row from the 'SID Happens' folder and thus can be edited
 				contents += '<div class="divider"></div>'+
@@ -3053,6 +3056,13 @@ Browser.prototype = {
 				if ($("#logged-username").text() == "JCH")
 					// The administrator can delete files in the 'SID Happens' folder
 					contents += '<div class="line" data-action="delete-file">Delete File</div>';
+				dividerForYouTube = dividerForAdmin = '';
+			}
+
+			if ($("#logged-username").text() == "JCH") {
+				// The administrator can unlink labels (the label info is preserved)
+				contents += dividerForAdmin+
+					'<div class="line" data-action="unlink-label">Unlink Label</div>';
 				dividerForYouTube = '';
 			}
 
@@ -3231,6 +3241,29 @@ Browser.prototype = {
 						}, function(data) {
 							this.validateData(data, function() {
 								browser.getFolder();
+							});
+						}.bind(this));
+					}.bind(this));
+				}
+				break;
+			case 'unlink-label':
+				if ($("#logged-username").text() == "JCH") {
+					$("#file-name-delete").empty().append('<b>'+this.contextSID+'</b>');
+					CustomDialog({
+						id: '#dialog-delete-file',
+						text: '<h3>Unlink a label</h3>'+
+							'<p>Are you sure you want to remove the label from this SID file?</p>',
+						width: 500,
+						height: 196,
+					}, function() {
+						$.post("php/labels_unlink.php", {
+							fullname: (this.isSearching || this.isCompoFolder || this.path.substr(1, 1) == "$"
+								? this.contextSID
+								: this.path.substr(1)+"/"+this.contextSID)
+						}, function(data) {
+							this.validateData(data, function() {
+								BrowserMessage("Unlinked label");
+								RefreshFolder();
 							});
 						}.bind(this));
 					}.bind(this));
