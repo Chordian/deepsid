@@ -2612,11 +2612,12 @@ Browser.prototype = {
 	 * 
 	 * Also handles the tab notification counter. 
 	 * 
-	 * @param {string} type			Optional; e.g. 'sid' or 'release'
-	 * @param {number} id			Optional; ID number used by CSDb
-	 * @param {boolean} canReturn	Optional; if TRUE, coming from list
+	 * @param {string} type				Optional; e.g. 'sid' or 'release'
+	 * @param {number} id				Optional; ID number used by CSDb
+	 * @param {boolean} canReturn		Optional; if TRUE, coming from list
+	 * @param {boolean} overrideCache	Optional; if TRUE, read from CSDb
 	 */
-	getCSDb: function(type, id, canReturn) {
+	getCSDb: function(type, id, canReturn, overrideCache) {
 		if (miniPlayer || isMobile || this.isTempTestFile()) return;
 		if (this.csdb) this.csdb.abort();
 		$("#topic-csdb").empty().append(this.loadingSpinner("csdb"));
@@ -2632,12 +2633,16 @@ Browser.prototype = {
 		var lastLine = lines[lines.length - 1];
 		var copyright = lastLine.substring(lastLine.indexOf(" ") + 1);
 
-		// Determine the arguments to be sent to the PHP file
-		var args = typeof type !== "undefined" && typeof id !== "undefined"
-			? { type: type, id: id, copyright: copyright }
-			: { fullname: browser.playlist[browser.songPos].fullname.substr(5) };
+		var readFromCSDb = typeof overrideCache !== "undefined" && overrideCache ? 1 : 0;
 
-		this.csdb = $.get("php/csdb.php", args, function(data) {
+		// Determine the arguments to be sent to the PHP file
+		// The 'this.csdbArgs' variable is also used by the refresh cache link (see 'main.js')
+		this.csdbArgs = typeof type !== "undefined" && typeof id !== "undefined"
+			? { type: type, id: id, copyright: copyright, override: readFromCSDb }
+			: { fullname: browser.playlist[browser.songPos].fullname.substr(this.ROOT_HVSC.length + 1),
+				override: readFromCSDb };
+
+		this.csdb = $.get("php/csdb.php", this.csdbArgs, function(data) {
 			this.validateData(data, function(data) {
 
 				if (data.debug !== "") console.log(data.debug);
@@ -2671,6 +2676,10 @@ Browser.prototype = {
 
 				this.emphasizing(false);
 				UpdateRedirectPlayIcons();
+
+				// Remove admin controls if included in a cache refreshed by an administrator
+				if ($("#logged-username").text() !== "JCH")
+					$("#topic-csdb .admin-csdb-button").remove();
 
 				// Enable highlighting button and its label if any emphasizing is present
 				setTimeout(() => {
@@ -2854,7 +2863,7 @@ Browser.prototype = {
 			$("#loading-gb64").fadeIn(500);
 		}, 250);
 
-		thisFullname = browser.playlist[browser.songPos].fullname.substr(5); 
+		thisFullname = browser.playlist[browser.songPos].fullname.substr(this.ROOT_HVSC.length + 1); 
 
 		var params = typeof optionalID === "undefined"
 			? { fullname: thisFullname }
@@ -2930,7 +2939,7 @@ Browser.prototype = {
 			$("#loading-remix").fadeIn(500);
 		}, 250);
 
-		var thisFullname = browser.playlist[browser.songPos].fullname.substr(5); 
+		var thisFullname = browser.playlist[browser.songPos].fullname.substr(this.ROOT_HVSC.length + 1); 
 
 		var params = typeof optionalID === "undefined"
 			? { fullname: thisFullname }

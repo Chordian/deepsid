@@ -1987,6 +1987,12 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>December 23, 2025</h3>
+						<ul>
+							<li>You can now refresh the CSDb cache using a small link at the bottom of CSDb pages.
+								Clicking it forces a fresh read from CSDb instead of using the existing cache.</li>
+						</ul>
+
 						<h3>December 21, 2025</h3>
 						<ul>
 							<li>Labels (the factoid that shows production titles) now use their own dedicated database tables and have been removed from the tags tables.</li>

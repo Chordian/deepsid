@@ -1683,6 +1683,10 @@ $(function() { // DOM ready
 		$("#dropdown-sort-csdb").val(cacheDDCSDbSort);
 		// Also set scroll position to where we clicked last time
 		SetScrollTopInstantly("#page", $this.hasClass("compo") ? cachePosBeforeCompo : cacheTabScrollPos);
+		// Clear the CSDb arguments to avoid confusing the refresh cache link
+		browser.csdbArgs = [];
+		// Remove the cache age info since it's no longer accurate
+		$("#cache-age").remove();
 	});
 
 	/**
@@ -1785,6 +1789,26 @@ $(function() { // DOM ready
 	$("#topic-csdb").on("click", "#csdb-post-reply", function() {
 		window.open("https://csdb.dk/forums/?action=reply&roomid="+$(this).attr("data-roomid")+
 			"&topicid="+$(this).attr("data-topicid"), "_blank");
+	});
+
+	/**
+	 * When clicking the link for refreshing the cache. It overrides the cache and
+	 * immediately reads from CSDb instead.
+	 */
+	$("#topic-csdb").on("click", "#refresh-cache", function(event) {
+		if ("type" in browser.csdbArgs) {
+			// One release page
+			browser.getCSDb(
+				browser.csdbArgs['type'],
+				browser.csdbArgs['id'],
+				browser.csdbArgs['copyright'],
+				true
+			 );
+		} else {
+			// List of release entries
+			browser.getCSDb(undefined, undefined, undefined, true);
+		}
+		return false;
 	});
 
 	/**
