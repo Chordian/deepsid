@@ -1070,15 +1070,15 @@ Controls.prototype = {
 	 * Update the collection version just above the sundry box.
 	 */
 	updateSundryVersion: function() {
-		if (typeof browser.playlist[browser.songPos] != "undefined") {
-			var version = browser.playlist[browser.songPos].hvsc,
-				isCGSC = browser.playlist[browser.songPos].fullname.substr(-4) == ".mus",
-				$sundryCtrls = $("#sundry-ctrls");
-			$sundryCtrls.empty();
-			if (version >= 50 && SID.emulator != "youtube")
-				$sundryCtrls.append('<span id="hvsc-version">'+
-					(isCGSC ? 'CGSC v'+String(version).substr(0, 1)+'.'+String(version).substr(1) : 'HVSC #'+String(version))+'</span>');
-		}
+		if (!browser.playlist || !browser.playlist[browser.songPos]) return;
+		
+		var version = browser.playlist[browser.songPos].hvsc,
+			isCGSC = browser.playlist[browser.songPos].fullname.substr(-4) == ".mus",
+			$sundryCtrls = $("#sundry-ctrls");
+		$sundryCtrls.empty();
+		if (version >= 50 && SID.emulator != "youtube")
+			$sundryCtrls.append('<span id="hvsc-version">'+
+				(isCGSC ? 'CGSC v'+String(version).substr(0, 1)+'.'+String(version).substr(1) : 'HVSC #'+String(version))+'</span>');
 	},
 
 	/**

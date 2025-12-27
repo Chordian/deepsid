@@ -1421,6 +1421,11 @@ $(function() { // DOM ready
 	$("#sticky-admin").on("click", "button", function(event) {
 		var category = $(event.target).attr("data-category");
 
+		if (category == "db") {
+			window.open("https://deepsid.chordian.net/php/adminer_gate.php", "_blank");
+			return;
+		}
+
 		$("#sticky-admin .admin-cat-buttons .button-on").removeClass("button-on").addClass("button-off");
 		$(this).removeClass("button-off").addClass("button-on");
 		$("#topic-admin").empty();

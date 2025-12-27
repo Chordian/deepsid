@@ -21,7 +21,11 @@ SHOULD BE DONE
   1ch, 2ch and 3ch tags. You have to find one yourself - all the suggestions offered by both
   ChatGPT and Gemini sucks.
 
+- The label add button doesn't like when CSDb titles have quote characters in them.
+
 - Ken (JSIDPlay2) has a lot more FM YAM songs in his demo folder. Check that out.
+
+- See e-mail about better sync in JSIDPlay2 emulator.
 
 - Tag brackets drop-down boxes: Only allow event type tags in top drop-down box and only
   allow production type tags in bottom drop-down box. (Perhaps allow administrators access

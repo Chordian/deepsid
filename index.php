@@ -672,12 +672,12 @@
 				<div id="stopic-stil" class="stopic">
 					<?php if (!MiniPlayer()): ?>
 						<div id="sundry-news">
-							<!--<span>The <a href="https://www.hvsc.c64.org/" target="_top">High Voltage SID Collection</a> has been upgraded to the latest version #83. Click <a href="//deepsid.chordian.net/?search=83&type=new">here</a> to see what's new in this update.</span>-->
+							<span>The <a href="https://www.hvsc.c64.org/" target="_top">High Voltage SID Collection</a> has been upgraded to the latest version #84. Click <a href="//deepsid.chordian.net/?search=84&type=new">here</a> to see what's new in this update.</span>
 							<!--<span><a href="http://www.c64music.co.uk/" target="_top">Compute's Gazette SID Collection</a> has been upgraded to the latest version #147. Click <a href="//deepsid.chordian.net/?search=147&type=new">here</a> to see what's new in this update.</span>-->
 
 							<!--<span>Want to learn how to make SID tunes? Check out <a href="https://www.youtube.com/watch?v=nXNtLetxFUg">this tutorial video</a> now on YouTube.</span>-->
 
-							<span><b class="strong">NEW:</b> A SID row now has <u>two</u> factoids. You can select what to show in them with two new drop-down boxes in the setup tab.</span>
+							<!--<span><b class="strong">NEW:</b> A SID row now has <u>two</u> factoids. You can select what to show in them with two new drop-down boxes in the setup tab.</span>-->
 
 							<!--<span><p style="margin:0 0 4px 0;">Have you made a new SID tune and need to slap a cool visualizer with a logo on it?</p><b style="font-size:22px;">Check out <a href="https://sidquake.c64demo.com/">SIDquake</a> by Raistlin!</b></span>-->
 							<!--<span> .... See <a href="#" onclick="$('#tab-changes').trigger('click'); return false;">Changes</a> for info.</span>-->
@@ -1060,6 +1060,7 @@
 							<button class="admin-cat-button ac-settings button-off" data-category="settings">Set</button>
 							<button class="admin-cat-button ac-scripts button-off" data-category="scripts">PHP</button>
 							<button class="admin-cat-button ac-notes button-off" data-category="notes">Note</button>
+							<button id="adminer" data-category="db">Adminer<img src="images/external_link.svg" alt="" /></button>
 						</div>
 					</div>
 				<?php endif ?>
@@ -1782,7 +1783,7 @@
 
 						<h3>Libraries of SID tunes</h3>
 						<p>
-							High Voltage SID Collection #83<br />
+							High Voltage SID Collection #84<br />
 							<a href="https://www.hvsc.c64.org/" target="_top">https://www.hvsc.c64.org/</a>
 						</p>
 						<p>
@@ -1986,6 +1987,17 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>December 27, 2025</h3>
+						<ul>
+							<li>Finished adding composer profiles for the new folders in HVSC #84.</li>
+							<li>All new files in HVSC #84 are now connected to CSDb entries.</li>
+						</ul>
+
+						<h3>December 25, 2025</h3>
+						<ul>
+							<li>The <a href="https://www.hvsc.c64.org/" target="_top">High Voltage SID Collection</a> has been upgraded to the latest version #84.</li>
+						</ul>
 
 						<h3>December 23, 2025</h3>
 						<ul>

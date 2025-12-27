@@ -13,20 +13,6 @@ Requirements
 
 NOTE: The "http://chordian/deepsid/" URL just refers to a LOCALHOST version of DeepSID.
 
-Social media
-¯¯¯¯¯¯¯¯¯¯¯¯
-First things first - post on Facebook and Bluesky (remember #deepsid tag for the latter).
-
-Use the following text:
-
-"The next High Voltage SID Collection update has arrived. DeepSID will be updated within a
-day or two. Stay tuned."
-
-If you don't do this first, you can be sure someone is going to post about it to "remind"
-you that the update has arrived (because obviously you are not aware of it).
-
-UPDATE: People don't seem to do this anymore. You can skip this if you want.
-
 Backup
 ¯¯¯¯¯¯
 Delete all leftover backup tables and backup the entire DeepSID database (both the local
@@ -229,7 +215,7 @@ Import HVSC song lengths:
   5. Stop recording and repeat the macro until end of file. (The bottom should be okay.)
      Don't copy something into the clipboard buffer until it's finished or you will bork it!
   6. Forward slashes in fullnames should already be used. Validate that this is still true.
-  7. Split the file into four CSV files of max 15000 lines using FileSplitter, which is present in the
+  7. Split the file into five CSV files of max 15000 lines using FileSplitter, which is present in the
      utility folder. (PhpMyAdmin can't handle it all).
 
   1. Enter the empty "hvsc_files_import" table and click "Import".
@@ -443,70 +429,37 @@ First time importing fullname list from HVSC:
   2. Enter the folder with composer images and rename the avatar file there. Make sure you remember
      to do this in both LOCALHOST and ONLINE folders.
 
-Import count of files in folders:
-
-  1. Edit the "python/count/count_files_in_folders.py" script and make sure the path line is correct.
-  2. Run the Python script.
-  3. Edit the resulting "count.csv" in Notepad++.
-  4. Delete the first line for HVSC itself.
-  5. Mark and copy string from start to HVSC root, including its appended backslash.
-  6. Ctrl+H, "Replace All" that string with nothing.
-  7. Ctrl+H, "Replace All" backslashes to forward slashes instead.
-  8. Delete the lines with non-music HVSC folders (DOCUMENTS and UPDATE + their sub folders).
-  9. Save the file and quit Notepad++.
-
-  1. Enter the "hvsc_folders" table and click "Operations".
-  2. In "Copy table to (database.table):" select "Structure only"
-  3. Enter "hvsc_folders_import" as the destination name.
-  4. Click "Go" to create it.
-
-  1. Enter the new "hvsc_folders_import" table and click "Import".
-  2. Click "Browse" and click the CSV file.
-  3. Change "Format" to "CSV".
-  4. Write "fullname,files" in the "Column names" edit box.
-  5. Click "Go".
-  6. Export the "hvsc_folders_import" to an SQL file for later import online. This way you won't
-     have to import the above, just that SQL file.
-
-  1. Enter the "hvsc_folders" table and click "SQL" (empty the box).
-  2. Run the following:
-
-       UPDATE hvsc_folders
-       INNER JOIN hvsc_folders_import on hvsc_folders_import.fullname = hvsc_folders.fullname
-       SET hvsc_folders.files = hvsc_folders_import.files
-
-  3. Enter the "hvsc_folders_import" table and click "Operations".
-  4. Drop the table (or truncate it for the next HVSC update).
-
-Update count of letter folders in 'MUSICIANS' for HVSC:
-
-NOTE: I'm not 100% sure if this is deprecated because of the next part (I skipped it for HVSC #71+).
-
-  1. Enter a letter folder in File Explorer and open a command box there.
-  2. Type: dir
-  3. Notice the count of folders in the bottom and subtract 2 for the "." and ".." entries.
-  4. Find the corresponding entry in the hvsc_folders table and update the count column (if different).
-  5. Repeat until all letter folders have been parsed.
-
-Update total count of individual letter folders (that have sub folders):
-
-  1. Make a backup of the "hvsc_folders" table.
-  2. Run your FTP program for online files and there edit ./php/update_total_count.php
-  3. Uncomment the "Now store" UPDATE line in the bottom. 
-  4. Now run the script like this: https://deepsid.chordian.net/php/update_total_count.php
-  5. Check the output and maybe compare with DeepSID itself in a few places.
-  6. Put the comment back in and save it online. 
-
-Be careful not to run this script more than this one time after a new HVSC update. This is also why the
-line is commented out - both to avoid mishaps but also to avoid hacking/trolling attempts.
-
 Set the type of new folders:
 
   1. Go to the end of the "hvsc_folders" table.
   2. Change the type of all the new HVSC folders to "SINGLE" (most common) or "GROUP".
   3. Change the "new" field to show the HVSC update version.
 
-Done.
+  Do this online too.
+
+LINKS AND VERSION
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+Update various minor stuff:
+
+  o  The version number in the 'About' tab (index.php).
+  o  The "notable" (yellow line) link in the profile page (composer table).
+  o  Update the top corner link in the profile page to point at the latest CSDb page (same table).
+  o  Update "HVSC_VERSION" in browser.js.
+  o  Remember to also update "HVSC_VERSION" in setup.php if you haven't already done so.
+  o  Check new folders for setting the 'focus' column in 'composers' to PRO, SCENER or BOTH.
+  o  If you set a 'focus' column to PRO or BOTH, also update the 'affiliation' column in that row.
+  o  Write about the new update in the 'News' box and in the 'Changes' tab.
+
+REACTIVE ONLINE SITE AGAIN - EVERYTHING DOWN HERE CAN BE DONE WHILE IT'S AVAILABLE.
+
+NUMBER OF FILES
+---------------
+
+Update count of files in folders:
+
+  This used to be complicated too, but I later wrote a PHP script to update everything in one go.
+  Just run: http://chordian/deepsid/php/update_counts_all.php (just run it from the 'Admin' tab)
+  Remember to do this online too when the time comes.
 
 TABLE: hvsc_lengths
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
@@ -587,25 +540,16 @@ the job while users are enjoying the new files.
 When done, check the lists of active and snoozing composers in the root page. You should not see
 composers like e.g. Johannes Bjerregaard or Ben Daglish in the lists of snoozing composers.
 
+Now run this ONLINE: https://deepsid.chordian.net/php/check_missing_info.php (in 'Admin' tab).
+Fix whatever it finds to be wrong.
+
 LAST CHECKS
 ¯¯¯¯¯¯¯¯¯¯¯
 Double-check these files both in the folder and in the database:
 
-  MUSICIANS/A/Acrouzet/Puzzled-Background_Music_IV.sid
-  GAMES/A-F/Desert_Decision.sid
+  https://deepsid.chordian.net/?file=/MUSICIANS/A/Acrouzet/Puzzled-Background_Music_IV.sid
+  https://deepsid.chordian.net/?file=/GAMES/A-F/Desert_Decision.sid
 
 They must match each other and play correctly. (NOTE: They probably work online but not locally.)
-
-LINKS AND VERSION
-¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-Update various minor stuff:
-
-  o  The version number in the 'About' tab (index.php).
-  o  The "notable" (yellow line) link in the profile page (composer table).
-  o  Update the top corner link in the profile page to point at the latest CSDb page (same table).
-  o  Update "HVSC_VERSION" in browser.js.
-  o  Remember to also update "HVSC_VERSION" in setup.php if you haven't already done so.
-  o  Check new folders for setting the 'focus' column in 'composers' to PRO, SCENER or BOTH.
-  o  If you set a 'focus' column to PRO or BOTH, also update the 'affiliation' column in that row.
 
 --------------------------------

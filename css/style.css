@@ -5544,6 +5544,7 @@ input[type=range]::-ms-track {
 
 				#sticky-admin .admin-cat-buttons {
 					left: 114px;
+					width: 740px;
 				}
 
 				#sticky-visuals .visuals-buttons > button,
@@ -5559,6 +5560,19 @@ input[type=range]::-ms-track {
 					#sticky-admin .admin-cat-buttons > button {
 						width: 55px;
 					}
+
+					#adminer {
+						float: right;
+						width: auto !important;
+						padding: 0 8px 4px 10px !important;
+					}
+
+						#adminer img {
+							position: relative;
+							top: 2px;
+							margin-left: 4px;
+							height: 14px;
+						}
 
 				#sticky-visuals button:before {
 					content: "";

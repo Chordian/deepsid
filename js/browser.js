@@ -42,7 +42,7 @@ const playerStrips = [
 function Browser() {
 
 	this.ROOT_HVSC = 'hvsc';
-	this.HVSC_VERSION = 83;
+	this.HVSC_VERSION = 84;
 	this.CGSC_VERSION = 147;
 
 	this.path = "";

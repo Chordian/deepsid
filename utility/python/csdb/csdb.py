@@ -16,10 +16,10 @@ import csv, requests
 from xml.etree import ElementTree
 
 if __name__ == '__main__':
-    with open('csdb_48301-65000.csv', 'w', newline='', encoding='utf-8') as csvfile:
+    with open('csdb_35000-65700.csv', 'w', newline='', encoding='utf-8') as csvfile:
         writer = csv.writer(csvfile, delimiter=',')
 
-        for sidId in range(48301, 65000):
+        for sidId in range(35000, 65700):
             response = requests.get(f'https://csdb.dk/webservice/?type=sid&id={sidId}')
             if response.status_code == 200:
                 try:
