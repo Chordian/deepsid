@@ -7,25 +7,22 @@ ToDo
   @link https://developer.mozilla.org/en-US/docs/Web/API/console
 
 
+ONGOING
+¯¯¯¯¯¯¯
+- Update 'labels_info' database with types and CSDb info numbers.
+
+
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- Update 'labels_info' database with types and CSDb info numbers. NOTE: Types have changed!
-
 - Make admin-only factoids available to admins (rotating and drop-down boxes).
 
 - Add an admin setting for temporarily turning off editing tags. I had one disaster lately
   where I could have used that feature. Perhaps a drop-down with "Everyone", "Admin only"
   and "Off" as options.
 
-- Tags: Make a unified tag for files that have less then 3 channels, then replace all those
-  1ch, 2ch and 3ch tags. You have to find one yourself - all the suggestions offered by both
-  ChatGPT and Gemini sucks.
-
 - The label add button doesn't like when CSDb titles have quote characters in them.
 
 - Ken (JSIDPlay2) has a lot more FM YAM songs in his demo folder. Check that out.
-
-- See e-mail about better sync in JSIDPlay2 emulator.
 
 - Tag brackets drop-down boxes: Only allow event type tags in top drop-down box and only
   allow production type tags in bottom drop-down box. (Perhaps allow administrators access
@@ -33,6 +30,12 @@ SHOULD BE DONE
 
 - Make rolling random tips in the upper news box. Hotkeys to use, etc. Part of the random
   messages could also be other things, for example a recommended link.
+
+- I need to move the "Add Label" button out of CSDb pages. Two reasons. The first is that
+  it's cumbersome to add labels in SH folder shown in a pane, second that the button will
+  disappear from cached CSDb pages over time because other users don't see the button. It
+  would be better to access it from the browser. A context menu option, perhaps?
+  UPDATE: Alternaively, add a hotkey.
 
 - Add a function, a hotkey, whatever, to send a rating change for a composer or folder over
   to the 'Ratings' user while still being logged in as the 'JCH' user.
@@ -512,6 +515,10 @@ PROBABLY NOT?
   show a message in the dialog box) saying that it will be hidden because the ranking should
   already make it clear, this is for a competition.
 
+- Tags: Make a unified tag for files that have less then 3 channels, then replace all those
+  1ch, 2ch and 3ch tags. You have to find one yourself - all the suggestions offered by both
+  ChatGPT and Gemini sucks.
+
 - KB: Sometimes I have to press ENTER twice on a SID row before it plays. Usually after having
   done some navigation elsewhere in DeepSID. The first ENTER is probably some kind of focus
   enabling. But the funny thing is, I actually don't mind this so much. It's easy to get used to
@@ -540,10 +547,6 @@ PROBABLY NOT?
   1SID (all sliders disabled), 2SID (3SID disabled) or 3SID (all sliders enabled). However,
   setting stereo mode to other values than AUTO seems to change this behavior, so be
   careful to check all combinations. Or just leave it as it is now - all sliders enabled.
-
-- JSIDPlay2: Add buffer size change when the tune length timer calculation can be calculated
-  right (hardcoded to 48000 for now). When adding support for buffer size, there are two
-  things to consider: tune length timer calculation + register read delay amount.
 
 - See here: https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-color-scheme
   With this you can preset to bright or dark color scheme the first time it is visited.

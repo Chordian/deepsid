@@ -582,8 +582,7 @@ Viz.prototype = {
 	 * @param {string} emulator		Emulator, e.g. "resid", "jsidplay2", etc.
 	 */
 	applyBufferSize: function(emulator) {
-		// @todo JSIDPlay2 will have to wait until I can get the tune length calculation right
-		if (["resid", "disabled:jsidplay2", "websid", "legacy", "webusb", "hermit", "asid"].includes(emulator)) {
+		if (["resid", "jsidplay2", "websid", "legacy", "webusb", "hermit", "asid"].includes(emulator)) {
 			if (emulator == "asid" || emulator == "webusb") emulator = "hermit";
 			$("#page .dropdown-buffer").prop("disabled", false);
 			$("#page .dropdown-buffer-label").removeClass("disabled");
@@ -596,7 +595,7 @@ Viz.prototype = {
 						SID.bufferSize['resid'] = 16384;
 						break;
 					case "jsidplay2":
-						SID.bufferSize['jsidplay2'] = 48000;
+						SID.bufferSize['jsidplay2'] = 16384;
 						break;
 					case "websid":
 						SID.bufferSize['websid'] = 16384;
@@ -615,12 +614,6 @@ Viz.prototype = {
 			$("#page .dropdown-buffer-label").addClass("disabled");
 			$("#settings-emu-msg").hide();
 		}
-
-		if (emulator == "jsidplay2") {
-			$("#page .dropdown-buffer option.jsidplay2").show();
-			$("#page .dropdown-buffer").val(48000); // @todo <= Remove when JSIDPlay2 is allowed above
-		} else
-			$("#page .dropdown-buffer option.jsidplay2").hide();
 	},
 
 	/**

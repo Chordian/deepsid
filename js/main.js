@@ -2633,7 +2633,7 @@ $(function() { // DOM ready
 	}
 
 	// Turn off visuals as default for JSIDPlay2 to save on CPU time
-	ToggleVisuals();
+	//ToggleVisuals();
 	
 });
 

@@ -1112,10 +1112,6 @@
 										<option value="4096">4096</option>
 										<option value="8192">8192</option>
 										<option value="16384" selected="selected">16384</option>
-										<option class="jsidplay2" value="24000" style="display:none;">24000</option>
-										<option class="jsidplay2" value="32000" style="display:none;">32000</option>
-										<option class="jsidplay2" value="40000" style="display:none;">40000</option>
-										<option class="jsidplay2" value="48000" style="display:none;">48000</option>
 									</select>
 								</div>
 							</div>
@@ -1204,10 +1200,6 @@
 										<option value="4096">4096</option>
 										<option value="8192">8192</option>
 										<option value="16384" selected="selected">16384</option>
-										<option class="jsidplay2" value="24000" style="display:none;">24000</option>
-										<option class="jsidplay2" value="32000" style="display:none;">32000</option>
-										<option class="jsidplay2" value="40000" style="display:none;">40000</option>
-										<option class="jsidplay2" value="48000" style="display:none;">48000</option>
 									</select>
 								</div>
 							</div>
@@ -1612,10 +1604,6 @@
 									<option value="4096">4096</option>
 									<option value="8192">8192</option>
 									<option value="16384" selected="selected">16384</option>
-									<option class="jsidplay2" value="24000" style="display:none;">24000</option>
-									<option class="jsidplay2" value="32000" style="display:none;">32000</option>
-									<option class="jsidplay2" value="40000" style="display:none;">40000</option>
-									<option class="jsidplay2" value="48000" style="display:none;">48000</option>
 								</select>
 								<label for="dropdown-settings-buffer" class="dropdown-buffer-label unselectable">Buffer size <span id="settings-emu-msg" style="display:none;">for <span id="settings-emu-type">?</span> emulator<span></label>
 
@@ -1987,6 +1975,13 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>December 30, 2025</h3>
+						<ul>
+							<li>Improved visual updates for the JSIDPlay2 emulator. They now update smoothly and without hesitation.</li>
+							<li>You can now change the buffer size used by JSIDPlay2.</li>
+							<li>Fixed the duration countdown in JSIDPlay2 so it now works correctly regardless of the selected buffer size.</li>
+						</ul>
 
 						<h3>December 27, 2025</h3>
 						<ul>

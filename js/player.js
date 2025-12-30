@@ -24,7 +24,7 @@ function SIDPlayer(emulator) {
 
 	this.bufferSize = {
 		resid:		16384,
-		jsidplay2:	48000,
+		jsidplay2:	16384,
 		websid:		16384,
 		legacy:		16384,
 		hermit:		16384,
@@ -48,6 +48,10 @@ function SIDPlayer(emulator) {
 	this.jp2Loading = true;
 	this.jp2PlayTime = 0;
 	this.jp2SidModel = "MOS8580";
+
+	this.jp2FutureWrites = [];
+	this.jp2ReadyWrites  = [];
+	this.jp2Registers = new Uint8Array(29 * 3); // 3 SID chips
 
 	this.jp2SidWrites = true;			// _jp2Play()
 
@@ -150,7 +154,7 @@ function SIDPlayer(emulator) {
 
 			this.jp2AudioContext = new AudioContext({
 				latencyHint: "interactive",
-				sampleRate: 48000,
+				sampleRate: 48000, // Do not change this when changing buffer size
 			});
 
 			this.applyAdvancedSetting("jsidplay2", "defemu", "RESID");
@@ -555,18 +559,6 @@ SIDPlayer.prototype = {
 				this.jp2PlayTime = 0;
 				this.jp2Loading = true;
 
-				// Used for delayed update of visuals
-				this.jp2RegisterCache = [
-					[], [], [], [], [], [], [], [], [], [], [], [], [], [],
-					[], [], [], [], [], [], [], [], [], [], [], [], [], [], [],
-
-					[], [], [], [], [], [], [], [], [], [], [], [], [], [],
-					[], [], [], [], [], [], [], [], [], [], [], [], [], [], [],
-
-					[], [], [], [], [], [], [], [], [], [], [], [], [], [],
-					[], [], [], [], [], [], [], [], [], [], [], [], [], [], [],
-				];
-
 				new Promise((resolve, reject) => {
 
 					var clockspeed = "PAL";		// Assume PAL tune to begin with
@@ -662,7 +654,7 @@ SIDPlayer.prototype = {
 							outer.callbackTrackEnd();
 						},
 						SAMPLES: function (eventData) {
-							var sampleRate = outer.jp2AudioContext.sampleRate;
+							const sampleRate = outer.jp2AudioContext.sampleRate;
 
 							// The worker has produced a chunk of sound data - create a stereo buffer and
 							// send it to the sound card
@@ -682,29 +674,23 @@ SIDPlayer.prototype = {
 							outer.jp2NextTime += buffer.duration; // New in v4.13
 
 							// Tick playtime in seconds taking fast forward into account
-							// @todo This needs to be adapted for other buffer sizes to work
-							outer.jp2PlayTime += 1 / ((eventData.length / sampleRate) / (outer.fastForward ? 2 : 1));
+							const bufferDuration = eventData.length / sampleRate;
+							outer.jp2PlayTime += bufferDuration * (outer.fastForward ? 2 : 1);
 
+							// For register reading
+							while (outer.jp2FutureWrites.length) {
+								outer.jp2ReadyWrites.push(
+									outer.jp2FutureWrites.shift()
+								);
+							}
 						},
 						SID_WRITE: function (eventData) {
-							// Enable this to monitor everything the event outputs
-							// log("relTime=" + eventData.relTime + ", addr=" + eventData.addr + ", value=" + eventData.value);
-
-							// Store SID value in an cache array with all registers
-							var sidRegister = false, sidValue = eventData.value,
-								timestamp = outer.jp2AudioContext.currentTime;
-							if (eventData.addr >= outer.jp2SID3Base && eventData.addr <= outer.jp2SID3Base + 28)
-								// SID chip #3
-								sidRegister = eventData.addr - outer.jp2SID3Base + (29 * 2);
-							else if (eventData.addr >= outer.jp2SID2Base && eventData.addr <= outer.jp2SID2Base + 28)
-								// SID chip #2
-								sidRegister = eventData.addr - outer.jp2SID2Base + 29;
-							else if (eventData.addr <= 0xD400 + 28)
-								// SID chip #1
-								sidRegister = eventData.addr - 0xD400;
-								// For some reason JSIDPlay2 loops registers all the way up to 255 to begin with
-							if (sidRegister)
-								outer.jp2RegisterCache[sidRegister].push({ value: sidValue, timestamp });
+							outer.jp2FutureWrites.push({
+								absTime: eventData.absTime,
+								addr: eventData.addr,
+								value: eventData.value,
+								currentTime: () => outer.jp2AudioContext.currentTime
+							});
 						},
 					};
  					
@@ -1129,6 +1115,15 @@ SIDPlayer.prototype = {
 	 */
 	_jp2Play: function() {
 
+		// Hard reset jsidplay2 visual state (per tune)
+		this.jp2FutureWrites.length = 0;
+		this.jp2ReadyWrites.length  = 0;
+		this.jp2Registers.fill(0);
+
+		this.jp2AudioStartTime = this.jp2AudioContext.currentTime;
+		this.jp2PlayTime = 0;
+		this.jp2NextTime = this.jp2AudioStartTime;
+
 		// The SID model can only be set before starting the tune
 		this.jp2SidModel = browser.playlist[browser.songPos].sidmodel;
 		this.jp2Worker.postMessage({
@@ -1162,7 +1157,7 @@ SIDPlayer.prototype = {
 
 		this.setVolume(1);
 		this._jp2SetStereo();
-		
+
 		this.jp2Worker.postMessage({
 			eventType: "OPEN",
 			eventData: {
@@ -1188,7 +1183,6 @@ SIDPlayer.prototype = {
 			},
 		});
 
-		this.jp2NextTime = this.jp2PlayTime = 0;
 		this.paused = this.stopped = this.fastForward = this.jp2Loading = false;
 	},
 
@@ -2234,16 +2228,44 @@ SIDPlayer.prototype = {
 				} catch(e) { /* Ignore type errors */ }
 				return value;
 			case "jsidplay2":
-				this.jp2Value = null;
 				if (!this.jp2Loading && !this.stopped) {
-					const delay = 1;
-					this.jp2RegisterCache[register + (chip * 29)].filter(item => {
-						if (this.jp2AudioContext.currentTime - item.timestamp >= delay) {
-							this.jp2Value = item.value;
+
+					const latency = 0.3;
+					const bufferSize = 16384;
+					const clockSpeed =
+						this.clockSpeed === "NTSC"
+						? 1022727.14
+						: 985248.4;
+
+					let write;
+
+					while (
+						this.jp2ReadyWrites.length &&
+						(write = this.jp2ReadyWrites[0])
+					) {
+
+						const audioElapsed = write.currentTime() - this.jp2AudioStartTime;
+
+						if (write.absTime - bufferSize <= (audioElapsed - latency) * clockSpeed) {
+
+							this.jp2ReadyWrites.shift();
+
+							const reg =
+								write.addr >= this.jp2SID3Base ? write.addr - this.jp2SID3Base + 58 :
+								write.addr >= this.jp2SID2Base ? write.addr - this.jp2SID2Base + 29 :
+								write.addr - 0xD400;
+
+							if (reg >= 0 && reg < this.jp2Registers.length) {
+								this.jp2Registers[reg] = write.value;
+							}
+
+						} else {
+							break;
 						}
-					});
+					}
 				}
-				return this.jp2Value;
+				return this.jp2Registers[register + chip * 29];
+
 			case "websid":
 				if (this.WebSid) {
 					try {
