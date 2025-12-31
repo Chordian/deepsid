@@ -1976,11 +1976,18 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>December 31, 2025</h3>
+						<ul>
+							<li>Fixed 'DEMOS' references in the STIL box not being converted correctly into links.</li>
+							<li>All editing-related context menu actions now have their own section.</li>
+						</ul>
+
 						<h3>December 30, 2025</h3>
 						<ul>
 							<li>Improved visual updates for the JSIDPlay2 emulator. They now update smoothly and without hesitation.</li>
 							<li>You can now change the buffer size used by JSIDPlay2.</li>
-							<li>Fixed the duration countdown in JSIDPlay2 so it now works correctly regardless of the selected buffer size.</li>
+							<li>Fixed the JSIDPlay2 duration timer to advance correctly regardless of buffer size.</li>
+							<li>Fixed a country flag bug affecting Romania.</li>
 						</ul>
 
 						<h3>December 27, 2025</h3>

@@ -452,10 +452,18 @@ if (isset($row)) {
 	$died = $died == '1970' ? '<i>Unknown date</i>' : $died;
 
 	// Append flag images to the potentially comma-separated list of multiple countries
-	foreach($countryCodes as $key => $code) {
-		$countryFound = strpos(strtolower($country), $key);
-		if ($countryFound > -1)
-			$country = str_ireplace($key, substr($country, $countryFound, strlen($key)).' <img class="flag" src="images/countries/'.$code.'.png" alt="'.$code.'" />', $country);
+	foreach ($countryCodes as $key => $code) {
+
+		$c_pattern = '/\b' . preg_quote($key, '/') . '\b/i';
+
+		$country = preg_replace_callback(
+			$c_pattern,
+			function ($matches) use ($code) {
+				return $matches[0]
+					. ' <img class="flag" src="images/countries/'.$code.'.png" alt="'.$code.'" />';
+			},
+			$country
+		);
 	}
 
 } else {

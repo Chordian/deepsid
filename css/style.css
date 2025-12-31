@@ -5102,11 +5102,6 @@ input[type=range]::-ms-track {
 				top: -2px;
 			}
 
-			#page .admin-csdb-button {
-				position: absolute;
-				bottom: 6px;
-			}
-
 		#page .ext .tinyhandle,
 		#annex .tinyhandle {
 			font-size: 10px;

@@ -82,7 +82,7 @@ function ParseQuery($query) {
  * 
  * @return		int								Value in raw milliseconds
  */
-function songLengthToMilliseconds(?string $length): ?int {
+function SongLengthToMilliseconds(?string $length): ?int {
     if (!is_string($length)) return null;
 
     // Normalize and quick sanity checks
@@ -1195,7 +1195,7 @@ try {
 			$stil = preg_replace(['/\(#(\d+)\)/'], ['<hr /><div class="subtune">$1</div>'], $stil);
 
 			// Make references to other HVSC tunes into redirect links (i.e. won't refresh the web page)
-			$stil = preg_replace('/(\/DEMO[^\s].+\.sid|\/GAMES[^\s]+\.sid|\/MUSICIANS[^\s]+\.sid)/', '<a class="redirect" href="#">$1</a>', $stil);
+			$stil = preg_replace('/(\/DEMOS[^\s]+\.sid|\/GAMES[^\s]+\.sid|\/MUSICIANS[^\s]+\.sid)/', '<a class="redirect" href="#">$1</a>', $stil);
 
 			$symid = $symid_pos = 0;
 			$substname = '';

@@ -2679,7 +2679,7 @@ Browser.prototype = {
 
 				// Remove admin controls if included in a cache refreshed by an administrator
 				if ($("#logged-username").text() !== "JCH")
-					$("#topic-csdb .admin-csdb-button").remove();
+					$("#topic-csdb .admin-csdb-button").remove(); // Admin button is legacy (don't delete)
 
 				// Enable highlighting button and its label if any emphasizing is present
 				setTimeout(() => {
@@ -3027,8 +3027,9 @@ Browser.prototype = {
 		if ($target.hasClass("sid")) {
 			var notSidRows = $target.parents("table").find("td.folder,td.spacer,td.divider").length;
 			var isPersonalSymlist = this.path.substr(0, 2) == "/!",
-				isPublicSymlist = this.path.substr(0, 2) == "/$",
+				isPublicSymlist = this.path.substr(0, 2) == "/$",				
 				thisRow = $target.parent("tr").index() - notSidRows;
+			var isSidHappensFolder = typeof this.playlist[thisRow].uploaded !== "undefined";
 
 			if (isPublicSymlist && !this.isSearching) {
 				var result = $.grep(this.symlistFolders, function(entry) {
@@ -3037,6 +3038,7 @@ Browser.prototype = {
 				var isMyPublicSymlist = result.length !== 0;
 			}
 
+			// Section: Managing playlists
 			contents = (isPersonalSymlist || isMyPublicSymlist) && !this.isSearching
 
 				? '<div class="line" data-action="symentry-rename">Rename</div>'+			// SID in symlist folder
@@ -3048,37 +3050,35 @@ Browser.prototype = {
 				  '<div class="line submenu'+(this.symlistFolders.length === 0 ? ' disabled' : '')+
 				  	'">Add to Playlist</div>';
 
-			// Divider to more common SID file actions
-			contents += '<div class="divider"></div>';
-
-			contents +=
+			// Section: Common actions
+			contents += '<div class="divider"></div>'+
 				'<div class="line" data-action="download-file">Download File</div>'+
-				'<div class="line" data-action="edit-tags">Edit Tags</div>'+
 				'<div class="line'+(this.isSearching || this.isCompoFolder || isPersonalSymlist || isPublicSymlist ? " disabled" : "")+
 					'" data-action="copy-link">Copy Link</div>';
 
-			var dividerForYouTube = dividerForAdmin = '<div class="divider"></div>';
-			if (typeof this.playlist[thisRow].uploaded !== "undefined") {
-				// It's a SID row from the 'SID Happens' folder and thus can be edited
-				contents += '<div class="divider"></div>'+
-					'<div class="line" data-action="edit-upload">Edit Uploaded File</div>';
-				if ($("#logged-username").text() == "JCH")
-					// The administrator can delete files in the 'SID Happens' folder
-					contents += '<div class="line" data-action="delete-file">Delete File</div>';
-				dividerForYouTube = dividerForAdmin = '';
-			}
+			// Section: Editing actions
+			contents += '<div class="divider"></div>'+
+				'<div class="line" data-action="edit-tags">Edit Tags</div>';
 
-			if ($("#logged-username").text() == "JCH") {
-				// The administrator can unlink labels (the label info is preserved)
-				contents += dividerForAdmin+
-					'<div class="line" data-action="unlink-label">Unlink Label</div>';
-				dividerForYouTube = '';
-			}
+			if (isSidHappensFolder)
+				// It's a SID row from the 'SID Happens' folder and thus can be edited
+				contents +=
+					'<div class="line" data-action="edit-upload">Edit Uploaded File</div>';
 
 			if (SID.emulator == "youtube") {
 				// A YouTube video link can be added to this SID row
-				contents += dividerForYouTube+
-					'<div class="line" data-action="edit-videos" data-subtunes="'+this.playlist[thisRow].subtunes+'">Edit YouTube Links</div>';
+				contents +=
+					'<div class="line" data-action="edit-videos" data-subtunes="'+
+						this.playlist[thisRow].subtunes+'">Edit YouTube Links</div>';
+			}
+
+			// Section: Administrator-only actions
+			if ($("#logged-username").text() == "JCH") {
+				contents += '<div class="divider"></div>'+
+					'<div class="line" data-action="add-label">Add Label</div>'+
+					'<div class="line" data-action="unlink-label">Unlink Label</div>';
+				if (isSidHappensFolder)
+					contents += '<div class="line" data-action="delete-file">Delete File</div>';
 			}
 
 		} else if ($target.hasClass("folder") && (this.contextSID.substr(0, 1) == "!" || this.contextSID.substr(0, 1) == "$")) {
@@ -3254,6 +3254,27 @@ Browser.prototype = {
 						}.bind(this));
 					}.bind(this));
 				}
+				break;
+			case 'add-label':
+				var $selectedSidFile = $("#folders tr.selected"),
+					$csdbInfo = $("#csdb-info");
+				if ($selectedSidFile.length && $csdbInfo.length) {
+					$.post("php/labels_write.php", {
+						id:			$selectedSidFile.find(".entry").attr("data-id"),
+						name:		$csdbInfo.attr("data-name"),
+						type:		$csdbInfo.attr("data-type"),
+						csdbid:		$csdbInfo.attr("data-csdbid")
+					}, function(data) {
+						browser.validateData(data, function(data) {
+							if (data.created)
+								BrowserMessage("Created label for '"+$csdbInfo.attr("data-name")+"'");
+							else
+								BrowserMessage("Linked to existing label");
+							RefreshFolder();
+						});
+					});
+				} else
+					alert("No SID song or CSDb release selected.");
 				break;
 			case 'unlink-label':
 				if ($("#logged-username").text() == "JCH") {

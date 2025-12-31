@@ -1566,32 +1566,6 @@ $(function() { // DOM ready
 	});
 
 	/**
-	 * Admin controls in CSDb page: Adding a label.
-	 */
-	$("#page").on("click", "#admin-csdb-add-label", function() {
-		var $this = $(this);
-
-		var $selectedSidFile = $("#folders tr.selected");
-		if ($selectedSidFile.length) {
-			$.post("php/labels_write.php", {
-				id:			$selectedSidFile.find(".entry").attr("data-id"),
-				name:		$this.attr("data-name"),
-				type:		$this.attr("data-type"),
-				csdbid:		$this.attr("data-csdbid")
-			}, function(data) {
-				browser.validateData(data, function(data) {
-					if (data.created)
-						BrowserMessage("Created the label");
-					else
-						BrowserMessage("Linked to existing label");
-					RefreshFolder();
-				});
-			});
-		} else
-			alert("No song selected.");
-	});
-
-	/**
 	 * User settings: When one of the ON/OFF toggle buttons are clicked.
 	 * 
 	 * @param {*} event 
@@ -2632,9 +2606,6 @@ $(function() { // DOM ready
 		$("#sticky-csdb").show(); // Show sticky header
 	}
 
-	// Turn off visuals as default for JSIDPlay2 to save on CPU time
-	//ToggleVisuals();
-	
 });
 
 /**
@@ -2676,21 +2647,6 @@ function ShowSundryFilterContents() {
 			$("#stopic-filter form").hide();
 		}
 	}, 0);
-}
-
-/**
- * Make sure the visuals (and "SID_WRITE" event) are turned OFF as default for
- * JSIDPlay2, otherwise ON for all other SID handlers. This is of course to
- * save on CPU time for JSIDPlay2 as "SID_WRITE" is a very busy event.
- * 
- * @handlers jsidplay2
- */
-function ToggleVisuals() {
-	if (SID.emulator == "jsidplay2" && $("#tab-visuals-toggle").hasClass("button-on"))
-		// Piano button must be clicked first or the visuals buttons all act funny
-		$("#sticky-visuals .icon-piano,#tab-visuals-toggle").trigger("click");
-	else if (SID.emulator != "jsidplay2" && $("#tab-visuals-toggle").hasClass("button-off"))
-		$("#tab-visuals-toggle").trigger("click");
 }
 
 /**

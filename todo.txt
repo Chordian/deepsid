@@ -10,37 +10,15 @@ ToDo
 ONGOING
 ¯¯¯¯¯¯¯
 - Update 'labels_info' database with types and CSDb info numbers.
+- The composer subfolders of "Blues Muz" need to be parsed for event tags.
+- Replace the PDO connection block in PHP scripts with '$db = $account->GetDB();' instead.
+- Replace all "utf8mb3_unicode_ci" database collations with "utf8mb4_0900_ai_ci" instead.
 
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- Make admin-only factoids available to admins (rotating and drop-down boxes).
-
-- Add an admin setting for temporarily turning off editing tags. I had one disaster lately
-  where I could have used that feature. Perhaps a drop-down with "Everyone", "Admin only"
-  and "Off" as options.
-
-- The label add button doesn't like when CSDb titles have quote characters in them.
-
-- Ken (JSIDPlay2) has a lot more FM YAM songs in his demo folder. Check that out.
-
-- Tag brackets drop-down boxes: Only allow event type tags in top drop-down box and only
-  allow production type tags in bottom drop-down box. (Perhaps allow administrators access
-  to all types in both drop-down boxes.)
-
 - Make rolling random tips in the upper news box. Hotkeys to use, etc. Part of the random
   messages could also be other things, for example a recommended link.
-
-- I need to move the "Add Label" button out of CSDb pages. Two reasons. The first is that
-  it's cumbersome to add labels in SH folder shown in a pane, second that the button will
-  disappear from cached CSDb pages over time because other users don't see the button. It
-  would be better to access it from the browser. A context menu option, perhaps?
-  UPDATE: Alternaively, add a hotkey.
-
-- Add a function, a hotkey, whatever, to send a rating change for a composer or folder over
-  to the 'Ratings' user while still being logged in as the 'JCH' user.
-
-- Replace all "utf8mb3_unicode_ci" database collations with "utf8mb4_0900_ai_ci" instead.
 
 - Idea from Anon-Relays: Loop song X number of times before moving on to the next one. In
   the settings, the default number should of course be 1. UPDATE: It doesn't have to be a
@@ -53,26 +31,23 @@ SHOULD BE DONE
 - Consider a HTML button somewhere for testing a SID, so it's not just the "l" hotkey.
   I thought about in the root where only a "\" is displayed, but is there a better place?
 
-- Replace the PDO connection block in PHP scripts with '$db = $account->GetDB();' instead.
-
 - See if you can get ChatGPT to convert tasks in HVSC update ToDo to PHP files.
 
 - BUG: In some situations the search box doesn't show the 'X' icon when it should. For
-  example, when clicking the 'New in HVSC update #83' folder link.
-
-- BUG: Romania and flag mixes in a weird way:
-  https://deepsid.chordian.net/?file=/MUSICIANS/M/Mega9man/
-
-- BUG: The STIL entry here is not parsed correctly - all links merge into one big link:
-  https://deepsid.chordian.net/?file=/MUSICIANS/B/Bulldog/E_X_I_S.sid&subtune=1
-  Here's one that could have been a mess too, but it actually works:
-  https://deepsid.chordian.net/?file=/MUSICIANS/G/Greg/Leppard.sid
-
-- The composer subfolders of "Blues Muz" need to be parsed for event tags.
+  example, when clicking the 'New in HVSC update #84' folder link (and you haven't been
+  searching for anything before that). Check also search topic in 'Help' annex tab.
 
 
-ADMIN PAGE
-¯¯¯¯¯¯¯¯¯¯
+ADMIN STUFF
+¯¯¯¯¯¯¯¯¯¯¯
+- Make admin-only factoids available to admins (rotating and drop-down boxes).
+
+- Add an admin setting for temporarily turning off editing tags. I had one disaster lately
+  where I could have used that feature. Perhaps a drop-down with "Everyone", "Admin only"
+  and "Off" as options.
+
+- The label add button doesn't like when CSDb titles have quote characters in them.
+
 - Ideas for more admin settings:
 
   - debug_mode: Enable verbose logging, PHP error display, or client console diagnostics.
@@ -164,6 +139,10 @@ CONSIDER THIS
 
 - Detect PAL/NTSC/CIA when clicking a SID row, and if not in the database, add it, so the
   factoid information is increasingly more complete over time.
+
+- Add a function, a hotkey, whatever, to send a rating change for a composer or folder over
+  to the 'Ratings' user while still being logged in as the 'JCH' user. UPDATE: Honestly, adding
+  ratings for new folders in an HVSC update only takes a minute, so is it worth the trouble?
 
 - After making the 'Admin' tab: Create a role column in the database table with users and
   give both "JCH" and "Ratings" the admin role. Then replace all checking for "JCH" here
@@ -515,6 +494,10 @@ PROBABLY NOT?
   show a message in the dialog box) saying that it will be hidden because the ranking should
   already make it clear, this is for a competition.
 
+- Tag brackets drop-down boxes: Only allow event type tags in top drop-down box and only
+  allow production type tags in bottom drop-down box. (Perhaps allow administrators access
+  to all types in both drop-down boxes.)
+
 - Tags: Make a unified tag for files that have less then 3 channels, then replace all those
   1ch, 2ch and 3ch tags. You have to find one yourself - all the suggestions offered by both
   ChatGPT and Gemini sucks.
@@ -734,5 +717,9 @@ TEST RESOURCES
   https://deepsid.chordian.net/?file=/MUSICIANS/T/TCC/ (199?)
   https://deepsid.chordian.net/?file=/MUSICIANS/T/The_Invincible_Cracker/ (198?)
   https://deepsid.chordian.net/?file=/MUSICIANS/H/Hogg_Steve/ (19??)
+
+- Tons of links in STIL text:
+  https://deepsid.chordian.net/?file=/MUSICIANS/B/Bulldog/E_X_I_S.sid&subtune=1
+  https://deepsid.chordian.net/?file=/MUSICIANS/G/Greg/Leppard.sid
 
 END
