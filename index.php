@@ -1980,6 +1980,7 @@
 						<ul>
 							<li>Fixed 'DEMOS' references in the STIL box not being converted correctly into links.</li>
 							<li>All editing-related context menu actions now have their own section.</li>
+							<li>Added the CSDb music competitions related to HVSC #84.</li>
 						</ul>
 
 						<h3>December 30, 2025</h3>

@@ -722,7 +722,7 @@ Viz.prototype = {
 	 * @param {boolean} activate 
 	 */
 	activatePiano: function(activate) {
-		if (miniPlayer || $("body").attr("data-mobile") !== "0") return;
+		if (main.miniPlayer || $("body").attr("data-mobile") !== "0") return;
 
 		// Clear all keyboard notes to default piano colors
 		$("#visuals-piano .piano svg .black").css("transition", "none").attr("fill", "#000");
@@ -1151,7 +1151,7 @@ Viz.prototype = {
 	 */
 	initGraph: function(chips) {
 
-		if (miniPlayer || $("body").attr("data-mobile") !== "0") return;
+		if (main.miniPlayer || $("body").attr("data-mobile") !== "0") return;
 
 		this.canvas_area = [], this.ctx_area = [], this.area_width = [], this.area_height = [];
 		this.isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
@@ -1219,7 +1219,7 @@ Viz.prototype = {
 	 */
 	animateGraph: function() {
 		// Not available on mobile devices, and the 'Graph' view and its tab must both be visible
-		if (!this.visualsEnabled || miniPlayer || $("body").attr("data-mobile") !== "0" || $("#tabs .selected").attr("data-topic") !== "visuals"
+		if (!this.visualsEnabled || main.miniPlayer || $("body").attr("data-mobile") !== "0" || $("#tabs .selected").attr("data-topic") !== "visuals"
 			|| !$("#sticky-visuals .icon-graph").hasClass("button-on")) return;
 		if (colorTheme == null) colorTheme = 0;
 
@@ -1507,7 +1507,7 @@ Viz.prototype = {
 	 * @param {boolean} activate	TRUE to activate, FALSE to turn off
 	 */
 	activateMemory: function(activate) {
-		if (browser.playlist.length == 0 || miniPlayer || $("body").attr("data-mobile") !== "0") return;
+		if (browser.playlist.length == 0 || main.miniPlayer || $("body").attr("data-mobile") !== "0") return;
 
 		if (activate && typeof browser.songPos != "undefined") {
 
@@ -1919,7 +1919,7 @@ Viz.prototype = {
 	 * Set up the continuous call of the SID.setCallbackBufferEnded() callback.
 	 */
 	animateBufferEnded: function() {
-		if (miniPlayer || $("body").attr("data-mobile") !== "0") return;
+		if (main.miniPlayer || $("body").attr("data-mobile") !== "0") return;
 		SID.setCallbackBufferEnded(function() {
 			// All calls have been moved to 'animateFrames' instead
 		}.bind(this));

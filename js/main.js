@@ -5,40 +5,11 @@
 
 var $=jQuery.noConflict();
 
-// Namespace for global variables and functions
-// @todo Move globals below into it and adapt where used
-var main = {
-	factoidTypeTop:		0,
-	factoidTypeBottom:	0,
-	sundryBoxShow:		true,
-};
-
-var cacheCSDb = cacheSticky = cacheStickyBeforeCompo = cacheCSDbProfile = cacheBeforeCompo = cachePlayer = cacheGB64 = cacheRemix = prevFile = sundryTab = reportSTIL = "";
-var cacheTabScrollPos = cachePlayerTabScrollPos = cacheGB64TabScrollPos = cacheRemixTabScrollPos = cachePosBeforeCompo = cacheDDCSDbSort = peekCounter = sundryHeight = 0;
-var recommended = forum = players = $trAutoPlay = null, showTags, fastForwarding, registering = blockNextEnter = false;
-var logCount = 1000, isMobile, miniPlayer, browserMessageTimer;
-
-var isMobile = $("body").attr("data-mobile") !== "0";
-var isNotips = $("body").attr("data-notips") !== "0";
-var miniPlayer = $("body").attr("data-mini");
-
-var tabPrevScrollPos = {
-	profile:	{ pos: 0, reset: false },
-	csdb:		{ pos: 0, reset: false },
-	gb64:		{ pos: 0, reset: false },
-	remix:		{ pos: 0, reset: false },
-	player:		{ pos: 0, reset: false },
-	stil:		{ pos: 0, reset: false },
-	visuals:	{ pos: 0, reset: false },
-	settings:	{ pos: 0, reset: false },
-	changes:	{ pos: 0, reset: false },
-	faq:		{ pos: 0, reset: false },
-	about:		{ pos: 0, reset: false },
-	admin:		{ pos: 0, reset: false },
-}
-
-// One timer per tracking event type
+// NOCAPS: One timer per tracking event type
 const trackingTimers = Object.create(null);
+
+// NOCAPS: Firefox can scroll more smoothly than Chrome
+const isFirefox = typeof InstallTrigger !== "undefined";
 
 // Tracking acceptance timeouts (ms)
 const TRACK_DELAY = {
@@ -47,34 +18,482 @@ const TRACK_DELAY = {
 	"select:emulator":	0
 };
 
-const factoidMessage = [
-	"Show nothing / upload date",
-	"Show tags",
-	"Song length",
-	"Type (PSID/RSID) and version",
-	"Compatibility (e.g. BASIC)",
-	"Clock speed (PAL/NTSC)",
-	"SID model (6581/8580)",
-	"Size in bytes (decimal)",
-	"Start and end address (hex)",
-	"HVSC or CGSC update version",
-	"Game status (RELEASE/PREVIEW)",
-	"Number of CSDb entries",
-	"Production label",
+const FACTOID_MESSAGE = [
+	"Show nothing / upload date",		// 0
+	"Show tags",						// 1
+	"Song length",						// 2
+	"Type (PSID/RSID) and version",		// 3
+	"Compatibility (e.g. BASIC)",		// 4
+	"Clock speed (PAL/NTSC)",			// 5
+	"SID model (6581/8580)",			// 6
+	"Size in bytes (decimal)",			// 7
+	"Start and end address (hex)",		// 8
+	"HVSC or CGSC update version",		// 9
+	"Game status (RELEASE/PREVIEW)",	// 10
+	"Number of CSDb entries",			// 11
+	"Production label",					// 12
 ];
 
-const factoidMessageAdmin = [
-	"Internal database ID",
-	"CSDb SID ID",
+const FACTOID_MESSAGE_ADMIN = [
+	"Internal database ID",				// 1000
+	"CSDb SID ID",						// 1001
 ]
-
-const isFirefox = typeof InstallTrigger !== "undefined"; // Firefox can scroll more smoothly than Chrome
 
 const PATH_UPLOADS = "_SID Happens";
 const PATH_SID_FM = PATH_UPLOADS + "/SID+FM";
 
 const FACTOID_TOP = "Inline factoid";
 const FACTOID_BOTTOM = "Detail factoid";
+
+// Namespace for global variables and functions
+// @todo Move globals below into it and adapt where used
+var main = {
+
+	$trAutoPlay:				null,		// The <TR> row with the SID file for playing from an URL
+	blockNextEnter:				false,		// TRUE = Prevents 'Enter' from also firing in the browser list
+	browserMessageTimer:		null,		// Timeout object for bottom message in browser
+
+	cacheBeforeCompo:			'',			// HTML of CSDb compo page before visiting sub page
+	cacheCSDb:					'',			// HTML of CSDb page before visiting sub page
+	cacheDDCSDbSort:			0,			// CSDb sorting drop-down box value before visiting sub page
+	cacheGB64:					'',			// HTML of GameBase64 page before visiting sub page
+	cacheGB64TabScrollPos:		0,			// Scroll position of GameBase64 page before visiting sub page
+	cachePlayer:				'',			// HTML of player/editor list before visiting sub page
+	cachePlayerTabScrollPos:	0,			// Scroll position of player/editor list before visiting sub page
+	cachePosBeforeCompo:		0,			// Scroll position of CSDb compo page before visiting sub page
+	cacheRemix:					'',			// HTML of Remix64 page before visiting sub page (@todo is it used?)
+	cacheRemixTabScrollPos:		0,			// Scroll position of Remix64 page before visiting sub page
+	cacheSticky:				'',			// HTML of sticky header before visiting sub page
+	cacheStickyBeforeCompo:		'',			// HTML of sticky header for CSDb compo before visiting sub page
+	cacheTabScrollPos:			0,			// Scroll position of CSDb page before visiting sub page
+
+	factoidTypeBottom:			0,			// Number of bottom line factoid (see FACTOID_MESSAGE above)
+	factoidTypeTop:				0,			// Number of top line factoid (see FACTOID_MESSAGE above)
+
+	fastForwarding:				false,		// @todo This is never set to TRUE - better investigate this
+	forum:						null,		// The AJAX object for showing parts of the CSDb forum
+	isMobile:					false,		// TRUE = Running on a mobile device (or forced with a switch)
+	isNotips:					false,		// TRUE = Do not display the annex box in the right side
+	logCount:					1000,		// Increased to make each console log output unique
+	miniPlayer:					0,			// TRUE = Display miniplayer with reduced controls
+	players:					null,		// The AJAX object for displaying a list of players/editors
+	prevFile:					'',			// Used for browser history processing
+	recommended:				null,		// The AJAX object for clicking the 'RECOMMENDED' link in top
+	registering:				false,		// TRUE = The user is registering now
+	showTags:					false,		// TRUE = Tags will be shown
+
+	sundryBoxShow:				true,		// TRUE = The sundry box is in its expanded state
+	sundryHeight:				0,			// The current height of the sundry box
+	sundryTab:					'',			// Currently selected sundry tab
+
+	tabPrevScrollPos: {
+		profile:	{ pos: 0, reset: false },
+		csdb:		{ pos: 0, reset: false },
+		gb64:		{ pos: 0, reset: false },
+		remix:		{ pos: 0, reset: false },
+		player:		{ pos: 0, reset: false },
+		stil:		{ pos: 0, reset: false },
+		visuals:	{ pos: 0, reset: false },
+		settings:	{ pos: 0, reset: false },
+		changes:	{ pos: 0, reset: false },
+		faq:		{ pos: 0, reset: false },
+		about:		{ pos: 0, reset: false },
+		admin:		{ pos: 0, reset: false },
+	},
+
+	/**
+	 * Helper function used by main.refreshFolder().
+	 * 
+	 * @used		main.js
+	 */
+	applyKeyboardSelection: function(scrollPosition, kbSelectedBefore, isMarkerInView) {
+		SetScrollTopInstantly("#folders", scrollPosition);
+		if (isMarkerInView)
+			// Only go to same keyboard marker if it was visible
+			browser.kbSelectedRow = kbSelectedBefore;
+		else
+			// Keyboard marker was not visible to set it in the middle of view
+			browser.kbSelectedRow = browser.getIndexClosestToCenter();
+		browser.moveKeyboardSelection(browser.kbSelectedRow, false);
+	},
+
+	/**
+	 * Show a floating message for a short period of time in the bottom of the song
+	 * browser window. Used when e.g. cycling the factoids.
+	 * 
+	 * @param {string} message
+	 * 
+	 * @used		browser.js
+	 * 				main.js
+	 */
+	browserMessage: function(message) {
+		clearTimeout(main.browserMessageTimer);
+		$("#browser-bottom .message").empty().append(message).css("display", "inline-block");
+		main.browserMessageTimer = setTimeout(() => {
+			$("#browser-bottom .message").hide();
+		}, 1500);
+	},
+
+	/**
+	 * Disable table rows for folders incompatible with this SID handler. File rows
+	 * that emulators can't handle (such as BASIC tunes) will also be disabled.
+	 * 
+	 * @used		browser.js
+	 * 				main.js
+	 */
+	disableIncompatibleRows: function() {
+		// The 'YouTube' handler has its own checks in 'hvsc.php'
+		if (SID.emulator == "youtube") return;
+		
+		$("#songs table").children().each(function() {
+			var $tr = $(this);
+			var isSIDFile = $tr.find("td.sid").length;
+			// Skip spacers, dividers and files for the general incompatibility field (folders only)
+			if (!$tr.find(".spacer").length && !$tr.find(".divider").length && !isSIDFile) {
+				$tr.removeClass("disabled");
+				var $span = $tr.find(".name");
+				if ($span.is("[data-incompat]") && ($span.attr("data-incompat").indexOf(SID.emulator) !== -1 ||
+				($span.attr("data-incompat").indexOf("mobile") !== -1 && main.isMobile)))
+					$tr.addClass("disabled");
+			} else if (isSIDFile && $tr.find(".name").attr("data-name").indexOf("BASIC.sid") !== -1) {
+				// These emulators can't do tunes made in BASIC
+				SID.emulator == "legacy" || SID.emulator == "hermit" || SID.emulator == "webusb" || SID.emulator == "asid"
+					? $tr.addClass("disabled")
+					: $tr.removeClass("disabled");
+			/*} else if (isSIDFile && (SID.emulator == "websid" || SID.emulator == "legacy") &&
+				($tr.find(".name").attr("data-name").indexOf("Comaland_tune_3.sid") !== -1 ||
+				$tr.find(".name").attr("data-name").indexOf("Fantasmolytic_tune_2.sid") !== -1)) {
+				// @todo Replace this with a proper incompatibility system later.
+				SID.emulator == "websid" || SID.emulator == "legacy"
+					? $tr.addClass("disabled")
+					: $tr.removeClass("disabled");*/
+			} else if (isSIDFile && SID.emulator == "legacy" &&
+				$tr.find(".name").attr("data-name").indexOf("Acid_Flashback.sid") !== -1) { // WebSid HQ now supports this
+				// @todo Replace this with a proper incompatibility system later.
+				SID.emulator == "websid" || SID.emulator == "legacy"
+					? $tr.addClass("disabled")
+					: $tr.removeClass("disabled");
+			} else if (isSIDFile && ($tr.find(".name").attr("data-type") === "RSID" || $tr.find(".name").attr("data-name").indexOf(".mus") !== -1)) {
+				// Hermit's emulator and ASID can't do neither any RSID tunes nor any MUS files
+				SID.emulator == "hermit" || SID.emulator == "webusb" || SID.emulator == "asid"
+					? $tr.addClass("disabled")
+					: $tr.removeClass("disabled");
+			} else if (isSIDFile && $tr.find(".name").attr("data-name").indexOf(".mus") !== -1) {
+				// JSIDPlay2 emulators can't do MUS files
+				SID.emulator == "jsidplay2"
+					? $tr.addClass("disabled")
+					: $tr.removeClass("disabled");
+			}
+		});
+	},
+
+	/**
+	 * Read one setting in the admin table and return its value.
+	 * 
+	 * @param {string} key 		Name of setting, e.g. "search-limit"
+	 * 
+	 * @returns {string}		The value
+	 * 
+	 * @used		N/A
+	 */
+	getAdminSetting: function(key) {
+		if (typeof DeepSID === "undefined" || !DeepSID.adminSettings) {
+			console.warn("Admin settings not loaded yet.");
+			return null;
+		}
+		const value = DeepSID.adminSettings[key];
+		return value !== undefined ? value : null;
+	},
+
+	/**
+	 * Settings: Get a value from an ON/OFF toggle button.
+	 * 
+	 * @param {string} id		Part of the ID to be appended
+	 * 
+	 * @return {*}				The value
+	 * 
+	 * @used		browser.js
+	 *				controls.js
+	 */
+	getSettingValue: function(id) {
+		$setting = $("#setting-"+id);
+		if ($setting.hasClass("button-toggle"))
+			// Checkbox style toggle button; return boolean
+			return $setting.hasClass("button-on");
+	},
+
+	/**
+	 * Show video box in top instead of info box if "YouTube" is the SID handler. Also shows
+	 * a MIDI drop-down box in top if "ASID" is the SID handler.
+	 * 
+	 * @handlers youtube, asid
+	 * 
+	 * @param {string} emulator
+	 * 
+	 * @used		main.js
+	 */
+	handleTopBox: function(emulator) {
+		if (emulator == "youtube") {
+			$("#info-text,#memory-lid").hide();
+			$("#youtube,#youtube-tabs").show();
+			$("#memory-chunk").css("top", "0");
+		} else {
+			$("#info-text,#memory-lid").show();
+			$("#youtube,#youtube-tabs").hide();
+			$("#memory-chunk").css("top", "-2px");
+		}
+
+		if (emulator == "webusb") {
+			$("#webusb-connect").show();
+		}
+		else {
+			$("#webusb-connect").hide();
+		}
+
+		if (emulator == "asid") {
+			$("#asid-midi").show();
+		}
+		else {
+			$("#asid-midi").hide();
+		}
+
+		$(window).trigger("resize"); // Keeps bottom search box in place
+	},
+
+	/**
+	 * Perform a search query from the URL parameters.
+	 * 
+	 * @param {string} searchQuery	The search query string
+	 * 
+	 * @used		main.js
+	 */
+	performSearchQuery: function(searchQuery) {
+		$("#dropdown-search").val(GetParam("type") !== "" ? GetParam("type").toLowerCase() : "#all#");
+		$("#search-here").prop("checked", GetParam("here") == "1");
+		$("#search-box").val(searchQuery).trigger("keyup");
+		$("#search-button").trigger("click");
+	},
+
+	/**
+	 * Play the tune that was specified in the URL.
+	 * 
+	 * @used		main.js
+	 */
+	playFromURL: function() {
+		if (SID.emulator == "youtube") {
+			// Patience; the YouTube IFrame video player can take a while to load
+			var i = 0;
+			var waitForYouTube = setInterval(function() {
+				if (SID.ytReady || ++i == 20) {
+					clearInterval(waitForYouTube);
+					main.playFromURLNow();
+				}
+			}, 500);
+		} else
+			main.playFromURLNow();
+	},
+
+	/**
+	 * Helper function used by main.playFromURL().
+	 * 
+	 * @used		main.js
+	 */
+	playFromURLNow: function () {
+		var paramSubtune = GetParam("subtune"),
+			paramWait = GetParam("wait");
+
+		if (paramSubtune == "")
+			main.$trAutoPlay.children("td.sid").trigger("click", [undefined, undefined, undefined, paramWait]);
+		else
+			main.$trAutoPlay.children("td.sid").trigger("click", [(paramSubtune == 0 ? 0 : paramSubtune - 1), undefined, undefined, paramWait]);
+	},
+
+	/**
+	 * Refresh the currently displayed folder, even if searching.
+	 * 
+	 * @used		browser.js
+	 * 				main.js
+	 */
+	refreshFolder: function() {
+		var scrollPosition = $("#folders").scrollTop(),
+			kbSelectedBefore = browser.kbSelectedRow,
+			isMarkerInView =  browser.isKeyboardMarkerInView();
+
+		if (browser.isSearching) {
+			// Something could have changed so have to repeat the same search
+			$("#dropdown-search").val(browser.searchType);
+			$("#search-here").prop("checked", browser.searchHere === 1);
+			$("#search-box").val(browser.searchQuery).trigger("keyup");
+
+			browser.getFolder(0, browser.searchQuery, undefined, function() {
+				main.applyKeyboardSelection(scrollPosition, kbSelectedBefore, isMarkerInView);
+			});
+		} else {
+			// Standard folder refresh
+			browser.getFolder(0, undefined, undefined, function() {
+				main.applyKeyboardSelection(scrollPosition, kbSelectedBefore, isMarkerInView);
+			});
+		}
+	},
+
+	/**
+	 * Reset the scrollbar in a "dexter" page to the top.
+	 * 
+	 * @param {string} topic	Name of tab, e.g. "profile", "csdb", etc.
+	 * 
+	 * @used		browser.js
+	 * 				main.js
+	 */
+	resetDexterScrollBar: function(topic) {
+		main.tabPrevScrollPos[topic].pos = 0;
+		main.tabPrevScrollPos[topic].reset = true;
+	},
+
+	/**
+	 * Resize the web site IFRAME then show it.
+	 * 
+	 * Called by an IFRAME inserted by the 'composer.php' script.
+	 * 
+	 * @todo No, it isn't? So, not used anymore and can be deleted?
+	 * 
+	 * @used		N/A
+	 */
+	resizeIframe: function() {
+		$(window).trigger("resize");
+		$("#page .deepsid-iframe").show();
+	},
+
+	/**
+	 * Select top or bottom factoid number and update folder.
+	 * 
+	 * @param {string} factoid		Use FACTOID_TOP or FACTOID_BOTTOM
+	 * @param {number} number		0 and up
+	 * 
+	 * @used		main.js
+	 */
+	selectFactoid: function(factoid, number, showMessage = true) {
+		if (showMessage)
+			main.browserMessage(factoid + ": " + FACTOID_MESSAGE[number]);
+
+		localStorage.setItem((factoid == FACTOID_TOP ? "factoidTop" : "factoidBottom"), number);
+		main.refreshFolder();
+	},
+
+	/**
+	 * Settings: Set the state of an ON/OFF toggle button.
+	 * 
+	 * @param {string} id		Part of the ID to be appended
+	 * @param {boolean} state	1 or 0
+	 * 
+	 * @used		main.js
+	 */
+	settingToggle: function(id, state) {
+		$("#setting-"+id)
+			.empty()
+			.append(state ? "On" : "Off")
+			.removeClass("button-off button-on")
+			.addClass("button-"+(state ? "on" : "off"));
+	},
+
+	/**
+	 * Enable or disable buttons and sliders in the sundry box for 6581 filter.
+	 * NOTE: Don't call this too early or 'SID.getModel()' fails.
+	 * 
+	 * @todo Probably belongs in the controls.js file instead?
+	 * 
+	 * @handlers	websid
+	 * 
+	 * @used		controls.js	
+	 */
+	showSundryFilterContents: function() {
+		$("#filter-websid").hide();
+		$("#stopic-filter form").show();
+		setTimeout(function(){
+			if (SID.emulator == "websid" && SID.getModel() == "6581") {
+				// Enable filter controls
+				$("#stopic-filter form label,#stopic-filter form input,#filter-revisions button")
+					.prop("disabled", false).removeClass("disabled");
+				$("#filter-6581").addClass("disable-6581");
+				$("#filter-6581 button").prop("disabled", true).addClass("disabled");
+			} else if (SID.emulator == "websid") {
+				// Disable filter controls (since 6581 chip mode is not active)
+				$("#stopic-filter form label,#stopic-filter form input,#filter-revisions button")
+					.prop("disabled", true).addClass("disabled");
+				$("#filter-6581").removeClass("disable-6581");
+				$("#filter-6581 button").prop("disabled", false).removeClass("disabled");
+			} else {
+				// Show "WebSid" button (the HQ version is required for these controls)
+				$("#filter-websid").show();
+				$("#stopic-filter form").hide();
+			}
+		}, 0);
+	},
+
+	/**
+	 * Check if a file exists in the "SID Happens" folder.
+	 * 
+	 * @param {string} filename		Must be full path
+	 * 
+	 * @return {boolean}			TRUE if the file exists
+	 * 
+	 * @used		main.js
+	 */
+	sidHappensFileExists: function(filename) {
+		var exists;
+		$.ajax({
+			url:		"php/file_exists.php",
+			type:		"get",
+			async:		false,
+			data:		{ file: browser.ROOT_HVSC+filename.replace("/SID Happens/", "/_SID Happens/") }
+		}).done(function(result) {
+			exists = result;
+		});
+		return exists == 1;
+	},
+
+	/**
+	 * Minimize or maximize the sundry box in case of a small display. When the box
+	 * is minimized, you can still click a tab to restore its size, or you can drag
+	 * the slider downwards to expand it.
+	 * 
+	 * All sundry tabs become unselected while minimized.
+	 * 
+	 * @param {boolean} shrink	TRUE to minimize, FALSE to return to before, or toggle if not specified
+	 * 
+	 * @used		main.js
+	 */
+	toggleSundry: function(shrink) {
+		if (typeof shrink === "undefined") shrink = main.sundryBoxShow;
+		if (!shrink) {
+			// Expand sundry box
+			$("#sundry").css({
+				"flex-basis":	main.sundryHeight,
+				"padding":		"6px 10px",
+			});
+			main.sundryBoxShow = true;
+			$("#sundry-tabs").find(".tab[data-topic='"+main.sundryTab+"']").addClass("selected");
+			$("#sundry-ctrls").show();
+			if (parseInt(main.sundryHeight) > 37 && browser.sliderButton && $("#sundry-tabs .selected").attr("data-topic") == "tags")
+				$("#slider-button").show();
+		} else {
+			// Collapse sundry box
+			main.sundryHeight = $("#sundry").css("flex-basis");
+			main.sundryTab = $("#sundry-tabs .selected").attr("data-topic");
+			$("#sundry").css({
+				"flex-basis":	0,
+				"padding":		0,
+			});
+			main.sundryBoxShow = false;
+			$("#sundry-tabs .tab").removeClass("selected"); // No tab selected anymore
+			$("#sundry-ctrls,#slider-button").hide();
+		}
+	},
+
+};
+
+// --------------------------------------------------------------------------
+// START
+// --------------------------------------------------------------------------
 
 $(function() { // DOM ready
 
@@ -92,22 +511,22 @@ $(function() { // DOM ready
 		browser.validateData(data);
 	});
 
-	isMobile = $("body").attr("data-mobile") !== "0";
-	isNotips = $("body").attr("data-notips") !== "0";
-	miniPlayer = parseInt($("body").attr("data-mini"));
+	main.isMobile = $("body").attr("data-mobile") !== "0";
+	main.isNotips = $("body").attr("data-notips") !== "0";
+	main.miniPlayer = parseInt($("body").attr("data-mini"));
 
 	// Get the emulator last used by the visitor
 	var storedEmulator = docCookies.getItem("emulator");
 	if (storedEmulator == null) {
 		// Set a default emulator
-		if (isMobile)
+		if (main.isMobile)
 			storedEmulator = "legacy";	// Legacy WebSid for mobile devices
 		else
 			storedEmulator = "websid";	// The best WebSid for desktop computers
 	}
 
 	// Don't show tags on mobile devices as the dragging there might give way to sideways scrolling
-	showTags = isMobile ? false : localStorage.getItem("showtags") !== "false";
+	main.showTags = main.isMobile ? false : localStorage.getItem("showtags") !== "false";
 
 	// However, a URL switch may TEMPORARILY override the stored emulator
 	var emulator = GetParam("emulator").toLowerCase();
@@ -125,7 +544,7 @@ $(function() { // DOM ready
 		"silence",
 	]) === -1) emulator = storedEmulator;
 
-	HandleTopBox(emulator);
+	main.handleTopBox(emulator);
 
 	// Default factoid in top is song length
 	main.factoidTypeTop = parseInt(localStorage.getItem("factoidTop") ?? 2, 10);
@@ -146,17 +565,17 @@ $(function() { // DOM ready
 	$("#volume").val(vol * 100);
 
 	// Currently only influenced by the "?lemon=1" switch in index.php
-	if (isNotips) browser.annexNotWanted = true;
+	if (main.isNotips) browser.annexNotWanted = true;
 
 	// Get the user's settings
 	$.post("php/settings.php", function(data) {
 		browser.validateData(data, function(data) {
-			SettingToggle("first-subtune",	data.settings.firstsubtune);
-			SettingToggle("skip-tune",		data.settings.skiptune);
-			SettingToggle("mark-tune",		data.settings.marktune);
-			SettingToggle("skip-bad",		data.settings.skipbad);
-			SettingToggle("skip-long",		data.settings.skiplong);
-			SettingToggle("skip-short",		data.settings.skipshort);
+			main.settingToggle("first-subtune",	data.settings.firstsubtune);
+			main.settingToggle("skip-tune",		data.settings.skiptune);
+			main.settingToggle("mark-tune",		data.settings.marktune);
+			main.settingToggle("skip-bad",		data.settings.skipbad);
+			main.settingToggle("skip-long",		data.settings.skiplong);
+			main.settingToggle("skip-short",		data.settings.skipshort);
 		});
 	}.bind(this));
 	
@@ -225,7 +644,7 @@ $(function() { // DOM ready
 					case 220:	// Keydown key below 'Escape' - fast forward
 
 						// Fast forward ON
-						if (!fastForwarding) {
+						if (!main.fastForwarding) {
 							if (event.shiftKey) {
 								// Create a fake middle mouse button down event
 								var e = $.Event("mousedown");
@@ -355,7 +774,7 @@ $(function() { // DOM ready
 
 						// Fast forward OFF
 						$("#faster").trigger("mouseup");
-						fastForwarding = false;
+						main.fastForwarding = false;
 						break;
 
 					case 27:	// Keyup 'Esc' - cancel search mode
@@ -393,7 +812,7 @@ $(function() { // DOM ready
 					case 83:	// Keyup 's' - open/close sundry box
 
 						// Toggle the sundry box minimized or restored
-						ToggleSundry();
+						main.toggleSundry();
 						$(window).trigger("resize");
 						break;
 
@@ -439,7 +858,7 @@ $(function() { // DOM ready
 									copyright:	$("#edit-file-copyright-input").val(),
 								}, function(data) {
 									browser.validateData(data, function() {
-										RefreshFolder();
+										main.refreshFolder();
 									});
 								});
 							});
@@ -466,7 +885,7 @@ $(function() { // DOM ready
 
 					case 70:	// Keyup 'f' - refresh current folder
 
-						RefreshFolder();
+						main.refreshFolder();
 						break;
 
 					case 84:	// Keyup 't' - open dialog box for editing tags
@@ -476,15 +895,15 @@ $(function() { // DOM ready
 
 					case 89:	// Keyup 'y' - toggle showing tags on or off
 
-						showTags = !showTags;
-						$("#showtags").prop("checked", showTags);
-						showTags
+						main.showTags = !main.showTags;
+						$("#showtags").prop("checked", main.showTags);
+						main.showTags
 							? $("#songs .tags-line").css("visibility", "")			//.show()
 							: $("#songs .tags-line").css("visibility", "hidden")	//.hide();
 
-						localStorage.setItem("showtags", showTags); // Boolean is stored as a string
+						localStorage.setItem("showtags", main.showTags); // Boolean is stored as a string
 
-						BrowserMessage("Show tags: "+(showTags ? "ON" : "OFF"));
+						main.browserMessage("Show tags: "+(main.showTags ? "ON" : "OFF"));
 						break;
 
 					case 73:	// Keyup 'i' - cycle through factoid types (top)
@@ -519,10 +938,10 @@ $(function() { // DOM ready
 					case 13:	// Keyup 'ENTER' - click the row keyboard-selected row
 
 						// Blocking next keyup is used by the custom dialog box
-						if (!isMobile && !blockNextEnter) {
+						if (!main.isMobile && !main.blockNextEnter) {
 							$("#songs tr").eq(browser.kbSelectedRow).trigger("click");
 						} else {
-							blockNextEnter = false;
+							main.blockNextEnter = false;
 						}
 						break;
 
@@ -571,7 +990,7 @@ $(function() { // DOM ready
 	 * When scrolling up or down in a dexter page.
 	 */
 	$("#page").on("scroll", function() {
-		tabPrevScrollPos[$("#tabs .selected").attr("data-topic")].reset = false;
+		main.tabPrevScrollPos[$("#tabs .selected").attr("data-topic")].reset = false;
 	});
 
 	/**
@@ -671,7 +1090,7 @@ $(function() { // DOM ready
 					//SetScrollTopInstantly("#folders", scrollPos);
 					SetScrollTopInstantly("#folders", 0);
 					browser.moveKeyboardToFirst();
-					DisableIncompatibleRows();
+					main.disableIncompatibleRows();
 				});
 			}
 		});
@@ -742,7 +1161,7 @@ $(function() { // DOM ready
 	$(window).on("resize", function() {
 		// Make sure the browser box always take up all screen height upon resizing the window
 		$("#folders").height(0).height($("#songs").height() - 100);
-		if (!miniPlayer && !isMobile) {
+		if (!main.miniPlayer && !main.isMobile) {
 			// Recalculate height for graph area too
 			viz.initGraph(browser.chips);
 			// And that the web site iframe has the correct height too
@@ -768,17 +1187,17 @@ $(function() { // DOM ready
 				"flex-basis":	newHeight,
 				"padding":		"6px 10px",
 			});
-			sundryHeight = newHeight;
+			main.sundryHeight = newHeight;
 			if (!main.sundryBoxShow) {
 				main.sundryBoxShow = true;
-				$("#sundry-tabs").find(".tab[data-topic='"+sundryTab+"']").addClass("selected");
+				$("#sundry-tabs").find(".tab[data-topic='"+main.sundryTab+"']").addClass("selected");
 				$("#sundry-ctrls").show();
 			}
 			$("#folders").height(0).height($("#songs").height() - 100);
 
 			// Remove the FOLDERS button for the 'Tags' tab if the sundry box is too small
 			if (browser.sliderButton && $("#sundry-tabs .selected").attr("data-topic") == "tags")
-				sundryHeight < 37 ? $("#slider-button").hide() : $("#slider-button").show();
+				main.sundryHeight < 37 ? $("#slider-button").hide() : $("#slider-button").show();
 		});
 	});
 	$("body").on("mouseup touchend", function() {
@@ -794,7 +1213,7 @@ $(function() { // DOM ready
 		$("#response").empty().removeClass("good bad").append('Type the user name and password | <a href="#" class="reg-cancel">Cancel</a>');
 		$("#username,#password").val("");
 		$("#reg-login-button").prop("disabled", false).removeClass("disabled");
-		registering = true;
+		main.registering = true;
 		return false;
 	});
 
@@ -807,7 +1226,7 @@ $(function() { // DOM ready
 		$("#response").empty().removeClass("good bad").append('Login or <a href="#" class="reg-new">register</a> to rate tunes');
 		$("#username,#password").val("");
 		$("#reg-login-button").prop("disabled", false).removeClass("disabled");
-		registering = false;
+		main.registering = false;
 		return false;
 	});
 
@@ -819,7 +1238,7 @@ $(function() { // DOM ready
 	$("#userform").submit(function(event) {
 		event.preventDefault();
 		if ($("#username").val() === "" || $("#password").val() === "" || $("#reg-login-button").hasClass("disabled")) return false;
-		if (registering) {
+		if (main.registering) {
 			// Show a dialog confirmation box first
 			CustomDialog({
 				id: '#dialog-register',
@@ -845,13 +1264,13 @@ $(function() { // DOM ready
 			browser.validateData(data, function(data) {
 
 				if (data['exists']) {
-					if (registering)
+					if (main.registering)
 						// This situation should not occur
 						$("#response a.reg-cancel").trigger("click");
 					else
 						ExecuteLoginOrRegister(false);	// User name exists so log in
 				} else {
-					if (registering)
+					if (main.registering)
 						ExecuteLoginOrRegister(true);	// Register the new user name
 					else {
 						$("#response").empty().removeClass("good bad").addClass("bad").append('This user name does not exist');
@@ -888,7 +1307,7 @@ $(function() { // DOM ready
 		if (event.keyCode == 13) {
 			$("#password").focus();
 			return false;
-		} else if (registering) {
+		} else if (main.registering) {
 			// So does this username exist?
 			$.post("php/account_exists.php", { username: $("#username").val() }, function(data) {
 				browser.validateData(data, function(data) {
@@ -964,8 +1383,8 @@ $(function() { // DOM ready
 	 */
 	$("#topic-gb64").on("click", ".gb64-list-entry", function() {
 		// First cache the list of releases in case we return to it
-		cacheGB64 = $("#topic-gb64").html();
-		cacheGB64TabScrollPos = $("#page").scrollTop();
+		main.cacheGB64 = $("#topic-gb64").html();
+		main.cacheGB64TabScrollPos = $("#page").scrollTop();
 		// Show the page
 		browser.getGB64($(this).attr("data-id"));
 		return false;
@@ -993,9 +1412,9 @@ $(function() { // DOM ready
 	$("#sticky-gb64").on("click", "#go-back-gb64", function() {
 		$("#sticky-gb64").empty().append('<h2 style="display:inline-block;margin-top:0;">GameBase64</h2>');
 		// Load the cache again
-		$("#topic-gb64")/*.css("visibility", "hidden")*/.empty().append(cacheGB64);
+		$("#topic-gb64")/*.css("visibility", "hidden")*/.empty().append(main.cacheGB64);
 		// Also set scroll position to where we clicked last time
-		SetScrollTopInstantly("#page", cacheGB64TabScrollPos);
+		SetScrollTopInstantly("#page", main.cacheGB64TabScrollPos);
 	}),
 
 	/**
@@ -1052,8 +1471,8 @@ $(function() { // DOM ready
 		// Store the scroll bar position as it is now for the tab we're about to leave
 		var oldTopic = $("#tabs .selected").attr("data-topic");
 		if (typeof oldTopic != "undefined") {
-			tabPrevScrollPos[oldTopic].pos = tabPrevScrollPos[oldTopic].reset ? 0 : $("#page").scrollTop();
-			tabPrevScrollPos[oldTopic].reset = false;
+			main.tabPrevScrollPos[oldTopic].pos = main.tabPrevScrollPos[oldTopic].reset ? 0 : $("#page").scrollTop();
+			main.tabPrevScrollPos[oldTopic].reset = false;
 		}
 
 		$("#page").removeClass("big-logo");
@@ -1069,7 +1488,7 @@ $(function() { // DOM ready
 		if (topic != "visuals")
 			$("#topic-"+topic).show();
 
-		SetScrollTopInstantly("#page", tabPrevScrollPos[topic].pos);
+		SetScrollTopInstantly("#page", main.tabPrevScrollPos[topic].pos);
 
 		// Show the 'To Top' button in the bottom on pages where this is nice to have
 		// NOTE: Turned off for now - not sure it's needed anymore now the default scrollbar is in use.
@@ -1207,13 +1626,13 @@ $(function() { // DOM ready
 
 		// If clicking the active tab, collapse the box
 		if ($this.hasClass("selected")) {
-			ToggleSundry(true);
+			main.toggleSundry(true);
 			$("#folders").height(0).height($("#songs").height() - 100);
 			return false;
 		}
 
 		// If the box was minimized, restore it first
-		if (!main.sundryBoxShow) ToggleSundry(false);
+		if (!main.sundryBoxShow) main.toggleSundry(false);
 
 		$("#sundry-ctrls").empty(); // Clear corner controls
 		$("#slider-button").hide();
@@ -1235,7 +1654,7 @@ $(function() { // DOM ready
 				break;
 			case "tags":
 				$("#sundry-ctrls").append(
-					'<input type="checkbox" id="showtags" name="showtagstoggle" class="unselectable"'+(showTags ? '' : 'un')+'checked />'+
+					'<input type="checkbox" id="showtags" name="showtagstoggle" class="unselectable"'+(main.showTags ? '' : 'un')+'checked />'+
 					'<label for="showtags" class="unselectable" style="position:relative;top:-2px;">Show tags in SID rows</label>'
 				);
 				if (browser.sliderButton)
@@ -1527,7 +1946,7 @@ $(function() { // DOM ready
 			$("#topic-admin .edit").show(); // Allow editing a row again
 
 			// Prevent 'Enter' from also firing in the browser list
-			blockNextEnter = true;
+			main.blockNextEnter = true;
 			return false;
 		}
 	});
@@ -1549,7 +1968,7 @@ $(function() { // DOM ready
 		$("#topic-admin .edit").show(); // Allow editing a row again
 
 		// Prevent 'Enter' from also firing in the browser list
-		blockNextEnter = true;
+		main.blockNextEnter = true;
 	});
 
 	/**
@@ -1605,7 +2024,7 @@ $(function() { // DOM ready
 	 */
 	$("#dropdown-settings-factoid-top").change(function(event) {
 		main.factoidTypeTop = event.target.value;
-		SelectFactoid(FACTOID_TOP, main.factoidTypeTop);
+		main.selectFactoid(FACTOID_TOP, main.factoidTypeTop);
 	});
 
 	/**
@@ -1615,7 +2034,7 @@ $(function() { // DOM ready
 	 */
 	$("#dropdown-settings-factoid-bottom").change(function(event) {
 		main.factoidTypeBottom = event.target.value;
-		SelectFactoid(FACTOID_BOTTOM, main.factoidTypeBottom);
+		main.selectFactoid(FACTOID_BOTTOM, main.factoidTypeBottom);
 	});
 
 	/**
@@ -1635,10 +2054,10 @@ $(function() { // DOM ready
 	 */
 	$("#topic-csdb").on("click", "a.internal", function() {
 		// First cache the list of releases in case we return to it
-		cacheCSDb = $("#topic-csdb").html();
-		cacheSticky = $("#sticky-csdb").html();
-		cacheTabScrollPos = $("#page").scrollTop();
-		cacheDDCSDbSort = $("#dropdown-sort-csdb").val();
+		main.cacheCSDb = $("#topic-csdb").html();
+		main.cacheSticky = $("#sticky-csdb").html();
+		main.cacheTabScrollPos = $("#page").scrollTop();
+		main.cacheDDCSDbSort = $("#dropdown-sort-csdb").val();
 		// Now load the actual release page
 		browser.getCSDb("release", $(this).attr("data-id"), true);
 		return false;
@@ -1648,7 +2067,7 @@ $(function() { // DOM ready
 	 * When clicking the 'BACK' button on a specific CSDb page to show the releases again.
 	 */
 	$("#topic-csdb,#sticky-csdb").on("click", "#go-back", function() {
-		if (cacheBeforeCompo === "" && cacheCSDb === "") {
+		if (main.cacheBeforeCompo === "" && main.cacheCSDb === "") {
 			// We have been redirecting recently so the tab must be refreshed properly
 			browser.getCSDb();
 			return;
@@ -1656,12 +2075,12 @@ $(function() { // DOM ready
 		var $this = $(this);
 		// Load the cache again (much faster than calling browser.getCSDb() to regenerate it)
 		$("#topic-csdb").empty()
-			.append($this.hasClass("compo") ? cacheBeforeCompo : cacheCSDb);
-		$("#sticky-csdb").empty().append($this.hasClass("compo") ? cacheStickyBeforeCompo : cacheSticky);
+			.append($this.hasClass("compo") ? main.cacheBeforeCompo : main.cacheCSDb);
+		$("#sticky-csdb").empty().append($this.hasClass("compo") ? main.cacheStickyBeforeCompo : main.cacheSticky);
 		// Adjust drop-down box to the sort setting
-		$("#dropdown-sort-csdb").val(cacheDDCSDbSort);
+		$("#dropdown-sort-csdb").val(main.cacheDDCSDbSort);
 		// Also set scroll position to where we clicked last time
-		SetScrollTopInstantly("#page", $this.hasClass("compo") ? cachePosBeforeCompo : cacheTabScrollPos);
+		SetScrollTopInstantly("#page", $this.hasClass("compo") ? main.cachePosBeforeCompo : main.cacheTabScrollPos);
 		// Clear the CSDb arguments to avoid confusing the refresh cache link
 		browser.csdbArgs = [];
 		// Remove the cache age info since it's no longer accurate
@@ -1695,15 +2114,15 @@ $(function() { // DOM ready
 	 * When clicking the 'BACK' button on a player/editor page to show the list of them again.
 	 */
 	$("#sticky-player").on("click", "#go-back-player", function() {
-		if (cachePlayer == "") {
+		if (main.cachePlayer == "") {
 			// First time?
 			$("#players").trigger("click");
 		} else {
 			$("#sticky-player").empty().height(34).append('<h2 style="display:inline-block;margin-top:0;">Players / Editors</h2>');
 			// Load the cache again
-			$("#topic-player")/*.css("visibility", "hidden")*/.empty().append(cachePlayer);
+			$("#topic-player")/*.css("visibility", "hidden")*/.empty().append(main.cachePlayer);
 			// Also set scroll position to where we clicked last time
-			SetScrollTopInstantly("#page", cachePlayerTabScrollPos);
+			SetScrollTopInstantly("#page", main.cachePlayerTabScrollPos);
 		}
 	}),
 
@@ -1712,18 +2131,18 @@ $(function() { // DOM ready
 	 */
 	$("#topic-remix").on("click", "#go-back-remix", function() {
 		// Load the cache again
-		$("#topic-remix")/*.css("visibility", "hidden")*/.empty().append(cacheRemix);
+		$("#topic-remix")/*.css("visibility", "hidden")*/.empty().append(main.cacheRemix);
 		// Also set scroll position to where we clicked last time
-		SetScrollTopInstantly("#page", cacheRemixTabScrollPos);
+		SetScrollTopInstantly("#page", main.cacheRemixTabScrollPos);
 	}),
 
 	/**
 	 * When clicking the 'SHOW' button on a CSDb page to show the full list of competition results.
 	 */
 	$("#topic-csdb").on("click", "#show-compo", function() {
-		cacheBeforeCompo = $("#topic-csdb").html();
-		cacheStickyBeforeCompo = $("#sticky-csdb").html();
-		cachePosBeforeCompo = $("#page").scrollTop();
+		main.cacheBeforeCompo = $("#topic-csdb").html();
+		main.cacheStickyBeforeCompo = $("#sticky-csdb").html();
+		main.cachePosBeforeCompo = $("#page").scrollTop();
 		var $this = $(this);
 		browser.getCompoResults($this.attr("data-compo"), $this.attr("data-id"), $this.attr("data-mark"));
 	});
@@ -1882,7 +2301,7 @@ $(function() { // DOM ready
 		} else if (!ClickAndScrollToSID(fullname, solitary))
 			$this.wrap('<del class="redirect"></del>').contents().unwrap();
 		// Clear caches to force proper refresh of CSDb tab after redirecting 
-		cacheBeforeCompo = cacheCSDb = cacheSticky = cacheStickyBeforeCompo = "";
+		main.cacheBeforeCompo = main.cacheCSDb = main.cacheSticky = main.cacheStickyBeforeCompo = "";
 		UpdateURL();
 		// Store SID location before redirecting in case the user wants to go back afterwards
 		$("#redirect-back").empty().append(prevRedirect);
@@ -2100,7 +2519,7 @@ $(function() { // DOM ready
 	 */
 	$("#recommended").click(function() {
 		$(this).blur();
-		if (recommended) recommended.abort();
+		if (main.recommended) main.recommended.abort();
 		$("#topic-profile").empty().append(browser.loadingSpinner("profile"));
 
 		if ($("#tabs .selected").attr("data-topic") !== "profile")
@@ -2111,14 +2530,14 @@ $(function() { // DOM ready
 			$("#loading-profile").fadeIn(500);
 		}, 250);
 
-		recommended = $.get("php/root_recommended.php", function(data) {
+		main.recommended = $.get("php/root_recommended.php", function(data) {
 			browser.validateData(data, function(data) {
 				$("#page").removeClass("big-logo").addClass("big-logo");
 				clearTimeout(loadingRecommended);
 				if (parseInt(colorTheme))
 					data.html = data.html.replace(/composer\.png/g, "composer_dark.png");
 				$("#topic-profile").empty().append(data.html);
-				ResetDexterScrollBar("profile");
+				main.resetDexterScrollBar("profile");
 			});
 		});
 		return false;
@@ -2141,12 +2560,12 @@ $(function() { // DOM ready
 			$("#loading-csdb").fadeIn(500);
 		}, 250);
 
-		forum = $.get("php/csdb_forum_root.php", function(data) {
+		main.forum = $.get("php/csdb_forum_root.php", function(data) {
 			browser.validateData(data, function(data) {
 				clearTimeout(loadingForum);
 				$("#sticky-csdb").empty().append(data.sticky);
 				$("#topic-csdb").empty().append(data.html);
-				ResetDexterScrollBar("csdb");
+				main.resetDexterScrollBar("csdb");
 			});
 		});
 	});
@@ -2156,17 +2575,17 @@ $(function() { // DOM ready
 	 */
 	$("#topic-csdb").on("click", "a.thread", function() {
 		var $this = $(this);
-		if (forum) forum.abort();
+		if (main.forum) main.forum.abort();
 		$("#topic-csdb").empty().append(browser.loadingSpinner("csdb"));
 		$("#loading-csdb").fadeIn(500);
 
-		forum = $.get("php/csdb_forum.php", { room: $this.attr("data-roomid"), topic: $this.attr("data-topicid") }, function(data) {
+		main.forum = $.get("php/csdb_forum.php", { room: $this.attr("data-roomid"), topic: $this.attr("data-topicid") }, function(data) {
 			browser.validateData(data, function(data) {
 				$("#sticky-csdb").empty().append(data.sticky);
 				if (parseInt(colorTheme))
 					data.html = data.html.replace(/composer\.png/g, "composer_dark.png");
 				$("#topic-csdb").empty().append(data.html);
-				ResetDexterScrollBar("csdb");
+				main.resetDexterScrollBar("csdb");
 
 				// Populate all "[type]/?id=" anchor links with HVSC path "plinks" instead
 				$.each(["sid", "release"], function(index, type) {
@@ -2195,7 +2614,7 @@ $(function() { // DOM ready
 	 */
 	$("#players").click(function(event, noclick){
 		$(this).blur();
-		if (players) players.abort();
+		if (main.players) main.players.abort();
 		$("#topic-players").empty().append(browser.loadingSpinner("profile"));
 		$("#sticky-player").empty();
 
@@ -2207,12 +2626,12 @@ $(function() { // DOM ready
 			$("#loading-profile").fadeIn(500);
 		}, 250);
 
-		players = $.get("php/player_list.php", function(data) {
+		main.players = $.get("php/player_list.php", function(data) {
 			browser.validateData(data, function(data) {
 				clearTimeout(loadingPlayers);
 				$("#sticky-player").empty().height(34).append(data.sticky);
 				$("#topic-player").empty().append(data.html);
-				ResetDexterScrollBar("player");
+				main.resetDexterScrollBar("player");
 				$("#note-csdb").hide();
 			});
 		});
@@ -2226,8 +2645,8 @@ $(function() { // DOM ready
 	$("#topic-player").on("click", ".player-entry", function() {
 		var $this = $(this);
 		// First cache the list of releases in case we return to it
-		cachePlayer = $("#topic-player").html();
-		cachePlayerTabScrollPos = $("#page").scrollTop();
+		main.cachePlayer = $("#topic-player").html();
+		main.cachePlayerTabScrollPos = $("#page").scrollTop();
 		// Show the page
 		browser.getPlayerInfo({id: $this.attr("data-id")});
 		// Also search for the related players
@@ -2242,8 +2661,8 @@ $(function() { // DOM ready
 	 */
 	$("#topic-remix").on("click", ".remix-list-entry", function() {
 		// First cache the list of releases in case we return to it
-		cacheRemix = $("#topic-remix").html();
-		cacheRemixTabScrollPos = $("#page").scrollTop();
+		main.cacheRemix = $("#topic-remix").html();
+		main.cacheRemixTabScrollPos = $("#page").scrollTop();
 		// Show the page
 		browser.getRemix($(this).attr("data-id"));
 		return false;
@@ -2415,11 +2834,11 @@ $(function() { // DOM ready
 		// Is a year subfolder specified for the SH folder?
 		if (fileParam.indexOf("SID Happens/") !== -1 && (fileParam.match(/\//g) || []).length < 3) {
 			// No, does the file exist in the root SH folder, i.e. the current year?
-			if (!SidHappensFileExists(fileParam)) {
+			if (!main.sidHappensFileExists(fileParam)) {
 				// No, figure out if it exists in one of the year subfolders then (backwards from latest)
 				for (var shYear = 2024; shYear >= 2020; shYear--) {
 					var yearFolder = fileParam.replace("SID Happens/", "SID Happens/"+shYear+"/");
-					if (SidHappensFileExists(yearFolder)) {
+					if (main.sidHappensFileExists(yearFolder)) {
 						fileParam = yearFolder;
 						break;
 					}
@@ -2461,9 +2880,9 @@ $(function() { // DOM ready
 					return found;
 				}).closest("tr");
 				// This is the <TR> row with the SID file we need to play
-				$trAutoPlay = $("#folders tr").eq($tr.index());
+				main.$trAutoPlay = $("#folders tr").eq($tr.index());
 				// Scroll the row into the middle of the list
-				var rowPos = $trAutoPlay[0].offsetTop;
+				var rowPos = main.$trAutoPlay[0].offsetTop;
 				var halfway = $("#folders").height() / 2 - 26; // Last value is half of SID file row height
 				$("#folders").scrollTop(rowPos > halfway ? rowPos - halfway : 0);
 				// The user may have to click a overlay question to satisfy browser auto-play prevention
@@ -2471,11 +2890,11 @@ $(function() { // DOM ready
 				if (forceCover || SID.isSuspended() || SID.emulator == "youtube")
 					$("#dialog-cover,#click-to-play-cover").show();
 				else
-					PlayFromURL(); // Don't need to show the click-to-play cover - play it now
+					main.playFromURL(); // Don't need to show the click-to-play cover - play it now
 
 			} else if (GetParam("here") == "1") {
 				setTimeout(function() {
-					PerformSearchQuery(searchQuery);
+					main.performSearchQuery(searchQuery);
 					$("#loading").hide();
 				}, 200);
 			}
@@ -2484,7 +2903,7 @@ $(function() { // DOM ready
 		});
 
 	} else if (searchQuery !== "")
-		PerformSearchQuery(searchQuery);
+		main.performSearchQuery(searchQuery);
 
 	/**
 	 * When clicking the overlay to satisfy the browser auto-play prevention. This
@@ -2492,7 +2911,7 @@ $(function() { // DOM ready
 	 */
 	$("#click-to-play-cover").click(function() {
 		$("#dialog-cover,#click-to-play-cover").hide();
-		PlayFromURL();
+		main.playFromURL();
 	});
 
 	/**
@@ -2618,230 +3037,6 @@ $(window).on("load", function() {
 	}, 350);
 });
 
-/**
- * Enable or disable buttons and sliders in the sundry box for 6581 filter.
- * 
- * @handlers websid
- * 
- * NOTE: Don't call this too early or 'SID.getModel()' fails.
- */
-function ShowSundryFilterContents() {
-	$("#filter-websid").hide();
-	$("#stopic-filter form").show();
-	setTimeout(function(){
-		if (SID.emulator == "websid" && SID.getModel() == "6581") {
-			// Enable filter controls
-			$("#stopic-filter form label,#stopic-filter form input,#filter-revisions button")
-				.prop("disabled", false).removeClass("disabled");
-			$("#filter-6581").addClass("disable-6581");
-			$("#filter-6581 button").prop("disabled", true).addClass("disabled");
-		} else if (SID.emulator == "websid") {
-			// Disable filter controls (since 6581 chip mode is not active)
-			$("#stopic-filter form label,#stopic-filter form input,#filter-revisions button")
-				.prop("disabled", true).addClass("disabled");
-			$("#filter-6581").removeClass("disable-6581");
-			$("#filter-6581 button").prop("disabled", false).removeClass("disabled");
-		} else {
-			// Show "WebSid" button (the HQ version is required for these controls)
-			$("#filter-websid").show();
-			$("#stopic-filter form").hide();
-		}
-	}, 0);
-}
-
-/**
- * Show a floating message for a short period of time in the bottom of the song
- * browser window. Used when e.g. cycling the factoids.
- * 
- * @param {string} message 
- */
-function BrowserMessage(message) {
-	clearTimeout(browserMessageTimer);
-	$("#browser-bottom .message").empty().append(message).css("display", "inline-block");
-	browserMessageTimer = setTimeout(() => {
-		$("#browser-bottom .message").hide();
-	}, 1500);
-}
-
-/**
- * Select top or bottom factoid number and update folder.
- * 
- * @param {string} factoid		Use FACTOID_TOP or FACTOID_BOTTOM
- * @param {number} number		0 and up
- */
-function SelectFactoid(factoid, number, showMessage = true) {
-	if (showMessage)
-		BrowserMessage(factoid + ": " + factoidMessage[number]);
-
-	localStorage.setItem((factoid == FACTOID_TOP ? "factoidTop" : "factoidBottom"), number);
-	RefreshFolder();
-}
-
-/**
- * Refresh the currently displayed folder, even if searching.
- */
-function RefreshFolder() {
-	var scrollPosition = $("#folders").scrollTop(),
-		kbSelectedBefore = browser.kbSelectedRow,
-		isMarkerInView =  browser.isKeyboardMarkerInView();
-
-	if (browser.isSearching) {
-		// Something could have changed so have to repeat the same search
-		$("#dropdown-search").val(browser.searchType);
-		$("#search-here").prop("checked", browser.searchHere === 1);
-		$("#search-box").val(browser.searchQuery).trigger("keyup");
-
-		browser.getFolder(0, browser.searchQuery, undefined, function() {
-			applyKeyboardSelection(scrollPosition, kbSelectedBefore, isMarkerInView);
-		});
-	} else {
-		// Standard folder refresh
-		browser.getFolder(0, undefined, undefined, function() {
-			applyKeyboardSelection(scrollPosition, kbSelectedBefore, isMarkerInView);
-		});
-	}
-}
-
-/**
- * Helper function used by RefreshFolder().
- */
-function applyKeyboardSelection(scrollPosition, kbSelectedBefore, isMarkerInView) {
-	SetScrollTopInstantly("#folders", scrollPosition);
-	if (isMarkerInView)
-		// Only go to same keyboard marker if it was visible
-		browser.kbSelectedRow = kbSelectedBefore;
-	else
-		// Keyboard marker was not visible to set it in the middle of view
-		browser.kbSelectedRow = browser.getIndexClosestToCenter();
-	browser.moveKeyboardSelection(browser.kbSelectedRow, false);
-}
-
-/**
- * Perform a search query from the URL parameters.
- * 
- * @param {string} searchQuery	The search query string
- */
-function PerformSearchQuery(searchQuery) {
-	$("#dropdown-search").val(GetParam("type") !== "" ? GetParam("type").toLowerCase() : "#all#");
-	$("#search-here").prop("checked", GetParam("here") == "1");
-	$("#search-box").val(searchQuery).trigger("keyup");
-	$("#search-button").trigger("click");
-}
-
-/**
- * Play the tune that was specified in the URL.
- */
-function PlayFromURL() {
-	if (SID.emulator == "youtube") {
-		// Patience; the YouTube IFrame video player can take a while to load
-		var i = 0;
-		var waitForYouTube = setInterval(function() {
-			if (SID.ytReady || ++i == 20) {
-				clearInterval(waitForYouTube);
-				PlayFromURLNow();
-			}
-		}, 500);
-	} else
-		PlayFromURLNow();
-}
-
-/**
- * Called by PlayFromURL() above.
- */
-function PlayFromURLNow() {
-	var paramSubtune = GetParam("subtune"),
-		paramWait = GetParam("wait");
-
-	if (paramSubtune == "")
-		$trAutoPlay.children("td.sid").trigger("click", [undefined, undefined, undefined, paramWait]);
-	else
-		$trAutoPlay.children("td.sid").trigger("click", [(paramSubtune == 0 ? 0 : paramSubtune - 1), undefined, undefined, paramWait]);
-}
-
-/**
- * Check if a file exists in the "SID Happens" folder.
- * 
- * @param {string} filename		Must be full path
- * 
- * @return {boolean}			TRUE if the file exists
- */
-function SidHappensFileExists(filename) {
-	var exists;
-	$.ajax({
-		url:		"php/file_exists.php",
-		type:		"get",
-		async:		false,
-		data:		{ file: browser.ROOT_HVSC+filename.replace("/SID Happens/", "/_SID Happens/") }
-	}).done(function(result) {
-		exists = result;
-	});
-	return exists == 1;
-}
-
-/**
- * Reset the scrollbar in a "dexter" page to the top.
- * 
- * @param {string} topic	Name of tab, e.g. "profile", "csdb", etc.
- */
-function ResetDexterScrollBar(topic) {
-	tabPrevScrollPos[topic].pos = 0;
-	tabPrevScrollPos[topic].reset = true;
-}
-
-/**
- * Settings: Set the state of an ON/OFF toggle button.
- * 
- * @param {string} id		Part of the ID to be appended
- * @param {boolean} state	1 or 0
- */
-function SettingToggle(id, state) {
-	$("#setting-"+id)
-		.empty()
-		.append(state ? "On" : "Off")
-		.removeClass("button-off button-on")
-		.addClass("button-"+(state ? "on" : "off"));
-}
-
-/**
- * Settings: Get a value from an ON/OFF toggle button.
- * 
- * @param {string} id		Part of the ID to be appended
- * 
- * @return {*}				The value
- */
-function GetSettingValue(id) {
-	$setting = $("#setting-"+id);
-	if ($setting.hasClass("button-toggle"))
-		// Checkbox style toggle button; return boolean
-		return $setting.hasClass("button-on");
-}
-
-/**
- * Read one setting in the admin table and return its value.
- * 
- * @param {string} key 		Name of setting, e.g. "search-limit"
- * 
- * @returns {string}		The value
- */
-function GetAdminSetting(key) {
-	if (typeof DeepSID === "undefined" || !DeepSID.adminSettings) {
-		console.warn("Admin settings not loaded yet.");
-		return null;
-	}
-	const value = DeepSID.adminSettings[key];
-	return value !== undefined ? value : null;
-}
-
-/**
- * Resize the web site IFRAME then show it.
- * 
- * Called by an IFRAME inserted by the 'composer.php' script.
- */
-function ResizeIframe() {
-	$(window).trigger("resize");
-	$("#page .deepsid-iframe").show();
-}
-
 // --------------------------------------------------------------------------
 // THUMBNAILS FOR LINKS
 // --------------------------------------------------------------------------
@@ -2887,128 +3082,6 @@ $(".site-link").on("click", function() {
 // --------------------------------------------------------------------------
 
 /**
- * Minimize or maximize the sundry box in case of a small display. When the box
- * is minimized, you can still click a tab to restore its size, or you can drag
- * the slider downwards to expand it.
- * 
- * All sundry tabs become unselected while minimized.
- * 
- * @param {boolean} shrink	TRUE to minimize, FALSE to return to before, or toggle if not specified
- */
-function ToggleSundry(shrink) {
-	if (typeof shrink === "undefined") shrink = main.sundryBoxShow;
-	if (!shrink) {
-		// Expand sundry box
-		$("#sundry").css({
-			"flex-basis":	sundryHeight,
-			"padding":		"6px 10px",
-		});
-		main.sundryBoxShow = true;
-		$("#sundry-tabs").find(".tab[data-topic='"+sundryTab+"']").addClass("selected");
-		$("#sundry-ctrls").show();
-		if (parseInt(sundryHeight) > 37 && browser.sliderButton && $("#sundry-tabs .selected").attr("data-topic") == "tags")
-			$("#slider-button").show();
-	} else {
-		// Collapse sundry box
-		sundryHeight = $("#sundry").css("flex-basis");
-		sundryTab = $("#sundry-tabs .selected").attr("data-topic");
-		$("#sundry").css({
-			"flex-basis":	0,
-			"padding":		0,
-		});
-		main.sundryBoxShow = false;
-		$("#sundry-tabs .tab").removeClass("selected"); // No tab selected anymore
-		$("#sundry-ctrls,#slider-button").hide();
-	}
-}
-
-/**
- * Show video box in top instead of info box if "YouTube" is the SID handler. Also shows
- * a MIDI drop-down box in top if "ASID" is the SID handler.
- * 
- * @handlers youtube, asid
- * 
- * @param {string} emulator
- */
-function HandleTopBox(emulator) {
-	if (emulator == "youtube") {
-		$("#info-text,#memory-lid").hide();
-		$("#youtube,#youtube-tabs").show();
-		$("#memory-chunk").css("top", "0");
-	} else {
-		$("#info-text,#memory-lid").show();
-		$("#youtube,#youtube-tabs").hide();
-		$("#memory-chunk").css("top", "-2px");
-	}
-
-	if (emulator == "webusb") {
-		$("#webusb-connect").show();
-	}
-	else {
-		$("#webusb-connect").hide();
-	}
-
-	if (emulator == "asid") {
-		$("#asid-midi").show();
-	}
-	else {
-		$("#asid-midi").hide();
-	}
-
-	$(window).trigger("resize"); // Keeps bottom search box in place
-}
-
-/**
- * Disable table rows for folders incompatible with this SID handler. File rows
- * that emulators can't handle (such as BASIC tunes) will also be disabled.
- */
-function DisableIncompatibleRows() {
-	// The 'YouTube' handler has its own checks in 'hvsc.php'
-	if (SID.emulator == "youtube") return;
-	
-	$("#songs table").children().each(function() {
-		var $tr = $(this);
-		var isSIDFile = $tr.find("td.sid").length;
-		// Skip spacers, dividers and files for the general incompatibility field (folders only)
-		if (!$tr.find(".spacer").length && !$tr.find(".divider").length && !isSIDFile) {
-			$tr.removeClass("disabled");
-			var $span = $tr.find(".name");
-			if ($span.is("[data-incompat]") && ($span.attr("data-incompat").indexOf(SID.emulator) !== -1 ||
-			($span.attr("data-incompat").indexOf("mobile") !== -1 && isMobile)))
-				$tr.addClass("disabled");
-		} else if (isSIDFile && $tr.find(".name").attr("data-name").indexOf("BASIC.sid") !== -1) {
-			// These emulators can't do tunes made in BASIC
-			SID.emulator == "legacy" || SID.emulator == "hermit" || SID.emulator == "webusb" || SID.emulator == "asid"
-				? $tr.addClass("disabled")
-				: $tr.removeClass("disabled");
-		/*} else if (isSIDFile && (SID.emulator == "websid" || SID.emulator == "legacy") &&
-			($tr.find(".name").attr("data-name").indexOf("Comaland_tune_3.sid") !== -1 ||
-			 $tr.find(".name").attr("data-name").indexOf("Fantasmolytic_tune_2.sid") !== -1)) {
-			// @todo Replace this with a proper incompatibility system later.
-			SID.emulator == "websid" || SID.emulator == "legacy"
-				? $tr.addClass("disabled")
-				: $tr.removeClass("disabled");*/
-		} else if (isSIDFile && SID.emulator == "legacy" &&
-			$tr.find(".name").attr("data-name").indexOf("Acid_Flashback.sid") !== -1) { // WebSid HQ now supports this
-			// @todo Replace this with a proper incompatibility system later.
-			SID.emulator == "websid" || SID.emulator == "legacy"
-				? $tr.addClass("disabled")
-				: $tr.removeClass("disabled");
-		} else if (isSIDFile && ($tr.find(".name").attr("data-type") === "RSID" || $tr.find(".name").attr("data-name").indexOf(".mus") !== -1)) {
-			// Hermit's emulator and ASID can't do neither any RSID tunes nor any MUS files
-			SID.emulator == "hermit" || SID.emulator == "webusb" || SID.emulator == "asid"
-				? $tr.addClass("disabled")
-				: $tr.removeClass("disabled");
-		} else if (isSIDFile && $tr.find(".name").attr("data-name").indexOf(".mus") !== -1) {
-			// JSIDPlay2 emulators can't do MUS files
-			SID.emulator == "jsidplay2"
-				? $tr.addClass("disabled")
-				: $tr.removeClass("disabled");
-		}
-	});
-}
-
-/**
  * Update the URL in the web browser address field.
  * 
  * @param {boolean} skipFileCheck	If specified, TRUE to skip file check
@@ -3049,10 +3122,10 @@ function UpdateURL(skipFileCheck) {
 	// Also make sure the following switches are sticky
 	if (GetParam("websiddebug")) link += "&websiddebug=1";
 	//if (GetParam("lemon")) link += "&lemon=1";
-	if (GetParam("mini")) link += "&mini="+miniPlayer;
+	if (GetParam("mini")) link += "&mini="+main.miniPlayer;
 	
-	if (urlFile != prevFile) {
-		prevFile = urlFile; // Need a new file clicked before we proceed in the browser history
+	if (urlFile != main.prevFile) {
+		main.prevFile = urlFile; // Need a new file clicked before we proceed in the browser history
 		history.pushState({}, document.title, link);
 	} else
 		history.replaceState({}, document.title, link);
@@ -3151,7 +3224,7 @@ function CustomDialog(data, callbackYes, callbackNo) {
 
 	$(data.id).on("click", ".dialog-button-yes", function() {
 		// Prevent 'Enter' from also firing in the browser list
-		blockNextEnter = true;
+		main.blockNextEnter = true;
 		$dialog.hide();
 		if (typeof callbackYes === "function")
 			callbackYes.call(this);
@@ -3313,7 +3386,7 @@ function GetParam(name) {
 function log(text, preventHuddle) {
 	if (window.console) {
 		if (typeof preventHuddle !== "undefined" && preventHuddle)
-			console.log("DeepSID "+(logCount++)+": " + text);
+			console.log("DeepSID "+(main.logCount++)+": " + text);
 		else
 			console.log(text);
 	}

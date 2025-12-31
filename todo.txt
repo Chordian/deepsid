@@ -14,9 +14,13 @@ ONGOING
 - Replace the PDO connection block in PHP scripts with '$db = $account->GetDB();' instead.
 - Replace all "utf8mb3_unicode_ci" database collations with "utf8mb4_0900_ai_ci" instead.
 
+- WIP: Namespace in main.js...
+
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+- BUG: Auto-shrinking of sundry on small display doesn't work anymore?
+
 - Make rolling random tips in the upper news box. Hotkeys to use, etc. Part of the random
   messages could also be other things, for example a recommended link.
 
@@ -44,7 +48,7 @@ ADMIN STUFF
 
 - Add an admin setting for temporarily turning off editing tags. I had one disaster lately
   where I could have used that feature. Perhaps a drop-down with "Everyone", "Admin only"
-  and "Off" as options.
+  and "Off" as options. Same with SH uploading.
 
 - The label add button doesn't like when CSDb titles have quote characters in them.
 
@@ -70,6 +74,8 @@ WHEN THE TIME IS RIGHT
   - Maybe 'csdb.php' should also have an extended name, to make it more clear what it does.
   - Go through all the other files and see if anything else ought to be renamed.
   - Globalize more variables in 'main.js' in the new 'main' namespace. Maybe also functions?
+  - Change all module.FunctionCall() to module.functionCall() (i.e. small first letter).
+  - Convert all use of quotes into apostrophes for strings in all JS files.
 
 
 CONSIDER THIS

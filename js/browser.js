@@ -136,7 +136,7 @@ Browser.prototype = {
 
 		$("#search-box").keydown(function(event) {
 			if (event.keyCode == 13 && $("#search-box").val() !== "") {
-				blockNextEnter = true;
+				main.blockNextEnter = true;
 				event.target.blur();
 				$("#search-button").trigger("click");
 			}
@@ -672,7 +672,7 @@ Browser.prototype = {
 			this.showSpinner($(event.target).parents("tr").children("td.sid"));
 
 			// Override default sub tune to first if demanded by a setting
-			var subtuneStart = GetSettingValue("first-subtune") ? 0 : this.playlist[this.songPos].startsubtune;
+			var subtuneStart = main.getSettingValue("first-subtune") ? 0 : this.playlist[this.songPos].startsubtune;
 			// Either default start subtune, or an override from a "?subtune=" URL parameter
 			var subtune = typeof paramSubtune !== "undefined" ? paramSubtune : subtuneStart,
 				subtuneMax = this.playlist[this.songPos].subtunes - 1;
@@ -779,7 +779,7 @@ Browser.prototype = {
 				if ($("#loop").hasClass("button-off")) {
 					// Play the next subtune, or if no more subtunes, the next tune in the list
 					$("#faster").trigger("mouseup"); // Easy there cowboy
-					if (!paramSolitary && !GetSettingValue("skip-tune") && (ctrls.subtuneCurrent < ctrls.subtuneMax && !$("#subtune-plus").hasClass("disabled")))
+					if (!paramSolitary && !main.getSettingValue("skip-tune") && (ctrls.subtuneCurrent < ctrls.subtuneMax && !$("#subtune-plus").hasClass("disabled")))
 						// Next subtune
 						$("#subtune-plus").trigger("mouseup", false);
 					else if (this.songPos < (this.playlist.length - 1) && !$("#skip-next").hasClass("disabled"))
@@ -1233,7 +1233,7 @@ Browser.prototype = {
 					'</tr>';
 			}.bind(this));
 			$("#songs table").append(files);
-			DisableIncompatibleRows();
+			main.disableIncompatibleRows();
 
 		} else if (!filterFolders && !this.isBigCompoFolder()) {
 
@@ -1296,14 +1296,14 @@ Browser.prototype = {
 			}.bind(this));
 			$("#songs table").append(this.folders+files);
 			this.showTagsBrackets();
-			DisableIncompatibleRows();
+			main.disableIncompatibleRows();
 
 		} else if (this.isBigCompoFolder()) {
 
 			// SORT/FILTER: Rebuild the big CSDb music competitions folder
 			var folders = "";
 			$.each(this.compolist, function(i, folder) {
-				var isMobileDenied = folder.incompatible.indexOf("mobile") !== -1 && isMobile;
+				var isMobileDenied = folder.incompatible.indexOf("mobile") !== -1 && main.isMobile;
 				folders += // SORT/FILTER: COMPETITIONS
 					'<tr'+(folder.incompatible.indexOf(SID.emulator) !== -1 || isMobileDenied ? ' class="disabled"' : '')+'>'+
 						'<td class="folder compo unselectable"><div class="block-wrap"><div class="block slimfont">'+
@@ -1384,7 +1384,7 @@ Browser.prototype = {
 				// Hack to make sure the bottom search bar sits in the correct bottom of the viewport
 				$(window).trigger("resize");
 				SetScrollTopInstantly("#folders", scrollPos);
-				DisableIncompatibleRows();
+				main.disableIncompatibleRows();
 				if (this.isBigCompoFolder()) $("#dropdown-sort").prop("disabled", false);
 
 				if (typeof callback === "function") callback.call(this);
@@ -1524,7 +1524,7 @@ Browser.prototype = {
 
 					$.each(data.folders, function(i, folder) {
 
-						var isMobileDenied = folder.incompatible.indexOf("mobile") !== -1 && isMobile;
+						var isMobileDenied = folder.incompatible.indexOf("mobile") !== -1 && main.isMobile;
 
 						if (folder.foldertype == "COMPO") {
 
@@ -1855,7 +1855,7 @@ Browser.prototype = {
 										: '';
 								break;
 							case 1:		// Tags
-								sidTags = '<div class="tags-line"'+(showTags ? '' : ' style="visibility:hidden;"')+tag_start_end+'>'+TAGS_BRACKET+list_of_tags+'</div>';
+								sidTags = '<div class="tags-line"'+(main.showTags ? '' : ' style="visibility:hidden;"')+tag_start_end+'>'+TAGS_BRACKET+list_of_tags+'</div>';
 								break;
 							case 2:		// Song length
 								if (this.isUploadFolder() && file.factoidbottom == "5:00")
@@ -2004,7 +2004,7 @@ Browser.prototype = {
 				if (this.path == "")
 					ctrls.state("root/back", "disabled");
 
-				DisableIncompatibleRows();
+				main.disableIncompatibleRows();
 
 			}.bind(this));
 		}
@@ -2086,7 +2086,7 @@ Browser.prototype = {
 		ctrls.state("prev/next", "disabled");
 		ctrls.state("subtunes", "disabled");
 
-		blockNextEnter = true;
+		main.blockNextEnter = true;
 
 		this.getFolder();
 		this.scrollPositions = [this.scrollPositions[0]];
@@ -2378,7 +2378,7 @@ Browser.prototype = {
 	 */
 	clearSpinner: function() {
 		$("#songs td.stars span,#songs td.stars div.fdiv").show();
-		if (showTags)
+		if (main.showTags)
 			$("#songs .tags-line").css("visibility", "");
 		$("#spinner").remove();
 	},
@@ -2398,7 +2398,7 @@ Browser.prototype = {
 	 * @param {boolean} rawPath			Unless, if specified, this is set to TRUE (path only)
 	 */
 	getComposer: function(overridePath, rawPath) {
-		if (miniPlayer || isMobile) return;
+		if (main.miniPlayer || main.isMobile) return;
 		if (this.composer) this.composer.abort();
 		if (this.groups) this.groups.abort();
 
@@ -2502,7 +2502,7 @@ Browser.prototype = {
 					}
 					$("#topic-profile").empty().append(data.html);
 					$("#atopic-profile").empty().append(data.annex_html);
-					ResetDexterScrollBar("profile");
+					main.resetDexterScrollBar("profile");
 
 					// Add star rating for this composer profile
 					$("#topic-profile .folder-rating,#annex .folder-rating")
@@ -2530,7 +2530,7 @@ Browser.prototype = {
 	 * @param {string} fullname		The SID filename including folders
 	 */
 	getGroups: function(fullname) {
-		if (miniPlayer) return;
+		if (main.miniPlayer) return;
 		clearTimeout(this.groupsTimer);
 		this.groups = $.get("php/groups.php", { fullname: fullname }, function(data) {
 			try {
@@ -2618,7 +2618,7 @@ Browser.prototype = {
 	 * @param {boolean} overrideCache	Optional; if TRUE, read from CSDb
 	 */
 	getCSDb: function(type, id, canReturn, overrideCache) {
-		if (miniPlayer || isMobile || this.isTempTestFile()) return;
+		if (main.miniPlayer || main.isMobile || this.isTempTestFile()) return;
 		if (this.csdb) this.csdb.abort();
 		$("#topic-csdb").empty().append(this.loadingSpinner("csdb"));
 		$("#sticky-csdb").empty();
@@ -2672,7 +2672,7 @@ Browser.prototype = {
 					data.html = data.html.replace(/composer\.png/g, "composer_dark.png");
 				$("#topic-csdb").empty().append(data.html)
 					.css("visibility", "visible");
-				ResetDexterScrollBar("csdb");
+				main.resetDexterScrollBar("csdb");
 
 				this.emphasizing(false);
 				UpdateRedirectPlayIcons();
@@ -2766,7 +2766,7 @@ Browser.prototype = {
 	 * @param {array} params	player: {string} or id: {number}
 	 */
 	getPlayerInfo: function(params) {
-		if (miniPlayer || isMobile || JSON.stringify(params) == JSON.stringify(this.playerParams)) return;
+		if (main.miniPlayer || main.isMobile || JSON.stringify(params) == JSON.stringify(this.playerParams)) return;
 		if (this.playerInfo) this.playerInfo.abort();
 		$("#topic-player").empty().append(this.loadingSpinner("player"));
 		$("#sticky-player").empty();
@@ -2787,7 +2787,7 @@ Browser.prototype = {
 				$("#sticky-player").empty().height(height).append(data.sticky);
 				$("#topic-player").empty().append(data.html)
 					.css("visibility", "visible");
-				ResetDexterScrollBar("player");
+				main.resetDexterScrollBar("player");
 
 				// If there are any entries then show a special notification character (if not in focus)
 				if (data.count != 0 && $("#tabs .selected").attr("data-topic") !== "player" && data.status !== "warning")
@@ -2807,7 +2807,7 @@ Browser.prototype = {
 	 * @param {number} mark		ID of the release page to mark on the competition results list
 	 */
 	getCompoResults: function(compo, id, mark) {
-		if (miniPlayer || isMobile) return;
+		if (main.miniPlayer || main.isMobile) return;
 		if (this.compo) this.compo.abort();
 		$("#topic-csdb").empty().append(this.loadingSpinner("csdb"));
 		$("#sticky-csdb").empty();
@@ -2826,7 +2826,7 @@ Browser.prototype = {
 					data.html = data.html.replace(/composer\.png/g, "composer_dark.png");
 				$("#topic-csdb").empty().append(data.html)
 					.css("visibility", "visible");
-				ResetDexterScrollBar("csdb");
+				main.resetDexterScrollBar("csdb");
 
 				// Populate all path table cells with HVSC plinks (when available in the CSDb release pages)
 				$("#topic-csdb .compo-path").each(function() {
@@ -2853,7 +2853,7 @@ Browser.prototype = {
 	 */
 	getGB64: function(optionalID) {
 
-		if (miniPlayer || isMobile || this.isTempTestFile()) return;
+		if (main.miniPlayer || main.isMobile || this.isTempTestFile()) return;
 		if (this.gb64) this.gb64.abort();
 		$("#topic-gb64").empty().append(this.loadingSpinner("gb64"));
 		$("#sticky-gb64").empty();
@@ -2876,7 +2876,7 @@ Browser.prototype = {
 				$("#sticky-gb64").empty().append(data.sticky);
 				$("#topic-gb64").empty().append(data.html)
 					.css("visibility", "visible");
-				ResetDexterScrollBar("gb64");
+				main.resetDexterScrollBar("gb64");
 	
 				// If there are any entries then show a notification number on the 'GB64' tab (if not in focus)
 				if (data.count > 0 && $("#tabs .selected").attr("data-topic") !== "gb64" && !this.isCGSC())
@@ -2929,7 +2929,7 @@ Browser.prototype = {
 	 * @param {number} optionalID		If specified, the ID to show a specific entry
 	 */
 	getRemix: function(optionalID) {
-		if (miniPlayer || isMobile || this.isTempTestFile()) return;
+		if (main.miniPlayer || main.isMobile || this.isTempTestFile()) return;
 		if (this.remix) this.remix.abort();
 		$("#topic-remix").empty().append(this.loadingSpinner("remix"));
 		$("#sticky-remix").empty();
@@ -2952,7 +2952,7 @@ Browser.prototype = {
 				$("#sticky-remix").empty().append(data.sticky);
 				$("#topic-remix").empty().append(data.html)
 					.css("visibility", "visible");
-				ResetDexterScrollBar("remix");
+				main.resetDexterScrollBar("remix");
 
 				// If there are any entries then show a notification number on the 'Remix' tab (if not in focus)
 				if (data.count > 0 && $("#tabs .selected").attr("data-topic") !== "remix" && !this.isCGSC())
@@ -3256,25 +3256,27 @@ Browser.prototype = {
 				}
 				break;
 			case 'add-label':
-				var $selectedSidFile = $("#folders tr.selected"),
-					$csdbInfo = $("#csdb-info");
-				if ($selectedSidFile.length && $csdbInfo.length) {
-					$.post("php/labels_write.php", {
-						id:			$selectedSidFile.find(".entry").attr("data-id"),
-						name:		$csdbInfo.attr("data-name"),
-						type:		$csdbInfo.attr("data-type"),
-						csdbid:		$csdbInfo.attr("data-csdbid")
-					}, function(data) {
-						browser.validateData(data, function(data) {
-							if (data.created)
-								BrowserMessage("Created label for '"+$csdbInfo.attr("data-name")+"'");
-							else
-								BrowserMessage("Linked to existing label");
-							RefreshFolder();
+				if ($("#logged-username").text() == "JCH") {
+					var $selectedSidFile = $("#folders tr.selected"),
+						$csdbInfo = $("#csdb-info");
+					if ($selectedSidFile.length && $csdbInfo.length) {
+						$.post("php/labels_write.php", {
+							id:			$selectedSidFile.find(".entry").attr("data-id"),
+							name:		$csdbInfo.attr("data-name"),
+							type:		$csdbInfo.attr("data-type"),
+							csdbid:		$csdbInfo.attr("data-csdbid")
+						}, function(data) {
+							browser.validateData(data, function(data) {
+								if (data.created)
+									main.browserMessage("Created label for '"+$csdbInfo.attr("data-name")+"'");
+								else
+									main.browserMessage("Linked to existing label");
+								main.refreshFolder();
+							});
 						});
-					});
-				} else
-					alert("No SID song or CSDb release selected.");
+					} else
+						alert("No SID song or CSDb release selected.");
+				}
 				break;
 			case 'unlink-label':
 				if ($("#logged-username").text() == "JCH") {
@@ -3292,8 +3294,8 @@ Browser.prototype = {
 								: this.path.substr(1)+"/"+this.contextSID)
 						}, function(data) {
 							this.validateData(data, function() {
-								BrowserMessage("Unlinked label");
-								RefreshFolder();
+								main.browserMessage("Unlinked label");
+								main.refreshFolder();
 							});
 						}.bind(this));
 					}.bind(this));
@@ -4075,7 +4077,7 @@ Browser.prototype = {
 	 * @param {boolean} scrollIntoView		Optional; False = Ignore scrolling into view
 	 */
 	moveKeyboardSelection: function(row, moveSmoothly, scrollIntoView) {
-		if (isMobile) return;
+		if (main.isMobile) return;
 
 		const $kb = $("#kb-marker");
 		const $rows = $("#folders tr");
@@ -4180,7 +4182,7 @@ Browser.prototype = {
 	 * this is a spacer or a divider.
 	 */
 	moveKeyboardToFirst: function() {
-		if (isMobile) return;
+		if (main.isMobile) return;
 
 		var $tr = $("#songs tr");
 		for (var i = 0; i < $tr.length; i++) {

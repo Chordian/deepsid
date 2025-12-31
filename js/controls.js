@@ -131,7 +131,7 @@ Controls.prototype = {
 			$("#time-bar").empty().append('<div></div>');
 
 			// Keep skipping subtunes if a setting is set to ignore those of less than 10 seconds
-			if (isAutoProgress && GetSettingValue("skip-short"))  {
+			if (isAutoProgress && main.getSettingValue("skip-short"))  {
 				while (browser.getLength(this.subtuneCurrent) < 10) {
 					this.subtuneCurrent++;
 					if (this.subtuneCurrent >= this.subtuneMax) {
@@ -180,12 +180,12 @@ Controls.prototype = {
 						$("#skip-next").addClass("disabled");
 						// Don't play the song in the bottom if a setting is supposed to skip it
 						if (isAutoProgress) {
-							if ((GetSettingValue("skip-bad") && (songRating == 1 || songRating == 2)) ||
-								(GetSettingValue("skip-short") && songLength < 10 && !moreSubtunes)) {
+							if ((main.getSettingValue("skip-bad") && (songRating == 1 || songRating == 2)) ||
+								(main.getSettingValue("skip-short") && songLength < 10 && !moreSubtunes)) {
 								$("#stop").trigger("mouseup");
 								SID.stop();
 								return false;
-							} else if (GetSettingValue("skip-short") && songLength < 10) {
+							} else if (main.getSettingValue("skip-short") && songLength < 10) {
 								// The default is too short, but what about the subsequent sub tunes in it?
 								$("#subtune-plus").trigger("mouseup", false);
 								return false;
@@ -198,8 +198,8 @@ Controls.prototype = {
 						break;
 					}
 				} while ($("#songs tr").eq(browser.songPos + browser.subFolders).hasClass("disabled") || 
-					(isAutoProgress && GetSettingValue("skip-bad") && (songRating == 1 || songRating == 2)) ||
-					(isAutoProgress && GetSettingValue("skip-short") && songLength < 10 && !moreSubtunes));
+					(isAutoProgress && main.getSettingValue("skip-bad") && (songRating == 1 || songRating == 2)) ||
+					(isAutoProgress && main.getSettingValue("skip-short") && songLength < 10 && !moreSubtunes));
 			} else {
 				do {
 					browser.songPos--;
@@ -218,9 +218,9 @@ Controls.prototype = {
 			if ($("#songs tr").eq(browser.songPos + browser.subFolders).hasClass("disabled")) return false;
 
 			// Override default sub tune to first if demanded by a setting
-			var subtune = GetSettingValue("first-subtune") ? 0 : browser.playlist[browser.songPos].startsubtune;
+			var subtune = main.getSettingValue("first-subtune") ? 0 : browser.playlist[browser.songPos].startsubtune;
 			// The default is too short, but what about the subsequent sub tunes in it?
-			if (isAutoProgress && GetSettingValue("skip-short") && songLength < 10) {
+			if (isAutoProgress && main.getSettingValue("skip-short") && songLength < 10) {
 				while (browser.getLength(subtune) < 10) {
 					subtune++;
 					if (subtune >= browser.playlist[browser.songPos].subtunes - 1) {
@@ -297,7 +297,7 @@ Controls.prototype = {
 				browser.moveKeyboardSelection(browser.kbSelectedRow, false);
 
 				// A timed out tune should only auto-center if a setting demands it
-				if (!isAutoProgress || GetSettingValue("mark-tune")) {
+				if (!isAutoProgress || main.getSettingValue("mark-tune")) {
 					var rowPos = $("#folders tr").eq($("tr.selected").index())[0].offsetTop;
 					var halfway = $("#folders").height() / 2 - 26; // Last value is half of SID file row height
 					$("#folders").scrollTop(rowPos > halfway ? rowPos - halfway : 0);
@@ -377,7 +377,7 @@ Controls.prototype = {
 					$("#info").append('<div id="sid-model" class="MOS6581" title="SID chip model set to MOS 6581">6581</div>');
 					SID.setModel("6581");
 				}
-				ShowSundryFilterContents();
+				main.showSundryFilterContents();
 				break;
 			case "clockspeed":
 				// Toggle between PAL or NTSC
@@ -431,8 +431,8 @@ Controls.prototype = {
 				break;
 			case "showtags":
 				// Toggle tags shown in SID rows ON or OFF
-				showTags = $("#showtags").is(":checked");
-				$("#songs .tags-line").css("visibility", showTags ? "" : "hidden");
+				main.showTags = $("#showtags").is(":checked");
+				$("#songs .tags-line").css("visibility", main.showTags ? "" : "hidden");
 				break;
 			case "filter-r2":
 			case "filter-r3":
@@ -655,7 +655,7 @@ Controls.prototype = {
 					sidFile = fullname.split("/").slice(-1)[0];
 				songName = '<a href="?file=/'+homePath+'" class="redirect">'+songName+'</a>';
 				songAuthor = '<a href="?file=/'+homePath.replace(sidFile, "")+'" class="redirect">'+songAuthor+'</a>';
-			} else if (typeof profile != "undefined" && profile != "" && !miniPlayer)
+			} else if (typeof profile != "undefined" && profile != "" && !main.miniPlayer)
 				// It's a 'SID Happens' file that points to a profile so change the author to that
 				songAuthor = '<a href="?file=/'+profile+'" class="redirect">'+songAuthor+'</a>';
 			$infoText.append(
@@ -697,7 +697,7 @@ Controls.prototype = {
 			// Only show collection version when the 'STIL/Lyrics' tab is selected
 			this.updateSundryVersion();
 
-		ShowSundryFilterContents();
+		main.showSundryFilterContents();
 	},
 	
 	/**
