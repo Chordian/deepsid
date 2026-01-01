@@ -14,8 +14,6 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH
 if ($account->CheckLogin() && ($account->UserName() == 'JCH' || $account->UserName() == 'Ratings'))
 	exit();
 
-exit(); //////////////// TURNED OFF FOR NOW
-
 try {
 	if ($_SERVER['HTTP_HOST'] == LOCALHOST)
 		$db = new PDO(PDO_LOCALHOST, USER_LOCALHOST, PWD_LOCALHOST);

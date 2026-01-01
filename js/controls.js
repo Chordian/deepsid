@@ -145,7 +145,7 @@ Controls.prototype = {
 			SID.load(this.subtuneCurrent, browser.getLength(this.subtuneCurrent), undefined, function() {
 				browser.clearSpinner();
 				if (SID.emulatorFlags.forcePlay) SID.play();
-				UpdateURL();
+				main.updateURL();
 				browser.chips = 1;
 				if (browser.playlist[browser.songPos].fullname.indexOf("_2SID") != -1) browser.chips = 2;
 				else if (browser.playlist[browser.songPos].fullname.indexOf("_3SID") != -1) browser.chips = 3;
@@ -236,7 +236,7 @@ Controls.prototype = {
 
 			SID.load(subtune, browser.getLength(subtune), browser.playlist[browser.songPos].fullname, function(error) {
 
-				TrackingEvent("start:sid", browser.playlist[browser.songPos].id);
+				main.trackingEvent("start:sid", browser.playlist[browser.songPos].id);
 
 				browser.clearSpinner();
 
@@ -279,7 +279,7 @@ Controls.prototype = {
 					browser.getGB64();
 					browser.getRemix();
 					browser.getPlayerInfo({player: browser.playlist[browser.songPos].player});
-					UpdateURL();
+					main.updateURL();
 				}
 
 				browser.chips = 1;

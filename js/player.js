@@ -1098,7 +1098,7 @@ SIDPlayer.prototype = {
 			case "silence":
 				break;
 		}
-		UpdateRedirectPlayIcons();
+		main.updateRedirectPlayIcons();
 		viz.clearStats();
 		// Stop all the <AUDIO> elements in the 'Remix' tab
 		$("#topic-remix audio").each(function() {

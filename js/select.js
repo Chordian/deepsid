@@ -98,19 +98,19 @@ $.fn.styledSelect = function(cls) {
 		function SelectNewLi($this) {
 			// Reset the previously highlighted LI row
 			var $selected = $this.parent("ul").children("li.selected");
-			var resetColor = typeof $selected.data("color") != "undefined" ? $selected.data("color") : GetCSSVar("--color-styled-resetcolor");
+			var resetColor = typeof $selected.data("color") != "undefined" ? $selected.data("color") : main.getCSSVar("--color-styled-resetcolor");
 			$selected
 				.removeClass("selected")
 				.css({
 					color:resetColor,
-					background:GetCSSVar("--color-styled-select-bg")
+					background:main.getCSSVar("--color-styled-select-bg")
 				})
 				.find("div").css("background-position","0 0");
 			// Highlight the new LI row (and change its icon)
 			$this.addClass("selected")
 				.css({
-					color:GetCSSVar("--color-styled-select-bg"),
-					background:GetCSSVar("--color-styled-select-text")
+					color:main.getCSSVar("--color-styled-select-bg"),
+					background:main.getCSSVar("--color-styled-select-text")
 				})
 				.find("div").css("background-position","-16px 0");
 		};
@@ -304,14 +304,14 @@ $.fn.styledState = function(state) {
 			$(this)
 				.next("div.styledSelect")
 				.removeClass("disabled")
-				.css("color",GetCSSVar("--color-styled-resetcolor"))
+				.css("color",main.getCSSVar("--color-styled-resetcolor"))
 				.parents("div.select")
 				.css("opacity","1.0");
 		} else {
 			$(this)
 				.next("div.styledSelect")
 				.addClass("disabled")
-				.css("color",GetCSSVar("--color-styled-disabled"))
+				.css("color",main.getCSSVar("--color-styled-disabled"))
 				.parents("div.select")
 				.css("opacity","0.5");
 		}

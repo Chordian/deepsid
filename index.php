@@ -696,49 +696,49 @@
 						<div style="float:left;width:48%;padding-bottom:2px;">
 							<div class="sundry-control">
 								<label class="disabled unselectable">Minimum</label>
-								<input id="filter-base-edit" class="disabled" type="text" maxlength="12" onkeypress="NumericInput(event)" disabled="disabled" />
+								<input id="filter-base-edit" class="disabled" type="text" maxlength="12" onkeypress="main.numericInput(event)" disabled="disabled" />
 								<input id="filter-base-slider" class="disabled" type="range" min="0" max="0.3" value="0" step="0.0012" disabled="disabled" />
 							</div>
 							<div class="sundry-control">
 								<label class="disabled unselectable">Maximum</label>
-								<input id="filter-max-edit" class="disabled" type="text" maxlength="12" onkeypress="NumericInput(event)" disabled="disabled" />
+								<input id="filter-max-edit" class="disabled" type="text" maxlength="12" onkeypress="main.numericInput(event)" disabled="disabled" />
 								<input id="filter-max-slider" class="disabled" type="range" min="0" max="1" value="0" step="0.004" disabled="disabled" />
 							</div>
 							<div class="sundry-control">
 								<label class="disabled unselectable">Steepness</label>
-								<input id="filter-steepness-edit" class="disabled" type="text" maxlength="12" onkeypress="NumericInput(event)" disabled="disabled" />
+								<input id="filter-steepness-edit" class="disabled" type="text" maxlength="12" onkeypress="main.numericInput(event)" disabled="disabled" />
 								<input id="filter-steepness-slider" class="disabled" type="range" min="1" max="1000" value="1" step="3.996" disabled="disabled" />
 							</div>
 							<div class="sundry-control">
 								<label class="disabled unselectable">X-Offset</label>
-								<input id="filter-x_offset-edit" class="disabled" type="text" maxlength="12" onkeypress="NumericInput(event)" disabled="disabled" />
+								<input id="filter-x_offset-edit" class="disabled" type="text" maxlength="12" onkeypress="main.numericInput(event)" disabled="disabled" />
 								<input id="filter-x_offset-slider" class="disabled" type="range" min="0" max="3000" value="0" step="12" disabled="disabled" />
 							</div>
 							<div class="sundry-control">
 								<label class="disabled unselectable">Kink</label>
-								<input id="filter-kink-edit" class="disabled" type="text" maxlength="12" onkeypress="NumericInput(event)" disabled="disabled" />
+								<input id="filter-kink-edit" class="disabled" type="text" maxlength="12" onkeypress="main.numericInput(event)" disabled="disabled" />
 								<input id="filter-kink-slider" class="disabled" type="range" min="0" max="2000" value="0" step="8" disabled="disabled" />
 							</div>
 						</div>
 						<div style="float:right;width:48%;">
 							<div class="sundry-control">
 								<label class="disabled unselectable">Distortion</label>
-								<input id="filter-distort-edit" class="disabled" type="text" maxlength="12" onkeypress="NumericInput(event)" disabled="disabled" />
+								<input id="filter-distort-edit" class="disabled" type="text" maxlength="12" onkeypress="main.numericInput(event)" disabled="disabled" />
 								<input id="filter-distort-slider" class="disabled" type="range" min="0" max="20" value="0" step="0.08" disabled="disabled" />
 							</div>
 							<div class="sundry-control">
 								<label class="disabled unselectable">Dist. Offset</label>
-								<input id="filter-distortOffset-edit" class="disabled" type="text" maxlength="12" onkeypress="NumericInput(event)" disabled="disabled" />
+								<input id="filter-distortOffset-edit" class="disabled" type="text" maxlength="12" onkeypress="main.numericInput(event)" disabled="disabled" />
 								<input id="filter-distortOffset-slider" class="disabled" type="range" min="0" max="200000" value="0" step="800" disabled="disabled" />
 							</div>
 							<div class="sundry-control">
 								<label class="disabled unselectable">Dist. Scale</label>
-								<input id="filter-distortScale-edit" class="disabled" type="text" maxlength="12" onkeypress="NumericInput(event)" disabled="disabled" />
+								<input id="filter-distortScale-edit" class="disabled" type="text" maxlength="12" onkeypress="main.numericInput(event)" disabled="disabled" />
 								<input id="filter-distortScale-slider" class="disabled" type="range" min="0" max="300" value="0" step="0.16" disabled="disabled" />
 							</div>
 							<div class="sundry-control">
 								<label class="disabled unselectable">Dist. Threshold</label>
-								<input id="filter-distortThreshold-edit" class="disabled" type="text" maxlength="12" onkeypress="NumericInput(event)" disabled="disabled" />
+								<input id="filter-distortThreshold-edit" class="disabled" type="text" maxlength="12" onkeypress="main.numericInput(event)" disabled="disabled" />
 								<input id="filter-distortThreshold-slider" class="disabled" type="range" min="0" max="4000" value="0" step="16" disabled="disabled" />
 							</div>
 						</div>

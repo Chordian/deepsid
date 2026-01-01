@@ -66,7 +66,7 @@ function Browser() {
 	this.scrollPositions = [];
 	this.kbPositions = [];
 	this.sliderButton = false;
-	this.annexNotWanted = GetParam("notips") !== ""
+	this.annexNotWanted = main.getParam("notips") !== ""
 
 	this.secondsLength = 0;
 	this.chips = 1;
@@ -89,7 +89,7 @@ Browser.prototype = {
 		this.getSymlists();
 		this.getComposer();
 
-		if (GetParam("file") === "" && GetParam("search") === "") this.getFolder();
+		if (main.getParam("file") === "" && main.getParam("search") === "") this.getFolder();
 		this.addEvents();
 	},
 
@@ -366,7 +366,7 @@ Browser.prototype = {
 					this.path = "";
 					ctrls.state("prev/next", "disabled");
 					ctrls.state("subtunes", "disabled");
-					CancelTrackType("enter:folder");
+					main.cancelTrackType("enter:folder");
 					this.getFolder(this.scrollPositions[0], undefined, undefined,
 						function() {
 							this.kbSelectedRow = [this.kbPositions[0]];
@@ -423,7 +423,7 @@ Browser.prototype = {
 								this.scrollPositions.pop(); // First pop out of search state
 								this.kbPositions.pop();
 							}
-							CancelTrackType("enter:folder");
+							main.cancelTrackType("enter:folder");
 							this.getFolder(this.scrollPositions.pop(), undefined,
 								(this.path === "/CSDb Music Competitions" || this.path === "/_Compute's Gazette SID Collection")
 									&& this.cache.folder !== "" /* <- Boolean parameter */ ,
@@ -435,7 +435,7 @@ Browser.prototype = {
 							}.bind(this));
 							this.getComposer();
 							ctrls.subtuneCurrent = ctrls.subtuneMax = 0; // Clear subtune switch
-							UpdateURL(true);
+							main.updateURL(true);
 						});
 					}.bind(this));
 				}
@@ -543,7 +543,7 @@ Browser.prototype = {
 					$("#dialog-list-start-tag").val(this.startTag);
 					$("#dialog-list-end-tag").val(this.endTag);
 					// Show the dialog box
-					CustomDialog({
+					main.customDialog({
 						id: '#dialog-tags',
 						text: '<h3>Edit tags</h3><p>'+name.split("/").slice(-1)[0]+'</p>'+
 							'<span class="dialog-label-top" style="float:left;">All tags available:</span>'+
@@ -575,8 +575,8 @@ Browser.prototype = {
 							});
 						}.bind(this));
 					});
-					SetScrollTopInstantly("#dialog-all-tags", 0);
-					SetScrollTopInstantly("#dialog-song-tags", 0);
+					main.setScrollTopInstantly("#dialog-all-tags", 0);
+					main.setScrollTopInstantly("#dialog-song-tags", 0);
 					$("#dialog-all-tags").focus();
 				});
 			}.bind(this));
@@ -646,8 +646,8 @@ Browser.prototype = {
 				});
 				this.getComposer();
 
-				TrackingEvent("enter:folder", this.path.substring(1));
-				UpdateURL();
+				main.trackingEvent("enter:folder", this.path.substring(1));
+				main.updateURL();
 			}
 
 		} else {
@@ -689,7 +689,7 @@ Browser.prototype = {
 
 			SID.load(subtune, this.getLength(subtune), this.playlist[this.songPos].fullname, function(error) {
 
-				TrackingEvent("start:sid", browser.playlist[browser.songPos].id);
+				main.trackingEvent("start:sid", browser.playlist[browser.songPos].id);
 
 				this.clearSpinner();
 
@@ -753,7 +753,7 @@ Browser.prototype = {
 				this.getRemix();
 				this.getPlayerInfo({player: this.playlist[this.songPos].player});
 
-				UpdateURL();
+				main.updateURL();
 				this.chips = 1;
 				if (this.playlist[this.songPos].fullname.indexOf("_2SID") != -1) this.chips = 2;
 				else if (this.playlist[this.songPos].fullname.indexOf("_3SID") != -1) this.chips = 3;
@@ -1383,7 +1383,7 @@ Browser.prototype = {
 
 				// Hack to make sure the bottom search bar sits in the correct bottom of the viewport
 				$(window).trigger("resize");
-				SetScrollTopInstantly("#folders", scrollPos);
+				main.setScrollTopInstantly("#folders", scrollPos);
 				main.disableIncompatibleRows();
 				if (this.isBigCompoFolder()) $("#dropdown-sort").prop("disabled", false);
 
@@ -1998,7 +1998,7 @@ Browser.prototype = {
 
 					// Hack to make sure the bottom search bar sits in the correct bottom of the viewport
 					$(window).trigger("resize");
-					SetScrollTopInstantly("#folders", scrollPos);
+					main.setScrollTopInstantly("#folders", scrollPos);
 					if (typeof callback === "function") callback.call(this);
 				});
 				if (this.path == "")
@@ -2096,7 +2096,7 @@ Browser.prototype = {
 		ctrls.subtuneCurrent = ctrls.subtuneMax = 0; // Clear subtune switch
 		this.redirectFolder = "";
 
-		UpdateURL(true);
+		main.updateURL(true);
 	},
 
 	/**
@@ -2165,9 +2165,9 @@ Browser.prototype = {
 		var $tr = $("#folders tr").eq(this.subFolders + this.songPos);
 
 		// Turn the row all red
-		$tr.find(".entry").css("color", GetCSSVar("--color-sid-row-error-entry"));
-		$tr.find("span.info").css("color", GetCSSVar("--color-sid-row-error-info"));
-		$tr.css("background", GetCSSVar("--color-sid-row-error-bg"));
+		$tr.find(".entry").css("color", main.getCSSVar("--color-sid-row-error-entry"));
+		$tr.find("span.info").css("color", main.getCSSVar("--color-sid-row-error-info"));
+		$tr.css("background", main.getCSSVar("--color-sid-row-error-bg"));
 
 		// Remove stuff, clear boxes, disable buttons
 		$("#sid-model,#clockspeed").remove();
@@ -2675,7 +2675,7 @@ Browser.prototype = {
 				main.resetDexterScrollBar("csdb");
 
 				this.emphasizing(false);
-				UpdateRedirectPlayIcons();
+				main.updateRedirectPlayIcons();
 
 				// Remove admin controls if included in a cache refreshed by an administrator
 				if ($("#logged-username").text() !== "JCH")
@@ -3022,7 +3022,7 @@ Browser.prototype = {
 
 		// Maintain hover background color while showing the context menu
 		this.contextTR = $target.parent("tr");
-		this.contextTR.css("background", GetCSSVar("--color-bg-sid-hover"));
+		this.contextTR.css("background", main.getCSSVar("--color-bg-sid-hover"));
 
 		if ($target.hasClass("sid")) {
 			var notSidRows = $target.parents("table").find("td.folder,td.spacer,td.divider").length;
@@ -3237,7 +3237,7 @@ Browser.prototype = {
 			case 'delete-file':
 				if ($("#logged-username").text() == "JCH") {
 					$("#file-name-delete").empty().append('<b>'+this.contextSID+'</b>');
-					CustomDialog({
+					main.customDialog({
 						id: '#dialog-delete-file',
 						text: '<h3>Delete an uploaded file</h3>'+
 							'<p>Are you sure you want to delete this SID file?</p>',
@@ -3281,7 +3281,7 @@ Browser.prototype = {
 			case 'unlink-label':
 				if ($("#logged-username").text() == "JCH") {
 					$("#file-name-delete").empty().append('<b>'+this.contextSID+'</b>');
-					CustomDialog({
+					main.customDialog({
 						id: '#dialog-delete-file',
 						text: '<h3>Unlink a label</h3>'+
 							'<p>Are you sure you want to remove the label from this SID file?</p>',
@@ -3321,7 +3321,7 @@ Browser.prototype = {
 				}.bind(this));
 				if (action === "symlist-new" && $("#logout").length) {
 					// Offer to let the user rename the new playlist on the fly
-					CustomDialog({
+					main.customDialog({
 						id: '#dialog-playlist-rename',
 						text: 'Would you like to rename your new playlist?',
 						height: 210,
@@ -3466,7 +3466,7 @@ Browser.prototype = {
 			for (var subtune = 1; subtune <= subtunes; subtune++)
 				$dd.append('<option value="'+(subtune - 1)+'">'+subtune+'</option>');
 
-			CustomDialog({
+			main.customDialog({
 				id: '#dialog-ev-subtunes',
 				text: 'There are multiple subtunes in this file. Which one are you going to edit video links for now?',
 				height: 150,
@@ -3539,7 +3539,7 @@ Browser.prototype = {
 			? this.path.split("/").slice(-1)[0]
 			: "";
 
-		CustomDialog({
+		main.customDialog({
 			id: '#dialog-edit-videos',
 			text: '<h3>Edit video links</h3><p id="ev-sid" data-author="'+author+'">'+fullname.split("/").slice(-1)[0]+'</p>',
 			width: 600,
@@ -4348,7 +4348,7 @@ Browser.prototype = {
 		switch (step) {
 			case 1:
 				// Present the SID file format information
-				CustomDialog({
+				main.customDialog({
 					id: '#dialog-upload-wiz2',
 					text: '<h3>Upload SID File Wizard</h3><div class="top-right-corner">1/4</div><p>The SID file contains the following information:</p>'+
 						'<table class="sid-info">'+
@@ -4407,7 +4407,7 @@ Browser.prototype = {
 					$("#label-lengths").empty().append("Define the <b>length</b> of the tune:");
 					$("#span-lengths").empty().append("length then just leave it");
 				}
-				CustomDialog({
+				main.customDialog({
 					id: '#dialog-upload-wiz3',
 					text: '<h3><span class="upload-edit">'+this.UploadEdit+'</span> SID File Wizard</h3><div class="top-right-corner">2/4</div><p>You can optionally connect a profile, a CSDb page, and edit the song length'+(data.info.subtunes > 1 ? 's' : '')+'.</p>',
 					height: 378,
@@ -4458,7 +4458,7 @@ Browser.prototype = {
 				var author = $("#dropdown-upload-profile").find("option:selected").attr("data-author");
 				if (author == "" || typeof author == "undefined") author = data.info.author;
 				$("#upload-file-author-input").val(author);
-				CustomDialog({
+				main.customDialog({
 					id: '#dialog-upload-wiz4',
 					text: '<h3><span class="upload-edit">'+this.UploadEdit+'</span> SID File Wizard</h3><div class="top-right-corner">3/4</div><p>You can optionally rename the file and edit the info that goes into the database.</p>',
 					height: 378,
@@ -4473,7 +4473,7 @@ Browser.prototype = {
 				break;
 			case 4:
 				// Edit custom STIL box text
-				CustomDialog({
+				main.customDialog({
 					id: '#dialog-upload-wiz5',
 					text: '<h3><span class="upload-edit">'+this.UploadEdit+'</span> SID File Wizard</h3><div class="top-right-corner">4/4</div><p>You can optionally write a custom text entry for the STIL tabs too. HTML tags are allowed.</p>',
 					height: 378,

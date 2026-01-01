@@ -1866,7 +1866,7 @@ Viz.prototype = {
 	 * @param {boolean} set			TRUE to set color, otherwise remove it
 	 */
 	setVoiceColor: function(voice, set) {
-		$("#table-stats .stats-"+(voice + 1)).css("background", (set ? GetCSSVar("--color-bg-stats-filterbg") : "transparent"));
+		$("#table-stats .stats-"+(voice + 1)).css("background", (set ? main.getCSSVar("--color-bg-stats-filterbg") : "transparent"));
 	},
 
 	/**

@@ -17,6 +17,11 @@ ONGOING
 - WIP: Namespace in main.js...
 
 
+
+  Refactoring DONE! Now to TEST, TEST, TEST...
+
+
+
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
 - BUG: Auto-shrinking of sundry on small display doesn't work anymore?
@@ -73,9 +78,9 @@ WHEN THE TIME IS RIGHT
     nothing to do with symlists. Rename it to something else to avoid confusion.
   - Maybe 'csdb.php' should also have an extended name, to make it more clear what it does.
   - Go through all the other files and see if anything else ought to be renamed.
-  - Globalize more variables in 'main.js' in the new 'main' namespace. Maybe also functions?
   - Change all module.FunctionCall() to module.functionCall() (i.e. small first letter).
   - Convert all use of quotes into apostrophes for strings in all JS files.
+  - Change all 'bind(this)' stuff to modern JavaScript handling instead.
 
 
 CONSIDER THIS
