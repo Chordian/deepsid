@@ -14,17 +14,27 @@ ONGOING
 - Replace the PDO connection block in PHP scripts with '$db = $account->GetDB();' instead.
 - Replace all "utf8mb3_unicode_ci" database collations with "utf8mb4_0900_ai_ci" instead.
 
-- WIP: Namespace in main.js...
-
-
-
-  Refactoring DONE! Now to TEST, TEST, TEST...
-
-
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+- Check automatic backup one of these days. It still works, right?
+
 - BUG: Auto-shrinking of sundry on small display doesn't work anymore?
+
+- BUG: Clicking an annex link in FAQ doesn't select the 'Help' tab first.
+  Showing "clinks" from profile does select the proper tab - look at that code for help.
+
+- BUG: Console log TypeError occurs when testing a direct CSDb link.
+
+- BUG: Playing SID+FM tune with Hermit gives a TypeError about property "replace".
+
+- Open multiple tabs in YouTube dialog box doesn't do that on Firefox anymore. At least
+  remove the "Use Firefox" message?
+
+- In addition to '?notips=1' add 'annexoff=1' which does the same thing.
+
+- Check if the "To Top" button in main.js is nice to have anymore. If not, it should have
+  all it's relevant code removed.
 
 - Make rolling random tips in the upper news box. Hotkeys to use, etc. Part of the random
   messages could also be other things, for example a recommended link.

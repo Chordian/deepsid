@@ -282,8 +282,9 @@ var main = {
 	},
 
 	/**
-	 * Show video box in top instead of info box if "YouTube" is the SID handler. Also shows
-	 * a MIDI drop-down box in top if "ASID" is the SID handler.
+	 * Show video box in top instead of info box if "YouTube" is the SID handler.
+	 * Also shows more controls for other SID handlers, for example a MIDI drop-down
+	 * box in top if "ASID" is the SID handler.
 	 * 
 	 * @handlers	youtube, asid
 	 * 
@@ -344,32 +345,6 @@ var main = {
 	},
 
 	/**
-	 * Call the root tracking.
-	 * 
-	 * This is used for generating a text file that is then parsed and displayed as
-	 * a separate HTML file.
-	 * 
-	 * This is not related to event tracking. 
-	 * 
-	 * @used		main.js
-	 */
-	pingTracking: function() {
-
-		// Prefer sendBeacon (even though it's not jQuery, it's passive and ideal here)
-		if (navigator.sendBeacon) {
-			try {
-				navigator.sendBeacon("tracking.php");
-				return;
-			} catch(e) {
-				// Fall through to AJAX fallback
-			}
-		}
-
-		// jQuery fallback
-		$.get("tracking.php");
-	},
-
-	/**
 	 * Refresh the currently displayed folder, even if searching.
 	 * 
 	 * @used		browser.js
@@ -417,9 +392,9 @@ var main = {
 	 * 
 	 * Called by an IFRAME inserted by the 'composer.php' script.
 	 * 
-	 * @todo No, it isn't? So, is it not used anymore and thus can be deleted?
+	 * @todo No, it isn't? Is it not used anymore and can be deleted?
 	 * 
-	 * @used		N/A
+	 * @used		N/A (?)
 	 */
 	resizeIframe: function() {
 		$(window).trigger("resize");
@@ -492,7 +467,7 @@ var main = {
 	 * 
 	 * Only an IP address is logged, not a specific user.
 	 * 
-	 * This is not related to root tracking.
+	 * This is not related to visitor tracking.
 	 * 
 	 * @param {string} type			E.g. "start", "enter", "select", etc.
 	 * @param {string} target		E.g. song ID, folder path, emulator name, etc.
@@ -539,7 +514,7 @@ var main = {
 	/**
 	 * Cancel only a specific type (e.g. when backing out of a folder).
 	 * 
-	 * This is not related to root tracking.
+	 * This is not related to visitor tracking.
 	 * 
 	 * @param {*} type 
 	 * 
@@ -554,7 +529,7 @@ var main = {
 	/**
 	 * Cancel all pending tracking.
 	 * 
-	 * This is not related to root tracking.
+	 * This is not related to visitor tracking.
 	 * 
 	 * @used		N/A
 	 */
@@ -1027,6 +1002,7 @@ main.initEvents = function() {
 	 */
 	$(window).on("load", function() {
 		// Just in case the web browser prefilled the username and password fields
+		// @todo This was refactored a while back; I'm not sure it's necessary anymore
 		setTimeout(function() {
 			$("#username,#password").trigger("keydown");
 		}, 350);
@@ -1937,7 +1913,7 @@ main.bindDexterEvents = function() {
 	/**
 	 * Clicking the 'BACK' button on a 'Remix' page to show the list of them again.
 	 * 
-	 * @todo Is this used at all?
+	 * @todo Is this used at all? As far as I know this tab doesn't have sub pages.
 	 */
 	$("#topic-remix").on("click", "#go-back-remix", function() {
 		// Load the cache again
@@ -2089,6 +2065,8 @@ main.bindDexterCSDbEvents = function() {
 
 	/**
 	 * Clicking 'RETRY' in the CSDb tab where a page load has failed.
+	 * 
+	 * @test Click Rob Hubbard's "Zoolook" in his folder.
 	 */
 	$("#topic-csdb").on("click", ".csdb-retry", function() {
 		browser.getCSDb();
@@ -2169,7 +2147,7 @@ main.bindDexterCSDbEvents = function() {
 	/**
 	 * Clicking the arrow up button in the bottom of CSDb pages to scroll back to the top.
 	 * 
-	 * @todo Is this used anymore? I think the button has been hidden or removed.
+	 * @todo Is this good to have? The code for the button has been commented out in ages.
 	 */
 	$("#topic-profile,#topic-csdb,#topic-player").on("click", "button.to-top", function() {
 		$("#page").scrollTop(0);
@@ -2554,9 +2532,10 @@ main.bindKeyboardEvents = function() {
 						main.fastForwarding = false;
 						break;
 
-					case 27:	// Keyup 'Esc' - cancel search mode
+					case 27:	// Keyup 'Esc' - cancel
 
 						// @todo Escaping custom dialog box should not escape search mode!
+						//       UPDATE: It doesn't now? Investigate further.
 						break;
 		
 					case 32:	// Keyup 'Space' - play/pause
@@ -2725,13 +2704,6 @@ main.bindKeyboardEvents = function() {
 					case 65:	// Keyup 'a' - test something
 
 						log("test");
-
-						SID.setVolume(0.3);
-						//SID.WebSid.resetSampleRate(5050); // Lowest possible rate for max FF speed = 3277
-						SID.speed(10); // Max allowed by WebSid emulator is 14
-						setTimeout(() => {
-							$("#faster").trigger("mouseup");
-						}, 2000); // 2 seconds fast forwards ~20-30 seconds of playtime
 						break;
 
 					default:
@@ -3452,30 +3424,56 @@ main.bindSundryEvents = function() {
 main.bindTrackingEvents = function() {
 
 	/**
-	 * Handle root tracking.
+	 * Handle visitor tracking.
 	 * 
 	 * This is not related to event tracking.
 	 */
 
 	// 1. Ping once shortly after load
 	$(document).ready(function() {
-		setTimeout(main.pingTracking, 1000);
+		setTimeout(_PingTracking, 1000);
 	});
 
 	// 2. Periodic ping
 	setInterval(function() {
-		main.pingTracking();
+		_PingTracking();
 	}, 4 * 60 * 1000); // Every 4 minutes
 
 	// 3. Ping when tab becomes visible again
 	$(document).on("visibilitychange", function() {
-		if (!document.hidden) main.pingTracking();
+		if (!document.hidden) _PingTracking();
 	});
 
 	// 4. Ping on unload
 	$(window).on("beforeunload", function() {
-		main.pingTracking();
+		_PingTracking();
 	});
+
+	/**
+	 * Call the visitor tracking.
+	 * 
+	 * This is used for generating a text file that is then parsed and displayed as
+	 * a separate HTML file.
+	 * 
+	 * This is not related to event tracking. 
+	 * 
+	 * @used		Above events
+	 */
+	function _PingTracking() {
+
+		if (navigator.sendBeacon) {
+			try {
+				navigator.sendBeacon("tracking.php");
+				return;
+			} catch(e) {
+				// Fall through to AJAX fallback
+			}
+		}
+
+		// jQuery fallback
+		$.get("tracking.php");
+	};
+
 }
 
 // ==============================
@@ -3575,7 +3573,7 @@ $(function() { // DOM ready
 	$("#topic-settings .settings-advanced").hide();
 	$("#topic-settings .settings-advanced-" + emulator).show();
 
-	// Doesn't work correctly and I can't test it as I don't have a MIDI device
+	// @todo Doesn't work correctly and I can't test it as I don't have a MIDI device
 	/*$("#asid-midi-outputs")
 		.styledSelect("midi-outputs");*/
 
