@@ -14,8 +14,8 @@
 	--color-bg-box:					#f7f8f5;			/* General background color for various boxes and pages */
 	--color-avatar-bg:				var(--color-top);	 /* Background color for all types of avatars */
 
-	--color-logo:					#d3d4c6;			/* Color for e.g. top left logo and disabled song rows */
-	--color-disabled:				var(--color-logo);
+	--color-logo:					#cfd0c2;			/* Color for e.g. top left logo */
+	--color-disabled:				#d3d4c6;
 	--color-dot:					#8a8c7a;			/* Color for e.g. small split dots in text */
 	--color-bg-sid-selected:		#ebebe5;			/* Background of e.g. a selected SID row in the browser */
 	--color-bg-sid-hover:			#f1f1ed;			/* Background when hovering on a SID row in the browser */
@@ -112,6 +112,7 @@
 	--color-theme-bg-hovbot:		var(--color-button-hover);
 	--shadow-theme-selector:		1px 1px 2px var(--color-text-minor);
 
+	--url-logo:						url(../images/logo.png);
 	--url-biglogo:					url(../images/biglogo.png);
 	
 	--color-link-hover:				#e95927;			/* Hovering on a link */
@@ -435,7 +436,7 @@
 	--color-bg-box:					#242424;			/* General background color for various boxes and pages */
 	--color-avatar-bg:				#393939;
 
-	--color-logo:					#31362e;
+	--color-logo:					#373c34;			/* #31362e */
 	--color-disabled:				#444;
 	--color-bg-sid-selected:		#343434;			/* Background of e.g. a selected SID row in the browser */
 	--color-bg-sid-hover:			#2c2c2c;			/* Background when hovering on a SID row in the browser */
@@ -526,6 +527,7 @@
 	--color-theme-bg-hovbot:		#000;
 	--shadow-theme-selector:		0 0 4px #f5f5f1;
 
+	--url-logo:						url(../images/logo_dark.png);
 	--url-biglogo:					url(../images/biglogo_dark.png);
 
 	--color-link-hover:				var(--color-anchor-hover);
@@ -1079,11 +1081,21 @@ small.u2 { margin-left: 2px; }
 
 #logo {
 	position: absolute;
-	top: -25px;
-	left: -7px;
-	color:  var(--color-logo);
-	font: bold 43px "Kanit", sans-serif;
+	top: -7px;
+	left: 25px;
+	width: 210px;
+	height: 60px;
+	background: var(--color-bg) var(--url-logo) 0 0 / 210px no-repeat;
 }
+
+	#minilogo {
+		position: absolute;
+		top: 0;
+		right: 0;
+		color:  var(--color-logo);
+		font: bold 43px "Kanit", sans-serif;
+		white-space: nowrap;
+	}
 
 #theme-selector {
 	position: absolute;

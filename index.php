@@ -566,9 +566,8 @@
 
 		<div id="panel">
 			<div id="top">
-				<div id="logo" class="unselectable">D e e p S I D
-					<?php if (MiniPlayer()) echo '<div style="position:absolute;top:24px;left:200px;white-space:nowrap;">mini-player</div>'; ?>
-				</div>
+				<div id="logo" class="unselectable"></div>
+				<?php if (MiniPlayer()) echo '<div id="minilogo">mini-player</div>'; ?>
 				<select id="dropdown-topleft-emulator" name="select-topleft-emulator" style="visibility:hidden;">
 					<option value="resid">reSID (BETA)</option>
 					<!--<option value="resid">reSID (WebSidPlay)</option>-->
