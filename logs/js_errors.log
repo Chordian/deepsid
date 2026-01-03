@@ -1,0 +1,46 @@
+[2026-01-03 09:21:03] error
+Message: TypeError: can't access property "subtunes", browser.playlist[browser.songPos] is undefined
+Source: http://chordian/deepsid/js/player.js?v=1767431819 (1482:1)
+IP: ::1
+Stack:
+getSongInfo@http://chordian/deepsid/js/player.js?v=1767431819:1482:1
+emphasizing/<@http://chordian/deepsid/js/browser.js?v=1767428985:2714:24
+setTimeout handler*emphasizing@http://chordian/deepsid/js/browser.js?v=1767428985:2712:13
+getCSDb/this.csdb</<@http://chordian/deepsid/js/browser.js?v=1767428985:2677:10
+validateData@http://chordian/deepsid/js/browser.js?v=1767428985:3778:14
+getCSDb/this.csdb<@http://chordian/deepsid/js/browser.js?v=1767428985:2646:9
+u@https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js:2:27457
+fireWith@https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js:2:28202
+k@https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js:2:77651
+send/n/<@https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js:2:79907
+EventHandlerNonNull*send@https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js:2:80093
+ajax@https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js:2:77118
+w[t]@https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js:2:78094
+getCSDb@http://chordian/deepsid/js/browser.js?v=1767428985:2645:17
+handleURLParameters@http://chordian/deepsid/js/main.js?v=1767431873:840:12
+@http://chordian/deepsid/js/main.js?v=1767431873:3637:7
+l@https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js:2:29375
+Deferred/then/a/</c<@https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js:2:29677
+setTimeout handler*Deferred/then/a/<@https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js:2:29886
+u@https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js:2:27457
+fireWith@https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js:2:28202
+fire@https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js:2:28238
+u@https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js:2:27457
+fireWith@https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js:2:28202
+ready@https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js:2:31285
+_@https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js:2:31419
+EventListener.handleEvent*@https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js:2:31533
+@https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js:2:220
+@https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js:2:225
+
+
+[2026-01-03 09:22:37] error
+Message: TypeError: can't access property "subtunes", browser.playlist[browser.songPos] is undefined
+Source: http://chordian/deepsid/js/player.js?v=1767431819 (1482:1)
+IP: ::1
+
+[2026-01-03 09:23:22] error
+Message: TypeError: can't access property "subtunes", browser.playlist[browser.songPos] is undefined
+Source: http://chordian/deepsid/js/player.js?v=1767431819 (1482:1)
+IP: ::1
+

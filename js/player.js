@@ -1479,7 +1479,9 @@ SIDPlayer.prototype = {
 		if (typeof result.songReleased == "undefined")
 			result.songReleased = "<?>";
 		if (isNaN(result.maxSubsong))
-			result.maxSubsong = browser.playlist[browser.songPos].subtunes - 1;
+			result.maxSubsong = main.isSongSelected()
+				? result.maxSubsong = browser.playlist[browser.songPos].subtunes - 1
+				: 0;
 		return result;
 	},
 

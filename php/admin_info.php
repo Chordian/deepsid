@@ -36,6 +36,11 @@ $html = '<h3>Information</h3>
 					<button class="run-script" data-script="'.$baseURL.'../logs/tags.htm">SHOW</button>
 				</div>
 				<div class="script">
+					<div class="monitor">JavaScript errors</div>
+					<span>Show a log of synchronous JavaScript errors and unhandled Promise rejections.</span>
+					<button class="run-script" data-script="'.$baseURL.'../logs/js_errors.log">SHOW</button>
+				</div>
+				<div class="script">
 					<div class="monitor">Database errors</div>
 					<span>Show a log of account-related database errors.</span>
 					<button class="run-script" data-script="'.$baseURL.'../logs/db_errors_account.txt">SHOW</button>

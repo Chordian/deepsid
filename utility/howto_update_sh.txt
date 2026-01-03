@@ -34,6 +34,9 @@ DATABASE
   6. Go to the "composers" table and search for this: %/2020
   7. Perform a copy of the single row you get and update all the years you find. Go.
 
+When done, search for "SID+FM" in the "hvsc_files" table. Make sure the year that was inserted in
+the "fullname" field for those tunes are removed.
+
 JAVASCRIPT
 ¯¯¯¯¯¯¯¯¯¯
   1. Edit the "main.js" file.

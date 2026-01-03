@@ -458,6 +458,15 @@ var main = {
 		});
 	},
 
+	/**
+	 * Check if a song is selected thus it is safe to read from the playlist array.
+	 * 
+	 * @returns {boolean}			TRUE if array and song position are set
+	 */
+	isSongSelected: function() {
+		return Boolean(browser.playlist && browser.playlist[browser.songPos]);
+	},
+
 	// ==============================
 	// Functions: Event tracking
 	// ==============================
@@ -579,7 +588,8 @@ var main = {
 
 	/**
 	 * Enable or disable buttons and sliders in the sundry box for 6581 filter.
-	 * NOTE: Don't call this too early or 'SID.getModel()' fails.
+	 * 
+	 * Don't call this too early or 'SID.getModel()' fails.
 	 * 
 	 * @todo Probably belongs in the controls.js file instead?
 	 * 
@@ -1311,6 +1321,46 @@ main.bindEvents = function() {
 		$("#dialog-cover,#click-to-play-cover").hide();
 		main.playFromURL();
 	});
+
+	/**
+	 * Catch synchronous JavaScript errors.
+	 */
+	window.onerror = function (message, source, lineno, colno, error) {
+
+		_LogJSError({
+			type:		'error',
+			message:	message,
+			source:		source,
+			line:		lineno,
+			column:		colno,
+			stack:		error && error.stack ? error.stack : ''
+		});
+
+		return false; // Let the error still appear in the browser console
+	};
+
+	/**
+	 * Catch unhandled Promise rejections (async/await errors).
+	 */
+	window.onunhandledrejection = function (event) {
+
+		_LogJSError({
+			type:		'unhandledrejection',
+			message:	event.reason ? event.reason.toString() : 'Unknown rejection',
+			stack:		event.reason && event.reason.stack ? event.reason.stack : ''
+		});
+	};
+
+	/**
+	 * Send JavaScript error info to the server for logging.
+	 */
+	function _LogJSError(data) {
+		$.ajax({
+			url:		'php/js_error_log.php',
+			method:		'POST',
+			data:		data
+		});
+	}
 }
 
 // ==============================
@@ -1710,6 +1760,7 @@ main.bindAnnexEvents = function() {
 		browser.annexNotWanted = false;
 		_ClickAnnexLink($(this).attr("href"));
 		setTimeout(function() {
+			$("#atab-help").trigger("click");
 			$("#annex").show();
 		}, 100);
 		return false;

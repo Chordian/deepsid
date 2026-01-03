@@ -423,8 +423,6 @@
 		</div>
 
 		<div id="dialog-edit-videos" class="dialog-box">
-			<a id="ev-corner-link" href="#" target="_blank" style="position:absolute;top:24px;right:24px;font-size:13px;">Open Tabs</a>
-			<small>Use <b>Firefox</b> for this</small>
 			<div class="dialog-text"></div>
 			<fieldset style="height:200px;"><legend>Song</legend>
 				<div class="ev-tabs">
@@ -1975,6 +1973,11 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>January 3, 2026</h3>
+						<ul>
+							<li>Fixed broken SID file information in the 'SID+FM' subfolder of the 'SID Happens' folder.</li>
+						</ul>
 
 						<h3>December 31, 2025</h3>
 						<ul>

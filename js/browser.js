@@ -66,7 +66,7 @@ function Browser() {
 	this.scrollPositions = [];
 	this.kbPositions = [];
 	this.sliderButton = false;
-	this.annexNotWanted = main.getParam("notips") !== ""
+	this.annexNotWanted = (main.getParam("notips") !== "" || main.getParam("noannex") !== "")
 
 	this.secondsLength = 0;
 	this.chips = 1;
@@ -3610,17 +3610,8 @@ Browser.prototype = {
 		var $evSid = $("#ev-sid");
 		var author = $evSid.attr("data-author").replace(/[_.]/g, " "),
 			name = $evSid.text().replace(/[_.]/g, " ");
-		var nameNoSid = name.substr(0, name.length - 4);
 
-		if (event.target.id == "ev-corner-link") {
-			// Open multiple web browser tabs
-			window.open("https://www.youtube.com/results?search_query="+encodeURIComponent(author+" "+name.substr(0, name.length - 4), "_blank"));
-			window.open("https://www.youtube.com/channel/UCDbAWy2ArsTKso-A0sFv_hA/search?query="+encodeURIComponent(author+" "+nameNoSid, "_blank"));
-			window.open("https://www.youtube.com/c/acrouzet/search?query="+encodeURIComponent(author+" "+nameNoSid, "_blank"));
-			window.open("https://www.youtube.com/user/demoscenes/search?query="+encodeURIComponent(author+" "+nameNoSid, "_blank"));
-			window.open("https://www.youtube.com/c/UnepicStonedHighSIDCollection/search?query="+encodeURIComponent(author+" "+nameNoSid, "_blank"));
-			return false;
-		} else if (event.target.id == "ev-dd2-checkbox") {
+		if (event.target.id == "ev-dd2-checkbox") {
 			if ($target.is(":checked")) {
 				// Turn on drop-down box for editing the next subtune
 				$("#ev-dd2-subtune").prop("disabled", false).removeClass("disabled");

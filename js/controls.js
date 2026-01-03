@@ -1070,7 +1070,7 @@ Controls.prototype = {
 	 * Update the collection version just above the sundry box.
 	 */
 	updateSundryVersion: function() {
-		if (!browser.playlist || !browser.playlist[browser.songPos]) return;
+		if (!main.isSongSelected()) return;
 		
 		var version = browser.playlist[browser.songPos].hvsc,
 			isCGSC = browser.playlist[browser.songPos].fullname.substr(-4) == ".mus",

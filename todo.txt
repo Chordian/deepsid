@@ -17,21 +17,7 @@ ONGOING
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- Check automatic backup one of these days. It still works, right?
-
-- BUG: Auto-shrinking of sundry on small display doesn't work anymore?
-
-- BUG: Clicking an annex link in FAQ doesn't select the 'Help' tab first.
-  Showing "clinks" from profile does select the proper tab - look at that code for help.
-
-- BUG: Console log TypeError occurs when testing a direct CSDb link.
-
-- BUG: Playing SID+FM tune with Hermit gives a TypeError about property "replace".
-
-- Open multiple tabs in YouTube dialog box doesn't do that on Firefox anymore. At least
-  remove the "Use Firefox" message?
-
-- In addition to '?notips=1' add 'annexoff=1' which does the same thing.
+- Consider including tags in "All" search?
 
 - Check if the "To Top" button in main.js is nice to have anymore. If not, it should have
   all it's relevant code removed.
@@ -51,6 +37,9 @@ SHOULD BE DONE
   I thought about in the root where only a "\" is displayed, but is there a better place?
 
 - See if you can get ChatGPT to convert tasks in HVSC update ToDo to PHP files.
+
+- I've asked ChatGPT if web audio can be cleaned up for next SID click. It smells like
+  something that could take quite some time to fiddle with. Dive in later.
 
 - BUG: In some situations the search box doesn't show the 'X' icon when it should. For
   example, when clicking the 'New in HVSC update #84' folder link (and you haven't been
@@ -218,6 +207,10 @@ CONSIDER THIS
 - Ellipsis box in annex group box is too wide on my work PC. (Chrome?)
   UPDATE: I tested a lot of composer with long group names and suddenly couldn't hit the bug
   on my work PC anymore. Parking it for now.
+
+- Sundry no longer auto-shrinks on small displays. This was removed 2025-09-06 because entering
+  folders accidentally expanded a manually collapsed sundry box. If you want to reinsert the
+  code in the windows "resize" event later, make sure you don't hit that bug again.
 
 - User wish: Option for automatic renaming of files in a downloaded playlist, so a composer is
   prepended. For example, "Cybernoid.sid" becomes "Jeroen Tel - Cybernoid.sid" instead. I am not

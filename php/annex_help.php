@@ -386,7 +386,7 @@ $help = array(
 				<td>wait</td><td>Select but do not play the song.&nbsp;&nbsp;Value is <b>ms</b> before pausing.&nbsp;&nbsp;<b>100</b> works well.</td>
 			</tr>
 			<tr>
-				<td>notips</td><td><b>1</b> to avoid showing this annex box.</td>
+				<td>noannex<br /><span style="font-weight:normal;">or</span> notips</td><td><b>1</b> to avoid showing this annex box.</td>
 			</tr>
 		</table>
 
