@@ -3174,6 +3174,29 @@ Browser.prototype = {
 
 		// Handle context menu options
 		switch (action) {
+			case 'main-next-inline-factoid':
+				main.cycleFactoidTypeTop();
+				break;
+			case 'main-next-detail-factoid':
+				main.cycleFactoidTypeBottom();
+				break;
+			case 'main-toggle-tags':
+				main.toggleTags();
+				break;
+			case 'main-toggle-sundry':
+				main.toggleSundry();
+				$(window).trigger("resize");
+				break;
+			case 'main-refresh-folder':
+				main.refreshFolder();
+				break;
+			case 'main-load-sid':
+				// Upload and test one or more external SID tune(s)
+				$("#upload-test").trigger("click");
+				break;
+			case 'main-popup-window':
+				main.popUpWindow();
+				break;
 			case "download-file":
 				// Stop playing in DeepSID in case an external SID player is going to take over now
 				$("#stop").trigger("mouseup");

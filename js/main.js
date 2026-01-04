@@ -418,6 +418,51 @@ var main = {
 	},
 
 	/**
+	 * Select next inline (top) factoid.
+	 */
+	cycleFactoidTypeTop: function() {
+		main.factoidTypeTop++;
+		if (main.factoidTypeTop == 1) main.factoidTypeTop++; // Skip tags
+		if (main.factoidTypeTop > 12) main.factoidTypeTop = 0;
+
+		$("#dropdown-settings-factoid-top").val(main.factoidTypeTop).trigger("change");
+	},
+
+	/**
+	 * Select next detail (bottom) factoid.
+	 */
+	cycleFactoidTypeBottom: function() {
+		main.factoidTypeBottom++;
+		if (main.factoidTypeBottom > 12) main.factoidTypeBottom = 0;
+
+		$("#dropdown-settings-factoid-bottom").val(main.factoidTypeBottom).trigger("change");
+	},
+
+	/**
+	 * Toggle tags ON or OFF.
+	 */
+	toggleTags: function() {
+		main.showTags = !main.showTags;
+		$("#showtags").prop("checked", main.showTags);
+		main.showTags
+			? $("#songs .tags-line").css("visibility", "")			//.show()
+			: $("#songs .tags-line").css("visibility", "hidden")	//.hide();
+
+		localStorage.setItem("showtags", main.showTags); // Boolean is stored as a string
+
+		main.browserMessage("Show tags: "+(main.showTags ? "ON" : "OFF"));
+	},
+
+	/**
+	 * Open a pop-up window with only the width of the '#panel' area.
+	 */
+	popUpWindow: function() {
+		
+		window.open("//deepsid.chordian.net/?mobile=1&emulator=websid", "_blank",
+			"'left=0,top=0,width=450,height="+(screen.height-150)+",scrollbars=no'");
+	},
+
+	/**
 	 * Check if a file exists in the "SID Happens" folder.
 	 * 
 	 * @param {string} filename		Must be full path
@@ -1320,6 +1365,36 @@ main.bindEvents = function() {
 	$("#click-to-play-cover").click(function() {
 		$("#dialog-cover,#click-to-play-cover").hide();
 		main.playFromURL();
+	});
+
+	/**
+	 * Showing the main menu context menu in top left corner.
+	 */
+	$("#main-menu").click(function() {
+
+		let contents = "", $panel = $("#panel");
+		$("#contextmenu").remove();
+
+		contents = `
+			<div class="line main-line" data-action="main-load-sid">Load SID file<span>l</span></div>
+			<div class="line main-line" data-action="main-popup-window">Pop-up window<span>p</span></div>
+			<div class="line main-line" data-action="main-next-inline-factoid">Next inline factoid<span>i</span></div>
+			<div class="line main-line" data-action="main-next-detail-factoid">Next detail factoid<span>u</span></div>
+			<div class="line main-line" data-action="main-refresh-folder">Refresh folder<span>f</span></div>
+			<div class="line main-line" data-action="main-toggle-sundry">Toggle sundry<span>s</span></div>
+			<div class="line main-line" data-action="main-toggle-tags">Toggle tags<span>y</span></div>
+		`;
+
+		// Create the context menu
+		setTimeout(() => {
+			$panel.prepend('<div id="contextmenu" class="context unselectable">'+contents+'</div>');
+
+			$("#contextmenu")
+				.css("z-index", 10) // Overlap emulator drop-down box
+				.css("top", 12)
+				.css("left", 17)
+				.css("visibility","visible");
+		}, 1);
 	});
 
 	/**
@@ -2598,9 +2673,7 @@ main.bindKeyboardEvents = function() {
 		
 					case 80:	// Keyup 'p' - pop-up window
 
-						// Open a pop-up window with only the width of the #panel area
-						window.open("//deepsid.chordian.net/?mobile=1&emulator=websid", "_blank",
-							"'left=0,top=0,width=450,height="+(screen.height-150)+",scrollbars=no'");
+						main.popUpWindow();
 						break;
 
 					case 67:	// Keyup 'c' - refresh compo cache - ADMIN ONLY
@@ -2618,7 +2691,6 @@ main.bindKeyboardEvents = function() {
 
 					case 83:	// Keyup 's' - open/close sundry box
 
-						// Toggle the sundry box minimized or restored
 						main.toggleSundry();
 						$(window).trigger("resize");
 						break;
@@ -2702,32 +2774,17 @@ main.bindKeyboardEvents = function() {
 
 					case 89:	// Keyup 'y' - toggle showing tags on or off
 
-						main.showTags = !main.showTags;
-						$("#showtags").prop("checked", main.showTags);
-						main.showTags
-							? $("#songs .tags-line").css("visibility", "")			//.show()
-							: $("#songs .tags-line").css("visibility", "hidden")	//.hide();
-
-						localStorage.setItem("showtags", main.showTags); // Boolean is stored as a string
-
-						main.browserMessage("Show tags: "+(main.showTags ? "ON" : "OFF"));
+						main.toggleTags();
 						break;
 
 					case 73:	// Keyup 'i' - cycle through factoid types (top)
 
-						main.factoidTypeTop++;
-						if (main.factoidTypeTop == 1) main.factoidTypeTop++; // Skip tags
-						if (main.factoidTypeTop > 12) main.factoidTypeTop = 0;
-
-						$("#dropdown-settings-factoid-top").val(main.factoidTypeTop).trigger("change");
+						main.cycleFactoidTypeTop();
 						break;
 
 					case 85:	// Keyup 'u' - cycle through factoid types (bottom)
 
-						main.factoidTypeBottom++;
-						if (main.factoidTypeBottom > 12) main.factoidTypeBottom = 0;
-
-						$("#dropdown-settings-factoid-bottom").val(main.factoidTypeBottom).trigger("change");
+						main.cycleFactoidTypeBottom();
 						break;
 
 					case 37:	// Keyup 'ARROW-LEFT' - skip to previous (+ SHIFT to emulate auto-progress)

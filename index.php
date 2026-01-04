@@ -566,6 +566,7 @@
 
 		<div id="panel">
 			<div id="top">
+				<div id="main-menu"><div></div><div></div><div></div></div>
 				<div id="logo" class="unselectable"></div>
 				<?php if (MiniPlayer()) echo '<div id="minilogo">mini-player</div>'; ?>
 				<select id="dropdown-topleft-emulator" name="select-topleft-emulator" style="visibility:hidden;">
@@ -1972,6 +1973,11 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>January 4, 2026</h3>
+						<ul>
+							<li>Added a main menu in the top-left corner. Click the three-line icon to access it.</li>
+						</ul>
 
 						<h3>January 3, 2026</h3>
 						<ul>

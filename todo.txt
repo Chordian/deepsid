@@ -22,6 +22,8 @@ SHOULD BE DONE
 - Check if the "To Top" button in main.js is nice to have anymore. If not, it should have
   all it's relevant code removed.
 
+- Put an EXIT button after "Temporary emulator testing" text.
+
 - Make rolling random tips in the upper news box. Hotkeys to use, etc. Part of the random
   messages could also be other things, for example a recommended link.
 

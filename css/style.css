@@ -1079,6 +1079,27 @@ small.u2 { margin-left: 2px; }
 	margin: 6px 0;
 }
 
+#main-menu {
+	position: absolute;
+	top: 0;
+	left: 2px;
+	width: 12px;
+	height: 20px;
+	cursor: pointer;
+}
+
+	#main-menu div {
+		width: 100%;
+		height: 2px;
+		margin: 2px 0 2.5px;
+		background: var(--color-text-fine);
+		border-radius: 4px;
+	}
+
+		#main-menu:hover div {
+			background: var(--color-text-strong);
+		}
+
 #logo {
 	position: absolute;
 	top: -7px;
@@ -4379,6 +4400,16 @@ input[type=range]::-ms-track {
 			color: var(--color-context-text-hover);
 			background: var(--color-context-bg-hover);
 		}
+
+		.context .main-line {
+			width: 170px;
+		}
+
+			.context .main-line span {
+				float: right;
+				font-family: "Courier New", serif;
+				/*font-weight: bold;*/
+			}
 
 	.context .divider {
 		height: 2px;
