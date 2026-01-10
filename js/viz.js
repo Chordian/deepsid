@@ -822,7 +822,13 @@ Viz.prototype = {
 					clockspeed = this.prevClockspeed; // Type error usually happens when leaving a folder while playing
 				}
 				// Find the closest match in the array of note frequencies (PAL or NTSC table)
-				this.sidFrequencies = clockspeed.substr(0, 4) === "NTSC" || browser.path.indexOf("Compute's Gazette SID Collection") !== -1 ? this.sidFrequenciesNTSC : this.sidFrequenciesPAL;
+				const isNTSC =
+					clockspeed.substr(0, 4) === "NTSC" ||
+					(typeof browser.path === "string" &&
+					browser.path.indexOf("Compute's Gazette SID Collection") !== -1);
+				this.sidFrequencies = isNTSC
+					? this.sidFrequenciesNTSC
+					: this.sidFrequenciesPAL;
 				$.each(this.sidFrequencies, function(index) {
 					if (closest == null || Math.abs(this - freq) < Math.abs(closest - freq)) {
 						closest = this;

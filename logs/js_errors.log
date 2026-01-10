@@ -44,3 +44,18 @@ Message: TypeError: can't access property "subtunes", browser.playlist[browser.s
 Source: http://chordian/deepsid/js/player.js?v=1767431819 (1482:1)
 IP: ::1
 
+[2026-01-10 07:52:01] error
+Message: ReferenceError: onBrowserReady is not defined
+Source: http://chordian/deepsid/js/main.js?v=1768031513 (3672:3)
+IP: ::1
+
+[2026-01-10 07:52:04] error
+Message: ReferenceError: onBrowserReady is not defined
+Source: http://chordian/deepsid/js/main.js?v=1768031513 (3672:3)
+IP: ::1
+
+[2026-01-10 08:23:05] error
+Message: TypeError: can't access property "outputs", midiAccessObj is null
+Source: http://chordian/deepsid/js/handlers/jsSID-modified.js?v=1768033362 (637:31)
+IP: ::1
+

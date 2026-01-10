@@ -244,6 +244,19 @@ var main = {
 	},
 
 	/**
+	 * Check if functions in the 'browser' object is ready for calling.
+	 * 
+	 * @param {*} fn			The function in the 'browser' object
+	 */
+	onBrowserReady: function(fn) {
+		if (browser.ready) {
+			fn();
+		} else {
+			setTimeout(() => onBrowserReady(fn), 0);
+		}
+	},
+
+	/**
 	 * Read one setting in the admin table and return its value.
 	 * 
 	 * This is not related to user settings.
@@ -822,9 +835,11 @@ var main = {
 					main.$trAutoPlay = $("#folders tr").eq($tr.index());
 
 					// Scroll the row into the middle of the list
-					var rowPos = main.$trAutoPlay[0].offsetTop;
-					var halfway = $("#folders").height() / 2 - 26; // Last value is half of SID file row height
-					$("#folders").scrollTop(rowPos > halfway ? rowPos - halfway : 0);
+					if (main.$trAutoPlay.length) {					
+						var rowPos = main.$trAutoPlay[0].offsetTop;
+						var halfway = $("#folders").height() / 2 - 26; // Last value is half of SID file row height
+						$("#folders").scrollTop(rowPos > halfway ? rowPos - halfway : 0);
+					}
 
 					// The user may have to click a overlay question to satisfy browser auto-play prevention
 					// NOTE: This is always shown for the YouTube handler. YouTube seems to do their own checking.
@@ -1096,7 +1111,11 @@ main.bindEvents = function() {
 		}
 		$(".dialog-box").center();
 
-		browser.positionFocusExplainer();		
+		main.onBrowserReady(function() {
+			if (typeof browser.positionFocusExplainer === "function") {
+				browser.positionFocusExplainer();
+			}
+		});
 	});
 
 	/**
@@ -1203,7 +1222,10 @@ main.bindEvents = function() {
 					$("#dropdown-topleft-emulator,#dropdown-settings-emulator")
 						.styledOptionState("resid jsidplay2 websid legacy hermit webusb asid", "enabled")
 						.styledOptionState("lemon youtube", "disabled");
-					$("#path").css("top", "5px").empty().append("Temporary emulator testing");
+					$("#path").css("top", "5px").empty().append(`
+						<span style="position:relative;top:-2px;margin-right:8px;">Temporary emulator testing</span>
+						<button id="load-test-exit" class="medium">Exit</button>
+					`);
 					$("#stab-stil,#tab-stil").empty().append("STIL");
 					ctrls.showNewsImage(false);
 
@@ -1944,11 +1966,6 @@ main.bindDexterEvents = function() {
 		}
 		main.setScrollTopInstantly("#page", main.tabPrevScrollPos[topic].pos);
 
-		// Show the 'To Top' button in the bottom on pages where this is nice to have
-		// NOTE: Turned off for now - not sure it's needed anymore now the default scrollbar is in use.
-		/*if (topic === "csdb" || topic === "profile" || topic === "player" || browser.isCompoFolder) {
-			$("#topic-"+topic+" button.to-top").show();
-		}*/
 		// Show the big logo for the informational tabs only
 		if (["about", "faq", "changes"].includes(topic) ||
 			(topic === "profile" && browser.path == "" &&
@@ -2007,9 +2024,9 @@ main.bindDexterEvents = function() {
 
 		// If 'Profile' tab is selected then refresh the charts if present
 		// NOTE: If this is not done the charts will appear "flattened" towards the left side.
-		if (topic === "profile" && typeof ctYears !== "undefined") {
-			ctYears.update();
-			ctPlayers.update();
+		if (topic === "profile") {
+			if (typeof ctYears !== "undefined") ctYears.update();
+			if (typeof ctPlayers !== "undefined") ctPlayers.update();
 		}
 	});
 
@@ -2268,15 +2285,6 @@ main.bindDexterCSDbEvents = function() {
 		main.cachePosBeforeCompo = $("#page").scrollTop();
 		var $this = $(this);
 		browser.getCompoResults($this.attr("data-compo"), $this.attr("data-id"), $this.attr("data-mark"));
-	});
-
-	/**
-	 * Clicking the arrow up button in the bottom of CSDb pages to scroll back to the top.
-	 * 
-	 * @todo Is this good to have? The code for the button has been commented out in ages.
-	 */
-	$("#topic-profile,#topic-csdb,#topic-player").on("click", "button.to-top", function() {
-		$("#page").scrollTop(0);
 	});
 
 	/**
@@ -3663,13 +3671,15 @@ $(function() { // DOM ready
 
 	// Get the user's settings
 	$.post("php/settings.php", function(data) {
-		browser.validateData(data, function(data) {
-			main.settingToggle("first-subtune",	data.settings.firstsubtune);
-			main.settingToggle("skip-tune",		data.settings.skiptune);
-			main.settingToggle("mark-tune",		data.settings.marktune);
-			main.settingToggle("skip-bad",		data.settings.skipbad);
-			main.settingToggle("skip-long",		data.settings.skiplong);
-			main.settingToggle("skip-short",	data.settings.skipshort);
+		main.onBrowserReady(function() {
+			browser.validateData(data, function(data) {
+				main.settingToggle("first-subtune",	data.settings.firstsubtune);
+				main.settingToggle("skip-tune",		data.settings.skiptune);
+				main.settingToggle("mark-tune",		data.settings.marktune);
+				main.settingToggle("skip-bad",		data.settings.skipbad);
+				main.settingToggle("skip-long",		data.settings.skiplong);
+				main.settingToggle("skip-short",	data.settings.skipshort);
+			});
 		});
 	}.bind(this));
 	

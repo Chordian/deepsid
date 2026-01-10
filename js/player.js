@@ -659,8 +659,15 @@ SIDPlayer.prototype = {
 							// The worker has produced a chunk of sound data - create a stereo buffer and
 							// send it to the sound card
 							var buffer = outer.jp2AudioContext.createBuffer(2, eventData.length, sampleRate);
-							buffer.getChannelData(0).set(new Float32Array(eventData.left));
-							buffer.getChannelData(1).set(new Float32Array(eventData.right));
+
+								const left = new Float32Array(eventData.left);
+								const right = new Float32Array(eventData.right);
+
+								const channel0 = buffer.getChannelData(0);
+								const channel1 = buffer.getChannelData(1);
+
+								channel0.set(left.subarray(0, channel0.length));
+								channel1.set(right.subarray(0, channel1.length));							
 
 							var sourceNode = outer.jp2AudioContext.createBufferSource();
 							sourceNode.buffer = buffer;

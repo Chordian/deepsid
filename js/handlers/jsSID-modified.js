@@ -207,7 +207,7 @@ function asidSend(chip) {
  asidOutBuffer[chip][index++] = 0xf7;
 
  // Send to physical MIDI port. Only use configured SIDs
- if (SID_address[chip]) {
+ if (SID_address[chip] && selectedMidiOutput) {
   selectedMidiOutput.send(asidOutBuffer[chip].slice(0, index));
  }
 
@@ -360,6 +360,7 @@ let webusbplaying = false;
     };
 
     webusb.writeReg = function (array) {
+      if (!port || typeof port.send !== "function") return;
       port.send(
         new Uint8Array(array)
       );

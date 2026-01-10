@@ -19,11 +19,6 @@ SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
 - Consider including tags in "All" search?
 
-- Check if the "To Top" button in main.js is nice to have anymore. If not, it should have
-  all it's relevant code removed.
-
-- Put an EXIT button after "Temporary emulator testing" text.
-
 - Make rolling random tips in the upper news box. Hotkeys to use, etc. Part of the random
   messages could also be other things, for example a recommended link.
 
@@ -32,16 +27,15 @@ SHOULD BE DONE
   setting. It could also be continuously toggle the LOOP button to get, infinity, 2 times,
   3 times, and then start over.
 
+- Syndrom claims SH date sorting is not detailed down to hours and minutes. Investigate.
+
 - Cache: Consider also caching the 'SHOW' pages. Alternatively, you could just disable the
   button on cached pages loaded whenever CSDb is down.
-
-- Consider a HTML button somewhere for testing a SID, so it's not just the "l" hotkey.
-  I thought about in the root where only a "\" is displayed, but is there a better place?
 
 - See if you can get ChatGPT to convert tasks in HVSC update ToDo to PHP files.
 
 - I've asked ChatGPT if web audio can be cleaned up for next SID click. It smells like
-  something that could take quite some time to fiddle with. Dive in later.
+  something that could take quite some time to fiddle with. Dive in later?
 
 - BUG: In some situations the search box doesn't show the 'X' icon when it should. For
   example, when clicking the 'New in HVSC update #84' folder link (and you haven't been
@@ -51,6 +45,10 @@ SHOULD BE DONE
 ADMIN STUFF
 ¯¯¯¯¯¯¯¯¯¯¯
 - Make admin-only factoids available to admins (rotating and drop-down boxes).
+
+- Create roles in the 'Users' database table, for normal users and administrators. Then
+  after giving JCH the admin role, change code everywhere to test for administrator role
+  and not for JCH specifically. UPDATE: I asked ChatGPT - see its thread for comments.
 
 - Add an admin setting for temporarily turning off editing tags. I had one disaster lately
   where I could have used that feature. Perhaps a drop-down with "Everyone", "Admin only"

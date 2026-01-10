@@ -216,7 +216,6 @@
 	--svg-filter-icon-editor:		invert(26%) sepia(11%) saturate(0%) hue-rotate(244deg) brightness(90%) contrast(90%);
 	--svg-filter-icon-cstar:		invert(8%) sepia(84%) saturate(5326%) hue-rotate(5deg) brightness(93%) contrast(114%);
 	--svg-filter-icon-time:			invert(50%) sepia(0%) saturate(0%) hue-rotate(184deg) brightness(93%) contrast(91%);
-	--svg-filter-icon-to-top:		var(--svg-filter-white);
 	--svg-filter-icon-visuals:		var(--svg-filter-button);
 	--svg-filter-icon-sticky:		var(--svg-filter-icon-editor);
 	--svg-filter-icon-disabled:		var(--svg-filter-white);
@@ -4308,7 +4307,8 @@ input[type=range]::-ms-track {
 				line-height: 22px;
 			}
 
-			#search-cancel {
+			#search-cancel,
+			#load-test-exit {
 				position: relative;
 				top: -2.5px;
 				height: 23px;
@@ -6595,20 +6595,6 @@ input[type=range]::-ms-track {
 		white-space: pre-wrap;
 		word-wrap: break-word;		
 	}
-
-	/* Small arrow up button in the bottom of CSDb pages (for scrolling back up) */
-	.to-top {
-		float: right;
-		margin-top: 7px;
-		padding: 0;
-		line-height: 0 !important;
-		width: 21px;
-		height: 15px !important;
-	}
-
-		.to-top img {
-			filter: var(--svg-filter-icon-to-top);
-		}
 
 	#topic-player .thumbnail-player,
 	#topic-gb64 .thumbnail-gb64 {

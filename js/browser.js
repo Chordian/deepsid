@@ -74,6 +74,7 @@ function Browser() {
 
 	this.redirectFolder = "";
 
+	this.ready = false;
 	this.slideTags = false;
 
 	this.init();
@@ -91,6 +92,8 @@ Browser.prototype = {
 
 		if (main.getParam("file") === "" && main.getParam("search") === "") this.getFolder();
 		this.addEvents();
+
+		this.ready = true;
 	},
 
 	/**
@@ -361,6 +364,7 @@ Browser.prototype = {
 
 		switch (event.target.id) {
 			case "folder-root":
+			case "load-test-exit":
 				if (!$("#folder-root").hasClass("disabled")) {
 					// Go to HVSC root folder
 					this.path = "";
@@ -2869,15 +2873,15 @@ Browser.prototype = {
 			? { fullname: thisFullname }
 			: { id: optionalID };
 
-		this.gb64 = $.get("php/gb64.php", params, function(data) {
-			this.validateData(data, function(data) {
+		this.gb64 = $.get("php/gb64.php", params, (data) => {
+			this.validateData(data, (data) => {
 
 				clearTimeout(loadingGB64);
 				$("#sticky-gb64").empty().append(data.sticky);
 				$("#topic-gb64").empty().append(data.html)
 					.css("visibility", "visible");
 				main.resetDexterScrollBar("gb64");
-	
+
 				// If there are any entries then show a notification number on the 'GB64' tab (if not in focus)
 				if (data.count > 0 && $("#tabs .selected").attr("data-topic") !== "gb64" && !this.isCGSC())
 					$("#note-gb64").empty().append(data.count).show();
@@ -2887,37 +2891,39 @@ Browser.prototype = {
 				// If there are entries then a "GameBase64" tag is already there or will be added below
 				// which means that the redundant "Game" and "Game Prev" tags should be removed
 				if (data.count > 0) {
+
 					$.post("php/tags_remove_game.php", {
-						fullname:	thisFullname,
-					}, function(data) {
-						browser.validateData(data, function(data) {
-							browser.updateStickyTags(
+						fullname: thisFullname,
+					}, (data) => {
+						this.validateData(data, (data) => {
+							this.updateStickyTags(
 								$("#songs tr.selected"),
-								browser.buildTags(data.tags, data.tagtypes, data.tagids),
+								this.buildTags(data.tags, data.tagtypes, data.tagids),
 								thisFullname.split("/").slice(-1)[0]
 							);
 						});
-					}.bind(this));
+					});
 
 					// If there is no "GameBase64" tag then add it now
-					if (browser.playlist[browser.songPos].tags.indexOf("tag-gamebase64") == -1) {
+					if (this.playlist[this.songPos].tags.indexOf("tag-gamebase64") === -1) {
+
 						$.post("php/tags_write_single.php", {
-							fullname:	thisFullname,
-							tag:		"GameBase64",
-						}, function(data) {
-							browser.validateData(data, function(data) {
+							fullname: thisFullname,
+							tag: "GameBase64",
+						}, (data) => {
+							this.validateData(data, (data) => {
 								// Both updates may be called asynchronously but it shouldn't break anything
-								browser.updateStickyTags(
+								this.updateStickyTags(
 									$("#songs tr.selected"),
-									browser.buildTags(data.tags, data.tagtypes, data.tagids),
+									this.buildTags(data.tags, data.tagtypes, data.tagids),
 									thisFullname.split("/").slice(-1)[0]
 								);
 							});
-						}.bind(this));
+						});
 					}
 				}
 			});
-		}.bind(this));
+		});
 	},
 
 	/**

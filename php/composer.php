@@ -172,7 +172,7 @@ if (isset($fullname)) {
 					$org_groups.
 					$user_comments.'</div>';
 
-				die(json_encode(array('status' => 'ok', 'html' => $html.'<i><small>Generated using the <a href="https://csdb.dk/webservice/" target="_blank">CSDb web service</a></small></i><button class="to-top" title="Scroll back to the top" style="display:none;"><img src="images/to_top.svg" alt="" /></button>', 'annex_html' => $annex_html)));
+				die(json_encode(array('status' => 'ok', 'html' => $html.'<i><small>Generated using the <a href="https://csdb.dk/webservice/" target="_blank">CSDb web service</a></small></i>', 'annex_html' => $annex_html)));
 			}
 
 		} catch(PDOException $e) {
