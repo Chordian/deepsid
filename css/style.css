@@ -7220,6 +7220,10 @@ input[type=range]::-ms-track {
 		margin-right: 2px;
 	}
 
+		#sundry-news .annex-link:after {
+			top: 4px;
+		}
+
 /* ---- Styled Select ------------------------------------------------------- */
 
 /* Used to make the original select hidden but still functional */

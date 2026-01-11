@@ -244,7 +244,7 @@ var main = {
 	},
 
 	/**
-	 * Check if functions in the 'browser' object is ready for calling.
+	 * Check if functions in the 'browser' object are ready for calling.
 	 * 
 	 * @param {*} fn			The function in the 'browser' object
 	 */
@@ -1227,7 +1227,6 @@ main.bindEvents = function() {
 						<button id="load-test-exit" class="medium">Exit</button>
 					`);
 					$("#stab-stil,#tab-stil").empty().append("STIL");
-					ctrls.showNewsImage(false);
 
 					// Only disable the ".." button
 					$("#folder-root,#folder-back").removeClass("disabled");
@@ -1853,7 +1852,7 @@ main.bindAnnexEvents = function() {
 	 * Clicking a link for showing a topic in the annex box. Since the annex box
 	 * could have been closed earlier, it is made visible again.
 	 */
-	 $("#page").on("click", "a.annex-link", function() {
+	 $("#page,#sundry-news").on("click", "a.annex-link", function() {
 		browser.annexNotWanted = false;
 		_ClickAnnexLink($(this).attr("href"));
 		setTimeout(function() {
@@ -2186,7 +2185,8 @@ main.bindDexterEvents = function() {
 		if ($tr.length) {
 			// Yes; this is the <TR> row with the SID file we need to play
 			var $trPlay = $("#folders tr").eq($tr.index());
-			$trPlay.children("td.sid").trigger("click", [undefined, true, solitary]); // Don't refresh CSDb + [Stop when done]
+			// Don't refresh CSDb + [Stop when done]
+			$trPlay.children("td.sid").trigger("click", [undefined, true, solitary]);
 			// Scroll the row into the middle of the list
 			var rowPos = $trPlay[0].offsetTop,
 				halfway = $("#folders").height() / 2 - 26; // Last value is half of SID file row height
@@ -2795,6 +2795,11 @@ main.bindKeyboardEvents = function() {
 						main.cycleFactoidTypeBottom();
 						break;
 
+					case 90:	// Keyup 'z' - add label (production title)
+
+						browser.addLabel();
+						break;
+
 					case 37:	// Keyup 'ARROW-LEFT' - skip to previous (+ SHIFT to emulate auto-progress)
 
 						$("#folders").focus();
@@ -3302,13 +3307,11 @@ main.bindSundryEvents = function() {
 		var stopic = $this.attr("data-topic");
 		localStorage.setItem("sundrytab", stopic);
 
-		ctrls.showNewsImage(false);
-
 		switch (stopic) {
 			case "stil":
 				// Show collection version for this song
 				ctrls.updateSundryVersion();
-				ctrls.showNewsImage(true);
+				ctrls.showSundryMessage();
 				break;
 			case "tags":
 				$("#sundry-ctrls").append(

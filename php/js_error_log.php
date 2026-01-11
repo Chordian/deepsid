@@ -26,7 +26,7 @@ $entry = [
 	'stack'   => $_POST['stack'] ?? ''
 ];
 
-/* Ignore 'Script error.' noise */
+// Ignore "Script error." noise
 if (
 	$entry['message'] === 'Script error.' &&
 	(empty($entry['source']) || $entry['source'] === '') &&
@@ -36,9 +36,9 @@ if (
 	return;
 }
 
-/* Ignore Google bot errors */
+// Ignore known search engine crawlers
 if (
-	preg_match('/^66\.249\./', $entry['ip']) &&
+	preg_match('/^(66\.249\.|40\.77\.|65\.55\.)/', $entry['ip']) &&
 	strpos($entry['message'], 'is not defined') !== false
 ) {
 	return;

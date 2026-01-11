@@ -3285,27 +3285,7 @@ Browser.prototype = {
 				}
 				break;
 			case 'add-label':
-				if ($("#logged-username").text() == "JCH") {
-					var $selectedSidFile = $("#folders tr.selected"),
-						$csdbInfo = $("#csdb-info");
-					if ($selectedSidFile.length && $csdbInfo.length) {
-						$.post("php/labels_write.php", {
-							id:			$selectedSidFile.find(".entry").attr("data-id"),
-							name:		$csdbInfo.attr("data-name"),
-							type:		$csdbInfo.attr("data-type"),
-							csdbid:		$csdbInfo.attr("data-csdbid")
-						}, function(data) {
-							browser.validateData(data, function(data) {
-								if (data.created)
-									main.browserMessage("Created label for '"+$csdbInfo.attr("data-name")+"'");
-								else
-									main.browserMessage("Linked to existing label");
-								main.refreshFolder();
-							});
-						});
-					} else
-						alert("No SID song or CSDb release selected.");
-				}
+				this.addLabel();
 				break;
 			case 'unlink-label':
 				if ($("#logged-username").text() == "JCH") {
@@ -3465,6 +3445,35 @@ Browser.prototype = {
 				break;
 			default:
 				break;
+		}
+	},
+
+	/**
+	 * Add a label (production title) as a factoid.
+	 * 
+	 * Only available to administrators.
+	 */
+	addLabel: function() {
+		if ($("#logged-username").text() == "JCH") {
+			var $selectedSidFile = $("#folders tr.selected"),
+				$csdbInfo = $("#csdb-info");
+			if ($selectedSidFile.length && $csdbInfo.length) {
+				$.post("php/labels_write.php", {
+					id:			$selectedSidFile.find(".entry").attr("data-id"),
+					name:		$csdbInfo.attr("data-name"),
+					type:		$csdbInfo.attr("data-type"),
+					csdbid:		$csdbInfo.attr("data-csdbid")
+				}, function(data) {
+					browser.validateData(data, function(data) {
+						if (data.created)
+							main.browserMessage("Created label for '"+$csdbInfo.attr("data-name")+"'");
+						else
+							main.browserMessage("Linked to existing label");
+						main.refreshFolder();
+					});
+				});
+			} else
+				alert("No SID song or CSDb release selected.");
 		}
 	},
 

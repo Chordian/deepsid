@@ -669,22 +669,7 @@
 			<div id="sundry">
 				<div id="stopic-stil" class="stopic">
 					<?php if (!MiniPlayer()): ?>
-						<div id="sundry-news">
-							<span>The <a href="https://www.hvsc.c64.org/" target="_top">High Voltage SID Collection</a> has been upgraded to the latest version #84. Click <a href="//deepsid.chordian.net/?search=84&type=new">here</a> to see what's new in this update.</span>
-							<!--<span><a href="http://www.c64music.co.uk/" target="_top">Compute's Gazette SID Collection</a> has been upgraded to the latest version #147. Click <a href="//deepsid.chordian.net/?search=147&type=new">here</a> to see what's new in this update.</span>-->
-
-							<!--<span>Want to learn how to make SID tunes? Check out <a href="https://www.youtube.com/watch?v=nXNtLetxFUg">this tutorial video</a> now on YouTube.</span>-->
-
-							<!--<span><b class="strong">NEW:</b> A SID row now has <u>two</u> factoids. You can select what to show in them with two new drop-down boxes in the setup tab.</span>-->
-
-							<!--<span><p style="margin:0 0 4px 0;">Have you made a new SID tune and need to slap a cool visualizer with a logo on it?</p><b style="font-size:22px;">Check out <a href="https://sidquake.c64demo.com/">SIDquake</a> by Raistlin!</b></span>-->
-							<!--<span> .... See <a href="#" onclick="$('#tab-changes').trigger('click'); return false;">Changes</a> for info.</span>-->
-
-								<!--   See in controls.js: "showNewsImage" and "clickNews" for how to set up a news image -->
-							<!--<pre style="height:112px;"></pre>-->
-							<!--<pre><b style="font-size:16px;">Coming up<br></b><b style="position:relative;top:-3px;font-size:13px;">17 - 19 Nov.</b><br><br><i style="position:absolute;bottom:-38px;right:4px;font-size:13px;line-height:17px;text-align:right;">New SID tunes<br><font style="font-size:17px;">incoming!</font></i></pre>-->
-							<!--<pre><b style="font-size:16px;">This weekend<br></b><b style="position:relative;top:-3px;font-size:13px;">24 - 27 July</b><br><br><i style="position:absolute;bottom:2px;right:4px;font-size:13px;line-height:17px;text-align:right;">New SID tunes<br><font style="font-size:17px;">incoming!</font></i></pre>-->
-						</div>
+						<div id="sundry-news"></div>
 					<?php endif ?>
 				</div>
 				<div id="stopic-tags" class="stopic" style="display:none;"></div>

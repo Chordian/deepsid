@@ -32,7 +32,6 @@ Controls.prototype = {
 		$("#info").on("click", "#sid-model,#clockspeed,#info-rating", this.onClick.bind(this));
 		$("#sundry,#topic-stil").on("click", ".subtune", this.onClick.bind(this));
 		$("#sundry").on("click", "canvas,.tag", this.onClick.bind(this));
-		$("#sundry-news").on("click", "pre", this.clickNews.bind(this));
 		$("#stopic-osc,#stopic-filter,#stopic-stereo").on("click", "button", this.onClick.bind(this));
 		$("#sundry-ctrls").on("click", "#sidwiz,#showtags,#filter-6581", this.onClick.bind(this));
 
@@ -842,7 +841,6 @@ Controls.prototype = {
 			tabName = "Notes";
 		$("#stab-stil").empty().append(tabName); // Set for both sundry and dexter tabs
 		$("#tab-stil").empty().append(tabName+'<div id="note-stil" class="notification stilcolor"></div>');
-		this.showNewsImage(false);
 
 		if (isCGSC) {
 			$("#topic-stil,#stopic-stil").addClass("c64font");
@@ -1004,35 +1002,20 @@ Controls.prototype = {
 	},
 
 	/**
-	 * Show or hide a background image in the 'News' tab of the Sundry box. This can be
-	 * used to e.g. show an image of a party coming up in the next weekend.
+	 * Show a message in the first sundry tab (typically a tip).
 	 * 
-	 * Replace the 'news.png' file in the images folder with the image you want to show
-	 * in the sundry box. You can also zoom in, if you want to center on a logo and
-	 * also get more height. Just increase 100% to a higher value.
-	 * 
-	 * @param {boolean} show	If specified and TRUE, show image if in 'News' tab
-	 */
-	showNewsImage: function(show) {
-
-		return; // Comment this out when you want to show a news image
-
-		if (show && $("#stab-stil").text() == "News")
-			$("#sundry").css({                                                    // Zoom  102%
-				'background': 'var(--color-bg-box) url(images/news.png) center -1px / 100% auto no-repeat',
+	 * The type of message is controlled with an administrator setting.
+	 */	
+	showSundryMessage: function() {
+		var $sundryNews = $("#sundry-news");
+		$sundryNews.empty();
+		$.get("php/sundry_message.php", (data) => {
+			browser.validateData(data, (data) => {
+				$sundryNews.append(data.html);
+				// Capitalize first letter
+				$("#stab-stil").empty().append(data.type.charAt(0).toUpperCase()+data.type.slice(1));
 			});
-		else
-			$("#sundry").css({
-				'background': 'var(--color-bg-box)',
-			});
-	},
-
-	/**
-	 * When clicking the 'News' tab while it's showing a background image. See above for
-	 * setting this up. Point this to the relevant web site for the image.
-	 */
-	clickNews: function() {
-		window.open("https://mysdata.org/2025/index.html");
+		});
 	},
 
 	/**

@@ -17,17 +17,24 @@ ONGOING
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- Consider including tags in "All" search?
-
 - Make rolling random tips in the upper news box. Hotkeys to use, etc. Part of the random
   messages could also be other things, for example a recommended link.
+
+
+
+  - Almost done. Need to fix tab renaming bugs when clicking around.
+
+
+
+- Add test resources (bottom of this text file) to a new page in 'Admin' tab. Make it the
+  first domain part is adapted depending on being local or online.
+
+- Make it so when you 'Add Label' it automatically purges any old link(s) first.
 
 - Idea from Anon-Relays: Loop song X number of times before moving on to the next one. In
   the settings, the default number should of course be 1. UPDATE: It doesn't have to be a
   setting. It could also be continuously toggle the LOOP button to get, infinity, 2 times,
   3 times, and then start over.
-
-- Syndrom claims SH date sorting is not detailed down to hours and minutes. Investigate.
 
 - Cache: Consider also caching the 'SHOW' pages. Alternatively, you could just disable the
   button on cached pages loaded whenever CSDb is down.
@@ -503,6 +510,11 @@ PROBABLY NOT?
 
 - How about a sticky footer on tab pages? For the CSDb tab it would be particularly useful
   as it makes it easy to see if the contents were generated from the cache or not.
+
+- Consider including tags in "All" search? UPDATE: Turning this one down for now. Searching for
+  tags is a complicated SQL query that I'd rather not merge with the existing "All" search. But
+  even more important, I fear that adding tags too will introduce a situation where searching for
+  almost anything will introduce a ton of annoying "noise" results.
 
 - I still ponder if hiding "Compo" is okay. If hiding it, perhaps consider an alert to pop up (or
   show a message in the dialog box) saying that it will be hidden because the ranking should
