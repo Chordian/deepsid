@@ -59,3 +59,13 @@ Message: TypeError: can't access property "outputs", midiAccessObj is null
 Source: http://chordian/deepsid/js/handlers/jsSID-modified.js?v=1768033362 (637:31)
 IP: ::1
 
+[2026-01-17 11:11:43] error
+Message: TypeError: can't access property "getContext", this.canvas_area[voice] is undefined
+Source: http://chordian/deepsid/js/viz.js?v=1768030740 (1207:4)
+IP: ::1
+
+[2026-01-17 11:25:57] error
+Message: TypeError: can't access property "substr", html is undefined
+Source: http://chordian/deepsid/js/browser.js?v=1768645289 (2592:5)
+IP: ::1
+

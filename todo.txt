@@ -17,8 +17,7 @@ ONGOING
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- Acrouzet would like pages in search results so all results can be viewed. See if it can
-  be done with a page selector parameter to the 'hvsc.php' file.
+- Rename admin setting for search limit (now it's results per page).
 
 - Consider not showing some random tips and links depending on whether the site resides
   inside a Lemon 64 iframe. Some features are disabled there.
@@ -26,11 +25,11 @@ SHOULD BE DONE
 - Add test resources (bottom of this text file) to a new page in 'Admin' tab. Make it the
   first domain part is adapted depending on being local or online.
 
-- Put up new Scarzix avatar image from his Facebook profile.
-
 - For administrators only, add "Source:" message about how CSDb loaded - directly, cache,
   or cache unreachable. The latter should have faint red text color. Place it where you
   previously had the 'Add Label' button before you removed it.
+
+- Tip: About searching for e.g. ratings 3 and more.
 
 - Make it so when you 'Add Label' it automatically purges any old link(s) first.
 

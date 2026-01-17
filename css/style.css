@@ -896,8 +896,8 @@ input[type="search"]:focus {
 	color: var(--color-input-text-focus);
 }
 
-::selection { background:var(--color-selection-bg); color:var(--color-selection-text); }
-::-moz-selection { background:var(--color-selection-bg); color:var(--color-selection-text); }
+::selection { background: var(--color-selection-bg); color:var(--color-selection-text); }
+::-moz-selection { background: var(--color-selection-bg); color:var(--color-selection-text); }
 
 /* ---- DeepSID -------------------------------------------------------------- */
 
@@ -3262,6 +3262,51 @@ input[type=range]::-ms-track {
 			font-size: 11px;
 		}
 
+		#path .results {
+			display: inline-block;
+			position: relative;
+			top: -2px;
+			font-family: "Asap Condensed", sans-serif;
+		}
+
+			/* Page browser buttons for search results */
+			#path .page {
+				position: relative;
+				top: 1px;
+				height: 20px;
+				width: 16px;
+				padding: 0;
+				line-height: 0;
+				border-radius: 2px;
+				fill: currentColor;
+				vertical-align: top;
+			}
+
+				#search-page-prev {
+					margin-left: 4px;
+				}
+
+					#search-page-prev svg {
+						position: relative;
+						left: -1px;
+						transform: rotate(90deg);
+					}
+
+				#search-page-next {
+					margin-right: 2px;
+				}
+
+					#search-page-next svg {
+						transform: rotate(270deg);
+					}
+
+		#path .page-counter {
+			display: inline-block;
+			width: 55px;
+			text-align: center;
+			background: rgb(118, 128, 118, 0.15);
+		}
+
 	/* The drop-down box for how the list is sorted */
 	#sort {
 		position: absolute;
@@ -4314,6 +4359,12 @@ input[type=range]::-ms-track {
 				height: 23px;
 				line-height: 26px;
 			}
+
+				#search-cancel {
+					float: right;
+					margin-right: 6px;
+					font-family: "Asap Condensed", sans-serif;
+				}
 
 /* ---- Thumbnails for links ------------------------------------------------- */
 

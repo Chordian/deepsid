@@ -9,6 +9,7 @@
  * @uses		$_GET['searchType']
  * @uses		$_GET['searchQuery']		overrides 'folder' if used
  * @uses		$_GET['searchHere']			1 = in current folder, 0 = in everything
+ * @uses		$_GET['page']				page number for search results
  * @uses		$_GET['factoidTop']			factoid type in top line
  * @uses		$_GET['factoidBottom']		factoid type in bottom line
  * 
@@ -109,11 +110,34 @@ function SongLengthToMilliseconds(?string $length): ?int {
     return ($minutes * 60 + $seconds) * 1000 + $ms;
 }
 
+/**
+ * Count search results and return the number.
+ * 
+ * @param		string							SQL query
+ * @param		array							Execute params if available
+ * 
+ * @return		int
+ */
+function CountSearchResults($search_sql, $params = []) {
+
+	global $db;
+
+	$count_sql = "SELECT COUNT(*) FROM ($search_sql) AS counted";
+	if ($params) {
+		$count = $db->prepare($count_sql);
+		$count->execute($params);
+		$count_search_results = (int)$count->fetchColumn();
+	} else {
+		$count_search_results = (int)$db->query($count_sql)->fetchColumn();
+	}
+	return $count_search_results;
+}
+
 // --------------------------------------------------------------------------
 // START
 // --------------------------------------------------------------------------
 
-$found = $symlist_folder_id = 0;
+$found = $symlist_folder_id = $count_search_results = 0;
 $debug = $incompatible = $owner = $new_uploads = '';
 $user_id = $account->CheckLogin() ? $account->UserID() : 0;
 $isSearching = isset($_GET['searchQuery']) && !empty($_GET['searchQuery']);
@@ -124,7 +148,9 @@ $isCSDbFolder = substr($_GET['folder'], 0, 24) == '/CSDb Music Competitions';
 $isCSDbCompo = $isCSDbFolder && !$isSearching;
 $compoName = $isCSDbCompo && strlen($_GET['folder']) > 25 ? explode('/', $_GET['folder'])[2] : '';
 
-$search_limit = $account->GetAdminSetting('search_limit');
+$page_size = $account->GetAdminSetting('search_limit');
+$offset = isset($_GET['page']) ? ($_GET['page'] - 1) * $page_size : 0;
+$search_limit_and_page = $offset.', '.$page_size;
 
 $folders_version = HVSC_VERSION;
 $search_shortcut_type = array();
@@ -166,10 +192,16 @@ try {
 				// Search for a specific user rating (1-5) or a range (e.g. -3 or 3-)
 				$operators = substr($_GET['searchQuery'], 0, 1) == '-' ? '<='
 					: (substr($_GET['searchQuery'], -1) == '-' ? '>=' : '=');
-				$select = $db->prepare('SELECT fullname FROM hvsc_files'.
+				$search_sql = 'SELECT fullname FROM hvsc_files'.
 					' INNER JOIN ratings ON hvsc_files.id = ratings.table_id'.
-					' WHERE '.$searchContext.' AND ratings.user_id = '.$user_id.' AND ratings.rating '.$operators.' :rating AND ratings.type = "FILE" LIMIT '.$search_limit);
-				$select->execute(array(':rating'=>str_replace('-', '', $_GET['searchQuery'])));
+					' WHERE '.$searchContext.' AND ratings.user_id = '.$user_id.' AND ratings.rating '.$operators.' :rating AND ratings.type = "FILE"';
+				$params = [
+					':rating'  => str_replace('-', '', $_GET['searchQuery'])
+				];
+				$select = $db->prepare($search_sql.' LIMIT '.$search_limit_and_page);
+				$select->execute($params);
+
+				$count_search_results = CountSearchResults($search_sql, $params);
 
 			} else if ($_GET['searchType'] == 'tag') {
 
@@ -179,47 +211,67 @@ try {
 				foreach($search_tags as $tag)
 					$tag_list .= ' OR tags_info.name LIKE "%'.$tag.'%"';
 
-				$select = $db->query('SELECT fullname FROM hvsc_files'.
+				$search_sql = 'SELECT fullname FROM hvsc_files'.
 					' LEFT JOIN tags_lookup ON hvsc_files.id = tags_lookup.files_id'.
 					' LEFT JOIN tags_info ON tags_info.id = tags_lookup.tags_id'.
 					' WHERE '.str_replace('fullname', 'hvsc_files.fullname', $searchContext).
 					' AND ('.substr($tag_list, 4).')'.
 					' GROUP BY tags_lookup.files_id'.
-					' HAVING COUNT(*) = '.count($search_tags).' LIMIT '.$search_limit);
+					' HAVING COUNT(*) = '.count($search_tags);
+				$select = $db->query($search_sql.' LIMIT '.$search_limit_and_page);
 
+				$count_search_results = CountSearchResults($search_sql);
 
 			} else if ($_GET['searchType'] == 'label') {
 
 				// Search for a label (production title)
-				$select = $db->prepare('SELECT fullname FROM hvsc_files'.
+				$search_sql = 'SELECT fullname FROM hvsc_files'.
 					' LEFT JOIN labels_lookup ON hvsc_files.id = labels_lookup.files_id'.
 					' LEFT JOIN labels_info ON labels_info.id = labels_lookup.labels_id'.
 					' WHERE '.str_replace('fullname', 'hvsc_files.fullname', $searchContext).
 					' AND labels_info.name LIKE :label'.
-					' GROUP BY labels_lookup.files_id LIMIT '.$search_limit);
-				$select->execute(array(':label'=>'%'.$_GET['searchQuery'].'%'));
+					' GROUP BY labels_lookup.files_id';
+				$params = [
+					':label' => '%'.$_GET['searchQuery'].'%'
+				];
+				$select = $db->prepare($search_sql.' LIMIT '.$search_limit_and_page);
+				$select->execute($params);
+
+				$count_search_results = CountSearchResults($search_sql, $params);
 
 			} else if ($_GET['searchType'] == 'location') {
 
-				$select = $db->prepare('SELECT fullname FROM hvsc_files'.
-					' WHERE '.$searchContext.' AND loadaddr = :loadaddr LIMIT '.$search_limit);
+				$search_sql = 'SELECT fullname FROM hvsc_files'.
+					' WHERE '.$searchContext.' AND loadaddr = :loadaddr';
 				$location = $_GET['searchQuery'];
 				if (substr($location, 0, 1) == '$')
 					$location = hexdec(substr($location, 1));
 				else if (substr($location, 0, 2) == '0x')
 					$location = hexdec(substr($location, 2));
-				$select->execute(array(':loadaddr'=>$location));
+				$params = [
+					':loadaddr' => $location
+				];
+				$select = $db->prepare($search_sql.' LIMIT '.$search_limit_and_page);
+				$select->execute($params);
+
+				$count_search_results = CountSearchResults($search_sql, $params);
 
 			} else if ($_GET['searchType'] == 'maximum') {
 
-				$select = $db->prepare('SELECT fullname FROM hvsc_files'.
-					' WHERE '.$searchContext.' AND datasize <= :datasize AND fullname LIKE "_High Voltage SID Collection%" LIMIT '.$search_limit);
+				$search_sql = 'SELECT fullname FROM hvsc_files'.
+					' WHERE '.$searchContext.' AND datasize <= :datasize AND fullname LIKE "_High Voltage SID Collection%"';
 				$datasize = $_GET['searchQuery'];
 				if (substr($datasize, 0, 1) == '$')
 					$datasize = hexdec(substr($datasize, 1));
 				else if (substr($datasize, 0, 2) == '0x')
 					$datasize = hexdec(substr($datasize, 2));
-				$select->execute(array(':datasize'=>$datasize));
+				$params = [
+					':datasize' => $datasize
+				];
+				$select = $db->prepare($search_sql.' LIMIT '.$search_limit_and_page);
+				$select->execute($params);
+
+				$count_search_results = CountSearchResults($search_sql, $params);
 
 			} else if ($_GET['searchType'] == 'gb64') {
 
@@ -239,7 +291,7 @@ try {
 				$word_list = substr($word_list, 4);
 
 				// Get list of SID files from GameBase64 database
-				$select_gb64 = $gb->query('SELECT SidFilename FROM Games WHERE '.$word_list.' LIMIT '.$search_limit);
+				$select_gb64 = $gb->query('SELECT SidFilename FROM Games WHERE '.$word_list.' LIMIT '.$search_limit_and_page);
 				$select_gb64->setFetchMode(PDO::FETCH_OBJ);
 
 				$chain = '1 = 2';
@@ -250,13 +302,22 @@ try {
 					$chain .= ' OR fullname = "'.$sid.'"';
 				}
 
-				$select = $db->query('SELECT fullname from hvsc_files WHERE '.$chain.' LIMIT '.$search_limit);
+				$search_sql = 'SELECT fullname from hvsc_files WHERE '.$chain;
+				$select = $db->query($search_sql.' LIMIT '.$search_limit_and_page);
+
+				$count_search_results = CountSearchResults($search_sql);
 
 			} else if ($_GET['searchType'] == 'type') {
 
-				$select = $db->prepare('SELECT fullname FROM hvsc_files'.
-					' WHERE '.$searchContext.' AND type = :type LIMIT '.$search_limit);
-				$select->execute(array(':type'=>$_GET['searchQuery']));
+				$search_sql = 'SELECT fullname FROM hvsc_files'.
+					' WHERE '.$searchContext.' AND type = :type';
+				$params = [
+					':type' => $_GET['searchQuery']
+				];
+				$select = $db->prepare($search_sql.' LIMIT '.$search_limit_and_page);
+				$select->execute($params);
+
+				$count_search_results = CountSearchResults($search_sql, $params);
 
 			} else if ($_GET['searchType'] == 'latest') {
 
@@ -268,13 +329,23 @@ try {
 					$query = $words[0];
 					$version = $words[1];		// For queries like "laxity/,74"
 				}
-				$select = $db->query('SELECT fullname from hvsc_files'.
-					' WHERE new = "'.$version.'" AND (fullname LIKE "%'.$query.'%" OR author LIKE "%'.$query.'%") LIMIT '.$search_limit);
+				$search_sql = 'SELECT fullname from hvsc_files'.
+					' WHERE new = "'.$version.'" AND (fullname LIKE "%'.$query.'%" OR author LIKE "%'.$query.'%")';
+				$select = $db->query($search_sql.' LIMIT '.$search_limit_and_page);
+
+				$count_search_results = CountSearchResults($search_sql);
 
 			} else if ($_GET['searchType'] == 'focus') {
 
-				$select = $db->prepare('SELECT fullname FROM composers WHERE '.$searchContext.' AND (focus1 LIKE :query OR focus2 LIKE :query) LIMIT '.$search_limit);
-				$select->execute(array(':query'=>$_GET['searchQuery'].'%'));
+				$search_sql = 'SELECT fullname FROM composers WHERE '.$searchContext.
+					' AND (focus1 LIKE :query OR focus2 LIKE :query)';
+				$params = [
+					':query' => $_GET['searchQuery'].'%'
+				];
+				$select = $db->prepare($search_sql.' LIMIT '.$search_limit_and_page);
+				$select->execute($params);
+
+				$count_search_results = CountSearchResults($search_sql, $params);
 
 			} else if ($_GET['searchType'] == 'folders') {
 
@@ -287,28 +358,28 @@ try {
 					case 'multispeed':
 
 						// Search for all multispeed types (2x, 3x, 4x, etc.)
-						$select = $db->query('SELECT fullname FROM hvsc_files'.
+						$search_sql = 'SELECT fullname FROM hvsc_files'.
 							' LEFT JOIN tags_lookup ON hvsc_files.id = tags_lookup.files_id'.
 							' LEFT JOIN tags_info ON tags_info.id = tags_lookup.tags_id'.
 							' WHERE tags_info.name IN ("multispeed", "2x", "3x", "4x", "5x", "6x", "7x", "8x", "9x", "10x", "11x", "12x", "13x", "14x", "15x", "16x")'.
-							' GROUP BY tags_lookup.files_id LIMIT '.$search_limit);
+							' GROUP BY tags_lookup.files_id';
 						break;
 
 					case 'multisid':
 
 						// Search for all multisid types (2SID, 3SID, etc.)
-						$select = $db->query('SELECT fullname FROM hvsc_files'.
-							' WHERE fullname REGEXP "_2SID|_3SID|_4SID|_8SID|_10SID" LIMIT '.$search_limit);
+						$search_sql = 'SELECT fullname FROM hvsc_files'.
+							' WHERE fullname REGEXP "_2SID|_3SID|_4SID|_8SID|_10SID"';
 						break;
 
 					case 'gamecomposers':
 
 						// Search for most popular game composers in one big list
-						$select = $db->query('SELECT fullname FROM hvsc_files'.
+						$search_sql = 'SELECT fullname FROM hvsc_files'.
 							' LEFT JOIN tags_lookup ON hvsc_files.id = tags_lookup.files_id'.
 							' LEFT JOIN tags_info ON tags_info.id = tags_lookup.tags_id'.
 							' WHERE author REGEXP "Rob Hubbard|Martin Galway|Fred Gray|Wally Beben|Neil Brennan|Ben Daglish|Charles Deenen|Tim Follin|Geoff Follin|Matt Gray|Chris Hülsbeck|Richard Joseph|Russell Lieblich|Reyn Ouwehand|Jeroen Tel|Steve Turner|Martin Walker|Johannes Bjerregaard|David Dunn|Laxity|Yip"'.
-							' AND tags_info.name LIKE "%Game" LIMIT '.$search_limit);
+							' AND tags_info.name LIKE "%Game"';
 						break;
 
 					case 'nogb64yet':
@@ -341,7 +412,7 @@ try {
 						$in_clause = implode(',', $escaped_list);
 
 						// Find all SID tunes with GB64 entries that doesn't have a "GameBase64" tag yet
-						$select = $db->query('
+						$search_sql = '
 							SELECT fullname
 							FROM hvsc_files
 							WHERE fullname IN ('.$in_clause.')
@@ -352,13 +423,17 @@ try {
 								WHERE tags_lookup.files_id = hvsc_files.id
 								AND tags_info.name = "GameBase64"
 							)
-						');
+						';
 						break;
 
 					default:
 
 						// Don't find anything if not a recognized special search
 				}
+
+				$select = $db->query($search_sql.' LIMIT '.$search_limit_and_page);
+
+				$count_search_results = CountSearchResults($search_sql);
 
 			} else if ($_GET['searchType'] != 'country') { // ALL OTHER SEARCH TYPES
 
@@ -397,8 +472,11 @@ try {
 						$exclude = str_replace('#all#', 'CONCAT('.$columns.')', $exclude);
 					}
 				}
-				$select = $db->query('SELECT fullname FROM hvsc_files WHERE '.$searchContext.' AND '.$include.$exclude.' LIMIT '.$search_limit);
-				//$debug = $select;
+
+				$search_sql = 'SELECT fullname FROM hvsc_files WHERE '.$searchContext.' AND '.$include.$exclude;
+				$select = $db->query($search_sql.' LIMIT '.$search_limit_and_page);
+
+				$count_search_results = CountSearchResults($search_sql);
 			}
 
 			$files = array();
@@ -418,45 +496,45 @@ try {
 			$select = null;
 			if ($_GET['searchType'] == 'rating') {
 
-				$select = $db->prepare('SELECT fullname FROM hvsc_folders'.
+				$search_sql = 'SELECT fullname FROM hvsc_folders'.
 					' INNER JOIN ratings ON hvsc_folders.id = ratings.table_id'.
-					' WHERE '.$searchContext.' AND ratings.user_id = '.$user_id.' AND ratings.rating '.$operators.' :rating AND ratings.type = "FOLDER" AND (fullname NOT LIKE "!%") LIMIT '.$search_limit);
-				$select->execute(array(':rating'=>str_replace('-', '', $_GET['searchQuery'])));
+					' WHERE '.$searchContext.' AND ratings.user_id = '.$user_id.' AND ratings.rating '.
+					$operators.' :rating AND ratings.type = "FOLDER" AND (fullname NOT LIKE "!%")';
+				$params = [
+					':rating' => str_replace('-', '', $_GET['searchQuery'])
+				];
+				$select = $db->prepare($search_sql.' LIMIT '.$search_limit_and_page);
+				$select->execute($params);
+
+				$count_search_results += CountSearchResults($search_sql, $params);
 
 			} else if ($_GET['searchType'] == 'country') {
 
 				// Search for country in composer profiles
-				$select = $db->prepare('SELECT fullname FROM composers WHERE '.$searchContext.' AND country LIKE :query LIMIT '.$search_limit);
+				$search_sql = 'SELECT fullname FROM composers WHERE '.$searchContext.' AND country LIKE :query';
 				$query = strtolower($_GET['searchQuery']) == 'holland' ? 'netherlands' : $_GET['searchQuery'];
-				$select->execute(array(':query'=>'%'.$query.'%'));
+				$params = [
+					':query' => '%'.$query.'%'
+				];
+				$select = $db->prepare($search_sql.' LIMIT '.$search_limit_and_page);
+				$select->execute($params);
+
+				$count_search_results += CountSearchResults($search_sql, $params);
 
 			} else if ($_GET['searchType'] == 'folders') {
 
 				// Search for folders affected by the specified 'new' version
-				$select = $db->prepare('SELECT DISTINCT hvsc_folders.fullname FROM hvsc_folders'.
+				$search_sql = 'SELECT DISTINCT hvsc_folders.fullname FROM hvsc_folders'.
 					' INNER JOIN hvsc_files ON hvsc_files.fullname LIKE CONCAT("%", hvsc_folders.fullname ,"/%")'.
-					' WHERE hvsc_files.new = :version AND LENGTH(hvsc_folders.fullname) - LENGTH(REPLACE(hvsc_folders.fullname, "/", "")) > 2');
+					' WHERE hvsc_files.new = :version AND LENGTH(hvsc_folders.fullname) - LENGTH(REPLACE(hvsc_folders.fullname, "/", "")) > 2';
 				$folders_version = $_GET['searchQuery'];
-				$select->execute(array(':version'=>$folders_version));
+				$params = [
+					':version' => $folders_version
+				];
+				$select = $db->prepare($search_sql.' LIMIT '.$search_limit_and_page);
+				$select->execute($params);
 
-			/*} else if ($_GET['searchType'] == 'special') { // NOT USED
-
-				switch(strtolower($_GET['searchQuery'])) {
-
-					case 'mon':
-
-						$select = $db->query('SELECT fullname FROM hvsc_folders WHERE id = 437 OR id = 841 OR id = 1458 OR id = 390 OR id = 903 OR id = 192 OR id = 1511 OR id = 865 OR id = 657 OR id = 733 OR id = 1078');
-						break;
-
-					case 'vibrants':
-
-						$select = $db->query('SELECT fullname FROM hvsc_folders WHERE id = 389 OR id = 437 OR id = 731 OR id = 746 OR id = 841 OR id = 857 OR id = 954');
-						break;
-
-					default:
-
-						// Don't find anything if not a recognized special search
-				}*/
+				$count_search_results += CountSearchResults($search_sql, $params);
 
 			} else if ($_GET['searchType'] == '#all#' || $_GET['searchType'] == 'fullname' || $_GET['searchType'] == 'author' || $_GET['searchType'] == 'new') {
 
@@ -473,7 +551,7 @@ try {
 
 					// Search the 'composers' table to see if the query matches the real name
 					// This makes it possible to search for e.g. "Max Hall" and see his "../Max_F3H" folder.
-					$composers = $db->query('SELECT fullname FROM composers WHERE '.str_replace('#all#', 'name', $include_folders).' LIMIT '.$search_limit);
+					$composers = $db->query('SELECT fullname FROM composers WHERE '.str_replace('#all#', 'name', $include_folders).' LIMIT '.$search_limit_and_page);
 					$composers->setFetchMode(PDO::FETCH_OBJ);
 
 					foreach($composers as $composer_row)
@@ -483,9 +561,12 @@ try {
 					$include = str_replace('#all#', 'fullname', $include_folders);
 					$exclude = str_replace('#all#', 'fullname', $exclude_folders);
 				}
-				$query = 'SELECT fullname FROM hvsc_folders WHERE '.$searchContext.' AND '.$include.$exclude.' AND (fullname NOT LIKE "!%") AND (fullname NOT LIKE "_High Voltage SID Collection/^%") '.$fullnames.' LIMIT '.$search_limit;
-				$select = $db->query($query);
-				//die($query);
+				$search_sql = 'SELECT fullname FROM hvsc_folders
+					WHERE '.$searchContext.' AND '.$include.$exclude.' AND (fullname NOT LIKE "!%")
+					AND (fullname NOT LIKE "_High Voltage SID Collection/^%") '.$fullnames;
+				$select = $db->query($search_sql.' LIMIT '.$search_limit_and_page);
+
+				$count_search_results += CountSearchResults($search_sql);
 			}
 
 			if ($select) {
@@ -508,7 +589,7 @@ try {
 						// Include where the group member folder will redirect to
 						$group = explode('/', $row->fullname)[2];
 
-						$select_groups = $db->query('SELECT folder, redirect FROM groups WHERE name = "'.$group.'"');
+						$select_groups = $db->query('SELECT folder, redirect FROM `groups` WHERE name = "'.$group.'"');
 						$select_groups->setFetchMode(PDO::FETCH_OBJ);
 
 						foreach($select_groups as $member) {
@@ -559,13 +640,13 @@ try {
 						' WHERE symlists.folder_id = '.$symlist_folder_id.
 						' AND ('.substr($tag_list, 4).')'.
 						' GROUP BY tags_lookup.files_id'.
-						' HAVING COUNT(*) = '.count($search_tags).' LIMIT '.$search_limit);
+						' HAVING COUNT(*) = '.count($search_tags).' LIMIT '.$search_limit_and_page);
 
 				} else if ($_GET['searchType'] == 'location') {
 
 					$select_files = $db->prepare('SELECT h.fullname FROM hvsc_files h'.
 						' INNER JOIN symlists ON h.id = symlists.file_id'.
-						' WHERE symlists.folder_id = '.$symlist_folder_id.' AND loadaddr = :loadaddr LIMIT '.$search_limit);
+						' WHERE symlists.folder_id = '.$symlist_folder_id.' AND loadaddr = :loadaddr LIMIT '.$search_limit_and_page);
 					$location = $_GET['searchQuery'];
 					if (substr($location, 0, 1) == '$')
 						$location = hexdec(substr($location, 1));
@@ -577,7 +658,7 @@ try {
 
 					$select_files = $db->prepare('SELECT h.fullname FROM hvsc_files h'.
 						' INNER JOIN symlists ON h.id = symlists.file_id'.
-						' WHERE symlists.folder_id = '.$symlist_folder_id.' AND datasize <= :datasize AND fullname LIKE "_High Voltage SID Collection%" LIMIT '.$search_limit);
+						' WHERE symlists.folder_id = '.$symlist_folder_id.' AND datasize <= :datasize AND fullname LIKE "_High Voltage SID Collection%" LIMIT '.$search_limit_and_page);
 					$datasize = $_GET['searchQuery'];
 					if (substr($datasize, 0, 1) == '$')
 						$datasize = hexdec(substr($datasize, 1));
@@ -650,7 +731,7 @@ try {
 
 				$select_files->setFetchMode(PDO::FETCH_OBJ);
 
-				$found = $select_files->rowCount();
+				$count_search_results = $select_files->rowCount();
 
 				foreach ($select_files as $row)
 					$files[] = $row->fullname;
@@ -918,7 +999,7 @@ try {
 
 			$group = explode('/', $_GET['folder'])[3];
 
-			$select_groups = $db->query('SELECT folder, redirect FROM groups WHERE name = "'.$group.'"');
+			$select_groups = $db->query('SELECT folder, redirect FROM `groups` WHERE name = "'.$group.'"');
 			$select_groups->setFetchMode(PDO::FETCH_OBJ);
 
 			foreach($select_groups as $member) {
@@ -1487,7 +1568,8 @@ echo json_encode(array(
 	'status' 		=> 'ok',
 	'files' 		=> $files_ext,
 	'folders' 		=> $folders_ext,
-	'results' 		=> $found,
+	'results' 		=> $count_search_results, // $found
+	'pages'			=> (int)ceil($count_search_results / $page_size),
 	'incompatible'	=> $incompatible,
 	'owner' 		=> $owner,
 	'compo' 		=> !empty($compoName),

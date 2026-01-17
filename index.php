@@ -1958,6 +1958,7 @@
 						<h3>January 17, 2026</h3>
 						<ul>
 							<li>The default sundry tab on the front page now displays random tips and links.</li>
+							<li>Search queries are no longer limited. Instead, a page selector now lets you browse all results.</li>
 						</ul>
 
 						<h3>January 4, 2026</h3>
