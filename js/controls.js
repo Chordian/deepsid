@@ -1007,12 +1007,13 @@ Controls.prototype = {
 	 * The type of message is controlled with an administrator setting.
 	 */	
 	showSundryMessage: function() {
-		var $sundryNews = $("#sundry-news");
-		$sundryNews.empty();
+		if (browser.path !== "" || main.miniPlayer) return;
+
+		$("#stopic-stil").empty().append('<div id="sundry-news"></div>');
 		$.get("php/sundry_message.php", (data) => {
 			browser.validateData(data, (data) => {
-				$sundryNews.append(data.html);
-				// Capitalize first letter
+				$("#sundry-news").append(data.html);
+				// Capitalize the first letter of the tab word
 				$("#stab-stil").empty().append(data.type.charAt(0).toUpperCase()+data.type.slice(1));
 			});
 		});

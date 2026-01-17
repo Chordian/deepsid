@@ -1852,7 +1852,7 @@ main.bindAnnexEvents = function() {
 	 * Clicking a link for showing a topic in the annex box. Since the annex box
 	 * could have been closed earlier, it is made visible again.
 	 */
-	 $("#page,#sundry-news").on("click", "a.annex-link", function() {
+	 $("#page,#stopic-stil").on("click", "a.annex-link", function() {
 		browser.annexNotWanted = false;
 		_ClickAnnexLink($(this).attr("href"));
 		setTimeout(function() {

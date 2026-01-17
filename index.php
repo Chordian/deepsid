@@ -667,11 +667,7 @@
 				<div id="sundry-ctrls"></div>
 			</div>
 			<div id="sundry">
-				<div id="stopic-stil" class="stopic">
-					<?php if (!MiniPlayer()): ?>
-						<div id="sundry-news"></div>
-					<?php endif ?>
-				</div>
+				<div id="stopic-stil" class="stopic"></div>
 				<div id="stopic-tags" class="stopic" style="display:none;"></div>
 				<div id="stopic-osc" class="stopic" style="display:none;"></div>
 				<div id="stopic-filter" class="stopic" style="display:none;">
@@ -1958,6 +1954,11 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>January 17, 2026</h3>
+						<ul>
+							<li>The default sundry tab on the front page now displays random tips and links.</li>
+						</ul>
 
 						<h3>January 4, 2026</h3>
 						<ul>
