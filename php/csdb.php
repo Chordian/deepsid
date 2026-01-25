@@ -805,7 +805,7 @@ if ($csdb_type == 'sid') {
 				'<p><b>Type:</b><br />'.$csdb->Release->Type.'</p>'.
 				// Info for controls outside of the page (e.g. on the context menu for a SID file)
 				'<div id="csdb-info" style="display:none;"
-					data-name="'.$csdb->Release->Name.'"
+					data-name="'.htmlspecialchars($csdb->Release->Name, ENT_QUOTES, 'UTF-8').'"
 					data-type="'.$csdb->Release->Type.'"
 					data-csdbid="'.$csdb_id.'"></div>'.
 			'</td>'.

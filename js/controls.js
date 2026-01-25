@@ -1008,9 +1008,8 @@ Controls.prototype = {
 	 */	
 	showSundryMessage: function() {
 		if (browser.path !== "" || main.miniPlayer) return;
-
 		$("#stopic-stil").empty().append('<div id="sundry-news"></div>');
-		$.get("php/sundry_message.php", (data) => {
+		$.get("php/sundry_message.php", { lemon: main.isLemon }, (data) => {
 			browser.validateData(data, (data) => {
 				$("#sundry-news").append(data.html);
 				// Capitalize the first letter of the tab word

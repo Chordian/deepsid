@@ -148,7 +148,7 @@ $isCSDbFolder = substr($_GET['folder'], 0, 24) == '/CSDb Music Competitions';
 $isCSDbCompo = $isCSDbFolder && !$isSearching;
 $compoName = $isCSDbCompo && strlen($_GET['folder']) > 25 ? explode('/', $_GET['folder'])[2] : '';
 
-$page_size = $account->GetAdminSetting('search_limit');
+$page_size = $account->GetAdminSetting('search_page_size');
 $offset = isset($_GET['page']) ? ($_GET['page'] - 1) * $page_size : 0;
 $search_limit_and_page = $offset.', '.$page_size;
 
@@ -1333,7 +1333,7 @@ try {
 				stripos($file, 'Quadtron.sid') === false)		// Quadtron.sid by Cosowi
 				$player .= ' (unpacked)';
 
-			// A "factoid" is the info field in two places of a SID row
+			// A "factoid" is an info field in two places of a SID row
 			$fmode = array($_GET['factoidTop'], $_GET['factoidBottom']);
 			$factoid = ["", ""];
 			$fvalue = ["", ""];

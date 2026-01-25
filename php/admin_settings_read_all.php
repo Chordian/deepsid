@@ -25,7 +25,7 @@ try {
 	$select = $db->query('SELECT * FROM admin_settings ORDER BY setting_key');
 	$settings = $select->fetchAll(PDO::FETCH_OBJ);
 
-	$html = '<h3>Settings</h3>';
+	$html = '<h3>Global settings</h3>';
 
 	// Build the rows for each setting
 	foreach ($settings as $s) {

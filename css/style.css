@@ -52,8 +52,10 @@
 	--color-text-block-changed:		#c00;
 	--color-text-spottext:			var(--color-top);
 	--color-text-new-user:			#0a0;
-	--color-text-script-name:		#a44;
-	--color-text-monitor:			#282;
+	--color-text-script-name:		#44a;
+	--color-text-monitor:			#207820; /* #282 */
+	--color-text-csdb-direct:		#00c;
+	--color-text-csdb-down:			#c00;
 
 	--color-text-tag:				var(--color-top);	 /* Default tag colors */
 	--color-bg-tag:					#a8ad95;
@@ -468,8 +470,10 @@
 	--color-text-block-changed:		#e66;
 	--color-text-spottext:			var(--color-bottom);
 	--color-text-new-user:			#0f0;
-	--color-text-script-name:		#cc7070;
-	--color-text-monitor:			#70cc70;
+	--color-text-script-name:		#a0b4e0; /* #cc7070 for red*/
+	--color-text-monitor:			#a0d6a0; /* #70cc70 */
+	--color-text-csdb-direct:		#aaf;
+	--color-text-csdb-down:			#e66;
 	
 	--color-text-tag:				var(--color-bottom);  /* Default tag colors */
 	--color-bg-tag:					#b6b9a5;
@@ -1083,20 +1087,19 @@ small.u2 { margin-left: 2px; }
 	top: 0;
 	left: 2px;
 	width: 12px;
-	height: 20px;
+	height: 24px;
 	cursor: pointer;
 }
 
-	#main-menu div {
-		width: 100%;
-		height: 2px;
-		margin: 2px 0 2.5px;
-		background: var(--color-text-fine);
-		border-radius: 4px;
+	#main-menu img {
+		position: relative;
+		top: -6px;
+		height: 24px;
+		filter: var(--svg-filter-icon-browser);
 	}
 
-		#main-menu:hover div {
-			background: var(--color-text-strong);
+		#main-menu img:hover {
+			filter: var(--svg-filter-icon-bottom);
 		}
 
 #logo {
@@ -4462,6 +4465,19 @@ input[type=range]::-ms-track {
 				/*font-weight: bold;*/
 			}
 
+	.context .admin {
+		color: var(--color-text-csdb-direct);
+	}
+
+	.factoid-admin {
+		color: #00c;
+	}
+
+		#dropdown-settings-factoid-top.admin-selected,
+		#dropdown-settings-factoid-bottom.admin-selected {
+			color: #00c;
+		}
+
 	.context .divider {
 		height: 2px;
 		margin-bottom: 1px;
@@ -4598,7 +4614,7 @@ input[type=range]::-ms-track {
 			justify-content: center;
 			flex-direction: column;
 			font-size: 17px;
-			color: var(--color-forum-moderator);
+			color: var(--color-text-strong);
 		}
 
 		#topic-admin .edit {
@@ -5653,7 +5669,7 @@ input[type=range]::-ms-track {
 					#adminer {
 						float: right;
 						width: auto !important;
-						padding: 0 8px 4px 10px !important;
+						padding: 0 8px 6px 10px !important;
 					}
 
 						#adminer img {
@@ -6615,6 +6631,15 @@ input[type=range]::-ms-track {
 		#dropdown-sort-csdb {
 			font-size: 13px;
 		}
+
+	/* Admin info on a CSDb release page */
+	#csdb-admin-release {
+		position: absolute;
+		top: 18px;
+		right: 50px;
+		font: normal 11px "Montserrat", sans-serif;
+		color: var(--color-text-c64font); /* --color-text-player */
+	}
 
 	/* Container for GIF loading spinner IMG */
 	#loading-profile,

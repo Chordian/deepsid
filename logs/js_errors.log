@@ -1,71 +1,15 @@
-[2026-01-03 09:21:03] error
-Message: TypeError: can't access property "subtunes", browser.playlist[browser.songPos] is undefined
-Source: http://chordian/deepsid/js/player.js?v=1767431819 (1482:1)
-IP: ::1
-Stack:
-getSongInfo@http://chordian/deepsid/js/player.js?v=1767431819:1482:1
-emphasizing/<@http://chordian/deepsid/js/browser.js?v=1767428985:2714:24
-setTimeout handler*emphasizing@http://chordian/deepsid/js/browser.js?v=1767428985:2712:13
-getCSDb/this.csdb</<@http://chordian/deepsid/js/browser.js?v=1767428985:2677:10
-validateData@http://chordian/deepsid/js/browser.js?v=1767428985:3778:14
-getCSDb/this.csdb<@http://chordian/deepsid/js/browser.js?v=1767428985:2646:9
-u@https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js:2:27457
-fireWith@https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js:2:28202
-k@https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js:2:77651
-send/n/<@https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js:2:79907
-EventHandlerNonNull*send@https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js:2:80093
-ajax@https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js:2:77118
-w[t]@https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js:2:78094
-getCSDb@http://chordian/deepsid/js/browser.js?v=1767428985:2645:17
-handleURLParameters@http://chordian/deepsid/js/main.js?v=1767431873:840:12
-@http://chordian/deepsid/js/main.js?v=1767431873:3637:7
-l@https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js:2:29375
-Deferred/then/a/</c<@https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js:2:29677
-setTimeout handler*Deferred/then/a/<@https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js:2:29886
-u@https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js:2:27457
-fireWith@https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js:2:28202
-fire@https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js:2:28238
-u@https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js:2:27457
-fireWith@https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js:2:28202
-ready@https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js:2:31285
-_@https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js:2:31419
-EventListener.handleEvent*@https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js:2:31533
-@https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js:2:220
-@https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js:2:225
-
-
-[2026-01-03 09:22:37] error
-Message: TypeError: can't access property "subtunes", browser.playlist[browser.songPos] is undefined
-Source: http://chordian/deepsid/js/player.js?v=1767431819 (1482:1)
+[2026-01-18 12:23:57] error
+Message: TypeError: can't access property "fullname", browser.playlist[browser.songPos] is undefined
+Source: http://chordian/deepsid/js/main.js?v=1768727297 (513:24)
 IP: ::1
 
-[2026-01-03 09:23:22] error
-Message: TypeError: can't access property "subtunes", browser.playlist[browser.songPos] is undefined
-Source: http://chordian/deepsid/js/player.js?v=1767431819 (1482:1)
+[2026-01-18 13:13:13] error
+Message: TypeError: data.html.index is not a function
+Source: http://chordian/deepsid/js/browser.js?v=1768741985 (2750:20)
 IP: ::1
 
-[2026-01-10 07:52:01] error
-Message: ReferenceError: onBrowserReady is not defined
-Source: http://chordian/deepsid/js/main.js?v=1768031513 (3672:3)
-IP: ::1
-
-[2026-01-10 07:52:04] error
-Message: ReferenceError: onBrowserReady is not defined
-Source: http://chordian/deepsid/js/main.js?v=1768031513 (3672:3)
-IP: ::1
-
-[2026-01-10 08:23:05] error
-Message: TypeError: can't access property "outputs", midiAccessObj is null
-Source: http://chordian/deepsid/js/handlers/jsSID-modified.js?v=1768033362 (637:31)
-IP: ::1
-
-[2026-01-17 11:11:43] error
-Message: TypeError: can't access property "getContext", this.canvas_area[voice] is undefined
-Source: http://chordian/deepsid/js/viz.js?v=1768030740 (1207:4)
-IP: ::1
-
-[2026-01-17 11:25:57] error
-Message: TypeError: can't access property "substr", html is undefined
-Source: http://chordian/deepsid/js/browser.js?v=1768645289 (2592:5)
+[2026-01-25 12:50:18] error
+Message: TypeError: can't access property "classList", this.options[this.selectedIndex] is undefined
+Source: http://chordian/deepsid/js/main.js?v=1769345402 (3296:4)
 IP: ::1
 

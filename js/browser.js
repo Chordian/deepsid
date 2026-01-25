@@ -155,6 +155,14 @@ Browser.prototype = {
 			}
 		});
 
+		$("#path").on("mouseup", ".page", function(event) {
+			if (event.which == 2) {
+				event.target.id == "search-page-prev"
+					? this.searchPagePrev(10000)
+					: this.searchPageNext(10000);
+			}
+		}.bind(this));
+
 		// Clicking the "X" icon at the right end of the edit box
 		$("#search-clear").click(function() {
 			$("#dropdown-search").val("#all#");
@@ -481,28 +489,10 @@ Browser.prototype = {
 				}
 				break;
 			case "search-page-prev":
-				var $buttonPrev = $("#search-page-prev");
-				if ($buttonPrev.hasClass("disabled")) return;
-
-				this.page--;
-				$("#search-page-next").removeClass("disabled");
-				this.getFolder(0, $("#search-box").val().replace(/\s/g, "_"));
-
-				if (this.page == 1) {
-					$buttonPrev.addClass("disabled");
-				}
+				this.searchPagePrev(event.shiftKey ? 5 : 1);
 				break;
 			case "search-page-next":
-				var $buttonNext = $("#search-page-next");
-				if ($buttonNext.hasClass("disabled")) return;
-
-				this.page++;
-				$("#search-page-prev").removeClass("disabled");
-				this.getFolder(0, $("#search-box").val().replace(/\s/g, "_"));
-
-				if (this.page == this.maxPages) {
-					$buttonNext.addClass("disabled");
-				}
+				this.searchPageNext(event.shiftKey ? 5 : 1);
 				break;
 			case "search-cancel":
 				// Cancel the search results and return to the previous normal folder view
@@ -961,6 +951,46 @@ Browser.prototype = {
 				}
 			    break;
 		}
+	},
+
+	/**
+	 * Browse to previous search page.
+	 * 
+	 * @param {*} amount - Number of pages
+	 */
+	searchPagePrev: function(amount) {
+		var $buttonPrev = $("#search-page-prev");
+		if ($buttonPrev.hasClass("disabled")) return;
+
+		this.page -= amount;
+
+		if (this.page <= 1) {
+			this.page = 1;
+			$buttonPrev.addClass("disabled");
+		}
+
+		$("#search-page-next").removeClass("disabled");
+		this.getFolder(0, $("#search-box").val().replace(/\s/g, "_"));
+	},
+
+	/**
+	 * Browse to next search page.
+	 * 
+	 * @param {*} amount - Number of pages
+	 */
+	searchPageNext: function(amount) {
+		var $buttonNext = $("#search-page-next");
+		if ($buttonNext.hasClass("disabled")) return;
+
+		this.page += amount;
+
+		if (this.page >= this.maxPages) {
+			this.page = this.maxPages;
+			$buttonNext.addClass("disabled");
+		}
+
+		$("#search-page-prev").removeClass("disabled");
+		this.getFolder(0, $("#search-box").val().replace(/\s/g, "_"));
 	},
 
 	/**
@@ -2714,9 +2744,19 @@ Browser.prototype = {
 				this.emphasizing(false);
 				main.updateRedirectPlayIcons();
 
-				// Remove admin controls if included in a cache refreshed by an administrator
-				if ($("#logged-username").text() !== "JCH")
-					$("#topic-csdb .admin-csdb-button").remove(); // Admin button is legacy (don't delete)
+				if ($("#logged-username").text() === "JCH") {
+					// Add cache info in top right corner
+					var cacheStatus = 'Cache';
+					if (data.html.indexOf("csdb.dk/webservice") !== -1) {
+						cacheStatus = '<span style="color:var(--color-text-csdb-direct);">CSDb</span>';
+					} else if (data.html.indexOf("(CSDb unreachable)") !== -1) {
+						cacheStatus = '<span style="color:var(--color-text-csdb-down);">Cache</span>';
+					}
+					$("#sticky-csdb").prepend('<div id="csdb-admin-release">'+cacheStatus+'</div>')
+				} else {
+					// Remove admin controls if included in a cache refreshed by an administrator
+					$("#topic-csdb .admin-csdb-button").remove(); // Admin button is legacy
+				}
 
 				// Enable highlighting button and its label if any emphasizing is present
 				setTimeout(() => {
@@ -3114,10 +3154,10 @@ Browser.prototype = {
 			// Section: Administrator-only actions
 			if ($("#logged-username").text() == "JCH") {
 				contents += '<div class="divider"></div>'+
-					'<div class="line" data-action="add-label">Add Label</div>'+
-					'<div class="line" data-action="unlink-label">Unlink Label</div>';
+					'<div class="line admin" data-action="add-label">Add Label</div>'+
+					'<div class="line admin" data-action="unlink-label">Unlink Label</div>';
 				if (isSidHappensFolder)
-					contents += '<div class="line" data-action="delete-file">Delete File</div>';
+					contents += '<div class="line admin" data-action="delete-file">Delete File</div>';
 			}
 
 		} else if ($target.hasClass("folder") && (this.contextSID.substr(0, 1) == "!" || this.contextSID.substr(0, 1) == "$")) {
@@ -3484,27 +3524,41 @@ Browser.prototype = {
 	/**
 	 * Add a label (production title) as a factoid.
 	 * 
-	 * Only available to administrators.
+	 * Only available to administrators for now.
 	 */
 	addLabel: function() {
 		if ($("#logged-username").text() == "JCH") {
 			var $selectedSidFile = $("#folders tr.selected"),
 				$csdbInfo = $("#csdb-info");
+
 			if ($selectedSidFile.length && $csdbInfo.length) {
-				$.post("php/labels_write.php", {
-					id:			$selectedSidFile.find(".entry").attr("data-id"),
-					name:		$csdbInfo.attr("data-name"),
-					type:		$csdbInfo.attr("data-type"),
-					csdbid:		$csdbInfo.attr("data-csdbid")
+
+				var name = decodeURIComponent($selectedSidFile.find(".name").attr("data-name"));
+				var thisFullname = ((this.isSearching || this.isSymlist || this.isCompoFolder? "/" : this.path+"/")+name).substr(1);
+
+				// First delete all labels that may exist for this file
+				$.post("php/labels_unlink.php", {
+					fullname: thisFullname
 				}, function(data) {
-					browser.validateData(data, function(data) {
-						if (data.created)
-							main.browserMessage("Created label for '"+$csdbInfo.attr("data-name")+"'");
-						else
-							main.browserMessage("Linked to existing label");
-						main.refreshFolder();
+					this.validateData(data, function() {
+						// Now add the new label
+						$.post("php/labels_write.php", {
+							id:			$selectedSidFile.find(".entry").attr("data-id"),
+							name:		$csdbInfo.attr("data-name"),
+							type:		$csdbInfo.attr("data-type"),
+							csdbid:		$csdbInfo.attr("data-csdbid")
+						}, function(data) {
+							browser.validateData(data, function(data) {
+								if (data.created)
+									main.browserMessage("Created label for '"+$csdbInfo.attr("data-name")+"'");
+								else
+									main.browserMessage("Linked to existing label");
+								main.refreshFolder();
+							});
+						});
 					});
-				});
+				}.bind(this));
+
 			} else
 				alert("No SID song or CSDb release selected.");
 		}

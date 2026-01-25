@@ -17,6 +17,7 @@ utility/python/gb64/*.csv
 utility/python/specific/*.csv
 utility/python/stil/*.csv
 utility/python/stil/STIL.txt
+js_errors.log
 .htaccess
 soasc.txt
 visitors.txt

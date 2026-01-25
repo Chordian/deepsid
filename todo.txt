@@ -9,30 +9,12 @@ ToDo
 
 ONGOING
 ¯¯¯¯¯¯¯
-- Update 'labels_info' database with types and CSDb info numbers.
-- The composer subfolders of "Blues Muz" need to be parsed for event tags.
 - Replace the PDO connection block in PHP scripts with '$db = $account->GetDB();' instead.
-- Replace all "utf8mb3_unicode_ci" database collations with "utf8mb4_0900_ai_ci" instead.
+- See below for a major collation change.
 
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- Rename admin setting for search limit (now it's results per page).
-
-- Consider not showing some random tips and links depending on whether the site resides
-  inside a Lemon 64 iframe. Some features are disabled there.
-
-- Add test resources (bottom of this text file) to a new page in 'Admin' tab. Make it the
-  first domain part is adapted depending on being local or online.
-
-- For administrators only, add "Source:" message about how CSDb loaded - directly, cache,
-  or cache unreachable. The latter should have faint red text color. Place it where you
-  previously had the 'Add Label' button before you removed it.
-
-- Tip: About searching for e.g. ratings 3 and more.
-
-- Make it so when you 'Add Label' it automatically purges any old link(s) first.
-
 - Idea from Anon-Relays: Loop song X number of times before moving on to the next one. In
   the settings, the default number should of course be 1. UPDATE: It doesn't have to be a
   setting. It could also be continuously toggle the LOOP button to get, infinity, 2 times,
@@ -42,6 +24,8 @@ SHOULD BE DONE
   button on cached pages loaded whenever CSDb is down.
 
 - See if you can get ChatGPT to convert tasks in HVSC update ToDo to PHP files.
+
+- Lemon64: Make inline factoids appear to the far right (where rating stars are missing).
 
 - I've asked ChatGPT if web audio can be cleaned up for next SID click. It smells like
   something that could take quite some time to fiddle with. Dive in later?
@@ -53,17 +37,15 @@ SHOULD BE DONE
 
 ADMIN STUFF
 ¯¯¯¯¯¯¯¯¯¯¯
-- Make admin-only factoids available to admins (rotating and drop-down boxes).
-
 - Create roles in the 'Users' database table, for normal users and administrators. Then
   after giving JCH the admin role, change code everywhere to test for administrator role
   and not for JCH specifically. UPDATE: I asked ChatGPT - see its thread for comments.
 
 - Add an admin setting for temporarily turning off editing tags. I had one disaster lately
   where I could have used that feature. Perhaps a drop-down with "Everyone", "Admin only"
-  and "Off" as options. Same with SH uploading.
-
-- The label add button doesn't like when CSDb titles have quote characters in them.
+  and "Off" as options.
+  
+- Same as above, but for SH uploading.
 
 - Ideas for more admin settings:
 
@@ -71,7 +53,52 @@ ADMIN STUFF
   - allow_registrations: Toggle user self-signup on/off. (Would this ever be needed?)
   - admin_email: Contact address shown in error popups.
   - log_rotation_days: Maybe more than that; see the cache stuff in the 'hvsc.php' file.
-  - enable_auto_backup: For when the backup script has been made (see other todo task).
+  - enable_auto_backup: For the daily database backup process.
+
+
+ONGOING
+¯¯¯¯¯¯¯
+- Replace all "utf8mb3_unicode_ci" database collations with "utf8mb4_unicode_ci" instead.
+  Don't migrate to "utf8mb4_0900_ai_ci" instead - One.com doesn't support it!
+
+  SQL query to run on a database table:
+
+  ALTER TABLE yourtable
+  CONVERT TO CHARACTER SET utf8mb4
+  COLLATE utf8mb4_unicode_ci;
+
+  Do this one table at a time then test.
+
+  Database tables:
+
+  admin_scripts         DONE
+  admin_settings        DONE
+  competitions          DONE
+  competitions_cache    DONE
+  composers
+  composers_links
+  csdb                  N/A
+  folders_map
+  groups
+  hvsc_files
+  hvsc_files_import
+  hvsc_folders
+  hvsc_folders_import
+  hvsc_lengths
+  labels_info           DONE
+  labels_lookup         N/A
+  players_info
+  players_lookup
+  ratings
+  ratings_cache         DONE
+  sid_release_map       N/A
+  symlists
+  tags_info
+  tags_lookup           N/A
+  tracking              DONE
+  uploads               N/A
+  users
+  youtube
 
 
 WHEN THE TIME IS RIGHT
@@ -237,6 +264,12 @@ CONSIDER THIS
 - Up/Down cursor keys to change sub tune, Left/Right cursor keys to skip previous/next.
 - For redirect links, add a BACK button in both STIL tabs (to complement the 'b' hotkey).
 - Front page top 10 list: Add most common birth years, now that you have the data for it.
+
+- Search bug from Acrouzet: "On mobile, ordering results based on the criteria selected
+  from the top right drop-down seems to not work properly. I believe it may be organizing pages
+  based on alphanumeric order then only applying the selected ordering per page." UPDATE: Seems
+  to work fine for me on a desktop PC. Both current folder and the search results in all pages
+  are sorted according to the drop-down box setting. Maybe I need to test this on mobile?
 
 - A second annex tab with history. Every click on a tune, maybe even every folder you enter, will
   be listed here, so you can re-click it. Newest entry in top.
@@ -498,20 +531,22 @@ PROBABLY NOT?
   search results the respective song is played but the "Profile" tab is not updated.'
   UPDATE: I tried to reproduce it today (2021-11-07) but couldn't. Archived until further notice.
 
+- BUG: Search many pages, e.g for "s" - then middle-click to the end. The last few pages appear
+  empty. Something is not calculated correctly. The empty pages doesn't seem to break anything
+  so there is no hurry to fix this one. UPDATE: I tried a ton of different solutions together
+  with ChatGPT. None of them solved the problem. Archiving this.
+
 - If you look closely, some tag names are too high up. It differs from SID row to SID row
   in Firefox. Test floating point line heights to see if it can be fixed. UPDATE: Having
-  fought with something similar with focus icons, I really doubt you can fix this.
+  fought with something similar with focus icons, I really doubt I can fix this.
 
 - Add context menu option for downloading a tune as an MP3. I'm thinking, maybe I can grab one
   of Lemon's MP3 files? UPDATE: I tried it using a download trick from Stack Overflow, but of
   course I got CORS issues and I don't want to waste my time trying to fix that crap. If you
   want to continue anyway, the test is here: temp\browser_download_mp3.js
 
-- Add support for uploading 4SID tunes in the SH folder. Also make it so only WebSid may
+- Add support for uploading 4SID tunes in the SH folder. Also make it so only WebSid+JSIDPlay2 may
   play such tunes in the SH folder - the SID row must be disabled for all other SID handlers.
-
-- How about a sticky footer on tab pages? For the CSDb tab it would be particularly useful
-  as it makes it easy to see if the contents were generated from the cache or not.
 
 - Consider including tags in "All" search? UPDATE: Turning this one down for now. Searching for
   tags is a complicated SQL query that I'd rather not merge with the existing "All" search. But
@@ -683,71 +718,5 @@ PROBABLY NOT?
   - Access granted by Simon Carless of MobyGames and API key is ready (put it in setup.php).
   - Test API and write a PHP page to show the game ID in a page tab.
   - See text file "Howto_Mobygames_API.txt" for more.
-
-
-TEST RESOURCES
-¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- Very long headers:
-
-  CSDb tab:
-  https://deepsid.chordian.net/?file=/MUSICIANS/J/Jammer/Rippin_Off_the_Most_Jazzy_Lads.sid
-  https://deepsid.chordian.net/?file=/MUSICIANS/F/Fegolhuzz/Emergent_Behavior_of_Hydrogen.sid
-  https://deepsid.chordian.net/?file=/MUSICIANS/C/Chiummo_Aldo/Unreadibility.sid (overflows BACK)
-  https://deepsid.chordian.net/?file=/MUSICIANS/B/Bakker_Nantco/When_Im_64.sid
-
-  SHOW compo in CSDb tab:
-  https://deepsid.chordian.net/?file=/MUSICIANS/T/The_Dungeon_Master/Fairy_Well.sid&subtune=1
-  https://deepsid.chordian.net/?file=/MUSICIANS/W/Wijnhoven_Joachim/Devil_Ronin.sid
-
-  GB64 tab (enter a game page for one of the two hits):
-  https://deepsid.chordian.net/?file=/MUSICIANS/B/Bogas_Ed/Murder_on_the_Mississippi.sid
-
-- Long group names in group box:
-  http://chordian/deepsid/?file=/MUSICIANS/L/Luca/
-  http://chordian/deepsid/?file=/MUSICIANS/M/Mr_Mouse/
-  http://chordian/deepsid/?file=/MUSICIANS/N/Nightbreed/
-  https://deepsid.chordian.net/?file=/MUSICIANS/D/Deathangels_Shadow/
-  https://deepsid.chordian.net/?file=/MUSICIANS/D/Demosic/
-  https://deepsid.chordian.net/?file=/MUSICIANS/G/Galancy/
-  https://deepsid.chordian.net/?file=/MUSICIANS/G/Gaston/
-  https://deepsid.chordian.net/?file=/MUSICIANS/G/Gillgrass_Dan/
-  https://deepsid.chordian.net/?file=/MUSICIANS/G/Gillies_Ewen/
-  https://deepsid.chordian.net/?file=/MUSICIANS/G/Gilmore_Adam/
-  https://deepsid.chordian.net/?file=/MUSICIANS/G/Green_David/
-  https://deepsid.chordian.net/?file=/MUSICIANS/G/Groepaz/
-  https://deepsid.chordian.net/?file=/MUSICIANS/H/Harlequin/
-  https://deepsid.chordian.net/?file=/MUSICIANS/H/Hero/
-  https://deepsid.chordian.net/?file=/MUSICIANS/H/HIC/
-  https://deepsid.chordian.net/?file=/MUSICIANS/H/Hulten_Jonas/
-
-- Too many DL links on a CSDb list page:
-  https://deepsid.chordian.net/?file=/MUSICIANS/O/Onebitman/Walking_in_the_Air.sid
-
-- Legacy CSDb cache data with no 'BACK' button for sticky header:
-  https://deepsid.chordian.net/?file=/MUSICIANS/G/G-Fellow/A_Message_for_You.sid
-  https://deepsid.chordian.net/?file=/MUSICIANS/G/G-Fellow/Neural_Consciousness_V2.sid
-  https://deepsid.chordian.net/?file=/MUSICIANS/G/G-Fellow/Wigwam.sid
-
-- Testing max-width on block-wrap for song showing "2SID" special label:
-  https://deepsid.chordian.net/?file=/MUSICIANS/H/Hermit/Song_of_the_Second_Moon_Delta_2SID.sid
-
-- Dark background on event graphics that wants light background:
-  https://deepsid.chordian.net/?file=%2FCSDb%20Music%20Competitions%2FDecrunch%202117
-  https://deepsid.chordian.net/?file=%2FCSDb%20Music%20Competitions%2FWorld%20Wide%20ZOO
-
-- Light background on event graphics that wants dark background:
-  https://deepsid.chordian.net/?file=%2FCSDb%20Music%20Competitions%2FEdison%202017
-  https://deepsid.chordian.net/?file=%2FCSDb%20Music%20Competitions%2FP%C3%A5gadata%202023
-  https://deepsid.chordian.net/?file=%2FCSDb%20Music%20Competitions%2FRevision%202017
-  https://deepsid.chordian.net/?file=%2FCSDb%20Music%20Competitions%2FXenium%202022%20%5BMixed%5D
-
-- Unknown years:
-  https://deepsid.chordian.net/?file=/MUSICIANS/T/TCC/ (199?)
-  https://deepsid.chordian.net/?file=/MUSICIANS/T/The_Invincible_Cracker/ (198?)
-  https://deepsid.chordian.net/?file=/MUSICIANS/H/Hogg_Steve/ (19??)
-
-- Tons of links in STIL text:
-  https://deepsid.chordian.net/?file=/MUSICIANS/B/Bulldog/E_X_I_S.sid&subtune=1
-  https://deepsid.chordian.net/?file=/MUSICIANS/G/Greg/Leppard.sid
 
 END

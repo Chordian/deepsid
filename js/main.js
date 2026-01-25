@@ -86,6 +86,7 @@ var main = {
 	forum:						null,		// The AJAX object for showing parts of the CSDb forum
 	isMobile:					false,		// TRUE = Running on a mobile device (or forced with a switch)
 	isNotips:					false,		// TRUE = Do not display the annex box in the right side
+	isLemon:					false,		// TRUE = Site is used in an iframe at Lemon64.com
 	logCount:					1000,		// Increased to make each console log output unique
 	miniPlayer:					0,			// TRUE = Display miniplayer with reduced controls
 	players:					null,		// The AJAX object for displaying a list of players/editors
@@ -1497,6 +1498,13 @@ main.bindAdminEvents = function() {
 				break;
 			case "scripts":
 				$.get("php/admin_scripts.php", function(data) {
+					browser.validateData(data, function(data) {
+						$("#topic-admin").append(data.html);
+					});
+				});
+				break;
+			case "test":
+				$.get("php/admin_test.php", function(data) {
 					browser.validateData(data, function(data) {
 						$("#topic-admin").append(data.html);
 					});
@@ -3272,6 +3280,27 @@ main.bindSettingsEvents = function() {
 		main.factoidTypeBottom = event.target.value;
 		main.selectFactoid(FACTOID_BOTTOM, main.factoidTypeBottom);
 	});
+
+	/**
+	 * Removing blue color on factoid drop-down boxes JUST before opening.
+	 */
+	$("#dropdown-settings-factoid-top,#dropdown-settings-factoid-bottom").on("mousedown keydown", function() {
+		$(this).removeClass("admin-selected");
+	});
+
+	/**
+	 * Restoring blue color on factoid drop-down boxes AFTER closing.
+	 */
+	$("#dropdown-settings-factoid-top,#dropdown-settings-factoid-bottom").on("change blur", function() {
+		const isAdmin =
+			this.options[this.selectedIndex].classList.contains("factoid-admin");
+		$(this).toggleClass("admin-selected", isAdmin);
+	});
+
+	/**
+	 * Initial state of factoid drop-down boxes on page load.
+	 */
+	$("#dropdown-settings-factoid-top,#dropdown-settings-factoid-bottom").trigger("blur");
 }
 
 // ==============================
@@ -3618,6 +3647,7 @@ $(function() { // DOM ready
 	main.isMobile = $("body").attr("data-mobile") !== "0";
 	main.isNotips = $("body").attr("data-notips") !== "0";
 	main.miniPlayer = parseInt($("body").attr("data-mini"));
+	main.isLemon = main.isNotips;
 
 	// Get the emulator last used by the visitor
 	var storedEmulator = docCookies.getItem("emulator");
