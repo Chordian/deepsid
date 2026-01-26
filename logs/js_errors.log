@@ -13,3 +13,38 @@ Message: TypeError: can't access property "classList", this.options[this.selecte
 Source: http://chordian/deepsid/js/main.js?v=1769345402 (3296:4)
 IP: ::1
 
+[2026-01-26 15:24:22] error
+Message: ReferenceError: GetAdminSetting is not defined
+Source: http://chordian/deepsid/js/browser.js?v=1769441056 (548:15)
+IP: ::1
+
+[2026-01-26 15:24:35] error
+Message: ReferenceError: GetAdminSetting is not defined
+Source: http://chordian/deepsid/js/browser.js?v=1769441056 (548:15)
+IP: ::1
+
+[2026-01-26 15:24:35] error
+Message: ReferenceError: GetAdminSetting is not defined
+Source: http://chordian/deepsid/js/browser.js?v=1769441056 (548:15)
+IP: ::1
+
+[2026-01-26 15:24:36] error
+Message: ReferenceError: GetAdminSetting is not defined
+Source: http://chordian/deepsid/js/browser.js?v=1769441056 (548:15)
+IP: ::1
+
+[2026-01-26 15:24:36] error
+Message: ReferenceError: GetAdminSetting is not defined
+Source: http://chordian/deepsid/js/browser.js?v=1769441056 (548:15)
+IP: ::1
+
+[2026-01-26 15:24:55] error
+Message: TypeError: main.GetAdminSetting is not a function
+Source: http://chordian/deepsid/js/browser.js?v=1769441085 (548:20)
+IP: ::1
+
+[2026-01-26 15:30:09] error
+Message: Error: Syntax error, unrecognized expression: unsupported pseudo: hover
+Source: https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js (2:12961)
+IP: ::1
+

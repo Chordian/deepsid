@@ -269,6 +269,13 @@ Browser.prototype = {
 					if (typeof this.contextTR != "undefined")
 						this.contextTR.css("background", "");
 					this.restoreSIDRow();
+
+					var $adminCatButton = $(".ac-settings");
+					if ($("#tabs .selected").attr("data-topic") === "admin" &&
+						$adminCatButton.length && $adminCatButton.hasClass("button-on")) {
+							// Reload administrator settings (refreshes the section)
+							$("#sticky-admin .ac-settings").trigger("click");
+					}
 					break;
 				case 13: // Enter
 					var $rename = $("#sym-rename"),
@@ -505,10 +512,15 @@ Browser.prototype = {
 				this.getComposer();
 				break;
 			case "upload-wizard":
+				var access = main.getAdminSetting("access_upload_new_sid");
+
 				// Clicked the button for uploading a new public SID file
 				if (!$("#logout").length) {
 					// But must be logged in to do that
 					alert("Login or register and you can upload new SID files here.");
+					return false;
+				} else if (access === "off" || (access === "admin" && $("#logged-username").text() !== "JCH")) {
+					alert("Uploading new SID files has been temporarily disabled.");
 					return false;
 				}
 				this.uploadWizard();
@@ -541,10 +553,14 @@ Browser.prototype = {
 		var thisFullname = ((this.isSearching || this.isSymlist || this.isCompoFolder ? "/" : this.path+"/")+name).substr(1);
 
 		if (event.target.className === "edit-tags") {
+			var access = main.getAdminSetting("access_edit_tags");
+
 			// Clicked the "+" icon button to edit tags for a SID file
 			if (!$("#logout").length) {
-				// But must be logged in to do that
 				alert("Login or register and you can edit the tags for this file.");
+				return false;
+			} else if (access === "off" || (access === "admin" && $("#logged-username").text() !== "JCH")) {
+				alert("Editing tags has been temporarily disabled.");
 				return false;
 			}
 

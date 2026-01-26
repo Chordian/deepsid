@@ -23,6 +23,9 @@ SHOULD BE DONE
 - Cache: Consider also caching the 'SHOW' pages. Alternatively, you could just disable the
   button on cached pages loaded whenever CSDb is down.
 
+- Production inline factoid should have a brown color instead of blue for GB64 games. Also,
+  consider support for getting GB64 info for context menu option and hotkey.
+
 - See if you can get ChatGPT to convert tasks in HVSC update ToDo to PHP files.
 
 - Lemon64: Make inline factoids appear to the far right (where rating stars are missing).
@@ -40,12 +43,6 @@ ADMIN STUFF
 - Create roles in the 'Users' database table, for normal users and administrators. Then
   after giving JCH the admin role, change code everywhere to test for administrator role
   and not for JCH specifically. UPDATE: I asked ChatGPT - see its thread for comments.
-
-- Add an admin setting for temporarily turning off editing tags. I had one disaster lately
-  where I could have used that feature. Perhaps a drop-down with "Everyone", "Admin only"
-  and "Off" as options.
-  
-- Same as above, but for SH uploading.
 
 - Ideas for more admin settings:
 
