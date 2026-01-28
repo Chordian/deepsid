@@ -1964,6 +1964,20 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>January 28, 2026</h3>
+						<ul>
+							<li>Improved the overall sorting of search results.</li>
+							<li>All CGSC folders and files have been moved to the end of search results, since other results are
+								generally more relevant to users.</li>
+						</ul>
+
+						<h3>January 27, 2026</h3>
+						<ul>
+							<li>The search algorithm has been improved. Page counts are now always correct, empty pages no longer
+								appear at the end, and folders are consistently shown (and sorted) on the first search pages.</li>
+							<li>Fixed a bug that caused search queries to return too many folder results.</li>
+						</ul>
+
 						<h3>January 18, 2026</h3>
 						<ul>
 							<li>You can now browse search pages more efficiently. Clicking a page button moves one page, as before.

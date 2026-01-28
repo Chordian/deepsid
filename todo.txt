@@ -15,6 +15,22 @@ ONGOING
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+- BUG: Searching in compo folder with "Here" ticked causes an SQL error.
+
+- Search online for "ja" and you will get a strange "Fjälldata" folder with 0 files in it.
+
+- I need a "CGSC results only from next page" search message in the bottom of the last page
+  of the non-CGSC search results. Should I invent a non-interactive SID row for that?
+
+- Add search results hotkey navigation (+1, +5, to end, etc.) as a sundry tip.
+
+- Move change results for 2024 into the archive file.
+
+- Have 4-5-6 notes boxes in the admin tab instead of one. Saving to individual text files?
+
+- In LOCALHOST database, clean out file entries for old custom folders such as e.g. '_$11
+  Music Compo 2018' and more.
+
 - Idea from Anon-Relays: Loop song X number of times before moving on to the next one. In
   the settings, the default number should of course be 1. UPDATE: It doesn't have to be a
   setting. It could also be continuously toggle the LOOP button to get, infinity, 2 times,
@@ -51,6 +67,7 @@ ADMIN STUFF
   - admin_email: Contact address shown in error popups.
   - log_rotation_days: Maybe more than that; see the cache stuff in the 'hvsc.php' file.
   - enable_auto_backup: For the daily database backup process.
+  - maintenance_mode: When enabled only the administrator may see the site.
 
 
 ONGOING
