@@ -759,6 +759,7 @@ var main = {
 			playerID 		= main.getParam("player"),
 			typeCSDb 		= main.getParam("csdbtype"),
 			idCSDb 			= main.getParam("csdbid"),
+			sorting			= main.getParam("sort"),
 			forceCover 		= main.getParam("cover");
 
 		// Make sure the bottom search bar sits in the correct bottom of the viewport
@@ -915,7 +916,7 @@ var main = {
 		$("#dropdown-search").val(main.getParam("type") !== "" ? main.getParam("type").toLowerCase() : "#all#");
 		$("#search-here").prop("checked", main.getParam("here") == "1");
 		$("#search-box").val(searchQuery).trigger("keyup");
-		$("#search-button").trigger("click");
+		$("#search-button").trigger("click", main.getParam("sort"));
 	},
 
 	/**
@@ -3116,7 +3117,7 @@ main.bindMenuEvents = function() {
 	 * @param {*} event 
 	 * @param {boolean} noclick		If specified and TRUE, the 'Player' tab won't be clicked
 	 */
-	$("#players").click(function(event, noclick){
+	$("#players").click(function(event, noclick) {
 		$(this).blur();
 		if (main.players) main.players.abort();
 		$("#topic-players").empty().append(browser.loadingSpinner("profile"));

@@ -369,9 +369,10 @@ Browser.prototype = {
 	/**
 	 * Click the left mouse button somewhere below the control buttons.
 	 * 
-	 * @param {*} event 
+	 * @param {*} event
+	 * @param {string} sorting		If specified, value for sort drop-down box
 	 */
-	onClickButton: function(event) {
+	onClickButton: function(event, sorting) {
 
 		this.clearSpinner();
 
@@ -489,9 +490,15 @@ Browser.prototype = {
 						break;
 					default:
 						// Search the query unless a search command was entered
-						cmds.handlePlusCommand.call(this, searchValue).then(handled => {
-							if (!handled)
-								this.getFolder(0, searchValue.replace(/\s/g, "_"));
+						cmds.handlePlusCommand.call(this, searchValue, sorting).then(handled => {
+							if (!handled) {
+								this.getFolder(0, searchValue.replace(/\s/g, "_"), undefined, () => {
+									if (typeof sorting !== "undefined" && sorting !== "") {
+										// Set how the folder is sorted as well
+										$("#dropdown-sort").val(sorting).trigger("change");
+									}
+								});
+							}
 						});
 				}
 				break;

@@ -1964,6 +1964,11 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>January 29, 2026</h3>
+						<ul>
+							<li>Added a new <code>?sort={text}</code> URL parameter for sorting search result folders.</li>
+						</ul>
+
 						<h3>January 28, 2026</h3>
 						<ul>
 							<li>Improved the overall sorting of search results.</li>

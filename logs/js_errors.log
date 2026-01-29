@@ -48,3 +48,8 @@ Message: Error: Syntax error, unrecognized expression: unsupported pseudo: hover
 Source: https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js (2:12961)
 IP: ::1
 
+[2026-01-29 14:21:43] error
+Message: ReferenceError: handled is not defined
+Source: http://chordian/deepsid/js/browser.js?v=1769696498 (493:59)
+IP: ::1
+

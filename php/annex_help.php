@@ -334,6 +334,19 @@ $help = array(
 				<td>here</td><td><b>1</b> to search in the current folder.&nbsp;&nbsp;Use with <b>search</b>.</td>
 			</tr>
 			<tr>
+				<td>sort</td><td>How to sort the folder.&nbsp;&nbsp;Use with <b>search</b>.&nbsp;&nbsp;Options:
+				<ul>
+					<li><b>name</b></li>
+					<li><b>rating</b></li>
+					<li><b>oldest</b></li>
+					<li><b>newest</b></li>
+					<li><b>factoidtop</b></li>
+					<li><b>factoidbottom</b></li>
+					<li><b>shuffle</b></li>
+				</ul>
+				</td>
+			</tr>
+			<tr>
 				<td>tab</td><td>Select a page tab.&nbsp;&nbsp;Options:
 					<ul>
 						<li><b>csdb</b></li>

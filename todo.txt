@@ -26,6 +26,9 @@ SHOULD BE DONE
 
 - Move change results for 2024 into the archive file.
 
+- In SH folder, new tunes in 2026 does not show a green 2026 in the "Active" bar. I can't
+  remember if this is supposed to be automatic or just affected by HVSC? Check up on it.
+
 - Have 4-5-6 notes boxes in the admin tab instead of one. Saving to individual text files?
 
 - In LOCALHOST database, clean out file entries for old custom folders such as e.g. '_$11
