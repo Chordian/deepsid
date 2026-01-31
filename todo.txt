@@ -15,8 +15,6 @@ ONGOING
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- BUG: Searching in compo folder with "Here" ticked causes an SQL error.
-
 - Search online for "ja" and you will get a strange "Fjälldata" folder with 0 files in it.
 
 - I need a "CGSC results only from next page" search message in the bottom of the last page

@@ -121,8 +121,8 @@ $isSearching = isset($_GET['searchQuery']) && !empty($_GET['searchQuery']);
 $isPersonalSymlist = substr($_GET['folder'], 0, 2) == '/!';
 $isPublicSymlist = substr($_GET['folder'], 0, 2) == '/$';
 // NOTE: A comparison of the 'COMPO' type is performed below that may also set these variables.
-$isCSDbFolder = substr($_GET['folder'], 0, 24) == '/CSDb Music Competitions';
-$isCSDbCompo = $isCSDbFolder && !$isSearching;
+$isCompoFolder = substr($_GET['folder'], 0, 24) == '/CSDb Music Competitions';
+$isCSDbCompo = $isCompoFolder && !$isSearching;
 $compoName = $isCSDbCompo && strlen($_GET['folder']) > 25 ? explode('/', $_GET['folder'])[2] : '';
 
 $folders_version = HVSC_VERSION;
@@ -131,11 +131,11 @@ $search_shortcut_query = array();
 $redirect_folder = array();
 
 // In current folder or everything?
-$searchContext = '1';
+$searchContextFullname = $searchContextFolders = '1';
 if ($_GET['searchHere']) {
-	$searchContext = $isCSDbFolder
-		? 'type = "COMPO"' // This will also be compared in hvsc_files but it exists and is never "COMPO" anyway
-		: 'fullname LIKE "'.substr($_GET['folder'], 1).'%"';
+	$searchContextFullname = $searchContextFolders = 'fullname LIKE "'.substr($_GET['folder'], 1).'%"';
+	if ($isCompoFolder)
+		$searchContextFolders = 'hvsc_folders.`type` = "COMPO"';
 }
 
 try {
@@ -171,7 +171,7 @@ try {
 				$select = $db->prepare('
 					SELECT fullname FROM hvsc_files
 					INNER JOIN ratings ON hvsc_files.id = ratings.table_id
-					WHERE '.$searchContext.' AND ratings.user_id = '.$user_id.'
+					WHERE '.$searchContextFullname.' AND ratings.user_id = '.$user_id.'
 					AND ratings.rating '.$operators.' :rating AND ratings.type = "FILE"
 				');
 				$select->execute([
@@ -190,7 +190,7 @@ try {
 					SELECT fullname FROM hvsc_files
 					LEFT JOIN tags_lookup ON hvsc_files.id = tags_lookup.files_id
 					LEFT JOIN tags_info ON tags_info.id = tags_lookup.tags_id
-					WHERE '.str_replace('fullname', 'hvsc_files.fullname', $searchContext).'
+					WHERE '.str_replace('fullname', 'hvsc_files.fullname', $searchContextFullname).'
 					AND ('.substr($tag_list, 4).')
 					GROUP BY tags_lookup.files_id
 					HAVING COUNT(*) = '.count($search_tags)
@@ -203,7 +203,7 @@ try {
 					SELECT fullname FROM hvsc_files
 					LEFT JOIN labels_lookup ON hvsc_files.id = labels_lookup.files_id
 					LEFT JOIN labels_info ON labels_info.id = labels_lookup.labels_id
-					WHERE '.str_replace('fullname', 'hvsc_files.fullname', $searchContext).'
+					WHERE '.str_replace('fullname', 'hvsc_files.fullname', $searchContextFullname).'
 					AND labels_info.name LIKE :label
 					GROUP BY labels_lookup.files_id
 				');
@@ -221,7 +221,7 @@ try {
 
 				$select = $db->prepare('
 					SELECT fullname FROM hvsc_files
-					WHERE '.$searchContext.' AND loadaddr = :loadaddr
+					WHERE '.$searchContextFullname.' AND loadaddr = :loadaddr
 				');
 				$select->execute([
 					':loadaddr' => $location
@@ -237,7 +237,7 @@ try {
 
 				$select = $db->prepare('
 					SELECT fullname FROM hvsc_files
-					WHERE '.$searchContext.'
+					WHERE '.$searchContextFullname.'
 					AND datasize <= :datasize
 					AND fullname LIKE "_High Voltage SID Collection%"
 				');
@@ -282,7 +282,7 @@ try {
 
 				$select = $db->prepare('
 					SELECT fullname FROM hvsc_files
-					WHERE '.$searchContext.' AND type = :type
+					WHERE '.$searchContextFullname.' AND type = :type
 				');
 				$select->execute([
 					':type' => $_GET['searchQuery']
@@ -308,7 +308,7 @@ try {
 			} else if ($_GET['searchType'] == 'focus') {											// Focus
 
 				$select = $db->prepare('
-					SELECT fullname FROM composers WHERE '.$searchContext.'
+					SELECT fullname FROM composers WHERE '.$searchContextFullname.'
 					AND (focus1 LIKE :query OR focus2 LIKE :query)
 				');
 				$select->execute([
@@ -446,7 +446,7 @@ try {
 				}
 
 				$select = $db->query('
-					SELECT fullname FROM hvsc_files WHERE '.$searchContext.' AND '.$include.$exclude
+					SELECT fullname FROM hvsc_files WHERE '.$searchContextFullname.' AND '.$include.$exclude
 				);
 			}
 
@@ -482,7 +482,7 @@ try {
 				$select = $db->prepare('
 					SELECT fullname FROM hvsc_folders
 					INNER JOIN ratings ON hvsc_folders.id = ratings.table_id
-					WHERE '.$searchContext.'
+					WHERE '.$searchContextFolders.'
 					AND ratings.user_id = '.$user_id.'
 					AND ratings.rating '.$operators.' :rating
 					AND ratings.type = "FOLDER"
@@ -499,7 +499,7 @@ try {
 
 				$select = $db->prepare('
 					SELECT fullname FROM composers
-					WHERE '.$searchContext.'
+					WHERE '.$searchContextFullname.'
 					AND country LIKE :query
 				');
 				$select->execute([
@@ -539,7 +539,7 @@ try {
 					// This makes it possible to search for e.g. "Max Hall" and see his "../Max_F3H" folder.
 					$composers = $db->query('
 						SELECT fullname FROM composers
-						WHERE '.$searchContext.'
+						WHERE '.$searchContextFullname.'
 						AND '.str_replace('#all#', 'name', $include_folders)
 					);
 					$composers->setFetchMode(PDO::FETCH_OBJ);
@@ -553,7 +553,7 @@ try {
 				}
 				$select = $db->query('
 					SELECT fullname FROM hvsc_folders
-					WHERE '.$searchContext.' AND '.$include.$exclude.' AND (fullname NOT LIKE "!%")
+					WHERE '.$searchContextFolders.' AND '.$include.$exclude.' AND (fullname NOT LIKE "!%")
 					AND (fullname NOT LIKE "_High Voltage SID Collection/^%") '.$fullnames
 				);
 			}

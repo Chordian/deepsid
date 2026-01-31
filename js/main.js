@@ -759,7 +759,6 @@ var main = {
 			playerID 		= main.getParam("player"),
 			typeCSDb 		= main.getParam("csdbtype"),
 			idCSDb 			= main.getParam("csdbid"),
-			sorting			= main.getParam("sort"),
 			forceCover 		= main.getParam("cover");
 
 		// Make sure the bottom search bar sits in the correct bottom of the viewport

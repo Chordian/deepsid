@@ -1964,6 +1964,11 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>January 31, 2026</h3>
+						<ul>
+							<li>Fixed an error when searching locally in a competition folder.</li>
+						</ul>
+
 						<h3>January 29, 2026</h3>
 						<ul>
 							<li>Added a new <code>?sort={text}</code> URL parameter for sorting search result folders.</li>
