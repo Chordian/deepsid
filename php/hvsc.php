@@ -115,7 +115,7 @@ function SongLengthToMilliseconds(?string $length): ?int {
 // --------------------------------------------------------------------------
 
 $found = $symlist_folder_id = $number_of_pages = 0;
-$debug = $incompatible = $owner = $new_uploads = '';
+$debug = $incompatible = $owner = $new_uploads = $message = '';
 $user_id = $account->CheckLogin() ? $account->UserID() : 0;
 $isSearching = isset($_GET['searchQuery']) && !empty($_GET['searchQuery']);
 $isPersonalSymlist = substr($_GET['folder'], 0, 2) == '/!';
@@ -625,6 +625,9 @@ try {
 				// --- NON-CGSC PAGE ---
 				$offset = ($page - 1) * $page_size;
 				$files  = array_slice($results_non_cgsc, $offset, $page_size);
+
+				if ($page < $number_of_pages && $page == $pages_non_cgsc)
+					$message = '#CGSCNEXT#';
 
 			} else {
 
@@ -1607,6 +1610,7 @@ echo json_encode(array(
 	'folders' 		=> $folders_ext,
 	'results' 		=> $found,
 	'pages'			=> $number_of_pages,
+	'message'		=> $message,
 	'incompatible'	=> $incompatible,
 	'owner' 		=> $owner,
 	'compo' 		=> !empty($compoName),

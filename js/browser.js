@@ -5,6 +5,7 @@
 
 const TR_SPACER 		= '<tr class="disabled"><td class="spacer" colspan="2"></td></tr>';
 const TR_DIVIDER		= '<tr class="disabled"><td class="divider" colspan="2"></td></tr>';
+const TR_CGSCNEXT		= TR_DIVIDER + '<tr class="disabled"><td class="message unselectable" colspan="2">The remaining results are from Compute\'s Gazette SID Collection</td></tr>';
 
 const TAGS_BRACKET		= '<div class="tags-bracket"></div>';
 
@@ -2065,10 +2066,12 @@ Browser.prototype = {
 						});
 					}.bind(this));
 
+					var message = data.message == "#CGSCNEXT#" ? TR_CGSCNEXT : "";
+
 					if (files !== "" || this.path === "" || this.isBigCompoFolder() || this.isMusiciansLetterFolder()) $("#dropdown-sort").prop("disabled", false);
 					/*var pos = this.folders.lastIndexOf('<tr>');
 					this.folders = this.folders.slice(0, pos) + this.folders.slice(pos).replace('<tr>', '<tr class="last">');*/
-					$("#songs table").append(this.folders+files);
+					$("#songs table").append(this.folders+files+message);
 
 					this.showTagsBrackets();
 					this.moveKeyboardToFirst();
@@ -3127,7 +3130,7 @@ Browser.prototype = {
 		this.contextTR.css("background", main.getCSSVar("--color-bg-sid-hover"));
 
 		if ($target.hasClass("sid")) {
-			var notSidRows = $target.parents("table").find("td.folder,td.spacer,td.divider").length;
+			var notSidRows = $target.parents("table").find("td.folder,td.spacer,td.divider,td.message").length;
 			var isPersonalSymlist = this.path.substr(0, 2) == "/!",
 				isPublicSymlist = this.path.substr(0, 2) == "/$",				
 				thisRow = $target.parent("tr").index() - notSidRows;

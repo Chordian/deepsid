@@ -205,8 +205,8 @@ var main = {
 		$("#songs table").children().each(function() {
 			var $tr = $(this);
 			var isSIDFile = $tr.find("td.sid").length;
-			// Skip spacers, dividers and files for the general incompatibility field (folders only)
-			if (!$tr.find(".spacer").length && !$tr.find(".divider").length && !isSIDFile) {
+			// Skip spacers, dividers, messages and files for the general incompatibility field (folders only)
+			if (!$tr.find(".spacer").length && !$tr.find(".divider").length && !$tr.find(".message").length && !isSIDFile) {
 				$tr.removeClass("disabled");
 				var $span = $tr.find(".name");
 				if ($span.is("[data-incompat]") && ($span.attr("data-incompat").indexOf(SID.emulator) !== -1 ||

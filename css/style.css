@@ -4250,6 +4250,16 @@ input[type=range]::-ms-track {
 			cursor: default;
 		}
 
+		/* For non-interactive SID row messages such as when CGSC is next in search results */
+		#songs .message {
+			padding: 28px 4px 10px 0;
+			color: var(--color-text-minor);
+			text-align: center;
+			cursor: default;
+			font-style: italic;
+			font-size: 12px;
+		}
+
 	#songs tr:hover {
 		/*color: var(--color-link-hover);*/
 		background: var(--color-bg-sid-hover);
