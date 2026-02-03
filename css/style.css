@@ -1337,7 +1337,8 @@ small.u2 { margin-left: 2px; }
 	#filter-6581 button.disabled,
 	#sticky-visuals button.disabled,
 	#sticky-admin button.disabled,
-	#csdb-sort button.disabled {
+	#csdb-sort button.disabled,
+	#topic-csdb button.disabled {
 		cursor: default;
 		background: var(--color-button-disabled);
 		border-color: var(--color-button-disabled);
@@ -3677,7 +3678,7 @@ input[type=range]::-ms-track {
 			--color-border-message: transparent;
 }
 
-			#browser-bottom .message {
+			#browser-bottom .bb-message {
 				display: none;
 				position: relative;
 				left: 50%;
@@ -4654,16 +4655,13 @@ input[type=range]::-ms-track {
 			line-height: 24px;
 		}
 
-	#admin-notes-text {
-		height: 400px;
+	#topic-admin .admin-notes-text {
+		height: 118px;
 		min-height: 28px;
 		min-width: 100%;
 		max-width: 100%;
+		margin-bottom: 10px;
 	}
-
-		#admin-notes-save {
-			margin-top: 6px;
-		}
 
 		#admin-notes-info {
 			margin-left: 8px;

@@ -17,8 +17,11 @@ if (!$account->CheckLogin() || $account->UserName() != 'JCH' || $account->UserID
 	die("This is for administrators only.");
 
 $html = '<h3>Notes</h3>
-			<h4>General</h4>
-			<textarea id="admin-notes-text" name="admin-notes"></textarea>
+			<textarea id="admin-notes-1" class="admin-notes-text" name="admin-notes-1"></textarea>
+			<textarea id="admin-notes-2" class="admin-notes-text" name="admin-notes-2"></textarea>
+			<textarea id="admin-notes-3" class="admin-notes-text" name="admin-notes-3"></textarea>
+			<textarea id="admin-notes-4" class="admin-notes-text" name="admin-notes-4"></textarea>
+			<textarea id="admin-notes-5" class="admin-notes-text" name="admin-notes-5"></textarea>
 			<button id="admin-notes-save">Save</button><span id="admin-notes-info"></span>
 	';
 

@@ -531,7 +531,7 @@ if (isset($row)) {
 		: '';
 
 	// Determine plot positions in the mini activity chart below
-	// @todo I'm sure this could done a lot smarter.
+	// @todo I'm sure this could be done a lot smarter.
 	if ($first_year === date("Y"))
 		$x1 = 106;
 	else if ($first_year < 1987)

@@ -3,7 +3,6 @@
  * DeepSID / SIDPlayer
  */
 
-// const YOUTUBE_BLANK = "8tPnX7OPo0Q"; // 10 minutes of blank video
 const YOUTUBE_BLANK = "ENmZnF2M41A"; // Animated DeepSID logo
 
 function SIDPlayer(emulator) {
@@ -237,16 +236,16 @@ function SIDPlayer(emulator) {
 			 */
 			this.hermit = new jsSID(($("body").attr("data-mobile") !== "0" ? 16384 : this.bufferSize[this.emulator]), 0.0005);
 
-			this.emulatorFlags.supportFaster = true;
-			this.emulatorFlags.supportEncoding = false;
-			this.emulatorFlags.supportSeeking = false;
-			this.emulatorFlags.supportLoop = true;
-			this.emulatorFlags.forceModel = true;
-			this.emulatorFlags.forcePlay = false;
-			this.emulatorFlags.hasFlags = true;
-			this.emulatorFlags.slowLoading = false;
-			this.emulatorFlags.returnCIA = true;
-			this.emulatorFlags.offline = false;
+			this.emulatorFlags.supportFaster 	= true;
+			this.emulatorFlags.supportEncoding	= false;
+			this.emulatorFlags.supportSeeking 	= false;
+			this.emulatorFlags.supportLoop 		= true;
+			this.emulatorFlags.forceModel 		= true;
+			this.emulatorFlags.forcePlay 		= false;
+			this.emulatorFlags.hasFlags 		= true;
+			this.emulatorFlags.slowLoading 		= false;
+			this.emulatorFlags.returnCIA 		= true;
+			this.emulatorFlags.offline 			= false;
 			break;
 
 		case "webusb":
@@ -257,16 +256,16 @@ function SIDPlayer(emulator) {
 			 */
 			this.hermit = new jsSID(0, 0, false, true);
 
-			this.emulatorFlags.supportFaster = true;
-			this.emulatorFlags.supportEncoding = false;
-			this.emulatorFlags.supportSeeking = false;
-			this.emulatorFlags.supportLoop = true;
-			this.emulatorFlags.forceModel = true;
-			this.emulatorFlags.forcePlay = false;
-			this.emulatorFlags.hasFlags = true;
-			this.emulatorFlags.slowLoading = false;
-			this.emulatorFlags.returnCIA = true;
-			this.emulatorFlags.offline = false;
+			this.emulatorFlags.supportFaster 	= true;
+			this.emulatorFlags.supportEncoding 	= false;
+			this.emulatorFlags.supportSeeking 	= false;
+			this.emulatorFlags.supportLoop 		= true;
+			this.emulatorFlags.forceModel 		= true;
+			this.emulatorFlags.forcePlay 		= false;
+			this.emulatorFlags.hasFlags 		= true;
+			this.emulatorFlags.slowLoading 		= false;
+			this.emulatorFlags.returnCIA 		= true;
+			this.emulatorFlags.offline 			= false;
 			break;
 
 		case "asid":
@@ -462,10 +461,10 @@ SIDPlayer.prototype = {
 		if (typeof this.callbackTrackEnd === "function") this.callbackTrackEnd();
 	},
 
-	setCallbackPlayerReady: function(callback) { this.callbackPlayerReady = callback; },
-	setCallbackTrackReadyToPlay: function(callback) { this.callbackTrackReadyToPlay = callback; },
-	setCallbackTrackEnd: function(callback) { this.callbackTrackEnd = callback; },
-	setCallbackBufferEnded: function(callback) { this.callbackBufferEnded = callback; },
+	setCallbackPlayerReady: 		function(callback) { this.callbackPlayerReady = callback; },
+	setCallbackTrackReadyToPlay:	function(callback) { this.callbackTrackReadyToPlay = callback; },
+	setCallbackTrackEnd: 			function(callback) { this.callbackTrackEnd = callback; },
+	setCallbackBufferEnded: 		function(callback) { this.callbackBufferEnded = callback; },
 
 	/**
 	 * Load a SID file but do not play it yet. Also handles callbacks to when the file

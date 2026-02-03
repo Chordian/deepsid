@@ -2784,6 +2784,11 @@ Browser.prototype = {
 					$("#topic-csdb .admin-csdb-button").remove(); // Admin button is legacy
 				}
 
+				// Disable 'SHOW' button if CSDb is currently unreachable
+				if (data.html.indexOf("(CSDb unreachable)") !== -1) {
+					$("#show-compo").prop("disabled", true).addClass("disabled");
+				}
+
 				// Enable highlighting button and its label if any emphasizing is present
 				setTimeout(() => {
 					if ($("table.releases tr").find("a.emphasize, a.empSec, a.empThird").length > 0)

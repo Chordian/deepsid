@@ -946,7 +946,7 @@
 						<select id="dropdown-sort" name="sort"><!-- browser.js --></select>
 					</div>
 				</div>
-				<div id="browser-bottom"><div class="message"></div></div>
+				<div id="browser-bottom"><div class="bb-message"></div></div>
 				<div id="folders" tabindex="0"><div id="kb-marker"></div><table></table>
 				</div>
 				<img id="loading" class="loading-spinner" src="images/loading.svg" style="display:none;" alt="" />

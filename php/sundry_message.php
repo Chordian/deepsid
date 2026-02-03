@@ -171,6 +171,15 @@ $random = array(
 			from 1 to 5. Add a dash before or after the number to search a range.
 		'
 	),
+
+	array(
+		'type'		=> 'tips',
+		'lemon'		=> true,
+		'message'	=> '
+			When browsing search results, click a page button to move one page at a time. Hold Shift to
+			jump five pages. Middle-click a page button to jump straight to the beginning or end.
+		'
+	),
 );
 
 switch ($account->GetAdminSetting('sundry_message')) {

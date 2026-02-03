@@ -129,9 +129,9 @@ var main = {
 	 */
 	browserMessage: function(message) {
 		clearTimeout(main.browserMessageTimer);
-		$("#browser-bottom .message").empty().append(message).css("display", "inline-block");
+		$("#browser-bottom .bb-message").empty().append(message).css("display", "inline-block");
 		main.browserMessageTimer = setTimeout(() => {
-			$("#browser-bottom .message").hide();
+			$("#browser-bottom .bb-message").hide();
 		}, 1500);
 	},
 
@@ -1511,12 +1511,30 @@ main.bindAdminEvents = function() {
 				});
 				break;
 			case "notes":
-				$.get("php/admin_notes.php", function(data) {
-					browser.validateData(data, function(data) {
+				$.get("php/admin_notes.php", function (data) {
+					browser.validateData(data, function (data) {
 						$("#topic-admin").append(data.html);
-						$.post("php/admin_notes_read.php", function(data) {
-							browser.validateData(data, function(data) {
-								$("#admin-notes-text").val(data.text);
+
+						$.post("php/admin_notes_read.php", function (data) {
+							browser.validateData(data, function (data) {
+
+								const text = data.text;
+
+								// Match blocks like: #NOTES1# ... #NOTES2#
+								const regex = /#NOTES(\d+)#([\s\S]*?)(?=#NOTES\d+#|$)/g;
+								let match;
+								const notes = {};
+
+								while ((match = regex.exec(text)) !== null) {
+									const index = match[1];                 // "1", "2", ...
+									const content = match[2].trim();        // text inside
+									notes[index] = content;
+								}
+
+								// Fill textareas 1–5 (empty if missing)
+								for (let i = 1; i <= 5; i++) {
+									$("#admin-notes-" + i).val(notes[i] || "");
+								}
 							});
 						});
 					});
@@ -1614,7 +1632,13 @@ main.bindAdminEvents = function() {
 	 * Admin settings: Saving a note.
 	 */
 	$("#topic-admin").on("click", "#admin-notes-save", function() {
-		$.post("php/admin_notes_write.php", { text: $("#admin-notes-text").val() }, function(data) {
+		const text =
+			'#NOTES1#' + $("#admin-notes-1").val() +
+			'#NOTES2#' + $("#admin-notes-2").val() +
+			'#NOTES3#' + $("#admin-notes-3").val() +
+			'#NOTES4#' + $("#admin-notes-4").val() +
+			'#NOTES5#' + $("#admin-notes-5").val();
+		$.post("php/admin_notes_write.php", { text: text }, function(data) {
 			browser.validateData(data);
 		});
 		$("#admin-notes-info").append("Saved.");

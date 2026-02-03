@@ -15,25 +15,13 @@ ONGOING
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- Add search results hotkey navigation (+1, +5, to end, etc.) as a sundry tip.
-
 - All link icons should only copy to clipboard (and mention it) not go to the link.
-
-- In SH folder, new tunes in 2026 does not show a green 2026 in the "Active" bar. I can't
-  remember if this is supposed to be automatic or just affected by HVSC? Check up on it.
-
-- Have 4-5-6 notes boxes in the admin tab instead of one. Saving to individual text files?
 
 - In LOCALHOST database, clean out file entries for old custom folders such as e.g. '_$11
   Music Compo 2018' and more.
 
-- Idea from Anon-Relays: Loop song X number of times before moving on to the next one. In
-  the settings, the default number should of course be 1. UPDATE: It doesn't have to be a
-  setting. It could also be continuously toggle the LOOP button to get, infinity, 2 times,
-  3 times, and then start over.
-
-- Cache: Consider also caching the 'SHOW' pages. Alternatively, you could just disable the
-  button on cached pages loaded whenever CSDb is down.
+- Make an SQL query for listing all "clinks" to LinkedIn. Mibri is right - LinkedIn links
+  do not belong on DeepSID and should all be deleted.
 
 - Production inline factoid should have a brown color instead of blue for GB64 games. Also,
   consider support for getting GB64 info for context menu option and hotkey.
@@ -41,9 +29,6 @@ SHOULD BE DONE
 - See if you can get ChatGPT to convert tasks in HVSC update ToDo to PHP files.
 
 - Lemon64: Make inline factoids appear to the far right (where rating stars are missing).
-
-- I've asked ChatGPT if web audio can be cleaned up for next SID click. It smells like
-  something that could take quite some time to fiddle with. Dive in later?
 
 - BUG: In some situations the search box doesn't show the 'X' icon when it should. For
   example, when clicking the 'New in HVSC update #84' folder link (and you haven't been
@@ -182,6 +167,11 @@ CONSIDER THIS
   appended to the date in the lists. It a logical way to show it and should be done, but it
   will require additional database storage. Maybe a "+" icon will appear after dates here
   too, clicking will open 'Edit tags' dialog box.
+
+- Idea from Anon-Relays: Loop song X number of times before moving on to the next one. In
+  the settings, the default number should of course be 1. UPDATE: It doesn't have to be a
+  setting. It could also be continuously toggle the LOOP button to get, infinity, 2 times,
+  3 times, and then start over.
 
 - Automate CGSC update process. All REN, MOVE, etc. Create folders where they can't be found
   in the filenames, count files in them, etc.
@@ -570,6 +560,9 @@ PROBABLY NOT?
 - Tag brackets drop-down boxes: Only allow event type tags in top drop-down box and only
   allow production type tags in bottom drop-down box. (Perhaps allow administrators access
   to all types in both drop-down boxes.)
+
+- Consider also caching the 'SHOW' pages. This would not be a walk in the park to do, because
+  there are sometimes also a party picture. Those are cached separately.
 
 - Tags: Make a unified tag for files that have less then 3 channels, then replace all those
   1ch, 2ch and 3ch tags. You have to find one yourself - all the suggestions offered by both

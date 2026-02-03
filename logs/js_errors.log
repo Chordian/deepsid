@@ -53,3 +53,23 @@ Message: ReferenceError: handled is not defined
 Source: http://chordian/deepsid/js/browser.js?v=1769696498 (493:59)
 IP: ::1
 
+[2026-02-03 14:15:33] error
+Message: Script error.
+Source: https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js (0:0)
+IP: ::1
+
+[2026-02-03 14:17:55] error
+Message: Script error.
+Source: https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js (0:0)
+IP: ::1
+
+[2026-02-03 14:18:32] error
+Message: Script error.
+Source: https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js (0:0)
+IP: ::1
+
+[2026-02-03 14:19:12] error
+Message: Script error.
+Source: https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js (0:0)
+IP: ::1
+
