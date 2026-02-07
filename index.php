@@ -1964,6 +1964,11 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>February 6, 2026</h3>
+						<ul>
+							<li>Clicking a permalink icon now copies the link to the clipboard instead of navigating to it.</li>
+						</ul>
+
 						<h3>January 31, 2026</h3>
 						<ul>
 							<li>Fixed an error when searching locally in a competition folder.</li>

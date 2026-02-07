@@ -1420,6 +1420,32 @@ main.bindEvents = function() {
 	});
 
 	/**
+	 * Clicking a permalink icon for copying it to the clipboard.
+	 */
+	$("#dexter,#path").on("click", "a.clipboard", function(event) {
+		event.preventDefault();
+
+		const url = this.href;
+
+		if (navigator.clipboard && window.isSecureContext) {
+			// Modern browsers
+			navigator.clipboard.writeText(url).then(() => {
+				main.browserMessage("Copied link to clipboard");
+			}).catch(err => {
+				console.error("Clipboard error:", err);
+			});
+		} else {
+			// Fallback for older browsers / non-HTTPS
+			const $temp = $("<textarea>");
+			$("body").append($temp);
+			$temp.val(url).select();
+			document.execCommand("copy");
+			$temp.remove();
+			main.browserMessage("Copied link to clipboard");
+		}
+	});
+
+	/**
 	 * Catch synchronous JavaScript errors.
 	 */
 	window.onerror = function (message, source, lineno, colno, error) {
@@ -2274,6 +2300,7 @@ main.bindDexterCSDbEvents = function() {
 		// Load the cache again (much faster than calling browser.getCSDb() to regenerate it)
 		$("#topic-csdb").empty()
 			.append($this.hasClass("compo") ? main.cacheBeforeCompo : main.cacheCSDb);
+		$("#show-unreachable").remove();
 		$("#sticky-csdb").empty().append($this.hasClass("compo") ? main.cacheStickyBeforeCompo : main.cacheSticky);
 		// Adjust drop-down box to the sort setting
 		$("#dropdown-sort-csdb").val(main.cacheDDCSDbSort);

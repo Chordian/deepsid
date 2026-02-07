@@ -94,7 +94,7 @@ try {
 		// NOTE: No ellipsis handling here because I am in control of all the titles.
 		$sticky = '<h2 style="display:inline-block;margin:0;" title="'.$title.'">'.$title.'</h2>'.
 			'<button id="go-back-player">Back</button>'.
-			'<a href="//deepsid.chordian.net?player='.$id.'&type=player&search='.str_replace(' ', '_', $search).'" title="Permalink">'.$svg_permalink.'</a>'.
+			'<a class="clipboard" href="//deepsid.chordian.net?player='.$id.'&type=player&search='.str_replace(' ', '_', $search).'" title="Permalink">'.$svg_permalink.'</a>'.
 			'<p style="position:relative;top:-9px;left:1px;font-size:13px;margin-bottom:-5px;">'.trim($years.$developer).$download.'</p>';
 
 		// Now build the HTML

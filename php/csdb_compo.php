@@ -25,7 +25,7 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH
 function CompoGetXML($event_id) {
 	$xml = curl('https://csdb.dk/webservice/?type=event&id='.$event_id);
 	if (!strpos($xml, '<CSDbData>'))
-		die(json_encode(array('status' => 'warning', 'html' => '<p style="margin-top:0;"><i>Uh... CSDb? Are you there?</i></p>'.
+		die(json_encode(array('status' => 'warning', 'html' => '<p style="margin-top:0;"><i>CSDb is currently unreachable.</i></p>'.
 			'<b>ID:</b> <a href="https://csdb.dk/event/?id='.$event_id.'" target="_blank">'.$event_id.'</a>')));
 	$csdb = simplexml_load_string($xml);
 	return $csdb;		

@@ -143,6 +143,7 @@
 	--color-text-strong:			var(--color-bottom);
 	--color-text-factoid-top:		#666;				/* Box for top factoid #707590 */
 	--color-text-factoid-label:		#666690;			/* Production title */
+	--color-text-error:				#c00;
 	
 	--color-tags-bracket:			#a1a294;			/* Used for horizontal tag start-to-end brackets */
 	--color-tags-bracket-up:		#949494;
@@ -559,6 +560,7 @@
 	--color-text-strong:			var(--color-top);
 	--color-text-factoid-top:		#ccc;				/* Box for tag label */
 	--color-text-factoid-label:		#c8c8d9;			/* Production title */
+	--color-text-error:				#e66;
 
 	--color-tags-bracket:			#808080;			/* Used for horizontal tag start-to-end brackets */
 	--color-tags-bracket-up:		#949494;
@@ -4656,6 +4658,7 @@ input[type=range]::-ms-track {
 		}
 
 	#topic-admin .admin-notes-text {
+		display: block;
 		height: 118px;
 		min-height: 28px;
 		min-width: 100%;
@@ -6491,6 +6494,13 @@ input[type=range]::-ms-track {
 					top: -1px;
 					margin-left: 8px;
 				}
+
+					#show-unreachable {
+						position: relative;
+						top: -1px;
+						left: 7px;
+						color: var(--color-text-error);
+					}
 
 				#csdb-comment {
 					margin: 6px 6px 0 0;

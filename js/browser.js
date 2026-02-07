@@ -1543,7 +1543,7 @@ Browser.prototype = {
 							'<button id="search-page-prev" class="page'+(this.page <= 1 ? ' disabled' : '')+'"><svg height="18" viewBox="0 0 48 48"><path d="M14.83 16.42l9.17 9.17 9.17-9.17 2.83 2.83-12 12-12-12z"/><path d="M0-.75h48v48h-48z" fill="none"/></svg></button>'+
 							'<div class="page-counter">'+(this.maxPages ? this.page: 0)+'/'+this.maxPages+'</div>'+
 							'<button id="search-page-next" class="page'+(this.page >= this.maxPages ? ' disabled': '')+'"><svg height="18" viewBox="0 0 48 48"><path d="M14.83 16.42l9.17 9.17 9.17-9.17 2.83 2.83-12 12-12-12z"/><path d="M0-.75h48v48h-48z" fill="none"/></svg></button>'+
-							'<a href="//deepsid.chordian.net?'+searchHere+'search='+searchQuery+(searchType !== '#all#' ? '&type='+searchType : '')+'" title="Permalink"><svg class="permalink" style="enable-background:new 0 0 80 80;" version="1.1" viewBox="0 0 80 80" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g><path d="M29.298,63.471l-4.048,4.02c-3.509,3.478-9.216,3.481-12.723,0c-1.686-1.673-2.612-3.895-2.612-6.257 s0.927-4.585,2.611-6.258l14.9-14.783c3.088-3.062,8.897-7.571,13.131-3.372c1.943,1.93,5.081,1.917,7.01-0.025 c1.93-1.942,1.918-5.081-0.025-7.009c-7.197-7.142-17.834-5.822-27.098,3.37L5.543,47.941C1.968,51.49,0,56.21,0,61.234 s1.968,9.743,5.544,13.292C9.223,78.176,14.054,80,18.887,80c4.834,0,9.667-1.824,13.348-5.476l4.051-4.021 c1.942-1.928,1.953-5.066,0.023-7.009C34.382,61.553,31.241,61.542,29.298,63.471z M74.454,6.044 c-7.73-7.67-18.538-8.086-25.694-0.986l-5.046,5.009c-1.943,1.929-1.955,5.066-0.025,7.009c1.93,1.943,5.068,1.954,7.011,0.025 l5.044-5.006c3.707-3.681,8.561-2.155,11.727,0.986c1.688,1.673,2.615,3.896,2.615,6.258c0,2.363-0.928,4.586-2.613,6.259 l-15.897,15.77c-7.269,7.212-10.679,3.827-12.134,2.383c-1.943-1.929-5.08-1.917-7.01,0.025c-1.93,1.942-1.918,5.081,0.025,7.009 c3.337,3.312,7.146,4.954,11.139,4.954c4.889,0,10.053-2.462,14.963-7.337l15.897-15.77C78.03,29.083,80,24.362,80,19.338 C80,14.316,78.03,9.595,74.454,6.044z"/></g><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/></svg></a>'+
+							'<a class="clipboard" href="//deepsid.chordian.net?'+searchHere+'search='+searchQuery+(searchType !== '#all#' ? '&type='+searchType : '')+'" title="Permalink"><svg class="permalink" style="enable-background:new 0 0 80 80;" version="1.1" viewBox="0 0 80 80" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g><path d="M29.298,63.471l-4.048,4.02c-3.509,3.478-9.216,3.481-12.723,0c-1.686-1.673-2.612-3.895-2.612-6.257 s0.927-4.585,2.611-6.258l14.9-14.783c3.088-3.062,8.897-7.571,13.131-3.372c1.943,1.93,5.081,1.917,7.01-0.025 c1.93-1.942,1.918-5.081-0.025-7.009c-7.197-7.142-17.834-5.822-27.098,3.37L5.543,47.941C1.968,51.49,0,56.21,0,61.234 s1.968,9.743,5.544,13.292C9.223,78.176,14.054,80,18.887,80c4.834,0,9.667-1.824,13.348-5.476l4.051-4.021 c1.942-1.928,1.953-5.066,0.023-7.009C34.382,61.553,31.241,61.542,29.298,63.471z M74.454,6.044 c-7.73-7.67-18.538-8.086-25.694-0.986l-5.046,5.009c-1.943,1.929-1.955,5.066-0.025,7.009c1.93,1.943,5.068,1.954,7.011,0.025 l5.044-5.006c3.707-3.681,8.561-2.155,11.727,0.986c1.688,1.673,2.615,3.896,2.615,6.258c0,2.363-0.928,4.586-2.613,6.259 l-15.897,15.77c-7.269,7.212-10.679,3.827-12.134,2.383c-1.943-1.929-5.08-1.917-7.01,0.025c-1.93,1.942-1.918,5.081,0.025,7.009 c3.337,3.312,7.146,4.954,11.139,4.954c4.889,0,10.053-2.462,14.963-7.337l15.897-15.77C78.03,29.083,80,24.362,80,19.338 C80,14.316,78.03,9.595,74.454,6.044z"/></g><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/></svg></a>'+
 							'</div><button id="search-cancel" class="medium">Cancel</button>';
 					} else if (this.isSymlist) {
 						$("#path").css("top", "0.5px");
@@ -2772,21 +2772,17 @@ Browser.prototype = {
 
 				if ($("#logged-username").text() === "JCH") {
 					// Add cache info in top right corner
-					var cacheStatus = 'Cache';
+					const cacheAge = this.getCacheAgeShort(data.html);
+					var cacheStatus = cacheAge ? `Cache (${cacheAge})` : "Cache";
 					if (data.html.indexOf("csdb.dk/webservice") !== -1) {
 						cacheStatus = '<span style="color:var(--color-text-csdb-direct);">CSDb</span>';
 					} else if (data.html.indexOf("(CSDb unreachable)") !== -1) {
-						cacheStatus = '<span style="color:var(--color-text-csdb-down);">Cache</span>';
+						cacheStatus = '<span style="color:var(--color-text-csdb-down);"><b>Cache</b></span>';
 					}
 					$("#sticky-csdb").prepend('<div id="csdb-admin-release">'+cacheStatus+'</div>')
 				} else {
 					// Remove admin controls if included in a cache refreshed by an administrator
 					$("#topic-csdb .admin-csdb-button").remove(); // Admin button is legacy
-				}
-
-				// Disable 'SHOW' button if CSDb is currently unreachable
-				if (data.html.indexOf("(CSDb unreachable)") !== -1) {
-					$("#show-compo").prop("disabled", true).addClass("disabled");
 				}
 
 				// Enable highlighting button and its label if any emphasizing is present
@@ -2809,6 +2805,32 @@ Browser.prototype = {
 
 			});
 		}.bind(this));
+	},
+
+	/**
+	 * Retrieve the short string version of the CSDb cache age.
+	 * 
+	 * @returns {string}		Short cache time, e.g. "(3s)", "(5d)", etc.
+	 */
+	getCacheAgeShort: function() {
+		const text = $("#cache-age").text(); // Pure text, no tags
+		const match = text.match(/\(updated\s+(\d+)\s+(second|minute|hour|day)s?\s+ago\)/i);
+
+		if (!match) {
+			return null;
+		}
+
+		const value = parseInt(match[1], 10);
+		const unit  = match[2].toLowerCase();
+
+		const unitMap = {
+			second: "s",
+			minute: "m",
+			hour:   "h",
+			day:    "d"
+		};
+
+		return value + unitMap[unit];
 	},
 
 	/**
@@ -2929,6 +2951,23 @@ Browser.prototype = {
 			this.validateData(data, function(data) {
 
 				clearTimeout(loadingCSDb);
+
+				// Is CSDb down?
+				if (data.html.indexOf("currently unreachable.") !== -1) {
+
+					// Show the previous CSDb release cache page again
+					$("#topic-csdb").empty().append(main.cacheBeforeCompo);
+					$("#show-unreachable").remove();
+					$("#sticky-csdb").empty().append(main.cacheStickyBeforeCompo);
+					main.setScrollTopInstantly("#page", main.cachePosBeforeCompo);
+					this.csdbArgs = [];
+					$("#cache-age").remove();
+
+					// Show an error message after the 'SHOW' button
+					$("#show-compo").after('<small id="show-unreachable">CSDb is unreachable</small>');
+					return false;
+				}
+
 				$("#sticky-csdb").empty().append(data.sticky);
 				if (parseInt(colorTheme))
 					data.html = data.html.replace(/composer\.png/g, "composer_dark.png");

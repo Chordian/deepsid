@@ -15,16 +15,18 @@ ONGOING
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- All link icons should only copy to clipboard (and mention it) not go to the link.
-
 - In LOCALHOST database, clean out file entries for old custom folders such as e.g. '_$11
   Music Compo 2018' and more.
 
-- Make an SQL query for listing all "clinks" to LinkedIn. Mibri is right - LinkedIn links
-  do not belong on DeepSID and should all be deleted.
+- Consider improving the active visitors page with a "humans online" number. See a chat I
+  I already had with ChatGPT about this.
+
+- The small STIL three-lines <div> icon in left side of SID rows also look bad on work PC,
+  i.e. on displays with 1920x1080 resolution. Replace with the SVG icon instead.
 
 - Production inline factoid should have a brown color instead of blue for GB64 games. Also,
-  consider support for getting GB64 info for context menu option and hotkey.
+  consider support for getting GB64 info for context menu option and hotkey. UPDATE: And
+  music releases could have a... white color?
 
 - See if you can get ChatGPT to convert tasks in HVSC update ToDo to PHP files.
 
