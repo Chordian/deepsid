@@ -142,7 +142,9 @@
 	--color-text-deprecated:		#e22;
 	--color-text-strong:			var(--color-bottom);
 	--color-text-factoid-top:		#666;				/* Box for top factoid #707590 */
-	--color-text-factoid-label:		#666690;			/* Production title */
+	--color-text-factoid-label:		#666690;			/* Production title (various) */
+	--color-text-factoid-music:		#a2a2a2;			/* Production title (C64 Music) */
+	--color-text-factoid-game:		#765d50;			/* Production title (GB64) */
 	--color-text-error:				#c00;
 	
 	--color-tags-bracket:			#a1a294;			/* Used for horizontal tag start-to-end brackets */
@@ -198,6 +200,9 @@
 
 	--url-vote:						url(../images/vote_bright.png);
 	--bottom-connect-down:			-9px;
+
+	--has-stil-icon:				url(../images/has_stil_black.png);
+	--has-stil-icon-disabled:		url(../images/has_stil_black_disabled.png);
 
 	/* SVG images */
 
@@ -559,7 +564,9 @@
 	--color-text-deprecated:		#e33;
 	--color-text-strong:			var(--color-top);
 	--color-text-factoid-top:		#ccc;				/* Box for tag label */
-	--color-text-factoid-label:		#c8c8d9;			/* Production title */
+	--color-text-factoid-label:		#c8c8d9;			/* Production title (various) */
+	--color-text-factoid-music:		#888;				/* Production title (C64 Music) */
+	--color-text-factoid-game:		#d0c2ba;			/* Production title (GB64) */
 	--color-text-error:				#e66;
 
 	--color-tags-bracket:			#808080;			/* Used for horizontal tag start-to-end brackets */
@@ -613,6 +620,9 @@
 
 	--url-vote:						url(../images/vote_dark.png);
 	--bottom-connect-down:			-8px;
+
+	--has-stil-icon:				url(../images/has_stil_white.png);
+	--has-stil-icon-disabled:		url(../images/has_stil_white_disabled.png);
 
 	/* SVG images */
 
@@ -3584,10 +3594,25 @@ input[type=range]::-ms-track {
 				color: var(--color-disabled);
 			}
 
-			/* Production title in top factoid */
-			#songs b.label {
+			/* Production title in top factoid (various) */
+			#songs b.label-prod {
 				color: var(--color-text-factoid-label);
 			}
+
+			/* Production title in top factoid (C64 Music) */
+			#songs b.label-music {
+				color: var(--color-text-factoid-music);
+			}
+
+			/* Production title in top factoid (GB64) */
+			#songs b.label-game {
+				color: var(--color-text-factoid-game);
+			}
+
+		/* Lemon64 doesn't show rating stars so move the top factoid further to the right */
+		#songs .factoid-top-lemon {
+			right: -92px;
+		}
 
 		/* Bottom factoid */
 		#songs .factoid-bottom {
@@ -3789,6 +3814,11 @@ input[type=range]::-ms-track {
 				right: 9px;
 			}
 
+				/* Lemon64 doesn't show rating stars so move the folder focus container further to the right */
+				#songs .folder-focus-lemon {
+					right: -92px;
+				}
+
 			#topic-profile .folder-focus {
 				display: inline-block;
 				position: relative;
@@ -3900,19 +3930,18 @@ input[type=range]::-ms-track {
 
 			#songs .has-stil {
 				position: absolute;
-				top: 10px;
-				left: 5px;
-				width: 3.5px;
+				top: 9.5px;
+				left: 4.5px;
 			}
 
 				#songs .has-stil div {
-					height: 1px;
-					margin-bottom: 1px;
-					border-top: 1px solid var(--color-text-body);
+					height: 7px;
+					width: 4px;
+					background: var(--has-stil-icon) no-repeat;
 				}
 
 				#songs tr.disabled .has-stil div {
-					border-top-color: var(--color-disabled);
+					background: var(--has-stil-icon-disabled) no-repeat;
 				}
 
 			#songs .all-starred {

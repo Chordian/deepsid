@@ -73,3 +73,8 @@ Message: Script error.
 Source: https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js (0:0)
 IP: ::1
 
+[2026-02-08 09:41:18] error
+Message: ReferenceError: label_type is not defined
+Source: http://chordian/deepsid/js/browser.js?v=1770543670 (1940:5)
+IP: ::1
+

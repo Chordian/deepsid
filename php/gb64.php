@@ -20,9 +20,34 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH
 	die("Direct access not permitted.");
 
 /**
- * Return an array with information from the imported GameBase64 database.
+ * Change e.g. "Moon, The" to "The Moon" instead.
  * 
- * REMOVE THIS LINE!
+ * @param		string		$id					The original title
+ *
+ * @return		string							The adapted title
+ */
+function NormalizeTitle(string $title): string
+{
+    $articles = [
+        'The', 'A', 'An',       			// English
+        'Der', 'Die', 'Das',    			// German
+        'Le', 'La', 'Les',      			// French
+        'El', 'Los', 'Las',     			// Spanish
+        'Il', 'Lo', 'La', 'I', 'Gli', 'Le',	// Italian
+        'De', 'Het'             			// Dutch
+    ];
+
+    $pattern = '/^(.*),\s*(' . implode('|', $articles) . ')$/i';
+
+    if (preg_match($pattern, $title, $m)) {
+        return $m[2] . ' ' . $m[1];
+    }
+
+    return $title;
+}
+
+/**
+ * Return an array with information from the imported GameBase64 database.
  * 
  * @global		object		$gb					database connection
  *
@@ -41,7 +66,7 @@ function ReadGB64DB($id) {
 	$games = $select_games->fetch();
 
 	// Get the title
-	$title = $games->Name;
+	$title = NormalizeTitle($games->Name);
 
 	// Get the year
 	$select_years = $gb->query('SELECT Year FROM Years WHERE YE_Id = '.$games->YE_Id.' LIMIT 1');
@@ -269,6 +294,8 @@ if ($page_id) {
 			'<a href="https://gb64.com/game.php?id='.$page_id.'" title="See this at GameBase64" target="_blank"><svg class="outlink" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg></a>'.
 		'</div>';
 
+	$data_type = explode(' - ', htmlspecialchars($data['genre'], ENT_QUOTES, 'UTF-8'))[0];
+
 	// And Now build the HTML
 	$html = '<table style="border:none;">
 		<tr>
@@ -290,7 +317,12 @@ if ($page_id) {
 				$clone.
 				$pcontrol.
 				$players.
-				$comments.'
+				$comments.
+				// Info for controls outside of the page (e.g. on the context menu for a SID file)
+				'<div id="gb64-info" style="display:none;"
+					data-name="'.htmlspecialchars($data['title'], ENT_QUOTES, 'UTF-8').'"
+					data-type="'.$data_type.'"
+					data-siteid="'.$page_id.'"></div>
 			</td>
 			<td style="width:340px;padding:0;border:none;vertical-align:top;text-align:right;">'.
 				$col_of_thumbnails.

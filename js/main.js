@@ -526,6 +526,15 @@ var main = {
 		return Boolean(browser.playlist && browser.playlist[browser.songPos]);
 	},
 
+	/**
+	 * Return the name of the currently selected page tab.
+	 * 
+	 * @returns 
+	 */
+	selectedDexterTab: function() {
+		return $("#tabs .selected").attr("data-topic");
+	},
+
 	// ==============================
 	// Functions: Event tracking
 	// ==============================
@@ -3711,9 +3720,6 @@ $(function() { // DOM ready
 		}
 	}
 
-	// Don't show tags on mobile devices as the dragging there might give way to sideways scrolling
-	main.showTags = main.isMobile ? false : localStorage.getItem("showtags") !== "false";
-
 	// However, a URL switch may TEMPORARILY override the stored emulator
 	var emulator = main.getParam("emulator").toLowerCase();
 	if ($.inArray(emulator, [
@@ -3729,6 +3735,9 @@ $(function() { // DOM ready
 		"download",
 		"silence",
 	]) === -1) emulator = storedEmulator;
+
+	// Don't show tags on mobile devices as the dragging there might give way to sideways scrolling
+	main.showTags = main.isMobile ? false : localStorage.getItem("showtags") !== "false";
 
 	main.handleTopBox(emulator);
 

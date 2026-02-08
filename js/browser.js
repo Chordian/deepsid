@@ -1331,7 +1331,7 @@ Browser.prototype = {
 				adaptedName = this.adaptBrowserName(adaptedName);
 				var tag_start_end = file.tagend ? ' data-tag-start-id="'+file.tagstart+'" data-tag-end-id="'+file.tagend+'"': '';
 				var playerType = "",
-					hasStil = file.stil != "" ? "<div></div><div></div><div></div>" : "";
+					hasStil = file.stil != "" ? '<div></div>' : '';
 				$.each(playerStrips, function(i, strip) {
 					if (file.player.indexOf(strip.type) != -1) {
 						playerType = " "+strip.class;
@@ -1358,9 +1358,10 @@ Browser.prototype = {
 										'" data-type="'+file.type+
 										'" data-id="'+file.id+
 										'" data-symid="'+file.symid+
+										'" data-lsite="'+file.labelsite+
 										'" data-lname="'+file.labelname+
 										'" data-ltype="'+file.labeltype+
-										'" data-lcid="'+file.labelcsdbid+
+										'" data-lsiteid="'+file.labelsiteid+
 										'">'+adaptedName+
 									'</div>'+
 								'</div>'+
@@ -1732,7 +1733,9 @@ Browser.prototype = {
 										focusRight = '<div class="bc"></div>';
 										break;
 								}
-								folderFocus = '<div class="folder-focus">'+focusLeft+focusMiddle+focusRight+'</div>';
+
+								var lemon64 = main.isLemon ? ' folder-focus-lemon' : '';
+								folderFocus = '<div class="folder-focus'+lemon64+'">'+focusLeft+focusMiddle+focusRight+'</div>';
 							}
 
 							// Add a small star in front of the folder if everything within has been rated
@@ -1910,7 +1913,7 @@ Browser.prototype = {
 
 						// STIL icon (three lines)
 						var stil = file.stil;
-						var hasStil = stil != "" ? "<div></div><div></div><div></div>" : "";
+						var hasStil = stil != "" ? '<div></div>' : '';
 
 						// Colored player strip
 						$.each(playerStrips, function(i, strip) {
@@ -1932,8 +1935,13 @@ Browser.prototype = {
 								if (this.isUploadFolder() && file.factoidtop == "5:00")
 									file.factoidtop = '<div>5:00</div>';	// Undefined in SH folder
 								break;
-							case 12:	// Use tag label as factoid
-								file.factoidtop = '<b class="label">'+file.factoidtop+'</b>';
+							case 12:	// Production title
+								var factoidLabel = "prod";
+								if (file.labeltype == "C64 Music")
+									factoidLabel = "music";
+								else if (file.labelsite == "GB64")
+									factoidLabel = "game";
+								file.factoidtop = '<b class="label-'+factoidLabel+'">'+file.factoidtop+'</b>';
 								break;
 						}
 
@@ -1971,7 +1979,8 @@ Browser.prototype = {
 								break;
 						}
 
-						var factoidTop = '<div class="factoid-top">' + file.factoidtop + '</div>';
+						var lemon64 = main.isLemon ? ' factoid-top-lemon' : '';
+						var factoidTop = '<div class="factoid-top'+lemon64+'">' + file.factoidtop + '</div>';
 						$("#measure-factoid").html(factoidTop); // Find the width of the factoid text
 						var nameWidth = 305 - $("#measure-factoid .factoid-top").outerWidth(); // Set width of name
 
@@ -2000,9 +2009,10 @@ Browser.prototype = {
 												'" data-type="'+file.type+
 												'" data-id="'+file.id+
 												'" data-symid="'+file.symid+
+												'" data-lsite="'+file.labelsite+
 												'" data-lname="'+file.labelname+
 												'" data-ltype="'+file.labeltype+
-												'" data-lcid="'+file.labelcsdbid+
+												'" data-lsiteid="'+file.labelsiteid+
 												'">'+adaptedName+
 											'</div>'+
 										'</div>'+
@@ -2056,9 +2066,10 @@ Browser.prototype = {
 							factoidbottom:	factoidBottom,
 							fvaluetop:		file.fvaluetop,
 							fvaluebottom:	file.fvaluebottom,
+							labelsite:		file.labelsite,
 							labelname:		file.labelname,
 							labeltype:		file.labeltype,
-							labelcsdbid:	file.labelcsdbid,
+							labelsiteid:	file.labelsiteid,
 							namewidth:		nameWidth,
 							sidtags:		sidTags,
 							profile:		file.profile,	// Only files from 'SID Happens'
@@ -3594,14 +3605,20 @@ Browser.prototype = {
 	/**
 	 * Add a label (production title) as a factoid.
 	 * 
+	 * This will process a CSDb release or a GB64 game depending on which page tab
+	 * is currently being displayed.
+	 * 
 	 * Only available to administrators for now.
 	 */
 	addLabel: function() {
 		if ($("#logged-username").text() == "JCH") {
-			var $selectedSidFile = $("#folders tr.selected"),
-				$csdbInfo = $("#csdb-info");
 
-			if ($selectedSidFile.length && $csdbInfo.length) {
+			var $selectedSidFile = $("#folders tr.selected"),
+				tab = main.selectedDexterTab(),
+				$csdbInfo = $("#csdb-info"),
+				$gbInfo = $("#gb64-info");
+
+			if ($selectedSidFile.length && ((tab == "csdb" && $csdbInfo.length) || tab == "gb64" && $gbInfo.length)) {
 
 				var name = decodeURIComponent($selectedSidFile.find(".name").attr("data-name"));
 				var thisFullname = ((this.isSearching || this.isSymlist || this.isCompoFolder? "/" : this.path+"/")+name).substr(1);
@@ -3611,18 +3628,21 @@ Browser.prototype = {
 					fullname: thisFullname
 				}, function(data) {
 					this.validateData(data, function() {
+						var $infoElement = tab == "csdb" ? $csdbInfo : $gbInfo;
+						var site = tab == "csdb" ? "CSDb" : "GB64";
 						// Now add the new label
 						$.post("php/labels_write.php", {
 							id:			$selectedSidFile.find(".entry").attr("data-id"),
-							name:		$csdbInfo.attr("data-name"),
-							type:		$csdbInfo.attr("data-type"),
-							csdbid:		$csdbInfo.attr("data-csdbid")
+							site:		site,
+							name:		$infoElement.attr("data-name"),
+							type:		$infoElement.attr("data-type"),
+							siteid:		$infoElement.attr("data-siteid")
 						}, function(data) {
 							browser.validateData(data, function(data) {
 								if (data.created)
-									main.browserMessage("Created label for '"+$csdbInfo.attr("data-name")+"'");
+									main.browserMessage("Created "+site+" label for '"+$infoElement.attr("data-name")+"'");
 								else
-									main.browserMessage("Linked to existing label");
+									main.browserMessage("Linked to existing "+site+" label");
 								main.refreshFolder();
 							});
 						});

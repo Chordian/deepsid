@@ -1964,6 +1964,12 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>February 8, 2026</h3>
+						<ul>
+							<li>The production title in the top factoid is now shown in blue for most productions, gray for music
+								releases, and brown for games (GameBase64).</li>
+						</ul>
+
 						<h3>February 6, 2026</h3>
 						<ul>
 							<li>Clicking a permalink icon now copies the link to the clipboard instead of navigating to it.</li>

@@ -807,7 +807,7 @@ if ($csdb_type == 'sid') {
 				'<div id="csdb-info" style="display:none;"
 					data-name="'.htmlspecialchars($csdb->Release->Name, ENT_QUOTES, 'UTF-8').'"
 					data-type="'.$csdb->Release->Type.'"
-					data-csdbid="'.$csdb_id.'"></div>'.
+					data-siteid="'.$csdb_id.'"></div>'.
 			'</td>'.
 		'</tr></table>'.
 		$also_known_as.

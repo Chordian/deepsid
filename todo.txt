@@ -15,22 +15,7 @@ ONGOING
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- In LOCALHOST database, clean out file entries for old custom folders such as e.g. '_$11
-  Music Compo 2018' and more.
-
-- Consider improving the active visitors page with a "humans online" number. See a chat I
-  I already had with ChatGPT about this.
-
-- The small STIL three-lines <div> icon in left side of SID rows also look bad on work PC,
-  i.e. on displays with 1920x1080 resolution. Replace with the SVG icon instead.
-
-- Production inline factoid should have a brown color instead of blue for GB64 games. Also,
-  consider support for getting GB64 info for context menu option and hotkey. UPDATE: And
-  music releases could have a... white color?
-
 - See if you can get ChatGPT to convert tasks in HVSC update ToDo to PHP files.
-
-- Lemon64: Make inline factoids appear to the far right (where rating stars are missing).
 
 - BUG: In some situations the search box doesn't show the 'X' icon when it should. For
   example, when clicking the 'New in HVSC update #84' folder link (and you haven't been
@@ -546,6 +531,14 @@ PROBABLY NOT?
   of Lemon's MP3 files? UPDATE: I tried it using a download trick from Stack Overflow, but of
   course I got CORS issues and I don't want to waste my time trying to fix that crap. If you
   want to continue anyway, the test is here: temp\browser_download_mp3.js
+
+- In February 2025, I had ChatGPT improve 'parse.php' to also show a number for human-only
+  visitors. However, it was lazy and actually only added up online and mobile users. None in the
+  other column were even considered. It claimed they were SEO crawlers with fake Chrome UAs,
+  headless scrapers, PetalBot / Baidu / Bing variants, junk traffic that looks human, etc. and so
+  not worth considering. I disagree. I could have asked it to include the other column anyway and
+  filtered it to extract likely human visitors, but I imagine there are a lot of potholes and it
+  may be difficult to get this right. Because of this I have decided to park it here.
 
 - Add support for uploading 4SID tunes in the SH folder. Also make it so only WebSid+JSIDPlay2 may
   play such tunes in the SH folder - the SID row must be disabled for all other SID handlers.

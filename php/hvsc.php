@@ -1491,24 +1491,25 @@ try {
 
 					case 12:	// Production title (previously tag label, now its own tables)
 
-						$label_name = $label_type = '';
-						$label_csdbid = 0;
+						$label_site = $label_name = $label_type = '';
+						$label_siteid = 0;
 
 						$lrow = $db->query('
-							SELECT i.id, i.name, i.type, i.csdbid, l.labels_id
+							SELECT i.id, i.site, i.name, i.type, i.site_id, l.labels_id
 							FROM labels_lookup l
 							JOIN labels_info i ON l.labels_id = i.id
 							WHERE l.files_id = '.$id.' LIMIT 1'
 						)->fetch(PDO::FETCH_OBJ);
 						if ($lrow) {
+							$label_site = $lrow->site;			// CSDB
 							$label_name = $lrow->name;			// Dutch Breeze
 							$label_type = $lrow->type;			// Demo
-							$label_csdbid = $lrow->csdbid;		// 11584
+							$label_siteid = $lrow->site_id;		// 11584
 						}
 						$factoid[$f] = $label_name;
 						break;
 
-					// ONLY ADMIN FACTOIDS BELOW (currently not available)
+					// ONLY ADMIN FACTOIDS BELOW
 
 					case 1000:	// ID (hvsc_files)
 
@@ -1565,9 +1566,10 @@ try {
 				'factoidbottom' =>	$factoid[1],
 				'fvaluetop' =>		$fvalue[0],
 				'fvaluebottom' =>	$fvalue[1],
+				'labelsite' =>		$label_site,
 				'labelname' =>		$label_name,
 				'labeltype' =>		$label_type,
-				'labelcsdbid' =>	$label_csdbid,
+				'labelsiteid' =>	$label_siteid,
 			));
 
 			// Add extra values for uploaded SID files too if available

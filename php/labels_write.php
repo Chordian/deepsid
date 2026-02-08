@@ -8,11 +8,12 @@
  * matching label was just linked to the file.
  * 
  * @uses		$_POST['id']			ID of the SID file
+ * @uses		$_POST['site']			Either 'CSDB' or 'GB64'
  * @uses		$_POST['name']			Name (e.g. "Dutch Breeze")
  * @uses		$_POST['type']			Type (e.g. "C64 Demo")
- * @uses		$_POST['csdbid']		CSDb ID (e.g. 11584)
+ * @uses		$_POST['siteid']		Site ID (e.g. 11584)
  * 
- * @used-by		main.js
+ * @used-by		browser.js
  */
 
 require_once("class.account.php"); // Includes setup
@@ -27,7 +28,7 @@ if (!$account->CheckLogin() || $account->UserName() !== 'JCH' || $account->UserI
 	die("This is for administrators only."); // At least for now...
 }
 
-if (!isset($_POST['id']) || !isset($_POST['name']) || !isset($_POST['type']) || !isset($_POST['csdbid']))
+if (!isset($_POST['id']) || !isset($_POST['site']) || !isset($_POST['name']) || !isset($_POST['type']) || !isset($_POST['siteid']))
 	die(json_encode(array('status' => 'error', 'message' => 'You must specify the proper POST variables.')));
 
 /**
@@ -38,10 +39,12 @@ if (!isset($_POST['id']) || !isset($_POST['name']) || !isset($_POST['type']) || 
  * @uses		$_POST['fileID']			file ID of the song being affected
  *
  * @param		string		$action
- * @param		string		$tag_id
- * @param		string		$tag_name
+ * @param		string		$labels_id
+ * @param		string		$labels_site
+ * @param		string		$labels_name
+ * @param		string		$labels_type
  */
-function LogTagActivity($action, $labels_id, $labels_name, $labels_type) {
+function LogTagActivity($action, $labels_id, $labels_site, $labels_name, $labels_type) {
 	global $db, $account;
 
 	// Get the fullname of this ID
@@ -61,6 +64,7 @@ function LogTagActivity($action, $labels_id, $labels_name, $labels_type) {
 			$fullname.','.
 			$action.','.
 			$labels_id.','.
+			$labels_site.','.
 			$labels_name.','.
 			$labels_type.		// Extra field
 		PHP_EOL, FILE_APPEND);
@@ -73,15 +77,16 @@ try {
 
 	$created = false;
 	$params = [
+		':site'		=> $_POST['site'],
 		':name'		=> $_POST['name'],
 		':type'		=> $_POST['type'],
-		':csdbid'	=> $_POST['csdbid']
+		':siteid'	=> $_POST['siteid']
 	];
 
 	// Try to get label info
 	$select = $db->prepare('
 		SELECT id FROM labels_info
-		WHERE name = :name AND type = :type AND csdbid = :csdbid
+		WHERE site = :site AND name = :name AND type = :type AND site_id = :siteid
 		LIMIT 1'
 	);
 	$select->execute($params);
@@ -92,12 +97,12 @@ try {
 		$labels_id = $select->fetch()->id;
 	} else {
 		// The label doesn't exist so create it first
-		$label = $db->prepare('INSERT INTO labels_info (name, type, csdbid)
-			VALUES(:name, :type, :csdbid)');
+		$label = $db->prepare('INSERT INTO labels_info (site, name, type, site_id)
+			VALUES(:site, :name, :type, :siteid)');
 		$label->execute($params);
 		$labels_id = $db->lastInsertId();
 		$created = true;
-		LogTagActivity('LABELS:CREATE', $labels_id, $_POST['name'], $_POST['type']);
+		LogTagActivity('LABELS:CREATE', $labels_id, $_POST['site'], $_POST['name'], $_POST['type']);
 	}
 
 	// Link the SID file to the label
@@ -107,7 +112,7 @@ try {
 		':files_id'  => $_POST['id'],
 		':labels_id' => $labels_id
 	]);
-	LogTagActivity('LABELS:LINK', $labels_id, $_POST['name'], $_POST['type']);
+	LogTagActivity('LABELS:LINK', $labels_id, $_POST['site'], $_POST['name'], $_POST['type']);
 
 } catch(PDOException $e) {
 	$account->LogActivityError(basename(__FILE__), $e->getMessage());
