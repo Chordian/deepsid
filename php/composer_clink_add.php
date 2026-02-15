@@ -22,12 +22,7 @@ if (!isset($_POST['cid']) || !isset($_POST['name']) || !isset($_POST['url']))
 if ($account->CheckLogin()) {
 	
 	try {
-		if ($_SERVER['HTTP_HOST'] == LOCALHOST)
-			$db = new PDO(PDO_LOCALHOST, USER_LOCALHOST, PWD_LOCALHOST);
-		else
-			$db = new PDO(PDO_ONLINE, USER_ONLINE, PWD_ONLINE);
-		$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-		$db->exec("SET NAMES UTF8");
+		$db = $account->GetDB();
 
 		// Who exactly are we doing this for?
 		$select = $db->prepare('SELECT fullname FROM composers WHERE id = :cid');

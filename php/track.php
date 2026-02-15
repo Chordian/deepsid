@@ -15,12 +15,7 @@ if ($account->CheckLogin() && ($account->UserName() == 'JCH' || $account->UserNa
 	exit();
 
 try {
-	if ($_SERVER['HTTP_HOST'] == LOCALHOST)
-		$db = new PDO(PDO_LOCALHOST, USER_LOCALHOST, PWD_LOCALHOST);
-	else
-		$db = new PDO(PDO_ONLINE, USER_ONLINE, PWD_ONLINE);
-	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-	$db->exec("SET NAMES UTF8");
+    $db = $account->GetDB();
 
     $insert = $db->prepare('
         INSERT INTO tracking (event_type, target, ip, created_at)

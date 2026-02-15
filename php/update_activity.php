@@ -22,12 +22,7 @@ require_once("class.account.php"); // Includes setup
 define('HVSC_ROOT', '_High Voltage SID Collection/');
 
 try {
-	if ($_SERVER['HTTP_HOST'] == LOCALHOST)
-		$db = new PDO(PDO_LOCALHOST, USER_LOCALHOST, PWD_LOCALHOST);
-	else
-		$db = new PDO(PDO_ONLINE, USER_ONLINE, PWD_ONLINE);
-	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-	$db->exec("SET NAMES UTF8");
+	$db = $account->GetDB();
 
 	// Get a list of all file rows in HVSC only (in the MUSICIANS folder and SINGLE composers only)
 	$folders = $db->query('SELECT fullname FROM hvsc_folders WHERE fullname LIKE "%/MUSICIANS/%" AND type = "SINGLE"');

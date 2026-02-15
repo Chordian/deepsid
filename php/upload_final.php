@@ -39,12 +39,7 @@ $info = $_POST['info'];
 $path = $_POST['path'].'/';
 
 try {
-	if ($_SERVER['HTTP_HOST'] == LOCALHOST)
-		$db = new PDO(PDO_LOCALHOST, USER_LOCALHOST, PWD_LOCALHOST);
-	else
-		$db = new PDO(PDO_ONLINE, USER_ONLINE, PWD_ONLINE);
-	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-	$db->exec("SET NAMES UTF8");
+	$db = $account->GetDB();
 
 	// Is this editing or uploading?
 	$select = $db->prepare('SELECT id FROM hvsc_files WHERE fullname = :fullname LIMIT 1');

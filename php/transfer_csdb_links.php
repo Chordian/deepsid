@@ -7,15 +7,10 @@
  * @used-by		N/A
  */
 
-require_once("setup.php");
+require_once("class.account.php"); // Includes setup
 
 try {
-	if ($_SERVER['HTTP_HOST'] == LOCALHOST)
-		$db = new PDO(PDO_LOCALHOST, USER_LOCALHOST, PWD_LOCALHOST);
-	else
-		$db = new PDO(PDO_ONLINE, USER_ONLINE, PWD_ONLINE);
-	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-	$db->exec("SET NAMES UTF8");
+	$db = $account->GetDB();
 
 	$select = $db->query('SELECT id, name, csdbid FROM composers WHERE csdbid != 0 AND csdbtype = "scener"');
 	$select->setFetchMode(PDO::FETCH_OBJ);

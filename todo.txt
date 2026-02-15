@@ -9,17 +9,19 @@ ToDo
 
 ONGOING
 ¯¯¯¯¯¯¯
-- Replace the PDO connection block in PHP scripts with '$db = $account->GetDB();' instead.
 - See below for a major collation change.
+- Check JavaScript error log.
 
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- See if you can get ChatGPT to convert tasks in HVSC update ToDo to PHP files.
+- Hitting the toggle (menu or hotkey) for tags should show them even if they're not the
+  factoid type, then also resetting the detail drop-down box to "Show tags" too.
 
-- BUG: In some situations the search box doesn't show the 'X' icon when it should. For
-  example, when clicking the 'New in HVSC update #84' folder link (and you haven't been
-  searching for anything before that). Check also search topic in 'Help' annex tab.
+- On a CSDb list, add a new button next to the COMMENT one in top. The new button will go
+  to the production pointed to in the label tables. Also consider a check box next to the
+  new button stating something like "Always go to the ????" (figure out a good name).
+  UPDATE: I'm not sure. Need think some more. Perhaps just a toggle setting?
 
 
 ADMIN STUFF
@@ -162,6 +164,9 @@ CONSIDER THIS
 
 - Automate CGSC update process. All REN, MOVE, etc. Create folders where they can't be found
   in the filenames, count files in them, etc.
+
+- See if you can get ChatGPT to convert tasks in HVSC update ToDo to PHP files. UPDATE: I fear
+  this will lead to a lot of ping-pong with ChatGPT to get it right.
 
 - Factoid type: SID row click rate (not direct number but e.g. percentage or similar).
   Maybe the click rate percentage could even be shown as a colored percentage bar?

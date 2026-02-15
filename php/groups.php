@@ -21,12 +21,7 @@ if (isset($fullname)) {
 	$fullname = ProxyExotic($fullname);
 
 	try {
-		if ($_SERVER['HTTP_HOST'] == LOCALHOST)
-			$db = new PDO(PDO_LOCALHOST, USER_LOCALHOST, PWD_LOCALHOST);
-		else
-			$db = new PDO(PDO_ONLINE, USER_ONLINE, PWD_ONLINE);
-		$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-		$db->exec("SET NAMES UTF8");
+		$db = $account->GetDB();
 
 		// If we are in a sub folder of a composer (e.g. work tunes or a previous handle) with no profile then re-use
 		// NOTE: This block is also used in the 'composer.php' file.

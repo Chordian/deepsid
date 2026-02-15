@@ -32,12 +32,7 @@ if ($account->CheckLogin()) {
 
 	try {
 
-		if ($_SERVER['HTTP_HOST'] == LOCALHOST)
-			$db = new PDO(PDO_LOCALHOST, USER_LOCALHOST, PWD_LOCALHOST);
-		else
-			$db = new PDO(PDO_ONLINE, USER_ONLINE, PWD_ONLINE);
-		$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-		$db->exec("SET NAMES UTF8");
+		$db = $account->GetDB();
 
 		$select = $db->prepare('SELECT hvsc_files.fullname as file, hvsc_folders.fullname as folder, rating FROM ratings r'.
 			' LEFT JOIN hvsc_files on r.table_id = hvsc_files.id AND r.type = "FILE"'.

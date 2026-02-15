@@ -40,12 +40,7 @@ if (isset($fullname)) {
 		// INSIDE ONE COMPETITION FOLDER
 
 		try {
-			if ($_SERVER['HTTP_HOST'] == LOCALHOST)
-				$db = new PDO(PDO_LOCALHOST, USER_LOCALHOST, PWD_LOCALHOST);
-			else
-				$db = new PDO(PDO_ONLINE, USER_ONLINE, PWD_ONLINE);
-			$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-			$db->exec("SET NAMES UTF8");
+			$db = $account->GetDB();
 
 			// Get the event ID of this compo folder
 			$select = $db->prepare('SELECT event_id FROM competitions WHERE competition = :compo LIMIT 1');
@@ -191,12 +186,7 @@ if (isset($fullname)) {
 		$fullname = $exoticFullname;
 
 		try {
-			if ($_SERVER['HTTP_HOST'] == LOCALHOST)
-				$db = new PDO(PDO_LOCALHOST, USER_LOCALHOST, PWD_LOCALHOST);
-			else
-				$db = new PDO(PDO_ONLINE, USER_ONLINE, PWD_ONLINE);
-			$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-			$db->exec("SET NAMES UTF8");
+			$db = $account->GetDB();
 
 			// If in a sub folder of a composer (e.g. work tunes or a previous handle) with no profile then re-use
 			// NOTE: This block is also used in the 'groups.php' file.

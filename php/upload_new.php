@@ -47,12 +47,7 @@ if ($file[0x1] !== 'S' || $file[0x2] !== 'I' || $file[0x3] !== 'D')
 	die(json_encode(array('status' => 'error', 'message' => 'Invalid file format.')));
 
 try {
-	if ($_SERVER['HTTP_HOST'] == LOCALHOST)
-		$db = new PDO(PDO_LOCALHOST, USER_LOCALHOST, PWD_LOCALHOST);
-	else
-		$db = new PDO(PDO_ONLINE, USER_ONLINE, PWD_ONLINE);
-	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-	$db->exec("SET NAMES UTF8");
+	$db = $account->GetDB();
 
 	// Make sure the filename uses the HVSC standard (e.g. 'laurel and hardy-2.sid' = 'Laurel_and_Hardy_2.sid')
 	$filename = ucwords(str_replace('_', ' ', str_replace('-', ' ', $sid['name'])));

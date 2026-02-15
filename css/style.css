@@ -3595,17 +3595,17 @@ input[type=range]::-ms-track {
 			}
 
 			/* Production title in top factoid (various) */
-			#songs b.label-prod {
+			#songs .label-prod {
 				color: var(--color-text-factoid-label);
 			}
 
 			/* Production title in top factoid (C64 Music) */
-			#songs b.label-music {
+			#songs .label-music {
 				color: var(--color-text-factoid-music);
 			}
 
 			/* Production title in top factoid (GB64) */
-			#songs b.label-game {
+			#songs .label-game {
 				color: var(--color-text-factoid-game);
 			}
 

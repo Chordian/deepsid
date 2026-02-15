@@ -190,12 +190,7 @@
 					$file = str_replace('/SID', '_SID', $file);
 
 				try {
-					if ($_SERVER['HTTP_HOST'] == LOCALHOST)
-						$db = new PDO(PDO_LOCALHOST, USER_LOCALHOST, PWD_LOCALHOST);
-					else
-						$db = new PDO(PDO_ONLINE, USER_ONLINE, PWD_ONLINE);
-					$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-					$db->exec("SET NAMES UTF8");
+					$db = $account->GetDB();
 
 					if (substr($file, -4) == '.sid' || substr($file, -4) == '.mus') {
 						// It's a specific file
@@ -270,12 +265,7 @@
 			} else if (isset($_GET['file']) && (strtolower(substr($_GET['file'], 0, 12))) == '/sid happens') {
 				$image = '';
 				try {
-					if ($_SERVER['HTTP_HOST'] == LOCALHOST)
-						$db = new PDO(PDO_LOCALHOST, USER_LOCALHOST, PWD_LOCALHOST);
-					else
-						$db = new PDO(PDO_ONLINE, USER_ONLINE, PWD_ONLINE);
-					$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-					$db->exec("SET NAMES UTF8");
+					$db = $account->GetDB();
 
 					// Get the ID of the SH file
 					$select = $db->prepare('SELECT id FROM hvsc_files WHERE fullname = :fullname LIMIT 1');

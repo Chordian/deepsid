@@ -44,12 +44,7 @@ require_once("class.account.php"); // Includes setup
 define('SYMFOLDER', $_SERVER['HTTP_HOST'] == LOCALHOST ? 2291 : 2306);
 
 try {
-	if ($_SERVER['HTTP_HOST'] == LOCALHOST)
-		$db = new PDO(PDO_LOCALHOST, USER_LOCALHOST, PWD_LOCALHOST);
-	else
-		$db = new PDO(PDO_ONLINE, USER_ONLINE, PWD_ONLINE);
-	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-	$db->exec("SET NAMES UTF8");
+	$db = $account->GetDB();
 
 	// -----------------------------------------------------------------------------------------------
 	// @todo FOR NEXT UPDATE, ADD CODE HERE TO DELETE/REMOVE ALL PREVIOUS SYMLIST ROWS AND START OVER!

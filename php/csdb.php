@@ -186,12 +186,7 @@ function cache_images_in_html($html, $image_cache_dir, $csdb_type, $csdb_id) {
 if (isset($_GET['fullname'])) {
 	// Get the CSDb 'type' and 'id' from the database row
 	try {
-		if ($_SERVER['HTTP_HOST'] == LOCALHOST)
-			$db = new PDO(PDO_LOCALHOST, USER_LOCALHOST, PWD_LOCALHOST);
-		else
-			$db = new PDO(PDO_ONLINE, USER_ONLINE, PWD_ONLINE);
-		$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-		$db->exec("SET NAMES UTF8");
+		$db = $account->GetDB();
 
 		$select = $db->prepare('SELECT copyright, csdbtype, csdbid FROM hvsc_files WHERE fullname = :fullname LIMIT 1');
 		$select->execute(array(':fullname'=>$_GET['fullname']));

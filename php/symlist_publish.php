@@ -24,12 +24,7 @@ if (!$user_id)
 	die(json_encode(array('status' => 'error', 'message' => 'You must be logged in to publish playlists.')));
 
 try {
-	if ($_SERVER['HTTP_HOST'] == LOCALHOST)
-		$db = new PDO(PDO_LOCALHOST, USER_LOCALHOST, PWD_LOCALHOST);
-	else
-		$db = new PDO(PDO_ONLINE, USER_ONLINE, PWD_ONLINE);
-	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-	$db->exec("SET NAMES UTF8");
+	$db = $account->GetDB();
 
 	// First let's make sure there is no public playlist with the same name
 	$select = $db->prepare('SELECT 1 FROM hvsc_folders WHERE fullname = :folder');

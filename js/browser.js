@@ -176,9 +176,9 @@ Browser.prototype = {
 			var year = event.currentTarget.innerHTML;
 			year = year.substr(0, 1) == "8" || year.substr(0, 1) == "9" ? "19"+year : "20"+year;
 			$("#dropdown-search").val("copyright");
-			$("#search-box").val(year);
+			$("#search-box").val(year).trigger("keyup");
 			$("#search-here").prop("checked", true);
-			$("#search-button").prop("disabled", false).trigger("click");
+			$("#search-button").trigger("click");
 		});
 
 		$("#get-all-tags").click(function() {
@@ -649,15 +649,8 @@ Browser.prototype = {
 				// SEARCH SHORTCUT
 
 				$("#dropdown-search").val(searchType);
-				$("#search-box").val($target.attr("data-search-query"));
-
-				var $searchButton = $("#search-button");
-				$searchButton.removeClass("disabled");
-				if ($("#search-box").val() !== "")
-					$searchButton.prop("disabled", false);
-				else
-					$searchButton.prop("enabled", false).addClass("disabled");
-				$searchButton.trigger("click"); // Perform the search now
+				$("#search-box").val($target.attr("data-search-query")).trigger("keyup");
+				$("#search-button").trigger("click");
 
 			} else {
 
@@ -1892,7 +1885,8 @@ Browser.prototype = {
 					$.each(data.files, function(i, file) {
 
 						// Player: Replace "_" with space + "V" with "v" for versions
-						var player = file.player.replace(/_/g, " ").replace(/(V)(\d)/g, "v$2"),
+						var factoidLabel,
+							player = file.player.replace(/_/g, " ").replace(/(V)(\d)/g, "v$2"),
 							rootFile = (this.isSearching || this.isSymlist || this.isCompoFolder ? "" : this.path) + "/" + file.filename,
 							countVideos = file.videos, playerType = "", fbarWidth = 0,
 							isNew = file.hvsc == this.HVSC_VERSION || file.hvsc == this.CGSC_VERSION ||
@@ -1936,7 +1930,7 @@ Browser.prototype = {
 									file.factoidtop = '<div>5:00</div>';	// Undefined in SH folder
 								break;
 							case 12:	// Production title
-								var factoidLabel = "prod";
+								factoidLabel = "prod";
 								if (file.labeltype == "C64 Music")
 									factoidLabel = "music";
 								else if (file.labelsite == "GB64")
@@ -1976,6 +1970,14 @@ Browser.prototype = {
 								if (file.fvaluebottom > 0)
 									// Define a bar width
 									fbarWidth = (file.fvaluebottom * 1.25) + 54; // Text width
+								break;
+							case 12:	// Production title
+								factoidLabel = "prod";
+								if (file.labeltype == "C64 Music")
+									factoidLabel = "music";
+								else if (file.labelsite == "GB64")
+									factoidLabel = "game";
+								file.factoidbottom = '<font class="label-'+factoidLabel+'">'+file.factoidbottom+'</font>';
 								break;
 						}
 
