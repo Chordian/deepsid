@@ -15,13 +15,7 @@ ONGOING
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- Hitting the toggle (menu or hotkey) for tags should show them even if they're not the
-  factoid type, then also resetting the detail drop-down box to "Show tags" too.
-
-- On a CSDb list, add a new button next to the COMMENT one in top. The new button will go
-  to the production pointed to in the label tables. Also consider a check box next to the
-  new button stating something like "Always go to the ????" (figure out a good name).
-  UPDATE: I'm not sure. Need think some more. Perhaps just a toggle setting?
+- Go to production title. Controlled how? A toggle in settings?
 
 
 ADMIN STUFF
@@ -104,32 +98,17 @@ WHEN THE TIME IS RIGHT
 
 CONSIDER THIS
 ¯¯¯¯¯¯¯¯¯¯¯¯¯
-- HVSC versions: Update with later changes, e.g. "Better Late Than Never" renaming. But how?
-  - Wasn't this an SOASC issue? (SOASC support was removed a long time ago.)
-
-- CSDb: If possible, convert ID cross-references in comments into the pertinent links.
-  - Maybe with separate post-AJAX scripts to avoid slowing the CSDb tab down? (Because the
-    problem is, I may have to call the CSDb web service for each of the links found.)
-
-- Buttons 'Attach' and 'Detach' for CSDb release pages (maybe only for me to begin with).
 - Maybe use .duration method for Howler instead of database length?
 - Need an extra URL parameter for file request to set loop on, e.g. "&loop=true".
-- Place an external link icon in the bottom right corner of the new CGSC iframe page.
 - Tilt the years in the activity chart on the composer profiles, so you can have full four digits.
 - Hover on profile images to slide up a transparent bottom panel with image credits.
 - The player text lines by the Chartist bars could be filter links.
 - JW says browser.js loads stuff before the user settings in main.js have been loaded.
 - With nothing selected, play should start playing the tune in top of a browser list.
-- How about user ratings for players/editors too?
 - Support for 2SID and 3SID in the scope tab as a mosaic of 2 x 3 (4) or 3 x 3 (4) boxes.
 - An adaptation list for CSDb forum HVSC paths that have since been moved/renamed in an update.
-- Far right side (outside of dexter) could have C64 link exchange ads.
 - Consider using specialized cookies to strengthen the uniqueness of visitors for tracking.
 - Feature request by Digger: Sort playlist by date added to playlist.
-- Go full HTTPS? Test online first to make sure it works without bugs and slowdowns.
-- Go through the late 2019 batch of STIL updates and mail Wilfred about the neglected ones.
-- How about making the redirecting 'deepsid.com' domain into a URL shortener too?
-- Some way to see what playlists are including a specific song. Perhaps from the context menu?
 - Statistics for how many times a tune has been played. (But shown where?)
 - Change the 'Cancel' button in all dialogs to the "Jensen"-hyperlink instead.
 - A link in far top for showing a tags cloud (get rid of blog post link to make room for it).
@@ -152,10 +131,31 @@ CONSIDER THIS
 - Consider also caching the group table. (If doing this, is it possible to cache Rob Hubbard's
   group data? It's so massive that it always times out, but I only need to get it once.)
 
+- How about user ratings for players/editors too? There's room in both list and pages.
+  UPDATE: Does rating editors by regular users make sense? How many of these editors do they
+  actually try out? It might make more sense with curated ratings. Users can rate, but after
+  rating the stars change color to indicate that the rating is a total average. I still fear
+  there will be too few and very biased ratings for this to be really useful.
+
+- CSDb: If possible, convert ID cross-references in comments into the pertinent links.
+  UPDATE: Maybe with separate post-AJAX scripts to avoid slowing the CSDb tab down? (Because
+  the problem is, I may have to call the CSDb web service for each of the links found.)
+
+- Some way to see what playlists are including a specific song. Perhaps from the context menu?
+  UPDATE: At first I failed to remember the logic behind this, but I think it's to make sure
+  a playlist doesn't already have the song about to be added. (Wouldn't it make more sense to
+  make a file check and then show a warning dialog box? However, remember that the same file
+  can be added for different subtunes chosen.)
+
+- Buttons 'Attach' and 'Detach' for CSDb release pages (maybe only for me to begin with).
+  UPDATE: A labels system has been implemented which works from context menu or hotkey. But
+  the button names are so good, I might consider doing this later.
+
 - Somehow add blue tags to CSDb tab list so it's apparent what they refer to. It could be
-  appended to the date in the lists. It a logical way to show it and should be done, but it
-  will require additional database storage. Maybe a "+" icon will appear after dates here
-  too, clicking will open 'Edit tags' dialog box.
+  appended to the date in the lists. It's a logical way to show it and should be done, but
+  it will require additional database storage. Maybe a "+" icon will appear after dates here
+  too, clicking will open 'Edit tags' dialog box. UPDATE: With the new label system this
+  might not be so interesting anymore.
 
 - Idea from Anon-Relays: Loop song X number of times before moving on to the next one. In
   the settings, the default number should of course be 1. UPDATE: It doesn't have to be a
@@ -187,8 +187,8 @@ CONSIDER THIS
   and there in JS and PHP source codes. ADDENDUM: This is to prepare for more admins in the
   future, but I'm not sure if it will ever happen or even be necessary.
 
-- Cache: When CSDb is down and a cache file is shown instead, a warning message in top
-  could say that CSDb is currently unreachable so here's a cached file instead.
+- Cache: When CSDb is down and a cache file is shown instead, a warning message in top could
+  say that CSDb is currently unreachable so here's a cached file instead.
 
 - In a profile page, make the small handles in group table into links and remove the corner external
   link icon. Then users can choose what handle to open in CSDb themselves.
@@ -253,7 +253,6 @@ CONSIDER THIS
 -
 - Continue updating CGSC profiles (next up is "D").
 - Maybe place "Misc" in CGSC in top, above a divider line?
-- Up/Down cursor keys to change sub tune, Left/Right cursor keys to skip previous/next.
 - For redirect links, add a BACK button in both STIL tabs (to complement the 'b' hotkey).
 - Front page top 10 list: Add most common birth years, now that you have the data for it.
 

@@ -3574,6 +3574,12 @@ input[type=range]::-ms-track {
 			right: -101px;
 		}
 
+		#topic-player .pfdiv {
+			position: absolute;
+			top: 12px;
+			right: 5px;
+		}
+
 		/* Top factoid */
 		#songs .factoid-top,
 		#measure-factoid .factoid-top {
@@ -3615,7 +3621,8 @@ input[type=range]::-ms-track {
 		}
 
 		/* Bottom factoid */
-		#songs .factoid-bottom {
+		#songs .factoid-bottom,
+		#topic-player .pfactoid-top {
 			float: right;
 			position: relative;
 			top: 2px;
@@ -3626,6 +3633,10 @@ input[type=range]::-ms-track {
 			color: var(--color-text-player);
 			z-index: 2;
 		}
+
+			#topic-player .pfactoid-top {
+				right: 0;
+			}
 
 			/* Static width factoid field */
 			#songs .factoid-bottom span,
@@ -3669,7 +3680,8 @@ input[type=range]::-ms-track {
 }
 
 		/* Horizontal bar below factoid value */
-		#songs .fbar {
+		#songs .fbar,
+		#topic-player .pfbar {
 			position: absolute;
 			top: 1.5px;
 			right: 12px;
@@ -3685,6 +3697,12 @@ input[type=range]::-ms-track {
 			background-position: right center;  /* Gradient anchored at right edge */
 			z-index: 0;
 		}
+
+			#topic-player .pfbar {
+				max-width: 450px;
+				background-size: 450px 100%;
+				z-index: -1;
+			}
 
 		/* Container previously used by the now deprecated corner buttons - still used for browser message */
 		#browser-bottom {

@@ -1954,6 +1954,13 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>February 21, 2026</h3>
+						<ul>
+							<li>If tags are not the current bottom factoid, toggling them now selects and displays them automatically.</li>
+							<li>Click <a class="search" href="deceased" data-type="special">here</a> to see a list of deceased composers and terminated groups.</li>
+							<li>Added song count bars to the list in the 'Players' tab.</li>
+						</ul>
+
 						<h3>February 8, 2026</h3>
 						<ul>
 							<li>The production title in the top factoid is now shown in blue for most productions, gray for music

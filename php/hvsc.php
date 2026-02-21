@@ -351,6 +351,16 @@ try {
 						';
 						break;
 
+					case 'died':
+					case 'deceased':
+
+						// Search for all composers that have died
+						$search_sql = '
+							SELECT hvsc_folders.fullname FROM hvsc_folders
+							INNER JOIN composers ON hvsc_folders.fullname = composers.fullname
+							WHERE composers.died != "0000-00-00"						';
+						break;
+
 					case 'nogb64yet':
 
 						// Connect to imported GameBase64 database

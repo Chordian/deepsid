@@ -516,8 +516,12 @@ if (isset($row)) {
 	$annex_born = $row->born != '0000-00-00' 
 		? '<img class="icon cake" src="images/composer_cake.svg" title="Born" alt="" />'.substr($row->born, 0, 4)
 		: '';
+
+	$year_death = substr($row->died, 0, 4);
+	$year_death = $year_death == '1970' ? '<small class="u1">?</small>?<small class="u2">?</small>' : $year_death;
+
 	$annex_died = $row->died != '0000-00-00'
-		? '<img class="icon stone" style="height:16px;top:6.3px;margin-left:10px;" src="images/composer_stone.svg" title="Died" alt="" />'.substr($row->died, 0, 4)
+		? '<img class="icon stone" style="height:16px;top:6.3px;margin-left:10px;" src="images/composer_stone.svg" title="Died" alt="" />'.$year_death
 		: '';
 
 	// Determine plot positions in the mini activity chart below

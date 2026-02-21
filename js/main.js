@@ -456,7 +456,15 @@ var main = {
 	 * Toggle tags ON or OFF.
 	 */
 	toggleTags: function() {
-		main.showTags = !main.showTags;
+		if (main.factoidTypeBottom !== 1) {
+			// Select it as the bottom factoid and then show it
+			$("#dropdown-settings-factoid-bottom").val(1).trigger("change");
+			main.showTags = true;
+		} else {
+			// It's the bottom factoid so just toggle it now
+			main.showTags = !main.showTags;
+		}
+
 		$("#showtags").prop("checked", main.showTags);
 		main.showTags
 			? $("#songs .tags-line").css("visibility", "")			//.show()
@@ -1723,7 +1731,7 @@ main.bindAnnexEvents = function() {
 	/**
 	 * Clicking a link for searching without refreshing the page.
 	 */
-	$("#annex").on("click", "a.search", function() {
+	$("#annex,#topic-changes").on("click", "a.search", function() {
 		var $this = $(this);
 		$("#dropdown-search").val($this.attr("data-type").toLowerCase());
 		$("#search-box").val($this.attr("href")).trigger("keyup");
@@ -3327,7 +3335,7 @@ main.bindSettingsEvents = function() {
 	 * @param {*} event 
 	 */
 	$("#dropdown-settings-factoid-top").change(function(event) {
-		main.factoidTypeTop = event.target.value;
+		main.factoidTypeTop = Number(event.target.value);
 		main.selectFactoid(FACTOID_TOP, main.factoidTypeTop);
 	});
 
@@ -3337,7 +3345,7 @@ main.bindSettingsEvents = function() {
 	 * @param {*} event 
 	 */
 	$("#dropdown-settings-factoid-bottom").change(function(event) {
-		main.factoidTypeBottom = event.target.value;
+		main.factoidTypeBottom = Number(event.target.value);
 		main.selectFactoid(FACTOID_BOTTOM, main.factoidTypeBottom);
 	});
 
