@@ -17,7 +17,7 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH
 
 if (!$account->CheckLogin())
 	die(json_encode(array('status' => 'error', 'message' => 'You must be logged in to delete SID files.')));
-else if($account->UserName() != 'JCH' || $account->UserID() != JCH)
+else if (!$account->IsAdmin())
 	die("Only a DeepSID administrator may delete files.");
 
 $fullname = $_POST['fullname'];

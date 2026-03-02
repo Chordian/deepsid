@@ -853,7 +853,7 @@ SIDPlayer.prototype = {
 								if (document.location.hostname == "chordian")
 									$("body").empty().append(data);
 								else
-									alert("An error occurred. If it keeps popping up please tell me about it: chordian@gmail.com");
+									main.showError();
 								return false;
 							}
 							if (data.status == "error") {
@@ -904,7 +904,7 @@ SIDPlayer.prototype = {
 							if (document.location.hostname == "chordian")
 								$("body").empty().append(data);
 							else
-								alert("An error occurred. If it keeps popping up please tell me about it: chordian@gmail.com");
+								main.showError();
 							return false;
 						}
 						if (data.status == "error") {
@@ -1459,7 +1459,7 @@ SIDPlayer.prototype = {
 							if (document.location.hostname == "chordian")
 								$("body").empty().append(data);
 							else
-								alert("An error occurred. If it keeps popping up please tell me about it: chordian@gmail.com");
+								main.showError();
 							return false;
 						}
 						if (data.status == "error") {

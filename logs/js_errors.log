@@ -78,3 +78,13 @@ Message: ReferenceError: label_type is not defined
 Source: http://chordian/deepsid/js/browser.js?v=1770543670 (1940:5)
 IP: ::1
 
+[2026-03-02 06:31:52] error
+Message: Error: Syntax error, unrecognized expression: unsupported pseudo: hover
+Source: https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js (2:12961)
+IP: ::1
+
+[2026-03-02 06:31:53] error
+Message: Error: Syntax error, unrecognized expression: unsupported pseudo: hover
+Source: https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js (2:12961)
+IP: ::1
+

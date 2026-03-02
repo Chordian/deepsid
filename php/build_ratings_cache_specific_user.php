@@ -5,7 +5,7 @@
  * Rebuild ratings cache for a specific user.
  */
 
-if (!$account->CheckLogin() || $account->UserName() != 'JCH' || $account->UserID() != JCH)
+if (!$account->IsAdmin())
     die("This is for administrators only.");
 
 require_once "class.account.php";

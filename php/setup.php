@@ -200,4 +200,20 @@ function GetUserColor($name) {
 	}
 	return $color;
 }
+
+/**
+ * Log to the browser console log.
+ * 
+ * NOTE: A jQuery snippet logs it in main.js.
+ */
+function clog(string $key, $value) {
+    if (headers_sent()) return;
+
+    $json = json_encode($value, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+
+    // Headers should be ASCII-ish and not huge
+    $json = substr($json, 0, 4000);
+
+    header("X-DeepSID-Debug-$key: " . $json);
+}
 ?>

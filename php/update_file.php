@@ -34,7 +34,7 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH
 
 $user_id = $account->CheckLogin() ? $account->UserID() : 0;
 
-if ($user_id != JCH)
+if (!$account->IsAdmin())
 	die(json_encode(array('status' => 'error', 'message' => 'Only an administrator may edit a file row in the database.')));
 
 try {

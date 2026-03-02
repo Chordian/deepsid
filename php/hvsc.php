@@ -358,7 +358,8 @@ try {
 						$search_sql = '
 							SELECT hvsc_folders.fullname FROM hvsc_folders
 							INNER JOIN composers ON hvsc_folders.fullname = composers.fullname
-							WHERE composers.died != "0000-00-00"						';
+							WHERE composers.died != "0000-00-00"';
+						//clog('SQL', $search_sql);
 						break;
 
 					case 'nogb64yet':

@@ -87,6 +87,7 @@ var main = {
 	isMobile:					false,		// TRUE = Running on a mobile device (or forced with a switch)
 	isNotips:					false,		// TRUE = Do not display the annex box in the right side
 	isLemon:					false,		// TRUE = Site is used in an iframe at Lemon64.com
+	isAdmin:					false,		// TRUE = The user logged in is an administrator
 	logCount:					1000,		// Increased to make each console log output unique
 	miniPlayer:					0,			// TRUE = Display miniplayer with reduced controls
 	players:					null,		// The AJAX object for displaying a list of players/editors
@@ -293,6 +294,15 @@ var main = {
 	 */
 	getCSSVar: function(cssVar) {
 		return $(parseInt(colorTheme) ? "[data-theme='dark']" : ":root").css(cssVar);
+	},
+
+	/**
+	 * Show an error message to the user.
+	 */
+	showError: function() {
+		var email = main.getAdminSetting("admin_email");
+		var more = email ? " If it keeps popping up please tell me about it: "+email : "";
+		alert("An error occurred."+more);
 	},
 
 	/**
@@ -1501,6 +1511,29 @@ main.bindEvents = function() {
 			data:		data
 		});
 	}
+
+	/**
+	 * Send PHP header logging to the browser console log.
+	 * 
+	 * See clog() in the 'setup.php' file.
+	 */
+	$(document).ajaxComplete(function(e, xhr, settings) {
+		// Read all response headers
+		const all = xhr.getAllResponseHeaders();
+		if (!all) return;
+
+		// Find our debug headers
+		all.split(/\r?\n/).forEach(line => {
+			const m = line.match(/^X-DeepSID-Debug-([^:]+):\s*(.*)$/i);
+			if (!m) return;
+
+			const key = m[1];
+			let val = m[2];
+
+			try { val = JSON.parse(val); } catch (e) {}
+			console.log(`[PHP:${key}]`, val, settings.url);
+		});
+	});
 }
 
 // ==============================
@@ -2762,7 +2795,7 @@ main.bindKeyboardEvents = function() {
 
 					case 67:	// Keyup 'c' - refresh compo cache - ADMIN ONLY
 
-						if (browser.isCompoFolder && $("#logged-username").text() == "JCH") {
+						if (browser.isCompoFolder && main.isAdmin) {
 							$.post("php/csdb_compo_clear_cache.php",
 								{ competition: browser.path.replace("/CSDb Music Competitions/", "") }, function(data) {
 								browser.validateData(data, function() {
@@ -2796,7 +2829,7 @@ main.bindKeyboardEvents = function() {
 						var $selected = $("#folders tr.selected");
 						var name = decodeURIComponent($selected.find(".name").attr("data-name"));
 
-						if (name != "undefined" && $("#logged-username").text() == "JCH") {
+						if (name != "undefined" && main.isAdmin) {
 
 							// Prepare some edit boxes with current data
 							var playerInfo = SID.getSongInfo("info");
@@ -2872,6 +2905,7 @@ main.bindKeyboardEvents = function() {
 						break;
 
 					case 90:	// Keyup 'z' - add label (production title)
+					case 88:	// Keyup 'x' - duplicate hotkey (I have a keyboard where 'z' is missing)
 
 						browser.addLabel();
 						break;
@@ -3716,6 +3750,7 @@ $(function() { // DOM ready
 	main.isNotips = $("body").attr("data-notips") !== "0";
 	main.miniPlayer = parseInt($("body").attr("data-mini"));
 	main.isLemon = main.isNotips;
+	main.isAdmin = $("body").attr("data-admin") !== "0";
 
 	// Get the emulator last used by the visitor
 	var storedEmulator = docCookies.getItem("emulator");

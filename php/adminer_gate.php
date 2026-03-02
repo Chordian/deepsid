@@ -1,7 +1,7 @@
 <?php
 require_once("class.account.php"); // Includes setup
 
-if (!$account->CheckLogin() || $account->UserName() !== 'JCH' || $account->UserID() !== JCH) {
+if (!$account->IsAdmin()) {
     http_response_code(403);
     die("This is for administrators only.");
 }

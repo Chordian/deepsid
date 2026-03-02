@@ -20,7 +20,7 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || strtolower($_SERVER['HTTP_X_REQ
 	die("Direct access not permitted.");
 }
 
-if (!$account->CheckLogin() || $account->UserName() !== 'JCH' || $account->UserID() !== JCH) {
+if (!$account->IsAdmin()) {
 	http_response_code(403);
 	die("This is for administrators only.");
 }

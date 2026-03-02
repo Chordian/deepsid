@@ -3,7 +3,7 @@
 
 	require_once("php/class.account.php"); // Includes setup
 	$user_id = $account->CheckLogin() ? $account->UserID() : 0;
-	$is_admin = $user_id && $account->UserName() === "JCH";
+	$is_admin = $user_id && $account->IsAdmin();
 
 	require_once("tracking.php"); // Also called periodically by 'main.js'
 
@@ -334,7 +334,7 @@
 		gtag('config', 'G-8WGW8WKDN4');
 	</script>
 
-	<body class="entry-content" data-mobile="<?php echo isMobile(); ?>" data-theme="" data-mini="<?php echo MiniPlayer(); ?>" data-notips="<?php echo isLemon() ? 1 : 0; ?>">
+	<body class="entry-content" data-mobile="<?php echo isMobile(); ?>" data-theme="" data-mini="<?php echo MiniPlayer(); ?>" data-notips="<?php echo isLemon() ? 1 : 0; ?>" data-admin="<?php echo $is_admin ? 1 : 0; ?>">
 		<?php if (!isLemon()): ?>
 			<script type="text/javascript">setTheme();</script>
 		<?php endif ?>
@@ -1958,7 +1958,7 @@
 						<ul>
 							<li>If tags are not the current bottom factoid, toggling them now selects and displays them automatically.</li>
 							<li>Click <a class="search" href="deceased" data-type="special">here</a> to see a list of deceased composers and terminated groups.</li>
-							<li>Added song count bars to the list in the 'Players' tab.</li>
+							<li><del>Added song count bars to the list in the 'Players' tab.</del></li>
 						</ul>
 
 						<h3>February 8, 2026</h3>

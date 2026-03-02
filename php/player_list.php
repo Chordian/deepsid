@@ -23,7 +23,7 @@ try {
 		die(json_encode(array('status' => 'error', 'message' => "Couldn't find the information in the database.")));
 	}
 
-	$rows = '';
+	$rows = $pfactoid_top = '';
 
 	foreach ($select as $row) {
 
@@ -54,15 +54,19 @@ try {
 		$cputime = str_replace('Approx ', '', $cputime);
 
 		// Prepare a horizontal bar for number of songs made in this player/editor
-		$words = explode(' ', $search);
+
+		// DISABLED: It took too long to render the player list and it doesn't look like useful
+		// information anyway - there is too much disparity / favoritism.
+
+		/*$words = explode(' ', $search);
 		$include = '(';
-		$pfactoid_top = $exclude = $i_and = $e_and = '';
+		$exclude = $i_and = $e_and = '';
 		foreach($words as $word) {
 			if (substr($word, 0, 1) == '-') {
 				$exclude .= $e_and.'player NOT LIKE "%'.substr($word, 1).'%"';
 				$e_and = ' AND ';
 			} else {
-				$include .= $i_and.'player LIKE "%'.$word.'%"';
+		s		$include .= $i_and.'player LIKE "%'.$word.'%"';
 				$i_and = ' AND ';
 			}
 		}
@@ -81,7 +85,7 @@ try {
 					<span class="pfactoid-top">'.$songs_count.' songs</span>
 				</div>
 			';
-		}
+		}*/
 
 		$rows .=
 			'<tr>'.

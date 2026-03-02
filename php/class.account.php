@@ -16,6 +16,7 @@
  *
  *		$_SESSION['user_name']			user name
  *		$_SESSION['user_id']			user ID
+ *		$_SESSION['roles']     			role(s)
  *
  *		$_SESSION['user_XXXXXXXXXX']	user name (for login check)
  *
@@ -194,6 +195,28 @@ class Account {
 	public function IsUserNameUnique() {
 		if (!$this->ConnectDB()) return false;
 		return $this->IsFieldUnique('username');
+	}
+
+	/**
+	 * Check if the user has the specified role.
+	 * 
+	 * @param		string		role
+	 * 
+	 * @return		boolean		true if the user has that role
+	 */
+	public function HasRole($role) {
+		if (!isset($_SESSION)) session_start();
+		$roles = $_SESSION['roles'] ?? [];
+		return in_array($role, $roles, true);
+	}
+
+	/**
+	 * Check if the user is an admin.
+	 * 
+	 * @return		boolean		true if the user is an admin
+	 */
+	public function IsAdmin() {
+		return $this->HasRole('admin');
 	}
 
 	/**
@@ -428,7 +451,7 @@ class Account {
 		if (!$this->ConnectDB()) return false;
 
 		try {
-			$select = $this->database->prepare('SELECT id, username, attempts, logintime'.
+			$select = $this->database->prepare('SELECT id, username, attempts, last_failed_login'.
 				' FROM users WHERE username = :username AND password = :pwdmd5 LIMIT 1');
 			$select->execute(array(':username'=>$username,':pwdmd5'=>md5($password)));
 			$select->setFetchMode(PDO::FETCH_OBJ);
@@ -459,7 +482,7 @@ class Account {
 						// Storing the IP address of the failed attempt is strictly for internal informational purposes. If the
 						// same IP is seen for a ton of users, it could be a hacker and you would want to ban the IP address.
 						$failip = $_SERVER['REMOTE_ADDR'];
-						$update = $this->database->prepare('UPDATE users SET logintime = :logintime, failip = :failip'.
+						$update = $this->database->prepare('UPDATE users SET last_failed_login = :logintime, last_failed_ip = :failip'.
 							' WHERE username = :username LIMIT 1');
 						$update->execute(array(':logintime'=>$logintime,':failip'=>$failip,':username'=>$username));
 						if ($update->rowCount() == 0) {
@@ -482,9 +505,9 @@ class Account {
 					return false;
 				}
 
-				// Make sure attempts are back to 0
-				$update = $this->database->prepare('UPDATE users SET attempts = 0 WHERE username = :username LIMIT 1');
-				$update->execute(array(':username'=>$username));
+				// Store login time and also make sure attempts are back to 0
+				$update = $this->database->prepare('UPDATE users SET last_visit = NOW(), attempts = 0 WHERE username = :username LIMIT 1');
+				$update->execute(array(':username' => $username));
 				if ($update->rowCount() == 0) {
 					$this->LogError('No rows found after resetting login attempts for the user "'.$username.'"');
 					return false;
@@ -492,6 +515,7 @@ class Account {
 
 				$_SESSION['user_name']	= $row->username;
 				$_SESSION['user_id']	= $row->id;
+				$_SESSION['roles']		= $this->GetUserRoles($row->id);
 
 				return true;
 			}
@@ -522,12 +546,17 @@ class Account {
 						$row = $select->fetch();
 						$_SESSION['user_name']	= $row->username;
 						$_SESSION['user_id']	= $row->id;
+						$_SESSION['roles']		= $this->GetUserRoles($row->id);
 						$_SESSION[$this->LoginSession()] = $row->username;
 
 						$this->LogActivity('User "'.$row->username.'" has returned via a cookie', true);
 
 						// Reset the expiry date
 						setcookie('user', $cookiehash, time()+3600*24*365, '/', COOKIE_HOST);
+
+						// Store cookie login time
+						$update = $this->database->prepare('UPDATE users SET last_visit = NOW() WHERE id = :id LIMIT 1');
+						$update->execute(array(':id' => $row->id));
 						return true;
 					} else {
 						// Commented out because it was blowing up the 'db_errors_account.txt' file
@@ -564,6 +593,31 @@ class Account {
 			return false;
 		}
 		return true;
+	}
+
+	/**
+	 * Returns an array with the user roles for the specified user ID.
+	 * 
+	 * @param		string		user ID
+	 * 
+	 * @return		array		user roles
+	 */
+	private function GetUserRoles($userId) {
+		if (!$this->ConnectDB()) return [];
+
+		try {
+			$select = $this->database->prepare('
+				SELECT r.name
+				FROM user_roles ur
+				INNER JOIN roles r ON r.id = ur.role_id
+				WHERE ur.user_id = :uid
+			');
+			$select->execute([':uid' => $userId]);
+			return $select->fetchAll(PDO::FETCH_COLUMN, 0); // E.g. ['admin']
+		} catch (PDOException $exception) {
+			$this->LogError($exception->getMessage());
+			return [];
+		}
 	}
 
 	/**
@@ -634,8 +688,8 @@ class Account {
 				joined,
 				session,
 				attempts,
-				logintime,
-				failip
+				last_failed_login,
+				last_failed_ip
 				) VALUES (
 				:username,
 				:password,

@@ -527,7 +527,7 @@ Browser.prototype = {
 					// But must be logged in to do that
 					alert("Login or register and you can upload new SID files here.");
 					return false;
-				} else if (access === "off" || (access === "admin" && $("#logged-username").text() !== "JCH")) {
+				} else if (access === "off" || (access === "admin" && !main.isAdmin)) {
 					alert("Uploading new SID files has been temporarily disabled.");
 					return false;
 				}
@@ -567,7 +567,7 @@ Browser.prototype = {
 			if (!$("#logout").length) {
 				alert("Login or register and you can edit the tags for this file.");
 				return false;
-			} else if (access === "off" || (access === "admin" && $("#logged-username").text() !== "JCH")) {
+			} else if (access === "off" || (access === "admin" && !main.isAdmin)) {
 				alert("Editing tags has been temporarily disabled.");
 				return false;
 			}
@@ -2642,7 +2642,7 @@ Browser.prototype = {
 			try {
 				data = $.parseJSON(data);
 			} catch(e) {
-				alert("An error occurred. If it keeps popping up please tell me about it: chordian@gmail.com");
+				main.showError();
 				return false;
 			}
 			if (data.status == "error" || data.status == "warning") {
@@ -2783,7 +2783,7 @@ Browser.prototype = {
 				this.emphasizing(false);
 				main.updateRedirectPlayIcons();
 
-				if ($("#logged-username").text() === "JCH") {
+				if (main.isAdmin) {
 					// Add cache info in top right corner
 					const cacheAge = this.getCacheAgeShort(data.html);
 					var cacheStatus = cacheAge ? `Cache (${cacheAge})` : "Cache";
@@ -3235,7 +3235,7 @@ Browser.prototype = {
 			}
 
 			// Section: Administrator-only actions
-			if ($("#logged-username").text() == "JCH") {
+			if (main.isAdmin) {
 				contents += '<div class="divider"></div>'+
 					'<div class="line admin" data-action="add-label">Add Label</div>'+
 					'<div class="line admin" data-action="unlink-label">Unlink Label</div>';
@@ -3420,7 +3420,7 @@ Browser.prototype = {
 				}.bind(this));
 				break;
 			case 'delete-file':
-				if ($("#logged-username").text() == "JCH") {
+				if (main.isAdmin) {
 					$("#file-name-delete").empty().append('<b>'+this.contextSID+'</b>');
 					main.customDialog({
 						id: '#dialog-delete-file',
@@ -3444,7 +3444,7 @@ Browser.prototype = {
 				this.addLabel();
 				break;
 			case 'unlink-label':
-				if ($("#logged-username").text() == "JCH") {
+				if (main.isAdmin) {
 					$("#file-name-delete").empty().append('<b>'+this.contextSID+'</b>');
 					main.customDialog({
 						id: '#dialog-delete-file',
@@ -3613,7 +3613,7 @@ Browser.prototype = {
 	 * Only available to administrators for now.
 	 */
 	addLabel: function() {
-		if ($("#logged-username").text() == "JCH") {
+		if (main.isAdmin) {
 
 			var $selectedSidFile = $("#folders tr.selected"),
 				tab = main.selectedDexterTab(),
@@ -3975,7 +3975,7 @@ Browser.prototype = {
 				else
 					$("body").empty().append(data);
 			else
-				alert("An error occurred. If it keeps popping up please tell me about it: chordian@gmail.com");
+				main.showError();
 			return false;
 		}
 		if (data.status == "error") {
