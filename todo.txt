@@ -19,9 +19,6 @@ SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
 - Go to production title. Controlled how? A toggle in settings?
 
-- When uploading to SH folder, make a general "remove middle name" when adding "2026 by
-  [name]" line. Any middle name should never be visible there.
-
 - Consider enforcing the password encryption. Search ChatGPT for 'password_algo' word.
 
 
