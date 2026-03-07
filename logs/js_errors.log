@@ -88,3 +88,18 @@ Message: Error: Syntax error, unrecognized expression: unsupported pseudo: hover
 Source: https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js (2:12961)
 IP: ::1
 
+[2026-03-07 13:01:31] error
+Message: TypeError: browser.browserMessage is not a function
+Source: http://chordian/deepsid/js/browser.js?v=1772888474 (3490:16)
+IP: ::1
+
+[2026-03-07 13:24:03] error
+Message: TypeError: this.validateData is not a function
+Source: http://chordian/deepsid/js/browser.js?v=1772889806 (3507:13)
+IP: ::1
+
+[2026-03-07 13:32:17] error
+Message: ReferenceError: newName is not defined
+Source: http://chordian/deepsid/js/browser.js?v=1772890328 (3572:57)
+IP: ::1
+

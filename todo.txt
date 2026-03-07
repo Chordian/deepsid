@@ -9,7 +9,6 @@ ToDo
 
 ONGOING
 ¯¯¯¯¯¯¯
-- See below for a major collation change.
 - Check JavaScript error log.
 - Change all 'DoThis()' function names to 'doThis()' instead in all PHP files.
 - Change all DB column names to use underscores ('last_visit' instead of 'lastvisit')
@@ -19,7 +18,7 @@ SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
 - Go to production title. Controlled how? A toggle in settings?
 
-- Consider enforcing the password encryption. Search ChatGPT for 'password_algo' word.
+- Remove the last two GB64 columns in 'hvsc_files' and adapt all code accordingly.
 
 
 ADMIN STUFF
@@ -31,53 +30,6 @@ ADMIN STUFF
   - log_rotation_days: Maybe more than that; see the cache stuff in the 'hvsc.php' file.
   - enable_auto_backup: For the daily database backup process.
   - maintenance_mode: When enabled only the administrator may see the site.
-
-
-ONGOING
-¯¯¯¯¯¯¯
-- Replace all "utf8mb3_unicode_ci" database collations with "utf8mb4_unicode_ci" instead.
-  Don't migrate to "utf8mb4_0900_ai_ci" instead - One.com doesn't support it!
-
-  SQL query to run on a database table:
-
-  ALTER TABLE yourtable
-  CONVERT TO CHARACTER SET utf8mb4
-  COLLATE utf8mb4_unicode_ci;
-
-  Do this one table at a time then test.
-
-  Database tables:
-
-  admin_scripts         DONE
-  admin_settings        DONE
-  competitions          DONE
-  competitions_cache    DONE
-  composers
-  composers_links
-  csdb                  N/A
-  folders_map
-  groups
-  hvsc_files
-  hvsc_files_import
-  hvsc_folders
-  hvsc_folders_import
-  hvsc_lengths
-  labels_info           DONE
-  labels_lookup         N/A
-  players_info
-  players_lookup
-  ratings
-  ratings_cache         DONE
-  sid_release_map       N/A
-  symlists
-  tags_info
-  tags_lookup           N/A
-  tracking              DONE
-  uploads               N/A
-  users
-  youtube
-  roles                 DONE
-  user_roles            N/A
 
 
 WHEN THE TIME IS RIGHT
@@ -123,6 +75,7 @@ CONSIDER THIS
 - Store stereo settings for a song with a pin icon.
 - The "WASM disabled" message should only be shown when WebSid (HQ and Legacy) is chosen.
 - Cache: Consider also caching the competition pages.
+- Consider enforcing the password encryption. Search ChatGPT for 'password_algo' word.
 
 - A W A I T : Figure out why a user regularly get an access violation from 'composer.php' file.
   UPDATE: I have now added log of name in 'composer.php' to pinpoint why a user always get

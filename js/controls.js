@@ -992,7 +992,7 @@ Controls.prototype = {
 	},
 
 	/**
-	 * Show a special notification character (if not in focus).
+	 * Show a special notification character (if tab not in focus).
 	 */
 	handleStilNotification: function() {
 		if ($("#tabs .selected").attr("data-topic") !== "stil")

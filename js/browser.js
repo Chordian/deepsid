@@ -3366,6 +3366,7 @@ Browser.prototype = {
 				var symChar = this.path.substr(1, 1);
 				// Force the browser to download it using an invisible <iframe>
 				$("#download").prop("src", this.ROOT_HVSC + '/' + (this.isSearching || this.isCompoFolder || symChar == "!" || symChar == "$" ? this.contextSID : this.path.substr(1)+"/"+this.contextSID));
+				main.browserMessage("Downloaded the '"+this.contextSID+"' file");
 				break;
 			case 'edit-tags':
 				// Just click the "+" button (it may be hidden but it should still react to this)
@@ -3386,6 +3387,7 @@ Browser.prototype = {
 				$temp.val(url).select();
 				document.execCommand("copy"); // Deprecated but there is no replacement yet
 				$temp.remove();
+				main.browserMessage("Copied link to clipboard");
 				break;
 			case 'edit-upload':
 				// Clicked the button for editing a public SID file
@@ -3431,9 +3433,10 @@ Browser.prototype = {
 					}, function() {
 						// Please don't try to hack - the PHP file only allows for deleting by an administrator
 						$.post("php/upload_delete.php", {
-							fullname:	(this.isSidFmFolder() ? PATH_SID_FM : PATH_UPLOADS)+"/"+this.contextSID
+							fullname: (this.isSidFmFolder() ? PATH_SID_FM : PATH_UPLOADS)+"/"+this.contextSID
 						}, function(data) {
 							this.validateData(data, function() {
+								main.browserMessage("Deleted the '"+this.contextSID+"' file");
 								browser.getFolder();
 							});
 						}.bind(this));
@@ -3481,7 +3484,13 @@ Browser.prototype = {
 					subtune:	(ctrls.subtuneCurrent && this.contextSelected ? ctrls.subtuneCurrent + 1 : 0)
 				}, function(data) {
 					this.validateData(data, function(data) {
+						if(data.status == "duplicate") {
+							alert("That file already exists in the playlist.");
+							return;
+						}
 						this.writeName = data.name;
+						if (action == "symlist-add")
+							main.browserMessage("Added the file to the '"+data.name.substr(1)+"' playlist");
 					});
 				}.bind(this));
 				if (action === "symlist-new" && $("#logout").length) {
@@ -3491,14 +3500,19 @@ Browser.prototype = {
 						text: 'Would you like to rename your new playlist?',
 						height: 210,
 					}, function() {
+						var newName = $("#pr-newplname").val();
 						$.post("php/symlist_rename.php", {
 							symlist:	this.writeName,
 							fullname:	'',
 							symid:		0,
-							new:		$("#pr-newplname").val(),
+							new:		newName,
 						}, function(data) {
-							this.validateData(data);
+							this.validateData(data, function() {
+								main.browserMessage("Added the file to the '"+newName+"' playlist");
+							});
 						}.bind(this));
+					}.bind(this), undefined, function() {
+						main.browserMessage("Added the file to the '"+this.writeName.substr(1)+"' playlist");
 					}.bind(this));
 					this.getSymlists();
 				}
@@ -3509,6 +3523,7 @@ Browser.prototype = {
 					symlist:	this.contextSID
 				}, function(data) {
 					this.validateData(data, function() {
+						main.browserMessage("Deleted the '"+this.contextSID.substr(1)+"' playlist");
 						this.getFolder();
 					});
 				}.bind(this));
@@ -3521,6 +3536,7 @@ Browser.prototype = {
 					symlist:	this.contextSID
 				}, function(data) {
 					this.validateData(data, function() {
+						main.browserMessage("Published the '"+this.contextSID.substr(1)+"' playlist");
 						this.getFolder();
 					});
 				}.bind(this));
@@ -3531,6 +3547,7 @@ Browser.prototype = {
 				}, function(data) {
 					this.validateData(data, function(data) {
 						window.location.href = data.file;
+						main.browserMessage("Downloaded the '"+this.contextSID.substr(1)+"' playlist");
 					});
 				}.bind(this));
 				break;
@@ -3542,6 +3559,7 @@ Browser.prototype = {
 					symlist:	this.contextSID
 				}, function(data) {
 					this.validateData(data, function() {
+						main.browserMessage("Unpublished the '"+this.contextSID.substr(1)+"' playlist");
 						this.getFolder();
 					});
 				}.bind(this));
@@ -3554,6 +3572,7 @@ Browser.prototype = {
 					symid:		this.contextSymID,
 				}, function(data) {
 					this.validateData(data, function() {
+						main.browserMessage("Removed the file from the '"+this.path.substr(2)+"' playlist");
 						this.getFolder();
 					});
 				}.bind(this));

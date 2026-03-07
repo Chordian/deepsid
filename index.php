@@ -1954,6 +1954,11 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>March 7, 2026</h3>
+						<ul>
+							<li>It is no longer possible to add duplicate files to a playlist. You will see an error message instead.</li>
+						</ul>
+
 						<h3>February 21, 2026</h3>
 						<ul>
 							<li>If tags are not the current bottom factoid, toggling them now selects and displays them automatically.</li>

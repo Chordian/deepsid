@@ -139,19 +139,20 @@ var main = {
 	/**
 	 * Show a custom dialog box.
 	 * 
-	 * @param {array} data				Associative array with data:
-	 * 									 - id		Must be set
-	 * 								 	 - text		Must be set
-	 * 								 	 - width	A default is used if not set
-	 * 								 	 - height	A default is used if not set
-	 * 									 - wizard	Don't fade cover if set and TRUE
-	 * @param {function} callbackYes	Callback used if YES is clicked
-	 * @param {function} callbackNo		Callback used if NO is clicked
+	 * @param {array} data					Associative array with data:
+	 * 									 	- id		Must be set
+	 * 								 	 	- text		Must be set
+	 * 								 	 	- width	A default is used if not set
+	 * 								 	 	- height	A default is used if not set
+	 * 									 	- wizard	Don't fade cover if set and TRUE
+	 * @param {function} callbackYes		Callback used if YES is clicked
+	 * @param {function} callbackNo			Callback used if NO is clicked
+	 * @param {function} callbackCancel		Callback used if CANCEL is clicked
 	 * 
 	 * @used		browser.js
 	 * 				main.js
 	 */
-	customDialog: function(data, callbackYes, callbackNo) {
+	customDialog: function(data, callbackYes, callbackNo, callbackCancel) {
 
 		$(data.id).off("click", ".dialog-button-yes");
 		$(data.id).off("click", ".dialog-button-no");
@@ -188,6 +189,9 @@ var main = {
 
 		$(data.id).on("click", ".dialog-cancel", function() {
 			$("#dialog-cover,.dialog-box").hide();
+			if (typeof callbackCancel === "function") {
+				callbackCancel.call(this);
+			}
 			return false;
 		});
 	},
