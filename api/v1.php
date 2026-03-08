@@ -95,8 +95,6 @@ try {
 				$response['updated'] 		= $row->updated;
 				$response['csdbtype'] 		= $row->csdbtype;
 				$response['csdbid'] 		= $row->csdbid;
-				$response['application'] 	= $row->application;
-				$response['gb64'] 			= $row->gb64;
 			}
 
 		} else {
@@ -183,8 +181,6 @@ try {
 						$response[$i]['updated'] 		= $row->updated;
 						$response[$i]['csdbtype'] 		= $row->csdbtype;
 						$response[$i]['csdbid'] 		= $row->csdbid;
-						$response[$i]['application'] 	= $row->application;
-						$response[$i]['gb64'] 			= $row->gb64;
 					}
 				}
 			}

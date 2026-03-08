@@ -33,7 +33,7 @@ const FACTOID_MESSAGE = [
 	"Size in bytes (decimal)",			// 7
 	"Start and end address (hex)",		// 8
 	"HVSC or CGSC update version",		// 9
-	"Game status (RELEASE/PREVIEW)",	// 10
+	"[ Unused ]",						// 10
 	"Number of CSDb entries",			// 11
 	"Production label",					// 12
 ];
@@ -450,7 +450,7 @@ var main = {
 	 */
 	cycleFactoidTypeTop: function() {
 		main.factoidTypeTop++;
-		if (main.factoidTypeTop == 1) main.factoidTypeTop++; // Skip tags
+		if (main.factoidTypeTop == 1 || main.factoidTypeTop == 10) main.factoidTypeTop++; // Skip #1 and #10
 		if (main.factoidTypeTop > 12) main.factoidTypeTop = 0;
 
 		$("#dropdown-settings-factoid-top").val(main.factoidTypeTop).trigger("change");
@@ -461,6 +461,7 @@ var main = {
 	 */
 	cycleFactoidTypeBottom: function() {
 		main.factoidTypeBottom++;
+		if (main.factoidTypeBottom == 10) main.factoidTypeBottom++; // Skip #10
 		if (main.factoidTypeBottom > 12) main.factoidTypeBottom = 0;
 
 		$("#dropdown-settings-factoid-bottom").val(main.factoidTypeBottom).trigger("change");

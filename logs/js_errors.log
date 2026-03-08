@@ -103,3 +103,33 @@ Message: ReferenceError: newName is not defined
 Source: http://chordian/deepsid/js/browser.js?v=1772890328 (3572:57)
 IP: ::1
 
+[2026-03-08 09:01:38] error
+Message: TypeError: can't access property "classList", this.options[this.selectedIndex] is undefined
+Source: http://chordian/deepsid/js/main.js?v=1772960002 (3403:4)
+IP: ::1
+
+[2026-03-08 09:02:03] error
+Message: TypeError: can't access property "classList", this.options[this.selectedIndex] is undefined
+Source: http://chordian/deepsid/js/main.js?v=1772960002 (3403:4)
+IP: ::1
+
+[2026-03-08 09:02:30] error
+Message: TypeError: can't access property "classList", this.options[this.selectedIndex] is undefined
+Source: http://chordian/deepsid/js/main.js?v=1772960002 (3403:4)
+IP: ::1
+
+[2026-03-08 09:09:36] error
+Message: TypeError: can't access property "classList", this.options[this.selectedIndex] is undefined
+Source: http://chordian/deepsid/js/main.js?v=1772960928 (3403:4)
+IP: ::1
+
+[2026-03-08 09:09:47] error
+Message: TypeError: can't access property "classList", this.options[this.selectedIndex] is undefined
+Source: http://chordian/deepsid/js/main.js?v=1772960928 (3403:4)
+IP: ::1
+
+[2026-03-08 09:10:10] error
+Message: Script error.
+Source: https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js (0:0)
+IP: ::1
+

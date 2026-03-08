@@ -1512,7 +1512,6 @@
 										<option value="7">Size in bytes (decimal)</option>
 										<option value="8">Start and end address (hex)</option>
 										<option value="9">HVSC/CGSC update version</option>
-										<option value="10">Game status (REL/PREV)</option>
 										<option value="11">Number of CSDb entries</option>
 										<option value="12">Production title</option>
 										<?php if ($is_admin): ?>
@@ -1537,7 +1536,6 @@
 										<option value="7">Size in bytes (decimal)</option>
 										<option value="8">Start and end address (hex)</option>
 										<option value="9">HVSC/CGSC update version</option>
-										<option value="10">Game status (REL/PREV)</option>
 										<option value="11">Number of CSDb entries</option>
 										<option value="12">Production title</option>
 										<?php if ($is_admin): ?>
@@ -1953,6 +1951,11 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>March 8, 2026</h3>
+						<ul>
+							<li>Game status (RELEASE or PREVIEW) is deprecated and thus no longer available as a factoid.</li>
+						</ul>
 
 						<h3>March 7, 2026</h3>
 						<ul>

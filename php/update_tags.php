@@ -10,7 +10,6 @@
 
 require_once("class.account.php"); // Includes setup
 
-define('MODE_GAME',		'Game');	// @todo Make the code test for 'Game Prev' tag too (don't add 'Game' if exists!)
 define('MODE_COOP',		'Coop');
 define('MODE_UNF',		'Unfinished');
 define('MODE_TINY',		'Tiny');
@@ -81,11 +80,6 @@ try {
 	// NOTE: LOCALHOST can be slow - you can temporarily active the '$test_max' variable for testing.
 	foreach ($select as $row) {
 		switch (MODE) {
-			case MODE_GAME:
-				// Condition: The 'application' field is used (indicating GB64 activity)
-				if (!empty($row->application))
-					AddTag($tagid);
-				break;
 			case MODE_COOP:
 				// Condition: The 'author' field must be like e.g. "Stan & Laurel"
 				if (strpos($row->author, ' & '))

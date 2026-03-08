@@ -133,8 +133,7 @@ try {
 				copyright,
 				stil,
 				csdbtype,
-				csdbid,
-				gb64
+				csdbid
 			) VALUES (
 				:fullname,
 				:player,
@@ -157,8 +156,7 @@ try {
 				:copyright,
 				:stil,
 				'.($info['csdbid'] ? '"release"' : '""').',
-				:csdbid,
-				:gb64
+				:csdbid
 			)');
 
 		$insert->execute(array(
@@ -181,8 +179,7 @@ try {
 				':author'		=> $info['author'],						// Modified by upload wizard
 				':copyright'	=> $info['copyright'],					// Modified by upload wizard
 				':stil'			=> $info['stil'],						// Created by upload wizard
-				':csdbid'		=> $info['csdbid'],						// Created by upload wizard
-				':gb64'			=> ''									// Does not has a default value
+				':csdbid'		=> $info['csdbid']						// Created by upload wizard
 			));
 
 		$files_id = $db->lastInsertId();

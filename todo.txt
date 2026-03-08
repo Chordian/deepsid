@@ -18,7 +18,7 @@ SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
 - Go to production title. Controlled how? A toggle in settings?
 
-- Remove the last two GB64 columns in 'hvsc_files' and adapt all code accordingly.
+- Update 'howto' files now that 'application' and 'gb64' columns are removed.
 
 
 ADMIN STUFF

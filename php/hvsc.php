@@ -1273,7 +1273,6 @@ try {
 				$hvsc =				$row->new;			// 0 (= 49)									50 and up
 				$csdbtype =			$row->csdbtype;		// sid										release
 				$csdbid =			$row->csdbid;		// 58172
-				$application = 		$row->application;	// RELEASE									PREVIEW
 				
 				if ($user_id) {
 					// Does the user have any rating for this SID file?
@@ -1466,7 +1465,7 @@ try {
 								'$' . strtoupper(str_pad(dechex($loadaddr + $datasize - 3), 4, '0', STR_PAD_LEFT));
 						break;
 
-					case 9:	// HVSC or CGSC version
+					case 9:		// HVSC or CGSC version
 
 						if ((int)$hvsc) {
 							if ($isCGSC)
@@ -1476,9 +1475,11 @@ try {
 						}
 						break;
 
-					case 10:	// Application (RELEASE or PREVIEW) - pertains to games
+					case 10:	// [ Unused ]
 
-						$factoid[$f] = $application;
+						// Used to be 'Application' (RELEASE or PREVIEW) - later deprecated
+
+						$factoid[$f] = '';
 						break;
 
 					case 11:	// Number of CSDb entries
