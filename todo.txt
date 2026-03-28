@@ -18,7 +18,16 @@ SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
 - Go to production title. Controlled how? A toggle in settings?
 
-- Update 'howto' files now that 'application' and 'gb64' columns are removed.
+- LMan has updated the Remix API to v2. See Messenger for more about this.
+  UPDATE: I still can't get it to work.
+
+- Export all databases for GitHub. Someone has requested it.
+
+- Add a TRANSFER button for CSDb releases with several SID tunes in them. The button
+  shows all the SID tunes in the left browser, i.e. it works like the in CShellDB.
+
+- Rewrite 'howto_update_gb64.txt' when the next GameBase64 update v20 arrives.
+  See the .txt file for a few preliminary things to test.
 
 
 ADMIN STUFF

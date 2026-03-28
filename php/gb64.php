@@ -265,6 +265,7 @@ try {
 if ($page_id) {
 
 	/***** SUB PAGE *****/
+	
 	$data = ReadGB64DB($page_id);
 
 	$published		= '<p style="margin-top:-2px;"><b>Published:</b><br />'.$data['year'].', '.$data['company'].'</p>';

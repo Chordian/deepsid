@@ -1952,6 +1952,11 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>March 28, 2026</h3>
+						<ul>
+							<li>CSDb information is now available again on both DeepSID and CShellDB.</li>
+						</ul>
+
 						<h3>March 8, 2026</h3>
 						<ul>
 							<li>Game status (RELEASE or PREVIEW) is deprecated and thus no longer available as a factoid.</li>

@@ -2786,7 +2786,7 @@ Browser.prototype = {
 				if (main.isAdmin) {
 					// Add cache info in top right corner
 					const cacheAge = this.getCacheAgeShort(data.html);
-					var cacheStatus = cacheAge ? `Cache (${cacheAge})` : "Cache";
+					var cacheStatus = cacheAge ? `Cache (${cacheAge})` : "";
 					if (data.html.indexOf("csdb.dk/webservice") !== -1) {
 						cacheStatus = '<span style="color:var(--color-text-csdb-direct);">CSDb</span>';
 					} else if (data.html.indexOf("(CSDb unreachable)") !== -1) {

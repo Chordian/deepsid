@@ -55,14 +55,15 @@ function curl($url) {
 
     $ch = curl_init();
 
-    curl_setopt($ch, CURLOPT_HEADER, false);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
     curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_TIMEOUT, 5);
-    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+    curl_setopt($ch, CURLOPT_REFERER, 'https://csdb.dk/'); // Added 2026-03-28
+
     $data = curl_exec($ch);
-    // echo curl_error($ch);
+    // clog($ch);
     curl_close($ch);
 
     return $data;

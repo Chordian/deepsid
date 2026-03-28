@@ -6,6 +6,18 @@ Let's call the new version ## in this document.
 
 
 THIS NEEDS TO BE UPDATED FOR THE NEW DATABASE METHOD!
+SEE IF YOU CAN UPDATE ALL THIS WHEN THE NEXT GB64 UPDATE ARRIVES.
+
+DANGER: I fear the ID numbers might shuffle around in future DB updates.
+  Safe: Only main.js calls via ID, but it gets that from a GB64 list that collected
+        them from the database, so it doesn't matter if that shuffles around.
+  Bad:  The labels info table refers to GB64 entries as ID numbers. That could break
+        if the GB64 guys are not keeping the ID numbers static.
+  Test: Compare some game entries in new database -versus- previous database. Are the
+        ID numbers unchanged for the same games?
+
+
+
 
 Include this step in the updated text:
 

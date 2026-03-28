@@ -31,8 +31,8 @@ Download the GitHub tree above as well as the following files:
 
 Download the following SID collections that will work with the database supplied below:
 
-* [High Voltage SID Collection #80](https://hvsc.brona.dk/HVSC/HVSC_80-all-of-them.7z)
-* [Compute's Gazette SID Collection v1.46](http://www.c64music.co.uk/CGSC_v146.7z)
+* [High Voltage SID Collection #84](https://hvsc.brona.dk/HVSC/HVSC_84-all-of-them.7z)
+* [Compute's Gazette SID Collection v1.47](http://www.c64music.co.uk/CGSC_v147.7z)
 
 1. Create the `/deepsid/hvsc/` sub folder.
 2. Unpack the HVSC archive into the `/deepsid/hvsc/` folder. This should create a `/C64Music/` sub folder.
@@ -50,20 +50,29 @@ Some collections are proprietary DeepSID collections. Download those here:
 3. Create the `/_SID Happens/` sub folder inside the `/deepsid/hvsc/` folder.
 4. Unpack **DeepSID_Collection_SID_Happens.zip** into the new folder.
 
-### Database
+### Databases
 
-Download the following file:
+Download the following files:
 
 * [DeepSID_Database.zip](https://chordian.net/files/deepsid/DeepSID_Database.zip)
+* [GB64_Database_v19.zip](https://chordian.net/files/deepsid/GB64_Database_v19.zip)
 
-This file contains all the MySQL database files that matches the HVSC and CGSC versions above. It also has one test user (user ID 1) with the password "test" for checking out a few basic ratings. There are no playlists.
+The DeepSID file contains all the MySQL database files that matches the HVSC and CGSC versions above. It also has one test user (user ID 1) with the password "test" for checking out a few basic ratings. There are no playlists.
 
 1. Create a database in your MySQL database, ready to receive tables.
 2. Unpack the archive and import all its SQL files into that database, one by one.
-3. Edit the `/deepsid/php/setup.php` file and change its constants to match your database.
+3. Edit the `/deepsid/php/setup.php` file and change its constants to match the database.
 4. Remember to also change the ROOT_HVSC, HOST and COOKIE_HOST constants in the same file.
 
 The user ID of 3 assigned to "USER_RATINGS" in `setup.php` is used for the letter folder quality filters. You can change this ID number to a user of your choice. The folder ratings of this user will then affect those quality filters. You have to give a letter folder two stars for the "Decent" option and three stars for the "Good" option.
+
+The GB64 file has a database created from the download available at the original web site. DeepSID uses this to show the game pages in the 'GB64' tab.
+
+1. Create a different database in your MySQL database for this, i.e. separate from DeepSID.
+2. Unpack the archive and import the single SQL file into that database.
+3. Edit the `/deepsid/php/setup.php` file and change its constants to match the database.
+
+### Logs
 
 You can run the `/deepsid/logs/activity.htm` file to see activity and also any errors. Note that it never logs ratings by other users (what they rate SID tunes is none of our business). If you want to see what tags were added, run the `/deepsid/logs/tags.htm` file.
 
