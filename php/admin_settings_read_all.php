@@ -29,12 +29,18 @@ try {
 
 	// Build the rows for each setting
 	foreach ($settings as $s) {
+		$value = htmlspecialchars($s->setting_value);
+		$type = $s->setting_type;
+
+		if ($type == 'bool')
+			$value = $value == 1 ? 'enabled' : 'disabled';
+
 		$html .= '
 			<div class="setting">
 				<div class="title">' . $s->setting_key . '</div>
 				<span> ' . $s->description . '</span>
-				<div class="value">' . htmlspecialchars($s->setting_value) . '</div>
-				<div class="edit" data-type="' . $s->setting_type . '" data-options="' . $s->setting_options . '"></div>
+				<div class="value">' . $value . '</div>
+				<div class="edit" data-type="' . $type . '" data-options="' . $s->setting_options . '"></div>
 			</div>
 		';
 	}

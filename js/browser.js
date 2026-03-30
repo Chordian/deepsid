@@ -199,7 +199,14 @@ Browser.prototype = {
 			})
 			.on("keydown", function(event) {
 				if (event.keyCode == 13) {
-					if ($("#dialog-all-tags option:selected").length) {
+					event.preventDefault();
+
+					var $selected = $("#dialog-all-tags option:selected");
+
+					if ($selected.length === 1 && $selected.first().text() === "_OK") {
+						$("#dialog-tags .dialog-button-yes").trigger("click");
+						$("#dialog-all-tags").blur();
+					} else if ($selected.length) {
 						$("#dialog-tags-right").trigger("click");				// Transfer entry
 					} else {
 						$("#dialog-tags .dialog-button-yes").trigger("click");	// Click 'OK' button

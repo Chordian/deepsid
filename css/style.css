@@ -1043,6 +1043,13 @@ small.u2 { margin-left: 2px; }
 		color: var(--color-link-hover);
 	}
 
+	#maintenance {
+		position: relative;
+		left: 86px;
+		color: var(--color-text-csdb-down);
+		font-weight: bold;
+	}
+
 	#click-to-play-cover {
 		display: none;
 		position: fixed;
@@ -4693,6 +4700,11 @@ input[type=range]::-ms-track {
 			#topic-admin .setting:hover .edit {
 				opacity: 0.7;
 			}
+
+		#topic-admin .admin-temp-check {
+			position: relative;
+			right: -120px;
+		}
 
 		#topic-admin .run-script {
 			position: absolute;

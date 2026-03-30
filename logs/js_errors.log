@@ -133,3 +133,18 @@ Message: Script error.
 Source: https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js (0:0)
 IP: ::1
 
+[2026-03-29 08:25:51] error
+Message: TypeError: can't access property "name", tagName is undefined
+Source: http://chordian/deepsid/js/browser.js?v=1773570664 (4250:45)
+IP: ::1
+
+[2026-03-29 08:26:00] error
+Message: TypeError: can't access property "name", tagName is undefined
+Source: http://chordian/deepsid/js/browser.js?v=1773570664 (4250:45)
+IP: ::1
+
+[2026-03-30 08:24:27] error
+Message: ReferenceError: $parent is not defined
+Source: http://chordian/deepsid/js/main.js?v=1774859054 (1680:15)
+IP: ::1
+

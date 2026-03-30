@@ -1643,6 +1643,11 @@ main.bindAdminEvents = function() {
 		$("#topic-admin .edit").hide(); // Hide not just this 'Edit' icon but all of them
 
 		switch (type) {
+			case 'bool':
+				// Check box
+				var state = value == "enabled" ? "checked" : "unchecked";
+				html = '<input type="checkbox" class="admin-temp-check" name="temp-check" '+state+' />';
+				break;
 			case 'list':
 				// Drop-down box
 				html = '<select class="admin-temp-select">';
@@ -1662,6 +1667,29 @@ main.bindAdminEvents = function() {
 			const len = this.value.length;
 			this.setSelectionRange(len, len);
 		});
+	});
+
+	/**
+	 * Admin settings: Clicking a check box.
+	 * 
+	 * @param {*} event 
+	 */
+	$("#topic-admin").on("click", ".admin-temp-check", function() {
+		var $parent = $(this).parents(".setting"),
+			value = $(this).is(":checked") ? 1 : 0;
+
+		var title = $parent.children(".title").html();
+		$parent.children(".value").empty().append(value ? "enabled" : "disabled");
+
+		$.post("php/admin_settings_write.php", { key: title, value: value }, function(data) {
+			browser.validateData(data);
+		});
+
+		$("#topic-admin .edit").show(); // Allow editing a row again
+
+		// Prevent 'Enter' from also firing in the browser list
+		main.blockNextEnter = true;
+		return false;
 	});
 
 	/**
@@ -2972,12 +3000,16 @@ main.bindLoginRegisterEvents = function() {
 	 * Clicking 'Register' in the login/register response line.
 	 */
 	$("#response").on("click", "a.reg-new", function() {
-		$("#label-username").empty().append('<span class="new-user">New</span>');
-		$("#label-password").empty().append('<span class="new-user">Pw</span>');
-		$("#response").empty().removeClass("good bad").append('Type the user name and password | <a href="#" class="reg-cancel">Cancel</a>');
-		$("#username,#password").val("");
-		$("#reg-login-button").prop("disabled", false).removeClass("disabled");
-		main.registering = true;
+		if (parseInt(main.getAdminSetting("allow_registrations"))) {
+			$("#label-username").empty().append('<span class="new-user">New</span>');
+			$("#label-password").empty().append('<span class="new-user">Pw</span>');
+			$("#response").empty().removeClass("good bad").append('Type the user name and password | <a href="#" class="reg-cancel">Cancel</a>');
+			$("#username,#password").val("");
+			$("#reg-login-button").prop("disabled", false).removeClass("disabled");
+			main.registering = true;
+		} else {
+			alert("Registration is currently disabled. Please try again later.");
+		}
 		return false;
 	});
 

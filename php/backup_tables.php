@@ -11,7 +11,9 @@
 
 $backupDir     = __DIR__ . '/../backups/';
 $timestampFile = $backupDir . 'last_backup.txt';
-$maxDays       = 7;
+
+$maxDays = (int)$account->GetAdminSetting('db_backup_retention_days');
+if ($maxDays < 1) $maxDays = 7;
 
 $tables = [
     'admin_settings',

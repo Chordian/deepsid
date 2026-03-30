@@ -1,9 +1,13 @@
 <?php
-	if (false) die('DeepSID is being updated. Please return again in a few minutes.');
-
 	require_once("php/class.account.php"); // Includes setup
 	$user_id = $account->CheckLogin() ? $account->UserID() : 0;
 	$is_admin = $user_id && $account->IsAdmin();
+	
+	$maintenance_mode = (int)$account->GetAdminSetting('maintenance_mode');
+
+	if ($maintenance_mode && !$is_admin) {
+		die('DeepSID is being updated. Please return again in a few minutes.');
+	}
 
 	require_once("tracking.php"); // Also called periodically by 'main.js'
 
@@ -989,6 +993,9 @@
 						<a id="players" href="#">Players</a>
 							<span>&#9642</span>
 						<a id="forum" href="#">Forum</a>
+						<?php if ($maintenance_mode): ?>
+							<span id="maintenance">Maintenance mode</span>
+						<?php endif ?>
 					</div>
 					<!--<a href="https://blog.chordian.net/2018/05/12/deepsid/" target="_blank">Blog Post</a>
 						<span>&#9642</span>-->
