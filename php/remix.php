@@ -9,6 +9,12 @@
  * @used-by		browser.js
  */
 
+define('REMIX64_PARTNER_ID',  'deepsid');
+define('REMIX64_API_PASSWORD','FeekTER1mNgoxusi3VejlOLDVdJIPgS0');
+define('REMIX64_API_SECRET',  'oDqHpvKZp2fM05JydWY2ylR8bCE8Y2PN'); // Not used for this endpoint
+
+define('REMIX64_EP_GET_REMIXES', 'remix/get_remixes_by_hvsc_path');
+
 require_once("class.account.php"); // Includes setup
 
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest')
@@ -28,8 +34,17 @@ function curl2($url) {
 	curl_setopt($ch, CURLOPT_URL, $url);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 	curl_setopt($ch, CURLOPT_HEADER, true);
+	curl_setopt($ch, CURLOPT_HTTPGET, true);
+	curl_setopt($ch, CURLOPT_USERPWD, REMIX64_PARTNER_ID . ':' . REMIX64_API_PASSWORD);
+	curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
 	curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0');
-    $data = curl_exec($ch);
+
+	if ($_SERVER['HTTP_HOST'] == LOCALHOST) {
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+	}
+
+	$data = curl_exec($ch);
 	$info = curl_getinfo($ch);
 
 	// Strip headers
@@ -45,22 +60,17 @@ $remixes = array();
 
 if (isset($_GET['fullname'])) {	
 
-	$hvsc_path = str_replace('_High Voltage SID Collection/', '', $_GET['fullname']);
-	$encoded = json_encode(array('hvsc_path' => $hvsc_path));
-	$hash = md5('deepsid'.$encoded.REMIX64_API.'get_remixes');
+	$params = ['hvsc_path' => str_replace('_High Voltage SID Collection/', '', $_GET['fullname'])];
+	$url = 'https://remix64.com/services/api/gb/2/' . REMIX64_EP_GET_REMIXES . '/?' . http_build_query($params);
 
 	try {
 		// Get the entire JSON tree for the SID file from Remix64
-		// @example https://www.remix64.com/services/api/de/deepsid/?task=get_remixes&api_user=deepsid&hash=d0f7e95f7e2e4ca1f50a8aaf66ca3808&data={%22hvsc_path%22:%22MUSICIANS\/D\/Daglish_Ben\/Cobra.sid%22}
 		$data = substr($hvsc_path, -4) != '.mus' && !strpos($hvsc_path, 'Exotic SID Tunes Collection') && !strpos($hvsc_path, 'SID Happens')
-			? curl2('https://remix64.com/services/api/de/deepsid/?task=get_remixes&api_user=deepsid&hash='.$hash.'&data='.urlencode($encoded))
+			? curl2($url)
 			: json_encode(array('error_code' => 'SH, CGSC and ESTC not supported'));
 	} catch(ErrorException $e) {
-		die(json_encode(array('status' => 'warning', 'html' => '<p style="margin:0;"><i>Uh... Remix64? Are you there?</i></p><small>Come on, Remix64, old buddy, don\'t let me down.</small>')));
+		die(json_encode(array('status' => 'warning', 'html' => '<p style="margin:0;"><i>Remix64 is currently unreachable.</i></p><small>Come on, Remix64, old buddy, don\'t let me down.</small>')));
 	}
-
-	//die(json_encode(array('status' => 'info', 'html' => 'API call: https://remix64.com/services/api/de/deepsid/?task=get_remixes&api_user=deepsid&hash='.$hash.'&data='.$encoded)));
-	//die(json_encode(array('status' => 'info', 'html' => '{'.json_encode($data).'}')));
 
 	$data = json_decode($data);
 

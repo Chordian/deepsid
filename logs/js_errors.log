@@ -148,3 +148,23 @@ Message: ReferenceError: $parent is not defined
 Source: http://chordian/deepsid/js/main.js?v=1774859054 (1680:15)
 IP: ::1
 
+[2026-03-31 07:14:55] unhandledrejection
+Message: AbortError: The fetching process for the media resource was aborted by the user agent at the user's request.
+Source:  (:)
+IP: ::1
+
+[2026-03-31 07:15:00] unhandledrejection
+Message: AbortError: The fetching process for the media resource was aborted by the user agent at the user's request.
+Source:  (:)
+IP: ::1
+
+[2026-03-31 07:15:07] unhandledrejection
+Message: AbortError: The fetching process for the media resource was aborted by the user agent at the user's request.
+Source:  (:)
+IP: ::1
+
+[2026-03-31 07:15:13] unhandledrejection
+Message: AbortError: The fetching process for the media resource was aborted by the user agent at the user's request.
+Source:  (:)
+IP: ::1
+

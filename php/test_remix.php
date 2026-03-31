@@ -1,7 +1,8 @@
 <?php
 
 $partnerId = 'deepsid';
-$apiPassword = 'oikcfquh';
+$apiPassword = 'FeekTER1mNgoxusi3VejlOLDVdJIPgS0';
+$sharedSecret = 'oDqHpvKZp2fM05JydWY2ylR8bCE8Y2PN'; // Not used for this endpoint
 
 $endpointPath = 'remix/get_remixes_by_hvsc_path';
 $params = [
@@ -23,8 +24,8 @@ curl_setopt_array($ch, [
     CURLOPT_USERAGENT      => 'Mozilla/5.0',
 
     // Local testing only
-    CURLOPT_SSL_VERIFYPEER => false,
-    CURLOPT_SSL_VERIFYHOST => false
+    //CURLOPT_SSL_VERIFYPEER => false,
+    //CURLOPT_SSL_VERIFYHOST => false
 ]);
 
 $response = curl_exec($ch);
