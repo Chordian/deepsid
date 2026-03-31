@@ -31,10 +31,10 @@ if (isset($_SERVER['HTTPS']) &&
 
 try {
 
-	if ($_SERVER['HTTP_HOST'] == LOCALHOST)
-		$db = new PDO(PDO_LOCALHOST, USER_LOCALHOST, PWD_LOCALHOST);
-	else
-		$db = new PDO(PDO_ONLINE, USER_ONLINE, PWD_ONLINE);
+	$db = new PDO(
+		'mysql:host='.$config['db_deepsid_host'].';dbname='.$config['db_deepsid_name'],
+		$config['db_deepsid_user'],
+		$config['db_deepsid_pwd']);
 	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	$db->exec("SET NAMES UTF8");
 

@@ -168,3 +168,38 @@ Message: AbortError: The fetching process for the media resource was aborted by 
 Source:  (:)
 IP: ::1
 
+[2026-03-31 08:14:50] error
+Message: TypeError: can't access property "charAt", data.type is null
+Source: http://chordian/deepsid/js/controls.js?v=1772886180 (1016:36)
+IP: ::1
+
+[2026-03-31 08:15:03] error
+Message: TypeError: can't access property "charAt", data.type is null
+Source: http://chordian/deepsid/js/controls.js?v=1772886180 (1016:36)
+IP: ::1
+
+[2026-03-31 08:18:03] error
+Message: TypeError: can't access property "charAt", data.type is null
+Source: http://chordian/deepsid/js/controls.js?v=1772886180 (1016:36)
+IP: ::1
+
+[2026-03-31 08:18:08] error
+Message: TypeError: can't access property "charAt", data.type is null
+Source: http://chordian/deepsid/js/controls.js?v=1772886180 (1016:36)
+IP: ::1
+
+[2026-03-31 08:20:25] error
+Message: TypeError: can't access property "charAt", data.type is null
+Source: http://chordian/deepsid/js/controls.js?v=1772886180 (1016:36)
+IP: ::1
+
+[2026-03-31 09:04:30] unhandledrejection
+Message: AbortError: The fetching process for the media resource was aborted by the user agent at the user's request.
+Source:  (:)
+IP: ::1
+
+[2026-03-31 12:24:59] unhandledrejection
+Message: AbortError: The fetching process for the media resource was aborted by the user agent at the user's request.
+Source:  (:)
+IP: ::1
+

@@ -47,6 +47,9 @@ class Account {
 	 * @return		boolean		false = call $this->GetErrorMessage()
 	 */
 	public function ConnectDB() {
+
+		global $config; // Defined in 'setup.php'
+
 		try {
 			// Skip connecting if already connected
 			if ($this->database instanceof PDO) {
@@ -57,11 +60,11 @@ class Account {
 				PDO::MYSQL_ATTR_FOUND_ROWS	=> true, // So that UPDATE statements actually return a row
 				PDO::ATTR_ERRMODE			=> PDO::ERRMODE_EXCEPTION
 			);
-			if ($_SERVER['HTTP_HOST'] == LOCALHOST) {
-				$this->database = new PDO(PDO_LOCALHOST, USER_LOCALHOST, PWD_LOCALHOST, $options);
-			} else {
-				$this->database = new PDO(PDO_ONLINE, USER_ONLINE, PWD_ONLINE, $options);
-			}
+			$this->database = new PDO(
+				'mysql:host='.$config['db_deepsid_host'].';dbname='.$config['db_deepsid_name'],
+				$config['db_deepsid_user'],
+				$config['db_deepsid_pwd'],
+				$options);
 			$this->database->exec("SET NAMES utf8mb4");
 			return true;
 

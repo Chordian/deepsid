@@ -1,8 +1,6 @@
 <?php
 
-$partnerId = 'deepsid';
-$apiPassword = 'FeekTER1mNgoxusi3VejlOLDVdJIPgS0';
-$sharedSecret = 'oDqHpvKZp2fM05JydWY2ylR8bCE8Y2PN'; // Not used for this endpoint
+require_once("setup.php");
 
 $endpointPath = 'remix/get_remixes_by_hvsc_path';
 $params = [
@@ -19,13 +17,12 @@ curl_setopt_array($ch, [
     CURLOPT_RETURNTRANSFER => true,
     CURLOPT_HEADER         => true,
     CURLOPT_HTTPGET        => true,
-    CURLOPT_USERPWD        => $partnerId . ':' . $apiPassword,
+    CURLOPT_USERPWD        => $config['remix64_partner_id'] . ':' . $config['remix64_api_password'],
     CURLOPT_HTTPAUTH       => CURLAUTH_BASIC,
     CURLOPT_USERAGENT      => 'Mozilla/5.0',
 
-    // Local testing only
-    //CURLOPT_SSL_VERIFYPEER => false,
-    //CURLOPT_SSL_VERIFYHOST => false
+    CURLOPT_SSL_VERIFYPEER => !$isLocal,
+    CURLOPT_SSL_VERIFYHOST => !$isLocal
 ]);
 
 $response = curl_exec($ch);

@@ -17,31 +17,27 @@ define('CGSC_VERSION',      '147');
 define('JCH',               2);                         // Same user ID on both localhost and online
 define('USER_RATINGS',      3);                         // Same user ID on both localhost and online
 
-define('DB_LOCALHOST',		'deepsid');				    // MySQL connection strings for localhost
-define('HOST_LOCALHOST',	'localhost');
-define('PDO_LOCALHOST',		'mysql:host='.HOST_LOCALHOST.';dbname='.DB_LOCALHOST);
-define('USER_LOCALHOST',	'root');
-define('PWD_LOCALHOST',		'');
-
-define('DB_ONLINE',			'[REDACTED]');              // MySQL connection strings for online (production)
-define('HOST_ONLINE',		'[REDACTED]');
-define('PDO_ONLINE',		'mysql:host='.HOST_ONLINE.';dbname='.DB_ONLINE);
-define('USER_ONLINE',		'[REDACTED]');
-define('PWD_ONLINE',		'[REDACTED]');
-
-define('DB_GB_LOCAL',       'gamebase');                // Name of imported GB64 database
-define('PDO_GB_LOCAL',		'mysql:host='.HOST_LOCALHOST.';dbname='.DB_GB_LOCAL);
-
-define('DB_GB_ONLINE',      'chordian_netgamebase');
-define('PDO_GB_ONLINE',		'mysql:host='.HOST_ONLINE.';dbname='.DB_GB_ONLINE);
-define('USER_GB_ONLINE',	'chordian_netgamebase');
-define('PWD_GB_ONLINE',		'commodore64');
-
-define('REMIX64_API',       'oDqHpvKZp2fM05JydWY2ylR8bCE8Y2PN');
-
 define('DB_ERROR',          'A database error has been written to a log regularly monitored by Chordian.');
 
 define('TIME_ADJUST',		'+1 hours');				// Added to all use of Date() to match correct time
+
+// Handle configuration file
+
+$host = $_SERVER['HTTP_HOST'] ?? '';
+$isCli = (PHP_SAPI === 'cli');
+$isLocal = $isCli || in_array($host, [LOCALHOST, 'localhost', '127.0.0.1'], true);
+
+$generalFile = __DIR__ . '/../config/general.php';
+$envFile  = __DIR__ . ($isLocal ? '/../config/localhost.php' : '/../config/online.php');
+
+if (!file_exists($generalFile) || !file_exists($envFile)) {
+    die('Missing configuration file.');
+}
+
+$generalConfig = require $generalFile;
+$envConfig  = require $envFile;
+
+$config = array_merge($generalConfig, $envConfig);      // See PHP files in 'config' folder for keys
 
 /**
  * Use this instead of 'file_get_contents' as that sometimes returns empty

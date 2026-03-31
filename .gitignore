@@ -10,6 +10,9 @@ php/move.txt
 php/_master/*
 php/hvsc_update/*
 temp/*
+config/general.php
+config/localhost.php
+config/online.php
 utility/*.csv
 utility/python/count/*.csv
 utility/python/csdb/*.csv

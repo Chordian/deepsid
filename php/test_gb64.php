@@ -1,10 +1,10 @@
 <?php
 require_once("class.account.php"); // Includes setup
 	try {
-		if ($_SERVER['HTTP_HOST'] == LOCALHOST)
-			$gb = new PDO(PDO_GB_LOCAL, USER_LOCALHOST, PWD_LOCALHOST);
-		else
-			$gb = new PDO(PDO_GB_ONLINE, USER_GB_ONLINE, PWD_GB_ONLINE);
+		$gb = new PDO(
+			'mysql:host='.$config['db_gb64_host'].';dbname='.$config['db_gb64_name'],
+			$config['db_gb64_user'],
+			$config['db_gb64_pwd']);
 		$gb->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		$gb->exec("SET NAMES UTF8");
 

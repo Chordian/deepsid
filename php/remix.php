@@ -9,10 +9,6 @@
  * @used-by		browser.js
  */
 
-define('REMIX64_PARTNER_ID',  'deepsid');
-define('REMIX64_API_PASSWORD','FeekTER1mNgoxusi3VejlOLDVdJIPgS0');
-define('REMIX64_API_SECRET',  'oDqHpvKZp2fM05JydWY2ylR8bCE8Y2PN'); // Not used for this endpoint
-
 define('REMIX64_EP_GET_REMIXES', 'remix/get_remixes_by_hvsc_path');
 
 require_once("class.account.php"); // Includes setup
@@ -29,13 +25,15 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH
  */
 function curl2($url) {
 
+	global $config;
+
     $ch = curl_init();
 
 	curl_setopt($ch, CURLOPT_URL, $url);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 	curl_setopt($ch, CURLOPT_HEADER, true);
 	curl_setopt($ch, CURLOPT_HTTPGET, true);
-	curl_setopt($ch, CURLOPT_USERPWD, REMIX64_PARTNER_ID . ':' . REMIX64_API_PASSWORD);
+	curl_setopt($ch, CURLOPT_USERPWD, $config['remix64_partner_id'] . ':' . $config['remix64_api_password']);
 	curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
 	curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0');
 

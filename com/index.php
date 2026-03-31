@@ -9,6 +9,7 @@ require_once("setup.php");
 
 try {
 
+	// Don't change this to '$config' syntax
 	$db = new PDO(PDO_ONLINE, USER_ONLINE, PWD_ONLINE);
 	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	$db->exec("SET NAMES UTF8");
