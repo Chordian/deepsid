@@ -13,6 +13,10 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 	exit;
 }
 
+if ((int)$account->GetAdminSetting('log_js_errors') !== 1) {
+	exit;
+}
+
 $logfile = __DIR__ . '/../logs/js_errors.log';
 
 $entry = [

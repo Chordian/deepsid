@@ -1,4 +1,9 @@
 <?php
+
+	/**
+	 * DeepSID / Index
+	 */
+
 	require_once("php/class.account.php"); // Includes setup
 	$user_id = $account->CheckLogin() ? $account->UserID() : 0;
 	$is_admin = $user_id && $account->IsAdmin();
@@ -63,6 +68,7 @@
 		}
 	}
 ?>
+
 <!DOCTYPE html>
 <html lang="en-US" style="overflow:scroll-x;">
 
@@ -1958,6 +1964,11 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>April 4, 2026</h3>
+						<ul>
+							<li>The 'C' focus icon (for composers who were on Compunet) now appears at full size whenever shown.</li>
+						</ul>
 
 						<h3>March 28, 2026</h3>
 						<ul>

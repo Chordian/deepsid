@@ -3855,7 +3855,7 @@ input[type=range]::-ms-track {
 					display: inline-block;
 					height: 16px;
 					width: 16px;
-					margin-right: 1px;
+					margin-right: 1px;	/* Not always precise spacing but never mind */
 				}
 
 				#topic-profile .folder-focus div {
@@ -3874,49 +3874,18 @@ input[type=range]::-ms-track {
 				.folder-focus .bc  { background: var(--svg-url-circle-basic) 0 0 / 18px 18px no-repeat; }
 				.folder-focus .none  { background: var(--svg-url-circle-none) 0 0 / 18px 18px no-repeat; }
 
-				/* Compunet icon is special - it is smaller and comes first */
-				.folder-focus .c,
-				.folder-focus .extra {
-					position: relative;
-				}
-
-					#topic-profile .folder-focus .c,
-					#topic-profile .folder-focus .extra {
-						top: 0;
-						height: 15px;
-						width: 15px;
-					}
-
-						#topic-profile .folder-focus .c  {
-							background: var(--svg-url-circle-c) 0 0 / 15px 15px no-repeat !important;
-						}
-
-						#topic-profile .folder-focus .extra  {
-							background: var(--svg-url-circle-none) 0 0 / 15px 15px no-repeat !important;
-						}
-
-					#annex .folder-focus .c,
-					#annex .folder-focus .extra {
-						top: 0;
-						height: 13px;
-						width: 13px;
-					}
-
-						#annex .folder-focus .c {
-							background: var(--svg-url-circle-c) 0 0 / 13px 13px no-repeat !important;
-						}
-
-						#annex .folder-focus .extra {
-							background: var(--svg-url-circle-none) 0 0 / 13px 13px no-repeat !important;
-						}
+				/* 2026-04-04: Compunet icon is now full size like the other icons */
+				.folder-focus .c  { background: var(--svg-url-circle-c) 0 0 / 18px 18px no-repeat; }
+				.folder-focus .extra { background: var(--svg-url-circle-none) 0 0 / 18px 18px no-repeat; }
 
 				.folder-focus .cextra {
 					float: left;
 					position: relative;
-					top: 3px;
-					height: 13px;
-					width: 13px;
-					background: var(--svg-url-circle-c) 0 0 / 13px 13px no-repeat;
+					top: 0;				/*  3px */
+					right: -1.5px;		/*  N/A */
+					height: 18px;		/* 13px */
+					width: 18px;		/* 13px */
+					background: var(--svg-url-circle-c) 0 0 / 18px 18px no-repeat;
 				}
 
 			#focus-explainer {
