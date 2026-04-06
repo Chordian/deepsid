@@ -193,7 +193,7 @@ try {
 
 			} else if ($_GET['searchType'] == 'label') {											// Label
 
-				// Search for a label (production title)
+				// Search for a label (primary release)
 				$select = $db->prepare('
 					SELECT fullname FROM hvsc_files
 					LEFT JOIN labels_lookup ON hvsc_files.id = labels_lookup.files_id
@@ -1496,7 +1496,7 @@ try {
 						}
 						break;
 
-					case 12:	// Production title (previously tag label, now its own tables)
+					case 12:	// Primary release (previously tag label, now its own tables)
 
 						$label_site = $label_name = $label_type = '';
 						$label_siteid = 0;

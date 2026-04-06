@@ -2,7 +2,7 @@
 /**
  * DeepSID
  *
- * Add a label to a specific file. (A label is a production title factoid.)
+ * Add a label to a specific file. (A label is a primary release factoid.)
  * 
  * Data will be returned stating if the entry was added, or if an existing
  * matching label was just linked to the file.

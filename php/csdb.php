@@ -11,6 +11,7 @@
  * 
  * @uses		$_GET['fullname']
  * @uses		$_GET['override']			Set to 1 to override cache read
+ * @uses		$_GET['noprimary']			Set to 1 to override primary release
  * 
  *		- OR -
  * 
@@ -18,6 +19,7 @@
  * @uses		$_GET['id']
  * @uses		$_GET['copyright']
  * @uses		$_GET['override']			Set to 1 to override cache read
+ * @uses		$_GET['noprimary']			Set to 1 to override primary release
  * 
  * @used-by		browser.js
  */
@@ -29,14 +31,17 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH
 	die("Direct access not permitted.");
 
 $debug = '';
+$primary_back_button = false;
 $amount_releases = 0;
 $scener_handle = array();
 $scener_id = array();
 $sid_entries = array();
 
-$fresh_days		= $account->GetAdminSetting('csdb_cache_fresh_days');	// Cache skip for items < 30 days old
-$ttl_days		= $account->GetAdminSetting('csdb_cache_ttl_days');		// Fallback TTL for date-less items (7 days)
-$ttl			= $ttl_days * 24 * 60 * 60;
+$user_id = $account->CheckLogin() ? $account->UserID() : 0;
+
+$fresh_days = $account->GetAdminSetting('csdb_cache_fresh_days');	// Cache skip for items < 30 days old
+$ttl_days = $account->GetAdminSetting('csdb_cache_ttl_days');		// Fallback TTL for date-less items (7 days)
+$ttl = $ttl_days * 24 * 60 * 60;
 
 $svg_permalink = '<svg class="permalink" style="enable-background:new 0 0 80 80;" version="1.1" viewBox="0 0 80 80" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g><path d="M29.298,63.471l-4.048,4.02c-3.509,3.478-9.216,3.481-12.723,0c-1.686-1.673-2.612-3.895-2.612-6.257 s0.927-4.585,2.611-6.258l14.9-14.783c3.088-3.062,8.897-7.571,13.131-3.372c1.943,1.93,5.081,1.917,7.01-0.025 c1.93-1.942,1.918-5.081-0.025-7.009c-7.197-7.142-17.834-5.822-27.098,3.37L5.543,47.941C1.968,51.49,0,56.21,0,61.234 s1.968,9.743,5.544,13.292C9.223,78.176,14.054,80,18.887,80c4.834,0,9.667-1.824,13.348-5.476l4.051-4.021 c1.942-1.928,1.953-5.066,0.023-7.009C34.382,61.553,31.241,61.542,29.298,63.471z M74.454,6.044 c-7.73-7.67-18.538-8.086-25.694-0.986l-5.046,5.009c-1.943,1.929-1.955,5.066-0.025,7.009c1.93,1.943,5.068,1.954,7.011,0.025 l5.044-5.006c3.707-3.681,8.561-2.155,11.727,0.986c1.688,1.673,2.615,3.896,2.615,6.258c0,2.363-0.928,4.586-2.613,6.259 l-15.897,15.77c-7.269,7.212-10.679,3.827-12.134,2.383c-1.943-1.929-5.08-1.917-7.01,0.025c-1.93,1.942-1.918,5.081,0.025,7.009 c3.337,3.312,7.146,4.954,11.139,4.954c4.889,0,10.053-2.462,14.963-7.337l15.897-15.77C78.03,29.083,80,24.362,80,19.338 C80,14.316,78.03,9.595,74.454,6.044z"/></g><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/></svg>';
 
@@ -100,7 +105,7 @@ function relative_age_text($timestamp) {
  * @param		string		$error_message		Message to display if no cache
  */
 function serve_cache_or_error($cache_file, $error_message) {
-	global $debug;
+	global $primary_back_button, $debug;
     if (file_exists($cache_file)) {
         $cached = json_decode(gzdecode(file_get_contents($cache_file)), true);
         echo json_encode(array(
@@ -110,6 +115,7 @@ function serve_cache_or_error($cache_file, $error_message) {
                          '<i><small>Generated from cache (CSDb unreachable)</small></i>',
             'count'   => $cached['count'],
             'entries' => $cached['entries'],
+			'primary' => $primary_back_button,
 			'debug'   => $debug
         ));
         exit;
@@ -189,12 +195,13 @@ if (isset($_GET['fullname'])) {
 	try {
 		$db = $account->GetDB();
 
-		$select = $db->prepare('SELECT copyright, csdbtype, csdbid FROM hvsc_files WHERE fullname = :fullname LIMIT 1');
+		$select = $db->prepare('SELECT id, copyright, csdbtype, csdbid FROM hvsc_files WHERE fullname = :fullname LIMIT 1');
 		$select->execute(array(':fullname'=>$_GET['fullname']));
 		$select->setFetchMode(PDO::FETCH_OBJ);
 
 		if ($select->rowCount()) {
 			$row = $select->fetch();
+			$files_id = $row->id;
 			$csdb_type = $row->csdbtype;	// Can be 'release' or 'sid'
 			$csdb_id = $row->csdbid;		// ID relates to the type
 			$copyright = $row->copyright;	// E.g. "1988 Jewels"
@@ -278,6 +285,43 @@ if (isset($_GET['fullname'])) {
 	die(json_encode(array('status' => 'error', 'message' => 'You must specify the proper GET variables.')));
 
 // --------------------------------------------------------------------------
+// PRIMARY RELEASE (depends on a user setting)
+// --------------------------------------------------------------------------
+
+// Any SID can have a label (which shows a primary release). If this is present (and the user has activated the
+// corresponding feature in the settings) the release page for that label should be shown instead.
+if (!$_GET['noprimary']) {
+
+	// Get the user's settings
+	$users = $db->query('SELECT flags FROM users WHERE id = '.$user_id)->fetch(PDO::FETCH_OBJ);
+	$settings = unserialize($users->flags);
+
+	// Does the user want to see the primary release?
+	if ($settings['primaryrelease']) {
+		// Get the ID of the primary release label (if the SID row has this)
+		$labels_lookup = $db->query('SELECT labels_id FROM labels_lookup WHERE files_id = '.$files_id.' LIMIT 1');
+		$row = $labels_lookup->fetch(PDO::FETCH_ASSOC);
+
+		if ($row) {
+			// Get the site reference (CSDb or GB64) and the ID to the page on the referenced site
+			$labels_info = $db->query('SELECT site, site_id FROM labels_info WHERE id = '.$row['labels_id'].' LIMIT 1');
+			$row = $labels_info->fetch(PDO::FETCH_ASSOC);
+
+			if ($row) {
+				if (strtolower($row['site']) == 'csdb') {
+					if ($csdb_type === 'sid') {
+						// A list would originally have been displayed so include a BACK button too
+						$primary_back_button = true;
+					}
+					$csdb_type	= 'release';
+					$csdb_id 	= $row['site_id'];
+				}
+			}
+		}
+	}
+}
+
+// --------------------------------------------------------------------------
 // PREPARE CACHE VARIABLES
 // --------------------------------------------------------------------------
 
@@ -330,6 +374,7 @@ if (file_exists($cache_file)) {
 							')</span> - <a id="refresh-cache" href="">Refresh cache</a></small></i>',
 			'count'   => $cached_data['count'],
 			'entries' => $cached_data['entries'],
+			'primary' => $primary_back_button,
 			'debug'	  => $debug
 		));
         exit;
@@ -866,5 +911,6 @@ echo json_encode(array(
 	'html'		=> $html.'<i><small>Generated using the <a href="https://csdb.dk/webservice/" target="_blank">CSDb web service</a></small></i>',
 	'count'		=> $amount_releases,
 	'entries'	=> $sid_entries,
+	'primary'	=> $primary_back_button,
 	'debug'		=> $debug));
 ?>

@@ -10,6 +10,7 @@
  * Settings that can be specified for saving:
  * 
  * @uses		$_POST['firstsubtune']		0 or 1
+ * @uses		$_POST['primaryrelease']	0 or 1
  * @uses		$_POST['skiptune']			0 or 1
  * @uses		$_POST['marktune']			0 or 1
  * @uses		$_POST['skipbad']			0 or 1
@@ -25,12 +26,13 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH
 	die("Direct access not permitted.");
 
 $firstTime = array(
-	'firstsubtune' =>	0,
-	'skiptune' =>		1,
-	'marktune' =>		0,
-	'skipbad' =>		0,
-	'skiplong' =>		0,
-	'skipshort' =>		0,
+	'firstsubtune'		=> 0,
+	'primaryrelease'	=> 0,
+	'skiptune'			=> 1,
+	'marktune'			=> 0,
+	'skipbad'			=> 0,
+	'skiplong'			=> 0,
+	'skipshort'			=> 0,
 );
 
 $user_id = $account->CheckLogin() ? $account->UserID() : 0;
@@ -47,12 +49,13 @@ try {
 	if (!$settings) $settings = $firstTime;
 
 	// Adjust settings
-	if (isset($_POST['firstsubtune']))	$settings['firstsubtune'] =	(int)$_POST['firstsubtune'];
-	if (isset($_POST['skiptune']))		$settings['skiptune'] =		(int)$_POST['skiptune'];
-	if (isset($_POST['marktune']))		$settings['marktune'] =		(int)$_POST['marktune'];
-	if (isset($_POST['skipbad']))		$settings['skipbad'] =		(int)$_POST['skipbad'];
-	if (isset($_POST['skiplong']))		$settings['skiplong'] =		(int)$_POST['skiplong'];
-	if (isset($_POST['skipshort']))		$settings['skipshort'] =	(int)$_POST['skipshort'];
+	if (isset($_POST['firstsubtune']))		$settings['firstsubtune']		= (int)$_POST['firstsubtune'];
+	if (isset($_POST['primaryrelease']))	$settings['primaryrelease']		= (int)$_POST['primaryrelease'];
+	if (isset($_POST['skiptune']))			$settings['skiptune']			= (int)$_POST['skiptune'];
+	if (isset($_POST['marktune']))			$settings['marktune']			= (int)$_POST['marktune'];
+	if (isset($_POST['skipbad']))			$settings['skipbad']			= (int)$_POST['skipbad'];
+	if (isset($_POST['skiplong']))			$settings['skiplong']			= (int)$_POST['skiplong'];
+	if (isset($_POST['skipshort']))			$settings['skipshort']			= (int)$_POST['skipshort'];
 
 	if ($_POST) {
 		// Store the settings

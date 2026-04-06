@@ -142,7 +142,7 @@ var main = {
 	 * @param {array} data					Associative array with data:
 	 * 									 	- id		Must be set
 	 * 								 	 	- text		Must be set
-	 * 								 	 	- width	A default is used if not set
+	 * 								 	 	- width		A default is used if not set
 	 * 								 	 	- height	A default is used if not set
 	 * 									 	- wizard	Don't fade cover if set and TRUE
 	 * @param {function} callbackYes		Callback used if YES is clicked
@@ -2366,7 +2366,7 @@ main.bindDexterCSDbEvents = function() {
 		main.cacheTabScrollPos = $("#page").scrollTop();
 		main.cacheDDCSDbSort = $("#dropdown-sort-csdb").val();
 		// Now load the actual release page
-		browser.getCSDb("release", $(this).attr("data-id"), true);
+		browser.getCSDb("release", $(this).attr("data-id"), true, undefined, true);
 		return false;
 	});
 
@@ -2374,7 +2374,11 @@ main.bindDexterCSDbEvents = function() {
 	 * Clicking the 'BACK' button on a specific CSDb page to show the releases again.
 	 */
 	$("#topic-csdb,#sticky-csdb").on("click", "#go-back", function() {
-		if (main.cacheBeforeCompo === "" && main.cacheCSDb === "") {
+		if (browser.csdbPrimaryBack) {
+			// The primary release was hiding a SID list - show it now
+			browser.getCSDb(undefined, undefined, undefined, undefined, true);
+			return;
+		} else if (main.cacheBeforeCompo === "" && main.cacheCSDb === "") {
 			// We have been redirecting recently so the tab must be refreshed properly
 			browser.getCSDb();
 			return;
@@ -2475,11 +2479,12 @@ main.bindDexterCSDbEvents = function() {
 				browser.csdbArgs['type'],
 				browser.csdbArgs['id'],
 				browser.csdbArgs['copyright'],
-				true
+				true,
+				browser.csdbArgs['noprimary']
 			 );
 		} else {
 			// List of release entries
-			browser.getCSDb(undefined, undefined, undefined, true);
+			browser.getCSDb(undefined, undefined, undefined, true, browser.csdbArgs['noprimary']);
 		}
 		return false;
 	});
@@ -2937,7 +2942,7 @@ main.bindKeyboardEvents = function() {
 						main.cycleFactoidTypeBottom();
 						break;
 
-					case 90:	// Keyup 'z' - add label (production title)
+					case 90:	// Keyup 'z' - add label (primary release)
 					case 88:	// Keyup 'x' - duplicate hotkey (I have a keyboard where 'z' is missing)
 
 						browser.addLabel();
@@ -3383,6 +3388,8 @@ main.bindSettingsEvents = function() {
 			var settings = {};
 			if (event.target.id === "setting-first-subtune") {
 				settings.firstsubtune = state ? 1 : 0;
+			} else if (event.target.id === "setting-primary-release") {
+				settings.primaryrelease = state ? 1 : 0;
 			} else if (event.target.id === "setting-skip-tune") {
 				settings.skiptune = state ? 1 : 0;
 			} else if (event.target.id === "setting-mark-tune") {
@@ -3846,12 +3853,13 @@ $(function() { // DOM ready
 	$.post("php/settings.php", function(data) {
 		main.onBrowserReady(function() {
 			browser.validateData(data, function(data) {
-				main.settingToggle("first-subtune",	data.settings.firstsubtune);
-				main.settingToggle("skip-tune",		data.settings.skiptune);
-				main.settingToggle("mark-tune",		data.settings.marktune);
-				main.settingToggle("skip-bad",		data.settings.skipbad);
-				main.settingToggle("skip-long",		data.settings.skiplong);
-				main.settingToggle("skip-short",	data.settings.skipshort);
+				main.settingToggle("first-subtune",		data.settings.firstsubtune);
+				main.settingToggle("primary-release",	data.settings.primaryrelease);
+				main.settingToggle("skip-tune",			data.settings.skiptune);
+				main.settingToggle("mark-tune",			data.settings.marktune);
+				main.settingToggle("skip-bad",			data.settings.skipbad);
+				main.settingToggle("skip-long",			data.settings.skiplong);
+				main.settingToggle("skip-short",		data.settings.skipshort);
 			});
 		});
 	}.bind(this));

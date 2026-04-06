@@ -15,13 +15,19 @@ ONGOING
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- Go to production title. Controlled how? A toggle in settings?
-  When other tab (CSDb versus GB64) is production target, select and flash it a few times,
-  but only if one of those two are already selected. Third tab? Just flash one of the two.
-  CSDb or GB64 tab: If only one release is available and its page is shown right away, leave
-  it at that. If a list if supposed to be displayed, add code there for determining whether
-  to show focus page (always with BACK button) or allow the list to be displayed (in case
-  no production title has been determined).
+- PRIMARY RELEASE:
+
+  - When other tab (CSDb versus GB64) is production target, select and flash it a few times,
+    but only if one of those two are already selected. Third tab? Just flash one of the two.
+
+  - When a primary release is shown in the CSDb tab, show the label "PRIMARY RELEASE" somewhere
+    too. Probably slightly smaller font and grayed color. Make sure it's not grabbed by the
+    cache system; i.e. add it from JavaScript.
+
+  - Should label (e.g. in context menu) be renamed to "primary release" instead?
+
+- Maybe the 'C' focus icon should be smaller again in browser lists? (I still think the full
+  size icon is better in the dexter and annex areas, however.)
 
 - A W A I T : Rewrite 'howto_update_gb64.txt' when the next GameBase64 update v20 arrives.
   See the .txt file for a few preliminary things to test.

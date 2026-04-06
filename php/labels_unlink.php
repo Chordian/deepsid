@@ -2,7 +2,7 @@
 /**
  * DeepSID
  *
- * Unlink all labels from a file. (A label is a production title factoid.)
+ * Unlink all labels from a file. (A label is a primary release factoid.)
  * 
  * @uses		$_POST['fullname']
  * 

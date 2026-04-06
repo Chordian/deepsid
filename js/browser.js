@@ -1936,7 +1936,7 @@ Browser.prototype = {
 								if (this.isUploadFolder() && file.factoidtop == "5:00")
 									file.factoidtop = '<div>5:00</div>';	// Undefined in SH folder
 								break;
-							case 12:	// Production title
+							case 12:	// Primary release (previously production title)
 								factoidLabel = "prod";
 								if (file.labeltype == "C64 Music")
 									factoidLabel = "music";
@@ -1978,7 +1978,7 @@ Browser.prototype = {
 									// Define a bar width
 									fbarWidth = (file.fvaluebottom * 1.25) + 54; // Text width
 								break;
-							case 12:	// Production title
+							case 12:	// Primary release (previously production title)
 								factoidLabel = "prod";
 								if (file.labeltype == "C64 Music")
 									factoidLabel = "music";
@@ -2725,16 +2725,19 @@ Browser.prototype = {
 	 * 
 	 * Also handles the tab notification counter. 
 	 * 
-	 * @param {string} type				Optional; e.g. 'sid' or 'release'
-	 * @param {number} id				Optional; ID number used by CSDb
-	 * @param {boolean} canReturn		Optional; if TRUE, coming from list
-	 * @param {boolean} overrideCache	Optional; if TRUE, read from CSDb
+	 * @param {string} type					Optional; e.g. 'sid' or 'release'
+	 * @param {number} id					Optional; ID number used by CSDb
+	 * @param {boolean} canReturn			Optional; if TRUE, coming from list
+	 * @param {boolean} overrideCache		Optional; if TRUE, read from CSDb
+	 * @param {boolean} overridePrimary		Optional; if TRUE, ignore labels
 	 */
-	getCSDb: function(type, id, canReturn, overrideCache) {
+	getCSDb: function(type, id, canReturn, overrideCache, overridePrimary) {
 		if (main.miniPlayer || main.isMobile || this.isTempTestFile()) return;
 		if (this.csdb) this.csdb.abort();
 		$("#topic-csdb").empty().append(this.loadingSpinner("csdb"));
 		$("#sticky-csdb").empty();
+
+		this.csdbPrimaryBack = false; // When a primary release page shows a 'BACK' button
 
 		var loadingCSDb = setTimeout(function() {
 			// Fade in a GIF loading spinner if the AJAX call takes a while
@@ -2747,13 +2750,14 @@ Browser.prototype = {
 		var copyright = lastLine.substring(lastLine.indexOf(" ") + 1);
 
 		var readFromCSDb = typeof overrideCache !== "undefined" && overrideCache ? 1 : 0;
+		var ignorePrimary = typeof overridePrimary !== "undefined" && overridePrimary ? 1 : 0;
 
 		// Determine the arguments to be sent to the PHP file
 		// The 'this.csdbArgs' variable is also used by the refresh cache link (see 'main.js')
 		this.csdbArgs = typeof type !== "undefined" && typeof id !== "undefined"
-			? { type: type, id: id, copyright: copyright, override: readFromCSDb }
+			? { type: type, id: id, copyright: copyright, override: readFromCSDb, noprimary: ignorePrimary }
 			: { fullname: browser.playlist[browser.songPos].fullname.substr(this.ROOT_HVSC.length + 1),
-				override: readFromCSDb };
+				override: readFromCSDb, noprimary: ignorePrimary };
 
 		this.csdb = $.get("php/csdb.php", this.csdbArgs, function(data) {
 			this.validateData(data, function(data) {
@@ -2776,6 +2780,9 @@ Browser.prototype = {
 					// Sometimes a 'BACK' button is missing (e.g. if a link chain icon click was cached)
 					if (data.sticky.indexOf("go-back") === -1)
 						data.sticky = data.sticky.replace('</h2>', '</h2><button id="go-back">Back</button>');
+				} else if (data.primary) {
+					// A primary release shows a 'BACK' button because it overrides a SID list
+					this.csdbPrimaryBack = true;
 				} else {
 					// A single release page should never show a 'BACK' button
 					data.sticky = $("<div>").html(data.sticky).find("#go-back, #go-back-init").remove().end().html();
@@ -3631,7 +3638,7 @@ Browser.prototype = {
 	},
 
 	/**
-	 * Add a label (production title) as a factoid.
+	 * Add a label (primary release) as a factoid.
 	 * 
 	 * This will process a CSDb release or a GB64 game depending on which page tab
 	 * is currently being displayed.

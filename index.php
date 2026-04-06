@@ -1479,7 +1479,12 @@
 
 								<button id="setting-first-subtune" class="button-edit button-toggle button-off">Off</button>
 								<label for="setting-first-subtune" class="unselectable">Always start at the <b>first sub tune</b> in a song instead of the default set by HVSC</label>
-								
+
+								<div class="space"></div>
+
+								<button id="setting-primary-release" class="button-edit button-toggle button-off">Off</button>
+								<label for="setting-primary-release" class="unselectable">Show <b>primary release</b> in the CSDb tab when this factoid has been defined for the song</label>
+
 								<div class="space splitline"></div>
 
 								<h3>Auto-progress</h3>
@@ -1526,7 +1531,7 @@
 										<option value="8">Start and end address (hex)</option>
 										<option value="9">HVSC/CGSC update version</option>
 										<option value="11">Number of CSDb entries</option>
-										<option value="12">Production title</option>
+										<option value="12">Primary release</option>
 										<?php if ($is_admin): ?>
 											<option class="factoid-admin" value="1000">Database ID</option>
 											<option class="factoid-admin" value="1001">SID ID on CSDb</option>
@@ -1550,7 +1555,7 @@
 										<option value="8">Start and end address (hex)</option>
 										<option value="9">HVSC/CGSC update version</option>
 										<option value="11">Number of CSDb entries</option>
-										<option value="12">Production title</option>
+										<option value="12">Primary release</option>
 										<?php if ($is_admin): ?>
 											<option class="factoid-admin" value="1000">Database ID</option>
 											<option class="factoid-admin" value="1001">SID ID on CSDb</option>
@@ -1964,6 +1969,14 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>April 6, 2026</h3>
+						<ul>
+							<li>The 'Production title' factoid has been renamed to 'Primary release' instead.</li>
+							<li>Added a new user setting to toggle the 'Primary release' feature. When enabled and a primary release factoid
+								exists for a song, the CSDb tab opens that release page directly instead of listing multiple releases.
+								A 'BACK' button is available when multiple releases exist. Use this new feature for a more focused experience.</li>
+						</ul>
 
 						<h3>April 4, 2026</h3>
 						<ul>
