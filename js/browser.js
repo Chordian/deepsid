@@ -744,6 +744,8 @@ Browser.prototype = {
 
 				} else {
 
+					this.handlePrimaryRelease();
+
 					ctrls.subtuneMax = SID.getSongInfo().maxSubsong;
 					ctrls.subtuneCurrent = subtune;
 					ctrls.updateSubtuneText();
@@ -2268,6 +2270,32 @@ Browser.prototype = {
 			}
 		}
 		return this.secondsLength;
+	},
+
+	/**
+	 * Adapt 'CSDb' or 'GB64' tabs if primary release is active.
+	 */
+	handlePrimaryRelease: function() {
+		var labelSite = browser.playlist[browser.songPos].labelsite.toLowerCase(),
+			selectedTab = $("#tabs .selected").attr("data-topic"),
+			$tabGB64 = $("#tab-gb64"), $tabCSDb = $("#tab-csdb");
+
+		$("#tab-csdb,#tab-gb64").removeClass("raised");
+
+		// If the 'Primary release' feature is activated
+		if (main.getSettingValue("primary-release")) {
+			// Click 'GB64' tab if the currently selected tab is 'CSDb'
+			if (labelSite == "gb64") {
+				if (selectedTab === "csdb")
+					$tabGB64.trigger("click")
+				$tabGB64.addClass("raised");
+			// Click 'CSDb' tab if the currently selected tab is 'GB64'
+			} else if (labelSite == "csdb") {
+				if (selectedTab === "gb64")
+					$tabCSDb.trigger("click")
+				$tabCSDb.addClass("raised");
+			}
+		}
 	},
 
 	/**

@@ -4764,6 +4764,7 @@ input[type=range]::-ms-track {
 			height: 22px;
 			font: normal 13px/0 "Montserrat", sans-serif;
 			padding-top: 10px;
+			padding-bottom: 0;
 			color: var(--color-tab-text-color);
 			margin-right: 3px;
 			border-top: 1px solid var(--color-tab-border);
@@ -4775,7 +4776,19 @@ input[type=range]::-ms-track {
 			background: var(--color-tab-bg);
 			z-index: 1;
 			cursor: pointer;
+			transition: top 0.5s ease, padding 0.5s ease;	/* To raise tab smoothly for primary release */
 		}
+
+			#tabs .tab:after {
+				content: "PRIMARY";
+				position: absolute;
+				top: 24px;
+				left: 9.5px;
+				font: bold 8px/0 "Montserrat", sans-serif;
+				color: var(--color-text-monitor);
+				opacity: 0;
+				transition: opacity 0.2s linear;
+			}
 
 			#sundry-tabs .tab {
 				top: 7.5px;
@@ -4837,6 +4850,23 @@ input[type=range]::-ms-track {
 			margin-left: 3px;
 			margin-right: 0;
 		}
+
+		/* A raised 'CSDb' or 'GB64' tab to indicate a primary release */
+		#tabs .raised {
+			top: 18.5px;
+			padding-bottom: 24px;
+		}
+
+			#tabs .raised:after {
+				content: "PRIMARY";
+				position: absolute;
+				top: 24px;
+				left: 9.5px;
+				font: bold 8px/0 "Montserrat", sans-serif;
+				color: var(--color-text-monitor);
+				opacity: 1;
+				transition-delay: 0.1s;
+			}
 
 		/* Small value bubbles at the tab corners */
 		#tabs .notification {

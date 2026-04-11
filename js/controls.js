@@ -241,6 +241,8 @@ Controls.prototype = {
 
 				if (!error) {
 
+					browser.handlePrimaryRelease();
+
 					if (!SID.emulatorFlags.offline) {
 						this.state("play/stop", "enabled");
 						$("#volume").prop("disabled", false);

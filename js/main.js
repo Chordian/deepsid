@@ -2377,6 +2377,7 @@ main.bindDexterCSDbEvents = function() {
 		if (browser.csdbPrimaryBack) {
 			// The primary release was hiding a SID list - show it now
 			browser.getCSDb(undefined, undefined, undefined, undefined, true);
+			$("#tab-csdb").removeClass("raised");
 			return;
 		} else if (main.cacheBeforeCompo === "" && main.cacheCSDb === "") {
 			// We have been redirecting recently so the tab must be refreshed properly
@@ -2531,6 +2532,7 @@ main.bindDexterGB64Events = function() {
 		if (browser.gb64PrimaryBack) {
 			// The primary release was hiding a games list - show it now
 			browser.getGB64(undefined, true);
+			$("#tab-gb64").removeClass("raised");
 		} else {
 			$("#sticky-gb64").empty().append('<h2 style="display:inline-block;margin-top:0;">GameBase64</h2>');
 			// Load the cache again

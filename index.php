@@ -1975,6 +1975,10 @@
 							<li>When the 'Primary release' feature is enabled and a primary release factoid for a GB64 page
 								exists for a song, the GB64 tab opens that page directly instead of listing multiple games.
 								A 'BACK' button is then also shown.</li>
+							<li>When the 'Primary release' feature is enabled and a primary release factoid exists for a song,
+								either the 'CSDb' or the 'GB64' tab is visually highlighted with an animation and a 'PRIMARY' label.
+								The relevant tab is also selected automatically, unless you have selected a completely different tab
+								than those two tabs.</li>
 						</ul>
 
 						<h3>April 6, 2026</h3>

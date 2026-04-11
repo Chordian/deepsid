@@ -15,27 +15,14 @@ ONGOING
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- 2026-04-05 11:19:46 - 2a0a:ef40:9a2:6901:8dc4:4087:3a4:4085 - Line 526 in ValidateLogin(): "A database error occurred; please try again later"
-  Reason: SQLSTATE[22001]: String data, right truncated: 1406 Data too long for column 'last_failed_ip' at row 1553
-  Probably because of IPv6. Make the varchar() bigger. (Ask ChatGPT if in doubt.)
-
-- PRIMARY RELEASE:
-
-  - Continue with the tab click exchange.
-
-  - When other tab (CSDb versus GB64) is production target, select and flash it a few times,
-    but only if one of those two are already selected. Third tab? Just flash one of the two.
-
-  - When a primary release is shown in the CSDb tab, show the label "PRIMARY RELEASE" somewhere
-    too. Probably slightly smaller font and grayed color. Make sure it's not grabbed by the
-    cache system; i.e. add it from JavaScript.
-
-  - Should label (e.g. in context menu) be renamed to "primary release" instead?
+- Should label (e.g. in context menu) be renamed to "primary release" instead?
 
 - Maybe the 'C' focus icon should be smaller again in browser lists? (I still think the full
   size icon is better in the dexter and annex areas, however.)
 
-- Remove '$debug' in everywhere in PHP and JS files - clog() is a much better solution.
+- Remove '$debug' everywhere in PHP and JS files - clog() is a much better solution.
+
+- Rename 'getSettingValue()' to 'getUserSetting()' everywhere instead.
 
 - A W A I T : Rewrite 'howto_update_gb64.txt' when the next GameBase64 update v20 arrives.
   See the .txt file for a few preliminary things to test.
