@@ -1483,7 +1483,7 @@
 								<div class="space"></div>
 
 								<button id="setting-primary-release" class="button-edit button-toggle button-off">Off</button>
-								<label for="setting-primary-release" class="unselectable">Show <b>primary release</b> in the CSDb tab when this factoid has been defined for the song</label>
+								<label for="setting-primary-release" class="unselectable">Show <b>primary release</b> in the CSDb and GB64 tabs when this factoid has been defined for the song</label>
 
 								<div class="space splitline"></div>
 
@@ -1970,12 +1970,20 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>April 11, 2026</h3>
+						<ul>
+							<li>When the 'Primary release' feature is enabled and a primary release factoid for a GB64 page
+								exists for a song, the GB64 tab opens that page directly instead of listing multiple games.
+								A 'BACK' button is then also shown.</li>
+						</ul>
+
 						<h3>April 6, 2026</h3>
 						<ul>
 							<li>The 'Production title' factoid has been renamed to 'Primary release' instead.</li>
-							<li>Added a new user setting to toggle the 'Primary release' feature. When enabled and a primary release factoid
+							<li>Added a new user setting to toggle the 'Primary release' feature.</li> 
+							<li>When the 'Primary release' feature is enabled and a primary release factoid for a CSDb release
 								exists for a song, the CSDb tab opens that release page directly instead of listing multiple releases.
-								A 'BACK' button is available when multiple releases exist. Use this new feature for a more focused experience.</li>
+								A 'BACK' button is then also shown. Use this new feature for a more focused experience.</li>
 						</ul>
 
 						<h3>April 4, 2026</h3>

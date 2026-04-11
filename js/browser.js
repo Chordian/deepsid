@@ -3023,9 +3023,10 @@ Browser.prototype = {
 	 * 
 	 * Also handles the tab notification counter. 
 	 * 
-	 * @param {number} optionalID		If specified, the ID to show a specific sub page
+	 * @param {number} optionalID			Optional; the ID to show a specific sub page
+	 * @param {number} overridePrimary		Optional; if TRUE, ignore labels
 	 */
-	getGB64: function(optionalID) {
+	getGB64: function(optionalID, overridePrimary) {
 
 		if (main.miniPlayer || main.isMobile || this.isTempTestFile()) return;
 		if (this.gb64) this.gb64.abort();
@@ -3037,11 +3038,13 @@ Browser.prototype = {
 			$("#loading-gb64").fadeIn(500);
 		}, 250);
 
-		thisFullname = browser.playlist[browser.songPos].fullname.substr(this.ROOT_HVSC.length + 1); 
+		var thisFullname = browser.playlist[browser.songPos].fullname.substr(this.ROOT_HVSC.length + 1);
+		var thisFileID = browser.playlist[browser.songPos].id;
+		var ignorePrimary = typeof overridePrimary !== "undefined" && overridePrimary ? 1 : 0;
 
 		var params = typeof optionalID === "undefined"
-			? { fullname: thisFullname }
-			: { id: optionalID };
+			? { fullname: thisFullname, fileid: thisFileID, noprimary: ignorePrimary }
+			: { id: optionalID, fileid: thisFileID, noprimary: ignorePrimary };
 
 		this.gb64 = $.get("php/gb64.php", params, (data) => {
 			this.validateData(data, (data) => {
@@ -3051,6 +3054,8 @@ Browser.prototype = {
 				$("#topic-gb64").empty().append(data.html)
 					.css("visibility", "visible");
 				main.resetDexterScrollBar("gb64");
+
+				this.gb64PrimaryBack = data.primary;
 
 				// If there are any entries then show a notification number on the 'GB64' tab (if not in focus)
 				if (data.count > 0 && $("#tabs .selected").attr("data-topic") !== "gb64" && !this.isCGSC())

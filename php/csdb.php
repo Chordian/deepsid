@@ -7,7 +7,7 @@
  * RELEASE entry especially made for that particular song.
  * 
  * In July 2025 this was extended with a cache system. It loads from the cache
- * if a cache file exists and the latest entry is older than 30 days.
+ * if a cache file exists and the latest entry is older than [30] days.
  * 
  * @uses		$_GET['fullname']
  * @uses		$_GET['override']			Set to 1 to override cache read

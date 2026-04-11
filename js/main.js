@@ -2528,11 +2528,16 @@ main.bindDexterGB64Events = function() {
 	 * Clicking the 'BACK' button on a GameBase64 page to show the list of them again.
 	 */
 	$("#sticky-gb64").on("click", "#go-back-gb64", function() {
-		$("#sticky-gb64").empty().append('<h2 style="display:inline-block;margin-top:0;">GameBase64</h2>');
-		// Load the cache again
-		$("#topic-gb64")/*.css("visibility", "hidden")*/.empty().append(main.cacheGB64);
-		// Also set scroll position to where we clicked last time
-		main.setScrollTopInstantly("#page", main.cacheGB64TabScrollPos);
+		if (browser.gb64PrimaryBack) {
+			// The primary release was hiding a games list - show it now
+			browser.getGB64(undefined, true);
+		} else {
+			$("#sticky-gb64").empty().append('<h2 style="display:inline-block;margin-top:0;">GameBase64</h2>');
+			// Load the cache again
+			$("#topic-gb64")/*.css("visibility", "hidden")*/.empty().append(main.cacheGB64);
+			// Also set scroll position to where we clicked last time
+			main.setScrollTopInstantly("#page", main.cacheGB64TabScrollPos);
+		}
 	});
 }
 

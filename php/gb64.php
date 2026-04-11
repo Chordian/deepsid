@@ -6,10 +6,14 @@
  * contained in the database) or a specific entry sub page.
  * 
  * @uses		$_GET['fullname']			for a page with links to sub pages
+ * @uses		$_GET['fileid']				file id of the song
+ * @uses		$_GET['noprimary']			Set to 1 to override primary release
  * 
  * 	- OR -
  * 
  * @uses		$_GET['id']					for a sub page with a specific entry
+ * @uses		$_GET['fileid']				file id of the song
+ * @uses		$_GET['noprimary']			Set to 1 to override primary release
  * 
  * @used-by		browser.js
  */
@@ -18,6 +22,13 @@ require_once("class.account.php"); // Includes setup
 
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest')
 	die("Direct access not permitted.");
+
+$primary_back_button = false;
+$user_id = $account->CheckLogin() ? $account->UserID() : 0;
+
+// --------------------------------------------------------------------------
+// FUNCTIONS
+// --------------------------------------------------------------------------
 
 /**
  * Change e.g. "Moon, The" to "The Moon" instead.
@@ -206,7 +217,9 @@ function ReadGB64DB($id) {
 	);
 }
 
-/***** START *****/
+// --------------------------------------------------------------------------
+// START
+// --------------------------------------------------------------------------
 
 try {
 
@@ -262,9 +275,48 @@ try {
 	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 }
 
+// --------------------------------------------------------------------------
+// PRIMARY RELEASE (depends on a user setting)
+// --------------------------------------------------------------------------
+
+// Any SID can have a label (which shows a primary release). If this is present (and the user has activated the
+// corresponding feature in the settings) a specific sub page for that label should be shown instead.
+if ($page_id == 0 && !$_GET['noprimary']) {
+
+	// Get the user's settings
+	$users = $db->query('SELECT flags FROM users WHERE id = '.$user_id)->fetch(PDO::FETCH_OBJ);
+	$settings = unserialize($users->flags);
+
+	// Does the user want to see the primary release?
+	if ($settings['primaryrelease']) {
+		// Get the ID of the primary release label (if the SID row has this)
+		$labels_lookup = $db->query('SELECT labels_id FROM labels_lookup WHERE files_id = '.$_GET['fileid'].' LIMIT 1');
+		$row = $labels_lookup->fetch(PDO::FETCH_ASSOC);
+
+		if ($row) {
+			// Get the site reference (CSDb or GB64) and the ID to the page on the referenced site
+			$labels_info = $db->query('SELECT site, site_id FROM labels_info WHERE id = '.$row['labels_id'].' LIMIT 1');
+			$row = $labels_info->fetch(PDO::FETCH_ASSOC);
+
+			if ($row) {
+				if (strtolower($row['site']) == 'gb64') {
+					$primary_back_button = true;
+					$page_id = $row['site_id'];
+				}
+			}
+		}
+	}
+}
+
+// --------------------------------------------------------------------------
+// BUILD HTML
+// --------------------------------------------------------------------------
+
 if ($page_id) {
 
-	/***** SUB PAGE *****/
+	// --------------------------------------------------------------------------
+	// SUB PAGE ONLY
+	// --------------------------------------------------------------------------
 	
 	$data = ReadGB64DB($page_id);
 
@@ -285,7 +337,7 @@ if ($page_id) {
 
 	// Build the sticky header HTML for the '#sticky' DIV
 	$sticky = '<h2 class="ellipsis" style="display:inline-block;margin:0 0 -8px 0;max-width:720px;" title="'.$data['title'].'">'.$data['title'].'</h2>'.
-		(isset($_GET['id']) ? '<button id="go-back-gb64">Back</button>' : '').
+		(isset($_GET['id']) || $primary_back_button ? '<button id="go-back-gb64">Back</button>' : '').
 		'<div class="corner-icons">'.
 			'<a href="https://gb64.com/game.php?id='.$page_id.'" title="See this at GameBase64" target="_blank"><svg class="outlink" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg></a>'.
 		'</div>';
@@ -328,7 +380,9 @@ if ($page_id) {
 
 } else {
 
-	/***** LIST *****/
+	// --------------------------------------------------------------------------
+	// LIST
+	// --------------------------------------------------------------------------
 
 	$rows = '';
 
@@ -364,5 +418,16 @@ if ($page_id) {
 			$rows.
 		'</table>'.$footnote;
 }
-echo json_encode(array('status' => 'ok', 'sticky' => $sticky, 'html' => $html, 'count' => count($gbIds)));
+
+// --------------------------------------------------------------------------
+// FINAL OUTPUT
+// --------------------------------------------------------------------------
+
+echo json_encode(array(
+	'status'	=> 'ok',
+	'sticky'	=> $sticky,
+	'html'		=> $html,
+	'count' 	=> count($gbIds),
+	'primary'	=> $primary_back_button,
+));
 ?>
