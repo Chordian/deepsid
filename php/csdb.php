@@ -30,7 +30,6 @@ require_once("csdb_comments.php");
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest')
 	die("Direct access not permitted.");
 
-$debug = '';
 $primary_back_button = false;
 $amount_releases = 0;
 $scener_handle = array();
@@ -105,7 +104,7 @@ function relative_age_text($timestamp) {
  * @param		string		$error_message		Message to display if no cache
  */
 function serve_cache_or_error($cache_file, $error_message) {
-	global $primary_back_button, $debug;
+	global $primary_back_button;
     if (file_exists($cache_file)) {
         $cached = json_decode(gzdecode(file_get_contents($cache_file)), true);
         echo json_encode(array(
@@ -115,13 +114,12 @@ function serve_cache_or_error($cache_file, $error_message) {
                          '<i><small>Generated from cache (CSDb unreachable)</small></i>',
             'count'   => $cached['count'],
             'entries' => $cached['entries'],
-			'primary' => $primary_back_button,
-			'debug'   => $debug
+			'primary' => $primary_back_button
         ));
         exit;
     }
     // No cache available – show fallback error
-    die(json_encode(array('status' => 'warning', 'sticky' => '<h2 style="margin-top:0;">CSDb</h2>', 'html' => $error_message, 'debug' => $debug)));
+    die(json_encode(array('status' => 'warning', 'sticky' => '<h2 style="margin-top:0;">CSDb</h2>', 'html' => $error_message)));
 }
 
 /**
@@ -217,7 +215,7 @@ if (isset($_GET['fullname'])) {
 
 	if (empty($csdb_type)) {
 		$sticky = '<h2 style="display:inline-block;margin-top:0;">CSDb</h2>';
-		die(json_encode(array('status' => 'warning', 'sticky' => $sticky, 'html' => '<p style="margin-top:0;"><i>No CSDb entry available.</i></p>', 'debug' => $debug)));
+		die(json_encode(array('status' => 'warning', 'sticky' => $sticky, 'html' => '<p style="margin-top:0;"><i>No CSDb entry available.</i></p>')));
 	}
 
 	// If there is just one release then we don't need to show the SID list first. The release page is then shown
@@ -374,8 +372,7 @@ if (file_exists($cache_file)) {
 							')</span> - <a id="refresh-cache" href="">Refresh cache</a></small></i>',
 			'count'   => $cached_data['count'],
 			'entries' => $cached_data['entries'],
-			'primary' => $primary_back_button,
-			'debug'	  => $debug
+			'primary' => $primary_back_button
 		));
         exit;
     }
@@ -911,6 +908,5 @@ echo json_encode(array(
 	'html'		=> $html.'<i><small>Generated using the <a href="https://csdb.dk/webservice/" target="_blank">CSDb web service</a></small></i>',
 	'count'		=> $amount_releases,
 	'entries'	=> $sid_entries,
-	'primary'	=> $primary_back_button,
-	'debug'		=> $debug));
+	'primary'	=> $primary_back_button));
 ?>

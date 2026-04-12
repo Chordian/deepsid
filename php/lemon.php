@@ -21,8 +21,6 @@ define('LEMON', 'https://lemon.ams3.cdn.digitaloceanspaces.com/c64/music/hvsc/mp
 if (!isset($_GET['file']) || !isset($_GET['subtune']))
 	die(json_encode(array('status' => 'error', 'message' => 'You must specify \'file\' and \'subtune\' as GET variables.')));
 
-$debug = '';
-
 $file = str_replace('hvsc', '', $_GET['file']);
 $subtune = $_GET['subtune'] + 1;
 

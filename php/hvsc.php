@@ -115,7 +115,7 @@ function SongLengthToMilliseconds(?string $length): ?int {
 // --------------------------------------------------------------------------
 
 $found = $symlist_folder_id = $number_of_pages = 0;
-$debug = $incompatible = $owner = $new_uploads = $message = '';
+$incompatible = $owner = $new_uploads = $message = '';
 $user_id = $account->CheckLogin() ? $account->UserID() : 0;
 $isSearching = isset($_GET['searchQuery']) && !empty($_GET['searchQuery']);
 $isPersonalSymlist = substr($_GET['folder'], 0, 2) == '/!';
@@ -1624,6 +1624,5 @@ echo json_encode(array(
 	'owner' 		=> $owner,
 	'compo' 		=> !empty($compoName),
 	'today' 		=> date('Y-m-d H:i:s', strtotime(TIME_ADJUST)),
-	'uploads' 		=> $new_uploads,
-	'debug' 		=> $debug));
+	'uploads' 		=> $new_uploads));
 ?>

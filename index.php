@@ -1970,6 +1970,11 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>April 12, 2026</h3>
+						<ul>
+							<li>Fixed a NULL bug that disabled parts of DeepSID.</li>
+						</ul>
+
 						<h3>April 11, 2026</h3>
 						<ul>
 							<li>When the 'Primary release' feature is enabled and a primary release factoid for a GB64 page

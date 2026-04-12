@@ -1510,8 +1510,6 @@ Browser.prototype = {
 			}, function(data) {
 				this.validateData(data, function(data) {
 
-					if (data.debug !== "") console.log(data.debug);
-
 					clearTimeout(loading);
 					$("#loading").hide();
 					ctrls.state("root/back", "enabled");
@@ -2276,14 +2274,14 @@ Browser.prototype = {
 	 * Adapt 'CSDb' or 'GB64' tabs if primary release is active.
 	 */
 	handlePrimaryRelease: function() {
-		var labelSite = browser.playlist[browser.songPos].labelsite.toLowerCase(),
+		var labelSite = browser.playlist[browser.songPos]?.labelsite?.toLowerCase(),
 			selectedTab = $("#tabs .selected").attr("data-topic"),
 			$tabGB64 = $("#tab-gb64"), $tabCSDb = $("#tab-csdb");
 
 		$("#tab-csdb,#tab-gb64").removeClass("raised");
 
 		// If the 'Primary release' feature is activated
-		if (main.getSettingValue("primary-release")) {
+		if (labelSite && main.getSettingValue("primary-release")) {
 			// Click 'GB64' tab if the currently selected tab is 'CSDb'
 			if (labelSite == "gb64") {
 				if (selectedTab === "csdb")
@@ -2789,8 +2787,6 @@ Browser.prototype = {
 
 		this.csdb = $.get("php/csdb.php", this.csdbArgs, function(data) {
 			this.validateData(data, function(data) {
-
-				if (data.debug !== "") console.log(data.debug);
 
 				// Gather the group names used by the scener (if applicable)
 				var groupTexts = [];

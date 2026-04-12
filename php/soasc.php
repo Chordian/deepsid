@@ -43,8 +43,6 @@ $soasc_models = array(
 if (!isset($_GET['file']) || !isset($_GET['sidModel']))
 	die(json_encode(array('status' => 'error', 'message' => 'You must specify \'file\', \'sidModel\' and \'subtune\' as GET variables.')));
 
-$debug = '';
-
 $file = str_replace('hvsc', '', $_GET['file']);
 $subtune = $_GET['subtune'] + 1;
 $model = $soasc_models[$_GET['sidModel']];
