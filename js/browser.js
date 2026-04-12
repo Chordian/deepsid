@@ -1936,7 +1936,7 @@ Browser.prototype = {
 								if (this.isUploadFolder() && file.factoidtop == "5:00")
 									file.factoidtop = '<div>5:00</div>';	// Undefined in SH folder
 								break;
-							case 12:	// Primary release (previously production title)
+							case 12:	// Primary release (previously production title) - label
 								factoidLabel = "prod";
 								if (file.labeltype == "C64 Music")
 									factoidLabel = "music";
@@ -1978,7 +1978,7 @@ Browser.prototype = {
 									// Define a bar width
 									fbarWidth = (file.fvaluebottom * 1.25) + 54; // Text width
 								break;
-							case 12:	// Primary release (previously production title)
+							case 12:	// Primary release (previously production title) - label
 								factoidLabel = "prod";
 								if (file.labeltype == "C64 Music")
 									factoidLabel = "music";

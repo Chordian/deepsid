@@ -1531,7 +1531,7 @@
 										<option value="8">Start and end address (hex)</option>
 										<option value="9">HVSC/CGSC update version</option>
 										<option value="11">Number of CSDb entries</option>
-										<option value="12">Primary release</option>
+										<option value="12">Primary release (label)</option>
 										<?php if ($is_admin): ?>
 											<option class="factoid-admin" value="1000">Database ID</option>
 											<option class="factoid-admin" value="1001">SID ID on CSDb</option>
@@ -1555,7 +1555,7 @@
 										<option value="8">Start and end address (hex)</option>
 										<option value="9">HVSC/CGSC update version</option>
 										<option value="11">Number of CSDb entries</option>
-										<option value="12">Primary release</option>
+										<option value="12">Primary release (label)</option>
 										<?php if ($is_admin): ?>
 											<option class="factoid-admin" value="1000">Database ID</option>
 											<option class="factoid-admin" value="1001">SID ID on CSDb</option>

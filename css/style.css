@@ -3881,12 +3881,12 @@ input[type=range]::-ms-track {
 
 				.folder-focus .cextra {
 					float: left;
-					position: relative;
-					top: 0;				/*  3px */
-					right: -1.5px;		/*  N/A */
-					height: 18px;		/* 13px */
-					width: 18px;		/* 13px */
-					background: var(--svg-url-circle-c) 0 0 / 18px 18px no-repeat;
+					position: relative;	/*  Small */ /* Bigger */
+					top: 3px;			/*    3px */ /*      0 */
+					/*right: -1.5px;*/	/*    N/A */ /* -1.5px */
+					height: 13px;		/*   13px */ /*   18px */
+					width: 13px;		/*   13px */ /*   18px */
+					background: var(--svg-url-circle-c) 0 0 / 13px 13px no-repeat;	/* 13px 13px */ /* 18px 18px */
 				}
 
 			#focus-explainer {

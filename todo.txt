@@ -15,11 +15,6 @@ ONGOING
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- Should label (e.g. in context menu) be renamed to "primary release" instead?
-
-- Maybe the 'C' focus icon should be smaller again in browser lists? (I still think the full
-  size icon is better in the dexter and annex areas, however.)
-
 - A W A I T : Rewrite 'howto_update_gb64.txt' when the next GameBase64 update v20 arrives.
   See the .txt file for a few preliminary things to test.
 
@@ -502,6 +497,11 @@ PROBABLY NOT?
   tags is a complicated SQL query that I'd rather not merge with the existing "All" search. But
   even more important, I fear that adding tags too will introduce a situation where searching for
   almost anything will introduce a ton of annoying "noise" results.
+
+- Should label (e.g. in context menu and search "drop-up" box) be renamed to "primary release"
+  instead? Not sure. In the search "drop-up" box it would then be logical to rename it to "primary"
+  as "primary release" would be too long, but I fear that would just confuse users. UPDATE: I have
+  now renamed 'Primary release' in factoid texts to 'Primary release (label)' instead.
 
 - I still ponder if hiding "Compo" is okay. If hiding it, perhaps consider an alert to pop up (or
   show a message in the dialog box) saying that it will be hidden because the ranking should

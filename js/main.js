@@ -35,7 +35,7 @@ const FACTOID_MESSAGE = [
 	"HVSC or CGSC update version",		// 9
 	"[ Unused ]",						// 10
 	"Number of CSDb entries",			// 11
-	"Production label",					// 12
+	"Primary release (label)",			// 12
 ];
 
 const FACTOID_MESSAGE_ADMIN = [
@@ -1048,6 +1048,8 @@ var main = {
 	/**
 	 * Settings: Get a value from an ON/OFF toggle button.
 	 * 
+	 * This is not related to admin settings.
+	 * 
 	 * @param {string} id		Part of the ID to be appended
 	 * 
 	 * @return {*}				The value
@@ -2036,11 +2038,11 @@ main.bindAnnexEvents = function() {
 			$img.one("load", function() {
 				localStorage.setItem(k, String(now));
 			}).attr("src", forcedSrc).on("error", function() {
-				// If quota exceeded (429) → revert to cached image
+				// If quota exceeded (429) - revert to cached image
 				$(this).attr("src", fallback);
 			});
 		}
-		// Don't preventDefault → link still opens in new tab
+		// Don't preventDefault - link still opens in new tab
 	});
 
 	/**
