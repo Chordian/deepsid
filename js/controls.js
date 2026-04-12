@@ -130,7 +130,7 @@ Controls.prototype = {
 			$("#time-bar").empty().append('<div></div>');
 
 			// Keep skipping subtunes if a setting is set to ignore those of less than 10 seconds
-			if (isAutoProgress && main.getSettingValue("skip-short"))  {
+			if (isAutoProgress && main.getUserSetting("skip-short"))  {
 				while (browser.getLength(this.subtuneCurrent) < 10) {
 					this.subtuneCurrent++;
 					if (this.subtuneCurrent >= this.subtuneMax) {
@@ -179,12 +179,12 @@ Controls.prototype = {
 						$("#skip-next").addClass("disabled");
 						// Don't play the song in the bottom if a setting is supposed to skip it
 						if (isAutoProgress) {
-							if ((main.getSettingValue("skip-bad") && (songRating == 1 || songRating == 2)) ||
-								(main.getSettingValue("skip-short") && songLength < 10 && !moreSubtunes)) {
+							if ((main.getUserSetting("skip-bad") && (songRating == 1 || songRating == 2)) ||
+								(main.getUserSetting("skip-short") && songLength < 10 && !moreSubtunes)) {
 								$("#stop").trigger("mouseup");
 								SID.stop();
 								return false;
-							} else if (main.getSettingValue("skip-short") && songLength < 10) {
+							} else if (main.getUserSetting("skip-short") && songLength < 10) {
 								// The default is too short, but what about the subsequent sub tunes in it?
 								$("#subtune-plus").trigger("mouseup", false);
 								return false;
@@ -197,8 +197,8 @@ Controls.prototype = {
 						break;
 					}
 				} while ($("#songs tr").eq(browser.songPos + browser.subFolders).hasClass("disabled") || 
-					(isAutoProgress && main.getSettingValue("skip-bad") && (songRating == 1 || songRating == 2)) ||
-					(isAutoProgress && main.getSettingValue("skip-short") && songLength < 10 && !moreSubtunes));
+					(isAutoProgress && main.getUserSetting("skip-bad") && (songRating == 1 || songRating == 2)) ||
+					(isAutoProgress && main.getUserSetting("skip-short") && songLength < 10 && !moreSubtunes));
 			} else {
 				do {
 					browser.songPos--;
@@ -217,9 +217,9 @@ Controls.prototype = {
 			if ($("#songs tr").eq(browser.songPos + browser.subFolders).hasClass("disabled")) return false;
 
 			// Override default sub tune to first if demanded by a setting
-			var subtune = main.getSettingValue("first-subtune") ? 0 : browser.playlist[browser.songPos].startsubtune;
+			var subtune = main.getUserSetting("first-subtune") ? 0 : browser.playlist[browser.songPos].startsubtune;
 			// The default is too short, but what about the subsequent sub tunes in it?
-			if (isAutoProgress && main.getSettingValue("skip-short") && songLength < 10) {
+			if (isAutoProgress && main.getUserSetting("skip-short") && songLength < 10) {
 				while (browser.getLength(subtune) < 10) {
 					subtune++;
 					if (subtune >= browser.playlist[browser.songPos].subtunes - 1) {
@@ -298,7 +298,7 @@ Controls.prototype = {
 				browser.moveKeyboardSelection(browser.kbSelectedRow, false);
 
 				// A timed out tune should only auto-center if a setting demands it
-				if (!isAutoProgress || main.getSettingValue("mark-tune")) {
+				if (!isAutoProgress || main.getUserSetting("mark-tune")) {
 					var rowPos = $("#folders tr").eq($("tr.selected").index())[0].offsetTop;
 					var halfway = $("#folders").height() / 2 - 26; // Last value is half of SID file row height
 					$("#folders").scrollTop(rowPos > halfway ? rowPos - halfway : 0);

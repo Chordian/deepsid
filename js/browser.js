@@ -717,7 +717,7 @@ Browser.prototype = {
 			this.showSpinner($(event.target).parents("tr").children("td.sid"));
 
 			// Override default sub tune to first if demanded by a setting
-			var subtuneStart = main.getSettingValue("first-subtune") ? 0 : this.playlist[this.songPos].startsubtune;
+			var subtuneStart = main.getUserSetting("first-subtune") ? 0 : this.playlist[this.songPos].startsubtune;
 			// Either default start subtune, or an override from a "?subtune=" URL parameter
 			var subtune = typeof paramSubtune !== "undefined" ? paramSubtune : subtuneStart,
 				subtuneMax = this.playlist[this.songPos].subtunes - 1;
@@ -826,7 +826,7 @@ Browser.prototype = {
 				if ($("#loop").hasClass("button-off")) {
 					// Play the next subtune, or if no more subtunes, the next tune in the list
 					$("#faster").trigger("mouseup"); // Easy there cowboy
-					if (!paramSolitary && !main.getSettingValue("skip-tune") && (ctrls.subtuneCurrent < ctrls.subtuneMax && !$("#subtune-plus").hasClass("disabled")))
+					if (!paramSolitary && !main.getUserSetting("skip-tune") && (ctrls.subtuneCurrent < ctrls.subtuneMax && !$("#subtune-plus").hasClass("disabled")))
 						// Next subtune
 						$("#subtune-plus").trigger("mouseup", false);
 					else if (this.songPos < (this.playlist.length - 1) && !$("#skip-next").hasClass("disabled"))
@@ -2281,7 +2281,7 @@ Browser.prototype = {
 		$("#tab-csdb,#tab-gb64").removeClass("raised");
 
 		// If the 'Primary release' feature is activated
-		if (labelSite && main.getSettingValue("primary-release")) {
+		if (labelSite && main.getUserSetting("primary-release")) {
 			// Click 'GB64' tab if the currently selected tab is 'CSDb'
 			if (labelSite == "gb64") {
 				if (selectedTab === "csdb")

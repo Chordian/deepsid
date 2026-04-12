@@ -1055,7 +1055,7 @@ var main = {
 	 * @used		browser.js
 	 *				controls.js
 	 */
-	getSettingValue: function(id) {
+	getUserSetting: function(id) {
 		$setting = $("#setting-"+id);
 		if ($setting.hasClass("button-toggle")) {
 			// Checkbox style toggle button; return boolean
