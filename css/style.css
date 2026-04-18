@@ -60,6 +60,8 @@
 	--color-text-tag:				var(--color-top);	 /* Default tag colors */
 	--color-bg-tag:					#a8ad95;
 	--color-bg-tag-hover:			#b6b9a5;
+	--color-text-tag-dev:			var(--color-text-tag);
+	--color-bg-tag-dev:				#9b9383;
 	--color-text-tag-event:			var(--color-text-tag);
 	--color-bg-tag-event:			#8aad85;
 	--color-text-tag-prod:			var(--color-text-tag);
@@ -484,6 +486,8 @@
 	--color-text-tag:				var(--color-bottom);  /* Default tag colors */
 	--color-bg-tag:					#b6b9a5;
 	--color-bg-tag-hover:			#c8cbbb;
+	--color-text-tag-dev:			var(--color-text-tag);
+	--color-bg-tag-dev:				#aca396; /* #ad9487 */
 	--color-text-tag-event:			var(--color-text-tag);
 	--color-bg-tag-event:			#a9c9a5;
 	--color-text-tag-prod:			var(--color-text-tag);
@@ -2495,6 +2499,11 @@ input[type=range]::-ms-track {
 			line-height: 1.35em;
 		}
 
+			.tag-developer {
+				color: var(--color-text-tag-dev);
+				background: var(--color-bg-tag-dev);
+			}
+
 			.tag-event {
 				color: var(--color-text-tag-event);
 				background: var(--color-bg-tag-event);
@@ -2610,6 +2619,10 @@ input[type=range]::-ms-track {
 				border-color: transparent var(--color-bg-tag) transparent transparent;
 				background: var(--color-bg-box);
 			}
+
+				.tag-developer:before {
+					border-color: transparent var(--color-bg-tag-dev) transparent transparent;
+				}
 
 				.tag-event:before {
 					border-color: transparent var(--color-bg-tag-event) transparent transparent;

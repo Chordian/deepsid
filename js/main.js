@@ -2957,6 +2957,11 @@ main.bindKeyboardEvents = function() {
 						browser.addLabel();
 						break;
 
+					case 78:	// Keyup 'n' - toggle between some SID emulator and 'No SID handler'
+
+						ctrls.selectEmulator(SID.emulator != "silence" ? "silence" : "websid");
+						break;
+
 					case 37:	// Keyup 'ARROW-LEFT' - skip to previous (+ SHIFT to emulate auto-progress)
 
 						$("#folders").focus();

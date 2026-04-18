@@ -42,15 +42,15 @@ function GetTagsAndTypes($file_id, &$list_of_tags, &$type_of_tags, &$id_of_tags,
 
 	// Define type priorities for sorting
 	$type_order = [
-		'EVENT'			=> 1,
-		'PRODUCTION' 	=> 2,
-		'ORIGIN'     	=> 3,
-		'SUBORIGIN'  	=> 4,
-		'MIXORIGIN'  	=> 5,
-		'DIGI'       	=> 6,
-		'SUBDIGI'    	=> 7,
-		'OTHER'      	=> 8,
-		'LABEL'			=> 9
+		'DEVELOPER'		=> 1,
+		'EVENT'			=> 2,
+		'PRODUCTION' 	=> 3,
+		'ORIGIN'     	=> 4,
+		'SUBORIGIN'  	=> 5,
+		'MIXORIGIN'  	=> 6,
+		'DIGI'       	=> 7,
+		'SUBDIGI'    	=> 8,
+		'OTHER'      	=> 9,
 	];
 
 	// Sorting logic
@@ -99,7 +99,7 @@ function GetTagsAndTypes($file_id, &$list_of_tags, &$type_of_tags, &$id_of_tags,
 		// Fallback for empty or missing type
 		// NOTE: The 'GENRE' type is treated as 'OTHER' for the time being.
 		$raw_type = strtoupper(trim($tag->type));
-		$allowed_types = ['EVENT', 'PRODUCTION', 'ORIGIN', 'SUBORIGIN', 'MIXORIGIN', 'DIGI', 'SUBDIGI', 'LABEL'];
+		$allowed_types = ['DEVELOPER', 'EVENT', 'PRODUCTION', 'ORIGIN', 'SUBORIGIN', 'MIXORIGIN', 'DIGI', 'SUBDIGI'];
 		$type = in_array($raw_type, $allowed_types) ? strtolower($raw_type) : 'other';
 
 		$list_of_tags[] = $tag->name;

@@ -1970,6 +1970,14 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>April 18, 2026</h3>
+						<ul>
+							<li>The "n" hotkey can now be used to toggle between the 'WebSid emulator' and 'No SID handler'. If
+								another SID handler is active, pressing it will first switch to 'No SID handler'.</li>
+							<li>A new tag type for game developers has been introduced. It typically follows a 'GameBase64' tag to
+								indicate the developer of the game. This tag will be added to DeepSID gradually over time.</li>
+						</ul>
+
 						<h3>April 12, 2026</h3>
 						<ul>
 							<li>Fixed a NULL bug that disabled parts of DeepSID.</li>

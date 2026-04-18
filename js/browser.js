@@ -2471,14 +2471,6 @@ Browser.prototype = {
 			} else if (tag == "Winner") {
 				// Add a class that turns the tag into gold
 				list_of_tags += '<div class="tag tag-event tag-winner"'+id+'>Winner</div>';
-			} else if (tag == "<-") {
-				// Replace "<-" with a pretty unicode arrow instead
-				// Disabled as perhaps users find them too confusing.
-				//list_of_tags += '<div class="tag tag-transparent"'+id+'>🡨</div>';
-			} else if (tag == "->") {
-				// Replace "->" with a pretty unicode arrow instead
-				// Disabled as perhaps users find them too confusing.
-				// list_of_tags += '<div class="tag tag-transparent"'+id+'>🡪</div>';
 			} else if (tag == "$31" || tag == "$61" || tag == "$71" || tag == "# ?" || tag.indexOf("Small Event") !== -1 || types[i] == "label") {
 				// These tags will not be shown for various reasons:
 				// Waveforms: Too commonly used in SID tunes and just adds noise.
@@ -2493,7 +2485,8 @@ Browser.prototype = {
 		});
 		list_of_tags += '<div class="edit-tags" title="Edit tags">&nbsp;</div>';
 
-		return gamebase64+remix64+list_of_tags;
+		// 2026-04: Remix64 is now first because GB64 can have a developer appended
+		return remix64+gamebase64+list_of_tags;
 	},
 
 	/**
@@ -4063,6 +4056,7 @@ Browser.prototype = {
 		this.sliderButton = false;
 		if (typeof tags == "undefined" || this.cache.folderTags == "0") {
 			var tagType = {
+				developer:		"",
 				event:			"",
 				production:		"",
 				origin:			"",
@@ -4088,6 +4082,7 @@ Browser.prototype = {
 				});
 			});
 			allTags =
+				tagType.developer+
 				tagType.event+
 				tagType.origin+
 				tagType.suborigin+
