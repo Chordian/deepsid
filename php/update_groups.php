@@ -14,7 +14,7 @@
 require_once("class.account.php"); // Includes setup
 
 try {
-	$db = $account->GetDB();
+	$db = $account->getDB();
 
 	// Get all fields for all group member rows
 	$groups = $db->query('SELECT * FROM groups');

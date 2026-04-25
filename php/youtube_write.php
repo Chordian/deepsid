@@ -19,12 +19,12 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH
 if (!isset($_POST['fullname']) || !isset($_POST['subtune']) || !isset($_POST['videos']))
 	die(json_encode(array('status' => 'error', 'message' => 'You must specify the proper POST variables.')));
 
-$user_id = $account->CheckLogin() ? $account->UserID() : 0;
+$user_id = $account->checkLogin() ? $account->userID() : 0;
 if (!$user_id)
 	die(json_encode(array('status' => 'error', 'message' => 'You must be logged in to edit YouTube video links.')));
 
 try {
-	$db = $account->GetDB();
+	$db = $account->getDB();
 
 	// First find the ID of the 'fullname' text
 	$select = $db->prepare('SELECT id FROM hvsc_files WHERE fullname = :fullname LIMIT 1');
@@ -56,10 +56,10 @@ try {
 	}
 
 	$fullname = str_replace('_High Voltage SID Collection', '', $_POST['fullname']);
-	$account->LogActivity('User "'.$_SESSION['user_name'].'" edited the video links for "'.$fullname.'" (subtune #'.$_POST['subtune'].')');
+	$account->logActivity('User "'.$_SESSION['user_name'].'" edited the video links for "'.$fullname.'" (subtune #'.$_POST['subtune'].')');
 
 } catch(PDOException $e) {
-	$account->LogActivityError(basename(__FILE__), $e->getMessage());
+	$account->logActivityError(basename(__FILE__), $e->getMessage());
 	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 }
 

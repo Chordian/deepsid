@@ -25,7 +25,7 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH
  *
  * Example of use:
  * 
- * CommentsTable('Trivia', $csdb->Release->Comments->Trivia, $scener_handle, $scener_id);
+ * commentsTable('Trivia', $csdb->Release->Comments->Trivia, $scener_handle, $scener_id);
  * 
  * @param		string		$title				title of the commments thread
  * @param		object		$comments			comments from a CSDb web service call
@@ -35,7 +35,7 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH
  *
  * @return		string							HTML
  */
-function CommentsTable($title, $comments, &$scener_handle, &$scener_id, $backwards = true) {
+function commentsTable($title, $comments, &$scener_handle, &$scener_id, $backwards = true) {
 
 	global $account;
 
@@ -161,7 +161,7 @@ function CommentsTable($title, $comments, &$scener_handle, &$scener_id, $backwar
 		$hvsc_folder = '';
 		if ($scid) {
 			try {
-				$db = $account->GetDB();
+				$db = $account->getDB();
 		
 				$select = $db->prepare('SELECT fullname FROM composers WHERE csdbid = :csdbid LIMIT 1');
 				$select->execute(array(':csdbid'=>$scid));
@@ -175,8 +175,8 @@ function CommentsTable($title, $comments, &$scener_handle, &$scener_id, $backwar
 			}
 		}
 
-		$thumbnail = GetAvatar($scid, $handle, $hvsc_folder);
-		$color = GetUserColor($handle);
+		$thumbnail = getAvatar($scid, $handle, $hvsc_folder);
+		$color = getUserColor($handle);
 
 		array_push($comments_array, '<tr>'.
 			'<td class="user">'.

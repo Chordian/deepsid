@@ -16,6 +16,10 @@ require_once("class.account.php"); // Includes setup
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest')
 	die("Direct access not permitted.");
 
+// --------------------------------------------------------------------------
+// FUNCTIONS
+// --------------------------------------------------------------------------
+
 /**
  * Modified version of 'curl' from the 'setup.php' script.
  *
@@ -53,6 +57,10 @@ function curl2($url) {
 
     return $data;
 }
+
+// --------------------------------------------------------------------------
+// START
+// --------------------------------------------------------------------------
 
 $remixes = array();
 

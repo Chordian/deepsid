@@ -38,11 +38,15 @@ if (file_exists($marker)) {
     return;
 }
 
+// --------------------------------------------------------------------------
+// FUNCTIONS
+// --------------------------------------------------------------------------
+
 /**
  * Rotate one active log into *_YYYY_MM.txt.
  * Returns backup path or null.
  */
-function rotate_one(string $activeFile, string $label): ?string {
+function rotateOne(string $activeFile, string $label): ?string {
     if (!file_exists($activeFile) || filesize($activeFile) === 0) {
         if (!file_exists($activeFile)) touch($activeFile);
         return null;
@@ -68,9 +72,13 @@ function rotate_one(string $activeFile, string $label): ?string {
     return null;
 }
 
+// --------------------------------------------------------------------------
+// START
+// --------------------------------------------------------------------------
+
 $backups = [];
-$b1 = rotate_one($activity, $label); if ($b1) $backups[] = $b1;
-$b2 = rotate_one($tags,     $label); if ($b2) $backups[] = $b2;
+$b1 = rotateOne($activity, $label); if ($b1) $backups[] = $b1;
+$b2 = rotateOne($tags,     $label); if ($b2) $backups[] = $b2;
 
 // Bundle backups into one ZIP inside archives/
 if ($backups) {

@@ -40,7 +40,7 @@ require_once("class.account.php"); // Includes setup
 define('SYMFOLDER', $_SERVER['HTTP_HOST'] == LOCALHOST ? 2299 : 2309);
 
 try {
-	$db = $account->GetDB();
+	$db = $account->getDB();
 
 	$row = 0;
 	echo '<table><tr><th>HVSC File</th><th>ST</th><th>Renamed To</th><th>Status</th></tr>';

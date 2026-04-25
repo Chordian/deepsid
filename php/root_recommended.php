@@ -13,7 +13,7 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH
 	die("Direct access not permitted.");
 
 try {
-	$db = $account->GetDB();
+	$db = $account->getDB();
 
 	// Get all the folder ID belonging to composers the 'Ratings' user have given 3 stars or more
 	$select_rec = $db->query('SELECT table_id FROM ratings WHERE user_id = '.USER_RATINGS.' AND rating >= 3 AND type = "FOLDER"');
@@ -97,7 +97,7 @@ try {
 	}
 
 } catch(PDOException $e) {
-	$account->LogActivityError(basename(__FILE__), $e->getMessage());
+	$account->logActivityError(basename(__FILE__), $e->getMessage());
 	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 }
 

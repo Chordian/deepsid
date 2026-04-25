@@ -11,16 +11,16 @@
 
 require_once("class.account.php"); // Includes setup
 
-if (!$account->IsAdmin())
+if (!$account->isAdmin())
 	die("This is for administrators only.");
 
 try {
-	$allowedScripts = $account->GetDB()
+	$allowedScripts = $account->getDB()
 	    ->query('SELECT script FROM admin_scripts WHERE script <> "" AND script IS NOT NULL')
     	->fetchAll(PDO::FETCH_COLUMN);	
 
 } catch(PDOException $e) {
-	$account->LogActivityError(basename(__FILE__), $e->getMessage());
+	$account->logActivityError(basename(__FILE__), $e->getMessage());
 	exit;
 }		
 

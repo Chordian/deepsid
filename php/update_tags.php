@@ -20,6 +20,10 @@ define('MODE_LYRICS',	'Lyrics');	// CGSC only
 
 define('MODE', MODE_LYRICS); // <---- SET THE TAG PARSING MODE HERE!
 
+// --------------------------------------------------------------------------
+// FUNCTIONS
+// --------------------------------------------------------------------------
+
 /**
  * Get the ID of a tag by looking up its name.
  *
@@ -29,7 +33,7 @@ define('MODE', MODE_LYRICS); // <---- SET THE TAG PARSING MODE HERE!
  *
  * @return		int								tag id
  */
-function GetTagID($name) {
+function getTagID($name) {
 
 	global $db;
 
@@ -43,7 +47,7 @@ function GetTagID($name) {
  *
  * @param		int			$tagid				tag id
  */
-function AddTag($tagid) {
+function addTag($tagid) {
 
 	global $db, $row;
 
@@ -58,10 +62,12 @@ function AddTag($tagid) {
 	}
 }
 
-/***** START *****/
+// --------------------------------------------------------------------------
+// START
+// --------------------------------------------------------------------------
 
 try {
-	$db = $account->GetDB();
+	$db = $account->getDB();
 
 	$collection = MODE == MODE_LYRICS ? "_Compute's Gazette SID Collection/%" : '_High Voltage SID Collection/%';
 	// Get a list of all file rows in the relevant collection
@@ -69,7 +75,7 @@ try {
 	$select->setFetchMode(PDO::FETCH_OBJ);
 
 	// Get the ID of the relevant tag name
-	$tagid = GetTagID(MODE);
+	$tagid = getTagID(MODE);
 
 	echo 'Tag: "'.MODE.'" (ID: '.$tagid.')<br /><br />
 		<style>body,table { font: normal 15px arial, sans-serif; } td { padding-right: 20px; }</style>
@@ -83,29 +89,29 @@ try {
 			case MODE_COOP:
 				// Condition: The 'author' field must be like e.g. "Stan & Laurel"
 				if (strpos($row->author, ' & '))
-					AddTag($tagid);
+					addTag($tagid);
 				break;
 			case MODE_UNF:
 				// Condition: The 'fullname' field must have "/Worktunes" in it
 				if (strpos($row->fullname, '/Worktunes'))
-					AddTag($tagid);
+					addTag($tagid);
 				break;
 			case MODE_TINY:
 				// Condition: Number of bytes in the 'datasize' field must be less than 512
 				if ($row->datasize < 512)
-					AddTag($tagid);
+					addTag($tagid);
 				break;
 			case MODE_PURE:
 				// Condition: The 'player' field must have "Master_Composer" in it
 				if ($row->player == 'Master_Composer')
-					AddTag($tagid);
+					addTag($tagid);
 				break;
 			case MODE_LONG:
 				// Condition: One of the sub tunes is longer than 10 minutes
 				$lengths = explode(' ', $row->lengths);
 				foreach ($lengths as $length) {
 					if (substr($length, 0, 2) >= 10)
-						AddTag($tagid);
+						addTag($tagid);
 					break;
 				}
 			case MODE_SHORT:
@@ -117,12 +123,12 @@ try {
 					if ($min_sec[0] > 0 || $min_sec[1] > 10)
 						$all_short = false; // It's too long
 				}
-				if ($all_short) AddTag($tagid);
+				if ($all_short) addTag($tagid);
 				break;
 			case MODE_LYRICS:
 				// Condition: If there's an accompanying .WDS file thereby indicating that lyrics exists (CGSC)
 				if (file_exists(ROOT_HVSC.'/'.substr($row->fullname, 0, -4).'.wds'))
-					AddTag($tagid);
+					addTag($tagid);
 				break;
 			}
 		if (isset($test_max)) {

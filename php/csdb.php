@@ -36,10 +36,10 @@ $scener_handle = array();
 $scener_id = array();
 $sid_entries = array();
 
-$user_id = $account->CheckLogin() ? $account->UserID() : 0;
+$user_id = $account->checkLogin() ? $account->userID() : 0;
 
-$fresh_days = $account->GetAdminSetting('csdb_cache_fresh_days');	// Cache skip for items < 30 days old
-$ttl_days = $account->GetAdminSetting('csdb_cache_ttl_days');		// Fallback TTL for date-less items (7 days)
+$fresh_days = $account->getAdminSetting('csdb_cache_fresh_days');	// Cache skip for items < 30 days old
+$ttl_days = $account->getAdminSetting('csdb_cache_ttl_days');		// Fallback TTL for date-less items (7 days)
 $ttl = $ttl_days * 24 * 60 * 60;
 
 $svg_permalink = '<svg class="permalink" style="enable-background:new 0 0 80 80;" version="1.1" viewBox="0 0 80 80" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g><path d="M29.298,63.471l-4.048,4.02c-3.509,3.478-9.216,3.481-12.723,0c-1.686-1.673-2.612-3.895-2.612-6.257 s0.927-4.585,2.611-6.258l14.9-14.783c3.088-3.062,8.897-7.571,13.131-3.372c1.943,1.93,5.081,1.917,7.01-0.025 c1.93-1.942,1.918-5.081-0.025-7.009c-7.197-7.142-17.834-5.822-27.098,3.37L5.543,47.941C1.968,51.49,0,56.21,0,61.234 s1.968,9.743,5.544,13.292C9.223,78.176,14.054,80,18.887,80c4.834,0,9.667-1.824,13.348-5.476l4.051-4.021 c1.942-1.928,1.953-5.066,0.023-7.009C34.382,61.553,31.241,61.542,29.298,63.471z M74.454,6.044 c-7.73-7.67-18.538-8.086-25.694-0.986l-5.046,5.009c-1.943,1.929-1.955,5.066-0.025,7.009c1.93,1.943,5.068,1.954,7.011,0.025 l5.044-5.006c3.707-3.681,8.561-2.155,11.727,0.986c1.688,1.673,2.615,3.896,2.615,6.258c0,2.363-0.928,4.586-2.613,6.259 l-15.897,15.77c-7.269,7.212-10.679,3.827-12.134,2.383c-1.943-1.929-5.08-1.917-7.01,0.025c-1.93,1.942-1.918,5.081,0.025,7.009 c3.337,3.312,7.146,4.954,11.139,4.954c4.889,0,10.053-2.462,14.963-7.337l15.897-15.77C78.03,29.083,80,24.362,80,19.338 C80,14.316,78.03,9.595,74.454,6.044z"/></g><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/></svg>';
@@ -59,7 +59,7 @@ $svg_permalink = '<svg class="permalink" style="enable-background:new 0 0 80 80;
  * 
  * @return		string							converted string
  */
-function to_utf8($string) {
+function toUTF8($string) {
 	// From http://w3.org/International/questions/qa-forms-utf-8.html
 	if (preg_match('%^(?:
 		  [\x09\x0A\x0D\x20-\x7E]            # ASCII
@@ -79,7 +79,7 @@ function to_utf8($string) {
 /**
  * Return relative time such as "3 days ago" etc.
  */
-function relative_age_text($timestamp) {
+function relativeAgeText($timestamp) {
     $age = time() - $timestamp;
 
     if ($age < 60) {
@@ -100,10 +100,10 @@ function relative_age_text($timestamp) {
 /**
  * Force reading results from cache if available, or show error message.
  * 
- * @param		string		$cache_file			Path of cached file
- * @param		string		$error_message		Message to display if no cache
+ * @param		string		$cache_file			path of cached file
+ * @param		string		$error_message		message to display if no cache
  */
-function serve_cache_or_error($cache_file, $error_message) {
+function serveCacheOrError($cache_file, $error_message) {
 	global $primary_back_button;
     if (file_exists($cache_file)) {
         $cached = json_decode(gzdecode(file_get_contents($cache_file)), true);
@@ -125,9 +125,9 @@ function serve_cache_or_error($cache_file, $error_message) {
 /**
  * Extract a release date from a string like YYYY-MM-DD in HTML.
  * 
- * @param		string		$html				The HTML block to parse
+ * @param		string		$html				the HTML block to parse
  */
-function find_release_date_in_cache($html) {
+function findReleaseDateInCache($html) {
     // First, try ISO date format (YYYY-MM-DD)
     if (preg_match('/\b(\d{4})-(\d{2})-(\d{2})\b/', $html, $matches)) {
         return strtotime($matches[0]);
@@ -144,12 +144,12 @@ function find_release_date_in_cache($html) {
 /**
  * Cache CSDb images and replace sources in <IMG> elements.
  * 
- * @param		string		$html				The HTML block to parse
- * @param		string		$image_cache_dir	The cache folder on the server
- * @param		string		$csdb_type			Can be 'sid' or 'release'
- * @param		int			$csdb_id			The ID of the specified type
+ * @param		string		$html				the HTML block to parse
+ * @param		string		$image_cache_dir	the cache folder on the server
+ * @param		string		$csdb_type			can be 'sid' or 'release'
+ * @param		int			$csdb_id			the ID of the specified type
  */
-function cache_images_in_html($html, $image_cache_dir, $csdb_type, $csdb_id) {
+function cacheImagesInHtml($html, $image_cache_dir, $csdb_type, $csdb_id) {
     return preg_replace_callback(
         '/<img[^>]+src=[\'"]([^\'"]+)[\'"][^>]*>/i',
         function ($matches) use ($image_cache_dir, $csdb_type, $csdb_id) {
@@ -191,7 +191,7 @@ function cache_images_in_html($html, $image_cache_dir, $csdb_type, $csdb_id) {
 if (isset($_GET['fullname'])) {
 	// Get the CSDb 'type' and 'id' from the database row
 	try {
-		$db = $account->GetDB();
+		$db = $account->getDB();
 
 		$select = $db->prepare('SELECT id, copyright, csdbtype, csdbid FROM hvsc_files WHERE fullname = :fullname LIMIT 1');
 		$select->execute(array(':fullname'=>$_GET['fullname']));
@@ -205,11 +205,11 @@ if (isset($_GET['fullname'])) {
 			$copyright = $row->copyright;	// E.g. "1988 Jewels"
 			$copyright = substr($copyright, strpos($copyright, ' ') + 1); // Only need "Jewels"
 		} else {
-			$account->LogActivityError(basename(__FILE__), 'No database info returned; $_GET[\'fullname\'] = '.$_GET['fullname']);
+			$account->logActivityError(basename(__FILE__), 'No database info returned; $_GET[\'fullname\'] = '.$_GET['fullname']);
 			die(json_encode(array('status' => 'error', 'message' => "Couldn't find the information in the database.")));
 		}
 	} catch(PDOException $e) {
-		$account->LogActivityError(basename(__FILE__), $e->getMessage());		
+		$account->logActivityError(basename(__FILE__), $e->getMessage());		
 		die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 	}
 
@@ -332,7 +332,7 @@ if (!is_dir($image_cache_dir)) mkdir($image_cache_dir, 0777, true);
 
 // Example: $csdb_type = 'release'; $csdb_id = 12345;
 $cache_file = $cache_dir . $csdb_type . '_' . $csdb_id . '.cache.gz';
-$cache_age = relative_age_text(filemtime($cache_file));
+$cache_age = relativeAgeText(filemtime($cache_file));
 
 // --------------------------------------------------------------------------
 // SMART CACHE-READ
@@ -344,7 +344,7 @@ if (file_exists($cache_file)) {
 
     if ($csdb_type === 'release') {
         // Try to parse release date from cached HTML
-        $release_timestamp = find_release_date_in_cache($cached_data['html']);
+        $release_timestamp = findReleaseDateInCache($cached_data['html']);
         if ($release_timestamp && (time() - $release_timestamp) < ($fresh_days * 24 * 60 * 60)) {
             $too_fresh = true;
         }
@@ -384,7 +384,7 @@ if (file_exists($cache_file)) {
 
 $xml = curl('https://csdb.dk/webservice/?type=' . $csdb_type . '&id=' . $csdb_id . ($csdb_type == 'sid' ? '&depth=3' : ''));
 if (!strpos($xml, '<CSDbData>')) {
-    serve_cache_or_error(
+    serveCacheOrError(
         $cache_file,
         '<p style="margin-top:0;"><i>CSDb is currently unreachable.</i></p>' .
         '<b>ID:</b> <a href="https://csdb.dk/' . $csdb_type . '/?id=' . $csdb_id . '" target="_blank">' . $csdb_id . '</a>' .
@@ -412,7 +412,7 @@ if ($csdb_type == 'sid') {
 
 	// For some reason the XML user comments for "sid" entries are not backwards
 	$user_comments = isset($simple_csdb->SID->UserComment)
-		? CommentsTable('User comments', $simple_csdb->SID->UserComment, $scener_handle, $scener_id)
+		? commentsTable('User comments', $simple_csdb->SID->UserComment, $scener_handle, $scener_id)
 		: '';
 	
 	$comment_button = '<button id="csdb-comment" data-type="sid" data-id="'.$csdb->SID->ID.'">Comment</button><br />';
@@ -790,7 +790,7 @@ if ($csdb_type == 'sid') {
 		foreach($dlinks as $dlink) {
 			// $link = utf8_decode(urldecode($dlink->Link));	// <- Doesn't work with e.g. "Skåneland 2" demo
 			// $link = urldecode($dlink->Link);					// <- Doesn't work with Kleimeyer's "Fuer Elise"
-			$link = to_utf8(urldecode($dlink->Link));			// <- Uses a custom UTF8 converter function
+			$link = toUTF8(urldecode($dlink->Link));			// <- Uses a custom UTF8 converter function
 			$download_links .= '<br /><a href="'.$dlink->CounterLink.'">'.$link.'</a>'.
 				'<span class="count">'.(!empty($dlink->Downloads) ? $dlink->Downloads : '0').'</span>'.
 				(stripos($link, '.prg') !== false ? '<span class="count"><a href="'.str_replace('.prg', '.c64', $link).'">C64</a></span>' : '');
@@ -799,27 +799,27 @@ if ($csdb_type == 'sid') {
 	}
 
 	$goofs = isset($csdb->Release->Comments->Goof)
-	? CommentsTable('Goofs', $csdb->Release->Comments->Goof, $scener_handle, $scener_id)
+	? commentsTable('Goofs', $csdb->Release->Comments->Goof, $scener_handle, $scener_id)
 	: '';
 
 	$hidden_parts = isset($csdb->Release->Comments->HiddenPart)
-	? CommentsTable('Hidden parts', $csdb->Release->Comments->HiddenPart, $scener_handle, $scener_id)
+	? commentsTable('Hidden parts', $csdb->Release->Comments->HiddenPart, $scener_handle, $scener_id)
 	: '';
 
 	$production_notes = isset($csdb->Release->Comments->ProductionNote)
-	? CommentsTable('Production notes', $csdb->Release->Comments->ProductionNote, $scener_handle, $scener_id)
+	? commentsTable('Production notes', $csdb->Release->Comments->ProductionNote, $scener_handle, $scener_id)
 	: '';
 
 	$user_comments = isset($csdb->Release->Comments->UserComment)
-	? CommentsTable('User comments', $csdb->Release->Comments->UserComment, $scener_handle, $scener_id)
+	? commentsTable('User comments', $csdb->Release->Comments->UserComment, $scener_handle, $scener_id)
 	: '';
 
 	$summaries = isset($csdb->Release->Comments->Summary)
-		? CommentsTable('Summaries', $csdb->Release->Comments->Summary, $scener_handle, $scener_id)
+		? commentsTable('Summaries', $csdb->Release->Comments->Summary, $scener_handle, $scener_id)
 		: '';
 
 	$trivia = isset($csdb->Release->Comments->Trivia)
-	? CommentsTable('Trivia', $csdb->Release->Comments->Trivia, $scener_handle, $scener_id)
+	? commentsTable('Trivia', $csdb->Release->Comments->Trivia, $scener_handle, $scener_id)
 	: '';
 
 	$comment_button = '<button id="csdb-comment" data-type="release" data-id="'.$csdb->Release->ID.'">Comment</button>'.
@@ -874,12 +874,12 @@ if (!is_dir($image_cache_dir)) {
 }
 
 // Process main HTML
-$html = cache_images_in_html($html, $image_cache_dir, $csdb_type, $csdb_id);
+$html = cacheImagesInHtml($html, $image_cache_dir, $csdb_type, $csdb_id);
 
 // Process each entry's HTML
 if (!empty($sid_entries)) {
     foreach ($sid_entries as &$entry) {
-        $entry['html'] = cache_images_in_html($entry['html'], $image_cache_dir, $csdb_type, $csdb_id);
+        $entry['html'] = cacheImagesInHtml($entry['html'], $image_cache_dir, $csdb_type, $csdb_id);
     }
     unset($entry);
 }

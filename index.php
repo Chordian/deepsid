@@ -5,10 +5,10 @@
 	 */
 
 	require_once("php/class.account.php"); // Includes setup
-	$user_id = $account->CheckLogin() ? $account->UserID() : 0;
-	$is_admin = $user_id && $account->IsAdmin();
+	$user_id = $account->checkLogin() ? $account->userID() : 0;
+	$is_admin = $user_id && $account->isAdmin();
 	
-	$maintenance_mode = (int)$account->GetAdminSetting('maintenance_mode');
+	$maintenance_mode = (int)$account->getAdminSetting('maintenance_mode');
 
 	if ($maintenance_mode && !$is_admin) {
 		die('DeepSID is being updated. Please return again in a few minutes.');
@@ -35,7 +35,7 @@
 		if (strpos($url, $char) !== false)
 			die("Malignant switch contents detected. Please fix the URL and try again.");
 
-	function MiniPlayer() {
+	function miniPlayer() {
 		return isset($_GET['mini'])
 			? $_GET['mini']
 			: 0;
@@ -103,7 +103,7 @@
 		<link rel="stylesheet" type="text/css" href="css/style.css?v=<?php echo filemtime('css/style.css') ?>" />
 		<?php if (isLemon()): ?>
 			<!-- For Lemon64: START -->
-			<link rel="stylesheet" type="text/css" href="https://www.lemon64.com/assets/external/deepsid/style.css" />
+			<link rel="stylesheet" type="text/css" href="https://www.lemon64.com/assets/c64/external/deepsid/style.css" />
 			<!-- For Lemon64: END -->
 		<?php endif ?>
 		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -140,7 +140,7 @@
 
 		<script>// Administrator settings
 			window.DeepSID = window.DeepSID || {};
-			DeepSID.adminSettings = <?= json_encode($account->GetAllAdminSettings(), JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE) ?>;
+			DeepSID.adminSettings = <?= json_encode($account->getAllAdminSettings(), JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE) ?>;
 		</script>
 
 		<!--<script type="text/javascript" src="js/handlers/jsidplay2.js"></script>-->
@@ -166,7 +166,7 @@
 		<script type="text/javascript" src="js/main.js?v=<?php echo filemtime('js/main.js') ?>"></script>
 		<?php if (isLemon()): ?>
 			<!-- For Lemon64: START -->
-			<script type="text/javascript" src="https://www.lemon64.com/assets/external/deepsid/main.js"></script>
+			<script type="text/javascript" src="https://www.lemon64.com/assets/c64/external/deepsid/main.js"></script>
 			<!-- For Lemon64: END -->
 		<?php endif ?>
 		<script type="text/javascript">
@@ -200,7 +200,7 @@
 					$file = str_replace('/SID', '_SID', $file);
 
 				try {
-					$db = $account->GetDB();
+					$db = $account->getDB();
 
 					if (substr($file, -4) == '.sid' || substr($file, -4) == '.mus') {
 						// It's a specific file
@@ -241,7 +241,7 @@
 		<meta property="og:type" content="website" />
 		<meta property="og:image" content="<?php
 
-			function MergeImage($image) {
+			function mergeImage($image) {
 
 				// @link https://stackoverflow.com/a/2269459/2242348
 				$png = imagecreatefrompng('images/og_overlay.png');
@@ -265,7 +265,7 @@
 				$image = strtolower(str_replace('/', '_', trim($file, '/'))).'.jpg';
 				if (file_exists('images/composers/'.$image))
 					if (substr($_GET['file'], -4) == '.sid' || substr($_GET['file'], -4) == '.mus')
-						MergeImage($image);
+						mergeImage($image);
 					else
 						echo 'https://chordian.net/deepsid/images/composers/'.$image;
 				else if (substr($_GET['file'], -4) == '.sid')
@@ -275,7 +275,7 @@
 			} else if (isset($_GET['file']) && (strtolower(substr($_GET['file'], 0, 12))) == '/sid happens') {
 				$image = '';
 				try {
-					$db = $account->GetDB();
+					$db = $account->getDB();
 
 					// Get the ID of the SH file
 					$select = $db->prepare('SELECT id FROM hvsc_files WHERE fullname = :fullname LIMIT 1');
@@ -309,7 +309,7 @@
 				}
 
 				if (!empty($image) && file_exists('images/composers/'.$image))
-					MergeImage($image);
+					mergeImage($image);
 				else if (substr($_GET['file'], -4) == '.sid')
 					echo 'https://chordian.net/deepsid/images/example_play.png';
 				else
@@ -344,7 +344,7 @@
 		gtag('config', 'G-8WGW8WKDN4');
 	</script>
 
-	<body class="entry-content" data-mobile="<?php echo isMobile(); ?>" data-theme="" data-mini="<?php echo MiniPlayer(); ?>" data-notips="<?php echo isLemon() ? 1 : 0; ?>" data-admin="<?php echo $is_admin ? 1 : 0; ?>">
+	<body class="entry-content" data-mobile="<?php echo isMobile(); ?>" data-theme="" data-mini="<?php echo miniPlayer(); ?>" data-notips="<?php echo isLemon() ? 1 : 0; ?>" data-admin="<?php echo $is_admin ? 1 : 0; ?>">
 		<?php if (!isLemon()): ?>
 			<script type="text/javascript">setTheme();</script>
 		<?php endif ?>
@@ -568,7 +568,7 @@
 			<div id="top">
 				<div id="main-menu"><img src="images/menu.svg" alt="Menu" /></div>
 				<div id="logo" class="unselectable"></div>
-				<?php if (MiniPlayer()) echo '<div id="minilogo">mini-player</div>'; ?>
+				<?php if (miniPlayer()) echo '<div id="minilogo">mini-player</div>'; ?>
 				<select id="dropdown-topleft-emulator" name="select-topleft-emulator" style="visibility:hidden;">
 					<option value="resid">reSID (BETA)</option>
 					<!--<option value="resid">reSID (WebSidPlay)</option>-->
@@ -585,23 +585,23 @@
 				</select>
 				<div id="theme-selector" title="Click here to toggle the color theme"><div></div></div>
 
-				<?php if (!MiniPlayer()): ?>
+				<?php if (!miniPlayer()): ?>
 					<?php if ($user_id) : ?>
 						<div id="logged-in">
-							<span id="logged-username"><?php echo $account->UserName(); ?></span>
+							<span id="logged-username"><?php echo $account->userName(); ?></span>
 							<button id="logout" title="Log out">
 								<svg height="14" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M704 1440q0 4 1 20t.5 26.5-3 23.5-10 19.5-20.5 6.5h-320q-119 0-203.5-84.5t-84.5-203.5v-704q0-119 84.5-203.5t203.5-84.5h320q13 0 22.5 9.5t9.5 22.5q0 4 1 20t.5 26.5-3 23.5-10 19.5-20.5 6.5h-320q-66 0-113 47t-47 113v704q0 66 47 113t113 47h312l11.5 1 11.5 3 8 5.5 7 9 2 13.5zm928-544q0 26-19 45l-544 544q-19 19-45 19t-45-19-19-45v-288h-448q-26 0-45-19t-19-45v-384q0-26 19-45t45-19h448v-288q0-26 19-45t45-19 45 19l544 544q19 19 19 45z"/></svg>
 							</button>
 						</div>
 					<?php else : ?>
-						<form id="userform" action="<?php echo $account->Self(); ?>" method="post" accept-charset="UTF-8">
+						<form id="userform" action="<?php echo $account->self(); ?>" method="post" accept-charset="UTF-8">
 							<fieldset>
 								<div id="response">Login or <a href="#" class="reg-new">register</a> to rate tunes</div>
 								<input type="hidden" name="submitted" value="1" />
-								<input type="text" class="spmhidip" name="<?php echo $account->SpamTrapName(); ?>" style="display:none;" />
+								<input type="text" class="spmhidip" name="<?php echo $account->spamTrapName(); ?>" style="display:none;" />
 
 								<label for="username" id="label-username">User</label>
-								<input type="text" name="username" id="username" value="<?php echo $account->PostValue('username'); ?>" maxlength="64" />
+								<input type="text" name="username" id="username" value="<?php echo $account->postValue('username'); ?>" maxlength="64" />
 
 								<label for="password" id="label-password">Pw</label>
 								<input type="password" name="password" id="password" maxlength="32" />
@@ -634,7 +634,7 @@
 			<div id="info">
 				<div id="info-composer"></div>
 				<div id="info-text">
-					<?php if (MiniPlayer()): ?>
+					<?php if (miniPlayer()): ?>
 						<div style="text-align:center;font-size:12px;">
 							<span style="position:relative;top:2px;">Please specify a tune to play with the <code style="font-size:12px;">?file=</code> URL parameter.<br />
 							Optionally add <code style="font-size:12px;">&wait=100</code> to prepare the tune but not play it yet.<br />
@@ -656,11 +656,11 @@
 			</div>
 			<div id="sundry-tabs">
 				<div class="tab unselectable" data-topic="stil" id="stab-stil">News</div>
-				<?php if (!MiniPlayer()): ?>
+				<?php if (!miniPlayer()): ?>
 					<div class="tab unselectable" data-topic="tags" id="stab-tags">Tags</div>
 				<?php endif ?>
 				<div class="tab unselectable" data-topic="osc" id="stab-osc">Scope</div>
-				<?php if (!MiniPlayer()): ?>
+				<?php if (!miniPlayer()): ?>
 					<div class="tab unselectable" data-topic="filter" id="stab-filter">Filter</div>
 				<?php endif ?>
 				<div class="tab unselectable" data-topic="stereo" id="stab-stereo">Stereo</div>
@@ -883,7 +883,7 @@
 						</button>
 					</div>
 					<div class="divider"></div>
-					<?php if (MiniPlayer() == 2): // Wider subtune buttons for Chris Abbott ?>
+					<?php if (miniPlayer() == 2): // Wider subtune buttons for Chris Abbott ?>
 						<div class="button-area">
 							<button id="subtune-minus" class="button-ctrls button-lady button-idle disabled">
 								<svg height="28" style="position:relative;top:-1px;left:-2px;transform:rotate(90deg);" viewBox="0 0 48 48"><path d="M14.83 16.42l9.17 9.17 9.17-9.17 2.83 2.83-12 12-12-12z"/><path d="M0-.75h48v48h-48z" fill="none"/></svg>
@@ -934,7 +934,7 @@
 				<div id="time"><span id="time-current">0:00</span> <div id="time-bar"><div></div></div> <span id="time-length" style="position:relative;">0:00</span></div>
 			</div>
 
-			<div id="songs"<?php if (MiniPlayer()) echo ' style="visibility:hidden;"'; ?>>
+			<div id="songs"<?php if (miniPlayer()) echo ' style="visibility:hidden;"'; ?>>
 				<div id="songs-buttons">
 					<button id="folder-root" class="button-lady browser-ctrls">
 						<svg height="26" viewBox="0 0 48 48"><path d="M12 12h4v24h-4zm7 12l17 12V12z"/><path d="M0 0h48v48H0z" fill="none"/></svg>
@@ -987,7 +987,7 @@
 			</div>
 		</div>
 
-		<?php if (!isMobile() && !MiniPlayer()): ?>
+		<?php if (!isMobile() && !miniPlayer()): ?>
 
 			<div id="dexter">
 				<div id="sites" class="unselectable">

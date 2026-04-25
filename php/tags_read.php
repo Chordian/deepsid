@@ -22,7 +22,7 @@
  * @param		int			&$id_tag_start		id to start bracket connection
  * @param		int			&$id_tag_end		id to end bracket connection
  */
-function GetTagsAndTypes($file_id, &$list_of_tags, &$type_of_tags, &$id_of_tags, &$id_tag_start, &$id_tag_end) {
+function getTagsAndTypes($file_id, &$list_of_tags, &$type_of_tags, &$id_of_tags, &$id_tag_start, &$id_tag_end) {
 	global $db;
 
 	$id_tag_start = 0;

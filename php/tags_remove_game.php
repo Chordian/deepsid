@@ -24,13 +24,17 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH
 if (!isset($_POST['fullname']))
 	die(json_encode(array('status' => 'error', 'message' => 'You must specify the proper POST variable.')));
 
+// --------------------------------------------------------------------------
+// FUNCTIONS
+// --------------------------------------------------------------------------
+
 /**
  * Removes the specified tag from the file.
  *
  * @param		int			$file_id			ID of file from the big table of files
  * @param		string		$name				Name of tag to be removed
  */
-function RemoveTag($file_id, $name) {
+function removeTag($file_id, $name) {
 
 	global $db;
 
@@ -59,8 +63,12 @@ function RemoveTag($file_id, $name) {
 	}
 }
 
+// --------------------------------------------------------------------------
+// START
+// --------------------------------------------------------------------------
+
 try {
-	$db = $account->GetDB();
+	$db = $account->getDB();
 
 	// Get the ID of this file
 	$select = $db->prepare('SELECT id FROM hvsc_files WHERE fullname = :fullname LIMIT 1');
@@ -70,18 +78,18 @@ try {
 		die(json_encode(array('status' => 'error', 'message' => 'Could not find "'.$_POST['fullname'].'" in the database')));
 	$file_id = $select->fetch()->id;
 
-	RemoveTag($file_id, 'Game');
-	RemoveTag($file_id, 'Game Prev');
+	removeTag($file_id, 'Game');
+	removeTag($file_id, 'Game Prev');
 
 	// Now get sorted arrays of the tag names and types used by this file right now
 	$list_of_tags = array();
 	$type_of_tags = array();
 	$id_of_tags = array();
 	$id_tag_start = $id_tag_end = 0;
-	GetTagsAndTypes($file_id, $list_of_tags, $type_of_tags, $id_of_tags, $id_tag_start, $id_tag_end);
+	getTagsAndTypes($file_id, $list_of_tags, $type_of_tags, $id_of_tags, $id_tag_start, $id_tag_end);
 
 } catch(PDOException $e) {
-	$account->LogActivityError(basename(__FILE__), $e->getMessage());
+	$account->logActivityError(basename(__FILE__), $e->getMessage());
 	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 }
 

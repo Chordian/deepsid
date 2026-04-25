@@ -9,6 +9,10 @@
 
 require_once("php/class.account.php"); // Includes setup
 
+// --------------------------------------------------------------------------
+// FUNCTIONS
+// --------------------------------------------------------------------------
+
 /**
  * Adapt the 'fullname' column value.
  *
@@ -16,7 +20,7 @@ require_once("php/class.account.php"); // Includes setup
  *
  * @return	string		name adapted to make more sense
  */
-function AdaptName($name) {
+function adaptName($name) {
 	if (substr($name, 0, 1) == '!')
 		$name = '_DeepSID personal playlist: "'.substr($name, 1).'"';
 	else if (substr($name, 0, 1) == '$')
@@ -26,27 +30,29 @@ function AdaptName($name) {
 	return $name;
 }
 
-/***** START *****/
+// --------------------------------------------------------------------------
+// START
+// --------------------------------------------------------------------------
 
-if ($account->CheckLogin()) {
+if ($account->checkLogin()) {
 
 	try {
 
-		$db = $account->GetDB();
+		$db = $account->getDB();
 
 		$select = $db->prepare('SELECT hvsc_files.fullname as file, hvsc_folders.fullname as folder, rating FROM ratings r'.
 			' LEFT JOIN hvsc_files on r.table_id = hvsc_files.id AND r.type = "FILE"'.
 			' LEFT JOIN hvsc_folders on r.table_id = hvsc_folders.id AND r.type = "FOLDER"'.
 			' WHERE r.user_id = :userid');
-		$select->execute(array(':userid'=>$account->UserID()));
+		$select->execute(array(':userid'=>$account->userID()));
 		$select->setFetchMode(PDO::FETCH_OBJ);
 
 		$i = 0;
 		foreach($select as $row) {
 			if (!empty($row->file))
-				$csv[++$i] = array(AdaptName($row->file), $row->rating);
+				$csv[++$i] = array(adaptName($row->file), $row->rating);
 			else if (!empty($row->folder))
-				$csv[++$i] = array(AdaptName($row->folder), $row->rating);
+				$csv[++$i] = array(adaptName($row->folder), $row->rating);
 		}
 
 		array_multisort($csv, 0);
@@ -67,13 +73,13 @@ if ($account->CheckLogin()) {
 				fputcsv($fp, $line, ';');
 			fclose($fp);
 
-			$account->LogActivity('User "'.$account->UserName().'" exported '.$i.' ratings to a CSV file');
+			$account->logActivity('User "'.$account->userName().'" exported '.$i.' ratings to a CSV file');
 
 		} else
 			die('There were no ratings to be exported.');
 
 	} catch(PDOException $e) {
-		$account->LogActivityError(basename(__FILE__), $e->getMessage());
+		$account->logActivityError(basename(__FILE__), $e->getMessage());
 		die('A database error occurred.');
 	}
 

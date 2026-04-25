@@ -19,7 +19,7 @@ define('CGSC_VERSION', '147'); // Remember to update this
 define('CGSC_PATH', "_Compute's Gazette SID Collection/");
 
 try {
-	$db = $account->GetDB();
+	$db = $account->getDB();
 
 	foreach (file('move.txt') as $line) {
 

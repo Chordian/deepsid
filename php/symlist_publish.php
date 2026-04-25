@@ -17,14 +17,14 @@ require_once("class.account.php"); // Includes setup
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest')
 	die("Direct access not permitted.");
 
-$user_id = $account->CheckLogin() ? $account->UserID() : 0;
+$user_id = $account->checkLogin() ? $account->userID() : 0;
 $symlist_char = $_POST['publish'] ? '$' : '!';
 
 if (!$user_id)
 	die(json_encode(array('status' => 'error', 'message' => 'You must be logged in to publish playlists.')));
 
 try {
-	$db = $account->GetDB();
+	$db = $account->getDB();
 
 	// First let's make sure there is no public playlist with the same name
 	$select = $db->prepare('SELECT 1 FROM hvsc_folders WHERE fullname = :folder');
@@ -41,10 +41,10 @@ try {
 	$update->execute(array(':public'=>$symlist_char.substr($_POST['symlist'], 1), ':fullname'=>$_POST['symlist']));
 	if ($update->rowCount() == 0)
 		die(json_encode(array('status' => 'error', 'message' => 'Could not '.($symlist_char == '!' ? 'un' : '').'publish "'.$_POST['symlist'])));
-	$account->LogActivity('User "'.$_SESSION['user_name'].'" '.($symlist_char == '!' ? 'un' : '').'published the "'.$_POST['symlist'].'" playlist');
+	$account->logActivity('User "'.$_SESSION['user_name'].'" '.($symlist_char == '!' ? 'un' : '').'published the "'.$_POST['symlist'].'" playlist');
 
 } catch(PDOException $e) {
-	$account->LogActivityError(basename(__FILE__), $e->getMessage());
+	$account->logActivityError(basename(__FILE__), $e->getMessage());
 	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 }
 

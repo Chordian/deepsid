@@ -14,7 +14,7 @@
  * 
  * @return		string		$fullname
  */
-function ProxyExotic($fullname) {
+function proxyExotic($fullname) {
 
 	if (substr($fullname, 0, 28) == '_Exotic SID Tunes Collection' && substr_count($fullname, '/') > 1) {
 

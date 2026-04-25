@@ -16,11 +16,11 @@ require_once("class.account.php"); // Includes setup
 
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest')
 	die("Direct access not permitted.");
-if (!$account->IsAdmin())
+if (!$account->isAdmin())
 	die("This is for administrators only.");
 
 	try {
-		$db = $account->GetDB();
+		$db = $account->getDB();
 
 		// Write or update the setting
 		$insert = $db->prepare('
@@ -31,7 +31,7 @@ if (!$account->IsAdmin())
 		$insert->execute([':key' => $_POST['key'], ':value' => $_POST['value']]);
 
 	} catch(PDOException $e) {
-		$account->LogActivityError(basename(__FILE__), $e->getMessage());
+		$account->logActivityError(basename(__FILE__), $e->getMessage());
 		die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 	}
 	die(json_encode(array('status' => 'ok')));

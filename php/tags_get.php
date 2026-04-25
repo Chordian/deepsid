@@ -15,7 +15,7 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH
 	die("Direct access not permitted.");
 
 try {
-	$db = $account->GetDB();
+	$db = $account->getDB();
 
 	// Get a list of all tags
 	$select = $db->query('SELECT id, name, type FROM tags_info ORDER BY name');
@@ -53,7 +53,7 @@ try {
 	$end_id = $select->rowCount() ? $row->end_id : 0;
 
 } catch(PDOException $e) {
-	$account->LogActivityError(basename(__FILE__), $e->getMessage());
+	$account->logActivityError(basename(__FILE__), $e->getMessage());
 	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 }
 

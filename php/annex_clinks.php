@@ -13,7 +13,7 @@ require_once("class.account.php"); // Includes setup
 
 try {
 
-	$db = $account->GetDB();
+	$db = $account->getDB();
 
 	// Get the list of links for this composer
 	$select = $db->prepare('SELECT id, name, url FROM composers_links WHERE composers_id = :id ORDER BY name');
@@ -40,7 +40,7 @@ try {
 	 }
 
 } catch(PDOException $e) {
-	$account->LogActivityError(basename(__FILE__), $e->getMessage());
+	$account->logActivityError(basename(__FILE__), $e->getMessage());
 	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 }
 die(json_encode(array('status' => 'ok', 'html' => $html, 'clinks' => $content)));

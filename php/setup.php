@@ -39,6 +39,10 @@ $envConfig  = require $envFile;
 
 $config = array_merge($generalConfig, $envConfig);      // See PHP files in 'config' folder for keys
 
+// --------------------------------------------------------------------------
+// FUNCTIONS
+// --------------------------------------------------------------------------
+
 /**
  * Use this instead of 'file_get_contents' as that sometimes returns empty
  * strings from CSDb.
@@ -72,7 +76,7 @@ function curl($url) {
  *
  * @return	    string		$fn                 file friendly user name
  */
-function GetFriendlyName($name) {
+function getFriendlyName($name) {
 
 	$fn = preg_replace('/[^a-z0-9]+/i', ' ', $name);
 	$fn = trim($fn);
@@ -91,7 +95,7 @@ function GetFriendlyName($name) {
  *
  * @return	    string		$avatar             image path for avatar
  */
-function GetAvatar($id, $name, $hvsc_folder) {
+function getAvatar($id, $name, $hvsc_folder) {
 
     if (!empty($hvsc_folder)) {
 
@@ -116,7 +120,7 @@ function GetAvatar($id, $name, $hvsc_folder) {
 
         if ($avatar == $undefined_image) {
             // Must use handle name to figure it out (not entirely reliable)
-            $fn = GetFriendlyName($name);
+            $fn = getFriendlyName($name);
 
             // First try to match the handle name after the 6-digit ID part
             $file = glob($_SERVER['DOCUMENT_ROOT'].'/deepsid/images/csdb/??????_'.$fn.'.jpg');
@@ -154,9 +158,9 @@ function GetAvatar($id, $name, $hvsc_folder) {
  *
  * @return	    string		$color              a HTML snippet
  */
-function GetUserColor($name) {
+function getUserColor($name) {
 
-	$fn = GetFriendlyName($name);
+	$fn = getFriendlyName($name);
 
 	// @link https://csdb.dk/help.php?section=intro
 	switch ($fn) {

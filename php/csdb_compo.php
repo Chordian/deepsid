@@ -22,7 +22,7 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH
  *
  * @return	object		pointer to XML data
  */
-function CompoGetXML($event_id) {
+function compoGetXML($event_id) {
 	$xml = curl('https://csdb.dk/webservice/?type=event&id='.$event_id);
 	if (!strpos($xml, '<CSDbData>'))
 		die(json_encode(array('status' => 'warning', 'html' => '<p style="margin-top:0;"><i>CSDb is currently unreachable.</i></p>'.
@@ -38,7 +38,7 @@ function CompoGetXML($event_id) {
  * 
  * @return	object		an array of entries
  */
-function CompoGetEntries($csdb) {
+function compoGetEntries($csdb) {
 	$compos = $csdb->Event->Compo;
 	if (!isset($compos))
 		die(json_encode(array('status' => 'warning', 'html' => '<p style="margin-top:0;">The XML data from the CSDb page had no competition entries.</p>')));
@@ -53,7 +53,7 @@ function CompoGetEntries($csdb) {
  * 
  * @return	string		HTML string with type, date and country
  */
-function CompoGetTypeDateCountry($csdb) {
+function compoGetTypeDateCountry($csdb) {
 
 	global $countryCodes;
 
@@ -117,7 +117,7 @@ function CompoGetTypeDateCountry($csdb) {
  *
  * @return	string		HTML string with the image element
  */
-function CompoGetImage($event_id) {
+function compoGetImage($event_id) {
 	// NOTE: CSDb follows this standard for event images:
 	// https://csdb.dk/gfx/events/(x)000/(id).jpg
 	// (x) is the first digit of the ID and (id) is the event ID itself.
@@ -134,11 +134,11 @@ function CompoGetImage($event_id) {
  * 
  * @return	string		HTML string with the comment table and button
  */
-function CompoGetComments($csdb, $event_id) {
+function compoGetComments($csdb, $event_id) {
 	$scener_handle = array();
 	$scener_id = array();
 	$comments = isset($csdb->Event->UserComment)
-		? CommentsTable('User comments', $csdb->Event->UserComment, $scener_handle, $scener_id)
+		? commentsTable('User comments', $csdb->Event->UserComment, $scener_handle, $scener_id)
 		: '';
 	$comments .= '<button id="csdb-comment" data-type="event" data-id="'.$event_id.'">Comment</button><br />';
 	return $comments;

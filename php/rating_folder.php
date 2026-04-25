@@ -17,11 +17,11 @@ require_once("class.account.php"); // Includes setup
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest')
 	die("Direct access not permitted.");
 
-if ($account->CheckLogin()) {
-	$user_id = $account->UserID();
+if ($account->checkLogin()) {
+	$user_id = $account->userID();
 
 	try {
-		$db = $account->GetDB();
+		$db = $account->getDB();
 
 		$select_files = $db->prepare("
 			SELECT files
@@ -51,7 +51,7 @@ if ($account->CheckLogin()) {
 		}
 
 	} catch(PDOException $e) {
-		$account->LogActivityError(basename(__FILE__), $e->getMessage());
+		$account->logActivityError(basename(__FILE__), $e->getMessage());
 		die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 	}
 } else {

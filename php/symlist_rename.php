@@ -18,13 +18,13 @@ require_once("class.account.php"); // Includes setup
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest')
 	die("Direct access not permitted.");
 
-$user_id = $account->CheckLogin() ? $account->UserID() : 0;
+$user_id = $account->checkLogin() ? $account->userID() : 0;
 
 if (!$user_id)
 	die(json_encode(array('status' => 'error', 'message' => 'You must be logged in to rename playlists.')));
 
 try {
-	$db = $account->GetDB();
+	$db = $account->getDB();
 
 	if (empty($_POST['fullname'])) {
 
@@ -47,7 +47,7 @@ try {
 		$update->execute(array(':old'=>$_POST['symlist'], ':new'=>$char.$_POST['new']));
 		if ($update->rowCount() == 0)
 			die(json_encode(array('status' => 'error', 'message' => 'Could not rename folder "'.$_POST['symlist'].'" => "'.$char.$_POST['new'].'"')));
-		$account->LogActivity('User "'.$_SESSION['user_name'].'" renamed the "'.$_POST['symlist'].'" playlist to "'.$char.$_POST['new'].'"');
+		$account->logActivity('User "'.$_SESSION['user_name'].'" renamed the "'.$_POST['symlist'].'" playlist to "'.$char.$_POST['new'].'"');
 
 	} else {
 
@@ -91,7 +91,7 @@ try {
 	}
 
 } catch(PDOException $e) {
-	$account->LogActivityError(basename(__FILE__), $e->getMessage());
+	$account->logActivityError(basename(__FILE__), $e->getMessage());
 	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 }
 

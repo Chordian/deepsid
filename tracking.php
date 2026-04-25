@@ -24,7 +24,7 @@ try {
     // Normalized "now", same style as the existing scripts
     $now = strtotime(date('Y-m-d H:i:s', strtotime(TIME_ADJUST)));
 
-    $userName   = $account->CheckLogin() ? $account->UserName() : '';
+    $userName   = $account->checkLogin() ? $account->userName() : '';
     $ip         = isset($_SERVER['REMOTE_ADDR'])      ? $_SERVER['REMOTE_ADDR']      : '';
     $userAgent  = isset($_SERVER['HTTP_USER_AGENT'])  ? $_SERVER['HTTP_USER_AGENT']  : '';
 
@@ -153,7 +153,7 @@ try {
 } catch (Throwable $e) {
     // Log and reset tracking file gracefully
     if (isset($account)) {
-        $account->LogActivityError(basename(__FILE__), $e->getMessage());
+        $account->logActivityError(basename(__FILE__), $e->getMessage());
     }
     @unlink(TRACKFILE);
     // Recreate with placeholder, as in the original script

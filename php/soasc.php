@@ -50,6 +50,10 @@ $model = $soasc_models[$_GET['sidModel']];
 // http://www.se2a1.net/dl.php?url=1&d=soasc/hvsc/070/FLAC/MUSICIANS/J/JCH/Yoko_Tsuno_T001.sid_MOS6581R2.flac
 // http://se2a1.iiiii.info:40000/files/soasc/hvsc/068/FLAC/DEMOS/0-9/8-bit_Panda-Ending_Theme_T001.sid_CSG8580R5.flac
 
+// --------------------------------------------------------------------------
+// FUNCTIONS
+// --------------------------------------------------------------------------
+
 /**
  * Try to get file data from a file on an SOASC server.
  *
@@ -57,7 +61,7 @@ $model = $soasc_models[$_GET['sidModel']];
  *
  * @return		string		$data				data is empty if failed
  */
-function RequestURL($path) {
+function requestURL($path) {
 
 	/*
 	$ch = curl_init();
@@ -87,8 +91,12 @@ function RequestURL($path) {
 	return $data;
 }
 
+// --------------------------------------------------------------------------
+// START
+// --------------------------------------------------------------------------
+
 try {
-	$db = $account->GetDB();
+	$db = $account->getDB();
 
 	if ($_GET['sidModel'] == 'auto') {
 		// Decide the SID model to use depending on the meta data setting in the database
@@ -109,7 +117,7 @@ try {
 
 		$path = 'cgsc/133/FLAC'.str_replace('.mus', '_T001.mus_'.$model.'.flac',
 			str_replace("/_Compute's Gazette SID Collection", "", $file));
-		$url = RequestURL($path);
+		$url = requestURL($path);
 		die(json_encode(array('status' => 'ok', 'url' => $url, 'request' => SOASC.$path, 'model' => $model)));
 
 	} else {
@@ -162,12 +170,12 @@ try {
 
 		$path = $hvsc.$format.str_replace('.sid', '_T'.$subtune.'.sid_'.$model.$ext,
 			str_replace('/_High Voltage SID Collection', '', $file));
-		$url = RequestURL($path);
+		$url = requestURL($path);
 		die(json_encode(array('status' => 'ok', 'url' => $url, 'request' => SOASC.$path, 'model' => $model)));
 	}
 
 } catch(PDOException $e) {
-	$account->LogActivityError(basename(__FILE__), $e->getMessage());
+	$account->logActivityError(basename(__FILE__), $e->getMessage());
 	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 }
 ?>

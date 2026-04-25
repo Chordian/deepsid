@@ -9,13 +9,24 @@ ToDo
 
 ONGOING
 ¯¯¯¯¯¯¯
-- Change all 'DoThis()' function names to 'doThis()' instead in all PHP files.
 - Change all DB column names to use underscores ('last_visit' instead of 'lastvisit')
 
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+- Change all 'DoThis()' function names to 'doThis()' instead in all PHP files.
+  PHP function names are case insensitive, so it's safe to rename around as you wish.
+  WIP: Almost done - PUSH to GitHub, go through changes there, then search functions with
+  new names in VSCode to see if all external references were caught.
+
 - Time to shorten 'GameBase64' tag to 'GB64' instead?
+
+- Add one "Primary" text in right side of the relevant one in CSDb release lists.
+
+- Consider cache info in right side in CSDb release lists.
+
+- Consider changing it so the 'Changes' tab calls a separate PHP file a fills it, just like
+  the admin sections. It would probably make it easier on the 'index.php' file.
 
 - A W A I T : Rewrite 'howto_update_gb64.txt' when the next GameBase64 update v20 arrives.
   See the .txt file for a few preliminary things to test.

@@ -15,5 +15,5 @@ require_once("root_generate.php");
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest')
 	die("Direct access not permitted.");
 
-echo json_encode(array('status' => 'ok', 'list' => GenerateList($_GET['rows'], $_GET['type'])));
+echo json_encode(array('status' => 'ok', 'list' => generateList($_GET['rows'], $_GET['type'])));
 ?>

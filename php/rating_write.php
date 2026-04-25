@@ -19,13 +19,13 @@ require_once("class.account.php"); // Includes setup
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest')
 	die("Direct access not permitted.");
 
-if (!$account->CheckLogin())
+if (!$account->checkLogin())
 	die(json_encode(['status'=>'error', 'message'=>'User not logged in']));
 
-$user_id = $account->UserID();
+$user_id = $account->userID();
 
 try {
-	$db = $account->GetDB();
+	$db = $account->getDB();
 
 	// ---------------------------------------------------------------------
 	// PREPARE INPUT
@@ -47,7 +47,7 @@ try {
 	$row = $select->fetch(PDO::FETCH_OBJ);
 
 	if (!$row) {
-		$account->LogActivityError(basename(__FILE__),
+		$account->logActivityError(basename(__FILE__),
 			"Name error; fullname '$fullname' not found in '$table'");
 		die(json_encode(['status'=>'error','message'=>DB_ERROR]));
 	}
@@ -106,7 +106,7 @@ try {
 	// NOTE: Updating the ratings cache was moved to the 'rating_cache.php' script (called by browser.js).
 
 } catch(PDOException $e) {
-	$account->LogActivityError(basename(__FILE__), $e->getMessage());
+	$account->logActivityError(basename(__FILE__), $e->getMessage());
 	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 }
 

@@ -18,7 +18,7 @@ define('HVSC_NEW_VERSION', '84');
 define('HVSC_PATH', '_High Voltage SID Collection/');
 
 try {
-	$db = $account->GetDB();
+	$db = $account->getDB();
 
 	/**
 	 * Read the entire file and start looping through it, line by line.
@@ -258,7 +258,7 @@ try {
 	 * Add players
 	 * Add SIDId stuff
 	 * 
-	 * Refer to the importing text file for details.
+	 * Refer to 'howto_update_hvsc.txt' for details.
 	 */
 
 } catch(PDOException $e) {

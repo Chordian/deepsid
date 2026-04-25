@@ -22,7 +22,7 @@ if (!isset($_GET['player']) && !isset($_GET['id']))
 	die(json_encode(array('status' => 'error', 'message' => 'You must specify \'player\' or \'id\' as a GET variable.')));
 
 try {
-	$db = $account->GetDB();
+	$db = $account->getDB();
 
 	// If a player string was specified then first look it up in the many-to-one table
 	if (isset($_GET['player'])) {
@@ -191,7 +191,7 @@ try {
 	}
 
 } catch(PDOException $e) {
-	$account->LogActivityError(basename(__FILE__), $e->getMessage());
+	$account->logActivityError(basename(__FILE__), $e->getMessage());
 	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 }
 echo json_encode(array('status' => 'ok', 'info' => true, 'sticky' => $sticky, 'html' => $html));

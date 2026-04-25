@@ -14,6 +14,10 @@ require_once("class.account.php"); // Includes setup
 
 $dryRun = true;		// Set to TRUE to test without updating DB
 
+// --------------------------------------------------------------------------
+// FUNCTIONS
+// --------------------------------------------------------------------------
+
 function csdbFindExactRelease(string $name): array
 {
     $url  = 'https://csdb.dk/search/?seinsel=all&search=' . urlencode($name);
@@ -110,9 +114,13 @@ function csdbFindExactRelease(string $name): array
     return $matches;
 }
 
+// --------------------------------------------------------------------------
+// START
+// --------------------------------------------------------------------------
+
 try {
 	
-	$db = $account->GetDB();
+	$db = $account->getDB();
 
 	// Fetch candidates
 	$stmt = $db->query("

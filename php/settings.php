@@ -35,11 +35,11 @@ $firstTime = array(
 	'skipshort'			=> 0,
 );
 
-$user_id = $account->CheckLogin() ? $account->UserID() : 0;
+$user_id = $account->checkLogin() ? $account->userID() : 0;
 if (!$user_id) die(json_encode(array('status' => 'ok', 'settings' => $firstTime)));
 
 try {
-	$db = $account->GetDB();
+	$db = $account->getDB();
 
 	// First get all the user's settings
 	$select = $db->query('SELECT flags FROM users WHERE id = '.$user_id);
@@ -62,13 +62,13 @@ try {
 		$serialized = serialize($settings);
 		$update = $db->prepare('UPDATE users SET flags = :flags WHERE id = '.$user_id);
 		$update->execute(array(':flags' => $serialized));
-		$account->LogActivity('User "'.$_SESSION['user_name'].'" updated personal settings: '.$serialized);
+		$account->logActivity('User "'.$_SESSION['user_name'].'" updated personal settings: '.$serialized);
 		if ($update->rowCount() == 0)
 			die(json_encode(array('status' => 'error', 'message' => 'Could not update your settings.')));
 	}
 
 } catch(PDOException $e) {
-	$account->LogActivityError(basename(__FILE__), $e->getMessage());
+	$account->logActivityError(basename(__FILE__), $e->getMessage());
 	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 }
 

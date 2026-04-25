@@ -18,13 +18,13 @@ require_once("class.account.php"); // Includes setup
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest')
 	die("Direct access not permitted.");
 
-$user_id = $account->CheckLogin() ? $account->UserID() : 0;
+$user_id = $account->checkLogin() ? $account->userID() : 0;
 
 if (!$user_id)
 	die(json_encode(array('status' => 'error', 'message' => 'You must be logged in to use playlists.')));
 
 try {
-	$db = $account->GetDB();
+	$db = $account->getDB();
 
 	if (isset($_POST['symid']) && $_POST['symid']) {
 
@@ -64,7 +64,7 @@ try {
 	}
 
 } catch(PDOException $e) {
-	$account->LogActivityError(basename(__FILE__), $e->getMessage());
+	$account->logActivityError(basename(__FILE__), $e->getMessage());
 	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 }
 

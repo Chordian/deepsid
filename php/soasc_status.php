@@ -35,6 +35,10 @@
 
 require_once("setup.php");
 
+// --------------------------------------------------------------------------
+// FUNCTIONS
+// --------------------------------------------------------------------------
+
 /**
  * Try to get file data from a file on an SOASC server.
  *
@@ -42,7 +46,7 @@ require_once("setup.php");
  *
  * @return		string		$data				data is empty if failed
  */
-function RequestURL($path) {
+function requestURL($path) {
 
 	/*
 	$ch = curl_init();
@@ -75,6 +79,10 @@ function RequestURL($path) {
 	return $data;
 }
 
+// --------------------------------------------------------------------------
+// START
+// --------------------------------------------------------------------------
+
 $time = date('Y-m-d H:i:s', strtotime(TIME_ADJUST));
 
 file_put_contents('../soasc.txt', $time.',1'); // In case the script terminates
@@ -89,13 +97,13 @@ $test_files = array( // These files are suitable as it's a very short sfx (less 
 // cron job services assume the script itself is in error and will terminate after a while.
 
 foreach($test_files as $file) {
-	/*$mirror = RequestURL('http://www.se2a1.net/dl.php?url=1&survey=1&d=soasc/'.$file);
+	/*$mirror = requestURL('http://www.se2a1.net/dl.php?url=1&survey=1&d=soasc/'.$file);
 	// file_put_contents('../soasc_mirror.txt', $mirror);
 	if (empty($mirror)) {
 		file_put_contents('../soasc.txt', $time.',2'); // The DL script timed out
 		die;
 	}*/
-	$result = RequestURL($file); // @todo Replace with $mirror when uncommenting the above!
+	$result = requestURL($file); // @todo Replace with $mirror when uncommenting the above!
 	// file_put_contents('../soasc_result.txt', $result);
 	if (empty($result)) {
 		file_put_contents('../soasc.txt', $time.',3'); // The mirror URL timed out

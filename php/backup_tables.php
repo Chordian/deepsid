@@ -12,7 +12,7 @@
 $backupDir     = __DIR__ . '/../backups/';
 $timestampFile = $backupDir . 'last_backup.txt';
 
-$maxDays = (int)$account->GetAdminSetting('db_backup_retention_days');
+$maxDays = (int)$account->getAdminSetting('db_backup_retention_days');
 if ($maxDays < 1) $maxDays = 7;
 
 $tables = [
@@ -55,7 +55,7 @@ file_put_contents($timestampFile, "Backup started at " . date('Y-m-d H:i:s'));
 require_once("class.account.php"); // Includes setup
 
 try {
-    $db = $account->GetDB();
+    $db = $account->getDB();
 
     $date = date('Y-m-d');
     $backupFile = "$backupDir/backup_$date.sql";
@@ -105,6 +105,6 @@ try {
     }
 
 } catch (Exception $e) {
-    $account->LogActivityError(basename(__FILE__), $e->getMessage());
+    $account->logActivityError(basename(__FILE__), $e->getMessage());
 }
 ?>

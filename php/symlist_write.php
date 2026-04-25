@@ -17,13 +17,13 @@ require_once("class.account.php"); // Includes setup
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest')
 	die("Direct access not permitted.");
 
-$user_id = $account->CheckLogin() ? $account->UserID() : 0;
+$user_id = $account->checkLogin() ? $account->userID() : 0;
 
 if (!$user_id)
 	die(json_encode(array('status' => 'error', 'message' => 'You must be logged in to use playlists.')));
 
 try {
-	$db = $account->GetDB();
+	$db = $account->getDB();
 
 	if (empty($_POST['symlist'])) {
 
@@ -52,7 +52,7 @@ try {
 			' VALUES("'.$suggested_symlist_name.'", '.$user_id.')');
 		if ($insert->rowCount() == 0)
 			die(json_encode(array('status' => 'error', 'message' => "Could not create ".$suggested_symlist_name)));
-		$account->LogActivity('User "'.$_SESSION['user_name'].'" created the "'.$suggested_symlist_name.'" playlist');
+		$account->logActivity('User "'.$_SESSION['user_name'].'" created the "'.$suggested_symlist_name.'" playlist');
 
 		$folder_id = $db->lastInsertId();
 		$file_count = 0;
@@ -111,7 +111,7 @@ try {
 		die(json_encode(array('status' => 'error', 'message' => 'Could not update the count of files in '.$symlist_folder)));
 
 } catch(PDOException $e) {
-	$account->LogActivityError(basename(__FILE__), $e->getMessage());
+	$account->logActivityError(basename(__FILE__), $e->getMessage());
 	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 }
 

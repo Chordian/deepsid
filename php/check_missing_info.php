@@ -95,7 +95,7 @@ function hasCorrectType($value, $type) {
 
 try {
 
-	$db = $account->GetDB();
+	$db = $account->getDB();
 
 	foreach ($collections as $collection) {
 
@@ -176,7 +176,7 @@ try {
 	}
 
 } catch (Exception $e) {
-	$account->LogActivityError(basename(__FILE__), $e->getMessage());
+	$account->logActivityError(basename(__FILE__), $e->getMessage());
 }
 
 echo "<p>Scanning completed.</p>";

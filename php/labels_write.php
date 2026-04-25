@@ -23,7 +23,7 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || strtolower($_SERVER['HTTP_X_REQ
 	die("Direct access not permitted.");
 }
 
-if (!$account->IsAdmin()) {
+if (!$account->isAdmin()) {
 	http_response_code(403);
 	die("This is for administrators only."); // At least for now...
 }
@@ -44,7 +44,7 @@ if (!isset($_POST['id']) || !isset($_POST['site']) || !isset($_POST['name']) || 
  * @param		string		$labels_name
  * @param		string		$labels_type
  */
-function LogTagActivity($action, $labels_id, $labels_site, $labels_name, $labels_type) {
+function logTagActivity($action, $labels_id, $labels_site, $labels_name, $labels_type) {
 	global $db, $account;
 
 	// Get the fullname of this ID
@@ -58,8 +58,8 @@ function LogTagActivity($action, $labels_id, $labels_site, $labels_name, $labels
 	file_put_contents($_SERVER['DOCUMENT_ROOT'].'/deepsid/logs/tags.txt',
 			date('Y-m-d H:i:s', strtotime(TIME_ADJUST)).','.
 			$_SERVER['REMOTE_ADDR'].','.
-			$account->UserID().','.
-			$account->UserName().','.
+			$account->userID().','.
+			$account->userName().','.
 			$_POST['id'].','.
 			$fullname.','.
 			$action.','.
@@ -73,7 +73,7 @@ function LogTagActivity($action, $labels_id, $labels_site, $labels_name, $labels
 /***** START *****/
 
 try {
-	$db = $account->GetDB();
+	$db = $account->getDB();
 
 	$created = false;
 	$params = [
@@ -102,7 +102,7 @@ try {
 		$label->execute($params);
 		$labels_id = $db->lastInsertId();
 		$created = true;
-		LogTagActivity('LABELS:CREATE', $labels_id, $_POST['site'], $_POST['name'], $_POST['type']);
+		logTagActivity('LABELS:CREATE', $labels_id, $_POST['site'], $_POST['name'], $_POST['type']);
 	}
 
 	// Link the SID file to the label
@@ -112,10 +112,10 @@ try {
 		':files_id'  => $_POST['id'],
 		':labels_id' => $labels_id
 	]);
-	LogTagActivity('LABELS:LINK', $labels_id, $_POST['site'], $_POST['name'], $_POST['type']);
+	logTagActivity('LABELS:LINK', $labels_id, $_POST['site'], $_POST['name'], $_POST['type']);
 
 } catch(PDOException $e) {
-	$account->LogActivityError(basename(__FILE__), $e->getMessage());
+	$account->logActivityError(basename(__FILE__), $e->getMessage());
 	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 }
 echo json_encode(array('status' => 'ok', 'created' => $created));

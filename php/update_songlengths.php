@@ -20,7 +20,7 @@ require_once("class.account.php"); // Includes setup
 define('HVSC_ROOT', '_High Voltage SID Collection/');
 
 try {
-	$db = $account->GetDB();
+	$db = $account->getDB();
 
 	// Get a list of all file rows in HVSC only
 	// NOTE: Tunes in CGSC currently don't have exact lengths tracked and thus are skipped.

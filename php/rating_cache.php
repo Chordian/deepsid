@@ -17,21 +17,21 @@ require_once('build_ratings_cache_single_user.php');
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest')
 	die("Direct access not permitted.");
 
-if ($account->CheckLogin()) {
-	$user_id = $account->UserID();
+if ($account->checkLogin()) {
+	$user_id = $account->userID();
 
 	try {
-		$db = $account->GetDB();
+		$db = $account->getDB();
 
 		// Delete old cache rows
 		$del = $db->prepare("DELETE FROM ratings_cache WHERE user_id = ?");
 		$del->execute([$user_id]);
 
 		// Build new cache
-		build_ratings_cache_for_user($db, (int)$user_id);
+		buildRatingsCacheForUser($db, (int)$user_id);
 
 	} catch(PDOException $e) {
-		$account->LogActivityError(basename(__FILE__), $e->getMessage());
+		$account->logActivityError(basename(__FILE__), $e->getMessage());
 		die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 	}
 }

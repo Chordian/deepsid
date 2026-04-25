@@ -13,7 +13,7 @@ require_once("class.account.php"); // Includes setup
 die("This script has served its purpose. It doesn't need to be run again.");
 
 try {
-	$db = $account->GetDB();
+	$db = $account->getDB();
 
 	// 1. Walk all tags with 'LABEL' type in 'tags_info' table
 	$select_labels = $db->query('SELECT id, name FROM tags_info WHERE type = "LABEL"');
@@ -52,6 +52,6 @@ try {
 	echo 'Script completed.';
 
 } catch(PDOException $e) {
-	$account->LogActivityError(basename(__FILE__), $e->getMessage());
+	$account->logActivityError(basename(__FILE__), $e->getMessage());
 }
 ?>

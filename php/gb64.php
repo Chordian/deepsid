@@ -24,7 +24,7 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH
 	die("Direct access not permitted.");
 
 $primary_back_button = false;
-$user_id = $account->CheckLogin() ? $account->UserID() : 0;
+$user_id = $account->checkLogin() ? $account->userID() : 0;
 
 // --------------------------------------------------------------------------
 // FUNCTIONS
@@ -33,11 +33,11 @@ $user_id = $account->CheckLogin() ? $account->UserID() : 0;
 /**
  * Change e.g. "Moon, The" to "The Moon" instead.
  * 
- * @param		string		$id					The original title
+ * @param		string		$id					the original title
  *
- * @return		string							The adapted title
+ * @return		string							the adapted title
  */
-function NormalizeTitle(string $title): string
+function normalizeTitle(string $title): string
 {
     $articles = [
         'The', 'A', 'An',       			// English
@@ -66,7 +66,7 @@ function NormalizeTitle(string $title): string
  *
  * @return		array							array with information
  */
-function ReadGB64DB($id) {
+function readGB64DB($id) {
 
 	global $gb;
 
@@ -77,7 +77,7 @@ function ReadGB64DB($id) {
 	$games = $select_games->fetch();
 
 	// Get the title
-	$title = NormalizeTitle($games->Name);
+	$title = normalizeTitle($games->Name);
 
 	// Get the year
 	$select_years = $gb->query('SELECT Year FROM Years WHERE YE_Id = '.$games->YE_Id.' LIMIT 1');
@@ -224,7 +224,7 @@ function ReadGB64DB($id) {
 try {
 
 	// Connect to DeepSID database
-	$db = $account->GetDB();
+	$db = $account->getDB();
 
 	// Connect to imported GameBase64 database
 	$gb = new PDO(
@@ -271,7 +271,7 @@ try {
 		die(json_encode(array('status' => 'error', 'message' => 'You must specify the proper GET variables.')));
 
 } catch(PDOException $e) {
-	$account->LogActivityError(basename(__FILE__), $e->getMessage());
+	$account->logActivityError(basename(__FILE__), $e->getMessage());
 	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 }
 
@@ -318,7 +318,7 @@ if ($page_id) {
 	// SUB PAGE ONLY
 	// --------------------------------------------------------------------------
 	
-	$data = ReadGB64DB($page_id);
+	$data = readGB64DB($page_id);
 
 	$published		= '<p style="margin-top:-2px;"><b>Published:</b><br />'.$data['year'].', '.$data['company'].'</p>';
 	$musician		= (!empty($data['musician']) ? '<p><b>Music:</b><br />'.$data['musician'].'</p>' : '');
@@ -388,7 +388,7 @@ if ($page_id) {
 
 	foreach($gbIds as $id) {
 
-		$data = ReadGB64DB($id);
+		$data = readGB64DB($id);
 
 		$thumbnails = array_slice($data['thumbnails'], 0, 4);	// Maximum 4 thumbnails
 

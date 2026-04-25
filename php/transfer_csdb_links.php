@@ -10,7 +10,7 @@
 require_once("class.account.php"); // Includes setup
 
 try {
-	$db = $account->GetDB();
+	$db = $account->getDB();
 
 	$select = $db->query('SELECT id, name, csdbid FROM composers WHERE csdbid != 0 AND csdbtype = "scener"');
 	$select->setFetchMode(PDO::FETCH_OBJ);

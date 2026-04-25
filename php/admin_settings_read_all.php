@@ -13,13 +13,13 @@ require_once("class.account.php"); // Includes setup
 
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest')
 	die("Direct access not permitted.");
-if (!$account->IsAdmin())
+if (!$account->isAdmin())
 	die("This is for administrators only.");
 
 $html = '';
 
 try {
-	$db = $account->GetDB();
+	$db = $account->getDB();
 
 	// Get all the admin settings
 	$select = $db->query('SELECT * FROM admin_settings ORDER BY setting_key');
@@ -46,7 +46,7 @@ try {
 	}
 
 } catch(PDOException $e) {
-	$account->LogActivityError(basename(__FILE__), $e->getMessage());
+	$account->logActivityError(basename(__FILE__), $e->getMessage());
 	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 }
 die(json_encode(array('status' => 'ok', 'html' => $html)));

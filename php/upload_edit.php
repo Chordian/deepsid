@@ -17,11 +17,11 @@ require_once("class.account.php"); // Includes setup
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest')
 	die("Direct access not permitted.");
 
-if (!$account->CheckLogin())
+if (!$account->checkLogin())
 	die(json_encode(array('status' => 'error', 'message' => 'You must be logged in to edit SID files.')));
 
 try {
-	$db = $account->GetDB();
+	$db = $account->getDB();
 	
 	// Get all general file info
 	$select = $db->prepare('SELECT * FROM hvsc_files WHERE fullname = :fullname LIMIT 1');
@@ -82,7 +82,7 @@ try {
 	);
 
 } catch(PDOException $e) {
-	$account->LogActivityError(basename(__FILE__), $e->getMessage());
+	$account->logActivityError(basename(__FILE__), $e->getMessage());
 	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 }
 

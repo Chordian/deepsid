@@ -20,7 +20,7 @@ require_once("countries.php"); // Used by the 'countries' list type
  *
  * @return		string		$adapted_fullname
  */
-function AdaptBrowserName($fullname, $link = '') {
+function adaptBrowserName($fullname, $link = '') {
 	$adapted_fullname = str_replace('_High Voltage SID Collection', '<font class="dim">HVSC</font>', $fullname);
 	$adapted_fullname = str_replace('HVSC</font>/DEMOS', 'HVSC/D</font>', $adapted_fullname);
 	$adapted_fullname = str_replace('HVSC</font>/GAMES', 'HVSC/G</font>', $adapted_fullname);
@@ -41,12 +41,12 @@ function AdaptBrowserName($fullname, $link = '') {
  *
  * @return		string		$contents			HTML
  */
-function GenerateList($rows, $type) {
+function generateList($rows, $type) {
 
 	global $account, $countryCodes;
 
 	try {
-		$db = $account->GetDB();
+		$db = $account->getDB();
 
 		$list = [];
 
@@ -62,7 +62,7 @@ function GenerateList($rows, $type) {
 				if ($select->rowCount()) {
 					foreach($select as $row) {
 						array_push($list, array(
-							'entry' =>	AdaptBrowserName($row->fullname, HOST.'?file=/'.$row->fullname),
+							'entry' =>	adaptBrowserName($row->fullname, HOST.'?file=/'.$row->fullname),
 							'value' =>	$row->files,
 						));
 					}
@@ -83,7 +83,7 @@ function GenerateList($rows, $type) {
 					foreach($select as $row) {
 						$length = explode(' ', $row->length)[0];
 						array_push($list, array(
-							'entry' =>	AdaptBrowserName($row->fullname, HOST.'?file=/'.$row->fullname.'&subtune='.($row->subtune + 1)),
+							'entry' =>	adaptBrowserName($row->fullname, HOST.'?file=/'.$row->fullname.'&subtune='.($row->subtune + 1)),
 							'value' =>	explode('.', $length)[0], // No MS
 							'subtune' => $row->subtune + 1,
 						));
@@ -119,7 +119,7 @@ function GenerateList($rows, $type) {
 					foreach ($select as $row) {
 						$folder = substr($row->fullname, 0, strrpos($row->fullname, '/'));
 						$list[] = array(
-							'entry' => AdaptBrowserName($folder, HOST.'?file=/'.$folder),
+							'entry' => adaptBrowserName($folder, HOST.'?file=/'.$folder),
 							'value' => (int)$row->c,
 						);
 					}
@@ -199,7 +199,7 @@ function GenerateList($rows, $type) {
 						$hours = floor($total_seconds / 3600);
 						$minutes = str_pad(floor(($total_seconds / 60) % 60), 2, '0', STR_PAD_LEFT);
 						array_push($list, array(
-							'entry' =>	AdaptBrowserName($row->f, HOST.'?file=/'.$row->f),
+							'entry' =>	adaptBrowserName($row->f, HOST.'?file=/'.$row->f),
 							'value' =>	'<span class="slimfont">'.$hours.'h '.$minutes.'m</span>',
 						));
 					}
@@ -230,7 +230,7 @@ function GenerateList($rows, $type) {
 		return $contents;
 
 	} catch(PDOException $e) {
-		$account->LogActivityError(basename(__FILE__), $e->getMessage());
+		$account->logActivityError(basename(__FILE__), $e->getMessage());
 		die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 	}
 }

@@ -9,7 +9,7 @@
  * @used-by		main.js
  */
 
-function MakeSiteLink($url, $header, $type = '') {
+function makeSiteLink($url, $header, $type = '') {
 
 	// Ensure proper escaping
     $escUrl    = htmlspecialchars($url,    ENT_QUOTES, 'UTF-8');

@@ -71,7 +71,7 @@ foreach($csdb->Forum->Room->Topic->Post as $post) {
 	$hvsc_folder = '';
 	if ($scid) {
 		try {
-			$db = $account->GetDB();
+			$db = $account->getDB();
 	
 			$select = $db->prepare('SELECT fullname FROM composers WHERE csdbid = :csdbid LIMIT 1');
 			$select->execute(array(':csdbid'=>$scid));
@@ -85,8 +85,8 @@ foreach($csdb->Forum->Room->Topic->Post as $post) {
 		}
 	}
 
-	$thumbnail = GetAvatar($scid, $handle, $hvsc_folder);
-	$color = GetUserColor($handle);
+	$thumbnail = getAvatar($scid, $handle, $hvsc_folder);
+	$color = getUserColor($handle);
 
 	/***** REDIRECT (PLINKS) ADAPTATIONS - BEGIN *****/
 

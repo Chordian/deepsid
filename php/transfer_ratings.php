@@ -13,7 +13,7 @@ define('USER_SOURCE', 		2);		// JCH
 define('USER_DESTINATION',	3);		// Dummy
 
 try {
-	$db = $account->GetDB();
+	$db = $account->getDB();
 
 	// First, purge all previous ratings by the destination user
 	$db->query('DELETE FROM ratings WHERE user_id = '.USER_DESTINATION);

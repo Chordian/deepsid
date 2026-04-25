@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 	exit;
 }
 
-if ((int)$account->GetAdminSetting('log_js_errors') !== 1) {
+if ((int)$account->getAdminSetting('log_js_errors') !== 1) {
 	exit;
 }
 

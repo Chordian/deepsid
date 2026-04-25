@@ -17,14 +17,14 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH
 
 if (isset($_POST['submitted'])) {
 	// Do we need to register a user first?
-	if (isset($_GET['register']) && $_GET['register'] == 'true' && !$account->RegisterUser())
-		die(json_encode(array('result' => false, 'error' => $account->GetErrorMessage())));
+	if (isset($_GET['register']) && $_GET['register'] == 'true' && !$account->registerUser())
+		die(json_encode(array('result' => false, 'error' => $account->getErrorMessage())));
 
 	// Always login regardless of having registered first or not
-	if ($account->Login()) {
+	if ($account->login()) {
 		echo json_encode(array('result' => true, 'error' => ''));
 	} else {
-		echo json_encode(array('result' => false, 'error' => $account->GetErrorMessage()));
+		echo json_encode(array('result' => false, 'error' => $account->getErrorMessage()));
 	}
 }
 ?>

@@ -23,11 +23,11 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH
 if (!isset($_GET['compo']) || !isset($_GET['id']))
 	die(json_encode(array('status' => 'error', 'message' => 'You must specify the proper GET variables.')));
 
-$csdb =					CompoGetXML($_GET['id']);
-$compos =				CompoGetEntries($csdb);
-$type_date_country =	CompoGetTypeDateCountry($csdb);
-$event_image =			CompoGetImage($_GET['id']);
-$user_comments = 		CompoGetComments($csdb, $_GET['id']);
+$csdb =					compoGetXML($_GET['id']);
+$compos =				compoGetEntries($csdb);
+$type_date_country =	compoGetTypeDateCountry($csdb);
+$event_image =			compoGetImage($_GET['id']);
+$user_comments = 		compoGetComments($csdb, $_GET['id']);
 
 $participants = '';
 $unknown = 0;

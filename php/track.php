@@ -10,12 +10,12 @@ require_once("class.account.php"); // Includes setup
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest')
 	die("Direct access not permitted.");
 
-// @todo Check again if this works:
-if ($account->CheckLogin() && ($account->UserName() == 'JCH' || $account->UserName() == 'Ratings'))
+// @todo Check again if this works
+if ($account->checkLogin() && ($account->userName() == 'JCH' || $account->userName() == 'Ratings'))
 	exit();
 
 try {
-    $db = $account->GetDB();
+    $db = $account->getDB();
 
     $insert = $db->prepare('
         INSERT INTO tracking (event_type, target, ip, created_at)

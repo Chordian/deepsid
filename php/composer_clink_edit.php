@@ -20,10 +20,10 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH
 if (!isset($_POST['cid']) || !isset($_POST['id']) || !isset($_POST['name']) || !isset($_POST['url']))
 	die(json_encode(array('status' => 'error', 'message' => 'You must specify the proper POST variables.')));
 
-if ($account->CheckLogin()) {
+if ($account->checkLogin()) {
 	
 	try {
-		$db = $account->GetDB();
+		$db = $account->getDB();
 
 		// Who exactly are we doing this for?
 		$select = $db->prepare('SELECT fullname FROM composers WHERE id = :cid');
@@ -40,10 +40,10 @@ if ($account->CheckLogin()) {
 			die(json_encode(array('status' => 'error', 'message' => 'Could not change a composer link to "'.$_POST['name'].'" for "'.$fullname.'"')));
 
 		// Finally log it
-		$account->LogActivity('User "'.$account->UserName().'" changed a composer link to "'.$_POST['name'].'" ('.$_POST['url'].') for "'.$fullname.'"');
+		$account->logActivity('User "'.$account->userName().'" changed a composer link to "'.$_POST['name'].'" ('.$_POST['url'].') for "'.$fullname.'"');
 
 	} catch(PDOException $e) {
-		$account->LogActivityError(basename(__FILE__), $e->getMessage());
+		$account->logActivityError(basename(__FILE__), $e->getMessage());
 		die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 	}
 

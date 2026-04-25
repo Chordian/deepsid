@@ -13,7 +13,7 @@ require_once("class.account.php"); // Includes setup
 
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest')
 	die("Direct access not permitted.");
-if (!$account->IsAdmin())
+if (!$account->isAdmin())
 	die("This is for administrators only.");
 
 $baseURL = $_SERVER['HTTP_HOST'] == LOCALHOST ? "http://chordian/deepsid/php/" : "https://deepsid.chordian.net/php/";

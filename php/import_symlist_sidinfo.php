@@ -44,7 +44,7 @@ require_once("class.account.php"); // Includes setup
 define('SYMFOLDER', $_SERVER['HTTP_HOST'] == LOCALHOST ? 2291 : 2306);
 
 try {
-	$db = $account->GetDB();
+	$db = $account->getDB();
 
 	// -----------------------------------------------------------------------------------------------
 	// @todo FOR NEXT UPDATE, ADD CODE HERE TO DELETE/REMOVE ALL PREVIOUS SYMLIST ROWS AND START OVER!

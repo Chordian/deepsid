@@ -18,7 +18,7 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH
 	die("Direct access not permitted.");
 
 try {
-	$db = $account->GetDB();
+	$db = $account->getDB();
 
 	$select = $db->prepare('SELECT id, fullname FROM hvsc_folders WHERE fullname LIKE :folder');
 	$select->execute(array(':folder'=>ltrim($_GET['folder'], '/').'/%'));
@@ -42,7 +42,7 @@ try {
 	}
 
 } catch(PDOException $e) {
-	$account->LogActivityError(basename(__FILE__), $e->getMessage());
+	$account->logActivityError(basename(__FILE__), $e->getMessage());
 	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 }
 echo json_encode(array('status' => 'ok', 'ready' => $ready, 'results' => $results));

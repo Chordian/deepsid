@@ -13,13 +13,13 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH
 	die("Direct access not permitted.");
 
 try {
-	$db = $account->GetDB();
+	$db = $account->getDB();
 
 	$select = $db->query('SELECT *, case when title like "The %" then trim(substr(title from 4)) else title end as title2 FROM players_info ORDER BY title2');
 	$select->setFetchMode(PDO::FETCH_OBJ);
 
 	if (!$select->rowCount()) {
-		$account->LogActivityError(basename(__FILE__), 'No entries returned');
+		$account->logActivityError(basename(__FILE__), 'No entries returned');
 		die(json_encode(array('status' => 'error', 'message' => "Couldn't find the information in the database.")));
 	}
 
@@ -115,7 +115,7 @@ try {
 		'</table>';
 
 } catch(PDOException $e) {
-	$account->LogActivityError(basename(__FILE__), $e->getMessage());
+	$account->logActivityError(basename(__FILE__), $e->getMessage());
 	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 }
 echo json_encode(array('status' => 'ok', 'sticky' => $sticky, 'html' => $html));

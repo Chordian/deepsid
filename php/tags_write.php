@@ -28,6 +28,10 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH
 if (!isset($_POST['fileID']) || !isset($_POST['allTags']))
 	die(json_encode(array('status' => 'error', 'message' => 'You must specify the proper POST variables.')));
 
+// --------------------------------------------------------------------------
+// FUNCTIONS
+// --------------------------------------------------------------------------
+
 /**
  * Writes a line to a CSV log file describing an activity only regarding tags.
  * 
@@ -43,7 +47,7 @@ if (!isset($_POST['fileID']) || !isset($_POST['allTags']))
  * @param		string		$tag_id
  * @param		string		$tag_name
  */
-function LogTagActivity($action, $tag_id, $tag_name) {
+function logTagActivity($action, $tag_id, $tag_name) {
 	global $user_id, $user_name, $fullname;
 	file_put_contents($_SERVER['DOCUMENT_ROOT'].'/deepsid/logs/tags.txt',
 			date('Y-m-d H:i:s', strtotime(TIME_ADJUST)).','.
@@ -58,7 +62,9 @@ function LogTagActivity($action, $tag_id, $tag_name) {
 		PHP_EOL, FILE_APPEND);
 }
 
-/***** START *****/
+// --------------------------------------------------------------------------
+// START
+// --------------------------------------------------------------------------
 
 // Uncompress all tags (compressed in 'browser.js' to avoid 'max_input_vars' limit in PHP)
 if (isset($_POST['allTags'])) {
@@ -69,14 +75,14 @@ if (isset($_POST['allTags'])) {
 
 $file_tags = isset($_POST['fileTags']) ? $_POST['fileTags'] : array();
 
-if (!$account->CheckLogin())
+if (!$account->checkLogin())
 	die(json_encode(array('status' => 'error', 'message' => 'You must be logged in to edit tags for a file.')));
 
-$user_id = $account->UserID();
-$user_name = $account->UserName();
+$user_id = $account->userID();
+$user_name = $account->userName();
 
 try {
-	$db = $account->GetDB();
+	$db = $account->getDB();
 
 	// Get full name of this file ID
 	$select = $db->prepare('SELECT fullname FROM hvsc_files WHERE id = :id');
@@ -92,7 +98,7 @@ try {
 			$insert->execute(array(':name'=>$tag['name']));
 			if ($insert->rowCount() == 0)
 				die(json_encode(array('status' => 'error', 'message' => 'Could not create the new tag "'.$tag['name'].'"')));
-			LogTagActivity('NEW', $db->lastInsertId(), $tag['name']);
+			logTagActivity('NEW', $db->lastInsertId(), $tag['name']);
 			// In the array for the file, replace the "fake" ID with the real one
 			$file_tags = array_diff($file_tags, [$tag['id']]);
 			$file_tags[] = $db->lastInsertId();
@@ -115,7 +121,7 @@ try {
 			// Get its name
 			$select = $db->query('SELECT name FROM tags_info WHERE id = '.$row->tags_id);
 			$select->setFetchMode(PDO::FETCH_OBJ);
-			LogTagActivity('DELETE', $row->tags_id, $select->fetch()->name);
+			logTagActivity('DELETE', $row->tags_id, $select->fetch()->name);
 		}
 	}
 
@@ -128,7 +134,7 @@ try {
 			// Get its name
 			$select = $db->query('SELECT name FROM tags_info WHERE id = '.$tag_id);
 			$select->setFetchMode(PDO::FETCH_OBJ);
-			LogTagActivity('ADD', $tag_id, $select->fetch()->name);
+			logTagActivity('ADD', $tag_id, $select->fetch()->name);
 		}
 	}
 
@@ -193,10 +199,10 @@ try {
 	$type_of_tags = array();
 	$id_of_tags = array();
 	$id_tag_start = $id_tag_end = 0;
-	GetTagsAndTypes($_POST['fileID'], $list_of_tags, $type_of_tags, $id_of_tags, $id_tag_start, $id_tag_end);
+	getTagsAndTypes($_POST['fileID'], $list_of_tags, $type_of_tags, $id_of_tags, $id_tag_start, $id_tag_end);
 
 } catch(PDOException $e) {
-	$account->LogActivityError(basename(__FILE__), $e->getMessage());	
+	$account->logActivityError(basename(__FILE__), $e->getMessage());	
 	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 }
 

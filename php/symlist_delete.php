@@ -14,13 +14,13 @@ require_once("class.account.php"); // Includes setup
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest')
 	die("Direct access not permitted.");
 
-$user_id = $account->CheckLogin() ? $account->UserID() : 0;
+$user_id = $account->checkLogin() ? $account->userID() : 0;
 
 if (!$user_id)
 	die(json_encode(array('status' => 'error', 'message' => 'You must be logged in to delete playlists.')));
 
 try {
-	$db = $account->GetDB();
+	$db = $account->getDB();
 
 	// Get ID of symlist folder
 	$select = $db->prepare('SELECT id FROM hvsc_folders WHERE fullname = :folder AND user_id = '.$user_id.' LIMIT 1');
@@ -37,10 +37,10 @@ try {
 
 	// Now delete the folder itself
 	$delete = $db->query('DELETE FROM hvsc_folders WHERE id = '.$folder_id.' LIMIT 1');
-	$account->LogActivity('User "'.$_SESSION['user_name'].'" deleted the "'.$_POST['symlist'].'" playlist');
+	$account->logActivity('User "'.$_SESSION['user_name'].'" deleted the "'.$_POST['symlist'].'" playlist');
 
 } catch(PDOException $e) {
-	$account->LogActivityError(basename(__FILE__), $e->getMessage());
+	$account->logActivityError(basename(__FILE__), $e->getMessage());
 	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 }
 

@@ -14,7 +14,7 @@
 require_once("class.account.php"); // Includes setup
 
 try {
-	$db = $account->GetDB();
+	$db = $account->getDB();
 
 	foreach (file('../utility/special_updating.sql') as $line) {
 

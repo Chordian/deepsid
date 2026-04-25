@@ -22,7 +22,7 @@ if (!isset($_POST['fullname']) || !isset($_POST['tag']))
 	die(json_encode(array('status' => 'error', 'message' => 'You must specify the proper POST variables.')));
 
 try {
-	$db = $account->GetDB();
+	$db = $account->getDB();
 
 	// Get the ID of this file
 	$select = $db->prepare('SELECT id FROM hvsc_files WHERE fullname = :fullname LIMIT 1');
@@ -63,10 +63,10 @@ try {
 	$type_of_tags = array();
 	$id_of_tags = array();
 	$id_tag_start = $id_tag_end = 0;
-	GetTagsAndTypes($file_id, $list_of_tags, $type_of_tags, $id_of_tags, $id_tag_start, $id_tag_end);
+	getTagsAndTypes($file_id, $list_of_tags, $type_of_tags, $id_of_tags, $id_tag_start, $id_tag_end);
 
 } catch(PDOException $e) {
-	$account->LogActivityError(basename(__FILE__), $e->getMessage());
+	$account->logActivityError(basename(__FILE__), $e->getMessage());
 	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 }
 

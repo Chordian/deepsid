@@ -22,7 +22,7 @@ require_once("class.account.php"); // Includes setup
 define('HVSC_ROOT', '_High Voltage SID Collection/');
 
 try {
-	$db = $account->GetDB();
+	$db = $account->getDB();
 
 	// Get a list of all file rows in HVSC only (in the MUSICIANS folder and SINGLE composers only)
 	$folders = $db->query('SELECT fullname FROM hvsc_folders WHERE fullname LIKE "%/MUSICIANS/%" AND type = "SINGLE"');

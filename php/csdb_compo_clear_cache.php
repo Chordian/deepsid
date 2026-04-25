@@ -15,7 +15,7 @@ require_once("class.account.php"); // Includes setup
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest')
 	die("Direct access not permitted.");
 
-$user_id = $account->CheckLogin() ? $account->UserID() : 0;
+$user_id = $account->checkLogin() ? $account->userID() : 0;
 if (!$user_id)
 	die(json_encode(array('status' => 'error', 'message' => 'You must be logged in to clear the cache of a competition folder.')));
 
@@ -23,7 +23,7 @@ if (!isset($_POST['competition']))
 	die(json_encode(array('status' => 'error', 'message' => 'You must specify the proper GET variable.')));
 
 try {
-	$db = $account->GetDB();
+	$db = $account->getDB();
 	
 	// Get event ID
 	$select = $db->prepare('SELECT event_id FROM competitions WHERE competition = :compo LIMIT 1');
@@ -36,10 +36,10 @@ try {
 
 	// Now delete all entries with this event ID in the cache table
 	$delete = $db->query('DELETE FROM competitions_cache WHERE event_id = '.$event_id);
-	$account->LogActivity('User "'.$_SESSION['user_name'].'" cleared the cache for the "'.$_POST['competition'].'" competition folder');
+	$account->logActivity('User "'.$_SESSION['user_name'].'" cleared the cache for the "'.$_POST['competition'].'" competition folder');
 
 } catch(PDOException $e) {
-	$account->LogActivityError(basename(__FILE__), $e->getMessage());
+	$account->logActivityError(basename(__FILE__), $e->getMessage());
 	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 }
 

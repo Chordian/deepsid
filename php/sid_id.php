@@ -25,7 +25,7 @@ define('T_NAME',-4);
  *
  * @return		string							name of player (empty if not identified)
  */
-function IdentifyPlayer($fullname) {
+function identifyPlayer($fullname) {
 
 	$sid = file_get_contents($fullname);
 	if (empty($sid)) return '';
@@ -82,7 +82,7 @@ function IdentifyPlayer($fullname) {
 	 *
 	 * @return		bool							true if identified
 	 */
-	function IdentifyBytes(&$chars, &$signature, &$sid_size) {
+	function identifyBytes(&$chars, &$signature, &$sid_size) {
 
 		$c = 1;
 		$d = 0;
@@ -126,7 +126,7 @@ function IdentifyPlayer($fullname) {
 	$chars = unpack('C*', $sid);
 	foreach ($config_array as $player => $signatures) {
 		foreach ($signatures as $signature) {
-			if (IdentifyBytes($chars, $signature, $sid_size))
+			if (identifyBytes($chars, $signature, $sid_size))
 				return $player;
 		}
 	}

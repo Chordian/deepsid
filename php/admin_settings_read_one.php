@@ -16,6 +16,6 @@ require_once("class.account.php"); // Includes setup
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest')
 	die("Direct access not permitted.");
 
-$value = $account->GetAdminSetting($_GET['key']);
+$value = $account->getAdminSetting($_GET['key']);
 die(json_encode(array('status' => 'ok', 'value' => $value)));
 ?>

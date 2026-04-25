@@ -14,7 +14,7 @@
  * @param PDO $db
  * @param int $userId
  */
-function build_ratings_cache_for_user(PDO $db, int $userId): void
+function buildRatingsCacheForUser(PDO $db, int $userId): void
 {
     // 1. Get ALL FOLDERS from hvsc_folders
     $select_folders = $db->query('SELECT fullname FROM hvsc_folders ORDER BY fullname');

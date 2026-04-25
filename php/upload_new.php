@@ -23,7 +23,7 @@ require_once("sid_id.php");
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest')
 	die("Direct access not permitted.");
 
-if (!$account->CheckLogin())
+if (!$account->checkLogin())
 	die(json_encode(array('status' => 'error', 'message' => 'You must be logged in to upload SID files.')));
 
 // Make sure we have a clean upload folder before adding a new file to it
@@ -47,7 +47,7 @@ if ($file[0x1] !== 'S' || $file[0x2] !== 'I' || $file[0x3] !== 'D')
 	die(json_encode(array('status' => 'error', 'message' => 'Invalid file format.')));
 
 try {
-	$db = $account->GetDB();
+	$db = $account->getDB();
 
 	// Make sure the filename uses the HVSC standard (e.g. 'laurel and hardy-2.sid' = 'Laurel_and_Hardy_2.sid')
 	$filename = ucwords(str_replace('_', ' ', str_replace('-', ' ', $sid['name'])));
@@ -117,7 +117,7 @@ try {
 	$info = array(
 		'fullname' =>		$path.$sid['name'],
 		'filename' =>		$sid['name'],
-		'player' =>			IdentifyPlayer($sid['tmp_name']),
+		'player' =>			identifyPlayer($sid['tmp_name']),
 		'lengths' => 		rtrim(str_repeat('20:00 ', $subtunes)),
 		'type' => 			$file[0].'SID',
 		'version' => 		$version,
@@ -138,7 +138,7 @@ try {
 	);
 
 } catch(PDOException $e) {
-	$account->LogActivityError(basename(__FILE__), $e->getMessage());
+	$account->logActivityError(basename(__FILE__), $e->getMessage());
 	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 }
 

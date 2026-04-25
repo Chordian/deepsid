@@ -46,7 +46,7 @@ if (substr($_GET['fullname'], -4) == '.mus') {
 	// HVSC: Get the information from the database
 
 	try {
-		$db = $account->GetDB();
+		$db = $account->getDB();
 
 		$select = $db->prepare('SELECT * FROM hvsc_files WHERE fullname = :fullname LIMIT 1');
 		$select->execute(array(':fullname'=>$_GET['fullname']));
@@ -83,7 +83,7 @@ if (substr($_GET['fullname'], -4) == '.mus') {
 		if ($info['sidmodel'] != 'MOS8580') $info['sidmodel'] = 'MOS6581';
 
 	} catch(PDOException $e) {
-		$account->LogActivityError(basename(__FILE__), $e->getMessage());
+		$account->logActivityError(basename(__FILE__), $e->getMessage());
 		die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 	}
 }

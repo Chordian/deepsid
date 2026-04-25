@@ -32,14 +32,14 @@ require_once("class.account.php"); // Includes setup
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest')
 	die("Direct access not permitted.");
 
-if (!$account->CheckLogin())
+if (!$account->checkLogin())
 	die(json_encode(array('status' => 'error', 'message' => 'You must be logged in to edit/upload SID files.')));
 
 $info = $_POST['info'];
 $path = $_POST['path'].'/';
 
 try {
-	$db = $account->GetDB();
+	$db = $account->getDB();
 
 	// Is this editing or uploading?
 	$select = $db->prepare('SELECT id FROM hvsc_files WHERE fullname = :fullname LIMIT 1');
@@ -100,7 +100,7 @@ try {
 			rename(ROOT_HVSC.'/'.$info['fullname'], ROOT_HVSC.'/'.$new_name);
 
 		// Finally log it
-		$account->LogActivity('User "'.$account->UserName().'" edited the "'.$filename.'" file'.
+		$account->logActivity('User "'.$account->userName().'" edited the "'.$filename.'" file'.
 			($info['fullname'] != $new_name ? ' (renamed to "'.$info['newname'].'")' : ''));
 
 	} else {
@@ -217,11 +217,11 @@ try {
 			$db->query('UPDATE composers SET active = "'.date("Y").'" WHERE id = '.$composers_id.' LIMIT 1');
 
 		// Finally log it
-		$account->LogActivity('User "'.$account->UserName().'" uploaded the "'.$info['newname'].'" file');
+		$account->logActivity('User "'.$account->userName().'" uploaded the "'.$info['newname'].'" file');
 	}
 
 } catch(PDOException $e) {
-	$account->LogActivityError(basename(__FILE__), $e->getMessage());
+	$account->logActivityError(basename(__FILE__), $e->getMessage());
 	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 }
 echo json_encode(array('status' => 'ok'));

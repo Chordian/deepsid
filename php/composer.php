@@ -40,7 +40,7 @@ if (isset($fullname)) {
 		// INSIDE ONE COMPETITION FOLDER
 
 		try {
-			$db = $account->GetDB();
+			$db = $account->getDB();
 
 			// Get the event ID of this compo folder
 			$select = $db->prepare('SELECT event_id FROM competitions WHERE competition = :compo LIMIT 1');
@@ -53,11 +53,11 @@ if (isset($fullname)) {
 
 				$sceners = array();
 
-				$csdb =					CompoGetXML($event_id);
-				$compos =				CompoGetEntries($csdb);
-				$type_date_country =	CompoGetTypeDateCountry($csdb);
-				$event_image =			CompoGetImage($event_id);
-				$user_comments = 		CompoGetComments($csdb, $event_id);
+				$csdb =					compoGetXML($event_id);
+				$compos =				compoGetEntries($csdb);
+				$type_date_country =	compoGetTypeDateCountry($csdb);
+				$event_image =			compoGetImage($event_id);
+				$user_comments = 		compoGetComments($csdb, $event_id);
 
 				$aka = '<p style="position:relative;top:-6px;left:1px;margin:0 0 4px;"><small>'.(isset($csdb->Event->AKA) ? '('.$csdb->Event->AKA.')' : '&nbsp;').'</small></p>';
 
@@ -171,7 +171,7 @@ if (isset($fullname)) {
 			}
 
 		} catch(PDOException $e) {
-			$account->LogActivityError(basename(__FILE__) . ' (compo)', $e->getMessage());
+			$account->logActivityError(basename(__FILE__) . ' (compo)', $e->getMessage());
 			die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 		}
 		die(json_encode(array('status' => 'ok', 'html' => $html, 'annex_html' => $annex_html)));
@@ -180,13 +180,13 @@ if (isset($fullname)) {
 
 		// OTHER FOLDERS
 
-		$exoticFullname = ProxyExotic($fullname);
+		$exoticFullname = proxyExotic($fullname);
 		$isExoticComposerFolder = ($fullname != $exoticFullname);
 		$isGroupsFolder = stripos($fullname, '/GROUPS/') !== false;
 		$fullname = $exoticFullname;
 
 		try {
-			$db = $account->GetDB();
+			$db = $account->getDB();
 
 			// If in a sub folder of a composer (e.g. work tunes or a previous handle) with no profile then re-use
 			// NOTE: This block is also used in the 'groups.php' file.
@@ -277,7 +277,7 @@ if (isset($fullname)) {
 			$select->setFetchMode(PDO::FETCH_OBJ);
 			$row_folder = $select->fetch();
 
-			$user_id = $account->CheckLogin() ? $account->UserID() : 0;
+			$user_id = $account->checkLogin() ? $account->userID() : 0;
 
 			if ($user_id) {
 				// Does the user have any rating for this folder?
@@ -355,7 +355,7 @@ if (isset($fullname)) {
 			}
 
 		} catch(PDOException $e) {
-			$account->LogActivityError(basename(__FILE__), $e->getMessage() + ' (' + $fullname + ')');
+			$account->logActivityError(basename(__FILE__), $e->getMessage() + ' (' + $fullname + ')');
 			die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 		}
 	}

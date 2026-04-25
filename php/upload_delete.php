@@ -15,15 +15,15 @@ require_once("class.account.php"); // Includes setup
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest')
 	die("Direct access not permitted.");
 
-if (!$account->CheckLogin())
+if (!$account->checkLogin())
 	die(json_encode(array('status' => 'error', 'message' => 'You must be logged in to delete SID files.')));
-else if (!$account->IsAdmin())
+else if (!$account->isAdmin())
 	die("Only a DeepSID administrator may delete files.");
 
 $fullname = $_POST['fullname'];
 
 try {
-	$db = $account->GetDB();
+	$db = $account->getDB();
 
 	// Get the ID for this SID tune
 	$select = $db->prepare('SELECT id FROM hvsc_files WHERE fullname = :fullname LIMIT 1');
@@ -41,10 +41,10 @@ try {
 	// Now delete the actual file too
 	unlink(ROOT_HVSC.'/'.$fullname);
 
-	$account->LogActivity('An administrator deleted the "'.$fullname.'" file');
+	$account->logActivity('An administrator deleted the "'.$fullname.'" file');
 
 } catch(PDOException $e) {
-	$account->LogActivityError(basename(__FILE__), $e->getMessage());
+	$account->logActivityError(basename(__FILE__), $e->getMessage());
 	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 }
 

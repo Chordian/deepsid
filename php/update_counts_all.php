@@ -39,16 +39,16 @@ $ALLOWED_EXT = [
     '_Exotic SID Tunes Collection'            => 'sid',
 ];
 
-// ---------------------------------------------------------------------------
+// --------------------------------------------------------------------------
+// FUNCTIONS
+// --------------------------------------------------------------------------
+
 // Helper: Normalize slashes
-// ---------------------------------------------------------------------------
 function norm($path) {
     return str_replace('\\', '/', $path);
 }
 
-// ---------------------------------------------------------------------------
 // Detect collection type from fullname
-// ---------------------------------------------------------------------------
 function getCollectionExt($fullname) {
     global $ALLOWED_EXT;
 
@@ -60,9 +60,7 @@ function getCollectionExt($fullname) {
     return null;
 }
 
-// ---------------------------------------------------------------------------
 // Recursive counting
-// ---------------------------------------------------------------------------
 function countItems($absPath, $relativePath) {
     global $IGNORE_FOLDERS;
 
@@ -106,14 +104,15 @@ function countItems($absPath, $relativePath) {
     return $count;
 }
 
-// ---------------------------------------------------------------------------
-// MAIN PROCESS
-// ---------------------------------------------------------------------------
+// --------------------------------------------------------------------------
+// START
+// --------------------------------------------------------------------------
+
 echo "<pre>";
 
 try {
 
-    $db = $account->GetDB();
+    $db = $account->getDB();
 
 	$q = $db->query('SELECT id, fullname FROM hvsc_folders ORDER BY fullname');
 	$q->setFetchMode(PDO::FETCH_OBJ);
@@ -142,7 +141,7 @@ try {
 	}
 
 } catch (Exception $e) {
-    $account->LogActivityError(basename(__FILE__), $e->getMessage());
+    $account->logActivityError(basename(__FILE__), $e->getMessage());
 }
 
 echo "\n✓ All folder/file counts updated.\n";

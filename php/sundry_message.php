@@ -182,7 +182,7 @@ $random = array(
 	),
 );
 
-switch ($account->GetAdminSetting('sundry_message')) {
+switch ($account->getAdminSetting('sundry_message')) {
 	case 'random':
 		// Are we on Lemon64.com?
 		if (isset($_GET['lemon']) && $_GET['lemon'] == "true") {

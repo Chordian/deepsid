@@ -16,7 +16,7 @@ ini_set('display_errors', '1');
 $csdb_type = $_GET['type'] ?? 'release'; // release, sid, event, group, etc.
 $csdb_id   = isset($_GET['id']) ? (int)$_GET['id'] : 225160;
 
-// Add depth=3 for SID entries, like in your real code
+// Add depth = 3 for SID entries, like in the real code
 $url = 'https://csdb.dk/webservice/?type=' . urlencode($csdb_type) .
        '&id=' . $csdb_id .
        ($csdb_type === 'sid' ? '&depth=3' : '');

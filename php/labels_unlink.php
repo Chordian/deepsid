@@ -16,7 +16,7 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || strtolower($_SERVER['HTTP_X_REQ
 	die("Direct access not permitted.");
 }
 
-if (!$account->IsAdmin()) {
+if (!$account->isAdmin()) {
 	http_response_code(403);
 	die("This is for administrators only."); // At least for now...
 }
@@ -25,7 +25,7 @@ if (!isset($_POST['fullname']))
 	die(json_encode(array('status' => 'error', 'message' => 'You must specify the proper POST variable.')));
 
 try {
-	$db = $account->GetDB();
+	$db = $account->getDB();
 
 	// Get the ID of this file
 	$select = $db->prepare('SELECT id FROM hvsc_files WHERE fullname = :fullname LIMIT 1');
@@ -42,15 +42,15 @@ try {
 	file_put_contents($_SERVER['DOCUMENT_ROOT'].'/deepsid/logs/tags.txt',
 		date('Y-m-d H:i:s', strtotime(TIME_ADJUST)).','.
 		$_SERVER['REMOTE_ADDR'].','.
-		$account->UserID().','.
-		$account->UserName().','.
+		$account->userID().','.
+		$account->userName().','.
 		$file_id.','.
 		$_POST['fullname'].','.
 		'LABELS:DELETE'.
 	PHP_EOL, FILE_APPEND);
 
 } catch(PDOException $e) {
-	$account->LogActivityError(basename(__FILE__), $e->getMessage());
+	$account->logActivityError(basename(__FILE__), $e->getMessage());
 	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 }
 echo json_encode(array('status' => 'ok'));

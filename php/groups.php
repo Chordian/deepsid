@@ -18,10 +18,10 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH
 $fullname = $_GET['fullname'];
 if (isset($fullname)) {
 
-	$fullname = ProxyExotic($fullname);
+	$fullname = proxyExotic($fullname);
 
 	try {
-		$db = $account->GetDB();
+		$db = $account->getDB();
 
 		// If we are in a sub folder of a composer (e.g. work tunes or a previous handle) with no profile then re-use
 		// NOTE: This block is also used in the 'composer.php' file.
@@ -63,7 +63,7 @@ if (isset($fullname)) {
 			die(json_encode(array('status' => 'ok', 'dexter_html' => '', 'annex_html' => ''))); // No profile found
 
 	} catch(PDOException $e) {
-		$account->LogActivityError(basename(__FILE__), $e->getMessage());
+		$account->logActivityError(basename(__FILE__), $e->getMessage());
 		die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 	}
 

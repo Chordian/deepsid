@@ -18,6 +18,10 @@ require_once("root_generate.php");
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest')
 	die("Direct access not permitted.");
 
+// --------------------------------------------------------------------------
+// FUNCTIONS
+// --------------------------------------------------------------------------
+
 /**
  * Return the HTML for a recommendation box.
  *
@@ -28,7 +32,7 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH
  *
  * @return		string							HTML
  */
-function CreateRecBox($random_id) {
+function createRecBox($random_id) {
 
 	global $db, $alt_box;
 
@@ -220,7 +224,7 @@ function CreateRecBox($random_id) {
  * @param		array		&$composers			reference to array of composers
  * @param		boolean		$pro				false (default) if not a game composer
  */
-function CreateComposersArray(&$select, &$composers, $pro = false) {
+function createComposersArray(&$select, &$composers, $pro = false) {
 
 	global $db;
 
@@ -264,7 +268,7 @@ function CreateComposersArray(&$select, &$composers, $pro = false) {
  *
  * @return		string							HTML for one TD cell
  */
-function QuickShortcutRow(&$author) {
+function quickShortcutRow(&$author) {
 
 	if (isset($author['file']))
 		$return_row =
@@ -290,7 +294,9 @@ function QuickShortcutRow(&$author) {
 	return $return_row;
 }
 
-/***** START *****/
+// --------------------------------------------------------------------------
+// START
+// --------------------------------------------------------------------------
 
 const BOX_DECENT		= 0;
 const BOX_PLAYLIST		= 1;
@@ -322,7 +328,7 @@ $choice_left = $available_lists[$choices[0]];
 $choice_right = $available_lists[$choices[1]];
 
 try {
-	$db = $account->GetDB();
+	$db = $account->getDB();
 
 	$good_composers = [];
 
@@ -351,7 +357,7 @@ try {
 		AND died = "0000-00-00"
 	');
 	$select->setFetchMode(PDO::FETCH_OBJ);
-	CreateComposersArray($select, $composers_active);
+	createComposersArray($select, $composers_active);
 
 	// Get composers that were active last year (and are still alive)
 	$select = $db->query('
@@ -360,7 +366,7 @@ try {
 		AND died = "0000-00-00"
 	');
 	$select->setFetchMode(PDO::FETCH_OBJ);
-	CreateComposersArray($select, $composers_snoozing);
+	createComposersArray($select, $composers_snoozing);
 
 	// Get composers that made for games professionally (magazines don't count)
 	// NOTE: Game composers without a real name in the database will be ignored.
@@ -369,7 +375,7 @@ try {
 		WHERE focus1 = "PRO" AND fullname NOT LIKE "%/GROUPS/%" AND name != "?"
 	');
 	$select->setFetchMode(PDO::FETCH_OBJ);
-	CreateComposersArray($select, $composers_game, true);
+	createComposersArray($select, $composers_game, true);
 
 	$i = 0;
 	$quick_shortcuts = '';
@@ -382,15 +388,15 @@ try {
 
 		$quick_shortcuts .=
 			'<tr>'.
-				QuickShortcutRow($author_active).
-				QuickShortcutRow($author_snoozing).
-				QuickShortcutRow($author_game).
+				quickShortcutRow($author_active).
+				quickShortcutRow($author_snoozing).
+				quickShortcutRow($author_game).
 			'</tr>';
 		$i++;
 	}
 
 } catch(PDOException $e) {
-	$account->LogActivityError(basename(__FILE__), $e->getMessage());
+	$account->logActivityError(basename(__FILE__), $e->getMessage());
 	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 }
 
@@ -399,15 +405,15 @@ $html =
 	// Recommendations
 	'<table class="root rec"><tr>'.
 		'<td style="max-width:10px;">'.
-			CreateRecBox($random_id_1).
+			createRecBox($random_id_1).
 		'</td>'.
 		'<td style="width:10px;"></td>'.
 		'<td style="max-width:10px;">'.
-			CreateRecBox($random_id_2).
+			createRecBox($random_id_2).
 		'</td>'.
 		'<td style="width:10px;"></td>'.
 		'<td style="max-width:10px;">'.
-			CreateRecBox($random_id_3).
+			createRecBox($random_id_3).
 		'</td>'.
 	'</tr></table>'.
 	// Top lists
@@ -421,7 +427,7 @@ $html =
 				$row_options.
 			'</select>'.
 			'<table class="top-list-left tight compo" style="max-width:100%;font-size:14px;padding:8px 12px;">'.
-				GenerateList(10, $choice_left).
+				generateList(10, $choice_left).
 			'</table>'.
 		'</td>'.
 		'<td style="width:10px;"></td>'.
@@ -434,7 +440,7 @@ $html =
 				$row_options.
 			'</select>'.
 			'<table class="top-list-right tight compo" style="max-width:100%;font-size:14px;padding:8px 12px;">'.
-				GenerateList(10, $choice_right).
+				generateList(10, $choice_right).
 			'</table>'.
 		'</td>'.
 	'</tr></table>'.

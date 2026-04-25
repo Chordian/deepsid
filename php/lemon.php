@@ -25,7 +25,7 @@ $file = str_replace('hvsc', '', $_GET['file']);
 $subtune = $_GET['subtune'] + 1;
 
 try {
-	$db = $account->GetDB();
+	$db = $account->getDB();
 
 	// What kind of folder is it?
 	$root_folder = explode('/', $file)[1];
@@ -69,7 +69,7 @@ try {
 	}
 
 } catch(PDOException $e) {
-	$account->LogActivityError(basename(__FILE__), $e->getMessage());
+	$account->logActivityError(basename(__FILE__), $e->getMessage());
 	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 }
 ?>

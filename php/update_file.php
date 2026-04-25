@@ -32,13 +32,13 @@ require_once("class.account.php"); // Includes setup
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest')
 	die("Direct access not permitted.");
 
-$user_id = $account->CheckLogin() ? $account->UserID() : 0;
+$user_id = $account->checkLogin() ? $account->userID() : 0;
 
-if (!$account->IsAdmin())
+if (!$account->isAdmin())
 	die(json_encode(array('status' => 'error', 'message' => 'Only an administrator may edit a file row in the database.')));
 
 try {
-	$db = $account->GetDB();
+	$db = $account->getDB();
 
 	$select = $db->prepare('SELECT id FROM hvsc_files WHERE fullname = :fullname LIMIT 1');
 	$select->execute(array(':fullname' => $_POST['fullname']));
@@ -63,7 +63,7 @@ try {
 		rename(ROOT_HVSC.'/'.$_POST['fullname'], ROOT_HVSC.'/'.$new_name);
 
 } catch(PDOException $e) {
-	$account->LogActivityError(basename(__FILE__), $e->getMessage());
+	$account->logActivityError(basename(__FILE__), $e->getMessage());
 	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 }
 

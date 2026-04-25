@@ -5,12 +5,12 @@
  * Rebuild ratings cache for a specific user.
  */
 
-if (!$account->IsAdmin())
+if (!$account->isAdmin())
     die("This is for administrators only.");
 
 require_once "class.account.php";
 
-$db = $account->GetDB();
+$db = $account->getDB();
 
 require __DIR__ . '/build_ratings_cache_single_user.php';
 
@@ -30,7 +30,7 @@ try {
     $del->execute([$u->id]);
 
     // Build new cache
-    build_ratings_cache_for_user($db, (int)$u->id);
+    buildRatingsCacheForUser($db, (int)$u->id);
 
     echo "  -> Done.\n";
 

@@ -34,7 +34,7 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH
  *
  * @return		string		$owner 				user name
  */
-function PublicSymlistOwner() {
+function publicSymlistOwner() {
 
 	global $db;
 
@@ -61,7 +61,7 @@ function PublicSymlistOwner() {
  *
  * @return		array							array with individual search words
  */
-function ParseQuery($query) {
+function parseQuery($query) {
 
 	// Replace spaces ('_') inside quoted queries with '¤' and remove the quotes themselves
 	// NOTE: This is a weird shortcut but after exploding '_' characters below, the '¤' is
@@ -83,7 +83,7 @@ function ParseQuery($query) {
  * 
  * @return		int								Value in raw milliseconds
  */
-function SongLengthToMilliseconds(?string $length): ?int {
+function songLengthToMilliseconds(?string $length): ?int {
     if (!is_string($length)) return null;
 
     // Normalize and quick sanity checks
@@ -116,7 +116,7 @@ function SongLengthToMilliseconds(?string $length): ?int {
 
 $found = $symlist_folder_id = $number_of_pages = 0;
 $incompatible = $owner = $new_uploads = $message = '';
-$user_id = $account->CheckLogin() ? $account->UserID() : 0;
+$user_id = $account->checkLogin() ? $account->userID() : 0;
 $isSearching = isset($_GET['searchQuery']) && !empty($_GET['searchQuery']);
 $isPersonalSymlist = substr($_GET['folder'], 0, 2) == '/!';
 $isPublicSymlist = substr($_GET['folder'], 0, 2) == '/$';
@@ -140,7 +140,7 @@ if ($_GET['searchHere']) {
 
 try {
 
-	$db = $account->GetDB();
+	$db = $account->getDB();
 
 	// --------------------------------------------------------------------------
 	// SEARCH
@@ -177,7 +177,7 @@ try {
 
 				// Search for one or more tags
 				$tag_list = '';
-				$search_tags = ParseQuery($_GET['searchQuery']);
+				$search_tags = parseQuery($_GET['searchQuery']);
 				foreach($search_tags as $tag)
 					$tag_list .= ' OR tags_info.name LIKE "%'.$tag.'%"';
 
@@ -252,7 +252,7 @@ try {
 
 				// Parse the search query
 				$word_list = '';
-				$search_words = ParseQuery($_GET['searchQuery']);
+				$search_words = parseQuery($_GET['searchQuery']);
 				foreach($search_words as $word)
 					$word_list .= ' OR (Name LIKE "%'.$word.'%" AND SidFilename != "")';
 				$word_list = substr($word_list, 4);
@@ -421,7 +421,7 @@ try {
 				if ($_GET['searchType'] == 'new') {
 					$include = $_GET['searchType'].' LIKE "%'.str_replace('.', '', $_GET['searchQuery']).'%"';
 				} else {
-					$words = ParseQuery($_GET['searchQuery']);
+					$words = parseQuery($_GET['searchQuery']);
 					$include = '(';
 					$i_and = $e_and = '';
 					foreach($words as $word) {
@@ -613,7 +613,7 @@ try {
 			$results_non_cgsc = array_merge($folders_non_cgsc, $files_non_cgsc);
 			$results_cgsc     = array_merge($folders_cgsc,     $files_cgsc);
 
-			$page_size = $account->GetAdminSetting('search_page_size');
+			$page_size = $account->getAdminSetting('search_page_size');
 			$page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
 
 			$count_non_cgsc = count($results_non_cgsc);
@@ -673,7 +673,7 @@ try {
 
 					// Search for one or more tags
 					$tag_list = '';
-					$search_tags = ParseQuery($_GET['searchQuery']);
+					$search_tags = parseQuery($_GET['searchQuery']);
 					foreach($search_tags as $tag)
 						$tag_list .= ' OR tags_info.name LIKE "%'.$tag.'%"';
 
@@ -784,7 +784,7 @@ try {
 			}
 
 			// If this is a public symlist we need to know who made it
-			if ($isPublicSymlist) $owner = PublicSymlistOwner();
+			if ($isPublicSymlist) $owner = publicSymlistOwner();
 		}
 
 	} else if ($isPublicSymlist || $isPersonalSymlist) {
@@ -812,7 +812,7 @@ try {
 		}
 
 		// If this is a public symlist we need to know who made it
-		if ($isPublicSymlist) $owner = PublicSymlistOwner();
+		if ($isPublicSymlist) $owner = publicSymlistOwner();
 
 	} else if ($isCSDbCompo) {
 
@@ -1358,7 +1358,7 @@ try {
 			$type_of_tags = array();
 			$id_of_tags = array();
 			$id_tag_start = $id_tag_end = 0;
-			GetTagsAndTypes($row->id, $list_of_tags, $type_of_tags, $id_of_tags, $id_tag_start, $id_tag_end);
+			getTagsAndTypes($row->id, $list_of_tags, $type_of_tags, $id_of_tags, $id_tag_start, $id_tag_end);
 
 			// Some player names have to be fetched specifically or there may be undesired changes elsewhere
 			if ($player == 'Jeff') $player = 'Jeff\'s player';
@@ -1410,7 +1410,7 @@ try {
 								// Default HVSC subtune
 								$factoid[$f] = $sub_lengths[$startsubtune - 1];
 
-							$fvalue[$f] = SongLengthToMilliseconds($factoid[$f]);
+							$fvalue[$f] = songLengthToMilliseconds($factoid[$f]);
 
 							// Get rid of the milliseconds
 							$factoid[$f] = explode('.', $factoid[$f], 2)[0];
@@ -1601,11 +1601,11 @@ try {
 	}
 
 } catch(PDOException $e) {
-	$account->LogActivityError(basename(__FILE__), $e->getMessage());
-	$account->LogActivityError(basename(__FILE__), '$_GET[\'folder\'] = '.(empty($_GET['folder']) ? '(root)' : $_GET['folder']).
+	$account->logActivityError(basename(__FILE__), $e->getMessage());
+	$account->logActivityError(basename(__FILE__), '$_GET[\'folder\'] = '.(empty($_GET['folder']) ? '(root)' : $_GET['folder']).
 		($isSearching ? ', $_GET[\'searchType\'] = '.$_GET['searchType'].', $_GET[\'searchQuery\'] = '.$_GET['searchQuery'] : ' (user was not searching)'));
-	// if (isset($files_ext)) $account->LogActivityError(basename(__FILE__), 'Files: '.print_r($files_ext, true));
-	// if (isset($folders_ext)) $account->LogActivityError(basename(__FILE__), 'Folders: '.print_r($folders_ext, true));
+	// if (isset($files_ext)) $account->logActivityError(basename(__FILE__), 'Files: '.print_r($files_ext, true));
+	// if (isset($folders_ext)) $account->logActivityError(basename(__FILE__), 'Folders: '.print_r($folders_ext, true));
 	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 }
 
