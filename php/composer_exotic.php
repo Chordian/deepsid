@@ -10,15 +10,15 @@
  * If a specific end path is inside the exotic folders, replace it with the
  * corresponding HVSC path to get the proper profile data.
  * 
- * @param		string		$fullname
+ * @param		string		$collection_path
  * 
- * @return		string		$fullname
+ * @return		string		$collection_path
  */
-function proxyExotic($fullname) {
+function proxyExotic($collection_path) {
 
-	if (substr($fullname, 0, 28) == '_Exotic SID Tunes Collection' && substr_count($fullname, '/') > 1) {
+	if (substr($collection_path, 0, 28) == '_Exotic SID Tunes Collection' && substr_count($collection_path, '/') > 1) {
 
-		$folders = substr($fullname, strlen('_Exotic SID Tunes Collection/Stereo 2SID/'));
+		$folders = substr($collection_path, strlen('_Exotic SID Tunes Collection/Stereo 2SID/'));
 
 		$letter_folder = array(
 			'Bayliss_Richard'			=> 'B',
@@ -58,8 +58,8 @@ function proxyExotic($fullname) {
 		)[$folders];
 		
 		// Use the original HVSC profile as a proxy
-		$fullname = '_High Voltage SID Collection/MUSICIANS/'.$letter_folder.'/'.$folders;
+		$collection_path = '_High Voltage SID Collection/MUSICIANS/'.$letter_folder.'/'.$folders;
 	}
-	return $fullname;
+	return $collection_path;
 }
 ?>

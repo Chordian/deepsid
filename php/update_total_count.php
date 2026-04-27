@@ -24,39 +24,39 @@ try {
 
 	foreach($letters as $letter) {
 		// Get a list of all composer folders in this letter folder
-		$select = $db->query('SELECT fullname FROM hvsc_folders WHERE fullname LIKE "'.MUSICIANS.$letter.'/%"');
+		$select = $db->query('SELECT collection_path FROM hvsc_folders WHERE collection_path LIKE "'.MUSICIANS.$letter.'/%"');
 		$select->setFetchMode(PDO::FETCH_OBJ);
 
-		$fullnames = [];
+		$collection_paths = [];
 		foreach($select as $row)
-			array_push($fullnames, $row->fullname);
+			array_push($collection_paths, $row->collection_path);
 		// To make sure sub folders with sub folders are handled first (affects absolute total)
-		$fullnames = array_reverse($fullnames);
+		$collection_paths = array_reverse($collection_paths);
 
-		foreach($fullnames as $fullname) {
+		foreach($collection_paths as $collection_path) {
 			// Any sub folder(s)?
-			if (substr_count($fullname, '/') > 3) {
+			if (substr_count($collection_path, '/') > 3) {
 				// Get count of this sub folder (it could have been updated in an earlier iteration)
-				$select_this = $db->query('SELECT files FROM hvsc_folders WHERE fullname = "'.$fullname.'"');
+				$select_this = $db->query('SELECT files FROM hvsc_folders WHERE collection_path = "'.$collection_path.'"');
 				$select_this->setFetchMode(PDO::FETCH_OBJ);
 				$this_count = $select_this->fetch()->files;
 
 				// Get parent and its children
-				$parent = substr($fullname, 0, strrpos($fullname, '/'));
+				$parent = substr($collection_path, 0, strrpos($collection_path, '/'));
 
 				// Get current count of files in parent
-				$select_parent = $db->query('SELECT files FROM hvsc_folders WHERE fullname = "'.$parent.'"');
+				$select_parent = $db->query('SELECT files FROM hvsc_folders WHERE collection_path = "'.$parent.'"');
 				$select_parent->setFetchMode(PDO::FETCH_OBJ);
 				$parent_count = $select_parent->fetch()->files;
 
 				$new_parent_count = $parent_count + $this_count;
 
 				echo $parent.' ('.$parent_count.') <br />';
-				echo $fullname.' ('.$this_count.') <br />';
+				echo $collection_path.' ('.$this_count.') <br />';
 				echo 'New parent count: '.$parent_count.' + '.$this_count.' = '.$new_parent_count.'<br /><br />';
 
 				// Now store the new parent count
-				// $db->query('UPDATE hvsc_folders SET files = '.$new_parent_count.' WHERE fullname = "'.$parent.'" LIMIT 1');
+				// $db->query('UPDATE hvsc_folders SET files = '.$new_parent_count.' WHERE collection_path = "'.$parent.'" LIMIT 1');
 			}
 		}
 	}

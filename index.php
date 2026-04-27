@@ -204,7 +204,7 @@
 
 					if (substr($file, -4) == '.sid' || substr($file, -4) == '.mus') {
 						// It's a specific file
-						$select = $db->query('SELECT name, author FROM hvsc_files WHERE fullname = "'.$file.'" LIMIT 1');
+						$select = $db->query('SELECT name, author FROM hvsc_files WHERE collection_path = "'.$file.'" LIMIT 1');
 						$select->setFetchMode(PDO::FETCH_OBJ);
 						if ($select->rowCount()) {
 							// Rob Hubbard - Commando
@@ -221,11 +221,12 @@
 						}
 					} else {
 						// It's a composer folder
-						$select = $db->query('SELECT name FROM composers WHERE fullname = "'.substr($file, 0, -1).'" LIMIT 1');
+						$select = $db->query('SELECT full_name FROM composers
+							WHERE collection_path = "'.substr($file, 0, -1).'" LIMIT 1');
 						$select->setFetchMode(PDO::FETCH_OBJ);
 						if ($select->rowCount()) {
 							// Rob Hubbard
-							$title = $select->fetch()->name;
+							$title = $select->fetch()->full_name;
 						} else {
 							// Fallback: Composer
 							$title = 'Composer';
@@ -278,8 +279,8 @@
 					$db = $account->getDB();
 
 					// Get the ID of the SH file
-					$select = $db->prepare('SELECT id FROM hvsc_files WHERE fullname = :fullname LIMIT 1');
-					$select->execute(array(':fullname'=>str_replace('/SID', '_SID', $_GET['file'])));
+					$select = $db->prepare('SELECT id FROM hvsc_files WHERE collection_path = :collection_path LIMIT 1');
+					$select->execute(array(':collection_path' => str_replace('/SID', '_SID', $_GET['file'])));
 					$select->setFetchMode(PDO::FETCH_OBJ);
 
 					if ($select->rowCount()) {
@@ -291,16 +292,16 @@
 						if ($select_upload->rowCount()) {
 
 							// Get the full path to the real composer profile
-							$select_comp = $db->query('SELECT fullname FROM composers WHERE id = '.$select_upload->fetch()->composers_id.' LIMIT 1');
+							$select_comp = $db->query('SELECT collection_path FROM composers WHERE id = '.$select_upload->fetch()->composers_id.' LIMIT 1');
 							$select_comp->setFetchMode(PDO::FETCH_OBJ);
 
 							if ($select_comp->rowCount()) {
 
 								// Figure out the name of the thumbnail (if it exists)
-								$fullname = str_replace('_High Voltage SID Collection/', '', $select_comp->fetch()->fullname);
-								$fullname = str_replace("_Compute's Gazette SID Collection/", "cgsc_", $fullname);
-								$fullname = strtolower(str_replace('/', '_', $fullname));
-								$image = $fullname.'.jpg';
+								$collection_path = str_replace('_High Voltage SID Collection/', '', $select_comp->fetch()->collection_path);
+								$collection_path = str_replace("_Compute's Gazette SID Collection/", "cgsc_", $collection_path);
+								$collection_path = strtolower(str_replace('/', '_', $collection_path));
+								$image = $collection_path.'.jpg';
 							}
 						}
 					}

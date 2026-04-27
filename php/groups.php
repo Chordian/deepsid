@@ -15,24 +15,24 @@ require_once("composer_exotic.php");
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest')
 	die("Direct access not permitted.");
 
-$fullname = $_GET['fullname'];
-if (isset($fullname)) {
+$collection_path = $_GET['fullname'];
+if (isset($collection_path)) {
 
-	$fullname = proxyExotic($fullname);
+	$collection_path = proxyExotic($collection_path);
 
 	try {
 		$db = $account->getDB();
 
 		// If we are in a sub folder of a composer (e.g. work tunes or a previous handle) with no profile then re-use
 		// NOTE: This block is also used in the 'composer.php' file.
-		$folders = explode('/', $fullname);
+		$folders = explode('/', $collection_path);
 		if (count($folders) > 3 && $folders[1] == 'MUSICIANS' && !empty($folders[4])) {
 			// Do we have a profile for the unique sub folder of this composer?
-			$select = $db->prepare('SELECT 1 FROM composers WHERE fullname = :fullname LIMIT 1');
-			$select->execute(array(':fullname'=>$fullname));
+			$select = $db->prepare('SELECT 1 FROM composers WHERE collection_path = :collection_path LIMIT 1');
+			$select->execute(array(':collection_path' => $collection_path));
 			if ($select->rowCount() == 0)
 				// No, re-use the profile of the parent composer folder then
-				$fullname = str_replace('/'.$folders[count($folders) - 1], '', $fullname);
+				$collection_path = str_replace('/'.$folders[count($folders) - 1], '', $collection_path);
 		}
 
 		// Get count of 'GameBase64' tags. These tags are automatically added, and there are always only one tag
@@ -40,7 +40,7 @@ if (isset($fullname)) {
 		$select = $db->prepare('
 			SELECT count(1)
 			FROM hvsc_files
-			WHERE fullname LIKE :fullname
+			WHERE collection_path LIKE :collection_path
 			AND EXISTS (
 				SELECT 1
 				FROM tags_lookup
@@ -49,12 +49,12 @@ if (isset($fullname)) {
 				AND tags_info.name = "GameBase64"
 			)
 		');
-		$select->execute(array(':fullname'=>$fullname.'/%'));
+		$select->execute(array(':collection_path' => $collection_path.'/%'));
 		$count_gb64 = $select->rowCount() ? $select->fetchColumn() : 0;
 
 		// Get data from the composer profile (if it exists)
-		$select = $db->prepare('SELECT * FROM composers WHERE fullname = :fullname LIMIT 1');
-		$select->execute(array(':fullname'=>$fullname));
+		$select = $db->prepare('SELECT * FROM composers WHERE collection_path = :collection_path LIMIT 1');
+		$select->execute(array(':collection_path' => $collection_path));
 		$select->setFetchMode(PDO::FETCH_OBJ);
 
 		if ($select->rowCount())
@@ -71,13 +71,13 @@ if (isset($fullname)) {
 	die(json_encode(array('status' => 'error', 'message' => 'You must specify the proper GET variables.')));
 
 // Get the XML from the CSDb web service
-$xml = curl('https://csdb.dk/webservice/?type='.$row->csdbtype.'&id='.$row->csdbid);
+$xml = curl('https://csdb.dk/webservice/?type='.$row->csdb_type.'&id='.$row->csdb_id);
 if (!strpos($xml, '<CSDbData>'))
 	die(json_encode(array('status' => 'error', 'warning' => '<p style="margin-top:0;"><i>Uh... CSDb? Are you there?</i></p>'.
-		'<b>ID:</b> <a href="https://csdb.dk/'.$row->csdbtype.'/?id='.$row->csdbid.'" target="_blank">'.$row->csdbid.'</a>')));
+		'<b>ID:</b> <a href="https://csdb.dk/'.$row->csdb_type.'/?id='.$row->csdb_id.'" target="_blank">'.$row->csdb_id.'</a>')));
 $csdb = simplexml_load_string($xml);
 
-if ($row->csdbtype == 'scener') {
+if ($row->csdb_type == 'scener') {
 
 	// SCENER
 
@@ -91,7 +91,7 @@ if ($row->csdbtype == 'scener') {
 		$handles = $csdb->Handle->Scener->Handles->Handle;
 		foreach($handles as $handle) {
 
-			if ($handle->ID == $row->csdbid) {
+			if ($handle->ID == $row->csdb_id) {
 				// Already fiddling with that one (no need to get it again)
 				$csdb_handle = $csdb;
 				$this_handle = $csdb->Handle->Handle;

@@ -25,21 +25,21 @@ if ($account->checkLogin()) {
 		$db = $account->getDB();
 
 		// Who exactly are we doing this for?
-		$select = $db->prepare('SELECT fullname FROM composers WHERE id = :cid');
+		$select = $db->prepare('SELECT collection_path FROM composers WHERE id = :cid');
 		$select->execute(array(':cid' => $_POST['cid']));
 		$select->setFetchMode(PDO::FETCH_OBJ);
 
-		$fullname = str_replace('_High Voltage SID Collection', '', $select->fetch()->fullname);
+		$collection_path = str_replace('_High Voltage SID Collection', '', $select->fetch()->collection_path);
 
 		// Add the new database entry
 		$insert = $db->prepare('INSERT INTO composers_links (composers_id, name, url) VALUES(:cid, :name, :url)');
 		$insert->execute(array('cid' => $_POST['cid'], 'name' => $_POST['name'], 'url' => $_POST['url']));
 
 		if ($insert->rowCount() == 0)
-			die(json_encode(array('status' => 'error', 'message' => 'Could not create the "'.$_POST['name'].'" composer link for "'.$fullname.'"')));
+			die(json_encode(array('status' => 'error', 'message' => 'Could not create the "'.$_POST['name'].'" composer link for "'.$collection_path.'"')));
 
 		// Finally log it
-		$account->logActivity('User "'.$account->userName().'" added the "'.$_POST['name'].'" composer link ('.$_POST['url'].') for "'.$fullname.'"');
+		$account->logActivity('User "'.$account->userName().'" added the "'.$_POST['name'].'" composer link ('.$_POST['url'].') for "'.$collection_path.'"');
 
 	} catch(PDOException $e) {
 		$account->logActivityError(basename(__FILE__), $e->getMessage());

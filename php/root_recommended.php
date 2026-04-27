@@ -24,35 +24,35 @@ try {
 
 	foreach($select_rec as $row_rec) {
 
-		// Get the fullname
-		$select = $db->query('SELECT fullname FROM hvsc_folders WHERE id = '.$row_rec->table_id);
+		// Get the collection path
+		$select = $db->query('SELECT collection_path FROM hvsc_folders WHERE id = '.$row_rec->table_id);
 		$select->setFetchMode(PDO::FETCH_OBJ);
-		$fullname = $select->rowCount() ? $select->fetch()->fullname : '';
+		$collection_path = $select->rowCount() ? $select->fetch()->collection_path : '';
 
 		// Skip it if it's a group entry
-		if (strpos($fullname, '/GROUPS/') !== false) continue;
+		if (strpos($collection_path, '/GROUPS/') !== false) continue;
 
-		// Get composer data via the fullname
-		$select = $db->query('SELECT name, shortname, handles, shorthandle FROM composers WHERE fullname = "'.$fullname.'"');
+		// Get composer data via the collection path
+		$select = $db->query('SELECT full_name, short_name, handles, short_handle FROM composers WHERE collection_path = "'.$collection_path.'"');
 		$select->setFetchMode(PDO::FETCH_OBJ);
 		$row = $select->fetch();
 
 		// Error or irrelevant (such as big parent folders in HVSC)
 		if ($select->rowCount() == 0) continue;
 
-		$name = empty($row->shortname) ? $row->name : $row->shortname;
+		$name = empty($row->short_name) ? $row->full_name : $row->short_name;
 		$parts = explode(',', $row->handles);
-		$handle = empty($row->shorthandle) ? end($parts) : $row->shorthandle;
+		$handle = empty($row->short_handle) ? end($parts) : $row->short_handle;
 
-		// Use 'fullname' parameter to figure out the name of the thumbnail (if it exists)
-		$fn = str_replace('_High Voltage SID Collection/', '', $fullname);
+		// Use collection path parameter to figure out the name of the thumbnail (if it exists)
+		$fn = str_replace('_High Voltage SID Collection/', '', $collection_path);
 		$fn = str_replace("_Compute's Gazette SID Collection/", "cgsc_", $fn);
 		$fn = strtolower(str_replace('/', '_', $fn));
 		$thumbnail = 'images/composers/'.$fn.'.jpg';
 		if (!file_exists('../'.$thumbnail)) $thumbnail = 'images/composer.png';
 		
 		// Get type and file count
-		$select = $db->query('SELECT type, files FROM hvsc_folders WHERE fullname = "'.$fullname.'"');
+		$select = $db->query('SELECT type, files FROM hvsc_folders WHERE collection_path = "'.$collection_path.'"');
 		$select->setFetchMode(PDO::FETCH_OBJ);
 		$row = $select->fetch();
 		$type = $row->type == 'GROUP' ? 'group' : 'single';
@@ -78,7 +78,7 @@ try {
 		// Add the HTML table for the box to an array
 		$boxes .=
 			$prepend.'<td style="max-width:10px;padding-bottom:10px;">'.
-				'<table class="tight compo recommended" data-folder="'.$fullname.'">'.
+				'<table class="tight compo recommended" data-folder="'.$collection_path.'">'.
 					'<tr>'.
 						'<td colspan="2"><img class="folder" src="images/if_folder_'.$type.'.svg" alt="" /><h3>Recommended Folder</h3></td>'.
 					'</tr>'.

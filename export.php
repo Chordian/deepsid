@@ -14,9 +14,9 @@ require_once("php/class.account.php"); // Includes setup
 // --------------------------------------------------------------------------
 
 /**
- * Adapt the 'fullname' column value.
+ * Adapt the 'collection_path' column value.
  *
- * @param	string		the text from 'fullname' column
+ * @param	string		the text from 'collection_path' column
  *
  * @return	string		name adapted to make more sense
  */
@@ -40,7 +40,7 @@ if ($account->checkLogin()) {
 
 		$db = $account->getDB();
 
-		$select = $db->prepare('SELECT hvsc_files.fullname as file, hvsc_folders.fullname as folder, rating FROM ratings r'.
+		$select = $db->prepare('SELECT hvsc_files.collection_path as file, hvsc_folders.collection_path as folder, rating FROM ratings r'.
 			' LEFT JOIN hvsc_files on r.table_id = hvsc_files.id AND r.type = "FILE"'.
 			' LEFT JOIN hvsc_folders on r.table_id = hvsc_folders.id AND r.type = "FOLDER"'.
 			' WHERE r.user_id = :userid');

@@ -30,10 +30,10 @@ try {
 	// ---------------------------------------------------------------------
 	// PREPARE INPUT
 	// ---------------------------------------------------------------------
-	$fullname = $_POST['fullname'] ?? '';
-	$fullname = str_replace('CSDb Music Competitions/', '', $fullname);
+	$collection_path = $_POST['fullname'] ?? '';
+	$collection_path = str_replace('CSDb Music Competitions/', '', $collection_path);
 
-	$table = (str_ends_with($fullname, '.sid') || str_ends_with($fullname, '.mus'))
+	$table = (str_ends_with($collection_path, '.sid') || str_ends_with($collection_path, '.mus'))
 			? 'hvsc_files'
 			: 'hvsc_folders';
 
@@ -42,13 +42,13 @@ try {
 	// ---------------------------------------------------------------------
 	// 1. FETCH TARGET ROW (id + hash)
 	// ---------------------------------------------------------------------
-	$select = $db->prepare("SELECT id, hash FROM $table WHERE fullname = :f LIMIT 1");
-	$select->execute([':f' => $fullname]);
+	$select = $db->prepare("SELECT id, hash FROM $table WHERE collection_path = :f LIMIT 1");
+	$select->execute([':f' => $collection_path]);
 	$row = $select->fetch(PDO::FETCH_OBJ);
 
 	if (!$row) {
 		$account->logActivityError(basename(__FILE__),
-			"Name error; fullname '$fullname' not found in '$table'");
+			"Name error; collection path '$collection_path' not found in '$table'");
 		die(json_encode(['status'=>'error','message'=>DB_ERROR]));
 	}
 

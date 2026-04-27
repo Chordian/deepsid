@@ -41,7 +41,7 @@ try {
 	if (isset($_GET['file']) && $_GET['file'] != "") {
 
 		$file = trim($_GET['file'], '/');
-		$fullname = '_High Voltage SID Collection/'.$file;
+		$collection_path = '_High Voltage SID Collection/'.$file;
 
 		if (strtolower(substr($file, -4)) == ".mus" || strtolower(substr($file, 0, 9)) == "compute's") {
 
@@ -63,54 +63,54 @@ try {
 
 			/***** SINGLE FILE *****/
 
-			$select = $db->prepare('SELECT * FROM hvsc_files WHERE fullname = :fullname LIMIT 1');
-			$select->execute(array(':fullname'=>$fullname));	
+			$select = $db->prepare('SELECT * FROM hvsc_files WHERE collection_path = :collection_path LIMIT 1');
+			$select->execute(array(':collection_path' => $collection_path));	
 			$select->setFetchMode(PDO::FETCH_OBJ);
 			$row = $select->fetch();
 	
 			if ($select->rowCount()) {
 	
-				$response['fullname'] 		= $row->fullname;
-				$response['player'] 		= $row->player;
-				$response['lengths'] 		= $row->lengths;
-				$response['type'] 			= $row->type;
-				$response['version'] 		= $row->version;
-				$response['playertype'] 	= $row->playertype;
-				$response['playercompat'] 	= $row->playercompat;
-				$response['clockspeed'] 	= $row->clockspeed;
-				$response['sidmodel'] 		= $row->sidmodel;
-				$response['dataoffset'] 	= $row->dataoffset;
-				$response['datasize'] 		= $row->datasize;
-				$response['loadaddr'] 		= $row->loadaddr;
-				$response['initaddr'] 		= $row->initaddr;
-				$response['playaddr'] 		= $row->playaddr;
-				$response['subtunes'] 		= $row->subtunes;
-				$response['startsubtune'] 	= $row->startsubtune;
-				$response['name'] 			= $row->name;
-				$response['author'] 		= $row->author;
-				$response['copyright'] 		= $row->copyright;
-				$response['hash'] 			= $row->hash;
-				$response['stil'] 			= $row->stil;
-				$response['new'] 			= $row->new;
-				$response['updated'] 		= $row->updated;
-				$response['csdbtype'] 		= $row->csdbtype;
-				$response['csdbid'] 		= $row->csdbid;
+				$response['collection_path']	= $row->collection_path;
+				$response['player'] 			= $row->player;
+				$response['lengths'] 			= $row->lengths;
+				$response['type'] 				= $row->type;
+				$response['version'] 			= $row->version;
+				$response['player_type'] 		= $row->player_type;
+				$response['player_compat'] 		= $row->player_compat;
+				$response['clock_speed'] 		= $row->clock_speed;
+				$response['sid_model'] 			= $row->sid_model;
+				$response['data_offset'] 		= $row->data_offset;
+				$response['data_size'] 			= $row->data_size;
+				$response['load_addr'] 			= $row->load_addr;
+				$response['init_addr'] 			= $row->init_addr;
+				$response['play_addr'] 			= $row->play_addr;
+				$response['subtunes'] 			= $row->subtunes;
+				$response['start_subtune'] 		= $row->start_subtune;
+				$response['name'] 				= $row->name;
+				$response['author'] 			= $row->author;
+				$response['copyright'] 			= $row->copyright;
+				$response['hash'] 				= $row->hash;
+				$response['stil'] 				= $row->stil;
+				$response['new'] 				= $row->new;
+				$response['updated'] 			= $row->updated;
+				$response['csdb_type'] 			= $row->csdb_type;
+				$response['csdb_id'] 			= $row->csdb_id;
 			}
 
 		} else {
 
 			/***** FOLDER AND FILES *****/
 
-			$folder = $fullname;
+			$folder = $collection_path;
 
-			$select_folder = $db->prepare('SELECT * FROM hvsc_folders WHERE fullname = :fullname LIMIT 1');
-			$select_folder->execute(array(':fullname'=>$folder));	
+			$select_folder = $db->prepare('SELECT * FROM hvsc_folders WHERE collection_path = :collection_path LIMIT 1');
+			$select_folder->execute(array(':collection_path' => $folder));	
 			$select_folder->setFetchMode(PDO::FETCH_OBJ);
 			$row_folder = $select_folder->fetch();
 	
 			if ($select_folder->rowCount()) {
 
-				$response['folder'] 		= $row_folder->fullname;
+				$response['folder'] 		= $row_folder->collection_path;
 				$response['type'] 			= $row_folder->type;
 				$response['files'] 			= $row_folder->files;
 				//$response['user_id'] 			= $row->user_id;
@@ -120,7 +120,7 @@ try {
 				$response['flags'] 			= $row_folder->flags;
 
 				// Get array of files in folder, remove unwanted entries, then re-index with 0 as start
-				$files = array_values(array_diff(scandir(ROOT_HVSC.'/'.$fullname), [
+				$files = array_values(array_diff(scandir(ROOT_HVSC.'/'.$collection_path), [
 					'.',
 					'..',
 					'DOCUMENTS',			// HVSC
@@ -149,38 +149,38 @@ try {
 
 				foreach($files as $i => $sid) {
 
-					$select = $db->prepare('SELECT * FROM hvsc_files WHERE fullname = :fullname LIMIT 1');
-					$select->execute(array(':fullname'=>$folder.'/'.$sid));	
+					$select = $db->prepare('SELECT * FROM hvsc_files WHERE collection_path = :collection_path LIMIT 1');
+					$select->execute(array(':collection_path' => $folder.'/'.$sid));	
 					$select->setFetchMode(PDO::FETCH_OBJ);
 					$row = $select->fetch();
 
 					if ($select->rowCount()) {
 			
-						$response[$i]['fullname'] 		= $row->fullname;
-						$response[$i]['player'] 		= $row->player;
-						$response[$i]['lengths'] 		= $row->lengths;
-						$response[$i]['type'] 			= $row->type;
-						$response[$i]['version'] 		= $row->version;
-						$response[$i]['playertype'] 	= $row->playertype;
-						$response[$i]['playercompat']	= $row->playercompat;
-						$response[$i]['clockspeed'] 	= $row->clockspeed;
-						$response[$i]['sidmodel'] 		= $row->sidmodel;
-						$response[$i]['dataoffset'] 	= $row->dataoffset;
-						$response[$i]['datasize'] 		= $row->datasize;
-						$response[$i]['loadaddr'] 		= $row->loadaddr;
-						$response[$i]['initaddr'] 		= $row->initaddr;
-						$response[$i]['playaddr'] 		= $row->playaddr;
-						$response[$i]['subtunes'] 		= $row->subtunes;
-						$response[$i]['startsubtune']	= $row->startsubtune;
-						$response[$i]['name'] 			= $row->name;
-						$response[$i]['author'] 		= $row->author;
-						$response[$i]['copyright'] 		= $row->copyright;
-						$response[$i]['hash'] 			= $row->hash;
-						$response[$i]['stil'] 			= $row->stil;
-						$response[$i]['new'] 			= $row->new;
-						$response[$i]['updated'] 		= $row->updated;
-						$response[$i]['csdbtype'] 		= $row->csdbtype;
-						$response[$i]['csdbid'] 		= $row->csdbid;
+						$response[$i]['collection_path']	= $row->collection_path;
+						$response[$i]['player'] 			= $row->player;
+						$response[$i]['lengths'] 			= $row->lengths;
+						$response[$i]['type'] 				= $row->type;
+						$response[$i]['version'] 			= $row->version;
+						$response[$i]['player_type'] 		= $row->player_type;
+						$response[$i]['player_compat']		= $row->player_compat;
+						$response[$i]['clock_speed'] 		= $row->clock_speed;
+						$response[$i]['sid_model'] 			= $row->sid_model;
+						$response[$i]['data_offset'] 		= $row->data_offset;
+						$response[$i]['data_size'] 			= $row->data_size;
+						$response[$i]['load_addr'] 			= $row->load_addr;
+						$response[$i]['init_addr'] 			= $row->init_addr;
+						$response[$i]['play_addr'] 			= $row->play_addr;
+						$response[$i]['subtunes'] 			= $row->subtunes;
+						$response[$i]['start_subtune']		= $row->start_subtune;
+						$response[$i]['name'] 				= $row->name;
+						$response[$i]['author'] 			= $row->author;
+						$response[$i]['copyright'] 			= $row->copyright;
+						$response[$i]['hash'] 				= $row->hash;
+						$response[$i]['stil'] 				= $row->stil;
+						$response[$i]['new'] 				= $row->new;
+						$response[$i]['updated'] 			= $row->updated;
+						$response[$i]['csdb_type'] 			= $row->csdb_type;
+						$response[$i]['csdb_id'] 			= $row->csdb_id;
 					}
 				}
 			}
@@ -204,16 +204,16 @@ try {
 					? '_'
 					: '_High Voltage SID Collection/';
 
-			$fullname = $prefix.$folder;
+			$collection_path = $prefix.$folder;
 
-			$select_folder = $db->prepare('SELECT * FROM hvsc_folders WHERE fullname = :fullname LIMIT 1');
-			$select_folder->execute(array(':fullname'=>$fullname));
+			$select_folder = $db->prepare('SELECT * FROM hvsc_folders WHERE collection_path = :collection_path LIMIT 1');
+			$select_folder->execute(array(':collection_path' => $collection_path));
 			$select_folder->setFetchMode(PDO::FETCH_OBJ);
 			$row_folder = $select_folder->fetch();
 
 			if ($select_folder->rowCount()) {
 
-				$response['folder'] 		= $row_folder->fullname;
+				$response['folder'] 		= $row_folder->collection_path;
 				$response['type'] 			= $row_folder->type;
 				$response['files'] 			= $row_folder->files;
 				//$response['user_id'] 			= $row_folder->user_id;
@@ -223,15 +223,15 @@ try {
 				$response['flags'] 			= $row_folder->flags;
 
 				// Get all subfolders too (if any)
-				$select_subfolder = $db->prepare('SELECT * FROM hvsc_folders WHERE fullname LIKE :fullname');
-				$select_subfolder->execute(array(':fullname'=>'%'.$fullname.'/%'));
+				$select_subfolder = $db->prepare('SELECT * FROM hvsc_folders WHERE collection_path LIKE :collection_path');
+				$select_subfolder->execute(array(':collection_path' => '%'.$collection_path.'/%'));
 				$select_subfolder->setFetchMode(PDO::FETCH_OBJ);
 
 				$response['subfolders'] 	= $select_subfolder->rowCount();
 
 				foreach($select_subfolder as $i => $row_subfolder) {
 
-					$response[$i]['folder'] 		= $row_subfolder->fullname;
+					$response[$i]['folder'] 		= $row_subfolder->collection_path;
 					$response[$i]['type'] 			= $row_subfolder->type;
 					$response[$i]['files'] 			= $row_subfolder->files;
 					//$response[$i]['user_id'] 			= $row_subfolder->user_id;
@@ -255,43 +255,44 @@ try {
 				? '_'
 				: '_High Voltage SID Collection/';
 
-		$fullname = $prefix.$folder;				
+		$collection_path = $prefix.$folder;				
 
-		$select = $db->prepare('SELECT * FROM composers WHERE fullname = :fullname LIMIT 1');
-		$select->execute(array(':fullname'=>$fullname));	
+		$select = $db->prepare('SELECT * FROM composers WHERE collection_path = :collection_path LIMIT 1');
+		$select->execute(array(':collection_path' => $collection_path));	
 		$select->setFetchMode(PDO::FETCH_OBJ);
 		$row = $select->fetch();
 
 		if ($select->rowCount()) {
 
-			// Use 'fullname' parameter to figure out the name of the thumbnail (if it exists)
-			$fn = str_replace('_High Voltage SID Collection/', '', $fullname);
+			// Use 'collection_path' parameter to figure out the name of the thumbnail (if it exists)
+			$fn = str_replace('_High Voltage SID Collection/', '', $collection_path);
 			$fn = str_replace("_Compute's Gazette SID Collection/", "cgsc_", $fn);
 			$fn = str_replace('_Exotic SID Tunes Collection', 'estc', $fn);
 			$fn = strtolower(str_replace('/', '_', $fn));
 			$thumbnail = '/images/composers/'.$fn.'.jpg';
 			if (!file_exists('../'.$thumbnail)) $thumbnail = '/images/composer.png';
 
-			$response['fullname'] 		= $row->fullname;
-			$response['focus'] 			= $row->focus;
-			$response['name'] 			= $row->name;
-			$response['shortname'] 		= $row->shortname;
-			$response['handles'] 		= $row->handles;
-			$response['shorthandle'] 	= $row->shorthandle;
-			$response['active'] 		= $row->active;
-			$response['born'] 			= $row->born;
-			$response['died'] 			= $row->died;
-			$response['cause'] 			= $row->cause;
-			$response['notable'] 		= $row->notable;
-			$response['country'] 		= $row->country;
-			$response['employment'] 	= $row->employment;
-			$response['affiliation'] 	= $row->affiliation;
-			$response['brand'] 			= empty($row->brand) ? '' : $protocol.'deepsid.chordian.net/images/brands/'.$row->brand;
-			$response['branddark'] 		= empty($row->branddark) ? '' : $protocol.'deepsid.chordian.net/images/brands/'.$row->branddark;
-			$response['csdbtype'] 		= $row->csdbtype;
-			$response['csdbid'] 		= $row->csdbid;
-			$response['thumbnail']		= $protocol.'deepsid.chordian.net'.$thumbnail;
-			$response['imagesource'] 	= $row->imagesource;
+			$response['collection_path']	= $row->collection_path;
+			$response['focus1'] 			= $row->focus1;
+			$response['focus2'] 			= $row->focus2;
+			$response['full_name']			= $row->full_name;
+			$response['short_name'] 		= $row->short_name;
+			$response['handles'] 			= $row->handles;
+			$response['short_handle'] 		= $row->short_handle;
+			$response['active'] 			= $row->active;
+			$response['date_birth'] 		= $row->date_birth;
+			$response['date_death'] 		= $row->date_death;
+			$response['death_cause'] 		= $row->death_cause;
+			$response['notable'] 			= $row->notable;
+			$response['country'] 			= $row->country;
+			$response['employment'] 		= $row->employment;
+			$response['affiliation'] 		= $row->affiliation;
+			$response['brand_light'] 		= empty($row->brand_light) ? '' : $protocol.'deepsid.chordian.net/images/brands/'.$row->brand_light;
+			$response['brand_dark'] 		= empty($row->brand_dark) ? '' : $protocol.'deepsid.chordian.net/images/brands/'.$row->brand_dark;
+			$response['csdb_type'] 			= $row->csdb_type;
+			$response['csdb_id'] 			= $row->csdb_id;
+			$response['thumbnail']			= $protocol.'deepsid.chordian.net'.$thumbnail;
+			$response['image_source'] 		= $row->image_source;
 		}
 
 	} else if (isset($_GET['players'])) {
@@ -307,44 +308,44 @@ try {
 			$response[$i]['search']				= $row->search;
 			$response[$i]['description']		= $row->description;
 			$response[$i]['developer']			= $row->developer;
-			$response[$i]['startyear']			= $row->startyear;
-			$response[$i]['endyear']			= $row->endyear;
+			$response[$i]['start_year']			= $row->start_year;
+			$response[$i]['end_year']			= $row->end_year;
 			$response[$i]['site']				= $row->site;
-			$response[$i]['csdbid']				= $row->csdbid;
+			$response[$i]['csdb_id']			= $row->csdb_id;
 			$response[$i]['platform']			= $row->platform;
 			$response[$i]['distribution']		= $row->distribution;
 			$response[$i]['encoding']			= $row->encoding;
-			$response[$i]['sourcecode']			= $row->sourcecode;
+			$response[$i]['source_code']		= $row->source_code;
 			$response[$i]['docs']				= $row->docs;
-			$response[$i]['exampletunes']	 	= $row->exampletunes;
-			$response[$i]['sidchipcount']	 	= $row->sidchipcount;
-			$response[$i]['channelsvisible']	= $row->channelsvisible;
+			$response[$i]['example_tunes']	 	= $row->example_tunes;
+			$response[$i]['sid_chip_count']	 	= $row->sid_chip_count;
+			$response[$i]['channels_visible']	= $row->channels_visible;
 			$response[$i]['speeds']				= $row->speeds;
 			$response[$i]['digi']				= $row->digi;
-			$response[$i]['auxsupport']			= $row->auxsupport;
-			$response[$i]['importfrom']			= $row->importfrom;
-			$response[$i]['saveto']				= $row->saveto;
+			$response[$i]['aux_support']		= $row->aux_support;
+			$response[$i]['import_from']		= $row->import_from;
+			$response[$i]['save_to']			= $row->save_to;
 			$response[$i]['packer']				= $row->packer;
 			$response[$i]['relocator']			= $row->relocator;
-			$response[$i]['loadsavesnd']		= $row->loadsavesnd;
+			$response[$i]['load_save_snd']		= $row->load_save_snd;
 			$response[$i]['instruments']		= $row->instruments;
 			$response[$i]['subtunes']			= $row->subtunes;
 			$response[$i]['noteworthy']			= $row->noteworthy;
-			$response[$i]['playersize']			= $row->playersize;
-			$response[$i]['zeropages']			= $row->zeropages;
-			$response[$i]['cputime']			= $row->cputime;
+			$response[$i]['player_size']		= $row->player_size;
+			$response[$i]['zero_pages']			= $row->zero_pages;
+			$response[$i]['cpu_time']			= $row->cpu_time;
 			$response[$i]['arpeggio']			= $row->arpeggio;
 			$response[$i]['pulsating']			= $row->pulsating;
 			$response[$i]['filtering']			= $row->filtering;
 			$response[$i]['vibrato']			= $row->vibrato;
-			$response[$i]['hardrestart']		= $row->hardrestart;
-			$response[$i]['tracksystem']		= $row->tracksystem;
+			$response[$i]['hard_restart']		= $row->hard_restart;
+			$response[$i]['track_system']		= $row->track_system;
 			$response[$i]['patterns']			= $row->patterns;
-			$response[$i]['followplay']			= $row->followplay;
-			$response[$i]['copypaste']			= $row->copypaste;
+			$response[$i]['follow_play']		= $row->follow_play;
+			$response[$i]['copy_paste']			= $row->copy_paste;
 			$response[$i]['undoing']			= $row->undoing;
-			$response[$i]['trackcmds']			= $row->trackcmds;
-			$response[$i]['noteinput']			= $row->noteinput;
+			$response[$i]['track_cmds']			= $row->track_cmds;
+			$response[$i]['note_input']			= $row->note_input;
 		}
 
 	} else {

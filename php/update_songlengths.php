@@ -24,7 +24,7 @@ try {
 
 	// Get a list of all file rows in HVSC only
 	// NOTE: Tunes in CGSC currently don't have exact lengths tracked and thus are skipped.
-	$select = $db->query('SELECT id, fullname, lengths FROM hvsc_files WHERE fullname LIKE "_High Voltage SID Collection/%" ORDER BY id');
+	$select = $db->query('SELECT id, collection_path, lengths FROM hvsc_files WHERE collection_path LIKE "_High Voltage SID Collection/%" ORDER BY id');
 	$select->setFetchMode(PDO::FETCH_OBJ);
 
 	// NOTE: Temporarily increase 'max_execution_time' to 800 in PHP.INI when done in LOCALHOST.
@@ -32,7 +32,7 @@ try {
 	foreach($select as $row) {
 		$lengths = explode(' ', $row->lengths);
 		foreach($lengths as $key => $length)
-			$db->query('INSERT INTO hvsc_lengths (fullname, length, subtune) VALUES("'.$row->fullname.'", "'.$length.'", '.$key.')');
+			$db->query('INSERT INTO hvsc_lengths (collection_path, length, subtune) VALUES("'.$row->collection_path.'", "'.$length.'", '.$key.')');
 	}
 
 	echo "Script 'update_songlengths.php' has completed.";

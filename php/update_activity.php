@@ -25,7 +25,7 @@ try {
 	$db = $account->getDB();
 
 	// Get a list of all file rows in HVSC only (in the MUSICIANS folder and SINGLE composers only)
-	$folders = $db->query('SELECT fullname FROM hvsc_folders WHERE fullname LIKE "%/MUSICIANS/%" AND type = "SINGLE"');
+	$folders = $db->query('SELECT collection_path FROM hvsc_folders WHERE collection_path LIKE "%/MUSICIANS/%" AND type = "SINGLE"');
 	$folders->setFetchMode(PDO::FETCH_OBJ);
 
 	echo '
@@ -35,10 +35,10 @@ try {
 		</style>';
 
 	foreach($folders as $folder) {
-		echo '<b>'.$folder->fullname.'</b><div>';
+		echo '<b>'.$folder->collection_path.'</b><div>';
 
 		// Get the copyright for all of the files belonging to this composer
-		$files = $db->query('SELECT copyright FROM hvsc_files WHERE fullname LIKE "'.$folder->fullname.'/%"');
+		$files = $db->query('SELECT copyright FROM hvsc_files WHERE collection_path LIKE "'.$folder->collection_path.'/%"');
 		$files->setFetchMode(PDO::FETCH_OBJ);
 
 		// Add the year from each copyright to an array
@@ -58,7 +58,7 @@ try {
 		echo '</div>Latest activity: '.end($years).'<br /><br />';
 
 		// Store the year in the database
-		$db->query('UPDATE composers SET active = "'.end($years).'" WHERE fullname = "'.$folder->fullname.'" LIMIT 1');
+		$db->query('UPDATE composers SET active = "'.end($years).'" WHERE collection_path = "'.$folder->collection_path.'" LIMIT 1');
 	}
 
 	echo "Script 'update_activity.php' has completed.";

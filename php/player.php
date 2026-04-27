@@ -26,12 +26,12 @@ try {
 
 	// If a player string was specified then first look it up in the many-to-one table
 	if (isset($_GET['player'])) {
-		$select = $db->prepare('SELECT playerid FROM players_lookup WHERE player = :player LIMIT 1');
+		$select = $db->prepare('SELECT player_id FROM players_lookup WHERE player = :player LIMIT 1');
 		$select->execute(array(':player'=>$_GET['player']));
 		$select->setFetchMode(PDO::FETCH_OBJ);
 
 		if ($select->rowCount()) {
-			$id = $select->fetch()->playerid;
+			$id = $select->fetch()->player_id;
 		} else {
 			// Not defined (yet)
 			$sticky = '<h2 style="display:inline-block;margin-top:0;">Players / Editors</h2>';
@@ -62,8 +62,8 @@ try {
 		if (strpos($row->developer, '++')) $developer .= ' et al.';
 		
 		$years = '';
-		if ($row->startyear != '0000') $years .= $row->startyear;
-		if ($row->endyear != '0000') $years .= '-'.$row->endyear;
+		if ($row->start_year != '0000') $years .= $row->start_year;
+		if ($row->end_year != '0000') $years .= '-'.$row->end_year;
 
 		// Use 'id' to figure out the name of the thumbnails (if they exist)
 		$thumbnails = '';
@@ -71,14 +71,14 @@ try {
 			$thumbnails .= '<img class="thumbnail-player zoom-up" src="'.substr($filename, 3).'" data-src="'.substr($filename, 3).'" alt="" />';
 		}
 
-		$cputime = str_replace('[SD]', '<sup><a href="http://csdb.chordian.net/?type=release&id=152422" title="Measured with SIDDump">SD</a></sup>', $row->cputime);
+		$cpu_time = str_replace('[SD]', '<sup><a href="http://csdb.chordian.net/?type=release&id=152422" title="Measured with SIDDump">SD</a></sup>', $row->cpu_time);
 
 		$download = '';
 		$label = '<span style="float:right;margin-right:2px;"><b style="margin-right:7px;">Download:</b>';
 		if (!empty($row->site))
 			$download .= $label.'<a href="'.$row->site.'">Site</a>';
-		if ($row->csdbid)
-			$download .= (!empty($download) ? '<span class="download-dot">&#9642;</span>' : $label).'<a href="http://csdb.chordian.net/?type=release&id='.$row->csdbid.'">CSDb</a>';
+		if ($row->csdb_id)
+			$download .= (!empty($download) ? '<span class="download-dot">&#9642;</span>' : $label).'<a href="http://csdb.chordian.net/?type=release&id='.$row->csdb_id.'">CSDb</a>';
 		if (!empty($download))
 			$download .= '</span>';
 
@@ -106,84 +106,84 @@ try {
 						(!empty($row->platform) ||
 						 !empty($row->distribution) ||
 						 !empty($row->encoding) ||
-						 !empty($row->sourcecode) ||
+						 !empty($row->source_code) ||
 						 !empty($row->docs) ||
-						 !empty($row->exampletunes) ||
-						 !empty($row->fileformat)
+						 !empty($row->example_tunes) ||
+						 !empty($row->file_format)
 						? '<tr><td class="corner package" colspan="2"><img class="svg" src="images/players_package.svg" style="position:relative;top:1px;" alt="" /><span>Package</span></tr>' : '').
 
 						(!empty($row->platform) ? '<tr><td>Platform</td><td>'.$row->platform.'</td></tr>' : '').
 						(!empty($row->distribution) ? '<tr><td>Distribution</td><td>'.$row->distribution.'</td></tr>' : '').
 						(!empty($row->encoding) ? '<tr><td>PAL / NTSC</td><td>'.$row->encoding.'</td></tr>' : '').
-						(!empty($row->sourcecode) ? '<tr><td>Source code</td><td>'.$row->sourcecode.'</td></tr>' : '').
+						(!empty($row->source_code) ? '<tr><td>Source code</td><td>'.$row->source_code.'</td></tr>' : '').
 						(!empty($row->docs) ? '<tr><td>Documentation</td><td>'.$row->docs.'</td></tr>' : '').
-						(!empty($row->exampletunes) ? '<tr><td>Example tunes</td><td>'.$row->exampletunes.'</td></tr>' : '').
-						(!empty($row->fileformat) ? '<tr><td>Proprietary file format</td><td>'.$row->fileformat.'</td></tr>' : '').
+						(!empty($row->example_tunes) ? '<tr><td>Example tunes</td><td>'.$row->example_tunes.'</td></tr>' : '').
+						(!empty($row->file_format) ? '<tr><td>Proprietary file format</td><td>'.$row->file_format.'</td></tr>' : '').
 
-						(!empty($row->sidchipcount) ||
-						 !empty($row->channelsvisible) ||
+						(!empty($row->sid_chip_count) ||
+						 !empty($row->channels_visible) ||
 						 !empty($row->speeds) ||
 						 !empty($row->digi) ||
-						 !empty($row->auxsupport) ||
-						 !empty($row->importfrom) ||
-						 !empty($row->saveto) ||
+						 !empty($row->aux_support) ||
+						 !empty($row->import_from) ||
+						 !empty($row->save_to) ||
 						 !empty($row->packer) ||
 						 !empty($row->relocator) ||
-						 !empty($row->loadsavesnd) ||
+						 !empty($row->load_save_snd) ||
 						 !empty($row->instruments) ||
 						 !empty($row->subtunes)
 						? '<tr><td class="corner features" colspan="2"><img class="svg" src="images/players_features.svg" style="position:relative;top:1px;" alt="" /><span>Features</span></td></tr>' : '').
 
-						(!empty($row->sidchipcount) ? '<tr><td>Number of SID chips</td><td>'.$row->sidchipcount.'</td></tr>' : '').
-						(!empty($row->channelsvisible) ? '<tr><td>Channels visible</td><td>'.$row->channelsvisible.'</td></tr>' : '').
+						(!empty($row->sid_chip_count) ? '<tr><td>Number of SID chips</td><td>'.$row->sid_chip_count.'</td></tr>' : '').
+						(!empty($row->channels_visible) ? '<tr><td>Channels visible</td><td>'.$row->channels_visible.'</td></tr>' : '').
 						(!empty($row->speeds) ? '<tr><td>Speeds</td><td>'.$row->speeds.'</td></tr>' : '').
 						(!empty($row->digi) ? '<tr><td>Digi / Samples</td><td>'.$row->digi.'</td></tr>' : '').
-						(!empty($row->auxsupport) ? '<tr><td>Auxiliary support</td><td>'.$row->auxsupport.'</td></tr>' : '').
-						(!empty($row->importfrom) ? '<tr><td>Import from</td><td>'.$row->importfrom.'</td></tr>' : '').
-						(!empty($row->saveto) ? '<tr><td>Save/Export to</td><td>'.$row->saveto.'</td></tr>' : '').
+						(!empty($row->aux_support) ? '<tr><td>Auxiliary support</td><td>'.$row->aux_support.'</td></tr>' : '').
+						(!empty($row->import_from) ? '<tr><td>Import from</td><td>'.$row->import_from.'</td></tr>' : '').
+						(!empty($row->save_to) ? '<tr><td>Save/Export to</td><td>'.$row->save_to.'</td></tr>' : '').
 						(!empty($row->packer) ? '<tr><td>Packer</td><td>'.$row->packer.'</td></tr>' : '').
 						(!empty($row->relocator) ? '<tr><td>Relocator</td><td>'.$row->relocator.'</td></tr>' : '').
-						(!empty($row->loadsavesnd) ? '<tr><td>Load/Save sounds</td><td>'.$row->loadsavesnd.'</td></tr>' : '').
+						(!empty($row->load_save_snd) ? '<tr><td>Load/Save sounds</td><td>'.$row->load_save_snd.'</td></tr>' : '').
 						(!empty($row->instruments) ? '<tr><td>Instruments / Sounds</td><td>'.$row->instruments.'</td></tr>' : '').
 						(!empty($row->subtunes) ? '<tr><td>Sub tunes</td><td>'.$row->subtunes.'</td></tr>' : '').
 
 						(!empty($row->noteworthy) ||
-						 !empty($row->playersize) ||
-						 !empty($row->zeropages) ||
-						 !empty($row->cputime) ||
+						 !empty($row->player_size) ||
+						 !empty($row->zero_pages) ||
+						 !empty($row->cpu_time) ||
 						 !empty($row->arpeggio) ||
 						 !empty($row->pulsating) ||
 						 !empty($row->filtering) ||
 						 !empty($row->vibrato) ||
-						 !empty($row->hardrestart)
+						 !empty($row->hard_restart)
 						? '<tr><td class="corner player" colspan="2"><img class="svg" src="images/players_player.svg" style="position:relative;top:1px;" alt="" /><span>Player</span></td></tr>' : '').
 
 						(!empty($row->noteworthy) ? '<tr><td>Noteworthy</td><td>'.$row->noteworthy.'</td></tr>' : '').
-						(!empty($row->playersize) ? '<tr><td>Size of player</td><td>'.$row->playersize.'</td></tr>' : '').
-						(!empty($row->zeropages) ? '<tr><td>Zero page usage</td><td>'.$row->zeropages.'</td></tr>' : '').
-						(!empty($row->cputime) ? '<tr><td>CPU time (1x)</td><td>'.$cputime.'</td></tr>' : '').
+						(!empty($row->player_size) ? '<tr><td>Size of player</td><td>'.$row->player_size.'</td></tr>' : '').
+						(!empty($row->zero_pages) ? '<tr><td>Zero page usage</td><td>'.$row->zero_pages.'</td></tr>' : '').
+						(!empty($row->cpu_time) ? '<tr><td>CPU time (1x)</td><td>'.$cpu_time.'</td></tr>' : '').
 						(!empty($row->arpeggio) ? '<tr><td>Arpeggio</td><td>'.$row->arpeggio.'</td></tr>' : '').
 						(!empty($row->pulsating) ? '<tr><td>Pulsating</td><td>'.$row->pulsating.'</td></tr>' : '').
 						(!empty($row->filtering) ? '<tr><td>Filtering</td><td>'.$row->filtering.'</td></tr>' : '').
 						(!empty($row->vibrato) ? '<tr><td>Vibrato</td><td>'.$row->vibrato.'</td></tr>' : '').
-						(!empty($row->hardrestart) ? '<tr><td>Hard restart</td><td>'.$row->hardrestart.'</td></tr>' : '').
+						(!empty($row->hard_restart) ? '<tr><td>Hard restart</td><td>'.$row->hard_restart.'</td></tr>' : '').
 
-						(!empty($row->tracksystem) ||
+						(!empty($row->track_system) ||
 						 !empty($row->patterns) ||
-						 !empty($row->followplay) ||
-						 !empty($row->copypaste) ||
+						 !empty($row->follow_play) ||
+						 !empty($row->copy_paste) ||
 						 !empty($row->undoing) ||
-						 !empty($row->trackcmds) ||
-						 !empty($row->noteinput)
+						 !empty($row->track_cmds) ||
+						 !empty($row->note_input)
 						? '<tr><td class="corner editor" colspan="2"><img class="svg icon-editor" src="images/players_editor.svg" style="position:relative;top:1px;" alt="" /><span>Editor</span></td></tr>' : '').
 
-						(!empty($row->tracksystem) ? '<tr><td>Track system</td><td>'.$row->tracksystem.'</td></tr>' : '').
+						(!empty($row->track_system) ? '<tr><td>Track system</td><td>'.$row->track_system.'</td></tr>' : '').
 						(!empty($row->patterns) ? '<tr><td>Patterns / Sequences</td><td>'.$row->patterns.'</td></tr>' : '').
-						(!empty($row->followplay) ? '<tr><td>Follow-play</td><td>'.$row->followplay.'</td></tr>' : '').
-						(!empty($row->copypaste) ? '<tr><td>Copy and Paste</td><td>'.$row->copypaste.'</td></tr>' : '').
+						(!empty($row->follow_play) ? '<tr><td>Follow-play</td><td>'.$row->follow_play.'</td></tr>' : '').
+						(!empty($row->copy_paste) ? '<tr><td>Copy and Paste</td><td>'.$row->copy_paste.'</td></tr>' : '').
 						(!empty($row->undoing) ? '<tr><td>Undo</td><td>'.$row->undoing.'</td></tr>' : '').
-						(!empty($row->trackcmds) ? '<tr><td>Track commands</td><td>'.$row->trackcmds.'</td></tr>' : '').
-						(!empty($row->noteinput) ? '<tr><td>Note input layout</td><td>'.$row->noteinput.'</td></tr>' : '').
+						(!empty($row->track_cmds) ? '<tr><td>Track commands</td><td>'.$row->track_cmds.'</td></tr>' : '').
+						(!empty($row->note_input) ? '<tr><td>Note input layout</td><td>'.$row->note_input.'</td></tr>' : '').
 					'</table>
 				</td>
 			</tr>

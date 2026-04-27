@@ -40,15 +40,15 @@ if (!$account->isAdmin())
 try {
 	$db = $account->getDB();
 
-	$select = $db->prepare('SELECT id FROM hvsc_files WHERE fullname = :fullname LIMIT 1');
-	$select->execute(array(':fullname' => $_POST['fullname']));
+	$select = $db->prepare('SELECT id FROM hvsc_files WHERE collection_path = :collection_path LIMIT 1');
+	$select->execute(array(':collection_path' => $_POST['fullname']));
 	$select->setFetchMode(PDO::FETCH_OBJ);
 	$id = $select->rowCount() ? $select->fetch()->id : 0;
 
 	$new_name = substr($_POST['fullname'], 0, strrpos($_POST['fullname'], '/') + 1).$_POST['name'];
 
 	// Update the fields
-	$update = $db->prepare('UPDATE hvsc_files SET fullname = :newername, player = :player, author = :author, copyright = :copyright WHERE id = '.$id.' LIMIT 1');
+	$update = $db->prepare('UPDATE hvsc_files SET collection_path = :newername, player = :player, author = :author, copyright = :copyright WHERE id = '.$id.' LIMIT 1');
 	$update->execute(array(
 		':newername'	=> $new_name,
 		':player'		=> $_POST['player'],

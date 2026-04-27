@@ -243,8 +243,8 @@ try {
 		$sidFilename = str_replace('/', '\\', $sidFilename);
 
 		// What games are using this SID file?
-		$select = $gb->prepare('SELECT GA_Id FROM Games WHERE SidFilename = :fullname');
-		$select->execute(array(':fullname'=>$sidFilename));
+		$select = $gb->prepare('SELECT GA_Id FROM Games WHERE SidFilename = :collection_path');
+		$select->execute(array(':collection_path' => $sidFilename));
 		$select->setFetchMode(PDO::FETCH_OBJ);
 
 		// Collect the GB64 ID numbers (if any)

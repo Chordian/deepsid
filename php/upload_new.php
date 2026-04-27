@@ -63,7 +63,7 @@ try {
 	$sid['name'] = substr($sid['name'], 0, -4).'.sid';
 
 	// Make sure a file of the same name doesn't already exist in the database
-	$exists = $db->query('SELECT 1 FROM hvsc_files WHERE fullname LIKE "'.$path.$sid['name'].'" LIMIT 1');
+	$exists = $db->query('SELECT 1 FROM hvsc_files WHERE collection_path LIKE "'.$path.$sid['name'].'" LIMIT 1');
 	if ($exists->rowCount())
 		die(json_encode(array('status' => 'error', 'message' => 'There is already a SID file of that name here. Duplicate names are not allowed. Try renaming it first.')));
 
@@ -88,53 +88,54 @@ try {
 
 	switch ($byte[0x77] & 0b00001100) {
 		case 0b00000100:
-			$clockspeed = 'PAL 50Hz';
+			$clock_speed = 'PAL 50Hz';
 			break;
 		case 0b00001000:
-			$clockspeed = 'NTSC 60Hz';
+			$clock_speed = 'NTSC 60Hz';
 			break;
 		case 0b00001100:
-			$clockspeed = 'PAL / NTSC';
+			$clock_speed = 'PAL / NTSC';
 			break;
 		default:
-			$clockspeed = 'Unknown';
+			$clock_speed = 'Unknown';
 	}
 
 	switch ($byte[0x77] & 0b00110000) {
 		case 0b00010000:
-			$sidmodel = 'MOS6581';
+			$sid_model = 'MOS6581';
 			break;
 		case 0b00100000:
-			$sidmodel = 'MOS8580';
+			$sid_model = 'MOS8580';
 			break;
 		case 0b00110000:
-			$sidmodel = 'MOS6581 / MOS8580';
+			$sid_model = 'MOS6581 / MOS8580';
 			break;
 		default:
-			$sidmodel = 'Unknown';
+			$sid_model = 'Unknown';
 	}
 
+	// Key names should be without underscores
 	$info = array(
-		'fullname' =>		$path.$sid['name'],
-		'filename' =>		$sid['name'],
-		'player' =>			identifyPlayer($sid['tmp_name']),
-		'lengths' => 		rtrim(str_repeat('20:00 ', $subtunes)),
-		'type' => 			$file[0].'SID',
-		'version' => 		$version,
-		'playertype' =>		'Normal built-in',
-		'playercompat' =>	$compatible,
-		'clockspeed' =>		$clockspeed,
-		'sidmodel' =>		$sidmodel,
-		'dataoffset' =>		$data_offset,
-		'datasize' => 		strlen($file) - $data_offset,
-		'loadaddr' => 		$load_addr ? $load_addr : $byte[$data_offset + 1] * 256 + $byte[$data_offset],
-		'initaddr' => 		$byte[0xA] * 256 + $byte[0xB],
-		'playaddr' => 		$byte[0xC] * 256 + $byte[0xD],
-		'subtunes' => 		$subtunes,
-		'startsubtune' => 	$byte[0x10] * 256 + $byte[0x11],
-		'name' => 			$name,
-		'author' => 		$author,
-		'copyright' => 		$copyright,
+		'fullname'			=> $path.$sid['name'],
+		'filename'			=> $sid['name'],
+		'player'			=> identifyPlayer($sid['tmp_name']),
+		'lengths'			=> rtrim(str_repeat('20:00 ', $subtunes)),
+		'type'				=> $file[0].'SID',
+		'version'			=> $version,
+		'playertype'		=> 'Normal built-in',
+		'playercompat'		=> $compatible,
+		'clockspeed'		=> $clock_speed,
+		'sidmodel'			=> $sid_model,
+		'dataoffset'		=> $data_offset,
+		'datasize'			=> strlen($file) - $data_offset,
+		'loadaddr'			=> $load_addr ? $load_addr : $byte[$data_offset + 1] * 256 + $byte[$data_offset],
+		'initaddr'			=> $byte[0xA] * 256 + $byte[0xB],
+		'playaddr'			=> $byte[0xC] * 256 + $byte[0xD],
+		'subtunes'			=> $subtunes,
+		'startsubtune'		=> $byte[0x10] * 256 + $byte[0x11],
+		'name'				=> $name,
+		'author'			=> $author,
+		'copyright'			=> $copyright,
 	);
 
 } catch(PDOException $e) {

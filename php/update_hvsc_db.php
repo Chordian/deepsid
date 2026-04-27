@@ -74,8 +74,8 @@ try {
 	 *   /DEMOS/UNKNOWN/Mission_Impossible_2.sid
 	 *   /DEMOS/M-R/Mission_Impossible.sid
 	 * 
-	 * The first / line is used to find the 'fullname' which is then updated to
-	 * the second line. If the second line is a target folder, the SID name is
+	 * The first / line is used to find the 'collection_path' which is then updated
+	 * to the second line. If the second line is a target folder, the SID name is
 	 * appended to it and the table with folders is checked to see if a new
 	 * entry needs to be created here too.
 	 * 
@@ -99,7 +99,7 @@ try {
 	 * 
 	 *   /MUSICIANS/0-9/4-Mat/Decline.sid
 	 * 
-	 * Simply deletes the entries found using the 'fullname' field.
+	 * Simply deletes the entries found using the 'collection_path' field.
 	 * 
 	 * In the clean-up section later, it may be used to delete a folder that
 	 * was purged earlier. Example:
@@ -164,24 +164,24 @@ try {
 						foreach ($sid_files as $sid) {
 							echo '&nbsp;&nbsp;&nbsp;&nbsp;- '.$destination.$sid.'<br />';
 
-							$db->query('INSERT INTO hvsc_files (fullname, new)'.
+							$db->query('INSERT INTO hvsc_files (collection_path, new)'.
 								' VALUES("'.HVSC_PATH.$destination.$sid.'", '.HVSC_NEW_VERSION.')');
 
 							// Better see if its folder already exists
 							$folder = substr($destination, 0, -1);
-							$select = $db->query('SELECT 1 FROM hvsc_folders WHERE fullname = "'.HVSC_PATH.$folder.'"');
+							$select = $db->query('SELECT 1 FROM hvsc_folders WHERE collection_path = "'.HVSC_PATH.$folder.'"');
 							$select->setFetchMode(PDO::FETCH_OBJ);
 							if (!$select->rowCount())
 								// No, better create an entry for it then
-								$db->query('INSERT INTO hvsc_folders (fullname) VALUES("'.HVSC_PATH.$folder.'")');
+								$db->query('INSERT INTO hvsc_folders (collection_path) VALUES("'.HVSC_PATH.$folder.'")');
 						}
 					} else if (substr($source, -4) == '.sid' && substr($destination, -4) == '.sid') {
 
 						// A SID file is merely renamed
 						echo '&nbsp;&nbsp;Renaming one file: '.$source.'&nbsp;&nbsp;=>&nbsp;&nbsp;'.$destination.'<br />';
 
-						$db->query('UPDATE hvsc_files SET fullname = "'.HVSC_PATH.$destination.'", updated = '.HVSC_NEW_VERSION.
-							' WHERE fullname = "'.HVSC_PATH.$source.'" LIMIT 1');
+						$db->query('UPDATE hvsc_files SET collection_path = "'.HVSC_PATH.$destination.'", updated = '.HVSC_NEW_VERSION.
+							' WHERE collection_path = "'.HVSC_PATH.$source.'" LIMIT 1');
 
 					} else if (substr($source, -4) == '.sid' && substr($destination, -1) == '/') {
 
@@ -189,16 +189,16 @@ try {
 						$file = substr($source, strrpos($source, '/') + 1);
 						echo '&nbsp;&nbsp;One file to folder: '.$source.'&nbsp;&nbsp;=>&nbsp;&nbsp;'.$destination.$file.'<br />';
 
-						$db->query('UPDATE hvsc_files SET fullname = "'.HVSC_PATH.$destination.$file.'", updated = '.HVSC_NEW_VERSION.
-							' WHERE fullname = "'.HVSC_PATH.$source.'" LIMIT 1');
+						$db->query('UPDATE hvsc_files SET collection_path = "'.HVSC_PATH.$destination.$file.'", updated = '.HVSC_NEW_VERSION.
+							' WHERE collection_path = "'.HVSC_PATH.$source.'" LIMIT 1');
 						
 						// But does that destination folder exist in the database?
 						$folder = substr($destination, 0, -1);
-						$select = $db->query('SELECT 1 FROM hvsc_folders WHERE fullname = "'.HVSC_PATH.$folder.'"');
+						$select = $db->query('SELECT 1 FROM hvsc_folders WHERE collection_path = "'.HVSC_PATH.$folder.'"');
 						$select->setFetchMode(PDO::FETCH_OBJ);
 						if (!$select->rowCount())
 							// No, better create an entry for it then
-							$db->query('INSERT INTO hvsc_folders (fullname) VALUES("'.HVSC_PATH.$folder.'")');
+							$db->query('INSERT INTO hvsc_folders (collection_path) VALUES("'.HVSC_PATH.$folder.'")');
 
 					} else if (substr($source, -1) == '/' && substr($destination, -1) == '/') {
 
@@ -206,20 +206,20 @@ try {
 						echo '&nbsp;&nbsp;Renaming a folder: '.$source.'&nbsp;&nbsp;=>&nbsp;&nbsp;'.$destination.'<br />';
 
 						// First get a list of all files that uses that folder
-						$select = $db->query('SELECT fullname FROM hvsc_files WHERE fullname LIKE "'.HVSC_PATH.$source.'%"');
+						$select = $db->query('SELECT collection_path FROM hvsc_files WHERE collection_path LIKE "'.HVSC_PATH.$source.'%"');
 						$select->setFetchMode(PDO::FETCH_OBJ);
 						if ($select->rowCount()) {
 							foreach($select as $row) {
 								// Now update every single one with the new destination folder
-								$file = substr($row->fullname, strrpos($row->fullname, '/') + 1);
-								$db->query('UPDATE hvsc_files SET fullname = "'.HVSC_PATH.$destination.$file.'", updated = '.HVSC_NEW_VERSION.
-									' WHERE fullname = "'.$row->fullname.'"');
+								$file = substr($row->collection_path, strrpos($row->collection_path, '/') + 1);
+								$db->query('UPDATE hvsc_files SET collection_path = "'.HVSC_PATH.$destination.$file.'", updated = '.HVSC_NEW_VERSION.
+									' WHERE collection_path = "'.$row->collection_path.'"');
 							}
 						}
 	
 						// Finally rename the folder entry itself
-						$db->query('UPDATE hvsc_folders SET fullname = "'.HVSC_PATH.substr($destination, 0, -1).'"'.
-							' WHERE fullname = "'.HVSC_PATH.substr($source, 0, -1).'"');
+						$db->query('UPDATE hvsc_folders SET collection_path = "'.HVSC_PATH.substr($destination, 0, -1).'"'.
+							' WHERE collection_path = "'.HVSC_PATH.substr($source, 0, -1).'"');
 
 					} else {
 						echo '&nbsp;&nbsp;<span style="color:#f00;">ERROR: UNKNOWN MOVE COMMAND</span><br />';
@@ -236,7 +236,7 @@ try {
 				// One file to be deleted
 				echo '&nbsp;&nbsp;Delete one file: '.$target.'<br />';
 
-				$db->query('DELETE FROM hvsc_files WHERE fullname = "'.HVSC_PATH.$target.'" LIMIT 1');
+				$db->query('DELETE FROM hvsc_files WHERE collection_path = "'.HVSC_PATH.$target.'" LIMIT 1');
 
 			} else if (substr($line, -1) == '/') {
 

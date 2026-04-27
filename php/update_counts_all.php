@@ -48,12 +48,12 @@ function norm($path) {
     return str_replace('\\', '/', $path);
 }
 
-// Detect collection type from fullname
-function getCollectionExt($fullname) {
+// Detect collection type from collection path
+function getCollectionExt($collection_path) {
     global $ALLOWED_EXT;
 
     foreach ($ALLOWED_EXT as $folder => $ext) {
-        if (strpos($fullname, $folder) === 0) {
+        if (strpos($collection_path, $folder) === 0) {
             return $ext;
         }
     }
@@ -114,22 +114,22 @@ try {
 
     $db = $account->getDB();
 
-	$q = $db->query('SELECT id, fullname FROM hvsc_folders ORDER BY fullname');
+	$q = $db->query('SELECT id, collection_path FROM hvsc_folders ORDER BY collection_path');
 	$q->setFetchMode(PDO::FETCH_OBJ);
 
 	foreach ($q as $row) {
 
-		$fullname = $row->fullname;				// e.g. "_High Voltage SID Collection/MUSICIANS/M/Merlin"
-		$absPath  = $ROOT . $fullname;
+		$collection_path = $row->collection_path;   // e.g. "_High Voltage SID Collection/MUSICIANS/M/Merlin"
+		$absPath  = $ROOT . $collection_path;
 
 		if (!is_dir($absPath)) {
-			echo "Missing dir: $fullname\n";
+			echo "Missing dir: $collection_path\n";
 			continue;
 		}
 
-		echo "Processing: $fullname ... ";
+		echo "Processing: $collection_path ... ";
 
-		$count = countItems($absPath, $fullname);
+		$count = countItems($absPath, $collection_path);
 
 		echo "count = $count\n";
 

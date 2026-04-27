@@ -26,7 +26,7 @@ if ($account->checkLogin()) {
 		$select_files = $db->prepare("
 			SELECT files
 			FROM hvsc_folders
-			WHERE fullname = :folder
+			WHERE collection_path = :folder
 		");
 		$select_files->execute([':folder' => $_GET['fullname']]);
 		$total_files = (int)$select_files->fetchColumn();

@@ -2479,7 +2479,7 @@ Browser.prototype = {
 				// The 'LABEL' type: Moved to other database tables.
 			} else {
 				// NOTE: Don't change the order of tags or the collector for a folder will break!
-				// If you want to change the order of tags, see GetTagsAndTypes() in 'tags_read.php'
+				// If you want to change the order of tags, see getTagsAndTypes() in 'tags_read.php'
 				list_of_tags += '<div class="tag tag-'+types[i]+'"'+id+'>'+tag+'</div>';
 			}
 		});
@@ -4618,7 +4618,7 @@ Browser.prototype = {
 					text: '<h3>Upload SID File Wizard</h3><div class="top-right-corner">1/4</div><p>The SID file contains the following information:</p>'+
 						'<table class="sid-info">'+
 							'<tr><td>Type</td><td>'+data.info.type+' v'+data.info.version+'</td></tr>'+
-							'<tr><td>Clock</td><td>'+data.info.clockspeed+'</td></tr>'+
+							'<tr><td>Clock</td><td>'+data.info.clock_speed+'</td></tr>'+
 							'<tr><td>SID Model</td><td>'+data.info.sidmodel+'</td></tr>'+
 							'<tr><td>Name</td><td>'+data.info.name+'</td></tr>'+
 							'<tr><td>Author</td><td>'+data.info.author+'</td></tr>'+

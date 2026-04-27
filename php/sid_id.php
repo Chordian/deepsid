@@ -21,15 +21,15 @@ define('T_NAME',-4);
 /**
  * Try to identify the player used by this SID file.
  *
- * @param		string		$fullname			fullname of SID file
+ * @param		string		$collection_path	full path name of SID file
  *
  * @return		string							name of player (empty if not identified)
  */
-function identifyPlayer($fullname) {
+function identifyPlayer($collection_path) {
 
-	$sid = file_get_contents($fullname);
+	$sid = file_get_contents($collection_path);
 	if (empty($sid)) return '';
-	$sid_size = filesize($fullname);
+	$sid_size = filesize($collection_path);
 
 	$player = '';
 	$config_array = array();

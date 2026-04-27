@@ -25,7 +25,7 @@ try {
 	$db = $account->getDB();
 
 	// Get ID of symlist folder
-	$select = $db->prepare('SELECT id, files FROM hvsc_folders WHERE fullname = :folder AND user_id = '.$user_id.' LIMIT 1');
+	$select = $db->prepare('SELECT id, files FROM hvsc_folders WHERE collection_path = :folder AND user_id = '.$user_id.' LIMIT 1');
 	$select->execute(array(':folder'=>$_POST['symlist']));
 	$select->setFetchMode(PDO::FETCH_OBJ);
 
@@ -45,8 +45,8 @@ try {
 	} else {
 
 		// Get ID of actual SID file
-		$select = $db->prepare('SELECT id FROM hvsc_files WHERE fullname = :fullname LIMIT 1');
-		$select->execute(array(':fullname'=>$_POST['fullname']));
+		$select = $db->prepare('SELECT id FROM hvsc_files WHERE collection_path = :collection_path LIMIT 1');
+		$select->execute(array(':collection_path' => $_POST['fullname']));
 		$select->setFetchMode(PDO::FETCH_OBJ);
 
 		if (!$select->rowCount())

@@ -26,9 +26,9 @@ if (!$user_id)
 try {
 	$db = $account->getDB();
 
-	// First find the ID of the 'fullname' text
-	$select = $db->prepare('SELECT id FROM hvsc_files WHERE fullname = :fullname LIMIT 1');
-	$select->execute(array(':fullname'=>$_POST['fullname']));
+	// First find the ID of the 'collection_path' text
+	$select = $db->prepare('SELECT id FROM hvsc_files WHERE collection_path = :collection_path LIMIT 1');
+	$select->execute(array(':collection_path' => $_POST['fullname']));
 	$select->setFetchMode(PDO::FETCH_OBJ);
 	$file_id = $select->fetch()->id;
 
@@ -55,8 +55,8 @@ try {
 			die(json_encode(array('status' => 'error', 'message' => 'Could not save all the YouTube video links for this SID row.')));
 	}
 
-	$fullname = str_replace('_High Voltage SID Collection', '', $_POST['fullname']);
-	$account->logActivity('User "'.$_SESSION['user_name'].'" edited the video links for "'.$fullname.'" (subtune #'.$_POST['subtune'].')');
+	$collection_path = str_replace('_High Voltage SID Collection', '', $_POST['fullname']);
+	$account->logActivity('User "'.$_SESSION['user_name'].'" edited the video links for "'.$collection_path.'" (subtune #'.$_POST['subtune'].')');
 
 } catch(PDOException $e) {
 	$account->logActivityError(basename(__FILE__), $e->getMessage());

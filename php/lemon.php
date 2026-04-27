@@ -8,7 +8,7 @@
  * 
  * https://lemon.ams3.cdn.digitaloceanspaces.com/c64/music/hvsc/mp3/GAMES/M-R/Nebulus-01.mp3
  * 
- * @uses		$_GET['file']				fullname path to SID file
+ * @uses		$_GET['file']				collection path to SID file
  * @uses		$_GET['subtune']			subtune number
  * 
  * @used-by		players.js
@@ -39,25 +39,25 @@ try {
 
 		if (!in_array($root_folder, array('DEMOS', 'GAMES', 'MUSICIANS'))) {
 			// It's in a custom folder - Howler can't play this one, but get its hash (MD5)
-			$select = $db->prepare('SELECT hash FROM hvsc_files WHERE fullname = :fullname LIMIT 1');
-			$select->execute(array(':fullname'=>ltrim($file, '/')));
+			$select = $db->prepare('SELECT hash FROM hvsc_files WHERE collection_path = :collection_path LIMIT 1');
+			$select->execute(array(':collection_path' => ltrim($file, '/')));
 			$select->setFetchMode(PDO::FETCH_OBJ);
 			// Now get all SID files that share the same hash (MD5)
-			$twins = $db->query('SELECT fullname FROM hvsc_files WHERE hash = "'.$select->fetch()->hash.'"');
+			$twins = $db->query('SELECT collection_path FROM hvsc_files WHERE hash = "'.$select->fetch()->hash.'"');
 			$twins->setFetchMode(PDO::FETCH_OBJ);
 
 			// So, does this file have a duplicate in HVSC that Howler can play?
 			foreach ($twins as $twin) {
-				$root_folder = explode('/', $twin->fullname)[0];
+				$root_folder = explode('/', $twin->collection_path)[0];
 				if (in_array($root_folder, array('DEMOS', 'GAMES', 'MUSICIANS')))
 					// Yep, here it is!
-					$file = '/'.$twin->fullname;
+					$file = '/'.$twin->collection_path;
 			}
 		}
 
 		// Does this tune have multiple subtunes?
-		$select = $db->prepare('SELECT subtunes FROM hvsc_files WHERE fullname = :fullname LIMIT 1');
-		$select->execute(array(':fullname'=>ltrim($file, '/')));
+		$select = $db->prepare('SELECT subtunes FROM hvsc_files WHERE collection_path = :collection_path LIMIT 1');
+		$select->execute(array(':collection_path' => ltrim($file, '/')));
 		$select->setFetchMode(PDO::FETCH_OBJ);
 		
 		$subtune = $select->fetch()->subtunes > 1

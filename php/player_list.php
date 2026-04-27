@@ -42,16 +42,16 @@ try {
 		if (strpos($row->developer, '++')) $developer .= ' et al.';
 
 		$years = '';
-		if ($row->startyear != '0000') $years .= $row->startyear;
-		if ($row->endyear != '0000') $years .= '-'.$row->endyear;
+		if ($row->start_year != '0000') $years .= $row->start_year;
+		if ($row->end_year != '0000') $years .= '-'.$row->end_year;
 
 		$info = $row->platform;
 		//$dot = '<span>&#9642;</span>';
-		//if (!empty($row->cputime)) $info .= $dot;
-		//$info .= $row->cputime;
+		//if (!empty($row->cpu_time)) $info .= $dot;
+		//$info .= $row->cpu_time;
 
-		$cputime = str_replace('[SD]', '', $row->cputime);
-		$cputime = str_replace('Approx ', '', $cputime);
+		$cpu_time = str_replace('[SD]', '', $row->cpu_time);
+		$cpu_time = str_replace('Approx ', '', $cpu_time);
 
 		// Prepare a horizontal bar for number of songs made in this player/editor
 
@@ -97,7 +97,7 @@ try {
 					trim($years.$developer).
 					'<br />'.$pfactoid_top.
 					'<span class="player-line" style="margin-right:0;">'.$info.'</span>'.
-					(!empty($cputime) ? '<span class="player-line player-right">'.$cputime.'</span>' : '').
+					(!empty($cpu_time) ? '<span class="player-line player-right">'.$cpu_time.'</span>' : '').
 				'</td>'.
 			'</tr>';
 	}

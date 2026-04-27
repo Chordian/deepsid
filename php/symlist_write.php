@@ -38,8 +38,8 @@ try {
 		$amend = 1;
 		$suggested_symlist_name = '!'.$isolated_sid_name;
 		do {
-			$select = $db->prepare('SELECT 1 FROM hvsc_folders WHERE fullname = :fullname AND user_id = '.$user_id);
-			$select->execute(array(':fullname'=>$suggested_symlist_name));
+			$select = $db->prepare('SELECT 1 FROM hvsc_folders WHERE collection_path = :collection_path AND user_id = '.$user_id);
+			$select->execute(array(':collection_path' => $suggested_symlist_name));
 
 			if ($select->rowCount()) {
 				$suggested_symlist_name = '!'.$isolated_sid_name.' '.$amend; // Try adding a number then
@@ -48,7 +48,7 @@ try {
 		} while ($select->rowCount());
 
 		// Create the new symlist entry and get its ID
-		$insert = $db->query('INSERT INTO hvsc_folders (fullname, user_id)'.
+		$insert = $db->query('INSERT INTO hvsc_folders (collection_path, user_id)'.
 			' VALUES("'.$suggested_symlist_name.'", '.$user_id.')');
 		if ($insert->rowCount() == 0)
 			die(json_encode(array('status' => 'error', 'message' => "Could not create ".$suggested_symlist_name)));
@@ -65,8 +65,8 @@ try {
 
 		$symlist_folder = str_replace(' [PUBLIC]', '', $_POST['symlist']);
 
-		$select = $db->prepare('SELECT id, files FROM hvsc_folders WHERE fullname = :fullname AND user_id = '.$user_id.' LIMIT 1');
-		$select->execute(array(':fullname'=>$symlist_folder));
+		$select = $db->prepare('SELECT id, files FROM hvsc_folders WHERE collection_path = :collection_path AND user_id = '.$user_id.' LIMIT 1');
+		$select->execute(array(':collection_path' => $symlist_folder));
 		$select->setFetchMode(PDO::FETCH_OBJ);
 
 		if (!$select->rowCount())
@@ -77,9 +77,9 @@ try {
 		$file_count = $row->files;
 	}
 
-	// Get the ID of the fullname SID file the user wanted to add as an entry
-	$select = $db->prepare('SELECT id FROM hvsc_files WHERE fullname = :fullname LIMIT 1');
-	$select->execute(array(':fullname'=>$_POST['fullname']));
+	// Get the ID of the collection path SID file the user wanted to add as an entry
+	$select = $db->prepare('SELECT id FROM hvsc_files WHERE collection_path = :collection_path LIMIT 1');
+	$select->execute(array(':collection_path' => $_POST['collection_path']));
 	$select->setFetchMode(PDO::FETCH_OBJ);
 
 	if (!$select->rowCount())

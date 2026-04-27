@@ -129,16 +129,16 @@ class Account {
 	 * @return		boolean		false = call $this->getErrorMessage()
 	 */
 	public function login() {
-		$username = trim($_POST['username']);
+		$user_name = trim($_POST['username']);
 		$password = trim($_POST['password']);
 
 		if (!isset($_SESSION)) session_start();
-		if (!$this->validateLogin($username, $password)) {
-			$this->logActivity('User "'.$username.'" tried to log in but was denied access');
+		if (!$this->validateLogin($user_name, $password)) {
+			$this->logActivity('User "'.$user_name.'" tried to log in but was denied access');
 			return false;
 		}
 
-		$_SESSION[$this->loginSession()] = $username;
+		$_SESSION[$this->loginSession()] = $user_name;
 
 		// Remember
 		$cookiehash = md5(sha1($_SESSION['user_name'].$_SERVER['REMOTE_ADDR']));
@@ -146,8 +146,8 @@ class Account {
 
 		try {
 			// Store the hash in the database
-			$update = $this->database->prepare('UPDATE users SET session = :cookiehash WHERE username = :username LIMIT 1');
-			$update->execute(array(':cookiehash'=>$cookiehash,':username'=>$username));
+			$update = $this->database->prepare('UPDATE users SET session = :cookiehash WHERE user_name = :user_name LIMIT 1');
+			$update->execute(array(':cookiehash' => $cookiehash,':user_name' => $user_name));
 			if ($update->rowCount() == 0)
 				return false;
 		} catch(PDOException $exception) {
@@ -155,7 +155,7 @@ class Account {
 			return false;
 		}
 
-		$this->logActivity('User "'.$username.'" logged in');
+		$this->logActivity('User "'.$user_name.'" logged in');
 		return true;
 	}
 
@@ -450,18 +450,18 @@ class Account {
 	 *
 	 * @return		boolean		false = call $this->getErrorMessage()
 	 */
-    private function validateLogin($username, $password) {
+    private function validateLogin($user_name, $password) {
 		if (!$this->connectDB()) return false;
 
 		try {
-			$select = $this->database->prepare('SELECT id, username, attempts, last_failed_login'.
-				' FROM users WHERE username = :username AND password = :pwdmd5 LIMIT 1');
-			$select->execute(array(':username'=>$username,':pwdmd5'=>md5($password)));
+			$select = $this->database->prepare('SELECT id, user_name, attempts, last_failed_login'.
+				' FROM users WHERE user_name = :user_name AND password = :pwdmd5 LIMIT 1');
+			$select->execute(array(':user_name' => $user_name, ':pwdmd5' => md5($password)));
 			$select->setFetchMode(PDO::FETCH_OBJ);
 			if ($select->rowCount() == 0) {
 				// No results - try again without password to see if the user exists at all
-				$select = $this->database->prepare('SELECT username, attempts FROM users WHERE username = :username LIMIT 1');
-				$select->execute(array(':username'=>$username));
+				$select = $this->database->prepare('SELECT user_name, attempts FROM users WHERE user_name = :user_name LIMIT 1');
+				$select->execute(array(':user_name' => $user_name));
 				$select->setFetchMode(PDO::FETCH_OBJ);
 				if ($select->rowCount() == 0) {
 					$this->handleError('Error logging in; the user name does not exist');
@@ -471,10 +471,10 @@ class Account {
 					$row = $select->fetch();
 					$attempts = $row->attempts + 1;
 
-					$update = $this->database->prepare('UPDATE users SET attempts = :attempts WHERE username = :username LIMIT 1');
-					$update->execute(array(':attempts'=>$attempts,':username'=>$username));
+					$update = $this->database->prepare('UPDATE users SET attempts = :attempts WHERE user_name = :user_name LIMIT 1');
+					$update->execute(array(':attempts' => $attempts, ':user_name' => $user_name));
 					if ($update->rowCount() == 0) {
-						$this->logError('No rows found after increasing login attempts for the user "'.$username.'"');
+						$this->logError('No rows found after increasing login attempts for the user "'.$user_name.'"');
 						return false;
 					}
 
@@ -486,10 +486,10 @@ class Account {
 						// same IP is seen for a ton of users, it could be a hacker and you would want to ban the IP address.
 						$failip = $_SERVER['REMOTE_ADDR'];
 						$update = $this->database->prepare('UPDATE users SET last_failed_login = :logintime, last_failed_ip = :failip'.
-							' WHERE username = :username LIMIT 1');
-						$update->execute(array(':logintime'=>$logintime,':failip'=>$failip,':username'=>$username));
+							' WHERE user_name = :user_name LIMIT 1');
+						$update->execute(array(':logintime' => $logintime, ':failip' => $failip, ':user_name' => $user_name));
 						if ($update->rowCount() == 0) {
-							$this->logError('No rows found after updating login time and failed IP address '.$failip.' for the user "'.$username.'"');
+							$this->logError('No rows found after updating login time and failed IP address '.$failip.' for the user "'.$user_name.'"');
 							return false;
 						}
 						$this->handleError("You have been temporarily banned for 10 minutes");
@@ -509,14 +509,14 @@ class Account {
 				}
 
 				// Store login time and also make sure attempts are back to 0
-				$update = $this->database->prepare('UPDATE users SET last_visit = NOW(), attempts = 0 WHERE username = :username LIMIT 1');
-				$update->execute(array(':username' => $username));
+				$update = $this->database->prepare('UPDATE users SET last_visit = NOW(), attempts = 0 WHERE user_name = :user_name LIMIT 1');
+				$update->execute(array(':user_name' => $user_name));
 				if ($update->rowCount() == 0) {
-					$this->logError('No rows found after resetting login attempts for the user "'.$username.'"');
+					$this->logError('No rows found after resetting login attempts for the user "'.$user_name.'"');
 					return false;
 				}
 
-				$_SESSION['user_name']	= $row->username;
+				$_SESSION['user_name']	= $row->user_name;
 				$_SESSION['user_id']	= $row->id;
 				$_SESSION['roles']		= $this->getUserRoles($row->id);
 
@@ -542,17 +542,17 @@ class Account {
 			if (!empty($cookiehash)) {
 				if (!$this->connectDB()) return false;
 				try {
-					$select = $this->database->prepare('SELECT id, username FROM users WHERE session = :cookiehash LIMIT 1');
+					$select = $this->database->prepare('SELECT id, user_name FROM users WHERE session = :cookiehash LIMIT 1');
 					$select->execute(array(':cookiehash'=>$cookiehash));
 					$select->setFetchMode(PDO::FETCH_OBJ);
 					if ($select->rowCount() > 0) {
 						$row = $select->fetch();
-						$_SESSION['user_name']	= $row->username;
+						$_SESSION['user_name']	= $row->user_name;
 						$_SESSION['user_id']	= $row->id;
 						$_SESSION['roles']		= $this->getUserRoles($row->id);
-						$_SESSION[$this->loginSession()] = $row->username;
+						$_SESSION[$this->loginSession()] = $row->user_name;
 
-						$this->logActivity('User "'.$row->username.'" has returned via a cookie', true);
+						$this->logActivity('User "'.$row->user_name.'" has returned via a cookie', true);
 
 						// Reset the expiry date
 						setcookie('user', $cookiehash, time()+3600*24*365, '/', COOKIE_HOST);
@@ -588,7 +588,7 @@ class Account {
 			$update = $this->database->prepare('UPDATE users SET password = :password WHERE id = :user_id LIMIT 1');
 			$update->execute(array(':password'=>md5($newpwd),':user_id'=>$profile->id));
 			if ($update->rowCount() == 0) {
-				$this->logError('No rows found after updating the password for the user "'.$profile->username.'"');
+				$this->logError('No rows found after updating the password for the user "'.$profile->user_name.'"');
 				return false;
 			}
 		} catch(PDOException $exception) {
@@ -631,15 +631,15 @@ class Account {
 	 *
 	 * @return		boolean		false = call $this->getErrorMessage()
 	 */
-	private function getProfile($username, &$profile) {
+	private function getProfile($user_name, &$profile) {
 		if (!$this->connectDB()) return false;
 
 		try {
-			$select = $this->database->prepare('SELECT * FROM users WHERE username = :username LIMIT 1');
-			$select->execute(array(':username'=>$username));
+			$select = $this->database->prepare('SELECT * FROM users WHERE user_name = :user_name LIMIT 1');
+			$select->execute(array(':user_name' => $user_name));
 			$select->setFetchMode(PDO::FETCH_OBJ);
 			if ($select->rowCount() == 0) {
-				$this->handleError('No user is registered with this user name: '.$username);
+				$this->handleError('No user is registered with this user name: '.$user_name);
 				return false;
 			}
 			$profile = $select->fetch(); // Fill user information array
@@ -668,7 +668,7 @@ class Account {
 	 */
 	private function isFieldUnique($field) {
 		try {
-			$select = $this->database->prepare('SELECT username FROM users WHERE '.$field.'=:postfield');
+			$select = $this->database->prepare('SELECT user_name FROM users WHERE '.$field.'=:postfield');
 			$select->execute(array(':postfield'=>$_POST[$field]));
 			if ($select->rowCount() > 0) return false;
 		} catch(PDOException $exception) {
@@ -686,7 +686,7 @@ class Account {
 	private function createUser() {
 		try {
 			$insert = $this->database->prepare('INSERT INTO users(
-				username,
+				user_name,
 				password,
 				joined,
 				session,
@@ -694,7 +694,7 @@ class Account {
 				last_failed_login,
 				last_failed_ip
 				) VALUES (
-				:username,
+				:user_name,
 				:password,
 				CURDATE(),
 				"",
@@ -703,7 +703,7 @@ class Account {
 				"0.0.0.0"
 				)');
 			$insert->execute(array(
-				':username'		=> $_POST['username'],
+				':user_name'	=> $_POST['username'],
 				':password'		=> md5($_POST['password']),
 				':logintime'	=> date('Y-m-d H:i:s', strtotime(TIME_ADJUST))
 				));

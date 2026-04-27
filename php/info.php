@@ -48,35 +48,36 @@ if (substr($_GET['fullname'], -4) == '.mus') {
 	try {
 		$db = $account->getDB();
 
-		$select = $db->prepare('SELECT * FROM hvsc_files WHERE fullname = :fullname LIMIT 1');
-		$select->execute(array(':fullname'=>$_GET['fullname']));
+		$select = $db->prepare('SELECT * FROM hvsc_files WHERE collection_path = :collection_path LIMIT 1');
+		$select->execute(array(':collection_path' => $_GET['fullname']));
 		$select->setFetchMode(PDO::FETCH_OBJ);
 
 		$info = array();
 
 		if ($select->rowCount()) {
-			$row = $select->fetch();					// Example									Can also be
-
-			$info['player'] =		$row->player;		// MoN/FutureComposer
-			$info['lengths'] =		$row->lengths;		// 6:47 0:46 0:04
-			$info['type'] = 		$row->type;			// PSID										RSID
-			$info['version'] =		$row->version;		// 2.0										3.0
-			$info['playertype'] =	$row->playertype;	// Normal built-in																	(only value seen)
-			$info['playercompat'] =	$row->playercompat;	// C64 compatible							PlaySID									(typically for BASIC tunes)
-			$info['clockspeed'] =	$row->clockspeed;	// PAL 50Hz									NTSC 60Hz, PAL / NTSC, Unknown
-			$info['sidmodel'] =		$row->sidmodel;		// MOS6581									MOS8580, MOS6581 / MOS858, Unknown
-			$info['dataoffset'] =	$row->dataoffset;	// 124										0
-			$info['datasize'] =		$row->datasize;		// 4557
-			$info['loadaddr'] =		$row->loadaddr;		// 57344
-			$info['initaddr'] =		$row->initaddr;		// 57344
-			$info['playaddr'] =		$row->playaddr;		// 57350
-			$info['subtunes'] =		$row->subtunes;		// 3
-			$info['startsubtune'] =	$row->startsubtune;	// 1
-			$info['name'] =			$row->name;			// Alloyrun
-			$info['author'] =		$row->author;		// Jeroen Tel
-			$info['copyright'] =	$row->copyright;	// 1988 Starlight
-			$info['hash'] =			$row->hash;			// 02df65150cbc4fa8fabf563b26c8cac4
-			$info['stil'] =			$row->stil;			// (#1)<br />NAME: Title tune<br />(#2)<br />NAME: High-score<br />(#3)<br />NAME: Get-ready
+			$row = $select->fetch();
+																// Example						Can also be
+			// No "_" in keys
+			$info['player'] =			$row->player;			// MoN/FutureComposer
+			$info['lengths'] =			$row->lengths;			// 6:47 0:46 0:04
+			$info['type'] = 			$row->type;				// PSID							RSID
+			$info['version'] =			$row->version;			// 2.0							3.0
+			$info['playertype'] =		$row->player_type;		// Normal built-in							(only value seen)
+			$info['playercompat'] =		$row->player_compat;	// C64 compatible				PlaySID		(typically for BASIC tunes)
+			$info['clockspeed'] =		$row->clock_speed;		// PAL 50Hz						NTSC 60Hz, PAL / NTSC, Unknown
+			$info['sidmodel'] =			$row->sid_model;		// MOS6581						MOS8580, MOS6581 / MOS858, Unknown
+			$info['dataoffset'] =		$row->data_offset;		// 124							0
+			$info['datasize'] =			$row->data_size;		// 4557
+			$info['loadaddr'] =			$row->load_addr;		// 57344
+			$info['initaddr'] =			$row->init_addr;		// 57344
+			$info['playaddr'] =			$row->play_addr;		// 57350
+			$info['subtunes'] =			$row->subtunes;			// 3
+			$info['startsubtune'] =		$row->start_subtune;	// 1
+			$info['name'] =				$row->name;				// Alloyrun
+			$info['author'] =			$row->author;			// Jeroen Tel
+			$info['copyright'] =		$row->copyright;		// 1988 Starlight
+			$info['hash'] =				$row->hash;				// 02df65150cbc4fa8fabf563b26c8cac4
+			$info['stil'] =				$row->stil;				// (#1)<br />NAME: Title tune<br />(#2)<br />NAME: High-score<br />(#3)<br />NAME: Get-ready
 		}
 
 		// Always default to 6581 if not specifically 8580

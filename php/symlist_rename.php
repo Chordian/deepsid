@@ -34,7 +34,7 @@ try {
 		$and_user_id = $char == '!' ? ' AND user_id = '.$user_id : '';
 
 		// First make sure the new name doesn't already exist
-		$select = $db->prepare('SELECT 1 FROM hvsc_folders WHERE fullname = :folder'.$and_user_id);
+		$select = $db->prepare('SELECT 1 FROM hvsc_folders WHERE collection_path = :folder'.$and_user_id);
 		$select->execute(array(':folder'=>$char.$_POST['new']));
 		if ($select->rowCount())
 			die(json_encode(array('status' => 'error', 'message' =>
@@ -43,7 +43,7 @@ try {
 					: 'You already have another playlist with that name.'))));
 
 		// Now rename it
-		$update = $db->prepare('UPDATE hvsc_folders SET fullname = :new WHERE fullname = :old AND user_id = '.$user_id);
+		$update = $db->prepare('UPDATE hvsc_folders SET collection_path = :new WHERE collection_path = :old AND user_id = '.$user_id);
 		$update->execute(array(':old'=>$_POST['symlist'], ':new'=>$char.$_POST['new']));
 		if ($update->rowCount() == 0)
 			die(json_encode(array('status' => 'error', 'message' => 'Could not rename folder "'.$_POST['symlist'].'" => "'.$char.$_POST['new'].'"')));
@@ -56,7 +56,7 @@ try {
 		if (isset($_POST['symid']) && $_POST['symid']) {
 
 			// We must reference the symlist ID directly because of multiple ocurrences of the same SID file
-			$update = $db->prepare('UPDATE symlists SET sidname = :new WHERE id = :symid LIMIT 1');
+			$update = $db->prepare('UPDATE symlists SET sid_name = :new WHERE id = :symid LIMIT 1');
 			$update->execute(array(':new'=>$_POST['new'], ':symid'=>$_POST['symid']));
 			if ($update->rowCount() == 0)
 				die(json_encode(array('status' => 'error', 'message' => 'Could not rename entry "'.$_POST['fullname'].'" => "'.$_POST['new'].'"')));
@@ -64,7 +64,7 @@ try {
 		} else {
 
 			// Get ID of symlist folder
-			$select = $db->prepare('SELECT id FROM hvsc_folders WHERE fullname = :folder AND user_id = '.$user_id.' LIMIT 1');
+			$select = $db->prepare('SELECT id FROM hvsc_folders WHERE collection_path = :folder AND user_id = '.$user_id.' LIMIT 1');
 			$select->execute(array(':folder'=>$_POST['symlist']));
 			$select->setFetchMode(PDO::FETCH_OBJ);
 
@@ -74,8 +74,8 @@ try {
 			$folder_id = $select->fetch()->id;
 
 			// Get ID of actual SID file
-			$select = $db->prepare('SELECT id FROM hvsc_files WHERE fullname = :fullname LIMIT 1');
-			$select->execute(array(':fullname'=>$_POST['fullname']));
+			$select = $db->prepare('SELECT id FROM hvsc_files WHERE collection_path = :collection_path LIMIT 1');
+			$select->execute(array(':collection_path' => $_POST['fullname']));
 			$select->setFetchMode(PDO::FETCH_OBJ);
 
 			if (!$select->rowCount())
@@ -83,7 +83,7 @@ try {
 
 			$file_id = $select->fetch()->id;
 
-			$update = $db->prepare('UPDATE symlists SET sidname = :new WHERE folder_id = '.$folder_id.' AND file_id = '.$file_id.' LIMIT 1');
+			$update = $db->prepare('UPDATE symlists SET sid_name = :new WHERE folder_id = '.$folder_id.' AND file_id = '.$file_id.' LIMIT 1');
 			$update->execute(array(':new'=>$_POST['new']));
 			if ($update->rowCount() == 0)
 				die(json_encode(array('status' => 'error', 'message' => 'Could not rename entry "'.$_POST['fullname'].'" => "'.$_POST['new'].'"')));

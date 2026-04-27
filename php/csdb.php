@@ -193,15 +193,15 @@ if (isset($_GET['fullname'])) {
 	try {
 		$db = $account->getDB();
 
-		$select = $db->prepare('SELECT id, copyright, csdbtype, csdbid FROM hvsc_files WHERE fullname = :fullname LIMIT 1');
-		$select->execute(array(':fullname'=>$_GET['fullname']));
+		$select = $db->prepare('SELECT id, copyright, csdb_type, csdb_id FROM hvsc_files WHERE collection_path = :collection_path LIMIT 1');
+		$select->execute(array(':collection_path' => $_GET['fullname']));
 		$select->setFetchMode(PDO::FETCH_OBJ);
 
 		if ($select->rowCount()) {
 			$row = $select->fetch();
 			$files_id = $row->id;
-			$csdb_type = $row->csdbtype;	// Can be 'release' or 'sid'
-			$csdb_id = $row->csdbid;		// ID relates to the type
+			$csdb_type = $row->csdb_type;	// Can be 'release' or 'sid'
+			$csdb_id = $row->csdb_id;		// ID relates to the type
 			$copyright = $row->copyright;	// E.g. "1988 Jewels"
 			$copyright = substr($copyright, strpos($copyright, ' ') + 1); // Only need "Jewels"
 		} else {

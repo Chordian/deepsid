@@ -15,7 +15,7 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH
 	try {
 		$db = $account->getDB();
 
-		$select = $db->query('SELECT fullname FROM hvsc_folders WHERE fullname LIKE "_High Voltage SID Collection/%"');
+		$select = $db->query('SELECT collection_path FROM hvsc_folders WHERE collection_path LIKE "_High Voltage SID Collection/%"');
 		$rows = $select->fetchAll(PDO::FETCH_COLUMN);
 
 		// Always emit UTF-8 JSON

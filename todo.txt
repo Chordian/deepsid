@@ -7,29 +7,98 @@ ToDo
   @link https://developer.mozilla.org/en-US/docs/Web/API/console
 
 
-ONGOING
-¯¯¯¯¯¯¯
-- Change all DB column names to use underscores ('last_visit' instead of 'lastvisit')
-
-
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- Change all 'DoThis()' function names to 'doThis()' instead in all PHP files.
-  PHP function names are case insensitive, so it's safe to rename around as you wish.
-  WIP: Almost done - PUSH to GitHub, go through changes there, then search functions with
-  new names in VSCode to see if all external references were caught.
-
-- Time to shorten 'GameBase64' tag to 'GB64' instead?
+- Any function names in JS files still using PascalCase? They should all use camelCase.
 
 - Add one "Primary" text in right side of the relevant one in CSDb release lists.
 
-- Consider cache info in right side in CSDb release lists.
+- Consider cache info in right side in CSDb release lists too.
 
-- Consider changing it so the 'Changes' tab calls a separate PHP file a fills it, just like
-  the admin sections. It would probably make it easier on the 'index.php' file.
+- Consider changing it so the 'Changes' tab calls a separate PHP file that fills it, just like
+  the admin sections. It would make the 'index.php' file much smaller. Also, I have a feeling
+  most users doesn't visit this tab.
+
+- Remove "Facebook" from the activity logs (both DeepSID and CShellDB).
+
+- Maybe shorten 'GameBase64' tag to 'GB64' instead, so the new developer tag has more room?
+
+- Another "fun" one: Make sure all variable names in all PHP files use snake_case.
+  Largely done: composer.php
 
 - A W A I T : Rewrite 'howto_update_gb64.txt' when the next GameBase64 update v20 arrives.
   See the .txt file for a few preliminary things to test.
+
+  ----
+
+- Change all DB column names to use underscores ('short_name' instead of 'shortname').
+
+  Just let JS and GET/POST parameters use 'fullname' until further notice.
+
+  NEXT UP:
+
+  Make a new test section in the admin tab with manual testing tasks. Maybe with a check box
+  that makes the background green for each task. The first task should be "Sanity" or "Smoke"
+  and goes through a somewhat thorough but standard use of the site.
+
+      admin_scripts             -
+      admin_settings            -
+      competitions              -
+      competitions_cache        -
+      composers                 fullname, [SEE BELOW]                         => DONE
+      composers_links           -
+      csdb                      -
+      folders_map               fullname                                      => DONE
+      groups                    -
+      hvsc_files                fullname, [SEE BELOW]                         => DONE
+      hvsc_folders              fullname                                      => DONE
+      hvsc_lengths              fullname                                      => DONE
+      labels_info               -
+      labels_lookup             -
+      players_info              [MANY]                                        => DONE
+      players_lookup            playerid => player_id                         => DONE
+      ratings                   -
+      ratings_cache             -
+      roles                     -
+      sid_release_map           -
+      symlists                  sidname => sid_name                           => DONE
+      tags_info                 -
+      tags_lookup               -
+      tracking                  -
+      uploads                   -
+      users                     username => user_name                         => DONE
+      user_roles                -
+      youtube                   -
+
+      all:
+        fullname        => collection_path    => DONE
+
+      composers: \$db->\w+\([^;]*\bcomposers\b
+        name            => full_name          => DONE
+        shortname       => short_name         => DONE
+        shorthandle     => short_handle       => DONE
+        born            => date_birth         => DONE
+        died            => date_death         => DONE
+        cause           => death_cause        => DONE
+        brand           => brand_light        => DONE
+        branddark       => brand_dark         => DONE
+        csdbtype        => csdb_type          => DONE
+        csdbid          => csdb_id            => DONE
+        imagesource     => image_source       => DONE
+
+      hvsc_files: Search for old name, update all files, next old name
+        playertype      => player_type        => DONE
+        playercompat    => player_compat      => DONE
+        clockspeed      => clock_speed        => DONE
+        sidmodel        => sid_model          => DONE
+        dataoffset      => data_offset        => DONE
+        datasize        => data_size          => DONE
+        loadaddr        => load_addr          => DONE
+        initaddr        => init_addr          => DONE
+        playaddr        => play_addr          => DONE
+        startsubtune    => start_subtune      => DONE
+        csdbtype        => csdb_type          => DONE
+        csdbid          => csdb_id            => DONE
 
 
 WHEN THE TIME IS RIGHT
@@ -44,7 +113,6 @@ WHEN THE TIME IS RIGHT
     nothing to do with symlists. Rename it to something else to avoid confusion.
   - Maybe 'csdb.php' should also have an extended name, to make it more clear what it does.
   - Go through all the other files and see if anything else ought to be renamed.
-  - Change all module.FunctionCall() to module.functionCall() (i.e. small first letter).
   - Convert all use of quotes into apostrophes for strings in all JS files.
   - Change all 'bind(this)' stuff to modern JavaScript handling instead.
 
@@ -449,7 +517,7 @@ CONSIDER THIS
     SID row. Then the comment would just apply to the entire folder - but would users get that?
 
 - Settings tab page:
-  - The user should be able to change the username (but only if the new one is not already taken).
+  - The user should be able to change the user name (but only if the new one is not already taken).
   - Attach to a HVSC/CGSC folder as being the same person now logged in. This gives privileges
     such as e.g. being able to upload a different avatar picture, or add external links.
   - Import CSV to Playlist. (See the 'import_symlist_hvsc.php' file to begin with.)

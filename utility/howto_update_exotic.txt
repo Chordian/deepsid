@@ -4,12 +4,12 @@ DEPRECATED: THIS FILE IS NOT RELEVANT ANYMORE SINCE THE EXOTIC 2SID FOLDER WAS D
 ADDED SUPPORT FOR EDITING STEREO EFFECTS.
 
 Requirements
-¯¯¯¯¯¯¯¯¯¯¯¯
+ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
   o  Access to MySQL databases (ONLINE only) through PhpMyAdmin.
   o  Access to the DeepSID files (ONLINE only via FTP).
 
 DATABASE
-¯¯¯¯¯¯¯¯
+ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
   1. Enter PhpMyAdmin and select the "hvsc_files" table, then click "Search" in top.
   2. For "fullname" LIKE type "%2SID.sid" as well as the HVSC version number in "new" too.
   3. Click "+ Options" in the bottom and only mark the "fullname" column, then click "Go" to search.
@@ -53,7 +53,7 @@ Now to create the new database entries for the exotic versions.
        o  Create a row for it in the "hvsc_folders" table (just copy and change the original folder).
        o  Add an entry in the "composer_exotic.php" file and upload it.
 
-  4. Change the "version" field to read "v4E" and "dataoffset" to "126". Clear the "hash" field. Go.
+  4. Change the "version" field to read "v4E" and "data_offset" to "126". Clear the "hash" field. Go.
 
   5. Now open an FTP client and upload the file to that folder.
   6. Check if it plays properly in DeepSID. While you're listening, search for the original to see what
@@ -62,6 +62,6 @@ Now to create the new database entries for the exotic versions.
   8. Go back to step 1 and process the next file.
 
 If you're doing this before Perff updated CSDb for the new version of HVSC, you may want to add the
-ID numbers in the "csdbid" field for their release pages. (Remember "release" in "csdbtype" too.)
+ID numbers in the "csdb_id" field for their release pages. (Remember "release" in "csdb_type" too.)
 
 Remember to also update folder counts in the "hvsc_folders" table (including the parent folders).

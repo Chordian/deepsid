@@ -54,11 +54,11 @@ function addTag($tagid) {
 	// Does the row already have this tag?
 	$tag = $db->query('SELECT 1 FROM tags_lookup WHERE files_id = '.$row->id.' AND tags_id = '.$tagid.' LIMIT 1');
 	if ($tag->rowCount()) {
-		echo '<tr><td>Tag already exists for</td><td>'.$row->id.'</td><td>'.$row->fullname.'</td></tr>';
+		echo '<tr><td>Tag already exists for</td><td>'.$row->id.'</td><td>'.$row->collection_path.'</td></tr>';
 	} else {
 		// No; add it now
 		$db->query('INSERT INTO tags_lookup (files_id, tags_id) VALUES('.$row->id.', '.$tagid.')');
-		echo '<tr><td>Tag added to</td><td>'.$row->id.'</td><td>'.$row->fullname.'</td></tr>';
+		echo '<tr><td>Tag added to</td><td>'.$row->id.'</td><td>'.$row->collection_path.'</td></tr>';
 	}
 }
 
@@ -71,7 +71,7 @@ try {
 
 	$collection = MODE == MODE_LYRICS ? "_Compute's Gazette SID Collection/%" : '_High Voltage SID Collection/%';
 	// Get a list of all file rows in the relevant collection
-	$select = $db->query('SELECT * FROM hvsc_files WHERE fullname LIKE "'.$collection.'" ORDER BY id');
+	$select = $db->query('SELECT * FROM hvsc_files WHERE collection_path LIKE "'.$collection.'" ORDER BY id');
 	$select->setFetchMode(PDO::FETCH_OBJ);
 
 	// Get the ID of the relevant tag name
@@ -79,7 +79,7 @@ try {
 
 	echo 'Tag: "'.MODE.'" (ID: '.$tagid.')<br /><br />
 		<style>body,table { font: normal 15px arial, sans-serif; } td { padding-right: 20px; }</style>
-		<table style="text-align:left;"><tr><th>Action</th><th>ID</th><th>Fullname</th></tr>';
+		<table style="text-align:left;"><tr><th>Action</th><th>ID</th><th>Collection path</th></tr>';
 
 	// $test_max = 1000;
 
@@ -92,13 +92,13 @@ try {
 					addTag($tagid);
 				break;
 			case MODE_UNF:
-				// Condition: The 'fullname' field must have "/Worktunes" in it
-				if (strpos($row->fullname, '/Worktunes'))
+				// Condition: The 'collection_path' field must have "/Worktunes" in it
+				if (strpos($row->collection_path, '/Worktunes'))
 					addTag($tagid);
 				break;
 			case MODE_TINY:
-				// Condition: Number of bytes in the 'datasize' field must be less than 512
-				if ($row->datasize < 512)
+				// Condition: Number of bytes in the 'data_size' field must be less than 512
+				if ($row->data_size < 512)
 					addTag($tagid);
 				break;
 			case MODE_PURE:
@@ -127,7 +127,7 @@ try {
 				break;
 			case MODE_LYRICS:
 				// Condition: If there's an accompanying .WDS file thereby indicating that lyrics exists (CGSC)
-				if (file_exists(ROOT_HVSC.'/'.substr($row->fullname, 0, -4).'.wds'))
+				if (file_exists(ROOT_HVSC.'/'.substr($row->collection_path, 0, -4).'.wds'))
 					addTag($tagid);
 				break;
 			}

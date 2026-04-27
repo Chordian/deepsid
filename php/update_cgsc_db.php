@@ -27,10 +27,10 @@ try {
 		$line = preg_replace('/\s+/', ' ', trim($line));
 
 		$parts = explode(' ', $line);
-		echo 'MOVE: Changing fullname from "'.$parts[1].'" to "'.$parts[2].'"';
+		echo 'MOVE: Changing collection path from "'.$parts[1].'" to "'.$parts[2].'"';
 
-		$db->query('UPDATE hvsc_files SET fullname = "'.CGSC_PATH.$parts[2].'", updated = '.CGSC_VERSION.
-		' WHERE fullname = "'.CGSC_PATH.$parts[1].'"');
+		$db->query('UPDATE hvsc_files SET collection_path = "'.CGSC_PATH.$parts[2].'", updated = '.CGSC_VERSION.
+		' WHERE collection_path = "'.CGSC_PATH.$parts[1].'"');
 
 		echo ' => DONE<br />';
 	}

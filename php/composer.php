@@ -24,18 +24,18 @@ require_once("countries.php");
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest')
 	die("Direct access not permitted.");
 
-$html = $annex_html = $folderFocus = '';
+$html = $annex_html = $folder_focus = '';
 $rating = 0;
-$fullname = $_GET['fullname'];
-$escaped_fullname = str_replace('_', '\_', $fullname);
+$collection_path = $_GET['fullname'];
+$escaped_collection_path = str_replace('_', '\_', $collection_path);
 
-if (isset($fullname)) {
+if (isset($collection_path)) {
 
-	if (empty($fullname))
+	if (empty($collection_path))
 		 // Don't do root
 		die(json_encode(array('status' => 'ok', 'html' => '', 'annex_html' => '<div class="annexMsg">No profile to show.</div>')));
 
-	if (substr($fullname, 0, 23) == 'CSDb Music Competitions' && strlen($fullname) > 24) {
+	if (substr($collection_path, 0, 23) == 'CSDb Music Competitions' && strlen($collection_path) > 24) {
 
 		// INSIDE ONE COMPETITION FOLDER
 
@@ -44,7 +44,7 @@ if (isset($fullname)) {
 
 			// Get the event ID of this compo folder
 			$select = $db->prepare('SELECT event_id FROM competitions WHERE competition = :compo LIMIT 1');
-			$select->execute(array(':compo'=>str_replace('CSDb Music Competitions/', '', $fullname)));
+			$select->execute(array(':compo'=>str_replace('CSDb Music Competitions/', '', $collection_path)));
 			$select->setFetchMode(PDO::FETCH_OBJ);
 
 			$event_id = $select->rowCount() ? $select->fetch()->event_id : 0;
@@ -180,40 +180,40 @@ if (isset($fullname)) {
 
 		// OTHER FOLDERS
 
-		$exoticFullname = proxyExotic($fullname);
-		$isExoticComposerFolder = ($fullname != $exoticFullname);
-		$isGroupsFolder = stripos($fullname, '/GROUPS/') !== false;
-		$fullname = $exoticFullname;
+		$exotic_collection_path = proxyExotic($collection_path);
+		$is_exotic_composer_folder = ($collection_path != $exotic_collection_path);
+		$is_groups_folder = stripos($collection_path, '/GROUPS/') !== false;
+		$collection_path = $exotic_collection_path;
 
 		try {
 			$db = $account->getDB();
 
 			// If in a sub folder of a composer (e.g. work tunes or a previous handle) with no profile then re-use
 			// NOTE: This block is also used in the 'groups.php' file.
-			$folders = explode('/', $fullname);
-			$isBorrowedProfile = false;
+			$folders = explode('/', $collection_path);
+			$is_borrowed_profile = false;
 			if (count($folders) > 3 && $folders[1] == 'MUSICIANS' && !empty($folders[4])) {
 				// Do we have a profile for the unique sub folder of this composer?
-				$select = $db->prepare('SELECT 1 FROM composers WHERE fullname = :fullname LIMIT 1');
-				$select->execute(array(':fullname'=>$fullname));
+				$select = $db->prepare('SELECT 1 FROM composers WHERE collection_path = :collection_path LIMIT 1');
+				$select->execute(array(':collection_path' => $collection_path));
 				if ($select->rowCount() == 0) {
 					// No, re-use the profile of the parent composer folder then
-					$fullname = str_replace('/'.$folders[count($folders) - 1], '', $fullname);
-					$isBorrowedProfile = true;
+					$collection_path = str_replace('/'.$folders[count($folders) - 1], '', $collection_path);
+					$is_borrowed_profile = true;
 				}
 			}
 
 			// Get data for top part like birthday, country, etc.
-			$select = $db->prepare('SELECT * FROM composers WHERE fullname = :fullname LIMIT 1');
-			$select->execute(array(':fullname'=>$fullname));
+			$select = $db->prepare('SELECT * FROM composers WHERE collection_path = :collection_path LIMIT 1');
+			$select->execute(array(':collection_path' => $collection_path));
 			$select->setFetchMode(PDO::FETCH_OBJ);
 
 			if ($select->rowCount())
 				$row = $select->fetch();
 
 			// Get data about players for the charts
-			$select = $db->prepare('SELECT player, count(player) AS count FROM hvsc_files WHERE fullname LIKE :fullname GROUP BY player');
-			$select->execute(array(':fullname'=>$escaped_fullname.'/%'));
+			$select = $db->prepare('SELECT player, count(player) AS count FROM hvsc_files WHERE collection_path LIKE :collection_path GROUP BY player');
+			$select->execute(array(':collection_path' => $escaped_collection_path.'/%'));
 			$select->setFetchMode(PDO::FETCH_OBJ);
 
 			$player_labels = Array();
@@ -243,8 +243,8 @@ if (isset($fullname)) {
 			}
 
 			// Get data about active years
-			$select = $db->prepare('SELECT copyright FROM hvsc_files WHERE fullname LIKE :fullname');
-			$select->execute(array(':fullname'=>$escaped_fullname.'/%'));
+			$select = $db->prepare('SELECT copyright FROM hvsc_files WHERE collection_path LIKE :collection_path');
+			$select->execute(array(':collection_path' => $escaped_collection_path.'/%'));
 			$select->setFetchMode(PDO::FETCH_OBJ);
 
 			$years = Array();
@@ -271,9 +271,9 @@ if (isset($fullname)) {
 			}
 
 			// Get the user's rating for the folder
-			$select = $db->prepare('SELECT id, hash FROM hvsc_folders WHERE fullname = :fullname'.
-				(substr($fullname, 0, 1) == '!' ? ' AND user_id = '.$user_id : '').' LIMIT 1');
-			$select->execute(array(':fullname'=>$fullname));
+			$select = $db->prepare('SELECT id, hash FROM hvsc_folders WHERE collection_path = :collection_path'.
+				(substr($collection_path, 0, 1) == '!' ? ' AND user_id = '.$user_id : '').' LIMIT 1');
+			$select->execute(array(':collection_path' => $collection_path));
 			$select->setFetchMode(PDO::FETCH_OBJ);
 			$row_folder = $select->fetch();
 
@@ -297,21 +297,21 @@ if (isset($fullname)) {
 
 			// Get the crosslink folder if there is any (i.e. HVSC composer has a CGSC folder or vice versa)
 			// NOTE: For now 'LIMIT 1' but the folder could in the future return multiple results.
-			$select_alt = $db->query('SELECT type, fullname FROM folders_map WHERE folders_id = '.$row_folder->id.' LIMIT 1');
+			$select_alt = $db->query('SELECT type, collection_path FROM folders_map WHERE folders_id = '.$row_folder->id.' LIMIT 1');
 			$select_alt->setFetchMode(PDO::FETCH_OBJ);
 			$row_alt = $select_alt->fetch();
 
-			$alt_type = $alt_fullname = '';
+			$alt_type = $alt_collection_path = '';
 			if ($select_alt->rowCount()) {
 				$alt_type = $row_alt->type;
-				$alt_fullname = $row_alt->fullname;
+				$alt_collection_path = $row_alt->collection_path;
 			}
 
 			// Only show focus icons in MUSICIANS profile pages
-			if (preg_match('~(?:^|/)MUSICIANS/[^/]+/[^/]+(?:/|$)~i', $fullname)) {
+			if (preg_match('~(?:^|/)MUSICIANS/[^/]+/[^/]+(?:/|$)~i', $collection_path)) {
 				// Fetch focus flags (defaults to 'NONE' if no row)
-				$select_focus = $db->prepare('SELECT focus1, focus2 FROM composers WHERE fullname = :fullname LIMIT 1');
-				$select_focus->execute([':fullname' => $fullname]);
+				$select_focus = $db->prepare('SELECT focus1, focus2 FROM composers WHERE collection_path = :collection_path LIMIT 1');
+				$select_focus->execute([':collection_path' => $collection_path]);
 				$row_focus = $select_focus->fetch(PDO::FETCH_ASSOC) ?: ['focus1' => 'NONE', 'focus2' => 'NONE'];
 
 				$focus1 = $row_focus['focus1'];
@@ -331,31 +331,31 @@ if (isset($fullname)) {
 					'EXTRA'		=> '<div class="extra"></div>'
 				];
 
-				$focusExtra = $icon['EXTRA'];
+				$focus_extra = $icon['EXTRA'];
 
 				// Left icon (and special case for CNET)
 				if ($focus1 === 'CNET') {
-					$focusExtra = $icon['CNET'];
-					$focusLeft = $icon['NONE'];
+					$focus_extra = $icon['CNET'];
+					$focus_left = $icon['NONE'];
 				} else	
-					$focusLeft = $icon[$focus1] ?? $icon['NONE'];
+					$focus_left = $icon[$focus1] ?? $icon['NONE'];
 
 				// Right icon (and special case for CNET)
 				if ($focus2 === 'CNET+SCENER') {
-					$focusExtra = $icon['CNET'];
-					$focusRight  = $icon['SCENER'];
+					$focus_extra = $icon['CNET'];
+					$focus_right  = $icon['SCENER'];
 				} else if ($focus2 === 'CNET') {
-					$focusExtra = $icon['CNET'];
-					$focusRight = $icon['NONE'];
+					$focus_extra = $icon['CNET'];
+					$focus_right = $icon['NONE'];
 				} else {
-					$focusRight  = $icon[$focus2] ?? $icon['NONE'];
+					$focus_right  = $icon[$focus2] ?? $icon['NONE'];
 				}
 
-				$folderFocus = '<div class="folder-focus">'.$focusExtra.$focusLeft.$focusRight.'</div>';
+				$folder_focus = '<div class="folder-focus">'.$focus_extra.$focus_left.$focus_right.'</div>';
 			}
 
 		} catch(PDOException $e) {
-			$account->logActivityError(basename(__FILE__), $e->getMessage() + ' (' + $fullname + ')');
+			$account->logActivityError(basename(__FILE__), $e->getMessage() + ' (' + $collection_path + ')');
 			die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 		}
 	}
@@ -363,11 +363,11 @@ if (isset($fullname)) {
 } else
 	die(json_encode(array('status' => 'error', 'message' => 'You must specify the proper GET variables.')));
 
-$uploadFolder = '_SID Happens';
+$upload_folder = '_SID Happens';
 
-// Figure out if the fullname is a folder with folders or a folder belonging to a composer (or group)
-$files = glob(ROOT_HVSC.'/'.$fullname.'/*.{sid,mus}', GLOB_BRACE);
-if (!empty($files) && !in_array($fullname, Array(
+// Figure out if the collection path is a folder with folders or a folder belonging to a composer (or group)
+$files = glob(ROOT_HVSC.'/'.$collection_path.'/*.{sid,mus}', GLOB_BRACE);
+if (!empty($files) && !in_array($collection_path, Array(
 	'DEMOS/0-9',
 	'DEMOS/A-F',
 	'DEMOS/G-L',
@@ -382,61 +382,61 @@ if (!empty($files) && !in_array($fullname, Array(
 	'_Datastorm 2018',						// Deprecated
 	'_From JCH\'s Special Collection',		// Deprecated
 ))) {
-	// Use 'fullname' parameter to figure out the name of the thumbnail (if it exists)
-	if (strpos($fullname, $uploadFolder) !== false) {
+	// Use collection path parameter to figure out the name of the thumbnail (if it exists)
+	if (strpos($collection_path, $upload_folder) !== false) {
 		$thumbnail = 'images/composers/_sh.png';
 	} else {
-		$fn = str_replace('_High Voltage SID Collection/', '', $fullname);
+		$fn = str_replace('_High Voltage SID Collection/', '', $collection_path);
 		$fn = str_replace("_Compute's Gazette SID Collection/", "cgsc_", $fn);
 		$fn = str_replace('_Exotic SID Tunes Collection', 'estc', $fn);
 		$fn = strtolower(str_replace('/', '_', $fn));
 		$thumbnail = 'images/composers/'.$fn.'.jpg';
 	}
 	if (!file_exists('../'.$thumbnail)) $thumbnail = 'images/composer.png';
-} else if (strpos($fullname, $uploadFolder) !== false) {
+} else if (strpos($collection_path, $upload_folder) !== false) {
 	$thumbnail = 'images/composers/_sh.png';
-} else if (strpos($fullname, '/GROUPS/') !== false) {
+} else if (strpos($collection_path, '/GROUPS/') !== false) {
 	// The unofficial folder with groups
-	$fn = str_replace('_High Voltage SID Collection/', '', $fullname);
+	$fn = str_replace('_High Voltage SID Collection/', '', $collection_path);
 	$fn = str_replace(' ', '_', $fn);
 	$fn = strtolower(str_replace('/', '_', $fn));
 	$thumbnail = 'images/composers/'.$fn.'.jpg';
 	if (!file_exists('../'.$thumbnail)) $thumbnail = 'images/folder.png';
-	$csdbid = 0;
+	$csdb_id = 0;
 } else {
 	// Folder with folders
 	$thumbnail = 'images/folder.png';
-	$csdbid = 0;
+	$csdb_id = 0;
 }
 
 $sh_year = '';
-if (strpos($fullname, $uploadFolder) !== false) {
+if (strpos($collection_path, $upload_folder) !== false) {
 	// Get the year if inside a year folder inside 'SID Happens'
-	$parts = explode("/", $fullname);
+	$parts = explode("/", $collection_path);
 	if (array_key_exists(1, $parts) && strlen($parts[1]) == 4 && is_numeric($parts[1]))
 		$sh_year = $parts[1];
 }
 
 if (isset($row)) {
 	// If there are both a birth and death year, calculate the age of death
-	$year_birth = (int) substr($row->born, 0, 4);
-	$year_death = (int) substr($row->died, 0, 4);
+	$year_birth = (int) substr($row->date_birth, 0, 4);
+	$year_death = (int) substr($row->date_death, 0, 4);
 	$age_of_death = $year_birth && $year_death ? ' ('.$year_death - $year_birth.')' : '';
 	$age_current = $year_birth && empty($age_of_death) ? ' ('.date("Y") - $year_birth.')' : '';
 
 	// We have extended info from the 'composers' database table
-	$name			= $row->name;
+	$name			= $row->full_name;
 	$handles		= str_replace(', ', ', <img class="arrow" src="images/composer_arrowright.svg" alt="" style="position:relative;top:1px;" />', $row->handles);
-	$born			= $row->born; 
-	$died			= substr($row->died, 0, 4);
+	$born			= $row->date_birth; 
+	$died			= substr($row->date_death, 0, 4);
 	$age_death		= $age_of_death;
 	$age_now		= $age_current;
 	$notable		= str_replace('[#]', '<img class="inline-icon icon-editor" src="images/composer_editor.svg" title="Music editor" alt="">', $row->notable);
 	$country		= $row->country;
-	$csdbtype		= $row->csdbtype;
-	$csdbid			= $row->csdbid;
-	$brand_light	= $row->brand;
-	$brand_dark		= $row->branddark;
+	$csdb_type		= $row->csdb_type;
+	$csdb_id		= $row->csdb_id;
+	$brand_light	= $row->brand_light;
+	$brand_dark		= $row->brand_dark;
 	$spinner		= true;
 
 	$died = $died == '1970' ? '<i>Unknown date</i>' : $died;
@@ -458,7 +458,7 @@ if (isset($row)) {
 
 } else {
 	// No database help; we have to figure things out for ourselves
-	$name			= substr('/'.$fullname, strrpos('/'.$fullname, '/') + 1);
+	$name			= substr('/'.$collection_path, strrpos('/'.$collection_path, '/') + 1);
 	$handles		= '';
 	$born			= '0000-00-00';
 	$died			= '0000';
@@ -466,7 +466,7 @@ if (isset($row)) {
 	$age_now		= '';
 	$notable		= '';
 	$country		= '';
-	$csdbid			= 0;
+	$csdb_id		= 0;
 	$brand_light	= '';
 	$brand_dark		= '';
 	$spinner		= false;
@@ -479,21 +479,21 @@ if (isset($row)) {
 if ($name == '?')
 	$name = '<small class="u1">?</small>?<small class="u2">?</small>';
 
-$csdbCompoFolder = 'CSDb Music Competitions';
-$exoticFolder = '_Exotic SID Tunes Collection';
+$csdb_compo_folder = 'CSDb Music Competitions';
+$exotic_folder = '_Exotic SID Tunes Collection';
 
 $clink = '';
 if (isset($row)) {
-	$clink_name = empty($row->shortname) ? $row->name : $row->shortname;
+	$clink_name = empty($row->short_name) ? $row->full_name : $row->short_name;
 	if ($clink_name == '?') {
 		$clink_handle = '';
-		$clink_name = $row->shorthandle;
+		$clink_name = $row->short_handle;
 		if (empty($clink_name)) {
 			$chandles = explode(',', $row->handles);
 			$clink_name = end($chandles);
 		}
 	} else {
-		$clink_handle = $row->shorthandle;
+		$clink_handle = $row->short_handle;
 		if (empty($clink_handle) || $clink_handle == '&nbsp;') {
 			$chandles = explode(',', $row->handles);
 			$clink_handle = end($chandles);
@@ -502,25 +502,25 @@ if (isset($row)) {
 	$clink = '<span class="line"><img class="icon clinks" src="images/composer_link.svg" title="Links" alt="" style="position:relative;top:2.5px;height:16px;" /><a href="#" class="clinks" data-id="'.$row->id.'" data-name="'.$clink_name.'" data-handle="'.$clink_handle.'">Links</a><img class="icon clinks" src="images/composer_arrowright.svg" alt="" style="position:relative;top:3px;height:15px;margin-left:3px;" alt="" /></span>';
 }
 
-$crossfolder = '';
+$cross_folder = '';
 if (!empty($alt_type))
-	$crossfolder = '<span class="line"><img class="icon xfolder" src="images/composer_folder.svg" title="See also" alt="" style="position:relative;top:3px;height:16px;margin-right:5px;" /><a href="?file=/'.$alt_fullname.'">'.$alt_type.'</a></span>';
+	$cross_folder = '<span class="line"><img class="icon xfolder" src="images/composer_folder.svg" title="See also" alt="" style="position:relative;top:3px;height:16px;margin-right:5px;" /><a href="?file=/'.$alt_collection_path.'">'.$alt_type.'</a></span>';
 
 // HTML for the slender 'Profile' tab in the annex box
 if (isset($row)) {
 	$annex_all_handles = $row->handles;
-	$annex_full_name = $row->name;
+	$annex_full_name = $row->full_name;
 	$annex_thumbnail = strpos($thumbnail, '.jpg')
 		? '<img class="composer" src="'.$thumbnail.'" alt="" />'
 		: '';
-	$annex_born = $row->born != '0000-00-00' 
-		? '<img class="icon cake" src="images/composer_cake.svg" title="Born" alt="" />'.substr($row->born, 0, 4)
+	$annex_born = $row->date_birth != '0000-00-00' 
+		? '<img class="icon cake" src="images/composer_cake.svg" title="Born" alt="" />'.substr($row->date_birth, 0, 4)
 		: '';
 
-	$year_death = substr($row->died, 0, 4);
+	$year_death = substr($row->date_death, 0, 4);
 	$year_death = $year_death == '1970' ? '<small class="u1">?</small>?<small class="u2">?</small>' : $year_death;
 
-	$annex_died = $row->died != '0000-00-00'
+	$annex_died = $row->date_death != '0000-00-00'
 		? '<img class="icon stone" style="height:16px;top:6.3px;margin-left:10px;" src="images/composer_stone.svg" title="Died" alt="" />'.$year_death
 		: '';
 
@@ -572,25 +572,25 @@ if (isset($row)) {
 	$single_country = count($parts) > 1
 		? '<img class="icon arrow" style="height:16px;" src="images/composer_arrowright.svg" title="Moved" alt="" /> ' . $last_country
 		: $last_country;
-	$annex_country = '<br /><div class="annex-condensed" style="width:100%;margin-top:4px;">'.(!empty($country) ? '<img class="icon earth" style="top:4px;" src="images/composer_earth.svg" title="Country" alt="" /><span>'.$single_country.'</span>' : '').'<div style="float:right;margin-top:4px;">'.$folderFocus.'</div></div>';
+	$annex_country = '<br /><div class="annex-condensed" style="width:100%;margin-top:4px;">'.(!empty($country) ? '<img class="icon earth" style="top:4px;" src="images/composer_earth.svg" title="Country" alt="" /><span>'.$single_country.'</span>' : '').'<div style="float:right;margin-top:4px;">'.$folder_focus.'</div></div>';
 
 	$annex_html = '
 		<h3 class="ellipsis" style="width:229px;margin-bottom:0;" title="'.$annex_full_name.'">'.$clink_name.'</h3>
 		<h4 class="ellipsis" style="width:229px;margin-top:0;" title="'.$annex_all_handles.'">'.$clink_handle.'</h4>
 		' . $annex_thumbnail
-		  . ($isExoticComposerFolder || $isBorrowedProfile ? '' : '<span class="folder-rating"></span>')
+		  . ($is_exotic_composer_folder || $is_borrowed_profile ? '' : '<span class="folder-rating"></span>')
 		  . '<div class="annex-condensed" style="position:relative;float:right;top:-4px;">' . $annex_born
 		  . $annex_died . '</div>'
 		  . $annex_country .
 		// Below is empty groups/work table placeholder
-		(!$isGroupsFolder ?
+		(!$is_groups_folder ?
 			'<div id="annex-groups-box"><table id="annex-table-groups" class="tight top" style="min-width:100%;font-size:14px;margin-top:5px;">'.
 				'<tr>'.
 					'<td id="annex-table-message" class="topline bottomline leftline rightline" style="height:30px;padding:0 !important;text-align:center;">'.($spinner ? '<img class="loading-dots" src="images/loading_threedots.svg" alt="" style="margin-top:10px;" />' : '<div class="no-profile">No profile data</div>').'</td>'.
 				'</tr>'.
 			'</table></div>' .
 			// Activity (years) - sort of reverse engineered 'Chartist'
-			(strpos($fullname, $uploadFolder) === false ?
+			(strpos($collection_path, $upload_folder) === false ?
 				'<div style="white-space:nowrap;"><h4 style="display:inline-block;margin-top:12px;margin-right:8px;">Active</h4><span class="ct-label">'. ($last_year !== $first_year ? $first_year : ($first_year < 2007 ? '<div style="display:inline-block;width:35px;"></div>' . $first_year : '<div style="display:inline-block;width:27px;"></div>')) .'</span>
 				<div style="display:inline-block;height:24px;width:114px;position:relative;top:7px;">
 					<svg class="ct-chart-line" style="width:100%;height:100%;">
@@ -629,17 +629,17 @@ if (isset($row)) {
 $html = '<table style="border:none;margin-bottom:0;"><tr>'.
 			'<td style="position:relative;padding:0;border:none;width:184px;">'.
 				(!empty($sh_year) ? '<div style="position:absolute;top:23px;left:22px;color:#33c;font:normal 15px &quot;Commodore 64&quot;, sans-serif"><b>'.$sh_year.'</b></div>' : '').
-				'<img class="composer'.($fullname == $uploadFolder ? ' nobg' : '').'" src="'.$thumbnail.'" alt="" />'.
+				'<img class="composer'.($collection_path == $upload_folder ? ' nobg' : '').'" src="'.$thumbnail.'" alt="" />'.
 			'</td>'.
 			'<td style="position:relative;vertical-align:top;">'.
-				'<h2 style="margin-top:0;'.(!empty($handles) ? 'margin-bottom:-1px;' : 'margin-bottom:6px;').'">'.$name.$folderFocus.'</h2>'.
+				'<h2 style="margin-top:0;'.(!empty($handles) ? 'margin-bottom:-1px;' : 'margin-bottom:6px;').'">'.$name.$folder_focus.'</h2>'.
 				(!empty($handles) ? '<h3 style="margin-top:0;margin-bottom:7px;">'.$handles.'</h3>' : '').
-				($isExoticComposerFolder || $isBorrowedProfile ? '' : '<span class="line folder-rating"></span>'). // Placeholder for star ratings (handled by JS)
+				($is_exotic_composer_folder || $is_borrowed_profile ? '' : '<span class="line folder-rating"></span>'). // Placeholder for star ratings (handled by JS)
 				($born != '0000-00-00' ? '<span class="line"><img class="icon cake" src="images/composer_cake.svg" title="Born" alt="" />'.
 					substr($born, 0, 4).$age_now.'</span>' : '').
 				($died != '0000' ? '<span class="line"><img class="icon stone" src="images/composer_stone.svg" title="Died" alt="" style="position:relative;top:3px;height:18px;margin-right:5px;" />'.
 					$died.$age_death.'</span>' : '').
-				$crossfolder.
+				$cross_folder.
 				$clink.
 				(!empty($notable) ? '<span class="notable">'.
 					'<img class="icon cstar" src="images/composer_star.svg" title="Notable" alt="" style="top:-1px;" /><b style="position:relative;top:-5px;">'.$notable.'&nbsp;</b></span>' : '').
@@ -656,36 +656,36 @@ $html = '<table style="border:none;margin-bottom:0;"><tr>'.
 			'</td>'.
 		'</tr></table>'.
 		// Below is empty groups/work table placeholder
-		($fullname != $csdbCompoFolder && $fullname != $exoticFolder && $fullname != $uploadFolder ?
+		($collection_path != $csdb_compo_folder && $collection_path != $exotic_folder && $collection_path != $upload_folder ?
 			'<div id="groups-box"><table id="table-groups" class="tight top" style="min-width:100%;font-size:14px;margin-top:5px;">'.
 				'<tr>'.
 					'<td id="table-message" class="topline bottomline leftline rightline" style="height:30px;padding:0 !important;text-align:center;">'.($spinner ? '<img class="loading-dots" src="images/loading_threedots.svg" alt="" style="margin-top:10px;" />' : '<div class="no-profile">No profile data</div>').'</td>'.
 				'</tr>'.
 			'</table></div>' : '').
 		'<div class="corner-icons">'.
-			'<div id="profilechange" style="'.($csdbid ? 'left:-153' : 'right:-3').'px;"></div>'.
-			($csdbid ? '<a href="http://csdb.chordian.net/?type='.$csdbtype.'&id='.$csdbid.'" title="See this at CSDb" target="_blank"><svg class="outlink" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg></a>' : '').
+			'<div id="profilechange" style="'.($csdb_id ? 'left:-153' : 'right:-3').'px;"></div>'.
+			($csdb_id ? '<a href="http://csdb.chordian.net/?type='.$csdb_type.'&id='.$csdb_id.'" title="See this at CSDb" target="_blank"><svg class="outlink" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg></a>' : '').
 		'</div>';
 
 // Chartist - @link https://gionkunz.github.io/chartist-js/index.html
 $cgsc = "_Compute's Gazette SID Collection";
-$isCGSC = substr($fullname, 0, strlen($cgsc)) === $cgsc;
+$is_CGSC = substr($collection_path, 0, strlen($cgsc)) === $cgsc;
 
-if ($fullname == $exoticFolder) {
+if ($collection_path == $exotic_folder) {
 	// Show a box with technical information about the custom SID format
 	$info = file_get_contents('../sidv4e.txt');
 	$html .= '<pre class="fixed-font-info">'.$info.'</pre>';
 
-} else if ($fullname == $uploadFolder) {
+} else if ($collection_path == $upload_folder) {
 	// Show a box with information about uploading to the 'SID Happens' folder
 	$info = file_get_contents('../upload.txt');
 	$html .= '<pre class="fixed-font-info">'.$info.'</pre>';
 	
-} else if ($fullname != $csdbCompoFolder && strpos($fullname, '/GROUPS') === false) {
+} else if ($collection_path != $csdb_compo_folder && strpos($collection_path, '/GROUPS') === false) {
 	// Charts for HVSC sub folders as well as custom "_" folders
 	$html .= '<h3 style="margin-top:21px;">Active years<div class="legend">X = year (1982-)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Y = number of SID files</div></h3>
 		<div id="ct-years"></div>'.
-		(!$isCGSC
+		(!$is_CGSC
 			? '<h3 style="margin-top:0;">Players used</h3><div id="ct-players"></div>'
 			: '').
 		'<script type="text/javascript">'.
@@ -714,7 +714,7 @@ if ($fullname == $exoticFolder) {
 					onlyInteger: true,
 				},
 			});'.
-			(!$isCGSC
+			(!$is_CGSC
 				? 'ctPlayers = new Chartist.Bar("#ct-players",
 				{
 					labels: '.json_encode($player_labels).',

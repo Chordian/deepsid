@@ -18,12 +18,12 @@ echo "Running...\n\n";
 
 try {
     // Just get it for *JCH* for now
-    $select_user = $db->query('SELECT id, username FROM users WHERE id = '.JCH.' LIMIT 1');
+    $select_user = $db->query('SELECT id, user_name FROM users WHERE id = '.JCH.' LIMIT 1');
     $select_user->setFetchMode(PDO::FETCH_OBJ);
     if ($select_user->rowCount())
         $u = $select_user->fetch();
 
-    echo "Specific user: {$u->username} (id={$u->id})\n";
+    echo "Specific user: {$u->user_name} (id={$u->id})\n";
 
     // Delete old cache rows
     $del = $db->prepare("DELETE FROM ratings_cache WHERE user_id = ?");

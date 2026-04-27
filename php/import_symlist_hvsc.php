@@ -47,14 +47,14 @@ try {
 	if (($handle = fopen('_list.csv', 'r')) != false) {
 		while (($line = fgetcsv($handle, 0, ';')) != false) {
 	
-			$fullname = substr($line[0], 0, 1) == '/' ? substr($line[0], 1) : $line[0];
-			$fullname = '_High Voltage SID Collection/'.$fullname;
+			$collection_path = substr($line[0], 0, 1) == '/' ? substr($line[0], 1) : $line[0];
+			$collection_path = '_High Voltage SID Collection/'.$collection_path;
 			$subtune = $line[1];
 			$substname = $line[2];
-			echo '<tr><td>'.$fullname.'</td><td>'.$subtune.'</td><td>'.$substname.'</td>';
+			echo '<tr><td>'.$collection_path.'</td><td>'.$subtune.'</td><td>'.$substname.'</td>';
 
 			// Find HVSC file
-			$select = $db->query('SELECT id FROM hvsc_files WHERE fullname ="'.$fullname.'" LIMIT 1');
+			$select = $db->query('SELECT id FROM hvsc_files WHERE collection_path ="'.$collection_path.'" LIMIT 1');
 			$select->setFetchMode(PDO::FETCH_OBJ);
 			if (!$select->rowCount())
 				echo '<td style="color:#a00;"><b>HVSC path not found!</b>';
@@ -67,7 +67,7 @@ try {
 				else {
 					echo '<td style="color:#00a;">Not in symlist; <b>adding now</b>';
 					// Add the symlist entry to the database
-					$db->query('INSERT INTO symlists (folder_id, file_id, sidname, subtune)'.
+					$db->query('INSERT INTO symlists (folder_id, file_id, sid_name, subtune)'.
 						' VALUES('.SYMFOLDER.','.$file_id.',"'.$substname.'",'.$subtune.')');
 				}
 			}

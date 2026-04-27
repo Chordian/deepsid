@@ -20,7 +20,7 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH
 try {
 	$db = $account->getDB();
 
-	$select = $db->prepare('SELECT id, fullname FROM hvsc_folders WHERE fullname LIKE :folder');
+	$select = $db->prepare('SELECT id, collection_path FROM hvsc_folders WHERE collection_path LIKE :folder');
 	$select->execute(array(':folder'=>ltrim($_GET['folder'], '/').'/%'));
 	$select->setFetchMode(PDO::FETCH_OBJ);
 
@@ -34,7 +34,7 @@ try {
 		$select_rating->setFetchMode(PDO::FETCH_OBJ);
 		$rating = $select_rating->rowCount() ? $select_rating->fetch()->rating : 0;
 
-		$parts = explode('/', $row->fullname);
+		$parts = explode('/', $row->collection_path);
 		if (count($parts) == 4) {
 			$results[end($parts)] = $rating;
 			if ($rating == 0) $ready = false;

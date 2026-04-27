@@ -20,9 +20,9 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH
 try {
 	$db = $account->getDB();
 
-	// First find the ID of the 'fullname' text
-	$select = $db->prepare('SELECT id FROM hvsc_files WHERE fullname = :fullname LIMIT 1');
-	$select->execute(array(':fullname'=>$_GET['fullname']));
+	// First find the ID of the 'collection_path' text
+	$select = $db->prepare('SELECT id FROM hvsc_files WHERE collection_path = :collection_path LIMIT 1');
+	$select->execute(array(':collection_path' => $_GET['fullname']));
 	$select->setFetchMode(PDO::FETCH_OBJ);
 
 	// Now get the YouTube info

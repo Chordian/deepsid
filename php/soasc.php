@@ -20,7 +20,7 @@
  * http://ftp.acc.umu.se/mirror/media/Oakvalley/soasc/
  * http://teamarchive1.fnf.archive.org/OAKVALLEY/soasc/
  * 
- * @uses		$_GET['file']				fullname path to SID file
+ * @uses		$_GET['file']				full name path to SID file
  * @uses		$_GET['sidModel']			a key in $soasc_models, or 'auto'
  * @uses		$_GET['subtune']			subtune number
  * 
@@ -100,13 +100,13 @@ try {
 
 	if ($_GET['sidModel'] == 'auto') {
 		// Decide the SID model to use depending on the meta data setting in the database
-		$select = $db->prepare('SELECT sidmodel FROM hvsc_files WHERE fullname = :fullname LIMIT 1');
-		$select->execute(array(':fullname'=>ltrim($file, '/')));
+		$select = $db->prepare('SELECT sid_model FROM hvsc_files WHERE collection_path = :collection_path LIMIT 1');
+		$select->execute(array(':collection_path' => ltrim($file, '/')));
 		$select->setFetchMode(PDO::FETCH_OBJ);
 
 		if ($select->rowCount())
 			// Always bump to 6581 if not explicitly set to 8580
-			$model = $select->fetch()->sidmodel == 'MOS8580' ? $soasc_models['r5'] : $soasc_models['r2'];
+			$model = $select->fetch()->sid_model == 'MOS8580' ? $soasc_models['r5'] : $soasc_models['r2'];
 	}
 	
 	// What kind of folder is it?
@@ -126,23 +126,23 @@ try {
 
 		if (!in_array($root_folder, array('DEMOS', 'GAMES', 'MUSICIANS'))) {
 			// It's in a custom folder - SOASC can't play this one, but get its hash (MD5)
-			$select = $db->prepare('SELECT hash FROM hvsc_files WHERE fullname = :fullname LIMIT 1');
-			$select->execute(array(':fullname'=>ltrim($file, '/')));
+			$select = $db->prepare('SELECT hash FROM hvsc_files WHERE collection_path = :collection_path LIMIT 1');
+			$select->execute(array(':collection_path' => ltrim($file, '/')));
 			$select->setFetchMode(PDO::FETCH_OBJ);
 			// Now get all SID files that share the same hash (MD5)
-			$twins = $db->query('SELECT fullname FROM hvsc_files WHERE hash = "'.$select->fetch()->hash.'"');
+			$twins = $db->query('SELECT collection_path FROM hvsc_files WHERE hash = "'.$select->fetch()->hash.'"');
 			$twins->setFetchMode(PDO::FETCH_OBJ);
 
 			// So, does this file have a duplicate in HVSC that SOASC can play?
 			foreach ($twins as $twin) {
-				$root_folder = explode('/', $twin->fullname)[0];
+				$root_folder = explode('/', $twin->collection_path)[0];
 				if (in_array($root_folder, array('DEMOS', 'GAMES', 'MUSICIANS')))
 					// Yep, here it is!
-					$file = '/'.$twin->fullname;
+					$file = '/'.$twin->collection_path;
 			}
 		}
-		$select = $db->prepare('SELECT new, updated FROM hvsc_files WHERE fullname = :fullname LIMIT 1');
-		$select->execute(array(':fullname'=>ltrim($file, '/')));
+		$select = $db->prepare('SELECT new, updated FROM hvsc_files WHERE collection_path = :collection_path LIMIT 1');
+		$select->execute(array(':collection_path' => ltrim($file, '/')));
 		$select->setFetchMode(PDO::FETCH_OBJ);
 
 		$hvsc = 0;

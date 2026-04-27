@@ -46,7 +46,7 @@ try {
         $handle = fopen(TRACKFILE, 'r');
         if ($handle !== false) {
             while (($line = fgetcsv($handle)) !== false) {
-                // Expecting 5 columns: ip, ua, username, time_created, time_updated
+                // Expecting 5 columns: ip, ua, user_name, time_created, time_updated
                 if (count($line) < 5) {
                     // Broken / placeholder line; ignore it
                     continue;

@@ -36,13 +36,13 @@ function createRecBox($random_id) {
 
 	global $db, $alt_box;
 
-	// Get the fullname
-	$select = $db->query('SELECT fullname FROM hvsc_folders WHERE id = '.$random_id);
+	// Get the collection path
+	$select = $db->query('SELECT collection_path FROM hvsc_folders WHERE id = '.$random_id);
 	$select->setFetchMode(PDO::FETCH_OBJ);
-	$fullname = $select->rowCount() ? $select->fetch()->fullname : '';
+	$collection_path = $select->rowCount() ? $select->fetch()->collection_path : '';
 
-	// Get composer data via the fullname
-	$select = $db->query('SELECT name, shortname, handles, shorthandle FROM composers WHERE fullname = "'.$fullname.'"');
+	// Get composer data via the collection path
+	$select = $db->query('SELECT full_name, short_name, handles, short_handle FROM composers WHERE collection_path = "'.$collection_path.'"');
 	$select->setFetchMode(PDO::FETCH_OBJ);
 	$row = $select->fetch();
 
@@ -70,13 +70,13 @@ function createRecBox($random_id) {
 				// Pick a random "decent" folder
 				$random_decent = $decent_composers[array_rand($decent_composers)];
 
-				// Get the fullname of it
-				$select_decent = $db->query('SELECT fullname FROM hvsc_folders WHERE id = '.$random_decent);
+				// Get the collection path of it
+				$select_decent = $db->query('SELECT collection_path FROM hvsc_folders WHERE id = '.$random_decent);
 				$select_decent->setFetchMode(PDO::FETCH_OBJ);
 
 				$return_html = $select_decent->rowCount()
 					? '
-						<table class="tight compo recommended pseudo decent" data-folder="'.$select_decent->fetch()->fullname.'" style="padding-bottom:0;">
+						<table class="tight compo recommended pseudo decent" data-folder="'.$select_decent->fetch()->collection_path.'" style="padding-bottom:0;">
 							<tr>
 								<td style="height:123px;">
 									<div class="random-container">
@@ -96,7 +96,7 @@ function createRecBox($random_id) {
 				$playlist_folders = [];
 
 				// Get an array of all public playlists
-				$select_playlist = $db->query('SELECT id FROM hvsc_folders WHERE fullname LIKE "$%"');
+				$select_playlist = $db->query('SELECT id FROM hvsc_folders WHERE collection_path LIKE "$%"');
 				$select_playlist->setFetchMode(PDO::FETCH_OBJ);
 				foreach($select_playlist as $row_playlist)
 					array_push($playlist_folders, $row_playlist->id);
@@ -105,25 +105,25 @@ function createRecBox($random_id) {
 				$random_playlist = $playlist_folders[array_rand($playlist_folders)];
 
 				// Get the needed information from this playlist entry
-				$select_playlist = $db->query('SELECT fullname, files, user_id FROM hvsc_folders WHERE id = '.$random_playlist.' LIMIT 1');
+				$select_playlist = $db->query('SELECT collection_path, files, user_id FROM hvsc_folders WHERE id = '.$random_playlist.' LIMIT 1');
 				$select_playlist->setFetchMode(PDO::FETCH_OBJ);
 				$playlist = $select_playlist->fetch();
 
 				$plural = $playlist->files > 1 ? 's' : '';
 
 				// Get the handle of the playlist creator
-				$select_user = $db->query('SELECT username FROM users WHERE id = '.$playlist->user_id.' LIMIT 1');
+				$select_user = $db->query('SELECT user_name FROM users WHERE id = '.$playlist->user_id.' LIMIT 1');
 				$select_user->setFetchMode(PDO::FETCH_OBJ);
-				$handle = $select_user->fetch()->username;
+				$handle = $select_user->fetch()->user_name;
 
 				return
-					'<table class="tight compo recommended pseudo spotlight" data-folder="'.$playlist->fullname.'">'.
+					'<table class="tight compo recommended pseudo spotlight" data-folder="'.$playlist->collection_path.'">'.
 						'<tr>'.
 							'<td colspan="2" style="padding-right:10px;"><img class="folder" src="images/if_folder_star.svg" alt="" /><h3>Playlist spotlight</h3></td>'.
 						'</tr>'.
 						'<tr>'.
 							'<td style="height:85px;padding-top:1px;padding-right:10px;">'.
-								'<h5 class="spottext">'.substr($playlist->fullname, 1).'</h5>'.
+								'<h5 class="spottext">'.substr($playlist->collection_path, 1).'</h5>'.
 								'<div style="position:absolute;bottom:8px;"><img class="icon doublenote" src="images/composer_doublenote.svg" title="Songs" alt="" />'.$playlist->files.' song'.$plural.'<span class="spottext" style="font-family:Asap Condensed,sans-serif;margin-left:20px;"><img class="icon doublenote" src="images/select.svg" style="position:relative;top:4.5px;height:17.5px;" title="Curator" alt="" />'.$handle.'</span></div>'.
 							'</td>'.
 						'</tr>'.
@@ -165,15 +165,15 @@ function createRecBox($random_id) {
 		}
 	}
 
-	$name = empty($row->shortname) ? $row->name : $row->shortname;
+	$name = empty($row->short_name) ? $row->full_name : $row->short_name;
 	$parts = explode(',', $row->handles);
-	$handle = empty($row->shorthandle) ? end($parts) : $row->shorthandle;
+	$handle = empty($row->short_handle) ? end($parts) : $row->short_handle;
 
 	if ($name == '?')
 		$name = '<small class="u1">?</small>?<small class="u2">?</small>';
 
-	// Use 'fullname' parameter to figure out the name of the thumbnail (if it exists)
-	$fn = str_replace('_High Voltage SID Collection/', '', $fullname);
+	// Use collection path parameter to figure out the name of the thumbnail (if it exists)
+	$fn = str_replace('_High Voltage SID Collection/', '', $collection_path);
 	$fn = str_replace("_Compute's Gazette SID Collection/", "cgsc_", $fn);
 	$fn = str_replace(' ', '_', $fn);
 	$fn = strtolower(str_replace('/', '_', $fn));
@@ -181,10 +181,10 @@ function createRecBox($random_id) {
 	if (!file_exists('../'.$thumbnail)) $thumbnail = 'images/composer.png';
 
 	// A true group folder?
-	$is_group = strpos($fullname, '/GROUPS/') !== false;
+	$is_group = strpos($collection_path, '/GROUPS/') !== false;
 	
 	// Get type and file count
-	$select = $db->query('SELECT type, files FROM hvsc_folders WHERE fullname = "'.$fullname.'"');
+	$select = $db->query('SELECT type, files FROM hvsc_folders WHERE collection_path = "'.$collection_path.'"');
 	$select->setFetchMode(PDO::FETCH_OBJ);
 	$row = $select->fetch();
 	$type = $row->type == 'GROUP' ? 'group' : 'single';
@@ -198,7 +198,7 @@ function createRecBox($random_id) {
 	// Create the HTML table for the box
 
 	return
-		'<table class="tight compo recommended" data-folder="'.$fullname.'">'.
+		'<table class="tight compo recommended" data-folder="'.$collection_path.'">'.
 			'<tr>'.
 				'<td colspan="2"><img class="folder" src="images/if_folder_'.$type.'.svg" alt="" /><h3>Recommended '.$rec.'</h3></td>'.
 			'</tr>'.
@@ -230,13 +230,13 @@ function createComposersArray(&$select, &$composers, $pro = false) {
 
 	foreach($select as $row) {
 
-		$name = $raw_name = empty($row->shortname) ? $row->name : $row->shortname;
+		$name = $raw_name = empty($row->short_name) ? $row->full_name : $row->short_name;
 		if ($name == '?') $name = '<small class="u1">?</small>?<small class="u2">?</small>';
 		$parts = explode(',', $row->handles);
-		$handle = trim(empty($row->shorthandle) ? end($parts) : $row->shorthandle);
+		$handle = trim(empty($row->short_handle) ? end($parts) : $row->short_handle);
 
-		// Use 'fullname' parameter to figure out the name of the thumbnail (if it exists)
-		$hvsc_path = str_replace('_High Voltage SID Collection/', '', $row->fullname);
+		// Use collection path parameter to figure out the name of the thumbnail (if it exists)
+		$hvsc_path = str_replace('_High Voltage SID Collection/', '', $row->collection_path);
 		$fn = str_replace(' ', '_', $hvsc_path);
 		$fn = strtolower(str_replace('/', '_', $fn));
 		$thumbnail = 'images/composers/'.$fn.'.jpg';
@@ -352,18 +352,18 @@ try {
 
 	// Get composers that were active this year (and are still alive)
 	$select = $db->query('
-		SELECT fullname, name, shortname, handles, shorthandle FROM composers
+		SELECT collection_path, full_name, short_name, handles, short_handle FROM composers
 		WHERE active = "'.date("Y").'"
-		AND died = "0000-00-00"
+		AND date_death = "0000-00-00"
 	');
 	$select->setFetchMode(PDO::FETCH_OBJ);
 	createComposersArray($select, $composers_active);
 
 	// Get composers that were active last year (and are still alive)
 	$select = $db->query('
-		SELECT fullname, name, shortname, handles, shorthandle FROM composers
+		SELECT collection_path, full_name, short_name, handles, short_handle FROM composers
 		WHERE active = "'.(date("Y") - 1).'"
-		AND died = "0000-00-00"
+		AND date_death = "0000-00-00"
 	');
 	$select->setFetchMode(PDO::FETCH_OBJ);
 	createComposersArray($select, $composers_snoozing);
@@ -371,8 +371,8 @@ try {
 	// Get composers that made for games professionally (magazines don't count)
 	// NOTE: Game composers without a real name in the database will be ignored.
 	$select = $db->query('
-		SELECT fullname, name, shortname, handles, shorthandle, affiliation FROM composers
-		WHERE focus1 = "PRO" AND fullname NOT LIKE "%/GROUPS/%" AND name != "?"
+		SELECT collection_path, full_name, short_name, handles, short_handle, affiliation FROM composers
+		WHERE focus1 = "PRO" AND collection_path NOT LIKE "%/GROUPS/%" AND full_name != "?"
 	');
 	$select->setFetchMode(PDO::FETCH_OBJ);
 	createComposersArray($select, $composers_game, true);

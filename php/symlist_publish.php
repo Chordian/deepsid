@@ -27,7 +27,7 @@ try {
 	$db = $account->getDB();
 
 	// First let's make sure there is no public playlist with the same name
-	$select = $db->prepare('SELECT 1 FROM hvsc_folders WHERE fullname = :folder');
+	$select = $db->prepare('SELECT 1 FROM hvsc_folders WHERE collection_path = :folder');
 	$select->execute(array(':folder'=>$symlist_char.substr($_POST['symlist'], 1)));
 	if ($select->rowCount() ) {
 		if ($symlist_char == '$')
@@ -37,8 +37,8 @@ try {
 	}
 
 	// Make the transition
-	$update = $db->prepare('UPDATE hvsc_folders SET fullname = :public WHERE fullname = :fullname AND user_id = '.$user_id.' LIMIT 1');
-	$update->execute(array(':public'=>$symlist_char.substr($_POST['symlist'], 1), ':fullname'=>$_POST['symlist']));
+	$update = $db->prepare('UPDATE hvsc_folders SET collection_path = :public WHERE collection_path = :collection_path AND user_id = '.$user_id.' LIMIT 1');
+	$update->execute(array(':public' => $symlist_char.substr($_POST['symlist'], 1), ':collection_path' => $_POST['symlist']));
 	if ($update->rowCount() == 0)
 		die(json_encode(array('status' => 'error', 'message' => 'Could not '.($symlist_char == '!' ? 'un' : '').'publish "'.$_POST['symlist'])));
 	$account->logActivity('User "'.$_SESSION['user_name'].'" '.($symlist_char == '!' ? 'un' : '').'published the "'.$_POST['symlist'].'" playlist');

@@ -38,8 +38,8 @@ if (!isset($_POST['fileID']) || !isset($_POST['allTags']))
  * It is written in the CSV format so it can be used by another PHP script, in
  * case actions by a user with malicious intentions need to be undone.
  * 
- * Fields:	time, ip address, user id, user name, file id, fullname, action,
- * 			tag id, tag name
+ * Fields:	time, ip address, user id, user name, file id, collection path,
+ * 			action, tag id, tag name
  * 
  * @uses		$_POST['fileID']			file ID of the song being affected
  *
@@ -48,14 +48,14 @@ if (!isset($_POST['fileID']) || !isset($_POST['allTags']))
  * @param		string		$tag_name
  */
 function logTagActivity($action, $tag_id, $tag_name) {
-	global $user_id, $user_name, $fullname;
+	global $user_id, $user_name, $collection_path;
 	file_put_contents($_SERVER['DOCUMENT_ROOT'].'/deepsid/logs/tags.txt',
 			date('Y-m-d H:i:s', strtotime(TIME_ADJUST)).','.
 			$_SERVER['REMOTE_ADDR'].','.
 			$user_id.','.
 			$user_name.','.
 			$_POST['fileID'].','.
-			$fullname.','.
+			$collection_path.','.
 			$action.','.
 			$tag_id.','.
 			$tag_name.
@@ -85,10 +85,10 @@ try {
 	$db = $account->getDB();
 
 	// Get full name of this file ID
-	$select = $db->prepare('SELECT fullname FROM hvsc_files WHERE id = :id');
+	$select = $db->prepare('SELECT collection_path FROM hvsc_files WHERE id = :id');
 	$select->execute(array(':id'=>$_POST['fileID']));
 	$select->setFetchMode(PDO::FETCH_OBJ);
-	$fullname = $select->fetch()->fullname;
+	$collection_path = $select->fetch()->collection_path;
 
 	// Add new typed-in tags
 	// NOTE: The type is indirectly set to a default value and will be updated by an administrator later.
@@ -184,7 +184,7 @@ try {
 					$user_id.','.
 					$user_name.','.
 					$_POST['fileID'].','.
-					$fullname.','.
+					$collection_path.','.
 					'BRACKET,'.
 					$_POST['startTag'].','.
 					$start_tag_name.','.

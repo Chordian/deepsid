@@ -26,18 +26,18 @@ if ($account->checkLogin()) {
 		$db = $account->getDB();
 
 		// Who exactly are we doing this for?
-		$select = $db->prepare('SELECT fullname FROM composers WHERE id = :cid');
+		$select = $db->prepare('SELECT collection_path FROM composers WHERE id = :cid');
 		$select->execute(array(':cid' => $_POST['cid']));
 		$select->setFetchMode(PDO::FETCH_OBJ);
 
-		$fullname = str_replace('_High Voltage SID Collection', '', $select->fetch()->fullname);
+		$collection_path = str_replace('_High Voltage SID Collection', '', $select->fetch()->collection_path);
 
 		// Delete new database entry
 		$delete = $db->prepare('DELETE FROM composers_links WHERE id = :id LIMIT 1');
 		$delete->execute(array('id' => $_POST['id']));
 
 		// Finally log it
-		$account->logActivity('User "'.$account->userName().'" deleted the "'.$_POST['name'].'" composer link ('.$_POST['url'].') for "'.$fullname.'"');
+		$account->logActivity('User "'.$account->userName().'" deleted the "'.$_POST['name'].'" composer link ('.$_POST['url'].') for "'.$collection_path.'"');
 
 	} catch(PDOException $e) {
 		$account->logActivityError(basename(__FILE__), $e->getMessage());

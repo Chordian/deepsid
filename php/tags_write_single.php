@@ -25,8 +25,8 @@ try {
 	$db = $account->getDB();
 
 	// Get the ID of this file
-	$select = $db->prepare('SELECT id FROM hvsc_files WHERE fullname = :fullname LIMIT 1');
-	$select->execute(array(':fullname'=>$_POST['fullname']));
+	$select = $db->prepare('SELECT id FROM hvsc_files WHERE collection_path = :collection_path LIMIT 1');
+	$select->execute(array(':collection_path' => $_POST['fullname']));
 	$select->setFetchMode(PDO::FETCH_OBJ);
 	if ($select->rowCount() == 0)
 		die(json_encode(array('status' => 'error', 'message' => 'Could not find "'.$_POST['fullname'].'" in the database')));

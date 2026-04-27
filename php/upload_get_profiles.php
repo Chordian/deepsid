@@ -21,16 +21,16 @@ try {
 
 	$active_only = $_GET['active'] ? ' AND active = "'.date("Y").'" AND died = "0000-00-00"' : '';
 
-	$select = $db->query('SELECT fullname, name, shortname, handles, shorthandle FROM composers WHERE fullname LIKE "_High Voltage SID Collection/%" AND fullname NOT LIKE "%/GROUPS/%"'.$active_only.' ORDER BY fullname');
+	$select = $db->query('SELECT collection_path, full_name, short_name, handles, short_handle FROM composers WHERE collection_path LIKE "_High Voltage SID Collection/%" AND collection_path NOT LIKE "%/GROUPS/%"'.$active_only.' ORDER BY collection_path');
 	$select->setFetchMode(PDO::FETCH_OBJ);
 
 	foreach($select as $row) {
-		$name = $row->name;
-		$short_name = $row->shortname;
+		$name = $row->full_name;
+		$short_name = $row->short_name;
 		$all_handles = explode(',', $row->handles);
 		$latest_handle = trim(end($all_handles));
 		$handle = strpos($latest_handle, '<del>') === false ? $latest_handle : '';
-		$short_handle = $row->shorthandle;
+		$short_handle = $row->short_handle;
 		if (!empty($short_handle)) $handle = $short_handle;
 
 		// Name
@@ -47,7 +47,7 @@ try {
 			$author .= ' ('.$handle.')';
 
 		$all_profiles[] = array(
-			'fullname'	=> str_replace('_High Voltage SID Collection', 'HVSC', $row->fullname),
+			'fullname'	=> str_replace('_High Voltage SID Collection', 'HVSC', $row->collection_path),
 			'author'	=> $author
 		);
 	}

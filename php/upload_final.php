@@ -42,8 +42,8 @@ try {
 	$db = $account->getDB();
 
 	// Is this editing or uploading?
-	$select = $db->prepare('SELECT id FROM hvsc_files WHERE fullname = :fullname LIMIT 1');
-	$select->execute(array(':fullname' => $info['fullname']));
+	$select = $db->prepare('SELECT id FROM hvsc_files WHERE collection_path = :collection_path LIMIT 1');
+	$select->execute(array(':collection_path' => $info['fullname']));
 	$select->setFetchMode(PDO::FETCH_OBJ);
 
 	// Spaces are not allowed in the filename
@@ -65,14 +65,14 @@ try {
 
 		// Update the general database row
 		$update = $db->prepare('UPDATE hvsc_files SET
-				fullname		= :newername,
+				collection_path	= :newername,
 				player			= :player,
 				lengths 		= :lengths,
 				stil 			= :stil,
 				author 			= :author,
 				copyright		= :copyright,
-				csdbtype 		= :csdbtype,
-				csdbid 			= :csdbid
+				csdb_type 		= :csdb_type,
+				csdb_id 		= :csdb_id
 			WHERE id = '.$files_id.' LIMIT 1');
 		$update->execute(array(
 				':newername'	=> $new_name,
@@ -81,12 +81,12 @@ try {
 				':stil'			=> $info['stil'],
 				':author'		=> $info['author'],
 				':copyright'	=> $info['copyright'],
-				':csdbtype'		=> $info['csdbid'] ? 'release' : '',
-				':csdbid'		=> $info['csdbid'],
+				':csdb_type'	=> $info['csdbid'] ? 'release' : '',
+				':csdb_id'		=> $info['csdbid'],
 			));
 
 		// Get the ID of the specified composer profile
-		$select = $db->prepare('SELECT id FROM composers WHERE fullname = :profile LIMIT 1');
+		$select = $db->prepare('SELECT id FROM composers WHERE collection_path = :profile LIMIT 1');
 		$select->execute(array(':profile' => str_replace('HVSC/', '_High Voltage SID Collection/', $info['profile'])));
 		$select->setFetchMode(PDO::FETCH_OBJ);
 
@@ -112,74 +112,74 @@ try {
 
 		// Add a new general database row for the new SID file
 		$insert = $db->prepare('INSERT INTO hvsc_files(
-				fullname,
+				collection_path,
 				player,
 				lengths,
 				type,
 				version,
-				playertype,
-				playercompat,
-				clockspeed,
-				sidmodel,
-				dataoffset,
-				datasize,
-				loadaddr,
-				initaddr,
-				playaddr,
+				player_type,
+				player_compat,
+				clock_speed,
+				sid_model,
+				data_offset,
+				data_size,
+				load_addr,
+				init_addr,
+				play_addr,
 				subtunes,
-				startsubtune,
+				start_subtune,
 				name,
 				author,
 				copyright,
 				stil,
-				csdbtype,
-				csdbid
+				csdb_type,
+				csdb_id
 			) VALUES (
-				:fullname,
+				:collection_path,
 				:player,
 				:lengths,
 				:type,
 				:version,
 				"Normal built-in",
-				:playercompat,
-				:clockspeed,
-				:sidmodel,
-				:dataoffset,
-				:datasize,
-				:loadaddr,
-				:initaddr,
-				:playaddr,
+				:player_compat,
+				:clock_speed,
+				:sid_model,
+				:data_offset,
+				:data_size,
+				:load_addr,
+				:init_addr,
+				:play_addr,
 				:subtunes,
-				:startsubtune,
+				:start_subtune,
 				:name,
 				:author,
 				:copyright,
 				:stil,
 				'.($info['csdbid'] ? '"release"' : '""').',
-				:csdbid
+				:csdb_id
 			)');
 
-		$insert->execute(array(
-				':fullname'		=> $path.$info['newname'],				// Renamed by upload wizard
-				':player'		=> $info['player'],						// Modified by upload wizard
-				':lengths'		=> $info['lengths'],					// Modified by upload wizard
-				':type'			=> $info['type'],
-				':version'		=> $info['version'],
-				':playercompat'	=> $info['playercompat'],
-				':clockspeed'	=> $info['clockspeed'],
-				':sidmodel'		=> $info['sidmodel'],
-				':dataoffset'	=> $info['dataoffset'],
-				':datasize'		=> $info['datasize'],
-				':loadaddr'		=> $info['loadaddr'],
-				':initaddr'		=> $info['initaddr'],
-				':playaddr'		=> $info['playaddr'],
-				':subtunes'		=> $info['subtunes'],
-				':startsubtune'	=> $info['startsubtune'],
-				':name'			=> $info['name'],
-				':author'		=> $info['author'],						// Modified by upload wizard
-				':copyright'	=> $info['copyright'],					// Modified by upload wizard
-				':stil'			=> $info['stil'],						// Created by upload wizard
-				':csdbid'		=> $info['csdbid']						// Created by upload wizard
+		$insert->execute(array(			// No "_" in these
+				':collection_path'		=> $path.$info['newname'],				// Renamed by upload wizard
+				':player'				=> $info['player'],						// Modified by upload wizard
+				':lengths'				=> $info['lengths'],					// Modified by upload wizard
+				':type'					=> $info['type'],
+				':version'				=> $info['version'],
+				':player_compat'		=> $info['playercompat'],
+				':clock_speed'			=> $info['clockspeed'],
+				':sid_model'			=> $info['sidmodel'],
+				':data_offset'			=> $info['dataoffset'],
+				':data_size'			=> $info['datasize'],
+				':load_addr'			=> $info['loadaddr'],
+				':init_addr'			=> $info['initaddr'],
+				':play_addr'			=> $info['playaddr'],
+				':subtunes'				=> $info['subtunes'],
+				':start_subtune'		=> $info['startsubtune'],
+				':name'					=> $info['name'],
+				':author'				=> $info['author'],						// Modified by upload wizard
+				':copyright'			=> $info['copyright'],					// Modified by upload wizard
+				':stil'					=> $info['stil'],						// Created by upload wizard
+				':csdb_id'				=> $info['csdbid']						// Created by upload wizard
 			));
 
 		$files_id = $db->lastInsertId();
@@ -188,7 +188,7 @@ try {
 			die(json_encode(array('status' => 'error', 'message' => 'Could not create the general database entry for the "'.$info['newname'].'" file.')));
 
 		// Get the ID of the specified composer profile
-		$select = $db->prepare('SELECT id FROM composers WHERE fullname = :profile LIMIT 1');
+		$select = $db->prepare('SELECT id FROM composers WHERE collection_path = :profile LIMIT 1');
 		$select->execute(array(':profile' => str_replace('HVSC/', '_High Voltage SID Collection/', $info['profile'])));
 		$select->setFetchMode(PDO::FETCH_OBJ);
 
@@ -210,7 +210,7 @@ try {
 
 		// If this is the 'SID+FM' subfolder then update its file count as well
 		if (stripos($path, 'sid+fm'))
-			$update = $db->query('UPDATE hvsc_folders SET files = files + 1 WHERE fullname = "_SID Happens/SID+FM" LIMIT 1');
+			$update = $db->query('UPDATE hvsc_folders SET files = files + 1 WHERE collection_path = "_SID Happens/SID+FM" LIMIT 1');
 
 		// Acknowledge that the composer is now active (this will be reflected in the root page)
 		if ($composers_id)

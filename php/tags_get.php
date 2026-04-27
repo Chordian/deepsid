@@ -31,8 +31,8 @@ try {
 	}
 
 	// Get the ID of this file
-	$select = $db->prepare('SELECT id FROM hvsc_files WHERE fullname = :fullname LIMIT 1');
-	$select->execute(array(':fullname'=>$_GET['fullname']));
+	$select = $db->prepare('SELECT id FROM hvsc_files WHERE collection_path = :collection_path LIMIT 1');
+	$select->execute(array(':collection_path' => $_GET['fullname']));
 	$select->setFetchMode(PDO::FETCH_OBJ);
 	$file_id = $select->rowCount() ? $select->fetch()->id : 0;
 

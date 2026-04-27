@@ -163,12 +163,12 @@ function commentsTable($title, $comments, &$scener_handle, &$scener_id, $backwar
 			try {
 				$db = $account->getDB();
 		
-				$select = $db->prepare('SELECT fullname FROM composers WHERE csdbid = :csdbid LIMIT 1');
-				$select->execute(array(':csdbid'=>$scid));
+				$select = $db->prepare('SELECT collection_path FROM composers WHERE csdb_id = :csdb_id LIMIT 1');
+				$select->execute(array(':csdb_id' => $scid));
 				$select->setFetchMode(PDO::FETCH_OBJ);
 		
 				if ($select->rowCount())
-					$hvsc_folder = $select->fetch()->fullname;
+					$hvsc_folder = $select->fetch()->collection_path;
 
 			} catch(PDOException $e) {
 				// Just forget it then...

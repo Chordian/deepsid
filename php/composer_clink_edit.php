@@ -26,21 +26,21 @@ if ($account->checkLogin()) {
 		$db = $account->getDB();
 
 		// Who exactly are we doing this for?
-		$select = $db->prepare('SELECT fullname FROM composers WHERE id = :cid');
+		$select = $db->prepare('SELECT collection_path FROM composers WHERE id = :cid');
 		$select->execute(array(':cid' => $_POST['cid']));
 		$select->setFetchMode(PDO::FETCH_OBJ);
 
-		$fullname = str_replace('_High Voltage SID Collection', '', $select->fetch()->fullname);
+		$collection_path = str_replace('_High Voltage SID Collection', '', $select->fetch()->collection_path);
 
 		// Update the existing database entry
 		$update = $db->prepare('UPDATE composers_links SET name = :name, url = :url WHERE id = :id LIMIT 1');
 		$update->execute(array('name' => $_POST['name'], 'url' => $_POST['url'], 'id' => $_POST['id']));
 
 		if ($update->rowCount() == 0)
-			die(json_encode(array('status' => 'error', 'message' => 'Could not change a composer link to "'.$_POST['name'].'" for "'.$fullname.'"')));
+			die(json_encode(array('status' => 'error', 'message' => 'Could not change a composer link to "'.$_POST['name'].'" for "'.$collection_path.'"')));
 
 		// Finally log it
-		$account->logActivity('User "'.$account->userName().'" changed a composer link to "'.$_POST['name'].'" ('.$_POST['url'].') for "'.$fullname.'"');
+		$account->logActivity('User "'.$account->userName().'" changed a composer link to "'.$_POST['name'].'" ('.$_POST['url'].') for "'.$collection_path.'"');
 
 	} catch(PDOException $e) {
 		$account->logActivityError(basename(__FILE__), $e->getMessage());

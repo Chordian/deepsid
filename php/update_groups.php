@@ -22,14 +22,14 @@ try {
 
 	// Read counts from all redirect paths and update the group member rows accordingly
 	foreach($groups as $member) {
-		$new = $db->prepare('SELECT files FROM hvsc_folders WHERE fullname = :fullname LIMIT 1');
-		$new->execute(array(':fullname'=>$member->redirect));
+		$new = $db->prepare('SELECT files FROM hvsc_folders WHERE collection_path = :collection_path LIMIT 1');
+		$new->execute(array(':collection_path' => $member->redirect));
 		$new->setFetchMode(PDO::FETCH_OBJ);
 
 		$count = $new->fetch()->files;
 		$target = '_High Voltage SID Collection/GROUPS/'.$member->name.'/'.$member->folder;
 
-		$db->query('UPDATE hvsc_folders SET files = '.$count.' WHERE fullname = "'.$target.'" LIMIT 1');
+		$db->query('UPDATE hvsc_folders SET files = '.$count.' WHERE collection_path = "'.$target.'" LIMIT 1');
 
 		echo '<div style="display:inline-block;width:950px;">'.$target.'</div> = <div style="display:inline-block;width:45px;">'.$count.'</div> ('.$member->redirect.')<br />';
 	}

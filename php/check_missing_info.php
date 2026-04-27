@@ -36,27 +36,27 @@ $allowedExt = [
 
 // Mandatory fields for *.sid rows
 $requiredFields = [
-    'id'           	=> 'number',
-    'fullname'     	=> 'text',
-    'lengths'      	=> 'text',
-    'type'         	=> 'text',
-    'version'      	=> 'text',
-    'playertype'   	=> 'text',
-    'playercompat' 	=> 'text',
-    'clockspeed'   	=> 'text',
-    'sidmodel'     	=> 'text',
-    'dataoffset'   	=> 'number',
-    'datasize'     	=> 'number',
-    'loadaddr'     	=> 'number',
-    'initaddr'     	=> 'number',
-    'playaddr'     	=> 'number',
-    'subtunes'     	=> 'number',
-    'startsubtune'	=> 'number',
-    //'name'         	=> 'text',
-    //'author'       	=> 'text',
-    //'copyright'    	=> 'text',
-    'new'          	=> 'number',
-    'updated'      	=> 'number'
+    'id'           		=> 'number',
+    'collection_path'	=> 'text',
+    'lengths'      		=> 'text',
+    'type'         		=> 'text',
+    'version'      		=> 'text',
+    'player_type'  		=> 'text',
+    'player_compat'		=> 'text',
+    'clock_speed'  		=> 'text',
+    'sid_model'    		=> 'text',
+    'data_offset'  		=> 'number',
+    'data_size'    		=> 'number',
+    'load_addr'    		=> 'number',
+    'init_addr'    		=> 'number',
+    'play_addr'    		=> 'number',
+    'subtunes'    		=> 'number',
+    'start_subtune'		=> 'number',
+    //'name'       		=> 'text',
+    //'author'     		=> 'text',
+    //'copyright'  		=> 'text',
+    'new'          		=> 'number',
+    'updated'      		=> 'number'
 ];
 
 // If a row has more than this many deviations → we treat it as completely unprepared
@@ -66,11 +66,11 @@ $unpreparedThreshold = 6;
 $baseURL = $_SERVER['HTTP_HOST'] == LOCALHOST ? "http://chordian/deepsid/?file=" : "https://deepsid.chordian.net/?file=";
 
 // -----------------------------------------------------------
-// Helper: Build browser URL from fullname
+// Helper: Build browser URL from collection_path
 // -----------------------------------------------------------
-function buildUrl($fullname, $baseURL) {
+function buildUrl($collection_path, $baseURL) {
     // Remove leading underscore from collection name
-    $parts = explode('/', $fullname);
+    $parts = explode('/', $collection_path);
     $parts[0] = ltrim($parts[0], '_'); 
 
     // URL encode properly, but keep slashes
@@ -116,13 +116,13 @@ try {
 
 			if (strtolower($file->getExtension()) !== $ext) continue;
 
-			// Build fullname used in hvsc_files table
+			// Build collection path used in hvsc_files table
 			$relativePath = $collection . '/' . substr($file->getPathname(), strlen($folderPath) + 1);
 			$relativePath = str_replace('\\', '/', $relativePath);
 
 			// Query DB for the file
-			$select = $db->prepare('SELECT * FROM hvsc_files WHERE fullname = :fullname LIMIT 1');
-			$select->execute([':fullname' => $relativePath]);
+			$select = $db->prepare('SELECT * FROM hvsc_files WHERE collection_path = :collection_path LIMIT 1');
+			$select->execute([':collection_path' => $relativePath]);
 			$row = $select->fetch(PDO::FETCH_ASSOC);
 
 			$url = buildUrl($relativePath, $baseURL);

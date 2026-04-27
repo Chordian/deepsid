@@ -35,7 +35,7 @@ try {
 	$zip->open($filename, ZipArchive::CREATE | ZipArchive::OVERWRITE);
 
 	// Get the ID of this symlist
-	$select = $db->prepare('SELECT id FROM hvsc_folders WHERE fullname = :folder LIMIT 1');
+	$select = $db->prepare('SELECT id FROM hvsc_folders WHERE collection_path = :folder LIMIT 1');
 	$select->execute(array(':folder'=>$_POST['symlist']));
 	$select->setFetchMode(PDO::FETCH_OBJ);
 
@@ -56,16 +56,16 @@ try {
 	// Parse through each SID file in the symlist folder
 	foreach ($select as $row) {
 
-		$files = $db->query('SELECT fullname FROM hvsc_files WHERE id = '.$row->file_id.' LIMIT 1');
+		$files = $db->query('SELECT collection_path FROM hvsc_files WHERE id = '.$row->file_id.' LIMIT 1');
 		$files->setFetchMode(PDO::FETCH_OBJ);
 
 		if (!$files->rowCount())
 			die(json_encode(array('status' => 'error', 'message' => "Couldn't find file ID '.$row->file_id.'; the download has failed.")));
 
-		$fullname = $files->fetch()->fullname;
+		$collection_path = $files->fetch()->collection_path;
 
 		// Add the file to the ZIP archive
-		$parts = explode('/', $fullname);
+		$parts = explode('/', $collection_path);
 		$org_file = $sid_file = end($parts);
 		$count = 1;
 		while (true) {
@@ -79,7 +79,7 @@ try {
 				die(json_encode(array('status' => 'error', 'message' => "Too many files of the same name; the download has failed.")));
 		}
 		$all_sid_files[] = strtolower($sid_file);
-		$zip->addFile(ROOT_HVSC.'/'.$fullname, $sid_file);
+		$zip->addFile(ROOT_HVSC.'/'.$collection_path, $sid_file);
 	}
 
 	$zip->close();

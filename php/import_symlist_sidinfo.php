@@ -63,7 +63,7 @@ try {
 			echo '<tr><td>'.$filename.'</td><td>'.$title.'</td><td>'.$author.'</td><td>'.$copyright.'</td>';
 
 			// The 'filename' and 'author' fields should be enough in most cases
-			$select = $db->query('SELECT id FROM hvsc_files WHERE fullname LIKE "_High Voltage SID Collection%" AND fullname LIKE "%'.$filename.'" AND author = "'.$author.'"');
+			$select = $db->query('SELECT id FROM hvsc_files WHERE collection_path LIKE "_High Voltage SID Collection%" AND collection_path LIKE "%'.$filename.'" AND author = "'.$author.'"');
 			$select->setFetchMode(PDO::FETCH_OBJ);
 			$rows_found = $select->rowCount();
 
@@ -85,7 +85,7 @@ try {
 						echo '<td style="color:#00a;">Found using author (DOUBLE-CHECK)';
 					else if (!$rows_found) {
 						// Author could have changed, try 'filename' and 'copyright' instead
-						$select = $db->query('SELECT id FROM hvsc_files WHERE fullname LIKE "_High Voltage SID Collection%" AND fullname LIKE "%'.$filename.'" AND copyright = "'.$copyright.'"');
+						$select = $db->query('SELECT id FROM hvsc_files WHERE collection_path LIKE "_High Voltage SID Collection%" AND collection_path LIKE "%'.$filename.'" AND copyright = "'.$copyright.'"');
 						$select->setFetchMode(PDO::FETCH_OBJ);
 						$rows_found = $select->rowCount();
 						if ($rows_found == 1)
@@ -101,7 +101,7 @@ try {
 					echo '<td style="color:#a00;"><b>Found too many!</b>';
 			} else {
 				// Too many; add 'copyright' as a third option too
-				$select = $db->query('SELECT id FROM hvsc_files WHERE fullname LIKE "_High Voltage SID Collection%" AND fullname LIKE "%'.$filename.'" AND author = "'.$author.'" AND copyright = "'.$copyright.'"');
+				$select = $db->query('SELECT id FROM hvsc_files WHERE collection_path LIKE "_High Voltage SID Collection%" AND collection_path LIKE "%'.$filename.'" AND author = "'.$author.'" AND copyright = "'.$copyright.'"');
 				$select->setFetchMode(PDO::FETCH_OBJ);
 				$rows_found = $select->rowCount();
 				if ($rows_found == 1)
@@ -110,7 +110,7 @@ try {
 					echo '<td style="color:#a00;"><b>Found nothing!</b>';
 				else {
 					// Still too many; add 'title' too then
-					$select = $db->query('SELECT id FROM hvsc_files WHERE fullname LIKE "_High Voltage SID Collection%" AND fullname LIKE "%'.$filename.'" AND name = "'.$title.'" AND author = "'.$author.'" AND copyright = "'.$copyright.'"');
+					$select = $db->query('SELECT id FROM hvsc_files WHERE collection_path LIKE "_High Voltage SID Collection%" AND collection_path LIKE "%'.$filename.'" AND name = "'.$title.'" AND author = "'.$author.'" AND copyright = "'.$copyright.'"');
 					$select->setFetchMode(PDO::FETCH_OBJ);
 					$rows_found = $select->rowCount();
 					if ($rows_found == 1)

@@ -47,13 +47,13 @@ if (!isset($_POST['id']) || !isset($_POST['site']) || !isset($_POST['name']) || 
 function logTagActivity($action, $labels_id, $labels_site, $labels_name, $labels_type) {
 	global $db, $account;
 
-	// Get the fullname of this ID
-	$select = $db->prepare('SELECT fullname FROM hvsc_files WHERE id = :id LIMIT 1');
+	// Get the collection path of this ID
+	$select = $db->prepare('SELECT collection_path FROM hvsc_files WHERE id = :id LIMIT 1');
 	$select->execute(array(':id'=>$_POST['id']));
 	$select->setFetchMode(PDO::FETCH_OBJ);
 	if ($select->rowCount() == 0)
 		die(json_encode(array('status' => 'error', 'message' => 'Could not find ID '.$_POST['id'].' in the database')));
-	$fullname = $select->fetch()->fullname;
+	$collection_path = $select->fetch()->collection_path;
 
 	file_put_contents($_SERVER['DOCUMENT_ROOT'].'/deepsid/logs/tags.txt',
 			date('Y-m-d H:i:s', strtotime(TIME_ADJUST)).','.
@@ -61,7 +61,7 @@ function logTagActivity($action, $labels_id, $labels_site, $labels_name, $labels
 			$account->userID().','.
 			$account->userName().','.
 			$_POST['id'].','.
-			$fullname.','.
+			$collection_path.','.
 			$action.','.
 			$labels_id.','.
 			$labels_site.','.

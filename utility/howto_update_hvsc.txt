@@ -20,7 +20,7 @@ and the online version).
 
 TABLE: hvsc_files
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-First time importing fullname list from HVSC:
+First time importing collection path list from HVSC:
 
   1. Go to (updated/newest) HVSC root and open a command box.
   2. Type: dir /s /b *.sid >hvsc_allfiles.csv
@@ -34,7 +34,7 @@ First time importing fullname list from HVSC:
   1. Enter the "hvsc_files" table in PhpMyAdmin and click "Import".
   2. Click "Browse" and click the first CSV file of two.
   3. Change "Format" to "CSV".
-  4. Write "fullname" in the "Column names" edit box.
+  4. Write "collection_path" in the "Column names" edit box.
   5. Click "Go".
   6. Repeat the above steps again for the second CSV file.
 
@@ -94,9 +94,9 @@ First, do steps 1 to 7 above as you will need the big file later.
 
   1. Go to the SQL box for the "hvsc_folders" table and execute this:
 
-       SELECT id, fullname FROM hvsc_folders WHERE fullname IN (
-         SELECT fullname FROM hvsc_folders GROUP BY fullname HAVING count(*) > 1
-       ) ORDER BY fullname
+       SELECT id, collection_path FROM hvsc_folders WHERE collection_path IN (
+         SELECT collection_path FROM hvsc_folders GROUP BY collection_path HAVING count(*) > 1
+       ) ORDER BY collection_path
 
      This will list all duplicate folders. (Don't bother with playlist folders.)
 
@@ -139,7 +139,7 @@ Import general SIDId player data:
   1. Enter the new "hvsc_files_import" table and click "Import".
   2. Click "Browse" and click the first CSV file.
   3. Change "Format" to "CSV".
-  4. Write "fullname,player" in the "Column names" edit box.
+  4. Write "collection_path,player" in the "Column names" edit box.
   5. Click "Go".
   6. Repeat the above steps again for the other CSV file parts.
   7. Export the "hvsc_files_import" to an SQL file for later import online. This way you won't have to
@@ -149,7 +149,7 @@ Import general SIDId player data:
   2. Run the following:
 
        UPDATE hvsc_files
-       INNER JOIN hvsc_files_import on hvsc_files_import.fullname = hvsc_files.fullname
+       INNER JOIN hvsc_files_import on hvsc_files_import.collection_path = hvsc_files.collection_path
        SET hvsc_files.player = hvsc_files_import.player
 
   3. Enter the "hvsc_files_import" table and click "Operations".
@@ -169,7 +169,7 @@ Import specific SIDId player data:
   1. Copy the "_specific.csv" file to the "python/specific/" folder.
   2. Run the "_process.bat" file to run Python scripts for various player types.
   3. Edit all resulting CSV files in Notepad++ in a ton of tabs.
-  4. Find weird lines with no fullname and delete them. (They are mostly the result of multiple detections.)
+  4. Find weird lines with no collection path and delete them. (They are mostly the result of multiple detections.)
      To find them, hit Ctrl+F, tick the "Regular expression" radio button, then search for:
         \  +   (<- TWO spaces between \ and +)
      Remember to use the F3 key for repeating the search in the files.
@@ -182,7 +182,7 @@ Import specific SIDId player data:
   1. Enter the empty "hvsc_files_import" table again and click "Import".
   2. Click "Browse" and select the CSV file.
   3. Change "Format" to "CSV".
-  4. Write "fullname,player" in the "Column names" edit box.
+  4. Write "collection_path,player" in the "Column names" edit box.
   5. Click "Go".
   6. Export the "hvsc_files_import" to an SQL file for later import online. This way you won't have to
      import the above, just that SQL file.
@@ -191,7 +191,7 @@ Import specific SIDId player data:
   2. Run the following:
 
        UPDATE hvsc_files
-       INNER JOIN hvsc_files_import on hvsc_files_import.fullname = hvsc_files.fullname
+       INNER JOIN hvsc_files_import on hvsc_files_import.collection_path = hvsc_files.collection_path
        SET hvsc_files.player = hvsc_files_import.player
 
   3. Enter the "hvsc_files_import" table and click "Operations".
@@ -214,14 +214,14 @@ Import HVSC song lengths:
         7. Home + down to next line.
   5. Stop recording and repeat the macro until end of file. (The bottom should be okay.)
      Don't copy something into the clipboard buffer until it's finished or you will bork it!
-  6. Forward slashes in fullnames should already be used. Validate that this is still true.
+  6. Forward slashes in collection paths should already be used. Validate that this is still true.
   7. Split the file into five CSV files of max 15000 lines using FileSplitter, which is present in the
      utility folder. (PhpMyAdmin can't handle it all).
 
   1. Enter the empty "hvsc_files_import" table and click "Import".
   2. Click "Browse" and click the first CSV file.
   3. Change "Format" to "CSV".
-  4. Write "fullname,lengths" in the "Column names" edit box.
+  4. Write "collection_path,lengths" in the "Column names" edit box.
   5. Click "Go".
   6. Repeat the above steps again for the other CSV file parts.
   7. Export the "hvsc_files_import" to an SQL file for later import online. This way you won't have to
@@ -231,7 +231,7 @@ Import HVSC song lengths:
   2. Run the following:
 
        UPDATE hvsc_files
-       INNER JOIN hvsc_files_import on hvsc_files_import.fullname = hvsc_files.fullname
+       INNER JOIN hvsc_files_import on hvsc_files_import.collection_path = hvsc_files.collection_path
        SET hvsc_files.lengths = hvsc_files_import.lengths
 
   3. Enter the "hvsc_files_import" table and click "Operations".
@@ -281,7 +281,7 @@ Import data from the SID files themselves:
   4. In "Columns enclosed with" delete the quote character there, leaving the edit box empty.
   5. In "Columns escaped with" type a backslash character instead.
   6. Specify:
-     fullname,type,version,playertype,playercompat,clockspeed,sidmodel,dataoffset,datasize,loadaddr,initaddr,playaddr,subtunes,startsubtune,name,author,copyright,hash
+     collection_path,type,version,player_type,player_compat,clock_speed,sid_model,data_offset,data_size,load_addr,init_addr,play_addr,subtunes,start_subtune,name,author,copyright,hash
   7. Click "Go".
   8. If you missed something in the CSV files, you'll get red import errors. The good news is that the
      error reports the line you have to edit.
@@ -294,20 +294,20 @@ Import data from the SID files themselves:
   2. Run the following:
 
        UPDATE hvsc_files
-       INNER JOIN hvsc_files_import on hvsc_files_import.fullname = hvsc_files.fullname
+       INNER JOIN hvsc_files_import on hvsc_files_import.collection_path = hvsc_files.collection_path
        SET hvsc_files.type = hvsc_files_import.type,
            hvsc_files.version = hvsc_files_import.version,
-           hvsc_files.playertype = hvsc_files_import.playertype,
-           hvsc_files.playercompat = hvsc_files_import.playercompat,
-           hvsc_files.clockspeed = hvsc_files_import.clockspeed,
-           hvsc_files.sidmodel = hvsc_files_import.sidmodel,
-           hvsc_files.dataoffset = hvsc_files_import.dataoffset,
-           hvsc_files.datasize = hvsc_files_import.datasize,
-           hvsc_files.loadaddr = hvsc_files_import.loadaddr,
-           hvsc_files.initaddr = hvsc_files_import.initaddr,
-           hvsc_files.playaddr = hvsc_files_import.playaddr,
+           hvsc_files.player_type = hvsc_files_import.player_type,
+           hvsc_files.player_compat = hvsc_files_import.player_compat,
+           hvsc_files.clock_speed = hvsc_files_import.clock_speed,
+           hvsc_files.sid_model = hvsc_files_import.sid_model,
+           hvsc_files.data_offset = hvsc_files_import.data_offset,
+           hvsc_files.data_size = hvsc_files_import.data_size,
+           hvsc_files.load_addr = hvsc_files_import.load_addr,
+           hvsc_files.init_addr = hvsc_files_import.init_addr,
+           hvsc_files.play_addr = hvsc_files_import.play_addr,
            hvsc_files.subtunes = hvsc_files_import.subtunes,
-           hvsc_files.startsubtune = hvsc_files_import.startsubtune,
+           hvsc_files.start_subtune = hvsc_files_import.start_subtune,
            hvsc_files.name = hvsc_files_import.name,
            hvsc_files.author = hvsc_files_import.author,
            hvsc_files.copyright = hvsc_files_import.copyright,
@@ -325,7 +325,7 @@ Import STIL entries:
   1. Enter the empty "hvsc_files_import" table again and click "Import".
   2. Click "Browse" and select the CSV file.
   3. Change "Format" to "CSV".
-  4. Write "fullname,stil" in the "Column names" edit box.
+  4. Write "collection_path,stil" in the "Column names" edit box.
   5. Click "Go".
   6. Export the "hvsc_files_import" to an SQL file for later import online. This way you won't have to
      import the above, just that SQL file.
@@ -334,7 +334,7 @@ Import STIL entries:
   2. Run the following:
 
        UPDATE hvsc_files
-       INNER JOIN hvsc_files_import on hvsc_files_import.fullname = hvsc_files.fullname
+       INNER JOIN hvsc_files_import on hvsc_files_import.collection_path = hvsc_files.collection_path
        SET hvsc_files.stil = hvsc_files_import.stil
 
   3. Enter the "hvsc_files_import" table and click "Operations".
@@ -361,7 +361,7 @@ shown for it, CSDb is not updated yet. In that case I recommend bookmarking the 
   1. Enter the empty "hvsc_files_import" table and click "Import".
   2. Click "Browse" and select a CSV file.
   3. Change "Format" to "CSV".
-  4. Write "fullname,csdbtype,csdbid" in the "Column names" edit box.
+  4. Write "collection_path,csdb_type,csdb_id" in the "Column names" edit box.
   5. Click "Go".
   6. Repeat for the other CSV files until all three have been imported.
   7. Export the "hvsc_files_import" to an SQL file for later import online. This way you won't have to
@@ -371,9 +371,9 @@ shown for it, CSDb is not updated yet. In that case I recommend bookmarking the 
   2. Run the following:
 
        UPDATE hvsc_files
-       INNER JOIN hvsc_files_import on hvsc_files_import.fullname = hvsc_files.fullname
-       SET hvsc_files.csdbtype = hvsc_files_import.csdbtype,
-           hvsc_files.csdbid = hvsc_files_import.csdbid
+       INNER JOIN hvsc_files_import on hvsc_files_import.collection_path = hvsc_files.collection_path
+       SET hvsc_files.csdb_type = hvsc_files_import.csdb_type,
+           hvsc_files.csdb_id = hvsc_files_import.csdb_id
 
   3. Enter the "hvsc_files_import" table and click "Operations".
   4. Drop the table (or truncate it for the next HVSC update).
@@ -386,12 +386,12 @@ Fixing HVSC update discrepancies:
 
   1. To see if you have any of these, go to the SQL box for the "hvsc_files" table and execute:
 
-       SELECT * FROM hvsc_files WHERE fullname LIKE "%high voltage%" AND datasize = 0
+       SELECT * FROM hvsc_files WHERE collection_path LIKE "%high voltage%" AND data_size = 0
 
      This will list the problem rows.
 
-  2. Find the problem area in the "Update##.hvs" file and determine how to rename the "fullname"
-     field to match the SID file correctly.
+  2. Find the problem area in the "Update##.hvs" file and determine how to rename the collection
+     path field to match the SID file correctly.
   3. Populate the fields of the SID row by finding the SID file in the various CSV files that
      you have set aside so far.
   4. When done, test the SID file in DeepSID to see if it now plays correctly and have data.
@@ -402,7 +402,7 @@ Fixing HVSC update discrepancies:
 
 TABLE: hvsc_folders
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-First time importing fullname list from HVSC:
+First time importing collection path list from HVSC:
 
   1. Go to (updated/newest) HVSC root and open a command box.
   2. Type: dir /ad /s /b *.sid >hvsc_allfolders.csv
@@ -416,7 +416,7 @@ First time importing fullname list from HVSC:
   1. Enter the "hvsc_folders" table in PhpMyAdmin and click "Import".
   2. Click "Browse" and click the CSV file.
   3. Change "Format" to "CSV".
-  4. Write "fullname" in the "Column names" edit box.
+  4. Write "collection_path" in the "Column names" edit box.
   5. Click "Go".
 
   Don't do the above for next HVSC version, the "update_hvsc_db.php" script should handle that.
@@ -425,7 +425,7 @@ First time importing fullname list from HVSC:
   HVSC allows for folders to be renamed which is something you should check up on. For example, in
   update #74, "Deazipan" was renamed to "Dex-D" instead. If you spot this again, do this:
 
-  1. Go to the 'composers' table and edit the 'fullname' field to use the new name.
+  1. Go to the 'composers' table and edit the 'collection_path' field to use the new name.
   2. Enter the folder with composer images and rename the avatar file there. Make sure you remember
      to do this in both LOCALHOST and ONLINE folders.
 

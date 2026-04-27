@@ -17,7 +17,7 @@
 function buildRatingsCacheForUser(PDO $db, int $userId): void
 {
     // 1. Get ALL FOLDERS from hvsc_folders
-    $select_folders = $db->query('SELECT fullname FROM hvsc_folders ORDER BY fullname');
+    $select_folders = $db->query('SELECT collection_path FROM hvsc_folders ORDER BY collection_path');
     $folders = $select_folders->fetchAll(PDO::FETCH_OBJ);
 
     if (!$folders) {
@@ -26,7 +26,7 @@ function buildRatingsCacheForUser(PDO $db, int $userId): void
     
     // 2. Get ALL RATED FILES for this user (direct ratings only)
     $select_ratings = $db->prepare('
-        SELECT f.fullname
+        SELECT f.collection_path
         FROM ratings r
         JOIN hvsc_files f ON f.id = r.table_id
         WHERE r.user_id = :user_id
@@ -38,11 +38,11 @@ function buildRatingsCacheForUser(PDO $db, int $userId): void
 
     $folderMap = []; // folder => rated_files
 
-    foreach ($ratedFiles as $fullname) {
-        $pos = strrpos($fullname, '/');
+    foreach ($ratedFiles as $collection_path) {
+        $pos = strrpos($collection_path, '/');
         if ($pos === false) continue; // Safety
 
-        $folder = substr($fullname, 0, $pos);
+        $folder = substr($collection_path, 0, $pos);
 
         if (!isset($folderMap[$folder])) {
             $folderMap[$folder] = 0;
@@ -59,7 +59,7 @@ function buildRatingsCacheForUser(PDO $db, int $userId): void
 
     // 4. Insert ALL folders — zeros included
     foreach ($folders as $f) {
-        $folder = $f->fullname;
+        $folder = $f->collection_path;
 
         // get count or default to 0
         $ratedFilesCount = $folderMap[$folder] ?? 0;
