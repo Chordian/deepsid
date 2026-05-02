@@ -130,6 +130,9 @@ $search_shortcut_type = array();
 $search_shortcut_query = array();
 $redirect_folder = array();
 
+// Because of "snake_case" overhaul in database column names
+$_GET['searchType'] = str_replace('fullname', 'collection_path', $_GET['searchType']);
+
 // In current folder or everything?
 $search_context_path = $search_context_folders = '1';
 if ($_GET['searchHere']) {
@@ -439,7 +442,7 @@ try {
 					if ($_GET['searchType'] == '#all#') {
 						// Searching ALL should of course include a range of columns
 						$columns = $comma = '';
-						foreach(array('fullname', 'author', 'copyright', 'player', 'stil') as $column) {
+						foreach(array('collection_path', 'author', 'copyright', 'player', 'stil') as $column) {
 							$columns .= $comma.$column.', " "';
 							$comma = ', ';
 						}
@@ -540,13 +543,12 @@ try {
 					$include = str_replace('author LIKE "%', 'collection_path LIKE "%', $include);
 
 				} else if ($_GET['searchType'] == '#all#') {
-
 					// Search the 'composers' table to see if the query matches the real name
 					// This makes it possible to search for e.g. "Max Hall" and see his "../Max_F3H" folder.
 					$composers = $db->query('
 						SELECT collection_path FROM composers
 						WHERE '.$search_context_path.'
-						AND '.str_replace('#all#', 'name', $include_folders)
+						AND '.str_replace('#all#', 'full_name', $include_folders)
 					);
 					$composers->setFetchMode(PDO::FETCH_OBJ);
 
@@ -758,7 +760,7 @@ try {
 						if ($_GET['searchType'] == '#all#') {
 							// Searching ALL should of course include a range of columns
 							$columns = $comma = '';
-							foreach(array('fullname', 'author', 'copyright', 'player', 'stil') as $column) {
+							foreach(array('collection_path', 'author', 'copyright', 'player', 'stil') as $column) {
 								$columns .= $comma.$column.', " "';
 								$comma = ', ';
 							}

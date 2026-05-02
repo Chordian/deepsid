@@ -15,6 +15,17 @@ SHOULD BE DONE
 
 - Consider cache info in right side in CSDb release lists too.
 
+- User setting: "Always open CSDb links in CSDb.dk instead of CShellDB"
+
+- BUG: Rating profile composer stars doesn't work when in "SID Happens" folder.
+
+- Is it possible to do a SID comment on a CSDb list page, edit the comment in DeepSID instead
+  of in CSDb, then post it in CSDb.dk under the hood?
+
+- Annex help about production tags: Change "Collection" to double-icon tag instead.
+
+- Annex help about production tags: Add "Music" in its single-icon tag form.
+
 - Consider changing it so the 'Changes' tab calls a separate PHP file that fills it, just like
   the admin sections. It would make the 'index.php' file much smaller. Also, I have a feeling
   most users doesn't visit this tab.
@@ -37,9 +48,12 @@ SHOULD BE DONE
 
   NEXT UP:
 
-  Make a new test section in the admin tab with manual testing tasks. Maybe with a check box
-  that makes the background green for each task. The first task should be "Sanity" or "Smoke"
-  and goes through a somewhat thorough but standard use of the site.
+  TEST EVERYTHING!
+  Things to test online:
+  - That detection of player when uploading to "SID Happens" works
+  - REST API examples
+  - Temporary "l" load SID test
+  - Remix playing
 
       admin_scripts             -
       admin_settings            -

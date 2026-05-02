@@ -19,7 +19,7 @@ try {
 
 	$all_profiles = array();
 
-	$active_only = $_GET['active'] ? ' AND active = "'.date("Y").'" AND died = "0000-00-00"' : '';
+	$active_only = $_GET['active'] ? ' AND active = "'.date("Y").'" AND date_death = "0000-00-00"' : '';
 
 	$select = $db->query('SELECT collection_path, full_name, short_name, handles, short_handle FROM composers WHERE collection_path LIKE "_High Voltage SID Collection/%" AND collection_path NOT LIKE "%/GROUPS/%"'.$active_only.' ORDER BY collection_path');
 	$select->setFetchMode(PDO::FETCH_OBJ);

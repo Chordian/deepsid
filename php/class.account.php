@@ -106,7 +106,7 @@ class Account {
 
 		if (!$this->connectDB()) return false;
 
-		if (!$this->isFieldUnique('username')) {
+		if (!$this->isFieldUnique('user_name')) {
 			$this->handleError('This user name has already been taken');
 			return false;
 		}        
@@ -197,7 +197,7 @@ class Account {
 	 */
 	public function isUserNameUnique() {
 		if (!$this->connectDB()) return false;
-		return $this->isFieldUnique('username');
+		return $this->isFieldUnique('user_name');
 	}
 
 	/**
@@ -668,8 +668,9 @@ class Account {
 	 */
 	private function isFieldUnique($field) {
 		try {
-			$select = $this->database->prepare('SELECT user_name FROM users WHERE '.$field.'=:postfield');
-			$select->execute(array(':postfield'=>$_POST[$field]));
+			$select = $this->database->prepare('SELECT user_name FROM users WHERE '.$field.' = :postfield');
+			$postField = $field = 'user_name' ? 'username' : $field; // Because of snake_case overhaul
+			$select->execute(array(':postfield' => $_POST[$postField]));
 			if ($select->rowCount() > 0) return false;
 		} catch(PDOException $exception) {
 			$this->logError($exception->getMessage());

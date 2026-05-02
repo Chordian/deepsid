@@ -79,7 +79,7 @@ try {
 
 	// Get the ID of the collection path SID file the user wanted to add as an entry
 	$select = $db->prepare('SELECT id FROM hvsc_files WHERE collection_path = :collection_path LIMIT 1');
-	$select->execute(array(':collection_path' => $_POST['collection_path']));
+	$select->execute(array(':collection_path' => $_POST['fullname']));
 	$select->setFetchMode(PDO::FETCH_OBJ);
 
 	if (!$select->rowCount())
