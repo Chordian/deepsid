@@ -130,7 +130,7 @@ $search_shortcut_type = array();
 $search_shortcut_query = array();
 $redirect_folder = array();
 
-// Because of "snake_case" overhaul in database column names
+// Because of snake_case overhaul in database column names
 $_GET['searchType'] = str_replace('fullname', 'collection_path', $_GET['searchType']);
 
 // In current folder or everything?

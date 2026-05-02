@@ -18,9 +18,15 @@ SHOULD BE DONE
 - User setting: "Always open CSDb links in CSDb.dk instead of CShellDB"
 
 - BUG: Rating profile composer stars doesn't work when in "SID Happens" folder.
+  If it turns out fixing this is not easy then consider removing the stars there.
+
+- BUG: When typing in subtune number for a playlist song, tags are overlapping the edit box.
 
 - Is it possible to do a SID comment on a CSDb list page, edit the comment in DeepSID instead
   of in CSDb, then post it in CSDb.dk under the hood?
+
+- When enabling "maintenance_mode" make it so visitors already on the site are thrown out.
+  Maybe this can be done when trying to do the most common thing? Browsing or playing?
 
 - Annex help about production tags: Change "Collection" to double-icon tag instead.
 
@@ -28,7 +34,7 @@ SHOULD BE DONE
 
 - Consider changing it so the 'Changes' tab calls a separate PHP file that fills it, just like
   the admin sections. It would make the 'index.php' file much smaller. Also, I have a feeling
-  most users doesn't visit this tab.
+  most users never visit this tab.
 
 - Remove "Facebook" from the activity logs (both DeepSID and CShellDB).
 
@@ -39,80 +45,6 @@ SHOULD BE DONE
 
 - A W A I T : Rewrite 'howto_update_gb64.txt' when the next GameBase64 update v20 arrives.
   See the .txt file for a few preliminary things to test.
-
-  ----
-
-- Change all DB column names to use underscores ('short_name' instead of 'shortname').
-
-  Just let JS and GET/POST parameters use 'fullname' until further notice.
-
-  NEXT UP:
-
-  TEST EVERYTHING!
-  Things to test online:
-  - That detection of player when uploading to "SID Happens" works
-  - REST API examples
-  - Temporary "l" load SID test
-  - Remix playing
-
-      admin_scripts             -
-      admin_settings            -
-      competitions              -
-      competitions_cache        -
-      composers                 fullname, [SEE BELOW]                         => DONE
-      composers_links           -
-      csdb                      -
-      folders_map               fullname                                      => DONE
-      groups                    -
-      hvsc_files                fullname, [SEE BELOW]                         => DONE
-      hvsc_folders              fullname                                      => DONE
-      hvsc_lengths              fullname                                      => DONE
-      labels_info               -
-      labels_lookup             -
-      players_info              [MANY]                                        => DONE
-      players_lookup            playerid => player_id                         => DONE
-      ratings                   -
-      ratings_cache             -
-      roles                     -
-      sid_release_map           -
-      symlists                  sidname => sid_name                           => DONE
-      tags_info                 -
-      tags_lookup               -
-      tracking                  -
-      uploads                   -
-      users                     username => user_name                         => DONE
-      user_roles                -
-      youtube                   -
-
-      all:
-        fullname        => collection_path    => DONE
-
-      composers: \$db->\w+\([^;]*\bcomposers\b
-        name            => full_name          => DONE
-        shortname       => short_name         => DONE
-        shorthandle     => short_handle       => DONE
-        born            => date_birth         => DONE
-        died            => date_death         => DONE
-        cause           => death_cause        => DONE
-        brand           => brand_light        => DONE
-        branddark       => brand_dark         => DONE
-        csdbtype        => csdb_type          => DONE
-        csdbid          => csdb_id            => DONE
-        imagesource     => image_source       => DONE
-
-      hvsc_files: Search for old name, update all files, next old name
-        playertype      => player_type        => DONE
-        playercompat    => player_compat      => DONE
-        clockspeed      => clock_speed        => DONE
-        sidmodel        => sid_model          => DONE
-        dataoffset      => data_offset        => DONE
-        datasize        => data_size          => DONE
-        loadaddr        => load_addr          => DONE
-        initaddr        => init_addr          => DONE
-        playaddr        => play_addr          => DONE
-        startsubtune    => start_subtune      => DONE
-        csdbtype        => csdb_type          => DONE
-        csdbid          => csdb_id            => DONE
 
 
 WHEN THE TIME IS RIGHT
