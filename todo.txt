@@ -22,6 +22,11 @@ SHOULD BE DONE
 
 - BUG: When typing in subtune number for a playlist song, tags are overlapping the edit box.
 
+- BUG: Daily backup currently doesn't work.
+
+- All separate utility scripts should be prefixed a "utility_" word. (Also test scripts?)
+  UPDATE: Or, maybe better, create a 'utility' folder and move them in there? (No renaming.)
+
 - Is it possible to do a SID comment on a CSDb list page, edit the comment in DeepSID instead
   of in CSDb, then post it in CSDb.dk under the hood?
 

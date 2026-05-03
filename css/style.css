@@ -271,17 +271,6 @@
 	--color-notification-remix:		#777;
 	--color-notification-stil:		#088;
 
-	/* SOASC status in top */
-
-	--color-soasc-status-bg:		var(--color-tab-border-disabled);
-	--color-soasc-status-border:	var(--color-logo);
-	--color-soasc-status-text:		var(--color-button-hover);
-	--color-soasc-status-unknown:	#999;				/* SOASC status field in top */
-	--color-soasc-status-up:		#0b0;
-	--color-soasc-status-down:		#c22;
-	--color-soasc-status-out:		#aa0;
-	--color-soasc-handlers-down:	#d00;				/* Used in the drop-down box for SID handlers */
-
 	/* Colors in root (front page) boxes */
 
 	--color-root-good-bg:			#efe;				/* Colors for good front page news */
@@ -680,12 +669,6 @@
 	--color-notification-player:	#848;
 	--color-notification-remix:		#666;
 	--color-notification-stil:		#077;
-
-	/* SOASC status in top */
-
-	--color-soasc-status-bg:		#2a2a2a;
-	--color-soasc-status-border:	#383838;
-	--color-soasc-status-text:		var(--color-text-minor);
 
 	/* Colors in root (front page) boxes */
 
@@ -4725,27 +4708,6 @@ input[type=range]::-ms-track {
 	height: calc(100% - 10px);
 	width: 860px;
 }
-
-	#dexter .soasc-status {
-		position: absolute;
-		top: -7.5px;
-		left: 348px;
-		padding: 3px 2px 3px 6px;
-		border-radius: 3px;
-		background: var(--color-soasc-status-bg);
-		border: 0.5px solid var(--color-soasc-status-border);
-		color: var(--color-soasc-status-text);
-	}
-
-	#soasc-status-led {
-		display: inline-block;
-		position: relative;
-		top: 0;
-		width: 7px;
-		height: 7px;
-		background: var(--color-soasc-status-unknown);
-		margin: 0 0 0 2px;
-	}
 
 	#tabs {
 		/* See also #top for additional styling (flex) */
