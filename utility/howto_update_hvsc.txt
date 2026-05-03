@@ -63,7 +63,7 @@ First, do steps 1 to 7 above as you will need the big file later.
   1. On the local machine, you should already have deleted the old HVSC folder tree and
      copied in the new one. If you haven't done that yet, do it now.
   2. Update the HVSC_NEW_VERSION constant in the "update_hvsc_db.php" script. (!!!)
-  3. Copy the new "Update##.hvs" file to the ./deepsid/php/hvsc_update/ folder.
+  3. Copy the new "Update##.hvs" file to the ./deepsid/php/_update/ folder.
   4. Edit the file and check the "Cleaning Up" section. If a real file is deleted
      there (e.g. something in DOCUMENTS) then delete that line and save. This goes for
      the sections below "Cleaning Up" as well. If you forget it, it doesn't matter much.

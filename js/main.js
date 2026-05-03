@@ -2893,7 +2893,7 @@ main.bindKeyboardEvents = function() {
 								height: 258,
 							}, function() {
 								// OK was clicked; make the changes to the file row in the database
-								$.post("php/update_file.php", {
+								$.post("php/admin_update_file.php", {
 									fullname:	browser.playlist[browser.songPos].fullname.replace(browser.ROOT_HVSC+"/", ""),
 									name:		$("#edit-file-name-input").val(),
 									player:		$("#edit-file-player-input").val(),

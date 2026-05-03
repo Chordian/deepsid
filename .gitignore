@@ -6,9 +6,8 @@ logs/*
 hvsc
 images
 js/_sources/*
-php/move.txt
 php/_master/*
-php/hvsc_update/*
+php/_update/*
 temp/*
 config/general.php
 config/localhost.php

@@ -12,7 +12,7 @@
 
 require_once("class.account.php"); // Includes setup
 
-$ROOT = realpath(__DIR__ . '/../hvsc');
+$ROOT = realpath(__DIR__ . '/../../hvsc');
 if (!$ROOT)
     exit("ERROR: Cannot locate the music folder. Expected at ../hvsc relative to this script.\n");
 $ROOT .= '/';

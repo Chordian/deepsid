@@ -19,7 +19,7 @@
  *     If a renaming is not required, leave the entry empty (end with ";").
  * 
  *  2. Save it as '_list.csv' and in UTF8.
- *  3. Copy the '_list.csv' file into the './php' folder.
+ *  3. Copy the '_list.csv' file into the './php/_update' folder.
  *  4. Run this script in the web browser:
  *       LOCALHOST: http://chordian/deepsid/php/utility/import_symlist_hvsc.php
  *       ONLINE:    https://deepsid.chordian.net/php/utility/import_symlist_hvsc.php
@@ -44,7 +44,7 @@ try {
 
 	$row = 0;
 	echo '<table><tr><th>HVSC File</th><th>ST</th><th>Renamed To</th><th>Status</th></tr>';
-	if (($handle = fopen('_list.csv', 'r')) != false) {
+	if (($handle = fopen('../_update/_list.csv', 'r')) != false) {
 		while (($line = fgetcsv($handle, 0, ';')) != false) {
 	
 			$collection_path = substr($line[0], 0, 1) == '/' ? substr($line[0], 1) : $line[0];

@@ -21,7 +21,7 @@ define('CGSC_PATH', "_Compute's Gazette SID Collection/");
 try {
 	$db = $account->getDB();
 
-	foreach (file('move.txt') as $line) {
+	foreach (file('../_update/move.txt') as $line) {
 
 		// Remove newlines and stuff
 		$line = preg_replace('/\s+/', ' ', trim($line));

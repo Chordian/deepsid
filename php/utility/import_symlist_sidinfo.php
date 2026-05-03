@@ -17,7 +17,7 @@
  *       sidinfo -l; -f filename,name,author,copyright *.sid >_list.csv
  *  3. Open the '_list.csv' it produces and search for: \;
  *     @todo If it finds any, somehow mend it and save.
- *  4. Copy the '_list.csv' file into the './php' folder.
+ *  4. Copy the '_list.csv' file into the './php/_update' folder.
  *  5. Run this script in the web browser:
  *       LOCALHOST: http://chordian/deepsid/php/utility/import_symlist_sidinfo.php
  *       ONLINE:    https://deepsid.chordian.net/php/utility/import_symlist_sidinfo.php
@@ -53,7 +53,7 @@ try {
 	// Read CSV file (split with semicolons, and remember to convert it to UTF8 first!)
 	$row = 0;
 	echo '<table>';
-	if (($handle = fopen('_list.csv', 'r')) != false) {
+	if (($handle = fopen('../_update/_list.csv', 'r')) != false) {
 		while (($line = fgetcsv($handle, 0, ';')) != false) {
 	
 			$filename = '/'.str_replace('.\\\\', '', $line[0]);

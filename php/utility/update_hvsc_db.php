@@ -112,7 +112,7 @@ try {
 
 	$mode = $source = '';
 	$sid_files = [];
-	foreach (file('hvsc_update/Update'.HVSC_NEW_VERSION.'.hvs') as $line) {
+	foreach (file('../_update/Update'.HVSC_NEW_VERSION.'.hvs') as $line) {
 
 		// Remove newlines and stuff
 		$line = preg_replace('/\s+/', ' ', trim($line));
