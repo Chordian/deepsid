@@ -489,8 +489,8 @@ be exactly the same now.
 
 SPECIAL DB UPDATING
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-The 'special_updating.sql' (located in the same folder as this text file) is not actually a real SQL
-file and must be parsed by a PHP script for DeepSID as stated below.
+The 'special_updating.sql' (located in the 'php/_update' folder) is not actually a real SQL file and
+must be parsed by a PHP script for DeepSID as stated below.
 
   o  Run this: http://chordian/deepsid/php/utility/update_special.php
 

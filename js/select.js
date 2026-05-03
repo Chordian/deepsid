@@ -56,7 +56,7 @@ $.fn.styledSelect = function(cls) {
 				// Mark the LI row corresponding to the current DIV selection
 				var $selected = $(this).next("ul.options").children("li[rel='"+$(this).attr("rel")+"']");
 				var pixelPosLi = $selected.index() * $selected.height();
-				SelectNewLi($selected);
+				selectNewLi($selected);
 				// Set scroll position of the DIV to get the LI row into view
 				if ($list.scrollTop() > pixelPosLi)
 					$list.scrollTop(pixelPosLi);
@@ -90,12 +90,12 @@ $.fn.styledSelect = function(cls) {
 				if (styledCursorScrolled)
 					styledCursorScrolled = false;
 				else
-					SelectNewLi($li);
+					selectNewLi($li);
 			}
 		});
 
 		// Reset old LI row and highlight the new one
-		function SelectNewLi($this) {
+		function selectNewLi($this) {
 			// Reset the previously highlighted LI row
 			var $selected = $this.parent("ul").children("li.selected");
 			var resetColor = typeof $selected.data("color") != "undefined" ? $selected.data("color") : main.getCSSVar("--color-styled-resetcolor");
@@ -142,7 +142,7 @@ $.fn.styledSelect = function(cls) {
 								if (currentLi == 0) return false;
 								$prevLi = $li.eq(--currentLi);
 							}
-							SelectNewLi($prevLi);
+							selectNewLi($prevLi);
 							var pixelPosLi = currentLi * $li.height();
 							if ($list.scrollTop() > pixelPosLi)
 								$list.scrollTop(pixelPosLi);
@@ -156,7 +156,7 @@ $.fn.styledSelect = function(cls) {
 							if (currentLi == $li.length) return false;
 							$nextLi = $li.eq(++currentLi);
 						}
-						SelectNewLi($nextLi);
+						selectNewLi($nextLi);
 						var pixelPosLi = currentLi * $li.height();
 						if ($list.scrollTop() + ($list.height() - $li.height()) < pixelPosLi)
 							$list.scrollTop(pixelPosLi - ($list.height() - $li.height()));
@@ -169,7 +169,7 @@ $.fn.styledSelect = function(cls) {
 							if (currentLi == $li.length) return false;
 							$thisLi = $li.eq(++currentLi);
 						}
-						SelectNewLi($thisLi);
+						selectNewLi($thisLi);
 						$list.scrollTop(0);
 						break;
 					case 35:	// End
@@ -180,7 +180,7 @@ $.fn.styledSelect = function(cls) {
 							if (currentLi == 0) return false;
 							$thisLi = $li.eq(--currentLi);
 						}
-						SelectNewLi($thisLi);
+						selectNewLi($thisLi);
 						$list.scrollTop(($li.length - 1) * $li.height());
 						break;
 					default:	// Filter typing
@@ -195,7 +195,7 @@ $.fn.styledSelect = function(cls) {
 						$thisLi = $li.eq(filterLi);					
 						if (filterLi != -1 && !$thisLi.hasClass("disabled")) {
 							var pixelPosLi = filterLi * $li.height();
-							SelectNewLi($thisLi);
+							selectNewLi($thisLi);
 							// Set scroll position of the DIV to get the filtered LI row into view
 							if ($list.scrollTop() > pixelPosLi)
 								$list.scrollTop(pixelPosLi);

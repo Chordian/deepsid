@@ -451,6 +451,7 @@ $help = array(
 		<div class="annex-hotkey"><a href="11" class="topic"><div class="tag tag-warning">Warning</div></a></div><span class="annex-tiny" style="position:relative;top:1px;">Bugged, hacked, etc.</span>
 		<div class="annex-hotkey" style="position:relative;top:3.5px;"><a href="remix64" class="search" data-type="tag"><div class="tag tag-remix64"></div></a></div><span class="annex-tiny" style="position:relative;top:1px;">It has been remixed</span>
 		<div class="annex-hotkey" style="position:relative;top:3.5px;"><a href="gamebase64" class="search" data-type="tag"><div class="tag tag-gamebase64"></div></a></div><span class="annex-tiny" style="position:relative;top:1px;">It has a game entry</span>
+		<div class="annex-hotkey"><a href="game" class="search" data-type="tag"><div class="tag tag-developer">Developer</div></a></div><span class="annex-tiny" style="position:relative;top:1px;">Game developer</span>
 		<div class="annex-hotkey"><a href="15" class="topic"><div class="tag">General</div></a></div><span class="annex-tiny" style="position:relative;top:1px;">All other tags</span>
 		<p>If a SID has been remixed, click the <b>Remix</b> tab in top to check this out.</p>
 
@@ -603,8 +604,12 @@ $help = array(
 			<p>Sort of a demo, only it cannot take up more than 4K of RAM. Often part of a competition.</p></li>
 		</ul>
 		<ul class="annex-tags-list">
-			<li><a href="collection" class="search" data-type="tag"><div class="tag tag-production">Collection</div></a>= <b>Added to a collection</b>
-			<p>Can sometimes be seen if the tune was added to a music collection. However, the tag has been used sparingly as it multiplies very easily.</p></li>
+			<li><a href="music" class="search" data-type="tag"><div class="tag tag-production tag-notes tag-music"><img src="images/composer_doublenote.svg" /><img src="images/composer_doublenote.svg" /><span></span></div></a>= <b>Added to a music screen</b>
+			<p>Can be seen if the tune was added to a music screen.</p></li>
+		</ul>
+		<ul class="annex-tags-list">
+			<li><a href="collection" class="search" data-type="tag"><div class="tag tag-production tag-notes tag-collection"><img src="images/composer_doublenote.svg" /><img style="margin-left:12px;" src="images/visuals_memory.svg" /><span>&nbsp;&nbsp;&nbsp;&nbsp&nbsp</span></div></a>= <b>Added to a collection</b>
+			<p>Can be seen if the tune was added to a music collection.</p></li>
 		</ul>
 		<ul class="annex-tags-list">
 			<li><a href="&quot;crack intro&quot;" class="search" data-type="tag"><div class="tag tag-production">Crack Intro</div></a>= <b>Made for a crack intro</b>

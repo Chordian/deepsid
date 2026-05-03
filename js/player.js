@@ -1048,7 +1048,7 @@ SIDPlayer.prototype = {
 	 * 
 	 * @param {boolean} forcePlay	TRUE if forcing play state (cold start)
 	 */
-	 play: function(forcePlay) {
+	play: function(forcePlay) {
 		if (!this.paused) {
 			this.voiceMask = [0xF, 0xF, 0xF];
 			viz.startBufferEndedEffects();
@@ -1241,7 +1241,7 @@ SIDPlayer.prototype = {
 	 * 
 	 * @return {boolean}	TRUE if suspended
 	 */
-	 isSuspended: function() {
+	isSuspended: function() {
 		var suspended;
 		switch (this.emulator) {
 			case "resid":
@@ -2340,7 +2340,7 @@ SIDPlayer.prototype = {
 	 * 
 	 * @return {*}				Byte value of the register, or FALSE
 	 */
-	 readLevel: function(voice, chip) {
+	readLevel: function(voice, chip) {
 		if (typeof chip === "undefined") chip = 0; else chip -= 1;
 		switch (this.emulator) {
 			case "websid":
@@ -2370,7 +2370,7 @@ SIDPlayer.prototype = {
 	 * @param {number} chip		SID chip number (default is 1)
 	 * @param {number} panning	Panning level (0-100)
 	 */
-	 setStereoPanning: function(voice, chip, panning) {
+	setStereoPanning: function(voice, chip, panning) {
 		if (typeof chip === "undefined") chip = 0; else chip -= 1;
 		switch (this.emulator) {
 			case "jsidplay2":
@@ -2432,7 +2432,7 @@ SIDPlayer.prototype = {
 	 * 
 	 * @param {number} reverb	Reverb level (0-100)
 	 */
-	 setStereoReverb: function(reverb) {
+	setStereoReverb: function(reverb) {
 		switch (this.emulator) {
 			case "websid":
 				SIDBackend.setReverbLevel(reverb);

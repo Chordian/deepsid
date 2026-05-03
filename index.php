@@ -1971,6 +1971,12 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>May 3, 2026</h3>
+						<ul>
+							<li>Fixed an issue where tags or factoids blocked editing of subtune numbers in playlists.</li>
+							<li>Fixed missing member counts for HVSC groups.</li>
+						</ul>
+
 						<h3>April 18, 2026</h3>
 						<ul>
 							<li>The "n" hotkey can now be used to toggle between the 'WebSid emulator' and 'No SID handler'. If

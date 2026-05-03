@@ -6,7 +6,7 @@
  * This is used to tweak and finetune information, for example with a precise
  * version number for a specific song player instead of just v1.x.
  * 
- * This script is referred to in a 'howto_update' text file.
+ * This script is referred to in the 'howto_update_hvsc' text file.
  * 
  * @used-by		N/A
  */
@@ -16,7 +16,7 @@ require_once("class.account.php"); // Includes setup
 try {
 	$db = $account->getDB();
 
-	foreach (file('../../utility/special_updating.sql') as $line) {
+	foreach (file('../_update/special_updating.sql') as $line) {
 
 		// Remove newlines and stuff
 		$line = preg_replace('/\s+/', ' ', trim($line));

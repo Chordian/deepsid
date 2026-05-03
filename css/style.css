@@ -2501,6 +2501,10 @@ input[type=range]::-ms-track {
 					pointer-events: none;
 				}
 
+				#annex-page .tag-notes img {
+					border: none;
+				}
+
 				.tag-notes span {
 					padding-left: 12px;
 					pointer-events: none;

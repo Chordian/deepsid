@@ -22,7 +22,7 @@ $tables = [
     'composers_links',
     'csdb',
     'folders_map',
-    'groups',
+    '`groups`',
     'hvsc_files',
     'hvsc_folders',
     'hvsc_lengths',

@@ -2680,8 +2680,8 @@ Browser.prototype = {
 					this.getGroups(this.groupsFullname);
 				}.bind(this), 20000);
 			} else if (data.dexter_html !== "") {
-				this.smoothReplaceAndExpand($("#annex-groups-box"), "#annex-table-groups", data.annex_html);
-				this.smoothReplaceAndExpand($("#groups-box"), "#table-groups", data.dexter_html);
+				this._smoothReplaceAndExpand($("#annex-groups-box"), "#annex-table-groups", data.annex_html);
+				this._smoothReplaceAndExpand($("#groups-box"), "#table-groups", data.dexter_html);
 				var html = $("#topic-profile").html();
 				// Don't include the script or the chart stuff will be shown twice
 				this.composerCache = html.substr(0, html.indexOf("<script"));
@@ -2697,7 +2697,7 @@ Browser.prototype = {
 	 * @param {string} table		ID of groups table
 	 * @param {string} newHtml		The HTML to put into the table
 	 */
-	smoothReplaceAndExpand: function($box, table, newHtml) {
+	_smoothReplaceAndExpand: function($box, table, newHtml) {
 		// Stop any previous run
 		$box.removeClass('is-animating').off('.expand').css('height', '');
 
@@ -2709,7 +2709,7 @@ Browser.prototype = {
 		$box.find(table).html(newHtml);
 
 		// If hidden (tab not shown) don't try to animate now
-		if (!this.isActuallyVisible($box)) {
+		if (!this._isActuallyVisible($box)) {
 			$box.css('height', ''); // Back to auto
 			return;
 		}
@@ -2732,9 +2732,9 @@ Browser.prototype = {
 	},
 
 	/**
-	 * Helper function used by 'smoothReplaceAndExpand' above.
+	 * Helper function used by '_smoothReplaceAndExpand' above.
 	 */
-	isActuallyVisible: function($el) {
+	_isActuallyVisible: function($el) {
 		return $el.is(':visible') && $el[0].offsetParent !== null;
 	},
 
@@ -3636,6 +3636,11 @@ Browser.prototype = {
 			case "symentry-subtune":
 				var $starField = this.contextEntry.parents("td").next();
 				this.prevStars = $starField.html();
+				// Remove tags and bottom factoid to leave space for the edit box
+				this.contextEntry.parents("tr")
+					.find(".tags-line").hide()
+					.parents("tr")
+					.find(".fdiv").hide();
 				// Create the edit box
 				$starField.empty().append(
 					'<div id="small-edit">'+
@@ -3874,7 +3879,7 @@ Browser.prototype = {
 	 * 
 	 * @param {*} event 
 	 */
-	 onYouTubeLinksClick: function(event) {
+	onYouTubeLinksClick: function(event) {
 		var $target = $(event.target);
 		if ($target.hasClass("disabled")) return;
 
@@ -3989,6 +3994,11 @@ Browser.prototype = {
 		} else if ($("#sym-specify-subtune").length) {
 			this.contextEntry.parents("td").next().empty().append(this.prevStars);
 			$("#sym-specify-subtune").remove();
+			// Add back tags and bottom factoid that were removed while editing
+			this.contextEntry.parents("tr")
+				.find(".tags-line").show()
+				.parents("tr")
+				.find(".fdiv").show();
 		}
 	},
 
