@@ -21,8 +21,8 @@
  *  2. Save it as '_list.csv' and in UTF8.
  *  3. Copy the '_list.csv' file into the './php' folder.
  *  4. Run this script in the web browser:
- *       LOCALHOST: http://chordian/deepsid/php/import_symlist_hvsc.php
- *       ONLINE:    https://deepsid.chordian.net/php/import_symlist_hvsc.php
+ *       LOCALHOST: http://chordian/deepsid/php/utility/import_symlist_hvsc.php
+ *       ONLINE:    https://deepsid.chordian.net/php/utility/import_symlist_hvsc.php
  *  5. Study the output. There will be red errors if a HVSC path wasn't found
  *     in the database and the line was skipped because of it.
  * 

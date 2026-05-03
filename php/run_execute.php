@@ -22,9 +22,9 @@ try {
 	exit;
 }
 
-$script = $_GET['script'] ?? '';
+$script = 'utility/' . $_GET['script'] ?? '';
 
-if (!in_array($script, $allowedScripts)) {
+if (!in_array($_GET['script'], $allowedScripts)) {
     http_response_code(403);
     echo "Error: Script not allowed.";
     exit;

@@ -19,8 +19,8 @@
  *     @todo If it finds any, somehow mend it and save.
  *  4. Copy the '_list.csv' file into the './php' folder.
  *  5. Run this script in the web browser:
- *       LOCALHOST: http://chordian/deepsid/php/import_symlist_sidinfo.php
- *       ONLINE:    https://deepsid.chordian.net/php/import_symlist_sidinfo.php
+ *       LOCALHOST: http://chordian/deepsid/php/utility/import_symlist_sidinfo.php
+ *       ONLINE:    https://deepsid.chordian.net/php/utility/import_symlist_sidinfo.php
  *  6. Study the output. The ones skipped must be added manually, and you may
  *     also want to check up on the blue text (adapted SQL retries) to see
  *     if the tunes match the corresponding one in the original folder.

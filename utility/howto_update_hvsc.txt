@@ -69,7 +69,7 @@ First, do steps 1 to 7 above as you will need the big file later.
      the sections below "Cleaning Up" as well. If you forget it, it doesn't matter much.
      You will just get a red error line in the bottom of the PHP script below, but at that
      point it should have done its job.
-  5. Run the script now like this: http://chordian/deepsid/php/update_hvsc_db.php
+  5. Run the script now like this: http://chordian/deepsid/php/utility/update_hvsc_db.php
      BE CAREFUL THIS IS ONLY DONE LOCALLY UNTIL IT'S TIME TO DO THE ONLINE VERSION!
   6. Look through the output and compare stuff in database to see if things went well.
   7. If there's a red move error, someone forgot to add end slashes to folders. Find
@@ -458,7 +458,7 @@ NUMBER OF FILES
 Update count of files in folders:
 
   This used to be complicated too, but I later wrote a PHP script to update everything in one go.
-  Just run: http://chordian/deepsid/php/update_counts_all.php (just run it from the 'Admin' tab)
+  Just run: http://chordian/deepsid/php/utility/update_counts_all.php (just run it from the 'Admin' tab)
   Remember to do this online too when the time comes.
 
 TABLE: hvsc_lengths
@@ -471,8 +471,8 @@ After a HVSC update, do this:
   2. Empty (truncate) it.
   3. Edit PHP.ini through the WampServer context menu.
   4. Set 'max_execution_time' to 800 and restart the WampServer services.
-  5. Edit ./deepsid/php/update_songlengths.php and uncomment the INSERT line.
-  6. Run this: http://chordian/deepsid/php/update_songlengths.php
+  5. Edit ./deepsid/php/utility/update_songlengths.php and uncomment the INSERT line.
+  6. Run this: http://chordian/deepsid/php/utility/update_songlengths.php
   7. Wait a few minutes until the script is done.
   8. Set 'max_execution_time' back to 120 in PHP.ini and restart the WampServer services again.
   9. Check the top 20 table with the longest tunes.
@@ -492,12 +492,12 @@ SPECIAL DB UPDATING
 The 'special_updating.sql' (located in the same folder as this text file) is not actually a real SQL
 file and must be parsed by a PHP script for DeepSID as stated below.
 
-  o  Run this: http://chordian/deepsid/php/update_special.php
+  o  Run this: http://chordian/deepsid/php/utility/update_special.php
 
 Note that some of the fields doesn't hit correctly in the LOCALHOST database (such as deleting tags)
 but it doesn't matter (especially tags are just a test chaos there).
 
-  o  Run this: https://deepsid.chordian.net/php/update_special.php
+  o  Run this: https://deepsid.chordian.net/php/utility/update_special.php
 
 To test that things went well, here are some links you can check out:
 
@@ -515,11 +515,11 @@ Remember to also do this online.
 
 Now a script must be run to update the file counts:
 
-  o  Run this: http://chordian/deepsid/php/update_groups.php
+  o  Run this: http://chordian/deepsid/php/utility/update_groups.php
 
 And online too:
 
-  o  Run this: https://deepsid.chordian.net/php/update_groups.php
+  o  Run this: https://deepsid.chordian.net/php/utility/update_groups.php
 
 LATEST ACTIVITY
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
@@ -528,7 +528,7 @@ Now the "composers" table need to be updated with the years that each one were l
 IT'S IMPORTANT THAT THE ABOVE SPECIAL DB SCRIPT HAS RUN PRIOR TO DOING THIS. The reason is that it
 amends a few years here and there to work better with the statistics in DeepSID.
 
-  1. Run this: http://chordian/deepsid/php/update_activity.php
+  1. Run this: http://chordian/deepsid/php/utility/update_activity.php
   2. Wait a few minutes until the script is done.
 
 You should also be able to do this online, but it won't be any faster. Check that it gets through
@@ -540,7 +540,7 @@ the job while users are enjoying the new files.
 When done, check the lists of active and snoozing composers in the root page. You should not see
 composers like e.g. Johannes Bjerregaard or Ben Daglish in the lists of snoozing composers.
 
-Now run this ONLINE: https://deepsid.chordian.net/php/check_missing_info.php (in 'Admin' tab).
+Now run this ONLINE: https://deepsid.chordian.net/php/utility/check_missing_info.php (in 'Admin' tab).
 Fix whatever it finds to be wrong.
 
 LAST CHECKS

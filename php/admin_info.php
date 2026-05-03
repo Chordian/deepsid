@@ -127,42 +127,42 @@ $html .=  '<h4>PHP variables</h4>
 $html .= '<h4>PHP info</h4>
 	<table style="font-size:13px;">
 		<tr>
-			<td><a href="php/php_info.php?flag=1" target="_blank">PHPInfo(1)</a></td>
+			<td><a href="php/admin_php_info.php?flag=1" target="_blank">PHPInfo(1)</a></td>
 			<td>INFO_GENERAL</td>
 			<td>The configuration line, php.ini location, build date, Web Server, System and more.</td>
 		</tr>
 		<tr>
-			<td><a href="php/php_info.php?flag=2" target="_blank">PHPInfo(2)</a></td>
+			<td><a href="php/admin_php_info.php?flag=2" target="_blank">PHPInfo(2)</a></td>
 			<td>INFO_CREDITS</td>
 			<td>PHP Credits.</td>
 		</tr>
 		<tr>
-			<td><a href="php/php_info.php?flag=4" target="_blank">PHPInfo(4)</a></td>
+			<td><a href="php/admin_php_info.php?flag=4" target="_blank">PHPInfo(4)</a></td>
 			<td>INFO_CONFIGURATION</td>
 			<td>Current Local and Master values for PHP directives.</td>
 		</tr>
 		<tr>
-			<td><a href="php/php_info.php?flag=8" target="_blank">PHPInfo(8)</a></td>
+			<td><a href="php/admin_php_info.php?flag=8" target="_blank">PHPInfo(8)</a></td>
 			<td>INFO_MODULES</td>
 			<td>Loaded modules and their respective settings.</td>
 		</tr>
 		<tr>
-			<td><a href="php/php_info.php?flag=16" target="_blank">PHPInfo(16)</a></td>
+			<td><a href="php/admin_php_info.php?flag=16" target="_blank">PHPInfo(16)</a></td>
 			<td>INFO_ENVIRONMENT</td>
 			<td>Environment Variable information that\'s also available in $_ENV.</td>
 		</tr>
 		<tr>
-			<td><a href="php/php_info.php?flag=32" target="_blank">PHPInfo(32)</a></td>
+			<td><a href="php/admin_php_info.php?flag=32" target="_blank">PHPInfo(32)</a></td>
 			<td>INFO_VARIABLES</td>
 			<td>Shows all predefined variables from EGPCS (Environment, GET, POST, Cookie, Server).</td>
 		</tr>
 		<tr>
-			<td><a href="php/php_info.php?flag=64" target="_blank">PHPInfo(64)</a></td>
+			<td><a href="php/admin_php_info.php?flag=64" target="_blank">PHPInfo(64)</a></td>
 			<td>INFO_LICENSE</td>
 			<td>PHP License information.</td>
 		</tr>
 		<tr>
-			<td><a href="php/php_info.php?flag=-1" target="_blank">PHPInfo(-1)</a></td>
+			<td><a href="php/admin_php_info.php?flag=-1" target="_blank">PHPInfo(-1)</a></td>
 			<td>INFO_ALL</td>
 			<td>Shows all of the above.</td>
 		</tr>

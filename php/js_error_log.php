@@ -4,7 +4,7 @@
  * 
  * Logs JavaScript errors.
  * 
- * @used-by main.js
+ * @used-by		main.js
  */
 
 require_once("class.account.php"); // Includes setup

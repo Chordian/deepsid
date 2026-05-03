@@ -3,6 +3,8 @@
  * DeepSID
  *
  * Track a behavior on the web site.
+ * 
+ * @used-by     main.js
  */
 
 require_once("class.account.php"); // Includes setup
