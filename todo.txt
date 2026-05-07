@@ -10,25 +10,18 @@ ToDo
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
 - Add one "Primary" text in right side of the relevant one in CSDb release lists.
+  UPDATE: Now done in SID release lists. Also add to release page - and GB64.
+  Not satisfied with the blue label. Idea: To the right of the title itself; a blue note
+  icon with a white/black arrow pointing towards the title? Title <Arrow><Icon>
+  
 - Consider cache info in right side in CSDb release lists too.
-
-- User setting: "Always open CSDb links in CSDb.dk instead of CShellDB"
 
 - BUG: Rating profile composer stars doesn't work when in "SID Happens" folder.
   If it turns out fixing this is not easy then consider removing the stars there.
 
-- BUG: Daily backup currently doesn't work.
-
-- Remove all custom scrollbar files and references.
-
-- Escape key doesn't remove the auto-play overlay correctly.
-
-- When enabling "maintenance_mode" make it so visitors already on the site are thrown out.
-  Maybe this can be done when trying to do the most common thing? Browsing or playing?
-
-- Consider changing it so the 'Changes' tab calls a separate PHP file that fills it, just like
-  the admin sections. It would make the 'index.php' file much smaller. Also, I have a feeling
-  most users never visit this tab.
+- When enabling "maintenance_mode" make it so visitors already on the site are shown a
+  warning ("DeepSID just entered maintenance mode. It's dangerous to browse here at the
+  moment" an so on). When to show? Playing? Browsing? Any event at all?
 
 - Remove "Facebook" from the activity logs (both DeepSID and CShellDB).
 
@@ -36,6 +29,8 @@ SHOULD BE DONE
 
 - Another "fun" one: Make sure all variable names in all PHP files use snake_case.
   Largely done: composer.php
+
+- User setting: "Always open CSDb links in CSDb.dk instead of CShellDB"
 
 - A W A I T : Rewrite 'howto_update_gb64.txt' when the next GameBase64 update v20 arrives.
   See the .txt file for a few preliminary things to test.
@@ -92,6 +87,10 @@ CONSIDER THIS
 
 - Consider also caching the group table. (If doing this, is it possible to cache Rob Hubbard's
   group data? It's so massive that it always times out, but I only need to get it once.)
+
+- Consider changing it so the 'Changes' tab calls a separate PHP file that fills it, just like
+  the admin sections. It would make the 'index.php' file much smaller. Also, I have a feeling
+  most users never visit this tab.
 
 - How about user ratings for players/editors too? There's room in both list and pages.
   UPDATE: Does rating editors by regular users make sense? How many of these editors do they

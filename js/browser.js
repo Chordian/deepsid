@@ -271,18 +271,20 @@ Browser.prototype = {
 		$(document).keyup(function(event) {
 			switch (event.keyCode) {
 				case 27: // ESC
-					$("#dialog-cover,.dialog-box,#zoomed").hide();
-					$("#contextmenu,#contextsubmenu").remove();
-					$("#dialog-all-tags").blur();
-					if (typeof this.contextTR != "undefined")
-						this.contextTR.css("background", "");
-					this.restoreSIDRow();
+					if (!$("#click-to-play-cover").is(":visible")) {
+						$("#dialog-cover,.dialog-box,#zoomed").hide();
+						$("#contextmenu,#contextsubmenu").remove();
+						$("#dialog-all-tags").blur();
+						if (typeof this.contextTR != "undefined")
+							this.contextTR.css("background", "");
+						this.restoreSIDRow();
 
-					var $adminCatButton = $(".ac-settings");
-					if ($("#tabs .selected").attr("data-topic") === "admin" &&
-						$adminCatButton.length && $adminCatButton.hasClass("button-on")) {
-							// Reload administrator settings (refreshes the section)
-							$("#sticky-admin .ac-settings").trigger("click");
+						var $adminCatButton = $(".ac-settings");
+						if ($("#tabs .selected").attr("data-topic") === "admin" &&
+							$adminCatButton.length && $adminCatButton.hasClass("button-on")) {
+								// Reload administrator settings (refreshes the section)
+								$("#sticky-admin .ac-settings").trigger("click");
+						}
 					}
 					break;
 				case 13: // Enter

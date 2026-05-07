@@ -56,6 +56,7 @@
 	--color-text-monitor:			#207820; /* #282 */
 	--color-text-csdb-direct:		#00c;
 	--color-text-csdb-down:			#c00;
+	--color-bg-primary-release:		#dd8;
 
 	--color-text-tag:				var(--color-top);	 /* Default tag colors */
 	--color-bg-tag:					#a8ad95;
@@ -471,6 +472,7 @@
 	--color-text-monitor:			#a0d6a0; /* #70cc70 */
 	--color-text-csdb-direct:		#aaf;
 	--color-text-csdb-down:			#e66;
+	--color-bg-primary-release:		#bb8;
 	
 	--color-text-tag:				var(--color-bottom);  /* Default tag colors */
 	--color-bg-tag:					#b6b9a5;
@@ -5918,7 +5920,7 @@ input[type=range]::-ms-track {
 				overflow: hidden;
 				white-space: nowrap;
 				text-overflow: ellipsis;
-			}		
+			}
 
 		#page .ext .oldest-in-top,
 		#page .ext .post-count {
@@ -6257,6 +6259,19 @@ input[type=range]::-ms-track {
 			#topic-csdb .thumbnail,
 			#topic-player .thumbnail {
 				width: 116px;
+			}
+
+			#topic-csdb .primary-list {
+				position: absolute;
+				top: 12px;
+				right: 0;
+				padding: 0 5px;
+				color: var(--color-text-tag-prod);
+				background: var(--color-bg-tag-prod);
+				border-radius: 3px;
+				font-size: 10px;
+				font-weight: bold;
+				letter-spacing: 0.3px;
 			}
 
 			#topic-gb64 .thumbnail {

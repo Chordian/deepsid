@@ -283,39 +283,42 @@ if (isset($_GET['fullname'])) {
 	die(json_encode(array('status' => 'error', 'message' => 'You must specify the proper GET variables.')));
 
 // --------------------------------------------------------------------------
-// PRIMARY RELEASE (depends on a user setting)
+// PRIMARY RELEASE
 // --------------------------------------------------------------------------
 
 // Any SID can have a label (which shows a primary release). If this is present (and the user has activated the
-// corresponding feature in the settings) the release page for that label should be shown instead.
+// corresponding feature in the settings) the release page for that label should be shown instead. If the user
+// did not activate the feature, at least show which release in a SID list is the primary one.
+
+$primary_id = 0;
 if (!$_GET['noprimary']) {
+
+	// Get the ID of the primary release label (if the SID row has this)
+	$labels_lookup = $db->query('SELECT labels_id FROM labels_lookup WHERE files_id = '.$files_id.' LIMIT 1');
+	$row = $labels_lookup->fetch(PDO::FETCH_ASSOC);
+
+	if ($row) {
+		// Get the site reference (CSDb or GB64) and the ID to the page on the referenced site
+		$labels_info = $db->query('SELECT site, site_id FROM labels_info WHERE id = '.$row['labels_id'].' LIMIT 1');
+		$row = $labels_info->fetch(PDO::FETCH_ASSOC);
+
+		if ($row && strtolower($row['site']) == 'csdb') {
+			$primary_id = $row['site_id'];
+		}
+	}
 
 	// Get the user's settings
 	$users = $db->query('SELECT flags FROM users WHERE id = '.$user_id)->fetch(PDO::FETCH_OBJ);
 	$settings = unserialize($users->flags);
 
 	// Does the user want to see the primary release?
-	if ($settings['primaryrelease']) {
-		// Get the ID of the primary release label (if the SID row has this)
-		$labels_lookup = $db->query('SELECT labels_id FROM labels_lookup WHERE files_id = '.$files_id.' LIMIT 1');
-		$row = $labels_lookup->fetch(PDO::FETCH_ASSOC);
-
-		if ($row) {
-			// Get the site reference (CSDb or GB64) and the ID to the page on the referenced site
-			$labels_info = $db->query('SELECT site, site_id FROM labels_info WHERE id = '.$row['labels_id'].' LIMIT 1');
-			$row = $labels_info->fetch(PDO::FETCH_ASSOC);
-
-			if ($row) {
-				if (strtolower($row['site']) == 'csdb') {
-					if ($csdb_type === 'sid') {
-						// A list would originally have been displayed so include a BACK button too
-						$primary_back_button = true;
-					}
-					$csdb_type	= 'release';
-					$csdb_id 	= $row['site_id'];
-				}
-			}
+	if ($primary_id && $settings['primaryrelease']) {
+		if ($csdb_type === 'sid') {
+			// A list would originally have been displayed so include a BACK button too
+			$primary_back_button = true;
 		}
+		$csdb_type	= 'release';
+		$csdb_id 	= $primary_id;
 	}
 }
 
@@ -555,6 +558,8 @@ if ($csdb_type == 'sid') {
 			}
 
 			$adapted_name = strlen($release->Name) > 75 ? substr($release->Name, 0, 75).'...' : $release->Name;
+			$primary_release = $primary_id == (int)$release->ID
+				? '<span class="primary-list">PRIMARY RELEASE</span>' : '';
 
 			$entry =
 				'<tr>'.
@@ -567,6 +572,7 @@ if ($csdb_type == 'sid') {
 						'<a class="'.($can_show_internally ? 'internal ' : '').'name" href="http://csdb.chordian.net/?type=release&id='.$release->ID.'" data-id="'.$release->ID.'" target="_blank">'.$adapted_name.'</a><br />'.
 						$type_and_released_by.
 						$release_date.
+						$primary_release.
 						$download_link.
 						$external_icon.
 					'</td>'.
@@ -622,10 +628,6 @@ if ($csdb_type == 'sid') {
 	
 	if (!empty($user_comments) && $amount_releases == 0)
 		$amount_releases = -1; // There are at least comments present in top
-
-	// NOTE: A PHP error may show up in LOCALHOST for very big release lists (such as a lot of those for Rob
-	// Hubbard's game tunes like e.g. "Crazy Comets") but this is not a problem online. Whatever constant is
-	// too low in LOCALHOST is obviously set higher by the web hotel.
 
 } else if ($csdb_type == 'release') {
 

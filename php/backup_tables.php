@@ -9,6 +9,8 @@
  * @used-by		index.php
  */
 
+require_once("class.account.php"); // Includes setup
+
 $backupDir     = __DIR__ . '/../backups/';
 $timestampFile = $backupDir . 'last_backup.txt';
 
@@ -22,7 +24,7 @@ $tables = [
     'composers_links',
     'csdb',
     'folders_map',
-    '`groups`',
+    'groups',
     'hvsc_files',
     'hvsc_folders',
     'hvsc_lengths',
@@ -51,8 +53,6 @@ if (file_exists($timestampFile) && (time() - filemtime($timestampFile)) < 86400)
 
 // Touch the timestamp file *before* backup to avoid double-run during traffic burst
 file_put_contents($timestampFile, "Backup started at " . date('Y-m-d H:i:s'));
-
-require_once("class.account.php"); // Includes setup
 
 try {
     $db = $account->getDB();

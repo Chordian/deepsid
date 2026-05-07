@@ -1971,6 +1971,12 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>May 6, 2026</h3>
+						<ul>
+							<li>CSDb release lists now show a 'PRIMARY RELEASE' indicator on the right side of the relevant
+								entry whenever the information is available.</li>
+						</ul>
+
 						<h3>May 3, 2026</h3>
 						<ul>
 							<li>Fixed an issue where tags or factoids blocked editing of subtune numbers in playlists.</li>
