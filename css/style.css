@@ -235,6 +235,7 @@
 	--svg-filter-money:				invert(59%) sepia(11%) saturate(1135%) hue-rotate(38deg) brightness(90%) contrast(84%);
 	--svg-filter-tn-disabled:		var(--svg-filter-white);
 	--svg-filter-all-starred:		invert(38%) sepia(100%) saturate(655%) hue-rotate(10deg) brightness(100%) contrast(101%);
+	--svg-filter-primary:			invert(42%) sepia(48%) saturate(293%) hue-rotate(201deg) brightness(88%) contrast(93%);
 
 	--svg-bg-star-orange:			url(../images/if_star_orange.svg) 0 0 / 18px 18px no-repeat;
 	--svg-bg-star-empty-voted:		url(../images/if_star_empty_voted.svg) 0 0 / 18px 18px no-repeat;
@@ -636,6 +637,7 @@
 	--svg-filter-tn-disabled:		invert(0%) sepia(9%) saturate(4037%) hue-rotate(328deg) brightness(104%) contrast(73%);
 	--svg-filter-all-starred:		invert(77%) sepia(66%) saturate(335%) hue-rotate(8deg) brightness(100%) contrast(78%);
 	--svg-filter-strong:			var(--svg-filter-white);
+	--svg-filter-primary:			invert(78%) sepia(13%) saturate(273%) hue-rotate(191deg) brightness(86%) contrast(88%);	
 
 	--svg-bg-star-orange:			url(../images/if_star_orange_dark.svg) 0 0 / 18px 18px no-repeat;
 	--svg-bg-star-empty-voted:		url(../images/if_star_empty_voted_dark.svg) 0 0 / 18px 18px no-repeat;
@@ -6261,18 +6263,30 @@ input[type=range]::-ms-track {
 				width: 116px;
 			}
 
+			/* Arrow-and-notes icons for indicating primary release in a CSDb list */
 			#topic-csdb .primary-list {
-				position: absolute;
-				top: 12px;
-				right: 0;
-				padding: 0 5px;
-				color: var(--color-text-tag-prod);
-				background: var(--color-bg-tag-prod);
-				border-radius: 3px;
-				font-size: 10px;
-				font-weight: bold;
-				letter-spacing: 0.3px;
+				display: inline-block;
+				position: relative;
+				top: 2px;
+				margin-left: 16px;
+				color: transparent;
+				width: 200px;
+				height: 14px;
 			}
+
+				#topic-csdb .primary-list img:first-child {		/* Arrow */
+					width: 14px;
+					height: 14px;
+					filter: var(--svg-filter-strong);
+				}
+
+				#topic-csdb .primary-list img:last-child {		/* Notes */
+					position: relative;
+					left: -1.5px;
+					width: 15px;
+					height: 15px;
+					filter: var(--svg-filter-primary);
+				}
 
 			#topic-gb64 .thumbnail {
 				text-align: right;

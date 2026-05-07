@@ -9,10 +9,8 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- Add one "Primary" text in right side of the relevant one in CSDb release lists.
-  UPDATE: Now done in SID release lists. Also add to release page - and GB64.
-  Not satisfied with the blue label. Idea: To the right of the title itself; a blue note
-  icon with a white/black arrow pointing towards the title? Title <Arrow><Icon>
+- Replace arrow-and-notes icons for primary release with same small green text as seen in
+  the tabs when the feature is turned on?
   
 - Consider cache info in right side in CSDb release lists too.
 

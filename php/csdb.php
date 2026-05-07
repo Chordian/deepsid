@@ -558,8 +558,9 @@ if ($csdb_type == 'sid') {
 			}
 
 			$adapted_name = strlen($release->Name) > 75 ? substr($release->Name, 0, 75).'...' : $release->Name;
+
 			$primary_release = $primary_id == (int)$release->ID
-				? '<span class="primary-list">PRIMARY RELEASE</span>' : '';
+				? '<span class="primary-list" title="Primary release"><img src="images/composer_arrowleft.svg" /><img src="images/composer_doublenote.svg" /></span>' : '';
 
 			$entry =
 				'<tr>'.
@@ -569,10 +570,9 @@ if ($csdb_type == 'sid') {
 							: '<a '.($can_show_internally ? 'class="internal" ' : '').'href="http://csdb.chordian.net/?type=release&id='.$release->ID.'" data-id="'.$release->ID.'" target="_blank"><img src="images/noscreenshot.gif" alt="'.$release->Name.'" /></a>').
 					'</td>'.
 					'<td class="info">'.
-						'<a class="'.($can_show_internally ? 'internal ' : '').'name" href="http://csdb.chordian.net/?type=release&id='.$release->ID.'" data-id="'.$release->ID.'" target="_blank">'.$adapted_name.'</a><br />'.
+						'<a class="'.($can_show_internally ? 'internal ' : '').'name" href="http://csdb.chordian.net/?type=release&id='.$release->ID.'" data-id="'.$release->ID.'" target="_blank">'.$adapted_name.'</a>'.$primary_release.'<br />'.
 						$type_and_released_by.
 						$release_date.
-						$primary_release.
 						$download_link.
 						$external_icon.
 					'</td>'.
