@@ -1975,6 +1975,7 @@
 						<ul>
 							<li>CSDb release lists now show a green 'PRIMARY' word next to the relevant title, whenever the information
 								about this release being the primary release for the SID file is available.</li>
+							<li>GB64 game lists also a green 'PRIMARY' word, according to the same rules.</li>
 						</ul>
 
 						<h3>May 3, 2026</h3>

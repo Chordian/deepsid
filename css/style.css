@@ -6289,7 +6289,8 @@ input[type=range]::-ms-track {
 					filter: var(--svg-filter-primary);
 				}
 
-			#topic-csdb .primary-entry:before {
+			#topic-csdb .primary-entry:before,
+			#topic-gb64 .primary-entry:before {
 				content: "PRIMARY";
 				position: relative;
 				top: -2px;

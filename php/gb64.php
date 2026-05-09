@@ -280,31 +280,34 @@ try {
 // --------------------------------------------------------------------------
 
 // Any SID can have a label (which shows a primary release). If this is present (and the user has activated the
-// corresponding feature in the settings) a specific sub page for that label should be shown instead.
+// corresponding feature in the settings) a specific sub page for that label should be shown instead. If the user
+// did not activate the feature, at least show which release in a SID list is the primary one.
+
+$primary_id = 0;
 if ($page_id == 0 && !$_GET['noprimary']) {
+
+	// Get the ID of the primary release label (if the SID row has this)
+	$labels_lookup = $db->query('SELECT labels_id FROM labels_lookup WHERE files_id = '.$_GET['fileid'].' LIMIT 1');
+	$row = $labels_lookup->fetch(PDO::FETCH_ASSOC);
+
+	if ($row) {
+		// Get the site reference (CSDb or GB64) and the ID to the page on the referenced site
+		$labels_info = $db->query('SELECT site, site_id FROM labels_info WHERE id = '.$row['labels_id'].' LIMIT 1');
+		$row = $labels_info->fetch(PDO::FETCH_ASSOC);
+
+		if ($row && strtolower($row['site']) == 'gb64') {
+			$primary_id = $row['site_id'];
+		}
+	}
 
 	// Get the user's settings
 	$users = $db->query('SELECT flags FROM users WHERE id = '.$user_id)->fetch(PDO::FETCH_OBJ);
 	$settings = unserialize($users->flags);
 
 	// Does the user want to see the primary release?
-	if ($settings['primaryrelease']) {
-		// Get the ID of the primary release label (if the SID row has this)
-		$labels_lookup = $db->query('SELECT labels_id FROM labels_lookup WHERE files_id = '.$_GET['fileid'].' LIMIT 1');
-		$row = $labels_lookup->fetch(PDO::FETCH_ASSOC);
-
-		if ($row) {
-			// Get the site reference (CSDb or GB64) and the ID to the page on the referenced site
-			$labels_info = $db->query('SELECT site, site_id FROM labels_info WHERE id = '.$row['labels_id'].' LIMIT 1');
-			$row = $labels_info->fetch(PDO::FETCH_ASSOC);
-
-			if ($row) {
-				if (strtolower($row['site']) == 'gb64') {
-					$primary_back_button = true;
-					$page_id = $row['site_id'];
-				}
-			}
-		}
+	if ($primary_id && $settings['primaryrelease']) {
+		$primary_back_button = true;
+		$page_id = $row['site_id'];
 	}
 }
 
@@ -396,10 +399,12 @@ if ($page_id) {
 		foreach($thumbnails as $thumbnail)
 			$line_of_thumbnails .= '<a class="gb64-list-entry" href="https://gb64.com/game.php?id='.$id.'" target="_blank" data-id="'.$id.'"><img class="gb64" src="images/gb64'.$thumbnail.'" alt="'.$thumbnail.'" /></a>';
 
+		$primary_release = $primary_id == $id ? '<span class="primary-entry"></span>' : '';
+
 		$rows .=
 			'<tr>'.
 				'<td class="info">'.
-					'<a class="name gb64-list-entry" href="https://gb64.com/game.php?id='.$id.'" target="_blank" data-id="'.$id.'">'.$data['title'].'</a><br />'.
+					'<a class="name gb64-list-entry" href="https://gb64.com/game.php?id='.$id.'" target="_blank" data-id="'.$id.'">'.$data['title'].'</a>'.$primary_release.'<br />'.
 					$data['year'].' '.$data['company'].'<br />'.
 					'<span class="language">'.$data['language'].'</span>'.
 				'</td>'.

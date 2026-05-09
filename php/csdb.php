@@ -559,8 +559,7 @@ if ($csdb_type == 'sid') {
 
 			$adapted_name = strlen($release->Name) > 75 ? substr($release->Name, 0, 75).'...' : $release->Name;
 
-			$primary_release = $primary_id == (int)$release->ID
-				? '<span class="primary-entry"></span>' : '';
+			$primary_release = $primary_id == (int)$release->ID ? '<span class="primary-entry"></span>' : '';
 
 			$entry =
 				'<tr>'.
