@@ -6264,6 +6264,7 @@ input[type=range]::-ms-track {
 			}
 
 			/* Arrow-and-notes icons for indicating primary release in a CSDb list */
+			/* DECPRECATED BUT REMAINS BECAUSE OF THE CSDB CACHING */
 			#topic-csdb .primary-list {
 				display: inline-block;
 				position: relative;
@@ -6287,6 +6288,15 @@ input[type=range]::-ms-track {
 					height: 15px;
 					filter: var(--svg-filter-primary);
 				}
+
+			#topic-csdb .primary-entry:before {
+				content: "PRIMARY";
+				position: relative;
+				top: -2px;
+				left: 12px;
+				font: bold 8px/0 "Montserrat", sans-serif;
+				color: var(--color-text-monitor);
+			}
 
 			#topic-gb64 .thumbnail {
 				text-align: right;

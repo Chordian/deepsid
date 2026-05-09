@@ -9,10 +9,9 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- Replace arrow-and-notes icons for primary release with same small green text as seen in
-  the tabs when the feature is turned on?
-  
 - Consider cache info in right side in CSDb release lists too.
+
+- Green 'PRIMARY' label in GB64 lists too.
 
 - BUG: Rating profile composer stars doesn't work when in "SID Happens" folder.
   If it turns out fixing this is not easy then consider removing the stars there.

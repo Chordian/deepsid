@@ -1971,16 +1971,10 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
-						<h3>May 7, 2026</h3>
+						<h3>May 9, 2026</h3>
 						<ul>
-							<li>The 'PRIMARY RELEASE' indicator has been replaced with a left-arrow and double-notes icon shown
-								next to the relevant title in CSDb release lists whenever the information is available.</li>
-						</ul>
-
-						<h3>May 6, 2026</h3>
-						<ul>
-							<li><del>CSDb release lists now show a 'PRIMARY RELEASE' indicator on the right side of the relevant
-								entry whenever the information is available.</del></li>
+							<li>CSDb release lists now show a green 'PRIMARY' word next to the relevant title, whenever the information
+								about this release being the primary release for the SID file is available.</li>
 						</ul>
 
 						<h3>May 3, 2026</h3>
