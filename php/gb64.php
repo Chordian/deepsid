@@ -281,7 +281,7 @@ try {
 
 // Any SID can have a label (which shows a primary release). If this is present (and the user has activated the
 // corresponding feature in the settings) a specific sub page for that label should be shown instead. If the user
-// did not activate the feature, at least show which release in a SID list is the primary one.
+// did not activate the feature, at least show which release in a game list is the primary one.
 
 $primary_id = 0;
 if ($page_id == 0 && !$_GET['noprimary']) {

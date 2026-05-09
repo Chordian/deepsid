@@ -2400,6 +2400,7 @@ main.bindDexterCSDbEvents = function() {
 		browser.csdbArgs = [];
 		// Remove the cache age info since it's no longer accurate
 		$("#cache-age").remove();
+		browser.markCached();
 	});
 
 	/**

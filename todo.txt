@@ -9,7 +9,10 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- Consider cache info in right side in CSDb release lists too.
+- Idea: Move row with primary release to the top in lists (both CSDb and GB64) when a 'Pin
+  primary release in top' toggle button in set to ON. When set ON, a pin icon is also added
+  to row. Next to the 'PRIMARY' label, perhaps? Not sure I want the pinning - maybe a mere
+  button in top to just show the primary release immediately is simpler and better?
 
 - BUG: Rating profile composer stars doesn't work when in "SID Happens" folder.
   If it turns out fixing this is not easy then consider removing the stars there.

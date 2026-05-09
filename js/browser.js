@@ -1103,6 +1103,7 @@ Browser.prototype = {
 		});
 		$("#topic-csdb table.releases").append(sortedList);
 		this.emphasizing(isEmpOn);
+		this.markCached();
 	},
 
 	/**
@@ -2815,6 +2816,7 @@ Browser.prototype = {
 
 				this.emphasizing(false);
 				main.updateRedirectPlayIcons();
+				this.markCached();
 
 				if (main.isAdmin) {
 					// Add cache info in top right corner
@@ -2851,6 +2853,33 @@ Browser.prototype = {
 
 			});
 		}.bind(this));
+	},
+
+	/**
+	 * Mark cached CSDb releases when a list of them is shown.
+	 */
+	markCached: function() {
+		setTimeout(() => {
+			$("#topic-csdb .cache-status").remove();
+		
+			if (main.isAdmin) {
+				$("#topic-csdb table.releases tr").each(function() {
+
+					const $link = $(this).find("td:eq(1) a.name");
+					const cacheId = $link.data("id");
+
+					if (!cacheId) return;
+
+					const fullname = "/cache/csdb/release_" + cacheId + ".cache.gz";
+
+					$.get("php/file_exists.php", { file: fullname }, function(exists) {
+						if (exists) {
+							$link.parent().append('<div class="cache-status">CACHED</div>');
+						}
+					});
+				});
+			}
+		}, 0);
 	},
 
 	/**

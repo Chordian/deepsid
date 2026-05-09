@@ -6299,6 +6299,13 @@ input[type=range]::-ms-track {
 				color: var(--color-text-monitor);
 			}
 
+			#topic-csdb .cache-status {
+				position: absolute;
+				top: 10px;
+				right: 2px;
+				color: var(--color-text-admin-span);
+			}
+
 			#topic-gb64 .thumbnail {
 				text-align: right;
 			}
