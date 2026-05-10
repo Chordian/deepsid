@@ -1,7 +1,7 @@
 ToDo
 ¯¯¯¯
 
-- Yes, I sometimes use ChatGPT. Sue me.
+- Yes, I sometimes use ChatGPT.
 
 - Look into the console logging alternatives, like warn, error, table, etc.
   @link https://developer.mozilla.org/en-US/docs/Web/API/console
@@ -9,26 +9,18 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- Idea: Move row with primary release to the top in lists (both CSDb and GB64) when a 'Pin
-  primary release in top' toggle button in set to ON. When set ON, a pin icon is also added
-  to row. Next to the 'PRIMARY' label, perhaps? Not sure I want the pinning - maybe a mere
-  button in top to just show the primary release immediately is simpler and better?
+- Maybe a "Show primary" button in top of CSDb release lists?
 
-- BUG: Rating profile composer stars doesn't work when in "SID Happens" folder.
-  If it turns out fixing this is not easy then consider removing the stars there.
+- Admin: Along with the new 'CACHED' words in CSDb lists, also show CSDb ID number.
 
 - When enabling "maintenance_mode" make it so visitors already on the site are shown a
   warning ("DeepSID just entered maintenance mode. It's dangerous to browse here at the
   moment" an so on). When to show? Playing? Browsing? Any event at all?
 
-- Remove "Facebook" from the activity logs (both DeepSID and CShellDB).
-
 - Maybe shorten 'GameBase64' tag to 'GB64' instead, so the new developer tag has more room?
 
 - Another "fun" one: Make sure all variable names in all PHP files use snake_case.
   Largely done: composer.php
-
-- User setting: "Always open CSDb links in CSDb.dk instead of CShellDB"
 
 - A W A I T : Rewrite 'howto_update_gb64.txt' when the next GameBase64 update v20 arrives.
   See the .txt file for a few preliminary things to test.
@@ -140,11 +132,6 @@ CONSIDER THIS
 - Add a function, a hotkey, whatever, to send a rating change for a composer or folder over
   to the 'Ratings' user while still being logged in as the 'JCH' user. UPDATE: Honestly, adding
   ratings for new folders in an HVSC update only takes a minute, so is it worth the trouble?
-
-- After making the 'Admin' tab: Create a role column in the database table with users and
-  give both "JCH" and "Ratings" the admin role. Then replace all checking for "JCH" here
-  and there in JS and PHP source codes. ADDENDUM: This is to prepare for more admins in the
-  future, but I'm not sure if it will ever happen or even be necessary.
 
 - Cache: When CSDb is down and a cache file is shown instead, a warning message in top could
   say that CSDb is currently unreachable so here's a cached file instead.
@@ -510,6 +497,9 @@ PROBABLY NOT?
 
 - Add support for uploading 4SID tunes in the SH folder. Also make it so only WebSid+JSIDPlay2 may
   play such tunes in the SH folder - the SID row must be disabled for all other SID handlers.
+
+- User setting: "Always open CSDb links in CSDb.dk instead of CShellDB" - UPDATE: But I'm not sure
+  I really want to do that. Force people to use CShellDB - it deserves an audience.
 
 - Consider including tags in "All" search? UPDATE: Turning this one down for now. Searching for
   tags is a complicated SQL query that I'd rather not merge with the existing "All" search. But

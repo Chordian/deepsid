@@ -1971,6 +1971,11 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>May 10, 2026</h3>
+						<ul>
+							<li>Fixed rating composer profiles in the 'SID Happens' folder not working correctly.</li>
+						</ul>
+
 						<h3>May 9, 2026</h3>
 						<ul>
 							<li>CSDb release lists now show a green 'PRIMARY' word next to the relevant title, whenever the information

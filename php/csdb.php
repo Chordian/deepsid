@@ -589,9 +589,14 @@ if ($csdb_type == 'sid') {
 			$amount_releases++;
 		}
 
+		$inside_button = '<img src="images/composer_arrowright.svg" alt="" />Primary';
+		$primary_button = $primary_id
+			? '<button id="go-primary" data-id="'.$primary_id.'">'.$inside_button.'</button>'
+			: '<button id="go-primary" class="disabled" disabled>'.$inside_button.'</button>';
+
 		$used_by_releases = 
 			$user_comments.
-			$comment_button.
+			$comment_button.$primary_button.
 			'<h3 id="csdb-releases">'.$amount_releases.' release'.($amount_releases > 1 ? 's' : '').' found</h3>'.
 			'<div id="csdb-sort">
 				<label id="csdb-emp-filter-label" for="csdb-emp-filter" class="unselectable disabled">Highlighted only</label><button

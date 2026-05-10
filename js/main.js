@@ -491,6 +491,20 @@ var main = {
 	},
 
 	/**
+	 * Show a CSDb release page after caching the list.
+	 */
+	showCSDbRelease: function() {
+		// First cache the list of releases in case we return to it
+		main.cacheCSDb = $("#topic-csdb").html();
+		main.cacheSticky = $("#sticky-csdb").html();
+		main.cacheTabScrollPos = $("#page").scrollTop();
+		main.cacheDDCSDbSort = $("#dropdown-sort-csdb").val();
+		// Now load the actual release page
+		browser.getCSDb("release", $(this).attr("data-id"), true, undefined, true);
+		return false;
+	},
+
+	/**
 	 * Open a pop-up window with only the width of the '#panel' area.
 	 */
 	popUpWindow: function() {
@@ -2234,14 +2248,19 @@ main.bindDexterEvents = function() {
 			return false;
 		}
 		var rating = event.shiftKey ? 0 : 5 - $(event.target).index();	// Remember stars are backwards (RTL; see CSS)
-		var homePath = browser.path.substr(1);							// Assume no searching to begin with
+		var homePath = browser.path.substr(1);							// Assume no searching or SH to begin with
 
 		var $selected = $("#folders tr.selected");
-		if (browser.isSearching && $selected.length) {
-			// The user is searching and has clicked a specific song so the path is now specific to that
-			var fullname = decodeURIComponent($selected.find(".entry").attr("data-name"));
-			var sidFile = fullname.split("/").slice(-1)[0];
-			homePath = fullname.replace(sidFile, "").slice(0, -1); // Lose trailing slash
+		if ($selected.length) {
+			if (browser.isSearching) {
+				// The user is searching and has clicked a specific song so the path is now specific to that
+				var fullname = decodeURIComponent($selected.find(".entry").attr("data-name"));
+				var sidFile = fullname.split("/").slice(-1)[0];
+				homePath = fullname.replace(sidFile, "").slice(0, -1); // Lose trailing slash
+			} else if (browser.isUploadFolder()) {
+				// Inside the 'SID Happens' folder
+				homePath = browser.playlist[browser.songPos].profile;
+			}
 		}
 
 		$.post("php/rating_write.php", { fullname: homePath, rating: rating }, function(data) {
@@ -2361,16 +2380,7 @@ main.bindDexterCSDbEvents = function() {
 	/**
 	 * Clicking a thumbnail/title in a CSDb release row to open it internally.
 	 */
-	$("#topic-csdb").on("click", "a.internal", function() {
-		// First cache the list of releases in case we return to it
-		main.cacheCSDb = $("#topic-csdb").html();
-		main.cacheSticky = $("#sticky-csdb").html();
-		main.cacheTabScrollPos = $("#page").scrollTop();
-		main.cacheDDCSDbSort = $("#dropdown-sort-csdb").val();
-		// Now load the actual release page
-		browser.getCSDb("release", $(this).attr("data-id"), true, undefined, true);
-		return false;
-	});
+	$("#topic-csdb").on("click", "a.internal", main.showCSDbRelease);
 
 	/**
 	 * Clicking the 'BACK' button on a specific CSDb page to show the releases again.
@@ -2461,6 +2471,11 @@ main.bindDexterCSDbEvents = function() {
 		window.open("https://csdb.dk/"+$(this).attr("data-type")+"/addcomment.php?"+
 			$(this).attr("data-type")+"_id="+$(this).attr("data-id"), "_blank");
 	});
+
+	/**
+	 * 
+	 */
+	$("#topic-csdb").on("click", "#go-primary", main.showCSDbRelease);
 
 	/**
 	 * Clicking the 'POST REPLY' button to add a post in a CSDb forum thread.

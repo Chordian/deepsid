@@ -54,7 +54,6 @@ $styling = '
 		.mobile { background: #f1f1ff; }
 		.user { background: #ffffe6; }
 		.jch { background: #efe; }
-		.fb { background: #eee; }
 		table {
 			margin-left: 8px;
 		}
@@ -70,7 +69,6 @@ $stacked = array(
 	'mobile'	=> '',
 	'bot'		=> '',
 	'jch'		=> '',
-	'fb'		=> '',
 	'other'		=> '',
 );
 
@@ -80,7 +78,6 @@ $count = array(
 	'mobile'	=> 0,
 	'jch' 		=> 0,
 	'user' 		=> 0,
-	'fb' 		=> 0,
 );
 
 if (($handle = fopen(TRACKFILE, 'r')) != false) {
@@ -103,8 +100,6 @@ if (($handle = fopen(TRACKFILE, 'r')) != false) {
 			$type = ' jch';
 		elseif (!empty($line[2]))
 			$type = ' user';
-		elseif (strpos($line[1], 'www.facebook.com'))
-			$type = ' fb';
 		$count[trim($type)]++;
 		$ip = str_replace('DUPLICATE IP ADDRESS', '<span class="duplicate">DUPLICATE IP ADDRESS</span>', $line[0]);
 		$box = '
@@ -125,14 +120,13 @@ $counts = '
 		<span><b>Mobile:</b> '.$count['mobile'].'</span>
 		<span><b>Other:</b> '.$count['other'].'</span>
 		<span><b>Bots:</b> '.$count['bot'].'</span>
-		<span><b>Facebook:</b> '.$count['fb'].'</span>
-		<span style="color:#000;"><b>Visitors:</b> '.($count['other'] + $count['mobile'] + $count['user'] + $count['fb']).'</span>
+		<span style="color:#000;"><b>Visitors:</b> '.($count['other'] + $count['mobile'] + $count['user']).'</span>
 	</div>';
 
 echo $styling.$counts.
 	'<table>
 		<tr>
-			<td>'.$stacked['jch'].$stacked['user'].$stacked['mobile'].'</td><td>'.$stacked['other'].'</td><td>'.$stacked['bot'].$stacked['fb'].'</td>
+			<td>'.$stacked['jch'].$stacked['user'].$stacked['mobile'].'</td><td>'.$stacked['other'].'</td><td>'.$stacked['bot'].'</td>
 		</tr>
 	</table>';
 ?>

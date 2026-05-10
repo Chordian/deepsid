@@ -6306,6 +6306,28 @@ input[type=range]::-ms-track {
 				color: var(--color-text-admin-span);
 			}
 
+			/* The 'PRIMARY' button in top of a CSDb release list */
+			#go-primary {
+				position: absolute;
+				top: 16px;
+				right: 10px;
+				padding-left: 24px;
+			}
+
+				/* Arrow before 'PRIMARY' button */
+				#go-primary img {
+					position: absolute;
+					top: 4.5px;
+					left: 8px;
+					height: 12px;
+					width: 12px;
+					filter: var(--svg-filter-white);	
+				}
+
+				#go-primary.disabled img {
+					filter: var(--svg-filter-icon-disabled);
+				}
+
 			#topic-gb64 .thumbnail {
 				text-align: right;
 			}
