@@ -9,12 +9,13 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- Primary preview: If GB64 has the primary release, show a preview for that in the top of
-  the CSDb release list. Clicking it then jumps to the GB64 tab and its primary release.
+- Consider renaming PREVIEW (green) to CSDb (blue) in primary preview.
 
-- Consider not coloring group names in the primary preview.
+- When a CSDb page has 0 releases, the primary preview is not shown at all.
 
 - Admin: Along with the new 'CACHED' words in CSDb lists, also show CSDb ID number.
+
+- Override "+follin" so it goes to Tim Follin and not his brother.
 
 - When enabling "maintenance_mode" make it so visitors already on the site are shown a
   warning ("DeepSID just entered maintenance mode. It's dangerous to browse here at the

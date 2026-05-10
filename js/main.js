@@ -2514,6 +2514,26 @@ main.bindDexterCSDbEvents = function() {
 	$("#topic-profile,#topic-csdb,#topic-player").on("click", ".home-folder", function() {
 		browser.gotoFolder($(this).attr("data-home"));
 	});
+
+	/**
+	 * Clicking a title or thumbnail in a GB64 primary preview.
+	 */
+	$("#topic-csdb").on("click", ".gb64-list-entry", function() {
+		var $thisEntry = $(this);
+		// Is there a list of several GB64 games?
+		if (browser.gb64OriginalCount > 1) {
+			browser.getGB64(undefined, true, function() {
+				// First cache the list of releases in case we return to it
+				main.cacheGB64 = $("#topic-gb64").html();
+				main.cacheGB64TabScrollPos = $("#page").scrollTop();
+				// Now show the primary release page
+				browser.getGB64($thisEntry.attr("data-id"));
+			});
+		}		
+		// Go to the 'GB64' tab to see the primary release
+		$("#tab-gb64").trigger("click");
+		return false;
+	});
 }
 
 // ==============================

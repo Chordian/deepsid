@@ -26,6 +26,7 @@
 
 require_once("class.account.php"); // Includes setup
 require_once("csdb_comments.php");
+require_once("gb64_functions.php");
 
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest')
 	die("Direct access not permitted.");
@@ -605,6 +606,54 @@ if ($csdb_type == 'sid') {
 			));
 
 			$amount_releases++;
+		}
+
+		if (empty($primary_corner)) {
+			// Is it because a GB64 release the primary release?
+			$labels_lookup = $db->query('SELECT labels_id FROM labels_lookup WHERE files_id = '.$files_id.' LIMIT 1');
+			$row_labels = $labels_lookup->fetch(PDO::FETCH_ASSOC);
+
+			if ($row_labels) {
+				// Get the site reference (CSDb or GB64) and the ID to the page on the referenced site
+				$labels_info = $db->query('SELECT site, site_id FROM labels_info WHERE id = '.$row_labels['labels_id'].' LIMIT 1');
+				$row_labels = $labels_info->fetch(PDO::FETCH_ASSOC);
+
+				if ($row_labels && strtolower($row_labels['site']) == 'gb64') {
+					// Yes, this 'GA_Id' is the primary release
+					$gb64_id = $row_labels['site_id'];
+
+					// Connect to DeepSID database
+					$db = $account->getDB();
+
+					// Connect to imported GameBase64 database
+					$gb = new PDO(
+						'mysql:host='.$config['db_gb64_host'].';dbname='.$config['db_gb64_name'],
+						$config['db_gb64_user'],
+						$config['db_gb64_pwd']);
+					$gb->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+					$gb->exec("SET NAMES UTF8");
+
+					$data = readGB64DB($gb64_id);
+
+					$thumbnails = array_slice($data['thumbnails'], 0, 4);	// Maximum 4 thumbnails
+
+					$line_of_thumbnails = '';
+					foreach($thumbnails as $thumbnail)
+						$line_of_thumbnails .= '<span style="padding:2.4px;"></span><a class="gb64-list-entry" href="https://gb64.com/game.php?id='.$gb64_id.'" target="_blank" data-id="'.$gb64_id.'"><img class="gb64" src="images/gb64'.$thumbnail.'" alt="'.$thumbnail.'" /></a>';
+
+					// Primary preview for the GB64 release
+					$primary_corner = '<table class="primary">'.
+					'<tr>'.
+						'<td class="thumbnail">'.
+							$line_of_thumbnails.
+						'</td>'.
+						'<td class="info">'.
+							'<a class="name gb64-list-entry" href="https://gb64.com/game.php?id='.$gb64_id.'" data-id="'.$gb64_id.'" target="_blank">'.$data['title'].'</a><span class="primary-entry primary-gb64"></span><br />'.
+							$data['year'].' '.$data['company'].'<br />'.
+						'</td>'.
+					'</tr></table>';
+				}
+			}
 		}
 
 		$used_by_releases = 

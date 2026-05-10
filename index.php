@@ -1976,6 +1976,8 @@
 							<li>Fixed rating composer profiles in the 'SID Happens' folder not working correctly.</li>
 							<li>CSDb release lists now show a primary release preview in the top right corner, whenever the
 								information about this is available. This makes it easy to access the primary release right away.</li>
+							<li>When a GB64 page is the primary release (because the SID file was made for the game) then the
+								primary release preview in the top right corner of the CSDb release list will reflect that too.</li>
 						</ul>
 
 						<h3>May 9, 2026</h3>

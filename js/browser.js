@@ -2928,6 +2928,11 @@ Browser.prototype = {
 			var realName = nameMatch ? nameMatch[1].trim().toLowerCase() : "";
 			var handle = nameMatch && nameMatch[2] ? nameMatch[2].trim().toLowerCase() : "";
 
+			// Make sure the primary preview in the top right corner doesn't get any highlighting
+			$("#topic-csdb table.primary")
+				.find(".csdb-replace, .csdb-scener, .csdb-group")
+				.removeClass("csdb-replace csdb-scener csdb-group");
+
 			// Emphasize group names that match the copyright line
 			$("a.csdb-replace,a.csdb-scener,a.csdb-group").each(function(i, element) {
 				if (releaseName === $(element).text().trim().toLowerCase())
@@ -3073,8 +3078,9 @@ Browser.prototype = {
 	 * 
 	 * @param {number} optionalID			Optional; the ID to show a specific sub page
 	 * @param {number} overridePrimary		Optional; if TRUE, ignore labels
-	 */
-	getGB64: function(optionalID, overridePrimary) {
+	 * @param {function} callback			Optional; function to call after showing the contents
+ 	 */
+	getGB64: function(optionalID, overridePrimary, callback) {
 
 		if (main.miniPlayer || main.isMobile || this.isTempTestFile()) return;
 		if (this.gb64) this.gb64.abort();
@@ -3104,6 +3110,8 @@ Browser.prototype = {
 				main.resetDexterScrollBar("gb64");
 
 				this.gb64PrimaryBack = data.primary;
+				if (typeof optionalID === "undefined")
+					this.gb64OriginalCount = data.count;
 
 				// If there are any entries then show a notification number on the 'GB64' tab (if not in focus)
 				if (data.count > 0 && $("#tabs .selected").attr("data-topic") !== "gb64" && !this.isCGSC())
@@ -3145,6 +3153,7 @@ Browser.prototype = {
 						});
 					}
 				}
+				if (typeof callback === "function") callback.call(this);
 			});
 		});
 	},

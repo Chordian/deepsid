@@ -54,6 +54,7 @@
 	--color-text-new-user:			#0a0;
 	--color-text-script-name:		#44a;
 	--color-text-monitor:			#207820; /* #282 */
+	--color-text-monitor-gb64:		#807030;
 	--color-text-csdb-direct:		#00c;
 	--color-text-csdb-down:			#c00;
 	--color-bg-primary-release:		#dd8;
@@ -471,6 +472,7 @@
 	--color-text-new-user:			#0f0;
 	--color-text-script-name:		#a0b4e0; /* #cc7070 for red*/
 	--color-text-monitor:			#a0d6a0; /* #70cc70 */
+	--color-text-monitor-gb64:		#d0a080;
 	--color-text-csdb-direct:		#aaf;
 	--color-text-csdb-down:			#e66;
 	--color-bg-primary-release:		#bb8;
@@ -6062,10 +6064,6 @@ input[type=range]::-ms-track {
 			margin: 0;
 		}
 
-		#page .ext table.primary {
-			/*border-bottom: none;*/
-		}
-
 			#page .ext table.releases td,
 			#page .ext table.primary td {
 				border-right: none;
@@ -6294,7 +6292,7 @@ input[type=range]::-ms-track {
 			}
 
 				#topic-csdb .primary .thumbnail {
-					width: 52px;
+					width: auto; /* 52px */
 				}
 
 			/* Arrow-and-notes icons for indicating primary release in a CSDb list */
@@ -6337,6 +6335,17 @@ input[type=range]::-ms-track {
 				left: 12px;
 				font: bold 8px/0 "Montserrat", sans-serif;
 				color: var(--color-text-monitor);
+			}
+
+			#topic-csdb .primary-gb64 {
+				display: inline-block;
+				width: 37px;
+			}
+
+			#topic-csdb .primary-gb64:before {
+				content: "GB64";
+				left: 10px;
+				color: var(--color-text-monitor-gb64);
 			}
 
 			#topic-csdb .cache-status {
