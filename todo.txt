@@ -9,7 +9,10 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- Maybe a "Show primary" button in top of CSDb release lists?
+- Primary preview: If GB64 has the primary release, show a preview for that in the top of
+  the CSDb release list. Clicking it then jumps to the GB64 tab and its primary release.
+
+- Consider not coloring group names in the primary preview.
 
 - Admin: Along with the new 'CACHED' words in CSDb lists, also show CSDb ID number.
 

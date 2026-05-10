@@ -1974,6 +1974,8 @@
 						<h3>May 10, 2026</h3>
 						<ul>
 							<li>Fixed rating composer profiles in the 'SID Happens' folder not working correctly.</li>
+							<li>CSDb release lists now show a primary release preview in the top right corner, whenever the
+								information about this is available. This makes it easy to access the primary release right away.</li>
 						</ul>
 
 						<h3>May 9, 2026</h3>

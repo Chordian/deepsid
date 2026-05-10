@@ -409,6 +409,8 @@ if ($csdb_type == 'sid') {
 	$sid_handles = array();
 	$sid_groups = array();
 
+	$primary_corner = '';
+
 	// For user comments in "sid" entries, we need to get them with lower depth to ensure we get all handles
 	$xml = curl('https://csdb.dk/webservice/?type=sid&id='.$csdb_id);
 	$simple_csdb = !strpos($xml, '<CSDbData>') ? $csdb : simplexml_load_string($xml);
@@ -418,6 +420,7 @@ if ($csdb_type == 'sid') {
 		? commentsTable('User comments', $simple_csdb->SID->UserComment, $scener_handle, $scener_id)
 		: '';
 	
+	$spacing = !empty($user_comments) ? '<div style="height:6px;"></div>' : '';
 	$comment_button = '<button id="csdb-comment" data-type="sid" data-id="'.$csdb->SID->ID.'">Comment</button><br />';
 
 	$used_by_releases = $user_comments.$comment_button.'<h3>0 releases found</h3><div class="zero-releases-line"></div>';
@@ -559,6 +562,7 @@ if ($csdb_type == 'sid') {
 
 			$adapted_name = strlen($release->Name) > 75 ? substr($release->Name, 0, 75).'...' : $release->Name;
 
+			// The green word next to a list entry
 			$primary_release = $primary_id == (int)$release->ID ? '<span class="primary-entry"></span>' : '';
 
 			$entry =
@@ -577,6 +581,20 @@ if ($csdb_type == 'sid') {
 					'</td>'.
 				'</tr>';
 
+			if ($primary_id == (int)$release->ID)
+				$primary_corner = '<table class="primary">'.
+				'<tr>'.
+					'<td class="thumbnail">'.
+						(isset($release->ScreenShot)
+							? '<a '.($can_show_internally ? 'class="internal" ' : '').'href="http://csdb.chordian.net/?type=release&id='.$release->ID.'" data-id="'.$release->ID.'" target="_blank"><img src="'.$release->ScreenShot.'" alt="'.$release->Name.'" /></a>'
+							: '<a '.($can_show_internally ? 'class="internal" ' : '').'href="http://csdb.chordian.net/?type=release&id='.$release->ID.'" data-id="'.$release->ID.'" target="_blank"><img src="images/noscreenshot.gif" alt="'.$release->Name.'" /></a>').
+					'</td>'.
+					'<td class="info">'.
+						'<a class="'.($can_show_internally ? 'internal ' : '').'name" href="http://csdb.chordian.net/?type=release&id='.$release->ID.'" data-id="'.$release->ID.'" target="_blank">'.$adapted_name.'</a>'.$primary_release.'<br />'.
+						$type_and_released_by.
+					'</td>'.
+				'</tr></table>';
+
 			// Push HTML and some data to an array for use by the sort drop-down box (in jQuery)
 			array_push($sid_entries, array(
 				'id'		=> (int)$release->ID,
@@ -589,28 +607,25 @@ if ($csdb_type == 'sid') {
 			$amount_releases++;
 		}
 
-		$inside_button = '<img src="images/composer_arrowright.svg" alt="" />Primary';
-		$primary_button = $primary_id
-			? '<button id="go-primary" data-id="'.$primary_id.'">'.$inside_button.'</button>'
-			: '<button id="go-primary" class="disabled" disabled>'.$inside_button.'</button>';
-
 		$used_by_releases = 
-			$user_comments.
-			$comment_button.$primary_button.
-			'<h3 id="csdb-releases">'.$amount_releases.' release'.($amount_releases > 1 ? 's' : '').' found</h3>'.
-			'<div id="csdb-sort">
-				<label id="csdb-emp-filter-label" for="csdb-emp-filter" class="unselectable disabled">Highlighted only</label><button
-					id="csdb-emp-filter" class="button-edit button-toggle button-off disabled" disabled>Off</button>&nbsp;&nbsp;
-				<label for="dropdown-sort-csdb" class="unselectable">Sort by</label>
-				<select id="dropdown-sort-csdb" name="sort-csdb">
-					<option value="title">Title</option>
-					<option value="type">Type</option>
-					<option value="oldest">Oldest</option>
-					<option value="newest" selected="selected">Newest</option>
-					<option value="low-id">Lower ID</option>
-					<option value="high-id">Higher ID</option>
-				</select>
-			 </div>'.
+			$user_comments.$spacing.
+			'<div id="comment-primary">'.$primary_corner.$comment_button.'</div>'.
+			'<div id="h3-sort">'.
+				'<h3 id="csdb-releases">'.$amount_releases.' release'.($amount_releases > 1 ? 's' : '').' found</h3>'.
+				'<div id="csdb-sort">
+					<label id="csdb-emp-filter-label" for="csdb-emp-filter" class="unselectable disabled">Highlighted only</label><button
+						id="csdb-emp-filter" class="button-edit button-toggle button-off disabled" disabled>Off</button>&nbsp;&nbsp;
+					<label for="dropdown-sort-csdb" class="unselectable">Sort by</label>
+					<select id="dropdown-sort-csdb" name="sort-csdb">
+						<option value="title">Title</option>
+						<option value="type">Type</option>
+						<option value="oldest">Oldest</option>
+						<option value="newest" selected="selected">Newest</option>
+						<option value="low-id">Lower ID</option>
+						<option value="high-id">Higher ID</option>
+					</select>
+				</div>'.
+			'</div>'.
 			'<table class="releases">'.
 			'</table>';
 	}

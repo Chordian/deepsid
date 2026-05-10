@@ -5887,12 +5887,31 @@ input[type=range]::-ms-track {
 				font-size: 9px;
 			}
 
+		/* Container for comment button and mini primary release preview */
+		#comment-primary {
+			position: relative;
+			margin-bottom: 10px;
+		}		
+
+		/* Container for H3 header and sort drop-down box */
+		#h3-sort {
+			position: relative;
+		}		
+
 		#page .ext table.comments,
-		#page .ext table.releases {
+		#page .ext table.releases,
+		#page .ext table.primary {
 			font-size: 14px;
 			margin: 0;
 			border-width: 1.5px;
 		}
+
+			#page .ext table.primary {
+				position: absolute;
+				top: -5px;
+				right: 0;
+				width: auto;
+			}
 
 		#page .ext table.comments td {
 			border-top-color: var(--color-border-comments);
@@ -6034,7 +6053,8 @@ input[type=range]::-ms-track {
 			}
 
 		/* Table showing releases for a SID tune (CSDb type: "SID") */
-		#page .ext table.releases {
+		#page .ext table.releases,
+		#page .ext table.primary {
 			border-left: none;
 			border-right: none;
 			border-top: none;
@@ -6042,10 +6062,20 @@ input[type=range]::-ms-track {
 			margin: 0;
 		}
 
-			#page .ext table.releases td {
+		#page .ext table.primary {
+			/*border-bottom: none;*/
+		}
+
+			#page .ext table.releases td,
+			#page .ext table.primary td {
 				border-right: none;
 				border-top: 1px solid var(--color-border);
 				padding: 7px 0 2px;
+			}
+
+			#page .ext table.primary td {
+				padding-bottom: 12px;
+				border-top: none;
 			}
 
 			#visuals-piano .piano {
@@ -6263,6 +6293,10 @@ input[type=range]::-ms-track {
 				width: 116px;
 			}
 
+				#topic-csdb .primary .thumbnail {
+					width: 52px;
+				}
+
 			/* Arrow-and-notes icons for indicating primary release in a CSDb list */
 			/* DECPRECATED BUT REMAINS BECAUSE OF THE CSDB CACHING */
 			#topic-csdb .primary-list {
@@ -6289,6 +6323,12 @@ input[type=range]::-ms-track {
 					filter: var(--svg-filter-primary);
 				}
 
+			#topic-csdb .primary-entry,
+			#topic-gb64 .primary-entry {
+				display: inline-block;
+				width: 52px; /* To make sure the width of the text in "before" is physical */
+			}
+
 			#topic-csdb .primary-entry:before,
 			#topic-gb64 .primary-entry:before {
 				content: "PRIMARY";
@@ -6306,7 +6346,7 @@ input[type=range]::-ms-track {
 				color: var(--color-text-admin-span);
 			}
 
-			/* The 'PRIMARY' button in top of a CSDb release list */
+			/* The 'PRIMARY' button in top of a CSDb release list [DEPRECATED] */
 			#go-primary {
 				position: absolute;
 				top: 16px;
@@ -6337,6 +6377,14 @@ input[type=range]::-ms-track {
 					height: 82px;
 					border: 1px solid var(--color-border);
 				}
+
+					#page .ext .primary .thumbnail img {
+						position: relative;
+						top: 4px;
+						width: 52px;
+						height: 37px;
+					}
+
 
 				#topic-gb64 .thumbnail img {
 					margin-left: 8px;
@@ -6744,7 +6792,7 @@ input[type=range]::-ms-track {
 	#csdb-sort {
 		float: right;
 		position: relative;
-		top: 30px;
+		top: 33px;
 	}
 
 		#csdb-sort label {
