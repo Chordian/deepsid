@@ -185,6 +185,35 @@ function cacheImagesInHtml($html, $image_cache_dir, $csdb_type, $csdb_id) {
     );
 }
 
+/**
+ * Get the site type and site ID from the labels, if this exists for the
+ * specified collection file ID.
+ * 
+ * @param		int			$id					the file ID of the SID file
+ * 
+ * @return		array							type and ID, or NULL if not found
+ */
+function getLabelTypeId($id) {
+	global $db;
+
+	$labels = $db->query(
+		'SELECT li.site, li.site_id
+		 FROM labels_lookup ll
+		 INNER JOIN labels_info li ON li.id = ll.labels_id
+		 WHERE ll.files_id = '.$id.' LIMIT 1'
+	);
+
+	$row = $labels->fetch(PDO::FETCH_ASSOC);
+
+	if (!$row)
+		return null;
+
+	return [
+		'type' => strtolower($row['site']),
+		'id'   => $row['site_id']
+	];
+}
+
 // --------------------------------------------------------------------------
 // START
 // --------------------------------------------------------------------------
@@ -219,9 +248,16 @@ if (isset($_GET['fullname'])) {
 		die(json_encode(array('status' => 'warning', 'sticky' => $sticky, 'html' => '<p style="margin-top:0;"><i>No CSDb entry available.</i></p>')));
 	}
 
+	// Is a GB64 game entry the primary release for this SID file?
+	$label = getLabelTypeId($files_id);
+	$isGB64primary = $label && $label['type'] == 'gb64';
+
 	// If there is just one release then we don't need to show the SID list first. The release page is then shown
 	// straight away. A database mapping is read first in case CSDb is offline, so the cache reader can work.
-	if ($csdb_type === 'sid') {
+	// An exception is if a GB64 game is the primary release; then we know the one CSDb release is not and we no
+	// longer care enough about it to show its page. Instead, this opens up for showing a GB64 primary preview.
+	if ($csdb_type === 'sid' && !$isGB64primary) {
+
 		$release_id = null;
 		$read_from_db = false;
 
@@ -231,6 +267,8 @@ if (isset($_GET['fullname'])) {
 		$row = $select->fetch(PDO::FETCH_ASSOC);
 
 		if ($row) {
+			// There's a row so we can map the CSDb SID ID to a CSDb release ID
+			// NOTE: A row only exists in this table if there is only this one release.
 			$release_id = $row['release_id'];
 			$updated_at = strtotime($row['updated_at']);
 
@@ -294,19 +332,9 @@ if (isset($_GET['fullname'])) {
 $primary_id = 0;
 if (!$_GET['noprimary']) {
 
-	// Get the ID of the primary release label (if the SID row has this)
-	$labels_lookup = $db->query('SELECT labels_id FROM labels_lookup WHERE files_id = '.$files_id.' LIMIT 1');
-	$row = $labels_lookup->fetch(PDO::FETCH_ASSOC);
-
-	if ($row) {
-		// Get the site reference (CSDb or GB64) and the ID to the page on the referenced site
-		$labels_info = $db->query('SELECT site, site_id FROM labels_info WHERE id = '.$row['labels_id'].' LIMIT 1');
-		$row = $labels_info->fetch(PDO::FETCH_ASSOC);
-
-		if ($row && strtolower($row['site']) == 'csdb') {
-			$primary_id = $row['site_id'];
-		}
-	}
+	$label = getLabelTypeId($files_id);
+	if ($label && $label['type'] == 'csdb')
+		$primary_id = $label['id'];
 
 	// Get the user's settings
 	$users = $db->query('SELECT flags FROM users WHERE id = '.$user_id)->fetch(PDO::FETCH_OBJ);
@@ -411,6 +439,43 @@ if ($csdb_type == 'sid') {
 	$sid_groups = array();
 
 	$primary_corner = '';
+	// Is a GB64 game release the primary release?
+	$label = getLabelTypeId($files_id);
+	if ($label && $label['type'] == 'gb64') {
+		// Yes, this 'GA_Id' is the primary release
+		$gb64_id = $label['id'];
+
+		// Connect to DeepSID database
+		$db = $account->getDB();
+
+		// Connect to imported GameBase64 database
+		$gb = new PDO(
+			'mysql:host='.$config['db_gb64_host'].';dbname='.$config['db_gb64_name'],
+			$config['db_gb64_user'],
+			$config['db_gb64_pwd']);
+		$gb->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		$gb->exec("SET NAMES UTF8");
+
+		$data = readGB64DB($gb64_id);
+
+		$thumbnails = array_slice($data['thumbnails'], 0, 4);	// Maximum 4 thumbnails
+
+		$line_of_thumbnails = '';
+		foreach($thumbnails as $thumbnail)
+			$line_of_thumbnails .= '<span style="padding:2.4px;"></span><a class="gb64-list-entry" href="https://gb64.com/game.php?id='.$gb64_id.'" target="_blank" data-id="'.$gb64_id.'"><img class="gb64" src="images/gb64'.$thumbnail.'" alt="'.$thumbnail.'" /></a>';
+
+		// Primary preview for the GB64 release
+		$primary_corner = '<table class="primary">'.
+		'<tr>'.
+			'<td class="thumbnail">'.
+				$line_of_thumbnails.
+			'</td>'.
+			'<td class="info">'.
+				'<a class="name gb64-list-entry" href="https://gb64.com/game.php?id='.$gb64_id.'" data-id="'.$gb64_id.'" target="_blank">'.$data['title'].'</a><span class="primary-entry primary-gb64"></span><br />'.
+				$data['year'].' '.$data['company'].'<br />'.
+			'</td>'.
+		'</tr></table>';
+	}
 
 	// For user comments in "sid" entries, we need to get them with lower depth to ensure we get all handles
 	$xml = curl('https://csdb.dk/webservice/?type=sid&id='.$csdb_id);
@@ -424,7 +489,10 @@ if ($csdb_type == 'sid') {
 	$spacing = !empty($user_comments) ? '<div style="height:6px;"></div>' : '';
 	$comment_button = '<button id="csdb-comment" data-type="sid" data-id="'.$csdb->SID->ID.'">Comment</button><br />';
 
-	$used_by_releases = $user_comments.$comment_button.'<h3>0 releases found</h3><div class="zero-releases-line"></div>';
+	$used_by_releases = $user_comments.$spacing.
+		'<div id="comment-primary">'.$primary_corner.$comment_button.'</div>'.
+		'<div class="csdb-zero"><h3>0 releases found</h3><div class="zero-releases-line"></div></div>';
+
 	if (isset($csdb->SID->UsedIn)) {
 		$releases = $csdb->SID->UsedIn->Release;
 
@@ -606,54 +674,6 @@ if ($csdb_type == 'sid') {
 			));
 
 			$amount_releases++;
-		}
-
-		if (empty($primary_corner)) {
-			// Is it because a GB64 release the primary release?
-			$labels_lookup = $db->query('SELECT labels_id FROM labels_lookup WHERE files_id = '.$files_id.' LIMIT 1');
-			$row_labels = $labels_lookup->fetch(PDO::FETCH_ASSOC);
-
-			if ($row_labels) {
-				// Get the site reference (CSDb or GB64) and the ID to the page on the referenced site
-				$labels_info = $db->query('SELECT site, site_id FROM labels_info WHERE id = '.$row_labels['labels_id'].' LIMIT 1');
-				$row_labels = $labels_info->fetch(PDO::FETCH_ASSOC);
-
-				if ($row_labels && strtolower($row_labels['site']) == 'gb64') {
-					// Yes, this 'GA_Id' is the primary release
-					$gb64_id = $row_labels['site_id'];
-
-					// Connect to DeepSID database
-					$db = $account->getDB();
-
-					// Connect to imported GameBase64 database
-					$gb = new PDO(
-						'mysql:host='.$config['db_gb64_host'].';dbname='.$config['db_gb64_name'],
-						$config['db_gb64_user'],
-						$config['db_gb64_pwd']);
-					$gb->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-					$gb->exec("SET NAMES UTF8");
-
-					$data = readGB64DB($gb64_id);
-
-					$thumbnails = array_slice($data['thumbnails'], 0, 4);	// Maximum 4 thumbnails
-
-					$line_of_thumbnails = '';
-					foreach($thumbnails as $thumbnail)
-						$line_of_thumbnails .= '<span style="padding:2.4px;"></span><a class="gb64-list-entry" href="https://gb64.com/game.php?id='.$gb64_id.'" target="_blank" data-id="'.$gb64_id.'"><img class="gb64" src="images/gb64'.$thumbnail.'" alt="'.$thumbnail.'" /></a>';
-
-					// Primary preview for the GB64 release
-					$primary_corner = '<table class="primary">'.
-					'<tr>'.
-						'<td class="thumbnail">'.
-							$line_of_thumbnails.
-						'</td>'.
-						'<td class="info">'.
-							'<a class="name gb64-list-entry" href="https://gb64.com/game.php?id='.$gb64_id.'" data-id="'.$gb64_id.'" target="_blank">'.$data['title'].'</a><span class="primary-entry primary-gb64"></span><br />'.
-							$data['year'].' '.$data['company'].'<br />'.
-						'</td>'.
-					'</tr></table>';
-				}
-			}
 		}
 
 		$used_by_releases = 

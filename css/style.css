@@ -5961,6 +5961,10 @@ input[type=range]::-ms-track {
 			border-top: 1px solid var(--color-border);
 		}
 
+		#topic-csdb .csdb-zero {
+			margin-top: 41px;
+		}
+
 		/* Used to emphasize handles or groups in a list of CSDb releases */
 		#page .ext .emphasize {
 			background: var(--color-emphasize);

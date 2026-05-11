@@ -11,7 +11,18 @@ SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
 - Consider renaming PREVIEW (green) to CSDb (blue) in primary preview.
 
+- Idea: If the PR is a GB64 entry and there is one CSDb release, don't show the page for
+  it - just show the CSDb list with just one release, so the primary preview is seen. This
+  also makes it clear that the CSDb release shown is not what the SID was meant for.
+
 - When a CSDb page has 0 releases, the primary preview is not shown at all.
+
+- For "GB64" tag in PP use developer tag background color var.
+
+- Try changing divider lines in black CSDb lists to dark gray instead of black.
+
+- Is it really necessary for the bottom composer avatars in the root to entirely reload
+  DeepSID when clicked? Surely it can be done so it goes to the folder directly.
 
 - Admin: Along with the new 'CACHED' words in CSDb lists, also show CSDb ID number.
 
