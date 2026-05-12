@@ -653,13 +653,13 @@ if ($csdb_type == 'sid') {
 			if ($primary_id == (int)$release->ID)
 				$primary_corner = '<table class="primary">'.
 				'<tr>'.
-					'<td class="thumbnail">'.
+					'<td class="thumbnail thumbnail-csdb">'.
 						(isset($release->ScreenShot)
 							? '<a '.($can_show_internally ? 'class="internal" ' : '').'href="http://csdb.chordian.net/?type=release&id='.$release->ID.'" data-id="'.$release->ID.'" target="_blank"><img src="'.$release->ScreenShot.'" alt="'.$release->Name.'" /></a>'
 							: '<a '.($can_show_internally ? 'class="internal" ' : '').'href="http://csdb.chordian.net/?type=release&id='.$release->ID.'" data-id="'.$release->ID.'" target="_blank"><img src="images/noscreenshot.gif" alt="'.$release->Name.'" /></a>').
 					'</td>'.
 					'<td class="info">'.
-						'<a class="'.($can_show_internally ? 'internal ' : '').'name" href="http://csdb.chordian.net/?type=release&id='.$release->ID.'" data-id="'.$release->ID.'" target="_blank">'.$adapted_name.'</a>'.$primary_release.'<br />'.
+						'<a class="'.($can_show_internally ? 'internal ' : '').'name" href="http://csdb.chordian.net/?type=release&id='.$release->ID.'" data-id="'.$release->ID.'" target="_blank">'.$adapted_name.'</a><span class="primary-entry primary-csdb"></span><br />'.
 						$type_and_released_by.
 					'</td>'.
 				'</tr></table>';
