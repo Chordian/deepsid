@@ -2777,7 +2777,8 @@ Browser.prototype = {
 		// Determine the arguments to be sent to the PHP file
 		// The 'this.csdbArgs' variable is also used by the refresh cache link (see 'main.js')
 		this.csdbArgs = typeof type !== "undefined" && typeof id !== "undefined"
-			? { type: type, id: id, copyright: copyright, override: readFromCSDb, noprimary: ignorePrimary }
+			? { fileid: browser.playlist[browser.songPos].id,
+				type: type, id: id, copyright: copyright, override: readFromCSDb, noprimary: ignorePrimary }
 			: { fullname: browser.playlist[browser.songPos].fullname.substr(this.ROOT_HVSC.length + 1),
 				override: readFromCSDb, noprimary: ignorePrimary };
 

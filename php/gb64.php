@@ -28,6 +28,39 @@ $primary_back_button = false;
 $user_id = $account->checkLogin() ? $account->userID() : 0;
 
 // --------------------------------------------------------------------------
+// FUNCTIONS
+// --------------------------------------------------------------------------
+
+/**
+ * Get the site type and site ID from the labels, if this exists for the
+ * specified collection file ID.
+ * 
+ * @param		int			$id					the file ID of the SID file
+ * 
+ * @return		array							type and ID, or NULL if not found
+ */
+function getLabelTypeId($id) { // @todo Same function as in 'csdb.php'
+	global $db;
+
+	$labels = $db->query(
+		'SELECT li.site, li.site_id
+		 FROM labels_lookup ll
+		 INNER JOIN labels_info li ON li.id = ll.labels_id
+		 WHERE ll.files_id = '.$id.' LIMIT 1'
+	);
+
+	$row = $labels->fetch(PDO::FETCH_ASSOC);
+
+	if (!$row)
+		return null;
+
+	return [
+		'type' => strtolower($row['site']),
+		'id'   => $row['site_id']
+	];
+}
+
+// --------------------------------------------------------------------------
 // START
 // --------------------------------------------------------------------------
 
@@ -96,19 +129,9 @@ try {
 $primary_id = 0;
 if ($page_id == 0 && !$_GET['noprimary']) {
 
-	// Get the ID of the primary release label (if the SID row has this)
-	$labels_lookup = $db->query('SELECT labels_id FROM labels_lookup WHERE files_id = '.$_GET['fileid'].' LIMIT 1');
-	$row = $labels_lookup->fetch(PDO::FETCH_ASSOC);
-
-	if ($row) {
-		// Get the site reference (CSDb or GB64) and the ID to the page on the referenced site
-		$labels_info = $db->query('SELECT site, site_id FROM labels_info WHERE id = '.$row['labels_id'].' LIMIT 1');
-		$row = $labels_info->fetch(PDO::FETCH_ASSOC);
-
-		if ($row && strtolower($row['site']) == 'gb64') {
-			$primary_id = $row['site_id'];
-		}
-	}
+	$label = getLabelTypeId($_GET['fileid']);
+	if ($label && $label['type'] == 'gb64')
+		$primary_id = $label['id'];
 
 	// Get the user's settings
 	$users = $db->query('SELECT flags FROM users WHERE id = '.$user_id)->fetch(PDO::FETCH_OBJ);
@@ -117,7 +140,7 @@ if ($page_id == 0 && !$_GET['noprimary']) {
 	// Does the user want to see the primary release?
 	if ($primary_id && $settings['primaryrelease']) {
 		$primary_back_button = true;
-		$page_id = $row['site_id'];
+		$page_id = $primary_id;
 	}
 }
 
@@ -148,9 +171,18 @@ if ($page_id) {
 	foreach($data['thumbnails'] as $thumbnail)
 		$col_of_thumbnails .= '<a href="#" class="zoom-up" data-src="images/gb64'.$thumbnail.'"><img class="thumbnail-gb64" src="images/gb64'.$thumbnail.'" alt="'.$thumbnail.'" /></a> ';
 
+	// If this is a primary release then prepare the arrow-and-bow icon
+	$primary_bow_icon = '';
+	if (isset($_GET['fileid'])) {
+		$label = getLabelTypeId($_GET['fileid']);
+		if ($label && $label['type'] == 'gb64' && $label['id'] == $page_id)
+			$primary_bow_icon = '<div class="primary-bow-tail"></div>';
+	}
+
 	// Build the sticky header HTML for the '#sticky' DIV
 	$sticky = '<h2 class="ellipsis" style="display:inline-block;margin:0 0 -8px 0;max-width:720px;" title="'.$data['title'].'">'.$data['title'].'</h2>'.
 		(isset($_GET['id']) || $primary_back_button ? '<button id="go-back-gb64">Back</button>' : '').
+		$primary_bow_icon.
 		'<div class="corner-icons">'.
 			'<a href="https://gb64.com/game.php?id='.$page_id.'" title="See this at GameBase64" target="_blank"><svg class="outlink" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg></a>'.
 		'</div>';
@@ -209,12 +241,18 @@ if ($page_id) {
 		foreach($thumbnails as $thumbnail)
 			$line_of_thumbnails .= '<a class="gb64-list-entry" href="https://gb64.com/game.php?id='.$id.'" target="_blank" data-id="'.$id.'"><img class="gb64" src="images/gb64'.$thumbnail.'" alt="'.$thumbnail.'" /></a>';
 
-		$primary_release = $primary_id == $id ? '<span class="primary-entry"></span>' : '';
+		$primary_bow_icon = '';
+		if (isset($_GET['fileid'])) {
+			$label = getLabelTypeId($_GET['fileid']);
+			if ($label && $label['type'] == 'gb64' && $label['id'] == $id)
+				$primary_bow_icon = '<div class="primary-bow-icon"></div>';
+		}
 
 		$rows .=
 			'<tr>'.
 				'<td class="info">'.
-					'<a class="name gb64-list-entry" href="https://gb64.com/game.php?id='.$id.'" target="_blank" data-id="'.$id.'">'.$data['title'].'</a>'.$primary_release.'<br />'.
+					$primary_bow_icon.
+					'<a class="name gb64-list-entry" href="https://gb64.com/game.php?id='.$id.'" target="_blank" data-id="'.$id.'">'.$data['title'].'</a><br />'.
 					$data['year'].' '.$data['company'].'<br />'.
 					'<span class="language">'.$data['language'].'</span>'.
 				'</td>'.

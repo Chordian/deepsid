@@ -6376,17 +6376,34 @@ input[type=range]::-ms-track {
 					color: var(--color-text-primary-csdb);
 				}
 
-			#topic-csdb .primary-bow-icon {
+			#topic-csdb .primary-bow-icon,
+			#topic-gb64 .primary-bow-icon{
 				float: left;
-				position: relative;
-				top: 6px;
-				margin-right: 3px;
+				margin: 0 9px 0 1px;
 				width: 30px;
-				height: 30px;
+				height: 40px;
 				line-height: 0;
-				background: url(../images/target.svg) 0 0 / 30px 30px no-repeat;
+				background: url(../images/target.svg) 0 7.5px / 30px 30px no-repeat;
 				filter: var(--svg-filter-target);
 			}
+
+			#sticky-csdb .primary-bow-tail,
+			#sticky-gb64 .primary-bow-tail {
+				display: inline-block;
+				position: relative;
+				top: 1.5px;
+				width: 24px;
+				height: 24px;
+				margin-left: 7px;
+				line-height: 0;
+				background: url(../images/target.svg) 0 0 / 24px 24px no-repeat;
+				filter: var(--svg-filter-target);
+			}
+
+				#sticky-gb64 .primary-bow-tail {
+					top: 2px;
+					margin-left: 9px;
+				}
 
 			#topic-csdb .cache-status {
 				position: absolute;

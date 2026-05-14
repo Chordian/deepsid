@@ -15,8 +15,9 @@
  * 
  *		- OR -
  * 
+ * @uses		$_GET['fileid']				file id of the song
  * @uses		$_GET['type']
- * @uses		$_GET['id']
+ * @uses		$_GET['id']					CSDb id
  * @uses		$_GET['copyright']
  * @uses		$_GET['override']			Set to 1 to override cache read
  * @uses		$_GET['noprimary']			Set to 1 to override primary release
@@ -193,7 +194,7 @@ function cacheImagesInHtml($html, $image_cache_dir, $csdb_type, $csdb_id) {
  * 
  * @return		array							type and ID, or NULL if not found
  */
-function getLabelTypeId($id) {
+function getLabelTypeId($id) { // @todo Same function as in 'gb64.php'
 	global $db;
 
 	$labels = $db->query(
@@ -315,6 +316,7 @@ if (isset($_GET['fullname'])) {
 
 } else if (isset($_GET['type']) && isset($_GET['id'])) {
 	// The 'type' and 'id' was directly specified (permalink)
+	$files_id = $_GET['fileid'];
 	$csdb_type = $_GET['type'];
 	$csdb_id = $_GET['id'];
 	$copyright = $_GET['copyright'];
@@ -632,8 +634,7 @@ if ($csdb_type == 'sid') {
 			$adapted_name = strlen($release->Name) > 75 ? substr($release->Name, 0, 75).'...' : $release->Name;
 
 			// The bow-and-arrow icon in the right side of a CSDb row that is the primary release
-			$primary_bow_icon = $primary_id == (int)$release->ID
-				? '<div class="primary-bow-icon"></div>' : '';
+			$primary_bow_icon = $primary_id == (int)$release->ID ? '<div class="primary-bow-icon"></div>' : '';
 
 			$entry =
 				'<tr>'.
@@ -643,9 +644,10 @@ if ($csdb_type == 'sid') {
 							: '<a '.($can_show_internally ? 'class="internal" ' : '').'href="http://csdb.chordian.net/?type=release&id='.$release->ID.'" data-id="'.$release->ID.'" target="_blank"><img src="images/noscreenshot.gif" alt="'.$release->Name.'" /></a>').
 					'</td>'.
 					'<td class="info">'.
+						$primary_bow_icon.
 						'<a class="'.($can_show_internally ? 'internal ' : '').'name" href="http://csdb.chordian.net/?type=release&id='.$release->ID.'" data-id="'.$release->ID.'" target="_blank">'.$adapted_name.'</a><br />'.
 						$type_and_released_by.
-						$release_date.$primary_bow_icon.
+						$release_date.
 						$download_link.
 						$external_icon.
 					'</td>'.
@@ -916,9 +918,17 @@ if ($csdb_type == 'sid') {
 	$comment_button = '<button id="csdb-comment" data-type="release" data-id="'.$csdb->Release->ID.'">Comment</button>'.
 		'<small class="shared-all-comments">Shared for all types of comment sections.</small><br />';
 
+	// If this is a primary release then prepare the arrow-and-bow icon
+	$primary_bow_icon = '';
+	$db = $account->getDB();
+	$label = getLabelTypeId($files_id);
+	if ($label && $label['type'] == 'csdb' && $label['id'] == $csdb->Release->ID)
+		$primary_bow_icon = '<div class="primary-bow-tail"></div>';
+
 	// Build the sticky header HTML for the '#sticky' DIV
 	$sticky = '<h2 class="ellipsis csdb-ellipsis" title="'.$csdb->Release->Name.'">'.$csdb->Release->Name.'</h2><button id="go-back">Back</button>'.
 		'<a class="clipboard" href="//deepsid.chordian.net?tab=csdb&csdbtype=release&csdbid='.$csdb->Release->ID.'" title="Permalink">'.$svg_permalink.'</a>'.
+		$primary_bow_icon.
 		'<div class="corner-icons">'.
 			'<a href="http://csdb.chordian.net/?type=release&id='.$csdb->Release->ID.'" title="See this at CSDb" target="_blank"><svg class="outlink" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg></a>'.
 		'</div>';		
