@@ -632,7 +632,8 @@ if ($csdb_type == 'sid') {
 			$adapted_name = strlen($release->Name) > 75 ? substr($release->Name, 0, 75).'...' : $release->Name;
 
 			// The bow-and-arrow icon in the right side of a CSDb row that is the primary release
-			$primary_bow_icon = $primary_id == (int)$release->ID ? '<div class="primary-bow-icon"></div>' : '';
+			$primary_bow_icon = $primary_id == (int)$release->ID
+				? '<div class="primary-bow-icon"></div>' : '';
 
 			$entry =
 				'<tr>'.
@@ -642,10 +643,9 @@ if ($csdb_type == 'sid') {
 							: '<a '.($can_show_internally ? 'class="internal" ' : '').'href="http://csdb.chordian.net/?type=release&id='.$release->ID.'" data-id="'.$release->ID.'" target="_blank"><img src="images/noscreenshot.gif" alt="'.$release->Name.'" /></a>').
 					'</td>'.
 					'<td class="info">'.
-						$primary_bow_icon.
 						'<a class="'.($can_show_internally ? 'internal ' : '').'name" href="http://csdb.chordian.net/?type=release&id='.$release->ID.'" data-id="'.$release->ID.'" target="_blank">'.$adapted_name.'</a><br />'.
 						$type_and_released_by.
-						$release_date.
+						$release_date.$primary_bow_icon.
 						$download_link.
 						$external_icon.
 					'</td>'.
