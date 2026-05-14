@@ -2808,9 +2808,13 @@ Browser.prototype = {
 					// A single release page should never show a 'BACK' button
 					data.sticky = $("<div>").html(data.sticky).find("#go-back, #go-back-init").remove().end().html();
 				}
+				// Get rid of legacy cache dirt
+				data.sticky = data.sticky.replace('<div class="primary-bow-tail"></div>', '');
+				// Show the sticky header
 				$("#sticky-csdb").empty().append(data.sticky);
 				if (parseInt(colorTheme))
 					data.html = data.html.replace(/composer\.png/g, "composer_dark.png");
+				// Show the page
 				$("#topic-csdb").empty().append(data.html)
 					.css("visibility", "visible");
 				main.resetDexterScrollBar("csdb");
@@ -2818,6 +2822,18 @@ Browser.prototype = {
 				this.emphasizing(false);
 				main.updateRedirectPlayIcons();
 				this.markCached();
+
+				// If this single release is a primary release then show the bow-and-arrow icon
+				if (data.count = -1) {
+					$.get("php/labels_info.php", { id: browser.playlist[browser.songPos].id }, function(data) {
+						browser.validateData(data, function(data) {
+							var id = $("#csdb-comment").attr("data-id");
+							if (data.id && data.type == "csdb" && data.id == id) {
+								$('a.clipboard').after('<div class="primary-bow-tail"></div>');
+							}
+						});
+					});
+				}
 
 				if (main.isAdmin) {
 					// Add cache info in top right corner
