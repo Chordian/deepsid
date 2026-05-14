@@ -645,7 +645,7 @@
 	--svg-filter-all-starred:		invert(77%) sepia(66%) saturate(335%) hue-rotate(8deg) brightness(100%) contrast(78%);
 	--svg-filter-strong:			var(--svg-filter-white);
 	--svg-filter-primary:			invert(78%) sepia(13%) saturate(273%) hue-rotate(191deg) brightness(86%) contrast(88%);	
-	--svg-filter-target:			invert(33%) sepia(0%) saturate(1251%) hue-rotate(229deg) brightness(100%) contrast(99%);
+	--svg-filter-target:			invert(30%) sepia(0%) saturate(1797%) hue-rotate(205deg) brightness(107%) contrast(80%);
 
 	--svg-bg-star-orange:			url(../images/if_star_orange_dark.svg) 0 0 / 18px 18px no-repeat;
 	--svg-bg-star-empty-voted:		url(../images/if_star_empty_voted_dark.svg) 0 0 / 18px 18px no-repeat;
@@ -6379,13 +6379,12 @@ input[type=range]::-ms-track {
 			#topic-csdb .primary-bow-icon {
 				float: left;
 				position: relative;
-				top: 11px;
-				margin-right: 4px;
-				width: 24px;
-				height: 24px;
+				top: 6px;
+				margin-right: 3px;
+				width: 30px;
+				height: 30px;
 				line-height: 0;
-				vertical-align: middle;
-				background: url(../images/target.svg) 0 0 / 24px 24px no-repeat;
+				background: url(../images/target.svg) 0 0 / 30px 30px no-repeat;
 				filter: var(--svg-filter-target);
 			}
 
