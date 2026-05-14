@@ -1971,6 +1971,12 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>May 13, 2026</h3>
+						<ul>
+							<li>Replaced the green 'PRIMARY' label in CSDb release lists with a bow-and-arrow icon on the right
+								side. This should make the primary release easier to spot while scrolling through the list.</li>
+						</ul>
+
 						<h3>May 10, 2026</h3>
 						<ul>
 							<li>Fixed rating composer profiles in the 'SID Happens' folder not working correctly.</li>

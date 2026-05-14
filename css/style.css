@@ -645,7 +645,7 @@
 	--svg-filter-all-starred:		invert(77%) sepia(66%) saturate(335%) hue-rotate(8deg) brightness(100%) contrast(78%);
 	--svg-filter-strong:			var(--svg-filter-white);
 	--svg-filter-primary:			invert(78%) sepia(13%) saturate(273%) hue-rotate(191deg) brightness(86%) contrast(88%);	
-	--svg-filter-target:			invert(28%) sepia(0%) saturate(93%) hue-rotate(143deg) brightness(97%) contrast(74%);
+	--svg-filter-target:			invert(30%) sepia(0%) saturate(1797%) hue-rotate(205deg) brightness(107%) contrast(80%);
 
 	--svg-bg-star-orange:			url(../images/if_star_orange_dark.svg) 0 0 / 18px 18px no-repeat;
 	--svg-bg-star-empty-voted:		url(../images/if_star_empty_voted_dark.svg) 0 0 / 18px 18px no-repeat;
@@ -6376,11 +6376,21 @@ input[type=range]::-ms-track {
 					color: var(--color-text-primary-csdb);
 				}
 
+			#topic-csdb .primary-bow-icon {
+				float: left;
+				margin: 0 9px 0 1px;
+				width: 30px;
+				height: 40px;
+				line-height: 0;
+				background: url(../images/target.svg) 0 7.5px / 30px 30px no-repeat;
+				filter: var(--svg-filter-target);
+			}
+
 			#topic-csdb .cache-status {
 				position: absolute;
-				top: 10px;
-				right: 2px;
-				color: var(--color-text-admin-span);
+				bottom: 10px;
+				right: 1px;
+				color: var(--color-text-time);
 			}
 
 			/* The 'PRIMARY' button in top of a CSDb release list [DEPRECATED] */

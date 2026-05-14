@@ -14,9 +14,19 @@ SHOULD BE DONE
 - Is it really necessary for the bottom composer avatars in the root to entirely reload
   DeepSID when clicked? Surely it can be done so it goes to the folder directly.
 
+- The new target icon could replace the green 'PRIMARY' word. But where to place it? In
+  the right side or the row? Next to the bottom date line?
+
+- The new target icon could also be put on a CSDb and GB64 release page.
+
 - GB64 tab: Primary preview following the same rule for one release - don't show the
   page for one release if a CSDb release is the primary release. Other than that, show
   the primary preview on the GB64 list in the top right corner as usual.
+
+- A direct CSDb link seems to be broken. A 500 server error occurs.
+
+- Put in the test admin tab for primary release here; it has a staggering "released by"
+  list: https://deepsid.chordian.net/?file=/MUSICIANS/O/Ouwehand_Reyn/Falcon_Tn.sid
 
 - Admin: Along with the new 'CACHED' words in CSDb lists, also show CSDb ID number.
 
