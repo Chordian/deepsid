@@ -95,7 +95,7 @@ Browser.prototype = {
 		if (main.getParam("file") === "" && main.getParam("search") === "") this.getFolder();
 		this.addEvents();
 
-		this.ready = true;
+	this.ready = true;
 	},
 
 	/**
@@ -497,6 +497,16 @@ Browser.prototype = {
 						break;
 					case "+misc":
 						this.gotoFolder("/_Compute's Gazette SID Collection/Misc");
+						break;
+					// Overriding for smoother experience
+					case "+follin":
+						this.gotoFolder("MUSICIANS/F/Follin_Tim");
+						break;
+					case "+martin":
+						this.gotoFolder("MUSICIANS/G/Galway_Martin");
+						break;
+					case "+jozz":
+						this.gotoFolder("MUSICIANS/B/Bjerregaard_Johannes");
 						break;
 					default:
 						// Search the query unless a search command was entered
@@ -3109,8 +3119,11 @@ Browser.prototype = {
 			$("#loading-gb64").fadeIn(500);
 		}, 250);
 
+		clearInterval(this.gb64PrimaryTimer);
+
 		var thisFullname = browser.playlist[browser.songPos].fullname.substr(this.ROOT_HVSC.length + 1);
 		var thisFileID = browser.playlist[browser.songPos].id;
+		var attempts = 0;
 		var ignorePrimary = typeof overridePrimary !== "undefined" && overridePrimary ? 1 : 0;
 
 		var params = typeof optionalID === "undefined"
@@ -3124,6 +3137,66 @@ Browser.prototype = {
 				$("#sticky-gb64").empty().append(data.sticky);
 				$("#topic-gb64").empty().append(data.html)
 					.css("visibility", "visible");
+
+				// Do we need a primary preview from CSDb?
+				if (data.needcsdb) {
+					this.gb64PrimaryTimer = setInterval(() => {
+						attempts++;
+						var primaryCorner = $("#topic-csdb table.primary").html();
+						if (primaryCorner) {
+							// CSDb list with primary preview
+							$("#primary-corner-gb64")
+								.empty()
+								.append('<table class="primary">'+primaryCorner+'</table>');
+							clearInterval(this.gb64PrimaryTimer);
+						} else if ($("#sticky-csdb .primary-bow-tail").length) {
+							// Single CSDb page; we have to build the HTML
+							var $topicCSDb = $("#topic-csdb");
+							var $screenshot = $topicCSDb.find("img.screenshot");
+
+							var ppId = $("#csdb-info").attr("data-siteid");
+							var ppScreenshot = $screenshot.attr("src");
+							var ppAlt = $screenshot.attr("alt");
+							var ppName = $("#sticky-csdb h2").html();
+							var ppType = $("#csdb-info").attr("data-type");
+							var releasedByLinks = $topicCSDb
+var ppBy = $topicCSDb
+    .find("p")
+    .filter(function () {
+        return $(this).text().includes("Released by:");
+    })
+    .find("a")
+    .map(function () {
+        return this.outerHTML;
+    })
+    .get()
+    .join(", ");
+
+							primaryCorner = ' \
+								<table class="primary"> \
+									<tr> \
+										<td class="thumbnail thumbnail-csdb"> \
+											<a class="internal" href="http://csdb.chordian.net/?type=release&id='+ppId+'" data-id="'+ppId+'" target="_blank"><img src="'+ppScreenshot+'" alt="'+ppName+'" /></a> \
+										</td> \
+										<td class="info"> \
+											<a class="internal name" href="http://csdb.chordian.net/?type=release&id='+ppId+'" data-id="'+ppId+'" target="_blank">'+ppName+'</a><span class="primary-entry primary-csdb"></span><br />' +
+											ppType+' by '+ppBy+' \
+										</td> \
+									</tr> \
+								</table>';
+							$("#primary-corner-gb64")
+								.empty()
+								.append('<table class="primary">'+primaryCorner+'</table>');
+							clearInterval(this.gb64PrimaryTimer);
+						}
+						// Give up after a few seconds
+						if (attempts > 35) {
+							$("#primary-corner-gb64").empty();
+							clearInterval(this.gb64PrimaryTimer);						
+						}
+					}, 200);
+				}
+
 				main.resetDexterScrollBar("gb64");
 
 				this.gb64PrimaryBack = data.primary;
@@ -3251,7 +3324,7 @@ Browser.prototype = {
 			});
 		}.bind(this));
 	},
-
+	
 	/**
 	 * Show the main context menu. This is shown when right-clicking a SID file row
 	 * or a symlist folder.

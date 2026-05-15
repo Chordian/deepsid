@@ -5921,6 +5921,16 @@ input[type=range]::-ms-track {
 				width: auto;
 			}
 
+			#topic-gb64 table.primary {
+				top: 5px !important;
+				right: 10px !important;
+			}
+
+			/* Vertical spacing in top of GB64 tab */
+			#topic-gb64 h3 {
+				margin-top: 24px; /* 24px doesn't waste space */ /* 68px matches CSDb spacing */
+			}
+
 		#page .ext table.comments td {
 			border-top-color: var(--color-border-comments);
 		}
@@ -6073,6 +6083,10 @@ input[type=range]::-ms-track {
 			border-bottom: 1px solid var(--color-border);
 			margin: 0;
 		}
+
+			#topic-gb64 table.primary {
+				border-bottom: none !important;
+			}
 
 			#page .ext table.releases td,
 			#page .ext table.primary td {
@@ -6301,23 +6315,26 @@ input[type=range]::-ms-track {
 				width: 116px;
 			}
 
-				#topic-csdb .primary .thumbnail {
+				#topic-csdb .primary .thumbnail,
+				#topic-gb64 .primary .thumbnail {
 					width: auto; /* 52px */
 				}
 
-				#topic-csdb .primary .thumbnail:before {
+				#topic-csdb .primary .thumbnail:before,
+				#topic-gb64 .primary .thumbnail:before {
 					content: "";
 					padding: 18px 16px 0;
 					background: url(../images/target.svg) 0 7px / 24px 24px no-repeat;
 					filter: var(--svg-filter-target);
 				}
 
-				#topic-csdb .primary .thumbnail-csdb:before {
+				#topic-csdb .primary .thumbnail-csdb:before,
+				#topic-gb64 .primary .thumbnail-csdb:before {
 					padding: 18px 18px 0 !important;
 				}
 
-			/* Arrow-and-notes icons for indicating primary release in a CSDb list */
-			/* DECPRECATED BUT REMAINS BECAUSE OF THE CSDB CACHING */
+			/* Separate arrow and notes icons for indicating primary release in a CSDb list */
+			/* DEPRECATED but remains because of CSDb caching */
 			#topic-csdb .primary-list {
 				display: inline-block;
 				position: relative;
@@ -6348,6 +6365,8 @@ input[type=range]::-ms-track {
 				width: 52px; /* To make sure the width of the text in "before" is physical */
 			}
 
+			/* Green 'PRIMARY' label */
+			/* DEPRECATED but remains because of CSDb caching */
 			#topic-csdb .primary-entry:before,
 			#topic-gb64 .primary-entry:before {
 				content: "PRIMARY";
@@ -6358,24 +6377,30 @@ input[type=range]::-ms-track {
 				color: var(--color-text-monitor);
 			}
 
+			/* The blue 'CSDb' and brown 'GB64' labels for primary preview in top right corner */
 			#topic-csdb .primary-gb64,
-			#topic-csdb .primary-csdb {
+			#topic-csdb .primary-csdb,
+			#topic-gb64 .primary-gb64,
+			#topic-gb64 .primary-csdb {
 				display: inline-block;
 				width: 35px;
 			}
 
-				#topic-csdb .primary-gb64:before {
+				#topic-csdb .primary-gb64:before,
+				#topic-gb64 .primary-gb64:before {
 					content: "GB64";
 					left: 10px;
 					color: var(--color-text-primary-gb64);
 				}
 
-				#topic-csdb .primary-csdb:before {
+				#topic-csdb .primary-csdb:before,
+				#topic-gb64 .primary-csdb:before {
 					content: "CSDb";
 					left: 10px;
 					color: var(--color-text-primary-csdb);
 				}
 
+			/* The arrow-and-bow icon (symbol for primary release) */
 			#topic-csdb .primary-bow-icon,
 			#topic-gb64 .primary-bow-icon{
 				float: left;
@@ -6387,6 +6412,7 @@ input[type=range]::-ms-track {
 				filter: var(--svg-filter-target);
 			}
 
+			/* The arrow-and-bow icon appended to titles in a single CSDb or GB64 release */
 			#sticky-csdb .primary-bow-tail,
 			#sticky-gb64 .primary-bow-tail {
 				display: inline-block;
@@ -6405,6 +6431,21 @@ input[type=range]::-ms-track {
 					margin-left: 9px;
 				}
 
+			/* Placeholder for primary preview top right corner on GB64 lists */
+			#primary-corner-gb64 {
+				float: right;
+				height: 24px;
+			}
+
+				#primary-corner-gb64 img.loading-pp {
+					position: relative;
+					top: 13px;
+					right: 41px;
+					width: 36px;
+					height: 9px;
+				}
+
+			/* Admin 'CACHED' status in right side of CSDb list rows */
 			#topic-csdb .cache-status {
 				position: absolute;
 				bottom: 10px;
@@ -6412,7 +6453,8 @@ input[type=range]::-ms-track {
 				color: var(--color-text-time);
 			}
 
-			/* The 'PRIMARY' button in top of a CSDb release list [DEPRECATED] */
+			/* The 'PRIMARY' button in top of a CSDb release list */
+			/* DEPRECATED but remains because of CSDb caching */
 			#go-primary {
 				position: absolute;
 				top: 16px;
@@ -6452,7 +6494,7 @@ input[type=range]::-ms-track {
 					}
 
 
-				#topic-gb64 .thumbnail img {
+				#topic-gb64 .thumbnail-list img {
 					margin-left: 8px;
 				}
 

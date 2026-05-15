@@ -24,7 +24,9 @@ require_once("gb64_functions.php");
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest')
 	die("Direct access not permitted.");
 
+$primary_corner = '';
 $primary_back_button = false;
+$primary_csdb_needed = false;
 $user_id = $account->checkLogin() ? $account->userID() : 0;
 
 // --------------------------------------------------------------------------
@@ -98,11 +100,29 @@ try {
 			}
 		} else {
 			$sticky = '<h2 style="display:inline-block;margin-top:0;">GameBase64</h2>';
-			die(json_encode(array('status' => 'warning', 'sticky' => $sticky, 'html' => '<h3>0 entries found</h3><div style="border-top:1px solid var(--color-border);">'.$footnote.'</div>')));
+			$label = getLabelTypeId($_GET['fileid']);
+			if ($label && $label['type'] == 'csdb') {
+				// Placeholder for CSDb primary preview
+				$primary_corner = '<div id="primary-corner-gb64"><img class="loading-pp" src="images/loading_threedots.svg" alt="" /></div>';
+				$primary_csdb_needed = true;
+			}
+			die(json_encode(array(
+				'status'	=> 'warning',
+				'sticky'	=> $sticky,
+				'html'		=> $primary_corner.'<h3>0 entries found</h3><div style="border-top:1px solid var(--color-border);">'.$footnote.'</div>',
+				'needcsdb'	=> $primary_csdb_needed,
+				'primary'	=> $primary_back_button
+			)));
 		}
 
-		// If only one result then just show that as a sub page
-		$page_id = count($gbIds) == 1 ? $gbIds[0] : 0;
+		// Is a CSDb entry the primary release for this SID file?
+		$label = getLabelTypeId($_GET['fileid']);
+		$isCSDbPrimary = $label && $label['type'] == 'csdb';
+
+		// If only one result then just show that as a sub page. An exception is if a CSDb entry is the primary
+		// release; then we know the one GB64 game is not and we no longer care enough about it to show its page.
+		// Instead, this opens up for showing a CSDb primary preview.
+		$page_id = count($gbIds) == 1 && !$isCSDbPrimary ? $gbIds[0] : 0;
 
 	} else if (isset($_GET['id'])) {
 
@@ -189,7 +209,7 @@ if ($page_id) {
 
 	$data_type = explode(' - ', htmlspecialchars($data['genre'], ENT_QUOTES, 'UTF-8'))[0];
 
-	// And Now build the HTML
+	// Now build the HTML
 	$html = '<table style="border:none;">
 		<tr>
 			<td style="padding-left:0;vertical-align:top;border:none;">
@@ -235,7 +255,7 @@ if ($page_id) {
 
 		$data = readGB64DB($id);
 
-		$thumbnails = array_slice($data['thumbnails'], 0, 4);	// Maximum 4 thumbnails
+		$thumbnails = array_slice($data['thumbnails'], 0, 3);	// Maximum 3 thumbnails
 
 		$line_of_thumbnails = '';
 		foreach($thumbnails as $thumbnail)
@@ -244,8 +264,37 @@ if ($page_id) {
 		$primary_bow_icon = '';
 		if (isset($_GET['fileid'])) {
 			$label = getLabelTypeId($_GET['fileid']);
-			if ($label && $label['type'] == 'gb64' && $label['id'] == $id)
-				$primary_bow_icon = '<div class="primary-bow-icon"></div>';
+			if ($label && $label['type'] == 'gb64' && $label['id'] == $id) {
+
+				// Icon for one entry in the GB64 list
+				$primary_bow_icon = '<div class="primary-bow-icon"></div>'; 
+
+				// Prepare primary preview in top right corner
+				$data = readGB64DB($id);
+
+				$pp_thumbnails = array_slice($data['thumbnails'], 0, 4);	// Maximum 4 thumbnails
+
+				$pp_line_of_thumbnails = '';
+				foreach($pp_thumbnails as $pp_thumbnail)
+					$pp_line_of_thumbnails .= '<span style="padding:2.4px;"></span><a class="gb64-list-entry" href="https://gb64.com/game.php?id='.$id.'" target="_blank" data-id="'.$id.'"><img class="gb64" src="images/gb64'.$pp_thumbnail.'" alt="'.$pp_thumbnail.'" /></a>';
+
+				// Primary preview for the GB64 release
+				$primary_corner = '<table class="primary">'.
+				'<tr>'.
+					'<td class="thumbnail">'.
+						$pp_line_of_thumbnails.
+					'</td>'.
+					'<td class="info">'.
+						'<a class="name gb64-list-entry" href="https://gb64.com/game.php?id='.$id.'" data-id="'.$id.'" target="_blank">'.$data['title'].'</a><span class="primary-entry primary-gb64"></span><br />'.
+						$data['year'].' '.$data['company'].'<br />'.
+					'</td>'.
+				'</tr></table>';
+
+			} else if ($label && $label['type'] == 'csdb') {
+				// Placeholder for CSDb primary preview
+				$primary_corner = '<div id="primary-corner-gb64"><img class="loading-pp" src="images/loading_threedots.svg" alt="" /></div>';
+				$primary_csdb_needed = true;
+			}
 		}
 
 		$rows .=
@@ -256,7 +305,7 @@ if ($page_id) {
 					$data['year'].' '.$data['company'].'<br />'.
 					'<span class="language">'.$data['language'].'</span>'.
 				'</td>'.
-				'<td class="thumbnail">'.
+				'<td class="thumbnail thumbnail-list">'.
 					$line_of_thumbnails.
 				'</td>'.
 			'</tr>';
@@ -266,7 +315,7 @@ if ($page_id) {
 	$sticky = '<h2 style="display:inline-block;margin-top:0;">GameBase64</h2>';
 
 	// And now build the HTML
-	$html = '<h3>'.count($gbIds).' entr'.(count($gbIds) > 1 ? 'ies' : 'y').' found</h3>'.
+	$html = $primary_corner.'<h3>'.count($gbIds).' entr'.(count($gbIds) > 1 ? 'ies' : 'y').' found</h3>'.
 		'<table class="releases">'.
 			$rows.
 		'</table>'.$footnote;
@@ -281,6 +330,7 @@ echo json_encode(array(
 	'sticky'	=> $sticky,
 	'html'		=> $html,
 	'count' 	=> count($gbIds),
-	'primary'	=> $primary_back_button,
+	'needcsdb'	=> $primary_csdb_needed,
+	'primary'	=> $primary_back_button
 ));
 ?>

@@ -105,6 +105,11 @@ $html = '
 				<li><a href="'.$baseURL.'?file=/MUSICIANS/B/Bulldog/E_X_I_S.sid&subtune=1">'.$home.'/MUSICIANS/B/Bulldog/E_X_I_S.sid</a></li>
 				<li><a href="'.$baseURL.'?file=/MUSICIANS/G/Greg/Leppard.sid">'.$home.'/MUSICIANS/G/Greg/Leppard.sid</a></li>
 			</ul>
+
+		<h4>Tons of "released by" in a CSDb release</h4>
+			<ul>
+				<li><a href="'.$baseURL.'?file=/MUSICIANS/O/Ouwehand_Reyn/Falcon_Tn.sid">'.$home.'/MUSICIANS/O/Ouwehand_Reyn/Falcon_Tn.sid</a> (Mega-Co Demo)</li>
+			</ul>
 ';
 
 die(json_encode(array('status' => 'ok', 'html' => $html)));

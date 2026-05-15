@@ -11,21 +11,32 @@ SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
 - Try changing divider lines in black CSDb lists to dark gray instead of black.
 
-- Is it really necessary for the bottom composer avatars in the root to entirely reload
-  DeepSID when clicked? Surely it can be done so it goes to the folder directly.
-
 - GB64 tab: Primary preview following the same rule for one release - don't show the
   page for one release if a CSDb release is the primary release. Other than that, show
   the primary preview on the GB64 list in the top right corner as usual.
 
+
+  @todo
+
+      - When only one CSDb release is available, "scrape" its HTML and stitch together
+        a primary preview out of that for GB64 tab.
+
+          bug: click csdb entry built by gb64 - there's a back button now ><
+
+      - Solve the sync problem so GB64 always shows the primary preview from CSDb.
+          only gb64 ajax should handle this
+          gb64: clear setinterval timer
+          gb64: if csdb is ready, grab and show. done.
+          gb64: otherwise start a setinterval (relatively fast) with a count cap
+          gb64: setinterval checks csdb again. ready? grab, show, stop interval
+          gb64: if a count cap is reached (several seconds) give up, stop interval
+
+          bug: enter csdb release, gb64, click pp, back to release #2 ><
+
+
 - A direct CSDb link seems to be broken. A 500 server error occurs.
 
-- Put in the test admin tab for primary release here; it has a staggering "released by"
-  list: https://deepsid.chordian.net/?file=/MUSICIANS/O/Ouwehand_Reyn/Falcon_Tn.sid
-
 - Admin: Along with the new 'CACHED' words in CSDb lists, also show CSDb ID number.
-
-- Override "+follin" so it goes to Tim Follin and not his brother.
 
 - When enabling "maintenance_mode" make it so visitors already on the site are shown a
   warning ("DeepSID just entered maintenance mode. It's dangerous to browse here at the

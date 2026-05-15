@@ -493,15 +493,14 @@ var main = {
 	/**
 	 * Show a CSDb release page after caching the list.
 	 */
-	showCSDbRelease: function() {
+	showCSDbRelease: function(id) {
 		// First cache the list of releases in case we return to it
 		main.cacheCSDb = $("#topic-csdb").html();
 		main.cacheSticky = $("#sticky-csdb").html();
 		main.cacheTabScrollPos = $("#page").scrollTop();
 		main.cacheDDCSDbSort = $("#dropdown-sort-csdb").val();
 		// Now load the actual release page
-		browser.getCSDb("release", $(this).attr("data-id"), true, undefined, true);
-		return false;
+		browser.getCSDb("release", id, true, undefined, true);
 	},
 
 	/**
@@ -1146,8 +1145,6 @@ main.bindEvents = function() {
 
 	/**
 	 * Resizing the window. Also affected by toggling the developer pane.
-	 * 
-	 * @param {*} event 
 	 */
 	$(window).on("resize", function() {
 		// Make sure the browser box always take up all screen height upon resizing the window
@@ -1212,6 +1209,7 @@ main.bindEvents = function() {
 	 * 
 	 * Used here by the SID handler. All SID handlers refresh the page.
 	 * 
+	 * @param {*} event 
 	 * @param {boolean} ignore		If specified and TRUE, exit immediately
 	 */
 	$("div.styledSelect").change(function(event, ignore) {
@@ -1422,7 +1420,7 @@ main.bindEvents = function() {
 				window.open(link);
 			} else {
 				// Open in same browser tab
-				window.location.href = link;
+				browser.gotoFolder(folder);
 			}
 		}
 		return false;
@@ -2380,7 +2378,10 @@ main.bindDexterCSDbEvents = function() {
 	/**
 	 * Clicking a thumbnail/title in a CSDb release row to open it internally.
 	 */
-	$("#topic-csdb").on("click", "a.internal", main.showCSDbRelease);
+	$("#topic-csdb").on("click", "a.internal", function() {
+		main.showCSDbRelease($(this).attr("data-id"));
+		return false;
+	});
 
 	/**
 	 * Clicking the 'BACK' button on a specific CSDb page to show the releases again.
@@ -2473,9 +2474,14 @@ main.bindDexterCSDbEvents = function() {
 	});
 
 	/**
+	 * The 'PRIMARY' button in top of a CSDb release list.
 	 * 
+	 * DEPRECATED but remains because of CSDb caching.
 	 */
-	$("#topic-csdb").on("click", "#go-primary", main.showCSDbRelease);
+	$("#topic-csdb").on("click", "#go-primary", function() {
+		main.showCSDbRelease($(this).attr("data-id"));
+		return false;
+	});
 
 	/**
 	 * Clicking the 'POST REPLY' button to add a post in a CSDb forum thread.
@@ -2541,6 +2547,16 @@ main.bindDexterCSDbEvents = function() {
 // ==============================
 
 main.bindDexterGB64Events = function() {
+
+	/**
+	 * Clicking a thumbnail/title in a CSDb release row to open it internally.
+	 */
+	$("#topic-gb64").on("click", "a.internal", function() {
+		main.showCSDbRelease($(this).attr("data-id"));
+		// Go to the 'CSDb' tab to see the primary release
+		$("#tab-csdb").trigger("click");
+		return false;
+	});
 
 	/**
 	 * Clicking a title or thumbnail in a list of GameBase64 entries.
