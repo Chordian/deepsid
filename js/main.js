@@ -494,11 +494,14 @@ var main = {
 	 * Show a CSDb release page after caching the list.
 	 */
 	showCSDbRelease: function(id) {
-		// First cache the list of releases in case we return to it
-		main.cacheCSDb = $("#topic-csdb").html();
-		main.cacheSticky = $("#sticky-csdb").html();
-		main.cacheTabScrollPos = $("#page").scrollTop();
-		main.cacheDDCSDbSort = $("#dropdown-sort-csdb").val();
+		// Does the 'CSDb' tab currently show a list of releases?
+		if ($("#topic-csdb table.releases").length) {
+			// Cache the HTML in case we return to the list again
+			main.cacheCSDb = $("#topic-csdb").html();
+			main.cacheSticky = $("#sticky-csdb").html();
+			main.cacheTabScrollPos = $("#page").scrollTop();
+			main.cacheDDCSDbSort = $("#dropdown-sort-csdb").val();
+		}
 		// Now load the actual release page
 		browser.getCSDb("release", id, true, undefined, true);
 	},
@@ -2552,7 +2555,9 @@ main.bindDexterGB64Events = function() {
 	 * Clicking a thumbnail/title in a CSDb release row to open it internally.
 	 */
 	$("#topic-gb64").on("click", "a.internal", function() {
-		main.showCSDbRelease($(this).attr("data-id"));
+		if (!$("#topic-gb64 table.pp-single").length)
+			// It's part of a CSDb list so make sure the entry is shown
+			main.showCSDbRelease($(this).attr("data-id"));
 		// Go to the 'CSDb' tab to see the primary release
 		$("#tab-csdb").trigger("click");
 		return false;

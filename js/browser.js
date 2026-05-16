@@ -3160,20 +3160,21 @@ Browser.prototype = {
 							var ppName = $("#sticky-csdb h2").html();
 							var ppType = $("#csdb-info").attr("data-type");
 							var releasedByLinks = $topicCSDb
-var ppBy = $topicCSDb
-    .find("p")
-    .filter(function () {
-        return $(this).text().includes("Released by:");
-    })
-    .find("a")
-    .map(function () {
-        return this.outerHTML;
-    })
-    .get()
-    .join(", ");
+
+							var ppBy = $topicCSDb
+								.find("p")
+								.filter(function () {
+									return $(this).text().includes("Released by:");
+								})
+								.find("a")
+								.map(function () {
+									return this.outerHTML;
+								})
+								.get()
+								.join(", ");
 
 							primaryCorner = ' \
-								<table class="primary"> \
+								<table class="primary pp-single"> \
 									<tr> \
 										<td class="thumbnail thumbnail-csdb"> \
 											<a class="internal" href="http://csdb.chordian.net/?type=release&id='+ppId+'" data-id="'+ppId+'" target="_blank"><img src="'+ppScreenshot+'" alt="'+ppName+'" /></a> \
