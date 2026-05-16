@@ -1975,6 +1975,7 @@
 						<ul>
 							<li>GB64 game lists now also show a primary release preview in the top right corner, whenever the
 								information about this is available. It also shows a CSDb release if that is the primary release.</li>
+							<li>Fixed direct CSDb lookups via URL not working correctly.</li>
 						</ul>
 
 						<h3>May 14, 2026</h3>

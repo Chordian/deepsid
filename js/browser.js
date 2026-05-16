@@ -2776,19 +2776,14 @@ Browser.prototype = {
 			$("#loading-csdb").fadeIn(500);
 		}, 250);
 
-		// Get the group or user in the copyright text
-		var lines = $("#info-text").html().split("<br>");
-		var lastLine = lines[lines.length - 1];
-		var copyright = lastLine.substring(lastLine.indexOf(" ") + 1);
-
 		var readFromCSDb = typeof overrideCache !== "undefined" && overrideCache ? 1 : 0;
 		var ignorePrimary = typeof overridePrimary !== "undefined" && overridePrimary ? 1 : 0;
 
 		// Determine the arguments to be sent to the PHP file
 		// The 'this.csdbArgs' variable is also used by the refresh cache link (see 'main.js')
 		this.csdbArgs = typeof type !== "undefined" && typeof id !== "undefined"
-			? { fileid: browser.playlist[browser.songPos].id,
-				type: type, id: id, copyright: copyright, override: readFromCSDb, noprimary: ignorePrimary }
+			? { fileid: browser.playlist[browser.songPos]?.id ?? 0,
+				type: type, id: id, override: readFromCSDb, noprimary: ignorePrimary }
 			: { fullname: browser.playlist[browser.songPos].fullname.substr(this.ROOT_HVSC.length + 1),
 				override: readFromCSDb, noprimary: ignorePrimary };
 
@@ -2835,9 +2830,10 @@ Browser.prototype = {
 
 				// If this single release is a primary release then show the bow-and-arrow icon
 				if (data.count = -1) {
-					$.get("php/labels_info.php", { id: browser.playlist[browser.songPos].id }, function(data) {
+					$.get("php/labels_info.php", { id: browser.playlist[browser.songPos]?.id ?? 0 }, function(data) {
 						browser.validateData(data, function(data) {
-							var id = $("#csdb-comment").attr("data-id");
+							// ID '#topic-csdb' must be here too or it breaks in the compo folders
+							var id = $("#topic-csdb #csdb-comment").attr("data-id");
 							if (data.id && data.type == "csdb" && data.id == id) {
 								$('a.clipboard').after('<div class="primary-bow-tail"></div>');
 							}

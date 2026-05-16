@@ -109,7 +109,7 @@ try {
 			die(json_encode(array(
 				'status'	=> 'warning',
 				'sticky'	=> $sticky,
-				'html'		=> $primary_corner.'<h3>0 entries found</h3><div style="border-top:1px solid var(--color-border);">'.$footnote.'</div>',
+				'html'		=> $primary_corner.'<h3>0 entries found</h3><div style="border-top:1px solid var(--color-border-csdb);">'.$footnote.'</div>',
 				'needcsdb'	=> $primary_csdb_needed,
 				'primary'	=> $primary_back_button
 			)));
@@ -241,7 +241,7 @@ if ($page_id) {
 				$col_of_thumbnails.
 			'</td>
 		</tr>
-	</table><div style="border-top:1px solid var(--color-border);">'.$footnote.'</div>';
+	</table><div style="border-top:1px solid var(--color-border-csdb);">'.$footnote.'</div>';
 
 } else {
 

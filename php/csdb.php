@@ -18,7 +18,6 @@
  * @uses		$_GET['fileid']				file id of the song
  * @uses		$_GET['type']
  * @uses		$_GET['id']					CSDb id
- * @uses		$_GET['copyright']
  * @uses		$_GET['override']			Set to 1 to override cache read
  * @uses		$_GET['noprimary']			Set to 1 to override primary release
  * 
@@ -224,7 +223,7 @@ if (isset($_GET['fullname'])) {
 	try {
 		$db = $account->getDB();
 
-		$select = $db->prepare('SELECT id, copyright, csdb_type, csdb_id FROM hvsc_files WHERE collection_path = :collection_path LIMIT 1');
+		$select = $db->prepare('SELECT id, csdb_type, csdb_id FROM hvsc_files WHERE collection_path = :collection_path LIMIT 1');
 		$select->execute(array(':collection_path' => $_GET['fullname']));
 		$select->setFetchMode(PDO::FETCH_OBJ);
 
@@ -233,8 +232,6 @@ if (isset($_GET['fullname'])) {
 			$files_id = $row->id;
 			$csdb_type = $row->csdb_type;	// Can be 'release' or 'sid'
 			$csdb_id = $row->csdb_id;		// ID relates to the type
-			$copyright = $row->copyright;	// E.g. "1988 Jewels"
-			$copyright = substr($copyright, strpos($copyright, ' ') + 1); // Only need "Jewels"
 		} else {
 			$account->logActivityError(basename(__FILE__), 'No database info returned; $_GET[\'fullname\'] = '.$_GET['fullname']);
 			die(json_encode(array('status' => 'error', 'message' => "Couldn't find the information in the database.")));
@@ -319,7 +316,6 @@ if (isset($_GET['fullname'])) {
 	$files_id = $_GET['fileid'];
 	$csdb_type = $_GET['type'];
 	$csdb_id = $_GET['id'];
-	$copyright = $_GET['copyright'];
 } else
 	die(json_encode(array('status' => 'error', 'message' => 'You must specify the proper GET variables.')));
 

@@ -9,18 +9,7 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- Try changing divider lines in black CSDb lists to dark gray instead of black.
-
-- A direct CSDb link seems to be broken. A 500 server error occurs.
-
 - Admin: Along with the new 'CACHED' words in CSDb lists, also show CSDb ID number.
-
-- When enabling "maintenance_mode" make it so visitors already on the site are shown a
-  warning ("DeepSID just entered maintenance mode. It's dangerous to browse here at the
-  moment" an so on). When to show? Playing? Browsing? Any event at all?
-
-- Known bug: Single CSDb release (from list or solitary) does not show arrow-and-bow icon
-  when in a compo folder, and GB64 just shows the loading GIF animation.
 
 - Maybe shorten 'GameBase64' tag to 'GB64' instead, so the new developer tag has more room?
 
@@ -96,6 +85,10 @@ CONSIDER THIS
 - CSDb: If possible, convert ID cross-references in comments into the pertinent links.
   UPDATE: Maybe with separate post-AJAX scripts to avoid slowing the CSDb tab down? (Because
   the problem is, I may have to call the CSDb web service for each of the links found.)
+
+- When enabling "maintenance_mode" make it so visitors already on the site are shown a
+  warning ("DeepSID just entered maintenance mode. It's dangerous to browse here at the
+  moment" an so on). When to show? Playing? Browsing? Any event at all?
 
 - Some way to see what playlists are including a specific song. Perhaps from the context menu?
   UPDATE: At first I failed to remember the logic behind this, but I think it's to make sure

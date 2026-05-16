@@ -89,6 +89,7 @@
 	--color-border-info:			#7a88c8;			/* Bottom border color for top info box */
 	--color-border-comments:		var(--color-border);
 	--color-border-scope:			var(--color-timebar-border);
+	--color-border-csdb:			var(--color-border);
 
 	--color-button:					#474937;			/* Darkest green typically used on buttons */
 	--color-button-border:			var(--color-button);
@@ -510,6 +511,7 @@
 	--color-border-info:			#303a70;			/* Bottom border color for top info box */
 	--color-border-comments:		#4c4c4c;
 	--color-border-scope:			#3e3e3e;
+	--color-border-csdb:			#3c3c3c;
 
 	--color-button:					linear-gradient(to bottom, #6e7965 0%,#4b5345 85%); /* #4e5648 #565f4f #4a5244 #5a6650 #415d43 */
 	--color-button-border:			#555e4e;
@@ -798,7 +800,7 @@
 [data-theme="dark"] #topic-player table,
 [data-theme="dark"] #topic-player th,
 [data-theme="dark"] #topic-player td {
-	border-color: #363636 !important;
+	border-color: var(--color-border-csdb) !important;
 }
 [data-theme="dark"] #topic-player td.corner {
 	color: #ddd;
@@ -5974,7 +5976,7 @@ input[type=range]::-ms-track {
 			}
 
 		#page .ext .zero-releases-line {
-			border-top: 1px solid var(--color-border);
+			border-top: 1px solid var(--color-border-csdb);
 		}
 
 		#topic-csdb .csdb-zero {
@@ -6080,7 +6082,7 @@ input[type=range]::-ms-track {
 			border-left: none;
 			border-right: none;
 			border-top: none;
-			border-bottom: 1px solid var(--color-border);
+			border-bottom: 1px solid var(--color-border-csdb);
 			margin: 0;
 		}
 
@@ -6091,7 +6093,7 @@ input[type=range]::-ms-track {
 			#page .ext table.releases td,
 			#page .ext table.primary td {
 				border-right: none;
-				border-top: 1px solid var(--color-border);
+				border-top: 1px solid var(--color-border-csdb);
 				padding: 7px 0 2px;
 			}
 

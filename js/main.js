@@ -947,7 +947,7 @@ var main = {
 		}
 		// Show a specific CSDb entry (only loads the content of the CSDb tab)
 		if (typeCSDb === "sid" || typeCSDb === "release") {
-			browser.getCSDb(typeCSDb, idCSDb);
+			browser.getCSDb(typeCSDb, idCSDb, undefined, undefined, true);
 			$("#sticky-csdb").show(); // Show sticky header
 		}
 	},

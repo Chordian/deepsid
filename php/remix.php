@@ -174,7 +174,7 @@ if (isset($_GET['fullname'])) {
 
 	// Now build the HTML
 	$html = '<h3>'.$amount.' entr'.($amount == 0 || $amount > 1 ? 'ies' : 'y').' found'.
-		($amount == 0 ? '</h3><div class="zero-releases-line"></div>': '<div class="remix64-vote"></div></h3>' ).
+		($amount == 0 ? '</h3>': '<div class="remix64-vote"></div></h3>' ).
 		'<table class="releases">'.
 			$rows.
 		'</table>';
