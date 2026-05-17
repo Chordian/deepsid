@@ -141,6 +141,7 @@
 	--color-text-c64font:			#555743;			/* Used for the C64 font in the CGSC folder */
 	--color-text-label-disabled:	var(--color-border);
 	--color-text-time:				#c6c6c6;
+	--color-text-csdb-info:			#b6b6b6;
 	--color-text-sundry-disabled:	#b2b3ad;
 	--color-text-fa-common:			#c8c8c8;
 	--color-text-admin-span:		#888977;
@@ -561,6 +562,7 @@
 	--color-text-c64font:			#a8a8a8;
 	--color-text-label-disabled:	#555;
 	--color-text-time:				#484848;
+	--color-text-csdb-info:			#585858;
 	--color-text-sundry-disabled:	#4a4a4a;
 	--color-text-fa-common:			#464646;
 	--color-text-admin-span:		#888;
@@ -6402,9 +6404,10 @@ input[type=range]::-ms-track {
 					color: var(--color-text-primary-csdb);
 				}
 
-			/* The arrow-and-bow icon (symbol for primary release) */
+			/* The big arrow-and-bow icon inserted in front of titles in CSDb/GB64 lists */
+			/* DEPRECATED but remains because of CSDb caching */
 			#topic-csdb .primary-bow-icon,
-			#topic-gb64 .primary-bow-icon{
+			#topic-gb64 .primary-bow-icon {
 				float: left;
 				margin: 0 9px 0 1px;
 				width: 30px;
@@ -6414,22 +6417,36 @@ input[type=range]::-ms-track {
 				filter: var(--svg-filter-target);
 			}
 
+			/* Smaller arrow-and-bow icon appended at the end of titles in CSDb/GB64 lists */
+			#topic-csdb .primary-title-icon,
+			#topic-gb64 .primary-title-icon {
+				display: inline-block;
+				position: relative;
+				top: 2px;
+				margin-left: 8px;
+				width: 16px;
+				height: 16px;
+				line-height: 0;
+				background: url(../images/target.svg) 0 0 / 16px 16px no-repeat;
+				filter: var(--svg-filter-target);
+			}
+
 			/* The arrow-and-bow icon appended to titles in a single CSDb or GB64 release */
 			#sticky-csdb .primary-bow-tail,
 			#sticky-gb64 .primary-bow-tail {
 				display: inline-block;
 				position: relative;
-				top: 1.5px;
-				width: 24px;
-				height: 24px;
+				top: 0.7px;
+				width: 20px;
+				height: 20px;
 				margin-left: 7px;
 				line-height: 0;
-				background: url(../images/target.svg) 0 0 / 24px 24px no-repeat;
+				background: url(../images/target.svg) 0 0 / 20px 20px no-repeat;
 				filter: var(--svg-filter-target);
 			}
 
 				#sticky-gb64 .primary-bow-tail {
-					top: 2px;
+					top: 1px;
 					margin-left: 9px;
 				}
 
@@ -6447,13 +6464,26 @@ input[type=range]::-ms-track {
 					height: 9px;
 				}
 
-			/* Admin 'CACHED' status in right side of CSDb list rows */
-			#topic-csdb .cache-status {
+			/* Output information in right side of CSDb release list rows */
+			#topic-csdb .release-csdb-info {
 				position: absolute;
-				bottom: 10px;
+				top: 10px;
 				right: 1px;
-				color: var(--color-text-time);
+				color: var(--color-text-csdb-info);
+				text-align: right;
+				pointer-events: auto;
 			}
+
+				#topic-csdb .release-csdb-info a {
+					color: var(--color-text-csdb-info);
+				}
+
+				/* The part with ID and 'CACHED' status for admins only */
+				#topic-csdb .admin-info {
+					position: relative;
+					top: 19px;
+					line-height: 20px;
+				}
 
 			/* The 'PRIMARY' button in top of a CSDb release list */
 			/* DEPRECATED but remains because of CSDb caching */

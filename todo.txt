@@ -9,7 +9,8 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- Admin: Along with the new 'CACHED' words in CSDb lists, also show CSDb ID number.
+- When adding a label, you could also add the bow-and-arrow icon in the sticky header, if
+  it is a single CSDb or GB64 release.
 
 - Maybe shorten 'GameBase64' tag to 'GB64' instead, so the new developer tag has more room?
 

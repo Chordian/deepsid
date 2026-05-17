@@ -1971,6 +1971,11 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>May 17, 2026</h3>
+						<ul>
+							<li>The right side of CSDb release list rows now have a link to the original CSDb site.</li>
+						</ul>
+
 						<h3>May 16, 2026</h3>
 						<ul>
 							<li>GB64 game lists now also show a primary release preview in the top right corner, whenever the
@@ -1980,14 +1985,14 @@
 
 						<h3>May 14, 2026</h3>
 						<ul>
-							<li>Replaced the green 'PRIMARY' label in GB64 release lists with a big bow-and-arrow icon.</li>
+							<li>Replaced the green 'PRIMARY' label in GB64 release lists with a bow-and-arrow icon.</li>
 							<li>Both a CSDb and a GB64 release page will now show a bow-and-arrow icon if it's the primary release.</li>
 							<li>All composer links on the front page now redirect without refreshing the site.</li>
 						</ul>
 
 						<h3>May 13, 2026</h3>
 						<ul>
-							<li>Replaced the green 'PRIMARY' label in CSDb release lists with a big bow-and-arrow icon.</li>
+							<li>Replaced the green 'PRIMARY' label in CSDb release lists with a bow-and-arrow icon.</li>
 						</ul>
 
 						<h3>May 10, 2026</h3>

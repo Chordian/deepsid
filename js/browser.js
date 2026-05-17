@@ -1113,7 +1113,7 @@ Browser.prototype = {
 		});
 		$("#topic-csdb table.releases").append(sortedList);
 		this.emphasizing(isEmpOn);
-		this.markCached();
+		this.releaseListInfo();
 	},
 
 	/**
@@ -2826,7 +2826,7 @@ Browser.prototype = {
 
 				this.emphasizing(false);
 				main.updateRedirectPlayIcons();
-				this.markCached();
+				this.releaseListInfo();
 
 				// If this single release is a primary release then show the bow-and-arrow icon
 				if (data.count = -1) {
@@ -2879,29 +2879,38 @@ Browser.prototype = {
 	},
 
 	/**
-	 * Mark cached CSDb releases when a list of them is shown.
+	 * Output right-side information for each row in a CSDb release list.
 	 */
-	markCached: function() {
+	releaseListInfo: function() {
 		setTimeout(() => {
-			$("#topic-csdb .cache-status").remove();
-		
-			if (main.isAdmin) {
-				$("#topic-csdb table.releases tr").each(function() {
+			// Includes legacy class names
+			$("#topic-csdb .cache-status,#topic-csdb .admin-csdb-info,#topic-csdb .release-csdb-info").remove();
 
-					const $link = $(this).find("td:eq(1) a.name");
-					const cacheId = $link.data("id");
+			$("#topic-csdb table.releases tr").each(function() {
 
-					if (!cacheId) return;
+				const $link = $(this).find("td:eq(1) a.name");
+				const cacheId = $link.data("id");
 
-					const fullname = "/cache/csdb/release_" + cacheId + ".cache.gz";
+				// The direct 'CSDb' link
+				const info = '<div class="release-csdb-info"><a href="https://csdb.dk/release/?id='+cacheId+'" target="_blank">CSDb</a>';
 
-					$.get("php/file_exists.php", { file: fullname }, function(exists) {
-						if (exists) {
-							$link.parent().append('<div class="cache-status">CACHED</div>');
-						}
-					});
-				});
-			}
+				if (main.isAdmin) {
+
+					// The CSDb ID and placeholder for asynchronous 'CACHED' status
+					$link.parent().append(info+'<div class="admin-info">'+cacheId+'<br /><span id="csdb-row-cached"></span></div></div>');
+					
+					if (cacheId) {
+						const fullname = "/cache/csdb/release_" + cacheId + ".cache.gz";
+
+						// This CSDb release has a cached file
+						$.get("php/file_exists.php", { file: fullname }, function(exists) {
+							if (exists) $link.parent().find("#csdb-row-cached").append('CACHED');
+						});
+					}
+				} else {
+					$link.parent().append(info+'</div>');
+				}
+			});
 		}, 0);
 	},
 

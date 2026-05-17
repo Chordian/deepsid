@@ -261,13 +261,13 @@ if ($page_id) {
 		foreach($thumbnails as $thumbnail)
 			$line_of_thumbnails .= '<a class="gb64-list-entry" href="https://gb64.com/game.php?id='.$id.'" target="_blank" data-id="'.$id.'"><img class="gb64" src="images/gb64'.$thumbnail.'" alt="'.$thumbnail.'" /></a>';
 
-		$primary_bow_icon = '';
+		$primary_title_icon = '';
 		if (isset($_GET['fileid'])) {
 			$label = getLabelTypeId($_GET['fileid']);
 			if ($label && $label['type'] == 'gb64' && $label['id'] == $id) {
 
 				// Icon for one entry in the GB64 list
-				$primary_bow_icon = '<div class="primary-bow-icon"></div>'; 
+				$primary_title_icon = '<div class="primary-title-icon"></div>'; 
 
 				// Prepare primary preview in top right corner
 				$data = readGB64DB($id);
@@ -300,8 +300,7 @@ if ($page_id) {
 		$rows .=
 			'<tr>'.
 				'<td class="info">'.
-					$primary_bow_icon.
-					'<a class="name gb64-list-entry" href="https://gb64.com/game.php?id='.$id.'" target="_blank" data-id="'.$id.'">'.$data['title'].'</a><br />'.
+					'<a class="name gb64-list-entry" href="https://gb64.com/game.php?id='.$id.'" target="_blank" data-id="'.$id.'">'.$data['title'].'</a>'.$primary_title_icon.'<br />'.
 					$data['year'].' '.$data['company'].'<br />'.
 					'<span class="language">'.$data['language'].'</span>'.
 				'</td>'.

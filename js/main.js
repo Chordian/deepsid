@@ -2414,7 +2414,7 @@ main.bindDexterCSDbEvents = function() {
 		browser.csdbArgs = [];
 		// Remove the cache age info since it's no longer accurate
 		$("#cache-age").remove();
-		browser.markCached();
+		browser.releaseListInfo();
 	});
 
 	/**
@@ -2897,16 +2897,22 @@ main.bindKeyboardEvents = function() {
 						main.popUpWindow();
 						break;
 
-					case 67:	// Keyup 'c' - refresh compo cache - ADMIN ONLY
+					case 67:	// Keyup 'c' - refresh compo cache or CSDb cache - ADMIN ONLY
 
-						if (browser.isCompoFolder && main.isAdmin) {
-							$.post("php/csdb_compo_clear_cache.php",
-								{ competition: browser.path.replace("/CSDb Music Competitions/", "") }, function(data) {
-								browser.validateData(data, function() {
-									// Now reload the folder to automatically refresh the cache
-									browser.getFolder();
-								});
-							}.bind(this));
+						if (main.isAdmin) {
+							if (browser.isCompoFolder) {
+								// Clear the files cache for this compo folder
+								$.post("php/csdb_compo_clear_cache.php",
+									{ competition: browser.path.replace("/CSDb Music Competitions/", "") }, function(data) {
+									browser.validateData(data, function() {
+										// Now reload the folder to automatically refresh the cache
+										browser.getFolder();
+									});
+								}.bind(this));
+							} else {
+								// Try to refresh the CSDb cache
+								$("#refresh-cache").trigger("click");
+							}
 						}
 						break;
 

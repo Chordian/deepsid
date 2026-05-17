@@ -40,6 +40,7 @@ $html = '
 		<h4>Long headers in GB64 tab</h4>
 			<ul>
 				<li><a href="'.$baseURL.'?file=/MUSICIANS/B/Bogas_Ed/Murder_on_the_Mississippi.sid&tab=gb64">'.$home.'/MUSICIANS/B/Bogas_Ed/Murder_on_the_Mississippi.sid</a></li>
+				<li><a href="'.$baseURL.'?file=/MUSICIANS/S/Sonic_Graffiti/Hayes_Ben/Greed_Monster.sid&tab=gb64">'.$home.'/MUSICIANS/S/Sonic_Graffiti/Hayes_Ben/Greed_Monster.sid</a></li>
 			</ul>
 
 		<h4>Long group names in group box</h4>
