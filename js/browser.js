@@ -893,19 +893,19 @@ Browser.prototype = {
 				const $startTag = $("#dialog-list-start-tag");
 				const $endTag = $("#dialog-list-end-tag");
 
-				// --- 1. Select EVENT type for the top drop-down ---
+				// Select EVENT type for the top drop-down
 				const eventTag = this.fileTags
 					.map(tagID => this.allTags.find(tag => tag.id == tagID))
 					.filter(tag => tag && tag.type === "EVENT")	// Only EVENT tags
-					.filter(tag => !["Winner", "Solitary", "Compo", "<-", "->"].includes(tag.name))
+					.filter(tag => !["Winner", "Solitary", "Compo"].includes(tag.name))
 					.filter(tag => !tag.name.startsWith("#"))	// Skip tags starting with '#'
 					.shift(); // Take the first matching event
 
-				const startTagValue = eventTag ? eventTag.id : 0;
+				let startTagValue = eventTag ? eventTag.id : 0;
 				$startTag.val(startTagValue);
 				this.startTag = startTagValue;
 
-				// --- 2. Select PRODUCTION type for the bottom drop-down ---
+				// Select PRODUCTION type for the bottom drop-down
 				const productionTags = this.fileTags
 					.map(tagID => this.allTags.find(tag => tag.id == tagID))
 					.filter(tag => tag && tag.type === "PRODUCTION"); // Only PRODUCTION tags
@@ -923,6 +923,29 @@ Browser.prototype = {
 
 				$endTag.val(productionId);
 				this.endTag = productionId;
+
+				// If one of the two types were not present, go second priority types
+				if (startTagValue == 0 || productionId == 0) {
+					// Select EVENT type for the top drop-down
+					const gameTag = this.fileTags
+						.map(tagID => this.allTags.find(tag => tag.id == tagID))
+						.filter(tag => tag.name.startsWith("Game"))
+						.shift();
+
+					startTagValue = gameTag ? gameTag.id : 0;
+					$startTag.val(startTagValue);
+					this.startTag = startTagValue;
+
+					// Select DEVELOPER type for the bottom drop-down
+					const developerTag = this.fileTags
+						.map(tagID => this.allTags.find(tag => tag.id == tagID))
+						.filter(tag => tag && tag.type === "DEVELOPER") // Only DEVELOPER tags
+						.shift();
+
+					let endTagValue = developerTag ? developerTag.id : 0;
+					$endTag.val(endTagValue);
+					this.endTag = endTagValue;
+				}
 				break;
 			case "dialog-tags-plus":
 				// Edit tags: Add a new tag in the right list
@@ -2762,8 +2785,9 @@ Browser.prototype = {
 	 * @param {boolean} canReturn			Optional; if TRUE, coming from list
 	 * @param {boolean} overrideCache		Optional; if TRUE, read from CSDb
 	 * @param {boolean} overridePrimary		Optional; if TRUE, ignore labels
+	 * @param {function} callback			Optional; function to call after showing the contents
 	 */
-	getCSDb: function(type, id, canReturn, overrideCache, overridePrimary) {
+	getCSDb: function(type, id, canReturn, overrideCache, overridePrimary, callback) {
 		if (main.miniPlayer || main.isMobile || this.isTempTestFile()) return;
 		if (this.csdb) this.csdb.abort();
 		$("#topic-csdb").empty().append(this.loadingSpinner("csdb"));
@@ -2874,6 +2898,7 @@ Browser.prototype = {
 				else
 					$("#note-csdb").hide();
 
+				if (typeof callback === "function") callback.call(this);
 			});
 		}.bind(this));
 	},
@@ -2897,14 +2922,14 @@ Browser.prototype = {
 				if (main.isAdmin) {
 
 					// The CSDb ID and placeholder for asynchronous 'CACHED' status
-					$link.parent().append(info+'<div class="admin-info">'+cacheId+'<br /><span id="csdb-row-cached"></span></div></div>');
+					$link.parent().append(info+'<div class="admin-info">'+cacheId+'<br /><span class="csdb-row-cached"></span></div></div>');
 					
 					if (cacheId) {
 						const fullname = "/cache/csdb/release_" + cacheId + ".cache.gz";
 
 						// This CSDb release has a cached file
 						$.get("php/file_exists.php", { file: fullname }, function(exists) {
-							if (exists) $link.parent().find("#csdb-row-cached").append('CACHED');
+							if (exists) $link.parent().find(".csdb-row-cached").empty().append('CACHED');
 						});
 					}
 				} else {
@@ -3232,7 +3257,7 @@ Browser.prototype = {
 					});
 
 					// If there is no "GameBase64" tag then add it now
-					if (this.playlist[this.songPos].tags.indexOf("tag-gamebase64") === -1) {
+					if (this.playlist[this.songPos]?.tags.indexOf("tag-gamebase64") === -1) {
 
 						$.post("php/tags_write_single.php", {
 							fullname: thisFullname,
@@ -3521,6 +3546,9 @@ Browser.prototype = {
 				main.toggleSundry();
 				$(window).trigger("resize");
 				break;
+			case 'main-toggle-annex':
+				main.toggleAnnex();
+				break;
 			case 'main-refresh-folder':
 				main.refreshFolder();
 				break;
@@ -3635,6 +3663,8 @@ Browser.prototype = {
 						}, function(data) {
 							this.validateData(data, function() {
 								main.browserMessage("Unlinked label");
+								$("#sticky-csdb .primary-bow-tail,#sticky-gb64 .primary-bow-tail").remove();
+								this._refreshPrimaryTabs();
 								main.refreshFolder();
 							});
 						}.bind(this));
@@ -3806,7 +3836,7 @@ Browser.prototype = {
 	 * This will process a CSDb release or a GB64 game depending on which page tab
 	 * is currently being displayed.
 	 * 
-	 * Only available to administrators for now.
+	 * Only available for administrators for now.
 	 */
 	addLabel: function() {
 		if (main.isAdmin) {
@@ -3836,19 +3866,45 @@ Browser.prototype = {
 							type:		$infoElement.attr("data-type"),
 							siteid:		$infoElement.attr("data-siteid")
 						}, function(data) {
-							browser.validateData(data, function(data) {
+							this.validateData(data, function(data) {
 								if (data.created)
 									main.browserMessage("Created "+site+" label for '"+$infoElement.attr("data-name")+"'");
 								else
 									main.browserMessage("Linked to existing "+site+" label");
+
+								// Add bow-and-arrow icon in sticky header
+								tailIcon = '<div class="primary-bow-tail"></div>';
+								if (tab == "csdb")
+									$('#sticky-csdb a.clipboard').after(tailIcon);
+								else
+									$('#sticky-gb64 div.corner-icons').before(tailIcon);
+								this._refreshPrimaryTabs();
 								main.refreshFolder();
 							});
-						});
+						}.bind(this));
 					});
 				}.bind(this));
 
 			} else
 				alert("No SID song or CSDb release selected.");
+		}
+	},
+
+	/**
+	 * Refresh CSDb and GB64 tabs after adding or removing a label.
+	 */
+	_refreshPrimaryTabs: function() {
+		// If a CSDb list is present or hiding behind a 'BACK' button
+		if (main.isCSDbList() || $("#sticky-csdb #go-back").length) {
+			var pl1 = this.playlist;
+			this.getCSDb(undefined, undefined, undefined, true, undefined, () => {
+				var pl2 = this.playlist;
+				this.playlist = pl1; // Restoring this variable is a bit of a hack
+				this.getGB64();
+				this.playlist = pl2; // Must be restored or row browsing breaks
+			});
+		} else {
+			this.getGB64();
 		}
 	},
 

@@ -120,8 +120,7 @@ var main = {
 	// ==============================
 
 	/**
-	 * Show a floating message for a short period of time in the bottom of the song
-	 * browser window. Used when e.g. cycling the factoids.
+	 * Show a temporary message in the search box for a short period of time.
 	 * 
 	 * @param {string} message
 	 * 
@@ -130,9 +129,11 @@ var main = {
 	 */
 	browserMessage: function(message) {
 		clearTimeout(main.browserMessageTimer);
-		$("#browser-bottom .bb-message").empty().append(message).css("display", "inline-block");
+		$("#search-bar").hide();
+		$("#browser-msg").empty().append(message).css("display", "flex");
 		main.browserMessageTimer = setTimeout(() => {
-			$("#browser-bottom .bb-message").hide();
+			$("#browser-msg").hide();
+			$("#search-bar").show();
 		}, 1500);
 	},
 
@@ -491,6 +492,14 @@ var main = {
 	},
 
 	/**
+	 * Toggle annex box ON or OFF.
+	 */
+	toggleAnnex: function() {
+		browser.annexNotWanted = !browser.annexNotWanted;
+		browser.annexNotWanted ? $("#annex").hide() : $("#annex").show();
+	},
+
+	/**
 	 * Show a CSDb release page after caching the list.
 	 */
 	showCSDbRelease: function(id) {
@@ -563,6 +572,15 @@ var main = {
 	 */
 	isSongSelected: function() {
 		return Boolean(browser.playlist && browser.playlist[browser.songPos]);
+	},
+
+	/**
+	 * Check if the 'CSDb' tab shows a list of release and not a single release.
+	 * 
+	 * @returns {boolean}			TRUE if a CSDb list is shown
+	 */
+	isCSDbList: function() {
+		return $("#comment-primary").length;
 	},
 
 	/**
@@ -1452,6 +1470,7 @@ main.bindEvents = function() {
 			<div class="line main-line" data-action="main-next-inline-factoid">Next inline factoid<span>i</span></div>
 			<div class="line main-line" data-action="main-next-detail-factoid">Next detail factoid<span>u</span></div>
 			<div class="line main-line" data-action="main-refresh-folder">Refresh folder<span>f</span></div>
+			<div class="line main-line" data-action="main-toggle-annex">Toggle annex<span>a</span></div>
 			<div class="line main-line" data-action="main-toggle-sundry">Toggle sundry<span>s</span></div>
 			<div class="line main-line" data-action="main-toggle-tags">Toggle tags<span>y</span></div>
 		`;
@@ -3025,6 +3044,11 @@ main.bindKeyboardEvents = function() {
 						ctrls.selectEmulator(SID.emulator != "silence" ? "silence" : "websid");
 						break;
 
+					case 65:	// Keyup 'a' - toggle annex on or off
+
+						main.toggleAnnex();
+						break;
+
 					case 37:	// Keyup 'ARROW-LEFT' - skip to previous (+ SHIFT to emulate auto-progress)
 
 						$("#folders").focus();
@@ -3047,9 +3071,9 @@ main.bindKeyboardEvents = function() {
 						}
 						break;
 
-					case 65:	// Keyup 'a' - test something
+					case 68:	// Keyup 'd' - test something
 
-						log("test");
+						main.browserMessage("This is a test message.");
 						break;
 
 					default:

@@ -947,43 +947,45 @@
 						<select id="dropdown-sort" name="sort"><!-- browser.js --></select>
 					</div>
 				</div>
-				<div id="browser-bottom"><div class="bb-message"></div></div>
 				<div id="folders" tabindex="0"><div id="kb-marker"></div><table></table>
 				</div>
 				<img id="loading" class="loading-spinner" src="images/loading.svg" style="display:none;" alt="" />
 				<div id="search">
-					<select id="dropdown-search" name="search-type">
-						<option value="#all#">All</option>
-						<option value="fullname">Filename</option>
-						<option value="author">Author</option>
-						<option value="copyright">Copyright</option>
-						<option value="player">Player</option>
-						<option value="location">Location</option>
-						<option value="maximum">Maximum</option>
-						<option value="type">Type</option>
-						<option value="tag">Tags</option>
-						<option value="stil">STIL</option>
-						<option value="rating">Rating</option>
-						<option value="country">Country</option>
-						<option value="label">Labels</option>
-						<option value="focus">Focus</option>
-						<option value="new">Version</option>
-						<option value="latest">Latest</option>
-						<option value="folders" style="display:none;">Folders</option>
-						<option value="gb64">Game</option>
-						<option value="special" style="display:none;">Special</option>
-					</select>
-					<form onsubmit="return false;" autocomplete="off">
-						<div class="search-wrapper">
-							<input type="text" name="search-box" id="search-box" maxlength="64" placeholder="Search..." />
-							<img src="images/close.svg" id="search-clear" alt="Clear" />
+					<div id="search-bar">
+						<select id="dropdown-search" name="search-type">
+							<option value="#all#">All</option>
+							<option value="fullname">Filename</option>
+							<option value="author">Author</option>
+							<option value="copyright">Copyright</option>
+							<option value="player">Player</option>
+							<option value="location">Location</option>
+							<option value="maximum">Maximum</option>
+							<option value="type">Type</option>
+							<option value="tag">Tags</option>
+							<option value="stil">STIL</option>
+							<option value="rating">Rating</option>
+							<option value="country">Country</option>
+							<option value="label">Labels</option>
+							<option value="focus">Focus</option>
+							<option value="new">Version</option>
+							<option value="latest">Latest</option>
+							<option value="folders" style="display:none;">Folders</option>
+							<option value="gb64">Game</option>
+							<option value="special" style="display:none;">Special</option>
+						</select>
+						<form onsubmit="return false;" autocomplete="off">
+							<div class="search-wrapper">
+								<input type="text" name="search-box" id="search-box" maxlength="64" placeholder="Search..." />
+								<img src="images/close.svg" id="search-clear" alt="Clear" />
+							</div>
+						</form>
+						<div id="search-here-container">
+							<input type="checkbox" id="search-here" name="shtoggle" class="unselectable" unchecked />
+							<label for="search-here" class="unselectable">Here</label>
 						</div>
-					</form>
-					<div id="search-here-container">
-						<input type="checkbox" id="search-here" name="shtoggle" class="unselectable" unchecked />
-						<label for="search-here" class="unselectable">Here</label>
+						<button id="search-button" class="medium disabled" disabled>Search</button>
 					</div>
-					<button id="search-button" class="medium disabled" disabled>Search</button>
+					<div id="browser-msg"></div>
 				</div>
 			</div>
 		</div>
@@ -1970,6 +1972,17 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>May 23, 2026</h3>
+						<ul>
+							<li>The "a" hotkey can now be used to toggle the annex box on or off.</li>
+							<li>Bottom messages now appear inside the search box instead of in a floating box.</li>
+						</ul>
+
+						<h3>May 18, 2026</h3>
+						<ul>
+							<li>The magic button in the dialog box for editing tags now also connects game and developer tags.</li>
+						</ul>
 
 						<h3>May 17, 2026</h3>
 						<ul>

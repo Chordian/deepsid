@@ -9,8 +9,14 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- When adding a label, you could also add the bow-and-arrow icon in the sticky header, if
-  it is a single CSDb or GB64 release.
+- The 'CACHED' row label is not easy enough to spot. Either give it a subtle color, make the
+  ID a weaker color, or move ID to the left of 'CACHED' (with a margin of course).
+
+- Revive random annex topic, but only on the front page. As soon as you enter a folder, the
+  profile tab should be updated as usual.
+
+- Make a post-CSDb release sweep of all CSDb ID's mentioned in forum comments and update to
+  link names. [This todo may be a duplicate]
 
 - Maybe shorten 'GameBase64' tag to 'GB64' instead, so the new developer tag has more room?
 
