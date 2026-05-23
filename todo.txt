@@ -9,16 +9,12 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- The 'CACHED' row label is not easy enough to spot. Either give it a subtle color, make the
-  ID a weaker color, or move ID to the left of 'CACHED' (with a margin of course).
-
 - Revive random annex topic, but only on the front page. As soon as you enter a folder, the
   profile tab should be updated as usual.
 
-- Make a post-CSDb release sweep of all CSDb ID's mentioned in forum comments and update to
-  link names. [This todo may be a duplicate]
-
 - Maybe shorten 'GameBase64' tag to 'GB64' instead, so the new developer tag has more room?
+
+- Copy the CSDb reference parsing function to CShellDB too.
 
 - Another "fun" one: Make sure all variable names in all PHP files use snake_case.
   Largely done: composer.php
@@ -89,10 +85,6 @@ CONSIDER THIS
   rating the stars change color to indicate that the rating is a total average. I still fear
   there will be too few and very biased ratings for this to be really useful.
 
-- CSDb: If possible, convert ID cross-references in comments into the pertinent links.
-  UPDATE: Maybe with separate post-AJAX scripts to avoid slowing the CSDb tab down? (Because
-  the problem is, I may have to call the CSDb web service for each of the links found.)
-
 - When enabling "maintenance_mode" make it so visitors already on the site are shown a
   warning ("DeepSID just entered maintenance mode. It's dangerous to browse here at the
   moment" an so on). When to show? Playing? Browsing? Any event at all?
@@ -106,12 +98,6 @@ CONSIDER THIS
 - Buttons 'Attach' and 'Detach' for CSDb release pages (maybe only for me to begin with).
   UPDATE: A labels system has been implemented which works from context menu or hotkey. But
   the button names are so good, I might consider doing this later.
-
-- Somehow add blue tags to CSDb tab list so it's apparent what they refer to. It could be
-  appended to the date in the lists. It's a logical way to show it and should be done, but
-  it will require additional database storage. Maybe a "+" icon will appear after dates here
-  too, clicking will open 'Edit tags' dialog box. UPDATE: With the new label system this
-  might not be so interesting anymore.
 
 - Idea from Anon-Relays: Loop song X number of times before moving on to the next one. In
   the settings, the default number should of course be 1. UPDATE: It doesn't have to be a
@@ -141,8 +127,8 @@ CONSIDER THIS
 - Cache: When CSDb is down and a cache file is shown instead, a warning message in top could
   say that CSDb is currently unreachable so here's a cached file instead.
 
-- In a profile page, make the small handles in group table into links and remove the corner external
-  link icon. Then users can choose what handle to open in CSDb themselves.
+- In a profile page, make the small handles in group table into links and remove the corner
+  external link icon. Then users can choose what handle to open in CSDb themselves.
 
 - SID rows with several subtunes could open up a list with the subtunes below the row. The subtunes
   could be given names that are stored in the database, and they could each show song length. This
@@ -281,8 +267,6 @@ CONSIDER THIS
 - Bug: Backing out of a playlist folder renamed to include a "/" character is problematic.
 - Bug: Country flag appears in the middle of the country name here:
   https://deepsid.chordian.net/?file=/MUSICIANS/M/Mega9man/
-- Bug: When a CSDb page title is too long:
-  https://deepsid.chordian.net/?file=/MUSICIANS/D/DRAX/Balance.sid&tab=csdb (click image then SHOW)
 - Bug: Copy link using the context menu triggers a console error if not logged in.
 - Bug: Players: Show list. Enter entry. Back. Entering the same entry again is now impossible.
 - Bug: Groepaz's profile header text overlaps the "report a profile change" link.

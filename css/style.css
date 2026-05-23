@@ -154,6 +154,7 @@
 	--color-text-error:				#c00;
 	--color-text-primary-gb64:		#7b5c4b;
 	--color-text-primary-csdb:		var(--color-text-script-name);
+	--color-text-row-cached:		#7e7e7e;
 
 	--color-tags-bracket:			#a1a294;			/* Used for horizontal tag start-to-end brackets */
 	--color-tags-bracket-up:		#949494;
@@ -575,6 +576,7 @@
 	--color-text-error:				#e66;
 	--color-text-primary-gb64:		#c2aa9c;
 	--color-text-primary-csdb:		var(--color-text-script-name);
+	--color-text-row-cached:		#888;
 
 	--color-tags-bracket:			#808080;			/* Used for horizontal tag start-to-end brackets */
 	--color-tags-bracket-up:		#949494;
@@ -6462,6 +6464,11 @@ input[type=range]::-ms-track {
 					position: relative;
 					top: 19px;
 					line-height: 20px;
+				}
+
+				/* Placeholder for the 'CACHED' word */
+				#topic-csdb .csdb-row-cached {
+					color: var(--color-text-row-cached);
 				}
 
 			/* The 'PRIMARY' button in top of a CSDb release list */

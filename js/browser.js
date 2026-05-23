@@ -2898,6 +2898,8 @@ Browser.prototype = {
 				else
 					$("#note-csdb").hide();
 
+				this.resolveCSDbReleaseRefs();
+
 				if (typeof callback === "function") callback.call(this);
 			});
 		}.bind(this));
@@ -2937,6 +2939,94 @@ Browser.prototype = {
 				}
 			});
 		}, 0);
+	},
+
+	/**
+	 * Parse the CSDb page and make all CSDb references readable and clickable.
+	 */
+	resolveCSDbReleaseRefs: function () {
+
+		function _getReleaseName(releaseId, callback) {
+			$.get("php/csdb_sid_path.php", {
+				type: "release",
+				id: releaseId
+			}, function(data) {
+				callback(data.name && data.name[0]
+					? data.name[0]
+					: "Release " + releaseId
+				);
+			}, "json");
+		}
+
+		function _makeReleaseLink(releaseId, releaseName) {
+			return $("<a>", {
+				"class": "internal",
+				"href": "https://csdb.chordian.net/?type=release&id=" + releaseId,
+				"data-id": releaseId,
+				"text": releaseName
+			});
+		}
+
+		// Existing full CSDb release links
+		$("#topic-csdb a[href*='csdb.dk/release/']").each(function() {
+
+			var $oldLink = $(this);
+			var href = $oldLink.attr("href");
+
+			var match = href.match(
+				/csdb\.dk\/release\/(?:index\.php)?\?id=(\d+)/i
+			);
+
+			if (!match)
+				return;
+
+			var releaseId = match[1];
+
+			_getReleaseName(releaseId, function(releaseName) {
+				$oldLink.replaceWith(_makeReleaseLink(releaseId, releaseName));
+			});
+
+		});
+
+		// Raw text refs like <release id=143830>
+		$("#topic-csdb").find("*").contents().filter(function() {
+			return this.nodeType === Node.TEXT_NODE;
+		}).each(function() {
+
+			var textNode = this;
+			var text = textNode.nodeValue;
+			var regex = /<release\s+id=(\d+)>/gi;
+			var match;
+			var parts = [];
+			var lastIndex = 0;
+
+			while ((match = regex.exec(text)) !== null) {
+
+				var releaseId = match[1];
+
+				if (match.index > lastIndex)
+					parts.push(document.createTextNode(text.slice(lastIndex, match.index)));
+
+				var placeholder = document.createTextNode("Release " + releaseId);
+				parts.push(placeholder);
+
+				_getReleaseName(releaseId, function(releaseId, placeholder) {
+					return function(releaseName) {
+						$(placeholder).replaceWith(_makeReleaseLink(releaseId, releaseName));
+					};
+				} (releaseId, placeholder));
+
+				lastIndex = regex.lastIndex;
+			}
+
+			if (!parts.length)
+				return;
+
+			if (lastIndex < text.length)
+				parts.push(document.createTextNode(text.slice(lastIndex)));
+
+			$(textNode).replaceWith(parts);
+		});
 	},
 
 	/**
