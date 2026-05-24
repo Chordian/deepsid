@@ -2604,8 +2604,13 @@ Browser.prototype = {
 			if ($("#tabs .selected").attr("data-topic") === "profile")
 				$("#page").addClass("big-logo");
 
-			// Big logo for annex profile page
-			$("#atopic-profile").empty().append('<div class="annex-big-logo"></div><div class="annex-taller"></div>');
+			// Show the list of useful links in the annex profile tab
+			$.get("php/annex_help.php", { id: 18 }, function(links) {
+				$("#atopic-profile").empty().append(links);
+			});
+
+			// Show the DeepSID logo in the tab with composer links
+			$("#atopic-links").empty().append('<div class="annex-big-logo"></div><div class="annex-taller"></div>');
 
 			this.composer = $.get("php/root.php", function(data) {
 				this.validateData(data, function(data) {
@@ -3213,6 +3218,8 @@ Browser.prototype = {
 						});
 					});
 				});
+
+				this.resolveCSDbReleaseRefs();
 			});
 		}.bind(this));
 	},

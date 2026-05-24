@@ -111,6 +111,12 @@ $html = '
 			<ul>
 				<li><a href="'.$baseURL.'?file=/MUSICIANS/O/Ouwehand_Reyn/Falcon_Tn.sid">'.$home.'/MUSICIANS/O/Ouwehand_Reyn/Falcon_Tn.sid</a> (Mega-Co Demo)</li>
 			</ul>
+
+		<h4>CSDb references to be converted to links with pretty names</h4>
+			<ul>
+				<li><a href="'.$baseURL.'?file=/MUSICIANS/T/Taylor_Stuart/Sky_Runner.sid&tab=csdb">'.$home.'/MUSICIANS/T/Taylor_Stuart/Sky_Runner.sid</a></li>
+				<li><a href="'.$baseURL.'?tab=csdb&csdbtype=release&csdbid=11266">'.$home.'/?tab=csdb&csdbtype=release&csdbid=11266</a> (CSDb page)</li>
+			</ul>
 ';
 
 die(json_encode(array('status' => 'ok', 'html' => $html)));

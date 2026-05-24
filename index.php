@@ -1973,11 +1973,17 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>May 24, 2026</h3>
+						<ul>
+							<li>The external links have been moved from the 'Help' tab to the 'Profile' tab in the annex box and
+								are now shown only on the front page. The list has also been renamed to "Beyond DeepSID" instead.</li>
+						</ul>
+
 						<h3>May 23, 2026</h3>
 						<ul>
 							<li>The "a" hotkey can now be used to toggle the annex box on or off.</li>
 							<li>Bottom messages now appear inside the search box instead of in a floating box.</li>
-							<li>CSDb ID references in comment threads are now converted into into links with proper names.</li>
+							<li>CSDb ID references in comment threads are now converted into links with proper names.</li>
 						</ul>
 
 						<h3>May 18, 2026</h3>
@@ -2717,9 +2723,7 @@
 					<div class="annex-topics" style="display:none;" title="Topics"></div>
 				</div>
 				<div id="annex-page">
-					<div id="atopic-profile" class="atopic" style="position:relative;">
-						<div class="annex-big-logo"></div><div class="annex-taller"></div>
-					</div>
+					<div id="atopic-profile" class="atopic" style="position:relative;"></div>
 					<div id="atopic-links" class="atopic" style="display:none;"></div>
 					<div id="atopic-help" class="atopic" style="display:none;"></div>
 				</div>

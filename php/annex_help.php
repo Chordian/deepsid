@@ -2,7 +2,7 @@
 /**
  * DeepSID
  *
- * Returns a randomly chosen block of HTML for the annex box with help topics.
+ * Returns a block of HTML for the annex box with help topics.
  * 
  * @uses		$_GET['id']			optional
  *
@@ -788,7 +788,7 @@ $help = array(
 
 	',
 
-    '   <h3 style="margin-bottom:20px;">Useful links</h3>
+    '   <h3 style="margin-bottom:20px;">Beyond DeepSID</h3>
 
 		<ul class="site-list">'
         . makeSiteLink('https://8bitlegends.com', '8BitLegends', 'Tribute')
@@ -839,10 +839,10 @@ $help = array(
         . makeSiteLink('https://www.slayradio.org', 'SLAY Radio', 'Music')
         . makeSiteLink('https://www.6581-8580.com', 'SOASC', 'Collection')
         . makeSiteLink('https://www.scs-trc.net', 'Success & TRC', 'Groups')
-        . makeSiteLink('https://tnd64.unikat.sk', 'TND', 'Scener')
+        . makeSiteLink('https://tnd64.dreamhosters.com', 'TND', 'Scener')
         . makeSiteLink('https://www.triad.se', 'Triad', 'Group')
         . makeSiteLink('https://ultimatesid.dk', 'USC', 'Collection')
-        . makeSiteLink('https://vandalism.news', 'Vandalism', 'Diskmag')
+        // . makeSiteLink('https://vandalism.news', 'Vandalism', 'Diskmag')
         . makeSiteLink('https://vice-emu.sourceforge.io', 'VICE', 'Emulator')
     	. '</ul>
 	',
@@ -857,8 +857,9 @@ if ($id != -1)
 else
 	echo
 	'	<h3>Select a topic:</h3>
-		<ul style="margin-bottom:16px;">
-			<li><a href="6" class="topic">Color strips</a></li>
+		<ul style="margin-bottom:16px;">'.
+			//<li><a href="18" class="topic">Beyond DeepSID</a></li>
+			'<li><a href="6" class="topic">Color strips</a></li>
 			<li><a href="12" class="topic">Digi tags</a></li>
 			<li><a href="17" class="topic">Event tags</a></li>
 			<li><a href="2" class="topic">External linking</a></li>
@@ -875,7 +876,6 @@ else
 			<li><a href="4" class="topic">SID handlers</a></li>
 			<li><a href="9" class="topic">Social links</a></li>
 			<li><a href="8" class="topic">URL parameters</a></li>
-			<li><a href="18" class="topic">Useful links</a></li>
 			<li><a href="11" class="topic">Warning tags</a></li>
 		</ul>
 	';

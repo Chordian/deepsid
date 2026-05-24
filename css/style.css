@@ -4901,8 +4901,8 @@ input[type=range]::-ms-track {
 
 			.annex-big-logo {
 				position: absolute;
-				top: -10px;
-				left: -12px;
+				top: 0;
+				left: -2px;
 				height: 45px;
 				width: 400px;
 				background: var(--color-bg-box) var(--url-biglogo) 0 0 / 254px no-repeat !important;
