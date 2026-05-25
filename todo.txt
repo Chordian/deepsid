@@ -9,9 +9,6 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- Convert group and scener references in CSDb comments to links with pretty names. When done
-  and it works, duplicate it in CShellDB too.
-
 - Another "fun" one: Make sure all variable names in all PHP files use snake_case.
   Largely done: composer.php
 
@@ -195,6 +192,8 @@ CONSIDER THIS
 - Maybe place "Misc" in CGSC in top, above a divider line?
 - For redirect links, add a BACK button in both STIL tabs (to complement the 'b' hotkey).
 - Front page top 10 list: Add most common birth years, now that you have the data for it.
+- Uncaught CSDb references that should also be converted:
+  http://chordian/deepsid/?tab=csdb&csdbtype=release&csdbid=261679
 
 - Search bug from Acrouzet: "On mobile, ordering results based on the criteria selected
   from the top right drop-down seems to not work properly. I believe it may be organizing pages
@@ -494,7 +493,7 @@ PROBABLY NOT?
   UPDATE: I made some PSP tests. The 'gb=64' version confuses beginners that may not associate that
   with a game. The 'game=64' is not bad but might annoy the GB64 site developers. I also tried a
   raw 'game' without rainbow patch and number, but it looks so much like a standard tag that the
-  lower cases "g" is grating. For now, the full 'gamebase=64' may be long, but it looks good.
+  lower case "g" is grating. For now, the full 'gamebase=64' may be long, but it looks good.
 
 - User setting: "Always open CSDb links in CSDb.dk instead of CShellDB" - UPDATE: But I'm not sure
   I really want to do that. Force people to use CShellDB - it deserves an audience.

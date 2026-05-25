@@ -15,6 +15,7 @@
  * @uses		$_GET['id']
  * 
  * @used-by		main.js
+ * @used-by		browser.js
  */
 
 require_once("setup.php");
@@ -23,7 +24,7 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH
 	die("Direct access not permitted.");
 
 if (!isset($_GET['type']) || !isset($_GET['id']))
-	die(json_encode(array('status' => 'error', 'message' => 'You must specify the proper GET variable.')));
+	die(json_encode(array('status' => 'error', 'message' => 'You must specify the proper GET variables.')));
 
 // Get the XML from the CSDb web service
 $xml = curl('https://csdb.dk/webservice/?type='.$_GET['type'].'&id='.$_GET['id']);

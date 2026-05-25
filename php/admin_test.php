@@ -116,6 +116,14 @@ $html = '
 			<ul>
 				<li><a href="'.$baseURL.'?file=/MUSICIANS/T/Taylor_Stuart/Sky_Runner.sid&tab=csdb">'.$home.'/MUSICIANS/T/Taylor_Stuart/Sky_Runner.sid</a></li>
 				<li><a href="'.$baseURL.'?tab=csdb&csdbtype=release&csdbid=11266">'.$home.'/?tab=csdb&csdbtype=release&csdbid=11266</a> (CSDb page)</li>
+				<li><a href="'.$baseURL.'?tab=csdb&csdbtype=release&csdbid=261666">'.$home.'/?tab=csdb&csdbtype=release&csdbid=261666</a> (CSDb page)</li>
+				<li><a href="'.$baseURL.'?tab=csdb&csdbtype=release&csdbid=261679">'.$home.'/?tab=csdb&csdbtype=release&csdbid=261679</a> (<i>unhandled</i>)</li>
+			</ul>
+
+		<h4>CSDb SID links in to be converted to "plinks" instead</h4>
+			<ul>
+				<li><a href="'.$baseURL.'?file=/MUSICIANS/T/TLF/Blue_Tac.sid&tab=csdb">'.$home.'/MUSICIANS/T/TLF/Blue_Tac.sid</a></li>
+				<li><a href="'.$baseURL.'?file=/MUSICIANS/T/TLF/DKC-Aqua_Ambient.sid&tab=csdb">'.$home.'/MUSICIANS/T/TLF/DKC-Aqua_Ambient.sid</a></li>
 			</ul>
 ';
 

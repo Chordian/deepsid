@@ -2903,7 +2903,7 @@ Browser.prototype = {
 				else
 					$("#note-csdb").hide();
 
-				this.resolveCSDbReleaseRefs();
+				this.resolveCSDbRefs();
 
 				if (typeof callback === "function") callback.call(this);
 			});
@@ -2947,79 +2947,101 @@ Browser.prototype = {
 	},
 
 	/**
-	 * Parse the CSDb page and make all CSDb references readable and clickable.
+	 * Parse the CSDb page and make all references readable and clickable.
 	 */
-	resolveCSDbReleaseRefs: function () {
+	resolveCSDbRefs: function() {
 
-		function _getReleaseName(releaseId, callback) {
-			$.get("php/csdb_sid_path.php", {
-				type: "release",
-				id: releaseId
-			}, function(data) {
-				callback(data.name && data.name[0]
-					? data.name[0]
-					: "Release " + releaseId
-				);
-			}, "json");
+		function _ucFirst(str) {
+			return str.charAt(0).toUpperCase() + str.slice(1);
 		}
 
-		function _makeReleaseLink(releaseId, releaseName) {
+		function _getCSDbName(type, id, callback) {
+			$.getJSON("php/csdb_json.php", {
+				type: type,
+				id: id
+			}, function(data) {
+
+				var typeKey = _ucFirst(type);
+				var name;
+
+				if (type === "scener") {
+					name = data.csdb &&
+						data.csdb.Handle &&
+						data.csdb.Handle.Handle;
+				} else {
+					name = data.csdb &&
+						data.csdb[typeKey] &&
+						data.csdb[typeKey].Name;
+				}
+
+				callback(name || _ucFirst(type) + " " + id);
+
+			});
+		}
+
+		function _makeCSDbLink(type, id, name) {
 			return $("<a>", {
-				"class": "internal",
-				"href": "https://csdb.chordian.net/?type=release&id=" + releaseId,
-				"data-id": releaseId,
-				"text": releaseName
+				//"class": "internal", // Opens in DeepSID but this comes with a bag of problems
+				"href": "https://csdb.chordian.net/?type=" + type + "&id=" + id,
+				"data-id": id,
+				"data-type": type,
+				"text": name,
+				"target": "_blank"
 			});
 		}
 
 		// Existing full CSDb release links
-		$("#topic-csdb a[href*='csdb.dk/release/']").each(function() {
+		$("#topic-csdb a[href*='/release/']").each(function() {
 
 			var $oldLink = $(this);
 			var href = $oldLink.attr("href");
 
 			var match = href.match(
-				/csdb\.dk\/release\/(?:index\.php)?\?id=(\d+)/i
+				/\/release\/(?:index\.php)?\?id=(\d+)/i
 			);
 
 			if (!match)
 				return;
 
-			var releaseId = match[1];
+			var type = "release";
+			var id = match[1];
 
-			_getReleaseName(releaseId, function(releaseName) {
-				$oldLink.replaceWith(_makeReleaseLink(releaseId, releaseName));
+			_getCSDbName(type, id, function(name) {
+				$oldLink.replaceWith(_makeCSDbLink(type, id, name));
 			});
 
 		});
 
-		// Raw text refs like <release id=143830>
+		// Raw text refs like <release id=143830>, <scener id="1185">, <group id=1234>
 		$("#topic-csdb").find("*").contents().filter(function() {
 			return this.nodeType === Node.TEXT_NODE;
 		}).each(function() {
 
 			var textNode = this;
 			var text = textNode.nodeValue;
-			var regex = /<release\s+id=(\d+)>/gi;
+
+			var regex = /<(release|scener|group)\s+id=["']?(\d+)["']?>/gi;
+
 			var match;
 			var parts = [];
 			var lastIndex = 0;
 
 			while ((match = regex.exec(text)) !== null) {
 
-				var releaseId = match[1];
+				var type = match[1].toLowerCase();
+				var id = match[2];
 
 				if (match.index > lastIndex)
 					parts.push(document.createTextNode(text.slice(lastIndex, match.index)));
 
-				var placeholder = document.createTextNode("Release " + releaseId);
+				var placeholder = document.createTextNode(_ucFirst(type) + " " + id);
 				parts.push(placeholder);
 
-				_getReleaseName(releaseId, function(releaseId, placeholder) {
-					return function(releaseName) {
-						$(placeholder).replaceWith(_makeReleaseLink(releaseId, releaseName));
+				_getCSDbName(type, id, function(type, id, placeholder) {
+					return function(name) {
+						$(placeholder).replaceWith(_makeCSDbLink(type, id, name));
 					};
-				} (releaseId, placeholder));
+				}(type, id, placeholder));
 
 				lastIndex = regex.lastIndex;
 			}
@@ -3031,7 +3053,10 @@ Browser.prototype = {
 				parts.push(document.createTextNode(text.slice(lastIndex)));
 
 			$(textNode).replaceWith(parts);
+
 		});
+
+		main.sidLinksToPlinks();
 	},
 
 	/**
@@ -3219,7 +3244,7 @@ Browser.prototype = {
 					});
 				});
 
-				this.resolveCSDbReleaseRefs();
+				this.resolveCSDbRefs();
 			});
 		}.bind(this));
 	},

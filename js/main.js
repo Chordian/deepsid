@@ -1,6 +1,8 @@
 
 /**
  * DeepSID / Main
+ * 
+ * {@link main.browserMessage}
  */
 
 var $=jQuery.noConflict();
@@ -590,6 +592,26 @@ var main = {
 	 */
 	selectedDexterTab: function() {
 		return $("#tabs .selected").attr("data-topic");
+	},
+
+	/**
+	 * Populate all CSDb "[type]/?id=" anchor links with "plinks" instead.
+	 */
+	sidLinksToPlinks: function() {
+		$.each(["sid", "release"], function(index, type) {
+			$("#topic-csdb table.comments").find("a[href*='"+type+"/?id=']").each(function() {
+				var $this = $(this);
+				$.get("php/csdb_sid_path.php", { type: type, id: $this.attr("href").split("=")[1] }, function(data) {
+					browser.validateData(data, function(data) {
+						if (data.path != "") {
+							$this.empty().append(data.path[0]).addClass("redirect"); // It is now a "plink"
+						} else if (data.name != "") {
+							$this.empty().append(data.name[0]); // At least set the name then
+						}
+					});
+				});
+			});
+		});
 	},
 
 	// ==============================
@@ -3074,6 +3096,9 @@ main.bindKeyboardEvents = function() {
 					case 68:	// Keyup 'd' - test something
 
 						main.browserMessage("This is a test message.");
+						/*$.getJSON("php/csdb_json.php", { type: "scener", id: 848 }, function(data) {
+							console.log(data.csdb.Handle.Handle);
+						});*/
 						break;
 
 					default:
@@ -3334,22 +3359,7 @@ main.bindMenuEvents = function() {
 				}
 				$("#topic-csdb").empty().append(data.html);
 				main.resetDexterScrollBar("csdb");
-
-				// Populate all "[type]/?id=" anchor links with HVSC path "plinks" instead
-				$.each(["sid", "release"], function(index, type) {
-					$("#topic-csdb table.comments").find("a[href*='"+type+"/?id=']").each(function() {
-						var $this = $(this);
-						$.get("php/csdb_sid_path.php", { type: type, id: $this.attr("href").split("=")[1] }, function(data) {
-							browser.validateData(data, function(data) {
-								if (data.path != "") {
-									$this.empty().append(data.path[0]).addClass("redirect"); // It is now a "plink"
-								} else if (data.name != "") {
-									$this.empty().append(data.name[0]); // At least set the name then
-								}
-							});
-						});
-					});
-				});
+				main.sidLinksToPlinks();
 			});
 		});
 		return false;
