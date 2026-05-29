@@ -51,14 +51,14 @@ foreach($csdb->Forum->Room->Topic->Post as $post) {
 
 	$user_id = $post->Author->CSDbUser->ID; // This ID can't be used to find scener ID but it's always available
 
-	$scid = 0;
+	$sc_id = 0;
 	if (isset($post->Author->CSDbUser->CSDbEntry)) {
-		$scid = $post->Author->CSDbUser->CSDbEntry->Handle->ID;
+		$sc_id = $post->Author->CSDbUser->CSDbEntry->Handle->ID;
 		// There's a scener ID, store it for later reference
-		$scener_id[(string)$user_id] = $scid;
+		$scener_id[(string)$user_id] = $sc_id;
 	} else if(array_key_exists((string)$user_id, $scener_id))
 		// We've obtained the scener ID for this scener before so get it now
-		$scid = $scener_id[(string)$user_id];
+		$sc_id = $scener_id[(string)$user_id];
 
 	if (!empty($handle))
 		// There's a handle for this scener; store it for later reference
@@ -69,12 +69,12 @@ foreach($csdb->Forum->Room->Topic->Post as $post) {
 
 	// If the scener ID is in the 'composers' database table then get his/her HVSC home folder
 	$hvsc_folder = '';
-	if ($scid) {
+	if ($sc_id) {
 		try {
 			$db = $account->getDB();
 	
 			$select = $db->prepare('SELECT collection_path FROM composers WHERE csdb_id = :csdb_id LIMIT 1');
-			$select->execute(array(':csdb_id' => $scid));
+			$select->execute(array(':csdb_id' => $sc_id));
 			$select->setFetchMode(PDO::FETCH_OBJ);
 	
 			if ($select->rowCount())
@@ -85,7 +85,7 @@ foreach($csdb->Forum->Room->Topic->Post as $post) {
 		}
 	}
 
-	$thumbnail = getAvatar($scid, $handle, $hvsc_folder);
+	$thumbnail = getAvatar($sc_id, $handle, $hvsc_folder);
 	$color = getUserColor($handle);
 
 	/***** REDIRECT (PLINKS) ADAPTATIONS - BEGIN *****/
@@ -150,8 +150,8 @@ foreach($csdb->Forum->Room->Topic->Post as $post) {
 	// Build the HTML row
 	$rows .= '<tr>'.
 		'<td class="user">'.
-			($scid
-				? '<a'.$color.' href="http://csdb.chordian.net/?type=scener&id='.$scid.'" target="_blank"><b>'.$handle.'</b></a>'
+			($sc_id
+				? '<a'.$color.' href="http://csdb.chordian.net/?type=scener&id='.$sc_id.'" target="_blank"><b>'.$handle.'</b></a>'
 				: '<b>'.(!empty($handle) ? $handle : '[?]').'</b>'
 			).
 			'<br /><span class="date">'.$time.'</span><br />'.

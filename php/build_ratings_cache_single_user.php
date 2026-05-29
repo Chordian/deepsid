@@ -8,13 +8,17 @@
  * @used-by		build_ratings_cache_specific_user.php
  */
 
+// --------------------------------------------------------------------------
+// FUNCTIONS
+// --------------------------------------------------------------------------
+
 /**
  * Build the ratings cache for the specified user ID.
  * 
  * @param PDO $db
- * @param int $userId
+ * @param int $user_id
  */
-function buildRatingsCacheForUser(PDO $db, int $userId): void
+function buildRatingsCacheForUser(PDO $db, int $user_id): void
 {
     // 1. Get ALL FOLDERS from hvsc_folders
     $select_folders = $db->query('SELECT collection_path FROM hvsc_folders ORDER BY collection_path');
@@ -33,26 +37,26 @@ function buildRatingsCacheForUser(PDO $db, int $userId): void
           AND r.type    = "FILE"
           AND r.rating  > 0
     ');
-    $select_ratings->execute([':user_id' => $userId]);
-    $ratedFiles = $select_ratings->fetchAll(PDO::FETCH_COLUMN, 0);
+    $select_ratings->execute([':user_id' => $user_id]);
+    $rated_files = $select_ratings->fetchAll(PDO::FETCH_COLUMN, 0);
 
-    $folderMap = []; // folder => rated_files
+    $folder_map = []; // Folder => rated_files
 
-    foreach ($ratedFiles as $collection_path) {
+    foreach ($rated_files as $collection_path) {
         $pos = strrpos($collection_path, '/');
         if ($pos === false) continue; // Safety
 
         $folder = substr($collection_path, 0, $pos);
 
-        if (!isset($folderMap[$folder])) {
-            $folderMap[$folder] = 0;
+        if (!isset($folder_map[$folder])) {
+            $folder_map[$folder] = 0;
         }
 
-        $folderMap[$folder] += 1; // One rated file in this folder
+        $folder_map[$folder] += 1; // One rated file in this folder
     }
 
     // 3. Prepare insertion
-    $stmtInsert = $db->prepare('
+    $select_insert = $db->prepare('
         INSERT INTO ratings_cache (user_id, folder, rated_files)
         VALUES (:user, :folder, :rated)
     ');
@@ -61,13 +65,13 @@ function buildRatingsCacheForUser(PDO $db, int $userId): void
     foreach ($folders as $f) {
         $folder = $f->collection_path;
 
-        // get count or default to 0
-        $ratedFilesCount = $folderMap[$folder] ?? 0;
+        // Get count or default to 0
+        $rated_files_count = $folder_map[$folder] ?? 0;
 
-        $stmtInsert->execute([
-            ':user'   => $userId,
+        $select_insert->execute([
+            ':user'   => $user_id,
             ':folder' => $folder,
-            ':rated'  => $ratedFilesCount
+            ':rated'  => $rated_files_count
         ]);
     }
 }

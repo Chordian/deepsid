@@ -9,8 +9,25 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- Another "fun" one: Make sure all variable names in all PHP files use snake_case.
-  Largely done: composer.php
+- Make sure all variable names in all PHP files use snake_case.
+  Ongoing. Next file to be parsed: root_generate.php
+
+- Invent a new admin-only hotkey that toggles the site between local and online. I suppose
+  it will do this by replacing the beginning of the URL and then load/refresh.
+
+- Consider removing HTML cache for "previous CSDb page" (usually the list) because I think
+  the new cache system will make that virtually redundant. The benefit will be that you can
+  restore the behavior of showing CSDb reference links in DeepSID (instead of opening in
+  CShellDB) since going back will now open the correct previous page.
+
+- Enhance converted CSDb references to have a type after the link like [Release] etc. Maybe
+  not in brackets but in a small box. (Same style as folder numbers?)
+
+- BUG: Adding a label to a single CSDb release that already has a bow-and-arrow icon in the
+  sticky header adds another one so there are temporarily two icons. It is not stored but it
+  looks silly. Probably also the same problem with GB64 pages?
+
+- Tilføj til eksterne links: https://wbochar.com
 
 - A W A I T : Rewrite 'howto_update_gb64.txt' when the next GameBase64 update v20 arrives.
   See the .txt file for a few preliminary things to test.
@@ -145,6 +162,9 @@ CONSIDER THIS
   I tried searching around it seems CSDb references are quite rare in 'SHOW' pages. If users do
   add links, it's usually to external resources.
 
+- BUG: The following link never loads in LOCALHOST. It does work online, though.
+  http://chordian/deepsid/?file=/MUSICIANS/T/Trident/China_Thai_Lunch_Demo.sid
+
 - Investigate if it's possible to add support for logging in with e.g. Google or FB accounts.
   UPDATE: Idea for design - instead of "User" and "Pw" boxes as default, show three buttons for
   local, Facebook, Google logins. If "Local" is clicked, the three buttons are then replaced by
@@ -192,8 +212,6 @@ CONSIDER THIS
 - Maybe place "Misc" in CGSC in top, above a divider line?
 - For redirect links, add a BACK button in both STIL tabs (to complement the 'b' hotkey).
 - Front page top 10 list: Add most common birth years, now that you have the data for it.
-- Uncaught CSDb references that should also be converted:
-  http://chordian/deepsid/?tab=csdb&csdbtype=release&csdbid=261679
 
 - Search bug from Acrouzet: "On mobile, ordering results based on the criteria selected
   from the top right drop-down seems to not work properly. I believe it may be organizing pages

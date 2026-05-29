@@ -2990,26 +2990,52 @@ Browser.prototype = {
 			});
 		}
 
-		// Existing full CSDb release links
-		$("#topic-csdb a[href*='/release/']").each(function() {
+		// Existing full CSDb type links
+		$("#topic-csdb a[href]").each(function() {
 
 			var $oldLink = $(this);
 			var href = $oldLink.attr("href");
 
 			var match = href.match(
-				/\/release\/(?:index\.php)?\?id=(\d+)/i
+				/\/(release|scener|group|event|sid)\/(?:index\.php)?\?id=(\d+)/i
 			);
 
 			if (!match)
 				return;
 
-			var type = "release";
-			var id = match[1];
+			var type = match[1].toLowerCase();
+			var id = match[2];
 
-			_getCSDbName(type, id, function(name) {
-				$oldLink.replaceWith(_makeCSDbLink(type, id, name));
-			});
+			if (type === "sid") {
 
+				// Make a "plink" (a link that redirects and plays in DeepSID)
+				$.get("php/csdb_sid_path.php", {
+					type: "sid",
+					id: id
+				}, function(data) {
+					browser.validateData(data, function(data) {
+						if (data.path && data.path[0]) {
+							$oldLink
+								.attr("href", "#")
+								.empty()
+								.append(data.path[0])
+								.addClass("redirect");
+						} else if (data.name && data.name[0]) {
+							$oldLink
+								.empty()
+								.append(data.name[0]);
+						}
+					});
+				});
+
+			} else {			
+
+				// Make a standard link
+				_getCSDbName(type, id, function(name) {
+					$oldLink.replaceWith(_makeCSDbLink(type, id, name));
+				});
+
+			}
 		});
 
 		// Raw text refs like <release id=143830>, <scener id="1185">, <group id=1234>
@@ -3020,7 +3046,7 @@ Browser.prototype = {
 			var textNode = this;
 			var text = textNode.nodeValue;
 
-			var regex = /<(release|scener|group)\s+id=["']?(\d+)["']?>/gi;
+			var regex = /<(release|scener|group|event|sid)\s+id=["']?(\d+)["']?>/gi;
 
 			var match;
 			var parts = [];
@@ -3037,12 +3063,39 @@ Browser.prototype = {
 				var placeholder = document.createTextNode(_ucFirst(type) + " " + id);
 				parts.push(placeholder);
 
-				_getCSDbName(type, id, function(type, id, placeholder) {
-					return function(name) {
-						$(placeholder).replaceWith(_makeCSDbLink(type, id, name));
-					};
-				}(type, id, placeholder));
+				if (type === "sid") {
 
+					// Make a "plink" (a link that redirects and plays in DeepSID)
+					$.get("php/csdb_sid_path.php", {
+						type: "sid",
+						id: id
+					}, function(id, placeholder) {
+						return function(data) {
+							browser.validateData(data, function(data) {
+								var $link = $("<a>", {
+									href: "#",
+									"class": "redirect",
+									text: data.path && data.path[0]
+										? data.path[0]
+										: (data.name && data.name[0]
+											? data.name[0]
+											: "SID " + id)
+								});
+								$(placeholder).replaceWith($link);
+							});
+						};
+					} (id, placeholder));
+
+				} else {
+
+					// Make a standard link
+					_getCSDbName(type, id, function(type, id, placeholder) {
+						return function(name) {
+							$(placeholder).replaceWith(_makeCSDbLink(type, id, name));
+						};
+					}(type, id, placeholder));
+
+				}
 				lastIndex = regex.lastIndex;
 			}
 
@@ -3053,10 +3106,7 @@ Browser.prototype = {
 				parts.push(document.createTextNode(text.slice(lastIndex)));
 
 			$(textNode).replaceWith(parts);
-
 		});
-
-		main.sidLinksToPlinks();
 	},
 
 	/**

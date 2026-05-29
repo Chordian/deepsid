@@ -1973,6 +1973,11 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>May 29, 2026</h3>
+						<ul>
+							<li>More CSDb ID references in comment threads are now converted into links with proper names.</li>
+						</ul>
+
 						<h3>May 24, 2026</h3>
 						<ul>
 							<li>The external links have been moved from the 'Help' tab to the 'Profile' tab in the annex box and

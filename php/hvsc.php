@@ -381,8 +381,8 @@ try {
 
 						$collection_path_list = [];
 						foreach ($gb64 as $game) {
-							$sidFilename = str_replace('\\', '/', $game->SidFilename);
-							$collection_path = '_High Voltage SID Collection/'.$sidFilename;
+							$sid_filename = str_replace('\\', '/', $game->SidFilename);
+							$collection_path = '_High Voltage SID Collection/'.$sid_filename;
 							$collection_path_list[] = $collection_path;
 						}
 
@@ -1081,7 +1081,7 @@ try {
 	$multiple = array();
 
 	// Extra data for CSDb compo parent folders
-	$isCompoRoot = $is_csdb_compo && empty($compo_name);
+	$is_compo_root = $is_csdb_compo && empty($compo_name);
 
 	foreach($files as $file) {
 
@@ -1102,7 +1102,7 @@ try {
 
 			$incompat_row = '';
 			$folder_type = $is_csdb_compo ? 'COMPO' : 'FOLDERS';
-			$rating = $filescount = 0;
+			$rating = $files_count = 0;
 
 			// Get the two focus fields (SCENER, PRO, etc.) of the composer if applicable
 			$focus1 = $focus2 = 'N/A';
@@ -1126,7 +1126,7 @@ try {
 				$row = $select->fetch();								// Example
 
 				$folder_type =		$row->type;							// SINGLE
-				$filescount =		$row->files;						// 42
+				$files_count =		$row->files;						// 42
 				$incompat_row =		$row->incompatible;					// jssid
 				$has_photo =		file_exists('../'.$thumbnail);		// TRUE
 				$flags =			$row->flags;						// 1
@@ -1154,7 +1154,7 @@ try {
 				$select_latest = $db->query('SELECT count(1) as cnt from hvsc_files'.
 					' WHERE new = "'.$folders_version.'" AND collection_path LIKE "%/'.$collection_path.'/%"');
 				$select_latest->setFetchMode(PDO::FETCH_OBJ);
-				$filescount = $select_latest->rowCount() ? $select_latest->fetch()->cnt : 0;
+				$files_count = $select_latest->rowCount() ? $select_latest->fetch()->cnt : 0;
 			}
 
 			// If a competition folder pops up in search results
@@ -1166,7 +1166,7 @@ try {
 				$select_compo->setFetchMode(PDO::FETCH_OBJ);
 
 				if ($select_compo->rowCount()) {
-					$isCompoRoot = true;
+					$is_compo_root = true;
 					$row_compo = $select_compo->fetch();
 
 					$compo[$collection_path]['prefix']		= $row_compo->prefix;
@@ -1211,23 +1211,23 @@ try {
 			array_push($folders_ext, array(
 				'foldername'	=> $file,
 				'foldertype'	=> $folder_type,
-				'filescount'	=> $filescount,
+				'filescount'	=> $files_count,
 				'incompatible'	=> $incompat_row,
 				'hasphoto'		=> (isset($has_photo) ? $has_photo : false),
 				'focus1'		=> $focus1,
 				'focus2'		=> $focus2,
 				'rating'		=> $rating,
 				'flags'			=> (isset($flags) ? $flags : 0),
-				'hvsc'			=> (isset($hvsc) ? $hvsc : 0),									// Example
+				'hvsc'			=> (isset($hvsc) ? $hvsc : 0),										// Example
 				
-				'prefix'		=> $isCompoRoot ? $compo[$collection_path]['prefix']	: '',	// Sort_Me_Differently
+				'prefix'		=> $is_compo_root ? $compo[$collection_path]['prefix']	: '',		// Sort_Differently
 
-				'compo_year'	=> $isCompoRoot ? $compo[$collection_path]['year']		: 0,	// 1992
-				'compo_country'	=> $isCompoRoot && !empty($compo[$collection_path]['country'])
-												? $compo[$collection_path]['country']	: '',	// Finland
-				'compo_type'	=> $isCompoRoot && !empty($compo[$collection_path]['type'])
-												? $compo[$collection_path]['type']		: '',	// DEMO
-				'compo_id'		=> $isCompoRoot ? $compo[$collection_path]['event_id']	: 0,	// 117
+				'compo_year'	=> $is_compo_root ? $compo[$collection_path]['year']		: 0,	// 1992
+				'compo_country'	=> $is_compo_root && !empty($compo[$collection_path]['country'])
+												? $compo[$collection_path]['country']	: '',		// Finland
+				'compo_type'	=> $is_compo_root && !empty($compo[$collection_path]['type'])
+												? $compo[$collection_path]['type']		: '',		// DEMO
+				'compo_id'		=> $is_compo_root ? $compo[$collection_path]['event_id']	: 0,	// 117
 
 				'ss_type'		=> (isset($search_shortcut_type[$file]) ? $search_shortcut_type[$file] : ''),		// new
 				'ss_query'		=> (isset($search_shortcut_query[$file]) ? $search_shortcut_query[$file] : ''),		// 75
@@ -1326,7 +1326,7 @@ try {
 			$stil = preg_replace('/(\/DEMOS[^\s]+\.sid|\/GAMES[^\s]+\.sid|\/MUSICIANS[^\s]+\.sid)/', '<a class="redirect" href="#">$1</a>', $stil);
 
 			$symid = $symid_pos = 0;
-			$substname = '';
+			$subst_name = '';
 			if ($is_public_symlist || $is_personal_symlist) {
 				// We're inside a symlist so check now if the file has a different name and sub tune here
 				$symlist = $db->query('SELECT id, sid_name, subtune FROM symlists WHERE folder_id = '.$symlist_folder_id.' AND file_id = '.$row->id.' ORDER BY id');
@@ -1342,8 +1342,8 @@ try {
 						$multiple[$row->id] = $symid_pos + 1;
 					}
 					// Did the user rename it?
-					$substname = $row_sym[$symid_pos]->sid_name;
-					if (!empty($substname)) $substname .= substr($file, -4);
+					$subst_name = $row_sym[$symid_pos]->sid_name;
+					if (!empty($subst_name)) $subst_name .= substr($file, -4);
 					// Also check if a different sub tune than the default one should play instead
 					if ($row_sym[$symid_pos]->subtune) $start_subtune = $row_sym[$symid_pos]->subtune;
 				}
@@ -1352,7 +1352,7 @@ try {
 			if (!empty($compo_name)) {
 				// Prepend a place number in front of CSDb competition SID files
 				$number = $place[$file] == -1 ? '<span class="q">?</span><span class="q">?</span><span class="dot">.</span> ' : $place[$file].'. ';
-				$substname = str_pad($number, 4, '0', STR_PAD_LEFT).substr($file, 1);
+				$subst_name = str_pad($number, 4, '0', STR_PAD_LEFT).substr($file, 1);
 			}
 
 			// Get an array of tags for this file ("Jazz", "Rock", etc.)
@@ -1385,7 +1385,7 @@ try {
 			$factoid = ["", ""];
 			$fvalue = ["", ""];
 
-			$isCGSC = stripos($collection_path, "_Compute's Gazette SID Collection/") !== false;
+			$is_cgsc = stripos($collection_path, "_Compute's Gazette SID Collection/") !== false;
 
 			foreach ([0, 1] as $f) {
 				switch ($fmode[$f]) {
@@ -1397,7 +1397,7 @@ try {
 
 					case 2:		// Song lengths
 
-						if (!$isCGSC) {
+						if (!$is_cgsc) {
 							// Get the user's settings
 							$frow = $db->query('SELECT flags FROM users WHERE id = '.$user_id)->fetch(PDO::FETCH_OBJ);
 							$settings = unserialize($frow->flags);
@@ -1453,7 +1453,7 @@ try {
 
 					case 7:		// Size in bytes (decimal)
 
-						if (!$isCGSC) {
+						if (!$is_cgsc) {
 							$fvalue[$f] = $data_size - 3;
 							//$factoid[$f] = 'Bytes: <span class="id">' . ($data_size - 3) . '</span>';
 							$factoid[$f] = ($data_size - 3) . ' bytes';
@@ -1470,7 +1470,7 @@ try {
 					case 9:		// HVSC or CGSC version
 
 						if ((int)$hvsc) {
-							if ($isCGSC)
+							if ($is_cgsc)
 								$factoid[$f] = 'CGSC v'.substr($hvsc, 0, 1).'.'.substr($hvsc, 1);
 							else
 								$factoid[$f] = 'HVSC #'.$hvsc;
@@ -1501,7 +1501,7 @@ try {
 					case 12:	// Primary release (previously tag label, now its own tables)
 
 						$label_site = $label_name = $label_type = '';
-						$label_siteid = 0;
+						$label_site_id = 0;
 
 						$lrow = $db->query('
 							SELECT i.id, i.site, i.name, i.type, i.site_id, l.labels_id
@@ -1510,10 +1510,10 @@ try {
 							WHERE l.files_id = '.$id.' LIMIT 1'
 						)->fetch(PDO::FETCH_OBJ);
 						if ($lrow) {
-							$label_site = $lrow->site;			// CSDB
-							$label_name = $lrow->name;			// Dutch Breeze
-							$label_type = $lrow->type;			// Demo
-							$label_siteid = $lrow->site_id;		// 11584
+							$label_site		= $lrow->site;			// CSDB
+							$label_name		= $lrow->name;			// Dutch Breeze
+							$label_type		= $lrow->type;			// Demo
+							$label_site_id	= $lrow->site_id;		// 11584
 						}
 						$factoid[$f] = $label_name;
 						break;
@@ -1541,9 +1541,9 @@ try {
 			array_push($files_ext, array(
 				'id' =>				$id,
 				'filename' =>		$file,
-				'substname' =>		$substname,
+				'substname' =>		$subst_name,
 				'playerraw' =>		$player,
-				'player' =>			str_replace(array_keys($prettyPlayerNames), $prettyPlayerNames, $player), // Remember it reads the array multiple times!
+				'player' =>			str_replace(array_keys($pretty_player_names), $pretty_player_names, $player), // Remember it reads the array multiple times!
 				'tags' =>			$list_of_tags,
 				'tagtypes' =>		$type_of_tags,
 				'tagids' =>			$id_of_tags,
@@ -1579,7 +1579,7 @@ try {
 				'labelsite' =>		$label_site,
 				'labelname' =>		$label_name,
 				'labeltype' =>		$label_type,
-				'labelsiteid' =>	$label_siteid,
+				'labelsiteid' =>	$label_site_id,
 			));
 
 			// Add extra values for uploaded SID files too if available

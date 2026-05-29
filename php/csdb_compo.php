@@ -15,6 +15,10 @@ require_once("countries.php");
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest')
 	die("Direct access not permitted.");
 
+// --------------------------------------------------------------------------
+// FUNCTIONS
+// --------------------------------------------------------------------------
+
 /**
  * Get the XML from the CSDb web service.
  * 
@@ -55,7 +59,7 @@ function compoGetEntries($csdb) {
  */
 function compoGetTypeDateCountry($csdb) {
 
-	global $countryCodes;
+	global $country_codes;
 
 	// Event type
 	$type_date_country = '';
@@ -77,25 +81,25 @@ function compoGetTypeDateCountry($csdb) {
 		'November',
 		'December',
 	);
-	$startYear	= isset($csdb->Event->StartYear) ? (int)$csdb->Event->StartYear : '?';
-	$startMonth	= isset($csdb->Event->StartMonth) ? $months[(int)$csdb->Event->StartMonth - 1] : '?';
-	$startDay	= isset($csdb->Event->StartDay) ? (int)$csdb->Event->StartDay : '?';
-	$endYear	= isset($csdb->Event->EndYear) ? (int)$csdb->Event->EndYear : '?';
-	$endMonth	= isset($csdb->Event->EndMonth) ? $months[(int)$csdb->Event->EndMonth - 1] : '?';
-	$endDay		= isset($csdb->Event->EndDay) ? (int)$csdb->Event->EndDay : '?';
+	$start_year		= isset($csdb->Event->StartYear) ? (int)$csdb->Event->StartYear : '?';
+	$start_month	= isset($csdb->Event->StartMonth) ? $months[(int)$csdb->Event->StartMonth - 1] : '?';
+	$start_day		= isset($csdb->Event->StartDay) ? (int)$csdb->Event->StartDay : '?';
+	$end_year		= isset($csdb->Event->EndYear) ? (int)$csdb->Event->EndYear : '?';
+	$end_month		= isset($csdb->Event->EndMonth) ? $months[(int)$csdb->Event->EndMonth - 1] : '?';
+	$end_day		= isset($csdb->Event->EndDay) ? (int)$csdb->Event->EndDay : '?';
 
-	$year		= $startYear == $endYear ? $startYear : '';
-	$month		= $startMonth == $endMonth ? $startMonth : '';
-	$day		= $startDay == $endDay ? $startDay : '';
+	$year			= $start_year == $end_year ? $start_year : '';
+	$month			= $start_month == $end_month ? $start_month : '';
+	$day			= $start_day == $end_day ? $start_day : '';
 
 	if (!empty($year) && !empty($month) && !empty($day))
 		$type_date_country .= $day.' '.$month.' '.$year;
 	else if (!empty($year) && !empty($month))
-		$type_date_country .= $startDay.' &ndash; '.$endDay.' '.$month.' '.$year;
+		$type_date_country .= $start_day.' &ndash; '.$end_day.' '.$month.' '.$year;
 	else if (!empty($year))
-		$type_date_country .= $startDay.' '.$startMonth.' &ndash; '.$endDay.' '.$endMonth.' '.$year;
+		$type_date_country .= $start_day.' '.$start_month.' &ndash; '.$end_day.' '.$end_month.' '.$year;
 	else
-		$type_date_country .= $startDay.' '.$startMonth.' '.$startYear.' &ndash; '.$endDay.' '.$endMonth.' '.$endYear;
+		$type_date_country .= $start_day.' '.$start_month.' '.$start_year.' &ndash; '.$end_day.' '.$end_month.' '.$end_year;
 
 	// Country
 	if (isset($csdb->Event->Country)) {

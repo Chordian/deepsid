@@ -12,26 +12,26 @@
 function makeSiteLink($url, $header, $type = '') {
 
 	// Ensure proper escaping
-    $escUrl    = htmlspecialchars($url,    ENT_QUOTES, 'UTF-8');
-    $escHeader = htmlspecialchars($header, ENT_QUOTES, 'UTF-8');
-    $escType   = htmlspecialchars($type,   ENT_QUOTES, 'UTF-8');
+    $esc_url    = htmlspecialchars($url,    ENT_QUOTES, 'UTF-8');
+    $esc_header = htmlspecialchars($header, ENT_QUOTES, 'UTF-8');
+    $esc_type   = htmlspecialchars($type,   ENT_QUOTES, 'UTF-8');
 
-	// $escType = !empty($escType) ? '[' . $escType . ']' : '';
+	// $esc_type = !empty($esc_type) ? '[' . $esc_type . ']' : '';
 
     // Pre-encode URL for Microlink
-    $encodedUrl = rawurlencode($url);
+    $encoded_url = rawurlencode($url);
 
     return '
         <li class="site-card">
             <a class="site-link"
-                href="' . $escUrl . '"
+                href="' . $esc_url . '"
                 target="_blank" rel="noopener"
-                data-url="' . $escUrl . '">
+                data-url="' . $esc_url . '">
                 <img class="thumb"
-                    src="https://api.microlink.io/?url=' . $encodedUrl . '&screenshot=true&meta=false&embed=screenshot.url"
-                    alt="' . $escHeader . '" loading="lazy">
-                <h3 class="site-header">' . $escHeader . '</h3>
-            </a><span class="site-type">' . $escType . '</span>
+                    src="https://api.microlink.io/?url=' . $encoded_url . '&screenshot=true&meta=false&embed=screenshot.url"
+                    alt="' . $esc_header . '" loading="lazy">
+                <h3 class="site-header">' . $esc_header . '</h3>
+            </a><span class="site-type">' . $esc_type . '</span>
         </li>';
 }
 

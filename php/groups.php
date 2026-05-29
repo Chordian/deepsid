@@ -136,26 +136,26 @@ if ($row->csdb_type == 'scener') {
 						$status = $group_array[$id]['status'];
 						$founder = $group_array[$id]['founder'];
 	
-						$dateStart = '';
+						$date_start = '';
 						if (isset($member->JoinYear)) {
-							$dateStart = $member->JoinYear;
+							$date_start = $member->JoinYear;
 							if (isset($member->JoinMonth)) {
-								$dateStart .= '-'.str_pad($member->JoinMonth, 2, '0', STR_PAD_LEFT);
+								$date_start .= '-'.str_pad($member->JoinMonth, 2, '0', STR_PAD_LEFT);
 								if (isset($member->JoinDay))
-									$dateStart .= '-'.str_pad($member->JoinDay, 2, '0', STR_PAD_LEFT);
+									$date_start .= '-'.str_pad($member->JoinDay, 2, '0', STR_PAD_LEFT);
 							}
-							$all_dates[] = $dateStart;
+							$all_dates[] = $date_start;
 						}
 
-						$dateEnd = '';
+						$date_end = '';
 						if (isset($member->LeaveYear)) {
-							$dateEnd = $member->LeaveYear;
+							$date_end = $member->LeaveYear;
 							if (isset($member->LeaveMonth)) {
-								$dateEnd .= '-'.str_pad($member->LeaveMonth, 2, '0', STR_PAD_LEFT);
+								$date_end .= '-'.str_pad($member->LeaveMonth, 2, '0', STR_PAD_LEFT);
 								if (isset($member->LeaveDay))
-									$dateEnd .= '-'.str_pad($member->LeaveDay, 2, '0', STR_PAD_LEFT);
+									$date_end .= '-'.str_pad($member->LeaveDay, 2, '0', STR_PAD_LEFT);
 							}
-							$all_dates[] = $dateEnd;
+							$all_dates[] = $date_end;
 						}
 
 						$first_column =
@@ -167,17 +167,17 @@ if ($row->csdb_type == 'scener') {
 								'</td>';
 
 						// Annex box
-						$annex_members_array[($status == 'active' ? 'z' : $status).$dateStart.$name] = // $status = 'z' or 'ex'
+						$annex_members_array[($status == 'active' ? 'z' : $status).$date_start.$name] = // $status = 'z' or 'ex'
 							$first_column.'</tr>';
 
 						// Dexter page
-						$dexter_members_array[($status == 'active' ? 'z' : $status).$dateStart.$name] = // $status = 'z' or 'ex'
+						$dexter_members_array[($status == 'active' ? 'z' : $status).$date_start.$name] = // $status = 'z' or 'ex'
 							$first_column.
 								'<td>'.
-									(empty($dateStart) ? '<span class="filler">0000-00-00</span>' : $dateStart).
+									(empty($date_start) ? '<span class="filler">0000-00-00</span>' : $date_start).
 								'</td>'.
 								'<td>'.
-									(empty($dateEnd) ? '<span class="filler">0000-00-00</span>' : $dateEnd).
+									(empty($date_end) ? '<span class="filler">0000-00-00</span>' : $date_end).
 								'</td>'.
 							'</tr>';
 					}
@@ -293,27 +293,27 @@ if ($row->csdb_type == 'scener') {
 				$status		= $member->Status;
 				$founder	= in_array((string)$id, $founder_array);
 
-				$dateStart = '';
+				$date_start = '';
 				if (isset($member->JoinYear)) {
-					$dateStart = $member->JoinYear;
+					$date_start = $member->JoinYear;
 					if (isset($member->JoinMonth)) {
-						$dateStart .= '-'.str_pad($member->JoinMonth, 2, '0', STR_PAD_LEFT);
+						$date_start .= '-'.str_pad($member->JoinMonth, 2, '0', STR_PAD_LEFT);
 						if (isset($member->JoinDay))
-							$dateStart .= '-'.str_pad($member->JoinDay, 2, '0', STR_PAD_LEFT);
+							$date_start .= '-'.str_pad($member->JoinDay, 2, '0', STR_PAD_LEFT);
 					}
 				}
 
-				$dateEnd = '';
+				$date_end = '';
 				if (isset($member->LeaveYear)) {
-					$dateEnd = $member->LeaveYear;
+					$date_end = $member->LeaveYear;
 					if (isset($member->LeaveMonth)) {
-						$dateEnd .= '-'.str_pad($member->LeaveMonth, 2, '0', STR_PAD_LEFT);
+						$date_end .= '-'.str_pad($member->LeaveMonth, 2, '0', STR_PAD_LEFT);
 						if (isset($member->LeaveDay))
-							$dateEnd .= '-'.str_pad($member->LeaveDay, 2, '0', STR_PAD_LEFT);
+							$date_end .= '-'.str_pad($member->LeaveDay, 2, '0', STR_PAD_LEFT);
 					}
 				}
 
-				$dexter_members_array[($status == 'active' ? 'z' : $status).$dateStart.$name] = 
+				$dexter_members_array[($status == 'active' ? 'z' : $status).$date_start.$name] = 
 					'<tr>'.
 						'<td>'.
 							//'<span class="up icon-before icon-arrowright" title="Joined...">'.
@@ -321,10 +321,10 @@ if ($row->csdb_type == 'scener') {
 							'<a class="group ellipsis" href="http://csdb.chordian.net/?type=scener&id='.$id.'" target="_blank">'.($status == 'ex' ? '<del>'.$name.'</del>' : $name).'</a></span>'.
 						'</td>'.
 						'<td>'.
-							$dateStart.
+							$date_start.
 						'</td>'.
 						'<td>'.
-							$dateEnd.
+							$date_end.
 						'</td>'.
 					'</tr>';
 			}

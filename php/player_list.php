@@ -53,40 +53,6 @@ try {
 		$cpu_time = str_replace('[SD]', '', $row->cpu_time);
 		$cpu_time = str_replace('Approx ', '', $cpu_time);
 
-		// Prepare a horizontal bar for number of songs made in this player/editor
-
-		// DISABLED: It took too long to render the player list and it doesn't look like useful
-		// information anyway - there is too much disparity / favoritism.
-
-		/*$words = explode(' ', $search);
-		$include = '(';
-		$exclude = $i_and = $e_and = '';
-		foreach($words as $word) {
-			if (substr($word, 0, 1) == '-') {
-				$exclude .= $e_and.'player NOT LIKE "%'.substr($word, 1).'%"';
-				$e_and = ' AND ';
-			} else {
-		s		$include .= $i_and.'player LIKE "%'.$word.'%"';
-				$i_and = ' AND ';
-			}
-		}
-		$include .= ')';
-		if (!empty($exclude)) $exclude = ' AND ('.$exclude.')';
-
-		$select = $db->query('SELECT count(1) AS c FROM hvsc_files WHERE '.$include.$exclude);
-		$select->setFetchMode(PDO::FETCH_OBJ);
-
-		$songs_count = $select->fetch()->c;
-		$pfbar_width = ($songs_count * 0.15) + 28;
-		if ($songs_count) {
-			$pfactoid_top = '
-				<div class="pfdiv">
-					<div class="pfbar" style="width:'.$pfbar_width.'px"></div>
-					<span class="pfactoid-top">'.$songs_count.' songs</span>
-				</div>
-			';
-		}*/
-
 		$rows .=
 			'<tr>'.
 				'<td class="thumbnail">'.

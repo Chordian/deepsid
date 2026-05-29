@@ -14,7 +14,6 @@
  * @uses		$_GET['type']				can be "release" or "sid"
  * @uses		$_GET['id']
  * 
- * @used-by		main.js
  * @used-by		browser.js
  */
 

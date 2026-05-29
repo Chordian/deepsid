@@ -17,7 +17,7 @@ if ((int)$account->getAdminSetting('log_js_errors') !== 1) {
 	exit;
 }
 
-$logfile = __DIR__ . '/../logs/js_errors.log';
+$log_file = __DIR__ . '/../logs/js_errors.log';
 
 $entry = [
 	'date'    => date('Y-m-d H:i:s'),
@@ -52,14 +52,14 @@ if (
  * Filter known browser / extension noise
  * (safe to ignore, not DeepSID bugs)
  */
-$noisePatterns = [
+$noise_patterns = [
 	'_AutofillCallbackHandler',
 	'Talisman extension',
 	'chrome-extension://',
 	'moz-extension://'
 ];
 
-foreach ($noisePatterns as $needle) {
+foreach ($noise_patterns as $needle) {
 	if (
 		($entry['message'] && strpos($entry['message'], $needle) !== false) ||
 		($entry['source']  && strpos($entry['source'],  $needle) !== false)
@@ -76,5 +76,5 @@ $line =
 	// "Stack:\n{$entry['stack']}\n" . // Extremely verbose
 	"\n";
 
-file_put_contents($logfile, $line, FILE_APPEND | LOCK_EX);
+file_put_contents($log_file, $line, FILE_APPEND | LOCK_EX);
 ?>

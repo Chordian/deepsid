@@ -17,7 +17,7 @@ if (!$account->isAdmin())
 	die("This is for administrators only.");
 
 $html = $section = '';
-$baseURL = $_SERVER['HTTP_HOST'] == LOCALHOST ? "http://chordian/deepsid/php/" : "https://deepsid.chordian.net/php/";
+$base_url = $_SERVER['HTTP_HOST'] == LOCALHOST ? "http://chordian/deepsid/php/" : "https://deepsid.chordian.net/php/";
 
 try {
 	$db = $account->getDB();
@@ -39,7 +39,7 @@ try {
 			<div class="script">
 				<div class="name">' . $s->name . '</div>
 				<span>' . $s->description . '</span>
-				<button class="run-script" data-script="'.$baseURL.'run_shell.php?script=' . $s->script . '" title="' . $baseURL.$s->script . '">RUN</button>
+				<button class="run-script" data-script="'.$base_url.'run_shell.php?script=' . $s->script . '" title="' . $base_url.$s->script . '">RUN</button>
 			</div>
 		';
 	}

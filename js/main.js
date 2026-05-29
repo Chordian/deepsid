@@ -594,26 +594,6 @@ var main = {
 		return $("#tabs .selected").attr("data-topic");
 	},
 
-	/**
-	 * Populate all CSDb "[type]/?id=" anchor links with "plinks" instead.
-	 */
-	sidLinksToPlinks: function() {
-		$.each(["sid", "release"], function(index, type) {
-			$("#topic-csdb table.comments").find("a[href*='"+type+"/?id=']").each(function() {
-				var $this = $(this);
-				$.get("php/csdb_sid_path.php", { type: type, id: $this.attr("href").split("=")[1] }, function(data) {
-					browser.validateData(data, function(data) {
-						if (data.path != "") {
-							$this.empty().append(data.path[0]).addClass("redirect"); // It is now a "plink"
-						} else if (data.name != "") {
-							$this.empty().append(data.name[0]); // At least set the name then
-						}
-					});
-				});
-			});
-		});
-	},
-
 	// ==============================
 	// Functions: Event tracking
 	// ==============================
@@ -3359,7 +3339,7 @@ main.bindMenuEvents = function() {
 				}
 				$("#topic-csdb").empty().append(data.html);
 				main.resetDexterScrollBar("csdb");
-				main.sidLinksToPlinks();
+				browser.resolveCSDbRefs();
 			});
 		});
 		return false;

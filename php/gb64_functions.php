@@ -140,24 +140,24 @@ function readGB64DB($id) {
 	$comments = $games->Comment;
 
 	// Get screenshot paths
-	$webPathBase = '/images/gb64'; // Folder with GB64 screenshots
-	$diskPathBase = $_SERVER['HTTP_HOST'] == LOCALHOST
-		? '..'.$webPathBase
-		: $_SERVER['DOCUMENT_ROOT'].'/deepsid'.$webPathBase;
+	$web_path_base = '/images/gb64'; // Folder with GB64 screenshots
+	$disk_path_base = $_SERVER['HTTP_HOST'] == LOCALHOST
+		? '..'.$web_path_base
+		: $_SERVER['DOCUMENT_ROOT'].'/deepsid'.$web_path_base;
 	
 	if (empty($games->ScrnshotFilename)) {
 		// There are no screenshots at all
 		$thumbnails = array('/noscreenshot.gif');
 	} else {
 		// Extract the directory and filename (without extension)
-		$relativePath = str_replace('\\', '/', $games->ScrnshotFilename);
+		$relative_path = str_replace('\\', '/', $games->ScrnshotFilename);
 		
-		$dirname = pathinfo($relativePath, PATHINFO_DIRNAME); // "S"
-		$filename = pathinfo($relativePath, PATHINFO_FILENAME); // "Sanxion"
-		$extension = pathinfo($relativePath, PATHINFO_EXTENSION); // "png"
+		$dir_name = pathinfo($relative_path, PATHINFO_DIRNAME); // "S"
+		$filename = pathinfo($relative_path, PATHINFO_FILENAME); // "Sanxion"
+		$extension = pathinfo($relative_path, PATHINFO_EXTENSION); // "png"
 
 		// Build the glob pattern for e.g. "S/Sanxion.png" and its variants with "_1", "_2", etc.
-		$pattern = $diskPathBase . '/' . $dirname . '/' . $filename . '{,_?}.' . $extension;
+		$pattern = $disk_path_base . '/' . $dir_name . '/' . $filename . '{,_?}.' . $extension;
 
 		// Some filenames include e.g. "[Preview]" - those brackets need to be escaped
 		$pattern = str_replace('[', '\[', $pattern);
@@ -169,13 +169,13 @@ function readGB64DB($id) {
 		if (!empty($matches)) {
 			// Convert full paths to web paths (strip 'images/gb64/')
 			if ($_SERVER['HTTP_HOST'] == LOCALHOST) {
-				$thumbnails = array_map(function($path) use ($diskPathBase) {
-					return '/' . substr($path, strlen($diskPathBase));
+				$thumbnails = array_map(function($path) use ($disk_path_base) {
+					return '/' . substr($path, strlen($disk_path_base));
 				}, $matches);
 			} else {
-		        $thumbnails = array_map(function($path) use ($diskPathBase) {
+		        $thumbnails = array_map(function($path) use ($disk_path_base) {
 		            // Convert absolute path to web path
-        		    return str_replace($diskPathBase, '', $path);
+        		    return str_replace($disk_path_base, '', $path);
         		}, $matches);
 			}
 		} else {

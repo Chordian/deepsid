@@ -8,7 +8,7 @@
  * @used-by		composer.php
  */
 
-$prettyPlayerNames = array(
+$pretty_player_names = array(
 	'20CC' =>					'20CC\'s player',
 	// '4-Mat' =>					'4-Mat\'s player', // Perhaps it looks better without
 	'4753_Softcopy' =>			'$4753 Softcopy\'s Digi player',
@@ -196,4 +196,7 @@ $prettyPlayerNames = array(
 	'Zoltan_Mohos' =>			'Zoltan Mohos\' player',
 	'Zyborg' =>					'Zyborg\'s player',
 );
+
+// Legacy (remove later)
+$prettyPlayerNames = $pretty_player_names;
 ?>

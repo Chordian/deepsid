@@ -50,8 +50,8 @@ function curl2($url) {
 	$info = curl_getinfo($ch);
 
 	// Strip headers
-	$headerSize = $info['header_size'];
-	$data = substr($data, $headerSize);
+	$header_size = $info['header_size'];
+	$data = substr($data, $header_size);
 
 	curl_close($ch);
 

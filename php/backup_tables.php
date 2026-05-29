@@ -11,11 +11,11 @@
 
 require_once("class.account.php"); // Includes setup
 
-$backupDir     = __DIR__ . '/../backups/';
-$timestampFile = $backupDir . 'last_backup.txt';
+$backup_dir     = __DIR__ . '/../backups/';
+$timestamp_file = $backup_dir . 'last_backup.txt';
 
-$maxDays = (int)$account->getAdminSetting('db_backup_retention_days');
-if ($maxDays < 1) $maxDays = 7;
+$max_days = (int)$account->getAdminSetting('db_backup_retention_days');
+if ($max_days < 1) $max_days = 7;
 
 $tables = [
     'admin_settings',
@@ -42,26 +42,26 @@ $tables = [
 ];
 
 // Ensure directory exists
-if (!is_dir($backupDir)) {
-    mkdir($backupDir, 0755, true);
+if (!is_dir($backup_dir)) {
+    mkdir($backup_dir, 0755, true);
 }
 
 // Run at most once every 24 hours
-if (file_exists($timestampFile) && (time() - filemtime($timestampFile)) < 86400) {
+if (file_exists($timestamp_file) && (time() - filemtime($timestamp_file)) < 86400) {
     return; // Already backed up today
 }
 
 // Touch the timestamp file *before* backup to avoid double-run during traffic burst
-file_put_contents($timestampFile, "Backup started at " . date('Y-m-d H:i:s'));
+file_put_contents($timestamp_file, "Backup started at " . date('Y-m-d H:i:s'));
 
 try {
     $db = $account->getDB();
 
     $date = date('Y-m-d');
-    $backupFile = "$backupDir/backup_$date.sql";
+    $backup_file = "$backup_dir/backup_$date.sql";
 
     // Open file for writing raw SQL
-    $fp = fopen($backupFile, 'w');
+    $fp = fopen($backup_file, 'w');
 
     foreach ($tables as $table) {
         // Create table structure
@@ -83,9 +83,9 @@ try {
     fclose($fp);
 
     // GZIP compression
-    $gzPath = "$backupFile.gz";
-    $gz = gzopen($gzPath, 'w9');
-    $fp = fopen($backupFile, 'r');
+    $gz_path = "$backup_file.gz";
+    $gz = gzopen($gz_path, 'w9');
+    $fp = fopen($backup_file, 'r');
 
     // Chunked copy (low memory footprint)
     while (!feof($fp)) {
@@ -95,11 +95,11 @@ try {
     fclose($fp);
     gzclose($gz);
 
-    unlink($backupFile); // Remove uncompressed file
+    unlink($backup_file); // Remove uncompressed file
 
     // ROTATION — remove files older than X days
-    foreach (glob("$backupDir/backup_*.sql.gz") as $file) {
-        if (filemtime($file) < time() - ($maxDays * 86400)) {
+    foreach (glob("$backup_dir/backup_*.sql.gz") as $file) {
+        if (filemtime($file) < time() - ($max_days * 86400)) {
             unlink($file);
         }
     }

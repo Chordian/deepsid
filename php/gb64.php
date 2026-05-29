@@ -1,3 +1,4 @@
+
 <?php
 /**
  * DeepSID
@@ -84,19 +85,19 @@ try {
 	if (isset($_GET['fullname'])) {
 
 		// Get rid of the HVSC folder in the beginning
-		$sidFilename = substr($_GET['fullname'], strpos($_GET['fullname'], '/') + 1);
-		$sidFilename = str_replace('/', '\\', $sidFilename);
+		$sid_filename = substr($_GET['fullname'], strpos($_GET['fullname'], '/') + 1);
+		$sid_filename = str_replace('/', '\\', $sid_filename);
 
 		// What games are using this SID file?
 		$select = $gb->prepare('SELECT GA_Id FROM Games WHERE SidFilename = :collection_path');
-		$select->execute(array(':collection_path' => $sidFilename));
+		$select->execute(array(':collection_path' => $sid_filename));
 		$select->setFetchMode(PDO::FETCH_OBJ);
 
 		// Collect the GB64 ID numbers (if any)
-		$gbIds = array();
+		$gb_ids = array();
 		if ($select->rowCount()) {
 			foreach ($select as $row) {
-				$gbIds[] = $GbRows = $row->GA_Id;
+				$gb_ids[] = $row->GA_Id;
 			}
 		} else {
 			$sticky = '<h2 style="display:inline-block;margin-top:0;">GameBase64</h2>';
@@ -117,18 +118,18 @@ try {
 
 		// Is a CSDb entry the primary release for this SID file?
 		$label = getLabelTypeId($_GET['fileid']);
-		$isCSDbPrimary = $label && $label['type'] == 'csdb';
+		$is_csdb_primary = $label && $label['type'] == 'csdb';
 
 		// If only one result then just show that as a sub page. An exception is if a CSDb entry is the primary
 		// release; then we know the one GB64 game is not and we no longer care enough about it to show its page.
 		// Instead, this opens up for showing a CSDb primary preview.
-		$page_id = count($gbIds) == 1 && !$isCSDbPrimary ? $gbIds[0] : 0;
+		$page_id = count($gb_ids) == 1 && !$is_csdb_primary ? $gb_ids[0] : 0;
 
 	} else if (isset($_GET['id'])) {
 
 		// A specific sub page ID was specified
 		$page_id = $_GET['id'];
-		$gbIds = array(1);
+		$gb_ids = array(1);
 
 	} else
 		die(json_encode(array('status' => 'error', 'message' => 'You must specify the proper GET variables.')));
@@ -251,7 +252,7 @@ if ($page_id) {
 
 	$rows = '';
 
-	foreach($gbIds as $id) {
+	foreach($gb_ids as $id) {
 
 		$data = readGB64DB($id);
 
@@ -314,7 +315,7 @@ if ($page_id) {
 	$sticky = '<h2 style="display:inline-block;margin-top:0;">GameBase64</h2>';
 
 	// And now build the HTML
-	$html = $primary_corner.'<h3>'.count($gbIds).' entr'.(count($gbIds) > 1 ? 'ies' : 'y').' found</h3>'.
+	$html = $primary_corner.'<h3>'.count($gb_ids).' entr'.(count($gb_ids) > 1 ? 'ies' : 'y').' found</h3>'.
 		'<table class="releases">'.
 			$rows.
 		'</table>'.$footnote;
@@ -328,7 +329,7 @@ echo json_encode(array(
 	'status'	=> 'ok',
 	'sticky'	=> $sticky,
 	'html'		=> $html,
-	'count' 	=> count($gbIds),
+	'count' 	=> count($gb_ids),
 	'needcsdb'	=> $primary_csdb_needed,
 	'primary'	=> $primary_back_button
 ));

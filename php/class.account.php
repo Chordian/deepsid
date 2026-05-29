@@ -141,13 +141,13 @@ class Account {
 		$_SESSION[$this->loginSession()] = $user_name;
 
 		// Remember
-		$cookiehash = md5(sha1($_SESSION['user_name'].$_SERVER['REMOTE_ADDR']));
-		setcookie('user', $cookiehash, time()+3600*24*365, '/', COOKIE_HOST);
+		$cookie_hash = md5(sha1($_SESSION['user_name'].$_SERVER['REMOTE_ADDR']));
+		setcookie('user', $cookie_hash, time()+3600*24*365, '/', COOKIE_HOST);
 
 		try {
 			// Store the hash in the database
 			$update = $this->database->prepare('UPDATE users SET session = :cookiehash WHERE user_name = :user_name LIMIT 1');
-			$update->execute(array(':cookiehash' => $cookiehash,':user_name' => $user_name));
+			$update->execute(array(':cookiehash' => $cookie_hash,':user_name' => $user_name));
 			if ($update->rowCount() == 0)
 				return false;
 		} catch(PDOException $exception) {
@@ -286,12 +286,12 @@ class Account {
 	 * @param		boolean		true if common (will have a weaker color)
 	 */
 	public function logActivity($str, $common = false) {
-		static $rotatedThisRequest = false;
+		static $rotated_this_request = false;
 
 		// Run rotation opportunistically on the 1st of each month
-		if (!$rotatedThisRequest && (int)date('j') === 1) {
+		if (!$rotated_this_request && (int)date('j') === 1) {
 			@require_once __DIR__ . '/rotate_logs.php';
-			$rotatedThisRequest = true;
+			$rotated_this_request = true;
 		}
 
 		$time_ip = date('Y-m-d H:i:s', strtotime(TIME_ADJUST)).' - '.$_SERVER['REMOTE_ADDR'].' - ';
@@ -481,15 +481,15 @@ class Account {
 					if ($attempts > 5) {
 						// Reached 5 attempts or more, so set a time stamp in the database
 						// NOTE: Additional attempts after 5 will just update this time and thus reset the 10 minutes continuously.
-						$logintime = date('Y-m-d H:i:s', strtotime(TIME_ADJUST));
+						$login_time = date('Y-m-d H:i:s', strtotime(TIME_ADJUST));
 						// Storing the IP address of the failed attempt is strictly for internal informational purposes. If the
 						// same IP is seen for a ton of users, it could be a hacker and you would want to ban the IP address.
-						$failip = $_SERVER['REMOTE_ADDR'];
+						$fail_ip = $_SERVER['REMOTE_ADDR'];
 						$update = $this->database->prepare('UPDATE users SET last_failed_login = :logintime, last_failed_ip = :failip'.
 							' WHERE user_name = :user_name LIMIT 1');
-						$update->execute(array(':logintime' => $logintime, ':failip' => $failip, ':user_name' => $user_name));
+						$update->execute(array(':logintime' => $login_time, ':failip' => $fail_ip, ':user_name' => $user_name));
 						if ($update->rowCount() == 0) {
-							$this->logError('No rows found after updating login time and failed IP address '.$failip.' for the user "'.$user_name.'"');
+							$this->logError('No rows found after updating login time and failed IP address '.$fail_ip.' for the user "'.$user_name.'"');
 							return false;
 						}
 						$this->handleError("You have been temporarily banned for 10 minutes");
@@ -502,7 +502,7 @@ class Account {
 				// The user and password is correct
 				$row = $select->fetch();
 
-				$minutes = round((strtotime(date('Y-m-d H:i:s', strtotime(TIME_ADJUST))) - strtotime($row->logintime)) / 60);
+				$minutes = round((strtotime(date('Y-m-d H:i:s', strtotime(TIME_ADJUST))) - strtotime($row->last_failed_login)) / 60);
 				if ($row->attempts >= 5 && $minutes < 10) {
 					$this->handleError('You are still banned for another '.(10 - $minutes).' minutes');
 					return false;
@@ -537,13 +537,13 @@ class Account {
 	 */
 	private function checkCookieLogin() {
 		if (isset($_COOKIE['user'])) {
-			$cookiehash = $_COOKIE['user'];
+			$cookie_hash = $_COOKIE['user'];
 
-			if (!empty($cookiehash)) {
+			if (!empty($cookie_hash)) {
 				if (!$this->connectDB()) return false;
 				try {
 					$select = $this->database->prepare('SELECT id, user_name FROM users WHERE session = :cookiehash LIMIT 1');
-					$select->execute(array(':cookiehash'=>$cookiehash));
+					$select->execute(array(':cookiehash'=>$cookie_hash));
 					$select->setFetchMode(PDO::FETCH_OBJ);
 					if ($select->rowCount() > 0) {
 						$row = $select->fetch();
@@ -555,7 +555,7 @@ class Account {
 						$this->logActivity('User "'.$row->user_name.'" has returned via a cookie', true);
 
 						// Reset the expiry date
-						setcookie('user', $cookiehash, time()+3600*24*365, '/', COOKIE_HOST);
+						setcookie('user', $cookie_hash, time()+3600*24*365, '/', COOKIE_HOST);
 
 						// Store cookie login time
 						$update = $this->database->prepare('UPDATE users SET last_visit = NOW() WHERE id = :id LIMIT 1');
@@ -563,7 +563,7 @@ class Account {
 						return true;
 					} else {
 						// Commented out because it was blowing up the 'db_errors_account.txt' file
-						// $this->logError('No rows found containing the cookie hash "'.$cookiehash.'"');
+						// $this->logError('No rows found containing the cookie hash "'.$cookie_hash.'"');
 						return false;
 					}
 				} catch(PDOException $exception) {
@@ -583,10 +583,10 @@ class Account {
 	 *
 	 * @return		boolean		false = call $this->getErrorMessage()
 	 */
-	private function storePassword($profile, $newpwd) {
+	private function storePassword($profile, $new_pwd) {
 		try {
 			$update = $this->database->prepare('UPDATE users SET password = :password WHERE id = :user_id LIMIT 1');
-			$update->execute(array(':password'=>md5($newpwd),':user_id'=>$profile->id));
+			$update->execute(array(':password'=>md5($new_pwd),':user_id'=>$profile->id));
 			if ($update->rowCount() == 0) {
 				$this->logError('No rows found after updating the password for the user "'.$profile->user_name.'"');
 				return false;
@@ -605,7 +605,7 @@ class Account {
 	 * 
 	 * @return		array		user roles
 	 */
-	private function getUserRoles($userId) {
+	private function getUserRoles($user_id) {
 		if (!$this->connectDB()) return [];
 
 		try {
@@ -615,7 +615,7 @@ class Account {
 				INNER JOIN roles r ON r.id = ur.role_id
 				WHERE ur.user_id = :uid
 			');
-			$select->execute([':uid' => $userId]);
+			$select->execute([':uid' => $user_id]);
 			return $select->fetchAll(PDO::FETCH_COLUMN, 0); // E.g. ['admin']
 		} catch (PDOException $exception) {
 			$this->logError($exception->getMessage());
@@ -669,8 +669,8 @@ class Account {
 	private function isFieldUnique($field) {
 		try {
 			$select = $this->database->prepare('SELECT user_name FROM users WHERE '.$field.' = :postfield');
-			$postField = $field = 'user_name' ? 'username' : $field; // Because of snake_case overhaul
-			$select->execute(array(':postfield' => $_POST[$postField]));
+			$post_field = $field = 'user_name' ? 'username' : $field; // Because of snake_case overhaul
+			$select->execute(array(':postfield' => $_POST[$post_field]));
 			if ($select->rowCount() > 0) return false;
 		} catch(PDOException $exception) {
 			$this->logError($exception->getMessage());

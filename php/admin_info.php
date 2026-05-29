@@ -16,34 +16,34 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH
 if (!$account->isAdmin())
 	die("This is for administrators only.");
 
-$baseURL = $_SERVER['HTTP_HOST'] == LOCALHOST ? "http://chordian/deepsid/php/" : "https://deepsid.chordian.net/php/";
+$base_url = $_SERVER['HTTP_HOST'] == LOCALHOST ? "http://chordian/deepsid/php/" : "https://deepsid.chordian.net/php/";
 
 $html = '<h3>Information</h3>
 			<h4>Tracking</h4>
 				<div class="script">
 					<div class="monitor">Visitor tracking</div>
 					<span>Show a tracking page with the current number of visitors.</span>
-					<button class="run-script" data-script="'.$baseURL.'../parse.php">SHOW</button>
+					<button class="run-script" data-script="'.$base_url.'../parse.php">SHOW</button>
 				</div>
 				<div class="script">
 					<div class="monitor">Activity log</div>
 					<span>Show a log with the various features users access on the site.</span>
-					<button class="run-script" data-script="'.$baseURL.'../logs/activity.htm">SHOW</button>
+					<button class="run-script" data-script="'.$base_url.'../logs/activity.htm">SHOW</button>
 				</div>
 				<div class="script">
 					<div class="monitor">Tags log</div>
 					<span>Show a log of the latest tags added to or removed from SID files.</span>
-					<button class="run-script" data-script="'.$baseURL.'../logs/tags.htm">SHOW</button>
+					<button class="run-script" data-script="'.$base_url.'../logs/tags.htm">SHOW</button>
 				</div>
 				<div class="script">
 					<div class="monitor">JavaScript errors</div>
 					<span>Show a log of synchronous JavaScript errors and unhandled Promise rejections.</span>
-					<button class="run-script" data-script="'.$baseURL.'../logs/js_errors.log">SHOW</button>
+					<button class="run-script" data-script="'.$base_url.'../logs/js_errors.log">SHOW</button>
 				</div>
 				<div class="script">
 					<div class="monitor">Database errors</div>
 					<span>Show a log of account-related database errors.</span>
-					<button class="run-script" data-script="'.$baseURL.'../logs/db_errors_account.txt">SHOW</button>
+					<button class="run-script" data-script="'.$base_url.'../logs/db_errors_account.txt">SHOW</button>
 				</div>
 	';
 

@@ -10,7 +10,7 @@
  * @used-by		root_generate.php
  */
 
-$countryCodes = array(
+$country_codes = array(
 
 	'catalonia' => 'catalonia',
 	'england' => 'england',
@@ -291,4 +291,7 @@ $countryCodes = array(
 	'zambia' => 'zm',
 	'zimbabwe' => 'zw'
 );
+
+// Legacy (remove later)
+$countryCodes = $country_codes;
 ?>

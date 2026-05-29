@@ -248,13 +248,13 @@ if (isset($_GET['fullname'])) {
 
 	// Is a GB64 game entry the primary release for this SID file?
 	$label = getLabelTypeId($files_id);
-	$isGB64primary = $label && $label['type'] == 'gb64';
+	$is_gb64_primary = $label && $label['type'] == 'gb64';
 
 	// If there is just one release then we don't need to show the SID list first. The release page is then shown
 	// straight away. A database mapping is read first in case CSDb is offline, so the cache reader can work.
 	// An exception is if a GB64 game is the primary release; then we know the one CSDb release is not and we no
 	// longer care enough about it to show its page. Instead, this opens up for showing a GB64 primary preview.
-	if ($csdb_type === 'sid' && !$isGB64primary) {
+	if ($csdb_type === 'sid' && !$is_gb64_primary) {
 
 		$release_id = null;
 		$read_from_db = false;
@@ -500,21 +500,21 @@ if ($csdb_type == 'sid') {
 			if (isset($release->Comments)) {
 				foreach($release->Comments->children() as $commentBlock) {
 					if (isset($commentBlock->CSDbUser->CSDbEntry->Handle)) {
-						$scid = $commentBlock->CSDbUser->CSDbEntry->Handle->ID;
+						$sc_id = $commentBlock->CSDbUser->CSDbEntry->Handle->ID;
 						$user_id = $commentBlock->CSDbUser->ID;
-						$scih = '';
+						$sc_ih = '';
 						if (isset($commentBlock->CSDbUser->CSDbEntry->Handle->Handle))
-							$scih = $commentBlock->CSDbUser->CSDbEntry->Handle->Handle;
+							$sc_ih = $commentBlock->CSDbUser->CSDbEntry->Handle->Handle;
 						else if (isset($commentBlock->CSDbUser->Handle))
-							$scih = $commentBlock->CSDbUser->Handle;
+							$sc_ih = $commentBlock->CSDbUser->Handle;
 						else if (isset($commentBlock->CSDbUser->Login))
-							$scih = $commentBlock->CSDbUser->Login;
-						if (!empty($scih)) {
+							$sc_ih = $commentBlock->CSDbUser->Login;
+						if (!empty($sc_ih)) {
 							// We found a scener handle, better store it for a rainy day
-							$sid_handles[(string)$scid] = $scih;
+							$sid_handles[(string)$sc_id] = $sc_ih;
 							// Also for comment function
-							$scener_id[(string)$user_id] = $scid;
-							$scener_handle[(string)$user_id] = $scih;
+							$scener_id[(string)$user_id] = $sc_id;
+							$scener_handle[(string)$user_id] = $sc_ih;
 						}
 					}
 				}
