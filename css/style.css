@@ -5807,6 +5807,36 @@ input[type=range]::-ms-track {
 			max-width: 710px !important;
 		}
 
+		/* Icon in front of converted CSDb reference links in comment threads */
+		.csdb-type:before {
+			content: "";
+			display: inline-block;
+			width: 20px;
+			height: 20px;
+			vertical-align: middle;
+			filter: var(--svg-filter-row-spinner);
+		}
+
+			.csdb-type-group:before {
+				margin-right: 2px;
+				background: url(../images/group.svg) 0 -1.5px / 20px 20px no-repeat;
+			}
+
+			.csdb-type-scener:before {
+				margin-right: 0;
+				background: url(../images/scener.svg) 0 -1.5px / 20px 20px no-repeat;
+			}
+
+			.csdb-type-release:before {
+				margin-right: -1px;
+				background: url(../images/release.svg) 0 1px / 16px 16px no-repeat;
+			}
+
+			.csdb-type-event:before {
+				margin-right: -1.5px;
+				background: url(../images/composer_earth.svg) 0 0.5px / 17px 17px no-repeat;
+			}
+
 		.corner-icons {
 			position: absolute;
 			top: 12px;

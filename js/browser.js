@@ -2982,10 +2982,12 @@ Browser.prototype = {
 		function _makeCSDbLink(type, id, name) {
 			return $("<a>", {
 				//"class": "internal", // Opens in DeepSID but this comes with a bag of problems
+				"class": "csdb-type csdb-type-"+type,
 				"href": "https://csdb.chordian.net/?type=" + type + "&id=" + id,
 				"data-id": id,
 				"data-type": type,
 				"text": name,
+				"title": _ucFirst(type),
 				"target": "_blank"
 			});
 		}

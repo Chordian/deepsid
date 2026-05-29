@@ -1976,6 +1976,7 @@
 						<h3>May 29, 2026</h3>
 						<ul>
 							<li>More CSDb ID references in comment threads are now converted into links with proper names.</li>
+							<li>Links converted from CSDb ID references now also have a type icon.</li>
 						</ul>
 
 						<h3>May 24, 2026</h3>
@@ -1988,7 +1989,7 @@
 						<ul>
 							<li>The "a" hotkey can now be used to toggle the annex box on or off.</li>
 							<li>Bottom messages now appear inside the search box instead of in a floating box.</li>
-							<li>CSDb ID references in comment threads are now converted into links with proper names.</li>
+							<li>Some CSDb ID references in comment threads are now converted into links with proper names.</li>
 						</ul>
 
 						<h3>May 18, 2026</h3>

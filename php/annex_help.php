@@ -844,6 +844,7 @@ $help = array(
         . makeSiteLink('https://ultimatesid.dk', 'USC', 'Collection')
         // . makeSiteLink('https://vandalism.news', 'Vandalism', 'Diskmag')
         . makeSiteLink('https://vice-emu.sourceforge.io', 'VICE', 'Emulator')
+        . makeSiteLink('https://wbochar.com', 'wbochar', 'PETSCII')
     	. '</ul>
 	',
 );
