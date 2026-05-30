@@ -16,7 +16,7 @@ set_time_limit(0);
 // CONFIG
 // -----------------------------------------------------------
 
-$hvscRoot = __DIR__ . '/../../hvsc/';
+$hvsc_root = __DIR__ . '/../../hvsc/';
 
 // Collections to scan
 $collections = [
@@ -27,7 +27,7 @@ $collections = [
 ];
 
 // File extensions allowed per collection
-$allowedExt = [
+$allowed_ext = [
     "_Compute's Gazette SID Collection" => 'mus',
     "_Exotic SID Tunes Collection"      => 'sid',
     "_High Voltage SID Collection"      => 'sid',
@@ -35,7 +35,7 @@ $allowedExt = [
 ];
 
 // Mandatory fields for *.sid rows
-$requiredFields = [
+$required_fields = [
     'id'           		=> 'number',
     'collection_path'	=> 'text',
     'lengths'      		=> 'text',
@@ -60,15 +60,15 @@ $requiredFields = [
 ];
 
 // If a row has more than this many deviations → we treat it as completely unprepared
-$unpreparedThreshold = 6;
+$unprepared_threshold = 6;
 
 // URL base
-$baseURL = $_SERVER['HTTP_HOST'] == LOCALHOST ? "http://chordian/deepsid/?file=" : "https://deepsid.chordian.net/?file=";
+$base_url = $_SERVER['HTTP_HOST'] == LOCALHOST ? "http://chordian/deepsid/?file=" : "https://deepsid.chordian.net/?file=";
 
 // -----------------------------------------------------------
 // Helper: Build browser URL from collection_path
 // -----------------------------------------------------------
-function buildUrl($collection_path, $baseURL) {
+function buildUrl($collection_path, $base_url) {
     // Remove leading underscore from collection name
     $parts = explode('/', $collection_path);
     $parts[0] = ltrim($parts[0], '_'); 
@@ -76,7 +76,7 @@ function buildUrl($collection_path, $baseURL) {
     // URL encode properly, but keep slashes
     $encoded = implode('/', array_map('rawurlencode', $parts));
 
-    return $baseURL . '/' . $encoded;
+    return $base_url . '/' . $encoded;
 }
 
 // -----------------------------------------------------------
@@ -99,17 +99,17 @@ try {
 
 	foreach ($collections as $collection) {
 
-		$folderPath = $hvscRoot . $collection;
+		$folder_path = $hvsc_root . $collection;
 
-		if (!is_dir($folderPath)) {
+		if (!is_dir($folder_path)) {
 			echo "[ERROR] Collection folder not found: $collection<br>";
 			continue;
 		}
 
 		echo "<h3>Scanning: $collection</h3>";
 
-		$ext = $allowedExt[$collection];
-		$rii = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($folderPath));
+		$ext = $allowed_ext[$collection];
+		$rii = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($folder_path));
 
 		foreach ($rii as $file) {
 			if ($file->isDir()) continue;
@@ -117,22 +117,22 @@ try {
 			if (strtolower($file->getExtension()) !== $ext) continue;
 
 			// Build collection path used in hvsc_files table
-			$relativePath = $collection . '/' . substr($file->getPathname(), strlen($folderPath) + 1);
-			$relativePath = str_replace('\\', '/', $relativePath);
+			$relative_path = $collection . '/' . substr($file->getPathname(), strlen($folder_path) + 1);
+			$relative_path = str_replace('\\', '/', $relative_path);
 
 			// Query DB for the file
 			$select = $db->prepare('SELECT * FROM hvsc_files WHERE collection_path = :collection_path LIMIT 1');
-			$select->execute([':collection_path' => $relativePath]);
+			$select->execute([':collection_path' => $relative_path]);
 			$row = $select->fetch(PDO::FETCH_ASSOC);
 
-			$url = buildUrl($relativePath, $baseURL);
+			$url = buildUrl($relative_path, $base_url);
 
 			//--------------------------------------------
 			// MUS files (only in Compute’s Gazette)
 			//--------------------------------------------
 			if ($ext === 'mus') {
 				if (!$row) {
-					echo "<div style='color:red'>[MISSING] $relativePath &nbsp; <a href='$url' target='_blank'>Open</a></div>";
+					echo "<div style='color:red'>[MISSING] $relative_path &nbsp; <a href='$url' target='_blank'>Open</a></div>";
 				}
 				continue;
 			}
@@ -141,14 +141,14 @@ try {
 			// SID files (full validation)
 			//--------------------------------------------
 			if (!$row) {
-				echo "<div style='color:red'>[MISSING ROW] $relativePath &nbsp; <a href='$url' target='_blank'>Open</a></div>";
+				echo "<div style='color:red'>[MISSING ROW] $relative_path &nbsp; <a href='$url' target='_blank'>Open</a></div>";
 				continue;
 			}
 
 			// Check required fields
 			$errors = [];
 
-			foreach ($requiredFields as $field => $type) {
+			foreach ($required_fields as $field => $type) {
 				if (!isset($row[$field]) || $row[$field] === '' || $row[$field] === null) {
 					$errors[] = "$field EMPTY";
 					continue;
@@ -159,14 +159,14 @@ try {
 			}
 
 			// Too many deviations → row is unprepared
-			if (count($errors) >= $unpreparedThreshold) {
-				echo "<div style='color:orange'>[UNPREPARED ROW] $relativePath &nbsp; <a href='$url' target='_blank'>Open</a></div>";
+			if (count($errors) >= $unprepared_threshold) {
+				echo "<div style='color:orange'>[UNPREPARED ROW] $relative_path &nbsp; <a href='$url' target='_blank'>Open</a></div>";
 				continue;
 			}
 
 			// Report specific field issues
 			if (!empty($errors)) {
-				echo "<div style='color:orange'>[FIELD ERRORS] $relativePath &nbsp; <a href='$url' target='_blank'>Open</a><br>";
+				echo "<div style='color:orange'>[FIELD ERRORS] $relative_path &nbsp; <a href='$url' target='_blank'>Open</a><br>";
 				foreach ($errors as $e) {
 					echo "&nbsp;&nbsp;- $e<br>";
 				}

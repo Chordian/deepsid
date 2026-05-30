@@ -44,23 +44,23 @@ curl_setopt_array($ch, [
 
 $xml = curl_exec($ch);
 
-$curl_errno    = curl_errno($ch);
-$curl_error    = curl_error($ch);
-$http_code     = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-$content_type  = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
-$total_time    = curl_getinfo($ch, CURLINFO_TOTAL_TIME);
-$namelookup    = curl_getinfo($ch, CURLINFO_NAMELOOKUP_TIME);
-$connect_time  = curl_getinfo($ch, CURLINFO_CONNECT_TIME);
-$starttransfer = curl_getinfo($ch, CURLINFO_STARTTRANSFER_TIME);
-$primary_ip    = curl_getinfo($ch, CURLINFO_PRIMARY_IP);
-$size_download = curl_getinfo($ch, CURLINFO_SIZE_DOWNLOAD);
+$curl_errno    	= curl_errno($ch);
+$curl_error    	= curl_error($ch);
+$http_code     	= curl_getinfo($ch, CURLINFO_HTTP_CODE);
+$content_type  	= curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
+$total_time    	= curl_getinfo($ch, CURLINFO_TOTAL_TIME);
+$name_lookup	= curl_getinfo($ch, CURLINFO_NAMELOOKUP_TIME);
+$connect_time  	= curl_getinfo($ch, CURLINFO_CONNECT_TIME);
+$start_transfer	= curl_getinfo($ch, CURLINFO_STARTTRANSFER_TIME);
+$primary_ip    	= curl_getinfo($ch, CURLINFO_PRIMARY_IP);
+$size_download 	= curl_getinfo($ch, CURLINFO_SIZE_DOWNLOAD);
 
 curl_close($ch);
 
 // --------------------------------------------------
 // XML checks
 // --------------------------------------------------
-$has_csdbdata = is_string($xml) && strpos($xml, '<CSDbData>') !== false;
+$has_csdb_data = is_string($xml) && strpos($xml, '<CSDbData>') !== false;
 
 libxml_use_internal_errors(true);
 $csdb = false;
@@ -214,7 +214,7 @@ function h($string): string {
 	</tr>
 	<tr>
 		<th>Name lookup time</th>
-		<td><?= h((string)$namelookup) ?> sec</td>
+		<td><?= h((string)$name_lookup) ?> sec</td>
 	</tr>
 	<tr>
 		<th>Connect time</th>
@@ -222,7 +222,7 @@ function h($string): string {
 	</tr>
 	<tr>
 		<th>Start transfer time</th>
-		<td><?= h((string)$starttransfer) ?> sec</td>
+		<td><?= h((string)$start_transfer) ?> sec</td>
 	</tr>
 	<tr>
 		<th>Total time</th>
@@ -238,7 +238,7 @@ function h($string): string {
 	</tr>
 	<tr>
 		<th>Contains &lt;CSDbData&gt;</th>
-		<td><?= $has_csdbdata ? '<span class="ok">YES</span>' : '<span class="fail">NO</span>' ?></td>
+		<td><?= $has_csdb_data ? '<span class="ok">YES</span>' : '<span class="fail">NO</span>' ?></td>
 	</tr>
 	<tr>
 		<th>simplexml_load_string()</th>

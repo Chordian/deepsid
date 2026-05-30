@@ -61,10 +61,10 @@ function getCollectionExt($collection_path) {
 }
 
 // Recursive counting
-function countItems($absPath, $relativePath) {
+function countItems($abs_path, $relative_path) {
     global $IGNORE_FOLDERS;
 
-    $rel = norm($relativePath);
+    $rel = norm($relative_path);
 
     // Skip ignored folders completely
     foreach ($IGNORE_FOLDERS as $skip) {
@@ -78,18 +78,18 @@ function countItems($absPath, $relativePath) {
 
     $count = 0;
 
-    $dh = @opendir($absPath);
+    $dh = @opendir($abs_path);
     if (!$dh) return 0;
 
     while (($file = readdir($dh)) !== false) {
         if ($file === '.' || $file === '..') continue;
 
-        $full = $absPath . '/' . $file;
-        $childRel = ltrim($rel . '/' . $file, '/');
+        $full = $abs_path . '/' . $file;
+        $child_rel = ltrim($rel . '/' . $file, '/');
 
         if (is_dir($full)) {
             // Always recurse, but never count the folder itself
-            $count += countItems($full, $childRel);
+            $count += countItems($full, $child_rel);
         } else {
             // Count files only — no folder counts anywhere
             if ($ext !== null) {
@@ -120,16 +120,16 @@ try {
 	foreach ($q as $row) {
 
 		$collection_path = $row->collection_path;   // e.g. "_High Voltage SID Collection/MUSICIANS/M/Merlin"
-		$absPath  = $ROOT . $collection_path;
+		$abs_path  = $ROOT . $collection_path;
 
-		if (!is_dir($absPath)) {
+		if (!is_dir($abs_path)) {
 			echo "Missing dir: $collection_path\n";
 			continue;
 		}
 
 		echo "Processing: $collection_path ... ";
 
-		$count = countItems($absPath, $collection_path);
+		$count = countItems($abs_path, $collection_path);
 
 		echo "count = $count\n";
 

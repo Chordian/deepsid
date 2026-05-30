@@ -24,18 +24,18 @@ try {
     // Normalized "now", same style as the existing scripts
     $now = strtotime(date('Y-m-d H:i:s', strtotime(TIME_ADJUST)));
 
-    $userName   = $account->checkLogin() ? $account->userName() : '';
+    $user_name  = $account->checkLogin() ? $account->userName() : '';
     $ip         = isset($_SERVER['REMOTE_ADDR'])      ? $_SERVER['REMOTE_ADDR']      : '';
-    $userAgent  = isset($_SERVER['HTTP_USER_AGENT'])  ? $_SERVER['HTTP_USER_AGENT']  : '';
+    $user_agent = isset($_SERVER['HTTP_USER_AGENT'])  ? $_SERVER['HTTP_USER_AGENT']  : '';
 
     // Basic sanity: if we don't have IP or UA, just bail quietly
-    if ($ip === '' || $userAgent === '') {
+    if ($ip === '' || $user_agent === '') {
         return;
     }
 
     // Skip external hits from Facebook (as in the original code),
     // but use strict comparison to avoid the 0 == false pitfall.
-    if (strpos($userAgent, 'www.facebook.com') !== false) {
+    if (strpos($user_agent, 'www.facebook.com') !== false) {
         return;
     }
 
@@ -52,24 +52,24 @@ try {
                     continue;
                 }
 
-                $lineIp         = $line[0];
-                $lineUa         = $line[1];
-                $lineUser       = $line[2];
-                $timeCreated    = (int)$line[3];
-                $timeUpdated    = (int)$line[4];
+                $line_ip        = $line[0];
+                $line_ua        = $line[1];
+                $line_user      = $line[2];
+                $time_created   = (int)$line[3];
+                $time_updated    = (int)$line[4];
 
                 // Drop expired visitors
-                $minutesSinceUpdate = round(($now - $timeUpdated) / 60);
-                if ($minutesSinceUpdate > ACTIVE_WINDOW_MINUTES) {
+                $minutes_since_update = round(($now - $time_updated) / 60);
+                if ($minutes_since_update > ACTIVE_WINDOW_MINUTES) {
                     continue;
                 }
 
                 $visitors[] = array(
-                    'ip_address'    => $lineIp,
-                    'user_agent'    => $lineUa,
-                    'user_name'     => $lineUser,
-                    'time_created'  => $timeCreated,
-                    'time_updated'  => $timeUpdated,
+                    'ip_address'    => $line_ip,
+                    'user_agent'    => $line_ua,
+                    'user_name'     => $line_user,
+                    'time_created'  => $time_created,
+                    'time_updated'  => $time_updated,
                 );
             }
             fclose($handle);
@@ -77,43 +77,43 @@ try {
     }
 
     // Look for current visitor (IP + UA combo)
-    $exists        = false;
-    $existingIndex = null;
+    $exists         = false;
+    $existing_index = null;
 
     foreach ($visitors as $index => $visitor) {
-        if ($visitor['ip_address'] === $ip && $visitor['user_agent'] === $userAgent) {
+        if ($visitor['ip_address'] === $ip && $visitor['user_agent'] === $user_agent) {
             $exists        = true;
-            $existingIndex = $index;
+            $existing_index = $index;
             break;
         }
     }
 
-    if ($exists && $existingIndex !== null) {
+    if ($exists && $existing_index !== null) {
         // Update existing visitor
-        $visitors[$existingIndex]['time_updated'] = $now;
+        $visitors[$existing_index]['time_updated'] = $now;
 
         // If user_name changed (e.g. logged in after anon), update it
-        if ($userName !== '' && $visitors[$existingIndex]['user_name'] !== $userName) {
-            $visitors[$existingIndex]['user_name'] = $userName;
+        if ($user_name !== '' && $visitors[$existing_index]['user_name'] !== $user_name) {
+            $visitors[$existing_index]['user_name'] = $user_name;
         }
 
     } else {
         // Optional: keep only one entry per IP at a time, as in the old script
         // (skip repeated IP addresses if already present with any UA).
-        $ipAlreadyPresent = false;
+        $ip_already_present = false;
         foreach ($visitors as $v) {
             if ($v['ip_address'] === $ip) {
-                $ipAlreadyPresent = true;
+                $ip_already_present = true;
                 break;
             }
         }
 
-        if (!$ipAlreadyPresent) {
+        if (!$ip_already_present) {
             // New visitor
             $visitors[] = array(
                 'ip_address'    => $ip,
-                'user_agent'    => $userAgent,
-                'user_name'     => $userName,
+                'user_agent'    => $user_agent,
+                'user_name'     => $user_name,
                 'time_created'  => $now,
                 'time_updated'  => $now,
             );

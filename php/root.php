@@ -453,11 +453,6 @@ $html =
 		'</tr>'.
 		$quick_shortcuts.
 	'</table>';
-	// Banner exchange (appears to now be dead)
-	/*'<div style="text-align:center;">'.
-		'<iframe src="https://cbm8bit.com/banner-exchange/show-random-banner/any?width=468" title="Commodore Banner Exchange" frameborder="0" style="width: 468px; height: 60px; border: 0; margin: 5px;"></iframe><br />'.
-		'<small style="position:relative;top:-13px;"><a target="_blank" href="https://cbm8bit.com/banner-exchange/" title="Commodore Banner Exchange">Commodore Banner Exchange</a></small>'.
-	'</div>;'*/
 
 echo json_encode(array('status' => 'ok', 'html' => $html, 'left' => $choice_left, 'right' => $choice_right));
 ?>

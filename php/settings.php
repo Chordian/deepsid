@@ -25,7 +25,7 @@ require_once("class.account.php"); // Includes setup
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest')
 	die("Direct access not permitted.");
 
-$firstTime = array(
+$first_time = array(
 	'firstsubtune'		=> 0,
 	'primaryrelease'	=> 0,
 	'skiptune'			=> 1,
@@ -36,7 +36,7 @@ $firstTime = array(
 );
 
 $user_id = $account->checkLogin() ? $account->userID() : 0;
-if (!$user_id) die(json_encode(array('status' => 'ok', 'settings' => $firstTime)));
+if (!$user_id) die(json_encode(array('status' => 'ok', 'settings' => $first_time)));
 
 try {
 	$db = $account->getDB();
@@ -46,7 +46,7 @@ try {
 	$select->setFetchMode(PDO::FETCH_OBJ);
 	$settings = unserialize($select->fetch()->flags);
 
-	if (!$settings) $settings = $firstTime;
+	if (!$settings) $settings = $first_time;
 
 	// Adjust settings
 	if (isset($_POST['firstsubtune']))		$settings['firstsubtune']		= (int)$_POST['firstsubtune'];

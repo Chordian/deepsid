@@ -224,8 +224,8 @@ if (isset($collection_path)) {
 					$player_counts[] = $player_row->count;
 				}
 				foreach($player_labels as $key => $label) {
-					if (isset($prettyPlayerNames[$label]))
-						$player_labels[$key] = str_replace('a Basic Program', 'Basic Program', $prettyPlayerNames[$label]);
+					if (isset($pretty_player_names[$label]))
+						$player_labels[$key] = str_replace('a Basic Program', 'Basic Program', $pretty_player_names[$label]);
 					else
 						$player_labels[$key] = str_replace('_', ' ', preg_replace('/(V)(\d)/', 'v$2', $player_labels[$key]));
 					$player_labels[$key] = str_replace('/', ' / ', $player_labels[$key]);
@@ -442,7 +442,7 @@ if (isset($row)) {
 	$died = $died == '1970' ? '<i>Unknown date</i>' : $died;
 
 	// Append flag images to the potentially comma-separated list of multiple countries
-	foreach ($countryCodes as $key => $code) {
+	foreach ($country_codes as $key => $code) {
 
 		$c_pattern = '/\b' . preg_quote($key, '/') . '\b/i';
 

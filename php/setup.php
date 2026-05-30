@@ -24,20 +24,20 @@ define('TIME_ADJUST',		'+1 hours');				// Added to all use of Date() to match co
 // Handle configuration file
 
 $host = $_SERVER['HTTP_HOST'] ?? '';
-$isCli = (PHP_SAPI === 'cli');
-$isLocal = $isCli || in_array($host, [LOCALHOST, 'localhost', '127.0.0.1'], true);
+$is_cli = (PHP_SAPI === 'cli');
+$isLocal = $is_cli || in_array($host, [LOCALHOST, 'localhost', '127.0.0.1'], true);
 
-$generalFile = __DIR__ . '/../config/general.php';
-$envFile  = __DIR__ . ($isLocal ? '/../config/localhost.php' : '/../config/online.php');
+$general_file = __DIR__ . '/../config/general.php';
+$env_file  = __DIR__ . ($isLocal ? '/../config/localhost.php' : '/../config/online.php');
 
-if (!file_exists($generalFile) || !file_exists($envFile)) {
+if (!file_exists($general_file) || !file_exists($env_file)) {
     die('Missing configuration file.');
 }
 
-$generalConfig = require $generalFile;
-$envConfig  = require $envFile;
+$general_config = require $general_file;
+$env_config  = require $env_file;
 
-$config = array_merge($generalConfig, $envConfig);      // See PHP files in 'config' folder for keys
+$config = array_merge($general_config, $env_config);    // See PHP files in 'config' folder for keys
 
 // --------------------------------------------------------------------------
 // FUNCTIONS

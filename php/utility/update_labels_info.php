@@ -46,20 +46,20 @@ function csdbFindExactRelease(string $name): array
         $id = (int)$idm[1];
 
         // Extract type
-        $typeNode = $xp->query('//b[text()="Type :"]/following::a[1]')->item(0);
-        if (!$typeNode) {
+        $type_node = $xp->query('//b[text()="Type :"]/following::a[1]')->item(0);
+        if (!$type_node) {
             return [];
         }
 
-        $type = trim($typeNode->textContent);
+        $type = trim($type_node->textContent);
 
         // Extract title
-        $titleNode = $xp->query('//font[@size="6"]')->item(0);
-        if (!$titleNode) {
+        $title_node = $xp->query('//font[@size="6"]')->item(0);
+        if (!$title_node) {
             return [];
         }
 
-        $title = trim($titleNode->textContent);
+        $title = trim($title_node->textContent);
 
         // Extra safety: exact title match
         if (strcasecmp($title, $name) !== 0) {
@@ -123,7 +123,7 @@ try {
 	$db = $account->getDB();
 
 	// Fetch candidates
-	$stmt = $db->query("
+	$select = $db->query("
 		SELECT id, name
 		FROM labels_info
 		WHERE csdbid = 0
@@ -139,13 +139,13 @@ try {
 	$updated = 0;
 	$skipped = 0;
 
-	foreach ($stmt as $row) {
+	foreach ($select as $row) {
 
-		$labelId = (int)$row['id'];
+		$label_id = (int)$row['id'];
 		$name    = trim($row['name']);
 
 		if ($name === '') {
-			echo "[SKIP] #{$labelId} empty name<br />";
+			echo "[SKIP] #{$label_id} empty name<br />";
 			$skipped++;
 			continue;
 		}
@@ -165,7 +165,7 @@ try {
 				$update->execute([
 					$m['id'],
 					$m['type'],
-					$labelId
+					$label_id
 				]);
 			}
 

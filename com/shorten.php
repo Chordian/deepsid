@@ -38,8 +38,8 @@ try {
 		$insert = $db->prepare("INSERT INTO short_urls (hash, full_url) VALUES (?, ?)");
 		$insert->execute([$hash, $url]);
 
-		$shortUrl = "https://deepsid.com/$hash";
-		echo "Short URL: <a href=\"$shortUrl\">$shortUrl</a>";
+		$short_url = "https://deepsid.com/$hash";
+		echo "Short URL: <a href=\"$short_url\">$short_url</a>";
 	}
 } catch(PDOException $e) {
 	die(DB_ERROR);

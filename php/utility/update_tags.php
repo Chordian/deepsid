@@ -45,19 +45,19 @@ function getTagID($name) {
 /**
  * Add the tag unless it already exists.
  *
- * @param		int			$tagid				tag id
+ * @param		int			$tag_id				tag id
  */
-function addTag($tagid) {
+function addTag($tag_id) {
 
 	global $db, $row;
 
 	// Does the row already have this tag?
-	$tag = $db->query('SELECT 1 FROM tags_lookup WHERE files_id = '.$row->id.' AND tags_id = '.$tagid.' LIMIT 1');
+	$tag = $db->query('SELECT 1 FROM tags_lookup WHERE files_id = '.$row->id.' AND tags_id = '.$tag_id.' LIMIT 1');
 	if ($tag->rowCount()) {
 		echo '<tr><td>Tag already exists for</td><td>'.$row->id.'</td><td>'.$row->collection_path.'</td></tr>';
 	} else {
 		// No; add it now
-		$db->query('INSERT INTO tags_lookup (files_id, tags_id) VALUES('.$row->id.', '.$tagid.')');
+		$db->query('INSERT INTO tags_lookup (files_id, tags_id) VALUES('.$row->id.', '.$tag_id.')');
 		echo '<tr><td>Tag added to</td><td>'.$row->id.'</td><td>'.$row->collection_path.'</td></tr>';
 	}
 }
@@ -75,9 +75,9 @@ try {
 	$select->setFetchMode(PDO::FETCH_OBJ);
 
 	// Get the ID of the relevant tag name
-	$tagid = getTagID(MODE);
+	$tag_id = getTagID(MODE);
 
-	echo 'Tag: "'.MODE.'" (ID: '.$tagid.')<br /><br />
+	echo 'Tag: "'.MODE.'" (ID: '.$tag_id.')<br /><br />
 		<style>body,table { font: normal 15px arial, sans-serif; } td { padding-right: 20px; }</style>
 		<table style="text-align:left;"><tr><th>Action</th><th>ID</th><th>Collection path</th></tr>';
 
@@ -89,29 +89,29 @@ try {
 			case MODE_COOP:
 				// Condition: The 'author' field must be like e.g. "Stan & Laurel"
 				if (strpos($row->author, ' & '))
-					addTag($tagid);
+					addTag($tag_id);
 				break;
 			case MODE_UNF:
 				// Condition: The 'collection_path' field must have "/Worktunes" in it
 				if (strpos($row->collection_path, '/Worktunes'))
-					addTag($tagid);
+					addTag($tag_id);
 				break;
 			case MODE_TINY:
 				// Condition: Number of bytes in the 'data_size' field must be less than 512
 				if ($row->data_size < 512)
-					addTag($tagid);
+					addTag($tag_id);
 				break;
 			case MODE_PURE:
 				// Condition: The 'player' field must have "Master_Composer" in it
 				if ($row->player == 'Master_Composer')
-					addTag($tagid);
+					addTag($tag_id);
 				break;
 			case MODE_LONG:
 				// Condition: One of the sub tunes is longer than 10 minutes
 				$lengths = explode(' ', $row->lengths);
 				foreach ($lengths as $length) {
 					if (substr($length, 0, 2) >= 10)
-						addTag($tagid);
+						addTag($tag_id);
 					break;
 				}
 			case MODE_SHORT:
@@ -123,12 +123,12 @@ try {
 					if ($min_sec[0] > 0 || $min_sec[1] > 10)
 						$all_short = false; // It's too long
 				}
-				if ($all_short) addTag($tagid);
+				if ($all_short) addTag($tag_id);
 				break;
 			case MODE_LYRICS:
 				// Condition: If there's an accompanying .WDS file thereby indicating that lyrics exists (CGSC)
 				if (file_exists(ROOT_HVSC.'/'.substr($row->collection_path, 0, -4).'.wds'))
-					addTag($tagid);
+					addTag($tag_id);
 				break;
 			}
 		if (isset($test_max)) {

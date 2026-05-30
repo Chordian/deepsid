@@ -34,7 +34,7 @@ function adaptBrowserName($collection_path, $link = '') {
 /**
  * Generate a top list and return its HTML.
  *
- * @global		array		$countryCodes		array with abbreviations
+ * @global		array		$country_codes		array with abbreviations
  * 
  * @param		int			$rows				number of rows
  * @param		string		$type				type of top list
@@ -43,7 +43,7 @@ function adaptBrowserName($collection_path, $link = '') {
  */
 function generateList($rows, $type) {
 
-	global $account, $countryCodes;
+	global $account, $$country_codes;
 
 	try {
 		$db = $account->getDB();
@@ -131,26 +131,26 @@ function generateList($rows, $type) {
 				$entry = "Country";
 				$value = 'Count';
 
-				$countryCounts = [];
+				$country_counts = [];
 
-				foreach($countryCodes as $country => $code) {
+				foreach($$country_codes as $country => $code) {
 					$select = $db->query('SELECT count(1) AS c FROM composers WHERE country LIKE "%'.$country.'%"');
 					$select->setFetchMode(PDO::FETCH_OBJ);
-					array_push($countryCounts, array(
+					array_push($country_counts, array(
 						'country' =>	($country == 'usa' ? 'USA' : ucwords($country)),
 						'count' =>		$select->fetch()->c,
 					));
 				}
 
-				usort($countryCounts, function ($item1, $item2) {
+				usort($country_counts, function ($item1, $item2) {
 					if ($item1['count'] == $item2['count']) return 0;
 					return $item1['count'] > $item2['count'] ? -1 : 1;
 				});				
 
 				for ($i = 0; $i < $rows; $i++) {
 					array_push($list, array(
-						'entry' =>	'<a href="'.HOST.'?type=country&search='.$countryCounts[$i]['country'].'">'.$countryCounts[$i]['country'].'</a>',
-						'value' =>	$countryCounts[$i]['count'],
+						'entry' =>	'<a href="'.HOST.'?type=country&search='.$country_counts[$i]['country'].'">'.$country_counts[$i]['country'].'</a>',
+						'value' =>	$country_counts[$i]['count'],
 					));
 				}
 				break;

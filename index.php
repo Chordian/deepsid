@@ -16,13 +16,13 @@
 
 	require_once("tracking.php"); // Also called periodically by 'main.js'
 
-	$backupDue = false;
+	$backup_due = false;
 
-	$backupDir     = __DIR__ . '/backups/';
-	$timestampFile = $backupDir . 'last_backup.txt';
+	$backup_dir = __DIR__ . '/backups/';
+	$timestamp_file = $backup_dir . 'last_backup.txt';
 
-	if (!file_exists($timestampFile) || (time() - filemtime($timestampFile)) > 86400)
-		$backupDue = true;
+	if (!file_exists($timestamp_file) || (time() - filemtime($timestamp_file)) > 86400)
+		$backup_due = true;
 
 	// @link https://stackoverflow.com/a/60199374/2242348
 	// $inside_iframe = isset($_SERVER['HTTP_SEC_FETCH_DEST']) && $_SERVER['HTTP_SEC_FETCH_DEST'] == 'iframe';
@@ -82,7 +82,7 @@
 			viewport.setAttribute("content", "width="+(screen.width < 450 ? "450" : "1320"));
 			document.head.appendChild(viewport);
 
-			var DEEPSID_BACKUP_DUE = <?php echo $backupDue ? 'true' : 'false'; ?>;
+			var DEEPSID_BACKUP_DUE = <?php echo $backup_due ? 'true' : 'false'; ?>;
 
 		</script>		
 		<meta name="description" content="A modern online SID player for the High Voltage and Compute's Gazette SID collections." /> <!-- Max 150 characters -->
@@ -249,10 +249,10 @@
 				$jpeg = imagecreatefromjpeg('images/composers/'.$image);
 
 				list($width, $height) = getimagesize('images/composers/'.$image);
-				list($newwidth, $newheight) = getimagesize('images/og_overlay.png');
-				$out = imagecreatetruecolor($newwidth, $newheight);
-				imagecopyresampled($out, $jpeg, 0, 0, 0, 0, $newwidth, $newheight, $width, $height);
-				imagecopyresampled($out, $png, 0, 0, 0, 0, $newwidth, $newheight, $newwidth, $newheight);
+				list($new_width, $new_height) = getimagesize('images/og_overlay.png');
+				$out = imagecreatetruecolor($new_width, $new_height);
+				imagecopyresampled($out, $jpeg, 0, 0, 0, 0, $new_width, $new_height, $width, $height);
+				imagecopyresampled($out, $png, 0, 0, 0, 0, $new_width, $new_height, $new_width, $new_height);
 
 				// 100 is best quality
 				imagejpeg($out, $_SERVER['DOCUMENT_ROOT'].'/deepsid/images/composers/play/'.$image, 100);
@@ -2235,7 +2235,7 @@
 
 						<h3>November 23, 2025</h3>
 						<ul>
-							<li>Upgraded the JSIDPlay2 emulator to v4.13. It’s now even faster and supports FM+SID playback as well as exotic SID formats such as 4SID, 8SID, and 10SID.</li>
+							<li>Upgraded the JSIDPlay2 emulator to v4.13. It's now even faster and supports FM+SID playback as well as exotic SID formats such as 4SID, 8SID, and 10SID.</li>
 						</ul>
 
 						<h3>November 16, 2025</h3>

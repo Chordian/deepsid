@@ -50,8 +50,8 @@ try {
 			$collection_path = substr($line[0], 0, 1) == '/' ? substr($line[0], 1) : $line[0];
 			$collection_path = '_High Voltage SID Collection/'.$collection_path;
 			$subtune = $line[1];
-			$substname = $line[2];
-			echo '<tr><td>'.$collection_path.'</td><td>'.$subtune.'</td><td>'.$substname.'</td>';
+			$subst_name = $line[2];
+			echo '<tr><td>'.$collection_path.'</td><td>'.$subtune.'</td><td>'.$subst_name.'</td>';
 
 			// Find HVSC file
 			$select = $db->query('SELECT id FROM hvsc_files WHERE collection_path ="'.$collection_path.'" LIMIT 1');
@@ -68,7 +68,7 @@ try {
 					echo '<td style="color:#00a;">Not in symlist; <b>adding now</b>';
 					// Add the symlist entry to the database
 					$db->query('INSERT INTO symlists (folder_id, file_id, sid_name, subtune)'.
-						' VALUES('.SYMFOLDER.','.$file_id.',"'.$substname.'",'.$subtune.')');
+						' VALUES('.SYMFOLDER.','.$file_id.',"'.$subst_name.'",'.$subtune.')');
 				}
 			}
 			echo '</td><tr>';

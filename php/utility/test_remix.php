@@ -2,13 +2,13 @@
 
 require_once("setup.php");
 
-$endpointPath = 'remix/get_remixes_by_hvsc_path';
+$endpoint_path = 'remix/get_remixes_by_hvsc_path';
 $params = [
     'hvsc_path' => 'MUSICIANS/H/Hubbard_Rob/ACE_II.sid'
 ];
 
 $url = 'https://remix64.com/services/api/gb/2/' .
-       $endpointPath . '/?' . http_build_query($params);
+       $endpoint_path . '/?' . http_build_query($params);
 
 $ch = curl_init();
 
@@ -28,7 +28,7 @@ curl_setopt_array($ch, [
 $response = curl_exec($ch);
 $info = curl_getinfo($ch);
 $error = curl_error($ch);
-$errno = curl_errno($ch);
+$err_no = curl_errno($ch);
 
 curl_close($ch);
 
@@ -36,15 +36,15 @@ echo "<pre>";
 
 if ($response === false) {
     echo "cURL failed\n";
-    echo "Error number: $errno\n";
+    echo "Error number: $err_no\n";
     echo "Error: $error\n";
     echo "</pre>";
     exit;
 }
 
-$headerSize = $info['header_size'];
-$headers = substr($response, 0, $headerSize);
-$body = substr($response, $headerSize);
+$header_size = $info['header_size'];
+$headers = substr($response, 0, $header_size);
+$body = substr($response, $header_size);
 
 echo "CURL Info:\n";
 print_r($info);

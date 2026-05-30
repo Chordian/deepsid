@@ -9,8 +9,10 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- Make sure all variable names in all PHP files use snake_case.
-  Ongoing. Next file to be parsed: root_generate.php
+- All PHP files now use snake_case. Test LOCALHOST a bit, upload, test ONLINE a bit.
+
+- CSDb references not converted:
+  http://chordian/deepsid/?tab=csdb&csdbtype=release&csdbid=12440
 
 - Invent a new admin-only hotkey that toggles the site between local and online. I suppose
   it will do this by replacing the beginning of the URL and then load/refresh.
@@ -42,6 +44,7 @@ WHEN THE TIME IS RIGHT
   - Go through all the other files and see if anything else ought to be renamed.
   - Convert all use of quotes into apostrophes for strings in all JS files.
   - Change all 'bind(this)' stuff to modern JavaScript handling instead.
+  - Change all define() statements into const instead.
 
 
 CONSIDER THIS

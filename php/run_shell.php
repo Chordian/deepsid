@@ -15,7 +15,7 @@ if (!$account->isAdmin())
 	die("This is for administrators only.");
 
 try {
-	$allowedScripts = $account->getDB()
+	$allowed_scripts = $account->getDB()
 	    ->query('SELECT script FROM admin_scripts WHERE script <> "" AND script IS NOT NULL')
     	->fetchAll(PDO::FETCH_COLUMN);	
 
@@ -26,7 +26,7 @@ try {
 
 $script = $_GET['script'] ?? '';
 
-if (!in_array($script, $allowedScripts)) {
+if (!in_array($script, $allowed_scripts)) {
     http_response_code(403);
     echo 'Error: Script not allowed.';
     exit;

@@ -104,9 +104,9 @@ function compoGetTypeDateCountry($csdb) {
 	// Country
 	if (isset($csdb->Event->Country)) {
 		$country = $csdb->Event->Country;
-		if (array_key_exists(strtolower($country), $countryCodes)) {
+		if (array_key_exists(strtolower($country), $country_codes)) {
 			// Append a flag image to country
-			$code = $countryCodes[strtolower($csdb->Event->Country)];
+			$code = $country_codes[strtolower($csdb->Event->Country)];
 			$country .= ' <img class="flag" src="images/countries/'.$code.'.png" alt="'.$code.'" />';
 		}
 		$type_date_country .= ' &#9642; '.$country;
