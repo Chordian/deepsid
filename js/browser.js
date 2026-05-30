@@ -2948,6 +2948,9 @@ Browser.prototype = {
 
 	/**
 	 * Parse the CSDb page and make all references readable and clickable.
+	 * 
+	 * This is a long one because CSDb references can be in a so many syntax
+	 * versions, and their rules are often twisted by CSDb commenters.
 	 */
 	resolveCSDbRefs: function() {
 
@@ -2989,6 +2992,35 @@ Browser.prototype = {
 				"text": name,
 				"title": _ucFirst(type),
 				"target": "_blank"
+			});
+		}
+
+		function _makePlink(path) {
+			return $("<a>", {
+				href: "#",
+				"class": "redirect",
+				text: path.replace(/\\/g, "/")
+			});
+		}
+
+		function _resolveSidToPlink(id, placeholder) {
+			$.get("php/csdb_sid_path.php", {
+				type: "sid",
+				id: id
+			}, function(data) {
+				browser.validateData(data, function(data) {
+					var $link = $("<a>", {
+						href: "#",
+						"class": "redirect",
+						text: data.path && data.path[0]
+							? data.path[0]
+							: (data.name && data.name[0]
+								? data.name[0]
+								: "SID " + id)
+					});
+					$(placeholder).replaceWith($link);
+				});
+
 			});
 		}
 
@@ -3041,14 +3073,14 @@ Browser.prototype = {
 		});
 
 		// Raw text refs like <release id=143830>, <scener id="1185">, <group id=1234>
-		$("#topic-csdb").find("*").contents().filter(function() {
+		$("#topic-csdb").find("*").not("a, a *").contents().filter(function() {
 			return this.nodeType === Node.TEXT_NODE;
 		}).each(function() {
 
 			var textNode = this;
 			var text = textNode.nodeValue;
 
-			var regex = /<(release|scener|group|event|sid)\s+id=["']?(\d+)["']?>/gi;
+			var regex = /<(release|scener|group|event|sid)(?:\s+id=|\/?\?id=)["']?(\d+)["']?>/gi;
 
 			var match;
 			var parts = [];
@@ -3068,25 +3100,7 @@ Browser.prototype = {
 				if (type === "sid") {
 
 					// Make a "plink" (a link that redirects and plays in DeepSID)
-					$.get("php/csdb_sid_path.php", {
-						type: "sid",
-						id: id
-					}, function(id, placeholder) {
-						return function(data) {
-							browser.validateData(data, function(data) {
-								var $link = $("<a>", {
-									href: "#",
-									"class": "redirect",
-									text: data.path && data.path[0]
-										? data.path[0]
-										: (data.name && data.name[0]
-											? data.name[0]
-											: "SID " + id)
-								});
-								$(placeholder).replaceWith($link);
-							});
-						};
-					} (id, placeholder));
+					_resolveSidToPlink(id, placeholder);
 
 				} else {
 
@@ -3095,9 +3109,45 @@ Browser.prototype = {
 						return function(name) {
 							$(placeholder).replaceWith(_makeCSDbLink(type, id, name));
 						};
-					}(type, id, placeholder));
-
+					} (type, id, placeholder));
 				}
+				lastIndex = regex.lastIndex;
+			}
+
+			if (!parts.length)
+				return;
+
+			if (lastIndex < text.length)
+				parts.push(document.createTextNode(text.slice(lastIndex)));
+
+			$(textNode).replaceWith(parts);
+
+		});
+
+		// Raw SID paths like /MUSICIANS/V/Vulgarik/Cheared_Tears.sid
+		$("#topic-csdb").find("*").not("a, a *").contents().filter(function() {
+			return this.nodeType === Node.TEXT_NODE;
+		}).each(function() {
+
+			var textNode = this;
+			var text = textNode.nodeValue;
+
+			var regex = /([\/\\](?:MUSICIANS|DEMOS|GAMES)(?:[\/\\][^\s<>"']+)*?\.sid)\b/gi;
+
+			var match;
+			var parts = [];
+			var lastIndex = 0;
+
+			while ((match = regex.exec(text)) !== null) {
+
+				var sidPath = match[1];
+				var normalizedPath = sidPath.replace(/\\/g, "/");
+
+				if (match.index > lastIndex)
+					parts.push(document.createTextNode(text.slice(lastIndex, match.index)));
+
+				parts.push(_makePlink(normalizedPath)[0]);
+
 				lastIndex = regex.lastIndex;
 			}
 
@@ -4047,6 +4097,7 @@ Browser.prototype = {
 									main.browserMessage("Linked to existing "+site+" label");
 
 								// Add bow-and-arrow icon in sticky header
+								$("#sticky-csdb div.primary-bow-tail,#sticky-gb64 div.primary-bow-tail").remove();
 								tailIcon = '<div class="primary-bow-tail"></div>';
 								if (tab == "csdb")
 									$('#sticky-csdb a.clipboard').after(tailIcon);

@@ -3051,6 +3051,30 @@ main.bindKeyboardEvents = function() {
 						main.toggleAnnex();
 						break;
 
+					case 72:	// Keyup 'h' - toggle between LOCALHOST or ONLINE - ADMIN ONLY
+
+						if (main.isAdmin) {
+							var url = window.location.href, newUrl;
+
+							if (window.location.hostname === "chordian") {
+								// Change LOCALHOST to ONLINE
+								newUrl = url.replace(
+									/^http:\/\/chordian\/deepsid/i,
+									"https://deepsid.chordian.net"
+								);
+							} else if (window.location.hostname === "deepsid.chordian.net") {
+								// Change ONLINE to LOCALHOST
+								newUrl = url.replace(
+									/^https:\/\/deepsid\.chordian\.net/i,
+									"http://chordian/deepsid"
+								);
+							} else {
+								break; // Unknown host
+							}
+							window.location.href = newUrl;
+						}
+						break;
+
 					case 37:	// Keyup 'ARROW-LEFT' - skip to previous (+ SHIFT to emulate auto-progress)
 
 						$("#folders").focus();

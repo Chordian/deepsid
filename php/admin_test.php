@@ -128,6 +128,7 @@ $html = '
 				<li><a href="'.$base_url.'?file=/MUSICIANS/T/Topshelf/8-Bit_House_Party.sid&tab=csdb">'.$home.'/MUSICIANS/T/Topshelf/8-Bit_House_Party.sid</a></li>
 				<li><a href="'.$base_url.'?file=/MUSICIANS/T/Trap/Freak_Out.sid&tab=csdb">'.$home.'/MUSICIANS/T/Trap/Freak_Out.sid</a></li>
 				<li><a href="'.$base_url.'?tab=csdb&csdbtype=release&csdbid=157887">'.$home.'/?tab=csdb&csdbtype=release&csdbid=157887</a></li>
+				<li><a href="'.$base_url.'?tab=csdb&csdbtype=release&csdbid=12440">'.$home.'/?tab=csdb&csdbtype=release&csdbid=12440</a></li>
 			</ul>
 
 		<h4>CSDb SID links in to be converted to "plinks" instead</h4>
@@ -135,6 +136,9 @@ $html = '
 				<li><a href="'.$base_url.'?file=/MUSICIANS/T/TLF/Blue_Tac.sid&tab=csdb">'.$home.'/MUSICIANS/T/TLF/Blue_Tac.sid</a></li>
 				<li><a href="'.$base_url.'?file=/MUSICIANS/T/TLF/DKC-Aqua_Ambient.sid&tab=csdb">'.$home.'/MUSICIANS/T/TLF/DKC-Aqua_Ambient.sid</a></li>
 				<li><a href="'.$base_url.'?tab=csdb&csdbtype=release&csdbid=25653">'.$home.'/?tab=csdb&csdbtype=release&csdbid=25653</a></li>
+				<li><a href="'.$base_url.'?tab=csdb&csdbtype=release&csdbid=47066">'.$home.'/?tab=csdb&csdbtype=release&csdbid=47066</a></li>
+				<li><a href="'.$base_url.'?tab=csdb&csdbtype=release&csdbid=21470">'.$home.'/?tab=csdb&csdbtype=release&csdbid=21470</a></li>
+				<li><a href="'.$base_url.'?tab=csdb&csdbtype=release&csdbid=104686">'.$home.'/?tab=csdb&csdbtype=release&csdbid=104686</a></li>
 			</ul>
 ';
 

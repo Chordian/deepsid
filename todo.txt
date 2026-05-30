@@ -9,23 +9,6 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- All PHP files now use snake_case. Test LOCALHOST a bit, upload, test ONLINE a bit.
-
-- CSDb references not converted:
-  http://chordian/deepsid/?tab=csdb&csdbtype=release&csdbid=12440
-
-- Invent a new admin-only hotkey that toggles the site between local and online. I suppose
-  it will do this by replacing the beginning of the URL and then load/refresh.
-
-- Consider removing HTML cache for "previous CSDb page" (usually the list) because I think
-  the new cache system will make that virtually redundant. The benefit will be that you can
-  restore the behavior of showing CSDb reference links in DeepSID (instead of opening in
-  CShellDB) since going back will now open the correct previous page.
-
-- BUG: Adding a label to a single CSDb release that already has a bow-and-arrow icon in the
-  sticky header adds another one so there are temporarily two icons. It is not stored but it
-  looks silly. Probably also the same problem with GB64 pages?
-
 - A W A I T : Rewrite 'howto_update_gb64.txt' when the next GameBase64 update v20 arrives.
   See the .txt file for a few preliminary things to test.
 
