@@ -5384,6 +5384,15 @@ input[type=range]::-ms-track {
 			bottom: 6px;
 		}
 
+		/* Group logo/name images inside recommendation box */ 
+		#page .brand-rec {
+			position: absolute;
+			right: 10px;
+			bottom: 5px;
+			max-width: 75px;
+			max-height: 40px;
+		}
+
 		/* The 'Report a profile change' link in the composer profile corner */
 		#profilechange {
 			position: absolute;

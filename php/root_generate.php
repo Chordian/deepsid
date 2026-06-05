@@ -43,7 +43,7 @@ function adaptBrowserName($collection_path, $link = '') {
  */
 function generateList($rows, $type) {
 
-	global $account, $$country_codes;
+	global $account, $country_codes;
 
 	try {
 		$db = $account->getDB();
@@ -133,7 +133,7 @@ function generateList($rows, $type) {
 
 				$country_counts = [];
 
-				foreach($$country_codes as $country => $code) {
+				foreach($country_codes as $country => $code) {
 					$select = $db->query('SELECT count(1) AS c FROM composers WHERE country LIKE "%'.$country.'%"');
 					$select->setFetchMode(PDO::FETCH_OBJ);
 					array_push($country_counts, array(

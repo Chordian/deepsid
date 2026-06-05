@@ -42,7 +42,7 @@ function createRecBox($random_id) {
 	$collection_path = $select->rowCount() ? $select->fetch()->collection_path : '';
 
 	// Get composer data via the collection path
-	$select = $db->query('SELECT full_name, short_name, handles, short_handle FROM composers WHERE collection_path = "'.$collection_path.'"');
+	$select = $db->query('SELECT full_name, short_name, handles, short_handle, brand_light, brand_dark FROM composers WHERE collection_path = "'.$collection_path.'"');
 	$select->setFetchMode(PDO::FETCH_OBJ);
 	$row = $select->fetch();
 
@@ -172,6 +172,18 @@ function createRecBox($random_id) {
 	if ($name == '?')
 		$name = '<small class="u1">?</small>?<small class="u2">?</small>';
 
+	$brand_light = $brand_dark = '';
+	if (!empty($row->brand_light)) {
+		$rec_image = str_replace('.', '_rec.', $row->brand_light); // <- Image custom made for recommendation box
+		$img = file_exists('../images/brands/'.$rec_image) ? $rec_image : $row->brand_light;
+		$brand_light = '<img class="brand-rec brand-rec-light" src="images/brands/'.$img.'" alt="'.$img.'" style="display:none;" />';
+	}
+	if (!empty($row->brand_dark)) {
+		$rec_image = str_replace('.', '_rec.', $row->brand_dark); 
+		$img = file_exists('../images/brands/'.$rec_image) ? $rec_image : $row->brand_dark;
+		$brand_dark = '<img class="brand-rec brand-rec-dark" src="images/brands/'.$img.'" alt="'.$img.'" style="display:none;" />';
+	}
+
 	// Use collection path parameter to figure out the name of the thumbnail (if it exists)
 	$fn = str_replace('_High Voltage SID Collection/', '', $collection_path);
 	$fn = str_replace("_Compute's Gazette SID Collection/", "cgsc_", $fn);
@@ -210,6 +222,7 @@ function createRecBox($random_id) {
 					'<h4 class="ellipsis">'.$name.'</h4>'.
 					'<h5>'.$handle.'</h5>'.
 					'<div style="position:absolute;bottom:8px;"><img class="icon'.$icss.' doublenote" src="images/'.$ifile.'.svg" title="'.$ititle.'" alt="" />'.$songs.' '.$items.'</div>'.
+					$brand_light.$brand_dark.
 				'</td>'.
 			'</tr>'.
 		'</table>';

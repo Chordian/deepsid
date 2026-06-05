@@ -33,7 +33,7 @@ try {
 		if (strpos($collection_path, '/GROUPS/') !== false) continue;
 
 		// Get composer data via the collection path
-		$select = $db->query('SELECT full_name, short_name, handles, short_handle FROM composers WHERE collection_path = "'.$collection_path.'"');
+		$select = $db->query('SELECT full_name, short_name, handles, short_handle, brand_light, brand_dark FROM composers WHERE collection_path = "'.$collection_path.'"');
 		$select->setFetchMode(PDO::FETCH_OBJ);
 		$row = $select->fetch();
 
@@ -43,6 +43,18 @@ try {
 		$name = empty($row->short_name) ? $row->full_name : $row->short_name;
 		$parts = explode(',', $row->handles);
 		$handle = empty($row->short_handle) ? end($parts) : $row->short_handle;
+
+		$brand_light = $brand_dark = '';
+		if (!empty($row->brand_light)) {
+			$rec_image = str_replace('.', '_rec.', $row->brand_light); // <- Image custom made for recommendation box
+			$img = file_exists('../images/brands/'.$rec_image) ? $rec_image : $row->brand_light;
+			$brand_light = '<img class="brand-rec brand-rec-light" src="images/brands/'.$img.'" alt="'.$img.'" style="display:none;" />';
+		}
+		if (!empty($row->brand_dark)) {
+			$rec_image = str_replace('.', '_rec.', $row->brand_dark); 
+			$img = file_exists('../images/brands/'.$rec_image) ? $rec_image : $row->brand_dark;
+			$brand_dark = '<img class="brand-rec brand-rec-dark" src="images/brands/'.$img.'" alt="'.$img.'" style="display:none;" />';
+		}
 
 		// Use collection path parameter to figure out the name of the thumbnail (if it exists)
 		$fn = str_replace('_High Voltage SID Collection/', '', $collection_path);
@@ -90,6 +102,7 @@ try {
 							'<h4 class="ellipsis">'.$name.'</h4>'.
 							'<h5>'.$handle.'</h5>'.
 							'<div style="position:absolute;bottom:8px;"><img class="icon doublenote" src="images/composer_doublenote.svg" title="Country" alt="" />'.$songs.' songs</div>'.
+							$brand_light.$brand_dark.
 						'</td>'.
 					'</tr>'.
 				'</table>'.

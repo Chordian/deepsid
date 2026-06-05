@@ -161,8 +161,7 @@ if ($row->csdb_type == 'scener') {
 						$first_column =
 							'<tr>'.
 								'<td>'.
-									//'<span class="up icon-before icon-arrowright" title="Joined...">'.
-									'<span class="up icon-before '.($founder ? 'icon-founder" title="Founded...">' : 'icon-arrowright" title="Joined...">').
+									'<span class="up icon-before '.($founder ? 'icon-founder" title="'.$name.'">' : 'icon-arrowright" title="'.$name.'">').
 									'<a class="group ellipsis" href="http://csdb.chordian.net/?type=group&id='.$id.'" target="_blank">'.($status == 'ex' ? '<del>'.$name.'</del>' : $name).'</a></span>'.
 								'</td>';
 

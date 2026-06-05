@@ -118,9 +118,7 @@ $html = '
 				<li><a href="'.$base_url.'?tab=csdb&csdbtype=release&csdbid=11266">'.$home.'/?tab=csdb&csdbtype=release&csdbid=11266</a></li>
 				<li><a href="'.$base_url.'?tab=csdb&csdbtype=release&csdbid=261666">'.$home.'/?tab=csdb&csdbtype=release&csdbid=261666</a></li>
 				<li><a href="'.$base_url.'?tab=csdb&csdbtype=release&csdbid=261679">'.$home.'/?tab=csdb&csdbtype=release&csdbid=261679</a></li>
-
 				<li><a href="'.$base_url.'?tab=csdb&csdbtype=release&csdbid=134769">'.$home.'/?tab=csdb&csdbtype=release&csdbid=134769</a></li>
-				<li><a href="'.$base_url.'?tab=csdb&csdbtype=release&csdbid=261679">'.$home.'/?tab=csdb&csdbtype=release&csdbid=261679</a></li>
 				<li><a href="'.$base_url.'?tab=csdb&csdbtype=release&csdbid=211403">'.$home.'/?tab=csdb&csdbtype=release&csdbid=211403</a></li>
 				<li><a href="'.$base_url.'?file=/MUSICIANS/T/Tonal_Teapot/Ubiks_Musik.sid&tab=csdb">'.$home.'/MUSICIANS/T/Tonal_Teapot/Ubiks_Musik.sid</a></li>
 				<li><a href="'.$base_url.'?tab=csdb&csdbtype=release&csdbid=133322">'.$home.'/?tab=csdb&csdbtype=release&csdbid=133322</a></li>
@@ -129,6 +127,9 @@ $html = '
 				<li><a href="'.$base_url.'?file=/MUSICIANS/T/Trap/Freak_Out.sid&tab=csdb">'.$home.'/MUSICIANS/T/Trap/Freak_Out.sid</a></li>
 				<li><a href="'.$base_url.'?tab=csdb&csdbtype=release&csdbid=157887">'.$home.'/?tab=csdb&csdbtype=release&csdbid=157887</a></li>
 				<li><a href="'.$base_url.'?tab=csdb&csdbtype=release&csdbid=12440">'.$home.'/?tab=csdb&csdbtype=release&csdbid=12440</a></li>
+				<li><a href="'.$base_url.'?tab=csdb&csdbtype=release&csdbid=218528">'.$home.'/?tab=csdb&csdbtype=release&csdbid=218528</a></li>
+				<li><a href="'.$base_url.'?tab=csdb&csdbtype=release&csdbid=189350">'.$home.'/?tab=csdb&csdbtype=release&csdbid=189350</a></li>
+				<li><a href="'.$base_url.'?tab=csdb&csdbtype=release&csdbid=90115">'.$home.'/?tab=csdb&csdbtype=release&csdbid=90115</a></li>
 			</ul>
 
 		<h4>CSDb SID links in to be converted to "plinks" instead</h4>

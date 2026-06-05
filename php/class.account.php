@@ -132,7 +132,9 @@ class Account {
 		$user_name = trim($_POST['username']);
 		$password = trim($_POST['password']);
 
-		if (!isset($_SESSION)) session_start();
+		if (session_status() !== PHP_SESSION_ACTIVE)
+			session_start();
+
 		if (!$this->validateLogin($user_name, $password)) {
 			$this->logActivity('User "'.$user_name.'" tried to log in but was denied access');
 			return false;
@@ -141,7 +143,7 @@ class Account {
 		$_SESSION[$this->loginSession()] = $user_name;
 
 		// Remember
-		$cookie_hash = md5(sha1($_SESSION['user_name'].$_SERVER['REMOTE_ADDR']));
+		$cookie_hash = md5(sha1($user_name.$_SERVER['REMOTE_ADDR']));
 		setcookie('user', $cookie_hash, time()+3600*24*365, '/', COOKIE_HOST);
 
 		try {
@@ -165,11 +167,19 @@ class Account {
 	 * @return		boolean		false if user is not logged in
 	 */
 	public function checkLogin() {
-		if (!isset($_SESSION)) session_start();
+		if (session_status() !== PHP_SESSION_ACTIVE)
+			session_start();
 
-		if (empty($_SESSION[$this->loginSession()]) && !$this->checkCookieLogin()) return false;
+		if (!empty($_SESSION[$this->loginSession()]))
+			return true;
 
-		return true;
+		if (!empty($_COOKIE['user'])) {
+			if ($this->checkCookieLogin())
+				return true;
+
+			setcookie('user', '', time() - 3600, '/', COOKIE_HOST);
+		}
+		return false;
 	}
 
 	/**
@@ -208,7 +218,9 @@ class Account {
 	 * @return		boolean		true if the user has that role
 	 */
 	public function hasRole($role) {
-		if (!isset($_SESSION)) session_start();
+		if (session_status() !== PHP_SESSION_ACTIVE)
+			session_start();
+
 		$roles = $_SESSION['roles'] ?? [];
 		return in_array($role, $roles, true);
 	}
@@ -543,7 +555,7 @@ class Account {
 				if (!$this->connectDB()) return false;
 				try {
 					$select = $this->database->prepare('SELECT id, user_name FROM users WHERE session = :cookiehash LIMIT 1');
-					$select->execute(array(':cookiehash'=>$cookie_hash));
+					$select->execute(array(':cookiehash' => $cookie_hash));
 					$select->setFetchMode(PDO::FETCH_OBJ);
 					if ($select->rowCount() > 0) {
 						$row = $select->fetch();
@@ -552,7 +564,15 @@ class Account {
 						$_SESSION['roles']		= $this->getUserRoles($row->id);
 						$_SESSION[$this->loginSession()] = $row->user_name;
 
-						$this->logActivity('User "'.$row->user_name.'" has returned via a cookie', true);
+						$is_main_page = basename($_SERVER['SCRIPT_NAME']) == 'index.php';
+
+						$is_ajax =
+							!empty($_SERVER['HTTP_X_REQUESTED_WITH']) &&
+							strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
+
+						if ($is_main_page && !$is_ajax) {
+							$this->logActivity('User "'.$row->user_name.'" has returned via a cookie', true);
+						}
 
 						// Reset the expiry date
 						setcookie('user', $cookie_hash, time()+3600*24*365, '/', COOKIE_HOST);
@@ -669,7 +689,7 @@ class Account {
 	private function isFieldUnique($field) {
 		try {
 			$select = $this->database->prepare('SELECT user_name FROM users WHERE '.$field.' = :postfield');
-			$post_field = $field = 'user_name' ? 'username' : $field; // Because of snake_case overhaul
+			$post_field = $field == 'user_name' ? 'username' : $field; // Because of snake_case overhaul
 			$select->execute(array(':postfield' => $_POST[$post_field]));
 			if ($select->rowCount() > 0) return false;
 		} catch(PDOException $exception) {

@@ -24,10 +24,10 @@ WHEN THE TIME IS RIGHT
   - There is an array called 'playlist' from the beginning of when DeepSID was made, that has
     nothing to do with symlists. Rename it to something else to avoid confusion.
   - Maybe 'csdb.php' should also have an extended name, to make it more clear what it does.
+    Then do the same in CShellDB.
   - Go through all the other files and see if anything else ought to be renamed.
-  - Convert all use of quotes into apostrophes for strings in all JS files.
   - Change all 'bind(this)' stuff to modern JavaScript handling instead.
-  - Change all define() statements into const instead.
+  - Change all define() statements into const instead in all PHP files.
 
 
 CONSIDER THIS
@@ -192,7 +192,6 @@ CONSIDER THIS
 - Continue updating CGSC profiles (next up is "D").
 - Maybe place "Misc" in CGSC in top, above a divider line?
 - For redirect links, add a BACK button in both STIL tabs (to complement the 'b' hotkey).
-- Front page top 10 list: Add most common birth years, now that you have the data for it.
 
 - Search bug from Acrouzet: "On mobile, ordering results based on the criteria selected
   from the top right drop-down seems to not work properly. I believe it may be organizing pages
@@ -207,42 +206,30 @@ CONSIDER THIS
   - Along with the above v2, "X" icons for deleting individual entries, plus a general button for
     clearing the entire history.
 
-- NoobTracker: Store the random seed used to shuffle a playlist in the URL so you can reload that
-  page without messing up the order.
+- NoobTracker suggested: Store the random seed used to shuffle a playlist in the URL so you can
+  reload that page without messing up the order.
 
 - CINJ suggested a feature in: https://github.com/Chordian/deepsid/issues/17
   Show how may times a song was played globally. Also show how may times a playlist was used, also
   globally. Both to show how popular a song or playlist really is.
-  This is a feature that should have been there from the beginning. If added, it will only track
-  from that moment in time. Perhaps one to add 1 January some year?
+  UPDATE: Song tracking has been added a later time.
 
 - A drop-down box for selecting 6581 filter settings. User can even save their own to the list,
   with the name of the filter settings plus the user's name e.g. appended in the end.
 
 - Stats: Add statistics to the database, done by all visitors. When visiting the song later,
   there will already be statistics ready. Maybe add an "entire song has been parsed" green icon?
+  UPDATE: Song tracking has been added a later time.
 
 - Replace drop-down boxes with styled versions (browser and search) - I don't like how e.g. Firefox
   and Chrome change their design like the wind blows.
 
-- In the list with game composer on the front page, have a "greatest hits" list in the top
+- In the right list with game composers on the front page, have a "greatest hits" list in the top
   before the rest is presented alphabetically below it. The list should have legends like e.g.
   Rob Hubbard, Martin Galway, etc. I don't think it's necessary to have a header for it.
 
 - Tips idea: Jargon. All kinds of abbreviations and technical expressions explained - including
   DeepSID jargon such as "plinks" and "clinks".
-
-- ADSR envelope handling: Consider using a table with offsets instead of just simple math
-  scaling. The colors do not always follow the note volume perfectly.
-
-- I'm beginning to suspect that the piano view sound chugging is not a memory leak in WebSid after
-  all, but in the piano view code itself. Might be worth looking into it? Maybe you need to add
-  some plugs to prevent stuff from being created more than the one time the tab is first shown.
-   V V V
-- Is it possible to only handle events for visible SID rows? It would save a lot of CPU time!
-  - https://stackoverflow.com/questions/1462138/event-listener-for-when-element-becomes-visible
-  - https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API
-  - https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver
 
 - Turn off chartist year search in playlists, exotic folder, and SH folder.
   - Not sure I want this. Yes, the results wouldn't match the chart there, but wouldn't it be nice
@@ -256,12 +243,7 @@ CONSIDER THIS
 - Statistics on player/editor page, listing composers using it (with most hits in top spot).
   - With tabs to toggle between the info table or this.
   - Might not be worth the trouble? Most editors have few users and you can get a perfectly
-    good overview just by looking and the browser list yourself.
-
-- Write the "Undo" admin script for tags.
-
-- Recommendation boxes:
-  - If from HVSC, add the brand image in the bottom left corner (there's room for it).
+    good overview just by looking at the browser list yourself.
 
 - Search options for NTSC, and for CIA timer.
 
@@ -366,7 +348,6 @@ CONSIDER THIS
     3. How about as 2. but judging from average of all star ratings given by all users? (In
        that case you better go for three stars or more, not two.)
     NOTE: Maybe not do step 2 at all? For individual tunes, the 'Ratings' user's ratings may be too biased.
-  - (Man, it feels weird referring to myself in the third person.)
   - Place the button for it in the white PATH box, which is ~empty anyway in the root.
   - Maybe make certain control buttons wine red (including the starter button) to show that this
     will affect the infinity radio mode. For example, wine red STOP button = stop and turn off.
@@ -467,6 +448,11 @@ PROBABLY NOT?
   in Firefox. Test floating point line heights to see if it can be fixed. UPDATE: Having
   fought with something similar with focus icons, I really doubt I can fix this.
 
+- ADSR envelope handling: Consider using a table with offsets instead of just simple math
+  scaling. The colors do not always follow the note volume perfectly.
+
+- Write the "Undo" admin script for tags. UPDATE: Never had the use for this since I created tags.
+
 - Add context menu option for downloading a tune as an MP3. I'm thinking, maybe I can grab one
   of Lemon's MP3 files? UPDATE: I tried it using a download trick from Stack Overflow, but of
   course I got CORS issues and I don't want to waste my time trying to fix that crap. If you
@@ -493,6 +479,15 @@ PROBABLY NOT?
   with a game. The 'game=64' is not bad but might annoy the GB64 site developers. I also tried a
   raw 'game' without rainbow patch and number, but it looks so much like a standard tag that the
   lower case "g" is grating. For now, the full 'gamebase=64' may be long, but it looks good.
+
+- I'm beginning to suspect that the piano view sound chugging is not a memory leak in WebSid after
+  all, but in the piano view code itself. Might be worth looking into it? Maybe you need to add
+  some plugs to prevent stuff from being created more than the one time the tab is first shown.
+   V V V
+- Is it possible to only handle events for visible SID rows? It would save a lot of CPU time!
+  - https://stackoverflow.com/questions/1462138/event-listener-for-when-element-becomes-visible
+  - https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API
+  - https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver
 
 - User setting: "Always open CSDb links in CSDb.dk instead of CShellDB" - UPDATE: But I'm not sure
   I really want to do that. Force people to use CShellDB - it deserves an audience.

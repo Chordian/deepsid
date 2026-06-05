@@ -2643,6 +2643,9 @@ Browser.prototype = {
 
 					this.showAnnexBox();
 
+					// Enable the brand image in recommendation boxes for the correct color theme
+					$(".brand-rec-"+(parseInt(colorTheme) ? "dark" : "light")).show();
+
 					// Update avatar images of the three quick shortcut columns
 					setTimeout(function() {
 						var $qs = $("#topic-profile img.quick-thumbnail"), i = 0;

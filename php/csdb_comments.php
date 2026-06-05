@@ -209,6 +209,14 @@ function commentsTable($title, $comments, &$scener_handle, &$scener_id, $backwar
 	$final_comments = '<b style="display:inline-block;margin-top:20px;">'.$title.':</b>'.
 		'<span class="oldest-in-top">Oldest in top</span>'.
 		'<table class="comments">'.$final_comments.'</table>';
+
+	// Fix Dymo's illegal CSDb references
+	$final_comments = preg_replace(
+		'/(<|&lt;)\s*(release|event|sid|group)id\s*=/i',
+		'$1$2 id=',
+		$final_comments
+	);	
+
 	return $final_comments;
 }
 ?>

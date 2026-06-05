@@ -1973,6 +1973,12 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>June 4, 2026</h3>
+						<ul>
+							<li>Tooltips for group names now show the full name, which is helpful when it has been ellipsized.</li>
+							<li>Recommendation boxes for composers now include a brand image when available.</li>
+						</ul>
+
 						<h3>May 29, 2026</h3>
 						<ul>
 							<li>More CSDb ID references in comment threads are now converted into links with proper names.</li>

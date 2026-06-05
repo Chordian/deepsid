@@ -1224,6 +1224,10 @@ main.bindEvents = function() {
 		$("#brand-"+(colorTheme ? "light" : "dark")).hide();
 		$("#brand-"+(colorTheme ? "dark" : "light")).show();
 
+		// Same in recommendation boxes
+		$(".brand-rec-"+(colorTheme ? "light" : "dark")).hide();
+		$(".brand-rec-"+(colorTheme ? "dark" : "light")).show();
+
 		localStorage.setItem("theme", colorTheme);
 	});
 
@@ -2597,7 +2601,7 @@ main.bindDexterGB64Events = function() {
 	});
 
 	/**
-	 * Clicking a GB64 sub-page screenshot to zoom it up.
+	 * Clicking a sub-page screenshot to zoom it up.
 	 */
 	$("#page").on("click", ".zoom-up", function() {
 		$("#dialog-cover").show();
@@ -3311,6 +3315,10 @@ main.bindMenuEvents = function() {
 					data.html = data.html.replace(/composer\.png/g, "composer_dark.png");
 				}
 				$("#topic-profile").empty().append(data.html);
+
+				// Enable the brand image in recommendation boxes for the correct color theme
+				$(".brand-rec-"+(parseInt(colorTheme) ? "dark" : "light")).show();
+
 				main.resetDexterScrollBar("profile");
 			});
 		});
