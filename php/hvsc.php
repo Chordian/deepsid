@@ -1022,15 +1022,6 @@ try {
 				$search_shortcut_query[$ss_name] = HVSC_VERSION - $i;
 			}
 
-			// Search shortcuts for showing MUSICIANS folders with new songs (according to latest HVSC update)
-			// DISABLED SINCE PHP STARTED REPORTING A 'MAX_JOIN_SIZE' ERROR ONLINE
-			/*for ($i = 0; $i < 5; $i++) {
-				$ss_name = '^01'.$i.'Folders in HVSC update #'.(HVSC_VERSION - $i);
-				$files[] = $ss_name;
-				$search_shortcut_type[$ss_name] = 'folders';
-				$search_shortcut_query[$ss_name] = HVSC_VERSION - $i;
-			}*/
-
 			// Search shortcuts for "all" of e.g. specific types of songs
 			$ss_name = '^030All multispeed tunes';
 			$files[] = $ss_name;

@@ -5393,7 +5393,7 @@ input[type=range]::-ms-track {
 			max-height: 40px;
 		}
 
-		/* The 'Report a profile change' link in the composer profile corner */
+		/* [DEPRECATED] The 'Report a profile change' link in the composer profile corner */
 		#profilechange {
 			position: absolute;
 			top: 4px;

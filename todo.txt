@@ -30,51 +30,57 @@ WHEN THE TIME IS RIGHT
   - Change all define() statements into const instead in all PHP files.
 
 
-CONSIDER THIS
-¯¯¯¯¯¯¯¯¯¯¯¯¯
-- Maybe use .duration method for Howler instead of database length?
+REALLY CONSIDER THIS
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+- Continue updating CGSC profiles (next up is "D").
+- Maybe place "Misc" in CGSC in top, above a divider line?
+- For redirect links, add a BACK button in both STIL tabs (to complement the 'b' hotkey).
+- In the GRAPH view, clicking a column/row graph could toggle it on or off.
+- CSDb Music Competitions: Add a flag icon after countries in the browser SID list itself.
+
+- Infinity radio. Plays tunes of two stars rating and above forever. Each time it is supposed to
+  auto-progress, it will jump to a random tune anywhere else in another folder.
+  - Jump algorithm randomly selects one of two (maybe three) methods at first:
+    1. Play any tune inside a MUSICIANS letter folder that the 'Ratings' user have given two stars or more.
+    2. Play any tune in all collections that the 'Ratings' user have specifically given two stars or more.
+    3. How about as 2. but judging from average of all star ratings given by all users? (In
+       that case you better go for three stars or more, not two.)
+    NOTE: Maybe not do step 2 at all? For individual tunes, the 'Ratings' user's ratings may be too biased.
+  - Place the button for it in the white PATH box, which is ~empty anyway in the root.
+  - Maybe make certain control buttons wine red (including the starter button) to show that this
+    will affect the infinity radio mode. For example, wine red STOP button = stop and turn off.
+    You will stay in the current folder but everything has now returned to normal. If you want to
+    restart the infinity radio, you have to return to the root and click the starter button again.
+
+
+MAYBE CONSIDER THIS
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
 - Need an extra URL parameter for file request to set loop on, e.g. "&loop=true".
 - Tilt the years in the activity chart on the composer profiles, so you can have full four digits.
-- Hover on profile images to slide up a transparent bottom panel with image credits.
 - The player text lines by the Chartist bars could be filter links.
-- JW says browser.js loads stuff before the user settings in main.js have been loaded.
 - With nothing selected, play should start playing the tune in top of a browser list.
 - Support for 2SID and 3SID in the scope tab as a mosaic of 2 x 3 (4) or 3 x 3 (4) boxes.
-- An adaptation list for CSDb forum HVSC paths that have since been moved/renamed in an update.
-- Consider using specialized cookies to strengthen the uniqueness of visitors for tracking.
-- Feature request by Digger: Sort playlist by date added to playlist.
 - Statistics for how many times a tune has been played. (But shown where?)
-- Change the 'Cancel' button in all dialogs to the "Jensen"-hyperlink instead.
-- A link in far top for showing a tags cloud (get rid of blog post link to make room for it).
 - Change isMobile() to also check for tablet width. PHP can't do this so you have to be tricky.
 - Digger and Mordi have requested keys fading out in piano view, for easier arpeggio reading.
 - Is it possible to have individual ratings for multiple sub tune clones in a playlist?
 - Download SID with the PSID header automatically removed, ready to be used in e.g. a demo.
 - Why does the hash cross-rating system work so badly? See if you can figure out what's up.
 - Ensure that the hash connection between SH and HVSC works instantaneously.
-- Presets or load/save setup in the stereo sundry tab.
-- Store stereo settings for a song with a pin icon.
 - The "WASM disabled" message should only be shown when WebSid (HQ and Legacy) is chosen.
 - Cache: Consider also caching the competition pages.
 - Consider enforcing the password encryption. Search ChatGPT for 'password_algo' word.
-
-- A W A I T : Figure out why a user regularly get an access violation from 'composer.php' file.
-  UPDATE: I have now added log of name in 'composer.php' to pinpoint why a user always get
-  this error. Still waiting for him to do it again...
-  UPDATE: Ever since enabling the above I have not seen it happen again. Lowering the priority.
+- Make 'Copy Link' in context menu possible in search lists, symlists and compo folders too?
+- Replace the drop-down boxes in the browser panel with the styled one.
+- Replace ".." with a back arrow SVG instead? (The ".." symbol might still be confusing to some.)
+- Keyboard: If 'ArrowRight' is pressed while on a folder, enter the folder.
 
 - Consider also caching the group table. (If doing this, is it possible to cache Rob Hubbard's
-  group data? It's so massive that it always times out, but I only need to get it once.)
+  group data? It's so massive that it always times out, but I only need to get it once...)
 
 - Consider changing it so the 'Changes' tab calls a separate PHP file that fills it, just like
   the admin sections. It would make the 'index.php' file much smaller. Also, I have a feeling
   most users never visit this tab.
-
-- How about user ratings for players/editors too? There's room in both list and pages.
-  UPDATE: Does rating editors by regular users make sense? How many of these editors do they
-  actually try out? It might make more sense with curated ratings. Users can rate, but after
-  rating the stars change color to indicate that the rating is a total average. I still fear
-  there will be too few and very biased ratings for this to be really useful.
 
 - When enabling "maintenance_mode" make it so visitors already on the site are shown a
   warning ("DeepSID just entered maintenance mode. It's dangerous to browse here at the
@@ -126,6 +132,8 @@ CONSIDER THIS
   is a cool idea, but probably very difficult to implement. I imagine it would require meticulous
   alterations and testing to get right. About opening up - either as soon as the row is clicked,
   where DeepSID detects multiple subtunes, or a wide "+" button next to the number of subtunes.
+  Counterpoint: Because of the height of SID rows, there is not a lot of room for this in the
+  browser space. Might not take much for the space to be used up, requiring the user to scroll.
 
 - Consider a settings option for choosing WebSid HQ or WebSid Legacy as the default on mobile
   devices. Alternative: Just let WebSid HQ be the default on mobile devices from now on. However,
@@ -141,7 +149,8 @@ CONSIDER THIS
   now shows a blank CSDb page. Test example (look for the 'PSID64 V1.2' link by Frostbyte):
   http://chordian/deepsid/?file=/MUSICIANS/L/Linus/And_the_World_Held_Its_Breath.sid&tab=csdb
   I tried searching around it seems CSDb references are quite rare in 'SHOW' pages. If users do
-  add links, it's usually to external resources.
+  add links, it's usually to external resources. UPDATE: CSDb references now all just open up in
+  CShellDB in a new browser tab. If this is maintained, this bug can't be triggered.
 
 - BUG: The following link never loads in LOCALHOST. It does work online, though.
   http://chordian/deepsid/?file=/MUSICIANS/T/Trident/China_Thai_Lunch_Demo.sid
@@ -151,47 +160,19 @@ CONSIDER THIS
   local, Facebook, Google logins. If "Local" is clicked, the three buttons are then replaced by
   the "User" and "Pw" boxes that originally used to be there.
 
-- Add search for tags by simply clicking one, instead of playing the SID row. However, it might
-  be wise to have a toggle in settings for turning it off. (Should it even be off as default?)
-  UPDATE: Fear it will be more annoying than helpful. When I click a row, I usually want it to play.
-
-- Idea from Jan Joeli: Following a playlist and getting a notification when it's changed.
-  Could be expanded with a context menu option for ignoring uninteresting playlists.
-
 - Idea from Anon-Relays: Pause/delay setting between tunes.
-
-- If one or more fields are empty in the top box, get the field(s) from the database instead.
-  Or, consider getting it all from the database instead. Or, maybe even better, add a toggle
-  button for showing info from the SID file itself versus from the database.
-  UPDATE: This has dropped in priority since all three of JW's emulators now get the info
-  from the database instead.
 
 - Consider a tag sorting dialog box. If not opened and used, the tags follow the usual
   sorting. If tags are complicated - e.g several events and productions - you can move the
   tags around to show a more logical setup of tags.
 
-- Ellipsis box in annex group box is too wide on my work PC. (Chrome?)
-  UPDATE: I tested a lot of composer with long group names and suddenly couldn't hit the bug
-  on my work PC anymore. Parking it for now.
-
 - Sundry no longer auto-shrinks on small displays. This was removed 2025-09-06 because entering
   folders accidentally expanded a manually collapsed sundry box. If you want to reinsert the
   code in the windows "resize" event later, make sure you don't hit that bug again.
 
-- User wish: Option for automatic renaming of files in a downloaded playlist, so a composer is
-  prepended. For example, "Cybernoid.sid" becomes "Jeroen Tel - Cybernoid.sid" instead. I am not
-  too hot on this idea. I suspect no one else is asking for this, and the feature would not be that
-  easy to make. Lowering on priority.
-
 - Kim Lemon wants me to make DeepSID cookieless. I could easily make the emulator choice into
   localstorage instead, but the PHP SESSION cookie belongs in a class I didn't write, and I
   fear it's not easy to change that.
-
-- SOLID "SHOULD BE DONE" CANDIDATES:
--
-- Continue updating CGSC profiles (next up is "D").
-- Maybe place "Misc" in CGSC in top, above a divider line?
-- For redirect links, add a BACK button in both STIL tabs (to complement the 'b' hotkey).
 
 - Search bug from Acrouzet: "On mobile, ordering results based on the criteria selected
   from the top right drop-down seems to not work properly. I believe it may be organizing pages
@@ -212,14 +193,14 @@ CONSIDER THIS
 - CINJ suggested a feature in: https://github.com/Chordian/deepsid/issues/17
   Show how may times a song was played globally. Also show how may times a playlist was used, also
   globally. Both to show how popular a song or playlist really is.
-  UPDATE: Song tracking has been added a later time.
+  UPDATE: Song tracking has been added a later time, but is not currently used in the UI.
 
 - A drop-down box for selecting 6581 filter settings. User can even save their own to the list,
   with the name of the filter settings plus the user's name e.g. appended in the end.
 
 - Stats: Add statistics to the database, done by all visitors. When visiting the song later,
   there will already be statistics ready. Maybe add an "entire song has been parsed" green icon?
-  UPDATE: Song tracking has been added a later time.
+  UPDATE: Song tracking has been added a later time, but is not currently used in the UI.
 
 - Replace drop-down boxes with styled versions (browser and search) - I don't like how e.g. Firefox
   and Chrome change their design like the wind blows.
@@ -240,46 +221,23 @@ CONSIDER THIS
 - MEMO, player block: A tall rectangle with a zoom box showing where we are in C64 RAM.
   - Maybe it would be best if it always shows the entire span of the C64's RAM?
 
-- Statistics on player/editor page, listing composers using it (with most hits in top spot).
-  - With tabs to toggle between the info table or this.
-  - Might not be worth the trouble? Most editors have few users and you can get a perfectly
-    good overview just by looking at the browser list yourself.
-
 - Search options for NTSC, and for CIA timer.
 
 - Bug: Backing out of a playlist folder renamed to include a "/" character is problematic.
-- Bug: Country flag appears in the middle of the country name here:
-  https://deepsid.chordian.net/?file=/MUSICIANS/M/Mega9man/
-- Bug: Copy link using the context menu triggers a console error if not logged in.
 - Bug: Players: Show list. Enter entry. Back. Entering the same entry again is now impossible.
-- Bug: Groepaz's profile header text overlaps the "report a profile change" link.
 - Bug: With little horizontal browser space in dark theme, the top area is not dark all the way.
 - Bug: CSDb: Start redirect play link, enter compo page, stop tune, back = icon still set to playing.
 - Bug: CSDb: Also a similar problem when opening a release page to already playing "redirect" tune.
-- BUG: Searching for the specific word "data" just returns a compo error.
 - BUG: Swapping color themes fiddles with at least a gray C64font color (maybe more).
-- BUG: Play song with multiple subtunes. Search. Cancel search. Now the subtunes are disabled.
 
-- BUG: While in YouTube SID handler, click a SID row. If "Unepic" refuses to start it sometimes bump
+- BUG: Log out, open context menu on a SID row and move mouse pointer up and down on it. You may
+  see "unsupported pseudo: hover" console log errors. Strangely it doesn't happened when logged in.
+
+- BUG: While in YouTube SID handler, click a SID row. If "Unepic" refuses to start it sometimes bumps
   to the next channel tab, then bumps twice as if several timers are messing around. This might be
   happening less often if the "Unepic" tab is manually clicked first, not sure. UPDATE: I only
   spotted this once the day before and the day after I couldn't provoke the bug again. I'm putting
   this aside for but and will keep an eye on it whenever videos time out.
-
-- BUG: The 'Folders in..." search shortcuts broke online. A PHP error occurs about exceeding the
-  MAX_JOIN_SIZE. It can be fixed with 'SET SQL_BIG_SELECTS = 1' or 'SET MAX_JOIN_SIZE = #', but
-  I'm pretty sure this is not allowed at my web hotel - One.com. The code for creating the search
-  shortcuts in 'hvsc.php' has been commented out. (I was actually never that fond of them myself;
-  it was something that JW commissioned. The SQL query was awfully slow.)
-
-- BUG: Loading annex links instead of tips is not solid. Sometimes tips are shown, period.
-  - I believe this is because LOADING A TUNE from the URL calls the annex code twice, and this can
-    result in either links or tips depending on the timing. However, this actually works in my
-    favor. It adds a nice element of randomization to whether links or tips are shown.
-
-- See also:
-  - A list of similar SID tunes, for example found by comparing STIL artists.
-  - I was thinking a new tab at first, but there are already a lot of those. Alternatives?
 
 - BUG: Sagan reports that clicking a name link in the top box goes to the SH folder instead of
   a composer folder in HVSC. See his e-mail from him for details about a "@narcisound" incident.
@@ -290,38 +248,12 @@ CONSIDER THIS
   could be expanded with additional code for checking if there is a composer folder, but I'm
   not sure it's worth the trouble.
 
-- VBI detection can be handled better in WebSid. JW said in Facebook Messenger:
-  "I have PSID specific APIs that might allow you to handle the PSID labels "more correctly", e.g.
-  envIsPSID() to check if it is one of those crappy PSID files, and then envIsTimerDrivenPSID() to
-  check if it is timer driven (which for PSIDs reports the opposite of envIsRasterDrivenPSID())."
-  However, note that these functions are not currently in the published backend JS file ready to be
-  called. Looks like JW will have to add them first.
+- A 'See also' feature. This could be a list of similar SID tunes, for example found by comparing
+  STIL artists. I was thinking a new tab at first, but there are already a lot of those. What else?
 
 - Remix tab:
   - Remix64's own site banner in top - maybe even animated the same way?
-  - Ask MK for new API endpoint for HVSC path only; returns SID names and number of remixes per
-    song. This could be used for indication in SID rows (where Disqus comments were once seen).
-    UPDATE: Not really needed anymore since the "Remix64" tag now covers most of it.
-  - Ask MK for new API endpoint for shouts. Add as a canvas-animated scroller above audio bar.
-
-- Piano view:
-  - Maybe a fourth pseudo keyboard with a green '4' button and... a digi oscilloscope?
-
-- Graph view:
-  - In the graph view, clicking a column/row graph could toggle it on or off.
-
-- A filter mode for MUSICIANS that shows folders for guys mostly involved with games.
-  - May need two SQL queries; "if more than 50% of tunes are for games" at first, but also
-    a "if made for 24 games or more" - otherwise people like Jeroen Tel would not make it.
-  - The above covers most, but still misses Matt Gray and Ed Bogas. Add as exceptions.
-  - Or, add a new database column in 'composers' where GAMES is one of the options.
-
-- CSDb Music Competitions:
-  - Add a flag icon after countries in the browser SID list itself?
-  - Empty: Devotion [C64 Sample Music], North Party v9.0 [C64 Sample Music], Skurup Party 1993
-
-- Context menu:
-  - Make "Copy Link" possible in search lists, symlists and compo folders too?
+  - Ask MK for a new API endpoint for shouts. Add as a canvas-animated scroller above audio bar.
 
 - Secondary compo table page:
   - Clicking release link should open in DeepSID itself (remember cache handling for BACK button).
@@ -338,22 +270,6 @@ CONSIDER THIS
     cutoff.
   - BAND REJECT: Same as band pass, but inverted (black cursor on yellow bar)."
 
-- SOLID "SHOULD BE DONE" CANDIDATE:
--
-- Infinity radio. Plays tunes of two stars rating and above forever. Each time it is supposed to
-  auto-progress, it will jump to a random tune anywhere else in another folder.
-  - Jump algorithm randomly selects one of two (maybe three) methods at first:
-    1. Play any tune inside a MUSICIANS letter folder that the 'Ratings' user have given two stars or more.
-    2. Play any tune in all collections that the 'Ratings' user have specifically given two stars or more.
-    3. How about as 2. but judging from average of all star ratings given by all users? (In
-       that case you better go for three stars or more, not two.)
-    NOTE: Maybe not do step 2 at all? For individual tunes, the 'Ratings' user's ratings may be too biased.
-  - Place the button for it in the white PATH box, which is ~empty anyway in the root.
-  - Maybe make certain control buttons wine red (including the starter button) to show that this
-    will affect the infinity radio mode. For example, wine red STOP button = stop and turn off.
-    You will stay in the current folder but everything has now returned to normal. If you want to
-    restart the infinity radio, you have to return to the root and click the starter button again.
-
 - Advanced search:
   - Move search button to end of edit box and shrink to only show a magnifying glass. This
     opens up for an "Advanced" link where the original search button used to be.
@@ -362,22 +278,6 @@ CONSIDER THIS
   - Plus button, then drop-down for table ("files", "folders", etc.) then column, then an
     input box for typing search query (always used LIKE %...% search). More?
   - Could also have an in-between drop-down box with "is", "contains", "not", etc.
-
-- Names from the "short name" field are not short enough for recommended boxes. It works well for
-  the annex profile, so don't shorten them further. Instead, add a "recommended name" table column
-  in the database with even shorter names.
-
-- A tab with post effects, applied by the web audio synth library.
-  - And maybe a setting toggle for applying this to the URL as a settings parameter string.
-  - UPDATE: I tried for a day making 'Tuna.js' work, but I couldn't make it work under any
-    circumstances. I tried with audio contexts from both emulators as well as Howler (even with
-    a dedicated effects plugin) to no avail. I never felt I got close to the cause for this
-    not working at all, and in the end I decided to shelve it until further notice. This would
-    have been a "luxury tab" anyway and is not in any way important.
-  - Tuna.js: https://github.com/Theodeus/tuna (easy and compact; would have been great for DeepSID)
-  - Tone.js: https://github.com/Tonejs/Tone.js (allows setting audio context too but is quite messy)
-  - Howler effect-chain: https://github.com/alexanderwallin/howler-plugin-effect-chain
-  - See "temp/tuna_attempt.txt" for the piece of code I tested in player.js/load() functions.
 
 - Symlists, next version: (Text editing requested by LaLa in February 2021)
   - First version is text only with no editing (so admin privilege to begin with). Editing later.
@@ -414,7 +314,7 @@ CONSIDER THIS
 - Settings tab page:
   - The user should be able to change the user name (but only if the new one is not already taken).
   - Attach to a HVSC/CGSC folder as being the same person now logged in. This gives privileges
-    such as e.g. being able to upload a different avatar picture, or add external links.
+    such as e.g. being able to upload a different avatar picture, add external links, or labels.
   - Import CSV to Playlist. (See the 'import_symlist_hvsc.php' file to begin with.)
   - Enable fade-out volume at end of song, just before auto-progressing to the next. Defaults to OFF.
   - Auto-progress skip (sub-)tune if playing for more than... 10 minutes? Or maybe user-definable?
@@ -422,15 +322,25 @@ CONSIDER THIS
 
 PROBABLY NOT?
 ¯¯¯¯¯¯¯¯¯¯¯¯¯
-- Replace the drop-down boxes in the browser panel with the styled one.
 - Drag-and-drop support. Maybe somehow tagged onto the existing emulator testing upload feature.
-- Consider using storage to remember the main volume setting between sessions.
 - To avoid stutter when stuff is loading, can the emulators be placed in a web worker?
-- A slider for altering the filtering of the emulators (requested by Matty Seito).
-- Replace ".." with a back arrow SVG instead? (I think people have gotten used to the ".." by now.)
-- A filter sort option in letter folders that show the crap only (one stars).
 - A filter sort option in letter folders for undecided (awaits evalution) for HVSC updates.
 - JW has pointed out that there are SID.load() redundancy in controls.js versus browser.js.
+- Maybe use .duration method for Howler instead of database length?
+- Hover on profile images to slide up a transparent bottom panel with image credits.
+- JW says browser.js loads stuff before the user settings in main.js have been loaded.
+- An adaptation list for CSDb forum HVSC paths that have since been moved/renamed in an update.
+- Feature request by Digger: Sort playlist by date added to playlist.
+- Consider using specialized cookies to strengthen the uniqueness of visitors for tracking.
+- Change the 'Cancel' button in all dialogs to the "Jensen"-hyperlink instead.
+- A link in far top for showing a tags cloud (get rid of blog post link to make room for it).
+- Presets or load/save setup in the stereo sundry tab.
+- Store stereo settings for a song with a pin icon.
+
+- A W A I T : Figure out why a user regularly get an access violation from 'composer.php' file.
+  UPDATE: I have now added log of name in 'composer.php' to pinpoint why a user always get
+  this error. Still waiting for him to do it again...
+  UPDATE: Ever since enabling the above I have not seen it happen again. Lowering the priority.
 
 - BUG: JW found a bug where the profile gets out of sync when searching. From his e-mail about
   it, dated 22 August 2021: 'For some reason the information in the "Profile" tab sometimes seems
@@ -439,24 +349,89 @@ PROBABLY NOT?
   search results the respective song is played but the "Profile" tab is not updated.'
   UPDATE: I tried to reproduce it today (2021-11-07) but couldn't. Archived until further notice.
 
-- BUG: Search many pages, e.g for "s" - then middle-click to the end. The last few pages appear
-  empty. Something is not calculated correctly. The empty pages doesn't seem to break anything
-  so there is no hurry to fix this one. UPDATE: I tried a ton of different solutions together
-  with ChatGPT. None of them solved the problem. Archiving this.
+- BUG: The 'Folders in..." search shortcuts broke online. A PHP error occurs about exceeding the
+  MAX_JOIN_SIZE. It can be fixed with 'SET SQL_BIG_SELECTS = 1' or 'SET MAX_JOIN_SIZE = #', but
+  I'm pretty sure this is not allowed at my web hotel - One.com. The code for creating the search
+  shortcuts in 'hvsc.php' has now been deleted. (I was actually never that fond of them myself;
+  it was something that JW commissioned. The SQL query was awfully slow.)
 
-- If you look closely, some tag names are too high up. It differs from SID row to SID row
-  in Firefox. Test floating point line heights to see if it can be fixed. UPDATE: Having
-  fought with something similar with focus icons, I really doubt I can fix this.
+- Empty folders in CSDb Music Competitions: Devotion [C64 Sample Music], North Party v9.0 [C64
+  Sample Music], and Skurup Party 1993. Can't do much about it, though. It is what is is.
 
-- ADSR envelope handling: Consider using a table with offsets instead of just simple math
-  scaling. The colors do not always follow the note volume perfectly.
+- How about user ratings for players/editors too? There's room in both list and pages.
+  UPDATE: Does rating editors by regular users make sense? How many of these editors do they
+  actually try out? It might make more sense with curated ratings. Users can rate, but after
+  rating the stars change color to indicate that the rating is a total average. I still fear
+  there will be too few and very biased ratings for this to be really useful.
+
+- Add search for tags by simply clicking one, instead of playing the SID row. However, it might
+  be wise to have a toggle in settings for turning it off. (Should it even be off as default?)
+  UPDATE: Fear it will be more annoying than helpful. When I click a row, I usually want it to play.
+
+- Idea from Jan Joeli: Following a playlist and getting a notification when it's changed.
+  Could be expanded with a context menu option for ignoring uninteresting playlists. UPDATE: Jan
+  may be overestimating how often this happens. I think almost all playlists are never updated
+  again once they've been published.
+
+- If one or more fields are empty in the top box, get the field(s) from the database instead.
+  Or, consider getting it all from the database instead. Or, maybe even better, add a toggle
+  button for showing info from the SID file itself versus from the database.
+  UPDATE: This has dropped in priority since all three of JW's emulators now get the info
+  from the database instead.
+
+- Ellipsis box in annex group box is too wide on my work PC. (Chrome?)
+  UPDATE: I tested a lot of composer with long group names and suddenly couldn't hit the bug
+  on my work PC anymore. Parking it for now.
+
+- User wish: Option for automatic renaming of files in a downloaded playlist, so a composer is
+  prepended. For example, "Cybernoid.sid" becomes "Jeroen Tel - Cybernoid.sid" instead. I am not
+  too hot on this idea. I suspect no one else is asking for this, and the feature would not be that
+  easy to make. Lowering on priority.
+
+- OCD: If you look closely, some tag names are too high up. It differs from SID row to SID row in
+  Firefox. Test floating point line heights to see if it can be fixed. UPDATE: Having fought with
+  something similar with focus icons, I really doubt I can fix this.
+
+- Piano view: Maybe a fourth pseudo keyboard with a green '4' button and... a digi oscilloscope?
+
+- ADSR envelope handling: Consider using a table with offsets instead of just simple math scaling.
+  The colors do not always follow the note volume perfectly.
 
 - Write the "Undo" admin script for tags. UPDATE: Never had the use for this since I created tags.
+  If something messes up here, I would probably just restore a database table backup.
+
+- Statistics on player/editor page, listing composers using it (with most hits in top spot).
+  - With tabs to toggle between the info table or this.
+  - Might not be worth the trouble? Most editors have few users and you can get a perfectly good
+    overview just by looking at the browser list yourself.
 
 - Add context menu option for downloading a tune as an MP3. I'm thinking, maybe I can grab one
   of Lemon's MP3 files? UPDATE: I tried it using a download trick from Stack Overflow, but of
   course I got CORS issues and I don't want to waste my time trying to fix that crap. If you
   want to continue anyway, the test is here: temp\browser_download_mp3.js
+
+- VBI detection can be handled better in WebSid. JW said in Facebook Messenger:
+  "I have PSID specific APIs that might allow you to handle the PSID labels "more correctly", e.g.
+  envIsPSID() to check if it is one of those crappy PSID files, and then envIsTimerDrivenPSID() to
+  check if it is timer driven (which for PSIDs reports the opposite of envIsRasterDrivenPSID())."
+  However, note that these functions are not currently in the published backend JS file ready to be
+  called. Looks like JW will have to add them first.
+
+- Names from the "short name" field are not short enough for recommended boxes. It works well for
+  the annex profile, so don't shorten them further. Consider adding a "recommended name" table
+  column in the database with even shorter names.
+
+- A tab with post effects, applied by the web audio synth library.
+  - And maybe a setting toggle for applying this to the URL as a settings parameter string.
+  - UPDATE: I tried for a day making 'Tuna.js' work, but I couldn't make it work under any
+    circumstances. I tried with audio contexts from both emulators as well as Howler (even with
+    a dedicated effects plugin) to no avail. I never felt I got close to the cause for this
+    not working at all, and in the end I decided to shelve it until further notice. This would
+    have been a "luxury tab" anyway and is not in any way important.
+  - Tuna.js: https://github.com/Theodeus/tuna (easy and compact; would have been great for DeepSID)
+  - Tone.js: https://github.com/Tonejs/Tone.js (allows setting audio context too but is quite messy)
+  - Howler effect-chain: https://github.com/alexanderwallin/howler-plugin-effect-chain
+  - See "temp/tuna_attempt.txt" for the piece of code I tested in player.js/load() functions.
 
 - In February 2025, I had ChatGPT improve 'parse.php' to also show a number for human-only
   visitors. However, it was lazy and actually only added up online and mobile users. None in the
@@ -505,40 +480,34 @@ PROBABLY NOT?
   as "primary release" would be too long, but I fear that would just confuse users. UPDATE: I have
   now renamed 'Primary release' in factoid texts to 'Primary release (label)' instead.
 
-- I still ponder if hiding "Compo" is okay. If hiding it, perhaps consider an alert to pop up (or
-  show a message in the dialog box) saying that it will be hidden because the ranking should
-  already make it clear, this is for a competition.
+- I still ponder if hiding the "Compo" tag is okay. If hiding it, perhaps consider an alert to pop
+  up (or show a message in the dialog box) saying that it will be hidden because the ranking should
+  already make it clear that it's for a competition.
 
-- Tag brackets drop-down boxes: Only allow event type tags in top drop-down box and only
-  allow production type tags in bottom drop-down box. (Perhaps allow administrators access
-  to all types in both drop-down boxes.)
+- Tag brackets drop-down boxes: Only allow event type tags in top drop-down box and only allow
+  production type tags in bottom drop-down box. (Perhaps allow administrators access to all types
+  in both drop-down boxes.) UPDATE: And 'GameBase64' connected to developer tags.
 
 - Consider also caching the 'SHOW' pages. This would not be a walk in the park to do, because
   there are sometimes also a party picture. Those are cached separately.
 
 - Tags: Make a unified tag for files that have less then 3 channels, then replace all those
-  1ch, 2ch and 3ch tags. You have to find one yourself - all the suggestions offered by both
+  1ch, 2ch and 3ch tags. You have to find a name yourself - all the suggestions offered by both
   ChatGPT and Gemini sucks.
 
-- KB: Sometimes I have to press ENTER twice on a SID row before it plays. Usually after having
-  done some navigation elsewhere in DeepSID. The first ENTER is probably some kind of focus
-  enabling. But the funny thing is, I actually don't mind this so much. It's easy to get used to
-  and it adds to the quirky charm of the web site.
+- Regarding keyboard controls: Sometimes I have to press ENTER twice on a SID row before it plays.
+  Usually after having done some navigation elsewhere in DeepSID. The first ENTER is probably some
+  kind of focus enabling. But the funny thing is, I actually don't mind this so much. It's easy to
+  get used to and it adds to the quirky charm of the web site.
 
-- When using a green event tag and a production the music was used in at that event, consider a
-  setting for adapting the colors of the production tag. Ideas: Fading from green to blue, or the
+- When using a green event tag and a production tag the music was used in at that event, consider
+  a setting for adapting the colors of the production tag. Ideas: Fading from green to blue, or the
   tag triangle in the left side is green and rest is blue. UPDATE: I fear new tag names are needed
   for this (e.g. "Event:Demo") and thus a lot of replacements to be done. At the same time, I'm
   not sure this would look good and/or visitors would understand what it means.
 
-- Link icons next to birth and death icons. E.g. #SoundCloud, etc.
-  - Two problems: 1. Composers that don't want this? 2. Keeping up with links that changes over time.
-
 - [GH] Bug: Seek clicking is not precise on Edge; it goes a few centimeters too far each time.
 - [GH] Bug: It's currently possible to specify an "?emulator="" that is incompatible with "?file=".
-
-- Bug: One of Ben Daglish's game tunes has a title long enough to erroneously expand the GB64 entry:
-  https://deepsid.chordian.net/?file=/MUSICIANS/D/Daglish_Ben/Challenge_of_the_Gobots_on_the_Moebius_Strip.sid
 
 - Let the time pass for "download" tunes so that automatic skip to next tune works in playlists.
   - Problem is subtunes. You can't advance to next subtune in the offline player.
@@ -552,9 +521,8 @@ PROBABLY NOT?
 - See here: https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-color-scheme
   With this you can preset to bright or dark color scheme the first time it is visited.
 
-- The SID tester (the "l" hotkey) should also be able to test MUS files.
-  - SID files can be detected, but it's not easy to detect a MUS file.
-  - It's not an easy fix and I doubt anyone is going to use it.
+- The SID tester (hotkey "l") should also be able to test MUS files. SID files can be detected, but
+  it's not easy to detect a MUS file. It's not an easy fix and I doubt anyone is going to use it.
 
 - An "add entire folder as playlist" for a symbolically linked version with a unique folder.
   - I'm actually not hot on making this but it was a feature request from the Facebook group.
@@ -564,14 +532,8 @@ PROBABLY NOT?
   - A notification "NEW" is added to it when new files are added after an update.
   - Entering such a folder would remove the "NEW" tag.
 
-- Would it be possible to have STIL on mobile devices?
-  - A general static button to replace #panel with STIL contents.
-  - Or perhaps sliding STIL in from the right by clicking a general static button always available?
-
-- KB: If 'ArrowRight' is pressed while on a folder, enter the folder.
-
-- KB: In search mode, 'ESC' should also work as Cancel. This is difficult to do because of key
-  bubbling and/or multi-events.
+- Keyboard: In search mode, 'ESC' should also work as Cancel. This is difficult to do because of
+  key bubbling and/or multi-events.
 
 - Use the new image credit field - hover on composer image to slide up a small "Source:" row.
   - If set to "UNKNOWN" then nothing is sliding up (i.e. as before).
@@ -597,43 +559,33 @@ PROBABLY NOT?
   - If no list of alternate handles, consider examining entire list of SID tunes to get a list
     of all handles used among them. Situation where SID tunes have more: "Gummibeer" composer.
 
-- Add the third and last JavaScript emulator, the one used in hamat's visualizer?
-  - I believe it even had a lot of different quality settings. They could be a handler option each?
-  - However, it doesn't really add anything to the table that the other emulators can't already do and
-    better too. And the tunes they have problems with, this emulator also have problems with. And just
-    like Hermit's emulator, it can't do digi tunes at all.
-
 - In Settings, make buffer size available for users NOT logged in. Then write below that you
   can edit more settings if you log in.
-  - The reason I put this in this section is that the "require" message in the oscilloscope tab about the
-    buffer size now shows an immmediate fix button, making it much less necessary to do the above.
+  - The reason I put it in this section is that the "require" message in the oscilloscope tab about
+    the buffer size now shows an immmediate fix button, making it much less necessary to do the above.
 
-- If not logged in, more than ~10 ratings for a folder or file is shown with stars (in a different color).
-- And those stars can be completely partially shown (not just half stars).
+- If not logged in, more than ~10 ratings for a folder or file is shown as an average of stars (in a
+  different color). And those stars can be completely partially shown (not just half stars).
 
 - Someone asked for a context menu option for exporting SID to MIDI, but it would be way too much work.
   I would need someone to have created a SID to MIDI library in JS or PHP so I can use it right away.
   Converting e.g. the XSID source code is not an option.
 
-- Idea for pinpointing a compo tune used in a production earlier (which is iffy) - a RED
-  arrow from the green tags to the blue production tag.
-  UPDATE: I later hid the left and right arrow tags completely, as they were too confusing.
-
 - Now that the "download" option is available, it would make sense to play CGSC stereo files. However,
   there's a problem there. Stereo files are two files; one MUS and one STR file, yet a row click
   obviously only downloads the MUS file. If only ZIP files were supported - then again, I'm not going to
-  ZIP thousands of MUS files!
+  ZIP thousands of MUS files! UPDATE: JW's 'reSID' emulator should actually support this.
   
-- Symlists, next version:
+- Additional idea for symlists:
   - A fourth option could be "Make a copy for myself only" to be used on a public folder.
   - A big list of symlists must use a scrollbar on the sub context menu.
   - A unique profile tab page that the user can edit and which supports headers, etc. (Maybe find a
     great JS plugin that allows for advanced editing?) - Counter argument: I predict that too many users
     would create a badly formatted page with typos and the like. Also, it would rarely be utilized.
 
-- Some process (Python?) that can detect "Made in 19xx, released in 20xx" STIL entries and put
-  the first year into the year field in the database. I don't agree with how HVSC does this; it
-  screws up the chart statistics.
+- Some process (Python?) that can detect "Made in 19xx, released in 20xx" STIL entries and put the first
+  year into the year field in the database. I don't agree with how HVSC does this; it screws up the
+  chart statistics.
   - I looked at various examples in the STIL text file, but the expressions are all over the
     place. It may not be possible to write a solid regex to catch enough of them to be viable.
   UPDATE: I later covered the most egregious ones through the special updating SQL list.
@@ -641,8 +593,8 @@ PROBABLY NOT?
 - Relevant to the above, regex to remove the player and length info from JCH's tunes. However, I tried
   a few regex lines in August 2021 and while it's easy to cover most of them, it's difficult to make it
   100% watertight. And that's where it transitions into it not being worth the trouble.
-  UPDATE: I've now sent a request to the HVSC team about removing those text bits.
-  UPDATE: They've amended a lot of tunes now, but not all of them.
+  UPDATE: I later sent a request to the HVSC team about removing those text bits. They amended some of
+  the tunes, but not all of them.
 
 - Bug found by JW: The current browser [search] context is lost when switching the used emulator.
   Example: Search for "M418" tag. In search results play one of the songs. Now switch to a different
@@ -656,14 +608,9 @@ PROBABLY NOT?
   Music" full length tag text, and then test with that. UPDATE: The "Asap Condensed" font is slightly
   tighter but it doesn't really help that much, and it is considerably harder to read.
 
-- CSDb Music Competitions:
-  - Thought about a better inside "path" box info where year and country is also visible, but it's not
-    really needed after the event profile page was added. It's shows the same information.
-
-- Web site widget box:
-  - Someone on Facebook suggested support for a box on other web sites showing a particular tune or
-    maybe even en entire playlist. I consider this narrow niche and thus probably not worth the trouble.
-  - UPDATE: A "miniplayer" was added some time later. Does it iron this one out?
+- For CSDb Music Competitions, I thought about a better inside "path" box info where year and country
+  is also visible, but it's not really needed after the event profile page was added. It shows the
+  same information.
 
 - MobyGames API support:
   - After two sessions of reconsideration, I have decided NOT to do this. The information retrieved
