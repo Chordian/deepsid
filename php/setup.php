@@ -7,7 +7,7 @@
 
 define('LOCALHOST',			'chordian');
 
-define('ROOT_HVSC',			$_SERVER['HTTP_HOST'] == LOCALHOST ? '/Users/jchuu/Music/HVSC' : '../hvsc');
+define('ROOT_HVSC',			$_SERVER['HTTP_HOST'] == LOCALHOST ? '/Users/jchuu/Music/HVSC' : '../music');
 define('HOST',              $_SERVER['HTTP_HOST'] == LOCALHOST ? 'http://chordian/deepsid/' : '//deepsid.chordian.net/');
 define('COOKIE_HOST',       $_SERVER['HTTP_HOST'] == LOCALHOST ? 'localhost_deepsid' : 'deepsid.chordian.net');
 

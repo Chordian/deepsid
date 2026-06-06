@@ -34,10 +34,10 @@ Download the following SID collections that will work with the database supplied
 * [High Voltage SID Collection #84](https://hvsc.brona.dk/HVSC/HVSC_84-all-of-them.7z)
 * [Compute's Gazette SID Collection v1.47](http://www.c64music.co.uk/CGSC_v147.7z)
 
-1. Create the `/deepsid/hvsc/` sub folder.
-2. Unpack the HVSC archive into the `/deepsid/hvsc/` folder. This should create a `/C64Music/` sub folder.
+1. Create the `/deepsid/music/` sub folder.
+2. Unpack the HVSC archive into the `/deepsid/music/` folder. This should create a `/C64Music/` sub folder.
 3. Rename the `/C64Music/` sub folder to `/_High Voltage SID Collection/` instead.
-4. Unpack the CGSC archive into the `/deepsid/hvsc/` folder. This should create a `/CGSC/` sub folder.
+4. Unpack the CGSC archive into the `/deepsid/music/` folder. This should create a `/CGSC/` sub folder.
 5. Rename the `/CGSC/` sub folder to `/_Compute's Gazette SID Collection/` instead.
 
 Some collections are proprietary DeepSID collections. Download those here:
@@ -45,9 +45,9 @@ Some collections are proprietary DeepSID collections. Download those here:
 * [DeepSID_Collection_Exotic_Tunes.zip](https://chordian.net/files/deepsid/DeepSID_Collection_Exotic_Tunes.zip)
 * [DeepSID_Collection_SID_Happens.zip](https://chordian.net/files/deepsid/DeepSID_Collection_SID_Happens.zip)
 
-1. Create the `/_Exotic SID Tunes Collection/` sub folder inside the `/deepsid/hvsc/` folder.
+1. Create the `/_Exotic SID Tunes Collection/` sub folder inside the `/deepsid/music/` folder.
 2. Unpack **DeepSID_Collection_Exotic_Tunes.zip** into the new folder.
-3. Create the `/_SID Happens/` sub folder inside the `/deepsid/hvsc/` folder.
+3. Create the `/_SID Happens/` sub folder inside the `/deepsid/music/` folder.
 4. Unpack **DeepSID_Collection_SID_Happens.zip** into the new folder.
 
 ### Databases

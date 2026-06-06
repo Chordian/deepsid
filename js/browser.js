@@ -42,7 +42,7 @@ const playerStrips = [
 
 function Browser() {
 
-	this.ROOT_HVSC = 'hvsc';
+	this.ROOT_HVSC = 'music';
 	this.HVSC_VERSION = 84;
 	this.CGSC_VERSION = 147;
 

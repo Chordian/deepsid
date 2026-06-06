@@ -46,7 +46,7 @@ For the next HVSC version:
   3. For ONLINE, first delete any previous HVSC_## version folders that might still be
      lingering, then copy the "_High Voltage..." folder into the root.
   4. When the time comes to activate it below, rename the old "_High Voltage..." folder
-     in /hvsc/ appending e.g. "OLD" and instead move the new one in there.
+     in /music/ appending e.g. "OLD" and instead move the new one in there.
   5. Finally edit the HVSC_VERSION constant in the "setup.php" script. It's a good idea to
      just edit the file directly online, to avoid messing with the database credentials.
 

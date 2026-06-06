@@ -16,7 +16,7 @@ set_time_limit(0);
 // CONFIG
 // -----------------------------------------------------------
 
-$hvsc_root = __DIR__ . '/../../hvsc/';
+$hvsc_root = __DIR__ . '/../../music/';
 
 // Collections to scan
 $collections = [

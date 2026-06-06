@@ -22,7 +22,7 @@ if (substr($_GET['fullname'], -4) == '.mus') {
 	// CGSC: Parse the file itself
 
 	// If there's a .wds file we can use it for the STIL box
-	$wds = @file_get_contents(str_replace('.mus', '.wds', '../hvsc/'.$_GET['fullname']));
+	$wds = @file_get_contents(str_replace('.mus', '.wds', '../music/'.$_GET['fullname']));
 	$stil = '';
 	if ($wds) {
 		$chars = unpack('C*', $wds);

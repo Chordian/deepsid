@@ -139,12 +139,12 @@ SID FILES
 The README.md informs users to download HVSC and CGSC from their source sites, but other stuff
 that is proprietary to DeepSID has to be uploaded.
 
-  1. Zip the contents of /deepsid/hvsc/_Exotic SID Tunes Collection/ and upload as:
+  1. Zip the contents of /deepsid/music/_Exotic SID Tunes Collection/ and upload as:
 
        <ROOT>/files/deepsid/DeepSID_Collection_Exotic_Tunes.zip
 
   2. For files in "SID Happens" you have to download those online as it's a living folder that
-     other users contribute to. Connect with FTP and enter the /deepsid/hvsc/ folder there.
+     other users contribute to. Connect with FTP and enter the /deepsid/music/ folder there.
      Download the entire "_SID Happens" folder to a local folder.
   3. ZIP the contents of this local "_SID Happens" folder and upload as:
 
