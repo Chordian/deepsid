@@ -2,7 +2,7 @@
 /**
  * DeepSID
  * 
- * @used-by		hvsc.php
+ * @used-by		music.php
  * @used-by		tags_write.php
  * @used-by		tags_write_single.php
  * @used-by		tags_remove_game.php

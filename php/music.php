@@ -5,6 +5,8 @@
  * Get an array of SID files from the specified folder, or perform a search
  * query if specified.
  * 
+ * Previously known as: hvsc.php
+ * 
  * @uses		$_GET['folder']
  * @uses		$_GET['searchType']
  * @uses		$_GET['searchQuery']		overrides 'folder' if used

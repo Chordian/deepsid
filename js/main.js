@@ -207,7 +207,7 @@ var main = {
 	 * 				main.js
 	 */
 	disableIncompatibleRows: function() {
-		// The 'YouTube' handler has its own checks in 'hvsc.php'
+		// The 'YouTube' handler has its own checks in 'music.php'
 		if (SID.emulator == "youtube") return;
 		
 		$("#songs table").children().each(function() {

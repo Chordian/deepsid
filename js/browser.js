@@ -1516,7 +1516,7 @@ Browser.prototype = {
 
 		} else {
 
-			// LOAD FROM HVSC.PHP
+			// LOAD FROM MUSIC.PHP
 
 			var loading = setTimeout(function() {
 				// Fade in a GIF loading spinner if the AJAX call takes longer than usual
@@ -1535,7 +1535,7 @@ Browser.prototype = {
 			$("#path").empty();
 
 			// Call the AJAX PHP script that delivers the list of files and folders
-			this.hvsc = $.get("php/hvsc.php", {
+			this.hvsc = $.get("php/music.php", {
 					folder:			this.path,
 					searchType:		this.searchType,
 					searchQuery:	this.searchQuery,

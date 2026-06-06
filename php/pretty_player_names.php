@@ -4,7 +4,7 @@
  *
  * Pretty player names.
  * 
- * @used-by		hvsc.php
+ * @used-by		music.php
  * @used-by		composer.php
  */
 
@@ -71,7 +71,7 @@ $pretty_player_names = array(
 	'Gavin_Raeburn' =>			'Gavin Raeburn\'s player',
 	'Georg_Brandt' =>			'Georg Brandt\'s player',
 	'Gilles_Soulet' =>			'Gilles Soulet\'s player',
-	// Glover's player is handled in 'hvsc.php' itself
+	// Glover's player is handled in 'music.php' itself
 	'Golem' =>					'Golem\'s player',
 	'Gregor_Larson' =>			'Gregor Larson\'s player',
 	'Guy_Shavitt' =>			'Guy Shavitt\'s player',
@@ -87,7 +87,7 @@ $pretty_player_names = array(
 	'Jason_Briggs' =>			'Jason Briggs\' player',
 	'Jason_Brooke' =>			'Jason Brooke\'s player',
 	'Jason_Page' =>				'Jason Page\'s player',
-	// Jeff's player is handled in 'hvsc.php' itself
+	// Jeff's player is handled in 'music.php' itself
 	'Jeff_Minter' =>			'Jeff Minter\'s player',
 	'Jeremy_Hall' =>			'Jeremy Hall\'s player',
 	'Jeroen_Kimmel' =>			'Jeroen Kimmel\'s player',
@@ -128,7 +128,7 @@ $pretty_player_names = array(
 	'Maurizio_Feletto' =>		'Maurizio Feletto\'s player',
 	'Michael_Delaney' =>		'Michael Delaney\'s player',
 	'Michael_Winterberg' =>		'Michael Winterberg\'s player',
-	// Mixer's player is handled in 'hvsc.php' itself
+	// Mixer's player is handled in 'music.php' itself
 	'MoN/FutureComposer/Deenen_Digi' => 'MoN/FC/Deenen_Digi', // Avoids rating stars being pushed out (later fixed)
 	'Neil_Baldwin' =>			'Neil Baldwin\'s player',
 	'Neil_Brennan' =>			'Neil Brennan\'s player',
@@ -168,7 +168,7 @@ $pretty_player_names = array(
 	'Silas_Warner' =>			'Silas Warner\'s player',
 	'Shaun_Southern' =>			'Shaun Southern\'s player',
 	'Slaygon' =>				'Slaygon\'s player',
-	// Soedesoft's player is handled in 'hvsc.php' itself
+	// Soedesoft's player is handled in 'music.php' itself
 	'Sonic_Graffiti' =>			'Sonic Graffiti\'s player',
 	'SounDemon' =>				'SounDemon\'s player',
 	'Spinnaker' =>				'Spinnaker Software\'s player',
@@ -192,7 +192,7 @@ $pretty_player_names = array(
 	'Urs_Heckmann' =>			'Urs Heckmann\'s player',
 	'Vibrants/JO' =>			'JO\'s player',
 	'X-Byte' =>					'X-Byte\'s player',
-	// Zardax's player is handled in 'hvsc.php' itself
+	// Zardax's player is handled in 'music.php' itself
 	'Zoltan_Mohos' =>			'Zoltan Mohos\' player',
 	'Zyborg' =>					'Zyborg\'s player',
 );

@@ -9,6 +9,8 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+- An admin hotkey to refresh the root part of the front page only.
+
 - A W A I T : Rewrite 'howto_update_gb64.txt' when the next GameBase64 update v20 arrives.
   See the .txt file for a few preliminary things to test.
 
@@ -17,9 +19,6 @@ WHEN THE TIME IS RIGHT
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
 - DO THE FOLLOWING IN THE BEGINNING OF A WEEKEND OR A VACATION AS IT MIGHT BLOW UP!
   You have to be damn sure everything still works afterwards - a lot of testing to be done...
-  - Likewise, the 'hvsc.php' file should be called 'music.php' or something instead. Some
-    other naming ideas: content, results, data, cluster, gather, collect
-    Also consider prefixing with "_" to always make it appear in top of the list.
   - There is an array called 'playlist' from the beginning of when DeepSID was made, that has
     nothing to do with symlists. Rename it to something else to avoid confusion.
   - Maybe 'csdb.php' should also have an extended name, to make it more clear what it does.
@@ -351,7 +350,7 @@ PROBABLY NOT?
 - BUG: The 'Folders in..." search shortcuts broke online. A PHP error occurs about exceeding the
   MAX_JOIN_SIZE. It can be fixed with 'SET SQL_BIG_SELECTS = 1' or 'SET MAX_JOIN_SIZE = #', but
   I'm pretty sure this is not allowed at my web hotel - One.com. The code for creating the search
-  shortcuts in 'hvsc.php' has now been deleted. (I was actually never that fond of them myself;
+  shortcuts in 'music.php' has now been deleted. (I was actually never that fond of them myself;
   it was something that JW commissioned. The SQL query was awfully slow.)
 
 - Empty folders in CSDb Music Competitions: Devotion [C64 Sample Music], North Party v9.0 [C64

@@ -5,7 +5,7 @@
  * Find out if the user has rated EVERYTHING inside the specified folder (and
  * its sub folders).
  * 
- * This is code cloned from the 'hvsc.php' script.
+ * This is code cloned from the 'music.php' script.
  * 
  * @uses		$_GET['fullname']
  * 
