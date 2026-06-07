@@ -25,7 +25,7 @@ try {
 	$db = $account->getDB();
 
 	// Get ID of symlist folder
-	$select = $db->prepare('SELECT id, files FROM hvsc_folders WHERE collection_path = :folder AND user_id = '.$user_id.' LIMIT 1');
+	$select = $db->prepare('SELECT id, files FROM folders WHERE collection_path = :folder AND user_id = '.$user_id.' LIMIT 1');
 	$select->execute(array(':folder'=>$_POST['symlist']));
 	$select->setFetchMode(PDO::FETCH_OBJ);
 
@@ -45,7 +45,7 @@ try {
 	} else {
 
 		// Get ID of actual SID file
-		$select = $db->prepare('SELECT id FROM hvsc_files WHERE collection_path = :collection_path LIMIT 1');
+		$select = $db->prepare('SELECT id FROM files WHERE collection_path = :collection_path LIMIT 1');
 		$select->execute(array(':collection_path' => $_POST['fullname']));
 		$select->setFetchMode(PDO::FETCH_OBJ);
 
@@ -59,7 +59,7 @@ try {
 	}
 
 	// Decrease the count of files
-	$update = $db->query('UPDATE hvsc_folders SET files = '.--$file_count.' WHERE id = '.$folder_id);
+	$update = $db->query('UPDATE folders SET files = '.--$file_count.' WHERE id = '.$folder_id);
 	if ($update->rowCount() == 0)
 		die(json_encode(array('status' => 'error', 'message' => 'Could not update the count of files in '.$_POST['symlist'])));
 

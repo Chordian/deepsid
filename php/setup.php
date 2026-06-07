@@ -5,21 +5,21 @@
  * Shared stuff used by other PHP scripts.
  */
 
-define('LOCALHOST',			'chordian');
+const LOCALHOST     = 'chordian';
 
-define('ROOT_HVSC',			$_SERVER['HTTP_HOST'] == LOCALHOST ? '/Users/jchuu/Music/HVSC' : '../music');
-define('HOST',              $_SERVER['HTTP_HOST'] == LOCALHOST ? 'http://chordian/deepsid/' : '//deepsid.chordian.net/');
-define('COOKIE_HOST',       $_SERVER['HTTP_HOST'] == LOCALHOST ? 'localhost_deepsid' : 'deepsid.chordian.net');
+const HVSC_VERSION  = '84';
+const CGSC_VERSION  = '147';
 
-define('HVSC_VERSION',      '84');
-define('CGSC_VERSION',      '147');
+const JCH           = 2;    // Same user ID on both localhost and online
+const USER_RATINGS  = 3;    // Same user ID on both localhost and online
 
-define('JCH',               2);                         // Same user ID on both localhost and online
-define('USER_RATINGS',      3);                         // Same user ID on both localhost and online
+const DB_ERROR      = 'A database error has been written to a log regularly monitored by Chordian.';
 
-define('DB_ERROR',          'A database error has been written to a log regularly monitored by Chordian.');
+const TIME_ADJUST   = '+1 hours';   // Added to all use of Date() to match correct time
 
-define('TIME_ADJUST',		'+1 hours');				// Added to all use of Date() to match correct time
+define('ROOT_HVSC',     $_SERVER['HTTP_HOST'] == LOCALHOST ? '/Users/jchuu/Music/HVSC' : '../music');
+define('HOST',          $_SERVER['HTTP_HOST'] == LOCALHOST ? 'http://chordian/deepsid/' : '//deepsid.chordian.net/');
+define('COOKIE_HOST',   $_SERVER['HTTP_HOST'] == LOCALHOST ? 'localhost_deepsid' : 'deepsid.chordian.net');
 
 // Handle configuration file
 
@@ -91,16 +91,16 @@ function getFriendlyName($name) {
  *
  * @param	    int 		$id                 ID for a CSDb scener (can be 0)
  * @param	    string		$name               name of scener/composer
- * @param	    string		$hvsc_folder        the scener's HVSC folder (can be empty)
+ * @param	    string		folder              the scener's collection folder (can be empty)
  *
  * @return	    string		$avatar             image path for avatar
  */
-function getAvatar($id, $name, $hvsc_folder) {
+function getAvatar($id, $name, $folder) {
 
-    if (!empty($hvsc_folder)) {
+    if (!empty($folder)) {
 
         // Figure out the name of the thumbnail (if it exists) for the composer
-        $fn = str_replace('_High Voltage SID Collection/', '', $hvsc_folder);
+        $fn = str_replace('_High Voltage SID Collection/', '', $folder);
         $fn = str_replace("_Compute's Gazette SID Collection/", "cgsc_", $fn);
         $fn = strtolower(str_replace('/', '_', $fn));
         $avatar = 'images/composers/'.$fn.'.jpg';

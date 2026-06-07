@@ -9,6 +9,9 @@
  *  - Left and right boxes for top lists
  *  - Active, procrastinating and game composers
  * 
+ * @uses		$_GET['recOnly']		if set, only returns HTML for rec boxes
+ * 
+ * @used-by		main.js
  * @used-by		browser.js
  */
 
@@ -37,7 +40,7 @@ function createRecBox($random_id) {
 	global $db, $alt_box;
 
 	// Get the collection path
-	$select = $db->query('SELECT collection_path FROM hvsc_folders WHERE id = '.$random_id);
+	$select = $db->query('SELECT collection_path FROM folders WHERE id = '.$random_id);
 	$select->setFetchMode(PDO::FETCH_OBJ);
 	$collection_path = $select->rowCount() ? $select->fetch()->collection_path : '';
 
@@ -71,7 +74,7 @@ function createRecBox($random_id) {
 				$random_decent = $decent_composers[array_rand($decent_composers)];
 
 				// Get the collection path of it
-				$select_decent = $db->query('SELECT collection_path FROM hvsc_folders WHERE id = '.$random_decent);
+				$select_decent = $db->query('SELECT collection_path FROM folders WHERE id = '.$random_decent);
 				$select_decent->setFetchMode(PDO::FETCH_OBJ);
 
 				$return_html = $select_decent->rowCount()
@@ -96,7 +99,7 @@ function createRecBox($random_id) {
 				$playlist_folders = [];
 
 				// Get an array of all public playlists
-				$select_playlist = $db->query('SELECT id FROM hvsc_folders WHERE collection_path LIKE "$%"');
+				$select_playlist = $db->query('SELECT id FROM folders WHERE collection_path LIKE "$%"');
 				$select_playlist->setFetchMode(PDO::FETCH_OBJ);
 				foreach($select_playlist as $row_playlist)
 					array_push($playlist_folders, $row_playlist->id);
@@ -105,7 +108,7 @@ function createRecBox($random_id) {
 				$random_playlist = $playlist_folders[array_rand($playlist_folders)];
 
 				// Get the needed information from this playlist entry
-				$select_playlist = $db->query('SELECT collection_path, files, user_id FROM hvsc_folders WHERE id = '.$random_playlist.' LIMIT 1');
+				$select_playlist = $db->query('SELECT collection_path, files, user_id FROM folders WHERE id = '.$random_playlist.' LIMIT 1');
 				$select_playlist->setFetchMode(PDO::FETCH_OBJ);
 				$playlist = $select_playlist->fetch();
 
@@ -196,7 +199,7 @@ function createRecBox($random_id) {
 	$is_group = strpos($collection_path, '/GROUPS/') !== false;
 	
 	// Get type and file count
-	$select = $db->query('SELECT type, files FROM hvsc_folders WHERE collection_path = "'.$collection_path.'"');
+	$select = $db->query('SELECT type, files FROM folders WHERE collection_path = "'.$collection_path.'"');
 	$select->setFetchMode(PDO::FETCH_OBJ);
 	$row = $select->fetch();
 	$type = $row->type == 'GROUP' ? 'group' : 'single';
@@ -343,6 +346,8 @@ $choice_right = $available_lists[$choices[1]];
 try {
 	$db = $account->getDB();
 
+	// RECOMMENDATION BOXES
+
 	$good_composers = [];
 
 	// Get an array of all the folder ID belonging to composers the 'Ratings' user have given 3 stars or more
@@ -356,6 +361,24 @@ try {
 	$random_id_1 = $good_composers[$choices[0]];
 	$random_id_2 = $good_composers[$choices[1]];
 	$random_id_3 = $good_composers[$choices[2]];
+
+	// If this is an admin refresh then just return the three recommendation boxes only
+	if(isset($_GET['recOnly'])) {
+		$html = '<tr>'.
+			'<td style="max-width:10px;">'.
+				createRecBox($random_id_1).
+			'</td>'.
+			'<td style="width:10px;"></td>'.
+			'<td style="max-width:10px;">'.
+				createRecBox($random_id_2).
+			'</td>'.
+			'<td style="width:10px;"></td>'.
+			'<td style="max-width:10px;">'.
+				createRecBox($random_id_3).
+			'</td></tr>';
+
+		die(json_encode(array('status' => 'ok', 'html' => $html)));
+	}
 
 	// QUICK SHORTCUTS
 
@@ -416,7 +439,7 @@ try {
 $html =
 	'<div style="height:149px;"></div>'.
 	// Recommendations
-	'<table class="root rec"><tr>'.
+	'<table id="three-rec" class="root rec"><tr>'.
 		'<td style="max-width:10px;">'.
 			createRecBox($random_id_1).
 		'</td>'.

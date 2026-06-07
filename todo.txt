@@ -9,23 +9,12 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- An admin hotkey to refresh the root part of the front page only.
+- Typing in the search box often bleeds through to hotkeys. Prevent that.
+
+- Lemon's MP3 files currently doesn't work.
 
 - A W A I T : Rewrite 'howto_update_gb64.txt' when the next GameBase64 update v20 arrives.
   See the .txt file for a few preliminary things to test.
-
-
-WHEN THE TIME IS RIGHT
-¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- DO THE FOLLOWING IN THE BEGINNING OF A WEEKEND OR A VACATION AS IT MIGHT BLOW UP!
-  You have to be damn sure everything still works afterwards - a lot of testing to be done...
-  - There is an array called 'playlist' from the beginning of when DeepSID was made, that has
-    nothing to do with symlists. Rename it to something else to avoid confusion.
-  - Maybe 'csdb.php' should also have an extended name, to make it more clear what it does.
-    Then do the same in CShellDB.
-  - Go through all the other files and see if anything else ought to be renamed. (And in CShellDB.)
-  - Change all 'bind(this)' stuff to modern JavaScript handling instead.
-  - Change all define() statements into const instead in all PHP files.
 
 
 REALLY CONSIDER THIS
@@ -83,6 +72,11 @@ MAYBE CONSIDER THIS
 - When enabling "maintenance_mode" make it so visitors already on the site are shown a
   warning ("DeepSID just entered maintenance mode. It's dangerous to browse here at the
   moment" an so on). When to show? Playing? Browsing? Any event at all?
+
+- Change all 'bind(this)' stuff to modern JavaScript '=>' handling instead. This is an enourmous
+  task as most JS files are completely engulfed in 'bind(this)' stuff, and there are caveats. The
+  context of 'this' changes inside events, for example. Perhaps it's better to do a little bit
+  here and there, then testing the subject immediately afterwards.
 
 - Some way to see what playlists are including a specific song. Perhaps from the context menu?
   UPDATE: At first I failed to remember the logic behind this, but I think it's to make sure

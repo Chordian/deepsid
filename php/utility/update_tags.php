@@ -10,15 +10,15 @@
 
 require_once("class.account.php"); // Includes setup
 
-define('MODE_COOP',		'Coop');
-define('MODE_UNF',		'Unfinished');
-define('MODE_TINY',		'Tiny');
-define('MODE_PURE',		'Pure');
-define('MODE_LONG',		'Long');
-define('MODE_SHORT',	'Short');
-define('MODE_LYRICS',	'Lyrics');	// CGSC only
+const MODE_COOP 	= 'Coop';
+const MODE_UNF 		= 'Unfinished';
+const MODE_TINY 	= 'Tiny';
+const MODE_PURE 	= 'Pure';
+const MODE_LONG 	= 'Long';
+const MODE_SHORT 	= 'Short';
+const MODE_LYRICS	= 'Lyrics'; // CGSC only
 
-define('MODE', MODE_LYRICS); // <---- SET THE TAG PARSING MODE HERE!
+const MODE = MODE_LYRICS; // <---- SET THE TAG PARSING MODE HERE!
 
 // --------------------------------------------------------------------------
 // FUNCTIONS
@@ -71,7 +71,7 @@ try {
 
 	$collection = MODE == MODE_LYRICS ? "_Compute's Gazette SID Collection/%" : '_High Voltage SID Collection/%';
 	// Get a list of all file rows in the relevant collection
-	$select = $db->query('SELECT * FROM hvsc_files WHERE collection_path LIKE "'.$collection.'" ORDER BY id');
+	$select = $db->query('SELECT * FROM files WHERE collection_path LIKE "'.$collection.'" ORDER BY id');
 	$select->setFetchMode(PDO::FETCH_OBJ);
 
 	// Get the ID of the relevant tag name

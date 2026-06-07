@@ -40,9 +40,9 @@ if ($account->checkLogin()) {
 
 		$db = $account->getDB();
 
-		$select = $db->prepare('SELECT hvsc_files.collection_path as file, hvsc_folders.collection_path as folder, rating FROM ratings r'.
-			' LEFT JOIN hvsc_files on r.table_id = hvsc_files.id AND r.type = "FILE"'.
-			' LEFT JOIN hvsc_folders on r.table_id = hvsc_folders.id AND r.type = "FOLDER"'.
+		$select = $db->prepare('SELECT files.collection_path as file, folders.collection_path as folder, rating FROM ratings r'.
+			' LEFT JOIN files on r.table_id = files.id AND r.type = "FILE"'.
+			' LEFT JOIN folders on r.table_id = folders.id AND r.type = "FOLDER"'.
 			' WHERE r.user_id = :userid');
 		$select->execute(array(':userid'=>$account->userID()));
 		$select->setFetchMode(PDO::FETCH_OBJ);

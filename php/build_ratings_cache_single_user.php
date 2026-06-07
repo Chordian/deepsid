@@ -20,8 +20,8 @@
  */
 function buildRatingsCacheForUser(PDO $db, int $user_id): void
 {
-    // 1. Get ALL FOLDERS from hvsc_folders
-    $select_folders = $db->query('SELECT collection_path FROM hvsc_folders ORDER BY collection_path');
+    // 1. Get ALL FOLDERS from 'folders' table
+    $select_folders = $db->query('SELECT collection_path FROM folders ORDER BY collection_path');
     $folders = $select_folders->fetchAll(PDO::FETCH_OBJ);
 
     if (!$folders) {
@@ -32,7 +32,7 @@ function buildRatingsCacheForUser(PDO $db, int $user_id): void
     $select_ratings = $db->prepare('
         SELECT f.collection_path
         FROM ratings r
-        JOIN hvsc_files f ON f.id = r.table_id
+        JOIN files f ON f.id = r.table_id
         WHERE r.user_id = :user_id
           AND r.type    = "FILE"
           AND r.rating  > 0

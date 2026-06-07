@@ -16,7 +16,7 @@
 
 require_once("class.account.php"); // Includes setup
 
-define('LEMON', 'https://lemon.ams3.cdn.digitaloceanspaces.com/c64/music/hvsc/mp3');
+const LEMON = 'https://lemon.ams3.cdn.digitaloceanspaces.com/c64/music/hvsc/mp3';
 
 if (!isset($_GET['file']) || !isset($_GET['subtune']))
 	die(json_encode(array('status' => 'error', 'message' => 'You must specify \'file\' and \'subtune\' as GET variables.')));
@@ -39,11 +39,11 @@ try {
 
 		if (!in_array($root_folder, array('DEMOS', 'GAMES', 'MUSICIANS'))) {
 			// It's in a custom folder - Howler can't play this one, but get its hash (MD5)
-			$select = $db->prepare('SELECT hash FROM hvsc_files WHERE collection_path = :collection_path LIMIT 1');
+			$select = $db->prepare('SELECT hash FROM files WHERE collection_path = :collection_path LIMIT 1');
 			$select->execute(array(':collection_path' => ltrim($file, '/')));
 			$select->setFetchMode(PDO::FETCH_OBJ);
 			// Now get all SID files that share the same hash (MD5)
-			$twins = $db->query('SELECT collection_path FROM hvsc_files WHERE hash = "'.$select->fetch()->hash.'"');
+			$twins = $db->query('SELECT collection_path FROM files WHERE hash = "'.$select->fetch()->hash.'"');
 			$twins->setFetchMode(PDO::FETCH_OBJ);
 
 			// So, does this file have a duplicate in HVSC that Howler can play?
@@ -56,7 +56,7 @@ try {
 		}
 
 		// Does this tune have multiple subtunes?
-		$select = $db->prepare('SELECT subtunes FROM hvsc_files WHERE collection_path = :collection_path LIMIT 1');
+		$select = $db->prepare('SELECT subtunes FROM files WHERE collection_path = :collection_path LIMIT 1');
 		$select->execute(array(':collection_path' => ltrim($file, '/')));
 		$select->setFetchMode(PDO::FETCH_OBJ);
 		

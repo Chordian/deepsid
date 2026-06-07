@@ -10,7 +10,7 @@ DATABASE
 ¯¯¯¯¯¯¯¯
   1. Enter PhpMyAdmin and export every single table into an SQL file, one by one.
 
-  2. Open "hvsc_folders.sql" in a text editor and delete all personal playlist lines. You can
+  2. Open "folders.sql" in a text editor and delete all personal playlist lines. You can
      find them by searching for this: , '!
      (NEXT TIME CREATE A MACRO TO DELETE THEM AND DESCRIBE THAT HERE)
   3. Save the file.

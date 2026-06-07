@@ -42,7 +42,7 @@ try {
 	$db = $account->getDB();
 
 	// Is this editing or uploading?
-	$select = $db->prepare('SELECT id FROM hvsc_files WHERE collection_path = :collection_path LIMIT 1');
+	$select = $db->prepare('SELECT id FROM files WHERE collection_path = :collection_path LIMIT 1');
 	$select->execute(array(':collection_path' => $info['fullname']));
 	$select->setFetchMode(PDO::FETCH_OBJ);
 
@@ -64,7 +64,7 @@ try {
 		$new_name = substr($info['fullname'], 0, strrpos($info['fullname'], '/') + 1).$info['newname'];
 
 		// Update the general database row
-		$update = $db->prepare('UPDATE hvsc_files SET
+		$update = $db->prepare('UPDATE files SET
 				collection_path	= :newername,
 				player			= :player,
 				lengths 		= :lengths,
@@ -111,7 +111,7 @@ try {
 		rename('../temp/upload/'.$info['filename'], ROOT_HVSC.'/'.$path.$info['newname']);
 
 		// Add a new general database row for the new SID file
-		$insert = $db->prepare('INSERT INTO hvsc_files(
+		$insert = $db->prepare('INSERT INTO files(
 				collection_path,
 				player,
 				lengths,
@@ -210,7 +210,7 @@ try {
 
 		// If this is the 'SID+FM' subfolder then update its file count as well
 		if (stripos($path, 'sid+fm'))
-			$update = $db->query('UPDATE hvsc_folders SET files = files + 1 WHERE collection_path = "_SID Happens/SID+FM" LIMIT 1');
+			$update = $db->query('UPDATE folders SET files = files + 1 WHERE collection_path = "_SID Happens/SID+FM" LIMIT 1');
 
 		// Acknowledge that the composer is now active (this will be reflected in the root page)
 		if ($composers_id)

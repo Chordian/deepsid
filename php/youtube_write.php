@@ -27,7 +27,7 @@ try {
 	$db = $account->getDB();
 
 	// First find the ID of the 'collection_path' text
-	$select = $db->prepare('SELECT id FROM hvsc_files WHERE collection_path = :collection_path LIMIT 1');
+	$select = $db->prepare('SELECT id FROM files WHERE collection_path = :collection_path LIMIT 1');
 	$select->execute(array(':collection_path' => $_POST['fullname']));
 	$select->setFetchMode(PDO::FETCH_OBJ);
 	$file_id = $select->fetch()->id;

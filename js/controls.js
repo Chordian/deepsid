@@ -146,8 +146,8 @@ Controls.prototype = {
 				if (SID.emulatorFlags.forcePlay) SID.play();
 				main.updateURL();
 				browser.chips = 1;
-				if (browser.playlist[browser.songPos].fullname.indexOf("_2SID") != -1) browser.chips = 2;
-				else if (browser.playlist[browser.songPos].fullname.indexOf("_3SID") != -1) browser.chips = 3;
+				if (browser.songs[browser.songPos].fullname.indexOf("_2SID") != -1) browser.chips = 2;
+				else if (browser.songs[browser.songPos].fullname.indexOf("_3SID") != -1) browser.chips = 3;
 				this.resetStereoPanning();
 				viz.initGraph(browser.chips);
 				viz.enableAllPianoVoices();
@@ -170,11 +170,11 @@ Controls.prototype = {
 			if (id == "skip-next") {
 				do {
 					browser.songPos++;
-					songRating = browser.playlist[browser.songPos].rating;
-					songLength = browser.getLength(browser.playlist[browser.songPos].startsubtune);
-					moreSubtunes = browser.playlist[browser.songPos].startsubtune < browser.playlist[browser.songPos].subtunes - 1;
+					songRating = browser.songs[browser.songPos].rating;
+					songLength = browser.getLength(browser.songs[browser.songPos].startsubtune);
+					moreSubtunes = browser.songs[browser.songPos].startsubtune < browser.songs[browser.songPos].subtunes - 1;
 
-					if (browser.songPos == browser.playlist.length - 1) {
+					if (browser.songPos == browser.songs.length - 1) {
 						// At the end of the list
 						$("#skip-next").addClass("disabled");
 						// Don't play the song in the bottom if a setting is supposed to skip it
@@ -217,12 +217,12 @@ Controls.prototype = {
 			if ($("#songs tr").eq(browser.songPos + browser.subFolders).hasClass("disabled")) return false;
 
 			// Override default sub tune to first if demanded by a setting
-			var subtune = main.getUserSetting("first-subtune") ? 0 : browser.playlist[browser.songPos].startsubtune;
+			var subtune = main.getUserSetting("first-subtune") ? 0 : browser.songs[browser.songPos].startsubtune;
 			// The default is too short, but what about the subsequent sub tunes in it?
 			if (isAutoProgress && main.getUserSetting("skip-short") && songLength < 10) {
 				while (browser.getLength(subtune) < 10) {
 					subtune++;
-					if (subtune >= browser.playlist[browser.songPos].subtunes - 1) {
+					if (subtune >= browser.songs[browser.songPos].subtunes - 1) {
 						// The rest of the sub tunes were all too short - NEXT!
 						$("#skip-next").removeClass("disabled").trigger("mouseup", false);
 						return false;
@@ -233,9 +233,9 @@ Controls.prototype = {
 			// Show loading spinner on the new row we're trying to skip to
 			browser.showSpinner($("#folders tr").eq(browser.subFolders + browser.songPos).find("td.sid"));
 
-			SID.load(subtune, browser.getLength(subtune), browser.playlist[browser.songPos].fullname, function(error) {
+			SID.load(subtune, browser.getLength(subtune), browser.songs[browser.songPos].fullname, function(error) {
 
-				main.trackingEvent("start:sid", browser.playlist[browser.songPos].id);
+				main.trackingEvent("start:sid", browser.songs[browser.songPos].id);
 
 				browser.clearSpinner();
 
@@ -249,7 +249,7 @@ Controls.prototype = {
 					}
 
 					// Only enable PREV or NEXT if not at list boundaries
-					if (browser.songPos != browser.playlist.length - 1)
+					if (browser.songPos != browser.songs.length - 1)
 						$("#skip-next").removeClass("disabled");
 					if (browser.songPos != 0)
 						$("#skip-prev").removeClass("disabled");
@@ -265,9 +265,9 @@ Controls.prototype = {
 					this.updateSundry();
 
 					browser.getCSDb();
-					if (typeof browser.playlist[browser.songPos].profile != "undefined")
-						if (browser.playlist[browser.songPos].profile != "") {
-							browser.getComposer(browser.playlist[browser.songPos].profile, true);
+					if (typeof browser.songs[browser.songPos].profile != "undefined")
+						if (browser.songs[browser.songPos].profile != "") {
+							browser.getComposer(browser.songs[browser.songPos].profile, true);
 						} else {
 							// If composers_id = 0 then do this
 							$("#topic-profile").empty().append('<i>No profile available.</i>');
@@ -276,16 +276,16 @@ Controls.prototype = {
 							browser.previousOverridePath = "_SID Happens";
 						}
 					else if (browser.isSearching || browser.path.substr(0, 2) === "/$" || browser.path.substr(0, 2) === "/!")
-						browser.getComposer(browser.playlist[browser.songPos].fullname);
+						browser.getComposer(browser.songs[browser.songPos].fullname);
 					browser.getGB64();
 					browser.getRemix();
-					browser.getPlayerInfo({player: browser.playlist[browser.songPos].player});
+					browser.getPlayerInfo({player: browser.songs[browser.songPos].player});
 					main.updateURL();
 				}
 
 				browser.chips = 1;
-				if (browser.playlist[browser.songPos].fullname.indexOf("_2SID") != -1) browser.chips = 2;
-				else if (browser.playlist[browser.songPos].fullname.indexOf("_3SID") != -1) browser.chips = 3;
+				if (browser.songs[browser.songPos].fullname.indexOf("_2SID") != -1) browser.chips = 2;
+				else if (browser.songs[browser.songPos].fullname.indexOf("_3SID") != -1) browser.chips = 3;
 				this.resetStereoPanning();
 				viz.initGraph(browser.chips);
 				viz.startBufferEndedEffects();
@@ -450,7 +450,7 @@ Controls.prototype = {
 					this.subtuneCurrent = event.target.innerHTML - 1;
 					$("#subtune-plus,#subtune-minus").removeClass("disabled").addClass("disabled");
 					$("#time-bar").empty().append('<div></div>');
-					SID.load(this.subtuneCurrent, browser.getLength(this.subtuneCurrent), browser.playlist[browser.songPos].fullname, function(){
+					SID.load(this.subtuneCurrent, browser.getLength(this.subtuneCurrent), browser.songs[browser.songPos].fullname, function(){
 						this.resetStereoPanning();
 						this.updateSubtuneText();
 						if (this.subtuneCurrent < this.subtuneMax && !SID.emulatorFlags.offline) $("#subtune-plus").removeClass("disabled");
@@ -592,8 +592,8 @@ Controls.prototype = {
 	 * CGSC: A colorful PETSCII box using a C64 font.
 	 */
 	updateInfo: function() {
-		var fullname = browser.playlist[browser.songPos].fullname,
-			profile = browser.playlist[browser.songPos].profile;
+		var fullname = browser.songs[browser.songPos].fullname,
+			profile = browser.songs[browser.songPos].profile;
 		var isCGSC = fullname.substr(-4) == ".mus";
 		var info = SID.getSongInfo(isCGSC ? "info" : false), // Always parse .mus files
 			unknown = '<small class="u1">?</small>?<small class="u2">?</small>';
@@ -665,8 +665,8 @@ Controls.prototype = {
 				info.songReleased.replace("<?>", unknown));
 		}
 		// Memory bar
-		var address = parseInt(browser.playlist[browser.songPos].address),
-			size = parseInt(browser.playlist[browser.songPos].size) - 3;
+		var address = parseInt(browser.songs[browser.songPos].address),
+			size = parseInt(browser.songs[browser.songPos].size) - 3;
 		var hexStart = address.toString(16).toUpperCase(),
 			hexEnd = (address + size).toString(16).toUpperCase();
 		$("#memory-chunk").css({
@@ -677,7 +677,7 @@ Controls.prototype = {
 		setTimeout(function() {
 			// SID model (values "unknown" and "MOS6581 / MOS858" (sic) will not be shown)
 			if (SID.emulatorFlags.forceModel)
-				browser.playlist[browser.songPos].sidmodel === "MOS6581" ? SID.setModel("6581") : SID.setModel("8580");
+				browser.songs[browser.songPos].sidmodel === "MOS6581" ? SID.setModel("6581") : SID.setModel("8580");
 			var sidModel = "MOS"+SID.getModel();
 			if (sidModel === "MOS6581" || sidModel === "MOS8580")
 				$("#info").append('<div id="sid-model" class="'+sidModel+'" title="Originally made for the '+sidModel+' SID chip model">'+sidModel.substr(3)+'</div>');
@@ -691,7 +691,7 @@ Controls.prototype = {
 			}
 		}, 150);
 		// Remember unique file ID in case the user clicks the star rating in the info box
-		this.currentFileID = browser.playlist[browser.songPos].id;
+		this.currentFileID = browser.songs[browser.songPos].id;
 		this.updateInfoRating();
 		// Collection version
 		if ($("#stopic-stil").css("display") != "none")
@@ -709,7 +709,7 @@ Controls.prototype = {
 	 */
 	convertC64Text: function() {
 
-		fetch(browser.playlist[browser.songPos].fullname)
+		fetch(browser.songs[browser.songPos].fullname)
 		.then(response => response.blob())
 		.then(function(blob) {
 			var reader = new FileReader();
@@ -830,10 +830,10 @@ Controls.prototype = {
 			.empty()
 			.removeClass("c64font");
 
-		var file = browser.playlist[browser.songPos].filename,
-			stil = browser.playlist[browser.songPos].stil,
-			isCGSC = browser.playlist[browser.songPos].fullname.substr(-4) == ".mus",
-			isSidHappens = browser.playlist[browser.songPos].fullname.indexOf("/"+PATH_UPLOADS) !== -1;
+		var file = browser.songs[browser.songPos].filename,
+			stil = browser.songs[browser.songPos].stil,
+			isCGSC = browser.songs[browser.songPos].fullname.substr(-4) == ".mus",
+			isSidHappens = browser.songs[browser.songPos].fullname.indexOf("/"+PATH_UPLOADS) !== -1;
 			//isRoot = $("#folder-root").hasClass("disabled");
 
 		var tabName = "STIL";
@@ -990,7 +990,7 @@ Controls.prototype = {
 		}
 
 		// Tab 'Tags'
-		this.updateSundryTags(browser.playlist[browser.songPos].tags);
+		this.updateSundryTags(browser.songs[browser.songPos].tags);
 	},
 
 	/**
@@ -1057,8 +1057,8 @@ Controls.prototype = {
 	updateSundryVersion: function() {
 		if (!main.isSongSelected()) return;
 		
-		var version = browser.playlist[browser.songPos].hvsc,
-			isCGSC = browser.playlist[browser.songPos].fullname.substr(-4) == ".mus",
+		var version = browser.songs[browser.songPos].hvsc,
+			isCGSC = browser.songs[browser.songPos].fullname.substr(-4) == ".mus",
 			$sundryCtrls = $("#sundry-ctrls");
 		$sundryCtrls.empty();
 		if (version >= 50 && SID.emulator != "youtube")
@@ -1075,10 +1075,10 @@ Controls.prototype = {
 	 * YouTube:  Video takes up all space - stars could be on top but this handler is rarely used anyway.
 	 */
 	updateInfoRating: function() {
-		var isCGSC = browser.playlist[browser.songPos].fullname.substr(-4) == ".mus";
+		var isCGSC = browser.songs[browser.songPos].fullname.substr(-4) == ".mus";
 		$("#info-rating").remove();
 		if (!isCGSC && SID.emulator != "youtube")
-			$("#info").append('<div id="info-rating">'+browser.buildStars(browser.playlist[browser.songPos].rating)+'</div>');
+			$("#info").append('<div id="info-rating">'+browser.buildStars(browser.songs[browser.songPos].rating)+'</div>');
 	},
 
 	/**

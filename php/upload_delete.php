@@ -26,14 +26,14 @@ try {
 	$db = $account->getDB();
 
 	// Get the ID for this SID tune
-	$select = $db->prepare('SELECT id FROM hvsc_files WHERE collection_path = :collection_path LIMIT 1');
+	$select = $db->prepare('SELECT id FROM files WHERE collection_path = :collection_path LIMIT 1');
 	$select->execute(array(':collection_path' => $collection_path));
 	$select->setFetchMode(PDO::FETCH_OBJ);
 
 	$file_id = $select->fetch()->id;
 
 	// First delete the file database entry
-	$delete = $db->query('DELETE FROM hvsc_files WHERE id = '.$file_id.' LIMIT 1');
+	$delete = $db->query('DELETE FROM files WHERE id = '.$file_id.' LIMIT 1');
 
 	// Then delete the special database row with the date
 	$delete = $db->query('DELETE FROM uploads WHERE files_id = '.$file_id.' LIMIT 1');

@@ -2,13 +2,13 @@
 /**
  * DeepSID
  *
- * Take all time length fields in 'hvsc_files', split them up into subtune
- * parts, then save them as individual rows in the 'hvsc_lengths' table.
+ * Take all time length fields in 'files', split them up into subtune parts,
+ * then save them as individual rows in the 'hvsc_lengths' table.
  * 
  * This table is used for displaying a top 20 list of the longest tunes. A
  * table for this is necessary as the SQL required to generate it directly
- * from the column in 'hvsc_files' is extremely complicated and may even
- * require access not granted by my web hotel.
+ * from the column in 'files' is extremely complicated and may even require
+ * access not granted by my web hotel.
  * 
  * The table should be emptied and this script run again after a HVSC update.
  * 
@@ -17,14 +17,14 @@
 
 require_once("class.account.php"); // Includes setup
 
-define('HVSC_ROOT', '_High Voltage SID Collection/');
+const HVSC_ROOT = '_High Voltage SID Collection/';
 
 try {
 	$db = $account->getDB();
 
 	// Get a list of all file rows in HVSC only
 	// NOTE: Tunes in CGSC currently don't have exact lengths tracked and thus are skipped.
-	$select = $db->query('SELECT id, collection_path, lengths FROM hvsc_files WHERE collection_path LIKE "_High Voltage SID Collection/%" ORDER BY id');
+	$select = $db->query('SELECT id, collection_path, lengths FROM files WHERE collection_path LIKE "_High Voltage SID Collection/%" ORDER BY id');
 	$select->setFetchMode(PDO::FETCH_OBJ);
 
 	// NOTE: Temporarily increase 'max_execution_time' to 800 in PHP.INI when done in LOCALHOST.

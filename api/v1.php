@@ -63,7 +63,7 @@ try {
 
 			/***** SINGLE FILE *****/
 
-			$select = $db->prepare('SELECT * FROM hvsc_files WHERE collection_path = :collection_path LIMIT 1');
+			$select = $db->prepare('SELECT * FROM files WHERE collection_path = :collection_path LIMIT 1');
 			$select->execute(array(':collection_path' => $collection_path));	
 			$select->setFetchMode(PDO::FETCH_OBJ);
 			$row = $select->fetch();
@@ -103,7 +103,7 @@ try {
 
 			$folder = $collection_path;
 
-			$select_folder = $db->prepare('SELECT * FROM hvsc_folders WHERE collection_path = :collection_path LIMIT 1');
+			$select_folder = $db->prepare('SELECT * FROM folders WHERE collection_path = :collection_path LIMIT 1');
 			$select_folder->execute(array(':collection_path' => $folder));	
 			$select_folder->setFetchMode(PDO::FETCH_OBJ);
 			$row_folder = $select_folder->fetch();
@@ -149,7 +149,7 @@ try {
 
 				foreach($files as $i => $sid) {
 
-					$select = $db->prepare('SELECT * FROM hvsc_files WHERE collection_path = :collection_path LIMIT 1');
+					$select = $db->prepare('SELECT * FROM files WHERE collection_path = :collection_path LIMIT 1');
 					$select->execute(array(':collection_path' => $folder.'/'.$sid));	
 					$select->setFetchMode(PDO::FETCH_OBJ);
 					$row = $select->fetch();
@@ -206,7 +206,7 @@ try {
 
 			$collection_path = $prefix.$folder;
 
-			$select_folder = $db->prepare('SELECT * FROM hvsc_folders WHERE collection_path = :collection_path LIMIT 1');
+			$select_folder = $db->prepare('SELECT * FROM folders WHERE collection_path = :collection_path LIMIT 1');
 			$select_folder->execute(array(':collection_path' => $collection_path));
 			$select_folder->setFetchMode(PDO::FETCH_OBJ);
 			$row_folder = $select_folder->fetch();
@@ -223,7 +223,7 @@ try {
 				$response['flags'] 			= $row_folder->flags;
 
 				// Get all subfolders too (if any)
-				$select_subfolder = $db->prepare('SELECT * FROM hvsc_folders WHERE collection_path LIKE :collection_path');
+				$select_subfolder = $db->prepare('SELECT * FROM folders WHERE collection_path LIKE :collection_path');
 				$select_subfolder->execute(array(':collection_path' => '%'.$collection_path.'/%'));
 				$select_subfolder->setFetchMode(PDO::FETCH_OBJ);
 

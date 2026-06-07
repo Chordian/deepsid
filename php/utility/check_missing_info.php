@@ -116,12 +116,12 @@ try {
 
 			if (strtolower($file->getExtension()) !== $ext) continue;
 
-			// Build collection path used in hvsc_files table
+			// Build collection path used in 'files' table
 			$relative_path = $collection . '/' . substr($file->getPathname(), strlen($folder_path) + 1);
 			$relative_path = str_replace('\\', '/', $relative_path);
 
 			// Query DB for the file
-			$select = $db->prepare('SELECT * FROM hvsc_files WHERE collection_path = :collection_path LIMIT 1');
+			$select = $db->prepare('SELECT * FROM files WHERE collection_path = :collection_path LIMIT 1');
 			$select->execute([':collection_path' => $relative_path]);
 			$row = $select->fetch(PDO::FETCH_ASSOC);
 

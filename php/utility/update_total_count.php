@@ -15,7 +15,7 @@
 
 require_once("class.account.php"); // Includes setup
 
-define('MUSICIANS', '_High Voltage SID Collection/MUSICIANS/');
+const MUSICIANS = '_High Voltage SID Collection/MUSICIANS/';
 
 try {
 	$db = $account->getDB();
@@ -24,7 +24,7 @@ try {
 
 	foreach($letters as $letter) {
 		// Get a list of all composer folders in this letter folder
-		$select = $db->query('SELECT collection_path FROM hvsc_folders WHERE collection_path LIKE "'.MUSICIANS.$letter.'/%"');
+		$select = $db->query('SELECT collection_path FROM folders WHERE collection_path LIKE "'.MUSICIANS.$letter.'/%"');
 		$select->setFetchMode(PDO::FETCH_OBJ);
 
 		$collection_paths = [];
@@ -37,7 +37,7 @@ try {
 			// Any sub folder(s)?
 			if (substr_count($collection_path, '/') > 3) {
 				// Get count of this sub folder (it could have been updated in an earlier iteration)
-				$select_this = $db->query('SELECT files FROM hvsc_folders WHERE collection_path = "'.$collection_path.'"');
+				$select_this = $db->query('SELECT files FROM folders WHERE collection_path = "'.$collection_path.'"');
 				$select_this->setFetchMode(PDO::FETCH_OBJ);
 				$this_count = $select_this->fetch()->files;
 
@@ -45,7 +45,7 @@ try {
 				$parent = substr($collection_path, 0, strrpos($collection_path, '/'));
 
 				// Get current count of files in parent
-				$select_parent = $db->query('SELECT files FROM hvsc_folders WHERE collection_path = "'.$parent.'"');
+				$select_parent = $db->query('SELECT files FROM folders WHERE collection_path = "'.$parent.'"');
 				$select_parent->setFetchMode(PDO::FETCH_OBJ);
 				$parent_count = $select_parent->fetch()->files;
 
@@ -56,7 +56,7 @@ try {
 				echo 'New parent count: '.$parent_count.' + '.$this_count.' = '.$new_parent_count.'<br /><br />';
 
 				// Now store the new parent count
-				// $db->query('UPDATE hvsc_folders SET files = '.$new_parent_count.' WHERE collection_path = "'.$parent.'" LIMIT 1');
+				// $db->query('UPDATE folders SET files = '.$new_parent_count.' WHERE collection_path = "'.$parent.'" LIMIT 1');
 			}
 		}
 	}

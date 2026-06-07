@@ -63,7 +63,7 @@ try {
 			echo '<tr><td>'.$filename.'</td><td>'.$title.'</td><td>'.$author.'</td><td>'.$copyright.'</td>';
 
 			// The 'filename' and 'author' fields should be enough in most cases
-			$select = $db->query('SELECT id FROM hvsc_files WHERE collection_path LIKE "_High Voltage SID Collection%" AND collection_path LIKE "%'.$filename.'" AND author = "'.$author.'"');
+			$select = $db->query('SELECT id FROM files WHERE collection_path LIKE "_High Voltage SID Collection%" AND collection_path LIKE "%'.$filename.'" AND author = "'.$author.'"');
 			$select->setFetchMode(PDO::FETCH_OBJ);
 			$rows_found = $select->rowCount();
 
@@ -71,21 +71,21 @@ try {
 				echo '<td style="color:#0a0;">Found one row';
 			else if (!$rows_found) {
 				// Filename could have changed, try 'title' and 'author' instead
-				$select = $db->query('SELECT id FROM hvsc_files WHERE name = "'.$title.'" AND author = "'.$author.'"');
+				$select = $db->query('SELECT id FROM files WHERE name = "'.$title.'" AND author = "'.$author.'"');
 				$select->setFetchMode(PDO::FETCH_OBJ);
 				$rows_found = $select->rowCount();
 				if ($rows_found == 1)
 					echo '<td style="color:#00a;">Found using name';
 				else if (!$rows_found) {
 					// Entire title could have changed, try 'author' and 'copyright' instead (risky)
-					$select = $db->query('SELECT id FROM hvsc_files WHERE author = "'.$author.'" AND copyright = "'.$copyright.'"');
+					$select = $db->query('SELECT id FROM files WHERE author = "'.$author.'" AND copyright = "'.$copyright.'"');
 					$select->setFetchMode(PDO::FETCH_OBJ);
 					$rows_found = $select->rowCount();
 					if ($rows_found == 1)
 						echo '<td style="color:#00a;">Found using author (DOUBLE-CHECK)';
 					else if (!$rows_found) {
 						// Author could have changed, try 'filename' and 'copyright' instead
-						$select = $db->query('SELECT id FROM hvsc_files WHERE collection_path LIKE "_High Voltage SID Collection%" AND collection_path LIKE "%'.$filename.'" AND copyright = "'.$copyright.'"');
+						$select = $db->query('SELECT id FROM files WHERE collection_path LIKE "_High Voltage SID Collection%" AND collection_path LIKE "%'.$filename.'" AND copyright = "'.$copyright.'"');
 						$select->setFetchMode(PDO::FETCH_OBJ);
 						$rows_found = $select->rowCount();
 						if ($rows_found == 1)
@@ -101,7 +101,7 @@ try {
 					echo '<td style="color:#a00;"><b>Found too many!</b>';
 			} else {
 				// Too many; add 'copyright' as a third option too
-				$select = $db->query('SELECT id FROM hvsc_files WHERE collection_path LIKE "_High Voltage SID Collection%" AND collection_path LIKE "%'.$filename.'" AND author = "'.$author.'" AND copyright = "'.$copyright.'"');
+				$select = $db->query('SELECT id FROM files WHERE collection_path LIKE "_High Voltage SID Collection%" AND collection_path LIKE "%'.$filename.'" AND author = "'.$author.'" AND copyright = "'.$copyright.'"');
 				$select->setFetchMode(PDO::FETCH_OBJ);
 				$rows_found = $select->rowCount();
 				if ($rows_found == 1)
@@ -110,7 +110,7 @@ try {
 					echo '<td style="color:#a00;"><b>Found nothing!</b>';
 				else {
 					// Still too many; add 'title' too then
-					$select = $db->query('SELECT id FROM hvsc_files WHERE collection_path LIKE "_High Voltage SID Collection%" AND collection_path LIKE "%'.$filename.'" AND name = "'.$title.'" AND author = "'.$author.'" AND copyright = "'.$copyright.'"');
+					$select = $db->query('SELECT id FROM files WHERE collection_path LIKE "_High Voltage SID Collection%" AND collection_path LIKE "%'.$filename.'" AND name = "'.$title.'" AND author = "'.$author.'" AND copyright = "'.$copyright.'"');
 					$select->setFetchMode(PDO::FETCH_OBJ);
 					$rows_found = $select->rowCount();
 					if ($rows_found == 1)
@@ -148,7 +148,7 @@ try {
 		$select = $db->query('SELECT COUNT(1) as c FROM symlists WHERE folder_id = '.SYMFOLDER);
 		$select->setFetchMode(PDO::FETCH_OBJ);
 
-		$update = $db->query('UPDATE hvsc_folders SET files = '.$select->fetch()->c.' WHERE id = '.SYMFOLDER);
+		$update = $db->query('UPDATE folders SET files = '.$select->fetch()->c.' WHERE id = '.SYMFOLDER);
 		if ($update->rowCount() == 0)
 			die(json_encode(array('status' => 'error', 'message' => 'Could not update the count of files for symlist folder ID '.SYMFOLDER)));
 

@@ -54,7 +54,7 @@ try {
 			echo '<tr><td>'.$collection_path.'</td><td>'.$subtune.'</td><td>'.$subst_name.'</td>';
 
 			// Find HVSC file
-			$select = $db->query('SELECT id FROM hvsc_files WHERE collection_path ="'.$collection_path.'" LIMIT 1');
+			$select = $db->query('SELECT id FROM files WHERE collection_path ="'.$collection_path.'" LIMIT 1');
 			$select->setFetchMode(PDO::FETCH_OBJ);
 			if (!$select->rowCount())
 				echo '<td style="color:#a00;"><b>HVSC path not found!</b>';
@@ -81,7 +81,7 @@ try {
 		$select = $db->query('SELECT COUNT(1) as c FROM symlists WHERE folder_id = '.SYMFOLDER);
 		$select->setFetchMode(PDO::FETCH_OBJ);
 
-		$update = $db->query('UPDATE hvsc_folders SET files = '.$select->fetch()->c.' WHERE id = '.SYMFOLDER);
+		$update = $db->query('UPDATE folders SET files = '.$select->fetch()->c.' WHERE id = '.SYMFOLDER);
 		if ($update->rowCount() == 0)
 			die('<br /><br />Could not update the count of files for symlist folder ID '.SYMFOLDER);
 

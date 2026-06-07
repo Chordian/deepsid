@@ -13,10 +13,10 @@
  * @used-by		upload_new.php
  */
 
-define('T_END',	-1);
-define('T_ANY',	-2);
-define('T_AND',	-3);
-define('T_NAME',-4);
+const T_END		= -1;
+const T_ANY		= -2;
+const T_AND		= -3;
+const T_NAME	= -4;
 
 /**
  * Try to identify the player used by this SID file.

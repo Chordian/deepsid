@@ -63,7 +63,7 @@ try {
 	$sid['name'] = substr($sid['name'], 0, -4).'.sid';
 
 	// Make sure a file of the same name doesn't already exist in the database
-	$exists = $db->query('SELECT 1 FROM hvsc_files WHERE collection_path LIKE "'.$path.$sid['name'].'" LIMIT 1');
+	$exists = $db->query('SELECT 1 FROM files WHERE collection_path LIKE "'.$path.$sid['name'].'" LIMIT 1');
 	if ($exists->rowCount())
 		die(json_encode(array('status' => 'error', 'message' => 'There is already a SID file of that name here. Duplicate names are not allowed. Try renaming it first.')));
 

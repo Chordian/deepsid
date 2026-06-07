@@ -20,7 +20,7 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH
 try {
 	$db = $account->getDB();
 
-	$select = $db->prepare('SELECT id, collection_path FROM hvsc_folders WHERE collection_path LIKE :folder');
+	$select = $db->prepare('SELECT id, collection_path FROM folders WHERE collection_path LIKE :folder');
 	$select->execute(array(':folder'=>ltrim($_GET['folder'], '/').'/%'));
 	$select->setFetchMode(PDO::FETCH_OBJ);
 

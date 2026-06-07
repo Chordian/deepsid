@@ -24,7 +24,7 @@ try {
 	$db = $account->getDB();
 	
 	// Get all general file info
-	$select = $db->prepare('SELECT * FROM hvsc_files WHERE collection_path = :collection_path LIMIT 1');
+	$select = $db->prepare('SELECT * FROM files WHERE collection_path = :collection_path LIMIT 1');
 	$select->execute(array(':collection_path' => $_GET['fullname']));
 	$select->setFetchMode(PDO::FETCH_OBJ);
 

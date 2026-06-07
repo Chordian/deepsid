@@ -38,7 +38,7 @@ Go down to the "MOVE OR RENAME TUNES" section in the update text file.
 
 For "REN" files with ".mus" extensions:
 
-  1. Copy the "before" filename (including ".mus" extension) and in the "hvsc_files" table in each
+  1. Copy the "before" filename (including ".mus" extension) and in the "files" table in each
      database tab, search "fullname" for %[filename]. You should get *ONE* hit in each tab. If you have
      to include a folder because the filename is too generic, change "\" to "/" when pasting.
   2. Edit the "fullname" field in the database row and replace the filename with the "after" filename.
@@ -47,14 +47,14 @@ For "REN" files with ".mus" extensions:
 
 For "REN" folders:
 
-  1. Copy the "before" part (including prepended folders) and in the "hvsc_files" table in each database
+  1. Copy the "before" part (including prepended folders) and in the "files" table in each database
      tab, change "LIKE" for "fullname" to "LIKE %...%" then paste the "before" part. Change the "\" to
      "/" instead. Search. You will probably get multiple hits - hopefully it's not a lot.
   2. Copy the "after" part (usually just the last folder) and edit the "filename" field for each database
      row. Change the destination folder in these to the new one. (Be careful not to mangle the filenames.)
   3. Edit the "updated" field and add the latest ### version number in it.
   4. Repeat steps 1-3 for additional folders.
-  5. Go to "hvsc_folders" in both database tabs.
+  5. Go to "folders" in both database tabs.
   6. Search for the "before" version of the folder. Again, you should get *ONE* hit, or you may
      have to include the parent folder and then change "\" to "/" when pasting.
   7. Edit the "fullname" field and change the last folder to the new "after" version.
@@ -72,7 +72,7 @@ For "MOVE" files with ".mus" extensions:
   IF ANY OF THE MOVE LINES CONTAIN SUB-FOLDERS IN THE "MISC" FOLDER, IT'S POSSIBLE THAT THE "MISC" FOLDER
   ITSELF IS MISSING IN FRONT. MAKE SURE THIS IS ADDED, BOTH TO SOURCE AND DESTINATION.
 
-  1. Copy the "before" filename (including ".mus" extension) and in the "hvsc_files" table in each
+  1. Copy the "before" filename (including ".mus" extension) and in the "files" table in each
      database tab, search "fullname" for %[filename]. You should get *ONE* hit in each tab. If you have
      to include a folder because the filename is too generic, change "\" to "/" when pasting.
   2. Copy the "after" FOLDER (!) and edit the "filename" field for each database row. Change the
@@ -80,7 +80,7 @@ For "MOVE" files with ".mus" extensions:
   3. Edit the "updated" field and add the latest ### version number in it.
   4. Repeat steps 1-3 for additional move lines.
 
-Check that the destination folders the files were moved to exists in the "hvsc_folders" table. You can
+Check that the destination folders the files were moved to exists in the "folders" table. You can
 copy an existing one and rename it if necessary (remember to also specify the correct count of files as
 well as the new version number).
 
@@ -97,7 +97,7 @@ Go down to the "DELETE" section in the update text file.
 
   1. If the line is not about a ".mus" file, you can ignore it. The ".wds" and ".str" files are not stored
      in the database at all. But if it does, continue to the next step:
-  2. Copy the "before" filename (including ".mus" extension) and in the "hvsc_files" table in each
+  2. Copy the "before" filename (including ".mus" extension) and in the "files" table in each
      database tab, search "fullname" for %[filename]. You should get *ONE* hit in each tab. If you have
      to include a folder because the filename is too generic, change "\" to "/" when pasting.
   3. Delete that database row in each of the database tabs. (If the row is not deleted in the database, you
@@ -122,13 +122,13 @@ ADDING NEW FILES
 
 Don't close "Whats_new_in_v###.txt" in Notepad++ just yet.
 
-  1. In the LOCAL database tab, enter the "hvsc_files" table in phpMyAdmin and click "Import".
+  1. In the LOCAL database tab, enter the "files" table in phpMyAdmin and click "Import".
   2. Click "Browse" and click the Notepad++ file.
   3. Change "Format" to "CSV".
   4. Write "fullname,new" in the "Column names" edit box.
   5. Click "Go".
 
-Search for the version number in the "new" field in the "hvsc_files" table to see if the new files were
+Search for the version number in the "new" field in the "files" table to see if the new files were
 added properly. If they were then do the same thing for the ONLINE database tab.
 
 ADDING NEW FOLDERS
@@ -137,7 +137,7 @@ Folders created for moving should already have been taken care of in the MOVE se
 
   1. Bring the "Whats_new_in_v###.txt" in Notepad into focus again.
   2. Look at the list of new files (those you copied to Notepad++) and try searching for each end folder in
-     the "hvsc_folders" table. Use the "LIKE %...%" option while searching.
+     the "folders" table. Use the "LIKE %...%" option while searching.
   3. If the folder exists, enter it in DeepSID and update the file count in the table if it's incorrect.
      (If there are a ton of files you may have to do a "dir *.mus" in a command box for the folder.)
   4. If the folder doesn't exist, insert:

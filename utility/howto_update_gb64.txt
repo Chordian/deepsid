@@ -109,12 +109,12 @@ Importing:
 Do the following for the local version only. A step will mention when it's time to do
 something for the online version.
 
-  1. Enter the "hvsc_files" table and click "Operations".
+  1. Enter the "files" table and click "Operations".
   2. In "Copy table to (database.table):" select "Structure only"
-  3. Enter "hvsc_files_import" as the destination name.
+  3. Enter "files_import" as the destination name.
   4. Click "Go" to create it.
 
-  1. Enter the new "hvsc_files_import" table and click "Import".
+  1. Enter the new "files_import" table and click "Import".
   2. Click "Browse" and click the "gbdest.csv" file.
   3. Change "Format" to "CSV".
   4. Change "Columns separated with" to ";".
@@ -123,19 +123,19 @@ something for the online version.
      error" check box too.
   7. Click "Go".
 
-  1. Enter the "hvsc_files" table and click "SQL" (empty the box).
+  1. Enter the "files" table and click "SQL" (empty the box).
   2. Run the following:
 
-       UPDATE hvsc_files
-       INNER JOIN hvsc_files_import on hvsc_files_import.fullname = hvsc_files.fullname
-       SET hvsc_files.application = hvsc_files_import.application,
-           hvsc_files.gb64 = hvsc_files_import.gb64
+       UPDATE files
+       INNER JOIN files_import on files_import.fullname = files.fullname
+       SET files.application = files_import.application,
+           files.gb64 = files_import.gb64
 
-  3. Export the "hvsc_files_import" table to an SQL file for the online version. Here,
-     you create the "hvsc_files_import" table as usual and import the SQL file instead
+  3. Export the "files_import" table to an SQL file for the online version. Here,
+     you create the "files_import" table as usual and import the SQL file instead
      of the CSV file. The reason for this is that the newer phpMyAdmin online may
      complain about invalid column counts when importing the CSV file.
-  4. Enter the "hvsc_files_import" table and click "Operations".
+  4. Enter the "files_import" table and click "Operations".
   5. Drop the table.
 
 Finalizing:

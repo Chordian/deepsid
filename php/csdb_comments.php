@@ -158,7 +158,7 @@ function commentsTable($title, $comments, &$scener_handle, &$scener_id, $backwar
 			$handle = $scener_handle[(string)$user_id];
 
 		// If the scener ID is in the 'composers' database table then get his/her HVSC home folder
-		$hvsc_folder = '';
+		$collection_folder = '';
 		if ($scid) {
 			try {
 				$db = $account->getDB();
@@ -168,14 +168,14 @@ function commentsTable($title, $comments, &$scener_handle, &$scener_id, $backwar
 				$select->setFetchMode(PDO::FETCH_OBJ);
 		
 				if ($select->rowCount())
-					$hvsc_folder = $select->fetch()->collection_path;
+					$collection_folder = $select->fetch()->collection_path;
 
 			} catch(PDOException $e) {
 				// Just forget it then...
 			}
 		}
 
-		$thumbnail = getAvatar($scid, $handle, $hvsc_folder);
+		$thumbnail = getAvatar($scid, $handle, $collection_folder);
 		$color = getUserColor($handle);
 
 		array_push($comments_array, '<tr>'.
@@ -185,13 +185,13 @@ function commentsTable($title, $comments, &$scener_handle, &$scener_id, $backwar
 					: '<b>'.(!empty($handle) ? $handle : '[ID:'.$comment->CSDbUser->ID.']').'</b>'
 				).
 				'<br /><span class="date">'.$fixed_date.'</span><br />'.
-				(!empty($hvsc_folder)
-					? '<a href="'.HOST.'?file=/'.$hvsc_folder.'"><img class="avatar" src="'.$thumbnail.'" alt="" /></a>'
+				(!empty($collection_folder)
+					? '<a href="'.HOST.'?file=/'.$collection_folder.'"><img class="avatar" src="'.$thumbnail.'" alt="" /></a>'
 					: (!empty($thumbnail) ? '<img class="avatar" src="'.$thumbnail.'" title="Not a composer" alt="" style="cursor:not-allowed;" />' : '')
 				).
 				'<span class="count pm"><a href="https://csdb.dk/privatemessages/sendmessage.php?userid='.$comment->CSDbUser->ID.'&selectdone.x=1" target="_blank">PM</a></span>'.
-				// (!empty($hvsc_folder) ? '<img class="home-folder" src="images/if_folder.svg" alt="" />' : '').
-				(!empty($hvsc_folder) ? '<span class="count home-folder" title="Show DeepSID folder" data-home="'.$hvsc_folder.'"><img style="width:14px;" src="images/if_folder.svg" alt="" /></span>' : '').
+				// (!empty($collection_folder) ? '<img class="home-folder" src="images/if_folder.svg" alt="" />' : '').
+				(!empty($collection_folder) ? '<span class="count home-folder" title="Show DeepSID folder" data-home="'.$collection_folder.'"><img style="width:14px;" src="images/if_folder.svg" alt="" /></span>' : '').
 			'</td>'.
 			'<td class="comment">'.
 				nl2br($fixed_comment).

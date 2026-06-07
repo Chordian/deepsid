@@ -57,7 +57,7 @@ function generateList($rows, $type) {
 				$entry = "Composer";
 				$value = 'Count';
 
-				$select = $db->query('SELECT collection_path, files FROM hvsc_folders WHERE type = "SINGLE" AND collection_path NOT LIKE "%Worktunes" AND collection_path NOT LIKE "%/GROUPS/%" ORDER BY files DESC LIMIT '.$rows);
+				$select = $db->query('SELECT collection_path, files FROM folders WHERE type = "SINGLE" AND collection_path NOT LIKE "%Worktunes" AND collection_path NOT LIKE "%/GROUPS/%" ORDER BY files DESC LIMIT '.$rows);
 				$select->setFetchMode(PDO::FETCH_OBJ);
 				if ($select->rowCount()) {
 					foreach($select as $row) {
@@ -100,12 +100,12 @@ function generateList($rows, $type) {
 					SELECT
 						collection_path,
 						COUNT(1) AS c
-					FROM hvsc_files
+					FROM files
 					WHERE EXISTS (
 						SELECT 1
 						FROM tags_lookup tl
 						JOIN tags_info ti ON ti.id = tl.tags_id
-						WHERE tl.files_id = hvsc_files.id
+						WHERE tl.files_id = files.id
 							AND ti.name = "GameBase64"
 					)
 					GROUP BY SUBSTRING_INDEX(collection_path, "/", 4)
@@ -160,7 +160,7 @@ function generateList($rows, $type) {
 				$entry = "Start address";
 				$value = 'Count';
 
-				$select = $db->query('SELECT load_addr, count(1) AS c FROM hvsc_files WHERE load_addr != 0 '.
+				$select = $db->query('SELECT load_addr, count(1) AS c FROM files WHERE load_addr != 0 '.
 					'GROUP BY load_addr ORDER BY c DESC LIMIT '.$rows);
 				$select->setFetchMode(PDO::FETCH_OBJ);
 				if ($select->rowCount()) {

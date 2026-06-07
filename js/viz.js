@@ -816,7 +816,7 @@ Viz.prototype = {
 				var freq = SID.readRegister(0xD400 + voice * 7, chip) + SID.readRegister(0xD401 + voice * 7, chip) * 256,
 					closest = null, indexMatch = 0, clockspeed;
 				try {
-					clockspeed = browser.playlist[browser.songPos].clockspeed;
+					clockspeed = browser.songs[browser.songPos].clockspeed;
 					this.prevClockspeed = clockspeed;
 				} catch(e) {
 					clockspeed = this.prevClockspeed; // Type error usually happens when leaving a folder while playing
@@ -1513,7 +1513,7 @@ Viz.prototype = {
 	 * @param {boolean} activate	TRUE to activate, FALSE to turn off
 	 */
 	activateMemory: function(activate) {
-		if (browser.playlist.length == 0 || main.miniPlayer || $("body").attr("data-mobile") !== "0") return;
+		if (browser.songs.length == 0 || main.miniPlayer || $("body").attr("data-mobile") !== "0") return;
 
 		if (activate && typeof browser.songPos != "undefined") {
 
@@ -1522,10 +1522,10 @@ Viz.prototype = {
 
 			this.blockZP = [], this.blockPlayer = [];
 				
-			this.playerAddrStart = this.playerAddrCurrent = Number(browser.playlist[browser.songPos].address);
-			this.playerAddrEnd = this.playerAddrStart + Number(browser.playlist[browser.songPos].size) - 3;
+			this.playerAddrStart = this.playerAddrCurrent = Number(browser.songs[browser.songPos].address);
+			this.playerAddrEnd = this.playerAddrStart + Number(browser.songs[browser.songPos].size) - 3;
 
-			if (browser.playlist[browser.songPos].fullname.substr(-4) == ".mus") {
+			if (browser.songs[browser.songPos].fullname.substr(-4) == ".mus") {
 				// MUS files in CGSC doesn't have an interesting player block to look at
 				$zp.empty().append(this.showMemoryBlock(0x0000, 0x00FF, this.blockZP));
 				$player.empty().append('<div class="msg">N/A</div>');
@@ -1575,18 +1575,18 @@ Viz.prototype = {
 	 * Show details about the SID file just above the ZP and player table blocks.
 	 */
 	showSIDInfo: function() {
-		if (typeof browser.songPos != "undefined" && browser.playlist.length > 0 && browser.playlist[browser.songPos].fullname.substr(-4) != ".mus") {
+		if (typeof browser.songPos != "undefined" && browser.songs.length > 0 && browser.songs[browser.songPos].fullname.substr(-4) != ".mus") {
 
-			var size = browser.playlist[browser.songPos].size - 3,
-				load = browser.playlist[browser.songPos].address,
-				init = browser.playlist[browser.songPos].init,
-				play = browser.playlist[browser.songPos].play;
-				sub  = browser.playlist[browser.songPos].startsubtune + 1;
-				max  = browser.playlist[browser.songPos].subtunes;
-				type = browser.playlist[browser.songPos].type,
-				vers = browser.playlist[browser.songPos].version,
-				enc  = browser.playlist[browser.songPos].clockspeed,
-				chip = browser.playlist[browser.songPos].sidmodel;
+			var size = browser.songs[browser.songPos].size - 3,
+				load = browser.songs[browser.songPos].address,
+				init = browser.songs[browser.songPos].init,
+				play = browser.songs[browser.songPos].play;
+				sub  = browser.songs[browser.songPos].startsubtune + 1;
+				max  = browser.songs[browser.songPos].subtunes;
+				type = browser.songs[browser.songPos].type,
+				vers = browser.songs[browser.songPos].version,
+				enc  = browser.songs[browser.songPos].clockspeed,
+				chip = browser.songs[browser.songPos].sidmodel;
 
 			$("#visuals-memory .si-size").empty().append("$"+this.paddedAddress(size)+" ("+size+" bytes)");
 			$("#visuals-memory .si-load").empty().append("$"+this.paddedAddress(load)+" ("+load+")");
@@ -1652,7 +1652,7 @@ Viz.prototype = {
 										// Get the clockspeed
 										var closest = null, indexMatch = 0, clockspeed;
 										try {
-											clockspeed = browser.playlist[browser.songPos].clockspeed;
+											clockspeed = browser.songs[browser.songPos].clockspeed;
 											this.prevClockspeedStats = clockspeed;
 										} catch(e) {
 											// Type error usually happens when leaving a folder while playing

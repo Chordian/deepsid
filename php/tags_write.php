@@ -85,7 +85,7 @@ try {
 	$db = $account->getDB();
 
 	// Get full name of this file ID
-	$select = $db->prepare('SELECT collection_path FROM hvsc_files WHERE id = :id');
+	$select = $db->prepare('SELECT collection_path FROM files WHERE id = :id');
 	$select->execute(array(':id'=>$_POST['fileID']));
 	$select->setFetchMode(PDO::FETCH_OBJ);
 	$collection_path = $select->fetch()->collection_path;

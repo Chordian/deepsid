@@ -9,8 +9,8 @@
 
 require_once("class.account.php"); // Includes setup
 
-define('USER_SOURCE', 		2);		// JCH
-define('USER_DESTINATION',	3);		// Dummy
+const USER_SOURCE		= 2;	// JCH
+const USER_DESTINATION	= 3;	// Dummy
 
 try {
 	$db = $account->getDB();

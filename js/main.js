@@ -502,6 +502,23 @@ var main = {
 	},
 
 	/**
+	 * Refresh the three recommendation boxes on the front page.
+	 */
+	refreshRecBoxes: function() {
+		if (browser.path == "") {
+			$.get("php/root.php", { recOnly: true }, (data) => {
+				browser.validateData(data, function(data) {
+					if (parseInt(colorTheme)) data.html = data.html.replace(/composer\.png/g, "composer_dark.png");
+					$("#three-rec").empty().append(data.html);
+
+					// Enable the brand image in recommendation boxes for the correct color theme
+					$(".brand-rec-"+(parseInt(colorTheme) ? "dark" : "light")).show();
+				});
+			});
+		}
+	},
+
+	/**
 	 * Show a CSDb release page after caching the list.
 	 */
 	showCSDbRelease: function(id) {
@@ -556,11 +573,11 @@ var main = {
 	 *				player.js
 	 */
 	updateRedirectPlayIcons: function() {
-		if (browser.playlist.length == 0) return;
+		if (browser.songs.length == 0) return;
 		// Set "active" icon on all plinks that has the same tune (HVSC only)
 		$("a.redirect").each(function() {
 			var $this = $(this);
-			if ($this.html() == browser.playlist[browser.songPos].fullname.replace(browser.ROOT_HVSC+
+			if ($this.html() == browser.songs[browser.songPos].fullname.replace(browser.ROOT_HVSC+
 				"/_High Voltage SID Collection", "")) {
 					$this.removeClass("playing").addClass("playing");
 			}
@@ -568,12 +585,12 @@ var main = {
 	},
 
 	/**
-	 * Check if a song is selected thus it is safe to read from the playlist array.
+	 * Check if a song is selected thus it is safe to read from the 'songs' array.
 	 * 
 	 * @returns {boolean}			TRUE if array and song position are set
 	 */
 	isSongSelected: function() {
-		return Boolean(browser.playlist && browser.playlist[browser.songPos]);
+		return Boolean(browser.songs && browser.songs[browser.songPos]);
 	},
 
 	/**
@@ -1046,9 +1063,9 @@ var main = {
 		}
 		if (typeof skipFileCheck === "undefined" || !skipFileCheck) {
 			try {
-				urlFile = browser.playlist[browser.songPos].substname !== "" && !browser.isCompoFolder
-					? urlFile += browser.playlist[browser.songPos].substname
-					: urlFile += browser.playlist[browser.songPos].filename.replace(/^\_/, '');
+				urlFile = browser.songs[browser.songPos].substname !== "" && !browser.isCompoFolder
+					? urlFile += browser.songs[browser.songPos].substname
+					: urlFile += browser.songs[browser.songPos].filename.replace(/^\_/, '');
 			} catch(e) { /* Type error means no SID file clicked */ }
 		}
 
@@ -1267,7 +1284,7 @@ main.bindEvents = function() {
 			sidFile.append(i, file);
 		});
 		browser.folders = browser.extra = browser.symlists = "";
-		browser.playlist = [];
+		browser.songs = [];
 		browser.subFolders = 0;
 
 		$("#dropdown-sort").empty().append(
@@ -1326,7 +1343,7 @@ main.bindEvents = function() {
 								'<td></td>'+
 							'</tr>';
 
-						browser.playlist.push({
+						browser.songs.push({
 							filename:		file.filename,
 							substname:		"",
 							fullname:		"temp/test/" + file.filename,
@@ -1476,6 +1493,7 @@ main.bindEvents = function() {
 			<div class="line main-line" data-action="main-next-inline-factoid">Next inline factoid<span>i</span></div>
 			<div class="line main-line" data-action="main-next-detail-factoid">Next detail factoid<span>u</span></div>
 			<div class="line main-line" data-action="main-refresh-folder">Refresh folder<span>f</span></div>
+			<div class="line main-line" data-action="main-refresh-rec">Refresh recomm.<span>g</span></div>
 			<div class="line main-line" data-action="main-toggle-annex">Toggle annex<span>a</span></div>
 			<div class="line main-line" data-action="main-toggle-sundry">Toggle sundry<span>s</span></div>
 			<div class="line main-line" data-action="main-toggle-tags">Toggle tags<span>y</span></div>
@@ -2285,7 +2303,7 @@ main.bindDexterEvents = function() {
 				homePath = fullname.replace(sidFile, "").slice(0, -1); // Lose trailing slash
 			} else if (browser.isUploadFolder()) {
 				// Inside the 'SID Happens' folder
-				homePath = browser.playlist[browser.songPos].profile;
+				homePath = browser.songs[browser.songPos].profile;
 			}
 		}
 
@@ -2321,7 +2339,7 @@ main.bindDexterEvents = function() {
 
 		var solitary = !$this.hasClass("continue"),
 			prevRedirect = typeof browser.songPos != "undefined"
-				? browser.playlist[browser.songPos].fullname.replace(browser.ROOT_HVSC+"/_High Voltage SID Collection", "")
+				? browser.songs[browser.songPos].fullname.replace(browser.ROOT_HVSC+"/_High Voltage SID Collection", "")
 				: "";
 
 		// Make the small play icon "active" bright
@@ -2969,7 +2987,7 @@ main.bindKeyboardEvents = function() {
 							// Prepare some edit boxes with current data
 							var playerInfo = SID.getSongInfo("info");
 							$("#edit-file-name-input").val(name.split("/").slice(-1)[0]);
-							$("#edit-file-player-input").val(browser.playlist[browser.songPos].playerraw);
+							$("#edit-file-player-input").val(browser.songs[browser.songPos].playerraw);
 							$("#edit-file-author-input").val(playerInfo.songAuthor);
 							$("#edit-file-copyright-input").val(playerInfo.songReleased);
 
@@ -2982,7 +3000,7 @@ main.bindKeyboardEvents = function() {
 							}, function() {
 								// OK was clicked; make the changes to the file row in the database
 								$.post("php/admin_update_file.php", {
-									fullname:	browser.playlist[browser.songPos].fullname.replace(browser.ROOT_HVSC+"/", ""),
+									fullname:	browser.songs[browser.songPos].fullname.replace(browser.ROOT_HVSC+"/", ""),
 									name:		$("#edit-file-name-input").val(),
 									player:		$("#edit-file-player-input").val(),
 									author:		$("#edit-file-author-input").val(),
@@ -3077,6 +3095,10 @@ main.bindKeyboardEvents = function() {
 							}
 							window.location.href = newUrl;
 						}
+						break;
+
+					case 71:	// Keyup 'g' - refresh recommendation boxes on the front page
+						main.refreshRecBoxes();
 						break;
 
 					case 37:	// Keyup 'ARROW-LEFT' - skip to previous (+ SHIFT to emulate auto-progress)

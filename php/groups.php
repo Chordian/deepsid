@@ -39,13 +39,13 @@ if (isset($collection_path)) {
 		// for each individual game (since GB64 can only link to one SID file) so it's fairly good for statistics.
 		$select = $db->prepare('
 			SELECT count(1)
-			FROM hvsc_files
+			FROM files
 			WHERE collection_path LIKE :collection_path
 			AND EXISTS (
 				SELECT 1
 				FROM tags_lookup
 				JOIN tags_info ON tags_info.id = tags_lookup.tags_id
-				WHERE tags_lookup.files_id = hvsc_files.id
+				WHERE tags_lookup.files_id = files.id
 				AND tags_info.name = "GameBase64"
 			)
 		');

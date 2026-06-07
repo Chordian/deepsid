@@ -5,7 +5,7 @@
  * SEPARATE UTILITY SCRIPT
  * 
  * Walks all collections and counts files along the way. Each count is stored
- * in the relevant 'hvsc_folders' row in the database.
+ * in the relevant 'folders' row in the database.
  * 
  * The folders themselves are not counted.
  */
@@ -114,7 +114,7 @@ try {
 
     $db = $account->getDB();
 
-	$q = $db->query('SELECT id, collection_path FROM hvsc_folders ORDER BY collection_path');
+	$q = $db->query('SELECT id, collection_path FROM folders ORDER BY collection_path');
 	$q->setFetchMode(PDO::FETCH_OBJ);
 
 	foreach ($q as $row) {
@@ -133,7 +133,7 @@ try {
 
 		echo "count = $count\n";
 
-		$u = $db->prepare("UPDATE hvsc_folders SET files = :c WHERE id = :id");
+		$u = $db->prepare("UPDATE folders SET files = :c WHERE id = :id");
 		$u->execute([
 			':c'  => $count,
 			':id' => $row->id

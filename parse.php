@@ -11,8 +11,8 @@
 require_once("php/setup.php");
 require_once("php/class.useragent.php");
 
-define('TRACKFILE', 'visitors.txt');
-define('CHORDIAN',	'87.60.173.201');
+const TRACKFILE	= 'visitors.txt';
+const CHORDIAN	= '87.60.173.201'; // Probably doesn't work anymore
 
 // @link https://www.toms-world.org/blog/parseuseragentstring/
 $parser = new parseUserAgentStringClass();

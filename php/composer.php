@@ -212,7 +212,7 @@ if (isset($collection_path)) {
 				$row = $select->fetch();
 
 			// Get data about players for the charts
-			$select = $db->prepare('SELECT player, count(player) AS count FROM hvsc_files WHERE collection_path LIKE :collection_path GROUP BY player');
+			$select = $db->prepare('SELECT player, count(player) AS count FROM files WHERE collection_path LIKE :collection_path GROUP BY player');
 			$select->execute(array(':collection_path' => $escaped_collection_path.'/%'));
 			$select->setFetchMode(PDO::FETCH_OBJ);
 
@@ -243,7 +243,7 @@ if (isset($collection_path)) {
 			}
 
 			// Get data about active years
-			$select = $db->prepare('SELECT copyright FROM hvsc_files WHERE collection_path LIKE :collection_path');
+			$select = $db->prepare('SELECT copyright FROM files WHERE collection_path LIKE :collection_path');
 			$select->execute(array(':collection_path' => $escaped_collection_path.'/%'));
 			$select->setFetchMode(PDO::FETCH_OBJ);
 
@@ -271,7 +271,7 @@ if (isset($collection_path)) {
 			}
 
 			// Get the user's rating for the folder
-			$select = $db->prepare('SELECT id, hash FROM hvsc_folders WHERE collection_path = :collection_path'.
+			$select = $db->prepare('SELECT id, hash FROM folders WHERE collection_path = :collection_path'.
 				(substr($collection_path, 0, 1) == '!' ? ' AND user_id = '.$user_id : '').' LIMIT 1');
 			$select->execute(array(':collection_path' => $collection_path));
 			$select->setFetchMode(PDO::FETCH_OBJ);

@@ -561,7 +561,7 @@ SIDPlayer.prototype = {
 				new Promise((resolve, reject) => {
 
 					var clockspeed = "PAL";		// Assume PAL tune to begin with
-					if (browser.playlist[browser.songPos].clockspeed.substr(0, 4).toLowerCase() == "ntsc")
+					if (browser.songs[browser.songPos].clockspeed.substr(0, 4).toLowerCase() == "ntsc")
 						clockspeed = "NTSC";	// This is an NTSC tune
 
 					// Set as boolean depending on advanced setting
@@ -1131,7 +1131,7 @@ SIDPlayer.prototype = {
 		this.jp2NextTime = this.jp2AudioStartTime;
 
 		// The SID model can only be set before starting the tune
-		this.jp2SidModel = browser.playlist[browser.songPos].sidmodel;
+		this.jp2SidModel = browser.songs[browser.songPos].sidmodel;
 		this.jp2Worker.postMessage({
 			eventType: "SET_DEFAULT_CHIP_MODEL",
 			eventData: {
@@ -1486,7 +1486,7 @@ SIDPlayer.prototype = {
 			result.songReleased = "<?>";
 		if (isNaN(result.maxSubsong))
 			result.maxSubsong = main.isSongSelected()
-				? result.maxSubsong = browser.playlist[browser.songPos].subtunes - 1
+				? result.maxSubsong = browser.songs[browser.songPos].subtunes - 1
 				: 0;
 		return result;
 	},

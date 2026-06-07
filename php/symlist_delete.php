@@ -23,7 +23,7 @@ try {
 	$db = $account->getDB();
 
 	// Get ID of symlist folder
-	$select = $db->prepare('SELECT id FROM hvsc_folders WHERE collection_path = :folder AND user_id = '.$user_id.' LIMIT 1');
+	$select = $db->prepare('SELECT id FROM folders WHERE collection_path = :folder AND user_id = '.$user_id.' LIMIT 1');
 	$select->execute(array(':folder'=>$_POST['symlist']));
 	$select->setFetchMode(PDO::FETCH_OBJ);
 
@@ -36,7 +36,7 @@ try {
 	$delete = $db->query('DELETE FROM symlists WHERE folder_id = '.$folder_id);
 
 	// Now delete the folder itself
-	$delete = $db->query('DELETE FROM hvsc_folders WHERE id = '.$folder_id.' LIMIT 1');
+	$delete = $db->query('DELETE FROM folders WHERE id = '.$folder_id.' LIMIT 1');
 	$account->logActivity('User "'.$_SESSION['user_name'].'" deleted the "'.$_POST['symlist'].'" playlist');
 
 } catch(PDOException $e) {

@@ -508,6 +508,59 @@ Browser.prototype = {
 					case "+jozz":
 						this.gotoFolder("MUSICIANS/B/Bjerregaard_Johannes");
 						break;
+					case "+flex":
+						this.gotoFolder("MUSICIANS/H/Hannula_Antti");
+						break;
+					case "+rand":
+					case "+randall":
+						this.gotoFolder("MUSICIANS/H/Hoffmann_Michal");
+						break;
+					case "+edwin":
+					case "+santen":
+						this.gotoFolder("MUSICIANS/0-9/20CC/van_Santen_Edwin");
+						break;
+					case "+aman":
+					case "+diemer":
+						this.gotoFolder("MUSICIANS/A/A-Man");
+						break;
+					case "+4mat":
+						this.gotoFolder("MUSICIANS/0-9/4-Mat");
+						break;
+					case "+xayne":
+						this.gotoFolder("MUSICIANS/B/Beat_Machine/Xayne");
+						break;
+					case "+6r6":
+					case "+grg":
+						this.gotoFolder("MUSICIANS/B/Blues_Muz/Gallefoss_Glenn");
+						break;
+					case "+chris":
+					case "+hulsbeck":
+						this.gotoFolder("MUSICIANS/H/Huelsbeck_Chris");
+						break;
+					case "+joseph":
+						this.gotoFolder("MUSICIANS/J/Joseph_Richard");
+						break;
+					case "+dane":
+						this.gotoFolder("MUSICIANS/M/Mitch_and_Dane/Dane");
+						break;
+					case "+page":
+						this.gotoFolder("MUSICIANS/P/Page_Jason");
+						break;
+					case "+stein":
+						this.gotoFolder("MUSICIANS/P/Prosonix/Pedersen_Stein");
+						break;
+					case "+rock":
+						this.gotoFolder("MUSICIANS/R/Rock");
+						break;
+					case "+guy":
+						this.gotoFolder("MUSICIANS/S/Shavitt_Guy");
+						break;
+					case "+steel":
+						this.gotoFolder("MUSICIANS/S/Steel");
+						break;
+					case "+steve":
+						this.gotoFolder("MUSICIANS/T/Turner_Steve");
+						break;
 					default:
 						// Search the query unless a search command was entered
 						cmds.handlePlusCommand.call(this, searchValue, sorting).then(handled => {
@@ -633,8 +686,8 @@ Browser.prototype = {
 								// Make sure sorting also works
 								var $filteredRows = $tr.parent().children("tr:has(td.sid)");
 								var index = $filteredRows.index($tr);										
-								browser.playlist[index].tagstart = browser.startTag;
-								browser.playlist[index].tagend = browser.endTag;
+								browser.songs[index].tagstart = browser.startTag;
+								browser.songs[index].tagend = browser.endTag;
 								ctrls.updateSundryTags(htmlTags);
 							});
 						}.bind(this));
@@ -729,24 +782,24 @@ Browser.prototype = {
 			this.showSpinner($(event.target).parents("tr").children("td.sid"));
 
 			// Override default sub tune to first if demanded by a setting
-			var subtuneStart = main.getUserSetting("first-subtune") ? 0 : this.playlist[this.songPos].startsubtune;
+			var subtuneStart = main.getUserSetting("first-subtune") ? 0 : this.songs[this.songPos].startsubtune;
 			// Either default start subtune, or an override from a "?subtune=" URL parameter
 			var subtune = typeof paramSubtune !== "undefined" ? paramSubtune : subtuneStart,
-				subtuneMax = this.playlist[this.songPos].subtunes - 1;
+				subtuneMax = this.songs[this.songPos].subtunes - 1;
 			// Make sure the overridden value is within what is available for that SID tune
 			subtune = subtune < 0 ? 0 : subtune;
 			subtune = subtune > subtuneMax ? subtuneMax : subtune;
 
 			// NOTE: These two lines used to be placed below SID.load(). Placing them up here instead
-			// fixed a row marking bug on iOS in playlists with duplicate use of songs.
+			// fixed a row marking bug on iOS with duplicate use of songs.
 			$("#songs tr").removeClass("selected");
 			$tr.addClass("selected");
 			this.kbSelectedRow = $tr.index();
 			this.moveKeyboardSelection(this.kbSelectedRow, false, false);
 
-			SID.load(subtune, this.getLength(subtune), this.playlist[this.songPos].fullname, function(error) {
+			SID.load(subtune, this.getLength(subtune), this.songs[this.songPos].fullname, function(error) {
 
-				main.trackingEvent("start:sid", browser.playlist[browser.songPos].id);
+				main.trackingEvent("start:sid", browser.songs[browser.songPos].id);
 
 				this.clearSpinner();
 
@@ -785,7 +838,7 @@ Browser.prototype = {
 				}
 
 				// Disable PREV or NEXT if at list boundaries, or if it's a solitary playing
-				if (this.songPos == this.playlist.length - 1 || paramSolitary)
+				if (this.songPos == this.songs.length - 1 || paramSolitary)
 					$("#skip-next").addClass("disabled");
 				if (this.songPos == 0 || paramSolitary)
 					$("#skip-prev").addClass("disabled");
@@ -794,9 +847,9 @@ Browser.prototype = {
 
 				if (typeof paramSkipCSDb === "undefined" || !paramSkipCSDb) {
 					this.getCSDb();
-					if (typeof this.playlist[this.songPos].profile != "undefined")
-						if (this.playlist[this.songPos].profile != "") {
-							this.getComposer(this.playlist[this.songPos].profile, true);
+					if (typeof this.songs[this.songPos].profile != "undefined")
+						if (this.songs[this.songPos].profile != "") {
+							this.getComposer(this.songs[this.songPos].profile, true);
 						} else {
 							// If composers_id = 0 then do this
 							$("#topic-profile").empty().append('<i>No profile available.</i>');
@@ -805,17 +858,17 @@ Browser.prototype = {
 							this.previousOverridePath = "_SID Happens";
 						}
 					else if (this.isSearching || this.path.substr(0, 2) === "/$" || this.path.substr(0, 2) === "/!")
-						this.getComposer(this.playlist[this.songPos].fullname);
+						this.getComposer(this.songs[this.songPos].fullname);
 				} else
 					this.getComposer();
 				this.getGB64();
 				this.getRemix();
-				this.getPlayerInfo({player: this.playlist[this.songPos].player});
+				this.getPlayerInfo({player: this.songs[this.songPos].player});
 
 				main.updateURL();
 				this.chips = 1;
-				if (this.playlist[this.songPos].fullname.indexOf("_2SID") != -1) this.chips = 2;
-				else if (this.playlist[this.songPos].fullname.indexOf("_3SID") != -1) this.chips = 3;
+				if (this.songs[this.songPos].fullname.indexOf("_2SID") != -1) this.chips = 2;
+				else if (this.songs[this.songPos].fullname.indexOf("_3SID") != -1) this.chips = 3;
 				ctrls.resetStereoPanning();
 				viz.initGraph(this.chips);
 				viz.startBufferEndedEffects();
@@ -841,7 +894,7 @@ Browser.prototype = {
 					if (!paramSolitary && !main.getUserSetting("skip-tune") && (ctrls.subtuneCurrent < ctrls.subtuneMax && !$("#subtune-plus").hasClass("disabled")))
 						// Next subtune
 						$("#subtune-plus").trigger("mouseup", false);
-					else if (this.songPos < (this.playlist.length - 1) && !$("#skip-next").hasClass("disabled"))
+					else if (this.songPos < (this.songs.length - 1) && !$("#skip-next").hasClass("disabled"))
 						// Next song
 						$("#skip-next").trigger("mouseup", false);
 					else
@@ -1097,13 +1150,13 @@ Browser.prototype = {
 		sortedList = "";
 		switch (event.target.value) {
 			case "title":
-				// Sort playlist according to release title
+				// Sort songs according to release title
 				this.sidEntries.sort(function(obj1, obj2) {
 					return obj1.title > obj2.title ? 1 : -1;	// A to Z (already lower case)
 				});
 				break;
 			case "type":
-				// Sort playlist according to release type
+				// Sort songs according to release type
 				this.sidEntries.sort(function(obj1, obj2) {
 					return obj1.type > obj2.type ? 1 : -1;		// A to Z (already lower case)
 				});
@@ -1210,8 +1263,8 @@ Browser.prototype = {
 					});
 					this.cache.composort = "name";
 				} else {
-					// Sort playlist according to the SID filename
-					this.playlist.sort(function(obj1, obj2) {
+					// Sort songs according to the SID filename
+					this.songs.sort(function(obj1, obj2) {
 						var o1 = obj1.substname !== "" ? obj1.substname : this.adaptBrowserName(obj1.filename, true);
 						var o2 = obj2.substname !== "" ? obj2.substname : this.adaptBrowserName(obj2.filename, true);
 						return o1.toLowerCase() > o2.toLowerCase() ? 1 : -1;
@@ -1221,9 +1274,9 @@ Browser.prototype = {
 				}
 				break;
 			case "player":
-				// Sort playlist according to music player
+				// Sort songs according to music player
 				// NOTE: This is not available in 'SID Happens' because players are not visible in the rows.
-				this.playlist.sort(function(obj1, obj2) {
+				this.songs.sort(function(obj1, obj2) {
 					return obj1.player.toLowerCase() > obj2.player.toLowerCase() ? 1 : -1;
 				});
 				if (!this.isUploadFolder())
@@ -1237,8 +1290,8 @@ Browser.prototype = {
 					});
 					this.cache.composort = "rating";
 				} else {
-					// Sort playlist according to rating
-					this.playlist.sort(function(obj1, obj2) {
+					// Sort songs according to rating
+					this.songs.sort(function(obj1, obj2) {
 						return obj2.rating - obj1.rating;
 					});
 					if (!this.isUploadFolder())
@@ -1254,12 +1307,12 @@ Browser.prototype = {
 					this.cache.composort = "oldest";
 				} else if (this.isUploadFolder()) {
 					// Sort 'SID Happens' folder according to upload date/time
-					this.playlist.sort(function(obj1, obj2) {
+					this.songs.sort(function(obj1, obj2) {
 						return obj1.uploaded > obj2.uploaded ? 1 : -1;
 					});
 				} else {
-					// Sort playlist according to the 'copyright' string (the year in start is used)
-					this.playlist.sort(function(obj1, obj2) {
+					// Sort songs according to the 'copyright' string (the year in start is used)
+					this.songs.sort(function(obj1, obj2) {
 						return obj1.copyright > obj2.copyright ? 1 : -1;
 					});
 					localStorage.setItem("sort", "oldest");
@@ -1274,12 +1327,12 @@ Browser.prototype = {
 					this.cache.composort = "newest";
 				} else if (this.isUploadFolder()) {
 					// Sort 'SID Happens' folder according to upload date/time
-					this.playlist.sort(function(obj1, obj2) {
+					this.songs.sort(function(obj1, obj2) {
 						return obj1.uploaded < obj2.uploaded ? 1 : -1;
 					});
 				} else {
-					// Sort playlist according to the 'copyright' string (the year in start is used)
-					this.playlist.sort(function(obj1, obj2) {
+					// Sort songs according to the 'copyright' string (the year in start is used)
+					this.songs.sort(function(obj1, obj2) {
 						return obj1.copyright < obj2.copyright ? 1 : -1;
 					});
 					localStorage.setItem("sort", "newest");
@@ -1287,7 +1340,7 @@ Browser.prototype = {
 				break;
 			case "factoidtop":
 				// Sort according to top "inline" factoid
-				this.playlist.sort(function(obj1, obj2) {
+				this.songs.sort(function(obj1, obj2) {
 					const av = obj1.fvaluetop || obj1.factoidtop;
 					const bv = obj2.fvaluetop || obj2.factoidtop;
 					return av < bv ? 1 : -1;
@@ -1296,7 +1349,7 @@ Browser.prototype = {
 				break;
 			case "factoidbottom":
 				// Sort according to top "detail" factoid
-				this.playlist.sort(function(obj1, obj2) {
+				this.songs.sort(function(obj1, obj2) {
 					const av = obj1.fvaluebottom || obj1.factoidbottom;
 					const bv = obj2.fvaluebottom || obj2.factoidbottom;
 					return av < bv ? 1 : -1;
@@ -1304,12 +1357,12 @@ Browser.prototype = {
 				localStorage.setItem("sort", "factoidbottom");
 				break;
 			case "shuffle":
-				// Sort playlist in a random manner (randomize)
+				// Sort songs in a random manner (randomize)
 				// NOTE: Previous "Math.random() >= 0.5" method didn't work in Chrome; this fix by JW.
-				for (var i = 0; i < this.playlist.length; i++) {
-					this.playlist[i].shuffle = Math.random();
+				for (var i = 0; i < this.songs.length; i++) {
+					this.songs[i].shuffle = Math.random();
 				}
-				this.playlist.sort(function(obj1, obj2) {
+				this.songs.sort(function(obj1, obj2) {
 					return obj1.shuffle > obj2.shuffle ? 1 : -1;
 				});
 				if (!this.isUploadFolder())
@@ -1346,7 +1399,7 @@ Browser.prototype = {
 		if (isTempFolder) {
 
 			var files = "";
-			$.each(this.playlist, function(i, file) {
+			$.each(this.songs, function(i, file) {
 				var year = isNaN(file.copyright.substr(0, 4)) ? "unknown year" : file.copyright.substr(0, 4);
 				files += '<tr>'+
 						'<td class="sid temp unselectable"><div class="block-wrap"><div class="block">'+(file.subtunes > 1 ? '<div class="subtunes">'+file.subtunes+'</div>' : '')+
@@ -1362,7 +1415,7 @@ Browser.prototype = {
 
 			// SORT/FILTER: Rebuild the reordered table list (files only; the folders in top are just preserved)
 			var files = adaptedName = "";
-			$.each(this.playlist, function(i, file) {
+			$.each(this.songs, function(i, file) {
 				var isNew = file.hvsc == this.HVSC_VERSION || file.hvsc == this.CGSC_VERSION ||
 					(typeof file.uploaded != "undefined" && file.uploaded.substr(0, 10) == this.today.substr(0, 10));
 				adaptedName = file.substname == "" ? file.filename.replace(/^\_/, '') : file.substname;
@@ -1528,7 +1581,7 @@ Browser.prototype = {
 			this.searchQuery = this.isSearching ? searchQuery : "";
 			this.searchHere = $("#search-here").is(":checked") ? 1 : 0;
 
-			this.playlist = [];		// Every folder we enter will become its own local playlist
+			this.songs = [];		// Every folder we enter will become its own list of songs
 			this.compolist = [];	// For the big CSDb music competitions folder list
 			this.subFolders = 0;
 			this.path = this.path.replace("/_CSDb", "/CSDb");
@@ -1856,31 +1909,31 @@ Browser.prototype = {
 						// All other folders should...
 						switch (filter) {
 							case "player":
-								// Sort playlist according to music player
+								// Sort songs according to music player
 								data.files.sort(function(obj1, obj2) {
 									return obj1.player.toLowerCase() > obj2.player.toLowerCase() ? 1 : -1;
 								});
 								break;
 							case "rating":
-								// Sort playlist according to rating
+								// Sort songs according to rating
 								data.files.sort(function(obj1, obj2) {
 									return obj2.rating - obj1.rating;
 								});
 								break;
 							case "oldest":
-								// Sort playlist according to the 'copyright' string (the year in start is used)
+								// Sort songs according to the 'copyright' string (the year in start is used)
 								data.files.sort(function(obj1, obj2) {
 									return obj1.copyright > obj2.copyright ? 1 : -1;
 								});
 								break;
 							case "newest":
-								// Sort playlist according to the 'copyright' string (the year in start is used)
+								// Sort songs according to the 'copyright' string (the year in start is used)
 								data.files.sort(function(obj1, obj2) {
 									return obj1.copyright < obj2.copyright ? 1 : -1;
 								});
 								break;
 							case "factoidtop":
-								// Sort playlist according to the "inline" factoid string
+								// Sort songs according to the "inline" factoid string
 								data.files.sort(function(obj1, obj2) {
 									const av = obj1.fvaluetop || obj1.factoidtop;
 									const bv = obj2.fvaluetop || obj2.factoidtop;
@@ -1888,7 +1941,7 @@ Browser.prototype = {
 								});
 								break;
 							case "factoidbottom":
-								// Sort playlist according to the "detail" factoid string
+								// Sort songs according to the "detail" factoid string
 								data.files.sort(function(obj1, obj2) {
 									const av = obj1.fvaluebottom || obj1.factoidbottom;
 									const bv = obj2.fvaluebottom || obj2.factoidbottom;
@@ -1896,7 +1949,7 @@ Browser.prototype = {
 								});
 								break;
 							case "shuffle":
-								// Sort playlist in a random manner (randomize)
+								// Sort songs in a random manner (randomize)
 								for (var i = 0; i < data.files.length; i++) {
 									data.files[i].shuffle = Math.random();
 								}
@@ -1905,7 +1958,7 @@ Browser.prototype = {
 								});
 								break;
 							default:
-								// Sort playlist according to the SID filename ("name")
+								// Sort songs according to the SID filename ("name")
 								data.files.sort(function(obj1, obj2) {
 									var o1 = obj1.substname !== "" ? obj1.substname : this.adaptBrowserName(obj1.filename, true);
 									var o2 = obj2.substname !== "" ? obj2.substname : this.adaptBrowserName(obj2.filename, true);
@@ -2078,7 +2131,7 @@ Browser.prototype = {
 						// If the STIL text starts with a <BR> newline or a <HR> line, get rid of it
 						if (stil.substr(2, 4) == "r />") stil = stil.substr(6);
 
-						this.playlist.push({
+						this.songs.push({
 							id:				file.id,
 							filename:		file.filename,
 							substname:		file.substname,	// Symlists can have renamed SID files
@@ -2289,7 +2342,7 @@ Browser.prototype = {
 		} else {
 
 			// Example of a DB length string for four subtunes: "4:03 0:07 0:03 1:41"
-			var length = this.playlist[this.songPos].length.split(" ")[subtune];
+			var length = this.songs[this.songPos].length.split(" ")[subtune];
 			if (typeof length === "undefined") length = "0:00";
 
 			this.secondsLength = length.split(":");
@@ -2310,7 +2363,7 @@ Browser.prototype = {
 	 * Adapt 'CSDb' or 'GB64' tabs if primary release is active.
 	 */
 	handlePrimaryRelease: function() {
-		var labelSite = browser.playlist[browser.songPos]?.labelsite?.toLowerCase(),
+		var labelSite = browser.songs[browser.songPos]?.labelsite?.toLowerCase(),
 			selectedTab = $("#tabs .selected").attr("data-topic"),
 			$tabGB64 = $("#tab-gb64"), $tabCSDb = $("#tab-csdb");
 
@@ -2393,8 +2446,8 @@ Browser.prototype = {
 					if ($relevant.length) {
 						// The current browse list contains the current song so adapt its ratings
 						$relevant.parents("tr").find("span.rating").empty().append(stars);
-						// Update the playlist array too so sorting also works
-						$.each(this.playlist, function(i, file) {
+						// Update the songs array too so sorting also works
+						$.each(this.songs, function(i, file) {
 							if (file.id == ctrls.currentFileID) {
 								file.rating = data.rating;
 								return false;
@@ -2413,8 +2466,8 @@ Browser.prototype = {
 					var isFile = $tr.find(".name").hasClass("file"),
 						endName = this.isSymlist || this.isCompoFolder ? fullname : fullname.split("/").slice(-1)[0];
 					if (isFile) {
-						// Update the playlist array
-						$.each(this.playlist, function(i, file) {
+						// Update the songs array
+						$.each(this.songs, function(i, file) {
 							if (file.filename == endName) {
 								file.rating = data.rating;
 								return false;
@@ -2814,9 +2867,9 @@ Browser.prototype = {
 		// Determine the arguments to be sent to the PHP file
 		// The 'this.csdbArgs' variable is also used by the refresh cache link (see 'main.js')
 		this.csdbArgs = typeof type !== "undefined" && typeof id !== "undefined"
-			? { fileid: browser.playlist[browser.songPos]?.id ?? 0,
+			? { fileid: browser.songs[browser.songPos]?.id ?? 0,
 				type: type, id: id, override: readFromCSDb, noprimary: ignorePrimary }
-			: { fullname: browser.playlist[browser.songPos].fullname.substr(this.ROOT_HVSC.length + 1),
+			: { fullname: browser.songs[browser.songPos].fullname.substr(this.ROOT_HVSC.length + 1),
 				override: readFromCSDb, noprimary: ignorePrimary };
 
 		this.csdb = $.get("php/csdb.php", this.csdbArgs, function(data) {
@@ -2862,7 +2915,7 @@ Browser.prototype = {
 
 				// If this single release is a primary release then show the bow-and-arrow icon
 				if (data.count = -1) {
-					$.get("php/labels_info.php", { id: browser.playlist[browser.songPos]?.id ?? 0 }, function(data) {
+					$.get("php/labels_info.php", { id: browser.songs[browser.songPos]?.id ?? 0 }, function(data) {
 						browser.validateData(data, function(data) {
 							// ID '#topic-csdb' must be here too or it breaks in the compo folders
 							var id = $("#topic-csdb #csdb-comment").attr("data-id");
@@ -3378,8 +3431,8 @@ Browser.prototype = {
 
 		clearInterval(this.gb64PrimaryTimer);
 
-		var thisFullname = browser.playlist[browser.songPos].fullname.substr(this.ROOT_HVSC.length + 1);
-		var thisFileID = browser.playlist[browser.songPos].id;
+		var thisFullname = browser.songs[browser.songPos].fullname.substr(this.ROOT_HVSC.length + 1);
+		var thisFileID = browser.songs[browser.songPos].id;
 		var attempts = 0;
 		var ignorePrimary = typeof overridePrimary !== "undefined" && overridePrimary ? 1 : 0;
 
@@ -3484,7 +3537,7 @@ Browser.prototype = {
 					});
 
 					// If there is no "GameBase64" tag then add it now
-					if (this.playlist[this.songPos]?.tags.indexOf("tag-gamebase64") === -1) {
+					if (this.songs[this.songPos]?.tags.indexOf("tag-gamebase64") === -1) {
 
 						$.post("php/tags_write_single.php", {
 							fullname: thisFullname,
@@ -3525,7 +3578,7 @@ Browser.prototype = {
 			$("#loading-remix").fadeIn(500);
 		}, 250);
 
-		var thisFullname = browser.playlist[browser.songPos].fullname.substr(this.ROOT_HVSC.length + 1); 
+		var thisFullname = browser.songs[browser.songPos].fullname.substr(this.ROOT_HVSC.length + 1); 
 
 		var params = typeof optionalID === "undefined"
 			? { fullname: thisFullname }
@@ -3547,7 +3600,7 @@ Browser.prototype = {
 					$("#note-remix").hide();
 
 				// If there are entries but no "Remix64" tag then add it now
-				if (data.count > 0 && browser.playlist[browser.songPos].tags.indexOf("tag-remix64") == -1) {
+				if (data.count > 0 && browser.songs[browser.songPos].tags.indexOf("tag-remix64") == -1) {
 					$.post("php/tags_write_single.php", {
 						fullname:	thisFullname,
 						tag:		"Remix64",
@@ -3615,7 +3668,7 @@ Browser.prototype = {
 			var isPersonalSymlist = this.path.substr(0, 2) == "/!",
 				isPublicSymlist = this.path.substr(0, 2) == "/$",				
 				thisRow = $target.parent("tr").index() - notSidRows;
-			var isSidHappensFolder = typeof this.playlist[thisRow].uploaded !== "undefined";
+			var isSidHappensFolder = typeof this.songs[thisRow].uploaded !== "undefined";
 
 			if (isPublicSymlist && !this.isSearching) {
 				var result = $.grep(this.symlistFolders, function(entry) {
@@ -3629,7 +3682,7 @@ Browser.prototype = {
 
 				? '<div class="line" data-action="symentry-rename">Rename</div>'+			// SID in symlist folder
 				  '<div class="line" data-action="symentry-remove">Remove</div>'+
-				  '<div class="line'+(this.playlist[thisRow].subtunes > 1 ? '' : ' disabled')+
+				  '<div class="line'+(this.songs[thisRow].subtunes > 1 ? '' : ' disabled')+
 				  	'" data-action="symentry-subtune">Select Subtune</div>'
 					
 				: '<div class="line" data-action="symlist-new">Add to New Playlist</div>'+	// SID in normal folder
@@ -3655,7 +3708,7 @@ Browser.prototype = {
 				// A YouTube video link can be added to this SID row
 				contents +=
 					'<div class="line" data-action="edit-videos" data-subtunes="'+
-						this.playlist[thisRow].subtunes+'">Edit YouTube Links</div>';
+						this.songs[thisRow].subtunes+'">Edit YouTube Links</div>';
 			}
 
 			// Section: Administrator-only actions
@@ -3778,6 +3831,9 @@ Browser.prototype = {
 				break;
 			case 'main-refresh-folder':
 				main.refreshFolder();
+				break;
+			case 'main-refresh-rec':
+				main.refreshRecBoxes();
 				break;
 			case 'main-load-sid':
 				// Upload and test one or more external SID tune(s)
@@ -4042,8 +4098,8 @@ Browser.prototype = {
 					'</div>');
 				$subtuneBox = $("#sym-specify-subtune");
 				var index = $starField.parent("tr").index();
-				var subtuneBeingEdited = this.playlist[index].startsubtune + 1;
-				this.contextMaxSubtunes = this.playlist[index].subtunes;
+				var subtuneBeingEdited = this.songs[index].startsubtune + 1;
+				this.contextMaxSubtunes = this.songs[index].subtunes;
 				$subtuneBox.focus().val(subtuneBeingEdited);
 				if ($subtuneBox[0].setSelectionRange) {
 					var len = $subtuneBox.val().length * 2; // Opera issue
@@ -4124,12 +4180,12 @@ Browser.prototype = {
 	_refreshPrimaryTabs: function() {
 		// If a CSDb list is present or hiding behind a 'BACK' button
 		if (main.isCSDbList() || $("#sticky-csdb #go-back").length) {
-			var pl1 = this.playlist;
+			var s1 = this.songs;
 			this.getCSDb(undefined, undefined, undefined, true, undefined, () => {
-				var pl2 = this.playlist;
-				this.playlist = pl1; // Restoring this variable is a bit of a hack
+				var s2 = this.songs;
+				this.songs = s1; // Restoring this variable is a bit of a hack
 				this.getGB64();
-				this.playlist = pl2; // Must be restored or row browsing breaks
+				this.songs = s2; // Must be restored or row browsing breaks
 			});
 		} else {
 			this.getGB64();
@@ -4501,7 +4557,7 @@ Browser.prototype = {
 				transparent:	"", // The arrow tag icons are not included below
 			};
 
-			$.each(browser.playlist, function(i, file) {
+			$.each(browser.songs, function(i, file) {
 				// Parse each DIV with one tag each							
 				$(file.tags).each(function() {
 					if (this.className.indexOf("tag-") != -1) {
@@ -4607,8 +4663,8 @@ Browser.prototype = {
 	 */
 	isCGSC: function() {
 		return (!this.isSearching && this.path.indexOf("_Compute's Gazette SID Collection") !== -1) ||
-			(typeof this.playlist[this.songPos] !== "undefined" &&
-				this.playlist[this.songPos].fullname.indexOf("_Compute's Gazette SID Collection") !== -1);
+			(typeof this.songs[this.songPos] !== "undefined" &&
+				this.songs[this.songPos].fullname.indexOf("_Compute's Gazette SID Collection") !== -1);
 	},
 
 	/**
@@ -4654,8 +4710,8 @@ Browser.prototype = {
 	 * @return {boolean}
 	 */
 	isTempTestFile: function() {
-		return typeof this.playlist[this.songPos] !== "undefined"
-			? this.playlist[this.songPos].fullname.indexOf("temp/test/") !== -1
+		return typeof this.songs[this.songPos] !== "undefined"
+			? this.songs[this.songPos].fullname.indexOf("temp/test/") !== -1
 			: false;
 	},
 
@@ -4681,8 +4737,8 @@ Browser.prototype = {
 		$selected.find(".tags-line").empty().append(TAGS_BRACKET+list_of_tags);
 		this.showTagsBrackets($selected);
 
-		// Update the playlist array
-		$.each(this.playlist, function(i, file) {
+		// Update the songs array
+		$.each(this.songs, function(i, file) {
 			if (file.filename == endName) {
 				file.tags = list_of_tags;
 				return false;

@@ -38,7 +38,7 @@ try {
 		$amend = 1;
 		$suggested_symlist_name = '!'.$isolated_sid_name;
 		do {
-			$select = $db->prepare('SELECT 1 FROM hvsc_folders WHERE collection_path = :collection_path AND user_id = '.$user_id);
+			$select = $db->prepare('SELECT 1 FROM folders WHERE collection_path = :collection_path AND user_id = '.$user_id);
 			$select->execute(array(':collection_path' => $suggested_symlist_name));
 
 			if ($select->rowCount()) {
@@ -48,7 +48,7 @@ try {
 		} while ($select->rowCount());
 
 		// Create the new symlist entry and get its ID
-		$insert = $db->query('INSERT INTO hvsc_folders (collection_path, user_id)'.
+		$insert = $db->query('INSERT INTO folders (collection_path, user_id)'.
 			' VALUES("'.$suggested_symlist_name.'", '.$user_id.')');
 		if ($insert->rowCount() == 0)
 			die(json_encode(array('status' => 'error', 'message' => "Could not create ".$suggested_symlist_name)));
@@ -65,7 +65,7 @@ try {
 
 		$symlist_folder = str_replace(' [PUBLIC]', '', $_POST['symlist']);
 
-		$select = $db->prepare('SELECT id, files FROM hvsc_folders WHERE collection_path = :collection_path AND user_id = '.$user_id.' LIMIT 1');
+		$select = $db->prepare('SELECT id, files FROM folders WHERE collection_path = :collection_path AND user_id = '.$user_id.' LIMIT 1');
 		$select->execute(array(':collection_path' => $symlist_folder));
 		$select->setFetchMode(PDO::FETCH_OBJ);
 
@@ -78,7 +78,7 @@ try {
 	}
 
 	// Get the ID of the collection path SID file the user wanted to add as an entry
-	$select = $db->prepare('SELECT id FROM hvsc_files WHERE collection_path = :collection_path LIMIT 1');
+	$select = $db->prepare('SELECT id FROM files WHERE collection_path = :collection_path LIMIT 1');
 	$select->execute(array(':collection_path' => $_POST['fullname']));
 	$select->setFetchMode(PDO::FETCH_OBJ);
 
@@ -89,8 +89,8 @@ try {
 
 	// Is that file already in the symlist?
 	$select = $db->query('
-		SELECT hvsc_files.id FROM hvsc_files
-		INNER JOIN symlists ON hvsc_files.id = symlists.file_id
+		SELECT files.id FROM files
+		INNER JOIN symlists ON files.id = symlists.file_id
 		WHERE symlists.folder_id = '.$folder_id);
 	$select->setFetchMode(PDO::FETCH_OBJ);
 
@@ -106,7 +106,7 @@ try {
 		die(json_encode(array('status' => 'error', 'message' => 'Could not create the entry in '.$symlist_folder)));
 
 	// Increase the count of files
-	$update = $db->query('UPDATE hvsc_folders SET files = '.++$file_count.' WHERE id = '.$folder_id);
+	$update = $db->query('UPDATE folders SET files = '.++$file_count.' WHERE id = '.$folder_id);
 	if ($update->rowCount() == 0)
 		die(json_encode(array('status' => 'error', 'message' => 'Could not update the count of files in '.$symlist_folder)));
 

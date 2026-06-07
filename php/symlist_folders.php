@@ -19,7 +19,7 @@ try {
 
 	$symlists = array();
 
-	$select = $db->query('SELECT id, collection_path, files, user_id FROM hvsc_folders WHERE (collection_path LIKE "!%" OR collection_path LIKE "$%") AND user_id = '.$user_id);
+	$select = $db->query('SELECT id, collection_path, files, user_id FROM folders WHERE (collection_path LIKE "!%" OR collection_path LIKE "$%") AND user_id = '.$user_id);
 	$select->setFetchMode(PDO::FETCH_OBJ);
 
 	if ($select->rowCount()) {

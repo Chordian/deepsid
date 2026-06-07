@@ -11,7 +11,7 @@
 
 require_once("class.account.php"); // Includes setup
 
-define('NOTESFILE', __DIR__ . '/../notes.txt');
+const NOTESFILE = __DIR__ . '/../notes.txt';
 
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) !== 'xmlhttprequest') {
 	http_response_code(403);	

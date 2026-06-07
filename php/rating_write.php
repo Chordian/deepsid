@@ -34,10 +34,10 @@ try {
 	$collection_path = str_replace('CSDb Music Competitions/', '', $collection_path);
 
 	$table = (str_ends_with($collection_path, '.sid') || str_ends_with($collection_path, '.mus'))
-			? 'hvsc_files'
-			: 'hvsc_folders';
+			? 'files'
+			: 'folders';
 
-	$type  = ($table == 'hvsc_files') ? 'FILE' : 'FOLDER';
+	$type  = ($table == 'files') ? 'FILE' : 'FOLDER';
 
 	// ---------------------------------------------------------------------
 	// 1. FETCH TARGET ROW (id + hash)

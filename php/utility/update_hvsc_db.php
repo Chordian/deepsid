@@ -14,8 +14,8 @@
 
 require_once("class.account.php"); // Includes setup
 
-define('HVSC_NEW_VERSION', '84');
-define('HVSC_PATH', '_High Voltage SID Collection/');
+const HVSC_NEW_VERSION	= '84';
+const HVSC_PATH			= '_High Voltage SID Collection/';
 
 try {
 	$db = $account->getDB();
@@ -164,23 +164,23 @@ try {
 						foreach ($sid_files as $sid) {
 							echo '&nbsp;&nbsp;&nbsp;&nbsp;- '.$destination.$sid.'<br />';
 
-							$db->query('INSERT INTO hvsc_files (collection_path, new)'.
+							$db->query('INSERT INTO files (collection_path, new)'.
 								' VALUES("'.HVSC_PATH.$destination.$sid.'", '.HVSC_NEW_VERSION.')');
 
 							// Better see if its folder already exists
 							$folder = substr($destination, 0, -1);
-							$select = $db->query('SELECT 1 FROM hvsc_folders WHERE collection_path = "'.HVSC_PATH.$folder.'"');
+							$select = $db->query('SELECT 1 FROM folders WHERE collection_path = "'.HVSC_PATH.$folder.'"');
 							$select->setFetchMode(PDO::FETCH_OBJ);
 							if (!$select->rowCount())
 								// No, better create an entry for it then
-								$db->query('INSERT INTO hvsc_folders (collection_path) VALUES("'.HVSC_PATH.$folder.'")');
+								$db->query('INSERT INTO folders (collection_path) VALUES("'.HVSC_PATH.$folder.'")');
 						}
 					} else if (substr($source, -4) == '.sid' && substr($destination, -4) == '.sid') {
 
 						// A SID file is merely renamed
 						echo '&nbsp;&nbsp;Renaming one file: '.$source.'&nbsp;&nbsp;=>&nbsp;&nbsp;'.$destination.'<br />';
 
-						$db->query('UPDATE hvsc_files SET collection_path = "'.HVSC_PATH.$destination.'", updated = '.HVSC_NEW_VERSION.
+						$db->query('UPDATE files SET collection_path = "'.HVSC_PATH.$destination.'", updated = '.HVSC_NEW_VERSION.
 							' WHERE collection_path = "'.HVSC_PATH.$source.'" LIMIT 1');
 
 					} else if (substr($source, -4) == '.sid' && substr($destination, -1) == '/') {
@@ -189,16 +189,16 @@ try {
 						$file = substr($source, strrpos($source, '/') + 1);
 						echo '&nbsp;&nbsp;One file to folder: '.$source.'&nbsp;&nbsp;=>&nbsp;&nbsp;'.$destination.$file.'<br />';
 
-						$db->query('UPDATE hvsc_files SET collection_path = "'.HVSC_PATH.$destination.$file.'", updated = '.HVSC_NEW_VERSION.
+						$db->query('UPDATE files SET collection_path = "'.HVSC_PATH.$destination.$file.'", updated = '.HVSC_NEW_VERSION.
 							' WHERE collection_path = "'.HVSC_PATH.$source.'" LIMIT 1');
 						
 						// But does that destination folder exist in the database?
 						$folder = substr($destination, 0, -1);
-						$select = $db->query('SELECT 1 FROM hvsc_folders WHERE collection_path = "'.HVSC_PATH.$folder.'"');
+						$select = $db->query('SELECT 1 FROM folders WHERE collection_path = "'.HVSC_PATH.$folder.'"');
 						$select->setFetchMode(PDO::FETCH_OBJ);
 						if (!$select->rowCount())
 							// No, better create an entry for it then
-							$db->query('INSERT INTO hvsc_folders (collection_path) VALUES("'.HVSC_PATH.$folder.'")');
+							$db->query('INSERT INTO folders (collection_path) VALUES("'.HVSC_PATH.$folder.'")');
 
 					} else if (substr($source, -1) == '/' && substr($destination, -1) == '/') {
 
@@ -206,19 +206,19 @@ try {
 						echo '&nbsp;&nbsp;Renaming a folder: '.$source.'&nbsp;&nbsp;=>&nbsp;&nbsp;'.$destination.'<br />';
 
 						// First get a list of all files that uses that folder
-						$select = $db->query('SELECT collection_path FROM hvsc_files WHERE collection_path LIKE "'.HVSC_PATH.$source.'%"');
+						$select = $db->query('SELECT collection_path FROM files WHERE collection_path LIKE "'.HVSC_PATH.$source.'%"');
 						$select->setFetchMode(PDO::FETCH_OBJ);
 						if ($select->rowCount()) {
 							foreach($select as $row) {
 								// Now update every single one with the new destination folder
 								$file = substr($row->collection_path, strrpos($row->collection_path, '/') + 1);
-								$db->query('UPDATE hvsc_files SET collection_path = "'.HVSC_PATH.$destination.$file.'", updated = '.HVSC_NEW_VERSION.
+								$db->query('UPDATE files SET collection_path = "'.HVSC_PATH.$destination.$file.'", updated = '.HVSC_NEW_VERSION.
 									' WHERE collection_path = "'.$row->collection_path.'"');
 							}
 						}
 	
 						// Finally rename the folder entry itself
-						$db->query('UPDATE hvsc_folders SET collection_path = "'.HVSC_PATH.substr($destination, 0, -1).'"'.
+						$db->query('UPDATE folders SET collection_path = "'.HVSC_PATH.substr($destination, 0, -1).'"'.
 							' WHERE collection_path = "'.HVSC_PATH.substr($source, 0, -1).'"');
 
 					} else {
@@ -236,7 +236,7 @@ try {
 				// One file to be deleted
 				echo '&nbsp;&nbsp;Delete one file: '.$target.'<br />';
 
-				$db->query('DELETE FROM hvsc_files WHERE collection_path = "'.HVSC_PATH.$target.'" LIMIT 1');
+				$db->query('DELETE FROM files WHERE collection_path = "'.HVSC_PATH.$target.'" LIMIT 1');
 
 			} else if (substr($line, -1) == '/') {
 

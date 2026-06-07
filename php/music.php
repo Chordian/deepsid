@@ -41,7 +41,7 @@ function publicSymlistOwner() {
 	global $db;
 
 	// First get its user ID
-	$select = $db->prepare('SELECT user_id FROM hvsc_folders WHERE collection_path = :folder LIMIT 1');
+	$select = $db->prepare('SELECT user_id FROM folders WHERE collection_path = :folder LIMIT 1');
 	$select->execute(array(':folder'=>substr($_GET['folder'], 1)));
 	$select->setFetchMode(PDO::FETCH_OBJ);
 
@@ -140,7 +140,7 @@ $search_context_path = $search_context_folders = '1';
 if ($_GET['searchHere']) {
 	$search_context_path = $search_context_folders = 'collection_path LIKE "'.substr($_GET['folder'], 1).'%"';
 	if ($is_compo_folder)
-		$search_context_folders = 'hvsc_folders.`type` = "COMPO"';
+		$search_context_folders = 'folders.`type` = "COMPO"';
 }
 
 try {
@@ -169,8 +169,8 @@ try {
 					: (substr($_GET['searchQuery'], -1) == '-' ? '>=' : '=');
 
 				$select = $db->prepare('
-					SELECT collection_path FROM hvsc_files
-					INNER JOIN ratings ON hvsc_files.id = ratings.table_id
+					SELECT collection_path FROM files
+					INNER JOIN ratings ON files.id = ratings.table_id
 					WHERE '.$search_context_path.' AND ratings.user_id = '.$user_id.'
 					AND ratings.rating '.$operators.' :rating AND ratings.type = "FILE"
 				');
@@ -187,10 +187,10 @@ try {
 					$tag_list .= ' OR tags_info.name LIKE "%'.$tag.'%"';
 
 				$select = $db->query('
-					SELECT collection_path FROM hvsc_files
-					LEFT JOIN tags_lookup ON hvsc_files.id = tags_lookup.files_id
+					SELECT collection_path FROM files
+					LEFT JOIN tags_lookup ON files.id = tags_lookup.files_id
 					LEFT JOIN tags_info ON tags_info.id = tags_lookup.tags_id
-					WHERE '.str_replace('collection_path', 'hvsc_files.collection_path', $search_context_path).'
+					WHERE '.str_replace('collection_path', 'files.collection_path', $search_context_path).'
 					AND ('.substr($tag_list, 4).')
 					GROUP BY tags_lookup.files_id
 					HAVING COUNT(*) = '.count($search_tags)
@@ -200,10 +200,10 @@ try {
 
 				// Search for a label (primary release)
 				$select = $db->prepare('
-					SELECT collection_path FROM hvsc_files
-					LEFT JOIN labels_lookup ON hvsc_files.id = labels_lookup.files_id
+					SELECT collection_path FROM files
+					LEFT JOIN labels_lookup ON files.id = labels_lookup.files_id
 					LEFT JOIN labels_info ON labels_info.id = labels_lookup.labels_id
-					WHERE '.str_replace('collection_path', 'hvsc_files.collection_path', $search_context_path).'
+					WHERE '.str_replace('collection_path', 'files.collection_path', $search_context_path).'
 					AND labels_info.name LIKE :label
 					GROUP BY labels_lookup.files_id
 				');
@@ -220,7 +220,7 @@ try {
 					$location = hexdec(substr($location, 2));
 
 				$select = $db->prepare('
-					SELECT collection_path FROM hvsc_files
+					SELECT collection_path FROM files
 					WHERE '.$search_context_path.' AND load_addr = :load_addr
 				');
 				$select->execute([
@@ -236,7 +236,7 @@ try {
 					$data_size = hexdec(substr($data_size, 2));
 
 				$select = $db->prepare('
-					SELECT collection_path FROM hvsc_files
+					SELECT collection_path FROM files
 					WHERE '.$search_context_path.'
 					AND data_size <= :data_size
 					AND collection_path LIKE "_High Voltage SID Collection%"
@@ -275,13 +275,13 @@ try {
 				}
 
 				$select = $db->query('
-					SELECT collection_path from hvsc_files WHERE '.$chain
+					SELECT collection_path from files WHERE '.$chain
 				);
 
 			} else if ($_GET['searchType'] == 'type') {												// Type
 
 				$select = $db->prepare('
-					SELECT collection_path FROM hvsc_files
+					SELECT collection_path FROM files
 					WHERE '.$search_context_path.' AND type = :type
 				');
 				$select->execute([
@@ -300,7 +300,7 @@ try {
 				}
 
 				$select = $db->query('
-					SELECT collection_path from hvsc_files
+					SELECT collection_path from files
 					WHERE new = "'.$version.'"
 					AND (collection_path LIKE "%'.$query.'%" OR author LIKE "%'.$query.'%")
 				');
@@ -327,8 +327,8 @@ try {
 
 						// Search for all multispeed types (2x, 3x, 4x, etc.)
 						$search_sql = '
-							SELECT collection_path FROM hvsc_files
-							LEFT JOIN tags_lookup ON hvsc_files.id = tags_lookup.files_id
+							SELECT collection_path FROM files
+							LEFT JOIN tags_lookup ON files.id = tags_lookup.files_id
 							LEFT JOIN tags_info ON tags_info.id = tags_lookup.tags_id
 							WHERE tags_info.name IN ("multispeed", "2x", "3x", "4x", "5x", "6x", "7x", "8x", "9x", "10x", "11x", "12x", "13x", "14x", "15x", "16x")
 							GROUP BY tags_lookup.files_id
@@ -339,7 +339,7 @@ try {
 
 						// Search for all multisid types (2SID, 3SID, etc.)
 						$search_sql = '
-							SELECT collection_path FROM hvsc_files
+							SELECT collection_path FROM files
 							WHERE collection_path REGEXP "_2SID|_3SID|_4SID|_8SID|_10SID"
 						';
 						break;
@@ -348,8 +348,8 @@ try {
 
 						// Search for most popular game composers in one big list
 						$search_sql = '
-							SELECT collection_path FROM hvsc_files
-							LEFT JOIN tags_lookup ON hvsc_files.id = tags_lookup.files_id
+							SELECT collection_path FROM files
+							LEFT JOIN tags_lookup ON files.id = tags_lookup.files_id
 							LEFT JOIN tags_info ON tags_info.id = tags_lookup.tags_id
 							WHERE author REGEXP "Rob Hubbard|Martin Galway|Fred Gray|Wally Beben|Neil Brennan|Ben Daglish|Charles Deenen|Tim Follin|Geoff Follin|Matt Gray|Chris Hülsbeck|Richard Joseph|Russell Lieblich|Reyn Ouwehand|Jeroen Tel|Steve Turner|Martin Walker|Johannes Bjerregaard|David Dunn|Laxity|Yip"
 							AND tags_info.name LIKE "%Game"
@@ -361,8 +361,8 @@ try {
 
 						// Search for all composers that have died
 						$search_sql = '
-							SELECT hvsc_folders.collection_path FROM hvsc_folders
-							INNER JOIN composers ON hvsc_folders.collection_path = composers.collection_path
+							SELECT folders.collection_path FROM folders
+							INNER JOIN composers ON folders.collection_path = composers.collection_path
 							WHERE composers.date_death != "0000-00-00"';
 						//clog('SQL', $search_sql);
 						break;
@@ -399,13 +399,13 @@ try {
 						// Find all SID tunes with GB64 entries that doesn't have a "GameBase64" tag yet
 						$search_sql = '
 							SELECT collection_path
-							FROM hvsc_files
+							FROM files
 							WHERE collection_path IN ('.$in_clause.')
 							AND NOT EXISTS (
 								SELECT 1
 								FROM tags_lookup
 								JOIN tags_info ON tags_info.id = tags_lookup.tags_id
-								WHERE tags_lookup.files_id = hvsc_files.id
+								WHERE tags_lookup.files_id = files.id
 								AND tags_info.name = "GameBase64"
 							)
 						';
@@ -457,7 +457,7 @@ try {
 				}
 
 				$select = $db->query('
-					SELECT collection_path FROM hvsc_files WHERE '.$search_context_path.' AND '.$include.$exclude
+					SELECT collection_path FROM files WHERE '.$search_context_path.' AND '.$include.$exclude
 				);
 			}
 
@@ -491,8 +491,8 @@ try {
 			if ($_GET['searchType'] == 'rating') {													// + Rating
 
 				$select = $db->prepare('
-					SELECT collection_path FROM hvsc_folders
-					INNER JOIN ratings ON hvsc_folders.id = ratings.table_id
+					SELECT collection_path FROM folders
+					INNER JOIN ratings ON folders.id = ratings.table_id
 					WHERE '.$search_context_folders.'
 					AND ratings.user_id = '.$user_id.'
 					AND ratings.rating '.$operators.' :rating
@@ -523,10 +523,10 @@ try {
 				$folders_version = $_GET['searchQuery'];
 
 				$select = $db->prepare('
-					SELECT DISTINCT hvsc_folders.collection_path FROM hvsc_folders
-					INNER JOIN hvsc_files ON hvsc_files.collection_path LIKE CONCAT("%", hvsc_folders.collection_path ,"/%")
-					WHERE hvsc_files.new = :version
-					AND LENGTH(hvsc_folders.collection_path) - LENGTH(REPLACE(hvsc_folders.collection_path, "/", "")) > 2
+					SELECT DISTINCT folders.collection_path FROM folders
+					INNER JOIN files ON files.collection_path LIKE CONCAT("%", folders.collection_path ,"/%")
+					WHERE files.new = :version
+					AND LENGTH(folders.collection_path) - LENGTH(REPLACE(folders.collection_path, "/", "")) > 2
 				');
 				$select->execute([
 					':version' => $folders_version
@@ -562,7 +562,7 @@ try {
 					$exclude = str_replace('#all#', 'collection_path', $exclude_folders);
 				}
 				$select = $db->query('
-					SELECT collection_path FROM hvsc_folders
+					SELECT collection_path FROM folders
 					WHERE '.$search_context_folders.' AND '.$include.$exclude.' AND (collection_path NOT LIKE "!%")
 					AND (collection_path NOT LIKE "_High Voltage SID Collection/^%") '.$collection_paths
 				);
@@ -655,7 +655,7 @@ try {
 			$files = array();
 
 			// First get the ID of the symlist
-			$select_folder = $db->prepare('SELECT id FROM hvsc_folders WHERE collection_path = :collection_path'.($is_personal_symlist ? ' AND user_id = '.$user_id : '').' LIMIT 1');
+			$select_folder = $db->prepare('SELECT id FROM folders WHERE collection_path = :collection_path'.($is_personal_symlist ? ' AND user_id = '.$user_id : '').' LIMIT 1');
 			$select_folder->execute(array(':collection_path' => substr($_GET['folder'], 1)));
 			$select_folder->setFetchMode(PDO::FETCH_OBJ);
 
@@ -667,8 +667,8 @@ try {
 					// Search for a specific user rating (1-5) or a range (e.g. -3 or 3-)
 					$operators = substr($_GET['searchQuery'], 0, 1) == '-' ? '<='
 						: (substr($_GET['searchQuery'], -1) == '-' ? '>=' : '=');
-					$select_files = $db->prepare('SELECT collection_path FROM hvsc_files'.
-						' INNER JOIN symlists ON hvsc_files.id = symlists.file_id'.
+					$select_files = $db->prepare('SELECT collection_path FROM files'.
+						' INNER JOIN symlists ON files.id = symlists.file_id'.
 						' INNER JOIN ratings ON symlists.file_id = ratings.table_id'.
 						' WHERE ratings.user_id = '.$user_id.' AND ratings.rating '.$operators.' :rating AND ratings.type = "FILE" AND symlists.folder_id = '.$symlist_folder_id);
 					$select_files->execute(array(':rating'=>str_replace('-', '', $_GET['searchQuery'])));
@@ -681,7 +681,7 @@ try {
 					foreach($search_tags as $tag)
 						$tag_list .= ' OR tags_info.name LIKE "%'.$tag.'%"';
 
-					$select_files = $db->query('SELECT h.collection_path FROM hvsc_files h'.
+					$select_files = $db->query('SELECT h.collection_path FROM files h'.
 						' INNER JOIN symlists ON h.id = symlists.file_id'.
 						' LEFT JOIN tags_lookup ON h.id = tags_lookup.files_id'.
 						' LEFT JOIN tags_info ON tags_info.id = tags_lookup.tags_id'.
@@ -692,7 +692,7 @@ try {
 
 				} else if ($_GET['searchType'] == 'location') {
 
-					$select_files = $db->prepare('SELECT h.collection_path FROM hvsc_files h'.
+					$select_files = $db->prepare('SELECT h.collection_path FROM files h'.
 						' INNER JOIN symlists ON h.id = symlists.file_id'.
 						' WHERE symlists.folder_id = '.$symlist_folder_id.' AND load_addr = :load_addr');
 					$location = $_GET['searchQuery'];
@@ -704,7 +704,7 @@ try {
 
 				} else if ($_GET['searchType'] == 'maximum') {
 
-					$select_files = $db->prepare('SELECT h.collection_path FROM hvsc_files h'.
+					$select_files = $db->prepare('SELECT h.collection_path FROM files h'.
 						' INNER JOIN symlists ON h.id = symlists.file_id'.
 						' WHERE symlists.folder_id = '.$symlist_folder_id.' AND data_size <= :data_size AND collection_path LIKE "_High Voltage SID Collection%"');
 					$data_size = $_GET['searchQuery'];
@@ -717,7 +717,7 @@ try {
 				} else if ($_GET['searchType'] == 'country') {
 
 					// Search for country in composer profiles
-					$select_files = $db->prepare('SELECT h.collection_path FROM hvsc_files h'.
+					$select_files = $db->prepare('SELECT h.collection_path FROM files h'.
 						' INNER JOIN symlists ON h.id = symlists.file_id'.
 						' INNER JOIN composers c ON h.collection_path LIKE CONCAT(c.collection_path, "%")'.
 						' WHERE c.country LIKE :query AND symlists.folder_id = '.$symlist_folder_id);
@@ -772,8 +772,8 @@ try {
 						}
 					}	
 
-					$select_files = $db->query('SELECT collection_path FROM hvsc_files'.
-						' INNER JOIN symlists ON hvsc_files.id = symlists.file_id'.
+					$select_files = $db->query('SELECT collection_path FROM files'.
+						' INNER JOIN symlists ON files.id = symlists.file_id'.
 						' WHERE '.$include.$exclude.' AND symlists.folder_id = '.$symlist_folder_id);
 				}
 
@@ -800,14 +800,14 @@ try {
 		$files = array();
 
 		// First get the ID of the symlist
-		$select_folder = $db->prepare('SELECT id FROM hvsc_folders WHERE collection_path = :collection_path'.($is_personal_symlist ? ' AND user_id = '.$user_id : '').' LIMIT 1');
+		$select_folder = $db->prepare('SELECT id FROM folders WHERE collection_path = :collection_path'.($is_personal_symlist ? ' AND user_id = '.$user_id : '').' LIMIT 1');
 		$select_folder->execute(array(':collection_path' => substr($_GET['folder'], 1)));
 		$select_folder->setFetchMode(PDO::FETCH_OBJ);
 
 		if ($select_folder->rowCount()) {
 			$symlist_folder_id = $select_folder->fetch()->id;
-			$select_files = $db->query('SELECT collection_path FROM hvsc_files'.
-				' INNER JOIN symlists ON hvsc_files.id = symlists.file_id'.
+			$select_files = $db->query('SELECT collection_path FROM files'.
+				' INNER JOIN symlists ON files.id = symlists.file_id'.
 				' WHERE symlists.folder_id = '.$symlist_folder_id);
 			$select_files->setFetchMode(PDO::FETCH_OBJ);
 
@@ -874,7 +874,7 @@ try {
 
 				foreach($select as $row) {
 					// Get collection path
-					$select_collection_path = $db->query('SELECT collection_path FROM hvsc_files WHERE id = '.$row->file_id);
+					$select_collection_path = $db->query('SELECT collection_path FROM files WHERE id = '.$row->file_id);
 					$select_collection_path->setFetchMode(PDO::FETCH_OBJ);
 
 					if ($select_collection_path->rowCount()) {
@@ -923,7 +923,7 @@ try {
 								$place[$collection_path] = isset($release->Achievement->Place) ? $release->Achievement->Place : -1;
 
 								// Find file ID of this HVSC path
-								$select = $db->query('SELECT id FROM hvsc_files WHERE collection_path = "'.$collection_path.'"');
+								$select = $db->query('SELECT id FROM files WHERE collection_path = "'.$collection_path.'"');
 								$select->setFetchMode(PDO::FETCH_OBJ);
 								$file_id = $select->rowCount() ? $select->fetch()->id : 0;
 
@@ -940,16 +940,16 @@ try {
 				}
 
 				// Does the corresponding folder already exist?
-				$select_folder = $db->prepare('SELECT id FROM hvsc_folders WHERE collection_path = :compo_name LIMIT 1');
+				$select_folder = $db->prepare('SELECT id FROM folders WHERE collection_path = :compo_name LIMIT 1');
 				$select_folder->execute(array(':compo_name' => $compo_name));
 				$select_folder->setFetchMode(PDO::FETCH_OBJ);
 				if ($select_folder->rowCount()) {
 					// Yes; just update its files count then
 					// NOTE: The check and update is necessary if regenerating the cache.
-					$db->query('UPDATE hvsc_folders SET files = '.$real_count.' WHERE id = '.$select_folder->fetch()->id);
+					$db->query('UPDATE folders SET files = '.$real_count.' WHERE id = '.$select_folder->fetch()->id);
 				} else {
 					// No; create the folder entry with the amount of viable files found
-					$insert_folder = $db->prepare('INSERT INTO hvsc_folders (collection_path, type, files, user_id)'.
+					$insert_folder = $db->prepare('INSERT INTO folders (collection_path, type, files, user_id)'.
 						' VALUES(:compo_name, "COMPO", '.$real_count.', 0)');
 					$insert_folder->execute(array(':compo_name' => $compo_name));						
 				}
@@ -996,7 +996,7 @@ try {
 			$files[] = 'CSDb Music Competitions';
 
 			// Append public symlist folders (starts with a "$" character)
-			$select = $db->query('SELECT collection_path FROM hvsc_folders WHERE collection_path LIKE "$%"');
+			$select = $db->query('SELECT collection_path FROM folders WHERE collection_path LIKE "$%"');
 			$select->setFetchMode(PDO::FETCH_OBJ);
 
 			if ($select->rowCount()) {
@@ -1004,7 +1004,7 @@ try {
 					$files[] = $row->collection_path;
 			}
 			// Append personal symlist folders (starts with a "!" character and needs the user_id)
-			$select = $db->query('SELECT collection_path FROM hvsc_folders WHERE collection_path LIKE "!%" AND user_id = '.$user_id);
+			$select = $db->query('SELECT collection_path FROM folders WHERE collection_path LIKE "!%" AND user_id = '.$user_id);
 			$select->setFetchMode(PDO::FETCH_OBJ);
 
 			if ($select->rowCount()) {
@@ -1059,7 +1059,7 @@ try {
 			$new_uploads = $select->rowCount().' NEW FILES TODAY';
 
 		// Get the incompatibility emulators/handlers for the parent folder
-		$select = $db->prepare('SELECT incompatible FROM hvsc_folders WHERE collection_path = :folder LIMIT 1');
+		$select = $db->prepare('SELECT incompatible FROM folders WHERE collection_path = :folder LIMIT 1');
 		$select->execute(array(':folder'=>ltrim($_GET['folder'], '/')));
 		$select->setFetchMode(PDO::FETCH_OBJ);
 		if ($select->rowCount()) $incompatible = $select->fetch()->incompatible;
@@ -1088,7 +1088,7 @@ try {
 
 			$collection_path = ($is_searching || $is_csdb_compo ? '' : $folder).$file;
 
-			$select = $db->prepare('SELECT * FROM hvsc_folders WHERE collection_path = :collection_path'.
+			$select = $db->prepare('SELECT * FROM folders WHERE collection_path = :collection_path'.
 				(substr($file, 0, 1) == '!' ? ' AND user_id = '.$user_id : '').' LIMIT 1');
 			$select->execute(array(':collection_path' => $collection_path));
 			$select->setFetchMode(PDO::FETCH_OBJ);
@@ -1144,7 +1144,7 @@ try {
 
 			if ($_GET['searchType'] == 'folders') {
 				// Replace total file count with number of new files in the specified HVSC update instead
-				$select_latest = $db->query('SELECT count(1) as cnt from hvsc_files'.
+				$select_latest = $db->query('SELECT count(1) as cnt from files'.
 					' WHERE new = "'.$folders_version.'" AND collection_path LIKE "%/'.$collection_path.'/%"');
 				$select_latest->setFetchMode(PDO::FETCH_OBJ);
 				$files_count = $select_latest->rowCount() ? $select_latest->fetch()->cnt : 0;
@@ -1175,7 +1175,7 @@ try {
 			// NOTE: See also 'ratings_folder.php' for duplicated code.
 			$select_files = $db->prepare("
 				SELECT files
-				FROM hvsc_folders
+				FROM folders
 				WHERE collection_path = :folder
 			");
 			$select_files->execute([':folder' => $folder.$file]);
@@ -1233,7 +1233,7 @@ try {
 
 			// FILE
 
-			$select = $db->prepare('SELECT * FROM hvsc_files WHERE collection_path = :collection_path LIMIT 1');
+			$select = $db->prepare('SELECT * FROM files WHERE collection_path = :collection_path LIMIT 1');
 			$select->execute(array(':collection_path'=>($is_searching || $is_public_symlist || $is_personal_symlist || $is_csdb_compo ? '' : $folder).$file));
 			$select->setFetchMode(PDO::FETCH_OBJ);
 
@@ -1513,7 +1513,7 @@ try {
 
 					// ONLY ADMIN FACTOIDS BELOW
 
-					case 1000:	// ID (hvsc_files)
+					case 1000:	// ID (the 'files' database table)
 
 						$factoid[$f] = 'DB ID: <span class="id">' . $id .'</span>';
 						break;

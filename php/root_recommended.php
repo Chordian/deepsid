@@ -25,7 +25,7 @@ try {
 	foreach($select_rec as $row_rec) {
 
 		// Get the collection path
-		$select = $db->query('SELECT collection_path FROM hvsc_folders WHERE id = '.$row_rec->table_id);
+		$select = $db->query('SELECT collection_path FROM folders WHERE id = '.$row_rec->table_id);
 		$select->setFetchMode(PDO::FETCH_OBJ);
 		$collection_path = $select->rowCount() ? $select->fetch()->collection_path : '';
 
@@ -64,7 +64,7 @@ try {
 		if (!file_exists('../'.$thumbnail)) $thumbnail = 'images/composer.png';
 		
 		// Get type and file count
-		$select = $db->query('SELECT type, files FROM hvsc_folders WHERE collection_path = "'.$collection_path.'"');
+		$select = $db->query('SELECT type, files FROM folders WHERE collection_path = "'.$collection_path.'"');
 		$select->setFetchMode(PDO::FETCH_OBJ);
 		$row = $select->fetch();
 		$type = $row->type == 'GROUP' ? 'group' : 'single';

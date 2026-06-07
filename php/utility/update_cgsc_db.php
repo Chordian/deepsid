@@ -15,8 +15,8 @@
 
 require_once("class.account.php"); // Includes setup
 
-define('CGSC_VERSION', '147'); // Remember to update this
-define('CGSC_PATH', "_Compute's Gazette SID Collection/");
+const CGSC_VERSION	= '147'; // Remember to update this
+const CGSC_PATH		= "_Compute's Gazette SID Collection/";
 
 try {
 	$db = $account->getDB();
@@ -29,7 +29,7 @@ try {
 		$parts = explode(' ', $line);
 		echo 'MOVE: Changing collection path from "'.$parts[1].'" to "'.$parts[2].'"';
 
-		$db->query('UPDATE hvsc_files SET collection_path = "'.CGSC_PATH.$parts[2].'", updated = '.CGSC_VERSION.
+		$db->query('UPDATE files SET collection_path = "'.CGSC_PATH.$parts[2].'", updated = '.CGSC_VERSION.
 		' WHERE collection_path = "'.CGSC_PATH.$parts[1].'"');
 
 		echo ' => DONE<br />';

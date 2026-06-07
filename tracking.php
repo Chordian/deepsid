@@ -14,10 +14,8 @@
 
 require_once("php/class.account.php"); // Includes setup
 
-define('TRACKFILE', 'visitors.txt');
-
-// How long (in minutes) a visitor is considered "active"
-define('ACTIVE_WINDOW_MINUTES', 30);
+const TRACKFILE = 'visitors.txt';
+const ACTIVE_WINDOW_MINUTES = 30; // How long (in minutes) a visitor is considered "active"
 
 try {
 

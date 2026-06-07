@@ -204,7 +204,7 @@
 
 					if (substr($file, -4) == '.sid' || substr($file, -4) == '.mus') {
 						// It's a specific file
-						$select = $db->query('SELECT name, author FROM hvsc_files WHERE collection_path = "'.$file.'" LIMIT 1');
+						$select = $db->query('SELECT name, author FROM files WHERE collection_path = "'.$file.'" LIMIT 1');
 						$select->setFetchMode(PDO::FETCH_OBJ);
 						if ($select->rowCount()) {
 							// Rob Hubbard - Commando
@@ -279,7 +279,7 @@
 					$db = $account->getDB();
 
 					// Get the ID of the SH file
-					$select = $db->prepare('SELECT id FROM hvsc_files WHERE collection_path = :collection_path LIMIT 1');
+					$select = $db->prepare('SELECT id FROM files WHERE collection_path = :collection_path LIMIT 1');
 					$select->execute(array(':collection_path' => str_replace('/SID', '_SID', $_GET['file'])));
 					$select->setFetchMode(PDO::FETCH_OBJ);
 
@@ -1972,6 +1972,13 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>June 7, 2026</h3>
+						<ul>
+							<li>New custom search commands: +follin, +martin, +jozz, +flex, +rand/+randall, +edwin/+santen, +aman/+diemer,
+								+4mat, +xayne, +6r6/+grg, +chris/+hulsbeck, +joseph, +dane, +page, +stein, +rock, +guy, +steel, +steve</li>
+							<li>The "g" hotkey can now be used to refresh the recommendation boxes on the front page.</li>
+						</ul>
 
 						<h3>June 4, 2026</h3>
 						<ul>

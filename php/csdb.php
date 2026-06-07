@@ -223,7 +223,7 @@ if (isset($_GET['fullname'])) {
 	try {
 		$db = $account->getDB();
 
-		$select = $db->prepare('SELECT id, csdb_type, csdb_id FROM hvsc_files WHERE collection_path = :collection_path LIMIT 1');
+		$select = $db->prepare('SELECT id, csdb_type, csdb_id FROM files WHERE collection_path = :collection_path LIMIT 1');
 		$select->execute(array(':collection_path' => $_GET['fullname']));
 		$select->setFetchMode(PDO::FETCH_OBJ);
 

@@ -35,7 +35,7 @@ try {
 	$zip->open($filename, ZipArchive::CREATE | ZipArchive::OVERWRITE);
 
 	// Get the ID of this symlist
-	$select = $db->prepare('SELECT id FROM hvsc_folders WHERE collection_path = :folder LIMIT 1');
+	$select = $db->prepare('SELECT id FROM folders WHERE collection_path = :folder LIMIT 1');
 	$select->execute(array(':folder'=>$_POST['symlist']));
 	$select->setFetchMode(PDO::FETCH_OBJ);
 
@@ -56,7 +56,7 @@ try {
 	// Parse through each SID file in the symlist folder
 	foreach ($select as $row) {
 
-		$files = $db->query('SELECT collection_path FROM hvsc_files WHERE id = '.$row->file_id.' LIMIT 1');
+		$files = $db->query('SELECT collection_path FROM files WHERE id = '.$row->file_id.' LIMIT 1');
 		$files->setFetchMode(PDO::FETCH_OBJ);
 
 		if (!$files->rowCount())

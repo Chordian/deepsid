@@ -9,7 +9,7 @@
  * @used-by		browser.js
  */
 
-define('REMIX64_EP_GET_REMIXES', 'remix/get_remixes_by_hvsc_path');
+const REMIX64_EP_GET_REMIXES = 'remix/get_remixes_by_hvsc_path';
 
 require_once("class.account.php"); // Includes setup
 

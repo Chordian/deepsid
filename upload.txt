@@ -19,9 +19,9 @@ Note that everyone can edit files, there is no ownership.
 
 Also note that the filename must be unique. If there is already a song with the same name, you will have to rename yours. However, when the next year comes all SID files are moved into a sub folder for the last year, and duplicates across those sub folders are allowed.
 
-It is currently not possible to delete files. (I will add this if there's a demand.)
+Only the administrator can delete files.
 
-The default sorting of this folder is always the latest uploaded files in top. The date below the star ratings show the date the file was uploaded. There's also a time attached for accuracy but this is not shown. The player line has been replaced with the author of the SID tune instead.
+The default sorting of this folder is always the latest uploaded files in top. A factoid can be set to show the upload date. There's also a time attached for accuracy but this is not shown. The player line has been replaced with the author of the SID tune instead.
 
 You can search, edit tags and add uploaded files to your own playlists as usual.
 

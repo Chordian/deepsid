@@ -48,7 +48,7 @@ function logTagActivity($action, $labels_id, $labels_site, $labels_name, $labels
 	global $db, $account;
 
 	// Get the collection path of this ID
-	$select = $db->prepare('SELECT collection_path FROM hvsc_files WHERE id = :id LIMIT 1');
+	$select = $db->prepare('SELECT collection_path FROM files WHERE id = :id LIMIT 1');
 	$select->execute(array(':id'=>$_POST['id']));
 	$select->setFetchMode(PDO::FETCH_OBJ);
 	if ($select->rowCount() == 0)

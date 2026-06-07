@@ -262,6 +262,7 @@ $help = array(
 		<div class="annex-hotkey">l</div><span class="annex-tiny">Upload SID for testing</span>
 		<div class="annex-hotkey">b</div><span class="annex-tiny">Back from plink</span>
 		<div class="annex-hotkey">f</div><span class="annex-tiny">Refresh folder</span>
+		<div class="annex-hotkey">g</div><span class="annex-tiny">Refresh recom. boxes</span>
 		<div class="annex-hotkey">t</div><span class="annex-tiny">Edit tags</span>
 		<div class="annex-hotkey">y</div><span class="annex-tiny">Toggle tags on/off</span>
 		<div class="annex-hotkey">i</div><span class="annex-tiny">Cycle top factoids</span>
