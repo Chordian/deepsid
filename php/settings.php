@@ -2,12 +2,12 @@
 /**
  * DeepSID
  *
- * Read and optionally write settings to the user's account.
+ * Read and optionally write toggle settings to the user's account.
  * 
- * If a setting is not specified, the script just returns the current state of
- * the settings for the logged in user.
+ * If a toggle setting is not specified, the script just returns the current
+ * state of the toggle settings for the logged in user.
  * 
- * Settings that can be specified for saving:
+ * Toggle settings that can be specified for saving:
  * 
  * @uses		$_POST['firstsubtune']		0 or 1
  * @uses		$_POST['primaryrelease']	0 or 1

@@ -322,6 +322,85 @@ class Account {
 	}
 
 	/**
+	 * Returns the value of a user's column in the 'Users' table.
+	 * 
+	 * @param		string			name of database column
+	 * 
+	 * @return		string|null		the value, or null if not found
+	 */
+	public function getUserSetting($column) {
+
+		if (!$this->checkLogin()) {
+			$this->handleError('User is not logged in');
+			return false;
+		}
+
+		static $user_cache = [];
+
+		// If we've seen this key before, return cached value
+		if (array_key_exists($column, $user_cache)) {
+			return $user_cache[$column];
+		}
+
+		if (!$this->connectDB()) return null;
+
+		// Only these columns may be accessed
+		$allowed = ['sid_handler'];
+		if (!in_array($column, $allowed, true)) return null;
+
+		try {
+			$select = $this->database->prepare("SELECT `$column` FROM users WHERE id = :user_id LIMIT 1");
+			$select->execute([':user_id' => $_SESSION['user_id']]);
+			$row = $select->fetch(PDO::FETCH_ASSOC);
+			$value = $row ? $row[$column] : null;
+
+			$user_cache[$column] = $value;
+			return $value;
+
+		} catch (PDOException $exception) {
+			$this->logError($exception->getMessage());
+			return null;
+		}
+	}
+
+	/**
+	 * Write the specified value in the user's column in the 'Users' table.
+	 * 
+	 * @param		string			name of database column
+	 * @param		string			the value to write in it
+	 * 
+	 * @return		string			message if an error occurred
+	 */
+	public function setUserSetting($column, $value) {
+
+		if (!$this->checkLogin()) {
+			$this->handleError('User is not logged in');
+			return 'User is not logged in';
+		}
+
+		if (!$this->connectDB())
+			return 'Could not connect to the database';
+
+		// Only these columns may be accessed
+		$allowed = ['sid_handler'];
+		if (!in_array($column, $allowed, true))
+			return 'Writing to the  "'.$column.'" setting is prohibited.';
+
+		try {
+			$update = $this->database->prepare("UPDATE users SET `$column` = :new_value WHERE id = :user_id LIMIT 1");
+			$update->execute([':new_value' => $value, ':user_id' => $_SESSION['user_id']]);
+			if ($update->rowCount() == 0) {
+				$this->logError("Could not update column '$column' with value '$value' in the 'Users' table");
+				return 'Could not write "'.$column.' = '.$value.'" in your settings.';
+			}
+		} catch (PDOException $exception) {
+			$this->logError($exception->getMessage());
+			return 'A database error occurred';
+		}
+		return '';
+	}
+
+	/**
 	 * Returns the value of a setting in the administrator settings table.
 	 * 
 	 * @param		string			name of setting, e.g. "search_limit"
@@ -329,11 +408,11 @@ class Account {
 	 * @return		string|null		the value, or null if not found
 	 */
 	public function getAdminSetting($key) {
-		static $cache = [];
+		static $admin_cache = [];
 
 		// If we've seen this key before, return cached value
-		if (array_key_exists($key, $cache)) {
-			return $cache[$key];
+		if (array_key_exists($key, $admin_cache)) {
+			return $admin_cache[$key];
 		}
 
 		if (!$this->connectDB()) return null;
@@ -346,7 +425,7 @@ class Account {
 			$row = $select->fetch(PDO::FETCH_OBJ);
 			$value = $row ? $row->setting_value : null;
 
-			$cache[$key] = $value;
+			$admin_cache[$key] = $value;
 			return $value;
 
 		} catch (PDOException $exception) {

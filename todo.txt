@@ -9,9 +9,17 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- Typing in the search box often bleeds through to hotkeys. Prevent that.
+- Consider storing the choice of emulator in the 'Users' database table.
 
-- Lemon's MP3 files currently doesn't work.
+- Lemon's MP3 files currently doesn't work. Since they're recorded from JSIDPlay2, which is
+  available in DeepSID now, consider if this SID handler is worth having anymore?
+
+- In the GRAPH view, clicking a column/row graph could toggle it on or off.
+
+- Reintroduce the "To Top" button on CSDb pages. Scrolling to the top can be cumbersome there
+  because of how navigation keys are mostly hijacked by the browser.
+
+- Add Ken's new JSIDPlay2 version.
 
 - A W A I T : Rewrite 'howto_update_gb64.txt' when the next GameBase64 update v20 arrives.
   See the .txt file for a few preliminary things to test.
@@ -22,7 +30,6 @@ REALLY CONSIDER THIS
 - Continue updating CGSC profiles (next up is "D").
 - Maybe place "Misc" in CGSC in top, above a divider line?
 - For redirect links, add a BACK button in both STIL tabs (to complement the 'b' hotkey).
-- In the GRAPH view, clicking a column/row graph could toggle it on or off.
 - CSDb Music Competitions: Add a flag icon after countries in the browser SID list itself.
 
 - Infinity radio. Plays tunes of two stars rating and above forever. Each time it is supposed to

@@ -436,7 +436,7 @@ function SIDPlayer(emulator) {
 			this.emulatorFlags.hasFlags			= false;
 			this.emulatorFlags.slowLoading		= false;
 			this.emulatorFlags.returnCIA		= false;
-			this.emulatorFlags.offline			= false;
+			this.emulatorFlags.offline			= true;		// Disables most control buttons
 			break;
 
 		default:

@@ -172,16 +172,19 @@ function createRecBox($random_id) {
 	$parts = explode(',', $row->handles);
 	$handle = empty($row->short_handle) ? end($parts) : $row->short_handle;
 
+	// A true group folder?
+	$is_group = strpos($collection_path, '/GROUPS/') !== false;
+
 	if ($name == '?')
 		$name = '<small class="u1">?</small>?<small class="u2">?</small>';
 
 	$brand_light = $brand_dark = '';
-	if (!empty($row->brand_light)) {
+	if (!$is_group && !empty($row->brand_light)) {
 		$rec_image = str_replace('.', '_rec.', $row->brand_light); // <- Image custom made for recommendation box
 		$img = file_exists('../images/brands/'.$rec_image) ? $rec_image : $row->brand_light;
 		$brand_light = '<img class="brand-rec brand-rec-light" src="images/brands/'.$img.'" alt="'.$img.'" style="display:none;" />';
 	}
-	if (!empty($row->brand_dark)) {
+	if (!$is_group && !empty($row->brand_dark)) {
 		$rec_image = str_replace('.', '_rec.', $row->brand_dark); 
 		$img = file_exists('../images/brands/'.$rec_image) ? $rec_image : $row->brand_dark;
 		$brand_dark = '<img class="brand-rec brand-rec-dark" src="images/brands/'.$img.'" alt="'.$img.'" style="display:none;" />';
@@ -194,9 +197,6 @@ function createRecBox($random_id) {
 	$fn = strtolower(str_replace('/', '_', $fn));
 	$thumbnail = 'images/composers/'.$fn.'.jpg';
 	if (!file_exists('../'.$thumbnail)) $thumbnail = 'images/composer.png';
-
-	// A true group folder?
-	$is_group = strpos($collection_path, '/GROUPS/') !== false;
 	
 	// Get type and file count
 	$select = $db->query('SELECT type, files FROM folders WHERE collection_path = "'.$collection_path.'"');
@@ -362,7 +362,7 @@ try {
 	$random_id_2 = $good_composers[$choices[1]];
 	$random_id_3 = $good_composers[$choices[2]];
 
-	// If this is an admin refresh then just return the three recommendation boxes only
+	// If this is a hotkey refresh then just return the three recommendation boxes only
 	if(isset($_GET['recOnly'])) {
 		$html = '<tr>'.
 			'<td style="max-width:10px;">'.

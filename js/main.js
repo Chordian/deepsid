@@ -1099,9 +1099,42 @@ var main = {
 	// ==============================
 
 	/**
-	 * Settings: Get a value from an ON/OFF toggle button.
+	 * Settings: Read a value from a database column.
 	 * 
 	 * This is not related to admin settings.
+	 * 
+	 * @param {string} column	The column to be read
+	 * 
+	 * @return {*}				The value
+	 */
+	getUserSetting: function(column) {
+		$.post("php/account_value.php", { column: column }, function(data) {
+			browser.validateData(data, function(data) {
+				return data.value;
+			});
+		});
+	},
+
+	/**
+	 * Settings: Write a value to a database column.
+	 * 
+	 * NOTE: To prevent accidents, a very restricted set of columns are allowed
+	 * to be written to.
+	 * 
+	 * @param {string} column	The column to be written to
+	 * @param {string} value	The value to write
+	 */
+	setUserSetting: function(column, value) {
+		$.post("php/account_value.php", { column: column, value: value }, function(data) {
+			browser.validateData(data);
+		});
+	},
+
+	/**
+	 * Settings: Get a value from an ON/OFF toggle button.
+	 * 
+	 * NOTE: This is only visual and doesn't read from the database. Search
+	 * for 'settings.php' for reading and writing the toggle settings.
 	 * 
 	 * @param {string} id		Part of the ID to be appended
 	 * 
@@ -1110,7 +1143,7 @@ var main = {
 	 * @used		browser.js
 	 *				controls.js
 	 */
-	getUserSetting: function(id) {
+	getUserToggle: function(id) {
 		$setting = $("#setting-"+id);
 		if ($setting.hasClass("button-toggle")) {
 			// Checkbox style toggle button; return boolean
@@ -1121,12 +1154,15 @@ var main = {
 	/**
 	 * Settings: Set the state of an ON/OFF toggle button.
 	 * 
+	 * NOTE: This is only visual and doesn't write to the database. Search
+	 * for 'settings.php' for reading and writing the toggle settings.
+	 * 
 	 * @param {string} id		Part of the ID to be appended
 	 * @param {boolean} state	1 or 0
 	 * 
 	 * @used		main.js
 	 */
-	settingToggle: function(id, state) {
+	setUserToggle: function(id, state) {
 		$("#setting-"+id)
 			.empty()
 			.append(state ? "On" : "Off")
@@ -3125,10 +3161,15 @@ main.bindKeyboardEvents = function() {
 
 					case 68:	// Keyup 'd' - test something
 
-						main.browserMessage("This is a test message.");
+						//main.browserMessage("This is a test message.");
 						/*$.getJSON("php/csdb_json.php", { type: "scener", id: 848 }, function(data) {
 							console.log(data.csdb.Handle.Handle);
 						});*/
+						$.post("php/account_value.php", { column: 'sid_handler', value: 'sovs2' }, function(data) {
+							browser.validateData(data, function(data) {
+								main.browserMessage("Done");
+							});
+						});
 						break;
 
 					default:
@@ -3998,13 +4039,13 @@ $(function() { // DOM ready
 	$.post("php/settings.php", function(data) {
 		main.onBrowserReady(function() {
 			browser.validateData(data, function(data) {
-				main.settingToggle("first-subtune",		data.settings.firstsubtune);
-				main.settingToggle("primary-release",	data.settings.primaryrelease);
-				main.settingToggle("skip-tune",			data.settings.skiptune);
-				main.settingToggle("mark-tune",			data.settings.marktune);
-				main.settingToggle("skip-bad",			data.settings.skipbad);
-				main.settingToggle("skip-long",			data.settings.skiplong);
-				main.settingToggle("skip-short",		data.settings.skipshort);
+				main.setUserToggle("first-subtune",		data.settings.firstsubtune);
+				main.setUserToggle("primary-release",	data.settings.primaryrelease);
+				main.setUserToggle("skip-tune",			data.settings.skiptune);
+				main.setUserToggle("mark-tune",			data.settings.marktune);
+				main.setUserToggle("skip-bad",			data.settings.skipbad);
+				main.setUserToggle("skip-long",			data.settings.skiplong);
+				main.setUserToggle("skip-short",		data.settings.skipshort);
 			});
 		});
 	}.bind(this));

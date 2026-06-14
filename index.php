@@ -1973,6 +1973,12 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>June 12, 2026</h3>
+						<ul>
+							<li>Fixed an issue where the final character of a search query could trigger a hotkey.</li>
+							<li>Fixed an SQL query bug when searching for tags within a big playlist.</li>
+						</ul>
+
 						<h3>June 7, 2026</h3>
 						<ul>
 							<li>New custom search commands: +follin, +martin, +jozz, +flex, +rand/+randall, +edwin/+santen, +aman/+diemer,

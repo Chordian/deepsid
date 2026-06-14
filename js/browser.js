@@ -95,7 +95,7 @@ Browser.prototype = {
 		if (main.getParam("file") === "" && main.getParam("search") === "") this.getFolder();
 		this.addEvents();
 
-	this.ready = true;
+		this.ready = true;
 	},
 
 	/**
@@ -142,8 +142,9 @@ Browser.prototype = {
 		$("#search-box").keydown(function(event) {
 			if (event.keyCode == 13 && $("#search-box").val() !== "") {
 				main.blockNextEnter = true;
-				event.target.blur();
 				$("#search-button").trigger("click");
+				// Must be delayed slightly or the last letter bleeds into the hotkey handler
+				setTimeout(() => this.blur(), 100);
 			}
 		}).keyup(function() {
 			$("#search-button").removeClass("disabled");
@@ -782,7 +783,7 @@ Browser.prototype = {
 			this.showSpinner($(event.target).parents("tr").children("td.sid"));
 
 			// Override default sub tune to first if demanded by a setting
-			var subtuneStart = main.getUserSetting("first-subtune") ? 0 : this.songs[this.songPos].startsubtune;
+			var subtuneStart = main.getUserToggle("first-subtune") ? 0 : this.songs[this.songPos].startsubtune;
 			// Either default start subtune, or an override from a "?subtune=" URL parameter
 			var subtune = typeof paramSubtune !== "undefined" ? paramSubtune : subtuneStart,
 				subtuneMax = this.songs[this.songPos].subtunes - 1;
@@ -891,7 +892,7 @@ Browser.prototype = {
 				if ($("#loop").hasClass("button-off")) {
 					// Play the next subtune, or if no more subtunes, the next tune in the list
 					$("#faster").trigger("mouseup"); // Easy there cowboy
-					if (!paramSolitary && !main.getUserSetting("skip-tune") && (ctrls.subtuneCurrent < ctrls.subtuneMax && !$("#subtune-plus").hasClass("disabled")))
+					if (!paramSolitary && !main.getUserToggle("skip-tune") && (ctrls.subtuneCurrent < ctrls.subtuneMax && !$("#subtune-plus").hasClass("disabled")))
 						// Next subtune
 						$("#subtune-plus").trigger("mouseup", false);
 					else if (this.songPos < (this.songs.length - 1) && !$("#skip-next").hasClass("disabled"))
@@ -2370,7 +2371,7 @@ Browser.prototype = {
 		$("#tab-csdb,#tab-gb64").removeClass("raised");
 
 		// If the 'Primary release' feature is activated
-		if (labelSite && main.getUserSetting("primary-release")) {
+		if (labelSite && main.getUserToggle("primary-release")) {
 			// Click 'GB64' tab if the currently selected tab is 'CSDb'
 			if (labelSite == "gb64") {
 				if (selectedTab === "csdb")
@@ -4527,7 +4528,7 @@ Browser.prototype = {
 				callback.call(this, data);
 			return true;
 		}		
-	},	
+	},
 
 	/**
 	 * Collect tags for all files and present them in the relevant sundry tab.
