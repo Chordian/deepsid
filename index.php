@@ -138,8 +138,9 @@
 			<script type="text/javascript" src="js/handlers/backend_websidplay.js?v=<?php echo filemtime('js/handlers/backend_websidplay.js') ?>"></script>
 		<?php endif ?>
 
-		<script>// Administrator settings
+		<script>// User and administrator settings
 			window.DeepSID = window.DeepSID || {};
+			DeepSID.userSettings = <?= json_encode($account->getAllUserSettings(), JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE) ?>;
 			DeepSID.adminSettings = <?= json_encode($account->getAllAdminSettings(), JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE) ?>;
 		</script>
 
@@ -1972,6 +1973,11 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>June 14, 2026</h3>
+						<ul>
+							<li>Your SID handler preference is now stored in the database when logged in.</li>
+						</ul>
 
 						<h3>June 12, 2026</h3>
 						<ul>

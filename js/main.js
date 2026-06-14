@@ -89,6 +89,7 @@ var main = {
 	isMobile:					false,		// TRUE = Running on a mobile device (or forced with a switch)
 	isNotips:					false,		// TRUE = Do not display the annex box in the right side
 	isLemon:					false,		// TRUE = Site is used in an iframe at Lemon64.com
+	isLoggedIn:					false,		// TRUE = The user is logged in
 	isAdmin:					false,		// TRUE = The user logged in is an administrator
 	logCount:					1000,		// Increased to make each console log output unique
 	miniPlayer:					0,			// TRUE = Display miniplayer with reduced controls
@@ -1108,18 +1109,19 @@ var main = {
 	 * @return {*}				The value
 	 */
 	getUserSetting: function(column) {
-		$.post("php/account_value.php", { column: column }, function(data) {
-			browser.validateData(data, function(data) {
-				return data.value;
-			});
-		});
+		if (typeof DeepSID === "undefined" || !DeepSID.userSettings) {
+			console.warn("User settings not loaded yet.");
+			return null;
+		}
+		const value = DeepSID.userSettings[column];
+		return value !== undefined ? value : null;
 	},
 
 	/**
 	 * Settings: Write a value to a database column.
 	 * 
-	 * NOTE: To prevent accidents, a very restricted set of columns are allowed
-	 * to be written to.
+	 * NOTE: To prevent accidents, only a very restricted set of columns are
+	 * allowed to be written to.
 	 * 
 	 * @param {string} column	The column to be written to
 	 * @param {string} value	The value to write
@@ -1299,6 +1301,7 @@ main.bindEvents = function() {
 		var emulator = $(this).prev("select").attr("name") == "select-topleft-emulator"
 			? $("#dropdown-topleft-emulator").styledGetValue()
 			: $("#dropdown-settings-emulator").styledGetValue();
+		if (main.isLoggedIn) main.setUserSetting('sid_handler', emulator);
 		docCookies.setItem("emulator", emulator, "Infinity", "/");
 
 		// Remember where we parked
@@ -1932,7 +1935,7 @@ main.bindAnnexEvents = function() {
 	 * Clicking the "Edit" or "Cancel" link for the composer's links.
 	 */
 	$("#annex").on("click", "#edit-cancel-clink", function() {
-		if (!$("#logout").length) {
+		if (!main.isLoggedIn) {
 			alert("Login or register and you will be able to edit composer links.");
 			return false;
 		}
@@ -1956,7 +1959,7 @@ main.bindAnnexEvents = function() {
 	 * Clicking the add link for a new "clink" in the annex box.
 	 */
 	$("#annex").on("click", "#edit-add-clink", function() {
-		if (!$("#logout").length) {
+		if (!main.isLoggedIn) {
 			alert("Login or register and you will be able to add composer links.");
 			return false;
 		}
@@ -2322,7 +2325,7 @@ main.bindDexterEvents = function() {
 	 */
 	$("#topic-profile,#annex").on("click", ".folder-rating b", function(event) {
 		// Clicked a star to set a rating for a folder or SID file
-		if (!$("#logout").length) {
+		if (!main.isLoggedIn) {
 			// But must be logged in to do that
 			alert("Login or register and you can click these stars to vote for this folder/composer.");
 			return false;
@@ -3161,15 +3164,7 @@ main.bindKeyboardEvents = function() {
 
 					case 68:	// Keyup 'd' - test something
 
-						//main.browserMessage("This is a test message.");
-						/*$.getJSON("php/csdb_json.php", { type: "scener", id: 848 }, function(data) {
-							console.log(data.csdb.Handle.Handle);
-						});*/
-						$.post("php/account_value.php", { column: 'sid_handler', value: 'sovs2' }, function(data) {
-							browser.validateData(data, function(data) {
-								main.browserMessage("Done");
-							});
-						});
+						main.browserMessage(main.getUserSetting('sid_handler'));
 						break;
 
 					default:
@@ -3980,10 +3975,12 @@ $(function() { // DOM ready
 	main.isNotips = $("body").attr("data-notips") !== "0";
 	main.miniPlayer = parseInt($("body").attr("data-mini"));
 	main.isLemon = main.isNotips;
+	main.isLoggedIn = $("#logout").length;
 	main.isAdmin = $("body").attr("data-admin") !== "0";
 
 	// Get the emulator last used by the visitor
-	var storedEmulator = docCookies.getItem("emulator");
+	var storedEmulator = main.isLoggedIn ? main.getUserSetting('sid_handler') : null;
+	if (!storedEmulator) storedEmulator = docCookies.getItem("emulator");
 	if (storedEmulator == null) {
 		// Set a default emulator
 		if (main.isMobile) {
@@ -4008,6 +4005,9 @@ $(function() { // DOM ready
 		"download",
 		"silence",
 	]) === -1) emulator = storedEmulator;
+
+		// Make sure the emulator is stored in the database too
+	if (main.isLoggedIn) main.setUserSetting('sid_handler', storedEmulator);
 
 	// Don't show tags on mobile devices as the dragging there might give way to sideways scrolling
 	main.showTags = main.isMobile ? false : localStorage.getItem("showtags") !== "false";

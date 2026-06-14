@@ -27,6 +27,9 @@
 
 require_once("setup.php");
 
+// Database columns allowed for read/write of user settings
+const USER_COLS_ALLOWED = ['sid_handler'];
+
 $account = new Account();
 
 class Account {
@@ -345,8 +348,7 @@ class Account {
 		if (!$this->connectDB()) return null;
 
 		// Only these columns may be accessed
-		$allowed = ['sid_handler'];
-		if (!in_array($column, $allowed, true)) return null;
+		if (!in_array($column, USER_COLS_ALLOWED, true)) return null;
 
 		try {
 			$select = $this->database->prepare("SELECT `$column` FROM users WHERE id = :user_id LIMIT 1");
@@ -362,6 +364,34 @@ class Account {
 			return null;
 		}
 	}
+
+	/**
+	 * Returns all allowed values in the 'Users' table.
+	 * 
+	 * @return	    array			array with keys and values
+	 */
+	public function getAllUserSettings() {
+
+	if (!$this->checkLogin()) {
+			$this->handleError('User is not logged in');
+			return false;
+		}
+
+		if (!$this->connectDB()) return null;
+
+		try {
+			$columns = '`' . implode('`, `', USER_COLS_ALLOWED) . '`';
+
+			$select = $this->database->prepare("SELECT $columns FROM users WHERE id = :user_id LIMIT 1");
+			$select->execute([':user_id' => $_SESSION['user_id']]);
+
+			return $select->fetch(PDO::FETCH_ASSOC) ?: [];
+
+		} catch (PDOException $exception) {
+			$this->logError($exception->getMessage());
+			return null;
+		}
+	}	
 
 	/**
 	 * Write the specified value in the user's column in the 'Users' table.
@@ -382,8 +412,7 @@ class Account {
 			return 'Could not connect to the database';
 
 		// Only these columns may be accessed
-		$allowed = ['sid_handler'];
-		if (!in_array($column, $allowed, true))
+		if (!in_array($column, USER_COLS_ALLOWED, true))
 			return 'Writing to the  "'.$column.'" setting is prohibited.';
 
 		try {
@@ -437,7 +466,7 @@ class Account {
 	/**
 	 * Returns all settings in the administrator settings table.
 	 * 
-	 * @return	    array		array with keys and values
+	 * @return	    array			array with keys and values
 	 */
 	public function getAllAdminSettings() {
 		if (!$this->connectDB()) return null;

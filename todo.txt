@@ -9,15 +9,14 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- Consider storing the choice of emulator in the 'Users' database table.
-
 - Lemon's MP3 files currently doesn't work. Since they're recorded from JSIDPlay2, which is
   available in DeepSID now, consider if this SID handler is worth having anymore?
 
 - In the GRAPH view, clicking a column/row graph could toggle it on or off.
 
 - Reintroduce the "To Top" button on CSDb pages. Scrolling to the top can be cumbersome there
-  because of how navigation keys are mostly hijacked by the browser.
+  because of how navigation keys are mostly hijacked by the browser. UPDATE: No need for a
+  floating button; just add one in the bottom in the line with the comment button.
 
 - Add Ken's new JSIDPlay2 version.
 

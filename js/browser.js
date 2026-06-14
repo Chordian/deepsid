@@ -596,7 +596,7 @@ Browser.prototype = {
 				var access = main.getAdminSetting("access_upload_new_sid");
 
 				// Clicked the button for uploading a new public SID file
-				if (!$("#logout").length) {
+				if (!main.isLoggedIn) {
 					// But must be logged in to do that
 					alert("Login or register and you can upload new SID files here.");
 					return false;
@@ -637,7 +637,7 @@ Browser.prototype = {
 			var access = main.getAdminSetting("access_edit_tags");
 
 			// Clicked the "+" icon button to edit tags for a SID file
-			if (!$("#logout").length) {
+			if (!main.isLoggedIn) {
 				alert("Login or register and you can edit the tags for this file.");
 				return false;
 			} else if (access === "off" || (access === "admin" && !main.isAdmin)) {
@@ -2420,7 +2420,7 @@ Browser.prototype = {
 	 */
 	registerStarRating: function(event, fullname) {
 
-		if (!$("#logout").length) {
+		if (!main.isLoggedIn) {
 			// But must be logged in to do that
 			alert("Login or register and you can click these stars to vote for a file or folder.");
 			return false;
@@ -2513,7 +2513,7 @@ Browser.prototype = {
 	 * @return {string}			The HTML string to put into the SID row
 	 */
 	buildStars: function(rating) {
-		var s = $("#logout").length ? "sh " : "s "; // Only allow stars lighting up on hover if logged in
+		var s = main.isLoggedIn ? "sh " : "s "; // Only allow stars lighting up on hover if logged in
 
 		if (!rating || rating === "0")
 			return '<b class="'+s+'eu"></b><b class="'+s+'eu"></b><b class="'+s+'eu"></b><b class="'+s+'eu"></b><b class="'+s+'eu"></b>';
@@ -3875,7 +3875,7 @@ Browser.prototype = {
 				break;
 			case 'edit-upload':
 				// Clicked the button for editing a public SID file
-				if (!$("#logout").length) {
+				if (!main.isLoggedIn) {
 					// But must be logged in to do that
 					alert("Login or register and you can edit this SID file.");
 					return false;
@@ -3979,7 +3979,7 @@ Browser.prototype = {
 							main.browserMessage("Added the file to the '"+data.name.substr(1)+"' playlist");
 					});
 				}.bind(this));
-				if (action === "symlist-new" && $("#logout").length) {
+				if (action === "symlist-new" && main.isLoggedIn) {
 					// Offer to let the user rename the new playlist on the fly
 					main.customDialog({
 						id: '#dialog-playlist-rename',
