@@ -315,6 +315,33 @@ try {
 					':query' => $_GET['searchQuery'].'%'
 				]);
 
+			} else if ($_GET['searchType'] == 'composer') {											// Composer
+
+				// Return a list of the newest songs in the SH folder belong to composer ID
+				$year = date('Y');
+
+				// Copyright year is used if a true year number, otherwise the uploaded year
+				$select = $db->prepare('
+					SELECT f.collection_path
+					FROM uploads u
+					INNER JOIN files f ON f.id = u.files_id
+					WHERE u.composers_id = :id
+					AND (
+							LEFT(f.copyright, 4) = :year
+							OR (
+								LEFT(f.copyright, 4) NOT REGEXP "^[0-9]{4}$"
+								AND u.uploaded >= :start
+								AND u.uploaded < :end
+							)
+						)
+				');
+				$select->execute([
+					':id'    => $_GET['searchQuery'],
+					':year'  => $year,
+					':start' => "$year-01-01",
+					':end'   => ($year + 1) . "-01-01"
+				]);
+
 			} else if ($_GET['searchType'] == 'folders') {											// Folders
 
 				// Don't find any files for this one

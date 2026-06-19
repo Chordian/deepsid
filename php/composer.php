@@ -256,8 +256,15 @@ if (isset($collection_path)) {
 			}
 			sort($years);
 
-			$first_year = $years[0];
+			$first_year = $years[0];	// These variables are only used in the annex box
 			$last_year =  end($years);
+
+			// Has this composer been active this very year? (HVSC is at a disadvantage here)
+			$this_year = '';
+			if ($last_year < date("Y") && $row->active == date("Y")) {
+				$last_year = date("Y");
+ 				$this_year = ' style="stroke:var(--color-text-resp-good);"'; // Green dot
+			}
 
 			$ycounts = array_count_values($years);
 			$years_labels = Array();
@@ -574,6 +581,8 @@ if (isset($row)) {
 		: $last_country;
 	$annex_country = '<br /><div class="annex-condensed" style="width:100%;margin-top:4px;">'.(!empty($country) ? '<img class="icon earth" style="top:4px;" src="images/composer_earth.svg" title="Country" alt="" /><span>'.$single_country.'</span>' : '').'<div style="float:right;margin-top:4px;">'.$folder_focus.'</div></div>';
 
+	$last_year_text = $last_year ===  date("Y") ? '<a href="'.$row->id.'" class="search" data-type="composer">'.$last_year.'</a>' : $last_year;
+
 	$annex_html = '
 		<h3 class="ellipsis" style="width:229px;margin-bottom:0;" title="'.$annex_full_name.'">'.$clink_name.'</h3>
 		<h4 class="ellipsis" style="width:229px;margin-top:0;" title="'.$annex_all_handles.'">'.$clink_handle.'</h4>
@@ -611,12 +620,12 @@ if (isset($row)) {
 									: '') . '
 								<line class="ct-point" x1="'.$x1.'" x2="'.$x1.'" y1="12" y2="12"></line>' .
 								($last_year > $first_year
-									? '<line class="ct-point" x1="'.$x2.'" x2="'.$x2.'" y1="12" y2="12"></line>'
+									? '<line class="ct-point"'.$this_year.' x1="'.$x2.'" x2="'.$x2.'" y1="12" y2="12"></line>'
 									: '') . '
 							</g>
 						</g>
 					</svg>
-				</div><span class="ct-label"' . ($last_year ===  date("Y") ? ' style="font-weight:bold;color:var(--color-text-resp-good);"' : '' ). '>' . ($last_year !== $first_year ? $last_year : ($first_year > 2007 ? $last_year : '')) . '</span>
+				</div><span class="ct-label">' . ($last_year !== $first_year ? $last_year_text : ($first_year > 2007 ? $last_year_text : '')) . '</span>
 				</div>'
 				: '')
 			: '');

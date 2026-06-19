@@ -9,6 +9,11 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+- Consider moving the "Active" line in the annex profile up above the groups table. The reason
+  is that some composers have an enormous group box and you have to scroll for it.
+
+- In URL parameters annex topic, link to the bottom of the FAQ page with examples.
+
 - Lemon's MP3 files currently doesn't work. Since they're recorded from JSIDPlay2, which is
   available in DeepSID now, consider if this SID handler is worth having anymore?
 

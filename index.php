@@ -973,6 +973,7 @@
 							<option value="folders" style="display:none;">Folders</option>
 							<option value="gb64">Game</option>
 							<option value="special" style="display:none;">Special</option>
+							<option value="composer" style="display:none;">Composer</option>
 						</select>
 						<form onsubmit="return false;" autocomplete="off">
 							<div class="search-wrapper">
@@ -1821,7 +1822,6 @@
 						<p>
 							SIDInfo by Matti Hämäläinen (ccr)<br />
 							<a href="http://csdb.chordian.net/?type=release&id=164751" target="_top">https://csdb.dk/release/?id=164751</a><br />
-							<a href="https://tnsp.org/hg/sidinfo/" target="_top">https://tnsp.org/hg/sidinfo/</a>
 						</p>
 						<p>
 							Chartist.js by Gion Kunz (<a href="https://github.com/gionkunz" target="_top">GitHub</a>)<br />
@@ -1973,6 +1973,18 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>June 19, 2026</h3>
+						<ul>
+							<li>If a composer has tunes from the current year, the year next to the new green dot (i.e. at the end of the
+								activity bar in the annex box) is now a link that will show their recent songs from the 'SID Happens' folder.</li>
+						</ul>
+
+						<h3>June 17, 2026</h3>
+						<ul>
+							<li>The activity bar in the annex box now reaches the current year when the composer has qualifying
+								tunes in the 'SID Happens' folder. This is indicated by a green dot at the end.</li>
+						</ul>
 
 						<h3>June 14, 2026</h3>
 						<ul>
