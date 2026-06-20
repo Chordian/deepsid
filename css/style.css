@@ -2018,7 +2018,7 @@ small.u2 { margin-left: 2px; }
    NOTE: These can't be comma-huddled! */
 
 input[type=range] {
-	-webkit-appearance: none;
+	appearance: none;
 	height: 100%;
 	background: transparent;
 }
@@ -6821,6 +6821,16 @@ input[type=range]::-ms-track {
 
 				#csdb-comment {
 					margin: 6px 6px 0 0;
+				}
+
+				#to-top {
+					display: none;
+					float: right;
+					position: relative;
+					bottom: -6px;
+					height: 13px !important;
+					padding: 0 3px;
+					fill: currentColor;
 				}
 
 	#page .ext table.tight,

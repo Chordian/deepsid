@@ -910,8 +910,9 @@ if ($csdb_type == 'sid') {
 	? commentsTable('Trivia', $csdb->Release->Comments->Trivia, $scener_handle, $scener_id)
 	: '';
 
-	$comment_button = '<button id="csdb-comment" data-type="release" data-id="'.$csdb->Release->ID.'">Comment</button>'.
-		'<small class="shared-all-comments">Shared for all types of comment sections.</small><br />';
+	$comment_button = '
+		<button id="csdb-comment" data-type="release" data-id="'.$csdb->Release->ID.'">Comment</button>
+		<small class="shared-all-comments">Shared for all types of comment sections.</small><br />';
 
 	// Build the sticky header HTML for the '#sticky' DIV
 	$sticky = '<h2 class="ellipsis csdb-ellipsis" title="'.$csdb->Release->Name.'">'.$csdb->Release->Name.'</h2><button id="go-back">Back</button>'.

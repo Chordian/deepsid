@@ -1235,6 +1235,10 @@ main.bindEvents = function() {
 		}
 		$(".dialog-box").center();
 
+		// Show 'To top' button?
+		const page = $("#page")[0];
+		$("#to-top").toggle(page.scrollHeight > page.clientHeight);
+
 		main.onBrowserReady(function() {
 			if (typeof browser.positionFocusExplainer === "function") {
 				browser.positionFocusExplainer();
@@ -2167,6 +2171,18 @@ main.bindDexterEvents = function() {
 	 */
 	$("#page").on("scroll", function() {
 		main.tabPrevScrollPos[$("#tabs .selected").attr("data-topic")].reset = false;
+
+		// Show 'To top' button?
+		const page = $("#page")[0];
+		$("#to-top").toggle(page.scrollHeight > page.clientHeight);
+	});
+
+	/**
+	 * Clicking the 'To top' button.
+	 */
+	$("#page").on("click", "#to-top", function() {
+		main.resetDexterScrollBar("csdb");
+		$("#page").scrollTop(0);
 	});
 
 	/**

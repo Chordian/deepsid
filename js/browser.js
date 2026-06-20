@@ -2917,8 +2917,10 @@ Browser.prototype = {
 				$("#sticky-csdb").empty().append(data.sticky);
 				if (parseInt(colorTheme))
 					data.html = data.html.replace(/composer\.png/g, "composer_dark.png");
+				// The 'To top' button (initially hidden)
+				const toTop = '<button id="to-top" title="Scroll to the top"><svg height="8" width="8" viewBox="0 0 32 32" style="position:relative;top:-4.5px;"><path d="M4 24 H28 L16 6 z"/></svg></button>';
 				// Show the page
-				$("#topic-csdb").empty().append(data.html)
+				$("#topic-csdb").empty().append(data.html+toTop)
 					.css("visibility", "visible");
 				main.resetDexterScrollBar("csdb");
 

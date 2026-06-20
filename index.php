@@ -1961,6 +1961,7 @@
 						<ul>
 							<li>Removed the 'Lemon's MP3 files' SID handler. Since the MP3 files were recorded using JSIDPlay2, and JSIDPlay2 is now
 								available as a SID handler in its own right, keeping both no longer made much sense.</li>
+							<li>The CSDb tab once again shows a 'To top' button whenever scrolling is required.</li>
 						</ul>
 
 						<h3>June 19, 2026</h3>

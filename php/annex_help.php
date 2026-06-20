@@ -151,14 +151,14 @@ $help = array(
 		<p>The default for mobile devices.</p>
 		Faster, but not as efficient. Use this if your computer is slow.
 
-		<h4><a href="//deepsid.chordian.net?emulator=jssid">Hermit\'s (+FM)</a></h4>
+		<h4><a href="//deepsid.chordian.net?emulator=hermit">Hermit\'s (+FM)</a></h4>
 		<p>Even faster, but cannot emulate RSID tunes, nor SID with digi.</p>
 		This can also play SID+FM tunes, i.e. with OPL synthesis added.
 
 		<h4><a href="//deepsid.chordian.net?emulator=asid">ASID (MIDI)</a></h4>
 		<p>Use with MIDI devices such as e.g. SidStation, TherapSID, etc.</p>
 
-		<h4><a href="//deepsid.chordian.net?emulator=asid">WebUSB (Hermit)</a></h4>
+		<h4><a href="//deepsid.chordian.net?emulator=webusb">WebUSB (Hermit)</a></h4>
 		<p>Use with USB devices such as e.g. <a href="https://github.com/LouDnl/USBSID-Pico">USBSID-Pico</a>.</p>
 
 		<h4><a href="//deepsid.chordian.net?emulator=youtube">YouTube videos</a></h4>
