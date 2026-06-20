@@ -1972,6 +1972,7 @@ small.u2 { margin-left: 2px; }
 		position: absolute;
 		border: 0.5px solid var(--color-graph-border);
 		background: var(--color-graph-bg);
+		cursor: pointer;
 	}
 
 	/* Round voice numbers in bottom left corner of canvas areas */

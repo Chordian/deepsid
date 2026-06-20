@@ -9,8 +9,6 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- In the GRAPH view, clicking a column/row graph could toggle it on or off.
-
 - A W A I T : Rewrite 'howto_update_gb64.txt' when the next GameBase64 update v20 arrives.
   See the .txt file for a few preliminary things to test.
 

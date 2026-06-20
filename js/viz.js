@@ -202,6 +202,7 @@ Viz.prototype = {
 		$("#topic-settings .settings-advanced").on("change", this.onChangeAdvancedSetting.bind(this));
 		$("#sticky-visuals").on("click", "button", this.onVisualsClick.bind(this));
 		$("#visuals-memory .block-info").on("click", "button", this.onPlayerBrowseClick.bind(this));
+		$("#visuals-graph").on("click", ".graph-area", this.onGraphVoiceClick.bind(this));
 	},
 
 	/**
@@ -428,6 +429,18 @@ Viz.prototype = {
 				for (var scope = 1; scope <= 4; scope++)
 					$("#scope"+scope).css("opacity", (state ? "1" : "0.3"));
 		}
+	},
+
+	/**
+	 * Graph: Click a scrolling voice box to turn it ON/OFF.
+	 * 
+	 * The "keyup" event in this script catches this.
+	 */
+	onGraphVoiceClick: function(event) {
+		var e = $.Event("keyup");
+		e.which = e.keyCode = 49 + parseInt(event.currentTarget.id.slice(-1));
+		e.shiftKey = event.shiftKey;
+		$(window).trigger(e);
 	},
 
 	/**
