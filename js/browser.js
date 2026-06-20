@@ -562,6 +562,18 @@ Browser.prototype = {
 					case "+steve":
 						this.gotoFolder("MUSICIANS/T/Turner_Steve");
 						break;
+					case "+jan":
+					case "+harries":
+					case "+diabelez":
+						this.gotoFolder("MUSICIANS/S/SIDwave");
+						break;
+					case "+peters":
+					case "+softmaster":
+						this.gotoFolder("MUSICIANS/A/Audial_Arts/Peters_Patrick");
+						break;
+					case "+djb":
+						this.gotoFolder("MUSICIANS/B/Bakewell_Dwayne");
+						break;
 					default:
 						// Search the query unless a search command was entered
 						cmds.handlePlusCommand.call(this, searchValue, sorting).then(handled => {
@@ -1531,7 +1543,7 @@ Browser.prototype = {
 			ctrls.state("root/back", "enabled");
 
 			// Disable emulators/handlers in the drop-down according to parent folder attributes
-			$("#dropdown-topleft-emulator,#dropdown-settings-emulator").styledOptionState("resid jsidplay2 websid legacy hermit webusb asid lemon youtube download silence", "enabled");
+			$("#dropdown-topleft-emulator,#dropdown-settings-emulator").styledOptionState("resid jsidplay2 websid legacy hermit webusb asid youtube download silence", "enabled");
 			$("#page .viz-emu").removeClass("disabled");
 			$("#dropdown-topleft-emulator,#dropdown-settings-emulator").styledOptionState(this.cache.incompatible, "disabled");
 			if (this.cache.incompatible.indexOf("resid") !== -1) $("#page .viz-resid").addClass("disabled");
@@ -1607,7 +1619,7 @@ Browser.prototype = {
 					var files = "";
 
 					// Disable emulators/handlers in the drop-down according to parent folder attributes
-					$("#dropdown-topleft-emulator,#dropdown-settings-emulator").styledOptionState("resid jsidplay2 websid legacy hermit webusb asid lemon youtube download silence", "enabled");
+					$("#dropdown-topleft-emulator,#dropdown-settings-emulator").styledOptionState("resid jsidplay2 websid legacy hermit webusb asid youtube download silence", "enabled");
 					$("#page .viz-emu").removeClass("disabled");
 					$("#dropdown-topleft-emulator,#dropdown-settings-emulator").styledOptionState(data.incompatible, "disabled");
 					if (data.incompatible.indexOf("resid") !== -1) $("#page .viz-resid").addClass("disabled");
@@ -1683,7 +1695,7 @@ Browser.prototype = {
 						this.previousOverridePath = "_SID Happens";
 					}
 
-					if (["lemon", "youtube", "download", "silence"].includes(SID.emulator)) {
+					if (["youtube", "download", "silence"].includes(SID.emulator)) {
 						// The 'Visuals' tab is useless to these SID handlers
 						$("#tab-visuals").addClass("disabled");
 						if ($selected.attr("data-topic") === "visuals")

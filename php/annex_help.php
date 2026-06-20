@@ -161,10 +161,6 @@ $help = array(
 		<h4><a href="//deepsid.chordian.net?emulator=asid">WebUSB (Hermit)</a></h4>
 		<p>Use with USB devices such as e.g. <a href="https://github.com/LouDnl/USBSID-Pico">USBSID-Pico</a>.</p>
 
-		<h4><a href="//deepsid.chordian.net?emulator=lemon">Lemon\'s MP3 files</a></h4>
-		<p>It plays MP3 files recorded from JSIDPlay2 (only
-		<a href="https://www.hvsc.c64.org/">HVSC</a> for now).</p>
-
 		<h4><a href="//deepsid.chordian.net?emulator=youtube">YouTube videos</a></h4>
 		<p>Plays a YouTube video where SID rows are enabled for clicking.</p>
 		One SID row can contain several videos, and you can add more.
@@ -287,7 +283,7 @@ $help = array(
 
 	'	<h3>URL parameters</h3>
 		<p>Here are the URL parameters you can use for external links:</p>
-		<table class="annex-table">
+		<table class="annex-table" style="margin-bottom:8px;">
 			<tr>
 				<td>file</td><td>File to play; folder to show.</td>
 			</tr>
@@ -304,7 +300,6 @@ $help = array(
 						<li><b>hermit</li>
 						<li><b>asid</b>&nbsp;&nbsp;(MIDI)</li>
 						<li><b>webusb</li>
-						<li><b>lemon</b></li>
 						<li><b>youtube</b></li>
 						<li><b>download</b></li>
 						<li><b>silence</b></li>
@@ -405,6 +400,7 @@ $help = array(
 				<td>noannex<br /><span style="font-weight:normal;">or</span> notips</td><td><b>1</b> to avoid showing this annex box.</td>
 			</tr>
 		</table>
+		See the bottom of the <a href="https://deepsid.chordian.net?tab=faq">FAQ</a> tab for a few examples.
 
 	',
 

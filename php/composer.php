@@ -593,14 +593,9 @@ if (isset($row)) {
 		  . $annex_country .
 		// Below is empty groups/work table placeholder
 		(!$is_groups_folder ?
-			'<div id="annex-groups-box"><table id="annex-table-groups" class="tight top" style="min-width:100%;font-size:14px;margin-top:5px;">'.
-				'<tr>'.
-					'<td id="annex-table-message" class="topline bottomline leftline rightline" style="height:30px;padding:0 !important;text-align:center;">'.($spinner ? '<img class="loading-dots" src="images/loading_threedots.svg" alt="" style="margin-top:10px;" />' : '<div class="no-profile">No profile data</div>').'</td>'.
-				'</tr>'.
-			'</table></div>' .
 			// Activity (years) - sort of reverse engineered 'Chartist'
 			(strpos($collection_path, $upload_folder) === false ?
-				'<div style="white-space:nowrap;"><h4 style="display:inline-block;margin-top:12px;margin-right:8px;">Active</h4><span class="ct-label">'. ($last_year !== $first_year ? $first_year : ($first_year < 2007 ? '<div style="display:inline-block;width:35px;"></div>' . $first_year : '<div style="display:inline-block;width:27px;"></div>')) .'</span>
+				'<div style="white-space:nowrap;"><h4 style="display:inline-block;margin:12px 6px 10px 2px;">Active</h4><span class="ct-label">'. ($last_year !== $first_year ? $first_year : ($first_year < 2007 ? '<div style="display:inline-block;width:35px;"></div>' . $first_year : '<div style="display:inline-block;width:27px;"></div>')) .'</span>
 				<div style="display:inline-block;height:24px;width:114px;position:relative;top:7px;">
 					<svg class="ct-chart-line" style="width:100%;height:100%;">
 						<g class="ct-grids">
@@ -627,9 +622,15 @@ if (isset($row)) {
 					</svg>
 				</div><span class="ct-label">' . ($last_year !== $first_year ? $last_year_text : ($first_year > 2007 ? $last_year_text : '')) . '</span>
 				</div>'
-				: '')
+				: '').
+				// Groups table
+				'<div id="annex-groups-box"><table id="annex-table-groups" class="tight top" style="min-width:100%;font-size:14px;margin-top:5px;">'.
+				'<tr>'.
+					'<td id="annex-table-message" class="topline bottomline leftline rightline" style="height:30px;padding:0 !important;text-align:center;">'.($spinner ? '<img class="loading-dots" src="images/loading_threedots.svg" alt="" style="margin-top:10px;" />' : '<div class="no-profile">No profile data</div>').'</td>'.
+				'</tr>'.
+				'</table></div>'
 			: '');
-
+			
 } else {
 	$annex_html = '<div class="annexMsg">No profile to show.</div>';
 }

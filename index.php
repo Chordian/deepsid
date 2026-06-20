@@ -146,7 +146,6 @@
 
 		<!--<script type="text/javascript" src="js/handlers/jsidplay2.js"></script>-->
 		<script type="text/javascript" src="js/handlers/jsSID-modified.js?v=<?php echo filemtime('js/handlers/jsSID-modified.js') ?>"></script>
-		<script type="text/javascript" src="js/handlers/howler.min.js?v=<?php echo filemtime('js/handlers/howler.min.js') ?>"></script>
 		<script type="text/javascript" src="js/chartist.min.js?v=<?php echo filemtime('js/chartist.min.js') ?>"></script>
 		<?php // @link https://github.com/madmurphy/cookies.js ?>
 		<script type="text/javascript" src="js/cookies.min.js?v=<?php echo filemtime('js/cookies.min.js') ?>"></script>
@@ -580,7 +579,6 @@
 					<option value="hermit">Hermit's (+FM)</option>
 					<option value="webusb">WebUSB (Hermit)</option>
 					<option value="asid">ASID (MIDI)</option>
-					<option value="lemon">Lemon's MP3 files</option>
 					<option value="youtube">YouTube videos</option>
 					<option value="download">Download SID file</option>
 					<option value="silence">No SID handler</option>
@@ -1580,7 +1578,6 @@
 										<option value="hermit">Hermit's (+FM)</option>
 										<option value="webusb">WebUSB (Hermit)</option>
 										<option value="asid">ASID (MIDI)</option>
-										<option value="lemon">Lemon's MP3 files</option>
 										<option value="youtube">YouTube videos</option>
 										<option value="download">Download SID file</option>
 										<option value="silence">No SID handler</option>
@@ -1608,7 +1605,7 @@
 
 								<h4>Advanced settings</h4>
 								<p>This section will change if you select a different SID handler.</p>
-								<div class="settings-advanced-resid settings-advanced-websid settings-advanced-legacy settings-advanced-hermit settings-advanced-asid settings-advanced-lemon settings-advanced-youtube settings-advanced-download settings-advanced-silence settings-advanced">
+								<div class="settings-advanced-resid settings-advanced-websid settings-advanced-legacy settings-advanced-hermit settings-advanced-asid settings-advanced-youtube settings-advanced-download settings-advanced-silence settings-advanced">
 									<label class="dropdown-unstyled-label unselectable">There are no advanced settings for this SID handler.</label>
 								</div>
 								<div class="settings-advanced-jsidplay2 settings-advanced">
@@ -1762,12 +1759,6 @@
 							<a href="https://github.com/Malvineous/opljs" target="_top">https://github.com/Malvineous/opljs</a><br />
 						</p>
 
-						<h3>Audio API library for MP3 files</h3>
-						<p>
-							Howler by James Simpson (<a href="https://goldfirestudios.com/">GoldFire Studios</a>)<br />
-							<a href="https://github.com/goldfire/howler.js">https://github.com/goldfire/howler.js</a>
-						</p>
-
 						<h3>Libraries of SID tunes</h3>
 						<p>
 							High Voltage SID Collection #84<br />
@@ -1776,11 +1767,6 @@
 						<p>
 							Compute's Gazette SID Collection #147<br />
 							<a href="http://www.c64music.co.uk/" target="_top">http://www.c64music.co.uk/</a>
-						</p>
-
-						<p>
-							Kim Lemon's MP3 files (JSIDPlay2)<br />
-							<a href="https://www.lemon64.com/" target="_top">https://www.lemon64.com/</a>
 						</p>
 
 						<h3>Remixes of SID tunes</h3>
@@ -1865,9 +1851,6 @@
 							I have repeatedly tried to fix the reaction times to no avail. It's a shame having to leave this
 							library behind as it would have been nice with real-time recordings to complement the emulations,
 							but I finally decided that the quality of the SOASC implementation was inadequate for DeepSID.
-						</p>
-						<p>
-							As an alternative, try the <a class="set-lemon" href="#">Lemon's MP3 Files</a> handler instead.
 						</p>
 
 						<h3>Where did the Disqus tab go?</h3>
@@ -1974,10 +1957,20 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>June 20, 2026</h3>
+						<ul>
+							<li>Removed the 'Lemon's MP3 files' SID handler. Since the MP3 files were recorded using JSIDPlay2, and JSIDPlay2 is now
+								available as a SID handler in its own right, keeping both no longer made much sense.</li>
+						</ul>
+
 						<h3>June 19, 2026</h3>
 						<ul>
 							<li>If a composer has tunes from the current year, the year next to the new green dot (i.e. at the end of the
 								activity bar in the annex box) is now a link that will show their recent songs from the 'SID Happens' folder.</li>
+							<li>Moved the activity bar above the groups table, as large group lists could otherwise push it out of view.</li>
+							<li>New custom search commands: +jan/+harries/+diabelez, +peters/+softmaster, +djb</li>
+							<li>Upgraded the JSIDPlay2 emulator to v4.14.</li>
+							<li>Fixed a bug that prevented new users from registering.</li>
 						</ul>
 
 						<h3>June 17, 2026</h3>

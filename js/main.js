@@ -1351,7 +1351,7 @@ main.bindEvents = function() {
 
 					$("#dropdown-topleft-emulator,#dropdown-settings-emulator")
 						.styledOptionState("resid jsidplay2 websid legacy hermit webusb asid", "enabled")
-						.styledOptionState("lemon youtube", "disabled");
+						.styledOptionState("youtube", "disabled");
 					$("#path").css("top", "5px").empty().append(`
 						<span style="position:relative;top:-2px;margin-right:8px;">Temporary emulator testing</span>
 						<button id="load-test-exit" class="medium">Exit</button>
@@ -1417,13 +1417,6 @@ main.bindEvents = function() {
 				});
 			}
 		});
-	});
-
-	/**
-	 * Clicking a link for choosing "Lemon's MP3 Files" SID handler.
-	 */
-	$("a.set-lemon").click(function() {
-		ctrls.selectEmulator("lemon");
 	});
 
 	/**

@@ -9,21 +9,11 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- Consider moving the "Active" line in the annex profile up above the groups table. The reason
-  is that some composers have an enormous group box and you have to scroll for it.
-
-- In URL parameters annex topic, link to the bottom of the FAQ page with examples.
-
-- Lemon's MP3 files currently doesn't work. Since they're recorded from JSIDPlay2, which is
-  available in DeepSID now, consider if this SID handler is worth having anymore?
-
 - In the GRAPH view, clicking a column/row graph could toggle it on or off.
 
 - Reintroduce the "To Top" button on CSDb pages. Scrolling to the top can be cumbersome there
   because of how navigation keys are mostly hijacked by the browser. UPDATE: No need for a
   floating button; just add one in the bottom in the line with the comment button.
-
-- Add Ken's new JSIDPlay2 version.
 
 - A W A I T : Rewrite 'howto_update_gb64.txt' when the next GameBase64 update v20 arrives.
   See the .txt file for a few preliminary things to test.
@@ -329,7 +319,6 @@ PROBABLY NOT?
 - To avoid stutter when stuff is loading, can the emulators be placed in a web worker?
 - A filter sort option in letter folders for undecided (awaits evalution) for HVSC updates.
 - JW has pointed out that there are SID.load() redundancy in controls.js versus browser.js.
-- Maybe use .duration method for Howler instead of database length?
 - Hover on profile images to slide up a transparent bottom panel with image credits.
 - JW says browser.js loads stuff before the user settings in main.js have been loaded.
 - An adaptation list for CSDb forum HVSC paths that have since been moved/renamed in an update.
@@ -407,11 +396,6 @@ PROBABLY NOT?
   - With tabs to toggle between the info table or this.
   - Might not be worth the trouble? Most editors have few users and you can get a perfectly good
     overview just by looking at the browser list yourself.
-
-- Add context menu option for downloading a tune as an MP3. I'm thinking, maybe I can grab one
-  of Lemon's MP3 files? UPDATE: I tried it using a download trick from Stack Overflow, but of
-  course I got CORS issues and I don't want to waste my time trying to fix that crap. If you
-  want to continue anyway, the test is here: temp\browser_download_mp3.js
 
 - VBI detection can be handled better in WebSid. JW said in Facebook Messenger:
   "I have PSID specific APIs that might allow you to handle the PSID labels "more correctly", e.g.

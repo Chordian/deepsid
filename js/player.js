@@ -291,38 +291,6 @@ function SIDPlayer(emulator) {
 			this.emulatorFlags.offline			= false;
 			break;
 
-
-		case "lemon":
-
-			/**
-			 * Howler by James Simpson (Goldfire Studios)
-			 * 
-			 * + Can play anything; used for Lemon's MP3 files
-			 * + Multiplier (only to 4.0 but still)
-			 * 
-			 * Kim Lemon's MP3 files
-			 * 
-			 * + MP3 recordings (128 kbps) from JSIDPlay2
-			 * + SID chip automatically chosen by JSIDPlay2
-			 * + Falls back to 6581 if chip is undefined
-			 * + All kinds of SID tunes are supported
-			 * - Depends on external CDN web site
-			 */
-			this.chip = this.emulator.substr(6);
-			this.emulator = "lemon";
-
-			this.emulatorFlags.supportFaster	= true;
-			this.emulatorFlags.supportEncoding	= false;
-			this.emulatorFlags.supportSeeking	= true;
-			this.emulatorFlags.supportLoop		= true;
-			this.emulatorFlags.forceModel		= false;
-			this.emulatorFlags.forcePlay		= true;
-			this.emulatorFlags.hasFlags			= false;
-			this.emulatorFlags.slowLoading		= true;
-			this.emulatorFlags.returnCIA		= false;
-			this.emulatorFlags.offline			= false;
-			break;
-
 		case "youtube":
 
 			/**
@@ -553,7 +521,7 @@ SIDPlayer.prototype = {
 				// NOTE: Whenever there is a new version of this file, increase the number at
 				// the end of the filename. Otherwise some web browsers (especially Firefox)
 				// might refuse to see the new file - even when clearing the cache.
-				this.jp2Worker = new Worker("js/handlers/jsidplay2-004.wasm_gc-worker.js", );
+				this.jp2Worker = new Worker("js/handlers/jsidplay2-005.wasm_gc-worker.js", );
 
 				this.jp2PlayTime = 0;
 				this.jp2Loading = true;
@@ -825,124 +793,6 @@ SIDPlayer.prototype = {
 				}
 				break;
 
-			case "lemon":
-
-				if (this.howler) this.howler.stop();	// Prevents the time bar from going crazy
-				if (this.lemon) this.lemon.abort();		// Allows for premature row off-clicks
-
-				if (this.howler) this.howler.unload();
-
-				if ($("body").attr("data-mobile") !== "0") {
-					// NOTE: The AJAX and the Howler code is in this short timeout function to give the loading
-					// spinner time to be displayed first. Without the timeout, the synchronous AJAX call would
-					// block most web browsers from executing the spinner display until it is moot.
-					setTimeout(function() {
-						// AJAX is called synchronously to avoid iOS muting the audio upon row click
-						this.lemon = $.ajax({
-							url:		"php/lemon.php",
-							type:		"get",
-							async:		false,
-							data:		{
-								file: 		file,
-								subtune:	subtune,
-							}
-						}).done(function(data) {
-							try {
-								data = $.parseJSON(data);
-							} catch(e) {
-								if (document.location.hostname == "chordian")
-									$("body").empty().append(data);
-								else
-									main.showError();
-								return false;
-							}
-							if (data.status == "error") {
-								alert(data.message);
-								return false;
-							}
-							this.url = data.url;
-							//this.modelLEMON = data.model;
-						}.bind(this));
-
-						this.howler = new Howl({
-							src:	[this.url],
-							loop:	$("#loop").hasClass("button-on"),
-							html5:	true, // Must use this or files won't play immediately on row click on iOS devices
-							onload:	function() {
-								// Reset volume in case the "Faster" button-slip trick was used
-								this.setVolume(1);
-								if (typeof callback === "function")
-									callback.call(this);
-							}.bind(this),
-							onloaderror: function() {
-								// ERROR: File not found
-								if (typeof callback === "function")
-									callback.call(this, true);
-								setTimeout(function() {
-									// After half a second just go to the next row
-									if (typeof this.callbackTrackEnd === "function")
-										this.callbackTrackEnd();
-								}.bind(this), 500);
-							}.bind(this),
-							onend: function() {
-								// When the song has ended
-								if (typeof this.callbackTrackEnd === "function")
-									this.callbackTrackEnd();
-							}.bind(this),
-						});
-					}.bind(this), 20);
-				} else {
-					// NOTE: Not playing on a mobile device makes for a lot more flexibility. The timeout is
-					// not necessary anymore and the PHP script can be called asynchronously.
-					this.lemon = $.get("php/lemon.php", {
-						file: 		file,
-						subtune:	subtune,
-					}, function(data) {
-						try {
-							data = $.parseJSON(data);
-						} catch(e) {
-							if (document.location.hostname == "chordian")
-								$("body").empty().append(data);
-							else
-								main.showError();
-							return false;
-						}
-						if (data.status == "error") {
-							alert(data.message);
-							return false;
-						}
-
-						//this.modelLEMON = data.model;
-
-						this.howler = new Howl({
-							src:	[data.url],
-							loop:	$("#loop").hasClass("button-on"),
-							onload:	function() {
-								// Reset volume in case the "Faster" button-slip trick was used
-								this.setVolume(1);
-								if (typeof callback === "function")
-									callback.call(this);
-							}.bind(this),
-							onloaderror: function() {
-								// ERROR: File not found
-								if (typeof callback === "function")
-									callback.call(this, true);
-								setTimeout(function() {
-									// After half a second just go to the next row
-									if (typeof this.callbackTrackEnd === "function")
-										this.callbackTrackEnd();
-								}.bind(this), 500);
-							}.bind(this),
-							onend: function() {
-								// When the song has ended
-								if (typeof this.callbackTrackEnd === "function")
-									this.callbackTrackEnd();
-							}.bind(this),
-						});
-					}.bind(this));
-				}
-				break;
-
 			case "youtube":
 
 				if (this.ytReady) {
@@ -1007,7 +857,7 @@ SIDPlayer.prototype = {
 	/**
 	 * Unload and destroy object. Not all handlers support this.
 	 * 
-	 * @handlers jsidplay2, lemon
+	 * @handlers jsidplay2
 	 */
 	unload: function() {
 		switch (this.emulator) {
@@ -1020,9 +870,6 @@ SIDPlayer.prototype = {
 					this.jp2AudioContext.close();
 					this.jp2AudioContext = undefined;
 				}
-				break;
-			case "lemon":
-				if (this.howler) this.howler.unload();
 				break;
 			case "resid":
 			case "websid":
@@ -1093,9 +940,6 @@ SIDPlayer.prototype = {
 					this.paused ? this.hermit.playcont() : this.hermit.start(this.subtune);
 					this.paused = false;
 				}
-				break;
-			case "lemon":
-				if (this.howler) this.howler.play();
 				break;
 			case "youtube":
 				if (this.ytReady) this.YouTube.playVideo();
@@ -1219,9 +1063,6 @@ SIDPlayer.prototype = {
 			case "asid":
 				// @todo
 				break;
-			case "lemon":
-				// @todo
-				break;
 			case "youtube":
 				if (this.ytReady)
 					playing = this.YouTube.getPlayerState() === YT.PlayerState.PLAYING;
@@ -1259,9 +1100,6 @@ SIDPlayer.prototype = {
 			case "asid":
 				suspended = this.hermit.issuspended();
 				break;
-			case "lemon":
-				suspended = true; // Doesn't seem to work without
-				break;
 			case "youtube":
 				// @todo
 				break;
@@ -1297,9 +1135,6 @@ SIDPlayer.prototype = {
 			case "webusb":
 			case "asid":
 				this.hermit.pause();
-				break;
-			case "lemon":
-				if (this.howler) this.howler.pause();
 				break;
 			case "youtube":
 				if (this.ytReady) this.YouTube.pauseVideo();
@@ -1347,9 +1182,6 @@ SIDPlayer.prototype = {
 				this.hermit.playcont(); // Added as a hack to avoid a nasty console error
 				this.hermit.stop();
 				this.paused = false;
-				break;
-			case "lemon":
-				if (this.howler) this.howler.stop();
 				break;
 			case "youtube":
 				if (this.ytReady) this.YouTube.stopVideo();
@@ -1403,9 +1235,6 @@ SIDPlayer.prototype = {
 			case "asid":
 				this.hermit.setSpeedMultiplier(multiplier);
 				break;
-			case "lemon":
-				if (this.howler) this.howler.rate(multiplier !== 1 ? 4.0 : 1.0);
-				break;
 			case "youtube":
 				if (this.ytReady) this.YouTube.setPlaybackRate(multiplier);
 				break;
@@ -1443,7 +1272,6 @@ SIDPlayer.prototype = {
 			case "legacy":
 				// @resid @todo The 'getSongInfo()' method is not suitable (all three emulators)
 			case "jsidplay2":
-			case "lemon":
 			case "youtube":
 			case "download":
 			case "silence":
@@ -1527,9 +1355,6 @@ SIDPlayer.prototype = {
 			case "asid":
 				this.hermit.setvolume(value);
 				break;
-			case "lemon":
-				if (this.howler) this.howler.volume(value);
-				break;
 			case "youtube":
 				if (this.ytReady) this.YouTube.setVolume(value * 100);
 				break;
@@ -1562,9 +1387,6 @@ SIDPlayer.prototype = {
 			case "webusb":
 			case "asid":
 				this.hermit.setvolume(value * this.mainVol);
-				break;
-			case "lemon":
-				if (this.howler) this.howler.volume(value * this.mainVol);
 				break;
 			case "youtube":
 				if (this.ytReady) this.YouTube.setVolume((value * this.mainVol) * 100);
@@ -1602,10 +1424,6 @@ SIDPlayer.prototype = {
 			case "asid":
 				time = this.hermit.getplaytime();
 				break;
-			case "lemon":
-				var seek = this.howler ? parseFloat(this.howler.seek()) || 0 : 0;
-				time = Math.round(seek);
-				break;
 			case "youtube":
 				if (this.ytReady)
 					time = this.YouTube.getCurrentTime();
@@ -1631,15 +1449,13 @@ SIDPlayer.prototype = {
 	/**
 	 * Set the seek of the song. Ignored by emulators.
 	 * 
-	 * @handlers youtube, lemon
+	 * @handlers youtube
 	 * 
 	 * @param {number} seconds	Number of seconds to move the seek to
 	 */
 	setSeek: function(seconds) {
 		if (this.emulator == "youtube" && this.ytReady)
 			this.YouTube.seekTo(seconds, true);
-		else if (this.emulator === "lemon" && this.howler)
-			this.howler.seek(seconds);
 	},
 
 	/**
@@ -1765,7 +1581,7 @@ SIDPlayer.prototype = {
 	/**
 	 * Disable the timeout of a SID tune. Used for infinite looping.
 	 * 
-	 * @handlers resid, websid, legacy, lemon, youtube
+	 * @handlers resid, websid, legacy, youtube
 	 */
 	disableTimeout: function() {
 		switch (this.emulator) {
@@ -1784,9 +1600,6 @@ SIDPlayer.prototype = {
 			case "webusb":
 			case "asid":
 				break;
-			case "lemon":
-				this.howler.loop(true);
-				break;
 			case "youtube":
 				// Unfortunately this only seems to work with YouTube playlists
 				if (this.ytReady) this.YouTube.setLoop(true);
@@ -1800,7 +1613,7 @@ SIDPlayer.prototype = {
 	/**
 	 * Enable the timeout of a SID tune.
 	 * 
-	 * @handlers resid, websid, legacy, lemon, youtube
+	 * @handlers resid, websid, legacy, youtube
 	 * 
 	 * @param {number} length	Number of seconds before the music times out
 	 */
@@ -1820,9 +1633,6 @@ SIDPlayer.prototype = {
 			case "hermit":
 			case "webusb":
 			case "asid":
-				break;
-			case "lemon":
-				this.howler.loop(false);
 				break;
 			case "youtube":
 				// Unfortunately this only seems to work with YouTube playlists
@@ -1858,7 +1668,6 @@ SIDPlayer.prototype = {
 			case "asid":
 				this.hermit.setmodel(model === "6581" ? 6581.0 : 8580.0);
 				break;
-			case "lemon":
 			case "youtube":
 			case "download":
 			case "silence":
@@ -1887,8 +1696,6 @@ SIDPlayer.prototype = {
 			case "webusb":
 			case "asid":
 				return this.hermit.getmodel() === 6581.0 ? "6581" : "8580";
-			case "lemon":
-				//return this.modelLEMON.substr(3, 4);
 			case "youtube":
 			case "download":
 			case "silence":
@@ -1921,7 +1728,6 @@ SIDPlayer.prototype = {
 				// Hermit's emulator doesn't support this
 				// @todo Try changing: this.hermit.C64_PAL_CPUCLK + this.hermit.PAL_FRAMERATE
 				break;
-			case "lemon":
 			case "youtube":
 			case "download":
 			case "silence":
@@ -1952,7 +1758,6 @@ SIDPlayer.prototype = {
 			case "asid":
 				// Hermit's emulator always defaults to PAL
 				return "PAL";
-			case "lemon":
 			case "youtube":
 			case "download":
 			case "silence":
@@ -2010,7 +1815,6 @@ SIDPlayer.prototype = {
 					jsMask += (this.voiceMask[jsChip] & 7) << (3 * jsChip);
 				this.hermit.enableVoices(jsMask);
 				break;
-			case "lemon":
 			case "youtube":
 			case "download":
 			case "silence":
@@ -2067,7 +1871,6 @@ SIDPlayer.prototype = {
 			case "asid":
 				this.hermit.enableVoices(0x1FF);
 				break;
-			case "lemon":
 			case "youtube":
 			case "download":
 			case "silence":
@@ -2109,7 +1912,6 @@ SIDPlayer.prototype = {
 			case "asid":
 				var cia = this.hermit.getcia();
 				return cia ? Math.round(19654 / cia) : 0;
-			case "lemon":
 			case "youtube":
 			case "download":
 			case "silence":
@@ -2136,7 +1938,6 @@ SIDPlayer.prototype = {
 			case "hermit":
 			case "webusb":
 			case "asid":
-			case "lemon":
 			case "youtube":
 			case "download":
 			case "silence":
@@ -2164,7 +1965,6 @@ SIDPlayer.prototype = {
 			case "hermit":
 			case "webusb":
 			case "asid":
-			case "lemon":
 			case "youtube":
 			case "download":
 			case "silence":
@@ -2206,7 +2006,6 @@ SIDPlayer.prototype = {
 			case "webusb":
 			case "asid":
 				return this.hermit.getSIDAddress(chip - 1);
-			case "lemon":
 			case "youtube":
 			case "download":
 			case "silence":
@@ -2254,7 +2053,7 @@ SIDPlayer.prototype = {
 
 						const audioElapsed = write.currentTime() - this.jp2AudioStartTime;
 
-						if (write.absTime - bufferSize <= (audioElapsed - latency) * clockSpeed) {
+						if (Number(write.absTime) - bufferSize <= (audioElapsed - latency) * clockSpeed) {
 
 							this.jp2ReadyWrites.shift();
 
@@ -2290,7 +2089,6 @@ SIDPlayer.prototype = {
 			case "webusb":
 			case "asid":
 				return this.hermit.readregister(register + this.hermit.getSIDAddress(chip));
-			case "lemon":
 			case "youtube":
 			case "download":
 			case "silence":
@@ -2321,7 +2119,6 @@ SIDPlayer.prototype = {
 				return this.hermit.readregister(address);
 			case "jsidplay2":
 				// Not supported
-			case "lemon":
 			case "youtube":
 			case "download":
 			case "silence":
@@ -2352,7 +2149,6 @@ SIDPlayer.prototype = {
 			case "hermit":
 			case "webusb":
 			case "asid":
-			case "lemon":
 			case "youtube":
 			case "download":
 			case "silence":
@@ -2384,7 +2180,6 @@ SIDPlayer.prototype = {
 			case "hermit":
 			case "webusb":
 			case "asid":
-			case "lemon":
 			case "youtube":
 			case "download":
 			case "silence":
@@ -2443,7 +2238,6 @@ SIDPlayer.prototype = {
 			case "hermit":
 			case "webusb":
 			case "asid":
-			case "lemon":
 			case "youtube":
 			case "download":
 			case "silence":
@@ -2470,7 +2264,6 @@ SIDPlayer.prototype = {
 			case "hermit":
 			case "webusb":
 			case "asid":
-			case "lemon":
 			case "youtube":
 			case "download":
 			case "silence":
@@ -2525,7 +2318,6 @@ SIDPlayer.prototype = {
 			case "hermit":
 			case "webusb":
 			case "asid":
-			case "lemon":
 			case "youtube":
 			case "download":
 			case "silence":
