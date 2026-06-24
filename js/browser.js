@@ -416,60 +416,33 @@ Browser.prototype = {
 				break;
 			case "folder-back":
 				if (!$("#folder-back").hasClass("disabled")) {
-					// First get the boolean for showing the "all starred" icon when showing parent folder
-					// NOTE: This is actually only used by CGSC since its main folder is cached.
-					$.get("php/rating_folder.php", { fullname: this.path.substring(1) }, function(data) {
-						this.validateData(data, function(data) {
-							// Does CGSC need to show the tiny "all starred" icon for the leaving folder?
-							if (this.path.indexOf("Compute's Gazette SID Collection") !== -1 &&
-									this.cache.folder !== "") {
-
-								var folderName = this.path.split("/").slice(-1)[0],
-									$folders = $(this.cache.folder); // Unwrap it
-								var $the_folder = $($folders)
-									.find('.name[data-name="'+encodeURIComponent(folderName)+'"]').parents("td");
-
-								if (data.all_rated) {
-									// TRUE:  Add icon
-									$the_folder.prepend('<div class="all-starred"></div>');
-								} else {
-									// FALSE: Remove icon
-									$the_folder.find('div.all-starred').remove();
-								}
-
-								// Wrap it up again
-								this.cache.folder = $("<div>").append($folders.clone()).html();
-							}
-
-							if (this.redirectFolder == "") {
-								// Go back one folder in the HVSC tree
-								this.path = this.path.substr(0, this.path.lastIndexOf("/"));
-							} else {
-								// Jump back to origin
-								this.path = this.redirectFolder;
-								this.redirectFolder = "";
-							}
-							ctrls.state("prev/next", "disabled");
-							ctrls.state("subtunes", "disabled");
-							if (this.isSearching) {
-								this.scrollPositions.pop(); // First pop out of search state
-								this.kbPositions.pop();
-							}
-							main.cancelTrackType("enter:folder");
-							this.getFolder(this.scrollPositions.pop(), undefined,
-								(this.path === "/CSDb Music Competitions" || this.path === "/_Compute's Gazette SID Collection")
-									&& this.cache.folder !== "" /* <- Boolean parameter */ ,
-								function() {
-									this.kbSelectedRow = this.kbPositions.pop();
-									if (typeof this.kbSelectedRow == "undefined")
-										this.moveKeyboardToFirst();
-									this.moveKeyboardSelection(this.kbSelectedRow, false);
-							}.bind(this));
-							this.getComposer();
-							ctrls.subtuneCurrent = ctrls.subtuneMax = 0; // Clear subtune switch
-							main.updateURL(true);
-						});
+					if (this.redirectFolder == "") {
+						// Go back one folder in the HVSC tree
+						this.path = this.path.substr(0, this.path.lastIndexOf("/"));
+					} else {
+						// Jump back to origin
+						this.path = this.redirectFolder;
+						this.redirectFolder = "";
+					}
+					ctrls.state("prev/next", "disabled");
+					ctrls.state("subtunes", "disabled");
+					if (this.isSearching) {
+						this.scrollPositions.pop(); // First pop out of search state
+						this.kbPositions.pop();
+					}
+					main.cancelTrackType("enter:folder");
+					this.getFolder(this.scrollPositions.pop(), undefined,
+						(this.path === "/CSDb Music Competitions" || this.path === "/_Compute's Gazette SID Collection")
+							&& this.cache.folder !== "" /* <- Boolean parameter */ ,
+						function() {
+							this.kbSelectedRow = this.kbPositions.pop();
+							if (typeof this.kbSelectedRow == "undefined")
+								this.moveKeyboardToFirst();
+							this.moveKeyboardSelection(this.kbSelectedRow, false);
 					}.bind(this));
+					this.getComposer();
+					ctrls.subtuneCurrent = ctrls.subtuneMax = 0; // Clear subtune switch
+					main.updateURL(true);
 				}
 				break;
 			case "search-button":
@@ -1840,16 +1813,11 @@ Browser.prototype = {
 								folderFocus = '<div class="folder-focus'+lemon64+'">'+focusLeft+focusMiddle+focusRight+'</div>';
 							}
 
-							// Add a small star in front of the folder if everything within has been rated
-							var allStarred = '';
-							if (this.path !== "") // Don't show the icons in the root
-								allStarred = folder.all_rated ? '<div class="all-starred"></div>' : '';
-
 							var folderEntry = // GET FOLDER: GENERAL FOLDERS
 								'<tr'+(folder.incompatible.indexOf(SID.emulator) !== -1 || isMobileDenied ? ' class="disabled"' : '')+'>'+
 									'<td class="folder'+musicians+' unselectable '+folderIcon+
 										(folder.hvsc == this.HVSC_VERSION || folder.hvsc == this.CGSC_VERSION ? ' new' : '')+
-										'">'+allStarred+folderFocus+'<div class="block-wrap"><div class="block'+(isRedirectFolder ? " slimfont" : "")+'">'+
+										'">'+folderFocus+'<div class="block-wrap"><div class="block'+(isRedirectFolder ? " slimfont" : "")+'">'+
 									(folder.foldername == "SID+FM" ? '<div class="sid_fm">Use Hermit\'s (+FM) emulator</div>' : '')+
 									(folder.filescount > 0 ? '<div class="filescount">'+folder.filescount+'</div>' : '')+
 									(folder.foldername == "_SID Happens" ? '<div class="new-uploads'+(data.uploads.substr(0, 6) == "NO NEW" ? ' no-new' : '')+'">'+data.uploads+'</div>' : '')+
@@ -2444,11 +2412,6 @@ Browser.prototype = {
 		// Star rating for a folder or a SID file (PHP script figures this out by itself)
 		$.post("php/rating_write.php", { fullname: fullname, rating: rating }, function(data) {
 			this.validateData(data, function(data) {
-
-				// Rebuild the ratings cache
-				$.get("php/rating_cache.php", function(data) {
-					this.validateData(data);
-				}.bind(this));
 
 				var stars = this.buildStars(data.rating);
 

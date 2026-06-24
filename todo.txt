@@ -9,6 +9,14 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+- Export and then delete the rating_cache database table too? Or just let it be?
+
+- The term "Copyright" (referring to the third line) should be replaced with "Released" instead, both
+  in source codes and public text. Consider even renaming the DB field in the 'Files' table.
+
+- BUG: It seems moving the cursor to the next SID row temporarily deletes any bracket line? This
+  is a weird bug - in some folders it's 100% consistent, in others not at all.
+
 - A W A I T : Rewrite 'howto_update_gb64.txt' when the next GameBase64 update v20 arrives.
   See the .txt file for a few preliminary things to test.
 

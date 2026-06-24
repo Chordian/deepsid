@@ -1957,6 +1957,13 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>June 24, 2026</h3>
+						<ul>
+							<li>The ratings cache feature, which showed a small star for folders that were 100% rated, has been removed because it began to
+								affect site performance. As it was mainly a power-user feature, the trade-off was no longer worth the added delays. This also
+								eliminates the 5-second startup delay for logged-in users.</li>
+						</ul>
+
 						<h3>June 20, 2026</h3>
 						<ul>
 							<li>Removed the 'Lemon's MP3 files' SID handler. Since the MP3 files were recorded using JSIDPlay2, and JSIDPlay2 is now
