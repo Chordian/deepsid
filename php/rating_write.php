@@ -103,8 +103,6 @@ try {
 		}
 	}
 
-	// NOTE: Updating the ratings cache was moved to the 'rating_cache.php' script (called by browser.js).
-
 } catch(PDOException $e) {
 	$account->logActivityError(basename(__FILE__), $e->getMessage());
 	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));

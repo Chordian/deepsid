@@ -1,13 +1,13 @@
 How to update the DeepSID files for the README file in GitHub.
 
 Requirements
-¯¯¯¯¯¯¯¯¯¯¯¯
+ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
   o  Access to MySQL databases (ONLINE only) through PhpMyAdmin.
   o  Access to the DeepSID files (ONLINE only via FTP).
   o  Notepad++ is mentioned here, but you can use any text editor you want.
 
 DATABASE
-¯¯¯¯¯¯¯¯
+ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
   1. Enter PhpMyAdmin and export every single table into an SQL file, one by one.
 
   2. Open "folders.sql" in a text editor and delete all personal playlist lines. You can
@@ -46,11 +46,7 @@ DATABASE
      bigger ID number it originally read.
  16. Save the file.
 
- 17. Open "ratings_cache.sql" in your text editor.
- 18. Remove "INSERT INTO" and ALL of its lines, then save the now completely purged skeleton.
- 19. Further down, edit the one MODIFY line to read AUTO_INCREMENT=1; in the end instead of the
-     bigger ID number it originally read.
- 20. Save the file.
+ 17. to 20. Was deleted - continue below.
 
  21. Open "tracking.sql" in your text editor.
  22. Remove "INSERT INTO" and ALL of its lines, then save the now completely purged skeleton.
@@ -76,7 +72,7 @@ DATABASE
  32. Make sure the version numbers and file links in the README.md for GitHub are updated too.
 
 GB64
-¯¯¯¯
+ï¿½ï¿½ï¿½ï¿½
 GB64 has its own database.
 
   1. Enter the database "chordian_netgamebase" and export in the root so you get everything.
@@ -89,7 +85,7 @@ GB64 has its own database.
   5. Make sure the version number and file link in the README.md for GitHub are updated too.
 
 FILES
-¯¯¯¯¯
+ï¿½ï¿½ï¿½ï¿½ï¿½
   1. ZIP the contents of /deepsid/fonts/ (files only) and upload as:
 
        <ROOT>/files/deepsid/DeepSID_Fonts.zip
@@ -135,7 +131,7 @@ FILES
      This is by far the biggest archive of them all. More than 100 MB.
 
 SID FILES
-¯¯¯¯¯¯¯¯¯
+ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 The README.md informs users to download HVSC and CGSC from their source sites, but other stuff
 that is proprietary to DeepSID has to be uploaded.
 
