@@ -9,17 +9,15 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- Delete the rating_cache.php, rating_folder.php + build_rating_cache files?
-
 - The term "Copyright" (referring to the third line) should be replaced with "Released" instead, both
   in source codes and public text. Consider even renaming the DB field in the 'Files' table.
-
-- BUG: It seems moving the cursor to the next SID row temporarily deletes any bracket line? This
-  is a weird bug - in some folders it's 100% consistent, in others not at all.
 
 - Snazzy idea: BACKSPACE (without SHIFT) goes back in CSDb or GB64 if the tab is visible and there is
   a 'BACK' button. If in root of any of these tabs, DeepSID goes back in folder system instead. (This
   would also render Shift+Backspace unnecessary.)
+
+- The blue notification tab icon for CSDb has become a little too eager. It lights up no matter what
+  goes on in the page area. Calm it down a bit if you can.
 
 - After applying the next HVSC update, check Danko's profile. In the annex box, there should be a red
   dot at 2026, and no SH folder link.

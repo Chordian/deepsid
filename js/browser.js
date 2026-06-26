@@ -664,16 +664,18 @@ Browser.prototype = {
 						}, function(data) {
 							browser.validateData(data, function(data) {
 								var htmlTags = browser.buildTags(data.tags, data.tagtypes, data.tagids);
-								browser.updateStickyTags(
-									$(event.target).parents("td"),
-									htmlTags,
-									(browser.isSymlist || browser.isCompoFolder ? thisFullname : thisFullname.split("/").slice(-1)[0])
-								);
+
 								// Make sure sorting also works
 								var $filteredRows = $tr.parent().children("tr:has(td.sid)");
 								var index = $filteredRows.index($tr);										
 								browser.songs[index].tagstart = browser.startTag;
 								browser.songs[index].tagend = browser.endTag;
+
+								browser.updateStickyTags(
+									$(event.target).parents("td"),
+									htmlTags,
+									(browser.isSymlist || browser.isCompoFolder ? thisFullname : thisFullname.split("/").slice(-1)[0])
+								);
 								ctrls.updateSundryTags(htmlTags);
 							});
 						}.bind(this));
@@ -4580,8 +4582,9 @@ Browser.prototype = {
 			$lines = $row.find('.tags-line');
 
 			// They may have been changed when editing the tags
-			$lines.eq(0).attr("data-tag-start-id", this.startTag);
-			$lines.eq(0).attr("data-tag-end-id", this.endTag);
+			const index = $row.parent().children("tr:has(td.sid)").index($row);
+			$lines.eq(0).attr("data-tag-start-id", this.songs[index].tagstart);
+			$lines.eq(0).attr("data-tag-end-id", this.songs[index].tagend);			
 
 		} else {
 			$lines = $('#songs .tags-line');

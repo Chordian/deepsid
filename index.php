@@ -1957,6 +1957,11 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>June 26, 2026</h3>
+						<ul>
+							<li>Fixed tag bracket lines sometimes disappearing when browsing and editing tags.</li>
+						</ul>
+
 						<h3>June 24, 2026</h3>
 						<ul>
 							<li>The ratings cache feature, which showed a small star for folders that were 100% rated, has been removed because it began to
