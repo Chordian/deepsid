@@ -11,6 +11,7 @@
  * 
  * @uses		$_POST['firstsubtune']		0 or 1
  * @uses		$_POST['primaryrelease']	0 or 1
+ * @uses		$_POST['delaynext']			0 or 1
  * @uses		$_POST['skiptune']			0 or 1
  * @uses		$_POST['marktune']			0 or 1
  * @uses		$_POST['skipbad']			0 or 1
@@ -28,6 +29,7 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH
 $first_time = array(
 	'firstsubtune'		=> 0,
 	'primaryrelease'	=> 0,
+	'delaynext'			=> 0,
 	'skiptune'			=> 1,
 	'marktune'			=> 0,
 	'skipbad'			=> 0,
@@ -51,6 +53,7 @@ try {
 	// Adjust settings
 	if (isset($_POST['firstsubtune']))		$settings['firstsubtune']		= (int)$_POST['firstsubtune'];
 	if (isset($_POST['primaryrelease']))	$settings['primaryrelease']		= (int)$_POST['primaryrelease'];
+	if (isset($_POST['delaynext']))			$settings['delaynext']			= (int)$_POST['delaynext'];
 	if (isset($_POST['skiptune']))			$settings['skiptune']			= (int)$_POST['skiptune'];
 	if (isset($_POST['marktune']))			$settings['marktune']			= (int)$_POST['marktune'];
 	if (isset($_POST['skipbad']))			$settings['skipbad']			= (int)$_POST['skipbad'];

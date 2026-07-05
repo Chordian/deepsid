@@ -43,7 +43,7 @@ const playerStrips = [
 function Browser() {
 
 	this.ROOT_HVSC = 'music';
-	this.HVSC_VERSION = 84;
+	this.HVSC_VERSION = 85;
 	this.CGSC_VERSION = 147;
 
 	this.path = "";
@@ -876,18 +876,27 @@ Browser.prototype = {
 			}.bind(this));
 
 			SID.setCallbackTrackEnd(function() {
+				// Does the user want a small pause between tunes?
+				var delayNextTune = main.getUserToggle("delay-next");
+				
 				if ($("#loop").hasClass("button-off")) {
-					// Play the next subtune, or if no more subtunes, the next tune in the list
-					$("#faster").trigger("mouseup"); // Easy there cowboy
-					if (!paramSolitary && !main.getUserToggle("skip-tune") && (ctrls.subtuneCurrent < ctrls.subtuneMax && !$("#subtune-plus").hasClass("disabled")))
-						// Next subtune
-						$("#subtune-plus").trigger("mouseup", false);
-					else if (this.songPos < (this.songs.length - 1) && !$("#skip-next").hasClass("disabled"))
-						// Next song
-						$("#skip-next").trigger("mouseup", false);
-					else
-						// At the end of everything
+					if (delayNextTune)
 						$("#stop").trigger("mouseup").trigger("click");
+
+					setTimeout(() => {
+						// Play the next subtune, or if no more subtunes, the next tune in the list
+						$("#faster").trigger("mouseup"); // Easy there cowboy
+						if (!paramSolitary && !main.getUserToggle("skip-tune") && (ctrls.subtuneCurrent < ctrls.subtuneMax && !$("#subtune-plus").hasClass("disabled"))) {
+							// Next subtune
+							$("#subtune-plus").trigger("mouseup", false);
+						} else if (this.songPos < (this.songs.length - 1) && !$("#skip-next").hasClass("disabled")) {
+							// Next song
+							$("#skip-next").trigger("mouseup", false);
+						} else {
+							// At the end of everything
+							$("#stop").trigger("mouseup").trigger("click");
+						}
+					}, delayNextTune ? 1500 : 0);
 				}
 			}.bind(this));
 		}

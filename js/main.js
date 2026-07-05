@@ -3580,6 +3580,8 @@ main.bindSettingsEvents = function() {
 				settings.firstsubtune = state ? 1 : 0;
 			} else if (event.target.id === "setting-primary-release") {
 				settings.primaryrelease = state ? 1 : 0;
+			} else if (event.target.id === "setting-delay-next") {
+				settings.delaynext = state ? 1 : 0;
 			} else if (event.target.id === "setting-skip-tune") {
 				settings.skiptune = state ? 1 : 0;
 			} else if (event.target.id === "setting-mark-tune") {
@@ -4045,6 +4047,7 @@ $(function() { // DOM ready
 			browser.validateData(data, function(data) {
 				main.setUserToggle("first-subtune",		data.settings.firstsubtune);
 				main.setUserToggle("primary-release",	data.settings.primaryrelease);
+				main.setUserToggle("delay-next",		data.settings.delaynext);
 				main.setUserToggle("skip-tune",			data.settings.skiptune);
 				main.setUserToggle("mark-tune",			data.settings.marktune);
 				main.setUserToggle("skip-bad",			data.settings.skipbad);

@@ -272,7 +272,7 @@ Import data from the SID files themselves:
  21. OPTIONAL: You can also find all "..," occurrences and expand titles that were cut off ( > 32
      characters). Look at the SID filename to see what the title should read in full.
  22. If the file is not already UTF-8, choose menu Encoding > Convert to UTF8. Now save it.
- 23. Split "sidinfo.csv" into six CSV files of max 10000 lines using FileSplitter, which is present in
+ 23. Split "sidinfo.csv" into seven CSV files of max 10000 lines using FileSplitter, which is present in
      the utility folder. (PhpMyAdmin can't handle it all).
 
   1. Enter the empty "files_import" table and click "Import".
@@ -345,7 +345,7 @@ Update CSDb data:
 Note that this requires that CSDb.dk has been updated to match the new update of HVSC. Sometimes
 this is done a bit later than the HVSC release itself. It's okay to postpone this process.
 
-To test whether CSDb.dk is updated, load the "Update##.hvs" and go down to the "NEW FILES section.
+To test whether CSDb.dk is updated, load the "Update##.hvs" and go down to the "NEW TUNES" section.
 Find a new tune with a really unique name and search for it in CSDb. If a SID info page is not
 shown for it, CSDb is not updated yet. In that case I recommend bookmarking the search.
 
@@ -448,7 +448,8 @@ Update various minor stuff:
   o  Remember to also update "HVSC_VERSION" in setup.php if you haven't already done so.
   o  Check new folders for setting the 'focus' column in 'composers' to PRO, SCENER or BOTH.
   o  If you set a 'focus' column to PRO or BOTH, also update the 'affiliation' column in that row.
-  o  Write about the new update in the 'News' box and in the 'Changes' tab.
+  o  In the admin 'SET' section, set 'sundry_message' to "hvsc" setting.
+  o  Write about the new update in the 'Changes' tab.
 
 REACTIVE ONLINE SITE AGAIN - EVERYTHING DOWN HERE CAN BE DONE WHILE IT'S AVAILABLE.
 
@@ -543,8 +544,8 @@ composers like e.g. Johannes Bjerregaard or Ben Daglish in the lists of snoozing
 Now run this ONLINE: https://deepsid.chordian.net/php/utility/check_missing_info.php (in 'Admin' tab).
 Fix whatever it finds to be wrong.
 
-LAST CHECKS
-¯¯¯¯¯¯¯¯¯¯¯
+LAST TASKS
+¯¯¯¯¯¯¯¯¯¯
 Double-check these files both in the folder and in the database:
 
   https://deepsid.chordian.net/?file=/MUSICIANS/A/Acrouzet/Puzzled-Background_Music_IV.sid

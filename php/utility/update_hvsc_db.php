@@ -14,7 +14,7 @@
 
 require_once("class.account.php"); // Includes setup
 
-const HVSC_NEW_VERSION	= '84';
+const HVSC_NEW_VERSION	= '85';
 const HVSC_PATH			= '_High Voltage SID Collection/';
 
 try {
@@ -112,7 +112,7 @@ try {
 
 	$mode = $source = '';
 	$sid_files = [];
-	foreach (file('../_update/Update'.HVSC_NEW_VERSION.'.hvs') as $line) {
+	foreach (file('_update/Update'.HVSC_NEW_VERSION.'.hvs') as $line) {
 
 		// Remove newlines and stuff
 		$line = preg_replace('/\s+/', ' ', trim($line));

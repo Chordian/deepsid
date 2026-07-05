@@ -55,6 +55,7 @@ List
   6. Create a playlist "[...] Best of HVSC ##" where ## is the HVSC version.
 
        - Add all the tunes you have rated 4-5 stars, then publish the playlist.
+       - NOTE: I stopped doing this as of update #85. I've become too picky.
 
   7. Do the steps in 'howto_update_hvsc.txt' about adding CSDb data.
 
@@ -62,10 +63,11 @@ List
          should have a file bookmarked that you can check from time to time. When it
          finally reveals that CSDb has been updated, perform the steps.
 
-  8. Add production and event tags to all new files.
+  8. Add production and event tags (and labels) to all new files.
 
        - Go through all new files in the HVSC update in DeepSID and check CSDb pages in
          its tab as you click them. Add production and event tags where it makes sense.
+       - After adding a production tag, add the label too.
 
   9. Wait a while then add competitions.
 

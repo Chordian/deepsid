@@ -16,7 +16,7 @@ require_once("class.account.php"); // Includes setup
 try {
 	$db = $account->getDB();
 
-	foreach (file('../_update/special_updating.sql') as $line) {
+	foreach (file('_update/special_updating.sql') as $line) {
 
 		// Remove newlines and stuff
 		$line = preg_replace('/\s+/', ' ', trim($line));

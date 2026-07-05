@@ -7,7 +7,7 @@
 
 const LOCALHOST     = 'chordian';
 
-const HVSC_VERSION  = '84';
+const HVSC_VERSION  = '85';
 const CGSC_VERSION  = '147';
 
 const JCH           = 2;    // Same user ID on both localhost and online

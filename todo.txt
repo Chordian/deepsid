@@ -9,6 +9,9 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+- Check if SID-Wizard is handled with multiple player identification. I have received an issue in GitHub
+  that might indicate otherwise.
+
 - The term "Copyright" (referring to the third line) should be replaced with "Released" instead, both
   in source codes and public text. Consider even renaming the DB field in the 'Files' table.
 
@@ -16,14 +19,23 @@ SHOULD BE DONE
   a 'BACK' button. If in root of any of these tabs, DeepSID goes back in folder system instead. (This
   would also render Shift+Backspace unnecessary.)
 
+- BUG: Composers that reach 2026 in annex activity has a hyperlink on year even if they have nothing in
+  the SH folder.
+
+- Add '<code>DEPRECATED</code>' in the database for the two ratings cache scripts online.
+
 - The blue notification tab icon for CSDb has become a little too eager. It lights up no matter what
   goes on in the page area. Calm it down a bit if you can.
 
-- After applying the next HVSC update, check Danko's profile. In the annex box, there should be a red
-  dot at 2026, and no SH folder link.
+- The "Game", "Game Prev" and "GTW" tags should come before other developer tags, just like "GameBase64"
+  always does.
 
-- A W A I T : Rewrite 'howto_update_gb64.txt' when the next GameBase64 update v20 arrives.
-  See the .txt file for a few preliminary things to test.
+- Really weird bug: https://deepsid.chordian.net/?file=/MUSICIANS/O/OCA/Xmas-Spirit.sid
+  The above plays fine with any SID handler in OCA's folder, but if you search for new tunes in HVSC
+  update #85, no SID handler will play it there. I've never seen this exception before.
+
+- A W A I T : Rewrite 'howto_update_gb64.txt' when the next GameBase64 update v20 arrives. See the .txt
+  file for a few preliminary things to test.
 
 
 REALLY CONSIDER THIS

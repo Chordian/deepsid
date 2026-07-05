@@ -1412,7 +1412,7 @@
 						<h3>STIL</h3>
 						<p>
 							If you're clicking a song in the <b>High Voltage SID Collection</b> that has a STIL entry, this will be
-							shown here as well as in the box. Any sub tunes mentioned have green buttons that you can click.
+							shown here as well as in the box. Any subtunes mentioned have green buttons that you can click.
 						</p>
 						<p>
 							STIL stands for <i>SID Tune Information List</i> and contains information beyond the standard
@@ -1481,7 +1481,7 @@
 								<h3>Defaults</h3>
 
 								<button id="setting-first-subtune" class="button-edit button-toggle button-off">Off</button>
-								<label for="setting-first-subtune" class="unselectable">Always start at the <b>first sub tune</b> in a song instead of the default set by HVSC</label>
+								<label for="setting-first-subtune" class="unselectable">Always start at the <b>first subtune</b> in a song instead of the default set by HVSC</label>
 
 								<div class="space"></div>
 
@@ -1493,8 +1493,13 @@
 								<h3>Auto-progress</h3>
 								<p>Determine what will happen when a tune has finished playing.</p>
 
+								<button id="setting-delay-next" class="button-edit button-toggle button-off">Off</button>
+								<label for="setting-delay-next" class="unselectable">Auto-progress should <b>stop and delay</b> playing the next song or subtune for one-and-a-half-second</label>
+
+								<div class="space"></div>
+
 								<button id="setting-skip-tune" class="button-edit button-toggle button-off">Off</button>
-								<label for="setting-skip-tune" class="unselectable">Auto-progress should proceed to the <b>next song</b> instead of the next sub tune</label>
+								<label for="setting-skip-tune" class="unselectable">Auto-progress should proceed to the <b>next song</b> instead of the next subtune</label>
 
 								<div class="space"></div>
 
@@ -1514,7 +1519,7 @@
 								<div class="space"></div>
 
 								<button id="setting-skip-short" class="button-edit button-toggle button-off">Off</button>
-								<label for="setting-skip-short" class="unselectable">Auto-progress should automatically skip songs and sub tunes that lasts <b>less than ten seconds</b></label>
+								<label for="setting-skip-short" class="unselectable">Auto-progress should automatically skip songs and subtunes that lasts <b>less than ten seconds</b></label>
 
 								<div class="space splitline"></div>
 
@@ -1761,7 +1766,7 @@
 
 						<h3>Libraries of SID tunes</h3>
 						<p>
-							High Voltage SID Collection #84<br />
+							High Voltage SID Collection #85<br />
 							<a href="https://www.hvsc.c64.org/" target="_top">https://www.hvsc.c64.org/</a>
 						</p>
 						<p>
@@ -1956,6 +1961,18 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+					
+						<h3>July 5, 2026</h3>
+						<ul>
+							<li>You can now enable a new auto-progress option that inserts a one-and-a-half-second pause between songs. See your user settings
+								to turn it on.</li>
+						</ul>
+
+						<h3>June 29, 2026</h3>
+						<ul>
+							<li>The <a href="https://www.hvsc.c64.org/" target="_top">High Voltage SID Collection</a> has been upgraded to the latest version #85.</li>
+							<li>Finished adding composer profiles for the new folders in HVSC #85.</li>
+						</ul>
 
 						<h3>June 26, 2026</h3>
 						<ul>
