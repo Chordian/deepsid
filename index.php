@@ -1962,6 +1962,11 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 					
+						<h3>July 10, 2026</h3>
+						<ul>
+							<li>Fixed a bug that prevented the new auto-progress option from being saved in your user settings.</li>
+						</ul>
+
 						<h3>July 5, 2026</h3>
 						<ul>
 							<li>You can now enable a new auto-progress option that inserts a one-and-a-half-second pause between songs. See your user settings

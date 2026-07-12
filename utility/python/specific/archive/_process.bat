@@ -1,0 +1,25 @@
+@echo off
+python beatbox.py
+python dane_newplayer.py
+python digimonitor.py
+python digitronix.py
+python dmc.py
+python drummaker.py
+python dusat_rockmon.py
+python fc_v3.py
+python fc_v4_packed.py
+python futurecomposer1.py
+python jch_newplayer.py
+python john_player.py
+python karl_xii.py
+python mon.py
+python music_assembler.py
+python musiccomposer.py
+python musicmaster.py
+python red_packed.py
+python rob_hubbard_digi.py
+python sid_wizard.py
+python soedesoft.py
+python soundmaker.py
+python syndicate_bb.py
+rem copy jch_newplayer.csv+musicmaster.csv+beatbox.csv+dane_newplayer.csv+digimonitor.csv+digitronix.csv+dmc.csv+drummaker.csv+dusat_rockmon.csv+fc_v3.csv+fc_v4_packed.csv+futurecomposer1.csv+john_player.csv+karl_xii.csv+mon.csv+musiccomposer.csv+red_packed.csv+rob_hubbard_digi.csv+soedesoft.csv+soundmaker.csv+syndicate_bb.csv _import.csv

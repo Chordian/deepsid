@@ -86,6 +86,16 @@ function getTagsAndTypes($file_id, &$list_of_tags, &$type_of_tags, &$id_of_tags,
 			if ($b->name === 'Collection') return 1;			
 		}
 
+		// Sort special DEVELOPER tag name
+		if ($a->type === 'DEVELOPER') {
+			$developer_first = ['Game', 'Game Prev', 'GTW'];
+
+			$a_special = in_array($a->name, $developer_first, true);
+			$b_special = in_array($b->name, $developer_first, true);
+
+			if ($a_special && !$b_special) return -1;
+			if (!$a_special && $b_special) return 1;
+		}
 		// Fallback to alphabetical
 		return strcasecmp($a->name, $b->name);
 	});

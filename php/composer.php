@@ -581,7 +581,7 @@ if (isset($row)) {
 		: $last_country;
 	$annex_country = '<br /><div class="annex-condensed" style="width:100%;margin-top:4px;">'.(!empty($country) ? '<img class="icon earth" style="top:4px;" src="images/composer_earth.svg" title="Country" alt="" /><span>'.$single_country.'</span>' : '').'<div style="float:right;margin-top:4px;">'.$folder_focus.'</div></div>';
 
-	$last_year_text = $last_year ===  date("Y") ? '<a href="'.$row->id.'" class="search" data-type="composer">'.$last_year.'</a>' : $last_year;
+	$last_year_text = $last_year ===  date("Y") && !empty($this_year) ? '<a href="'.$row->id.'" class="search" data-type="composer">'.$last_year.'</a>' : $last_year;
 
 	$annex_html = '
 		<h3 class="ellipsis" style="width:229px;margin-bottom:0;" title="'.$annex_full_name.'">'.$clink_name.'</h3>

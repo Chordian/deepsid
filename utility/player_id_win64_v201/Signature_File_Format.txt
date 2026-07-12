@@ -1,0 +1,189 @@
+SIGNATURE FILE FORMAT V2.0
+
+
+CHANGE LOG
+==========
+V1.0: initial release
+V2.0: added support for && token and made END token optional
+
+
+SPECIFICATION
+=============
+
+Signatures are stored in a config file, e.g., in a file named "sidid.cfg".
+This file should be ISO-8859-1 encoded.
+
+A signature starts with a name that can be a player/editor name or if that is
+not known, it is common to put the author's name of the player/tunes for a
+signature name. A signature name must not contain spaces and should be at
+least 3 characters long.
+
+A signature consists of 2 hexadecimal digits and can contain wildcards by
+specifying a ?? token. A wildcard for a nibble is not possible. Each value
+and wildcard is separated by a space.
+
+A signature can also contain multiple groups of bytes by using an AND token.
+The AND token can also be written like && (introduced in version 2 of the file
+format). With this token you can skip multiple bytes until the next occurrence
+is found.
+
+Each signature can be ended with the END token. This is useful when you want
+to define a signature on multiple lines. If no END token is used, a signature
+definition ends at the end of the line. For version 1 of the file format the
+END token is required at the end of each signature.
+
+Signatures can be separated by an empty line or can be put together. A new
+signature starts when the line specifies a signature name.
+
+Example:
+
+Anthony_Lees
+BD ?? ?? 18 ?? ?? ?? 99 00 D4 A9 00 7D ?? ?? 99 01 D4
+
+Example with AND/&& token:
+
+Paul_Norman/Cosmi
+C8 D0 02 E6 ?? B1 && 8D 00 D4 && C8 D0 02 E6 ?? B1 && 8D 08 D4
+
+Sometimes it is not possible to have only one signature for a player. You can
+therefore specify multiple signatures for the same player, like:
+
+Mark_Cooksey
+8E ?? ?? B1 ?? F0 ?? E8
+C8 B1 FB 9D ?? ?? C8 98 18 65 FB 9D ?? ?? A5 FC 69 00 9D
+
+If one of the two or both IDs are detected, the signature Mark_Cooksey will be
+reported.
+
+You can also specify sub signatures when e.g. a certain player is covered by a
+signature, and you want to cover a certain version of it or additional routine
+with another signature.
+The convention for specifying sub signatures is to put the player name between
+brackets, like:
+
+(Rob_Hubbard_Digi)
+4A 4A 4A 4A 4C ?? ?? 29 0F EE ?? ?? D0 03 EE ?? ?? 8D 18 D4 AD 0D DD
+
+(DUSAT/RockMon2)
+48 29 0F AA CA 68 4A 4A 4A 4A 18 69 ?? 8D ?? ?? 4C
+
+If you want to specify a signature on multiple lines:
+
+Georg_Brandt
+85 ?? A2 ?? A9 ?? 9D 00 D4 A9 FF 9D ?? ?? CA
+10 F3 AD ?? ?? 8D ?? ?? 8D ?? ?? A9 ?? 8D 18 D4 END
+C8 B1 ?? 9D ?? ?? BD ?? ?? 09 01 9D 04 D4 88
+
+Note that the first two lines are seen as one signature because of the END token
+missing at line 1 and because it is present at line 2. If the END token was not
+mentioned at line 2, then line 1 and 2 are seen as separate signatures.
+
+
+HOW TO CREATE YOUR OWN SIGNATURES
+=================================
+
+When you make your own signature, you should not specify addresses in the
+signature since players are most of the time relocated at any address. However,
+addresses that reference I/O are a good thing to have in the signature.
+
+For example, you have the following code that you want to make a signature for:
+
+;0F2E  AA        TAX
+;0F2F  BD 0B 10  LDA $100B,X
+;0F32  99 01 D4  STA $D401,Y
+;0F35  A6 FF     LDX $FF
+;0F37  AC AD 01  LDY $01AD
+;0F3A  BD D0 01  LDA $01D0,X
+;0F3D  99 04 D4  STA $D404,Y
+;0F40  CA        DEX
+;0F41  30 03     BMI $0F46
+;0F43  4C 30 0A  JMP $0A30
+;0F46  60        RTS
+
+The signature for this would be:
+
+AA BD ?? ?? 99 01 D4 A6 ?? AC ?? ?? BD ?? ?? 99 04 D4 CA 30 ?? 4C ?? ?? 60
+
+As you can see, addresses and zero-page references are replaced by a wild card,
+except for SID address references. Also, the second byte of BMI is left out but
+this is not a requirement. It's useful when the branch is not always pointing
+to the same location.
+
+Make sure you only specify code in your signature and not data.
+
+To find a good signature for a player, try to get at least two tunes that you
+expect that are using the same player.
+
+Then disassemble the SID or PRG file with a 6502 disassembler or with machine
+code monitor that can do this.
+
+Try to see if there are similarities, make multiple signatures and run them
+with player-id to see if they match for both files and also for other SID files.
+
+If you see code that does match mostly but not fully, try to see if you can hide
+the code that doesn't match with wildcards or, if it is not possible to solve
+with wildcards, and you can't find a better signature, make use of the AND token
+to skip multiple bytes.
+
+It is not recommended to make very large signatures. The more specific a
+signature is, the less it will eventually match, and it might be that it will
+not match future SID files that have a slightly modified player code.
+
+The same counts for very small signatures, try not to make very small
+signatures to avoid false positive matches unless the code is very specific
+and if it is not possible to cover all the SID files with a bigger signature.
+
+
+INFO FILE FORMAT
+================
+
+Each config file can have an info file, e.g. a file named "sidid.nfo". An info
+file contains information about a signature. The info filename is the same as
+the config filename but with extension nfo. The info file should be ISO-8859-1
+encoded.
+
+An info section starts with the signature name. This name should be present in
+the config file and must have the same casing. The lines under the signature
+name can have the following tags:
+
+* NAME
+* AUTHOR
+* RELEASED
+* REFERENCE
+* COMMENT
+
+The tags should be present in the same order but are all optional and at least
+one of the tags should be present for a signature. The tag is followed by a
+colon and a space. All the colons should be aligned, see example below.
+
+NAME
+  The full name of the player or editor.
+
+AUTHOR
+  The author(s) of the player or editor.
+
+RELEASED
+  Includes the first release year of the player/editor, if known, and it may
+  be followed with the publisher, group or author that released it.
+
+REFERENCE
+  This is a URL of the release of the player or editor. It can only have one
+  URL. If more references are known, it is common to put the reference of the
+  first known release.
+
+COMMENT
+  Includes extra information about the player/editor. This tag can contain
+  multiple lines. The lines should be aligned and padded with spaces.
+
+Example of an info section:
+
+Music_Construction_Set
+     NAME: Will Harvey's Music Construction Set
+   AUTHOR: Will Harvey
+ RELEASED: 1984 Electronic Arts
+REFERENCE: https://csdb.dk/release/?id=185248
+  COMMENT: Originally developed for the Apple II and ported to other systems
+           like the C64
+
+Info sections can be separated by an empty line or can be put together. A new
+section starts when the line specifies a signature name.

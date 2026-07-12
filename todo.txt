@@ -9,8 +9,23 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+- WIP: Using new player ID command-line tool. It's blazingly fast!
+  WIP: Enhanced code for fixing "   " lines in CSV files. Currently sits in the "mon.py" file.
+    ToDo: Spread that new code into all the other Python files.
+  WIP: Added for Music Assembler and SID-Wizard.
+    ToDo: Look through sid.cfg and see if there are other multi-signatures to make Python files for.
+
+- When new player data is imported, check if the player database needs new ID texts.
+
+- Rename Markus Schneider's "Computech" player according to his description in a Messenger chat.
+
+- Add a seconds edit box for the new delay-next feature.
+
 - Check if SID-Wizard is handled with multiple player identification. I have received an issue in GitHub
-  that might indicate otherwise.
+  that might indicate otherwise. UPDATE: If I search players for "wizard" I only get v1.x.
+
+- https://deepsid.chordian.net/?file=/MUSICIANS/J/Jammer/Have_Some_Faith.sid
+  This tune shows unidentified but it's JammicroV1.
 
 - The term "Copyright" (referring to the third line) should be replaced with "Released" instead, both
   in source codes and public text. Consider even renaming the DB field in the 'Files' table.
@@ -19,20 +34,10 @@ SHOULD BE DONE
   a 'BACK' button. If in root of any of these tabs, DeepSID goes back in folder system instead. (This
   would also render Shift+Backspace unnecessary.)
 
-- BUG: Composers that reach 2026 in annex activity has a hyperlink on year even if they have nothing in
-  the SH folder.
-
-- Add '<code>DEPRECATED</code>' in the database for the two ratings cache scripts online.
+- Magic button in tags dialog box should also handle Game/Game Prev/GTW and developer correctly.
 
 - The blue notification tab icon for CSDb has become a little too eager. It lights up no matter what
   goes on in the page area. Calm it down a bit if you can.
-
-- The "Game", "Game Prev" and "GTW" tags should come before other developer tags, just like "GameBase64"
-  always does.
-
-- Really weird bug: https://deepsid.chordian.net/?file=/MUSICIANS/O/OCA/Xmas-Spirit.sid
-  The above plays fine with any SID handler in OCA's folder, but if you search for new tunes in HVSC
-  update #85, no SID handler will play it there. I've never seen this exception before.
 
 - A W A I T : Rewrite 'howto_update_gb64.txt' when the next GameBase64 update v20 arrives. See the .txt
   file for a few preliminary things to test.

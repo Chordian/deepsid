@@ -108,42 +108,11 @@ First, do steps 1 to 7 above as you will need the big file later.
 
   Now continue with the various sections below (except creating folders from scratch).
 
-Import general SIDId player data:
+NEW: Import simple player data:
 
-  1. Copy the 100 character-space-version of SIDID.EXE and its CFG file to the HVSC root.
-     There should be a version of this tool located in the ./deepsid/utility/sidid_100/ folder.
-  2. Open a command box and type: sidid >sidid_100_simple.csv
-  3. Surf the internet for a few minutes.
-  4. Edit it with Notepad++.
-  5. Delete the first two lines (info line and empty line).
-  6. Go to bottom and scroll up to the last MUSICIANS line. Delete everything up to it.
-  7. Go to top, Ctrl+H, "Replace All" backslashes to forward slashes instead.
-  8. Staying in top, press Ctrl+H then tick the "Regular expression" radio button.
-  9. In "Find what", type: \ +     (<- space between \ and +)
- 10. In "Replace with", type: ,
- 11. Click "Replace All".
- 12. Copy this string now: _High Voltage SID Collection/
- 13. Home on start of the first line and record a macro:
-        1. Paste the string from step 12.
-        2. Down to next line (again home on start of the line).
- 14. Stop recording and repeat the macro until end of file. (The bottom should be okay.)
- 15. Save.
- 16. Split the file into four CSV files of max 15000 lines using FileSplitter, which is present in the
-     utility folder. (PhpMyAdmin can't handle it all).
-
-  1. Enter the "files" table and click "Operations".
-  2. In "Copy table to (database.table):" select "Structure only"
-  3. Enter "files_import" as the destination name.
-  4. Click "Go" to create it.
-
-  1. Enter the new "files_import" table and click "Import".
-  2. Click "Browse" and click the first CSV file.
-  3. Change "Format" to "CSV".
-  4. Write "collection_path,player" in the "Column names" edit box.
-  5. Click "Go".
-  6. Repeat the above steps again for the other CSV file parts.
-  7. Export the "files_import" to an SQL file for later import online. This way you won't have to
-     import the parts above, just that SQL file.
+  1. Go to this folder: utility/hvsc_update/02_players_simple
+  2. Double-click the "_simple.bat" file. (Assuming no errors after this step.)
+  3. Go to phpMyAdmin and export the "files_import" to an SQL file for later import online.
 
   1. Enter the "files" table and click "SQL" (empty the box).
   2. Run the following:
@@ -155,37 +124,11 @@ Import general SIDId player data:
   3. Enter the "files_import" table and click "Operations".
   4. Truncate the table so it is ready for more updating.
 
-Import specific SIDId player data:
+NEW: Import multiple player data:
 
-  1. Make sure you still have the 100 character-space-version of SIDID.EXE and its CFG file in the HVSC root.
-  2. Open a command box and type: sidid -m >_specific.csv
-  3. Surf the internet for a few minutes.
-  4. Edit it with Notepad++.
-  5. Delete the first two lines (info line and empty line).
-  6. Go to bottom and scroll up to the last MUSICIANS line. Delete everything up to it.
-  7. Go to top, Ctrl+H, "Replace All" backslashes to forward slashes instead. (Remember to use "Normal" search
-     instead of "Regular expression" again.)
-
-  1. Copy the "_specific.csv" file to the "python/specific/" folder.
-  2. Run the "_process.bat" file to run Python scripts for various player types.
-  3. Edit all resulting CSV files in Notepad++ in a ton of tabs.
-  4. Find weird lines with no collection path and delete them. (They are mostly the result of multiple detections.)
-     To find them, hit Ctrl+F, tick the "Regular expression" radio button, then search for:
-        \  +   (<- TWO spaces between \ and +)
-     Remember to use the F3 key for repeating the search in the files.
-  5. Save and close the CSV file and process the next tab, if there are more of them.
-
-  1. Run the "_combine.bat" file to link all the CSV files into one big one.
-  2. Open the resulting "_import.csv" file and page down in it, making sure there are no odd lines.
-  3. There are probably a weird "SUB" in the bottom, delete to leave an empty line as last.
-
-  1. Enter the empty "files_import" table again and click "Import".
-  2. Click "Browse" and select the CSV file.
-  3. Change "Format" to "CSV".
-  4. Write "collection_path,player" in the "Column names" edit box.
-  5. Click "Go".
-  6. Export the "files_import" to an SQL file for later import online. This way you won't have to
-     import the above, just that SQL file.
+  1. Go to this folder: utility/hvsc_update/03_players_multiple
+  2. Double-click the "_multiple.bat" file. (Assuming no errors after this step.)
+  3. Go to phpMyAdmin and export the "files_import" to an SQL file for later import online.
 
   1. Enter the "files" table and click "SQL" (empty the box).
   2. Run the following:
