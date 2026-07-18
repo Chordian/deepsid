@@ -293,12 +293,13 @@ Find a new tune with a really unique name and search for it in CSDb. If a SID in
 shown for it, CSDb is not updated yet. In that case I recommend bookmarking the search.
 
   1. Go to the "python/csdb/" folder and edit "csdb.py" in Notepad++.
-  2. Set both the "open(" line and the "range(" line to 00001-19999 each.
+  2. Set START_ID and END_ID to: 1-19999
   3. Run the script (takes a few minutes).
   4. Repeat step 2 and 3 for 20000-34999.
-  5. Run this in a web browser: https://csdb.dk/webservice/?type=sid&id=0
-  6. Note that value it returns. If e.g. 56413, round up a bit - for example 56500.
-  7. Repeat step 2 and 3 for 35000-[The value you rounded up to]. (It doesn't matter if it walks
+  5  Repeat step 2 and 3 for 35000-54999.
+  6. Run this in a web browser: https://csdb.dk/webservice/?type=sid&id=0
+  7. Note that value it returns. If e.g. 66265, round up a bit - for example 66300.
+  8. Repeat step 2 and 3 for 55000-[The value you rounded up to]. (It doesn't matter if it walks
      too far, the script will just ignore it.)
 
   1. Enter the empty "files_import" table and click "Import".
@@ -449,6 +450,10 @@ https://deepsid.chordian.net/?file=/DEMOS/G-L/Kinetix_Blasting_Power_Mix.sid  (p
 https://deepsid.chordian.net/?file=/DEMOS/S-Z/Wize_Mixes.sid  (player)
 https://deepsid.chordian.net/?file=/MUSICIANS/N/Nebula&here=1&search=mixer&type=player  (8 rows found)
 
+Special for update #86:
+Check that this one does not have a FAME player detection. It should have an empty (unidentified) field.
+High Voltage SID Collection/GAMES/M-R/River_Chase.sid
+
 GROUPS
 ¯¯¯¯¯¯
 Back out of the HVSC version folder (i.e. in OneDrive documents) and copy the GROUPS folder there.
@@ -495,5 +500,11 @@ Double-check these files both in the folder and in the database:
   https://deepsid.chordian.net/?file=/GAMES/A-F/Desert_Decision.sid
 
 They must match each other and play correctly. (NOTE: They probably work online but not locally.)
+
+EXTRA FOR HVSC UPDATE #86
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+  o  Search player "future" and make sure all Future Composer names look good.
+  o  Search player "compotech" and make sure "Compotech-X v2.4" is there.
+  o  Search player "Tjelta" and make sure "Geir_Tjelta/Comptech-X" is NOT there.
 
 --------------------------------

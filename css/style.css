@@ -4002,6 +4002,17 @@ input[type=range]::-ms-track {
 			white-space: nowrap; /* Needed for the line of tags to work */
 		}
 
+			#songs .info > .by {
+				display: inline-block;
+				padding: 0 2px;
+				margin-left: 5px;
+				margin-right: 1px;
+				border: 1px solid var(--color-text-minor);
+				border-radius: 3px;
+				font-size: 9px;
+				line-height: 11px;
+			}
+
 		/* Tel_Jeroen (folder) */
 		#songs .folder {
 			font-size: 16px;

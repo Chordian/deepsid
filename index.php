@@ -1807,8 +1807,8 @@
 
 						<h3>Other resources used</h3>
 						<p>
-							SIDId by Lasse Öörni (<a href="https://cadaver.github.io/" target="_top">Cadaver</a>)<br />
-							<a href="http://csdb.chordian.net/?type=release&id=112201" target="_top">http://csdb.dk/release/?id=112201</a>
+							Player-ID by Wilfred Bos (<a href="https://github.com/WilfredC64/player-id" target="_top">WilfredC64</a>)<br />
+							<a href="http://csdb.chordian.net/?type=release&id=232676" target="_top">https://csdb.dk/release/?id=232676</a>
 						</p>
 						<p>
 							SIDInfo by Matti Hämäläinen (ccr)<br />
@@ -1961,7 +1961,22 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
-					
+
+						<h3>July 18, 2026</h3>
+						<ul>
+							<li>Player names have been cleaned up and significantly prettified.</li>
+						</ul>
+
+						<h3>July 16, 2026</h3>
+						<ul>
+							<li>All new files in HVSC update #85 are now connected to CSDb entries.</li>
+						</ul>
+
+						<h3>July 12, 2026</h3>
+						<ul>
+							<li>The player identification system has been completely overhauled. DeepSID now uses Wilfred Bos's latest identification tool together with the newest configuration file. Support for multiple player signatures has also been greatly expanded, resulting in more accurate player information throughout the site. Note that some player names may currently appear a little unusual and will be refined over time.</li>
+						</ul>
+
 						<h3>July 10, 2026</h3>
 						<ul>
 							<li>Fixed a bug that prevented the new auto-progress option from being saved in your user settings.</li>

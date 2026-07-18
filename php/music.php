@@ -866,11 +866,11 @@ try {
 			foreach ($select_compo as $row) {
 				$files[] = $row->competition;
 				$compo += [strtolower($row->competition) => array(
-					'prefix' =>		$row->prefix,
-					'year' =>		$row->year,
-					'country' =>	$row->country,
-					'type' =>		$row->type,
-					'event_id' =>	$row->event_id,
+					'prefix'	=> $row->prefix,
+					'year'		=> $row->year,
+					'country'	=> $row->country,
+					'type'		=> $row->type,
+					'event_id'	=> $row->event_id,
 				)];
 			}
 
@@ -1295,8 +1295,6 @@ try {
 				$subtunes = $start_subtune = 1;
 			} else if (empty($player))
 				$player = 'an unidentified player';
-			else if ($player == 'MoN/Bjerregaard')
-				$player = 'Bjerregaard';
 
 			$stil = str_replace('<br />',	' ',						$stil);
 
@@ -1349,15 +1347,6 @@ try {
 			$id_of_tags = array();
 			$id_tag_start = $id_tag_end = 0;
 			getTagsAndTypes($row->id, $list_of_tags, $type_of_tags, $id_of_tags, $id_tag_start, $id_tag_end);
-
-			// Some player names have to be fetched specifically or there may be undesired changes elsewhere
-			if ($player == 'Jeff') $player = 'Jeff\'s player';
-			if ($player == 'Mixer') $player = 'Mixer\'s player';
-			if ($player == 'SoedeSoft') $player = 'SoedeSoft\'s player';
-			if ($player == 'Zardax') $player = 'Zardax\'s player';
-			if ($player == 'Daryll_Reynolds') $player = 'Daryll Reynolds\' player';
-			if ($player == 'Daryll_Reynolds_Digi') $player = 'Daryll Reynolds\' digi player';
-			if ($player == 'Glover') $player = 'Glover\'s player';
 
 			// If it's an *unpacked* JCH NewPlayer tune, add that info about it
 			// NOTE: Just checking the specific load address is not entirely watertight, but to be 100%
@@ -1525,49 +1514,58 @@ try {
 
 			if ($sid_model != 'MOS8580') $sid_model = 'MOS6581'; // Always default to 6581 if not specifically 8580
 
+			$pretty_player_name = $pretty_player_name = $pretty_player_names[$player] ?? $player;
+			// Put the text after the "/" in a small <DIV> box
+			$pretty_player_name = preg_replace(
+				'~^(.*?)\/(.+)$~',
+				'$1<div class="by">$2</div>',
+				$pretty_player_name
+			);
+			//$pretty_player_name = str_replace("/", " / ", $pretty_player_name);
+
 			// Don't use underscores in key names
 			array_push($files_ext, array(
-				'id' =>				$id,
-				'filename' =>		$file,
-				'substname' =>		$subst_name,
-				'playerraw' =>		$player,
-				'player' =>			str_replace(array_keys($pretty_player_names), $pretty_player_names, $player), // Remember it reads the array multiple times!
-				'tags' =>			$list_of_tags,
-				'tagtypes' =>		$type_of_tags,
-				'tagids' =>			$id_of_tags,
-				'tagidstart' =>		$id_tag_start,
-				'tagidend' =>		$id_tag_end,
-				'lengths' => 		$lengths,
-				'type' => 			$type,
-				'version' => 		$version,
-				//'playertype' => 	$player_type,
-				//'playercompat' => $player_compat,
-				'clockspeed' => 	$clock_speed,
-				'sidmodel' => 		$sid_model,
-				//'dataoffset' => 	$data_offset,
-				'datasize' => 		$data_size,
-				'loadaddr' => 		$load_addr,
-				'initaddr' => 		$init_addr,
-				'playaddr' => 		$play_addr,
-				'subtunes' => 		$subtunes,
-				'startsubtune' => 	$start_subtune,
-				//'name' => 		$name,				// @link https://github.com/Chordian/deepsid/issues/21
-				'author' => 		$author,
-				'copyright' => 		$copyright,
-				//'hash' => 		$hash,
-				'stil' => 			$stil,
-				'rating' =>			$rating,
-				'hvsc' =>			$hvsc,
-				'symid' =>			$symid,
-				'videos' =>			$videos,
-				'factoidtop' =>		$factoid[0],
-				'factoidbottom' =>	$factoid[1],
-				'fvaluetop' =>		$fvalue[0],
-				'fvaluebottom' =>	$fvalue[1],
-				'labelsite' =>		$label_site,
-				'labelname' =>		$label_name,
-				'labeltype' =>		$label_type,
-				'labelsiteid' =>	$label_site_id,
+				'id'				=> $id,
+				'filename'			=> $file,
+				'substname'			=> $subst_name,
+				'playerraw'			=> $player,
+				'player'			=> $pretty_player_name,
+				'tags'				=> $list_of_tags,
+				'tagtypes'			=> $type_of_tags,
+				'tagids'			=> $id_of_tags,
+				'tagidstart'		=> $id_tag_start,
+				'tagidend'			=> $id_tag_end,
+				'lengths'			=> $lengths,
+				'type'				=> $type,
+				'version'			=> $version,
+				//'playertype'		=> $player_type,
+				//'playercompat'	=> $player_compat,
+				'clockspeed'		=> $clock_speed,
+				'sidmodel'			=> $sid_model,
+				//'dataoffset'		=> $data_offset,
+				'datasize'			=> $data_size,
+				'loadaddr'			=> $load_addr,
+				'initaddr'			=> $init_addr,
+				'playaddr'			=> $play_addr,
+				'subtunes'			=> $subtunes,
+				'startsubtune'		=> $start_subtune,
+				//'name'			=> $name,				// @link https://github.com/Chordian/deepsid/issues/21
+				'author'			=> $author,
+				'copyright'			=> $copyright,
+				//'hash'			=> $hash,
+				'stil'				=> $stil,
+				'rating'			=> $rating,
+				'hvsc'				=> $hvsc,
+				'symid'				=> $symid,
+				'videos'			=> $videos,
+				'factoidtop'		=> $factoid[0],
+				'factoidbottom'		=> $factoid[1],
+				'fvaluetop'			=> $fvalue[0],
+				'fvaluebottom'		=> $fvalue[1],
+				'labelsite'			=> $label_site,
+				'labelname'			=> $label_name,
+				'labeltype'			=> $label_type,
+				'labelsiteid'		=> $label_site_id,
 			));
 
 			// Add extra values for uploaded SID files too if available
@@ -1583,8 +1581,8 @@ try {
 
 					// Append to what was just pushed above
 					$files_ext[count($files_ext) - 1] += array(
-						'profile' =>		$select_comp->rowCount() ? $select_comp->fetch()->collection_path : '',
-						'uploaded' =>		$row_upload->uploaded,
+						'profile'	=> $select_comp->rowCount() ? $select_comp->fetch()->collection_path : '',
+						'uploaded'	=> $row_upload->uploaded,
 					);
 				}
 			}

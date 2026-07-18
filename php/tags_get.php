@@ -24,9 +24,9 @@ try {
 	$all_tags = array();
 	foreach ($select as $row) {
 		array_push($all_tags, array(
-			'id' =>				$row->id,
-			'name' =>			$row->name,
-			'type' =>			$row->type
+			'id'	=> $row->id,
+			'name'	=> $row->name,
+			'type'	=> $row->type
 		));
 	}
 

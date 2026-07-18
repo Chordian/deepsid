@@ -9,23 +9,24 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- WIP: Using new player ID command-line tool. It's blazingly fast!
-  WIP: Enhanced code for fixing "   " lines in CSV files. Currently sits in the "mon.py" file.
-    ToDo: Spread that new code into all the other Python files.
-  WIP: Added for Music Assembler and SID-Wizard.
-    ToDo: Look through sid.cfg and see if there are other multi-signatures to make Python files for.
+- PRETTIFYING PLAYER STAGE 1 COMPLETE.
 
-- When new player data is imported, check if the player database needs new ID texts.
+  STAGE 2: Go through 'pretty_player_names.php' and see if all 'x/y' pairs make sense. Some of them
+  may have to be swapped, now that you have the CSS-styled box for the right text.
 
-- Rename Markus Schneider's "Computech" player according to his description in a Messenger chat.
+- A lot of look-ups have broken since the overhaul in the 'pretty_player_names.php' PHP script. I
+  need the look-up system to work with the raw names, not the prettified ones.
 
-- Add a seconds edit box for the new delay-next feature.
+- After prettifying a lot of player names, change it so player search accepts the prettified name.
+  That you have to search for the un-prettified name doesn't make any sense. Best solution is to
+  put the array in the database. Refer to your assistant for more.
 
-- Check if SID-Wizard is handled with multiple player identification. I have received an issue in GitHub
-  that might indicate otherwise. UPDATE: If I search players for "wizard" I only get v1.x.
+- Change 'n' hotkey to stop play immediately (like "?wait=100") instead of silence SID handler.
+  This makes it possible to still use e.g. MEMO view.
 
-- https://deepsid.chordian.net/?file=/MUSICIANS/J/Jammer/Have_Some_Faith.sid
-  This tune shows unidentified but it's JammicroV1.
+- Expand upon the new HVSC update procedure in the 'hvsc_update' folder.
+
+- Add a "seconds" edit box for the new delay-next feature.
 
 - The term "Copyright" (referring to the third line) should be replaced with "Released" instead, both
   in source codes and public text. Consider even renaming the DB field in the 'Files' table.
@@ -34,7 +35,18 @@ SHOULD BE DONE
   a 'BACK' button. If in root of any of these tabs, DeepSID goes back in folder system instead. (This
   would also render Shift+Backspace unnecessary.)
 
-- Magic button in tags dialog box should also handle Game/Game Prev/GTW and developer correctly.
+- MEMO browsing needs the same rules as search browsing (shift and MMB).
+
+- Should the developer tags be just a tad darker, in both color schemes?
+
+- Magic button in tags dialog box should also handle Game/Game Prev/GTW + developer correctly. Also,
+  events currently come after developer tags. Wouldn't it be better the other way around?
+
+- Look into improving activity log to use cookies or session ID instead of IP addresses to distinguish
+  between individual visitors.
+
+- New right-click context menu option for a song: Open in new browser window with hex monitor view of
+  the entire player. Fills out the view of the entire window and is scrollable (no pages).
 
 - The blue notification tab icon for CSDb has become a little too eager. It lights up no matter what
   goes on in the page area. Calm it down a bit if you can.
@@ -49,6 +61,8 @@ REALLY CONSIDER THIS
 - Maybe place "Misc" in CGSC in top, above a divider line?
 - For redirect links, add a BACK button in both STIL tabs (to complement the 'b' hotkey).
 - CSDb Music Competitions: Add a flag icon after countries in the browser SID list itself.
+- Make sure all 'sovs' =>   '1' is fixed to 'sovs'    => '1' instead, in all PHP files.
+- Change player lookup to look for raw player strings instead of the prettified ones.
 
 - Infinity radio. Plays tunes of two stars rating and above forever. Each time it is supposed to
   auto-progress, it will jump to a random tune anywhere else in another folder.

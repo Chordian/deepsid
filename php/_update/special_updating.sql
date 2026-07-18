@@ -8,55 +8,31 @@
 /* Update various players with correct or more precise information (be careful with long strings as together with tags they may mess with the layout) */
 UPDATE files SET player = "FC + Martin Galway's Digi player" WHERE id = 619			-- _High Voltage SID Collection/DEMOS/G-L/Kinetix_Blasting_Power_Mix.sid
 UPDATE files SET player = "Galway's player + Hubbard's players" WHERE id = 1249		-- _High Voltage SID Collection/DEMOS/S-Z/Wize_Mixes.sid
-UPDATE files SET player = "" WHERE id = 3268											-- _High Voltage SID Collection/GAMES/M-R/River_Chase.sid (remove FAME detection)
-
-UPDATE files SET player = "JCH IntroPlayer" WHERE id = 24152							-- _High Voltage SID Collection/MUSICIANS/J/JCH/Fooled.sid
-UPDATE files SET player = "a player by JO of Visage Studios" WHERE id = 66100			-- _High Voltage SID Collection/MUSICIANS/J/JCH/JCH_in_Visages_Editor.sid
-UPDATE files SET player = "Zoolook's player" WHERE id = 24177							-- _High Voltage SID Collection/MUSICIANS/J/JCH/Test_in_Zoolooks_Player.sid
-UPDATE files SET player = "JammicroV0" WHERE id = 67945								-- _High Voltage SID Collection/MUSICIANS/J/Jammer/Aye_Contact.sid
-UPDATE files SET player = "JammicroV0" WHERE id = 67946								-- _High Voltage SID Collection/MUSICIANS/J/Jammer/Tillax.sid
+UPDATE files SET player = "JCH IntroPlayer" WHERE id = 24152						-- _High Voltage SID Collection/MUSICIANS/J/JCH/Fooled.sid
+UPDATE files SET player = "a player by JO of Visage Studios" WHERE id = 66100		-- _High Voltage SID Collection/MUSICIANS/J/JCH/JCH_in_Visages_Editor.sid
+UPDATE files SET player = "Zoolook's player" WHERE id = 24177						-- _High Voltage SID Collection/MUSICIANS/J/JCH/Test_in_Zoolooks_Player.sid
 UPDATE files SET player = "JO's player + THCM" WHERE id = 22304						-- _High Voltage SID Collection/MUSICIANS/H/HJE/Megademo_part_2.sid
-UPDATE files SET player = "Vibrants/JO" WHERE id = 22322								-- _High Voltage SID Collection/MUSICIANS/H/HJE/Woody_the_Worm.sid
 
-UPDATE files SET player = "JammicroV1" WHERE id = 73319								-- _High Voltage SID Collection/MUSICIANS/J/Jammer/Ambience.sid
-UPDATE files SET player = "JammicroV1" WHERE id = 73322								-- _High Voltage SID Collection/MUSICIANS/J/Jammer/Sneaky_Billy.sid
-UPDATE files SET player = "JammicroV1" WHERE id = 73627								-- _High Voltage SID Collection/MUSICIANS/T/That8BitChiptuneGuy/1_Byte_Under_512.sid
-UPDATE files SET player = "JammicroV1" WHERE id = 73575								-- _High Voltage SID Collection/MUSICIANS/S/Shogoon/512_Rap.sid
+-- This is handled in 'pretty_player_names.php' instead
+-- UPDATE files SET player = "Compotech-X v2.4" WHERE id = 82082						-- _High Voltage SID Collection/MUSICIANS/S/Schneider_Markus/41_Neurons.sid
+-- UPDATE files SET player = "Compotech-X v2.4" WHERE id = 68094						-- _High Voltage SID Collection/MUSICIANS/S/Schneider_Markus/VandaliSID.sid
+-- UPDATE files SET player = "Compotech-X v2.4" WHERE id = 68158						-- _High Voltage SID Collection/MUSICIANS/T/Tjelta_Geir/X-Rated_Red_Wine_GT_Remix.sid
+-- UPDATE files SET player = "Compotech-X v2.4" WHERE id = 70163						-- _High Voltage SID Collection/MUSICIANS/S/Schneider_Markus/Move.sid
+-- UPDATE files SET player = "Compotech-X v2.4" WHERE id = 73226 					-- _High Voltage SID Collection/MUSICIANS/D/Detert_Thomas/Spectrum.sid
+-- UPDATE files SET player = "Compotech-X v2.4" WHERE id = 73560						-- _High Voltage SID Collection/MUSICIANS/S/Schneider_Markus/Legacy.sid
+-- UPDATE files SET player = "Compotech-X v2.4" WHERE id = 81091 					-- _High Voltage SID Collection/MUSICIANS/S/Schneider_Markus/Harmony.sid
+-- UPDATE files SET player = "Compotech-X v2.4" WHERE id = 82083 					-- _High Voltage SID Collection/MUSICIANS/S/Schneider_Markus/Next_Round_tune_1.sid
 
-UPDATE files SET player = "JammicroV1_1" WHERE id = 76342								-- _High Voltage SID Collection/MUSICIANS/J/Jammer/Anything_GEOS.sid
-UPDATE files SET player = "JammicroV1_1" WHERE id = 76344								-- _High Voltage SID Collection/MUSICIANS/J/Jammer/Faithless_Insomnia.sid
-UPDATE files SET player = "JammicroV1_1" WHERE id = 76345								-- _High Voltage SID Collection/MUSICIANS/J/Jammer/Finally_Asleep.sid
-UPDATE files SET player = "JammicroV1_1" WHERE id = 76340								-- _High Voltage SID Collection/MUSICIANS/J/Jammer/Dark_Heart.sid
-UPDATE files SET player = "JammicroV1_1" WHERE id = 76350								-- _High Voltage SID Collection/MUSICIANS/J/Jammer/HNO3.sid
-UPDATE files SET player = "JammicroV1_1" WHERE id = 74834								-- _High Voltage SID Collection/MUSICIANS/J/Jammer/Higher_Math.sid
-
-UPDATE files SET player = "MahoneyDigi/THCM" WHERE id = 76346							-- _High Voltage SID Collection/MUSICIANS/J/Jammer/Next_Level_of_Insomnia.sid
-UPDATE files SET player = "MahoneyDigi/THCM" WHERE id = 76347							-- _High Voltage SID Collection/MUSICIANS/J/Jammer/Next_Level_of_Insomnia_short.sid
-UPDATE files SET player = "MahoneyDigi/THCM" WHERE id = 76348							-- _High Voltage SID Collection/MUSICIANS/J/Jammer/Sky_Buster.sid
-UPDATE files SET player = "MahoneyDigi/THCM" WHERE id = 66735							-- _High Voltage SID Collection/MUSICIANS/J/Jammer/Immigrant_Song.sid
-
-UPDATE files SET player = "Steve_Turner" WHERE id = 45979								-- _High Voltage SID Collection/MUSICIANS/T/Turner_Steve/Bushido.sid
-UPDATE files SET player = "Steve_Turner" WHERE id = 45981								-- _High Voltage SID Collection/MUSICIANS/T/Turner_Steve/Intensity.sid
-UPDATE files SET player = "Steve_Turner" WHERE id = 45984								-- _High Voltage SID Collection/MUSICIANS/T/Turner_Steve/Soldier_of_Fortune.sid
+/* Players not detected by Player-ID */
+UPDATE files SET player = "JammicroV1" WHERE id = 81935								-- _High Voltage SID Collection/MUSICIANS/J/Jammer/Have_Some_Faith.sid (code change?)
 
 /* Tags */
-DELETE FROM tags_lookup WHERE files_id = 66429 AND tags_id = 9								-- Tag ID 9 = "Coop" + _High Voltage SID Collection/DEMOS/M-R/Mr_Brightside.sid
-DELETE FROM tags_lookup WHERE files_id = 2429 AND tags_id = 9								-- Tag ID 9 = "Coop" + _High Voltage SID Collection/GAMES/A-F/Athanor.sid
-
-/* Replace 'Music Assembler' with 'Padua's Music Mixer' which used the same player */
-UPDATE files SET player = "Padua's Music Mixer" WHERE id = 32528						-- _High Voltage SID Collection/MUSICIANS/N/Nebula/Catman.sid
-UPDATE files SET player = "Padua's Music Mixer" WHERE id = 32543						-- _High Voltage SID Collection/MUSICIANS/N/Nebula/Flodder.sid
-UPDATE files SET player = "Padua's Music Mixer" WHERE id = 32588						-- _High Voltage SID Collection/MUSICIANS/N/Nebula/Shadow_Intro_Tune_1.sid
-UPDATE files SET player = "Padua's Music Mixer" WHERE id = 32590						-- _High Voltage SID Collection/MUSICIANS/N/Nebula/Shadow_Intro_Tune_3.sid
-UPDATE files SET player = "Padua's Music Mixer" WHERE id = 32591						-- _High Voltage SID Collection/MUSICIANS/N/Nebula/Shadow_Intro_Tune_4.sid
-UPDATE files SET player = "Padua's Music Mixer" WHERE id = 32592						-- _High Voltage SID Collection/MUSICIANS/N/Nebula/Shadow_Intro_Tune_5.sid
-UPDATE files SET player = "Padua's Music Mixer" WHERE id = 32597						-- _High Voltage SID Collection/MUSICIANS/N/Nebula/Sockendurst.sid
-UPDATE files SET player = "Padua's Music Mixer" WHERE id = 32609						-- _High Voltage SID Collection/MUSICIANS/N/Nebula/Urlaubskurs.sid
+DELETE FROM tags_lookup WHERE files_id = 66429 AND tags_id = 9						-- Tag ID 9 = "Coop" + _High Voltage SID Collection/DEMOS/M-R/Mr_Brightside.sid
+DELETE FROM tags_lookup WHERE files_id = 2429 AND tags_id = 9						-- Tag ID 9 = "Coop" + _High Voltage SID Collection/GAMES/A-F/Athanor.sid
 
 /* Lengths */
-UPDATE files SET lengths = "1:47" WHERE id = 68061										-- _High Voltage SID Collection/MUSICIANS/P/Proton/Mellow_Bite.sid
+UPDATE files SET lengths = "1:47" WHERE id = 68061									-- _High Voltage SID Collection/MUSICIANS/P/Proton/Mellow_Bite.sid
 UPDATE files SET lengths = "12:08" WHERE id = 39135									-- _High Voltage SID Collection/MUSICIANS/S/Scarzix/Singularity_2SID.sid
-UPDATE files SET lengths = "12:08" WHERE id = 67664									-- _Exotic SID Tunes Collection/Stereo 2SID/Scarzix/Singularity_2SID.sid
 
 /* Amend "created in 1989, released in 2020" situations in HVSC */
 UPDATE files SET copyright = "1989" WHERE collection_path LIKE "%/MUSICIANS/B/Bjerregaard_Johannes/STII8.sid"

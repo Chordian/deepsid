@@ -24,9 +24,12 @@ PLAYER_RULES = {
 	'Blackbird/LFT': {
 		'comparison_names': ['Blackbird']
 	},
-	'MoN/FutureComposer': {
-		'comparison_names': ['FutureComposer', 'MoN/']
-	},
+    # Now handled in 'pretty_player_names.php'
+    # @todo CHECK THAT IT WORKS IN HVSC UPDATE #86!
+    #    
+	#'MoN/FutureComposer': {
+	#	'comparison_names': ['FutureComposer', 'MoN/']
+	#},
 	'Music_Assembler': {
 		'comparison_names': ['Music_Assembler/MC']
 	},
