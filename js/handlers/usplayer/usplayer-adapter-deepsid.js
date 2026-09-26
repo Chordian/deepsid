@@ -777,7 +777,13 @@ export class USPlayerAdapter {
     if (!t || typeof t.playerSetPlaytime !== 'function') return;
     let ms = 0;
     try {
-      const lens = this.songLengths(this.md5());
+      /* The external Songlengths database first; a v5 tune's own embedded
+       * table (see sidfile.h) as the fallback, for a file the database has
+       * never heard of. */
+      let lens = this.songLengths(this.md5());
+      if ((!lens || !lens.length) && typeof this._player.embeddedSongLengths === 'function') {
+        lens = this._player.embeddedSongLengths();
+      }
       if (lens && lens.length) {
         ms = lens[Math.min(lens.length, Math.max(1, subtune)) - 1] || 0;
       }
@@ -1112,11 +1118,7 @@ export class USPlayerAdapter {
          *
          * It counts songs from **one**, and this method's argument is 0 based
          * like `load_sidtune()` and like every other branch here, so the two
-         * have to be converted between. They used not to be, and this branch
-         * read the argument as 1 based: every host that passed a 0 based number
-         * played song 1 whichever song it asked for, and the one host that
-         * passed a 1 based number got the right song here and the wrong one in
-         * all four other modes. */
+         * have to be converted between. */
         if (!this._transport || !this._transport.isOpen) {
           throw new Error('no board on the serial port to send it to');
         }
