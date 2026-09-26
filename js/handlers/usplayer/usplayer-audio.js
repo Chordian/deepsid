@@ -200,6 +200,15 @@ const HIDDEN_SECONDS  = 2.0;
 const VISIBLE_STEPS = 8;
 const HIDDEN_STEPS  = 100;
 
+/* The longest a single _fill() burst may run, in wall clock ms, whatever
+ * maxSteps says. Only reached on the main thread fallback: a many-SID tune
+ * behind on real time can cost far more per frame than VISIBLE_STEPS assumes,
+ * and every one of those frames runs before this function gives the thread
+ * back - the same thread a tune switch's own click handler is queued on. See
+ * usplayer-worker.js's AUDIO_FILL_BUDGET_MS for the same bound in the worker,
+ * where this normally runs instead. */
+const FILL_BUDGET_MS = 8;
+
 /* Running through a tune's silent lead-in.
  *
  * Plenty of RSID tunes are a loader: the machine boots, BASIC RUNs a program and
@@ -224,22 +233,18 @@ const HIDDEN_STEPS  = 100;
 const SKIP_SETTLE_FRAMES = 50;    /* about a second, well past the ring down */
 const SKIP_THRESHOLD     = 128;   /* int16 peak to peak, about -54 dBFS */
 /* Give up after this much emulated silence and play on at one times speed.
+ * It has to exist, because a tune that makes no sound at all would
+ * otherwise be run through at speed for its whole length. A skip that runs
+ * through a tune is worth being suspicious of the *player* for first, not
+ * the tune: `ResidFpSidBackend::attach()` once built a chip with the volume
+ * at zero for any tune attached after its registers were already set,
+ * which looked exactly like this from here.
  *
- * It has to exist, because a tune that makes no sound at all would otherwise be
- * run through at speed for its whole length.
- *
- * The tune this was first written against, `Beisikki_Demo_BASIC.sid`, turned out
- * **not** to be silent: it was being silenced by a bug of ours, where attaching
- * the software SID after a program had already set its registers built a chip
- * with the volume at zero. Fixed in `ResidFpSidBackend::attach()`. It is worth
- * remembering as the shape of the mistake: a skip that runs through a tune is
- * suspicious of the *player* first, not of the tune.
- *
- * Giving up is not free: the tune's clock is now this far in, so a five minute
- * tune has that much less to play. Ninety seconds is chosen against the case
- * this feature is for, loaders of "up to sixty seconds", with margin, and
- * against the cost of being wrong, which is a minute and a half of a tune that
- * was not going to be heard anyway. */
+ * Giving up is not free: the tune's clock is now this far in, so a five
+ * minute tune has that much less to play. Ninety seconds is chosen against
+ * the case this feature is for, loaders of "up to sixty seconds", with
+ * margin, against the cost of being wrong (a minute and a half of a tune
+ * that was not going to be heard anyway). */
 const SKIP_MAX_SECONDS   = 90;
 /* How long one call may spend on this. It runs on the main thread, and the
  * worklet asks for samples about every 11 ms, so this is the share of the thread
@@ -282,6 +287,8 @@ export class UsPlayerAudio {
     this.node = null;
     this.gain = null;      /* the volume stage, built with the graph */
     this._volume = 1;      /* survives a host setting it before there is one */
+    this._sidVolume = 100; /* percent, see setSidVolume() */
+    this._fmVolume = 50;   /* percent, see setFmVolume() */
     this._ptr = 0;
     this._max = 8192;
     this.starved = 0;
@@ -356,9 +363,15 @@ export class UsPlayerAudio {
 
     /* Must follow a user gesture, which is not this file's business to arrange
      * but is the first thing to check when nothing plays: iOS in particular
-     * gives a context that stays suspended for ever otherwise. */
+     * gives a context that stays suspended for ever otherwise. A bare await
+     * here hung load() forever on a context the browser will not let start -
+     * silently, since resume() never rejects either, it just never settles.
+     * Racing it against a timeout is what _startAudioClock() (usplayer-web.js)
+     * already does for the same reason; this path wants the same guard. */
     this.ctx = new (window.AudioContext || window.webkitAudioContext)();
-    if (this.ctx.state === 'suspended') await this.ctx.resume();
+    if (this.ctx.state === 'suspended') {
+      await Promise.race([this.ctx.resume(), new Promise((r) => setTimeout(r, 2000))]);
+    }
 
     this._url = URL.createObjectURL(
       new Blob([PROCESSOR_SRC], { type: 'application/javascript' }));
@@ -423,6 +436,42 @@ export class UsPlayerAudio {
     const v = Math.max(0, Math.min(1, Number(value)));
     this._volume = isNaN(v) ? 1 : v;
     if (this.gain) this.gain.gain.value = this._volume;
+  }
+
+  /**
+   * How loud the reSIDfp (SID) side of the mix is, independent of the FM/OPL
+   * side - see usp_audio_set_sid_volume() (web_api.cpp). Unlike setVolume(),
+   * this scales inside the wasm mix before the two chips are summed, so it
+   * balances one against the other rather than turning both down together;
+   * a post-mix WebAudio GainNode cannot do that.
+   *
+   * Applied straight to the wasm module rather than remembered for a graph
+   * that has to exist first - this._sidVolume just survives a call made
+   * before the module is loaded (typeof guard below), not before a graph.
+   *
+   * @param {number} percent 100 is unity (the default), 0 silences it
+   */
+  setSidVolume(percent) {
+    const v = Number(percent);
+    this._sidVolume = isNaN(v) ? 100 : v;
+    if (typeof this.M._usp_audio_set_sid_volume === 'function') {
+      this.M._usp_audio_set_sid_volume(this._sidVolume | 0);
+    }
+  }
+
+  /**
+   * How loud the FM/OPL side of the mix is, independent of the SID side.
+   * See setSidVolume() - same idea, the other chip. Default 50: the OPL is
+   * the louder of the two in practice - see OplChip::set_gain().
+   *
+   * @param {number} percent 100 is unity, 0 silences it
+   */
+  setFmVolume(percent) {
+    const v = Number(percent);
+    this._fmVolume = isNaN(v) ? 50 : v;
+    if (typeof this.M._usp_audio_set_fm_volume === 'function') {
+      this.M._usp_audio_set_fm_volume(this._fmVolume | 0);
+    }
   }
 
   /**
@@ -829,6 +878,7 @@ export class UsPlayerAudio {
        * emulated and their audio thrown away, which is what the command line
        * player does for the same reason. */
       const mult = Math.max(1, Math.round(p.speed || 1));
+      const deadline = t0 + FILL_BUDGET_MS;
       let steps = 0;
       while (this._owed > 0 && steps < this._maxSteps) {
         this._frames++;
@@ -837,10 +887,12 @@ export class UsPlayerAudio {
           for (let k = 1; k < mult; k++) p.stepAndDrain();
           this.discard();
           steps += mult;
+          if (t0 && performance.now() >= deadline) break;
           continue;
         }
         this._owed -= this.pump();
         steps++;
+        if (t0 && performance.now() >= deadline) break;
       }
       if (mult > 1) this._owed = 0;
     } finally {

@@ -7,7 +7,7 @@
 	require_once("php/lib/class.account.php"); // Includes setup
 	$user_id = $account->checkLogin() ? $account->userID() : 0;
 	$is_admin = $user_id && $account->isAdmin();
-	
+
 	$maintenance_mode = (int)$account->getAdminSetting('maintenance_mode');
 
 	if ($maintenance_mode && !$is_admin) {
@@ -171,7 +171,7 @@
 					hex.slice(16, 20) + "-" +
 					hex.slice(20)
 				);
-			}			
+			}
 
 		</script>
 
@@ -631,7 +631,7 @@
 					<option value="websid">WebSid emulator</option>
 					<option value="legacy">WebSid (Legacy)</option>
 					<option value="hermit">Hermit's (+FM)</option>
-					<option value="webusb">WebUSB (Hermit)</option>
+					<!-- <option value="webusb">WebUSB (Hermit)</option> -->
 					<option value="asid">ASID (MIDI)</option>
 					<option value="usplayer">USBSID-Player</option>
 					<option value="youtube">YouTube videos</option>
@@ -1660,7 +1660,7 @@
 										<option value="websid">WebSid emulator</option>
 										<option value="legacy">WebSid (Legacy)</option>
 										<option value="hermit">Hermit's (+FM)</option>
-										<option value="webusb">WebUSB (Hermit)</option>
+										<!-- <option value="webusb">WebUSB (Hermit)</option> -->
 										<option value="asid">ASID (MIDI)</option>
 										<option value="usplayer">USBSID-Player</option>
 										<option value="youtube">YouTube videos</option>
@@ -2350,7 +2350,7 @@
 						<h3>April 6, 2026</h3>
 						<ul>
 							<li>The 'Production title' factoid has been renamed to 'Primary release' instead.</li>
-							<li>Added a new user setting to toggle the 'Primary release' feature.</li> 
+							<li>Added a new user setting to toggle the 'Primary release' feature.</li>
 							<li>When the 'Primary release' feature is enabled and a primary release factoid for a CSDb release
 								exists for a song, the CSDb tab opens that release page directly instead of listing multiple releases.
 								A 'BACK' button is then also shown. Use this new feature for a more focused experience.</li>
