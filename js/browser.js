@@ -2376,7 +2376,7 @@ Browser.prototype = {
 		$("#tab-csdb,#tab-gb64").removeClass("raised");
 
 		// If the 'Primary release' feature is activated
-		if (labelSite && main.getUserToggle("primary-release")) {
+		if (main.getUserToggle("primary-release")) {
 			// Click 'GB64' tab if the currently selected tab is 'CSDb'
 			if (labelSite == "gb64") {
 				if (selectedTab === "csdb")
@@ -2387,6 +2387,9 @@ Browser.prototype = {
 				if (selectedTab === "gb64")
 					$tabCSDb.trigger("click")
 				$tabCSDb.addClass("raised");
+			// At least go back to the 'CSDb' tab again
+			} else if (selectedTab === "gb64") {
+				$tabCSDb.trigger("click");
 			}
 		}
 	},

@@ -8,11 +8,18 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- Primary Release ON: When a GB64 has been PR, the next song where GB64 isn't should return to the
-  CSDb tab again, regardless of whether there is a PR there or not (there could be e.g. comments).
+- Add first check for SID v5: If a file is v5, error mark row and don't play. No emulator in
+  DeepSID supports this file format yet.
 
-- A W A I T : Rewrite 'howto_update_gb64.txt' when the next GameBase64 update v20 arrives. See the .txt
-  file for a few preliminary things to test.
+- If giving SIDInfo.exe a SID v5 file, it returns one line saying it doesn't support it. This
+  must be handled by the HVSC update process.
+
+- A user reports that there are no songs in a folder, when clicking this link on a mobile device:
+  https://deepsid.chordian.net/?file=/SID%20Happens/&here=1&search=syndrom&type=author&sort=newest
+  It works in the desktop version.
+
+- A W A I T : Rewrite 'howto_update_gb64.txt' when the next GameBase64 update v20 arrives. See
+  the .txt file for a few preliminary things to test.
 
 
 REALLY CONSIDER THIS
@@ -24,10 +31,6 @@ REALLY CONSIDER THIS
 - The player text lines by the Chartist bars could be filter links.
 - Consider moving the array in 'countries.php' to a table in the database instead.
 - Convert YouTube links in comments to a real YouTube video.
-
-- Check out this: https://github.com/Chordian/deepsid/issues/43
-  Two new SID players that could be added later - reSIDfp and SIDLite.
-  https://github.com/chrisgleissner/libsidplayfp-wasm
 
 
 MAYBE CONSIDER THIS
@@ -85,6 +88,10 @@ MAYBE CONSIDER THIS
   a playlist doesn't already have the song about to be added. (Wouldn't it make more sense to
   make a file check and then show a warning dialog box? However, remember that the same file
   can be added for different subtunes chosen.)
+
+- Check out this: https://github.com/Chordian/deepsid/issues/43
+  Two new SID players that could be added later - reSIDfp and SIDLite.
+  https://github.com/chrisgleissner/libsidplayfp-wasm
 
 - Buttons 'Attach' and 'Detach' for CSDb release pages (maybe only for me to begin with).
   UPDATE: A labels system has been implemented which works from context menu or hotkey. But
