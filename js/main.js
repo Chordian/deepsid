@@ -638,7 +638,7 @@ var main = {
 	 *				player.js
 	 */
 	updateRedirectPlayIcons: function() {
-		if (browser.songs.length == 0) return;
+		if (!this.isSongSelected()) return;
 		// Set "active" icon on all plinks that has the same tune (HVSC only)
 		$("a.redirect").each(function() {
 			var $this = $(this);
