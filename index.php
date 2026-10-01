@@ -1004,6 +1004,7 @@
 							<svg width="23" style="enable-background:new 0 0 42 28;position:relative;top:-1px;" version="1.1" viewBox="0 0 90 60"><path d="M80,11H61v14h15v21H14V25h21v11l20-18L35,0v11H10C4.477,11,0,15.477,0,21v29c0,5.523,4.477,10,10,10h70  c5.523,0,10-4.477,10-10V21C90,15.477,85.523,11,80,11z"/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/></svg>
 						</button>
 						<input id="volume" type="range" min="0" max="100" value="100" step="1" disabled="disabled" />
+						<input id="volume-fm" type="range" min="0" max="100" value="50" step="1" title="FM volume" style="display:none;" />
 					</div>
 				</div>
 				<div id="time"><span id="time-current">0:00</span> <div id="time-bar"><div></div></div> <span id="time-length" style="position:relative;">0:00</span></div>
