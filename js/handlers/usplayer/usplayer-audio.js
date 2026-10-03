@@ -80,19 +80,21 @@ class UspAudio extends AudioWorkletProcessor {
      * requests for more go out on it, while this.port stays for the page's own
      * commands (flush, target) and for the stats it displays. */
     this._peer = null;
-    const handle = (e) => this._onMessage(e);
-    this.port.onmessage = handle;
-    this._handle = handle;
+    /* Samples received per sender, reported back: lets each sender tell what
+     * is still in flight however stale a report is by the time it lands. */
+    this._recvPort = 0;
+    this._recvPeer = 0;
+    this.port.onmessage = (e) => this._onMessage(e, false);
   }
 
-  _onMessage(e) {
+  _onMessage(e, fromPeer) {
       const d = e.data;
       /* The worker's end of the channel. Kept as a port rather than a flag: a
        * transferred MessagePort is the only way into this thread that does not
        * go through the main thread's task queue. */
       if (d && d.cmd === 'peer' && d.port) {
         this._peer = d.port;
-        this._peer.onmessage = this._handle;
+        this._peer.onmessage = (ev) => this._onMessage(ev, true);
         if (this._peer.start) this._peer.start();
         this._since = 4;
         return;
@@ -118,6 +120,15 @@ class UspAudio extends AudioWorkletProcessor {
         this._since = 4;
         return;
       }
+      /* Drop the oldest samples down to 'keep', skipping ahead. For a host
+       * returning from hidden with a deep ring that wants controls to answer
+       * at once rather than after the ring drains. */
+      if (d && d.cmd === 'trim' && typeof d.keep === 'number') {
+        const excess = this._queued() - Math.max(0, d.keep | 0);
+        if (excess > 0) this._tail = (this._tail + excess) % this._buf.length;
+        this._since = 4;
+        return;
+      }
       if (d && d.cmd === 'flush') {
         this._head = 0;
         this._tail = 0;
@@ -126,6 +137,8 @@ class UspAudio extends AudioWorkletProcessor {
         return;
       }
       if (!(d instanceof Int16Array)) return;
+      if (fromPeer) this._recvPeer += d.length;
+      else this._recvPort += d.length;
       /* Int16 to float here rather than on the main thread: it is the audio
        * thread's own format and doing it here keeps the transfer half the size. */
       for (let i = 0; i < d.length; i++) {
@@ -171,9 +184,10 @@ class UspAudio extends AudioWorkletProcessor {
         starved: this._starved,
       };
       /* To the worker when there is one, since it is the thing that can act on
-       * it, and to the page as well so its status line keeps working. */
-      if (this._peer) this._peer.postMessage(report);
-      this.port.postMessage(report);
+       * it, and to the page as well for its status line. Each gets its own
+       * received count. */
+      if (this._peer) this._peer.postMessage(Object.assign({ received: this._recvPeer }, report));
+      this.port.postMessage(Object.assign({ received: this._recvPort }, report));
     }
     return true;
   }
@@ -300,6 +314,8 @@ export class UsPlayerAudio {
     this._driven = null;   /* the player this is clocking, if any */
     this._owed = 0;        /* samples the worklet has asked for and not had */
     this._sentSince = 0;   /* posted to the worklet since its last report */
+    this._sentTotal = 0;   /* posted to the worklet, ever */
+    this._received = null; /* worklet's count of those received, per its report */
     this._filling = false;
     this._hidden = false;
     this._onVisibility = null;
@@ -507,7 +523,7 @@ export class UsPlayerAudio {
        *
        * Subtracting what has been posted since the last report makes a stale
        * report harmless: it can only ever ask for what is genuinely missing. */
-      const owed = this._target - d.queued - this._sentSince;
+      const owed = this._target - d.queued - this._inFlight(d);
       this._sentSince = 0;
       this._owed = owed > 0 ? owed : 0;
       /* While a lead-in is being skipped there is nothing on its way to the ring
@@ -516,6 +532,22 @@ export class UsPlayerAudio {
        * that drives the skip forward. */
       if (this._owed > 0 || this._skipping) this._fill();
     }
+  }
+
+  /**
+   * Samples posted to the worklet and not yet received by it.
+   *
+   * Exact when the worklet reports a received count: a backlog of stale
+   * reports then cannot ask for the same shortfall twice. Falls back to the
+   * posted-since-last-report estimate for a worklet without one.
+   *
+   * @param {object|null} d a worklet report, or null to use the last one seen
+   * @returns {number} samples in flight
+   */
+  _inFlight(d) {
+    if (d && typeof d.received === 'number') this._received = d.received;
+    if (this._received === null) return this._sentSince;
+    return Math.max(0, this._sentTotal - this._received);
   }
 
   /**
@@ -540,6 +572,7 @@ export class UsPlayerAudio {
        * flight when these were posted is read as if the ring were still that
        * empty, and the ring is filled twice over. */
       this._sentSince += n;
+      this._sentTotal += n;
       moved += n;
       if (n < this._max) break;
     }
@@ -624,6 +657,17 @@ export class UsPlayerAudio {
     return ch.port1;
   }
 
+  /**
+   * Drop buffered audio beyond the current target, oldest first.
+   *
+   * Skips the tune ahead by the excess; used on return from hidden to drop
+   * the deep hidden ring at once instead of letting it drain.
+   */
+  trim() {
+    if (!this.node) return;
+    this.node.port.postMessage({ cmd: 'trim', keep: this._target });
+  }
+
   /** True once a worker owns the ring. */
   get handedOver() { return !!this._handedOver; }
 
@@ -697,7 +741,7 @@ export class UsPlayerAudio {
     if (this._keepAlive) return;
     this._keepAlive = setInterval(() => {
       if (!this._driven || this._filling) return;
-      const owed = this._target - this.queued - this._sentSince;
+      const owed = this._target - this.queued - this._inFlight(null);
       if (owed > 0) { this._owed = owed; this._fill(); }
     }, 500);
   }
@@ -824,6 +868,7 @@ export class UsPlayerAudio {
             const chunk = new Int16Array(M.HEAPU8.buffer, this._ptr, n).slice();
             this.node.port.postMessage(chunk, [chunk.buffer]);
             this._sentSince += n;
+            this._sentTotal += n;
             this._endSkip('sound at ' +
               (p.frames() / p.refreshHz()).toFixed(1) + 's');
             return;

@@ -27,7 +27,7 @@ function SIDPlayer(emulator) {
 		websid:		16384,
 		legacy:		16384,
 		hermit:		16384,
-		usplayer:	16384,	// Fixed; the buffer is the AudioWorklet's own ring
+		usplayer:	16384,	// reSIDfp mode only; see backend_usplayer.js setBufferSize()
 	};
 
 	this.advancedSetting = {

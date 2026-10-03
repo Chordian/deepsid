@@ -194,6 +194,8 @@ function USPlayer(mode) {
 		songAuthor:	"",
 		songReleased:	"",
 		numSids:	1,
+		hasFm:		false,
+		sidAddresses:	[],
 	};
 
 	this.pollTimer = 0;
@@ -215,6 +217,13 @@ USPlayer.prototype = {
 	build: function() {
 		return import(USPLAYER_PATH + "usplayer-adapter-deepsid.js" + USPLAYER_VERSION).then(function(module) {
 			this.adapter = new module.USPlayerAdapter(USPLAYER_MODES[this.mode].adapter);
+
+			// Restore stored FM/OPL volume; the adapter applies it on load
+			var fmVolume = parseInt(localStorage.getItem("volume_fm"), 10);
+			if (!isNaN(fmVolume)) {
+				this.adapter.setFmVolume(fmVolume);
+				$("#volume-fm").val(fmVolume);
+			}
 
 			// Our own log and status line, instead of the two panes and the
 			// element ids the player's other host owns.
@@ -502,7 +511,12 @@ USPlayer.prototype = {
 				songAuthor:	info.songAuthor,
 				songReleased:	info.songReleased,
 				numSids:	info.numSids,
+				hasFm:		!!info.hasFm,
+				sidAddresses:	info.sidAddresses || [],
 			};
+			this.showFmVolume();
+			if (typeof SID !== "undefined" && SID.bufferSize)
+				this.setBufferSize(SID.bufferSize.usplayer);
 			// What is loaded, so a restart of the same thing at frame zero can
 			// tell there is nothing to do. See start().
 			this.loadedUrl = this.url;
@@ -653,6 +667,45 @@ USPlayer.prototype = {
 		return this.mode === "audio";
 	},
 
+	/**
+	 * Set the FM/OPL side of the reSIDfp mix.
+	 *
+	 * @param {number} percent	0 for silence, 50 is the default, 100 is unity
+	 */
+	setFmVolume: function(percent) {
+		if (!this.adapter) return;
+		this.adapter.setFmVolume(percent);
+	},
+
+	/**
+	 * Set how much audio reSIDfp keeps ready, from DeepSID's "Buffer size".
+	 *
+	 * A deeper buffer keeps playback steady while the visuals are drawing.
+	 * The piano stays in step with the sound, and pausing takes effect that
+	 * much later. Only reSIDfp mode has a buffer; the board modes ignore it.
+	 *
+	 * @param {number} samples	Buffer size in samples, e.g. 16384
+	 */
+	setBufferSize: function(samples) {
+		if (!this.adapter || this.mode !== "audio") return;
+		this.adapter.setBufferSamples(samples);
+	},
+
+	/** Does the loaded tune have an FM/OPL side to turn? */
+	hasFm: function() {
+		if (this.mode !== "audio") return false;
+		// Tunes older than v5 carry no FM flag: the adapter sees their FM writes
+		return !!this.info.hasFm || (!!this.adapter && this.adapter.hasFm());
+	},
+
+	/** Show the FM volume slider only for an FM tune in reSIDfp mode. */
+	showFmVolume: function() {
+		var show = this.hasFm();
+		if (show === this.fmVolumeShown) return;
+		this.fmVolumeShown = show;
+		$("#volume-fm").toggle(show).parent().toggleClass("has-fm", show);
+	},
+
 	/** Seconds into the song, the emulation's own count and not wall clock. */
 	getPlaytime: function() {
 		if (!this.adapter) return 0;
@@ -714,6 +767,9 @@ USPlayer.prototype = {
 	 */
 	getSIDAddress: function(chip) {
 		if (!chip) return 0xD400;
+		// The emulation's own placement, which also covers v5 multi-SID layouts
+		if (this.info.sidAddresses.length)
+			return this.info.sidAddresses[chip] || 0;
 		if (!this.header || this.header.length < 0x7C) return 0;
 		var byte = this.header[chip === 1 ? 0x7A : 0x7B];
 		if (byte >= 0x42 && (byte < 0x80 || byte >= 0xE0)) return 0xD000 + byte * 16;
@@ -778,6 +834,7 @@ USPlayer.prototype = {
 		this.stopPolling();
 		this.pollTimer = setInterval(function() {
 			if (!this.playing || this.paused) return;
+			this.showFmVolume();
 			if (typeof this.bufferCallback === "function") this.bufferCallback();
 			if (this.playlength > 0 && !this.ended &&
 				this.getPlaytime() >= this.playlength) {
