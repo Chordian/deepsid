@@ -2069,6 +2069,12 @@
 							<li>The reSIDfp output of USBSID-Player is a SID handler of its own: <b>reSIDfp (usPlayer)</b>. It needs no hardware at all; the same cycle-exact C64 as USBSID-Player plays the tune, with the sound synthesised by reSIDfp in the page. It plays RSID, BASIC and digi tunes, and SID tunes with up to four chips. The <b>USBSID-Player</b> SID handler still offers reSIDfp too, as the last of its modes after WebUSB, Web Serial, ASID and SendSID.</li>
 						</ul>
 
+						<h3>September 26, 2026</h3>
+						<ul>
+							<li>Removed the 'WebUSB' SID handler.</li>
+							<li>The 'USBSID-Player' SID handler has been updated.</li>
+						</ul>
+
 						<h3>September 5, 2026</h3>
 						<ul>
 							<li>Infinity Radio: The alert about not being able to find a suitable random file no longer appears. It now simply tries a different folder instead.</li>

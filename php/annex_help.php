@@ -182,9 +182,6 @@ $help = array(
 		Plays RSID, BASIC and digi tunes, up to 4 SID chips, and SID+FM.
 		The same player as USBSID-Player, without a board.
 
-		<h4><a href="//deepsid.chordian.net?emulator=webusb">WebUSB (Hermit)</a></h4>
-		<p>Use with USB devices such as e.g. USBSID-Pico.</p>
-
 		<h4><a href="//deepsid.chordian.net?emulator=asid">ASID (MIDI)</a></h4>
 		<p>Use with MIDI devices such as e.g. SidStation, TherapSID, etc.</p>
 
@@ -335,7 +332,6 @@ $help = array(
 						<li><b>websid</b></li>
 						<li><b>legacy</b></li>
 						<li><b>hermit</li>
-						<li><b>webusb</li>
 						<li><b>asid</b>&nbsp;&nbsp;(MIDI)</li>
 						<li><b>usplayfp</b>&nbsp;&nbsp;(reSIDfp)</li>
 						<li><b>usplayer</li>
