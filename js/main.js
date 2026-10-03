@@ -262,7 +262,7 @@ var main = {
 				// USBSID-Player plays RSID tunes, being a real machine, but not MUS files.
 				var isMUSFile = $tr.find(".name").attr("data-name").indexOf(".mus") !== -1;
 				SID.emulator == "hermit" || SID.emulator == "webusb" || SID.emulator == "asid" ||
-				(SID.emulator == "usplayer" && isMUSFile)
+				((SID.emulator == "usplayer" || SID.emulator == "usplayfp") && isMUSFile)
 					? $tr.addClass("disabled")
 					: $tr.removeClass("disabled");
 			} else if (isSIDFile && $tr.find(".name").attr("data-name").indexOf(".mus") !== -1) {
@@ -370,13 +370,13 @@ var main = {
 
 		if (emulator == "usplayer") {
 			// The mode selector is always relevant; what it needs plugged in is
-			// not. 'audio' needs nothing, the two board modes need a board and
-			// ASID needs a MIDI output.
+			// not. 'audio' needs nothing, the board modes need a board and
+			// ASID needs a MIDI output. The 'usplayfp' handler has no box.
 			//
 			// Read from storage and not from SID.advancedSetting, because this
 			// is called before 'new SIDPlayer()' further down and there is no
 			// SID object to ask yet. Same key 'applyAdvancedSetting()' uses.
-			var mode = localStorage.getItem("advanced_setting_usplayer_mode") || "audio";
+			var mode = localStorage.getItem("advanced_setting_usplayer_mode") || "webusb";
 			$("#usplayer-box").show();
 			/* Before the value is set, so a stored mode this browser cannot do
 			 * falls back to one it can. See backend_usplayer.js. */
@@ -1638,7 +1638,7 @@ main.bindEvents = function() {
 					ctrls.state("root/back", "enabled");
 
 					$("#dropdown-topleft-emulator,#dropdown-settings-emulator")
-						.styledOptionState("resid jsidplay2 websid legacy hermit webusb asid usplayer", "enabled")
+						.styledOptionState("resid jsidplay2 websid legacy hermit webusb asid usplayfp usplayer", "enabled")
 						.styledOptionState("youtube", "disabled");
 					$("#path").css("top", "5px").empty().append(`
 						<span style="position:relative;top:-2px;margin-right:8px;">Temporary emulator testing</span>
@@ -4262,6 +4262,7 @@ $(function() { // DOM ready
 		"hermit",
 		"webusb",
 		"asid",
+		"usplayfp",
 		"usplayer",
 		"lemon",
 		"youtube",
