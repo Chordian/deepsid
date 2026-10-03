@@ -219,6 +219,19 @@ export class USPlayerAdapter {
     this._worker = null;
     this._workerReady = null;
     this._snap = null;
+    /* Worker register reports waiting for their audible moment, see
+     * _queueRegisters(), and the CIA 1 timer A latch from the latest one. */
+    this._regQueue = [];
+    this._workerCiaLatch = 0;
+    /* SID and FM sides of the software mix, percent. Undefined until the host
+     * sets one: the wasm defaults (100 and 50) stand until then. */
+    this._sidVolume = undefined;
+    this._fmVolume = undefined;
+    /* DeepSID's "Buffer size" setting in samples: software audio ring depth
+     * while the page is visible. Undefined keeps UsPlayerAudio's own. */
+    this._bufferSamples = undefined;
+    this._onBufferVisibility = null;
+    this._onResumeVisibility = null;
     this._msgId = 0;
     this._pending = new Map();
     /* What the host wants doing with the running commentary, see setHost(). All
@@ -382,11 +395,12 @@ export class USPlayerAdapter {
    * The board modes are left on the write side, where the shadow is a record of
    * what was actually sent to the board, which is the more useful truth there.
    *
-   * Not in worker mode: the page's own player is loaded but never stepped, so its
-   * mirror is whatever the tune wrote during the load. See TODO 29.
+   * Worker mode reads the worker's reports instead: the page's own player is
+   * loaded but never stepped. See _queueRegisters().
    */
   _pollRegisters() {
-    if (!this._isAudio || this._worker) return;
+    if (this._isAudio && this._worker) { this._drainRegisters(); return; }
+    if (!this._isAudio) return;
     if (!this._player || typeof this._player.sidRegister !== 'function') return;
     const chips = Math.min(4, Math.max(1, this._info.numSids | 0));
     for (let c = 0; c < chips; c++) {
@@ -894,8 +908,9 @@ export class USPlayerAdapter {
        * which is the whole reason for the worker and is not a reason to lose
        * playback when there cannot be one. */
       try {
-        this._worker = new Worker(new URL('./usplayer-worker.js', import.meta.url),
-                                  { type: 'module' });
+        /* Versioned like the wasm: a cached worker older than this adapter
+         * lacks the messages it sends. */
+        this._worker = new Worker(versioned('usplayer-worker.js'), { type: 'module' });
         this._worker.onmessage = (e) => this._onWorkerMessage(e.data);
         this._worker.onerror = (e) => this._log('worker error: ' + (e.message || e));
         /* With a deadline. A worker that comes up but never answers, because
@@ -931,6 +946,7 @@ export class USPlayerAdapter {
     if (!d) return;
     if (d.type === 'log') { this._log(d.payload.message); return; }
     if (d.type === 'state') { this._snap = d.payload; return; }
+    if (d.type === 'regs') { this._queueRegisters(d.payload); return; }
     const p = this._pending.get(d.id);
     if (!p) return;
     this._pending.delete(d.id);
@@ -1030,6 +1046,10 @@ export class USPlayerAdapter {
          * or the page says "Tune 1/18" while song 3 plays and picks the wrong
          * song length to go with it. */
         song: i.song,
+        /* v5 FM/OPL tune, for a host offering an FM volume. */
+        hasFm: !!i.hasFmOpl,
+        /* Each chip's address as the emulation placed it, v5 layouts included. */
+        sidAddresses: (i.sids || []).map((c) => c.addr),
       };
 
       this._subtune = subtune || 0;
@@ -1042,6 +1062,8 @@ export class USPlayerAdapter {
       this._seen.fill(0);
       this._dirty.fill(0);
       this._anyDirty = false;
+      this._regQueue.length = 0;
+      this._workerCiaLatch = 0;
 
       if (this._isAudio) {
         /* Started here and not in _ensure(): the synthesis has to be
@@ -1083,7 +1105,14 @@ export class USPlayerAdapter {
             this._audio.onTargetChange = (target, steps) => {
               if (this._worker) this._call('audioTarget', { target, steps });
             };
+            /* Deeper ring while hidden, reaching the worker through
+             * onTargetChange; UsPlayerAudio only does this from run(). */
+            if (typeof this._audio._watchVisibility === 'function') {
+              this._audio._watchVisibility();
+            }
+            this._watchResume();
           }
+          this._applyBufferSamples();
           const copy = bytes.slice();
           await this._call('loadSID',
                            { bytes: copy.buffer, subtune: subtune || 0 },
@@ -1096,11 +1125,20 @@ export class USPlayerAdapter {
             target: this._audio._target,
             steps: this._audio._maxSteps || 24,
           });
+          if (this._sidVolume !== undefined) {
+            await this._call('sidVolume', { percent: this._sidVolume }).catch(() => {});
+          }
+          if (this._fmVolume !== undefined) {
+            await this._call('fmVolume', { percent: this._fmVolume }).catch(() => {});
+          }
           await this._call('start', {});
         } else {
           /* The main thread does it, as it did before there was a worker. */
           await this._player.start({ externalClock: true });
+          if (this._sidVolume !== undefined) this._audio.setSidVolume(this._sidVolume);
+          if (this._fmVolume !== undefined) this._audio.setFmVolume(this._fmVolume);
           this._audio.run(this._player);
+          this._applyBufferSamples();
         }
         this._log(`software audio${inWorker ? ' in a worker' : ''}: ` +
                   `${this._audio.ctx.sampleRate} Hz, ` +
@@ -1225,6 +1263,7 @@ export class USPlayerAdapter {
       this._call('stop', {});
       this._call('audioDiscard', {});
       this._snap = null;
+      this._regQueue.length = 0;
     }
     if (this._player) this._player.stop();
     this._paused = false;
@@ -1257,6 +1296,95 @@ export class USPlayerAdapter {
 
   /** Can this mode's loudness be changed at all? */
   hasVolume() { return this._isAudio; }
+
+  /**
+   * Set the SID side of the software mix, before the SID and FM are summed.
+   *
+   * @param {number} percent 100 is unity, 0 silences the SID side
+   * @returns {boolean} true when this mode has a mix to set
+   */
+  setSidVolume(percent) {
+    this._sidVolume = Math.max(0, Number(percent) || 0);
+    if (!this._isAudio) return false;
+    if (this._worker) this._call('sidVolume', { percent: this._sidVolume }).catch(() => {});
+    else if (this._audio) this._audio.setSidVolume(this._sidVolume);
+    return true;
+  }
+
+  /**
+   * Set the FM/OPL side of the software mix, before the SID and FM are summed.
+   *
+   * @param {number} percent 100 is unity, 0 silences the FM side
+   * @returns {boolean} true when this mode has a mix to set
+   */
+  setFmVolume(percent) {
+    this._fmVolume = Math.max(0, Number(percent) || 0);
+    if (!this._isAudio) return false;
+    if (this._worker) this._call('fmVolume', { percent: this._fmVolume }).catch(() => {});
+    else if (this._audio) this._audio.setFmVolume(this._fmVolume);
+    return true;
+  }
+
+  /**
+   * Does the loaded tune have an FM/OPL side?
+   *
+   * True for the v5 header flag, and for any tune once it has written to the
+   * FM/OPL in software audio: older SID+FM tunes carry no flag.
+   *
+   * @returns {boolean}
+   */
+  hasFm() {
+    if (this._info.hasFm) return true;
+    if (!this._isAudio) return false;
+    if (this._worker) return !!this._snap && this._snap.fmWrites > 0;
+    return !!this._audio && this._audio.stats().fmWrites > 0;
+  }
+
+  /**
+   * Set the software audio ring depth used while the page is visible.
+   *
+   * A deeper ring keeps playback steady while the host page is busy drawing;
+   * register reports are delayed by the same amount.
+   *
+   * @param {number} samples ring depth, clamped to the default minimum
+   */
+  setBufferSamples(samples) {
+    const n = Number(samples) | 0;
+    this._bufferSamples = n > 0 ? n : undefined;
+    this._applyBufferSamples();
+    if (!this._onBufferVisibility && typeof document !== 'undefined') {
+      /* UsPlayerAudio resets a visible ring to its own depth; restore ours
+       * after its handler has run. */
+      this._onBufferVisibility = () => setTimeout(() => this._applyBufferSamples(), 0);
+      document.addEventListener('visibilitychange', this._onBufferVisibility);
+    }
+  }
+
+  /**
+   * Resume an audio context the OS suspended or interrupted while the page
+   * was hidden, as mobile browsers do on a tab or app switch.
+   */
+  _watchResume() {
+    if (this._onResumeVisibility || typeof document === 'undefined') return;
+    this._onResumeVisibility = () => {
+      if (document.visibilityState !== 'visible' || this._paused) return;
+      const ctx = this._audio && this._audio.ctx;
+      if (!ctx || ctx.state === 'running' || ctx.state === 'closed') return;
+      this._log(`audio context ${ctx.state} on return, resuming`);
+      ctx.resume().catch((e) => this._log('resume failed: ' + e));
+    };
+    document.addEventListener('visibilitychange', this._onResumeVisibility);
+  }
+
+  /** Apply the host's ring depth to a running software audio graph. */
+  _applyBufferSamples() {
+    if (this._bufferSamples === undefined || !this._isAudio) return;
+    if (!this._audio || !this._audio.ctx || !this._audio.node) return;
+    if (typeof document !== 'undefined' && document.visibilityState === 'hidden') return;
+    const rate = this._audio.ctx.sampleRate || 48000;
+    const seconds = Math.max(0.2, this._bufferSamples / rate);
+    this._audio.setTarget(seconds, this._audio._maxSteps);
+  }
 
   /**
    * The MIDI outputs ASID mode could play to, `[{ id, name }]`.
@@ -1404,10 +1532,53 @@ export class USPlayerAdapter {
       try { return this._player.sidRegister(chip | 0, reg & 0x1f) & 0xff; }
       catch (_) { /* fall through to the shadow */ }
     }
+    if (this._isAudio && this._worker) this._drainRegisters();
     const v = this._shadow[i];
     /* 0xff is the fill this starts as, meaning "never written". A page wants a
      * quiet chip to look quiet rather than to look like every bit is set. */
     return this._dirtyEver(i) ? v : 0;
+  }
+
+  /**
+   * Hold a worker register report until the audio it belongs to is heard.
+   *
+   * The worker emulates ahead of the playhead by the ring's depth and says by
+   * how much, in `leadMs`.
+   *
+   * @param {object} p { regs: Uint8Array, ciaLatch, leadMs }
+   */
+  _queueRegisters(p) {
+    if (!p || !p.regs) return;
+    const due = _now() + Math.max(0, Number(p.leadMs) || 0);
+    this._regQueue.push({ due, regs: p.regs, ciaLatch: p.ciaLatch | 0 });
+    /* Bound the queue for a page that never reads it. */
+    if (this._regQueue.length > 256) this._applyRegisters(this._regQueue.shift());
+  }
+
+  /** Apply every queued worker register report that is due. */
+  _drainRegisters() {
+    const now = _now();
+    while (this._regQueue.length && this._regQueue[0].due <= now) {
+      this._applyRegisters(this._regQueue.shift());
+    }
+  }
+
+  /**
+   * Copy one worker register report into the shadow.
+   *
+   * @param {object} e { regs, ciaLatch }
+   */
+  _applyRegisters(e) {
+    const n = Math.min(128, e.regs.length);
+    for (let i = 0; i < n; i++) {
+      const v = e.regs[i];
+      this._seen[i] = 1;
+      if (this._shadow[i] === v) continue;
+      this._shadow[i] = v;
+      this._dirty[i] = 1;
+      this._anyDirty = true;
+    }
+    this._workerCiaLatch = e.ciaLatch;
   }
 
   /** Has anything ever been written to this shadow slot? */
@@ -1433,6 +1604,10 @@ export class USPlayerAdapter {
    * @param {number} timer 0 for A, 1 for B
    */
   ciaLatch(cia = 1, timer = 0) {
+    if (this._isAudio && this._worker) {
+      this._drainRegisters();
+      return (cia === 1 && timer === 0) ? this._workerCiaLatch : 0;
+    }
     if (!this._player || typeof this._player.ciaLatch !== 'function') return 0;
     try { return this._player.ciaLatch(cia, timer); } catch (_) { return 0; }
   }

@@ -142,6 +142,7 @@ function Viz(emulator) {
 		websid:		"the default WebSid",
 		legacy:		"the legacy WebSid",
 		hermit:		"Hermit's",
+		usplayer:	"USBSID-Player (reSIDfp)",
 	};
 
 	this.applyBufferSize(this.emulator);
@@ -466,6 +467,8 @@ Viz.prototype = {
 			ctrls.selectEmulator("asid");
 		else if (this.emulator == "webusb")
 			ctrls.selectEmulator("webusb");
+		else if (this.emulator == "usplayer")
+			SID.usplayer.setBufferSize(SID.bufferSize[emulator]); // Applied live
 		else
 			$("#visuals-piano .viz-emu.button-on").trigger("click");
 		this.showBufferMessage(emulator);
@@ -663,7 +666,7 @@ Viz.prototype = {
 	 * @param {string} emulator		Emulator, e.g. "resid", "jsidplay2", etc.
 	 */
 	applyBufferSize: function(emulator) {
-		if (["resid", "jsidplay2", "websid", "legacy", "webusb", "hermit", "asid"].includes(emulator)) {
+		if (["resid", "jsidplay2", "websid", "legacy", "webusb", "hermit", "asid", "usplayer"].includes(emulator)) {
 			if (emulator == "asid" || emulator == "webusb") emulator = "hermit";
 			$("#page .dropdown-buffer").prop("disabled", false);
 			$("#page .dropdown-buffer-label").removeClass("disabled");
@@ -683,6 +686,9 @@ Viz.prototype = {
 						break;
 					case "legacy":
 						SID.bufferSize['legacy'] = 1024;
+						break;
+					case "usplayer":
+						SID.bufferSize['usplayer'] = 16384;
 						break;
 					default:
 						SID.bufferSize[emulator] = 1024;

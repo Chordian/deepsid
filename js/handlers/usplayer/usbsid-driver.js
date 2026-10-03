@@ -141,6 +141,10 @@ const RESET_MIDI_STATE = 0x63;
 
 const USBSID_VERSION  = 0x80;
 const US_PCB_VERSION  = 0x81;
+/* What the firmware was compiled with, one byte of flags
+ * bit 7 is the embedded SID player, which is the one SendSID needs. */
+const US_FEATURES     = 0x82;
+const FEATURE_SIDPLAYER = 1 << 7;
 const RESTART_BUS     = 0x85;
 const RESTART_BUS_CLK = 0x86;
 const SYNC_PIOS       = 0x87;
@@ -205,6 +209,8 @@ class USBSIDDevice {
     this._ifaceNum   = null;
     this._isOpen     = false;
     this._debug      = false;
+    this._deviceOpened = false;
+    this._openingDevice = false;
     /* Best-effort close on page hide/refresh.
      * Chrome does not cancel HCI-queued bulk OUT transfers on same-origin
      * page reload - old SID write packets from unawaited write() calls
@@ -225,6 +231,8 @@ class USBSIDDevice {
       this._device.close().catch(() => {});
     } catch (_) {}
     this._isOpen   = false;
+    this._deviceOpened   = false;
+    this._openingDevice   = false;
     this._device   = null;
     this._epOut    = null;
     this._epIn     = null;
@@ -271,7 +279,14 @@ class USBSIDDevice {
       const dev = devices.find(d => d.vendorId === USBSID_VID && d.productId === USBSID_PID);
       if (!dev) return false;
       this._device = dev;
-      try { await dev.open(); await dev.close(); } catch (_) {}
+      /* Throwaway warm-up cycle, not a real open - must not touch
+       * _deviceOpened/_openingDevice, those guard _open() below and setting
+       * them here would make _open() bail out before it actually opens
+       * anything. */
+      try {
+        await dev.open();
+        await dev.close();
+      } catch (_) {}
       return await this._open();
     } catch (e) {
       this._log('reconnect failed:', e);
@@ -282,7 +297,16 @@ class USBSIDDevice {
   /** Internal: open, claim interface, enable */
   async _open() {
     try {
-      await this._device.open();
+      // await this._device.open();
+      if (this._deviceOpened || this._openingDevice)
+        return;
+      this._openingDevice = true;
+      try {
+        await this._device.open();
+        this._deviceOpened = true;
+      } finally {
+        this._openingDevice = false;
+      }
       if (this._device.configuration === null) {
         await this._device.selectConfiguration(1);
       }
@@ -342,7 +366,9 @@ class USBSIDDevice {
         await this._device.close();
       } catch (_) {}
     }
-    this._isOpen   = false;
+    this._isOpen        = false;
+    this._deviceOpened  = false;
+    this._openingDevice = false;
     this._device   = null;
     this._epOut    = null;
     this._epIn     = null;
@@ -361,7 +387,7 @@ class USBSIDDevice {
     if (!this._isOpen) return;
     const buf = data instanceof Uint8Array ? data : new Uint8Array(data);
     try {
-      /* await */ this._device.transferOut(this._epOut, buf);
+      await this._device.transferOut(this._epOut, buf);
     } catch (e) {
       this._log('write error:', e);
     }
@@ -374,7 +400,6 @@ class USBSIDDevice {
     try {
       await this._device.transferOut(this._epOut, buf);
       const result = await this._device.transferIn(this._epIn, MAX_PACKET_SIZE); /* Vendor is fixed at 64 bytes */
-      this._device.transferIn(this._epIn, 0); /* Account for the second 0 length packet */
       return new Uint8Array(result.data.buffer);
     } catch (e) {
       this._log('writeAndRead error:', e);
@@ -387,7 +412,6 @@ class USBSIDDevice {
     if (!this._isOpen) return null;
     try {
       const result = await this._device.transferIn(this._epIn, MAX_PACKET_SIZE); /* Vendor is fixed at 64 bytes */
-      this._device.transferIn(this._epIn, 0); /* Account for the second 0 length packet */
       return new Uint8Array(result.data.buffer);
     } catch (e) {
       this._log('read error:', e);
@@ -498,7 +522,6 @@ class USBSIDDevice {
       //     setTimeout(() => reject(new Error('configCmdRead timeout')), timeoutMs)
       //   ),
       // ]);
-      this._device.transferIn(this._epIn, 0); /* Account for the second 0 length packet */
       packets.push(new Uint8Array(r.data.buffer));
     } catch (e) {
       /* Remember it: the next read clears up after this one. The abandoned
@@ -561,7 +584,6 @@ class USBSIDDevice {
     try {
       await this._device.transferOut(this._epOut, cmdBuf);
       const r = await this._device.transferIn(this._epIn, MAX_PACKET_SIZE); /* Vendor is fixed at 64 bytes */
-      r.data.byteLength == 64 ? this._device.transferIn(this._epIn, 0) : null ; /* Account for the second 0 length packet */
       await us_delay(100);
       return new Uint8Array(r.data.buffer);
     } catch (e) {
@@ -611,7 +633,6 @@ class USBSIDDevice {
       await this._device.transferOut(this._epOut, cmdBuf);
       for (let i = 0; i < 4; i++) {
         const r = await this._device.transferIn(this._epIn, MAX_PACKET_SIZE); /* Vendor is fixed at 64 bytes */
-        r.data.byteLength == 64 ? this._device.transferIn(this._epIn, 0) : null ; /* Account for the second 0 length packet */
         const chunk = new Uint8Array(r.data.buffer);
         if (all.length === 0) {
           if (chunk.length === 0) { this._log('readConfig: skipping zero-length packet'); continue; }
@@ -793,6 +814,20 @@ class USBSIDDevice {
     return (r && r.length) ? r[0] : 0;
   }
 
+  /* What the firmware was built with, or null when it will not say (older
+   * firmware that predates this command). */
+  async readFeatures() {
+    usbsidLog("Reading USBSID-Pico feature flags");
+    const r = await this.configReadNoRace(US_FEATURES, MAX_PACKET_SIZE);
+    return (r && r.length) ? r[0] : null;
+  }
+
+  /** Does this board carry the onboard SID player? null when it will not say. */
+  async hasSidPlayer() {
+    const f = await this.readFeatures();
+    return (f === null) ? null : (f & FEATURE_SIDPLAYER) !== 0;
+  }
+
   /* Clone config commands */
   async configFPGASID(b2, b3, b4) { await this.configCmd(FPGASID, b2, b3, b4); }
   async configSKPico(b2, b3, b4)  { await this.configCmd(SKPICO, b2, b3, b4); }
@@ -889,7 +924,7 @@ class USBSIDDevice {
   async pause()   { await this.write([this.cmd(COMMAND, PAUSE),   0, 0, 0, 0, 0]); }
   async unpause() { await this.write([this.cmd(COMMAND, UNPAUSE), 0, 0, 0, 0, 0]); }
 
-  /* Onboard player (requires ONBOARD_SIDPLAYER firmware build) */
+  /* Onboard player (requires ONBOARD_EMULATOR firmware build) */
   async playerUploadStart(fileType = 0x01) {
     await this.configCmd(UPLOAD_SID_START, fileType);
   }

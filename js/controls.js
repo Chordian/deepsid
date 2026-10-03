@@ -35,7 +35,7 @@ Controls.prototype = {
 		$("#stopic-osc,#stopic-filter,#stopic-stereo").on("click", "button", this.onClick.bind(this));
 		$("#sundry-ctrls").on("click", "#sidwiz,#showtags,#filter-6581", this.onClick.bind(this));
 
-		$("#volume,#sundry-ctrls").on("input", this.onInput.bind(this));
+		$("#volume,#volume-fm,#sundry-ctrls").on("input", this.onInput.bind(this));
 
 		$("#memory-chunk").on("click", function() {
 			// Go to 'Visuals > MEMO' when the blue memory chunk is clicked
@@ -548,6 +548,12 @@ Controls.prototype = {
 				var vol = event.currentTarget.value / 100;
 				SID.setMainVolume(vol);
 				localStorage.setItem("volume", vol);
+				break;
+			case "volume-fm":
+				// FM/OPL volume of USBSID-Player; percent, 50 is the default
+				var fmVol = event.currentTarget.value * 1;
+				if (SID.emulator == "usplayer") SID.usplayer.setFmVolume(fmVol);
+				localStorage.setItem("volume_fm", fmVol);
 				break;
 			case "osc-zoom":
 				// Oscilloscope zoom; 1 (closest) to 5 (farthest)
