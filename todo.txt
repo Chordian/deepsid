@@ -8,11 +8,55 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- Add first check for SID v5: If a file is v5, error mark row and don't play. No emulator in
-  DeepSID supports this file format yet.
+- Labels 'name' field in the database needs to be longer.
 
-- If giving SIDInfo.exe a SID v5 file, it returns one line saying it doesn't support it. This
-  must be handled by the HVSC update process.
+- Most SID handlers can actually already play SID v5 files, even with FM. Consider adding a folder
+  with all SID v5 test files. The folder should only be seen and used by administrators.
+
+- SID v5 support: If giving SIDInfo.exe a SID v5 file, it returns one line saying it doesn't
+  support it. This must be handled by 'utility/update_sidinfo.php' as well. Two solutions exist.
+  Either skip and add a placeholder row in the 'files' table, or add PHP code for doing your own
+  examination of the SID file to populate a proper row. You can also hope that an updated version
+  of SIDInfo.exe makes it before the next HVSC update.
+
+- SID v5 support: Consider new table columns. UPDATE: I recommend waiting a few months.
+
+    Changes to 'files' table:
+
+      - Existing columns that need no changes:
+
+      - Column 'lengths' already exists for song lengths with subtune details
+      - Column 'version' should be set to 5.0 for the new format
+      - Column 'name' is already 128 chars long; plenty of space for v5 format
+      - Column 'author' is already 128 chars long; plenty of space for v5 format
+      - Column 'released' is already 128 chars long; plenty of space for v5 format
+
+      - New columns to be added:
+
+        ALTER TABLE files
+          ADD COLUMN flags SMALLINT UNSIGNED NOT NULL DEFAULT 0,
+          ADD COLUMN sid_count TINYINT UNSIGNED NOT NULL DEFAULT 1,
+          ADD COLUMN sid_address_config TINYINT UNSIGNED NOT NULL DEFAULT 0,
+          ADD COLUMN sid_address_start TINYINT UNSIGNED NOT NULL DEFAULT 0,
+          ADD COLUMN panning_layout TINYINT UNSIGNED NOT NULL DEFAULT 0,
+          ADD COLUMN panning_mode TINYINT UNSIGNED NOT NULL DEFAULT 0,
+          ADD COLUMN fmopl TINYINT UNSIGNED NOT NULL DEFAULT 0;
+
+          flag                = $0000 to $0fff
+          sid_count           = 1 to 15 - might be better to read than looking at filename
+          sid_address_config  = address-generation configuration 0 to 6
+          sid_address_start   = raw starting-address byte (0, $42–$7E, $E0–$FE)
+          panning_layout      = 0–3: Standard, L/C/R, Center First, Fully Centered
+          panning_mode        = 0–3: Direct, Reverse, Group, Spread
+          fmopl               = boolean indicating that FM OPL is required
+
+- SID v5 support: See if 'sidheader' in players.js also need updating.
+
+- SID v5 support: See if the first wizard step for getting and showing SID info needs updating.
+
+- BUG: Uploading temp with 'L' hotkey then clicking the SID row shows this error in an alert box:
+  "You must specify 'player' or 'id' as a GET variable."
+  Closing the alert box then allows for playing, but it's annoying. Make sure it doesn't appear.
 
 - A user reports that there are no songs in a folder, when clicking this link on a mobile device:
   https://deepsid.chordian.net/?file=/SID%20Happens/&here=1&search=syndrom&type=author&sort=newest

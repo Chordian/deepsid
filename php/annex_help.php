@@ -176,9 +176,6 @@ $help = array(
 		<p>Even faster, but cannot emulate RSID tunes, nor SID with digi.</p>
 		This can also play SID+FM tunes, i.e. with OPL synthesis added.
 
-		<h4><a href="//deepsid.chordian.net?emulator=webusb">WebUSB (Hermit)</a></h4>
-		<p>Use with USB devices such as e.g. USBSID-Pico.</p>
-
 		<h4><a href="//deepsid.chordian.net?emulator=asid">ASID (MIDI)</a></h4>
 		<p>Use with MIDI devices such as e.g. SidStation, TherapSID, etc.</p>
 
@@ -327,7 +324,6 @@ $help = array(
 						<li><b>websid</b></li>
 						<li><b>legacy</b></li>
 						<li><b>hermit</li>
-						<li><b>webusb</li>
 						<li><b>asid</b>&nbsp;&nbsp;(MIDI)</li>
 						<li><b>usplayer</li>
 						<li><b>youtube</b></li>

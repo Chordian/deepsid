@@ -2060,6 +2060,12 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>September 26, 2026</h3>
+						<ul>
+							<li>Removed the 'WebUSB' SID handler.</li>
+							<li>The 'USBSID-Player' SID handler has been updated.</li>
+						</ul>
+
 						<h3>September 5, 2026</h3>
 						<ul>
 							<li>Infinity Radio: The alert about not being able to find a suitable random file no longer appears. It now simply tries a different folder instead.</li>
