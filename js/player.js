@@ -27,7 +27,7 @@ function SIDPlayer(emulator) {
 		websid:		16384,
 		legacy:		16384,
 		hermit:		16384,
-		usplayer:	16384,	// reSIDfp mode only; see backend_usplayer.js setBufferSize()
+		usplayfp:	16384,	// See backend_usplayer.js setBufferSize()
 	};
 
 	this.advancedSetting = {
@@ -44,7 +44,7 @@ function SIDPlayer(emulator) {
 		legacy:		{},
 		hermit:		{},
 		usplayer:	{
-			"mode":				"audio",	// Where the SID writes go
+			"mode":				"webusb",	// Where the SID writes go
 		},
 	}
 
@@ -295,6 +295,21 @@ function SIDPlayer(emulator) {
 			this.emulatorFlags.offline			= false;
 			break;
 
+		case "usplayfp":
+
+			/**
+			 * reSIDfp (usPlayer) by LouD
+			 *
+			 * USBSID-Player with its reSIDfp output, listed as a SID handler of
+			 * its own. Needs no hardware: the sound is synthesised in the page.
+			 *
+			 * + Everything USBSID-Player below does, without a board
+			 * + Buffer size applies, as with the other emulators
+			 */
+			this.usplayer = new USPlayer("audio");
+
+			// Continues to...
+
 		case "usplayer":
 
 			/**
@@ -306,16 +321,16 @@ function SIDPlayer(emulator) {
 			 *
 			 * + Plays RSID, BASIC and digi tunes, being a real machine
 			 * + Can play 2SID, 3SID and 4SID tunes
-			 * + Four outputs: reSIDfp in the page, WebUSB, Web Serial, ASID
-			 * + The three hardware outputs play on real or cloned SID chips
+			 * + Outputs: WebUSB, Web Serial, ASID, SendSID and reSIDfp
+			 * + The hardware outputs play on real or cloned SID chips
 			 * - Cannot play MUS files in CGSC
 			 * - No encoding options: it follows the tune's own clock
 			 * - No seeking
 			 *
 			 * Search for "@usplayer" for things to be updated later
 			 */
-			var mode = this.applyAdvancedSetting("usplayer", "mode", "audio");
-			this.usplayer = new USPlayer(mode);
+			if (!this.usplayer)
+				this.usplayer = new USPlayer(this.applyAdvancedSetting("usplayer", "mode", "webusb"));
 
 			this.emulatorFlags.supportFaster	= true;
 			this.emulatorFlags.supportEncoding	= false;
@@ -982,6 +997,7 @@ SIDPlayer.prototype = {
 				}
 				break;
 
+			case "usplayfp":
 			case "usplayer":
 
 				// No '_BASIC.' exception here: a BASIC tune is a program this
@@ -1095,6 +1111,7 @@ SIDPlayer.prototype = {
 			case "hermit":
 			case "webusb":
 			case "asid":
+			case "usplayfp":
 			case "usplayer":
 			case "youtube":
 				// At least stop the tune
@@ -1150,6 +1167,7 @@ SIDPlayer.prototype = {
 				}
 				this.speed($("#piano-slow").hasClass("button-on") ? viz.slowSpeed : 1);
 				break;
+			case "usplayfp":
 			case "usplayer":
 				if (typeof forcePlay !== "undefined")
 					this.usplayer.start(this.subtune);
@@ -1290,6 +1308,7 @@ SIDPlayer.prototype = {
 			case "asid":
 				// @todo
 				break;
+			case "usplayfp":
 			case "usplayer":
 				playing = this.usplayer.isPlaying();
 				break;
@@ -1330,6 +1349,7 @@ SIDPlayer.prototype = {
 			case "asid":
 				suspended = this.hermit.issuspended();
 				break;
+			case "usplayfp":
 			case "usplayer":
 				// Only the audio mode has a context to suspend; the modes that
 				// play on a board are never held back by the browser.
@@ -1371,6 +1391,7 @@ SIDPlayer.prototype = {
 			case "asid":
 				this.hermit.pause();
 				break;
+			case "usplayfp":
 			case "usplayer":
 				this.usplayer.pause();
 				break;
@@ -1421,6 +1442,7 @@ SIDPlayer.prototype = {
 				this.hermit.stop();
 				this.paused = false;
 				break;
+			case "usplayfp":
 			case "usplayer":
 				this.usplayer.stop();
 				this.paused = false;
@@ -1477,6 +1499,7 @@ SIDPlayer.prototype = {
 			case "asid":
 				this.hermit.setSpeedMultiplier(multiplier);
 				break;
+			case "usplayfp":
 			case "usplayer":
 				this.usplayer.setSpeed(multiplier);
 				break;
@@ -1512,6 +1535,7 @@ SIDPlayer.prototype = {
 				result.songName			= this.hermit.gettitle();
 				result.songReleased		= this.hermit.getinfo();
 				break;
+			case "usplayfp":
 			case "usplayer":
 				// Read from the file the player has loaded, so no request to the
 				// server. The strings are ISO 8859-1 in the header and are
@@ -1611,6 +1635,7 @@ SIDPlayer.prototype = {
 			case "asid":
 				this.hermit.setvolume(value);
 				break;
+			case "usplayfp":
 			case "usplayer":
 				this.usplayer.setVolume(value);
 				break;
@@ -1647,6 +1672,7 @@ SIDPlayer.prototype = {
 			case "asid":
 				this.hermit.setvolume(value * this.mainVol);
 				break;
+			case "usplayfp":
 			case "usplayer":
 				this.usplayer.setVolume(value * this.mainVol);
 				break;
@@ -1686,6 +1712,7 @@ SIDPlayer.prototype = {
 			case "asid":
 				time = this.hermit.getplaytime();
 				break;
+			case "usplayfp":
 			case "usplayer":
 				time = this.usplayer.getPlaytime();
 				break;
@@ -1865,6 +1892,7 @@ SIDPlayer.prototype = {
 			case "webusb":
 			case "asid":
 				break;
+			case "usplayfp":
 			case "usplayer":
 				this.usplayer.disableTimeout();
 				break;
@@ -1902,6 +1930,7 @@ SIDPlayer.prototype = {
 			case "webusb":
 			case "asid":
 				break;
+			case "usplayfp":
 			case "usplayer":
 				this.usplayer.enableTimeout(length);
 				break;
@@ -1939,6 +1968,7 @@ SIDPlayer.prototype = {
 			case "asid":
 				this.hermit.setmodel(model === "6581" ? 6581.0 : 8580.0);
 				break;
+			case "usplayfp":
 			case "usplayer":
 				// Recorded rather than applied: 'forceModel' is false, so this
 				// is only reached if that changes. @usplayer
@@ -1972,6 +2002,7 @@ SIDPlayer.prototype = {
 			case "webusb":
 			case "asid":
 				return this.hermit.getmodel() === 6581.0 ? "6581" : "8580";
+			case "usplayfp":
 			case "usplayer":
 				// What the file asks for, which is what is being played. In the
 				// hardware modes it is also whatever chip happens to be socketed,
@@ -2009,6 +2040,7 @@ SIDPlayer.prototype = {
 				// Hermit's emulator doesn't support this
 				// @todo Try changing: this.hermit.C64_PAL_CPUCLK + this.hermit.PAL_FRAMERATE
 				break;
+			case "usplayfp":
 			case "usplayer":
 				// The machine follows the clock the tune asks for, and the player
 				// does not expose a way to override it. @usplayer
@@ -2043,6 +2075,7 @@ SIDPlayer.prototype = {
 			case "asid":
 				// Hermit's emulator always defaults to PAL
 				return "PAL";
+			case "usplayfp":
 			case "usplayer":
 				// 'supportEncoding' is false, so this is only for display. The
 				// player runs whichever the tune asks for. @usplayer
@@ -2104,6 +2137,7 @@ SIDPlayer.prototype = {
 					jsMask += (this.voiceMask[jsChip] & 7) << (3 * jsChip);
 				this.hermit.enableVoices(jsMask);
 				break;
+			case "usplayfp":
 			case "usplayer":
 				// Masked inside the emulation, so it works the same in every one
 				// of its modes: the writes still happen and the gate is held
@@ -2166,6 +2200,7 @@ SIDPlayer.prototype = {
 			case "asid":
 				this.hermit.enableVoices(0x1FF);
 				break;
+			case "usplayfp":
 			case "usplayer":
 				for (var uspChip = 0; uspChip < 3; uspChip++)
 					this.usplayer.setVoiceMask(0xF, uspChip);
@@ -2231,6 +2266,7 @@ SIDPlayer.prototype = {
 			case "asid":
 				cia = this.hermit.getcia();
 				break;
+			case "usplayfp":
 			case "usplayer":
 				cia = this.usplayer.getCIA();
 				break;
@@ -2275,6 +2311,7 @@ SIDPlayer.prototype = {
 			case "hermit":
 			case "webusb":
 			case "asid":
+			case "usplayfp":
 			case "usplayer":
 				// USBSID-Player plays digis, being a real 6510 writing $D418,
 				// but it does not classify them. @usplayer
@@ -2305,6 +2342,7 @@ SIDPlayer.prototype = {
 			case "hermit":
 			case "webusb":
 			case "asid":
+			case "usplayfp":
 			case "usplayer":
 			case "youtube":
 			case "download":
@@ -2347,6 +2385,7 @@ SIDPlayer.prototype = {
 			case "webusb":
 			case "asid":
 				return this.hermit.getSIDAddress(chip - 1);
+			case "usplayfp":
 			case "usplayer":
 				return this.usplayer.getSIDAddress(chip - 1);
 			case "youtube":
@@ -2432,6 +2471,7 @@ SIDPlayer.prototype = {
 			case "webusb":
 			case "asid":
 				return this.hermit.readregister(register + this.hermit.getSIDAddress(chip));
+			case "usplayfp":
 			case "usplayer":
 				return this.usplayer.readRegister(chip, register);
 			case "youtube":
@@ -2462,6 +2502,7 @@ SIDPlayer.prototype = {
 			case "webusb":
 			case "asid":
 				return this.hermit.readregister(address);
+			case "usplayfp":
 			case "usplayer":
 				return this.usplayer.readMemory(address);
 			case "jsidplay2":
@@ -2496,6 +2537,7 @@ SIDPlayer.prototype = {
 			case "hermit":
 			case "webusb":
 			case "asid":
+			case "usplayfp":
 			case "usplayer":
 			case "youtube":
 			case "download":
@@ -2528,6 +2570,7 @@ SIDPlayer.prototype = {
 			case "hermit":
 			case "webusb":
 			case "asid":
+			case "usplayfp":
 			case "usplayer":
 			case "youtube":
 			case "download":
@@ -2587,6 +2630,7 @@ SIDPlayer.prototype = {
 			case "hermit":
 			case "webusb":
 			case "asid":
+			case "usplayfp":
 			case "usplayer":
 			case "youtube":
 			case "download":
@@ -2614,6 +2658,7 @@ SIDPlayer.prototype = {
 			case "hermit":
 			case "webusb":
 			case "asid":
+			case "usplayfp":
 			case "usplayer":
 			case "youtube":
 			case "download":
@@ -2669,6 +2714,7 @@ SIDPlayer.prototype = {
 			case "hermit":
 			case "webusb":
 			case "asid":
+			case "usplayfp":
 			case "usplayer":
 			case "youtube":
 			case "download":
@@ -2717,7 +2763,7 @@ SIDPlayer.prototype = {
 	 *
 	 * @handlers usplayer
 	 *
-	 * @param {string} mode		"audio", "webusb", "serial" or "asid"
+	 * @param {string} mode		"webusb", "serial", "asid", "sendsid" or "audio"
 	 */
 	setUSPlayerMode: function(mode) {
 		if (this.emulator !== "usplayer" || !this.usplayer) return;

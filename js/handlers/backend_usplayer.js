@@ -6,15 +6,17 @@
 // The same player runs the command line tool, the USBSID-Pico firmware's onboard
 // player and https://usbsid.loudai.nl.
 //
-// Five outputs, chosen in "Advanced settings" or in top:
+// Five outputs, chosen in "Advanced settings" or in top. The "reSIDfp
+// (usPlayer)" SID handler ('usplayfp') is this player fixed to audio, listed
+// on its own to make plain that it needs no board:
 //
-//  - audio   reSIDfp in the page, through an AudioWorklet. Needs no hardware.
-//  - webusb  a USBSID-Pico over WebUSB, so real or cloned SID chips.
+//  - webusb  a USBSID-Pico over WebUSB, for real or cloned SID chips.
 //  - serial  a USBSID-Pico over Web Serial, for browsers without WebUSB.
 //  - asid    ASID over MIDI, so any ASID capable device.
 //  - sendsid the file itself to a USBSID-Pico, played by the board's own
 //            player. Nothing is emulated in the page, so the visuals have
 //            nothing to draw and the time bar is a wall clock.
+//  - audio   reSIDfp in the page, through an AudioWorklet. Needs no hardware.
 //
 // This file is the seam between DeepSID and the player, and holds no emulation
 // of its own. The player ships as ES modules in 'js/handlers/usplayer/' and is
@@ -74,13 +76,13 @@ var USPLAYER_VERSION = (function() {
 var USPLAYER_POLL_MS = 200;
 
 /** The modes, in the order they are offered. Kept beside the labels so that the
- *  drop-down box in index.php and this file cannot drift apart. */
+ *  drop-down boxes in index.php and this file cannot drift apart. */
 var USPLAYER_MODES = {
-	audio:	{ adapter: "usplayer-audio",		needs: "nothing",		label: "USBSID-Player (ResidFp)" },
 	webusb:	{ adapter: "usplayer",			needs: "a USBSID-Pico",		label: "WebUSB (USBSID-Player)" },
 	serial:	{ adapter: "usplayer-serial",		needs: "a USBSID-Pico",		label: "Web Serial (USBSID-Player)" },
 	asid:	{ adapter: "usplayer-asid",		needs: "a MIDI output",		label: "ASID (USBSID-Player)" },
 	sendsid: { adapter: "usplayer-sendsid",		needs: "a USBSID-Pico",		label: "SendSID (onboard player)" },
+	audio:	{ adapter: "usplayer-audio",		needs: "nothing",		label: "reSIDfp (no hardware)" },
 };
 
 /**
@@ -516,7 +518,7 @@ USPlayer.prototype = {
 			};
 			this.showFmVolume();
 			if (typeof SID !== "undefined" && SID.bufferSize)
-				this.setBufferSize(SID.bufferSize.usplayer);
+				this.setBufferSize(SID.bufferSize.usplayfp);
 			// What is loaded, so a restart of the same thing at frame zero can
 			// tell there is nothing to do. See start().
 			this.loadedUrl = this.url;

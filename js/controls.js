@@ -552,7 +552,7 @@ Controls.prototype = {
 			case "volume-fm":
 				// FM/OPL volume of USBSID-Player; percent, 50 is the default
 				var fmVol = event.currentTarget.value * 1;
-				if (SID.emulator == "usplayer") SID.usplayer.setFmVolume(fmVol);
+				if (SID.emulator == "usplayfp" || SID.emulator == "usplayer") SID.usplayer.setFmVolume(fmVol);
 				localStorage.setItem("volume_fm", fmVol);
 				break;
 			case "osc-zoom":
