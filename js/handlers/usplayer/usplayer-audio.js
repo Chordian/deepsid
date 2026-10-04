@@ -386,6 +386,16 @@ export class UsPlayerAudio {
      * Racing it against a timeout is what _startAudioClock() (usplayer-web.js)
      * already does for the same reason; this path wants the same guard. */
     this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+    /* Browsers only expose audioWorklet in a secure context: https://, or
+     * http://localhost / 127.0.0.1. A page on plain http under any other host
+     * name gets a context without it, and addModule below would fail with a
+     * bare "audioWorklet is undefined" that says nothing about the cause. */
+    if (!this.ctx.audioWorklet) {
+      this.ctx.close().catch(() => {});
+      this.ctx = null;
+      throw new Error('AudioWorklet is not available: the page must be served over '
+        + 'https:// or from http://localhost (secure context)');
+    }
     if (this.ctx.state === 'suspended') {
       await Promise.race([this.ctx.resume(), new Promise((r) => setTimeout(r, 2000))]);
     }
