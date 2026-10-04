@@ -1534,7 +1534,7 @@ Browser.prototype = {
 			ctrls.state("root/back", "enabled");
 
 			// Disable emulators/handlers in the drop-down according to parent folder attributes
-			$("#dropdown-topleft-emulator,#dropdown-settings-emulator").styledOptionState("resid jsidplay2 websid legacy hermit webusb asid usplayer youtube download silence", "enabled");
+			$("#dropdown-topleft-emulator,#dropdown-settings-emulator").styledOptionState("resid jsidplay2 websid legacy hermit webusb asid usplayfp usplayer youtube download silence", "enabled");
 			$("#page .viz-emu").removeClass("disabled");
 			$("#dropdown-topleft-emulator,#dropdown-settings-emulator").styledOptionState(this.cache.incompatible, "disabled");
 			if (this.cache.incompatible.indexOf("resid") !== -1) $("#page .viz-resid").addClass("disabled");
@@ -1543,7 +1543,7 @@ Browser.prototype = {
 			if (this.cache.incompatible.indexOf("hermit") !== -1) $("#page .viz-hermit").addClass("disabled");
 			if (this.cache.incompatible.indexOf("webusb") !== -1) $("#page .viz-hermit").addClass("disabled");
 			if (this.cache.incompatible.indexOf("asid") !== -1) $("#page .viz-asid").addClass("disabled");
-			if (this.cache.incompatible.indexOf("usplayer") !== -1) $("#page .viz-usplayer").addClass("disabled");
+			if (this.cache.incompatible.indexOf("usplayfp") !== -1) $("#page .viz-usplayfp").addClass("disabled");
 
 			$("#path").css("top", "5px").empty().append(
 				this.path
@@ -1611,7 +1611,7 @@ Browser.prototype = {
 					var files = "";
 
 					// Disable emulators/handlers in the drop-down according to parent folder attributes
-					$("#dropdown-topleft-emulator,#dropdown-settings-emulator").styledOptionState("resid jsidplay2 websid legacy hermit webusb asid usplayer youtube download silence", "enabled");
+					$("#dropdown-topleft-emulator,#dropdown-settings-emulator").styledOptionState("resid jsidplay2 websid legacy hermit webusb asid usplayfp usplayer youtube download silence", "enabled");
 					$("#page .viz-emu").removeClass("disabled");
 					$("#dropdown-topleft-emulator,#dropdown-settings-emulator").styledOptionState(data.incompatible, "disabled");
 					if (data.incompatible.indexOf("resid") !== -1) $("#page .viz-resid").addClass("disabled");
@@ -1620,7 +1620,7 @@ Browser.prototype = {
 					if (data.incompatible.indexOf("hermit") !== -1) $("#page .viz-hermit").addClass("disabled");
 					if (data.incompatible.indexOf("webusb") !== -1) $("#page .viz-hermit").addClass("disabled");
 					if (data.incompatible.indexOf("asid") !== -1) $("#page .viz-asid").addClass("disabled");
-					if (data.incompatible.indexOf("usplayer") !== -1) $("#page .viz-usplayer").addClass("disabled");
+					if (data.incompatible.indexOf("usplayfp") !== -1) $("#page .viz-usplayfp").addClass("disabled");
 
 					$("#path").css("top", "5px");
 					var pathAppend = "", pathText = this.path

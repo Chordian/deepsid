@@ -2316,7 +2316,8 @@ input[type=range]::-ms-track {
 		#time .legacy div		{ background: var(--color-timebar-websid); }
 		#time .hermit div		{ background: var(--color-timebar-hermit); }
 		#time .asid div			{ background: var(--color-timebar-asid); }
-		#time .usplayer div		{ background: var(--color-timebar-usplayer); }
+		#time .usplayer div,
+		#time .usplayfp div		{ background: var(--color-timebar-usplayer); }
 		#time .youtube div		{ background: var(--color-timebar-youtube); }
 
 /* Small dot that indicates this time length has millseconds too */

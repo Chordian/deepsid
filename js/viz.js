@@ -142,7 +142,7 @@ function Viz(emulator) {
 		websid:		"the default WebSid",
 		legacy:		"the legacy WebSid",
 		hermit:		"Hermit's",
-		usplayer:	"USBSID-Player (reSIDfp)",
+		usplayfp:	"reSIDfp (usPlayer)",
 	};
 
 	this.applyBufferSize(this.emulator);
@@ -165,7 +165,7 @@ function Viz(emulator) {
 			break;
 		case "usplayer":
 			// Apply advanced settings from local storage or a default value
-			this.applyAdvancedSetting("usplayer", "mode", "dropdown", "audio");
+			this.applyAdvancedSetting("usplayer", "mode", "dropdown", "webusb");
 			break;
 		default:
 	}
@@ -457,6 +457,7 @@ Viz.prototype = {
 	 */
 	onChangeBufferSize: function (event) {
 		var emulator = this.emulator == "asid" || this.emulator == "webusb" ? "hermit" : this.emulator;
+		if (emulator == "usplayer") emulator = "usplayfp";
 		SID.bufferSize[emulator] = $(event.target).val();
 		localStorage.setItem("buffer_" + emulator, SID.bufferSize[emulator]);
 		// Make sure all drop-down boxes of this kind agree on the new value
@@ -467,7 +468,7 @@ Viz.prototype = {
 			ctrls.selectEmulator("asid");
 		else if (this.emulator == "webusb")
 			ctrls.selectEmulator("webusb");
-		else if (this.emulator == "usplayer")
+		else if (this.emulator == "usplayfp" || this.emulator == "usplayer")
 			SID.usplayer.setBufferSize(SID.bufferSize[emulator]); // Applied live
 		else
 			$("#visuals-piano .viz-emu.button-on").trigger("click");
@@ -649,10 +650,11 @@ Viz.prototype = {
 	 * @param {string} emulator		Emulator, e.g. "resid", "jsidplay2", etc.
 	 */
 	setEmuButton: function(emulator) {
-		if (["resid", "jsidplay2", "websid", "legacy", "webusb", "hermit", "asid", "usplayer"].includes(emulator)) {
-			// The three Hermit based handlers share one button, as do the four
-			// USBSID-Player modes: the mode is chosen in top, not here.
+		if (["resid", "jsidplay2", "websid", "legacy", "webusb", "hermit", "asid", "usplayfp", "usplayer"].includes(emulator)) {
+			// The three Hermit based handlers share one button, as do the two
+			// USBSID-Player handlers: the USBSID-Player mode is chosen in top.
 			if (emulator == "asid" || emulator == "webusb") emulator = "hermit";
+			if (emulator == "usplayer") emulator = "usplayfp";
 			$("#page .viz-" + emulator).addClass("button-on");
 			$("#page .viz-msg-emu").hide();
 		} else
@@ -666,8 +668,10 @@ Viz.prototype = {
 	 * @param {string} emulator		Emulator, e.g. "resid", "jsidplay2", etc.
 	 */
 	applyBufferSize: function(emulator) {
-		if (["resid", "jsidplay2", "websid", "legacy", "webusb", "hermit", "asid", "usplayer"].includes(emulator)) {
+		if (["resid", "jsidplay2", "websid", "legacy", "webusb", "hermit", "asid", "usplayfp", "usplayer"].includes(emulator)) {
+			// Both USBSID-Player handlers share the buffer size of reSIDfp
 			if (emulator == "asid" || emulator == "webusb") emulator = "hermit";
+			if (emulator == "usplayer") emulator = "usplayfp";
 			$("#page .dropdown-buffer").prop("disabled", false);
 			$("#page .dropdown-buffer-label").removeClass("disabled");
 			$("#settings-emu-type").empty().append(this.bufferEmulator[emulator]);
@@ -687,8 +691,8 @@ Viz.prototype = {
 					case "legacy":
 						SID.bufferSize['legacy'] = 1024;
 						break;
-					case "usplayer":
-						SID.bufferSize['usplayer'] = 16384;
+					case "usplayfp":
+						SID.bufferSize['usplayfp'] = 16384;
 						break;
 					default:
 						SID.bufferSize[emulator] = 1024;
@@ -710,7 +714,7 @@ Viz.prototype = {
 	 * @param {string} emulator		Emulator, e.g. "resid", "jsidplay2", etc.
 	 */
 	showBufferMessage: function(emulator) {
-		SID.bufferSize[emulator] > 1024 && $("#page .viz-msg-emu").css("display") == "none" && emulator != "jsidplay2" && emulator != "websid" && emulator != "usplayer"
+		SID.bufferSize[emulator] > 1024 && $("#page .viz-msg-emu").css("display") == "none" && emulator != "jsidplay2" && emulator != "websid" && emulator != "usplayfp"
 			? $("#page .viz-msg-buffer").show()
 			: $("#page .viz-msg-buffer").hide();
 	},
@@ -756,6 +760,7 @@ Viz.prototype = {
 			case "webusb":
 			case "hermit":
 			case "asid":
+			case "usplayfp":
 			case "usplayer":
 				this.stateViewButton("piano", "enabled");
 				this.stateViewButton("graph", "enabled");

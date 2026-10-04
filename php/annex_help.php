@@ -176,11 +176,19 @@ $help = array(
 		<p>Even faster, but cannot emulate RSID tunes, nor SID with digi.</p>
 		This can also play SID+FM tunes, i.e. with OPL synthesis added.
 
+		<h4><a href="//deepsid.chordian.net?emulator=usplayfp">reSIDfp (usPlayer)</a></h4>
+		<p>No hardware needed. A cycle exact C64 with reSIDfp in the page.</p>
+		Runs the tune\'s own code on an emulated 6510, CIAs and VIC.
+		Plays RSID, BASIC and digi tunes, up to 4 SID chips, and SID+FM.
+		The same player as USBSID-Player, without a board.
+
 		<h4><a href="//deepsid.chordian.net?emulator=asid">ASID (MIDI)</a></h4>
 		<p>Use with MIDI devices such as e.g. SidStation, TherapSID, etc.</p>
 
 		<h4><a href="//deepsid.chordian.net?emulator=usplayer">USBSID-Player</a></h4>
-		<p>A cycle exact C64 with 4 outputs; reSIDfp in the page, WebUSB, Web Serial and ASID.</p>
+		<p>The same cycle exact C64, played on real or cloned SID chips.</p>
+		Outputs: WebUSB, Web Serial and SendSID for a USBSID-Pico board,
+		ASID for any ASID capable MIDI device, and reSIDfp in the page.
 
 		<h4><a href="//deepsid.chordian.net?emulator=youtube">YouTube videos</a></h4>
 		<p>Plays a YouTube video where SID rows are enabled for clicking.</p>
@@ -325,6 +333,7 @@ $help = array(
 						<li><b>legacy</b></li>
 						<li><b>hermit</li>
 						<li><b>asid</b>&nbsp;&nbsp;(MIDI)</li>
+						<li><b>usplayfp</b>&nbsp;&nbsp;(reSIDfp)</li>
 						<li><b>usplayer</li>
 						<li><b>youtube</b></li>
 						<li><b>download</b></li>
