@@ -126,6 +126,13 @@ const GRID_MS = 50;
 /* The status line, once a second: it is text to read, not an animation. */
 const STATUS_EVERY = 20;
 
+/* readMemory() page watch, worker mode: a page not read for this long drops
+ * out of the worker's report, the set is re-checked at most this often, and
+ * no more than this many pages are reported. */
+const MEM_WATCH_IDLE_MS = 1000;
+const MEM_WATCH_CHECK_MS = 250;
+const MEM_WATCH_MAX = 16;
+
 let _modulePromise = null;
 /**
  * The wasm module, instantiated once for the page.
@@ -224,6 +231,14 @@ export class USPlayerAdapter {
      * _queueRegisters(), and the CIA 1 timer A latch from the latest one. */
     this._regQueue = [];
     this._workerCiaLatch = 0;
+    /* RAM mirror of the worker's machine for readMemory(), filled from the
+     * pages the host reads, see _watchPage(). `_memValid` marks pages the
+     * mirror holds; `_memPages` maps page to last read time. */
+    this._mem = new Uint8Array(65536);
+    this._memValid = new Uint8Array(256);
+    this._memPages = new Map();
+    this._memSent = '';
+    this._memCheck = 0;
     /* SID and FM sides of the software mix, percent. Undefined until the host
      * sets one: the wasm defaults (100 and 50) stand until then. */
     this._sidVolume = undefined;
@@ -1065,6 +1080,7 @@ export class USPlayerAdapter {
       this._anyDirty = false;
       this._regQueue.length = 0;
       this._workerCiaLatch = 0;
+      this._memValid.fill(0);
 
       if (this._isAudio) {
         /* Started here and not in _ensure(): the synthesis has to be
@@ -1131,6 +1147,10 @@ export class USPlayerAdapter {
           }
           if (this._fmVolume !== undefined) {
             await this._call('fmVolume', { percent: this._fmVolume }).catch(() => {});
+          }
+          /* A speed set before the worker was up never reached it. */
+          if (this._player.speed !== 1) {
+            await this._call('speed', { mult: this._player.speed }).catch(() => {});
           }
           await this._call('start', {});
         } else {
@@ -1347,7 +1367,7 @@ export class USPlayerAdapter {
    * A deeper ring keeps playback steady while the host page is busy drawing;
    * register reports are delayed by the same amount.
    *
-   * @param {number} samples ring depth, clamped to the default minimum
+   * @param {number} samples ring depth, clamped to 2048
    */
   setBufferSamples(samples) {
     const n = Number(samples) | 0;
@@ -1383,8 +1403,9 @@ export class USPlayerAdapter {
     if (!this._audio || !this._audio.ctx || !this._audio.node) return;
     if (typeof document !== 'undefined' && document.visibilityState === 'hidden') return;
     const rate = this._audio.ctx.sampleRate || 48000;
-    const seconds = Math.max(0.2, this._bufferSamples / rate);
-    this._audio.setTarget(seconds, this._audio._maxSteps);
+    /* No floor of its own: setTarget() keeps 2048 samples, the worklet's
+     * minimum. Every DeepSID buffer size from 2048 up takes effect. */
+    this._audio.setTarget(this._bufferSamples / rate, this._audio._maxSteps);
   }
 
   /**
@@ -1546,12 +1567,13 @@ export class USPlayerAdapter {
    * The worker emulates ahead of the playhead by the ring's depth and says by
    * how much, in `leadMs`.
    *
-   * @param {object} p { regs: Uint8Array, ciaLatch, leadMs }
+   * @param {object} p { regs: Uint8Array, ciaLatch, leadMs, mem?, memPages? }
    */
   _queueRegisters(p) {
     if (!p || !p.regs) return;
     const due = _now() + Math.max(0, Number(p.leadMs) || 0);
-    this._regQueue.push({ due, regs: p.regs, ciaLatch: p.ciaLatch | 0 });
+    this._regQueue.push({ due, regs: p.regs, ciaLatch: p.ciaLatch | 0,
+                          mem: p.mem, memPages: p.memPages });
     /* Bound the queue for a page that never reads it. */
     if (this._regQueue.length > 256) this._applyRegisters(this._regQueue.shift());
   }
@@ -1567,7 +1589,7 @@ export class USPlayerAdapter {
   /**
    * Copy one worker register report into the shadow.
    *
-   * @param {object} e { regs, ciaLatch }
+   * @param {object} e { regs, ciaLatch, mem?, memPages? }
    */
   _applyRegisters(e) {
     const n = Math.min(128, e.regs.length);
@@ -1580,6 +1602,14 @@ export class USPlayerAdapter {
       this._anyDirty = true;
     }
     this._workerCiaLatch = e.ciaLatch;
+    if (e.mem && e.memPages) {
+      const pages = e.memPages;
+      for (let k = 0; k < pages.length; k++) {
+        const pg = pages[k];
+        this._mem.set(e.mem.subarray(k << 8, (k + 1) << 8), pg << 8);
+        this._memValid[pg] = 1;
+      }
+    }
   }
 
   /** Has anything ever been written to this shadow slot? */
@@ -1594,8 +1624,46 @@ export class USPlayerAdapter {
    * @param {number} address 0 to 65535
    */
   readMemory(address) {
+    /* Worker mode: the page's player is never stepped, its RAM is the tune
+     * as loaded. Answer from the mirror the worker's reports fill. */
+    if (this._isAudio && this._worker) {
+      const a = address & 0xffff;
+      this._watchPage(a >> 8);
+      this._drainRegisters();
+      if (this._memValid[a >> 8]) return this._mem[a];
+    }
     if (!this._player || typeof this._player.readMemory !== 'function') return 0;
     try { return this._player.readMemory(address); } catch (_) { return 0; }
+  }
+
+  /**
+   * Mark a RAM page as read, and tell the worker when the watched set changes.
+   *
+   * Pages not read for MEM_WATCH_IDLE_MS drop out of the set and the mirror.
+   *
+   * @param {number} page 0 to 255
+   */
+  _watchPage(page) {
+    const now = _now();
+    const fresh = !this._memPages.has(page);
+    this._memPages.set(page, now);
+    if (!fresh && now - this._memCheck < MEM_WATCH_CHECK_MS) return;
+    this._memCheck = now;
+    for (const [pg, t] of this._memPages) {
+      if (now - t <= MEM_WATCH_IDLE_MS) continue;
+      this._memPages.delete(pg);
+      this._memValid[pg] = 0;
+    }
+    /* Most recently read first, capped at the worker's own limit. */
+    const pages = [...this._memPages.entries()]
+      .sort((x, y) => y[1] - x[1])
+      .slice(0, MEM_WATCH_MAX)
+      .map(([pg]) => pg)
+      .sort((x, y) => x - y);
+    const key = pages.join(',');
+    if (key === this._memSent) return;
+    this._memSent = key;
+    this._call('memWatch', { pages }).catch(() => {});
   }
 
   /**
@@ -1720,6 +1788,9 @@ export class USPlayerAdapter {
    */
   fastForward(on, mult) {
     if (this._player) this._player.fastForward(on, mult);
+    if (this._isAudio && this._worker) {
+      this._call('fastForward', { on: !!on, mult }).catch(() => {});
+    }
   }
 
   /**
@@ -1728,13 +1799,17 @@ export class USPlayerAdapter {
    * Not the same as `fastForward()`, which is a seek: that one also stops the
    * writes reaching the board, because the point of it is to arrive somewhere
    * rather than to hear the way there. This one leaves the output alone, so on a
-   * board it is audibly faster. Software audio cannot render ahead of a ring
-   * that plays at one times speed, so there the extra frames are emulated and
-   * their audio dropped, which comes out as a fast silent seek.
+   * board it is audibly faster. Software audio changes the synthesis output
+   * rate instead: faster or slower with the pitch following.
    *
    * @param {number} mult 0.1 to 8
    */
-  setSpeed(mult) { if (this._player) this._player.setSpeed(mult); }
+  setSpeed(mult) {
+    if (this._player) this._player.setSpeed(mult);
+    if (this._isAudio && this._worker) {
+      this._call('speed', { mult }).catch(() => {});
+    }
+  }
 
   /**
    * The board's mono/stereo audio switch, v1.3+ PCBs.
