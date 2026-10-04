@@ -2061,6 +2061,11 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>October 3, 2026</h3>
+						<ul>
+							<li>Added fixes for USBSID-Pico; fixed WebUSB crashes in Windows, added fmopl volume slider when using ReSIDFp, and fixed issues when reading the configuration.</li>
+						</ul>
+
 						<h3>September 26, 2026</h3>
 						<ul>
 							<li>Removed the 'WebUSB' SID handler.</li>
