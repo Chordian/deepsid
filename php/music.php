@@ -78,6 +78,83 @@ function parseQuery($query) {
 }
 
 /**
+ * Parse a number written as decimal, 0x hex, or $ hex.
+ *
+ * @param		string		$value				e.g. 4096, 0x1000, or $1000
+ *
+ * @return		int|null						the number, or null if invalid
+ */
+function parseAddress($value) {
+
+	if (preg_match('/^\$([0-9a-f]{1,4})$/i', $value, $m) || preg_match('/^0x([0-9a-f]{1,4})$/i', $value, $m))
+		return hexdec($m[1]);
+	if (preg_match('/^[0-9]{1,5}$/', $value) && (int)$value <= 0xFFFF)
+		return (int)$value;
+	return null;
+}
+
+/**
+ * Build the WHERE conditions for the 'memory' search type.
+ *
+ * The query is a list of keys, all optional and all required to match:
+ *
+ *   load=$1000 init=$1000 play=$1003	exact addresses
+ *   start=$1000 end=$25FF				the tune fits inside this memory range
+ *   pal ntsc psid rsid					clock and file type
+ *   nobasic							no C64 BASIC flag
+ *   single								no multispeed tag (2x, 3x, etc.)
+ *
+ * The end address is load_addr + data_size - 3 since data_size includes the
+ * two bytes of the load address in front of the data.
+ *
+ * @param		string		$query				search query from a GET variable
+ * @param		string		$table				table name or alias for 'files'
+ *
+ * @return		array|null						[SQL conditions, PDO parameters], or null if invalid
+ */
+function memoryConditions($query, $table) {
+
+	$conditions = [];
+	$params = [];
+	$columns = ['load' => 'load_addr', 'init' => 'init_addr', 'play' => 'play_addr'];
+
+	foreach (preg_split('/[_\s]+/', trim($query, " _")) as $word) {
+		$word = strtolower($word);
+		if (strpos($word, '=') !== false) {
+			list($key, $value) = explode('=', $word, 2);
+			$address = parseAddress($value);
+			if ($address === null) return null;
+			if (isset($columns[$key])) {
+				$conditions[] = $table.'.'.$columns[$key].' = :'.$key;
+			} else if ($key == 'start') {
+				$conditions[] = $table.'.load_addr >= :start';
+			} else if ($key == 'end') {
+				$conditions[] = $table.'.load_addr + '.$table.'.data_size - 3 <= :end';
+			} else {
+				return null;
+			}
+			$params[':'.$key] = $address;
+		} else if ($word == 'pal' || $word == 'ntsc') {
+			$conditions[] = $table.'.clock_speed LIKE "%'.strtoupper($word).'%"';
+		} else if ($word == 'psid' || $word == 'rsid') {
+			$conditions[] = $table.'.type = "'.strtoupper($word).'"';
+		} else if ($word == 'nobasic') {
+			$conditions[] = $table.'.player_compat NOT LIKE "%BASIC%"';
+		} else if ($word == 'single') {
+			$conditions[] = 'NOT EXISTS (
+				SELECT 1 FROM tags_lookup
+				INNER JOIN tags_info ON tags_info.id = tags_lookup.tags_id
+				WHERE tags_lookup.files_id = '.$table.'.id
+				AND tags_info.name IN ("multispeed", "2x", "3x", "4x", "5x", "6x", "7x", "8x", "9x", "10x", "11x", "12x", "13x", "14x", "15x", "16x")
+			)';
+		} else {
+			return null;
+		}
+	}
+	return count($conditions) ? [implode(' AND ', $conditions), $params] : null;
+}
+
+/**
  * Convert song length (3:33 or 3:33.333) to raw milliseconds.
  * 
  * @param		string		$length				HVSC song length
@@ -251,6 +328,18 @@ try {
 				$select->execute([
 					':data_size' => $data_size
 				]);
+
+			} else if ($_GET['searchType'] == 'memory') {											// Memory
+
+				// Search for load/init/play addresses, a memory range, clock, type, etc.
+				$memory = memoryConditions($_GET['searchQuery'], 'files');
+				$select = $db->prepare('
+					SELECT collection_path FROM files
+					WHERE '.$search_context_path.'
+					AND '.($memory ? $memory[0] : '0').'
+					AND collection_path LIKE "_High Voltage SID Collection%"
+				');
+				$select->execute($memory ? $memory[1] : []);
 
 			} else if ($_GET['searchType'] == 'gb64') {												// GB64
 
@@ -797,6 +886,14 @@ try {
 					else if (substr($data_size, 0, 2) == '0x')
 						$data_size = hexdec(substr($data_size, 2));
 					$select_files->execute(array(':data_size' => $data_size));
+
+				} else if ($_GET['searchType'] == 'memory') {
+
+					$memory = memoryConditions($_GET['searchQuery'], 'h');
+					$select_files = $db->prepare('SELECT h.collection_path FROM files h'.
+						' INNER JOIN symlists ON h.id = symlists.file_id'.
+						' WHERE symlists.folder_id = '.$symlist_folder_id.' AND '.($memory ? $memory[0] : '0').' AND collection_path LIKE "_High Voltage SID Collection%"');
+					$select_files->execute($memory ? $memory[1] : array());
 
 				} else if ($_GET['searchType'] == 'country') {
 

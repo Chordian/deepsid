@@ -1134,6 +1134,7 @@
 							<option value="player" title="Searches in the prettified player names.">Player</option>
 							<option value="location" title="Searches for a start location, e.g. 16384, 0x4000, or $4000.">Location</option>
 							<option value="maximum" title="Searches for a maximum size, e.g. 4095, 0x0FFF, or $0FFF.">Maximum</option>
+							<option value="memory" title="Searches for memory usage. Combine load=, init=, play=, start=, end= with pal, ntsc, psid, rsid, nobasic, single. Example: load=$1000 play=$1003 end=$25FF pal nobasic single">Memory</option>
 							<option value="type" title='Searches for a SID type, e.g. "rsid" for those types only.'>Type</option>
 							<option value="tag" title="Searches for tags. Enclose in quotes to search a tag with spaces between words.">Tags</option>
 							<option value="stil" title= "Searches in STIL texts.">STIL</option>
