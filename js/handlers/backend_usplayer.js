@@ -847,7 +847,7 @@ USPlayer.prototype = {
 		}.bind(this), 60);
 	},
 
-	/** Fill the filter tab, with the curve of the other chip model dimmed. */
+	/** Fill the filter tab, with the sliders of the other chip model dimmed and locked. */
 	showFilter: function() {
 		var f = this.filter;
 		$("#filter-usp-enabled").prop("checked", f.enabled);
@@ -858,8 +858,11 @@ USPlayer.prototype = {
 			$("#filter-"+property+"-edit").val(sliders[property].toFixed(3));
 		}
 		var model = this.getModel(); // 0 before a tune is loaded: nothing dimmed
-		$("#filter-usp6581curve,#filter-usp6581range").toggleClass("disabled", model === 8580);
-		$("#filter-usp8580curve").toggleClass("disabled", model === 6581);
+		var off6581 = model === 8580, off8580 = model === 6581;
+		$("#filter-usp6581curve,#filter-usp6581range").toggleClass("disabled", off6581)
+			.find("input[type='range']").prop("disabled", off6581);
+		$("#filter-usp8580curve").toggleClass("disabled", off8580)
+			.find("input[type='range']").prop("disabled", off8580);
 	},
 
 	/** Read the stereo tab's drop-down boxes and send them. */
