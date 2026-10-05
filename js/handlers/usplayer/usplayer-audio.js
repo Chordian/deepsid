@@ -59,6 +59,8 @@ class UspAudio extends AudioWorkletProcessor {
     const opt = (options && options.processorOptions) || {};
     const cap = opt.capacity || 32768;
     this._buf = new Float32Array(cap);
+    /* Right channel: a copy of _buf for mono chunks, see _onMessage(). */
+    this._bufR = new Float32Array(cap);
     this._head = 0;   /* written by onmessage */
     this._tail = 0;   /* read by process() */
     this._starved = 0;
@@ -137,15 +139,22 @@ class UspAudio extends AudioWorkletProcessor {
         this._since = 4;
         return;
       }
-      if (!(d instanceof Int16Array)) return;
-      if (fromPeer) this._recvPeer += d.length;
-      else this._recvPort += d.length;
+      /* A bare Int16Array is mono, { stereo: Int16Array } is L/R pairs.
+       * Counts and ring positions are frames either way. */
+      const ch = (d && d.stereo instanceof Int16Array) ? 2 : 1;
+      const pcm = (ch === 2) ? d.stereo : d;
+      if (!(pcm instanceof Int16Array)) return;
+      const frames = (ch === 2) ? (pcm.length >> 1) : pcm.length;
+      if (fromPeer) this._recvPeer += frames;
+      else this._recvPort += frames;
       /* Int16 to float here rather than on the main thread: it is the audio
        * thread's own format and doing it here keeps the transfer half the size. */
-      for (let i = 0; i < d.length; i++) {
+      for (let i = 0; i < frames; i++) {
         const next = (this._head + 1) % this._buf.length;
         if (next === this._tail) break;   /* full: drop, the page is too far ahead */
-        this._buf[this._head] = d[i] / 32768;
+        const l = pcm[i * ch] / 32768;
+        this._buf[this._head] = l;
+        this._bufR[this._head] = (ch === 2) ? pcm[i * 2 + 1] / 32768 : l;
         this._head = next;
       }
   }
@@ -157,14 +166,17 @@ class UspAudio extends AudioWorkletProcessor {
   process(inputs, outputs) {
     const out = outputs[0][0];
     if (!out) return true;
+    const outR = outputs[0][1];
     const have = this._queued();
     const n = Math.min(out.length, have);
     for (let i = 0; i < n; i++) {
       out[i] = this._buf[this._tail];
+      if (outR) outR[i] = this._bufR[this._tail];
       this._tail = (this._tail + 1) % this._buf.length;
     }
     if (n < out.length) {
       out.fill(0, n);
+      if (outR) outR.fill(0, n);
       this._starved += out.length - n;
     }
 
@@ -325,6 +337,7 @@ export class UsPlayerAudio {
     /* Running through a silent lead-in: see _skipSilence(). Per tune, set in
      * run(), and never set again once the tune has made a sound. */
     this._skipping = false;
+    this._speed = 1;       /* last speed handed to the synthesis, see _applySpeed() */
     this._skippedFrames = 0;
     this._starveBase = 0;
     this._skipSince = 0;      /* frames since the output was last looked at */
@@ -386,6 +399,16 @@ export class UsPlayerAudio {
      * Racing it against a timeout is what _startAudioClock() (usplayer-web.js)
      * already does for the same reason; this path wants the same guard. */
     this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+    /* Browsers only expose audioWorklet in a secure context: https://, or
+     * http://localhost / 127.0.0.1. A page on plain http under any other host
+     * name gets a context without it, and addModule below would fail with a
+     * bare "audioWorklet is undefined" that says nothing about the cause. */
+    if (!this.ctx.audioWorklet) {
+      this.ctx.close().catch(() => {});
+      this.ctx = null;
+      throw new Error('AudioWorklet is not available: the page must be served over '
+        + 'https:// or from http://localhost (secure context)');
+    }
     if (this.ctx.state === 'suspended') {
       await Promise.race([this.ctx.resume(), new Promise((r) => setTimeout(r, 2000))]);
     }
@@ -409,13 +432,13 @@ export class UsPlayerAudio {
      *
      * Capacity is four seconds, well beyond that, because the target is raised
      * to seconds while the page is hidden and the ring has to be able to hold
-     * it. See setTarget(). Four seconds of mono 48 kHz floats is 768 kB, which
-     * is nothing beside the wasm heap. */
+     * it. See setTarget(). Four seconds of 48 kHz floats is 768 kB per
+     * channel, 1.5 MB for the two, which is nothing beside the wasm heap. */
     const target = Math.max(2048, Math.round(rate * VISIBLE_SECONDS));
     this.node = new AudioWorkletNode(this.ctx, 'usp-audio', {
       numberOfInputs: 0,
       numberOfOutputs: 1,
-      outputChannelCount: [1],
+      outputChannelCount: [2],
       processorOptions: { capacity: Math.max(8192, rate * 4), target },
     });
     this._target = target;
@@ -903,6 +926,22 @@ export class UsPlayerAudio {
   /** True while a silent lead-in is being run through. */
   get skipping() { return !!this._skipping; }
 
+  /**
+   * Follow a player speed change with the synthesis output rate.
+   *
+   * Faster yields fewer samples per frame and slower more, played at the
+   * context rate: pitch follows speed. See usp_audio_set_speed().
+   *
+   * @param {number} mult the player's speed multiplier
+   */
+  _applySpeed(mult) {
+    if (mult === this._speed) return;
+    this._speed = mult;
+    if (typeof this.M._usp_audio_set_speed === 'function') {
+      this.M._usp_audio_set_speed(mult);
+    }
+  }
+
   _fill() {
     const p = this._driven;
     if (!p || !this.node || this._filling) return;
@@ -919,28 +958,16 @@ export class UsPlayerAudio {
     this._filling = true;
     const t0 = (typeof performance !== 'undefined') ? performance.now() : 0;
     try {
-      /* Fast forward means seeking, not playing faster: nothing can render
-       * ahead of a ring that plays at one times speed. So the extra frames are
-       * emulated and their audio thrown away, which is what the command line
-       * player does for the same reason. */
-      const mult = Math.max(1, Math.round(p.speed || 1));
+      this._applySpeed(p.speed || 1);
       const deadline = t0 + FILL_BUDGET_MS;
       let steps = 0;
       while (this._owed > 0 && steps < this._maxSteps) {
         this._frames++;
         p.stepAndDrain();
-        if (mult > 1) {
-          for (let k = 1; k < mult; k++) p.stepAndDrain();
-          this.discard();
-          steps += mult;
-          if (t0 && performance.now() >= deadline) break;
-          continue;
-        }
         this._owed -= this.pump();
         steps++;
         if (t0 && performance.now() >= deadline) break;
       }
-      if (mult > 1) this._owed = 0;
     } finally {
       this._filling = false;
       if (t0) {

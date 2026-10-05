@@ -75,6 +75,39 @@ var USPLAYER_VERSION = (function() {
 /** How often the play time is looked at, for the song end and the loop. */
 var USPLAYER_POLL_MS = 200;
 
+/** reSIDfp filter defaults, reSIDfp's own: see usp_audio_set_filter(). */
+var USPLAYER_FILTER = {
+	enabled:	true,
+	curve6581:	0.5,
+	range6581:	19 / 39,
+	curve8580:	0.5,
+	waveforms:	0,			// 0 average, 1 weak, 2 strong
+};
+
+/** Stereo defaults: mono, as the other emulators start. See usp_audio_set_panning(). */
+var USPLAYER_PANNING = {
+	stereo:		false,
+	layout:		-1,			// -1 the tune's own (SID v5), else 0-3
+	mode:		-1,			// -1 the tune's own (SID v5), else 0-3
+	single:		1,			// one SID tunes: 0 left, 1 center, 2 right
+};
+
+/**
+ * A stored settings object, with defaults for whatever it lacks.
+ *
+ * @param {string} key			localStorage key
+ * @param {object} defaults		The settings it has to have
+ * @return {object}			A new object
+ */
+function usplayerStored(key, defaults) {
+	var stored = {};
+	try { stored = JSON.parse(localStorage.getItem(key)) || {}; } catch (e) { stored = {}; }
+	var out = {};
+	for (var name in defaults)
+		out[name] = typeof stored[name] === typeof defaults[name] ? stored[name] : defaults[name];
+	return out;
+}
+
 /** The modes, in the order they are offered. Kept beside the labels so that the
  *  drop-down boxes in index.php and this file cannot drift apart. */
 var USPLAYER_MODES = {
@@ -184,6 +217,11 @@ function USPlayer(mode) {
 	this.ended = false;			// so the end callback fires once
 	this.speedMultiplier = 1;
 	this.model = 0;				// 6581 or 8580 when DeepSID has said
+	this.scopeOn = false;			// the scope tab wants voice output
+	this.filter = usplayerStored("usplayer_filter", USPLAYER_FILTER);
+	this.panning = usplayerStored("usplayer_panning", USPLAYER_PANNING);
+	this.filterTimer = 0;
+	this.pansShown = "";
 
 	this.loadCallback = null;
 	this.endCallback = null;
@@ -219,6 +257,14 @@ USPlayer.prototype = {
 	build: function() {
 		return import(USPLAYER_PATH + "usplayer-adapter-deepsid.js" + USPLAYER_VERSION).then(function(module) {
 			this.adapter = new module.USPlayerAdapter(USPLAYER_MODES[this.mode].adapter);
+
+			// A scope tab opened before the module arrived
+			if (this.scopeOn) this.adapter.setScope(true);
+			// Stored filter and stereo settings; the adapter applies them on load
+			if (this.isAudio()) {
+				this.adapter.setFilter(this.filter);
+				this.adapter.setPanning(this.panning);
+			}
 
 			// Restore stored FM/OPL volume; the adapter applies it on load
 			var fmVolume = parseInt(localStorage.getItem("volume_fm"), 10);
@@ -752,6 +798,138 @@ USPlayer.prototype = {
 		return this.adapter.readMemory(address);
 	},
 
+	/**
+	 * Is the sound made in the page, which the scope, filter and stereo tabs need?
+	 *
+	 * @return {boolean}		True in reSIDfp mode
+	 */
+	isAudio: function() {
+		return this.mode === "audio";
+	},
+
+	/**
+	 * Set one reSIDfp filter setting from a slider in the filter tab.
+	 *
+	 * Sent after the slider rests for a moment: a curve or range change
+	 * rebuilds reSIDfp's filter tables.
+	 *
+	 * @param {string} property	"usp6581curve", "usp6581range" or "usp8580curve"
+	 * @param {number} value		0 to 1
+	 */
+	setFilter: function(property, value) {
+		var name = { usp6581curve: "curve6581", usp6581range: "range6581", usp8580curve: "curve8580" }[property];
+		if (!name) return;
+		this.filter[name] = parseFloat(value);
+		$("#filter-"+property+"-edit").val(parseFloat(value).toFixed(3));
+		this.applyFilter();
+	},
+
+	/** Read the filter tab's check box and drop-down box. */
+	readFilter: function() {
+		this.filter.enabled = $("#filter-usp-enabled").is(":checked");
+		this.filter.waveforms = parseInt($("#dropdown-usp-waveforms").val()) || 0;
+		this.applyFilter();
+	},
+
+	/** Put the filter back to reSIDfp's defaults. */
+	resetFilter: function() {
+		this.filter = $.extend({}, USPLAYER_FILTER);
+		this.showFilter();
+		this.applyFilter();
+	},
+
+	/** Store the filter settings and send them, once input has rested. */
+	applyFilter: function() {
+		try { localStorage.setItem("usplayer_filter", JSON.stringify(this.filter)); } catch (e) {}
+		clearTimeout(this.filterTimer);
+		this.filterTimer = setTimeout(function() {
+			if (this.adapter) this.adapter.setFilter(this.filter);
+		}.bind(this), 60);
+	},
+
+	/** Fill the filter tab, with the curve of the other chip model dimmed. */
+	showFilter: function() {
+		var f = this.filter;
+		$("#filter-usp-enabled").prop("checked", f.enabled);
+		$("#dropdown-usp-waveforms").val(f.waveforms);
+		var sliders = { usp6581curve: f.curve6581, usp6581range: f.range6581, usp8580curve: f.curve8580 };
+		for (var property in sliders) {
+			$("#filter-"+property+"-slider").val(sliders[property]);
+			$("#filter-"+property+"-edit").val(sliders[property].toFixed(3));
+		}
+		var model = this.getModel(); // 0 before a tune is loaded: nothing dimmed
+		$("#filter-usp6581curve,#filter-usp6581range").toggleClass("disabled", model === 8580);
+		$("#filter-usp8580curve").toggleClass("disabled", model === 6581);
+	},
+
+	/** Read the stereo tab's drop-down boxes and send them. */
+	readStereo: function() {
+		this.panning = {
+			stereo:	$("#dropdown-usp-stereo").val() === "1",
+			layout:	parseInt($("#dropdown-usp-layout").val()),
+			mode:	parseInt($("#dropdown-usp-mode").val()),
+			single:	parseInt($("#dropdown-usp-single").val()),
+		};
+		try { localStorage.setItem("usplayer_panning", JSON.stringify(this.panning)); } catch (e) {}
+		if (this.adapter) this.adapter.setPanning(this.panning);
+		this.showStereo();
+	},
+
+	/** Fill the stereo tab, the panning boxes enabled in stereo only. */
+	showStereo: function() {
+		var p = this.panning;
+		$("#dropdown-usp-stereo").val(p.stereo ? "1" : "0");
+		$("#dropdown-usp-layout").val(p.layout);
+		$("#dropdown-usp-mode").val(p.mode);
+		$("#dropdown-usp-single").val(p.single);
+		$("#dropdown-usp-layout,#dropdown-usp-mode,#dropdown-usp-single").prop("disabled", !p.stereo);
+		$("#stereo-usplayer .stereo-usp-pan").toggleClass("disabled", !p.stereo);
+		this.pansShown = "";
+		this.showPans();
+	},
+
+	/** Show where each SID chip of the playing tune sits, as "SID 1: L". */
+	showPans: function() {
+		var pans = this.adapter ? this.adapter.panning() : [];
+		var text = pans.length
+			? pans.map(function(pan, chip) { return "SID "+(chip + 1)+": "+(["L", "C", "R"][pan] || "C"); }).join("&nbsp;&nbsp;")
+			: "No tune playing";
+		if (text === this.pansShown) return;
+		this.pansShown = text;
+		$("#stereo-usp-playing").empty().append(text);
+	},
+
+	/**
+	 * Record each voice's own output for the scope tab, or stop.
+	 *
+	 * reSIDfp only: the board modes have no sound in the page to show.
+	 *
+	 * @param {boolean} on		True while the scope tab is showing
+	 */
+	setScope: function(on) {
+		this.scopeOn = !!on;
+		if (this.adapter && typeof this.adapter.setScope === "function")
+			this.adapter.setScope(this.scopeOn);
+	},
+
+	/**
+	 * Fill a buffer with one voice's latest output, up to the audible point.
+	 *
+	 * @param {number} voice		0-based, chip 1 voices 1-3 first
+	 * @param {Float32Array} out	Receives out.length samples, -1 to 1
+	 * @return {boolean}		False when there is nothing to show yet
+	 */
+	readScope: function(voice, out) {
+		if (!this.adapter || typeof this.adapter.scopeData !== "function") return false;
+		return this.adapter.scopeData(voice, out);
+	},
+
+	/** Sample rate of the voice output, the audio output's. */
+	getScopeRate: function() {
+		if (!this.adapter || typeof this.adapter.scopeRate !== "function") return 48000;
+		return this.adapter.scopeRate();
+	},
+
 	/** CIA 1 timer A's latch, which is what DeepSID calls the CIA value. */
 	getCIA: function() {
 		if (!this.adapter) return 0;
@@ -851,5 +1029,95 @@ USPlayer.prototype = {
 			clearInterval(this.pollTimer);
 			this.pollTimer = 0;
 		}
+	},
+};
+
+/**
+ * One oscilloscope box in the scope tab, drawn from a voice's own output.
+ *
+ * Answers the calls 'viz.js' makes on WebSid's VoiceDisplay, which reads its
+ * data through ScriptNodePlayer and cannot be pointed at this player.
+ *
+ * @param {string} id			Canvas element ID
+ * @param {USPlayer} player		The player to read from
+ * @param {number} voice		0-based, chip 1 voices 1-3 first
+ * @param {boolean} syncMode		Hold a periodic wave in place
+ */
+function USPlayerScope(id, player, voice, syncMode) {
+	this.canvas = document.getElementById(id);
+	this.ctx = this.canvas ? this.canvas.getContext("2d") : null;
+	this.player = player;
+	this.voice = voice;
+	this.syncMode = syncMode;
+	this.zoom = 5;
+	this.strokeColor = "rgba(1, 0, 0, 1.0)";
+	this.data = new Float32Array(0);
+	this.setSize(512, 80);
+}
+
+USPlayerScope.prototype = {
+
+	setSize: function(width, height) {
+		this.width = width;
+		this.height = height;
+		if (this.canvas) {
+			this.canvas.width = width;
+			this.canvas.height = height;
+		}
+	},
+
+	setSyncMode: function(syncMode) { this.syncMode = syncMode; },
+
+	setStrokeColor: function(color) { this.strokeColor = color; },
+
+	/**
+	 * How much time the box shows, as WebSid's: zoom + 1 sixtieths of a second.
+	 *
+	 * @param {number} zoom		1 (closest) to 5 (farthest)
+	 */
+	setZoom: function(zoom) { this.zoom = parseInt(zoom) || 5; },
+
+	/**
+	 * Draw the latest output of the voice.
+	 *
+	 * The data runs a 45th of a second longer than shown; in sync mode the
+	 * window starts at the last rising crossing of the wave's midline in that
+	 * extra part, which holds a periodic wave in place.
+	 */
+	redrawGraph: function() {
+		if (!this.ctx) return;
+		var rate = this.player.getScopeRate();
+		var scan = Math.floor(rate / 45);
+		var total = Math.min(16384, Math.floor(rate / 60 * (this.zoom + 1)));
+		if (total <= scan) return;
+		if (this.data.length !== total) this.data = new Float32Array(total);
+		if (!this.player.readScope(this.voice, this.data)) return;
+
+		var data = this.data, shown = total - scan, start = scan;
+		var min = data[scan], max = data[scan];
+		for (var i = scan + 1; i < total; i++) {
+			if (data[i] < min) min = data[i];
+			if (data[i] > max) max = data[i];
+		}
+		var mid = (min + max) / 2;
+		if (this.syncMode && max - min > 0.01) {
+			for (var i = scan; i > 0; i--) {
+				if (data[i - 1] < mid && data[i] >= mid) { start = i; break; }
+			}
+		}
+
+		// A full swing of one voice spans about 1, drawn at 90% of the height
+		var scale = this.height * 0.9, step = this.width / shown, center = this.height / 2;
+		this.ctx.clearRect(0, 0, this.width, this.height);
+		this.ctx.strokeStyle = this.strokeColor;
+		this.ctx.beginPath();
+		for (var i = 0; i < shown; i++) {
+			var y = center - (data[start + i] - mid) * scale;
+			if (i == 0)
+				this.ctx.moveTo(0, y);
+			else
+				this.ctx.lineTo(Math.floor(i * step), y);
+		}
+		this.ctx.stroke();
 	},
 };

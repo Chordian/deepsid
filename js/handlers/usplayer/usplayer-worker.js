@@ -69,12 +69,32 @@ let audioSentTotal = 0;        /* posted to the ring, ever */
 let audioSteps = 24;           /* frames one fill may emulate */
 let audioFilling = false;
 let audioRate = 48000;         /* the ring's sample rate, for the register lead */
+let audioChannels = 1;         /* samples per frame from _usp_audio_take() */
+let audioCpuMs = 0;            /* time spent emulating, since audioConfigure */
+let audioFrames = 0;           /* frames emulated, since audioConfigure */
 
 /* SID register mirror reported to the page in audio mode, which feeds its
  * piano, graph and register views: the page's own player never steps.
  * Four chips at most, the size of the adapter's shadow. */
 const REG_CHIPS_MAX = 4;
 let regChips = 1;
+
+/* RAM pages the page is reading (memory view), appended to each register
+ * report to keep the page's mirror in step with this machine. Set by memWatch. */
+const MEM_PAGES_MAX = 16;
+let memPages = new Uint8Array(0);
+let memPtr = 0;                /* MEM_PAGES_MAX pages of scratch in the wasm heap */
+
+/* Per voice output for an oscilloscope, set by the scope message. Taken in
+ * step with the audio and sent with the following register report: the page
+ * shows it when the audio it belongs to is heard. At most SCOPE_VOICES_MAX
+ * values per frame: chip 1 voices 1-3 first. */
+const SCOPE_VOICES_MAX = REG_CHIPS_MAX * 3;
+let scopeOn = false;
+let scopePtr = 0;              /* audioMax frames of scratch in the wasm heap */
+let scopeVoices = 0;           /* values per frame in scopeChunks */
+let scopeChunks = [];          /* Int16Array per audio chunk since the last report */
+let scopeFrames = 0;
 
 /* The longest a single audioFill() burst may run, in wall clock ms, whatever
  * audioSteps says. A many-SID tune's frame cost scales with chip count, and
@@ -112,6 +132,14 @@ function snapshot() {
      * the v5 header flag. */
     fmWrites: (audioMode && typeof player.M._usp_audio_fm_writes === 'function')
       ? player.M._usp_audio_fm_writes() : 0,
+    /* Mean ms of emulation per frame since the tune was configured, against a
+     * frame's budget of about 20 ms; audio mode only. */
+    msPerFrame: audioFrames > 0 ? audioCpuMs / audioFrames : 0,
+    clipped: (audioMode && typeof player.M._usp_audio_clipped === 'function')
+      ? player.M._usp_audio_clipped() : 0,
+    /* Stereo position per chip, 0 left, 1 center, 2 right: see panning. */
+    pans: (audioMode && typeof player.M._usp_audio_pan === 'function')
+      ? info.sids.map((_, c) => player.M._usp_audio_pan(c + 1)) : [],
   };
 }
 
@@ -136,7 +164,10 @@ function audioFill() {
     const M = player.M;
     const deadline = performance.now() + AUDIO_FILL_BUDGET_MS;
     while (audioOwed > 0 && steps < audioSteps) {
+      const t0 = performance.now();
       player.stepAndDrain();
+      audioCpuMs += performance.now() - t0;
+      audioFrames++;
       steps++;
       for (;;) {
         const n = M._usp_audio_take(audioPtr, audioMax);
@@ -144,8 +175,9 @@ function audioFill() {
         /* A copy, because the heap view is reused on the next call and may be
          * detached entirely if the heap grows. Transferred, so the audio thread
          * does not copy it again. */
-        const chunk = new Int16Array(M.HEAPU8.buffer, audioPtr, n).slice();
-        clockPort.postMessage(chunk, [chunk.buffer]);
+        const chunk = new Int16Array(M.HEAPU8.buffer, audioPtr, n * audioChannels).slice();
+        clockPort.postMessage(audioChannels === 2 ? { stereo: chunk } : chunk, [chunk.buffer]);
+        if (scopeOn) takeScope(n);
         audioSent += n;
         audioSentTotal += n;
         audioOwed -= n;
@@ -160,6 +192,37 @@ function audioFill() {
 }
 
 /**
+ * Take the scope frames belonging to the last audio chunk sent.
+ *
+ * @param {number} frames  frames in that audio chunk
+ */
+function takeScope(frames) {
+  const M = player.M;
+  const v = Math.min(SCOPE_VOICES_MAX, M._usp_audio_scope_voices() | 0);
+  if (v === 0) return;
+  if (v !== scopeVoices) { scopeChunks = []; scopeFrames = 0; scopeVoices = v; }
+  const k = M._usp_audio_scope_take(scopePtr, frames, v);
+  if (k <= 0) return;
+  scopeChunks.push(new Int16Array(M.HEAPU8.buffer, scopePtr, k * v).slice());
+  scopeFrames += k;
+}
+
+/**
+ * Join the scope chunks taken since the last report and start over.
+ *
+ * @returns {Int16Array|null} frames * scopeVoices values, null when none
+ */
+function drainScope() {
+  if (scopeFrames === 0) return null;
+  const out = new Int16Array(scopeFrames * scopeVoices);
+  let at = 0;
+  for (const c of scopeChunks) { out.set(c, at); at += c.length; }
+  scopeChunks = [];
+  scopeFrames = 0;
+  return out;
+}
+
+/**
  * Send the SID register mirror to the page, with how far ahead of the audible
  * output it is.
  *
@@ -171,11 +234,68 @@ function postRegisters(leadSamples) {
   for (let c = 0; c < regChips; c++) {
     for (let r = 0; r < 32; r++) regs[(c << 5) | r] = player.sidRegister(c + 1, r) & 0xff;
   }
-  self.postMessage({ type: 'regs', payload: {
+  const payload = {
     regs,
     ciaLatch: player.ciaLatch(1, 0),
     leadMs: (leadSamples * 1000) / audioRate,
-  } }, [regs.buffer]);
+  };
+  const transfer = [regs.buffer];
+  const scope = scopeOn ? drainScope() : null;
+  if (scope) {
+    payload.scope = scope;
+    payload.scopeVoices = scopeVoices;
+    transfer.push(scope.buffer);
+  }
+  const mem = readWatchedPages();
+  if (mem) {
+    payload.mem = mem;
+    payload.memPages = memPages.slice();
+    transfer.push(mem.buffer, payload.memPages.buffer);
+  }
+  self.postMessage({ type: 'regs', payload }, transfer);
+}
+
+/**
+ * Read the watched RAM pages, in memPages order.
+ *
+ * @returns {Uint8Array|null} 256 bytes per page, null when none are watched
+ */
+function readWatchedPages() {
+  const n = memPages.length;
+  if (n === 0) return null;
+  const M = player.M;
+  const mem = new Uint8Array(n * 256);
+  if (typeof M._usp_read_memory_block === 'function') {
+    if (!memPtr) memPtr = M._usp_alloc(MEM_PAGES_MAX * 256);
+    for (let k = 0; k < n; k++) {
+      M._usp_read_memory_block(memPtr + (k << 8), memPages[k] << 8, 256);
+    }
+    mem.set(new Uint8Array(M.HEAPU8.buffer, memPtr, n * 256));
+  } else {
+    for (let k = 0; k < n; k++) {
+      const base = memPages[k] << 8;
+      for (let i = 0; i < 256; i++) mem[(k << 8) | i] = player.readMemory(base + i) & 0xff;
+    }
+  }
+  return mem;
+}
+
+/**
+ * Apply a speed multiplier to the player and, in audio mode, to the
+ * synthesis output rate. See usp_audio_set_speed().
+ *
+ * @param {number} mult speed multiplier, 1 is normal
+ */
+function applySpeed(mult) {
+  player.setSpeed(mult);
+  applyAudioSpeed();
+}
+
+/** Follow the player's speed with the synthesis output rate, audio mode only. */
+function applyAudioSpeed() {
+  if (audioMode && typeof player.M._usp_audio_set_speed === 'function') {
+    player.M._usp_audio_set_speed(player.speed);
+  }
 }
 
 /** A report from the ring: how short it is, counting what is already on its way. */
@@ -315,7 +435,7 @@ const handlers = {
     transport = null;
     player = new USBSIDPlayerWeb(M);
     audioMode = true;
-    audioPtr = M._usp_alloc(audioMax * 2);
+    audioPtr = M._usp_alloc(audioMax * 2 * 2);   /* room for stereo frames */
     post('log', { message: 'worker audio: wasm up, no board' });
     return { ok: true, audio: true };
   },
@@ -326,16 +446,25 @@ const handlers = {
    * `target` and `steps` come from the page because it is the side that knows
    * whether it is visible: hidden, it asks for a deeper ring and bigger fills.
    */
-  audioConfigure({ chips, rate, quality, model, target, steps }) {
+  audioConfigure({ chips, rate, quality, model, target, steps, stereo }) {
     if (player === null) return { ok: false };
+    if (typeof player.M._usp_audio_set_stereo === 'function') {
+      player.M._usp_audio_set_stereo(stereo ? 1 : 0);
+    }
     const ok = !!player.M._usp_audio_configure(
       (chips || 1) | 0, rate | 0,
       (quality === undefined ? 1 : quality) | 0, (model || 0) | 0);
     if (target) audioTarget = target | 0;
     if (steps) audioSteps = steps | 0;
     if (rate) audioRate = rate | 0;
+    audioChannels = (typeof player.M._usp_audio_channels === 'function')
+      ? (player.M._usp_audio_channels() | 0) || 1 : 1;
+    audioCpuMs = 0;
+    audioFrames = 0;
     audioOwed = 0;
     audioSent = 0;
+    scopeChunks = [];
+    scopeFrames = 0;
     post('log', { message: 'worker audio: ' + rate + ' Hz, ' + (chips || 1) +
                            ' chip(s), target ' + audioTarget });
     return { ok };
@@ -355,7 +484,53 @@ const handlers = {
     }
     audioOwed = 0;
     audioSent = 0;
+    scopeChunks = [];
+    scopeFrames = 0;
     return { ok: true };
+  },
+
+  /**
+   * Place the chips in the stereo mix, see usp_audio_set_panning(). Kept
+   * across tunes by the wasm.
+   */
+  panning({ stereo, layout, mode, single }) {
+    if (player === null || typeof player.M._usp_audio_set_panning !== 'function') {
+      return { ok: false };
+    }
+    player.M._usp_audio_set_panning(stereo ? 1 : 0, layout | 0, mode | 0, single | 0);
+    return { ok: true, info: snapshot() };
+  },
+
+  /**
+   * Set the reSIDfp filter, see usp_audio_set_filter(). Kept across tunes by
+   * the wasm.
+   */
+  filter({ enabled, curve6581, range6581, curve8580, waveforms }) {
+    if (player === null || typeof player.M._usp_audio_set_filter !== 'function') {
+      return { ok: false };
+    }
+    player.M._usp_audio_set_filter(enabled ? 1 : 0, +curve6581, +range6581,
+                                   +curve8580, waveforms | 0);
+    return { ok: true };
+  },
+
+  /**
+   * Record each voice's own output for an oscilloscope, or stop.
+   *
+   * Frames go out with the register reports, see postRegisters().
+   */
+  scope({ on }) {
+    if (player === null || !audioMode ||
+        typeof player.M._usp_audio_scope !== 'function') {
+      return { ok: false };
+    }
+    const M = player.M;
+    if (on && !scopePtr) scopePtr = M._usp_alloc(audioMax * SCOPE_VOICES_MAX * 2);
+    scopeOn = !!on;
+    scopeChunks = [];
+    scopeFrames = 0;
+    M._usp_audio_scope(scopeOn ? 1 : 0);
+    return { ok: true, on: scopeOn };
   },
 
   /** The Songlengths key of what is loaded, and the lookup, both in here. */
@@ -414,8 +589,18 @@ const handlers = {
     }
     return { ok: true };
   },
-  speed({ mult }) { player.setSpeed(mult); return { ok: true }; },
-  fastForward({ on, mult }) { player.fastForward(!!on, mult); return { ok: true }; },
+  speed({ mult }) { applySpeed(mult); return { ok: true, speed: player.speed }; },
+  fastForward({ on, mult }) {
+    player.fastForward(!!on, mult);
+    applyAudioSpeed();
+    return { ok: true, speed: player.speed };
+  },
+  /* RAM pages to report with the registers, see readWatchedPages(). */
+  memWatch({ pages }) {
+    const list = Array.from(pages || []).slice(0, MEM_PAGES_MAX);
+    memPages = Uint8Array.from(list, (pg) => pg & 0xff);
+    return { ok: true, pages: memPages.length };
+  },
   nextSubtune() { player.nextSubtune(); return { ok: true }; },
   prevSubtune() { player.prevSubtune(); return { ok: true }; },
   runStop() { return { ok: player.runStop() }; },

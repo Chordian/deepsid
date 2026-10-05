@@ -963,15 +963,21 @@ var main = {
 	 * 
 	 * @todo Probably belongs in the controls.js file instead?
 	 * 
-	 * @handlers	websid
+	 * @handlers	websid, usplayfp, usplayer
 	 * 
 	 * @used		controls.js	
 	 */
 	showSundryFilterContents: function() {
-		$("#filter-websid").hide();
+		$("#filter-websid,#filter-usplayer").hide();
 		$("#stopic-filter form").show();
 		setTimeout(function(){
-			if (SID.emulator == "websid" && SID.getModel() == "6581") {
+			if (typeof viz !== "undefined" && viz.usplayerAudio) {
+				// The reSIDfp filter controls of USBSID-Player
+				$("#stopic-filter form").hide();
+				$("#filter-usplayer").show();
+				$("#filter-6581").hide(); // Both chip models have their own controls
+				SID.usplayer.showFilter();
+			} else if (SID.emulator == "websid" && SID.getModel() == "6581") {
 				// Enable filter controls
 				$("#stopic-filter form label,#stopic-filter form input,#filter-revisions button")
 					.prop("disabled", false).removeClass("disabled");
@@ -4150,6 +4156,34 @@ main.bindSundryEvents = function() {
 	$("#dropdown-stereo-mode").change(function(event) {
 		if (SID.stereoLevel == -1 || event.target.value == -1) SID.resetStereo();
 		SID.setStereoMode(event.target.value);
+	});
+
+	/**
+	 * Changing a drop-down box in the stereo sundry box (USBSID-Player in reSIDfp mode).
+	 * 
+	 * @handlers usplayfp, usplayer
+	 */
+	$("#stereo-usplayer").on("change", "select", function() {
+		SID.usplayer.readStereo();
+	});
+
+	/**
+	 * Clicking the filter check box or changing the combined waveforms drop-down
+	 * box in the filter sundry box (USBSID-Player in reSIDfp mode).
+	 * 
+	 * @handlers usplayfp, usplayer
+	 */
+	$("#filter-usplayer").on("change", "select,input[type='checkbox']", function() {
+		SID.usplayer.readFilter();
+	});
+
+	/**
+	 * Clicking the button for reSIDfp's default filter settings.
+	 * 
+	 * @handlers usplayfp, usplayer
+	 */
+	$("#filter-usp-reset").click(function() {
+		SID.usplayer.resetFilter();
 	});
 }
 

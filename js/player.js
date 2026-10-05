@@ -1753,12 +1753,16 @@ SIDPlayer.prototype = {
 	/**
 	 * Adjust filter parameters for 6581.
 	 * 
-	 * @handlers websid
+	 * @handlers websid, usplayfp, usplayer
 	 * 
 	 * @param {string} property		Set to "base", "max", etc.
 	 * @param {number} value		The value to apply to the property
 	 */
 	setFilter: function(property, value) {
+		if (this.emulator == "usplayfp" || this.emulator == "usplayer") {
+			this.usplayer.setFilter(property, value);
+			return;
+		}
 		if (this.emulator == "websid") {
 			switch (property.toLowerCase()) {
 				case "base":

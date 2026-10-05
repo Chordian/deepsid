@@ -3036,6 +3036,21 @@ input[type=range]::-ms-track {
 		cursor: pointer;
 	}
 
+	/* 2SID and 3SID oscilloscope boxes for USBSID-Player in reSIDfp mode */
+	#sundry .scope-mosaic {
+		position: relative;
+		top: -0.3px;
+		left: -4.5px;
+		width: 417.5px;
+		display: grid;
+		gap: 2px;
+	}
+
+		#sundry .scope-mosaic .scope {
+			position: static;
+			width: 100%;
+		}
+
 		#stopic-stereo .scope {
 			position: absolute;
 			top: 0;
@@ -3130,6 +3145,29 @@ input[type=range]::-ms-track {
 				top: 165px;
 				right: 0;
 			}
+
+			#filter-usp-buttons {
+				clear: both;
+				text-align: right;
+			}
+
+			#filter-usplayer .sundry-control.disabled label,
+			#stopic-stereo .stereo-usp-pan.disabled {
+				color: var(--color-text-label-disabled);
+			}
+
+			#stereo-usplayer td {
+				padding: 4px 6px;
+			}
+
+				#stereo-usplayer td.stereo-header {
+					width: 1%;
+					white-space: nowrap;
+				}
+
+				#stereo-usplayer td.stereo-cell {
+					text-align: left;
+				}
 		
 		#filter-6581 {
 			position: relative;
