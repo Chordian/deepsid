@@ -54,6 +54,9 @@ SHOULD BE DONE
 
 - SID v5 support: See if the first wizard step for getting and showing SID info needs updating.
 
+- See GitHub issue #49 for security problems with searching in the 'music.php' file. There may be
+  more information in a CSDb PM.
+
 - BUG: Uploading temp with 'L' hotkey then clicking the SID row shows this error in an alert box:
   "You must specify 'player' or 'id' as a GET variable."
   Closing the alert box then allows for playing, but it's annoying. Make sure it doesn't appear.

@@ -2160,6 +2160,18 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>October 5, 2026</h3>
+						<ul>
+							<li>The reSIDfp SID handler now supports slow speed, fast forward, and updating byte contents in MEMO view. Buffer sizes below 200 ms now also take effect.</li>
+							<li>For the WebUSB part of USBSID-Player, socket configuration, FM/OPL slot, and other board reads are now in sync again on firmware using the FastReads interface.</li>
+							<li>Both the reSIDfp SID handler and its counterpart in USBSID-Player now support the 'Scope', 'Filter', and 'Stereo' tabs, allowing you to view the oscilloscope, tweak the filter, and adjust various stereo effects.</li>
+							<ul>
+								<li><b>Scope:</b> Uses reSIDfp's per-voice output, synchronized with the audio. A single SID shows the standard three boxes, while 2SID and 3SID show a mosaic with one column per chip. Clicking a box toggles its chip, just like the keyboard hotkeys. There is no fourth box, as there is no digi channel.</li>
+								<li><b>Filter:</b> Provides reSIDfp's own controls for enabling or disabling the filter, adjusting the 6581 curve and range, the 8580 curve, combined waveforms, and restoring defaults. The curve for the chip model not used by the tune is dimmed.</li>
+								<li><b>Stereo:</b> Provides Mono/Stereo output, SID v5 panning layout and mode (using the tune's settings by default), single-SID positioning, and placement of each chip during playback. Mono is the default.</li>
+							</ul>
+						</ul>
+
 						<h3>October 3, 2026</h3>
 						<ul>
 							<li>Added fixes for USBSID-Pico; fixed WebUSB crashes in Windows, added fmopl volume slider when using ReSIDFp, and fixed issues when reading the configuration.</li>
