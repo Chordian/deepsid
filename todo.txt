@@ -58,6 +58,9 @@ SHOULD BE DONE
   "You must specify 'player' or 'id' as a GET variable."
   Closing the alert box then allows for playing, but it's annoying. Make sure it doesn't appear.
 
+- BUG: A user reports that downloading playlists can yield some "ID 67543" error. He gave a few
+  playlist examples in Facebook.
+
 - A user reports that there are no songs in a folder, when clicking this link on a mobile device:
   https://deepsid.chordian.net/?file=/SID%20Happens/&here=1&search=syndrom&type=author&sort=newest
   It works in the desktop version.

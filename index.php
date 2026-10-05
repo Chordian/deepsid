@@ -2067,7 +2067,7 @@
 						<h3>October 3, 2026</h3>
 						<ul>
 							<li>Added fixes for USBSID-Pico; fixed WebUSB crashes in Windows, added fmopl volume slider when using ReSIDFp, and fixed issues when reading the configuration.</li>
-							<li>The reSIDfp output of USBSID-Player is a SID handler of its own: <b>reSIDfp (usPlayer)</b>. It needs no hardware at all; the same cycle-exact C64 as USBSID-Player plays the tune, with the sound synthesised by reSIDfp in the page. It plays RSID, BASIC and digi tunes, and SID tunes with up to four chips. The <b>USBSID-Player</b> SID handler still offers reSIDfp too, as the last of its modes after WebUSB, Web Serial, ASID and SendSID.</li>
+							<li>The reSIDfp output of USBSID-Player is now a SID handler of its own: <b>reSIDfp (usPlayer)</b>. It needs no hardware at all; the same cycle-exact C64 as USBSID-Player plays the tune, with the sound synthesised by reSIDfp in the page. It plays RSID, BASIC and digi tunes, and SID tunes with up to four chips. The <b>USBSID-Player</b> SID handler still offers reSIDfp too, as the last of its modes after WebUSB, Web Serial, ASID and SendSID.</li>
 						</ul>
 
 						<h3>September 26, 2026</h3>

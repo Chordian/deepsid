@@ -178,8 +178,8 @@ $help = array(
 
 		<h4><a href="//deepsid.chordian.net?emulator=usplayfp">reSIDfp (usPlayer)</a></h4>
 		<p>No hardware needed. A cycle exact C64 with reSIDfp in the page.</p>
-		Runs the tune\'s own code on an emulated 6510, CIAs and VIC.
-		Plays RSID, BASIC and digi tunes, up to 4 SID chips, and SID+FM.
+		<p>Runs the tune\'s own code on an emulated 6510, CIA\'s and VIC.
+		Plays RSID, BASIC and digi tunes, up to 4 SID chips, and SID+FM.</p>
 		The same player as USBSID-Player, without a board.
 
 		<h4><a href="//deepsid.chordian.net?emulator=asid">ASID (MIDI)</a></h4>
