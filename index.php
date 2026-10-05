@@ -803,6 +803,43 @@
 							<button id="filter-r4" class="disabled" disabled="disabled">R4</button>
 						</div>
 					</form>
+					<?php // Sundry tab: reSIDfp filter for USBSID-Player ?>
+					<div id="filter-usplayer" style="display:none;">
+						<div style="float:left;width:48%;padding-bottom:2px;">
+							<div id="filter-usp6581curve" class="sundry-control">
+								<label class="unselectable">6581 curve</label>
+								<input id="filter-usp6581curve-edit" type="text" maxlength="12" readonly="readonly" />
+								<input id="filter-usp6581curve-slider" type="range" min="0" max="1" value="0.5" step="0.005" />
+							</div>
+							<div id="filter-usp6581range" class="sundry-control">
+								<label class="unselectable">6581 range</label>
+								<input id="filter-usp6581range-edit" type="text" maxlength="12" readonly="readonly" />
+								<input id="filter-usp6581range-slider" type="range" min="0" max="1" value="0.487" step="0.005" />
+							</div>
+						</div>
+						<div style="float:right;width:48%;">
+							<div id="filter-usp8580curve" class="sundry-control">
+								<label class="unselectable">8580 curve</label>
+								<input id="filter-usp8580curve-edit" type="text" maxlength="12" readonly="readonly" />
+								<input id="filter-usp8580curve-slider" type="range" min="0" max="1" value="0.5" step="0.005" />
+							</div>
+							<div class="sundry-control">
+								<label class="unselectable" for="filter-usp-enabled">Filter</label>
+								<input type="checkbox" id="filter-usp-enabled" class="unselectable" style="position:absolute;top:2px;right:0;" checked />
+							</div>
+							<div class="sundry-control">
+								<label class="unselectable">Waveforms</label>
+								<select id="dropdown-usp-waveforms" name="select-usp-waveforms" style="position:absolute;top:0;right:0;">
+									<option value="0" selected="selected">Average</option>
+									<option value="1">Weak</option>
+									<option value="2">Strong</option>
+								</select>
+							</div>
+						</div>
+						<div id="filter-usp-buttons">
+							<button id="filter-usp-reset">Defaults</button>
+						</div>
+					</div>
 					<div id="filter-websid" class="sundryMsg" style="display:none;">This tab requires the <button class="set-websid">WebSid</button> emulator.</div>
 				</div>
 				<div id="stopic-stereo" class="stopic" style="display:none;">
@@ -930,6 +967,65 @@
 								<option value="THIRD_SID">3rd SID chip</option>
 							</select>
 						</div>
+					</div>
+					<?php // Sundry tab: Stereo controls for USBSID-Player in reSIDfp mode ?>
+					<div id="stereo-usplayer" style="display:none;">
+						<table>
+							<tr>
+								<td class="stereo-header">
+									<span><b>Output</b></span>
+								</td>
+								<td class="stereo-cell">
+									<select id="dropdown-usp-stereo" name="select-usp-stereo">
+										<option value="0" selected="selected">Mono</option>
+										<option value="1">Stereo</option>
+									</select>
+								</td>
+							</tr>
+							<tr>
+								<td class="stereo-header">
+									<span class="stereo-usp-pan"><b>Multi SID</b></span>
+								</td>
+								<td class="stereo-cell">
+									<label class="stereo-usp-pan unselectable">Layout</label>
+									<select id="dropdown-usp-layout" name="select-usp-layout">
+										<option value="-1" selected="selected">Tune</option>
+										<option value="0">Standard</option>
+										<option value="1">L/C/R</option>
+										<option value="2">Center first</option>
+										<option value="3">Fully centered</option>
+									</select>
+									<label class="stereo-usp-pan unselectable" style="margin-left:10px;">Mode</label>
+									<select id="dropdown-usp-mode" name="select-usp-mode">
+										<option value="-1" selected="selected">Tune</option>
+										<option value="0">Direct</option>
+										<option value="1">Reverse</option>
+										<option value="2">Group</option>
+										<option value="3">Spread</option>
+									</select>
+								</td>
+							</tr>
+							<tr>
+								<td class="stereo-header">
+									<span class="stereo-usp-pan"><b>Single SID</b></span>
+								</td>
+								<td class="stereo-cell">
+									<select id="dropdown-usp-single" name="select-usp-single">
+										<option value="0">Left</option>
+										<option value="1" selected="selected">Center</option>
+										<option value="2">Right</option>
+									</select>
+								</td>
+							</tr>
+							<tr>
+								<td class="stereo-header">
+									<span><b>Playing</b></span>
+								</td>
+								<td class="stereo-cell">
+									<span id="stereo-usp-playing">No tune playing</span>
+								</td>
+							</tr>
+						</table>
 					</div>
 					<div id="stereo-message" class="sundryMsg" style="display:none;">This tab requires the <button class="set-websid">WebSid</button> or the <button class="set-jsidplay2">JSIDPlay2</button> emulator.</div>
 				</div>

@@ -210,6 +210,7 @@ Viz.prototype = {
 			.on("click", "button", this.onPlayerBrowseClick.bind(this))
 			.on("auxclick", "button", this.onPlayerBrowseClick.bind(this));
 		$("#visuals-graph").on("click", ".graph-area", this.onGraphVoiceClick.bind(this));
+		$("#stopic-osc").on("click", ".scope-chip", this.onScopeChipClick.bind(this));
 	},
 
 	/**
@@ -1120,6 +1121,12 @@ Viz.prototype = {
 			}
 		}
 
+		// The 'usplayfp' handler, and the 'usplayer' handler in its reSIDfp mode
+		this.usplayerAudio = (SID.emulator == "usplayfp" || SID.emulator == "usplayer") &&
+			SID.usplayer.isAudio();
+
+		this.scopeChips = 0; // Boxes are laid out in 'initUsplayerScope()' once the tab shows
+
 		if (SID.emulator == "websid") {
 			this.scopeStereo[0][0] = new VoiceDisplay("scope-s1v1", Tracer, function() { return Tracer.getData(0); }, false);
 			this.scopeStereo[0][1] = new VoiceDisplay("scope-s1v2", Tracer, function() { return Tracer.getData(1); }, false);
@@ -1146,9 +1153,9 @@ Viz.prototype = {
 
 		if ($("#sundry-tabs .selected").attr("data-topic") == "stereo") {
 
-			if (SID.emulator !== "websid" && SID.emulator !== "jsidplay2") {
+			if (SID.emulator !== "websid" && SID.emulator !== "jsidplay2" && !this.usplayerAudio) {
 				if (this.tabStereoMode !== "NOTSTEREO") {
-					$("#stereo-websid,#stereo-jsidplay2").hide();
+					$("#stereo-websid,#stereo-jsidplay2,#stereo-usplayer").hide();
 					$("#stereo-message").show();
 					this.tabStereoMode = "NOTSTEREO";
 				}
@@ -1156,10 +1163,12 @@ Viz.prototype = {
 			} else if (this.tabStereoMode !== "STEREO") {
 				// Okay to show stereo sliders again now
 				$("#stereo-message").hide();
-				$("#stereo-websid,#stereo-jsidplay2").hide();
-				$("#stereo-"+SID.emulator).show();
+				$("#stereo-websid,#stereo-jsidplay2,#stereo-usplayer").hide();
+				$("#stereo-"+(this.usplayerAudio ? "usplayer" : SID.emulator)).show();
+				if (this.usplayerAudio) SID.usplayer.showStereo();
 				this.tabStereoMode = "STEREO";
 			}
+			if (this.usplayerAudio) SID.usplayer.showPans();
 			if (SID.emulator == "websid" && SID.isPlaying()) {
 				for (var chip = 0; chip < 3; chip++) {
 					for (var voice = 0; voice < 3; voice++) {
@@ -1173,7 +1182,36 @@ Viz.prototype = {
 
 		// TAB: Scope
 
-		if ($("#sundry-tabs .selected").attr("data-topic") !== "osc") return; // Tab not active
+		if ($("#sundry-tabs .selected").attr("data-topic") !== "osc") {
+			// Tab not active
+			if (this.tabOscMode == "OSC" && this.usplayerAudio) {
+				SID.usplayer.setScope(false);
+				this.tabOscMode = "";
+			}
+			return;
+		}
+
+		if (this.usplayerAudio) {
+			var chips = Math.min(3, Math.max(1, browser.chips || 1));
+			if (this.tabOscMode !== "OSC" || this.scopeChips !== chips) {
+				$("#stopic-osc .sundryMsg").hide();
+				this.initUsplayerScope(chips);
+				if (this.tabOscMode !== "OSC") SID.usplayer.setScope(true);
+				this.tabOscMode = "OSC";
+			}
+			if (chips > 1) this.dimUsplayerScope();
+			if (SID.isPlaying()) {
+				var color = "rgba("+(this.scopeLineColor[colorTheme])+", 1.0)";
+				for (var i = 0; i < this.scopeUsplayer.length; i++) {
+					var scope = this.scopeUsplayer[i];
+					scope.setZoom(this.scopeZoom);
+					scope.setSyncMode(this.scopeMode);
+					scope.setStrokeColor(color);
+					scope.redrawGraph();
+				}
+			}
+			return;
+		}
 		
 		if (SID.emulator !== "websid" && SID.emulator !== "legacy") {
 			if (this.tabOscMode !== "NOTWEBSID") {
@@ -1212,11 +1250,95 @@ Viz.prototype = {
 	},
 
 	/**
+	 * Scope: Lay out the oscilloscope boxes for USBSID-Player in reSIDfp mode.
+	 *
+	 * One SID chip uses the standard boxes. 2SID and 3SID get a mosaic with a
+	 * column per chip and a row per voice.
+	 *
+	 * @handlers usplayfp, usplayer
+	 *
+	 * @param {number} chips		Number of SID chips (1 to 3)
+	 */
+	initUsplayerScope: function(chips) {
+		this.scopeChips = chips;
+		this.scopeUsplayer = [];
+		this.scopeDim = [];
+		$("#stopic-osc .scope-mosaic").remove();
+		$("#scope4").hide(); // No digi channel
+
+		if (chips == 1) {
+			$("#scope1,#scope2,#scope3").show();
+			for (var voice = 0; voice < 3; voice++) {
+				var scope = new USPlayerScope("scope"+(voice + 1), SID.usplayer, voice, this.scopeMode);
+				scope.setSize(512, 70);
+				this.scopeUsplayer.push(scope);
+			}
+			return;
+		}
+
+		$("#scope1,#scope2,#scope3").hide();
+		var canvas = '';
+		for (var voice = 1; voice <= 3; voice++) {
+			for (var chip = 1; chip <= chips; chip++)
+				canvas += '<canvas class="scope scope-chip" id="scope-c'+chip+'v'+voice+'" data-chip="'+chip+'" data-voice="'+voice+'"></canvas>';
+		}
+		$("#stopic-osc").prepend('<div class="scope-mosaic" style="grid-template-columns:repeat('+chips+',1fr);">'+canvas+'</div>');
+		for (var voice = 1; voice <= 3; voice++) {
+			for (var chip = 1; chip <= chips; chip++) {
+				var scope = new USPlayerScope("scope-c"+chip+"v"+voice, SID.usplayer, (chip - 1) * 3 + voice - 1, this.scopeMode);
+				scope.setSize(Math.floor(512 / chips), 70);
+				this.scopeUsplayer.push(scope);
+			}
+		}
+	},
+
+	/**
+	 * Scope: Dim the mosaic boxes of voices that are turned off.
+	 *
+	 * @handlers usplayfp, usplayer
+	 */
+	dimUsplayerScope: function() {
+		for (var chip = 1; chip <= this.scopeChips; chip++) {
+			var mask = SID.voiceMask[chip - 1] & 7;
+			if (this.scopeDim[chip] === mask) continue;
+			this.scopeDim[chip] = mask;
+			for (var voice = 1; voice <= 3; voice++)
+				$("#scope-c"+chip+"v"+voice).css("opacity", (mask & (1 << (voice - 1)) ? "1" : "0.3"));
+		}
+	},
+
+	/**
+	 * Scope: Toggle the SID chip of a clicked mosaic box, as the keyboard
+	 * hotkeys do for 2SID and 3SID tunes.
+	 *
+	 * @handlers usplayfp, usplayer
+	 *
+	 * @param {*} event 
+	 */
+	onScopeChipClick: function(event) {
+		var e = $.Event("keyup");
+		e.which = e.keyCode = 48 + parseInt($(event.currentTarget).attr("data-chip"));
+		e.shiftKey = event.shiftKey;
+		$(window).trigger(e);
+	},
+
+	/**
 	 * Scope/Stereo: Show centered horizontal lines to indicate that the music has stopped.
 	 */
 	stopScope: function() {
 
 		// TAB: Scope
+
+		var fadedColor = "rgba("+(this.scopeLineColor[colorTheme])+", 0.4)";
+		$("#stopic-osc .scope-mosaic canvas").each(function() {
+			var ctx = this.getContext("2d");
+			ctx.clearRect(0, 0, this.width, this.height);
+			ctx.strokeStyle = fadedColor;
+			ctx.beginPath();
+			ctx.moveTo(0, this.height / 2);
+			ctx.lineTo(this.width - 1, this.height / 2);
+			ctx.stroke();
+		});
 
 		for (var voice = 1; voice <= 4; voice++) {
 			var canvas = $("#scope"+voice)[0];
