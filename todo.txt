@@ -8,6 +8,10 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+- Check branches in: https://github.com/mrr19121970/deepsid
+  For code expansions by mrr19121970. UPDATE: I check the changes and they look good. I asked him
+  to make a pull request with both 'music.php' file changes.
+
 - Labels 'name' field in the database needs to be longer.
 
 - Most SID handlers can actually already play SID v5 files, even with FM. Consider adding a folder
@@ -54,8 +58,9 @@ SHOULD BE DONE
 
 - SID v5 support: See if the first wizard step for getting and showing SID info needs updating.
 
-- See GitHub issue #49 for security problems with searching in the 'music.php' file. There may be
-  more information in a CSDb PM.
+- Add "or reSIDfp" to scope, filter and stereo sundry tabs when nothing viable is used.
+
+- BUG: Web service calls to the CSDb web service currently don't work. Investigate.
 
 - BUG: Uploading temp with 'L' hotkey then clicking the SID row shows this error in an alert box:
   "You must specify 'player' or 'id' as a GET variable."
