@@ -253,7 +253,8 @@
 
 					if (substr($file, -4) == '.sid' || substr($file, -4) == '.mus') {
 						// It's a specific file
-						$select = $db->query('SELECT name, author FROM files WHERE collection_path = "'.$file.'" LIMIT 1');
+						$select = $db->prepare('SELECT name, author FROM files WHERE collection_path = :collection_path LIMIT 1');
+						$select->execute(array(':collection_path' => $file));
 						$select->setFetchMode(PDO::FETCH_OBJ);
 						if ($select->rowCount()) {
 							// Rob Hubbard - Commando
@@ -270,8 +271,9 @@
 						}
 					} else {
 						// It's a composer folder
-						$select = $db->query('SELECT full_name FROM composers
-							WHERE collection_path = "'.substr($file, 0, -1).'" LIMIT 1');
+						$select = $db->prepare('SELECT full_name FROM composers
+							WHERE collection_path = :collection_path LIMIT 1');
+						$select->execute(array(':collection_path' => substr($file, 0, -1)));
 						$select->setFetchMode(PDO::FETCH_OBJ);
 						if ($select->rowCount()) {
 							// Rob Hubbard
