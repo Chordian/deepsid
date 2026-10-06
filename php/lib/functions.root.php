@@ -49,6 +49,8 @@ function generateList($rows, $type) {
 
 	global $account, $country_codes;
 
+	$rows = (int)$rows;
+
 	try {
 		$db = $account->getDB();
 

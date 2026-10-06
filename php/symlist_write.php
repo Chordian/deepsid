@@ -50,8 +50,9 @@ try {
 		} while ($select->rowCount());
 
 		// Create the new symlist entry and get its ID
-		$insert = $db->query('INSERT INTO folders (collection_path, user_id)'.
-			' VALUES("'.$suggested_symlist_name.'", '.$user_id.')');
+		$insert = $db->prepare('INSERT INTO folders (collection_path, user_id)'.
+			' VALUES(:collection_path, '.$user_id.')');
+		$insert->execute(array(':collection_path' => $suggested_symlist_name));
 		if ($insert->rowCount() == 0)
 			die(json_encode(array('status' => 'error', 'message' => "Could not create ".$suggested_symlist_name)));
 		$account->logActivity('User "'.$_SESSION['user_name'].'" created the "'.$suggested_symlist_name.'" playlist');

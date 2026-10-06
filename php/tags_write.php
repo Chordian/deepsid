@@ -130,6 +130,7 @@ try {
 
 	// Check what tags are now associated with this file
 	foreach($file_tags as $tag_id) {
+		$tag_id = (int)$tag_id;
 		if (!in_array($tag_id, $current_tags)) {
 			// Add database entry if the ID is not already there (i.e. new or existing pool tag was added)
 			$insert = $db->prepare('INSERT INTO tags_lookup (files_id, tags_id) VALUES(:id, '.$tag_id.')');

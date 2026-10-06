@@ -78,6 +78,83 @@ function parseQuery($query) {
 }
 
 /**
+ * Parse a number written as decimal, 0x hex, or $ hex.
+ *
+ * @param		string		$value				e.g. 4096, 0x1000, or $1000
+ *
+ * @return		int|null						the number, or null if invalid
+ */
+function parseAddress($value) {
+
+	if (preg_match('/^\$([0-9a-f]{1,4})$/i', $value, $m) || preg_match('/^0x([0-9a-f]{1,4})$/i', $value, $m))
+		return hexdec($m[1]);
+	if (preg_match('/^[0-9]{1,5}$/', $value) && (int)$value <= 0xFFFF)
+		return (int)$value;
+	return null;
+}
+
+/**
+ * Build the WHERE conditions for the 'memory' search type.
+ *
+ * The query is a list of keys, all optional and all required to match:
+ *
+ *   load=$1000 init=$1000 play=$1003	exact addresses
+ *   start=$1000 end=$25FF				the tune fits inside this memory range
+ *   pal ntsc psid rsid					clock and file type
+ *   nobasic							no C64 BASIC flag
+ *   single								no multispeed tag (2x, 3x, etc.)
+ *
+ * The end address is load_addr + data_size - 3 since data_size includes the
+ * two bytes of the load address in front of the data.
+ *
+ * @param		string		$query				search query from a GET variable
+ * @param		string		$table				table name or alias for 'files'
+ *
+ * @return		array|null						[SQL conditions, PDO parameters], or null if invalid
+ */
+function memoryConditions($query, $table) {
+
+	$conditions = [];
+	$params = [];
+	$columns = ['load' => 'load_addr', 'init' => 'init_addr', 'play' => 'play_addr'];
+
+	foreach (preg_split('/[_\s]+/', trim($query, " _")) as $word) {
+		$word = strtolower($word);
+		if (strpos($word, '=') !== false) {
+			list($key, $value) = explode('=', $word, 2);
+			$address = parseAddress($value);
+			if ($address === null) return null;
+			if (isset($columns[$key])) {
+				$conditions[] = $table.'.'.$columns[$key].' = :'.$key;
+			} else if ($key == 'start') {
+				$conditions[] = $table.'.load_addr >= :start';
+			} else if ($key == 'end') {
+				$conditions[] = $table.'.load_addr + '.$table.'.data_size - 3 <= :end';
+			} else {
+				return null;
+			}
+			$params[':'.$key] = $address;
+		} else if ($word == 'pal' || $word == 'ntsc') {
+			$conditions[] = $table.'.clock_speed LIKE "%'.strtoupper($word).'%"';
+		} else if ($word == 'psid' || $word == 'rsid') {
+			$conditions[] = $table.'.type = "'.strtoupper($word).'"';
+		} else if ($word == 'nobasic') {
+			$conditions[] = $table.'.player_compat NOT LIKE "%BASIC%"';
+		} else if ($word == 'single') {
+			$conditions[] = 'NOT EXISTS (
+				SELECT 1 FROM tags_lookup
+				INNER JOIN tags_info ON tags_info.id = tags_lookup.tags_id
+				WHERE tags_lookup.files_id = '.$table.'.id
+				AND tags_info.name IN ("multispeed", "2x", "3x", "4x", "5x", "6x", "7x", "8x", "9x", "10x", "11x", "12x", "13x", "14x", "15x", "16x")
+			)';
+		} else {
+			return null;
+		}
+	}
+	return count($conditions) ? [implode(' AND ', $conditions), $params] : null;
+}
+
+/**
  * Convert song length (3:33 or 3:33.333) to raw milliseconds.
  * 
  * @param		string		$length				HVSC song length
@@ -139,17 +216,20 @@ $redirect_folder = array();
 // Because of snake_case overhaul in database column names
 $_GET['searchType'] = str_replace('fullname', 'collection_path', $_GET['searchType']);
 
-// In current folder or everything?
-$search_context_path = $search_context_folders = '1';
-if ($_GET['searchHere']) {
-	$search_context_path = $search_context_folders = 'collection_path LIKE "'.substr($_GET['folder'], 1).'%"';
-	if ($is_compo_folder)
-		$search_context_folders = 'folders.`type` = "COMPO"';
-}
+// Columns that may be searched directly with the normal type search
+$search_columns = ['#all#', 'collection_path', 'author', 'released', 'player', 'stil', 'new'];
 
 try {
 
 	$db = $account->getDB();
+
+	// In current folder or everything?
+	$search_context_path = $search_context_folders = '1';
+	if ($_GET['searchHere']) {
+		$search_context_path = $search_context_folders = 'collection_path LIKE '.$db->quote(substr($_GET['folder'], 1).'%');
+		if ($is_compo_folder)
+			$search_context_folders = 'folders.`type` = "COMPO"';
+	}
 
 	// --------------------------------------------------------------------------
 	// SEARCH
@@ -188,7 +268,7 @@ try {
 				$tag_list = '';
 				$search_tags = parseQuery($_GET['searchQuery']);
 				foreach($search_tags as $tag)
-					$tag_list .= ' OR tags_info.name LIKE "%'.$tag.'%"';
+					$tag_list .= ' OR tags_info.name LIKE '.$db->quote('%'.$tag.'%');
 
 				$select = $db->query('
 					SELECT collection_path FROM files
@@ -249,6 +329,18 @@ try {
 					':data_size' => $data_size
 				]);
 
+			} else if ($_GET['searchType'] == 'memory') {											// Memory
+
+				// Search for load/init/play addresses, a memory range, clock, type, etc.
+				$memory = memoryConditions($_GET['searchQuery'], 'files');
+				$select = $db->prepare('
+					SELECT collection_path FROM files
+					WHERE '.$search_context_path.'
+					AND '.($memory ? $memory[0] : '0').'
+					AND collection_path LIKE "_High Voltage SID Collection%"
+				');
+				$select->execute($memory ? $memory[1] : []);
+
 			} else if ($_GET['searchType'] == 'gb64') {												// GB64
 
 				// Connect to imported GameBase64 database
@@ -263,7 +355,7 @@ try {
 				$word_list = '';
 				$search_words = parseQuery($_GET['searchQuery']);
 				foreach($search_words as $word)
-					$word_list .= ' OR (Name LIKE "%'.$word.'%" AND SidFilename != "")';
+					$word_list .= ' OR (Name LIKE '.$gb->quote('%'.$word.'%').' AND SidFilename != "")';
 				$word_list = substr($word_list, 4);
 
 				// Get list of SID files from GameBase64 database
@@ -275,7 +367,7 @@ try {
 					$sid = '_High Voltage SID Collection/'.$sid->SidFilename;
 					$sid = str_replace('\\', '/', $sid);
 
-					$chain .= ' OR collection_path = "'.$sid.'"';
+					$chain .= ' OR collection_path = '.$db->quote($sid);
 				}
 
 				$select = $db->query('
@@ -305,8 +397,8 @@ try {
 
 				$select = $db->query('
 					SELECT collection_path from files
-					WHERE new = "'.$version.'"
-					AND (collection_path LIKE "%'.$query.'%" OR author LIKE "%'.$query.'%")
+					WHERE new = '.$db->quote($version).'
+					AND (collection_path LIKE '.$db->quote('%'.$query.'%').' OR author LIKE '.$db->quote('%'.$query.'%').')
 				');
 
 			} else if ($_GET['searchType'] == 'focus') {											// Focus
@@ -449,7 +541,7 @@ try {
 
 				$select = $db->query($search_sql);
 
-			} else if ($_GET['searchType'] != 'country') {											// All
+			} else if (in_array($_GET['searchType'], $search_columns)) {							// All
 
 				$join = '';
 
@@ -470,9 +562,8 @@ try {
 
 				if ($_GET['searchType'] == 'new') {
 
-					$include = $search_field.' LIKE "%'.
-						str_replace('.', '', $_GET['searchQuery']).
-					'%"';
+					$include = $search_field.' LIKE '.
+						$db->quote('%'.str_replace('.', '', $_GET['searchQuery']).'%');
 
 				} else {
 
@@ -486,18 +577,16 @@ try {
 							$exclude .=
 								$e_and.
 								$search_field.
-								' NOT LIKE "%'.
-								substr($word, 1).
-								'%"';
+								' NOT LIKE '.
+								$db->quote('%'.substr($word, 1).'%');
 
 							$e_and = ' AND ';
 						} else {
 							$include .=
 								$i_and.
 								$search_field.
-								' LIKE "%'.
-								$word.
-								'%"';
+								' LIKE '.
+								$db->quote('%'.$word.'%');
 
 							$i_and = ' AND ';
 						}
@@ -625,8 +714,8 @@ try {
 				if ($_GET['searchType'] == 'author') {
 
 					// Let 'author' also find folders using 'collection_path' as replacement type
-					$exclude = str_replace('author NOT LIKE "%', 'collection_path NOT LIKE "%', $exclude);
-					$include = str_replace('author LIKE "%', 'collection_path LIKE "%', $include);
+					$exclude = str_replace('author NOT LIKE ', 'collection_path NOT LIKE ', $exclude);
+					$include = str_replace('author LIKE ', 'collection_path LIKE ', $include);
 
 				} else if ($_GET['searchType'] == '#all#') {
 					// Search the 'composers' table to see if the query matches the real name
@@ -639,7 +728,7 @@ try {
 					$composers->setFetchMode(PDO::FETCH_OBJ);
 
 					foreach($composers as $composer_row)
-						$collection_paths .= 'OR collection_path = "'.$composer_row->collection_path.'" ';
+						$collection_paths .= 'OR collection_path = '.$db->quote($composer_row->collection_path).' ';
 
 					// Just search 'collection_path' - none of the other columns exist in this table
 					$include = str_replace('#all#', 'collection_path', $include_folders);
@@ -681,7 +770,7 @@ try {
 						// Include where the group member folder will redirect to
 						$group = explode('/', $row->collection_path)[2];
 
-						$select_groups = $db->query('SELECT folder, redirect FROM `groups` WHERE name = "'.$group.'"');
+						$select_groups = $db->query('SELECT folder, redirect FROM `groups` WHERE name = '.$db->quote($group));
 						$select_groups->setFetchMode(PDO::FETCH_OBJ);
 
 						foreach($select_groups as $member) {
@@ -763,7 +852,7 @@ try {
 					$tag_list = '';
 					$search_tags = parseQuery($_GET['searchQuery']);
 					foreach($search_tags as $tag)
-						$tag_list .= ' OR tags_info.name LIKE "%'.$tag.'%"';
+						$tag_list .= ' OR tags_info.name LIKE '.$db->quote('%'.$tag.'%');
 
 					$select_files = $db->query('SELECT h.collection_path FROM files h'.
 						' INNER JOIN symlists ON h.id = symlists.file_id'.
@@ -798,6 +887,14 @@ try {
 						$data_size = hexdec(substr($data_size, 2));
 					$select_files->execute(array(':data_size' => $data_size));
 
+				} else if ($_GET['searchType'] == 'memory') {
+
+					$memory = memoryConditions($_GET['searchQuery'], 'h');
+					$select_files = $db->prepare('SELECT h.collection_path FROM files h'.
+						' INNER JOIN symlists ON h.id = symlists.file_id'.
+						' WHERE symlists.folder_id = '.$symlist_folder_id.' AND '.($memory ? $memory[0] : '0').' AND collection_path LIKE "_High Voltage SID Collection%"');
+					$select_files->execute($memory ? $memory[1] : array());
+
 				} else if ($_GET['searchType'] == 'country') {
 
 					// Search for country in composer profiles
@@ -813,8 +910,10 @@ try {
 					// Normal type search (handles any position of words and excluding with "-" prepended)
 					// NOTE: This would have been easier with 'Full-Text' search but I'm not using the MyISAM engine.
 					$exclude = '';
-					if ($_GET['searchType'] == 'new') {
-						$include = $_GET['searchType'].' LIKE "%'.str_replace('.', '', $_GET['searchQuery']).'%"';
+					if (!in_array($_GET['searchType'], $search_columns)) {
+						$include = '0';
+					} else if ($_GET['searchType'] == 'new') {
+						$include = $_GET['searchType'].' LIKE '.$db->quote('%'.str_replace('.', '', $_GET['searchQuery']).'%');
 					} else {
 						$query = $_GET['searchQuery'];
 
@@ -833,10 +932,10 @@ try {
 						$i_and = $e_and = '';
 						foreach($words as $word) {
 							if (substr($word, 0, 1) == '-') {
-								$exclude .= $e_and.$_GET['searchType'].' NOT LIKE "%'.substr($word, 1).'%"';
+								$exclude .= $e_and.$_GET['searchType'].' NOT LIKE '.$db->quote('%'.substr($word, 1).'%');
 								$e_and = ' AND ';
 							} else {
-								$include .= $i_and.$_GET['searchType'].' LIKE "%'.$word.'%"';
+								$include .= $i_and.$_GET['searchType'].' LIKE '.$db->quote('%'.$word.'%');
 								$i_and = ' AND ';
 							}
 						}
@@ -948,7 +1047,7 @@ try {
 
 			// Has this folder been cached?
 
-			$select = $db->query('SELECT file_id, place FROM competitions_cache WHERE event_id = '.$event_id.' AND name = "'.$name.'"');
+			$select = $db->query('SELECT file_id, place FROM competitions_cache WHERE event_id = '.(int)$event_id.' AND name = '.$db->quote($name));
 			$select->setFetchMode(PDO::FETCH_OBJ);
 			$entries = $select->rowCount();
 
@@ -958,7 +1057,7 @@ try {
 
 				foreach($select as $row) {
 					// Get collection path
-					$select_collection_path = $db->query('SELECT collection_path FROM files WHERE id = '.$row->file_id);
+					$select_collection_path = $db->query('SELECT collection_path FROM files WHERE id = '.(int)$row->file_id);
 					$select_collection_path->setFetchMode(PDO::FETCH_OBJ);
 
 					if ($select_collection_path->rowCount()) {
@@ -1007,7 +1106,7 @@ try {
 								$place[$collection_path] = isset($release->Achievement->Place) ? $release->Achievement->Place : -1;
 
 								// Find file ID of this HVSC path
-								$select = $db->query('SELECT id FROM files WHERE collection_path = "'.$collection_path.'"');
+								$select = $db->query('SELECT id FROM files WHERE collection_path = '.$db->quote($collection_path));
 								$select->setFetchMode(PDO::FETCH_OBJ);
 								$file_id = $select->rowCount() ? $select->fetch()->id : 0;
 
@@ -1015,7 +1114,7 @@ try {
 									// Cache this competition SID entry
 									// NOTE: The release ID is actually not used but saved anyway as debug info.
 									$db->query('INSERT INTO competitions_cache (event_id, name, release_id, file_id, place)'.
-										' VALUES('.$event_id.', "'.$name.'", '.$release->ID.', '.$file_id.', '.$place[$collection_path].')');
+										' VALUES('.(int)$event_id.', '.$db->quote($name).', '.(int)$release->ID.', '.(int)$file_id.', '.(int)$place[$collection_path].')');
 									$real_count++;
 								}
 							}
@@ -1046,6 +1145,10 @@ try {
 		// CONTENTS OF PHYSICAL FOLDER
 		// --------------------------------------------------------------------------
 		
+		// Don't allow the folder to point outside the collections
+		if (strpos($_GET['folder'], '..') !== false)
+			die(json_encode(array('status' => 'error', 'message' => 'Invalid folder.')));
+
 		// Get array of files in folder, remove unwanted entries, then re-index with 0 as start
 		$files = array_values(array_diff(scandir(ROOT_HVSC.$_GET['folder']), [
 			'.',
@@ -1124,7 +1227,7 @@ try {
 
 			$group = explode('/', $_GET['folder'])[3];
 
-			$select_groups = $db->query('SELECT folder, redirect FROM `groups` WHERE name = "'.$group.'"');
+			$select_groups = $db->query('SELECT folder, redirect FROM `groups` WHERE name = '.$db->quote($group));
 			$select_groups->setFetchMode(PDO::FETCH_OBJ);
 
 			foreach($select_groups as $member) {

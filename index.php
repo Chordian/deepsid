@@ -253,7 +253,8 @@
 
 					if (substr($file, -4) == '.sid' || substr($file, -4) == '.mus') {
 						// It's a specific file
-						$select = $db->query('SELECT name, author FROM files WHERE collection_path = "'.$file.'" LIMIT 1');
+						$select = $db->prepare('SELECT name, author FROM files WHERE collection_path = :collection_path LIMIT 1');
+						$select->execute(array(':collection_path' => $file));
 						$select->setFetchMode(PDO::FETCH_OBJ);
 						if ($select->rowCount()) {
 							// Rob Hubbard - Commando
@@ -270,8 +271,9 @@
 						}
 					} else {
 						// It's a composer folder
-						$select = $db->query('SELECT full_name FROM composers
-							WHERE collection_path = "'.substr($file, 0, -1).'" LIMIT 1');
+						$select = $db->prepare('SELECT full_name FROM composers
+							WHERE collection_path = :collection_path LIMIT 1');
+						$select->execute(array(':collection_path' => substr($file, 0, -1)));
 						$select->setFetchMode(PDO::FETCH_OBJ);
 						if ($select->rowCount()) {
 							// Rob Hubbard
@@ -1132,6 +1134,7 @@
 							<option value="player" title="Searches in the prettified player names.">Player</option>
 							<option value="location" title="Searches for a start location, e.g. 16384, 0x4000, or $4000.">Location</option>
 							<option value="maximum" title="Searches for a maximum size, e.g. 4095, 0x0FFF, or $0FFF.">Maximum</option>
+							<option value="memory" title="Searches for memory usage. Combine load=, init=, play=, start=, end= with pal, ntsc, psid, rsid, nobasic, single. Example: load=$1000 play=$1003 end=$25FF pal nobasic single">Memory</option>
 							<option value="type" title='Searches for a SID type, e.g. "rsid" for those types only.'>Type</option>
 							<option value="tag" title="Searches for tags. Enclose in quotes to search a tag with spaces between words.">Tags</option>
 							<option value="stil" title= "Searches in STIL texts.">STIL</option>

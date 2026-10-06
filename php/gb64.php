@@ -52,7 +52,7 @@ function getLabelTypeId($id) { // @todo Same function as in 'csdb.php'
 		'SELECT li.site, li.site_id
 		 FROM labels_lookup ll
 		 INNER JOIN labels_info li ON li.id = ll.labels_id
-		 WHERE ll.files_id = '.$id.' LIMIT 1'
+		 WHERE ll.files_id = '.(int)$id.' LIMIT 1'
 	);
 
 	$row = $labels->fetch(PDO::FETCH_ASSOC);
