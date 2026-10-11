@@ -19,7 +19,8 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH
 	die("Direct access not permitted.");
 
 if (!isset($_GET['player']) && !isset($_GET['id']))
-	die(json_encode(array('status' => 'error', 'message' => 'You must specify \'player\' or \'id\' as a GET variable.')));
+	// Unfortunately an error is shown when testing SID files, so instead we just ignore the call
+	die(json_encode(array('status' => 'ignore')));
 
 try {
 	$db = $account->getDB();

@@ -59,8 +59,12 @@ try {
 		$files = $db->query('SELECT collection_path FROM files WHERE id = '.$row->file_id.' LIMIT 1');
 		$files->setFetchMode(PDO::FETCH_OBJ);
 
-		if (!$files->rowCount())
-			die(json_encode(array('status' => 'error', 'message' => "Couldn't find file ID '.$row->file_id.'; the download has failed.")));
+		if (!$files->rowCount()) {
+			// Removed because it's possible to delete files in the SH folder
+			// die(json_encode(array('status' => 'error', 'message' => "Couldn't find file ID '.$row->file_id.'; the download has failed.")));
+			// Instead, just ignore it
+			continue;
+		}
 
 		$collection_path = $files->fetch()->collection_path;
 

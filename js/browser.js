@@ -3360,21 +3360,26 @@ Browser.prototype = {
 
 		this.playerInfo = $.get("php/player.php", params, function(data) {
 			this.validateData(data, function(data) {
-
-				var height = data.info ? 58 : 34;
-
 				clearTimeout(loadingPlayer);
-				$("#sticky-player").empty().height(height).append(data.sticky);
-				$("#topic-player").empty().append(data.html)
-					.css("visibility", "visible");
-				main.resetDexterScrollBar("player");
+				if (data.status == "ignore") {
+					$("#sticky-player").empty().append('<h2 style="display:inline-block;margin-top:0;">Players / Editors</h2>');
+					$("#topic-player").empty().append("<i>This information is not available when testing a SID tune.</i>")
+						.css("visibility", "visible");
+					main.resetDexterScrollBar("player");
+				} else {
+					var height = data.info ? 58 : 34;
 
-				// If there are any entries then show a special notification character (if not in focus)
-				if (data.count != 0 && $("#tabs .selected").attr("data-topic") !== "player" && data.status !== "warning")
-					$("#note-player").empty().append("&#9679;").show();
-				else
-					$("#note-player").hide();
+					$("#sticky-player").empty().height(height).append(data.sticky);
+					$("#topic-player").empty().append(data.html)
+						.css("visibility", "visible");
+					main.resetDexterScrollBar("player");
 
+					// If there are any entries then show a special notification character (if not in focus)
+					if (data.count != 0 && $("#tabs .selected").attr("data-topic") !== "player" && data.status !== "warning")
+						$("#note-player").empty().append("&#9679;").show();
+					else
+						$("#note-player").hide();
+				}
 			});
 		}.bind(this));
 	},

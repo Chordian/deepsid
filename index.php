@@ -2163,6 +2163,17 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>October 11, 2026</h3>
+						<ul>
+							<li>Fixed an ID bug when downloading a playlist as a ZIP file. Files that no longer exist, such as deleted files in the SH folder, are now simply ignored.</li>
+							<li>Fixed an issue where uploading a SID file for testing ('L' hotkey) and then playing it resulted in an error.</li>
+						</ul>
+
+						<h3>October 6, 2026</h3>
+						<ul>
+							<li>Added a new 'Memory' entry to the search drop-down menu for searching memory usage. Combine load=, init=, play=, start=, or end= with pal, ntsc, psid, rsid, nobasic, or single. Thanks to mrr19121970 for this update.</li>
+						</ul>
+
 						<h3>October 5, 2026</h3>
 						<ul>
 							<li>The reSIDfp SID handler now supports slow speed, fast forward, and updating byte contents in MEMO view. Buffer sizes below 200 ms now also take effect.</li>
