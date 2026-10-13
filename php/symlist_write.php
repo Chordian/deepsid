@@ -90,17 +90,16 @@ try {
 
 	$file_id = $select->fetch()->id;
 
-	// Is that file already in the symlist?
-	$select = $db->query('
-		SELECT files.id FROM files
-		INNER JOIN symlists ON files.id = symlists.file_id
-		WHERE symlists.folder_id = '.$folder_id);
-	$select->setFetchMode(PDO::FETCH_OBJ);
+	// Is that file with that subtune already in the symlist?
+	$select = $db->prepare('SELECT 1 FROM symlists WHERE folder_id = :folder_id AND file_id = :file_id AND subtune = :subtune LIMIT 1');
+	$select->execute(array(
+		':folder_id'	=> $folder_id,
+		':file_id'		=> $file_id,
+		':subtune'		=> $_POST['subtune']
+	));
 
-	foreach ($select as $row) {
-		if ($row->id == $file_id)
-			die(json_encode(array('status' => 'duplicate')));
-	}
+	if ($select->rowCount())
+		die(json_encode(array('status' => 'duplicate')));
 
 	// Now create the symlist entry (different SID name via renaming is done in a different PHP file)
 	$insert = $db->prepare('INSERT INTO symlists (folder_id, file_id, subtune) VALUES('.$folder_id.', '.$file_id.', :subtune)');
