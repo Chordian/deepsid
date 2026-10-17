@@ -830,7 +830,7 @@
 								<input type="checkbox" id="filter-usp-enabled" class="unselectable" style="position:absolute;top:2px;right:0;" checked />
 							</div>
 							<div class="sundry-control">
-								<label class="unselectable">Waveforms</label>
+								<label class="filter-waveforms unselectable">Waveforms</label>
 								<select id="dropdown-usp-waveforms" name="select-usp-waveforms" style="position:absolute;top:0;right:0;">
 									<option value="0" selected="selected">Average</option>
 									<option value="1">Weak</option>

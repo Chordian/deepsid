@@ -3009,7 +3009,9 @@ input[type=range]::-ms-track {
 		}
 
 		#dropdown-stereo-mode,
-		#stereo-jsidplay2 select {
+		#stereo-jsidplay2 select,
+		#stereo-usplayer select,
+		#filter-usplayer select {
 			font-size: 13px;
 		}
 
@@ -3151,6 +3153,12 @@ input[type=range]::-ms-track {
 				text-align: right;
 			}
 
+			#stopic-stereo .stereo-usp-pan,
+			#stopic-filter .filter-waveforms {
+				position: relative;
+				top: -0.5px;
+			}
+
 			#filter-usplayer .sundry-control.disabled label,
 			#stopic-stereo .stereo-usp-pan.disabled {
 				color: var(--color-text-label-disabled);
@@ -3162,11 +3170,17 @@ input[type=range]::-ms-track {
 
 				#stereo-usplayer td.stereo-header {
 					width: 1%;
-					white-space: nowrap;
+					/*white-space: nowrap;*/
 				}
+
+					#stereo-usplayer td.stereo-header b {
+						position: relative;
+						top: -5px;
+					}
 
 				#stereo-usplayer td.stereo-cell {
 					text-align: left;
+					padding-bottom: 5px;
 				}
 		
 		#filter-6581 {
