@@ -842,7 +842,7 @@
 							<button id="filter-usp-reset">Defaults</button>
 						</div>
 					</div>
-					<div id="filter-websid" class="sundryMsg" style="display:none;">This tab requires the <button class="set-websid">WebSid</button> emulator.</div>
+					<div id="filter-websid" class="sundryMsg" style="display:none;">This tab requires the <button class="set-websid">WebSid</button> or the <button class="set-residfp">ReSIDfp</button> emulator.</div>
 				</div>
 				<div id="stopic-stereo" class="stopic" style="display:none;">
 					<?php // Sundry tab: Stereo controls for WebSid ?>
@@ -1029,7 +1029,7 @@
 							</tr>
 						</table>
 					</div>
-					<div id="stereo-message" class="sundryMsg" style="display:none;">This tab requires the <button class="set-websid">WebSid</button> or the <button class="set-jsidplay2">JSIDPlay2</button> emulator.</div>
+					<div id="stereo-message" class="sundryMsg" style="display:none;"><div style="position:relative;top:-4px;"><p>This tab requires the</p><p style="margin-top:14px;"><button class="set-websid">WebSid</button> or <button class="set-residfp">ReSIDfp</button> or <button class="set-jsidplay2">JSIDPlay2</button></p>emulator.</div></div>
 				</div>
 				<a id="redirect-back" class="redirect continue" href="#" style="display:none"></a>
 			</div>
@@ -2162,6 +2162,12 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>October 15, 2026</h3>
+						<ul>
+							<li>Fixed an issue where folders would sometimes appear empty on mobile devices.</li>
+							<li>The same SID file can now be added to a playlist multiple times with different subtunes selected. Thanks to ElSomers for the fix.</li>
+						</ul>
 
 						<h3>October 11, 2026</h3>
 						<ul>

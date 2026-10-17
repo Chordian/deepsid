@@ -1474,7 +1474,7 @@ main.bindEvents = function() {
 
 		// Show 'To top' button?
 		const page = $("#page")[0];
-		$("#to-top").toggle(page.scrollHeight > page.clientHeight);
+		if (page) $("#to-top").toggle(page.scrollHeight > page.clientHeight);
 
 		main.onBrowserReady(function() {
 			if (typeof browser.positionFocusExplainer === "function") {

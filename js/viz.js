@@ -1213,10 +1213,10 @@ Viz.prototype = {
 			return;
 		}
 		
-		if (SID.emulator !== "websid" && SID.emulator !== "legacy") {
+		if (SID.emulator !== "websid" && SID.emulator !== "legacy" && SID.emulator !== "usplayfp") {
 			if (this.tabOscMode !== "NOTWEBSID") {
 				$("#scope1,#scope2,#scope3,#scope4").hide(); // Don't use 'canvas' or '.scope' here
-				$("#stopic-osc .sundryMsg").empty().append('This tab requires the <button class="set-websid">WebSid</button> emulator.').show();
+				$("#stopic-osc .sundryMsg").empty().append('This tab requires the <button class="set-websid">WebSid</button> or the <button class="set-residfp">ReSIDfp</button> emulator.').show();
 				this.tabOscMode = "NOTWEBSID";
 			}
 			return;

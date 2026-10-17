@@ -530,6 +530,8 @@ Controls.prototype = {
 					this.selectEmulator("websid");
 				} else if (event.target.className == "set-jsidplay2") {
 					this.selectEmulator("jsidplay2");
+				} else if (event.target.className == "set-residfp") {
+					this.selectEmulator("usplayfp");
 				} else if (event.target.className == "set-6581") {
 					$("#sid-model").trigger("click");
 				}

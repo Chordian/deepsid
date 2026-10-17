@@ -8,15 +8,8 @@ ToDo
 
 TO BE DONE
 ¯¯¯¯¯¯¯¯¯¯
-- Add "or reSIDfp" to scope, filter and stereo sundry tabs when nothing viable is used.
-
 - There's a new "AI usage" label in CSDb. Support it. Either just as is (text) or fancy box (DIV
   or a label).
-
-- BUG: A user reports there are no songs in a folder when clicking this link on a mobile device:
-  https://deepsid.chordian.net/?file=/SID%20Happens/&here=1&search=syndrom&type=author&sort=newest
-  It works in the desktop version.
-  UPDATE: Another user analyzed the bug: https://github.com/Chordian/deepsid/issues/54
 
 - A W A I T : Rewrite 'howto_update_gb64.txt' when the next GameBase64 update v20 arrives. See
   the .txt file for a few preliminary things to test.
