@@ -2163,6 +2163,11 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>October 17, 2026</h3>
+						<ul>
+							<li>CSDb pages in both DeepSID and CShellDB can now indicate whether AI was used to generate the content.</li>
+						</ul>
+
 						<h3>October 15, 2026</h3>
 						<ul>
 							<li>Fixed an issue where folders would sometimes appear empty on mobile devices.</li>

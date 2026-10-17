@@ -764,6 +764,10 @@ if ($csdb_type == 'sid') {
 		$release_date = '<p><b>Release date:</b><br />'.$day.' '.$month.' '.$year.'</p>';
 	}
 
+	$ai_content = '';
+	if (isset($csdb->Release->AIUsage))
+		$ai_content = '<i><small>'.$csdb->Release->AIUsage.'</small></i>';
+
 	// At one point there were extra controls visible for administrators only here, but they were removed.
 	// Adding this on the page is not a good idea because of the cache system. Add controls for the page in
 	// another location, such as e.g. the context menu.
@@ -937,6 +941,7 @@ if ($csdb_type == 'sid') {
 				$released_by.
 				$release_date.
 				'<p><b>Type:</b><br />'.$csdb->Release->Type.'</p>'.
+				$ai_content.
 				// Info for controls outside of the page (e.g. on the context menu for a SID file)
 				'<div id="csdb-info" style="display:none;"
 					data-name="'.htmlspecialchars($csdb->Release->Name, ENT_QUOTES, 'UTF-8').'"
