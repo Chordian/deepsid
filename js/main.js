@@ -3959,7 +3959,9 @@ main.bindSundryEvents = function() {
 				if ($sundry.css("flex-basis").replace("px", "") < 205) {
 					$sundry.css("flex-basis", 205);
 				}
-				$("#sundry-ctrls").append('<span id="filter-6581" class="disable-6581">This requires <button class="set-6581 disabled" disabled="disabled">6581</button> chip mode</span>');
+				// The reSIDfp filter controls have no chip mode requirement
+				if (typeof viz === "undefined" || !viz.usplayerAudio)
+					$("#sundry-ctrls").append('<span id="filter-6581" class="disable-6581">This requires <button class="set-6581 disabled" disabled="disabled">6581</button> chip mode</span>');
 				break;
 			case "stereo":
 				// The stereo view requires a minimum amount of vertical space
