@@ -457,12 +457,14 @@ USPlayer.prototype = {
 			$sel.append($("<option></option>").attr("value", out.name).text(out.name));
 		});
 
-		// The transport has already picked one; show which, then follow changes.
+		// The transport has already picked one (a port matching its name hint, else
+		// the first). Show that one and leave it alone; only a user change selects.
+		var current = this.adapter.currentMidiOutput ? this.adapter.currentMidiOutput() : "";
+		if (current) $sel.val(current);
 		$sel.off("change.usplayer").on("change.usplayer", function() {
 			this.adapter.selectMidiOutput($sel.val());
 			this.refreshPlayState();
 		}.bind(this));
-		this.adapter.selectMidiOutput($sel.val());
 		this.refreshPlayState();
 	},
 

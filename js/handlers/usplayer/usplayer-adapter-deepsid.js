@@ -1,57 +1,41 @@
 /*
- * USBSID-Player: a cycle exact C64 SID player for USBSID-Pico, for command
- * line playback, for embedding on RP2350 (Pico2), and in a browser.
+ * USBSID-Player: a cycle exact C64 SID player for USBSID-Pico,
+ * command line playback, websites and for embedding on RP2040/RP2350.
  *
  * js/handlers/usplayer/usplayer-adapter-deepsid.js
  *
- * A DEEPSID FORK of usplayer-adapter.js, and the only file in DeepSID's
- * `usplayer/` that is not byte identical to the shared set. Named for it so the
- * difference cannot be missed.
+ * DeepSID fork of usplayer-adapter.js
+ * Only file in the DeepSID usplayer/ directory that is not byte identical to the shared set
  *
- * THIS FILE IS THE SOURCE. It lives here in `player-repo/web` beside the adapter
- * it forks, and is deployed to two places, which must stay byte identical to it:
+ * This file is the source, it lives in player-repo/web
+ * Deployed copies must stay byte identical to it:
  *
  *   git.deepsid/js/handlers/usplayer/usplayer-adapter-deepsid.js
  *   deepsid/public_html/deepsid/js/handlers/usplayer/usplayer-adapter-deepsid.js
  *
- * Keeping it here rather than only in DeepSID is the point: a file with copies
- * and no source is the one nobody thinks to propagate, which is how the SendSID
- * subtune byte and the driver's globalThis block both drifted.
+ * DeepSID has no host app handing over a connected board, differences:
  *
- * Three things differ, all because DeepSID has no host application to hand this
- * an already connected board, where config-tool-web does:
+ *   - imports usbsid-driver.js
+ *   - _ensure() adopts the usbsidDevice singleton of that driver (WebUSB branch)
+ *   - disconnect() closes that driver, connect() takes it back
  *
- *   - it imports `usbsid-driver.js`
- *   - `_ensure()` adopts that driver's `usbsidDevice` singleton in the WebUSB
- *     branch, rather than being given a device
- *   - `disconnect()` closes that adopted driver, and `connect()` takes it back
+ * Do not merge back over the shared file, other hosts have no usbsid-driver.js
+ * in their usplayer/ directory and the import would fail
+ * Fixes not about the above belong in both
  *
- * Do not merge this back over the shared file: the other hosts have no
- * `usbsid-driver.js` inside their `usplayer/` directory, so the import would fail
- * to resolve and take their player down with it. Fixes that are not about the
- * above belong in both.
- * The player wearing the interface another app expects.
+ * Wraps USBSIDPlayerWeb in the shape repo/examples/config-tool-web expects of
+ * a player backend (load / play / pause / stop / setVolume / getSongInfo / paused / emulator)
  *
- * Carried over from player-repo/web/usplayer-adapter.js. It wraps
- * USBSIDPlayerWeb in the shape repo/examples/config-tool-web asks of a player
- * backend (load / play / pause / stop / setVolume / getSongInfo / paused /
- * emulator), so the app can select it the way it selects any other.
+ * WebUSB mode reuses the USBSIDDevice the app connected, injected by the constructor
+ * ASID mode opens Web MIDI and follows the output picker of the app by name
  *
- * In WebUSB mode it reuses the USBSIDDevice the app has already connected,
- * injected by whatever constructs this, so there is never a second connection
- * to the same board. In ASID mode it opens Web MIDI itself and follows the
- * app's own output picker by name.
+ * Loaded as an ES module, registers window.USPlayerAdapter
+ * The WASM factory (window.USBSIDPlayer) comes from usbsid.js, loaded as a classic script
  *
- * Loaded as an ES module, and registers window.USPlayerAdapter so a classic
- * script can construct it. The WASM factory (window.USBSIDPlayer) comes from
- * usbsid.js, which the page loads as a classic script.
+ * Reports player status to the status line of the app, load and stop to the log panes
+ * Periodic output goes to the status line, see _report()
  *
- * It also reports the player's status into the app's own status line, and logs
- * a load and a stop into its log panes, which is why nothing in
- * config-tool-web needs changing to see any of it. Periodic output goes to the
- * status line rather than the log on purpose: see _report().
- *
- * This file is part of USBSID-Pico (https://github.com/LouDnl/USBSID-Player)
+ * This file is part of USBSID-Player (https://github.com/LouDnl/USBSID-Player)
  * File author: LouD
  *
  * Copyright (c) 2026 LouD
@@ -79,71 +63,44 @@ import { ASIDMIDITransport } from './asid-midi.js';
 import { UsPlayerAudio } from './usplayer-audio.js';
 import { applySoftAudio } from './usplayer-softaudio.js';
 
-/* Where the build artefacts are: beside this file, whatever the page's own URL
- * is.
- *
- * Resolved from `import.meta.url` and not from the page, because the two are not
- * the same directory in every host. config-tool-web keeps the whole build in
- * `usplayer/` next to its index.html, so a page relative 'usplayer/' worked
- * there; DeepSID keeps it in `js/handlers/usplayer/` under a page at the site
- * root, where a page relative path would look for the wasm at `/usplayer/` and
- * find nothing. The wasm, the ES module and this file ship together and always
- * have, so "next to me" is the one answer that is right in every host. */
+/* Build artefacts sit beside this file, resolved from import.meta.url (page relative
+ * paths differ per host, DeepSID uses js/handlers/usplayer/) */
 const WASM_DIR = new URL('./', import.meta.url).href;
 
-/* A cache buster to pass on, when the host gave this file one.
- *
- * A host that imports this as `usplayer-adapter-deepsid.js?v=<something>` wants that
- * `<something>` on the wasm and the ES module too, and it matters more there
- * than here: those two are fetched by script rather than by the document, so a
- * reload does not necessarily refetch them, and even a hard reload was seen to
- * hand back a stale `usbsid.wasm` beside a fresh `usbsid.esm.js`. That pairing
- * does not fail loudly. It fails as `usp_audio_configure()` returning 0 and a
- * tune that will not play, which is a long way from the cause.
- *
- * Empty when the host did not ask for one, which is config-tool-web and the demo
- * pages, and then every URL below is exactly what it always was. */
+/* Cache buster of the host, empty when none was given
+ * Also applied to the wasm and ES module, a stale usbsid.wasm beside a fresh
+ * usbsid.esm.js shows up as usp_audio_configure() returning 0 */
 const VERSION = new URL(import.meta.url).search;
 
-/** `name` with the host's cache buster on it, if there is one. */
+/** Name with the cache buster of the host on it */
 function versioned(name) { return WASM_DIR + name + VERSION; }
 
-/** Milliseconds, monotonic where the browser offers it. */
+/** Milliseconds, monotonic if available */
 function _now() {
   return (typeof performance !== 'undefined') ? performance.now() : Date.now();
 }
 
-/* How often the register grid is pushed, in milliseconds.
- *
- * Twenty a second. The eye reads a hex byte in well under that, and the app's
- * highlight lasts 180 ms, so a change is always seen; going slower starts to
- * look like a recording rather than a live chip. Going faster shows changes
- * nobody can distinguish and puts the work back on the thread the emulation is
- * on. A tune writing $d418 six hundred times a frame is not something a grid
- * can show and not something anyone could read: what is displayed is the value
- * as it stands each time this fires. */
+/* Register grid push interval in ms, 20 per second
+ * The highlight of the app lasts 180 ms
+ * Slower looks like a recording, faster adds load to the emulation thread without
+ * visible gain */
 const GRID_MS = 50;
 
-/* The status line, once a second: it is text to read, not an animation. */
+/* Status line once a second (every 20 grid ticks) */
 const STATUS_EVERY = 20;
 
-/* readMemory() page watch, worker mode: a page not read for this long drops
- * out of the worker's report, the set is re-checked at most this often, and
- * no more than this many pages are reported. */
+/* readMemory() page watch, worker mode: idle time before a page drops out of the
+ * report, recheck interval and maximum reported pages */
 const MEM_WATCH_IDLE_MS = 1000;
 const MEM_WATCH_CHECK_MS = 250;
 const MEM_WATCH_MAX = 16;
 
 let _modulePromise = null;
 /**
- * The wasm module, instantiated once for the page.
+ * Get the wasm module, instantiated once per page
  *
- * The factory comes from `usbsid.js` when the host has loaded it as a classic
- * script and put `USBSIDPlayer` on the window, which is what config-tool-web
- * does. A host that has not is not required to: the same build ships as
- * `usbsid.esm.js` beside this file and is imported on demand. That way adding
- * this player to a page is one module import and nothing else, with no global
- * to arrange and no script tag whose order matters.
+ * Factory comes from window.USBSIDPlayer (usbsid.js as classic script) or is imported
+ * from usbsid.esm.js beside this file
  */
 function getModule() {
   if (!_modulePromise) {
@@ -159,9 +116,9 @@ function getModule() {
   return _modulePromise;
 }
 
-/* How many chips a tune wants, from its header. Version 3 puts a second SID
- * address at 0x7a and version 4 a third at 0x7b; a non zero byte means that
- * chip is there. Anything older, or too short to say, is a single SID. */
+/* Chip count from the tune header: version 3 has a second SID address at 0x7a, version
+ * 4 a third at 0x7b
+ * Non zero byte means present */
 export class USPlayerAdapter {
   /**
    * @param {string} emulator  'usplayer' (WebUSB) or 'usplayer-asid'
@@ -171,28 +128,21 @@ export class USPlayerAdapter {
     this.emulator = emulator;
     this._device = device || null;
     this._isAsid = (emulator === 'usplayer-asid');
-    /* Web Serial talks to the board's CDC interface, which the host app's own
-     * driver knows nothing about: the app owns a WebUSB device on the vendor
-     * interface. So this mode opens its own port rather than sharing, and it is
-     * the only mode here that works in a browser with no WebUSB at all. */
+    /* Web Serial uses the CDC interface of the board, the app driver uses the vendor
+     * interface
+     * Opens a separate port, only mode working without WebUSB */
     this._isSerial = (emulator === 'usplayer-serial');
-    /* No board at all: reSIDfp inside the same wasm, out through an
-     * AudioWorklet. The one mode here that needs nothing plugged in, which is
-     * what it replaced Hermit jsSID for. */
+    /* No board: reSIDfp in the same wasm, out through an AudioWorklet */
     this._isAudio = (emulator === 'usplayer-audio');
-    /* The whole file goes to the board and the board's own player plays it.
-     * Nothing is emulated here, so this is the one mode where the page cannot
-     * say what the chip is doing: no register writes pass through it and there
-     * is no play position to read back. Same transport as `usplayer-serial`,
-     * a very different division of labour. */
+    /* Whole file goes to the board and its embedded player plays it
+     * Nothing is emulated: no register writes, no play position to read back
+     * Same transport as usplayer-serial */
     this._isSendsid = (emulator === 'usplayer-sendsid');
-    /* Where the board's playback started, in `performance.now()` terms, and
-     * how much of it has been played. The board reports no position, so this
-     * is the only clock there is: see playtimeMs(). */
+    /* Board playback start in performance.now() terms and time played
+     * The board reports no position, see playtimeMs() */
     this._boardStart = 0;
     this._boardPlayed = 0;
-    /* The board's own position, from the last successful poll, or null while it
-     * has not answered. See _pollBoardTime(). */
+    /* Board position of the last successful poll, null if unanswered, see _pollBoardTime() */
     this._boardMs = null;
     this._boardPoll = null;
     this._boardPollFails = 0;
@@ -210,67 +160,58 @@ export class USPlayerAdapter {
     this._prefix = 'Playing';
     this._lastStatus = '';
     this._volume = 1;
-    /* The register grid's shadow copy: see the onWrite comment in _ensure(). */
+    /* Register grid shadow copy, see onWrite in _ensure() */
     this._shadow = new Uint8Array(128).fill(0xff);
     this._dirty = new Uint8Array(128);
-    /* Which slots a tune has ever written. The shadow starts filled with 0xff so
-     * that the first write of any value counts as a change and gets pushed, which
-     * means the fill cannot itself be read back as a value: see
-     * readRegister(). */
+    /* Slots a tune has written
+     * The shadow starts as 0xff, first write of any value counts as a change, see
+     * readRegister() */
     this._seen = new Uint8Array(128);
     this._anyDirty = false;
     this._tick = 0;
-    /* Software audio runs the emulation in a worker, see _startWorker(). The
-     * page keeps a player of its own for the file's metadata and for the
-     * Songlengths lookup, both of which are synchronous calls the host makes,
-     * but that player is never started and never steps. What is playing is the
-     * worker's, and `_snap` is the last thing it said about itself. */
+    /* Software audio runs the emulation in a worker, see _startWorker()
+     * The page player serves metadata and Songlengths lookups and never steps _snap is
+     * the last state report of the worker */
     this._worker = null;
     this._workerReady = null;
     this._snap = null;
-    /* Worker register reports waiting for their audible moment, see
-     * _queueRegisters(), and the CIA 1 timer A latch from the latest one. */
+    /* Worker register reports waiting to be heard, see _queueRegisters(), and the CIA 1
+     * timer A latch of the latest one */
     this._regQueue = [];
     this._workerCiaLatch = 0;
-    /* RAM mirror of the worker's machine for readMemory(), filled from the
-     * pages the host reads, see _watchPage(). `_memValid` marks pages the
-     * mirror holds; `_memPages` maps page to last read time. */
+    /* RAM mirror of the worker machine for readMemory(), filled from the pages the host
+     * reads, see _watchPage(). _memValid marks pages held, _memPages maps page to last
+     * read time */
     this._mem = new Uint8Array(65536);
     this._memValid = new Uint8Array(256);
     this._memPages = new Map();
     this._memSent = '';
-    /* Scope, panning and filter state, see usplayer-softaudio.js. */
+    /* Scope, panning and filter state, see usplayer-softaudio.js */
     this._softAudioInit();
     this._memCheck = 0;
-    /* SID and FM sides of the software mix, percent. Undefined until the host
-     * sets one: the wasm defaults (100 and 50) stand until then. */
+    /* SID and FM mix in percent, undefined until the host sets one (wasm defaults are
+     * 100 and 50) */
     this._sidVolume = undefined;
     this._fmVolume = undefined;
-    /* DeepSID's "Buffer size" setting in samples: software audio ring depth
-     * while the page is visible. Undefined keeps UsPlayerAudio's own. */
+    /* DeepSID "Buffer size" in samples, ring depth while the page is visible
+     * Undefined keeps the UsPlayerAudio default */
     this._bufferSamples = undefined;
     this._onBufferVisibility = null;
     this._onResumeVisibility = null;
     this._msgId = 0;
     this._pending = new Map();
-    /* What the host wants doing with the running commentary, see setHost(). All
-     * null means "config-tool-web", which is what this was written for and what
-     * every default below reproduces. */
+    /* Host overrides for log, status, registers and SID count, see setHost()
+     * All null means config-tool-web defaults */
     this._host = { log: null, status: null, registers: null, sidCount: null };
   }
 
   /**
-   * Tell the adapter how this host wants to be talked to.
+   * Set how the host wants to be talked to
    *
-   * Everything here has a config-tool-web shaped default: log lines go into
-   * `#player-log` and `#debug-log`, the status line into `#status-text`, and
-   * changed registers to `window.updateSIDReg`. That suits a page written around
-   * this player and suits nothing else, so a host with its own ideas passes them
-   * in and none of the defaults run.
+   * Defaults are config-tool-web shaped: log lines go to #player-log and #debug-log,
+   * status to #status-text, registers to window.updateSIDReg
+   * Callbacks replace the defaults
    *
-   * Callbacks rather than element ids on purpose: a host that wants a log line
-   * in a console, a status in a title bar or registers in a canvas should not
-   * have to own an element with a particular id to get them.
    *
    * @param {object} host
    * @param {(line: string) => void}                  [host.log]
@@ -289,16 +230,11 @@ export class USPlayerAdapter {
   get stopped() { return !this._player || !this._player.isPlaying(); }
 
   /**
-   * Put a line in the app's log panes.
+   * Put a line in the log panes of the app
    *
-   * Straight into the elements rather than through the app's own `usbsidLog`,
-   * which is a plain function in a classic script and so is not reachable from
-   * a module. Doing it this way is what keeps this a drop in: nothing in
-   * config-tool-web has to change.
-   *
-   * Only for the occasional event, a load or a stop. Anything periodic goes to
-   * the status line instead: see _report() for why appending here while a tune
-   * plays is a bad idea.
+   * Writes the elements directly, usbsidLog is not reachable from a module
+   * Only for occasional events (load, stop)
+   * Periodic output goes to the status line, see _report()
    */
   _log(line) {
     if (this._host.log) { this._host.log(line); return; }
@@ -311,37 +247,26 @@ export class USPlayerAdapter {
   }
 
   /**
-   * The running status, into the app's status line rather than its log.
+   * Show the running status in the status line of the app
    *
-   * Not the log: appending there is `textContent +=`, which rereads and
-   * rewrites the whole buffer every time and so gets slower the longer it
-   * runs, followed by a scroll that forces a synchronous layout. Twice a
-   * second on the thread the emulation is on, that is enough to show up as a
-   * gap in the writes. This is one small element, set only when the text has
-   * actually changed.
+   * Appending to the log rereads and rewrites the whole buffer and forces a layout,
+   * which shows up as gaps in the writes
+   * The app writes "Playing: <name>", kept as prefix with the numbers appended
    *
-   * The app writes `Playing: <name>` here itself, so that is kept as the
-   * prefix and the numbers are appended to it.
-   *
-   * `drain` is the mean and the worst gap between a frame's writes going out,
-   * against a frame of about 20 ms; `queue` is transfers waiting; `dropped` is
-   * the write ring overflowing and should never be anything but zero.
+   * drain = mean and worst gap between frame writes going out (frame ~20 ms) queue =
+   * transfers waiting dropped = write ring overflow (should be 0)
    */
   _report() {
     if (!this._player || !this._player.isPlaying()) return;
-    /* Nowhere to put it: no host callback and no element to write into. Worth
-     * leaving early, because building the line asks the transport for its
-     * statistics. */
+    /* No host callback and no element, leave early (building the line queries the transport) */
     if (!this._host.status &&
         (typeof document === 'undefined' ||
          !document.getElementById('status-text'))) return;
 
     const p = this._player;
 
-    /* Nothing here is running in SendSID mode: the board has the file and is
-     * playing it on its own. Frames, fps and the transport counters would all
-     * read zero and say nothing, so this reports the one thing the page does
-     * know, which is how long ago it sent it. */
+    /* SendSID: the board plays the file, frames and transport counters would read zero
+     * Show the time since the file was sent */
     if (this._isSendsid) {
       const secs = (this.playtimeMs() / 1000).toFixed(1);
       this._status(`${this._prefix} | playing on the board` +
@@ -351,17 +276,15 @@ export class USPlayerAdapter {
 
     const s = (typeof p.stats === 'function') ? p.stats() : null;
 
-    /* With the worker the page's own player never steps: the numbers come
-     * from the worker's latest snapshot. */
+    /* Worker mode: numbers come from the latest worker snapshot */
     const w = (this._isAudio && this._worker) ? this._snap : null;
     let line = `${this._prefix} | ${(w ? (w.refreshHz || 0) : p.refreshHz()).toFixed(2)} fps` +
                ` | ${w ? (w.frames || 0) : p.frames()} frames`;
 
-    /* Software audio has no transport, so the board numbers below are all zero
-     * and meaningless. These are the ones that matter instead: ms/frame against
-     * a 20 ms budget says whether the machine can keep up at all, and starve is
-     * silence the worklet had to invent, heard as crackle rather than as a gap.
-     * Both stay flat when it is working. */
+    /* Software audio has no transport, board numbers are zero
+     * Show ms/frame against the 20 ms budget and starve (silence the worklet had to
+     * make up, heard as crackle)
+     * Both stay flat when it works */
     if (this._isAudio && this._audio) {
       const a = this._audio.stats();
       if (w) {
@@ -369,9 +292,7 @@ export class USPlayerAdapter {
         a.fmWrites = w.fmWrites || 0;
         a.clipped = w.clipped || 0;
       }
-      /* Running through a silent lead-in is the one time the numbers below mean
-       * nothing: the ring is empty on purpose and the tune is deliberately not
-       * playing at one times speed. Say what is happening instead. */
+      /* Silent lead-in: empty ring and faster than 1x on purpose, numbers mean nothing */
       if (a.skipping) {
         this._status(`${this._prefix} | running through the loader` +
                      ` | ${(p.playtimeMs() / 1000).toFixed(1)}s in`);
@@ -379,7 +300,7 @@ export class USPlayerAdapter {
       }
       line += ` | ${a.msPerFrame.toFixed(1)}/20 ms per frame` +
               ` | buffer ${a.queuedMs} ms`;
-      /* Only when a tune has an FM side at all, which most do not. */
+      /* Only for tunes with an FM side */
       if (a.fmWrites > 0) line += ` | FM ${a.fmWrites}`;
       if (a.starvedMs) line += ` | STARVED ${a.starvedMs} ms`;
       if (a.clipped > 0) line += ` | CLIPPED ${a.clipped}`;
@@ -400,7 +321,7 @@ export class USPlayerAdapter {
     this._status(line);
   }
 
-  /** The status line, wherever this host keeps it, and only when it changed. */
+  /** Set the status line, only when changed */
   _status(line) {
     if (line === this._lastStatus) return;
     this._lastStatus = line;
@@ -411,19 +332,12 @@ export class USPlayerAdapter {
   }
 
   /**
-   * Fill the shadow from the emulation's own register mirror.
+   * Fill the shadow from the register mirror of the emulation
    *
-   * Only software audio needs this, and it needs it badly: `usp_audio_configure`
-   * hands the emulation's SID over to reSIDfp, which consumes every write inside
-   * `advance()`, so the transport this adapter listens to sees nothing at all.
-   * Without this a register grid, a piano and an oscilloscope are dead in the one
-   * mode that needs no hardware, while the tune plays perfectly.
-   *
-   * The board modes are left on the write side, where the shadow is a record of
-   * what was actually sent to the board, which is the more useful truth there.
-   *
-   * Worker mode reads the worker's reports instead: the page's own player is
-   * loaded but never stepped. See _queueRegisters().
+   * Software audio only: usp_audio_configure hands the SID to reSIDfp and the transport
+   * sees no writes, leaving register grid, piano and scope dead
+   * Board modes stay on the write side (record of what was sent)
+   * Worker mode reads the worker reports, see _queueRegisters()
    */
   _pollRegisters() {
     if (this._isAudio && this._worker) { this._drainRegisters(); return; }
@@ -444,7 +358,7 @@ export class USPlayerAdapter {
     }
   }
 
-  /** Push the registers that changed since last time, and nothing else. */
+  /** Push the registers that changed */
   _flushRegisters() {
     if (!this._anyDirty) return;
     this._anyDirty = false;
@@ -461,11 +375,9 @@ export class USPlayerAdapter {
   _startReporting() {
     this._stopReporting();
     if (typeof setInterval !== 'function') return;
-    /* Whatever the app last put in the status line is the name of the tune,
-     * which it sets right after load. Picked up once rather than fought over. */
+    /* Take the tune name the app puts in the status line right after load, once */
     if (this._host.status) {
-      /* A host that takes the status line owns what is in it, so there is
-       * nothing of its to read back and nothing to preserve. */
+      /* Host owns the status line, nothing to read back */
       this._prefix = 'Playing';
     } else {
       setTimeout(() => {
@@ -474,8 +386,7 @@ export class USPlayerAdapter {
         this._prefix = (el && el.textContent) ? el.textContent : 'Playing';
       }, 250);
     }
-    /* One timer for both: the grid at twenty a second, which is faster than
-     * the eye, and the status line at one. */
+    /* One timer: grid 20 per second, status line once a second */
     this._tick = 0;
     this._reportTimer = setInterval(() => {
       try {
@@ -497,16 +408,13 @@ export class USPlayerAdapter {
     this._ready = (async () => {
       const M = await getModule();
       if (this._isAudio) {
-        /* Nothing to connect to, and nothing for a transport to carry:
-         * usp_audio_configure() takes the emulation's backend over, so no write
-         * ever reaches the write ring. The AudioContext is not opened here but
-         * in load(), because it needs the tune's clock and chip count and
-         * because a context created outside a user gesture stays suspended. */
+        /* No transport to connect, usp_audio_configure() takes over the emulation
+         * backend and no write reaches the write ring
+         * AudioContext opens in load(): needs the tune clock and chip count, and a
+         * context created outside a user gesture stays suspended */
         this._transport = new NullTransport();
-        /* Bring the worker up now rather than at the first load. It has a wasm
-         * module of its own to fetch and instantiate, and doing that while the
-         * user is still choosing a tune costs nothing; doing it inside load()
-         * puts it between the click and the first note. */
+        /* Start the worker early, it fetches and instantiates a wasm module while the
+         * user picks a tune */
         this._startWorker().catch((e) => this._log('worker init: ' + e.message));
       } else if (this._isAsid) {
         this._transport = new ASIDMIDITransport();
@@ -515,13 +423,10 @@ export class USPlayerAdapter {
           this._wireMidiPicker();
         } catch (e) { console.warn('ASID connect:', e); }
       } else if (this._isSendsid) {
-        /* Either interface can carry it: the firmware takes the same packets
-         * over the vendor interface and over CDC. WebUSB first, because a
-         * browser that has already granted the board for another mode needs no
-         * second dialog and no second picker, and because only the vendor
-         * interface can be probed for what the firmware was built with. Web
-         * Serial is the fallback, and the only route in a browser with no
-         * WebUSB at all: see TODO 35 and the note in config-tool-web. */
+        /* Vendor interface and CDC take the same packets
+         * WebUSB first: no second dialog when the board is granted for another mode,
+         * and only the vendor interface can be probed for the firmware build flags
+         * Web Serial is the fallback, the only route without WebUSB */
         this._transport = new USBSIDWebUSBTransport({ device: this._device });
         try {
           if (this._device) await this._transport.connect();
@@ -536,48 +441,38 @@ export class USPlayerAdapter {
         }
         await this._checkSidPlayer();
       } else if (this._isSerial) {
-        /* Both talk to the board's CDC interface. The difference is what goes
-         * down it: a stream of register writes for `serial`, the whole file
-         * once for `sendsid`.
+        /* Both use the CDC interface. serial streams register writes, sendsid sends the
+         * whole file once
          *
-         * Only what the origin has already been granted, exactly as the WebUSB
-         * branch below does. `connect()` calls `requestPort()`, which shows a
-         * picker and needs a user gesture; calling it from here threw a chooser
-         * at anyone who merely selected the mode, and when there was no gesture
-         * it threw an exception instead and left the port shut with a line in
-         * the log. The picker belongs to the host's Connect button, which
-         * reaches it through connect(). */
+         * Take only a port that is already granted, connect() calls requestPort() which
+         * needs a user gesture
+         * The picker belongs to the Connect button of the host, via connect() */
         this._transport = new USBSIDWebSerialTransport();
         try {
           const ok = await this._transport.connectGranted();
           if (!ok) this._log('no serial port granted yet, press Connect');
         } catch (e) { this._log('Web Serial: ' + e.message); }
       } else {
-        /* A driver of our own.
+        /* Driver owned by the adapter
          *
-         * config-tool-web hands the adapter the USBSIDDevice it has already
-         * connected, and the transport then talks through it rather than opening
-         * a second conversation with the same board. DeepSID has no such object,
-         * so one is made here and used the same way: `_extDev` is what puts the
-         * board reads on the driver's serialised config path.
+         * config-tool-web hands over a connected USBSIDDevice
+         * DeepSID has no such object, this branch makes one. _extDev puts board reads
+         * on the serialised config path of the driver
          *
-         * `reconnect()` and not `connect()`. The latter calls `requestDevice()`,
-         * which shows a picker and needs a user gesture, and this runs while the
-         * page is still loading. `reconnect()` takes only what the origin has
-         * already been granted and answers false when there is nothing. The
-         * picker belongs to the Connect button, which reaches it through
-         * `connect()` below. */
+         * reconnect() takes only a granted device and answers false when there is none.
+         * connect() calls requestDevice() which needs a user gesture, this runs at page
+         * load
+         * The picker belongs to the Connect button, via connect() below */
         if (!this._device && globalThis.usbsidDevice) {
           try {
-            /* The driver's own singleton, the one config-tool-web uses, rather
-             * than a second instance: two drivers on one board would each hold
-             * their own endpoint state and take each other's replies. */
+            /* Use the driver singleton of config-tool-web, two drivers on one board
+             * would take each other's replies */
             const drv = globalThis.usbsidDevice;
             if (drv.isOpen || await drv.reconnect()) {
               this._driver = drv;
               this._device = drv;
             } else {
-              this._driver = drv;   /* kept, so Connect can open it */
+              this._driver = drv;   /* kept for Connect to open it */
               this._log('no board granted yet, press Connect');
             }
           } catch (e) {
@@ -586,40 +481,27 @@ export class USPlayerAdapter {
         }
         this._transport = new USBSIDWebUSBTransport({ device: this._device });
         try {
-          /* With a device handed to us there is nothing to ask for: the host has
-           * already opened the board and `connect()` only confirms it.
-           *
-           * Without one, take what the origin has already been granted and do
-           * not go further. `connect()` calls `requestDevice()`, which shows a
-           * picker, and a picker belongs to a button the user pressed, not to
-           * whatever happened to bring the player up: a host with no board
-           * plugged in would otherwise get a chooser thrown at it for choosing
-           * the handler. The host's own connect button reaches the picker
-           * through connect() below. */
+          /* With a device handed in, connect() only confirms it
+           * Without one take what is granted: connect() calls requestDevice() which
+           * shows a picker, and that belongs to a button the user pressed
+           * The Connect button of the host reaches it via connect() below */
           if (this._device) await this._transport.connect();
           else await this._transport.connectGranted();
         } catch (_) {}
       }
       this._player = new USBSIDPlayerWeb(M, this._transport);
 
-      /* Mirror the writes into the app's register display, which is otherwise
-       * only fed by its own player.
+      /* Mirror the writes into the register display of the app
        *
-       * Into a shadow copy, not straight through. Calling the app's
-       * updateSIDReg per write means a DOM update per write, and a digi writes
-       * about thirty thousand registers a second: measured in the config tool,
-       * that alone held the tab at 102% of a core and grew it to two gigabytes,
-       * because the garbage came faster than it could be collected. The grid
-       * cannot show thirty thousand changes a second and nobody could read them
-       * if it did. So the values are kept here and only the ones that actually
-       * changed are pushed, twenty times a second, which is faster than the eye
-       * and a thousandth of the work. */
-      /* What the board is carrying. The app hands us its own connected
-       * device, so the read goes through that rather than opening a second
-       * conversation with the same board. Without this $df40/$df50 reach
-       * nothing and an FM/OPL tune plays no OPL. */
+       * Goes through a shadow copy. updateSIDReg per write is a DOM update per write
+       * and a digi writes ~30000 registers a second (measured in the config tool: tab
+       * at 102% of a core, grew to 2 GB)
+       * Only changed values are pushed, 20 times a second */
+      /* Board config, read through the connected device of the app
+       * Without it
+       * $df40/$df50 reach nothing and an FM/OPL tune plays no OPL */
       try {
-        /* No board to ask, and asking would time out. */
+        /* No board to ask, asking would time out */
         const board = this._isAudio ? null : await this._player.applyBoardConfig();
         if (board) {
           this._log(`board: socket one ${board.sidsSocketOne} SID(s), ` +
@@ -641,11 +523,11 @@ export class USPlayerAdapter {
   }
 
   /**
-   * Follow the app's shared MIDI output list without rewriting it.
+   * Follow the shared MIDI output list of the app
    *
-   * The list belongs to the app: its option values are indices into the app's
-   * own MIDIAccess, so replacing them with our port ids breaks the app's other
-   * player. Read the selected option's name and map that onto our transport.
+   * Option values are indices into the MIDIAccess of the app, replacing them with port
+   * ids of this adapter breaks the other player
+   * Read the name of the selected option and map it onto the transport
    */
   _wireMidiPicker() {
     const sel = document.getElementById('asid-midi-outputs');
@@ -666,36 +548,28 @@ export class USPlayerAdapter {
   }
 
   /**
-   * The app's entry point: load(subtune, timeout, url, callback), subtune
-   * counted from zero with zero meaning the file's own default.
+   * Entry point of the app: load(subtune, timeout, url, callback), subtune counted from
+   * zero, zero meaning the default song of the file
    */
   /**
-   * Bring the transport up now, rather than when the first tune loads.
+   * Bring the transport up before the first tune loads, returns true when open
    *
-   * Web Serial's `requestPort()` needs a user gesture, and `_ensure()` used to
-   * run on the first `load()`, which meant the port picker appeared long after
-   * the host's connect button had already gone green. Whoever owns that button
-   * calls this from the click instead.
-   *
-   * @returns true when the transport is open and ready to be written to.
+   * Web Serial requestPort() needs a user gesture, call this from the click of the
+   * Connect button of the host
    */
   async connect() {
     await this._ensure();
-    /* Still shut. `_ensure()` only ever takes what was already granted, so this
-     * is where a picker is allowed: this call came from a host's connect button,
-     * which is the user gesture `requestDevice()` and `requestPort()` need.
-     * `_ensure()` is memoized and will not retry, so the retry lives here. */
+    /* Still shut. _ensure() takes granted devices only and is memoized, the retry is in
+     * this method
+     * The Connect button gives the user gesture a picker needs */
     if (!this.isConnected() && this._transport &&
         typeof this._transport.connect === 'function') {
-      /* When the board is reached through a driver of ours, the picker is the
-       * driver's. The transport's own `connect()` only confirms a device it was
-       * handed, so on its own it can never acquire one, and pressing Connect
-       * with nothing granted would do nothing at all. */
+      /* Board reached through the adopted driver: the picker is the driver's
+       * The connect() of the transport only confirms a handed device */
       if (this._driver && !this._driver.isOpen) {
-        /* Granted first, picker second. After a disconnect the origin still has
-         * permission, so `reconnect()` takes the board back with no dialog; only
-         * a board that was never granted needs the picker, and this call came
-         * from a button so a gesture is in hand. */
+        /* Granted first, picker second
+         * A granted board comes back via reconnect() without a dialog, a never granted
+         * one needs the picker */
         try {
           if (!await this._driver.reconnect()) await this._driver.connect();
         } catch (e) { this._log('driver connect: ' + (e && e.message ? e.message : e)); }
@@ -706,54 +580,43 @@ export class USPlayerAdapter {
       }
       try { await this._transport.connect(); }
       catch (e) { this._log('connect: ' + (e && e.message ? e.message : e)); }
-      /* This is where a board is really chosen, so this is where it has to be
-       * asked whether it can do the job at all. */
+      /* A board is chosen in this call, ask whether it can do the job */
       await this._checkSidPlayer();
     }
     return this.isConnected();
   }
 
   /**
-   * Let go of the board, the port or the MIDI output.
+   * Let go of the board, port or MIDI output, returns true when the link is shut
    *
-   * The other half of `connect()`, so a host can offer one button that does
-   * both. Software audio has nothing to let go of and says so by returning
-   * false.
-   *
-   * The transport is kept and reopened by the next `connect()`, which is why
-   * `_ready` is left memoized: `_ensure()` builds the transport and picks
-   * between WebUSB and Web Serial, and that decision does not change because
-   * the link was closed. What does change is that the next `connect()` shows a
-   * picker again, since the granted device was released here.
-   *
-   * @returns {Promise<boolean>} true when the link is really shut
+   * Counterpart of connect(), a host can offer one button for both
+   * Software audio has nothing to release and returns false
+   * The transport is kept for the following connect(), _ready stays memoized (the
+   * WebUSB or Web Serial choice does not change)
+   * The following connect() shows the picker again, the granted device was released
    */
   async disconnect() {
     if (this._isAudio) return false;
-    /* SendSID is the one mode where the tune is playing on the far side, so
-     * closing the link would leave the board playing with nothing left able to
-     * stop it. Stop it first. The other modes emulate here and only send
-     * writes, which a shut transport drops on the floor. */
+    /* SendSID plays on the board, closing the link would leave it playing with nothing
+     * to stop it
+     * Stop first
+     * Other modes only send writes, which a shut transport drops */
     if (this._isSendsid) { try { this.stop(); } catch (_) { /* going anyway */ } }
     this._stopBoardPoll();
     if (this._transport && typeof this._transport.disconnect === 'function') {
       try { await this._transport.disconnect(); }
       catch (e) { this._log('disconnect: ' + (e && e.message ? e.message : e)); }
     }
-    /* The transport will not close a device it was handed: "not ours to close"
-     * is right when the host app owns it, as config-tool-web does. Here the
-     * driver was adopted by `_ensure()` and nothing else holds it, so nobody
-     * else would ever close it. Without this the link stays open, `isOpen` keeps
-     * answering true through `_extDev`, and the host's Connect button sits on
-     * "Connected" logging a disconnect on every press while nothing happens.
-     *
-     * `_driver` is only set when we adopted it, which is exactly the case where
-     * closing it is ours to do. */
+    /* The transport does not close a device it was handed (right when the host app owns
+     * it, as config-tool-web)
+     * This driver was adopted by _ensure(), nobody else closes it
+     * Left open, isOpen keeps answering true via _extDev and the Connect button of the
+     * host stays on "Connected"
+     * _driver is only set when adopted */
     if (this._driver && typeof this._driver.close === 'function') {
       try { await this._driver.close(); }
       catch (e) { this._log('driver close: ' + (e && e.message ? e.message : e)); }
-      /* Dropped as well, so the next connect() re-acquires rather than handing
-       * the transport a device that has been shut underneath it. */
+      /* Drop the device too, the following connect() re-acquires */
       this._device = null;
       if (this._transport) this._transport._extDev = null;
     }
@@ -763,28 +626,21 @@ export class USPlayerAdapter {
   }
 
   /**
-   * Refuse a board that cannot play what SendSID sends it.
+   * Refuse a board that cannot play what SendSID sends
    *
-   * The firmware says what it was compiled with, one byte of flags, and bit 7
-   * is the embedded SID player. Without it the board takes the whole upload,
-   * answers every packet and plays **nothing**, which from the outside is
-   * indistinguishable from a broken file or a wrong subtune. So it is asked
-   * once, at connect, and a board that says no is let go of again rather than
-   * left looking connected.
-   *
-   * A board that will not answer at all is left alone: older firmware predates
-   * the question, and refusing to talk to it would be worse than not knowing.
+   * The firmware reports its build flags in one byte, bit 7 is the embedded
+   * SID player
+   * Without it the board takes the upload, answers every packet and plays nothing
+   * Asked once at connect, a board saying no is disconnected
+   * A board that does not answer is left alone, older firmware predates the question
    */
   /**
-   * Ask the board where it has got to, on a timer of its own.
+   * Poll the board position every half second
    *
-   * Half a second, not the host's display rate: each poll is a write followed by
-   * a read with a timeout, and `_configRead()` leaves a timed out read pending so
-   * a late reply would satisfy the next one. The transport guards against
-   * overlapping reads, and this gives up after a few failures rather than asking a
-   * board that clearly will not answer twice a second for the rest of the session.
-   * Giving up leaves `_boardMs` null, which puts playtimeMs() back on the wall
-   * clock, so the display carries on either way.
+   * Each poll is a write plus a read with timeout, _configRead() leaves a timed out
+   * read pending (a late reply would satisfy the following one)
+   * Gives up after a few failures, _boardMs stays null and playtimeMs() falls back to
+   * the wall clock
    */
   _startBoardPoll() {
     if (this._boardPoll || !this._isSendsid) return;
@@ -812,15 +668,13 @@ export class USPlayerAdapter {
     this._boardMs = ms;
   }
 
-  /** The current subtune's length, to the board, when it is known. */
+  /** Send the length of the current subtune to the board, when known */
   async _sendBoardPlaytime(subtune) {
     const t = this._transport;
     if (!t || typeof t.playerSetPlaytime !== 'function') return;
     let ms = 0;
     try {
-      /* The external Songlengths database first; a v5 tune's own embedded
-       * table (see sidfile.h) as the fallback, for a file the database has
-       * never heard of. */
+      /* External Songlengths database first, then the embedded table of a v5 tune */
       let lens = this.songLengths(this.md5());
       if ((!lens || !lens.length) && typeof this._player.embeddedSongLengths === 'function') {
         lens = this._player.embeddedSongLengths();
@@ -828,15 +682,15 @@ export class USPlayerAdapter {
       if (lens && lens.length) {
         ms = lens[Math.min(lens.length, Math.max(1, subtune)) - 1] || 0;
       }
-    } catch (_) { /* no lengths, the board keeps its own default */ }
+    } catch (_) { /* no lengths, board keeps its default */ }
     if (!ms) return;
     try {
       await t.playerSetPlaytime(ms);
       this._log(`board max playtime set to ${(ms / 1000).toFixed(1)}s`);
-    } catch (_) { /* not fatal: the board falls back to five minutes */ }
+    } catch (_) { /* not fatal, board falls back to five minutes */ }
   }
 
-  /* ---- the onboard player's mute controls ------------------------------- */
+  /* Onboard player mute controls */
 
   /** Mute or unmute one voice of one chip on the board. */
   async playerMute(chip, voice, mute) {
@@ -845,21 +699,21 @@ export class USPlayerAdapter {
     return await t.playerMute(chip, voice, mute);
   }
 
-  /** Every voice of every chip on the board. */
+  /** Mute or unmute all voices of all chips on the board */
   async playerMuteAll(mute) {
     const t = this._transport;
     if (!t || typeof t.playerMuteAll !== 'function') return false;
     return await t.playerMuteAll(mute);
   }
 
-  /** One chip, as its three voices: the firmware has no chip form. */
+  /** Mute or unmute one chip, sent as its three voices (firmware has no chip form) */
   async playerMuteChip(chip, mute) {
     const t = this._transport;
     if (!t || typeof t.playerMuteChip !== 'function') return false;
     return await t.playerMuteChip(chip, mute);
   }
 
-  /** The board's mute state, one bitmask per chip, or null. */
+  /** Board mute state, one bitmask per chip, null if unknown */
   async playerMuteState() {
     const t = this._transport;
     if (!t || typeof t.playerMuteState !== 'function') return null;
@@ -884,31 +738,25 @@ export class USPlayerAdapter {
   }
 
   /**
-   * Bring up the worker that will run the emulation for software audio.
+   * Bring up the worker running the emulation for software audio
    *
-   * The main thread is throttled hard as soon as the page is hidden, and on
-   * Android with the screen off it barely runs; the audio thread is never
-   * throttled. Feeding the ring from the main thread therefore stutters however
-   * deep the buffer is, which is what a bigger buffer and a keep-alive timer
-   * failed to fix. A worker is throttled far less, and once it holds one end of
-   * a MessageChannel whose other end is inside the AudioWorkletProcessor, the
-   * main thread is not in the audio path at all.
+   * The main thread is throttled hard in a hidden page, on Android with the screen off
+   * it barely runs
+   * The audio thread is not throttled
+   * A bigger buffer or keep-alive timer did not stop the stutter
+   * A worker is throttled far less and holds one end of a MessageChannel, the other end
+   * sits in the AudioWorkletProcessor and the main thread leaves the audio path
    */
   /**
    * Is the worker wanted?
    *
-   * **On by default, provisionally, so that it gets used and judged.** Moving
-   * the emulation off the main thread is the right fix for a hidden page
-   * stuttering, and it cannot be exercised in a headless browser at all:
-   * `audioWorklet.addModule` never completes there. It was off behind a switch
-   * for exactly that reason, which meant nobody ever ran it, which meant it
-   * stayed unproven. See TODO 29.
+   * On by default
+   * Cannot be exercised in a headless browser (audioWorklet.addModule never completes
+   * there)
    *
-   * `?worker=0` turns it off and is remembered, `?worker=1` turns it back on.
-   * What to weigh while it is on: the audio should survive a backgrounded tab,
-   * and a host's register grid, piano and memory view will show a still picture,
-   * because the player they read is the page's and the one that is stepping is
-   * the worker's.
+   * ?worker=0 turns it off and is remembered, ?worker=1 turns it on again
+   * While on: audio survives a backgrounded tab, register grid, piano and memory view
+   * of the host show a still picture (the page player is not the one stepping)
    */
   _workerWanted() {
     try {
@@ -928,29 +776,21 @@ export class USPlayerAdapter {
       return this._workerReady;
     }
     this._workerReady = (async () => {
-      /* Never fatal. A browser with no module workers, a page served in a way
-       * that will not let one start, a wasm the worker cannot fetch: any of
-       * those must leave a working player rather than a dead one, because the
-       * main thread can still do this. It only does it badly while hidden,
-       * which is the whole reason for the worker and is not a reason to lose
-       * playback when there cannot be one. */
+      /* Not fatal: no module workers, a page that cannot start one or an unfetchable
+       * wasm all leave the main thread playing (bad only while hidden) */
       try {
-        /* Versioned like the wasm: a cached worker older than this adapter
-         * lacks the messages it sends. */
+        /* Versioned like the wasm, an older cached worker lacks the messages this adapter sends */
         this._worker = new Worker(versioned('usplayer-worker.js'), { type: 'module' });
         this._worker.onmessage = (e) => this._onWorkerMessage(e.data);
         this._worker.onerror = (e) => this._log('worker error: ' + (e.message || e));
-        /* With a deadline. A worker that comes up but never answers, because
-         * its wasm will not fetch or instantiate, would otherwise leave load()
-         * awaiting for ever and nothing would play at all: a worse failure than
-         * the stutter this is here to fix. Five seconds is far longer than
-         * instantiating a 150 kB module takes on a phone. */
+        /* With a deadline: a worker that never answers (wasm fetch or instantiate
+         * fails) would leave load() waiting for good. 5 s is far above the
+         * instantiation time of a 150 kB module on a phone */
         await Promise.race([
           this._call('audioInit', {
-            /* `.esm.js` and not `.mjs`: nginx's stock mime.types has no entry
-           * for .mjs, so it arrives as application/octet-stream, and a module
-           * import is strictly MIME checked and refuses it. Same bytes, a name
-           * every server already knows. See CMakeLists.txt. */
+          /* Named .esm.js: nginx mime.types has no entry for .mjs, module import
+           * refuses octet-stream
+           * See CMakeLists.txt */
           wasmUrl: versioned('usbsid.esm.js'),
           }),
           new Promise((_, reject) =>
@@ -990,11 +830,9 @@ export class USPlayerAdapter {
     });
   }
 
-  /** Is the transport actually open? Not "could it be". */
+  /** Is the transport open */
   isConnected() {
-    /* Software audio has nothing to open, so it is always ready. Reporting
-     * otherwise leaves the host's connect button and transport controls greyed
-     * out for ever, since nothing will ever make it true. */
+    /* Software audio has nothing to open and is ready, false would grey out the host controls for good */
     if (this._isAudio) return true;
     return !!(this._transport && this._transport.isOpen);
   }
@@ -1005,31 +843,23 @@ export class USPlayerAdapter {
   }
 
   /**
-   * Fetch a file and play it.
+   * Fetch a file and play it
    *
-   * @param {number} subtune  0 based, the way `load_sidtune()` counts: 0 is the
-   *                          file's own default song, 1 is the second song. A
-   *                          host that counts from one converts before calling.
+   * @param {number} subtune  0 based like load_sidtune(): 0 is the default
+   *                          song of the file, 1 the second. Hosts counting
+   *                          from one convert first
    * @param {number} timeout  unused, kept for the host signature
    * @param {string} url      what to fetch
    * @param {function} callback  called once the tune is loaded and running
    */
   async load(subtune, timeout, url, callback) {
     await this._ensure();
-    /* Stop clocking the tune that is playing, before the fetch rather than
-     * after it.
-     *
-     * `_fill()` runs on the main thread and emulates up to eight frames every
-     * time the worklet asks, which is twice every ten milliseconds or so. A
-     * fetch, a JSON-free parse and a `loadSID` all have to get in between those,
-     * so choosing a tune while one is playing took visibly longer than pressing
-     * stop and then choosing it: stop calls `unrun()`, and the main thread is
-     * free. Doing it here makes the two paths the same one.
-     *
-     * It also means the sound stops when the tune is clicked rather than when
-     * the file arrives, which is what clicking a different tune is asking for,
-     * and it removes the window in which the fill loop could step a player that
-     * had already been handed different bytes. */
+    /* Stop clocking the playing tune before the fetch. _fill() runs on the main thread
+     * and emulates up to eight frames each time the worklet asks, fetch, parse and
+     * loadSID get in between and picking a tune during playback took visibly longer
+     * than stop then pick. unrun() frees the main thread
+     * Also silences at click time and closes the window where the fill loop could step
+     * a player holding different bytes */
     if (this._isAudio && this._audio) {
       this._audio.unrun();
       if (typeof this._audio.flush === 'function') this._audio.flush();
@@ -1040,20 +870,24 @@ export class USPlayerAdapter {
 
       const sid = isSidHeader(bytes) && !/\.(prg|p00)(\?|$)/i.test(url);
       const nsids = sid ? countSids(bytes) : 1;
-      /* ASID only emits the chips it is told about, and the app's register
-       * grid only shows those it is told about. */
+      /* ASID emits only the chips it is told about, as does the register grid of the app */
       if (this._transport && 'nosids' in this._transport) this._transport.nosids = nsids;
       if (this._host.sidCount) this._host.sidCount(nsids);
       else if (typeof window.updateRegGridSIDCount === 'function') {
         window.updateRegGridSIDCount(nsids);
       }
 
+      /* The wasm module is shared by the page, an earlier software audio play left
+       * the machine on reSIDfp, a board or ASID transport needs the web backend back
+       * (older wasm has no release) */
+      if (!this._isAudio && typeof this._player.M._usp_audio_release === 'function') {
+        this._player.M._usp_audio_release();
+      }
       const ok = sid ? this._player.loadSID(bytes, subtune || 0)
                      : this._player.loadPRG(bytes);
       if (!ok) throw new Error('neither a SID nor a program');
 
-      /* The player has read the header itself, so take the metadata from it
-       * rather than parsing the same bytes twice. */
+      /* Take the metadata from the player, it has read the header */
       const i = this._player.info();
       this._info = {
         maxSubsong: Math.max(0, i.songs - 1),
@@ -1061,30 +895,23 @@ export class USPlayerAdapter {
         songAuthor: i.author,
         songReleased: i.released,
         numSids: nsids,
-        /* A page showing what is loaded wants to say so: a program has no
-         * subtunes and no header of its own, and looks broken labelled as a
-         * tune with one song. */
+        /* A program has no subtunes and no header, a page needs to tell it from a one song tune */
         isPrg: !sid,
-        /* Which song is actually playing.
-         *
-         * Subtune 0 means "the file's own default", and for plenty of tunes
-         * that is not song 1: Mechanicus starts at song 3 of 18. The player
-         * honours it, so the number has to be read back rather than assumed,
-         * or the page says "Tune 1/18" while song 3 plays and picks the wrong
-         * song length to go with it. */
+        /* Song actually playing
+         * Subtune 0 means the default song of the file, often not song 1 (Mechanicus
+         * starts at song 3 of 18)
+         * Read it back for the right number on the page and the right song length */
         song: i.song,
         /* v5 FM/OPL tune, for a host offering an FM volume. */
         hasFm: !!i.hasFmOpl,
-        /* Each chip's address as the emulation placed it, v5 layouts included. */
+        /* Chip addresses as placed by the emulation, v5 layouts included */
         sidAddresses: (i.sids || []).map((c) => c.addr),
       };
 
       this._subtune = subtune || 0;
 
-      /* A new tune starts from an unwritten chip. Without this a host reading
-       * the shadow shows the previous tune's registers for every one this tune
-       * has not got round to setting yet, which reads as a chip half programmed
-       * by two different tunes. */
+      /* A new tune starts from an unwritten chip, else a host reading the shadow shows
+       * registers of the previous tune */
       this._shadow.fill(0xff);
       this._seen.fill(0);
       this._dirty.fill(0);
@@ -1095,14 +922,11 @@ export class USPlayerAdapter {
       this._memValid.fill(0);
 
       if (this._isAudio) {
-        /* Started here and not in _ensure(): the synthesis has to be
-         * configured for this tune's clock, chip count and model, all of which
-         * are only known once it is loaded. */
+        /* Started in load(), synthesis needs the clock, chip count and model of this tune */
         if (!this._audio) {
           this._audio = new UsPlayerAudio(this._player);
-          /* Say when a silent lead-in was run through, and only when there was
-           * one: every tune reports the end of a skip, most of them having
-           * skipped a single frame. */
+          /* Report a silent lead-in skip only when there was one (every tune reports a
+           * skip end, most of a single frame) */
           this._audio.onSkipEnd = (why, frames) => {
             const secs = frames / (this._player.refreshHz() || 50);
             if (secs >= 1) {
@@ -1110,7 +934,7 @@ export class USPlayerAdapter {
             }
           };
         }
-        /* Whatever the host asked for before there was a graph to ask. */
+        /* Volume the host asked for before the graph existed */
         if (this._volume !== undefined) this._audio.setVolume(this._volume);
         const started = await this._audio.start({
           chips: nsids,
@@ -1119,23 +943,22 @@ export class USPlayerAdapter {
         });
         if (!started) throw new Error('reSIDfp would not take this rate');
 
-        /* The emulation goes in a worker and the ring is handed to it, so the
-         * main thread is out of the audio path entirely. The player on this
-         * thread stays loaded for its metadata and for the Songlengths lookup,
-         * both of which the host calls synchronously, but it is never started
-         * and never steps. */
+        /* Emulation goes in a worker and the ring is handed to it, taking the main
+         * thread out of the audio path
+         * The page player stays loaded for metadata and Songlengths lookups
+         * (synchronous host calls) and never steps */
         const inWorker = await this._startWorker();
         if (inWorker) {
           if (!this._audio.handedOver) {
             const port = this._audio.handOver();
             if (port) await this._call('clock', { port }, [port]);
-            /* Hidden and visible want different ring depths, and the worker is
-             * the side that fills it, so the change has to reach it. */
+            /* Hidden and visible want different ring depths, the worker fills the ring
+             * and must hear of changes */
             this._audio.onTargetChange = (target, steps) => {
               if (this._worker) this._call('audioTarget', { target, steps });
             };
-            /* Deeper ring while hidden, reaching the worker through
-             * onTargetChange; UsPlayerAudio only does this from run(). */
+            /* Deeper ring while hidden, passed to the worker via onTargetChange
+             * UsPlayerAudio does this only from run() */
             if (typeof this._audio._watchVisibility === 'function') {
               this._audio._watchVisibility();
             }
@@ -1153,8 +976,7 @@ export class USPlayerAdapter {
             model: sid ? sidModel(bytes) : 0,
             target: this._audio._target,
             steps: this._audio._maxSteps || 24,
-            /* Always stereo: mono is every chip Center, which needs no
-             * reconfigure to switch. See setPanning(). */
+            /* Always stereo, mono is every chip Center and needs no reconfigure, see setPanning() */
             stereo: true,
           });
           await this._softAudioReplay();
@@ -1164,13 +986,13 @@ export class USPlayerAdapter {
           if (this._fmVolume !== undefined) {
             await this._call('fmVolume', { percent: this._fmVolume }).catch(() => {});
           }
-          /* A speed set before the worker was up never reached it. */
+          /* A speed set before the worker was up has not reached it */
           if (this._player.speed !== 1) {
             await this._call('speed', { mult: this._player.speed }).catch(() => {});
           }
           await this._call('start', {});
         } else {
-          /* The main thread does it, as it did before there was a worker. */
+          /* Main thread fallback */
           await this._player.start({ externalClock: true });
           if (this._filter) this.setFilter(this._filter);
           if (this._sidVolume !== undefined) this._audio.setSidVolume(this._sidVolume);
@@ -1183,18 +1005,16 @@ export class USPlayerAdapter {
                   `${nsids} chip${nsids === 1 ? '' : 's'}, ` +
                   `${sid && sidModel(bytes) ? '8580' : '6581'}, sinc`);
       } else if (this._isSendsid) {
-        /* The board plays it, not us. The local player above has still read
-         * the file, because the host asks for the title, the song count and
-         * the Songlengths key synchronously, but it is never started and never
-         * steps: `loadSID()` only primes the emulation, and what clocks it in
-         * the other modes is the `start()` in the branch below.
+        /* The board plays the file
+         * The local player still reads it for title, song count and Songlengths key
+         * (synchronous host calls) but never starts or steps: loadSID() primes the
+         * emulation, start() in the branch below clocks it
          *
-         * `uploadSIDFile()` is the whole sequence: stop, START, the file in 62
-         * byte pieces, END, SIZE, pick the subtune, start.
-         *
-         * It counts songs from **one**, and this method's argument is 0 based
-         * like `load_sidtune()` and like every other branch here, so the two
-         * have to be converted between. */
+         * uploadSIDFile() does the whole sequence: stop, START, file in 62 byte pieces,
+         * END, SIZE, pick subtune, start
+         * It counts songs from one, the argument of this method is 0 based like
+         * load_sidtune()
+         * Convert */
         if (!this._transport || !this._transport.isOpen) {
           throw new Error('no board on the serial port to send it to');
         }
@@ -1206,10 +1026,9 @@ export class USPlayerAdapter {
         this._boardStart = _now();
         this._boardPlayed = 0;
         this._boardMs = null;
-        /* Tell the board how long this subtune runs, so it stops there rather
-         * than at its own five minute default. The lengths come from the same
-         * database the host uses, and the local player has already read the file,
-         * so this is available without asking anyone. */
+        /* Tell the board how long this subtune runs to stop it there, default is five
+         * minutes
+         * Lengths come from the database of the host */
         await this._sendBoardPlaytime(song);
         this._log(`sent to the board: ${bytes.length} bytes, ` +
                   `song ${song} of ${i.songs}, playing on its own player`);
@@ -1237,8 +1056,7 @@ export class USPlayerAdapter {
   play() {
     if (this._isSendsid) {
       if (!this._paused) return;
-      /* The board's own transport. Nothing here is playing, so there is
-       * nothing here to resume. */
+      /* Board transport, nothing plays locally to resume */
       if (this._transport && this._transport.playerStart) this._transport.playerStart();
       this._boardStart = _now();
       this._paused = false;
@@ -1257,7 +1075,7 @@ export class USPlayerAdapter {
     if (this._isSendsid) {
       if (this._paused) return;
       if (this._transport && this._transport.playerPause) this._transport.playerPause();
-      /* Bank what has played: the clock below only measures the running part. */
+      /* Bank what has played, the clock only measures the running part */
       this._boardPlayed += _now() - this._boardStart;
       this._paused = true;
       this._log('paused on the board');
@@ -1277,21 +1095,16 @@ export class USPlayerAdapter {
       this._stopBoardPoll();
       this._boardStart = 0;
       this._boardPlayed = 0;
-      /* Back to zero rather than holding the last reading: a stop means the
-       * transport should read 0:00, and the board's own figure freezes instead of
-       * clearing, so leaving it set would show the position it stopped at. */
+      /* Reset to zero, a stop reads 0:00 and the board figure freezes at the stop position */
       this._boardMs = null;
       this._paused = false;
       this._lastStatus = '';
       this._log('stopped on the board');
       return;
     }
-    /* Let go of the player before stopping it, so nothing is stepped after the
-     * tune has been torn down, and drop what was rendered but not yet played:
-     * otherwise the last fifth of a second is heard after the stop. */
-    /* flush, not discard: discard only drops what the page has rendered and
-     * not yet posted, so the worklet's own ring played on and the last fifth
-     * of a second was still heard after the stop. */
+    /* Release the player before stopping, nothing steps after teardown
+     * flush drops audio rendered but not yet played (worklet ring too), discard drops
+     * only what the page has not posted */
     if (this._audio) {
       this._audio.unrun();
       if (typeof this._audio.flush === 'function') this._audio.flush();
@@ -1311,36 +1124,34 @@ export class USPlayerAdapter {
   }
 
   /**
-   * How loud, 0 to 1.
+   * Set the volume, 0 to 1, returns true when this mode has a volume
    *
-   * Software audio only, where there is a gain stage after the synthesis. A
-   * board plays at whatever its own output is set to and a tune owns $d418, so
-   * there is nothing here that could turn it down without changing the tune.
-   * Returns whether it was applied, so a host can grey a slider that would do
-   * nothing rather than offer one that lies.
+   * Software audio only, a gain stage follows the synthesis
+   * A board plays at its output setting and a tune writes $d418, nothing turns it down
+   * without changing the tune
+   * Returns whether it was applied, letting a host grey the slider
    *
    * @param {number} value 0 for silence, 1 for full
-   * @returns {boolean} true when this mode has a volume to set
    */
   setVolume(value) {
     this._volume = value;
     if (!this._isAudio) return false;
-    /* Before load() there is no graph yet, so it is kept and applied in
-     * start(): a host restoring a stored volume does it at startup. */
+    /* Before load() there is no graph, kept and applied in start() (a host restoring a
+     * stored volume does this at startup) */
     if (this._audio && typeof this._audio.setVolume === 'function') {
       this._audio.setVolume(value);
     }
     return true;
   }
 
-  /** Can this mode's loudness be changed at all? */
+  /** Can the volume of this mode be changed */
   hasVolume() { return this._isAudio; }
 
   /**
-   * Set the SID side of the software mix, before the SID and FM are summed.
+   * Set the SID side of the software mix (before SID and FM are summed), returns false
+   * outside software audio
    *
    * @param {number} percent 100 is unity, 0 silences the SID side
-   * @returns {boolean} true when this mode has a mix to set
    */
   setSidVolume(percent) {
     this._sidVolume = Math.max(0, Number(percent) || 0);
@@ -1351,10 +1162,10 @@ export class USPlayerAdapter {
   }
 
   /**
-   * Set the FM/OPL side of the software mix, before the SID and FM are summed.
+   * Set the FM/OPL side of the software mix (before SID and FM are summed), returns
+   * false outside software audio
    *
    * @param {number} percent 100 is unity, 0 silences the FM side
-   * @returns {boolean} true when this mode has a mix to set
    */
   setFmVolume(percent) {
     this._fmVolume = Math.max(0, Number(percent) || 0);
@@ -1365,12 +1176,10 @@ export class USPlayerAdapter {
   }
 
   /**
-   * Does the loaded tune have an FM/OPL side?
+   * Does the loaded tune have an FM/OPL side
    *
-   * True for the v5 header flag, and for any tune once it has written to the
-   * FM/OPL in software audio: older SID+FM tunes carry no flag.
-   *
-   * @returns {boolean}
+   * True for the v5 header flag, and once a tune has written to the FM/OPL in software
+   * audio (older SID+FM tunes have no flag)
    */
   hasFm() {
     if (this._info.hasFm) return true;
@@ -1380,10 +1189,10 @@ export class USPlayerAdapter {
   }
 
   /**
-   * Set the software audio ring depth used while the page is visible.
+   * Set the software audio ring depth while the page is visible
    *
-   * A deeper ring keeps playback steady while the host page is busy drawing;
-   * register reports are delayed by the same amount.
+   * A deeper ring keeps playback steady when the host page is busy drawing, register
+   * reports are delayed as much
    *
    * @param {number} samples ring depth, clamped to 2048
    */
@@ -1392,16 +1201,15 @@ export class USPlayerAdapter {
     this._bufferSamples = n > 0 ? n : undefined;
     this._applyBufferSamples();
     if (!this._onBufferVisibility && typeof document !== 'undefined') {
-      /* UsPlayerAudio resets a visible ring to its own depth; restore ours
-       * after its handler has run. */
+      /* UsPlayerAudio resets a visible ring to its default depth, restore the host depth after its handler */
       this._onBufferVisibility = () => setTimeout(() => this._applyBufferSamples(), 0);
       document.addEventListener('visibilitychange', this._onBufferVisibility);
     }
   }
 
   /**
-   * Resume an audio context the OS suspended or interrupted while the page
-   * was hidden, as mobile browsers do on a tab or app switch.
+   * Resume an audio context the OS suspended or interrupted while the page was hidden
+   * (mobile browsers do this on tab or app switch)
    */
   _watchResume() {
     if (this._onResumeVisibility || typeof document === 'undefined') return;
@@ -1415,24 +1223,23 @@ export class USPlayerAdapter {
     document.addEventListener('visibilitychange', this._onResumeVisibility);
   }
 
-  /** Apply the host's ring depth to a running software audio graph. */
+  /** Apply the host's ring depth to a running software audio graph */
   _applyBufferSamples() {
     if (this._bufferSamples === undefined || !this._isAudio) return;
     if (!this._audio || !this._audio.ctx || !this._audio.node) return;
     if (typeof document !== 'undefined' && document.visibilityState === 'hidden') return;
     const rate = this._audio.ctx.sampleRate || 48000;
-    /* No floor of its own: setTarget() keeps 2048 samples, the worklet's
-     * minimum. Every DeepSID buffer size from 2048 up takes effect. */
+    /* No floor, setTarget() keeps 2048 samples (worklet minimum)
+     * Every DeepSID buffer size from 2048 up takes effect */
     this._audio.setTarget(this._bufferSamples / rate, this._audio._maxSteps);
   }
 
   /**
-   * The MIDI outputs ASID mode could play to, `[{ id, name }]`.
+   * MIDI outputs ASID mode could play to, [{ id, name }]
    *
-   * For a host that wants to offer its own picker. `_wireMidiPicker()` is the
-   * other arrangement: it follows a list the host already owns, by the name
-   * shown in it. Empty in every mode but ASID, and before Web MIDI has been
-   * granted.
+   * For a host offering a picker. _wireMidiPicker() follows a list the host has, by the
+   * name shown
+   * Empty outside ASID mode and before Web MIDI is granted
    */
   midiOutputs() {
     const t = this._transport;
@@ -1441,13 +1248,12 @@ export class USPlayerAdapter {
   }
 
   /**
-   * Play ASID to the output with this name.
+   * Play ASID to the output with this name, returns false when there is none
    *
-   * By name and not by id, because a host's own list is usually built from
-   * names and because an id changes between visits in some browsers.
+   * By name: host lists are built from names and ids change between visits in some
+   * browsers
    *
-   * @param {string} name as it appears in `midiOutputs()`
-   * @returns {boolean} true when there is an output with that name
+   * @param {string} name as in midiOutputs()
    */
   selectMidiOutput(name) {
     const t = this._transport;
@@ -1455,11 +1261,23 @@ export class USPlayerAdapter {
     try { return !!t.selectOutputByName(name); } catch (_) { return false; }
   }
 
+  /**
+   * Name of the output ASID mode plays to now, empty when there is none
+   *
+   * A host picker shows this rather than its first entry: the transport prefers a
+   * port matching its device name hint
+   */
+  currentMidiOutput() {
+    const t = this._transport;
+    if (!t || typeof t.outputs !== 'function') return '';
+    try { return t.productName || ''; } catch (_) { return ''; }
+  }
+
   getSongInfo() { return this._info; }
 
   /**
-   * What is driving the tune and how it was started, for a page that wants to
-   * show it. Null when the player cannot say, which is any older copy.
+   * What drives the tune and how it was started, for a page that wants to show it
+   * Null when the player cannot say (older copy)
    */
   timing() {
     if (this._isAudio && this._worker && this._snap) return this._snap.timing;
@@ -1468,31 +1286,21 @@ export class USPlayerAdapter {
   }
 
   /**
-   * Emulated play time in milliseconds, or null when there is nothing loaded.
+   * Emulated play time in milliseconds, null when nothing is loaded
    *
-   * Every mode this adapter drives runs the same emulation in the page, so all
-   * of them can answer. The one mode that cannot is SendSID, which is not this
-   * adapter: there the tune is playing on the board and the page is not
-   * emulating anything, so its transport shows a dash until the firmware can
-   * report the figure back.
+   * All modes run the emulation in the page and can answer
+   * SendSID uses the board position poll with the wall clock as fallback
    */
   playtimeMs() {
-    /* The worker is what is playing in audio mode, so it is the only thing that
-     * knows where the tune has got to. `_snap` is its last report, three times
-     * a second, which is more than a clock showing seconds needs. */
+    /* Audio mode: the worker is playing, _snap is its last report (3 per second) */
     if (this._isAudio && this._worker && this._snap) return this._snap.playtimeMs || 0;
-    /* Nothing is emulated here in SendSID mode and the board reports no
-     * position, so the wall clock is the only answer available. It is honest
-     * about what it is: time since the file was sent, less any pause. The board
-     * plays from its own crystal, so this drifts against the tune by whatever
-     * the two clocks disagree by, which is far below what a display showing
-     * seconds can show. What it cannot know is the board finishing early. */
+    /* SendSID: nothing is emulated
+     * The board reports its position (SID_PLAYER_TIME), the real clock of the player,
+     * which also catches an early finish. _boardMs is the last poll reading
+     * The wall clock is the fallback for a silent board or firmware: time since the
+     * file was sent minus pauses, drift against the board crystal is far below display
+     * resolution */
     if (this._isSendsid) {
-      /* The board reports its own position now (SID_PLAYER_TIME), which is the
-       * player's real clock rather than an estimate, and unlike the wall clock it
-       * knows when the board finished early. `_boardMs` is what the poll below
-       * last read; the wall clock stays as the fallback for a board or a firmware
-       * that will not answer. */
       if (this._boardMs != null) return this._boardMs;
       if (this._boardStart === 0) return 0;
       return this._paused ? this._boardPlayed
@@ -1503,14 +1311,12 @@ export class USPlayerAdapter {
   }
 
   /**
-   * The Songlengths key of the tune that is loaded: the MD5 of the whole file.
+   * Songlengths key of the loaded tune, MD5 of the whole file ('' when nothing is
+   * loaded)
    *
-   * For a tune that came from the served library the lengths are in
-   * `sidfilelist.json` already and this is not needed. It is for everything
-   * else: a local folder, an upload, a URL. Cheap, a few kilobytes of MD5, so
-   * it is computed on demand rather than kept.
-   *
-   * @returns {string} 32 hex characters, or '' when nothing is loaded
+   * Tunes from the served library have lengths in sidfilelist.json
+   * This is for a local folder, upload or URL. Computed on demand, a few kilobytes of
+   * MD5
    */
   md5() {
     if (!this._player || !this._bytes) return '';
@@ -1519,7 +1325,7 @@ export class USPlayerAdapter {
   }
 
   /**
-   * Hand the Songlengths database to the player, once.
+   * Hand the Songlengths database to the player, once
    *
    * @param {string} text the file as fetched
    */
@@ -1533,9 +1339,9 @@ export class USPlayerAdapter {
   }
 
   /**
-   * Every song's length in milliseconds for a key, or null when it is absent.
+   * Song lengths in ms for a key, null when absent
    *
-   * @param {string} key from `md5()`
+   * @param {string} key from md5()
    */
   songLengths(key) {
     if (!this._player || typeof this._player.songLengths !== 'function') return null;
@@ -1543,30 +1349,22 @@ export class USPlayerAdapter {
   }
 
   /**
-   * The last value written to a SID register, from the write shadow.
+   * Last value written to a SID register, from the write shadow (0 if never written)
    *
-   * A read and not a push, for a host that asks rather than one that is told:
-   * `setHost({ registers })` is the push side and this is the pull side, and
-   * both read the same shadow.
-   *
-   * It is a shadow of the writes because there is nothing else it could be. A
-   * real chip over USB cannot be read back at the rate a display wants, ASID has
-   * no read at all, and in software audio the synthesis lives behind the audio
-   * thread. Every register a tune sets is write only on real hardware anyway, so
-   * the last thing written *is* the state, with the two read only registers at
-   * $1b and $1c (oscillator 3 and its envelope) the exception: nothing writes
-   * them, so they answer 0.
+   * Pull side of setHost({ registers }), same shadow
+   * A real chip cannot be read back over USB at display rate, ASID has no read and the
+   * synthesis of software audio lives in the audio thread
+   * SID registers are write only: the last write is the state, bar the read only $1b
+   * and $1c (oscillator 3 and its envelope) which answer 0
    *
    * @param {number} chip 1 to 4
-   * @param {number} reg  0 to 31, so $d400 relative
-   * @returns {number} the byte, or 0 for a register nothing has written
+   * @param {number} reg  0 to 31, $d400 relative
    */
   readRegister(chip, reg) {
     const i = (((chip | 0) - 1) << 5) | (reg & 0x1f);
     if (i < 0 || i > 127) return 0;
-    /* Software audio has no writes to watch, so ask the emulation instead, and
-     * ask it now rather than reading what the poll last saw: a host redrawing a
-     * piano every frame wants this frame's notes. See _pollRegisters(). */
+    /* Software audio has no writes to watch, ask the emulation at once (a host
+     * redrawing a piano every frame wants this frame), see _pollRegisters() */
     if (this._isAudio && !this._worker &&
         this._player && typeof this._player.sidRegister === 'function') {
       try { return this._player.sidRegister(chip | 0, reg & 0x1f) & 0xff; }
@@ -1574,16 +1372,14 @@ export class USPlayerAdapter {
     }
     if (this._isAudio && this._worker) this._drainRegisters();
     const v = this._shadow[i];
-    /* 0xff is the fill this starts as, meaning "never written". A page wants a
-     * quiet chip to look quiet rather than to look like every bit is set. */
+    /* 0xff is the initial fill (never written), a quiet chip should look quiet */
     return this._dirtyEver(i) ? v : 0;
   }
 
   /**
-   * Hold a worker register report until the audio it belongs to is heard.
+   * Hold a worker register report until its audio is heard
    *
-   * The worker emulates ahead of the playhead by the ring's depth and says by
-   * how much, in `leadMs`.
+   * The worker emulates ahead of the playhead by the ring depth, reported as leadMs
    *
    * @param {object} p { regs: Uint8Array, ciaLatch, leadMs, mem?, memPages? }
    */
@@ -1593,11 +1389,11 @@ export class USPlayerAdapter {
     this._regQueue.push({ due, regs: p.regs, ciaLatch: p.ciaLatch | 0,
                           mem: p.mem, memPages: p.memPages,
                           scope: p.scope, scopeVoices: p.scopeVoices | 0 });
-    /* Bound the queue for a page that never reads it. */
+    /* Bound the queue for a page that does not read it */
     if (this._regQueue.length > 256) this._applyRegisters(this._regQueue.shift());
   }
 
-  /** Apply every queued worker register report that is due. */
+  /** Apply the queued worker register reports that are due */
   _drainRegisters() {
     const now = _now();
     while (this._regQueue.length && this._regQueue[0].due <= now) {
@@ -1606,7 +1402,7 @@ export class USPlayerAdapter {
   }
 
   /**
-   * Copy one worker register report into the shadow.
+   * Copy one worker register report into the shadow
    *
    * @param {object} e { regs, ciaLatch, mem?, memPages? }
    */
@@ -1632,20 +1428,20 @@ export class USPlayerAdapter {
     }
   }
 
-  /** Has anything ever been written to this shadow slot? */
+  /** Has this shadow slot been written */
   _dirtyEver(i) {
     if (!this._seen) return false;
     return this._seen[i] === 1;
   }
 
   /**
-   * One byte of the emulated machine's RAM, or 0 when nothing is loaded.
+   * One byte of the emulated machine's RAM, or 0 when nothing is loaded
    *
    * @param {number} address 0 to 65535
    */
   readMemory(address) {
-    /* Worker mode: the page's player is never stepped, its RAM is the tune
-     * as loaded. Answer from the mirror the worker's reports fill. */
+    /* Worker mode: the page player never steps and its RAM is the tune as loaded,
+     * answer from the mirror filled by the worker reports */
     if (this._isAudio && this._worker) {
       const a = address & 0xffff;
       this._watchPage(a >> 8);
@@ -1657,9 +1453,9 @@ export class USPlayerAdapter {
   }
 
   /**
-   * Mark a RAM page as read, and tell the worker when the watched set changes.
+   * Mark a RAM page as read, tell the worker when the watched set changes
    *
-   * Pages not read for MEM_WATCH_IDLE_MS drop out of the set and the mirror.
+   * Pages unread for MEM_WATCH_IDLE_MS drop out of the set and the mirror
    *
    * @param {number} page 0 to 255
    */
@@ -1674,7 +1470,7 @@ export class USPlayerAdapter {
       this._memPages.delete(pg);
       this._memValid[pg] = 0;
     }
-    /* Most recently read first, capped at the worker's own limit. */
+    /* Most recently read first, capped at the worker limit */
     const pages = [...this._memPages.entries()]
       .sort((x, y) => y[1] - x[1])
       .slice(0, MEM_WATCH_MAX)
@@ -1687,7 +1483,7 @@ export class USPlayerAdapter {
   }
 
   /**
-   * A CIA timer's latch, which is how often a CIA driven tune is called.
+   * A CIA timer latch, how often a CIA driven tune is called
    *
    * @param {number} cia   1 or 2
    * @param {number} timer 0 for A, 1 for B
@@ -1702,47 +1498,45 @@ export class USPlayerAdapter {
   }
 
   /**
-   * Hold one voice silent, or let it play again.
+   * Mute or unmute one voice
    *
    * @param {number} chip  1 to 4
    * @param {number} voice 1 to 3
    * @param {boolean} muted
    */
   setVoiceMute(chip, voice, muted) {
-    /* In SendSID mode the board is playing, not the local emulation. The local
-     * player still exists here because it read the file for the title and the
-     * song count, so muting it would succeed and change nothing audible. The
-     * board takes SID_PLAYER_MUTE, so send it there and the host's existing voice
-     * controls work on the board without the host knowing anything about it. */
+    /* SendSID: the board plays, the local player only read the file for title and song
+     * count
+     * Muting it would change nothing audible
+     * The board takes
+     * SID_PLAYER_MUTE, the voice controls of the host work unchanged */
     if (this._isSendsid) {
       const t = this._transport;
       if (t && typeof t.playerMute === 'function') {
-        /* Not awaited: the host calls this from a click handler and does not want
-         * a USB round trip in the way. A failure is the transport's to report. */
+        /* Not awaited, host calls this from a click handler and wants no USB round trip
+         * Failures are reported by the transport */
         t.playerMute(chip, voice, muted);
       }
       return;
     }
     if (!this._player || typeof this._player.setVoiceMute !== 'function') return;
     this._player.setVoiceMute(chip, voice, muted);
-    /* The worker is what is playing in audio mode, so it needs telling too. */
+    /* Audio mode: the worker is playing and needs telling too */
     if (this._isAudio && this._worker) {
       this._call('voiceMute', { chip, voice, muted: !!muted });
     }
   }
 
   /**
-   * Hold a whole chip silent.
+   * Mute or unmute a whole chip
    *
-   * The counterpart of setVoiceMute() and the same shape: the board's own command
-   * in SendSID mode, where the board is playing and the local player is not, and
-   * the emulation everywhere else. The worker is told as well when it is the thing
-   * sounding, exactly as for a voice.
+   * Counterpart of setVoiceMute(): board command in SendSID mode, the emulation
+   * elsewhere, plus the worker when it is sounding
    *
-   * Not three voice mutes. A voice mute masks the gate and the sustain and lets
-   * every other write through; a chip mute drops the writes, which is the only one
-   * of the two that reaches $18, so it is the only one that silences a tune playing
-   * samples through the volume register.
+   * A voice mute masks gate and sustain and lets other writes through
+   * A chip mute drops the writes, the only one reaching $18, needed to silence a tune
+   * playing samples through the volume register
+   *
    *
    * @param {number} chip 1 to 4
    * @param {boolean} muted
@@ -1751,8 +1545,7 @@ export class USPlayerAdapter {
     if (this._isSendsid) {
       const t = this._transport;
       if (t && typeof t.playerMuteChip === 'function') {
-        /* Not awaited: the host calls this from a click and does not want a USB
-         * round trip in the way. */
+        /* Not awaited, host calls this from a click and wants no USB round trip */
         t.playerMuteChip(chip, muted);
       }
       return;
@@ -1764,34 +1557,32 @@ export class USPlayerAdapter {
     }
   }
 
-  /** The muted chips as a bitmask, bit 0 being chip one, or 0 when unknown. */
+  /** Muted chips as a bitmask, bit 0 is chip 1, 0 when unknown */
   chipMute() {
     if (!this._player || typeof this._player.chipMute !== 'function') return 0;
     try { return this._player.chipMute(); } catch (_) { return 0; }
   }
 
-  /** The mute bits of one chip, bit 0 being voice 1, or 0 when unknown. */
+  /** Mute bits of one chip, bit 0 is voice 1, 0 when unknown */
   voiceMute(chip = 1) {
     if (!this._player || typeof this._player.voiceMute !== 'function') return 0;
     try { return this._player.voiceMute(chip); } catch (_) { return 0; }
   }
 
-  /** The header of what is loaded, or null. For a host that wants to parse it. */
+  /** File bytes of what is loaded, null if nothing, for hosts that parse the header */
   bytes() { return this._bytes; }
 
   /**
    * Is the browser holding the audio context suspended?
    *
-   * Only software audio has a context to hold, so every other mode says no. A
-   * host that dims its display while the sound is stopped needs to tell the
-   * difference between a tune that is paused and a page the browser has not let
-   * make a sound yet.
+   * Only software audio has a context, other modes say no
+   * A host dimming its display while the sound is stopped must tell a paused tune from
+   * a page the browser has not let make a sound yet
    *
-   * In audio mode a context that does not exist yet counts as suspended. The
-   * context is opened by the first load, on purpose, because it needs the tune's
-   * rate and because one opened outside a user gesture stays suspended for ever.
-   * So a host asking before any tune has played is asking whether it may start
-   * one without a click, and the answer then is no.
+   * In audio mode a missing context counts as suspended: it opens at first load (needs
+   * the tune rate, and a context opened outside a user gesture stays suspended)
+   * A host asking before any tune played is asking whether it may start one without a
+   * click, answer no
    */
   isSuspended() {
     const ctx = this._audio && this._audio.ctx;
@@ -1799,12 +1590,12 @@ export class USPlayerAdapter {
     return ctx.state === 'suspended';
   }
 
-  /* extras the app may not call, but which cost nothing to offer */
+  /* Extras the app may not call */
   /**
-   * Run faster than the tune asks for.
+   * Run faster than the tune asks for
    *
    * @param {boolean} on
-   * @param {number} [mult] how much faster, the player's own default otherwise
+   * @param {number} [mult] how much faster, player default if omitted
    */
   fastForward(on, mult) {
     if (this._player) this._player.fastForward(on, mult);
@@ -1814,13 +1605,11 @@ export class USPlayerAdapter {
   }
 
   /**
-   * Play at a multiple of the tune's own speed. 1 is normal.
+   * Play at a multiple of the tune speed, 1 is normal
    *
-   * Not the same as `fastForward()`, which is a seek: that one also stops the
-   * writes reaching the board, because the point of it is to arrive somewhere
-   * rather than to hear the way there. This one leaves the output alone, so on a
-   * board it is audibly faster. Software audio changes the synthesis output
-   * rate instead: faster or slower with the pitch following.
+   * fastForward() is a seek and stops writes reaching the board
+   * This leaves the output alone, a board is audibly faster
+   * Software audio changes the synthesis output rate, pitch follows
    *
    * @param {number} mult 0.1 to 8
    */
@@ -1832,11 +1621,10 @@ export class USPlayerAdapter {
   }
 
   /**
-   * The board's mono/stereo audio switch, v1.3+ PCBs.
+   * Mono/stereo audio switch of the board, v1.3+ PCBs
    *
-   * Only the board transports carry it: ASID has no such concept and a software
-   * receiver has its own mixing. Returns false when the active transport cannot
-   * do it, so a caller can grey the control rather than pretend.
+   * Board transports only, ASID and software receivers have no switch
+   * Returns false when the active transport cannot, letting a caller grey the control
    *
    * @param {boolean|undefined} stereo true or false to set it, undefined to flip
    */
