@@ -171,6 +171,12 @@
 	--color-text-subtune:			#222;				/* Text color for sub tune indicators in playlists */
 	--color-bg-subtune:				var(--color-top);
 
+	--color-ai-text:				#a05e52;
+	--color-ai-bg:					#fbe7e8;
+	--color-ai-no-text:				#b5b6b1;
+	--color-ai-no-bg:				#eeefe6;
+	--color-ai-shadow:				#f7f8f5;			/* Same as BG to avoid having a shadow for bright theme */
+
 	--color-text-resp-good:			#494;				/* Good response text color in user form */
 	--color-text-resp-bad:			#a44;				/* Bad response text color in user form */
 
@@ -600,6 +606,12 @@
 
 	--color-border-subtune:			#000;
 	--color-bg-subtune:				#d4d4d4;
+
+	--color-ai-text:				#b69595;
+	--color-ai-bg:					#502020;
+	--color-ai-no-text:				#585858;
+	--color-ai-no-bg:				#2c2c2c;
+	--color-ai-shadow:				#000;
 
 	--color-text-resp-good:			#6b6;
 	--color-text-resp-bad:			#d77;
@@ -6076,6 +6088,37 @@ input[type=range]::-ms-track {
 			.csdb-type-event:before {
 				margin-right: -1.5px;
 				background: url(../images/composer_earth.svg) 0 0.5px / 17px 17px no-repeat;
+			}
+
+		.csdb-ai,
+		.csdb-no-ai {
+			display: inline-block;
+			position: relative;
+			top: 8px;
+			padding: 0.5px 6px;
+			border: 1px solid var(--color-ai-text);
+			border-radius: 5px;
+			background: var(--color-ai-bg);
+			box-shadow: 0 0 5px var(--color-ai-shadow);
+		}
+
+			.csdb-no-ai {
+				border: 1px solid var(--color-ai-no-text);
+				background: var(--color-ai-no-bg);
+				box-shadow: none;
+			}
+
+			.csdb-ai:before,
+			.csdb-no-ai:before {
+				content: "No AI";
+				font-size: 14px;
+				font-weight: bold;
+				color: var(--color-ai-no-text);
+			}
+
+			.csdb-ai:before {
+				content: "AI Used";
+				color: var(--color-ai-text);
 			}
 
 		.corner-icons {

@@ -2163,6 +2163,16 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>November 8, 2026</h3>
+						<ul>
+							<li>Replaced the plain text indicating AI involvement on CSDb release pages with labels.</li>
+						</ul>
+
+						<h3>October 31, 2026</h3>
+						<ul>
+							<li>Upgraded USBSID-Player with various fixes and improvements.</li>
+						</ul>
+
 						<h3>October 17, 2026</h3>
 						<ul>
 							<li>CSDb pages in both DeepSID and CShellDB can now indicate whether AI was used to generate the content.</li>

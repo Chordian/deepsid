@@ -765,8 +765,13 @@ if ($csdb_type == 'sid') {
 	}
 
 	$ai_content = '';
-	if (isset($csdb->Release->AIUsage))
-		$ai_content = '<i><small>'.$csdb->Release->AIUsage.'</small></i>';
+	if (isset($csdb->Release->AIUsage)) {
+		// $ai_content = '<i><small>'.$csdb->Release->AIUsage.'</small></i>';
+		if (strpos(strtolower($csdb->Release->AIUsage), 'no ai') !== false)
+			$ai_content = '<div class="csdb-no-ai"></div>';
+		else
+			$ai_content = '<div class="csdb-ai"></div>';
+	}
 
 	// At one point there were extra controls visible for administrators only here, but they were removed.
 	// Adding this on the page is not a good idea because of the cache system. Add controls for the page in

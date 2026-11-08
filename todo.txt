@@ -8,14 +8,10 @@ ToDo
 
 TO BE DONE
 ¯¯¯¯¯¯¯¯¯¯
-- There's a new "AI usage" label in CSDb. Support it. Either just as is (text) or fancy box (DIV
-  or a label).
+- SID v5: Handle v5 files in the next HVSC update by the script for SIDInfo ignoring them.
 
-  <Release>
-    <ID>265071</ID>
-    <Name>ReCHARGED intro</Name>
-    <Type>C64 Intro</Type>
-    <AIUsage>Contains AI generated content</AIUsage>
+- CSDb: Consider green color for "NO AI" and red color for AI" generated content text line. Use a
+  color class so it looks right in both color themes.
 
 - A W A I T : Rewrite 'howto_update_gb64.txt' when the next GameBase64 update v20 arrives. See
   the .txt file for a few preliminary things to test.

@@ -128,6 +128,16 @@ $html = '
 				<li><a href="'.$base_url.'?tab=csdb&csdbtype=release&csdbid=238430">'.$home.'/?tab=csdb&csdbtype=release&csdbid=238430</a></li>
 			</ul>
 
+		<h4>Tons of "plinks" in the CSDb release</h4>
+			<ul>
+				<li><a href="'.$base_url.'?tab=csdb&csdbtype=release&csdbid=18101">'.$home.'/?tab=csdb&csdbtype=release&csdbid=18101</a></li>
+			</ul>
+
+		<h4>Lots of comments in top of a CSDb list</h4>
+			<ul>
+				<li><a href="'.$base_url.'?file=/DEMOS/UNKNOWN/Pac_Runner.sid&tab=csdb">'.$home.'/?file=/DEMOS/UNKNOWN/Pac_Runner.sid</a></li>
+			</ul>
+
 		<h4>CSDb references to be converted to links with pretty names</h4>
 			<ul>
 				<li><a href="'.$base_url.'?file=/MUSICIANS/T/Taylor_Stuart/Sky_Runner.sid&tab=csdb">'.$home.'/MUSICIANS/T/Taylor_Stuart/Sky_Runner.sid</a></li>
