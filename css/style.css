@@ -291,6 +291,7 @@
 	--color-notification-default:	#a00;				/* Background color of notifications in the corner of tabs */
 	--color-notification-csdb:		#100098;			/* Original CSDb color */
 	--color-notification-gb64:		#070;
+	--toggle-color:					rgb(164, 175, 216); /* Light blue icon color of buttons in their "on" state (loop) */
 	--color-notification-player:	#808;
 	--color-notification-remix:		#777;
 	--color-notification-stil:		#088;
@@ -1482,6 +1483,26 @@ small.u2 { margin-left: 2px; }
 		fill: var(--color-button-disabled-text);
 	}
 
+	/* A disabled button shows no hover feedback at all */
+	#controls button.disabled:hover,
+	#songs button.disabled:hover,
+	#userform button.disabled:hover,
+	.edit button.disabled:hover,
+	.dialog-new button.disabled:hover,
+	#sticky-right-buttons button.disabled:hover,
+	.block-info button.disabled:hover,
+	.dialog-box button.disabled:hover,
+	#filter-revisions button.disabled:hover,
+	#filter-6581 button.disabled:hover,
+	#sticky-visuals button.disabled:hover,
+	#sticky-admin button.disabled:hover,
+	#csdb-sort button.disabled:hover,
+	#topic-csdb button.disabled:hover {
+		background: var(--color-button-disabled);
+		border-color: var(--color-button-disabled);
+		color: var(--color-button-disabled-text);
+	}
+
 		#sticky-visuals button.disabled:before {
 			filter: var(--svg-filter-icon-disabled);
 		}	
@@ -1553,6 +1574,54 @@ small.u2 { margin-left: 2px; }
 		border-color: var(--color-button-border-hovsel);
 		color: var(--color-button-text-hovsel);
 		background: var(--color-button-bg-hovsel);
+	}
+
+#loop.button-on {
+	color: var(--toggle-color);
+	border-color: var(--color-button-border-idle);
+	background: var(--color-button);
+}
+
+	#loop.button-on:hover {
+		color: var(--toggle-color);
+		border-color: var(--color-button-border-idle);
+		background: var(--color-button-hover);
+	}
+
+#play-pause.button-selected {
+	color: var(--color-button-inverted);
+	border-color: var(--color-button-border-idle);
+	background: var(--color-button);
+}
+
+	#play-pause.button-selected:hover {
+		color: var(--color-button-inverted);
+		border-color: var(--color-button-border-idle);
+		background: var(--color-button-hover);
+	}
+
+#stop.button-selected {
+	color: var(--color-button-inverted);
+	border-color: var(--color-button-border-idle);
+	background: var(--color-button);
+}
+
+	#stop.button-selected:hover {
+		color: var(--color-button-inverted);
+		border-color: var(--color-button-border-idle);
+		background: var(--color-button-hover);
+	}
+
+#faster.button-selected {
+	color: var(--toggle-color);
+	border-color: var(--color-button-border-idle);
+	background: var(--color-button);
+}
+
+	#faster.button-selected:hover {
+		color: var(--toggle-color);
+		border-color: var(--color-button-border-idle);
+		background: var(--color-button-hover);
 	}
 
 .button-area {
@@ -2317,20 +2386,45 @@ input[type=range]::-ms-track {
 			float: left;
 			height: 100%;
 			width: 0; /* Changed in jQuery */
-			background: var(--color-bottom);
-			transition: all 1s linear;
+			background: var(--timebar-fill, var(--color-bottom));
+			transition: width 1s linear; /* Only animate the width; background must switch instantly (paused pulse) */
 			pointer-events: none;
 		}
 
-		#time .resid div		{ background: var(--color-timebar-resid); }
-		#time .jsidplay2 div	{ background: var(--color-timebar-jsidplay2); }
+		/* The fill color as a variable so the paused pulse can animate towards it;
+		   the emulator class on #time-bar picks the same color used while playing */
+		#time-bar {
+			--timebar-fill: var(--color-bottom);
+		}
+		#time-bar.resid		{ --timebar-fill: var(--color-timebar-resid); }
+		#time-bar.jsidplay2	{ --timebar-fill: var(--color-timebar-jsidplay2); }
+		#time-bar.websid,
+		#time-bar.legacy	{ --timebar-fill: var(--color-timebar-websid); }
+		#time-bar.hermit	{ --timebar-fill: var(--color-timebar-hermit); }
+		#time-bar.asid		{ --timebar-fill: var(--color-timebar-asid); }
+		#time-bar.usplayer,
+		#time-bar.usplayfp	{ --timebar-fill: var(--color-timebar-usplayer); }
+		#time-bar.youtube	{ --timebar-fill: var(--color-timebar-youtube); }
+
+		/* While paused, the fill pulses its transparency (halfway towards the bar background) */
+		#time-bar.paused div {
+			animation: ds-timebar-paused 1.5s ease-in-out infinite;
+		}
+
+		#time .resid div		{ background: var(--timebar-fill); }
+		#time .jsidplay2 div	{ background: var(--timebar-fill); }
 		#time .websid div,
-		#time .legacy div		{ background: var(--color-timebar-websid); }
-		#time .hermit div		{ background: var(--color-timebar-hermit); }
-		#time .asid div			{ background: var(--color-timebar-asid); }
+		#time .legacy div		{ background: var(--timebar-fill); }
+		#time .hermit div		{ background: var(--timebar-fill); }
+		#time .asid div			{ background: var(--timebar-fill); }
 		#time .usplayer div,
-		#time .usplayfp div		{ background: var(--color-timebar-usplayer); }
-		#time .youtube div		{ background: var(--color-timebar-youtube); }
+		#time .usplayfp div		{ background: var(--timebar-fill); }
+		#time .youtube div		{ background: var(--timebar-fill); }
+
+@keyframes ds-timebar-paused {
+	0%, 100% { opacity: 1; }
+	50% { opacity: .5; }
+}
 
 /* Small dot that indicates this time length has millseconds too */
 #time-length div {
