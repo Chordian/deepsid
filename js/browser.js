@@ -828,7 +828,7 @@ Browser.prototype = {
 
 					if (!paramWait && !main.noPlay) {
 						SID.play(true);
-						setTimeout(ctrls.setButtonPlay, 75); // For nice pause-to-play delay animation
+						setTimeout(function() { ctrls.setButtonPlay(); }, 75); // For nice pause-to-play delay animation
 					}
 				}
 

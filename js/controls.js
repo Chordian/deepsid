@@ -63,11 +63,11 @@ Controls.prototype = {
 			// Want the faster bar to be more smooth? Try finetuning these milliseconds!
 			if (event.which == 2 && event.button == 1) {
 				// Middle mouse button
-				$("#time-bar div").css("transition", "all 250ms linear");
+				$("#time-bar div").css("transition", "width 250ms linear");
 				SID.speed(8);
 			} else {
 				// Normal
-				$("#time-bar div").css("transition", "all 500ms linear");
+				$("#time-bar div").css("transition", "width 500ms linear");
 				SID.speed(4);
 			}
 			return false;
@@ -98,7 +98,7 @@ Controls.prototype = {
 			// Back to normal speed
 			this.selectButton($("#play-pause"));
 			SID.speed($("#piano-slow").hasClass("button-on") ? viz.slowSpeed : 1);
-			$("#time-bar div").css("transition", "all 1s linear");
+			$("#time-bar div").css("transition", "width 1s linear");
 			SID.setVolume(1);
 			return false;
 		} else if (id != "loop") {
@@ -152,6 +152,8 @@ Controls.prototype = {
 				viz.initGraph(browser.chips);
 				viz.enableAllPianoVoices();
 				browser.conditionalStopPlay();
+				// Sync the play/pause buttons after a subtune buttons was selected
+				if (SID.emulatorFlags.forcePlay) this.setButtonPlay(); else this.updateTimeBarPulse();
 			}.bind(this));
 			this.updateSubtuneText();
 			$(id == "subtune-plus" && !SID.emulatorFlags.offline ? "#subtune-minus" : "#subtune-plus").removeClass("disabled");
@@ -438,10 +440,10 @@ Controls.prototype = {
 						clickPos = event.originalEvent.layerX;
 					var clickSeconds = (clickPos / barWidth) * maxSeconds;
 					// Temporarily disable transition to change the bar width instantaneously
-					$("#time-bar div").css("transition", "all 100ms linear");
+					$("#time-bar div").css("transition", "width 100ms linear");
 					SID.setSeek(clickSeconds);
 					setTimeout(function(){
-						$("#time-bar div").css("transition", "all 1s linear");
+						$("#time-bar div").css("transition", "width 1s linear");
 					}, 250);
 				}
 				break;
@@ -590,6 +592,7 @@ Controls.prototype = {
 	togglePlayOrPause: function(buttonsOnly) {
 		if (typeof buttonsOnly !== "undefined" && !buttonsOnly) {
 			if ($("#play").css("display") !== "none") {
+				$("#stop").removeClass("disabled"); // Starting or resuming makes stopping possible again
 				if (this.emulatorChanged) {
 					// Clicking the same row again is safest
 					$("#folders tr.selected").children("td.sid").trigger("click", ctrls.subtuneCurrent);
@@ -603,6 +606,19 @@ Controls.prototype = {
 		}
 		if ($("#play-pause").hasClass("button-selected") || ($("#play-pause").hasClass("button-idle") && $("#play").css("display") === "none"))
 			$("#play-pause svg").toggle();
+		if (typeof buttonsOnly !== "undefined" && buttonsOnly)
+			$("#stop").addClass("disabled"); // Stopped; nothing left to stop until the next track is loaded
+		this.updateTimeBarPulse();
+	},
+
+	/**
+	 * Sync the paused pulse animation of the time bar with the current state.
+	 * It may only run while a track is loaded and paused (never while playing,
+	 * stopped or loading/playing a new track or subtune).
+	 */
+	updateTimeBarPulse: function() {
+		var paused = $("#play-pause").hasClass("button-selected") && $("#play").css("display") !== "none";
+		$("#time-bar").toggleClass("paused", paused);
 	},
 
 	/**
@@ -613,6 +629,7 @@ Controls.prototype = {
 		$("#play-pause").addClass("button-selected");
 		$("#play").hide();
 		$("#pause").show();
+		this.updateTimeBarPulse();
 	},
 
 	/**
@@ -623,6 +640,7 @@ Controls.prototype = {
 		$("#play-pause").addClass("button-selected");
 		$("#play").show();
 		$("#pause").hide();
+		this.updateTimeBarPulse();
 	},
 
 	/**
