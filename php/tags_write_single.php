@@ -45,7 +45,7 @@ try {
 	if ($select->rowCount() == 0) {
 		$insert = $db->query('INSERT INTO tags_lookup (files_id, tags_id) VALUES('.$file_id.', '.$tag_id.')');
 		// Report this to the CSV log file describing an activity only regarding tags
-		file_put_contents($_SERVER['DOCUMENT_ROOT'].'/deepsid/logs/tags.txt',
+		file_put_contents(__DIR__ . '/../logs/tags.txt',
 			date('Y-m-d H:i:s', strtotime(TIME_ADJUST)).','.
 			$_SERVER['REMOTE_ADDR'].','.
 			'0,'.

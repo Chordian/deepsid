@@ -28,7 +28,7 @@ try {
 
 	$playlist = str_replace(' ', '_', $playlist);
 
-	$filename = $_SERVER['DOCUMENT_ROOT'].'/deepsid/temp/'.$playlist.'.zip';
+	$filename = __DIR__ . '/../temp/'.$playlist.'.zip';
 	if (file_exists($filename)) unlink($filename);
 
 	$zip = new ZipArchive();
@@ -95,7 +95,7 @@ try {
 
 $time_ip = date('Y-m-d H:i:s', strtotime(TIME_ADJUST)).' - '.$_SERVER['REMOTE_ADDR'].' - ';
 $message = 'The playlist "'.$_POST['symlist'].'" was downloaded as a ZIP file';
-file_put_contents($_SERVER['DOCUMENT_ROOT'].'/deepsid/logs/activity.txt', '<span style="color:#999;">'.$time_ip.$message.'</span>'.PHP_EOL, FILE_APPEND);
+file_put_contents(__DIR__ . '/../logs/activity.txt', '<span style="color:#999;">'.$time_ip.$message.'</span>'.PHP_EOL, FILE_APPEND);
 
 echo json_encode(array(
 	'status'	=> 'ok',

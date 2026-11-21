@@ -41,7 +41,7 @@ try {
 
 	if ($_POST['logging']) {
 		// Log the action (the tags log file is used to avoid yet another log file)
-		file_put_contents($_SERVER['DOCUMENT_ROOT'].'/deepsid/logs/tags.txt',
+		file_put_contents(__DIR__ . '/../logs/tags.txt',
 			date('Y-m-d H:i:s', strtotime(TIME_ADJUST)).','.
 			$_SERVER['REMOTE_ADDR'].','.
 			$account->userID().','.

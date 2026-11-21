@@ -55,7 +55,7 @@ function logTagActivity($action, $labels_id, $labels_site, $labels_name, $labels
 		die(json_encode(array('status' => 'error', 'message' => 'Could not find ID '.$_POST['id'].' in the database')));
 	$collection_path = $select->fetch()->collection_path;
 
-	file_put_contents($_SERVER['DOCUMENT_ROOT'].'/deepsid/logs/tags.txt',
+	file_put_contents(__DIR__ . '/../logs/tags.txt',
 			date('Y-m-d H:i:s', strtotime(TIME_ADJUST)).','.
 			$_SERVER['REMOTE_ADDR'].','.
 			$account->userID().','.

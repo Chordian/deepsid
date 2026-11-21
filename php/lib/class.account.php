@@ -310,7 +310,7 @@ class Account {
 		}
 
 		$time_ip = date('Y-m-d H:i:s', strtotime(TIME_ADJUST)).' - '.$_SERVER['REMOTE_ADDR'].' - ';
-		file_put_contents($_SERVER['DOCUMENT_ROOT'].'/deepsid/logs/activity.txt', ($common ? '<span style="color:#999;">' : '').$time_ip.$str.($common ? '</span>' : '').PHP_EOL, FILE_APPEND);
+		file_put_contents(__DIR__ . '/../../logs/activity.txt', ($common ? '<span style="color:#999;">' : '').$time_ip.$str.($common ? '</span>' : '').PHP_EOL, FILE_APPEND);
 	}
 
 	/**
@@ -542,13 +542,12 @@ class Account {
 	 */
 	private function logError($reason, $message = 'A database error occurred; please try again later') {
 		$this->handleError($message);
-		$path = $_SERVER['DOCUMENT_ROOT'];
 		// Time and IP address is first in log entry
 		$time_and_ip = date('Y-m-d H:i:s', strtotime(TIME_ADJUST)).' - '.$_SERVER['REMOTE_ADDR'].' - ';
 		// We need to know the line number and the name of the function that generated this error
 		$callers = debug_backtrace();
 		// The detailed error is logged to a file on the web server
-		file_put_contents($path.'/deepsid/logs/db_errors_account.txt', $time_and_ip.'Line '.$callers[0]['line'].' in '.$callers[1]['function'].'(): "'.$message.'"'.PHP_EOL.
+		file_put_contents(__DIR__ . '/../../logs/db_errors_account.txt', $time_and_ip.'Line '.$callers[0]['line'].' in '.$callers[1]['function'].'(): "'.$message.'"'.PHP_EOL.
 			'Reason: '.$reason.PHP_EOL.PHP_EOL, FILE_APPEND);
 	}
 

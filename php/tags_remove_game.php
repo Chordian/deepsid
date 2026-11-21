@@ -48,7 +48,7 @@ function removeTag($file_id, $name) {
 	$delete = $db->query('DELETE FROM tags_lookup WHERE files_id = '.$file_id.' AND tags_id = '.$tag_id.' LIMIT 1');
 	if ($delete->rowCount()) {
 		// Report this to the CSV log file describing an activity only regarding tags
-		file_put_contents($_SERVER['DOCUMENT_ROOT'].'/deepsid/logs/tags.txt',
+		file_put_contents(__DIR__ . '/../logs/tags.txt',
 			date('Y-m-d H:i:s', strtotime(TIME_ADJUST)).','.
 			$_SERVER['REMOTE_ADDR'].','.
 			'0,'.

@@ -49,7 +49,7 @@ if (!isset($_POST['fileID']) || !isset($_POST['allTags']))
  */
 function logTagActivity($action, $tag_id, $tag_name) {
 	global $user_id, $user_name, $collection_path;
-	file_put_contents($_SERVER['DOCUMENT_ROOT'].'/deepsid/logs/tags.txt',
+	file_put_contents(__DIR__ . '/../logs/tags.txt',
 			date('Y-m-d H:i:s', strtotime(TIME_ADJUST)).','.
 			$_SERVER['REMOTE_ADDR'].','.
 			$user_id.','.
@@ -182,7 +182,7 @@ try {
 			$update->execute(array(':end_id' => $_POST['endTag'],':files_id' => $_POST['fileID'],':tags_id' => $_POST['startTag']));
 
 			// More information is logged in this version
-			file_put_contents($_SERVER['DOCUMENT_ROOT'].'/deepsid/logs/tags.txt',
+			file_put_contents(__DIR__ . '/../logs/tags.txt',
 					date('Y-m-d H:i:s', strtotime(TIME_ADJUST)).','.
 					$_SERVER['REMOTE_ADDR'].','.
 					$user_id.','.

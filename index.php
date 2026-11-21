@@ -2163,6 +2163,11 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>November 21, 2026</h3>
+						<ul>
+							<li>Fixed an issue that prevented playlists from being downloaded.</li>
+						</ul>
+
 						<h3>November 8, 2026</h3>
 						<ul>
 							<li>Replaced the plain text indicating AI involvement on CSDb release pages with labels.</li>
