@@ -142,9 +142,7 @@ function readGB64DB($id) {
 
 	// Get screenshot paths
 	$web_path_base = '/images/gb64'; // Folder with GB64 screenshots
-	$disk_path_base = $_SERVER['HTTP_HOST'] == LOCALHOST
-		? '..'.$web_path_base
-		: $_SERVER['DOCUMENT_ROOT'].'/deepsid'.$web_path_base;
+	$disk_path_base = dirname(__DIR__, 2) . $web_path_base;		
 	
 	if (empty($games->ScrnshotFilename)) {
 		// There are no screenshots at all
@@ -168,17 +166,9 @@ function readGB64DB($id) {
 		$matches = glob($pattern, GLOB_BRACE);
 
 		if (!empty($matches)) {
-			// Convert full paths to web paths (strip 'images/gb64/')
-			if ($_SERVER['HTTP_HOST'] == LOCALHOST) {
-				$thumbnails = array_map(function($path) use ($disk_path_base) {
-					return '/' . substr($path, strlen($disk_path_base));
-				}, $matches);
-			} else {
-		        $thumbnails = array_map(function($path) use ($disk_path_base) {
-		            // Convert absolute path to web path
-        		    return str_replace($disk_path_base, '', $path);
-        		}, $matches);
-			}
+			$thumbnails = array_map(function($path) use ($disk_path_base) {
+				return substr($path, strlen($disk_path_base));
+			}, $matches);
 		} else {
 			$thumbnails = array('/noscreenshot.gif');
 		}

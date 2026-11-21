@@ -2166,6 +2166,7 @@
 						<h3>November 21, 2026</h3>
 						<ul>
 							<li>Fixed an issue that prevented playlists from being downloaded.</li>
+							<li>Fixed GB64 screenshots not being displayed.</li>
 						</ul>
 
 						<h3>November 8, 2026</h3>

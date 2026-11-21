@@ -8,9 +8,11 @@ ToDo
 
 TO BE DONE
 ¯¯¯¯¯¯¯¯¯¯
-- SID v5: Handle v5 files in the next HVSC update by the script for SIDInfo ignoring them.
+- Check out the PR suggestion for control key handling at GitHub.
 
-- TEST DEEPSID AND CSHELLDB THOROUGHLY AFTER ONE.COM'S LATEST CHANGES!
+- Add new CGSC v1.48.
+
+- SID v5: Handle v5 files in the next HVSC update by the script for SIDInfo ignoring them.
 
 - A W A I T : Rewrite 'howto_update_gb64.txt' when the next GameBase64 update v20 arrives. See
   the .txt file for a few preliminary things to test.
